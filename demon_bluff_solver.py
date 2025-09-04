@@ -166,7 +166,8 @@ def enumerate_worlds(puzzle, roles_info, claims, rules):
     N = puzzle["seats"]
     deck = list(puzzle["deck"])
     truth_map = rules["terms"]["default_truth_by_alignment"].copy()
-    truth_map["puppet"] = False
+    truth_map["puppet"] = True
+    flipped_claims = {int(k) - 1: v.strip() for k, v in puzzle.get("flipped", {}).items()}
     worlds: List[World] = []
     for perm in itertools.permutations(deck, N):
         roles = list(perm)
@@ -228,11 +229,19 @@ def enumerate_worlds(puzzle, roles_info, claims, rules):
             candidates = [i for i, a in enumerate(align) if a == "villager"]
             if not candidates:
                 continue
-            for corrupt in candidates:
+            for corrupt in [None] + candidates:
                 corrupted = [False] * N
-                corrupted[corrupt] = True
+                if corrupt is not None:
+                    corrupted[corrupt] = True
                 world = World(list(roles_list), list(align), corrupted, puppet_seat)
-                if apply_claims(world, claims, roles_info, truth_map):
+                ok = True
+                for seat_idx, claimed_role in flipped_claims.items():
+                    alignment = world.alignments[seat_idx]
+                    if alignment not in {"minion", "demon", "puppet"} and not corrupted[seat_idx]:
+                        if world.roles[seat_idx] != claimed_role:
+                            ok = False
+                            break
+                if ok and apply_claims(world, claims, roles_info, truth_map):
                     worlds.append(world)
     return worlds
 
