@@ -1,13 +1,7 @@
-# ========================= puzzle2Solution.yaml ============================
-# Ground-truth solution reconstructed from the screenshot.
-# Objective (from UI): Find and Execute 2 Evil Characters (2 Minions, 0 Demon).
-
 seats: 8
 
-# Exact number of evils to execute in this puzzle (minion | puppeteer | puppet)
 evils_in_play: 2
 
-# Truth assignment by seat at reveal
 solution:
   1: { role: druid,        alignment: good }
   2: { role: baker,        alignment: good }
