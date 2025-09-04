@@ -166,7 +166,14 @@ def enumerate_worlds(puzzle, roles_info, claims, rules):
     N = puzzle["seats"]
     deck = list(puzzle["deck"])
     truth_map = rules["terms"]["default_truth_by_alignment"].copy()
-    truth_map["puppet"] = False
+    # Puppets speak truthfully unless corrupted or rules override
+    truth_map["puppet"] = True
+    flipped_claims = {int(k) - 1: v.strip() for k, v in puzzle.get("flipped", {}).items()}
+    # Optional requirement on total evils
+    evils_required = puzzle.get("evils_in_play")
+    if evils_required is None:
+        evils_required = puzzle.get("options", {}).get("executions_to_win")
+
     worlds: List[World] = []
     for perm in itertools.permutations(deck, N):
         roles = list(perm)
@@ -228,11 +235,31 @@ def enumerate_worlds(puzzle, roles_info, claims, rules):
             candidates = [i for i, a in enumerate(align) if a == "villager"]
             if not candidates:
                 continue
-            for corrupt in candidates:
+            # Allow corruption only if a role capable of causing it is present
+            corruption_roles = {"plague doctor", "poisoner", "pooka"}
+            if any(r in corruption_roles for r in roles_list):
+                corrupt_options = [None] + candidates
+            else:
+                corrupt_options = [None]
+            for corrupt in corrupt_options:
                 corrupted = [False] * N
-                corrupted[corrupt] = True
+                if corrupt is not None:
+                    corrupted[corrupt] = True
                 world = World(list(roles_list), list(align), corrupted, puppet_seat)
-                if apply_claims(world, claims, roles_info, truth_map):
+                ok = True
+                for seat_idx, claimed_role in flipped_claims.items():
+                    alignment = world.alignments[seat_idx]
+                    truthful = truth_map.get(alignment, False)
+                    if corrupted[seat_idx]:
+                        truthful = False
+                    if truthful and world.roles[seat_idx] != claimed_role:
+                        ok = False
+                        break
+                if ok and apply_claims(world, claims, roles_info, truth_map):
+                    if evils_required is not None:
+                        evil_count = sum(1 for a in world.alignments if a in {"minion", "demon", "puppet"})
+                        if evil_count != evils_required:
+                            continue
                     worlds.append(world)
     return worlds
 
