@@ -226,44 +226,68 @@ def check_baker_claims_and_counts(world: Dict[int,str], baker_original: List[Bak
     return True
 
 # ---------- solving ----------
-def solve_puzzle1(puz: Puzzle):
+def solve(puz: Puzzle) -> List[Dict[int, str]]:
+    """Enumerate all consistent worlds for either puzzle variant."""
     N = puz.seats
-    roles = ["knitter","fortune teller","alchemist","wretch","medium","puppeteer","minion","puppet"]
-    knit_claims, med_claims, scout_ds, alchem_claims, baker_orig, baker_was = parse_info_log(puz.info_log)
+    knit_claims, med_claims, scout_ds, _alchem_claims, baker_orig, baker_was = parse_info_log(puz.info_log)
 
-    worlds: List[Dict[int,str]] = []
-    for perm in itertools.permutations(roles, N):
-        world = {i+1: perm[i] for i in range(N)}
-        if not check_flips(world, puz.flipped): continue
-        if not check_puppetry(world, N): continue
-        if not check_knitter_claims(world, knit_claims, N): continue
-        if not check_medium_claims(world, med_claims): continue
-        if not check_scout_claims(world, scout_ds, N): continue
-        worlds.append(world)
+    flip_roles = list(puz.flipped.values())
+    is_puzzle2 = (
+        "counsellor" in puz.deck
+        and "shaman" in puz.deck
+        and flip_roles.count("baker") >= 3
+    )
+
+    worlds: List[Dict[int, str]] = []
+
+    if is_puzzle2:
+        multiset = [
+            "druid",
+            "plague doctor",
+            "drunk",
+            "counsellor",
+            "shaman",
+            "baker",
+            "baker",
+            "baker",
+        ]
+        for perm in set(itertools.permutations(multiset, N)):
+            world = {i + 1: perm[i] for i in range(N)}
+            if not check_flips(world, puz.flipped):
+                continue
+            if not check_counsellor_adjacent_outcast(world, N):
+                continue
+            if not check_drunk_not_in_play(world, puz.flipped):
+                continue
+            if not check_baker_claims_and_counts(world, baker_orig, baker_was):
+                continue
+            worlds.append(world)
+    else:
+        roles = [
+            "knitter",
+            "fortune teller",
+            "alchemist",
+            "wretch",
+            "medium",
+            "puppeteer",
+            "minion",
+            "puppet",
+        ]
+        for perm in itertools.permutations(roles, N):
+            world = {i + 1: perm[i] for i in range(N)}
+            if not check_flips(world, puz.flipped):
+                continue
+            if not check_puppetry(world, N):
+                continue
+            if not check_knitter_claims(world, knit_claims, N):
+                continue
+            if not check_medium_claims(world, med_claims):
+                continue
+            if not check_scout_claims(world, scout_ds, N):
+                continue
+            worlds.append(world)
+
     return worlds
-
-def solve_puzzle2(puz: Puzzle):
-    N = puz.seats
-    # For puzzle2, the true-role multiset must accommodate multiple Bakers and two Minions.
-    multiset = ["druid","plague doctor","drunk","counsellor","shaman","baker","baker","baker"]
-    knit_claims, med_claims, scout_ds, alchem_claims, baker_orig, baker_was = parse_info_log(puz.info_log)
-
-    worlds: List[Dict[int,str]] = []
-    for perm in set(itertools.permutations(multiset, N)):
-        world = {i+1: perm[i] for i in range(N)}
-        if not check_flips(world, puz.flipped): continue
-        if not check_counsellor_adjacent_outcast(world, N): continue
-        if not check_drunk_not_in_play(world, puz.flipped): continue
-        if not check_baker_claims_and_counts(world, baker_orig, baker_was): continue
-        worlds.append(world)
-    return worlds
-
-def choose_solver(puz: Puzzle):
-    # Heuristic: if puzzle deck contains 'counsellor' AND 'shaman' AND many 'baker' flips, use puzzle2 solver.
-    flip_roles = [r for r in puz.flipped.values()]
-    if "counsellor" in puz.deck and "shaman" in puz.deck and flip_roles.count("baker") >= 3:
-        return solve_puzzle2
-    return solve_puzzle1
 
 # ---------- execution picks & FT advice (unchanged) ----------
 def fmt_world(world: Dict[int,str]) -> str:
@@ -314,8 +338,7 @@ def main(argv: List[str]) -> int:
     args = ap.parse_args(argv)
 
     puz = load_puzzle(args.puzzle)
-    solver = choose_solver(puz)
-    worlds = solver(puz)
+    worlds = solve(puz)
 
     if not worlds:
         print("No consistent worlds found.")
