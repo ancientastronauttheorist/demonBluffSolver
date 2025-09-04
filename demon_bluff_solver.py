@@ -1,24 +1,7 @@
 # demonBluffSolver.py
 # Minimal, puzzle-specific Demon Bluff solver for puzzle1.yaml
 # Python 3.11+
-#
-# New in this version:
-# - If ambiguous, prints ALL consistent worlds.
-# - Recommends Fortune Teller queries (pairs of seats) that maximally split the worlds.
-#   Ranking = minimax (fewest worlds in worst case), tie-break by information gain.
-#
-# Scope (kept tiny on purpose to "start slow"):
-# - Roles used: {alchemist, fortune teller, scout, knitter, medium, wretch, puppeteer, minion, puppet}
-# - Truth defaults: villagers/outcasts truthful; minions lie/disguise; puppet truthful but shows as villager
-# - Puppeteer must have exactly one adjacent puppet (created from a villager-like GOOD seat)
-# - Knitter claim = exact adjacent evil pairs count
-# - Medium claim = “#X is the real Y”
-# - Scout line used in puzzle1 = “puppeteer is 1 card away from closest evil” (validate as a factual constraint)
-#
-# Run:
-#   python3 demonBluffSolver.py
-#   python3 demonBluffSolver.py puzzle1.yaml
-#
+
 from __future__ import annotations
 import sys, argparse, itertools, re, math, yaml
 from dataclasses import dataclass
@@ -66,63 +49,46 @@ def load_puzzle(path: str) -> Puzzle:
     executions_to_win = int(options.get("executions_to_win", 3))
     return Puzzle(seats, deck, flipped, info_log, executions_to_win)
 
-# ---------- read statements we care about (puzzle1 patterns) ----------
+# ---------- info_log patterns used in puzzle1 ----------
 @dataclass
-class KnitterPairsClaim:
-    seat: int
-    pairs: int
-
+class KnitterPairsClaim: seat:int; pairs:int
 @dataclass
-class MediumRealClaim:
-    seat: int
-    target_seat: int
-    role: str
-
+class MediumRealClaim: seat:int; target_seat:int; role:str
 @dataclass
-class ScoutPuppeteerDistanceClaim:
-    seat: int
-    distance: int
-
+class ScoutPuppeteerDistanceClaim: seat:int; distance:int
 @dataclass
-class AlchemistCuredClaim:
-    seat: int
-    cured: int
+class AlchemistCuredClaim: seat:int; cured:int
 
 def parse_info_log(info_log: List[Dict[str,str]]):
     knitter_pairs: List[KnitterPairsClaim] = []
     medium_real: List[MediumRealClaim] = []
     scout_puppeteer_d: List[ScoutPuppeteerDistanceClaim] = []
     alchem_cured: List[AlchemistCuredClaim] = []
-
     for row in info_log:
         seat = int(row.get("seat"))
         says = (row.get("says") or "").strip().lower()
 
         m = re.search(r"there are (\d+) pairs of evil", says)
         if m:
-            knitter_pairs.append(KnitterPairsClaim(seat=seat, pairs=int(m.group(1))))
+            knitter_pairs.append(KnitterPairsClaim(seat, int(m.group(1))))
             continue
 
         m = re.search(r"#(\d+)\s+is the real\s+([a-z ]+)", says)
         if m:
-            medium_real.append(MediumRealClaim(seat=seat, target_seat=int(m.group(1)), role=m.group(2).strip()))
+            medium_real.append(MediumRealClaim(seat, int(m.group(1)), m.group(2).strip()))
             continue
 
         m = re.search(r"puppeteer is (\d+) card[s]? away from closest evil", says)
         if m:
-            scout_puppeteer_d.append(SoutPuppeteerDistanceClaim(seat=seat, distance=int(m.group(1))))  # typo fixed below
+            scout_puppeteer_d.append(ScoutPuppeteerDistanceClaim(seat, int(m.group(1))))
             continue
 
         m = re.search(r"i cured (\d+) corruptions", says)
         if m:
-            alchem_cured.append(AlchemistCuredClaim(seat=seat, cured=int(m.group(1))))
+            alchem_cured.append(AlchemistCuredClaim(seat, int(m.group(1))))
             continue
 
     return knitter_pairs, medium_real, scout_puppeteer_d, alchem_cured
-
-# Fix a tiny typo above (keeps parsing robust without retyping logs)
-class SoutPuppeteerDistanceClaim(ScoutPuppeteerDistanceClaim):
-    pass
 
 # ---------- world checks ----------
 def pairs_of_evil(world: Dict[int,str], N: int) -> int:
@@ -150,11 +116,10 @@ def check_flips(world: Dict[int,str], flipped: Dict[int,str]) -> bool:
 
 def check_puppetry(world: Dict[int,str], N: int) -> bool:
     # Exactly one puppeteer and one puppet; puppet must be adjacent to puppeteer.
-    seats_by_role = invert(world)
-    if "puppeteer" not in seats_by_role or "puppet" not in seats_by_role:
-        return False
-    ps = seats_by_role["puppeteer"][0]
-    pu = seats_by_role["puppet"][0]
+    by = invert(world)
+    if "puppeteer" not in by or "puppet" not in by: return False
+    ps = by["puppeteer"][0]
+    pu = by["puppet"][0]
     return pu in neighbors(ps, N)
 
 def invert(world: Dict[int,str]) -> Dict[str,List[int]]:
@@ -176,9 +141,10 @@ def check_medium_claims(world: Dict[int,str], medium_real: List[MediumRealClaim]
     return True
 
 def check_scout_claims(world: Dict[int,str], scout_ds: List[ScoutPuppeteerDistanceClaim], N: int) -> bool:
-    seats_by_role = invert(world)
-    if "puppeteer" not in seats_by_role: return False
-    p = seats_by_role["puppeteer"][0]
+    # Validate just the factual content of the statement (as in the puzzle screenshot).
+    by = invert(world)
+    if "puppeteer" not in by: return False
+    p = by["puppeteer"][0]
     evil_seats = [s for s,r in world.items() if is_evil(r) and s != p]
     if not evil_seats: return False
     nearest = min(ring_distance(p, e, N) for e in evil_seats)
@@ -188,20 +154,19 @@ def check_scout_claims(world: Dict[int,str], scout_ds: List[ScoutPuppeteerDistan
 
 def solve_puzzle(puz):
     N = puz.seats
+    # Roles actually used for puzzle1 reasoning
     roles = ["knitter","fortune teller","alchemist","wretch","medium","puppeteer","minion","puppet"]
     knit_claims, med_claims, scout_ds, alchem_claims = parse_info_log(puz.info_log)
 
     worlds: List[Dict[int,str]] = []
     for perm in itertools.permutations(roles, N):
         world = {i+1: perm[i] for i in range(N)}
-
         if not check_flips(world, puz.flipped): continue
         if not check_puppetry(world, N): continue
         if not check_knitter_claims(world, knit_claims, N): continue
         if not check_medium_claims(world, med_claims): continue
         if not check_scout_claims(world, scout_ds, N): continue
-        # (We intentionally ignore alchemist cured counts for puzzle1.)
-
+        # (Alchemist cured counts are ignored for puzzle1.)
         worlds.append(world)
     return worlds
 
@@ -216,14 +181,15 @@ def score_pair(worlds: List[Dict[int,str]], i: int, j: int) -> Tuple[int,float,i
     yes = sum(1 for w in worlds if ft_outcome_for_pair(w, i, j) == "Yes")
     no = total - yes
     worst = max(yes, no)
-    # Info gain = H(prior) - weighted H(posteriors) over outcomes
-    def H(n): 
-        if n == 0: return 0.0
-        p = n/total
-        return -p * math.log2(p)
-    prior = math.log2(total) if total > 0 else 0.0
-    # Posterior entropy over world-identity outcomes is simply H(yes_count) + H(no_count)
-    info_gain = prior - (H(yes) + H(no))
+    # Correct IG: H_prior - E[H_posterior (over world identity)]
+    # H_prior = log2(total)
+    # E[H_post] = (yes/total)*log2(yes) + (no/total)*log2(no)   [with 0→0 guards]
+    def lg(n): return math.log2(n) if n > 0 else 0.0
+    prior = lg(total)
+    p_yes = yes/total
+    p_no  = no/total
+    expected_post = p_yes*lg(yes) + p_no*lg(no)
+    info_gain = prior - expected_post
     return (worst, info_gain, yes, no)
 
 def best_fortune_teller_pairs(worlds: List[Dict[int,str]], N: int, top_k: int = 5):
@@ -234,9 +200,9 @@ def best_fortune_teller_pairs(worlds: List[Dict[int,str]], N: int, top_k: int = 
             pairs.append(((i,j), worst, ig, yes, no))
     # Sort: fewest worst-case remaining worlds, then higher info gain
     pairs.sort(key=lambda x: (x[1], -x[2], x[0]))
-    return pairs[:top_k]
+    return pairs[:top_k], pairs
 
-# ---------- pretty printing ----------
+# ---------- helpers ----------
 def fmt_world(world: Dict[int,str]) -> str:
     seats = sorted(world.keys())
     parts = []
@@ -249,6 +215,13 @@ def fmt_world(world: Dict[int,str]) -> str:
 def pick_executions(world: Dict[int,str], k: int) -> List[int]:
     evils = [s for s,r in world.items() if is_evil(r)]
     return evils[:k]
+
+def evil_sets(worlds: List[Dict[int,str]]) -> Tuple[Set[int], Set[int], bool]:
+    sets = [set(s for s,r in w.items() if is_evil(r)) for w in worlds]
+    inter = set.intersection(*sets) if sets else set()
+    uni   = set.union(*sets) if sets else set()
+    all_same = all(s == sets[0] for s in sets)
+    return inter, uni, all_same
 
 # ---------- main ----------
 def main(argv: List[str]) -> int:
@@ -272,23 +245,41 @@ def main(argv: List[str]) -> int:
         print(f"\nExecute {puz.executions_to_win}: {to_execute}")
         return 0
 
-    # Ambiguous: print every world and Fortune Teller guidance
+    # Ambiguous: print every world
     print(f"Ambiguous: {len(worlds)} consistent worlds.\n")
     for idx, w in enumerate(worlds, 1):
         print(f"World {idx}: {fmt_world(w)}")
 
-    print("\nFortune Teller suggestions (pairs of seats):")
-    best = best_fortune_teller_pairs(worlds, puz.seats, top_k=6)
-    total = len(worlds)
-    for (i,j), worst, ig, yes, no in best:
-        print(f"  ({i},{j})  → worst-case {worst}/{total} worlds,  IG≈{ig:.3f} bits,  Yes={yes}, No={no}")
+    # If the set of EVIL seats is invariant and already solves the objective, print executions now
+    inter, uni, all_same = evil_sets(worlds)
+    if all_same:
+        evils_list = sorted(next(iter(set(s for s,r in w.items() if is_evil(r)) for w in worlds)))
+        if len(evils_list) >= puz.executions_to_win:
+            print(f"\n✅ The evil seats are identical across all worlds: {evils_list}")
+            print(f"Execute {puz.executions_to_win}: {evils_list[:puz.executions_to_win]}")
+            print("(Fortune Teller cannot further disambiguate who is minion/puppet/puppeteer; it only answers 'any evil?')")
+            return 0
 
-    # Also show the single best (minimax) recommendation explicitly
-    if best:
-        (i,j), worst, ig, yes, no = best[0]
-        print(f"\nRecommend Fortune Teller on seats ({i},{j}). "
-              f"If answer is Yes → {yes} worlds remain; if No → {no} worlds remain "
-              f"(worst case {worst}/{total}, ≈{ig:.3f} bits of information).")
+    # Otherwise, offer FT only if it actually splits worlds
+    print("\nFortune Teller suggestions (pairs that split the worlds):")
+    best, all_pairs = best_fortune_teller_pairs(worlds, puz.seats, top_k=10)
+    total = len(worlds)
+    any_split = False
+    for (i,j), worst, ig, yes, no in best:
+        if worst < total:  # actually splits
+            any_split = True
+            print(f"  ({i},{j}) → worst-case {worst}/{total}, IG≈{ig:.3f} bits, Yes={yes}, No={no}")
+    if not any_split:
+        print("  (none) — every FT query leaves all worlds possible; skip FT and execute the invariant evil seats.")
+        if all_same:
+            evils_list = sorted(inter)
+            print(f"\nExecute {puz.executions_to_win}: {evils_list[:puz.executions_to_win]}")
+            return 0
+    else:
+        (i,j), worst, ig, yes, no = min(((p[0], p[1], p[2], p[3], p[4]) for p in all_pairs), key=lambda x: (x[1], -x[2], x[0]))
+        print(f"\nRecommend FT on seats ({i},{j}). If Yes → {yes} worlds remain; if No → {no} worlds remain "
+              f"(worst case {worst}/{total}, ≈{ig:.3f} bits).")
+
     return 1
 
 if __name__ == "__main__":
