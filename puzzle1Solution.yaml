@@ -1,14 +1,7 @@
-# ========================= puzzle1Solution.yaml ============================
-# Ground-truth solution reconstructed from the screenshot.
-# Objective (from UI): Find and Execute 3 Evil Characters (2 Minions, 0 Demon).
-# Puppet counts as an executable evil created by the Puppeteer.
-
 seats: 8
 
-# Exact number of evils to execute in this puzzle (minion | puppeteer | puppet)
 evils_in_play: 3
 
-# Truth assignment by seat at reveal
 solution:
   1: { role: knitter,      alignment: good }
   2: { role: fortune teller, alignment: good }
