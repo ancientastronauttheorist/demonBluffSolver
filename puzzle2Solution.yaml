@@ -1,13 +1,28 @@
 seats: 8
-
 evils_in_play: 2
 
 solution:
-  1: { role: druid,        alignment: good }
-  2: { role: baker,        alignment: good }
-  3: { role: plague doctor, alignment: outcast }
-  4: { role: baker,        alignment: good }
-  5: { role: drunk,        alignment: outcast }
-  6: { role: counsellor,   alignment: minion }
-  7: { role: baker,        alignment: good }
-  8: { role: shaman,       alignment: minion }
+  1:
+    role: druid
+    alignment: good
+  2:
+    role: baker
+    alignment: good
+  3:
+    role: plague doctor
+    alignment: outcast
+  4:
+    role: baker
+    alignment: good
+  5:
+    role: drunk
+    alignment: outcast
+  6:
+    role: counsellor
+    alignment: minion
+  7:
+    role: baker
+    alignment: good
+  8:
+    role: shaman
+    alignment: minion
