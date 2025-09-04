@@ -1,0 +1,102 @@
+# demon_bluff_rules.yaml
+schema_version: 1
+game: Demon Bluff
+source: steam
+last_checked: 2025-09-03
+ignore_cycles: true
+
+terms:
+  alignments:
+    good: [villager, outcast]
+    evil: [minion, demon]
+  default_truth_by_alignment:
+    villager: true
+    outcast: true
+    minion: false
+    demon: false
+  statuses:
+    corrupted:
+      description: A corrupted character lies and their ability text is disabled (unless the role says otherwise).
+      notes: Corruption never changes alignment.
+  measurements:
+    ring:
+      seats_are_in_a_circle: true
+      adjacency: left_and_right_wrap
+    distance:
+      definition: "shortest number of steps along the ring between seats"
+    range:
+      definition: "all seats within distance r inclusive on both sides"
+    pairs:
+      definition: "unordered adjacent seat pairs (i, i+1) around the ring (with N wrapping to 1)"
+    side_of_circle:
+      definition: "split the ring into two halves of equal size anchored at a chosen seat; when N is even both midpoints are included in their respective halves"
+  keywords:
+    lie: "speaker's statement may be false or misleading; treat as untrusted"
+    disguise: "speaker may claim a role other than their true role when revealed or when listed under 'flipped' claims"
+    reveal: "turning a face-down card face-up; if flipped_are_claims: true, treat the revealed role as a claim instead of a fact"
+
+setup:
+  seats: "<int: number of seats in puzzle>"
+  deck: "<list of role names available to be drawn>"
+  deal: "Shuffle deck and place one role to each seat (or draw from a deck larger than N, per puzzle)."
+  flips:
+    description: "The UI may show each seat's role claim. By default, a flip is factual; set options.flipped_are_claims: true to treat them as claims."
+  statements:
+    format: "{seat: <int>, role: <role_name or claim>, says: <free-form string>}"
+    truthiness: "Truth depends on alignment, statuses, and role text."
+
+flow:
+  turn_structure: "Not modelled here (ignore day/night). Use role text and statements as given by the puzzle."
+  abilities:
+    timing: "Unless the role specifies otherwise, abilities resolve when the seat is revealed or when the puzzle supplies their statement."
+    multiplicity: "Abilities are one-shot unless the role says otherwise."
+  conflicts:
+    resolution: "If two abilities would contradict, the puzzle instance provides the authoritative log; treat as constraints to satisfy."
+
+win_and_loss:
+  win:
+    objective: "Execute all Evil characters (minions and demons; include puppet if puppetry module enabled)."
+  loss:
+    conditions:
+      - "After you have exhausted your allowed executions and any evils remain alive."
+  parameters:
+    executions_to_win: "<int | default: equal to number of evils in play>"
+    evils_in_play: "<int | auto if puzzle can infer>"
+
+options:
+  flipped_are_claims: false
+  enable_puppetry_module: false
+  enable_corrode_module: false
+
+modules:
+  puppetry:
+    enabled_if: "enable_puppetry_module == true and deck contains 'puppeteer'"
+    rules:
+      - "Create exactly one Puppet on a villager-adjacent seat to the Puppeteer, if any such seat exists."
+      - "The Puppet's printed role is the same as its base seat; alignment becomes evil; by default a Puppet is truthful unless the Puppet or Puppeteer text says otherwise."
+      - "Puppets cannot themselves create Puppets."
+      - "Puppet counts as evil for executions and for distance/pair measurements."
+  corruption:
+    enabled_if: "roles or puzzle introduce corruption"
+    rules:
+      - "A corrupted character lies and its role ability is suppressed (unless that role's text says otherwise)."
+      - "Cure effects remove corruption; curing never changes alignment."
+
+solver_conventions:
+  distance_metric: "min(|i-j|, N-|i-j|)"
+  'k_away_from_closest_evil':
+    meaning: "Distance from seat to nearest seat whose alignment is evil under current world assumptions."
+  'side_more_evil':
+    meaning: "Compare counts of evil seats on the two halves of the ring relative to the speaker's seat."
+  'pairs_of_evil':
+    meaning: "Number of adjacent pairs (i,i+1) where both seats are evil."
+  assumptions:
+    - "When a role says 'Learn X', take the statement at face value if the speaker is truthful; otherwise treat as untrusted but not necessarily negated."
+    - "When a role has 'Lie', treat all their statements as untrusted regardless of alignment."
+
+notes:
+  compatibility:
+    - "This rules file is designed to pair with your characters.yaml role list."
+    - "It intentionally omits day/night phases and roguelike deckbuilding steps per request."
+  provenance:
+    - "Core concepts (single-player social deduction, four character types, goal is to find/execute evils, cards can lie) are summarized from the official Steam store page."
