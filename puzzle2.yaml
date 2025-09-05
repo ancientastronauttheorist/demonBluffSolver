@@ -1,36 +1,37 @@
-seats: 8
+seats: 7
+executions_to_win: 2
 deck:
-  - alchemist
-  - enlightened
-  - knitter
-  - bard
   - druid
-  - baker
+  - oracle
+  - medium
+  - knitter
+  - confessor
   - plague doctor
-  - drunk
-  - counsellor
-  - shaman
+  - doppelganger
+  - poisoner
+  - pooka
+flipped_alignment_counts:
+  villager: 4
+  outcast: 1
+  minion: 1
+  demon: 1
 flipped:
   1:
-    role: druid
+    role: medium
+    says: "#4 is a real knitter"
   2:
-    role: baker
-    says: "i am the original baker"
+    role: confessor
+    says: "i am dizzy"
   3:
-    role: plague doctor
+    role: druid
   4:
-    role: baker
-  5:
-    role: alchemist
-    says: "i cured 2 corruptions"
-  6:
-    role: baker
-    says: "i was a bard"
-  7:
-    role: baker
-    says: "i was a knitter"
-  8:
     role: knitter
     says: "there is only 1 pair of evil"
-options:
-  executions_to_win: 2
+  5:
+    role: plague doctor
+  6:
+    role: medium
+    says: "#1 is a real medium"
+  7:
+    role: oracle
+    says: "#6 or #5 is a poisoner"
