@@ -1,0 +1,14 @@
+{
+  "seats": 8,
+  "evils_in_play": 2,
+  "solution": {
+    "1": { "role": "oracle", "alignment": "good", "corrupted": false },
+    "2": { "role": "medium", "alignment": "good", "corrupted": false },
+    "3": { "role": "confessor", "alignment": "good", "corrupted": false },
+    "4": { "role": "witch", "alignment": "minion", "corrupted": false },
+    "5": { "role": "enlightened", "alignment": "good", "corrupted": false },
+    "6": { "role": "shaman", "alignment": "minion", "corrupted": false },
+    "7": { "role": "wretch", "alignment": "outcast", "corrupted": false },
+    "8": { "role": "oracle", "alignment": "good", "corrupted": false }
+  }
+}
