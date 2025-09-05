@@ -1,0 +1,28 @@
+seats: 8
+evils_in_play: 3
+
+solution:
+  1:
+    role: knitter
+    alignment: good
+  2:
+    role: fortune teller
+    alignment: good
+  3:
+    role: alchemist
+    alignment: good
+  4:
+    role: wretch
+    alignment: outcast
+  5:
+    role: medium
+    alignment: good
+  6:
+    role: puppeteer
+    alignment: minion
+  7:
+    role: puppet
+    alignment: puppet
+  8:
+    role: minion
+    alignment: minion

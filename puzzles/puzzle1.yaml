@@ -1,0 +1,28 @@
+seats: 8
+deck:
+  - alchemist
+  - fortune teller
+  - scout
+  - knitter
+  - medium
+  - plague doctor
+  - wretch
+  - puppeteer
+  - minion
+flipped:
+  1: knitter
+  2: fortune teller
+  3: alchemist
+  4: wretch
+  5: medium
+  6: plague doctor
+  7: scout
+  8: alchemist
+info_log:
+  - {seat: 1, role: knitter,         says: "there are 2 pairs of evil"}
+  - {seat: 3, role: alchemist,       says: "i cured 0 corruptions"}
+  - {seat: 5, role: medium,          says: "#1 is the real knitter"}
+  - {seat: 7, role: scout,           says: "puppeteer is 1 card away from closest evil"}
+  - {seat: 8, role: alchemist,       says: "i cured 2 corruptions"}
+options:
+  executions_to_win: 3  
