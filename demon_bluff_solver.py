@@ -128,6 +128,10 @@ def count_cures_for_seat(seat: int, roles: dict, corrupted: set, seats: int) -> 
 
 def simulate_corruption(roles: dict, seats: int):
     base = set()
+    # Drunks start the game corrupted
+    for i, r in roles.items():
+        if r == 'drunk':
+            base.add(i)
     # Pooka
     for i, r in roles.items():
         if r == 'pooka':
@@ -156,10 +160,11 @@ def simulate_corruption(roles: dict, seats: int):
     # Plague doctor
     for i, r in roles.items():
         if r == 'plague doctor':
-            targets = [j for j in range(1, seats + 1) if is_villager(roles[j]) and alignment(roles[j]) == 'good' and can_be_corrupted(roles[j])]
+            targets = [j for j in range(1, seats + 1)
+                       if is_villager(roles[j]) and alignment(roles[j]) == 'good' and can_be_corrupted(roles[j])]
             new = []
             if targets:
-                for t in targets:
+                for t in reversed(targets):
                     for s in scenarios:
                         ns = set(s)
                         ns.add(t)
@@ -357,8 +362,24 @@ def check_global_constraints(puzzle, roles):
                 return False
             if not any(j != i and roles[j] == disp for j in range(1, seats + 1)):
                 return False
+    # drunk disguise check
+    for i, r in roles.items():
+        if r == 'drunk':
+            disp = flipped[str(i)]['role']
+            if not is_villager(disp):
+                return False
+            if any(j != i and roles[j] == disp for j in range(1, seats + 1)):
+                return False
     req = puzzle.get('flipped_alignment_counts', {})
     counts = Counter(alignment(r) for r in roles.values())
+    # Drunks appear as Villagers for alignment counts
+    drunk_cnt = sum(1 for r in roles.values() if r == 'drunk')
+    if drunk_cnt:
+        counts['outcast'] -= drunk_cnt
+    if req.get('minion', counts.get('minion', 0)) != counts.get('minion', 0):
+        return False
+    if req.get('demon', counts.get('demon', 0)) != counts.get('demon', 0):
+        return False
     if 'outcast' in req:
         if 'doppelganger' in roles.values():
             if counts.get('outcast', 0) < req['outcast']:
@@ -366,10 +387,6 @@ def check_global_constraints(puzzle, roles):
         else:
             if counts.get('outcast', 0) != req['outcast']:
                 return False
-    if req.get('minion', counts.get('minion', 0)) != counts.get('minion', 0):
-        return False
-    if req.get('demon', counts.get('demon', 0)) != counts.get('demon', 0):
-        return False
     return True
 
 def solve_puzzle(puzzle_path: str):
