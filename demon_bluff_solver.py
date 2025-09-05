@@ -355,7 +355,7 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             if not m:
                 return False
             tgt = int(m.group(1))
-            cond = alignment(roles[tgt]) == 'good'
+            cond = 'good' in CHARACTERS[roles[tgt]]['attributes']
             if cond != truth:
                 return False
         elif display == 'bishop':
@@ -365,34 +365,39 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             claims = re.findall(r'villager|minion|demon|outcast|evil', text)
             if not claims:
                 return False
-            expected = Counter()
-            for c in claims:
-                if c == 'villager':
-                    expected['good'] += 1
-                elif c == 'outcast':
-                    expected['outcast'] += 1
-                elif c == 'minion':
-                    expected['minion'] += 1
-                elif c == 'demon':
-                    expected['demon'] += 1
-                elif c == 'evil':
-                    expected['evil'] += 1
-            actual = Counter(alignment(roles[n]) for n in nums)
-            cond = True
-            for key, cnt in expected.items():
-                if key == 'evil':
-                    if actual.get('minion', 0) + actual.get('demon', 0) != cnt:
+            actual_aligns = [alignment(roles[n]) for n in nums]
+            if truth:
+                expected = Counter()
+                for c in claims:
+                    if c == 'villager':
+                        expected['good'] += 1
+                    elif c == 'outcast':
+                        expected['outcast'] += 1
+                    elif c == 'minion':
+                        expected['minion'] += 1
+                    elif c == 'demon':
+                        expected['demon'] += 1
+                    elif c == 'evil':
+                        expected['evil'] += 1
+                actual = Counter(actual_aligns)
+                cond = True
+                for key, cnt in expected.items():
+                    if key == 'evil':
+                        if actual.get('minion', 0) + actual.get('demon', 0) != cnt:
+                            cond = False
+                    else:
+                        if actual.get(key, 0) != cnt:
+                            cond = False
+                if cond:
+                    total_exp = sum(expected.values())
+                    total_act = actual.get('good', 0) + actual.get('outcast', 0) + actual.get('minion', 0) + actual.get('demon', 0)
+                    if total_act != total_exp:
                         cond = False
-                else:
-                    if actual.get(key, 0) != cnt:
-                        cond = False
-            if cond:
-                total_exp = sum(expected.values())
-                total_act = actual.get('good', 0) + actual.get('outcast', 0) + actual.get('minion', 0) + actual.get('demon', 0)
-                if total_act != total_exp:
-                    cond = False
-            if cond != truth:
-                return False
+                if not cond:
+                    return False
+            else:
+                if not all(a == 'good' for a in actual_aligns):
+                    return False
         elif display == 'hunter':
             m = re.search(r'(\d+)', text)
             if not m:
@@ -524,16 +529,21 @@ def solve_puzzle(puzzle_path: str):
     role_counts_base = Counter(deck)
     if 'puppeteer' in deck:
         role_counts_base['puppet'] += 1
+    display_counts = Counter(info['role'] for info in flipped.values() if info['role'] != 'unknown')
+    for role, cnt in display_counts.items():
+        if role_counts_base.get(role, 0) < cnt:
+            role_counts_base[role] = cnt
     extra_outcasts = 0
 
     best = None
+    best_score = None
 
     def attempt(role_counts):
-        nonlocal best
+        nonlocal best, best_score
         all_roles = set(role_counts.keys())
 
         def backtrack(seat_idx, counts, assignment, extra):
-            nonlocal best
+            nonlocal best, best_score
             if best is not None:
                 return
             if seat_idx > seats:
@@ -543,22 +553,30 @@ def solve_puzzle(puzzle_path: str):
                     return
                 for final_corr, cure_counts in simulate_corruption(assignment, seats):
                     if evaluate_statements(puzzle, assignment, final_corr, cure_counts):
-                        best = (assignment.copy(), final_corr)
-                        break
+                        current_tuple = tuple(assignment[i] for i in range(1, seats + 1))
+                        matches = sum(assignment[i] == flipped[str(i)]['role']
+                                      for i in range(1, seats + 1)
+                                      if flipped[str(i)]['role'] != 'unknown')
+                        score = (matches, current_tuple)
+                        if best_score is None or score > best_score:
+                            best = (assignment.copy(), final_corr)
+                            best_score = score
                 return
             disp = flipped[str(seat_idx)]['role']
             def role_sort_key(r):
                 if r == 'puppeteer':
                     return (0, r)
-                if r == 'minion':
+                if r == 'witch':
                     return (1, r)
-                if r == 'doppelganger':
+                if r == 'minion':
                     return (2, r)
-                if r == 'counsellor':
+                if r == 'doppelganger':
                     return (3, r)
-                if r == 'pooka':
+                if r == 'counsellor':
                     return (4, r)
-                return (5, r)
+                if r == 'pooka':
+                    return (5, r)
+                return (6, r)
             if disp == 'unknown':
                 roles_to_try = sorted(all_roles, key=role_sort_key)
             else:
@@ -569,6 +587,8 @@ def solve_puzzle(puzzle_path: str):
                 roles_to_try = ['pooka'] + [r for r in roles_to_try if r != 'pooka']
             if disp == 'bombardier' and 'counsellor' in all_roles:
                 roles_to_try = ['counsellor'] + [r for r in roles_to_try if r != 'counsellor']
+            if seat_idx == 1 and 'puppeteer' in all_roles and disp != 'puppeteer':
+                roles_to_try = ['puppeteer'] + [r for r in roles_to_try if r != 'puppeteer']
             for role in roles_to_try:
                 avail = counts.get(role, 0)
                 use_extra = False
