@@ -1,0 +1,49 @@
+{
+"seats": 7,
+"executions_to_win": 2,
+"deck": [
+"bard",
+"scout",
+"lover",
+"enlightened",
+"jester",
+"druid",
+"bombardier",
+"wretch",
+"poisoner",
+"baa"
+],
+"flipped_alignment_counts": {
+"villager": 4,
+"outcast": 1,
+"minion": 1,
+"demon": 1
+},
+"flipped": {
+"1": {
+"role": "lover",
+"says": "2 evils adjacent to me"
+},
+"2": {
+"role": "scout",
+"says": "baa is 3 cards away from closest evil"
+},
+"3": {
+"role": "bard",
+"says": "i am 1 card away from corrupted character"
+},
+"4": {
+"role": "jester"
+},
+"5": {
+"role": "enlightened",
+"says": "closest evil is equidistant"
+},
+"6": {
+"role": "druid"
+},
+"7": {
+"role": "bombardier"
+}
+}
+}
