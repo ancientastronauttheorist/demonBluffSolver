@@ -1,0 +1,32 @@
+{
+  "seats": 8,
+  "executions_to_win": 2,
+  "deck": [
+    "alchemist",
+    "enlightened",
+    "knitter",
+    "bard",
+    "druid",
+    "baker",
+    "plague doctor",
+    "drunk",
+    "counsellor",
+    "shaman"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 5,
+    "outcast": 1,
+    "minion": 2,
+    "demon": 0
+  },
+  "flipped": {
+    "1": { "role": "druid" },
+    "2": { "role": "baker", "says": "i am the original baker" },
+    "3": { "role": "plague doctor" },
+    "4": { "role": "baker", "says": "i was a baker" },
+    "5": { "role": "alchemist", "says": "i cured 2 corruptions" },
+    "6": { "role": "baker", "says": "i was a bard" },
+    "7": { "role": "baker", "says": "i was a knitter" },
+    "8": { "role": "knitter", "says": "there is only 1 pair of evil" }
+  }
+}
