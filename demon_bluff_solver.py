@@ -190,6 +190,10 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
         says = flipped[str(i)].get('says')
         corrupted = i in corrupted_set
         truth = is_truthful(role, corrupted)
+        if display == 'unknown':
+            if not says or 'can not reveal' not in says.lower():
+                return False
+            continue
         if display == 'confessor':
             said_dizzy = (says or '').strip().lower() == 'i am dizzy'
             cond = alignment(role) in {'minion', 'demon'} or corrupted
@@ -354,6 +358,41 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             cond = alignment(roles[tgt]) == 'good'
             if cond != truth:
                 return False
+        elif display == 'bishop':
+            nums = list(map(int, re.findall(r'#(\d+)', text)))
+            if not nums:
+                return False
+            claims = re.findall(r'villager|minion|demon|outcast|evil', text)
+            if not claims:
+                return False
+            expected = Counter()
+            for c in claims:
+                if c == 'villager':
+                    expected['good'] += 1
+                elif c == 'outcast':
+                    expected['outcast'] += 1
+                elif c == 'minion':
+                    expected['minion'] += 1
+                elif c == 'demon':
+                    expected['demon'] += 1
+                elif c == 'evil':
+                    expected['evil'] += 1
+            actual = Counter(alignment(roles[n]) for n in nums)
+            cond = True
+            for key, cnt in expected.items():
+                if key == 'evil':
+                    if actual.get('minion', 0) + actual.get('demon', 0) != cnt:
+                        cond = False
+                else:
+                    if actual.get(key, 0) != cnt:
+                        cond = False
+            if cond:
+                total_exp = sum(expected.values())
+                total_act = actual.get('good', 0) + actual.get('outcast', 0) + actual.get('minion', 0) + actual.get('demon', 0)
+                if total_act != total_exp:
+                    cond = False
+            if cond != truth:
+                return False
         elif display == 'hunter':
             m = re.search(r'(\d+)', text)
             if not m:
@@ -417,7 +456,7 @@ def check_global_constraints(puzzle, roles):
         if min(abs(pupt - pup), seats - abs(pupt - pup)) != 1:
             return False
         disp = flipped[str(pup)]['role']
-        if not is_villager(disp):
+        if disp != 'unknown' and not is_villager(disp):
             return False
     else:
         if puppet_seats:
@@ -440,18 +479,20 @@ def check_global_constraints(puzzle, roles):
     for i, r in roles.items():
         if r == 'doppelganger':
             disp = flipped[str(i)]['role']
-            if alignment(disp) != 'good':
-                return False
-            if not any(j != i and roles[j] == disp for j in range(1, seats + 1)):
-                return False
+            if disp != 'unknown':
+                if alignment(disp) != 'good':
+                    return False
+                if not any(j != i and roles[j] == disp for j in range(1, seats + 1)):
+                    return False
     # drunk disguise check
     for i, r in roles.items():
         if r == 'drunk':
             disp = flipped[str(i)]['role']
-            if not is_villager(disp):
-                return False
-            if any(j != i and roles[j] == disp for j in range(1, seats + 1)):
-                return False
+            if disp != 'unknown':
+                if not is_villager(disp):
+                    return False
+                if any(j != i and roles[j] == disp for j in range(1, seats + 1)):
+                    return False
     req = puzzle.get('flipped_alignment_counts', {})
     counts = Counter(alignment(r) for r in roles.values())
     # Drunks appear as Villagers for alignment counts
@@ -469,6 +510,9 @@ def check_global_constraints(puzzle, roles):
         else:
             if counts.get('outcast', 0) != req['outcast']:
                 return False
+    if any(info['role'] == 'unknown' for info in flipped.values()):
+        if 'witch' not in roles.values():
+            return False
     return True
 
 def solve_puzzle(puzzle_path: str):
@@ -515,7 +559,10 @@ def solve_puzzle(puzzle_path: str):
                 if r == 'pooka':
                     return (4, r)
                 return (5, r)
-            roles_to_try = [disp] + sorted([r for r in all_roles if r != disp], key=role_sort_key)
+            if disp == 'unknown':
+                roles_to_try = sorted(all_roles, key=role_sort_key)
+            else:
+                roles_to_try = [disp] + sorted([r for r in all_roles if r != disp], key=role_sort_key)
             if disp == 'baker' and 'doppelganger' in all_roles:
                 roles_to_try = ['doppelganger'] + [r for r in roles_to_try if r != 'doppelganger']
             if disp == 'architect' and 'pooka' in all_roles:
@@ -532,7 +579,7 @@ def solve_puzzle(puzzle_path: str):
                         use_extra = True
                     else:
                         continue
-                if role != disp and not can_disguise(role):
+                if disp != 'unknown' and role != disp and not can_disguise(role):
                     continue
                 assignment[seat_idx] = role
                 if role == 'baker' and avail == 0:
