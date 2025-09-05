@@ -1,0 +1,29 @@
+{
+  "seats": 7,
+  "executions_to_win": 2,
+  "deck": [
+    "knitter",
+    "hunter",
+    "fortune teller",
+    "judge",
+    "lover",
+    "bombardier",
+    "poisoner",
+    "pooka"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 4,
+    "outcast": 1,
+    "minion": 1,
+    "demon": 1
+  },
+  "flipped": {
+    "1": { "role": "knitter", "says": "there is only 1 pair of evil" },
+    "2": { "role": "fortune teller" },
+    "3": { "role": "lover", "says": "1 evil adjacent to me" },
+    "4": { "role": "knitter", "says": "there is only 1 pair of evil" },
+    "5": { "role": "judge" },
+    "6": { "role": "bombardier" },
+    "7": { "role": "hunter", "says": "i am 3 cards away from closest evil" }
+  }
+}
