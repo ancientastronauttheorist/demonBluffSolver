@@ -234,7 +234,7 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             if cond != truth:
                 return False
         elif display == 'medium':
-            m = re.search(r'#(\d+) is (?:a|the) real ([a-z ]+)', text)
+            m = re.search(r'#(\d+) is (?:a |the )?real ([a-z ]+)', text)
             if not m:
                 return False
             tgt = int(m.group(1))
@@ -524,6 +524,10 @@ def check_global_constraints(puzzle, roles):
     if any(info['role'] == 'unknown' for info in flipped.values()):
         if 'witch' not in roles.values():
             return False
+    if 'shaman' in roles.values():
+        villager_counts = Counter(r for r in roles.values() if is_villager(r))
+        if not any(cnt >= 2 for cnt in villager_counts.values()):
+            return False
     return True
 
 def solve_puzzle(puzzle_path: str):
@@ -620,18 +624,33 @@ def solve_puzzle(puzzle_path: str):
 
         backtrack(1, role_counts, {}, extra_outcasts)
 
-    if 'baa' in deck:
-        outcast_roles = [r for r in role_counts_base if alignment(r) == 'outcast']
-        for fake in outcast_roles:
-            counts = role_counts_base.copy()
-            counts[fake] -= 1
-            if counts[fake] <= 0:
-                del counts[fake]
-            attempt(counts)
-            if best is not None:
-                break
-    else:
-        attempt(role_counts_base)
+    base_counts = role_counts_base.copy()
+
+    def count_variants():
+        bases = [base_counts]
+        if 'baa' in deck:
+            bases = []
+            outcast_roles = [r for r in base_counts if alignment(r) == 'outcast']
+            for fake in outcast_roles:
+                c = base_counts.copy()
+                c[fake] -= 1
+                if c[fake] <= 0:
+                    del c[fake]
+                bases.append(c)
+        for counts in bases:
+            if 'shaman' in deck:
+                villagers = [r for r in counts if is_villager(r)]
+                for v in villagers:
+                    c2 = counts.copy()
+                    c2[v] += 1
+                    yield c2
+            else:
+                yield counts
+
+    for counts in count_variants():
+        attempt(counts)
+        if best is not None:
+            break
 
     if best is None:
         raise ValueError('No solution found')
