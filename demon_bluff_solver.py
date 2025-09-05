@@ -73,6 +73,13 @@ def nearest_evil_distance(roles: dict, seat: int, seats: int) -> int:
     dists = [min(abs(seat - e), seats - abs(seat - e)) for e in evil_seats]
     return min(dists)
 
+def nearest_corrupted_distance(corrupted_set: set, seat: int, seats: int) -> int:
+    others = [i for i in corrupted_set if i != seat]
+    if not others:
+        return None
+    dists = [min(abs(seat - c), seats - abs(seat - c)) for c in others]
+    return min(dists)
+
 def nearest_evil_direction(roles: dict, seat: int, seats: int):
     cw = None
     ccw = None
@@ -196,6 +203,16 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             cond = (said == actual)
             if cond != truth:
                 return False
+        elif display == 'lover':
+            m = re.search(r'(\d+)', text)
+            if not m:
+                return False
+            said = int(m.group(1))
+            left, right = neighbors(i, seats)
+            actual = sum(1 for s in (left, right) if is_evil_for_observer(roles[s]))
+            cond = (said == actual)
+            if cond != truth:
+                return False
         elif display == 'alchemist':
             m = re.search(r'(\d+)', text)
             if not m:
@@ -229,6 +246,17 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
                 return False
             dist = nearest_evil_distance(roles, seat_target, seats)
             cond = dist == dist_claim
+            if cond != truth:
+                return False
+        elif display == 'bard':
+            m = re.search(r'(\d+)', text)
+            if not m:
+                return False
+            said = int(m.group(1))
+            dist = nearest_corrupted_distance(corrupted_set, i, seats)
+            if dist is None:
+                return False
+            cond = dist == said
             if cond != truth:
                 return False
         elif display == 'oracle':
@@ -274,6 +302,17 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
         elif display == 'baker':
             # Baker statements are not informative for deduction
             continue
+        elif display == 'jester':
+            nums = re.findall(r'#(\d+)', text)
+            m = re.search(r'(\d+) evil', text)
+            if len(nums) != 3 or not m:
+                return False
+            seats_checked = list(map(int, nums))
+            said = int(m.group(1))
+            actual = sum(1 for s in seats_checked if is_evil_for_observer(roles[s]))
+            cond = actual == said
+            if cond != truth:
+                return False
         else:
             return False
     return True
@@ -333,72 +372,89 @@ def solve_puzzle(puzzle_path: str):
     seats = puzzle['seats']
     flipped = puzzle['flipped']
     deck = puzzle['deck']
-    role_counts = Counter(deck)
+    role_counts_base = Counter(deck)
     if 'puppeteer' in deck:
-        role_counts['puppet'] += 1
+        role_counts_base['puppet'] += 1
     extra_outcasts = 0
-    all_roles = set(role_counts.keys())
 
     best = None
 
-    def backtrack(seat_idx, counts, assignment, extra):
+    def attempt(role_counts):
         nonlocal best
-        if best is not None:
-            return
-        if seat_idx > seats:
-            if extra != 0:
-                return
-            if not check_global_constraints(puzzle, assignment):
-                return
-            for final_corr, cure_counts in simulate_corruption(assignment, seats):
-                if evaluate_statements(puzzle, assignment, final_corr, cure_counts):
-                    best = (assignment.copy(), final_corr)
-                    break
-            return
-        disp = flipped[str(seat_idx)]['role']
-        def role_sort_key(r):
-            if r == 'puppeteer':
-                return (0, r)
-            if r == 'minion':
-                return (1, r)
-            if r == 'doppelganger':
-                return (2, r)
-            if r == 'counsellor':
-                return (3, r)
-            if r == 'pooka':
-                return (4, r)
-            return (5, r)
-        roles_to_try = [disp] + sorted([r for r in all_roles if r != disp], key=role_sort_key)
-        if disp == 'baker' and 'doppelganger' in all_roles:
-            roles_to_try = ['doppelganger'] + [r for r in roles_to_try if r != 'doppelganger']
-        if disp == 'architect' and 'pooka' in all_roles:
-            roles_to_try = ['pooka'] + [r for r in roles_to_try if r != 'pooka']
-        if disp == 'bombardier' and 'counsellor' in all_roles:
-            roles_to_try = ['counsellor'] + [r for r in roles_to_try if r != 'counsellor']
-        for role in roles_to_try:
-            avail = counts.get(role, 0)
-            use_extra = False
-            if avail == 0:
-                if role == 'baker':
-                    pass
-                elif extra > 0 and alignment(role) == 'outcast' and role != 'doppelganger':
-                    use_extra = True
-                else:
-                    continue
-            if role != disp and not can_disguise(role):
-                continue
-            assignment[seat_idx] = role
-            if role == 'baker' and avail == 0:
-                backtrack(seat_idx + 1, counts, assignment, extra)
-            elif use_extra:
-                backtrack(seat_idx + 1, counts, assignment, extra - 1)
-            else:
-                counts[role] = avail - 1
-                backtrack(seat_idx + 1, counts, assignment, extra)
-                counts[role] = avail
-            del assignment[seat_idx]
+        all_roles = set(role_counts.keys())
 
-    backtrack(1, role_counts, {}, extra_outcasts)
+        def backtrack(seat_idx, counts, assignment, extra):
+            nonlocal best
+            if best is not None:
+                return
+            if seat_idx > seats:
+                if extra != 0:
+                    return
+                if not check_global_constraints(puzzle, assignment):
+                    return
+                for final_corr, cure_counts in simulate_corruption(assignment, seats):
+                    if evaluate_statements(puzzle, assignment, final_corr, cure_counts):
+                        best = (assignment.copy(), final_corr)
+                        break
+                return
+            disp = flipped[str(seat_idx)]['role']
+            def role_sort_key(r):
+                if r == 'puppeteer':
+                    return (0, r)
+                if r == 'minion':
+                    return (1, r)
+                if r == 'doppelganger':
+                    return (2, r)
+                if r == 'counsellor':
+                    return (3, r)
+                if r == 'pooka':
+                    return (4, r)
+                return (5, r)
+            roles_to_try = [disp] + sorted([r for r in all_roles if r != disp], key=role_sort_key)
+            if disp == 'baker' and 'doppelganger' in all_roles:
+                roles_to_try = ['doppelganger'] + [r for r in roles_to_try if r != 'doppelganger']
+            if disp == 'architect' and 'pooka' in all_roles:
+                roles_to_try = ['pooka'] + [r for r in roles_to_try if r != 'pooka']
+            if disp == 'bombardier' and 'counsellor' in all_roles:
+                roles_to_try = ['counsellor'] + [r for r in roles_to_try if r != 'counsellor']
+            for role in roles_to_try:
+                avail = counts.get(role, 0)
+                use_extra = False
+                if avail == 0:
+                    if role == 'baker':
+                        pass
+                    elif extra > 0 and alignment(role) == 'outcast' and role != 'doppelganger':
+                        use_extra = True
+                    else:
+                        continue
+                if role != disp and not can_disguise(role):
+                    continue
+                assignment[seat_idx] = role
+                if role == 'baker' and avail == 0:
+                    backtrack(seat_idx + 1, counts, assignment, extra)
+                elif use_extra:
+                    backtrack(seat_idx + 1, counts, assignment, extra - 1)
+                else:
+                    counts[role] = avail - 1
+                    backtrack(seat_idx + 1, counts, assignment, extra)
+                    counts[role] = avail
+                del assignment[seat_idx]
+
+        backtrack(1, role_counts, {}, extra_outcasts)
+
+    if 'baa' in deck:
+        outcast_roles = [r for r in role_counts_base if alignment(r) == 'outcast']
+        for fake in outcast_roles:
+            counts = role_counts_base.copy()
+            counts[fake] -= 1
+            if counts[fake] <= 0:
+                del counts[fake]
+            attempt(counts)
+            if best is not None:
+                break
+    else:
+        attempt(role_counts_base)
+
     if best is None:
         raise ValueError('No solution found')
     roles, corrupted = best
