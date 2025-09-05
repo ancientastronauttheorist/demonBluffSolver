@@ -1,0 +1,31 @@
+{
+  "seats": 8,
+  "executions_to_win": 2,
+  "deck": [
+    "confessor",
+    "architect",
+    "medium",
+    "enlightened",
+    "druid",
+    "oracle",
+    "wretch",
+    "shaman",
+    "witch"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 5,
+    "outcast": 1,
+    "minion": 2,
+    "demon": 0
+  },
+  "flipped": {
+    "1": { "role": "oracle", "says": "#4 or #8 is a witch" },
+    "2": { "role": "medium", "says": "#8 is a real oracle" },
+    "3": { "role": "confessor", "says": "i am good" },
+    "4": { "role": "architect", "says": "right side is more evil" },
+    "5": { "role": "enlightened", "says": "closest evil is equidistant" },
+    "6": { "role": "medium", "says": "#4 is real architect" },
+    "7": { "role": "wretch" },
+    "8": { "role": "unknown", "says": "can not reveal something is blocking me" }
+  }
+}
