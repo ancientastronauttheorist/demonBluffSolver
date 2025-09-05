@@ -1,0 +1,34 @@
+{
+  "seats": 9,
+  "executions_to_win": 4,
+  "deck": [
+    "judge",
+    "knight",
+    "druid",
+    "slayer",
+    "alchemist",
+    "gemcrafter",
+    "bishop",
+    "plague doctor",
+    "shaman",
+    "puppeteer",
+    "witch"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 5,
+    "outcast": 1,
+    "minion": 3,
+    "demon": 0
+  },
+  "flipped": {
+    "1": { "role": "knight" },
+    "2": { "role": "druid" },
+    "3": { "role": "judge" },
+    "4": { "role": "gemcrafter", "says": "#8 is good" },
+    "5": { "role": "slayer" },
+    "6": { "role": "gemcrafter", "says": "#9 is good" },
+    "7": { "role": "bishop", "says": "between #3, #6 and #8 there is: outcast, villager and minion" },
+    "8": { "role": "alchemist", "says": "i cured 2 corruptions" },
+    "9": { "role": "unknown", "says": "can not reveal something is blocking me" }
+  }
+}
