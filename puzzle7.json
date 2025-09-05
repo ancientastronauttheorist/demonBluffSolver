@@ -1,0 +1,32 @@
+{
+  "seats": 8,
+  "executions_to_win": 2,
+  "deck": [
+    "dreamer",
+    "baker",
+    "gemcrafter",
+    "confessor",
+    "scout",
+    "architect",
+    "bombardier",
+    "plague doctor",
+    "shaman",
+    "poisoner"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 4,
+    "outcast": 2,
+    "minion": 2,
+    "demon": 0
+  },
+  "flipped": {
+    "1": { "role": "confessor", "says": "i am dizzy" },
+    "2": { "role": "scout", "says": "shaman is 3 cards away from closest evil" },
+    "3": { "role": "baker", "says": "i was a confessor" },
+    "4": { "role": "confessor", "says": "i am good" },
+    "5": { "role": "gemcrafter", "says": "#2 is good" },
+    "6": { "role": "dreamer" },
+    "7": { "role": "plague doctor" },
+    "8": { "role": "bombardier" }
+  }
+}
