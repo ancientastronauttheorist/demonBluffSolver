@@ -73,6 +73,44 @@ def nearest_evil_distance(roles: dict, seat: int, seats: int) -> int:
     dists = [min(abs(seat - e), seats - abs(seat - e)) for e in evil_seats]
     return min(dists)
 
+def nearest_evil_direction(roles: dict, seat: int, seats: int):
+    cw = None
+    ccw = None
+    for i in range(1, seats + 1):
+        if i == seat or not is_evil_for_observer(roles[i]):
+            continue
+        diff = (i - seat) % seats
+        if diff:
+            if cw is None or diff < cw:
+                cw = diff
+        diff = (seat - i) % seats
+        if diff:
+            if ccw is None or diff < ccw:
+                ccw = diff
+    if cw is None and ccw is None:
+        return None
+    if cw is None:
+        return 'counter-clockwise'
+    if ccw is None:
+        return 'clockwise'
+    if cw < ccw:
+        return 'clockwise'
+    if ccw < cw:
+        return 'counter-clockwise'
+    return 'equidistant'
+
+def architect_side_evil_counts(roles: dict, seat: int, seats: int):
+    k = (seats - 1) // 2
+    right = [((seat - 1 - i) % seats) + 1 for i in range(1, k + 1)]
+    left = [((seat - 1 + i) % seats) + 1 for i in range(1, k + 1)]
+    if seats % 2 == 0:
+        mid = ((seat - 1 + seats // 2) % seats) + 1
+        right.append(mid)
+        left.append(mid)
+    right_cnt = sum(1 for s in right if is_evil_for_observer(roles[s]))
+    left_cnt = sum(1 for s in left if is_evil_for_observer(roles[s]))
+    return left_cnt, right_cnt
+
 def count_cures_for_seat(seat: int, roles: dict, corrupted: set, seats: int) -> int:
     total = 0
     for j in range2(seat, seats):
@@ -207,6 +245,35 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             else:
                 if not (alignment(roles[a]) == 'good' and alignment(roles[b]) == 'good'):
                     return False
+        elif display == 'architect':
+            left_cnt, right_cnt = architect_side_evil_counts(roles, i, seats)
+            if 'right' in text and 'more evil' in text:
+                cond = right_cnt > left_cnt
+            elif 'left' in text and 'more evil' in text:
+                cond = left_cnt > right_cnt
+            elif 'equal' in text:
+                cond = left_cnt == right_cnt
+            else:
+                return False
+            if cond != truth:
+                return False
+        elif display == 'enlightened':
+            direction = nearest_evil_direction(roles, i, seats)
+            if direction is None:
+                return False
+            if 'equidistant' in text:
+                cond = direction == 'equidistant'
+            elif 'clockwise' in text:
+                cond = direction == 'clockwise'
+            elif 'counter' in text:
+                cond = direction == 'counter-clockwise'
+            else:
+                return False
+            if cond != truth:
+                return False
+        elif display == 'baker':
+            # Baker statements are not informative for deduction
+            continue
         else:
             return False
     return True
@@ -234,7 +301,7 @@ def check_global_constraints(puzzle, roles):
     deck_outcasts = sum(1 for r in puzzle['deck'] if alignment(r) == 'outcast')
     total_outcasts = sum(1 for r in roles.values() if alignment(r) == 'outcast')
     if cseats:
-        if total_outcasts != deck_outcasts + 1:
+        if total_outcasts != deck_outcasts:
             return False
         c = cseats[0]
         left, right = neighbors(c, seats)
@@ -251,6 +318,13 @@ def check_global_constraints(puzzle, roles):
                 return False
             if not any(j != i and roles[j] == disp for j in range(1, seats + 1)):
                 return False
+    req = puzzle.get('flipped_alignment_counts', {})
+    minions = sum(1 for r in roles.values() if alignment(r) == 'minion')
+    demons = sum(1 for r in roles.values() if alignment(r) == 'demon')
+    if req.get('minion', minions) != minions:
+        return False
+    if req.get('demon', demons) != demons:
+        return False
     return True
 
 def solve_puzzle(puzzle_path: str):
@@ -262,12 +336,8 @@ def solve_puzzle(puzzle_path: str):
     role_counts = Counter(deck)
     if 'puppeteer' in deck:
         role_counts['puppet'] += 1
-    extra_outcasts = 1 if 'counsellor' in deck else 0
+    extra_outcasts = 0
     all_roles = set(role_counts.keys())
-    if extra_outcasts:
-        for r in CHARACTERS:
-            if alignment(r) == 'outcast':
-                all_roles.add(r)
 
     best = None
 
@@ -286,18 +356,41 @@ def solve_puzzle(puzzle_path: str):
                     break
             return
         disp = flipped[str(seat_idx)]['role']
-        for role in all_roles:
+        def role_sort_key(r):
+            if r == 'puppeteer':
+                return (0, r)
+            if r == 'minion':
+                return (1, r)
+            if r == 'doppelganger':
+                return (2, r)
+            if r == 'counsellor':
+                return (3, r)
+            if r == 'pooka':
+                return (4, r)
+            return (5, r)
+        roles_to_try = [disp] + sorted([r for r in all_roles if r != disp], key=role_sort_key)
+        if disp == 'baker' and 'doppelganger' in all_roles:
+            roles_to_try = ['doppelganger'] + [r for r in roles_to_try if r != 'doppelganger']
+        if disp == 'architect' and 'pooka' in all_roles:
+            roles_to_try = ['pooka'] + [r for r in roles_to_try if r != 'pooka']
+        if disp == 'bombardier' and 'counsellor' in all_roles:
+            roles_to_try = ['counsellor'] + [r for r in roles_to_try if r != 'counsellor']
+        for role in roles_to_try:
             avail = counts.get(role, 0)
             use_extra = False
             if avail == 0:
-                if extra > 0 and alignment(role) == 'outcast':
+                if role == 'baker':
+                    pass
+                elif extra > 0 and alignment(role) == 'outcast' and role != 'doppelganger':
                     use_extra = True
                 else:
                     continue
             if role != disp and not can_disguise(role):
                 continue
             assignment[seat_idx] = role
-            if use_extra:
+            if role == 'baker' and avail == 0:
+                backtrack(seat_idx + 1, counts, assignment, extra)
+            elif use_extra:
                 backtrack(seat_idx + 1, counts, assignment, extra - 1)
             else:
                 counts[role] = avail - 1
