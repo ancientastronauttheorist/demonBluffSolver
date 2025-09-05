@@ -431,7 +431,13 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
             if cond != truth:
                 return False
         elif display == 'baker':
-            # Baker statements are not informative for deduction
+            # Bakers may claim a previous role; only enforce if parseable
+            m = re.search(r'i was (?:a|the) ([a-z ]+)', text)
+            if m:
+                claimed = m.group(1).strip()
+                cond = (role == claimed)
+                if cond != truth:
+                    return False
             continue
         elif display == 'jester':
             nums = re.findall(r'#(\d+)', text)
