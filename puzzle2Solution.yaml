@@ -1,28 +1,25 @@
-seats: 8
-evils_in_play: 2
+seats: 7
+evils_in_play: 3
 
 solution:
   1:
-    role: druid
-    alignment: good
+    role: doppelganger
+    alignment: outcast
   2:
-    role: baker
+    role: confessor
     alignment: good
   3:
-    role: plague doctor
-    alignment: outcast
+    role: pooka
+    alignment: minion
   4:
-    role: baker
+    role: knitter
     alignment: good
   5:
-    role: drunk
-    alignment: outcast
+    role: poisoner
+    alignment: minion
   6:
-    role: counsellor
-    alignment: minion
-  7:
-    role: baker
+    role: medium
     alignment: good
-  8:
-    role: shaman
-    alignment: minion
+  7:
+    role: oracle
+    alignment: good
