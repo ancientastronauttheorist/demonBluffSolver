@@ -192,6 +192,8 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
                 return False
             continue
         if not says:
+            if display == 'jester' and corrupted:
+                return False
             continue
         text = says.lower()
         if display == 'knitter':
@@ -254,9 +256,7 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
                 return False
             said = int(m.group(1))
             dist = nearest_corrupted_distance(corrupted_set, i, seats)
-            if dist is None:
-                return False
-            cond = dist == said
+            cond = dist == said if dist is not None else False
             if cond != truth:
                 return False
         elif display == 'oracle':
@@ -358,11 +358,17 @@ def check_global_constraints(puzzle, roles):
             if not any(j != i and roles[j] == disp for j in range(1, seats + 1)):
                 return False
     req = puzzle.get('flipped_alignment_counts', {})
-    minions = sum(1 for r in roles.values() if alignment(r) == 'minion')
-    demons = sum(1 for r in roles.values() if alignment(r) == 'demon')
-    if req.get('minion', minions) != minions:
+    counts = Counter(alignment(r) for r in roles.values())
+    if 'outcast' in req:
+        if 'doppelganger' in roles.values():
+            if counts.get('outcast', 0) < req['outcast']:
+                return False
+        else:
+            if counts.get('outcast', 0) != req['outcast']:
+                return False
+    if req.get('minion', counts.get('minion', 0)) != counts.get('minion', 0):
         return False
-    if req.get('demon', demons) != demons:
+    if req.get('demon', counts.get('demon', 0)) != counts.get('demon', 0):
         return False
     return True
 
