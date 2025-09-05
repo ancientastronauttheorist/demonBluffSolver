@@ -2,24 +2,10 @@ seats: 7
 evils_in_play: 2
 
 solution:
-  1:
-    role: doppelganger
-    alignment: outcast
-  2:
-    role: confessor
-    alignment: good
-  3:
-    role: pooka
-    alignment: minion
-  4:
-    role: knitter
-    alignment: good
-  5:
-    role: poisoner
-    alignment: minion
-  6:
-    role: medium
-    alignment: good
-  7:
-    role: oracle
-    alignment: good
+  1: { role: doppelganger, alignment: outcast,  corrupted: false }
+  2: { role: confessor,    alignment: good,     corrupted: true }
+  3: { role: pooka,        alignment: minion,   corrupted: false }
+  4: { role: knitter,      alignment: good,     corrupted: true }  
+  5: { role: poisoner,     alignment: minion,   corrupted: false }
+  6: { role: medium,       alignment: good,     corrupted: true }
+  7: { role: oracle,       alignment: good,     corrupted: false }
