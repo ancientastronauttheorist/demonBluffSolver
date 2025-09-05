@@ -319,6 +319,73 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
                 return False
             if cond != truth:
                 return False
+        elif display == 'fortune teller':
+            nums = re.findall(r'#(\d+)', text)
+            if len(nums) != 2:
+                return False
+            seats_checked = list(map(int, nums))
+            neg = 'no' in text or 'none' in text or 'not' in text
+            any_evil = any(is_evil_for_observer(roles[s]) for s in seats_checked)
+            cond = not any_evil if neg else any_evil
+            if cond != truth:
+                return False
+        elif display == 'dreamer':
+            m = re.search(r'#(\d+) is (?:a|the) ([a-z ]+)', text)
+            if not m:
+                return False
+            tgt = int(m.group(1))
+            role_name = m.group(2).strip()
+            cond = roles[tgt] == role_name
+            if cond != truth:
+                return False
+        elif display == 'druid':
+            m = re.search(r'#(\d+)', text)
+            if not m or 'outcast' not in text:
+                return False
+            tgt = int(m.group(1))
+            cond = roles[tgt] != 'wretch' and alignment(roles[tgt]) == 'outcast'
+            if cond != truth:
+                return False
+        elif display == 'gemcrafter':
+            m = re.search(r'#(\d+)', text)
+            if not m:
+                return False
+            tgt = int(m.group(1))
+            cond = alignment(roles[tgt]) == 'good'
+            if cond != truth:
+                return False
+        elif display == 'hunter':
+            m = re.search(r'(\d+)', text)
+            if not m:
+                return False
+            said = int(m.group(1))
+            dist = nearest_evil_distance(roles, i, seats)
+            cond = dist == said if dist is not None else False
+            if cond != truth:
+                return False
+        elif display == 'plague doctor':
+            m = re.search(r'#(\d+)', text)
+            if not m:
+                return False
+            tgt = int(m.group(1))
+            if 'evil' in text:
+                cond = is_evil_for_observer(roles[tgt])
+            else:
+                m2 = re.search(r'#\d+ is (?:a|the) ([a-z ]+)', text)
+                if not m2:
+                    return False
+                role_name = m2.group(1).strip()
+                cond = roles[tgt] == role_name
+            if cond != truth:
+                return False
+        elif display == 'slayer':
+            m = re.search(r'#(\d+)', text)
+            if not m:
+                return False
+            tgt = int(m.group(1))
+            cond = is_evil_for_observer(roles[tgt])
+            if cond != truth:
+                return False
         elif display == 'baker':
             # Baker statements are not informative for deduction
             continue
