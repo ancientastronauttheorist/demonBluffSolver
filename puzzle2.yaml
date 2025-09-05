@@ -11,19 +11,26 @@ deck:
   - counsellor
   - shaman
 flipped:
-  1: druid
-  2: baker
-  3: plague doctor
-  4: baker
-  5: alchemist
-  6: baker
-  7: baker
-  8: knitter
-info_log:
-  - {seat: 8, role: knitter,   says: "there is only 1 pair of evil"}
-  - {seat: 5, role: alchemist, says: "i cured 2 corruptions"}
-  - {seat: 2, role: baker,     says: "i am the original baker"}
-  - {seat: 6, role: baker,     says: "i was a bard"}
-  - {seat: 7, role: baker,     says: "i was a knitter"}
+  1:
+    role: druid
+  2:
+    role: baker
+    says: "i am the original baker"
+  3:
+    role: plague doctor
+  4:
+    role: baker
+  5:
+    role: alchemist
+    says: "i cured 2 corruptions"
+  6:
+    role: baker
+    says: "i was a bard"
+  7:
+    role: baker
+    says: "i was a knitter"
+  8:
+    role: knitter
+    says: "there is only 1 pair of evil"
 options:
   executions_to_win: 2
