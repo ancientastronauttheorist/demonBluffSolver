@@ -1,0 +1,49 @@
+{
+  "seats": 7,
+  "executions_to_win": 2,
+  "deck": [
+    "baker",
+    "architect",
+    "bard",
+    "enlightened",
+    "judge",
+    "bombardier",
+    "doppelganger",
+    "counsellor",
+    "pooka"
+  ],
+  "flipped_alignment_counts": {
+    "villager": 4,
+    "outcast": 1,
+    "minion": 1,
+    "demon": 1
+  },
+  "flipped": {
+    "1": {
+      "role": "baker",
+      "says": "i am the original baker"
+    },
+    "2": {
+      "role": "architect",
+      "says": "right side is more evil"
+    },
+    "3": {
+      "role": "enlightened",
+      "says": "closest evil is equidistant"
+    },
+    "4": {
+      "role": "baker",
+      "says": "i am the original baker"
+    },
+    "5": {
+      "role": "bombardier"
+    },
+    "6": {
+      "role": "bombardier"
+    },
+    "7": {
+      "role": "baker",
+      "says": "i was a baker"
+    }
+  }
+}
