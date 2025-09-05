@@ -1,0 +1,13 @@
+{
+"seats": 7,
+"evils_in_play": 2,
+"solution": {
+"1": { "role": "doppelganger", "alignment": "outcast", "corrupted": false },
+"2": { "role": "pooka", "alignment": "demon", "corrupted": false },
+"3": { "role": "enlightened", "alignment": "good", "corrupted": true },
+"4": { "role": "baker", "alignment": "good", "corrupted": false },
+"5": { "role": "counsellor", "alignment": "minion", "corrupted": false },
+"6": { "role": "bombardier", "alignment": "outcast", "corrupted": false },
+"7": { "role": "baker", "alignment": "good", "corrupted": false }
+}
+}
