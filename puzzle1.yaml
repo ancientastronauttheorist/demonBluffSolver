@@ -10,19 +10,26 @@ deck:
   - puppeteer
   - minion
 flipped:
-  1: knitter
-  2: fortune teller
-  3: alchemist
-  4: wretch
-  5: medium
-  6: plague doctor
-  7: scout
-  8: alchemist
-info_log:
-  - {seat: 1, role: knitter,         says: "there are 2 pairs of evil"}
-  - {seat: 3, role: alchemist,       says: "i cured 0 corruptions"}
-  - {seat: 5, role: medium,          says: "#1 is the real knitter"}
-  - {seat: 7, role: scout,           says: "puppeteer is 1 card away from closest evil"}
-  - {seat: 8, role: alchemist,       says: "i cured 2 corruptions"}
+  1:
+    role: knitter
+    says: "there are 2 pairs of evil"
+  2:
+    role: fortune teller
+  3:
+    role: alchemist
+    says: "i cured 0 corruptions"
+  4:
+    role: wretch
+  5:
+    role: medium
+    says: "#1 is the real knitter"
+  6:
+    role: plague doctor
+  7:
+    role: scout
+    says: "puppeteer is 1 card away from closest evil"
+  8:
+    role: alchemist
+    says: "i cured 2 corruptions"
 options:
-  executions_to_win: 3  
+  executions_to_win: 3
