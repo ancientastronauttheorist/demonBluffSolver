@@ -1,5 +1,6 @@
 import json
 import re
+from collections import Counter
 
 # Load character definitions
 with open('characters.json') as f:
@@ -12,7 +13,7 @@ def alignment(role: str) -> str:
         return 'puppet'
     attrs = CHARACTERS[role]['attributes']
     if 'demon' in attrs:
-        return 'minion'
+        return 'demon'
     if 'minion' in attrs:
         return 'minion'
     if 'outcast' in attrs:
@@ -228,6 +229,20 @@ def check_global_constraints(puzzle, roles):
     else:
         if puppet_seats:
             return False
+    # counsellor adjacency and outcast count
+    cseats = [i for i, r in roles.items() if r == 'counsellor']
+    deck_outcasts = sum(1 for r in puzzle['deck'] if alignment(r) == 'outcast')
+    total_outcasts = sum(1 for r in roles.values() if alignment(r) == 'outcast')
+    if cseats:
+        if total_outcasts != deck_outcasts + 1:
+            return False
+        c = cseats[0]
+        left, right = neighbors(c, seats)
+        if alignment(roles[left]) != 'outcast' and alignment(roles[right]) != 'outcast':
+            return False
+    else:
+        if total_outcasts > deck_outcasts:
+            return False
     # doppelganger check
     for i, r in roles.items():
         if r == 'doppelganger':
@@ -244,17 +259,25 @@ def solve_puzzle(puzzle_path: str):
     seats = puzzle['seats']
     flipped = puzzle['flipped']
     deck = puzzle['deck']
-    roles_available = deck[:]
+    role_counts = Counter(deck)
     if 'puppeteer' in deck:
-        roles_available.append('puppet')
+        role_counts['puppet'] += 1
+    extra_outcasts = 1 if 'counsellor' in deck else 0
+    all_roles = set(role_counts.keys())
+    if extra_outcasts:
+        for r in CHARACTERS:
+            if alignment(r) == 'outcast':
+                all_roles.add(r)
 
     best = None
 
-    def backtrack(seat_idx, used, assignment):
+    def backtrack(seat_idx, counts, assignment, extra):
         nonlocal best
         if best is not None:
             return
         if seat_idx > seats:
+            if extra != 0:
+                return
             if not check_global_constraints(puzzle, assignment):
                 return
             for final_corr, cure_counts in simulate_corruption(assignment, seats):
@@ -263,18 +286,26 @@ def solve_puzzle(puzzle_path: str):
                     break
             return
         disp = flipped[str(seat_idx)]['role']
-        for role in roles_available:
-            if role in used:
-                continue
+        for role in all_roles:
+            avail = counts.get(role, 0)
+            use_extra = False
+            if avail == 0:
+                if extra > 0 and alignment(role) == 'outcast':
+                    use_extra = True
+                else:
+                    continue
             if role != disp and not can_disguise(role):
                 continue
             assignment[seat_idx] = role
-            used.add(role)
-            backtrack(seat_idx + 1, used, assignment)
-            used.remove(role)
+            if use_extra:
+                backtrack(seat_idx + 1, counts, assignment, extra - 1)
+            else:
+                counts[role] = avail - 1
+                backtrack(seat_idx + 1, counts, assignment, extra)
+                counts[role] = avail
             del assignment[seat_idx]
 
-    backtrack(1, set(), {})
+    backtrack(1, role_counts, {}, extra_outcasts)
     if best is None:
         raise ValueError('No solution found')
     roles, corrupted = best
