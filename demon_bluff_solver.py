@@ -304,6 +304,21 @@ def evaluate_statements(puzzle, roles, corrupted_set, cure_counts):
                 return False
             if cond != truth:
                 return False
+        elif display == 'judge':
+            m = re.search(r'#(\d+)', text)
+            if not m:
+                return False
+            tgt = int(m.group(1))
+            target_truth = is_truthful(roles[tgt], tgt in corrupted_set)
+            neg = 'not' in text
+            if 'lying' in text:
+                cond = target_truth if neg else not target_truth
+            elif 'truth' in text:
+                cond = not target_truth if neg else target_truth
+            else:
+                return False
+            if cond != truth:
+                return False
         elif display == 'baker':
             # Baker statements are not informative for deduction
             continue
