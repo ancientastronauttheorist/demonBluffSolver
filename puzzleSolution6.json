@@ -1,0 +1,15 @@
+{
+  "seats": 9,
+  "evils_in_play": 4,
+  "solution": {
+    "1": { "role": "puppeteer", "alignment": "minion", "corrupted": false },
+    "2": { "role": "puppet", "alignment": "puppet", "corrupted": false },
+    "3": { "role": "judge", "alignment": "good", "corrupted": false },
+    "4": { "role": "gemcrafter", "alignment": "good", "corrupted": false },
+    "5": { "role": "witch", "alignment": "minion", "corrupted": false },
+    "6": { "role": "gemcrafter", "alignment": "good", "corrupted": false },
+    "7": { "role": "shaman", "alignment": "minion", "corrupted": false },
+    "8": { "role": "alchemist", "alignment": "good", "corrupted": true },
+    "9": { "role": "plague doctor", "alignment": "outcast", "corrupted": false }
+  }
+}
