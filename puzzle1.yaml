@@ -1,4 +1,5 @@
 seats: 8
+executions_to_win: 3
 deck:
   - alchemist
   - fortune teller
@@ -9,6 +10,11 @@ deck:
   - wretch
   - puppeteer
   - minion
+flipped_alignment_counts:
+  villager: 5
+  outcast: 1
+  minion: 2
+  demon: 0
 flipped:
   1:
     role: knitter
@@ -31,5 +37,3 @@ flipped:
   8:
     role: alchemist
     says: "i cured 2 corruptions"
-options:
-  executions_to_win: 3
