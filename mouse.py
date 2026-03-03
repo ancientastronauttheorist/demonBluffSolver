@@ -1,48 +1,111 @@
-"""Mouse control utility for interacting with the game."""
+"""Mouse control utility for interacting with the game.
+
+Automatically applies calibration transform if calibration.json exists.
+Run `python calibrate.py` to generate the calibration file.
+"""
+import json
+import os
 import sys
 import time
+import ctypes
 import pyautogui
+
+# Fix DPI scaling on Windows — without this, coordinates are wrong!
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except Exception:
+    pass
 
 # Safety: don't move too fast, allow abort by moving mouse to corner
 pyautogui.PAUSE = 0.3
 pyautogui.FAILSAFE = True
 
+# Calibration state (lazy-loaded)
+_calibration = None
+_calibration_loaded = False
+CALIBRATION_FILE = os.path.join(os.path.dirname(__file__), "calibration.json")
+
+
+def _load_calibration():
+    """Lazy-load calibration.json. Only reads file once."""
+    global _calibration, _calibration_loaded
+    if _calibration_loaded:
+        return _calibration
+    _calibration_loaded = True
+    if os.path.exists(CALIBRATION_FILE):
+        try:
+            with open(CALIBRATION_FILE) as f:
+                _calibration = json.load(f)
+            print(f"[calibration] Loaded (max residual: {_calibration['max_residual_px']:.1f} px)")
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"[calibration] WARNING: Failed to load {CALIBRATION_FILE}: {e}")
+            _calibration = None
+    return _calibration
+
+
+def _transform(x, y):
+    """Apply inverse calibration transform: screenshot coords → pyautogui coords.
+
+    If no calibration is loaded, returns coordinates unchanged.
+    """
+    cal = _load_calibration()
+    if cal is None:
+        return int(round(x)), int(round(y))
+    inv = cal["inverse"]
+    tx = inv["scale_x"] * x + inv["offset_x"]
+    ty = inv["scale_y"] * y + inv["offset_y"]
+    return int(round(tx)), int(round(ty))
+
+
+def _fmt(orig_x, orig_y, trans_x, trans_y):
+    """Format coordinate debug string, only showing transform if it changed."""
+    if orig_x == trans_x and orig_y == trans_y:
+        return f"({orig_x}, {orig_y})"
+    return f"({orig_x}, {orig_y})→({trans_x}, {trans_y})"
+
 
 def click(x, y, button="left"):
-    """Click at position (x, y)."""
-    pyautogui.click(x, y, button=button)
-    print(f"Clicked ({x}, {y}) {button}")
+    """Click at position (x, y). Coords are in screenshot space."""
+    tx, ty = _transform(x, y)
+    pyautogui.click(tx, ty, button=button)
+    print(f"Clicked {_fmt(x, y, tx, ty)} {button}")
 
 
 def move(x, y):
-    """Move mouse to position (x, y)."""
-    pyautogui.moveTo(x, y)
-    print(f"Moved to ({x}, {y})")
+    """Move mouse to position (x, y). Coords are in screenshot space."""
+    tx, ty = _transform(x, y)
+    pyautogui.moveTo(tx, ty)
+    print(f"Moved to {_fmt(x, y, tx, ty)}")
 
 
 def right_click(x, y):
-    """Right-click at position (x, y)."""
-    pyautogui.click(x, y, button="right")
-    print(f"Right-clicked ({x}, {y})")
+    """Right-click at position (x, y). Coords are in screenshot space."""
+    tx, ty = _transform(x, y)
+    pyautogui.click(tx, ty, button="right")
+    print(f"Right-clicked {_fmt(x, y, tx, ty)}")
 
 
 def double_click(x, y):
-    """Double-click at position (x, y)."""
-    pyautogui.doubleClick(x, y)
-    print(f"Double-clicked ({x}, {y})")
+    """Double-click at position (x, y). Coords are in screenshot space."""
+    tx, ty = _transform(x, y)
+    pyautogui.doubleClick(tx, ty)
+    print(f"Double-clicked {_fmt(x, y, tx, ty)}")
 
 
 def drag(x1, y1, x2, y2, duration=0.5):
-    """Drag from (x1, y1) to (x2, y2)."""
-    pyautogui.moveTo(x1, y1)
-    pyautogui.drag(x2 - x1, y2 - y1, duration=duration)
-    print(f"Dragged ({x1},{y1}) -> ({x2},{y2})")
+    """Drag from (x1, y1) to (x2, y2). Coords are in screenshot space."""
+    tx1, ty1 = _transform(x1, y1)
+    tx2, ty2 = _transform(x2, y2)
+    pyautogui.moveTo(tx1, ty1)
+    pyautogui.drag(tx2 - tx1, ty2 - ty1, duration=duration)
+    print(f"Dragged {_fmt(x1, y1, tx1, ty1)} -> {_fmt(x2, y2, tx2, ty2)}")
 
 
 def scroll(amount, x=None, y=None):
-    """Scroll up (positive) or down (negative)."""
+    """Scroll up (positive) or down (negative). Coords are in screenshot space."""
     if x is not None and y is not None:
-        pyautogui.moveTo(x, y)
+        tx, ty = _transform(x, y)
+        pyautogui.moveTo(tx, ty)
     pyautogui.scroll(amount)
     print(f"Scrolled {amount}")
 
