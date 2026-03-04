@@ -365,8 +365,13 @@ def _recommend_slayer(
 ) -> Optional[AbilityRecommendation]:
     """Slayer: pick target with highest evil probability. Not entropy-based."""
     probs = evil_probabilities(state, result)
+    # Filter out Bombardier (auto-lose if Slayer kills Good Bombardier)
+    # and execution-immune roles (Knight can't die)
+    dangerous = set(result.bombardier_positions)
+    immune = {c.position for c in state.cards if c.apparent_role in EXECUTION_IMMUNE_ROLES}
     candidates = [p for p in range(1, state.n_cards + 1)
-                  if p not in state.executed and p != ability_pos]
+                  if p not in state.executed and p != ability_pos
+                  and p not in dangerous and p not in immune]
     if not candidates:
         return None
 
@@ -403,6 +408,15 @@ def recommend_abilities(
     recommendations = []
     available = [p for p in range(1, state.n_cards + 1) if p not in state.executed]
 
+    # Build sets of useless targets
+    # Poet targets are useless for Judge (random info = meaningless "lying" check)
+    poet_positions = {c.position for c in state.cards if c.apparent_role == "Poet"}
+    # Bombardier targets are dangerous for Slayer (auto-lose if killed)
+    bombardier_safe = set(result.bombardier_positions)
+    # Execution-immune targets are useless for Slayer
+    immune_positions = {c.position for c in state.cards
+                        if c.apparent_role in EXECUTION_IMMUNE_ROLES}
+
     for card in state.cards:
         pos = card.position
         if pos in state.executed or pos in used_abilities:
@@ -433,12 +447,18 @@ def recommend_abilities(
                 recommendations.append(rec)
 
         elif role == "Judge":
-            candidates = [[t] for t in others]
+            # Filter out Poets — their info is random, so Judge result is meaningless
+            judge_targets = [t for t in others if t not in poet_positions]
+            if not judge_targets:
+                continue
+            candidates = [[t] for t in judge_targets]
             rec = _recommend_boolean_ability(
                 "Judge", pos,
                 lambda t, s, st: _judge_ground_truth(t[0], s, st),
                 candidates, state, result)
             if rec:
+                if rec.targets and rec.targets[0] in poet_positions:
+                    rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
                 recommendations.append(rec)
 
         elif role == "Dreamer":
@@ -617,16 +637,35 @@ def recommend_action(
             warnings=best_ability.warnings)
 
     # 6. Witch fallback -- can't reveal, execute by probability
+    # HP-aware gating: only allow probabilistic execution if we can afford a wrong guess
+    can_afford_wrong = state.hp > state.wrong_exec_cost
     probs = evil_probabilities(state, result)
     active_probs = {p: prob for p, prob in probs.items()
                     if p not in state.executed and p not in result.bombardier_positions
                     and p not in immune_positions}
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
+        best_prob = active_probs[best_pos]
+
+        warnings = [f"Probabilistic execution -- {best_prob:.0%} confident"]
+        if not can_afford_wrong:
+            warnings.append(f"CRITICAL: HP={state.hp}, wrong exec costs {state.wrong_exec_cost} -- "
+                            f"CANNOT afford a mistake! Only execute if certain.")
+            # Block execution below 100% if we can't afford wrong
+            if best_prob < 1.0:
+                return Action(
+                    "error", position=best_pos,
+                    reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but HP too low to risk "
+                              f"(HP={state.hp}, cost={state.wrong_exec_cost}). Need more info.",
+                    warnings=warnings)
+        elif best_prob < 0.5:
+            warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")
+
         return Action(
             "execute", position=best_pos,
-            reasoning=f"No reveals available. #{best_pos} is {active_probs[best_pos]:.0%} likely evil",
-            warnings=["Probabilistic execution -- no certainty"])
+            reasoning=f"No reveals available. #{best_pos} is {best_prob:.0%} likely evil "
+                      f"(HP={state.hp}, can afford {state.hp // state.wrong_exec_cost} wrong execs)",
+            warnings=warnings)
 
     # 7. Shouldn't reach here
     return Action("error", reasoning="No valid action found")
@@ -679,5 +718,9 @@ def print_recommendation(state: GameState, result: SolverResult,
             for w in rec.warnings:
                 print(f"      WARNING: {w}")
 
-    print(f"\n  ({result.n_surviving} surviving scenarios)\n")
+    # HP status
+    wrong_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 999
+    print(f"\n  HP: {state.hp}/{10} | Wrong exec cost: {state.wrong_exec_cost} | "
+          f"Budget: {wrong_budget} wrong executions")
+    print(f"  ({result.n_surviving} surviving scenarios)\n")
     return action

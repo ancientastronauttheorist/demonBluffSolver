@@ -131,6 +131,9 @@ class GameSession:
         self.confirmed_good: list[int] = []
         self.pd_corruption_target: Optional[int] = None
         self.used_abilities: list[int] = []
+        self.executed_evil_roles: dict[int, str] = {}  # pos -> evil role name
+        self.hp: int = 10
+        self.wrong_exec_cost: int = 2  # Ascension 4 default
 
     # -- Deck --
 
@@ -149,13 +152,16 @@ class GameSession:
         self.cards.append(card)
         self.cards.sort(key=lambda c: c.position)
 
-    def mark_executed(self, pos: int, was_evil: Optional[bool] = None):
+    def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
+                      evil_role: Optional[str] = None):
         if pos not in self.executed:
             self.executed.append(pos)
         if was_evil is True and pos not in self.confirmed_evil:
             self.confirmed_evil.append(pos)
         elif was_evil is False and pos not in self.confirmed_good:
             self.confirmed_good.append(pos)
+        if evil_role:
+            self.executed_evil_roles[pos] = evil_role
 
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
@@ -182,6 +188,9 @@ class GameSession:
             confirmed_evil=list(self.confirmed_evil),
             confirmed_good=list(self.confirmed_good),
             pd_corruption_target=self.pd_corruption_target,
+            executed_evil_roles=dict(self.executed_evil_roles),
+            hp=self.hp,
+            wrong_exec_cost=self.wrong_exec_cost,
         )
 
     def solve(self) -> SolverResult:
@@ -308,6 +317,9 @@ class GameSession:
             "confirmed_good": self.confirmed_good,
             "pd_corruption_target": self.pd_corruption_target,
             "used_abilities": self.used_abilities,
+            "executed_evil_roles": self.executed_evil_roles,
+            "hp": self.hp,
+            "wrong_exec_cost": self.wrong_exec_cost,
         }
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
@@ -331,6 +343,11 @@ class GameSession:
         session.confirmed_good = data.get("confirmed_good", [])
         session.pd_corruption_target = data.get("pd_corruption_target")
         session.used_abilities = data.get("used_abilities", [])
+        # Convert executed_evil_roles keys from str (JSON) back to int
+        raw_eer = data.get("executed_evil_roles", {})
+        session.executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
+        session.hp = data.get("hp", 10)
+        session.wrong_exec_cost = data.get("wrong_exec_cost", 2)
         print(f"[load] Session loaded from {path}")
         return session
 
@@ -417,17 +434,20 @@ def main():
         print("Usage: python game_loop.py <command> [args...]")
         print()
         print("Commands:")
-        print("  new <n_cards> <n_evil>              Start new game session")
-        print("  deck V=... O=... M=... D=...        Set deck composition")
-        print("  card <role> <pos> [args...]          Add a revealed card")
-        print("  execute <pos> [evil|good]            Mark position executed")
-        print("  pd_target <pos>                      Set Plague Doctor corruption target")
-        print("  solve                                Run solver")
-        print("  status                               Print session state")
-        print("  confirm_evil <pos>                   Mark position as confirmed evil")
-        print("  confirm_good <pos>                   Mark position as confirmed good")
-        print("  next                                 Full strategy recommendation")
-        print("  ability_used <pos>                   Mark ability as activated")
+        print("  new <n_cards> <n_evil> [hp=N cost=N] Start new game session")
+        print("  deck V=... O=... M=... D=...         Set deck composition")
+        print("  card <role> <pos> [args...]           Add a revealed card")
+        print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
+        print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
+        print("  pd_target <pos>                       Set Plague Doctor corruption target")
+        print("  set_hp <hp> [wrong_exec_cost]         Update HP and wrong execution cost")
+        print("  solve                                 Run solver")
+        print("  status                                Print session state")
+        print("  confirm_evil <pos>                    Mark position as confirmed evil")
+        print("  confirm_good <pos>                    Mark position as confirmed good")
+        print("  next                                  Full strategy recommendation")
+        print("  ability_used <pos>                    Mark ability as activated")
+        print("  save_test <name> [true_evils_json]    Save game as regression test")
         print()
         print("Card examples:")
         print("  card enlightened 3 CW")
@@ -445,8 +465,23 @@ def main():
         n_cards = int(sys.argv[2])
         n_evil = int(sys.argv[3])
         session = GameSession(n_cards, n_evil)
+        # Optional: hp and wrong_exec_cost
+        for arg in sys.argv[4:]:
+            if arg.startswith("hp="):
+                session.hp = int(arg[3:])
+            elif arg.startswith("cost="):
+                session.wrong_exec_cost = int(arg[5:])
         session.save()
-        print(f"New session: {n_cards} cards, {n_evil} evil")
+        print(f"New session: {n_cards} cards, {n_evil} evil, HP={session.hp}, cost={session.wrong_exec_cost}")
+        return
+
+    if cmd == "set_hp":
+        session = GameSession.load()
+        session.hp = int(sys.argv[2])
+        if len(sys.argv) > 3:
+            session.wrong_exec_cost = int(sys.argv[3])
+        session.save()
+        print(f"HP set to {session.hp}, wrong exec cost = {session.wrong_exec_cost}")
         return
 
     if cmd == "deck":
@@ -478,15 +513,23 @@ def main():
         session = GameSession.load()
         pos = int(sys.argv[2])
         was_evil = None
+        evil_role = None
         if len(sys.argv) > 3:
             w = sys.argv[3].lower()
             if w in ("evil", "true", "1", "yes"):
                 was_evil = True
+                # Optional 4th arg: evil role name (e.g., "Chancellor")
+                if len(sys.argv) > 4:
+                    evil_role = sys.argv[4]
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
-        session.mark_executed(pos, was_evil)
+            else:
+                # Treat as evil role name directly: execute 2 Chancellor
+                was_evil = True
+                evil_role = sys.argv[3]
+        session.mark_executed(pos, was_evil, evil_role)
         session.save()
-        tag = f" (was_evil={was_evil})" if was_evil is not None else ""
+        tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
         print(f"Executed #{pos}{tag}")
         return
 
@@ -537,6 +580,32 @@ def main():
         session.mark_ability_used(pos)
         session.save()
         print(f"Ability at #{pos} marked as used")
+        return
+
+    if cmd == "save_test":
+        session = GameSession.load()
+        name = sys.argv[2] if len(sys.argv) > 2 else "unnamed"
+        # Parse true evil positions: "2=Chancellor,7=Baa" or JSON
+        true_evils = {}
+        if len(sys.argv) > 3:
+            raw = sys.argv[3]
+            if raw.startswith("{"):
+                import ast
+                true_evils = {int(k): v for k, v in ast.literal_eval(raw).items()}
+            else:
+                for pair in raw.split(","):
+                    pos_str, role = pair.split("=")
+                    true_evils[int(pos_str)] = role
+        from tests.test_regression import save_test_case
+        save_test_case(SESSION_FILE, name, true_evils)
+        # Also run the test immediately
+        from tests.test_regression import load_test_case, run_test
+        case = load_test_case(os.path.join("tests", "cases", f"{name}.json"))
+        passed, messages = run_test(case)
+        status = "PASS" if passed else "FAIL"
+        print(f"\n[{status}] {name}")
+        for msg in messages:
+            print(f"  {msg}")
         return
 
     # Game action commands (require game running)
