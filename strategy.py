@@ -1,0 +1,676 @@
+"""Strategy/planning layer for Demon Bluff solver.
+
+Uses surviving scenarios from the constraint solver to recommend actions:
+which card to reveal, which ability to use (and on which targets), when to execute.
+Decisions are driven by Shannon entropy -- actions that split scenarios most evenly
+give the most information.
+"""
+
+from __future__ import annotations
+import math
+from dataclasses import dataclass, field
+from itertools import combinations
+from typing import Optional
+
+from knowledge_base import get_card, Role, CARDS_BY_NAME
+from solver import (
+    GameState, SolverResult, Scenario, TruthStatus,
+    _truth_status, _is_evil_in_scenario, _effective_alignment,
+    _get_card_at, _get_real_role,
+    circle_distance, adjacent_positions, Alignment,
+)
+
+
+# ============================================================
+# Data Structures
+# ============================================================
+
+@dataclass
+class Action:
+    action_type: str  # "execute", "reveal", "use_ability", "win", "error"
+    position: Optional[int] = None
+    targets: Optional[list[int]] = None
+    ability_name: Optional[str] = None
+    reasoning: str = ""
+    warnings: list[str] = field(default_factory=list)
+
+
+@dataclass
+class RevealRecommendation:
+    position: int
+    entropy: float
+    p_evil: float
+    reasoning: str = ""
+
+
+@dataclass
+class AbilityRecommendation:
+    position: int
+    ability_name: str
+    targets: list[int]
+    score: float  # higher = better (entropy or negative expected posterior)
+    reasoning: str = ""
+    warnings: list[str] = field(default_factory=list)
+
+
+# ============================================================
+# Helpers
+# ============================================================
+
+def _shannon_entropy(counts: list[int]) -> float:
+    """Shannon entropy from partition counts. Higher = more informative."""
+    total = sum(counts)
+    if total == 0:
+        return 0.0
+    entropy = 0.0
+    for c in counts:
+        if c > 0:
+            p = c / total
+            entropy -= p * math.log2(p)
+    return entropy
+
+
+def evil_probabilities(state: GameState, result: SolverResult) -> dict[int, float]:
+    """Per-position probability of being evil across surviving scenarios."""
+    if result.n_surviving == 0:
+        return {}
+    probs = {}
+    for pos in range(1, state.n_cards + 1):
+        if pos in state.executed:
+            continue
+        count = sum(1 for s in result.surviving_scenarios
+                    if _is_evil_in_scenario(pos, s))
+        probs[pos] = count / result.n_surviving
+    return probs
+
+
+def _unrevealed_positions(state: GameState) -> list[int]:
+    """Positions that haven't been revealed yet (no CardInfo)."""
+    revealed = {c.position for c in state.cards}
+    return [p for p in range(1, state.n_cards + 1)
+            if p not in revealed and p not in state.executed]
+
+
+def _count_remaining_evil(state: GameState, result: SolverResult) -> int:
+    """Count evil characters not yet executed, using first surviving scenario."""
+    if not result.surviving_scenarios:
+        return 0
+    s = result.surviving_scenarios[0]
+    count = 0
+    for pos in range(1, state.n_cards + 1):
+        if pos in state.executed:
+            continue
+        if _is_evil_in_scenario(pos, s):
+            count += 1
+    return count
+
+
+def _witch_might_be_alive(state: GameState, result: SolverResult) -> bool:
+    """Check if Witch could be alive (non-executed) in any surviving scenario."""
+    for s in result.surviving_scenarios:
+        for pos, role in s.evil_positions.items():
+            if role == "Witch" and pos not in state.executed:
+                return True
+    return False
+
+
+def _corruption_risk(pos: int, result: SolverResult) -> float:
+    """Probability that position is corrupted across surviving scenarios."""
+    if result.n_surviving == 0:
+        return 0.0
+    count = sum(1 for s in result.surviving_scenarios if pos in s.corrupted)
+    return count / result.n_surviving
+
+
+def _could_have_active_ability(pos: int, state: GameState, result: SolverResult) -> bool:
+    """Check if an unrevealed position might have an active ability."""
+    # Active ability roles from knowledge base
+    active_roles = {c.name for c in CARDS_BY_NAME.values() if c.activated_ability}
+    # Roles already placed at revealed positions
+    placed_roles = {c.apparent_role for c in state.cards}
+    # Unplaced active roles
+    all_deck_roles = state.deck.villagers + state.deck.outcasts
+    unplaced_active = [r for r in all_deck_roles
+                       if r in active_roles and r not in placed_roles]
+    return len(unplaced_active) > 0
+
+
+# ============================================================
+# Ground Truth Simulators (per ability)
+# ============================================================
+
+def _ft_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> bool:
+    """Fortune Teller: any target evil?"""
+    return any(_effective_alignment(t, scenario, state) == Alignment.EVIL
+               for t in targets)
+
+
+def _jester_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> int:
+    """Jester: count evil among targets."""
+    return sum(1 for t in targets
+               if _effective_alignment(t, scenario, state) == Alignment.EVIL)
+
+
+def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bool:
+    """Judge: is target lying?"""
+    return _truth_status(target, scenario, state) == TruthStatus.LYING
+
+
+def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> str:
+    """Dreamer: if target is evil, return evil role name. Else 'any_evil'."""
+    if _is_evil_in_scenario(target, scenario):
+        return scenario.evil_positions.get(target, "Puppet")
+    return "any_evil"
+
+
+def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
+    """Druid: find outcast among targets, or 'none'."""
+    for t in targets:
+        if _is_evil_in_scenario(t, scenario):
+            continue
+        card = _get_card_at(t, state)
+        if card:
+            card_def = get_card(card.apparent_role)
+            if card_def and card_def.role == Role.OUTCAST and card.apparent_role != "Wretch":
+                return card.apparent_role
+    return "none"
+
+
+def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
+    """Slayer: is target evil?"""
+    return _is_evil_in_scenario(target, scenario)
+
+
+def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple:
+    """Plague Doctor: (is_corrupted, evil_char_pos or None)."""
+    is_corrupted = target in scenario.corrupted
+    evil_pos = None
+    if is_corrupted:
+        # Learn an evil character
+        evil_positions = [p for p in scenario.evil_positions if p not in state.executed]
+        if evil_positions:
+            evil_pos = evil_positions[0]
+    return (is_corrupted, evil_pos)
+
+
+# ============================================================
+# Ability Recommenders
+# ============================================================
+
+def _recommend_boolean_ability(
+    ability_name: str,
+    ability_pos: int,
+    ground_truth_fn,
+    candidate_targets: list[list[int]],
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend targets for a boolean-outcome ability (FT, Judge)."""
+    best_targets = None
+    best_entropy = -1.0
+
+    for targets in candidate_targets:
+        true_count = 0
+        false_count = 0
+        for s in result.surviving_scenarios:
+            truth = _truth_status(ability_pos, s, state)
+            if isinstance(targets, list):
+                real = ground_truth_fn(targets, s, state)
+            else:
+                real = ground_truth_fn(targets, s, state)
+            observed = real if truth == TruthStatus.TRUTHFUL else (not real)
+            if observed:
+                true_count += 1
+            else:
+                false_count += 1
+        ent = _shannon_entropy([true_count, false_count])
+        if ent > best_entropy:
+            best_entropy = ent
+            best_targets = targets if isinstance(targets, list) else [targets]
+
+    if best_targets is None:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_entropy * (1 - 0.5 * corr)
+    warnings = []
+    if corr > 0:
+        warnings.append(f"Corruption risk: {corr:.0%}")
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name=ability_name,
+        targets=best_targets,
+        score=adjusted,
+        reasoning=f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})",
+        warnings=warnings,
+    )
+
+
+def _recommend_count_ability(
+    ability_name: str,
+    ability_pos: int,
+    ground_truth_fn,
+    candidate_targets: list[list[int]],
+    max_count: int,
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend targets for a count-outcome ability (Jester).
+    Uses expected-posterior-size metric since lying makes multiple values compatible."""
+    best_targets = None
+    best_score = float('inf')
+
+    for targets in candidate_targets:
+        # For each possible observed value, count compatible scenarios
+        compatible = {v: 0 for v in range(max_count + 1)}
+        scenario_count = len(result.surviving_scenarios)
+
+        for s in result.surviving_scenarios:
+            truth = _truth_status(ability_pos, s, state)
+            real = ground_truth_fn(targets, s, state)
+            if truth == TruthStatus.TRUTHFUL:
+                compatible[real] += 1
+            else:
+                # Lying: observed != real, so this scenario is compatible with any v != real
+                for v in range(max_count + 1):
+                    if v != real:
+                        compatible[v] += 1
+
+        # Expected posterior size: weighted average of compatible counts
+        total_weight = sum(compatible.values())
+        if total_weight == 0:
+            continue
+        expected_posterior = sum(c * c for c in compatible.values()) / total_weight
+        if expected_posterior < best_score:
+            best_score = expected_posterior
+            best_targets = targets
+
+    if best_targets is None:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_score * (1 + 0.5 * corr)  # Higher posterior = worse, so penalize upward
+    warnings = []
+    if corr > 0:
+        warnings.append(f"Corruption risk: {corr:.0%}")
+
+    # Convert to a positive "goodness" score (negative expected posterior)
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name=ability_name,
+        targets=best_targets,
+        score=-adjusted,  # Negative: lower posterior = higher score
+        reasoning=f"Expected posterior {best_score:.1f} scenarios (adjusted {adjusted:.1f})",
+        warnings=warnings,
+    )
+
+
+def _recommend_partition_ability(
+    ability_name: str,
+    ability_pos: int,
+    ground_truth_fn,
+    candidate_targets: list,
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend targets for a multi-valued partition ability (Dreamer, Druid, PD)."""
+    best_targets = None
+    best_entropy = -1.0
+
+    for targets in candidate_targets:
+        partition: dict[str, int] = {}
+        for s in result.surviving_scenarios:
+            truth = _truth_status(ability_pos, s, state)
+            if isinstance(targets, list):
+                real = ground_truth_fn(targets, s, state)
+            else:
+                real = ground_truth_fn(targets, s, state)
+
+            if truth == TruthStatus.TRUTHFUL:
+                key = str(real)
+            else:
+                key = f"lie_{real}"
+            partition[key] = partition.get(key, 0) + 1
+
+        ent = _shannon_entropy(list(partition.values()))
+        if ent > best_entropy:
+            best_entropy = ent
+            best_targets = targets if isinstance(targets, list) else [targets]
+
+    if best_targets is None:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_entropy * (1 - 0.5 * corr)
+    warnings = []
+    if corr > 0:
+        warnings.append(f"Corruption risk: {corr:.0%}")
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name=ability_name,
+        targets=best_targets,
+        score=adjusted,
+        reasoning=f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})",
+        warnings=warnings,
+    )
+
+
+def _recommend_slayer(
+    ability_pos: int,
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Slayer: pick target with highest evil probability. Not entropy-based."""
+    probs = evil_probabilities(state, result)
+    candidates = [p for p in range(1, state.n_cards + 1)
+                  if p not in state.executed and p != ability_pos]
+    if not candidates:
+        return None
+
+    best_pos = max(candidates, key=lambda p: probs.get(p, 0))
+    best_prob = probs.get(best_pos, 0)
+    if best_prob == 0:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_prob * (1 - corr)  # Corrupted Slayer = ability disabled
+    warnings = []
+    if corr > 0:
+        warnings.append(f"Corruption risk: {corr:.0%} -- Slayer ability disabled if corrupted")
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Slayer",
+        targets=[best_pos],
+        score=adjusted,
+        reasoning=f"Target #{best_pos} is {best_prob:.0%} evil (adjusted {adjusted:.2f})",
+        warnings=warnings,
+    )
+
+
+def recommend_abilities(
+    state: GameState,
+    result: SolverResult,
+    used_abilities: list[int],
+) -> list[AbilityRecommendation]:
+    """Find all available active abilities and recommend optimal targets."""
+    if result.n_surviving == 0:
+        return []
+
+    recommendations = []
+    available = [p for p in range(1, state.n_cards + 1) if p not in state.executed]
+
+    for card in state.cards:
+        pos = card.position
+        if pos in state.executed or pos in used_abilities:
+            continue
+
+        role = card.apparent_role
+        card_def = get_card(role)
+        if not card_def or not card_def.activated_ability:
+            continue
+
+        # Build candidate target lists (exclude self and executed)
+        others = [p for p in available if p != pos]
+
+        if role == "Fortune Teller" and len(others) >= 2:
+            candidates = [list(c) for c in combinations(others, 2)]
+            rec = _recommend_boolean_ability(
+                "Fortune Teller", pos,
+                _ft_ground_truth, candidates, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Jester" and len(others) >= 3:
+            candidates = [list(c) for c in combinations(others, 3)]
+            rec = _recommend_count_ability(
+                "Jester", pos, _jester_ground_truth,
+                candidates, 3, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Judge":
+            candidates = [[t] for t in others]
+            rec = _recommend_boolean_ability(
+                "Judge", pos,
+                lambda t, s, st: _judge_ground_truth(t[0], s, st),
+                candidates, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Dreamer":
+            candidates = others
+            rec = _recommend_partition_ability(
+                "Dreamer", pos,
+                _dreamer_ground_truth, candidates, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Druid" and len(others) >= 3:
+            candidates = [list(c) for c in combinations(others, 3)]
+            rec = _recommend_partition_ability(
+                "Druid", pos,
+                _druid_ground_truth, candidates, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Slayer":
+            rec = _recommend_slayer(pos, state, result)
+            if rec:
+                recommendations.append(rec)
+
+        elif role == "Plague Doctor":
+            candidates = others
+            rec = _recommend_partition_ability(
+                "Plague Doctor", pos,
+                lambda t, s, st: str(_pd_ground_truth(t, s, st)),
+                candidates, state, result)
+            if rec:
+                recommendations.append(rec)
+
+    return recommendations
+
+
+# ============================================================
+# Reveal Recommendation
+# ============================================================
+
+def recommend_reveal(
+    state: GameState,
+    result: SolverResult,
+) -> Optional[RevealRecommendation]:
+    """Pick the most informative unrevealed position to reveal next."""
+    unrevealed = _unrevealed_positions(state)
+    if not unrevealed:
+        return None
+
+    # Witch edge case: can't reveal last card
+    if len(unrevealed) == 1 and _witch_might_be_alive(state, result):
+        return None  # Blocked by Witch
+
+    probs = evil_probabilities(state, result)
+    best = None
+    best_entropy = -1.0
+
+    for pos in unrevealed:
+        p = probs.get(pos, 0)
+        # Entropy of binary evil/good split
+        if p == 0 or p == 1:
+            ent = 0.0
+        else:
+            ent = _shannon_entropy([
+                int(p * result.n_surviving),
+                int((1 - p) * result.n_surviving)
+            ])
+        # Bonus for positions that might have active abilities
+        if _could_have_active_ability(pos, state, result):
+            ent += 0.1
+
+        if ent > best_entropy:
+            best_entropy = ent
+            best = RevealRecommendation(
+                position=pos, entropy=ent, p_evil=p,
+                reasoning=f"#{pos}: {p:.0%} evil, entropy {ent:.3f}")
+
+    return best
+
+
+# ============================================================
+# Top-Level Entry Point
+# ============================================================
+
+def recommend_action(
+    state: GameState,
+    result: SolverResult,
+    used_abilities: list[int],
+) -> Action:
+    """Recommend the best next action given solver results.
+
+    Priority:
+    1. Error -- 0 surviving scenarios
+    2. Win -- all evil executed
+    3. Execute -- definite evil found (skip Bombardier)
+    4. Use ability -- if high info gain
+    5. Reveal -- most informative unrevealed position
+    6. Witch fallback -- can't reveal, execute best guess
+    7. Probability fallback -- all revealed, no certainty
+    """
+    # 1. Error
+    if result.n_surviving == 0:
+        return Action("error", reasoning="No surviving scenarios -- check input data")
+
+    # 2. Win check
+    remaining = _count_remaining_evil(state, result)
+    if remaining == 0:
+        return Action("win", reasoning="All evil characters have been executed!")
+
+    # 3. Execute definite evil (skip Bombardier)
+    safe_executions = [p for p in result.definite_evil
+                       if p not in state.executed
+                       and p not in result.bombardier_positions]
+    if safe_executions:
+        pos = safe_executions[0]
+        roles = set()
+        for s in result.surviving_scenarios:
+            if pos in s.evil_positions:
+                roles.add(s.evil_positions[pos])
+        return Action(
+            "execute", position=pos,
+            reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
+
+    # 4. Check available abilities
+    ability_recs = recommend_abilities(state, result, used_abilities)
+    ability_recs.sort(key=lambda r: r.score, reverse=True)
+
+    # 5. Check reveal
+    reveal_rec = recommend_reveal(state, result)
+
+    # Choose between ability and reveal based on scores
+    best_ability = ability_recs[0] if ability_recs else None
+    if best_ability and best_ability.ability_name == "Slayer" and best_ability.score > 0.8:
+        # Slayer with high confidence -- use it
+        return Action(
+            "use_ability", position=best_ability.position,
+            targets=best_ability.targets,
+            ability_name="Slayer",
+            reasoning=best_ability.reasoning,
+            warnings=best_ability.warnings)
+
+    if best_ability and reveal_rec:
+        # Compare ability info gain vs reveal info gain
+        # For abilities using negative expected posterior, score is negative (lower = better for count)
+        # For entropy-based, higher = better
+        # Use ability if it has meaningful info gain
+        if best_ability.score > reveal_rec.entropy and best_ability.score > 0.3:
+            return Action(
+                "use_ability", position=best_ability.position,
+                targets=best_ability.targets,
+                ability_name=best_ability.ability_name,
+                reasoning=best_ability.reasoning,
+                warnings=best_ability.warnings)
+
+    if reveal_rec:
+        warnings = []
+        if _witch_might_be_alive(state, result):
+            n_unrevealed = len(_unrevealed_positions(state))
+            if n_unrevealed <= 2:
+                warnings.append("Witch may be alive -- be cautious about revealing")
+        return Action(
+            "reveal", position=reveal_rec.position,
+            reasoning=reveal_rec.reasoning,
+            warnings=warnings)
+
+    if best_ability:
+        return Action(
+            "use_ability", position=best_ability.position,
+            targets=best_ability.targets,
+            ability_name=best_ability.ability_name,
+            reasoning=best_ability.reasoning,
+            warnings=best_ability.warnings)
+
+    # 6. Witch fallback -- can't reveal, execute by probability
+    probs = evil_probabilities(state, result)
+    active_probs = {p: prob for p, prob in probs.items()
+                    if p not in state.executed and p not in result.bombardier_positions}
+    if active_probs:
+        best_pos = max(active_probs, key=active_probs.get)
+        return Action(
+            "execute", position=best_pos,
+            reasoning=f"No reveals available. #{best_pos} is {active_probs[best_pos]:.0%} likely evil",
+            warnings=["Probabilistic execution -- no certainty"])
+
+    # 7. Shouldn't reach here
+    return Action("error", reasoning="No valid action found")
+
+
+# ============================================================
+# Display
+# ============================================================
+
+def print_recommendation(state: GameState, result: SolverResult,
+                         used_abilities: list[int]):
+    """Print a full strategy recommendation."""
+    action = recommend_action(state, result, used_abilities)
+
+    print(f"\n=== STRATEGY RECOMMENDATION ===")
+    print(f"  Action: {action.action_type.upper()}", end="")
+    if action.position:
+        print(f" #{action.position}", end="")
+    if action.ability_name:
+        print(f" ({action.ability_name})", end="")
+    if action.targets:
+        print(f" -> targets {['#'+str(t) for t in action.targets]}", end="")
+    print()
+    print(f"  Reason: {action.reasoning}")
+    for w in action.warnings:
+        print(f"  WARNING: {w}")
+
+    # Show evil probabilities for context
+    if action.action_type in ("reveal", "use_ability", "execute"):
+        probs = evil_probabilities(state, result)
+        unrevealed = _unrevealed_positions(state)
+        if unrevealed:
+            print(f"\n  Unrevealed positions:")
+            for pos in sorted(unrevealed):
+                p = probs.get(pos, 0)
+                marker = " <-- RECOMMEND" if pos == action.position and action.action_type == "reveal" else ""
+                print(f"    #{pos}: {p:.0%} evil{marker}")
+
+    # Show available abilities
+    recs = recommend_abilities(state, result, used_abilities)
+    if recs:
+        print(f"\n  Available abilities:")
+        recs.sort(key=lambda r: r.score, reverse=True)
+        for rec in recs:
+            chosen = " <-- RECOMMEND" if (action.action_type == "use_ability"
+                                          and action.position == rec.position) else ""
+            targets_str = ",".join(f"#{t}" for t in rec.targets)
+            print(f"    #{rec.position} {rec.ability_name} -> [{targets_str}] "
+                  f"(score {rec.score:.3f}){chosen}")
+            for w in rec.warnings:
+                print(f"      WARNING: {w}")
+
+    print(f"\n  ({result.n_surviving} surviving scenarios)\n")
+    return action

@@ -11,6 +11,7 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional
 
 from solver import CardInfo, DeckComposition, GameState, SolverResult, solve
+from strategy import recommend_action, print_recommendation
 
 
 # ============================================================
@@ -129,6 +130,7 @@ class GameSession:
         self.confirmed_evil: list[int] = []
         self.confirmed_good: list[int] = []
         self.pd_corruption_target: Optional[int] = None
+        self.used_abilities: list[int] = []
 
     # -- Deck --
 
@@ -157,6 +159,10 @@ class GameSession:
 
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
+
+    def mark_ability_used(self, pos: int):
+        if pos not in self.used_abilities:
+            self.used_abilities.append(pos)
 
     # -- Solver --
 
@@ -211,6 +217,14 @@ class GameSession:
         if safe_to_execute:
             return f"Execute #{safe_to_execute[0]}"
         return "Reveal more cards"
+
+    def next_action(self):
+        """Run solver + strategy, print full recommendation."""
+        state = self._build_game_state()
+        result = solve(state)
+        for line in result.reasoning:
+            print(f"  {line}")
+        return print_recommendation(state, result, self.used_abilities)
 
     # -- Status --
 
@@ -293,6 +307,7 @@ class GameSession:
             "confirmed_evil": self.confirmed_evil,
             "confirmed_good": self.confirmed_good,
             "pd_corruption_target": self.pd_corruption_target,
+            "used_abilities": self.used_abilities,
         }
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
@@ -315,6 +330,7 @@ class GameSession:
         session.confirmed_evil = data.get("confirmed_evil", [])
         session.confirmed_good = data.get("confirmed_good", [])
         session.pd_corruption_target = data.get("pd_corruption_target")
+        session.used_abilities = data.get("used_abilities", [])
         print(f"[load] Session loaded from {path}")
         return session
 
@@ -410,6 +426,8 @@ def main():
         print("  status                               Print session state")
         print("  confirm_evil <pos>                   Mark position as confirmed evil")
         print("  confirm_good <pos>                   Mark position as confirmed good")
+        print("  next                                 Full strategy recommendation")
+        print("  ability_used <pos>                   Mark ability as activated")
         print()
         print("Card examples:")
         print("  card enlightened 3 CW")
@@ -506,6 +524,19 @@ def main():
             session.confirmed_good.append(pos)
         session.save()
         print(f"#{pos} confirmed good")
+        return
+
+    if cmd == "next":
+        session = GameSession.load()
+        session.next_action()
+        return
+
+    if cmd == "ability_used":
+        session = GameSession.load()
+        pos = int(sys.argv[2])
+        session.mark_ability_used(pos)
+        session.save()
+        print(f"Ability at #{pos} marked as used")
         return
 
     # Game action commands (require game running)
