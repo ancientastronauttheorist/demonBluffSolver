@@ -1,0 +1,229 @@
+"""Regression tests for the Demon Bluff solver using known game sessions."""
+
+import unittest
+from solver import (
+    GameState, DeckComposition, CardInfo, SolverResult, Scenario,
+    circle_distance, circle_direction, adjacent_positions, solve,
+    _is_evil_in_scenario,
+)
+
+
+class TestCircleGeometry(unittest.TestCase):
+    def test_distance(self):
+        self.assertEqual(circle_distance(1, 4, 7), 3)
+        self.assertEqual(circle_distance(1, 7, 7), 1)
+        self.assertEqual(circle_distance(1, 1, 7), 0)
+        self.assertEqual(circle_distance(3, 6, 8), 3)
+
+    def test_direction(self):
+        self.assertEqual(circle_direction(1, 3, 7), "CW")
+        self.assertEqual(circle_direction(1, 7, 7), "CCW")
+        self.assertEqual(circle_direction(1, 4, 7), "CW")  # 3 CW vs 4 CCW
+        self.assertEqual(circle_direction(1, 5, 8), "Equidistant")  # 4 each way
+
+    def test_adjacent(self):
+        self.assertEqual(sorted(adjacent_positions(1, 7)), [2, 7])
+        self.assertEqual(sorted(adjacent_positions(4, 7)), [3, 5])
+        self.assertEqual(sorted(adjacent_positions(7, 7)), [1, 6])
+
+
+class TestSyntheticSimple(unittest.TestCase):
+    """Simple 5-card puzzle: 1 evil Minion.
+    Cards: #1 Enlightened, #2 Lover, #3 Knitter, #4 Confessor, #5 Minion(disguised as Slayer).
+    Minion at #5 → lies, disguises as Slayer."""
+
+    def _make_state(self):
+        deck = DeckComposition(
+            villagers=["Enlightened", "Lover", "Knitter", "Confessor"],
+            outcasts=[],
+            minions=["Minion"],
+            demons=[],
+        )
+        # Compute true values with Minion at #5:
+        # #1 Enlightened: nearest evil = #5. Dir 1→5 on 5-card: CW dist 4, CCW dist 1 → CCW.
+        #   Truthful → claims "CCW"
+        # #2 Lover: adj = #1(Good), #3(Good). 0 evil adj. Truthful → claims 0.
+        # #3 Knitter: evil pairs adj? Evil = {#5}. Only 1 evil, can't have pair. 0 pairs.
+        #   Truthful → claims 0.
+        # #4 Confessor: not evil, not corrupted → dirty=False. Can't lie → claims False.
+        # #5 Minion (disguised as Slayer): no info to validate.
+        cards = [
+            CardInfo(1, "Enlightened", info_parsed={"direction": "CCW"}),
+            CardInfo(2, "Lover", info_parsed={"evil_adjacent": 0}),
+            CardInfo(3, "Knitter", info_parsed={"evil_pairs": 0}),
+            CardInfo(4, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(5, "Slayer"),
+        ]
+        return GameState(n_cards=5, deck=deck, cards=cards, n_evil=1)
+
+    def test_finds_evil(self):
+        state = self._make_state()
+        result = solve(state)
+        self.assertIn(5, result.definite_evil,
+                      f"Expected #5 evil. Reasoning: {result.reasoning}")
+        self.assertEqual(len(result.definite_evil), 1)
+
+    def test_good_positions(self):
+        state = self._make_state()
+        result = solve(state)
+        for pos in [1, 2, 3, 4]:
+            self.assertIn(pos, result.definite_good)
+
+
+class TestSession8(unittest.TestCase):
+    """Session 8: 7 cards, 2 evils (Chancellor + Pooka).
+    Solution: #3=Pooka, #6=Chancellor.
+    Pooka at #3 corrupts #2(Lover) and #4(Knitter).
+    Key: Gemcrafter #3 says '#5 is Good' but Wretch registers as Evil → #3 is lying."""
+
+    def _make_state(self):
+        deck = DeckComposition(
+            villagers=["Bard", "Knitter", "Gemcrafter", "Lover", "Alchemist"],
+            outcasts=["Wretch", "Bombardier"],
+            minions=["Chancellor"],
+            demons=["Pooka"],
+        )
+        # True state: #3=Pooka, #6=Chancellor
+        # Pooka at #3 corrupts adj #2 and #4
+        # #1 Bard (truthful): dist to nearest corrupted. Corrupted={#2,#4}. #2 at dist 1. → 1
+        # #2 Lover (corrupted→lying): adj #1(Good), #3(Evil). 1 evil adj. Lies: claims 0
+        # #3 Gemcrafter (evil Pooka→lying): "#5 is Good". Wretch effective=Evil. Lie ✓
+        # #4 Knitter (corrupted→lying): evil pairs. Effective evil={#3,#5(Wretch),#6}.
+        #   Pairs: (#5,#6) adj. 1 pair. Lies: claims 0
+        # #5 Wretch: no info
+        # #6 Bombardier (evil Chancellor): no info
+        # #7 Bombardier: no info
+        cards = [
+            CardInfo(1, "Bard", info_parsed={"corruption_distance": 1}),
+            CardInfo(2, "Lover", info_parsed={"evil_adjacent": 0}),
+            CardInfo(3, "Gemcrafter", info_parsed={"good_position": 5}),
+            CardInfo(4, "Knitter", info_parsed={"evil_pairs": 0}),
+            CardInfo(5, "Wretch"),
+            CardInfo(6, "Bombardier"),
+            CardInfo(7, "Bombardier"),
+        ]
+        return GameState(n_cards=7, deck=deck, cards=cards, n_evil=2)
+
+    def test_pooka_found(self):
+        """Gemcrafter calling Wretch 'Good' proves #3 is lying = evil."""
+        state = self._make_state()
+        result = solve(state)
+        self.assertIn(3, result.definite_evil,
+                      f"Expected #3 evil. Reasoning: {result.reasoning}")
+
+    def test_bombardier_safe(self):
+        """Real Bombardier (#7) should never be in definite_evil."""
+        state = self._make_state()
+        result = solve(state)
+        self.assertNotIn(7, result.definite_evil)
+
+    def test_correct_solution_survives(self):
+        """The known solution (#3=Pooka, #6=Chancellor) must be in surviving scenarios."""
+        state = self._make_state()
+        result = solve(state)
+        found = False
+        for s in result.surviving_scenarios:
+            if (s.evil_positions.get(3) == "Pooka" and
+                    s.evil_positions.get(6) == "Chancellor"):
+                found = True
+                break
+        self.assertTrue(found,
+                        f"Expected solution not in survivors. "
+                        f"Surviving: {[(dict(s.evil_positions), s.corrupted) for s in result.surviving_scenarios]}")
+
+
+class TestSession11(unittest.TestCase):
+    """Session 11: 8 cards, 3 evils (Puppeteer + Puppet + Pooka).
+    Solution: #3=Puppeteer, #4=Puppet (converted from Enlightened), #5=Pooka.
+    Pooka at #5 corrupts adj #6 (Slayer). #4 is evil, not corrupted."""
+
+    def _make_state(self):
+        deck = DeckComposition(
+            villagers=["Knitter", "Scout", "Jester", "Slayer",
+                       "Enlightened", "Confessor"],
+            outcasts=["Plague Doctor"],
+            minions=["Puppeteer"],
+            demons=["Pooka"],
+        )
+        # True state: #3=Puppeteer, #4=Puppet, #5=Pooka
+        # Pooka at #5 corrupts adj villagers: #4 is Puppet(evil)→skip, #6 Slayer→corrupted
+        # Corrupted = {#6}
+        #
+        # #1 Confessor (truthful, can't lie): not evil, not corrupted → dirty=False
+        # #2 Knitter (truthful): evil pairs adj.
+        #   Evil effective: {#3,#4,#5}. Pairs: (#3,#4) ✓, (#4,#5) ✓. 2 pairs. Claims 2.
+        # #3 Enlightened (Puppeteer, evil→lying): nearest evil from #3.
+        #   Other evil: #4 at dist 1 CW, #5 at dist 2 CW. Nearest: #4 CW.
+        #   Truth = "CW". Lies: claims "CCW" (≠CW ✓)
+        # #4 Enlightened (Puppet, evil but can't lie→truthful): nearest evil from #4.
+        #   Other evil: #3 at dist 1 CCW, #5 at dist 1 CW. Equidistant.
+        #   Truth = "Equidistant". Claims "Equidistant" ✓
+        # #5 Scout (Pooka, evil→lying): "Pooka is N from nearest Evil"
+        #   Pooka at #5. Nearest other evil: #4 at dist 1. Truth = 1.
+        #   Lies: claims 2 (≠1 ✓)
+        # #6 Slayer (corrupted→lying): no info ability for Slayer. Skip.
+        # #7 Jester (truthful): picks [1,3,5], evil count.
+        #   #1=Good, #3=Evil, #5=Evil. Count=2. Claims 2 ✓
+        # #8 Plague Doctor: no standard info to validate
+        cards = [
+            CardInfo(1, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(2, "Knitter", info_parsed={"evil_pairs": 2}),
+            CardInfo(3, "Enlightened", info_parsed={"direction": "CCW"}),
+            CardInfo(4, "Enlightened", info_parsed={"direction": "Equidistant"}),
+            CardInfo(5, "Scout", info_parsed={
+                "evil_role": "Pooka", "distance": 2}),
+            CardInfo(6, "Slayer"),
+            CardInfo(7, "Jester", info_parsed={
+                "targets": [1, 3, 5], "evil_count": 2}),
+            CardInfo(8, "Plague Doctor"),
+        ]
+        return GameState(n_cards=8, deck=deck, cards=cards, n_evil=3,
+                        pd_corruption_target=6)  # PD corrupted #6 Slayer
+
+    def test_finds_all_evils(self):
+        state = self._make_state()
+        result = solve(state)
+        for pos in [3, 4, 5]:
+            self.assertIn(pos, result.definite_evil,
+                          f"Expected #{pos} evil. Surviving: {result.n_surviving}. "
+                          f"Reasoning: {result.reasoning}")
+
+    def test_good_positions(self):
+        state = self._make_state()
+        result = solve(state)
+        for pos in [1, 2, 6, 7, 8]:
+            self.assertIn(pos, result.definite_good,
+                          f"Expected #{pos} good. Reasoning: {result.reasoning}")
+
+
+class TestExecutedEvil(unittest.TestCase):
+    """After executing one evil, solver should find remaining evil(s)."""
+
+    def test_one_remaining(self):
+        deck = DeckComposition(
+            villagers=["Confessor", "Confessor", "Confessor"],
+            outcasts=[],
+            minions=["Minion"],
+            demons=["Baa"],
+        )
+        # 5 cards, 2 evils. Minion at #3 already executed.
+        # Remaining: Baa at #5 (disguised as Enlightened, lying)
+        # Confessors at #1, #2, #4 all say dirty=False → can't be evil
+        # Only #5 can be Baa
+        cards = [
+            CardInfo(1, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(2, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(4, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(5, "Enlightened"),
+        ]
+        state = GameState(
+            n_cards=5, deck=deck, cards=cards, n_evil=2,
+            executed=[3], confirmed_evil=[3],
+        )
+        result = solve(state)
+        self.assertIn(5, result.definite_evil,
+                      f"Expected #5 evil. Reasoning: {result.reasoning}")
+
+
+if __name__ == "__main__":
+    unittest.main()
