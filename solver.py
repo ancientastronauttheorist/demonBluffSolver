@@ -569,12 +569,21 @@ def _validate_bard(card: CardInfo, scenario: Scenario,
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
+    # -1 sentinel means "no corrupted characters exist" (binary claim)
+    if claimed == -1:
+        no_corrupted = len(scenario.corrupted) == 0
+        if truth == TruthStatus.TRUTHFUL:
+            return no_corrupted
+        else:
+            return not no_corrupted
+
+    # Distance claim: "I am N cards from closest corrupted"
     if not scenario.corrupted:
-        # No corrupted cards — Bard would say... 0? or max?
-        # "How far from closest corrupted" — if none, this is tricky
-        # Treat as: no corrupted = can't match any distance claim
-        # A truthful Bard with no corrupted targets is edge case
-        actual = 0  # Game likely shows 0 or doesn't fire
+        # Claimed a distance but no corrupted exist — truthful would say "none" (−1)
+        if truth == TruthStatus.TRUTHFUL:
+            return False
+        else:
+            return True  # Liar claimed a distance when there are none
     else:
         actual = min(circle_distance(pos, c, n) for c in scenario.corrupted)
 
@@ -681,7 +690,7 @@ def _validate_architect(card: CardInfo, scenario: Scenario,
     if "side" not in info:
         return True
 
-    claimed = info["side"]  # "Left", "Right", "Equal"
+    claimed = info["side"].capitalize()  # Normalize: "right" -> "Right", etc.
     pos = card.position
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
@@ -820,6 +829,12 @@ def _validate_judge(card: CardInfo, scenario: Scenario,
     target = info["target"]
     claimed_lying = info["is_lying"]
     pos = card.position
+
+    # Corrupted Judge's ability "doesn't work" — result is unreliable,
+    # NOT a clean inversion like an evil Judge. Skip validation entirely.
+    if pos in scenario.corrupted:
+        return True
+
     truth = _truth_status(pos, scenario, state)
 
     actual_lying = _truth_status(target, scenario, state) == TruthStatus.LYING
@@ -1003,10 +1018,19 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                     else:
                         pd_targets = [None]
 
+        # Build full evil set including executed evils (needed for corruption
+        # computation and validator evil counting)
+        full_evil = dict(placement)
+        for ex_pos, ex_role in state.executed_evil_roles.items():
+            full_evil[ex_pos] = ex_role
+        for ex_pos in state.confirmed_evil:
+            if ex_pos in state.executed and ex_pos not in full_evil:
+                full_evil[ex_pos] = "Unknown"
+
         for pd_t in pd_targets:
-            for corrupted in _corruption_variants(placement, state, pd_t):
+            for corrupted in _corruption_variants(full_evil, state, pd_t):
                 scenario = Scenario(
-                    evil_positions=dict(placement),
+                    evil_positions=dict(full_evil),
                     puppet_position=puppet_pos,
                     corrupted=corrupted,
                     pd_corrupted=pd_t,
@@ -1019,6 +1043,11 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
 def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     """Check if a scenario is consistent with all revealed card info."""
     for card in state.cards:
+        # Skip executed cards — their alignment is already known,
+        # and their info shouldn't constrain remaining scenarios
+        if card.position in state.executed:
+            continue
+
         if card.position in scenario.evil_positions:
             # Evil card — its apparent role is a disguise, skip role-based validation
             # But we can still check if its info (as a lie) is consistent
