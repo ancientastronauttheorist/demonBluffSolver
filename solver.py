@@ -936,7 +936,17 @@ VALIDATORS = {
     "Alchemist": _validate_alchemist,
     "Druid": _validate_druid,
     "Bishop": _validate_bishop,
+    # NOTE: "Poet" is intentionally excluded — Poet's info is randomly generated
+    # (not truth-based), so it can't be validated for consistency. Good Poets can
+    # display false info. Judge detecting "lying" on a Poet just means the random
+    # info didn't match reality, NOT that the Poet is evil.
+    # NOTE: "Knight" has no info to validate — Knight's ability is "I can't die"
+    # (execution immunity). See EXECUTION_IMMUNE_ROLES below.
 }
+
+# Roles that cannot be executed (game blocks it). If execution attempt fails,
+# it CONFIRMS the card is the real role (evil disguise wouldn't have immunity).
+EXECUTION_IMMUNE_ROLES = {"Knight"}
 
 
 # ============================================================
@@ -1067,6 +1077,17 @@ def solve(state: GameState) -> SolverResult:
     for card in state.cards:
         if card.apparent_role == "Bombardier" and card.position in definite_good:
             bombardier_positions.append(card.position)
+
+    # Knight (execution-immune) positions — can't execute, but confirms Good
+    for card in state.cards:
+        if card.apparent_role in EXECUTION_IMMUNE_ROLES and card.position not in definite_good:
+            # If we attempted execution and it was blocked, the card is confirmed Good
+            # (evil disguise wouldn't have the immunity)
+            # Add to definite_good if not already there
+            if all(not _is_evil_in_scenario(card.position, s) for s in surviving):
+                if card.position not in definite_good:
+                    definite_good.append(card.position)
+                    reasoning.append(f"  #{card.position} is execution-immune ({card.apparent_role}) — confirmed GOOD")
 
     for pos in sorted(definite_evil):
         roles = set()

@@ -18,6 +18,7 @@ from solver import (
     _truth_status, _is_evil_in_scenario, _effective_alignment,
     _get_card_at, _get_real_role,
     circle_distance, adjacent_positions, Alignment,
+    EXECUTION_IMMUNE_ROLES,
 )
 
 
@@ -546,10 +547,15 @@ def recommend_action(
     if remaining == 0:
         return Action("win", reasoning="All evil characters have been executed!")
 
-    # 3. Execute definite evil (skip Bombardier)
+    # 3. Execute definite evil (skip Bombardier and execution-immune roles)
+    immune_positions = set()
+    for card in state.cards:
+        if card.apparent_role in EXECUTION_IMMUNE_ROLES:
+            immune_positions.add(card.position)
     safe_executions = [p for p in result.definite_evil
                        if p not in state.executed
-                       and p not in result.bombardier_positions]
+                       and p not in result.bombardier_positions
+                       and p not in immune_positions]
     if safe_executions:
         pos = safe_executions[0]
         roles = set()
@@ -613,7 +619,8 @@ def recommend_action(
     # 6. Witch fallback -- can't reveal, execute by probability
     probs = evil_probabilities(state, result)
     active_probs = {p: prob for p, prob in probs.items()
-                    if p not in state.executed and p not in result.bombardier_positions}
+                    if p not in state.executed and p not in result.bombardier_positions
+                    and p not in immune_positions}
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         return Action(

@@ -89,17 +89,40 @@ def detect_card_positions(screenshot_path: str) -> list[tuple[int, int]]:
         return []
 
     # Get center of mass for each region, filter by size
-    centers = []
+    raw_centers = []
     for i in range(1, n_features + 1):
         region = (labeled == i)
         size = region.sum()
         if size < 500:  # Skip tiny noise
             continue
         cy, cx = ndimage.center_of_mass(region)
-        centers.append((int(cx), int(cy)))
+        raw_centers.append((int(cx), int(cy)))
+
+    if not raw_centers:
+        print("[cards] No card-sized regions found")
+        return []
+
+    # Merge nearby centroids (cards often split into 2 regions)
+    MERGE_DIST = 120  # px — card halves are within this distance
+    centers = []
+    used = [False] * len(raw_centers)
+    for i, (x1, y1) in enumerate(raw_centers):
+        if used[i]:
+            continue
+        group_x, group_y, count = x1, y1, 1
+        for j, (x2, y2) in enumerate(raw_centers):
+            if j <= i or used[j]:
+                continue
+            if abs(x1 - x2) < MERGE_DIST and abs(y1 - y2) < MERGE_DIST:
+                group_x += x2
+                group_y += y2
+                count += 1
+                used[j] = True
+        centers.append((group_x // count, group_y // count))
+        used[i] = True
 
     if not centers:
-        print("[cards] No card-sized regions found")
+        print("[cards] No card-sized regions found after merge")
         return []
 
     # Sort clockwise from top: compute angle from centroid
