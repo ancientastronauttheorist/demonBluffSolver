@@ -250,23 +250,28 @@ def _apply_placement_constraints(placement: dict[int, str],
 
 
 def _compute_corruption(placement: dict[int, str], state: GameState,
-                        pd_target: Optional[int] = None) -> set[int]:
-    """Compute which positions are corrupted given evil placement."""
+                        pd_target: Optional[int] = None,
+                        doppelganger_pos: Optional[int] = None) -> set[int]:
+    """Compute which positions are corrupted given evil placement.
+
+    doppelganger_pos: if set, this position is Doppelganger (Outcast) and
+    immune to Pooka/Poisoner corruption (they only target Villagers).
+    """
     n = state.n_cards
     corrupted = set()
 
     for pos, role in placement.items():
         if role == "Pooka":
-            # Pooka corrupts adjacent Villagers
+            # Pooka corrupts adjacent Villagers (Doppelganger immune)
             for adj in adjacent_positions(pos, n):
-                if adj not in placement:  # Not evil
+                if adj not in placement and adj != doppelganger_pos:
                     card = _get_card_at(adj, state)
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
         elif role == "Poisoner":
-            # Poisoner corrupts 1 adjacent Villager
+            # Poisoner corrupts 1 adjacent Villager (Doppelganger immune)
             for adj in adjacent_positions(pos, n):
-                if adj not in placement:
+                if adj not in placement and adj != doppelganger_pos:
                     card = _get_card_at(adj, state)
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
@@ -282,6 +287,42 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
             corrupted.add(card.position)
 
     return corrupted
+
+
+def _corruption_variants(placement: dict[int, str], state: GameState,
+                         pd_target: Optional[int] = None) -> list[set[int]]:
+    """Generate corruption set variants accounting for Doppelganger immunity.
+
+    If Doppelganger is in the deck, any apparent Villager adjacent to a
+    corruption source could be Doppelganger (Outcast, immune). Returns all
+    distinct corruption sets to try.
+    """
+    has_doppelganger = "Doppelganger" in state.deck.outcasts
+    if not has_doppelganger:
+        return [_compute_corruption(placement, state, pd_target)]
+
+    n = state.n_cards
+    # Find positions adjacent to corruption sources that appear as Villagers
+    corruption_adjacent = set()
+    for pos, role in placement.items():
+        if role in ("Pooka", "Poisoner"):
+            for adj in adjacent_positions(pos, n):
+                if adj not in placement:
+                    card = _get_card_at(adj, state)
+                    if card and _is_villager_role(card.apparent_role, state):
+                        corruption_adjacent.add(adj)
+
+    # Try Doppelganger at each relevant position (or nowhere relevant)
+    dopp_options = [None] + list(corruption_adjacent)
+    seen = set()
+    variants = []
+    for dopp_pos in dopp_options:
+        corrupted = _compute_corruption(placement, state, pd_target, dopp_pos)
+        key = frozenset(corrupted)
+        if key not in seen:
+            seen.add(key)
+            variants.append(corrupted)
+    return variants
 
 
 def _get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
@@ -948,14 +989,14 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                         pd_targets = [None]
 
         for pd_t in pd_targets:
-            corrupted = _compute_corruption(placement, state, pd_t)
-            scenario = Scenario(
-                evil_positions=dict(placement),
-                puppet_position=puppet_pos,
-                corrupted=corrupted,
-                pd_corrupted=pd_t,
-            )
-            scenarios.append(scenario)
+            for corrupted in _corruption_variants(placement, state, pd_t):
+                scenario = Scenario(
+                    evil_positions=dict(placement),
+                    puppet_position=puppet_pos,
+                    corrupted=corrupted,
+                    pd_corrupted=pd_t,
+                )
+                scenarios.append(scenario)
 
     return scenarios
 
