@@ -1,22 +1,19 @@
 {
-  "n_cards": 9,
+  "n_cards": 7,
   "n_evil": 3,
   "villagers": [
-    "Slayer",
-    "Bard",
-    "Bishop",
-    "Empress",
-    "Alchemist",
+    "Gemcrafter",
     "Judge",
-    "Knitter"
+    "Medium",
+    "Oracle",
+    "Alchemist"
   ],
   "outcasts": [
-    "Plague_Doctor",
+    "Doppelganger",
     "Wretch"
   ],
   "minions": [
-    "Twin_Minion",
-    "Minion"
+    "Puppeteer"
   ],
   "demons": [
     "Baa"
@@ -24,24 +21,6 @@
   "cards": [
     {
       "position": 1,
-      "apparent_role": "Empress",
-      "info_text": "",
-      "info_parsed": {
-        "targets": [
-          2,
-          6,
-          9
-        ]
-      }
-    },
-    {
-      "position": 2,
-      "apparent_role": "Wretch",
-      "info_text": "",
-      "info_parsed": {}
-    },
-    {
-      "position": 3,
       "apparent_role": "Alchemist",
       "info_text": "",
       "info_parsed": {
@@ -49,70 +28,82 @@
       }
     },
     {
-      "position": 4,
-      "apparent_role": "Knitter",
+      "position": 2,
+      "apparent_role": "Judge",
       "info_text": "",
       "info_parsed": {
-        "evil_pairs": 1
+        "target": 3,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Judge"
       }
     },
     {
       "position": 5,
-      "apparent_role": "Bard",
+      "apparent_role": "Gemcrafter",
       "info_text": "",
       "info_parsed": {
-        "corruption_distance": 3
+        "good_position": 1
       }
     },
     {
       "position": 6,
-      "apparent_role": "Judge",
-      "info_text": "",
-      "info_parsed": {}
-    },
-    {
-      "position": 7,
-      "apparent_role": "Judge",
-      "info_text": "",
-      "info_parsed": {}
-    },
-    {
-      "position": 8,
-      "apparent_role": "Bishop",
+      "apparent_role": "Medium",
       "info_text": "",
       "info_parsed": {
-        "targets": [
-          1,
-          6,
-          9
-        ]
+        "good_position": 2,
+        "good_role": "Judge"
       }
     },
     {
-      "position": 9,
-      "apparent_role": "Slayer",
+      "position": 7,
+      "apparent_role": "Oracle",
       "info_text": "",
-      "info_parsed": {}
+      "info_parsed": {
+        "targets": [
+          5,
+          7
+        ],
+        "minion_role": "Puppet"
+      }
     }
   ],
   "executed": [
-    8,
+    7,
     5,
-    7
+    4,
+    6
   ],
   "confirmed_evil": [
-    8,
-    5,
-    7
+    7,
+    4,
+    6
   ],
-  "confirmed_good": [],
+  "confirmed_good": [
+    5
+  ],
   "pd_corruption_target": null,
   "used_abilities": [
-    9
+    2
   ],
   "executed_evil_roles": {
-    "5": "Minion"
+    "7": "Puppet",
+    "4": "Baa",
+    "6": "Puppeteer"
   },
-  "hp": 10,
+  "hp": 5,
   "wrong_exec_cost": 5
 }

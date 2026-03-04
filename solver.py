@@ -116,6 +116,7 @@ class Scenario:
     puppet_position: Optional[int] = None  # If Puppeteer in play
     corrupted: set[int] = field(default_factory=set)  # Corrupted positions
     pd_corrupted: Optional[int] = None  # Plague Doctor corruption target
+    doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
 
 
 @dataclass
@@ -352,6 +353,8 @@ def _get_real_role(pos: int, scenario: Scenario, state: GameState) -> str:
         return scenario.evil_positions[pos]
     if pos == scenario.puppet_position:
         return "Puppet"
+    if pos == scenario.doppelganger_position:
+        return "Doppelganger"
     card = _get_card_at(pos, state)
     if card:
         return card.apparent_role
@@ -1027,13 +1030,35 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if ex_pos in state.executed and ex_pos not in full_evil:
                 full_evil[ex_pos] = "Unknown"
 
+        # Determine possible Doppelganger positions
+        has_doppelganger = "Doppelganger" in state.deck.outcasts
+        dopp_candidates = [None]  # None = Doppelganger not in play / not relevant
+        if has_doppelganger:
+            for p in range(1, state.n_cards + 1):
+                if p in full_evil or p == puppet_pos:
+                    continue
+                if p in state.executed:
+                    continue
+                card = _get_card_at(p, state)
+                if card and _is_villager_role(card.apparent_role, state):
+                    dopp_candidates.append(p)
+
         for pd_t in pd_targets:
-            for corrupted in _corruption_variants(full_evil, state, pd_t):
+            seen = set()
+            for dopp_pos in dopp_candidates:
+                corrupted = _compute_corruption(
+                    full_evil, state, pd_t, dopp_pos)
+                # Deduplicate scenarios with same corruption+dopp combo
+                key = (frozenset(corrupted), dopp_pos)
+                if key in seen:
+                    continue
+                seen.add(key)
                 scenario = Scenario(
                     evil_positions=dict(full_evil),
                     puppet_position=puppet_pos,
                     corrupted=corrupted,
                     pd_corrupted=pd_t,
+                    doppelganger_position=dopp_pos,
                 )
                 scenarios.append(scenario)
 

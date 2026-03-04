@@ -1,0 +1,29 @@
+{
+  "name": "session22_v1_asc5_preexec",
+  "notes": "PRE-EXECUTION STATE: Village 1/7, Ascension 5. 7 cards, 3 evils. SOLVER BUG: solver found {1:Puppet, 5:Baa, 7:Puppeteer} but reality was {4:Baa, 6:Puppeteer, 7:Puppet}. Both Mediums were evil (both lying about #2=real Judge). #2 was Doppelganger disguised as Judge. Solver must handle: (1) evil Medium can lie about target's role even if target IS Good, (2) Doppelganger disguise as Judge, (3) Puppet adjacent to Puppeteer at #6 not #1.",
+  "n_cards": 7,
+  "n_evil": 3,
+  "deck": {
+    "villagers": ["Gemcrafter", "Judge", "Medium", "Oracle", "Alchemist"],
+    "outcasts": ["Doppelganger", "Wretch"],
+    "minions": ["Puppeteer"],
+    "demons": ["Baa"]
+  },
+  "cards": [
+    {"position": 1, "apparent_role": "Alchemist", "info_text": "", "info_parsed": {"cured_count": 0}},
+    {"position": 2, "apparent_role": "Judge", "info_text": "", "info_parsed": {"target": 3, "is_lying": false}},
+    {"position": 3, "apparent_role": "Judge", "info_text": "", "info_parsed": {}},
+    {"position": 4, "apparent_role": "Medium", "info_text": "", "info_parsed": {"good_position": 2, "good_role": "Judge"}},
+    {"position": 5, "apparent_role": "Gemcrafter", "info_text": "", "info_parsed": {"good_position": 1}},
+    {"position": 6, "apparent_role": "Medium", "info_text": "", "info_parsed": {"good_position": 2, "good_role": "Judge"}},
+    {"position": 7, "apparent_role": "Oracle", "info_text": "", "info_parsed": {"targets": [5, 7], "minion_role": "Puppet"}}
+  ],
+  "executed": [],
+  "confirmed_evil": [],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {},
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "true_evil_positions": {"4": "Baa", "6": "Puppeteer", "7": "Puppet"}
+}
