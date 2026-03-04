@@ -1,23 +1,27 @@
 {
+  "name": "session25_v4_asc5_midgame",
+  "notes": "MID-GAME STATE: Village 4/7, Ascension 5. After executing #1 (wrong, Good corrupted Knitter) and #3 (Minion). SOLVER BUG: executed-card skip in _check_scenario prevented corrupted Knitter #1 lie check from constraining scenarios. With fix, solver correctly finds only #7=Lilis (1 surviving). Without fix, both #4 and #7 appear possible (2 surviving).",
   "n_cards": 8,
   "n_evil": 2,
-  "villagers": [
-    "Bard",
-    "Dreamer",
-    "Architect",
-    "Lover",
-    "Knitter"
-  ],
-  "outcasts": [
-    "Oracle",
-    "Plague_Doctor"
-  ],
-  "minions": [
-    "Minion"
-  ],
-  "demons": [
-    "Lilis"
-  ],
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Dreamer",
+      "Architect",
+      "Lover",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Oracle",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
   "cards": [
     {
       "position": 1,
@@ -85,10 +89,13 @@
     1
   ],
   "pd_corruption_target": 1,
-  "used_abilities": [],
   "executed_evil_roles": {
     "3": "Minion"
   },
   "hp": 3,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "true_evil_positions": {
+    "3": "Minion",
+    "7": "Lilis"
+  }
 }

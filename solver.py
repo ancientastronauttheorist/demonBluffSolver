@@ -984,7 +984,7 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
     # Find Plague Doctor position (if any) for corruption
     pd_pos = None
     for card in state.cards:
-        if card.apparent_role == "Plague Doctor":
+        if card.apparent_role in ("Plague_Doctor", "Plague Doctor"):
             if card.position not in []:  # Not evil (check later per scenario)
                 pd_pos = card.position
 
@@ -1004,7 +1004,7 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         pd_targets = [None]
         if pd_pos and pd_pos not in placement:
             # PD is good — it corrupted someone
-            if "Plague Doctor" in state.deck.outcasts:
+            if "Plague_Doctor" in state.deck.outcasts or "Plague Doctor" in state.deck.outcasts:
                 if state.pd_corruption_target is not None:
                     # Known PD target — only use that
                     pd_targets = [state.pd_corruption_target]
@@ -1068,9 +1068,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
 def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     """Check if a scenario is consistent with all revealed card info."""
     for card in state.cards:
-        # Skip executed cards — their alignment is already known,
-        # and their info shouldn't constrain remaining scenarios
-        if card.position in state.executed:
+        # Skip executed cards UNLESS they are corrupted in this scenario —
+        # corrupted cards' info must still be validated (lies constrain scenarios)
+        if card.position in state.executed and card.position not in scenario.corrupted:
             continue
 
         if card.position in scenario.evil_positions:
