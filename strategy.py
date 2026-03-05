@@ -92,6 +92,36 @@ def _unrevealed_positions(state: GameState) -> list[int]:
             if p not in revealed and p not in state.executed]
 
 
+def _revealed_fraction(state: GameState) -> float:
+    """Fraction of non-executed cards that have been revealed."""
+    total = state.n_cards - len(state.executed)
+    if total <= 0:
+        return 1.0
+    revealed = len([c for c in state.cards if c.position not in state.executed])
+    return revealed / total
+
+
+def _ability_timing_factor(state: GameState) -> float:
+    """Scaling factor for ability scores based on how much info we have.
+
+    Returns 0.0-1.0. Low when few cards revealed (save abilities for later),
+    high when most cards revealed (use them now before it's too late).
+
+    The curve ramps up after ~40% revealed, reaching full value at ~70%.
+    Slayer is exempt from this (handled separately -- always good to use early
+    if target is high-probability evil).
+    """
+    frac = _revealed_fraction(state)
+    # Smooth ramp: 0 at 0%, ~0.15 at 25%, ~0.5 at 40%, ~0.85 at 55%, 1.0 at 70%+
+    if frac >= 0.7:
+        return 1.0
+    if frac <= 0.1:
+        return 0.05
+    # Sigmoid-like: map [0.1, 0.7] -> [0.05, 1.0]
+    t = (frac - 0.1) / 0.6  # 0 to 1
+    return 0.05 + 0.95 * (t * t * (3 - 2 * t))  # smoothstep
+
+
 def _count_remaining_evil(state: GameState, result: SolverResult) -> int:
     """Count evil characters not yet executed, using first surviving scenario."""
     if not result.surviving_scenarios:
@@ -405,6 +435,7 @@ def recommend_abilities(
     if result.n_surviving == 0:
         return []
 
+    timing = _ability_timing_factor(state)
     recommendations = []
     available = [p for p in range(1, state.n_cards + 1) if p not in state.executed]
 
@@ -436,6 +467,10 @@ def recommend_abilities(
                 "Fortune Teller", pos,
                 _ft_ground_truth, candidates, state, result)
             if rec:
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
         elif role == "Jester" and len(others) >= 3:
@@ -444,6 +479,10 @@ def recommend_abilities(
                 "Jester", pos, _jester_ground_truth,
                 candidates, 3, state, result)
             if rec:
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
         elif role == "Judge":
@@ -459,6 +498,10 @@ def recommend_abilities(
             if rec:
                 if rec.targets and rec.targets[0] in poet_positions:
                     rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
         elif role == "Dreamer":
@@ -467,6 +510,10 @@ def recommend_abilities(
                 "Dreamer", pos,
                 _dreamer_ground_truth, candidates, state, result)
             if rec:
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
         elif role == "Druid" and len(others) >= 3:
@@ -475,9 +522,14 @@ def recommend_abilities(
                 "Druid", pos,
                 _druid_ground_truth, candidates, state, result)
             if rec:
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
         elif role == "Slayer":
+            # Slayer is exempt from timing penalty — killing evil early is always good
             rec = _recommend_slayer(pos, state, result)
             if rec:
                 recommendations.append(rec)
@@ -489,6 +541,10 @@ def recommend_abilities(
                 lambda t, s, st: str(_pd_ground_truth(t, s, st)),
                 candidates, state, result)
             if rec:
+                rec.score *= timing
+                rec.reasoning += f" | timing x{timing:.2f}"
+                if timing < 0.5:
+                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
                 recommendations.append(rec)
 
     return recommendations

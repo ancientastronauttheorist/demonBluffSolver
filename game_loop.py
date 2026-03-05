@@ -8,10 +8,11 @@ import json
 import os
 import sys
 from dataclasses import dataclass, field, asdict
+from datetime import datetime
 from typing import Optional
 
 from solver import CardInfo, DeckComposition, GameState, SolverResult, solve
-from strategy import recommend_action, print_recommendation
+from strategy import recommend_action, print_recommendation, evil_probabilities
 
 
 # ============================================================
@@ -111,6 +112,112 @@ CARD_BUILDERS = {
 }
 
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
+DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
+
+
+# ============================================================
+# Decision Log
+# ============================================================
+
+class DecisionLog:
+    """Append-only markdown log of every decision in the current game."""
+
+    @staticmethod
+    def _ts() -> str:
+        return datetime.now().strftime("%H:%M:%S")
+
+    @staticmethod
+    def start_game(n_cards: int, n_evil: int, hp: int, cost: int):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"\n---\n\n")
+            f.write(f"# New Game — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Cards: {n_cards}, Evil: {n_evil}, HP: {hp}, Wrong exec cost: {cost}\n\n")
+
+    @staticmethod
+    def log_deck(villagers, outcasts, minions, demons):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"## Deck\n")
+            f.write(f"- Villagers: {', '.join(villagers)}\n")
+            f.write(f"- Outcasts: {', '.join(outcasts)}\n")
+            f.write(f"- Minions: {', '.join(minions)}\n")
+            f.write(f"- Demons: {', '.join(demons)}\n\n")
+
+    @staticmethod
+    def log_card(card: CardInfo):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"### [{DecisionLog._ts()}] Revealed #{card.position} {card.apparent_role}\n")
+            f.write(f"Info: {card.info_parsed}\n\n")
+
+    @staticmethod
+    def log_solver_output(result: SolverResult, state: GameState):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"#### [{DecisionLog._ts()}] Solver Output\n")
+            f.write(f"Scenarios: {result.n_surviving}/{result.n_scenarios}\n")
+            if result.definite_evil:
+                f.write(f"Definite evil: {['#'+str(p) for p in result.definite_evil]}\n")
+            if result.definite_good:
+                f.write(f"Definite good: {['#'+str(p) for p in result.definite_good]}\n")
+            if result.n_surviving > 0:
+                probs = evil_probabilities(state, result)
+                uncertain = {p: prob for p, prob in probs.items()
+                             if 0 < prob < 1 and p not in state.executed}
+                if uncertain:
+                    f.write(f"Evil probabilities: " +
+                            ", ".join(f"#{p}={prob:.0%}" for p, prob in
+                                      sorted(uncertain.items(), key=lambda x: -x[1])) + "\n")
+            for line in result.reasoning:
+                f.write(f"  {line}\n")
+            f.write("\n")
+
+    @staticmethod
+    def log_recommendation(action):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"#### [{DecisionLog._ts()}] Recommendation\n")
+            f.write(f"Action: **{action.action_type.upper()}**")
+            if action.position:
+                f.write(f" #{action.position}")
+            if action.ability_name:
+                f.write(f" ({action.ability_name})")
+            if action.targets:
+                f.write(f" -> targets {['#'+str(t) for t in action.targets]}")
+            f.write(f"\nReason: {action.reasoning}\n")
+            for w in action.warnings:
+                f.write(f"WARNING: {w}\n")
+            f.write("\n")
+
+    @staticmethod
+    def log_execution(pos: int, was_evil, evil_role):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"### [{DecisionLog._ts()}] Executed #{pos}")
+            if evil_role:
+                f.write(f" -> {evil_role} (EVIL)")
+            elif was_evil is True:
+                f.write(f" -> EVIL")
+            elif was_evil is False:
+                f.write(f" -> GOOD (WRONG!)")
+            f.write("\n\n")
+
+    @staticmethod
+    def log_ability_used(pos: int):
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"### [{DecisionLog._ts()}] Ability used at #{pos}\n\n")
+
+    @staticmethod
+    def log_game_over(result: str, hp: int, notes: str = ""):
+        """Log game outcome: 'win' or 'loss'."""
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"## [{DecisionLog._ts()}] GAME OVER — {result.upper()}\n")
+            f.write(f"Final HP: {hp}\n")
+            if notes:
+                f.write(f"Notes: {notes}\n")
+            f.write("\n")
+
+    @staticmethod
+    def log_custom(label: str, text: str):
+        """For Claude to log its own reasoning."""
+        with open(DECISION_LOG, "a") as f:
+            f.write(f"#### [{DecisionLog._ts()}] {label}\n")
+            f.write(f"{text}\n\n")
 
 
 # ============================================================
@@ -233,7 +340,10 @@ class GameSession:
         result = solve(state)
         for line in result.reasoning:
             print(f"  {line}")
-        return print_recommendation(state, result, self.used_abilities)
+        DecisionLog.log_solver_output(result, state)
+        action = print_recommendation(state, result, self.used_abilities)
+        DecisionLog.log_recommendation(action)
+        return action
 
     # -- Status --
 
@@ -447,6 +557,8 @@ def main():
         print("  confirm_good <pos>                    Mark position as confirmed good")
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
+        print("  log <label> <text>                    Add reasoning to decision log")
+        print("  game_over <win|loss> [notes]           Log game result to decision log")
         print("  save_test <name> [true_evils_json]    Save game as regression test")
         print()
         print("Card examples:")
@@ -472,6 +584,7 @@ def main():
             elif arg.startswith("cost="):
                 session.wrong_exec_cost = int(arg[5:])
         session.save()
+        DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
         print(f"New session: {n_cards} cards, {n_evil} evil, HP={session.hp}, cost={session.wrong_exec_cost}")
         return
 
@@ -498,6 +611,7 @@ def main():
                 demons = _parse_role_list(arg[2:])
         session.set_deck(villagers, outcasts, minions, demons)
         session.save()
+        DecisionLog.log_deck(villagers, outcasts, minions, demons)
         print(f"Deck set: V={villagers} O={outcasts} M={minions} D={demons}")
         return
 
@@ -506,6 +620,7 @@ def main():
         card = _parse_card_cli(sys.argv[2:])
         session.add_card(card)
         session.save()
+        DecisionLog.log_card(card)
         print(f"Added #{card.position} {card.apparent_role}: {card.info_parsed}")
         return
 
@@ -529,6 +644,7 @@ def main():
                 evil_role = sys.argv[3]
         session.mark_executed(pos, was_evil, evil_role)
         session.save()
+        DecisionLog.log_execution(pos, was_evil, evil_role)
         tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
         print(f"Executed #{pos}{tag}")
         return
@@ -579,7 +695,25 @@ def main():
         pos = int(sys.argv[2])
         session.mark_ability_used(pos)
         session.save()
+        DecisionLog.log_ability_used(pos)
         print(f"Ability at #{pos} marked as used")
+        return
+
+    if cmd == "log":
+        # Log Claude's reasoning: python game_loop.py log "label" "text"
+        label = sys.argv[2] if len(sys.argv) > 2 else "Claude Reasoning"
+        text = sys.argv[3] if len(sys.argv) > 3 else ""
+        DecisionLog.log_custom(label, text)
+        print(f"[log] Logged: {label}")
+        return
+
+    if cmd == "game_over":
+        # Log game result: python game_loop.py game_over win/loss [notes]
+        session = GameSession.load()
+        result = sys.argv[2] if len(sys.argv) > 2 else "unknown"
+        notes = sys.argv[3] if len(sys.argv) > 3 else ""
+        DecisionLog.log_game_over(result, session.hp, notes)
+        print(f"[game_over] Logged: {result.upper()}, HP={session.hp}")
         return
 
     if cmd == "save_test":
