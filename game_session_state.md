@@ -1130,3 +1130,449 @@ SOLVER NAILED IT. #3 and #8 both definitely Evil. Bard corruption distance confi
 Final HP: 8
 Notes: Solver 100% correct. Bard corruption distance was key. Judge (evil) said #4 lying = corruption not evil.
 
+
+---
+
+# New Game — 2026-03-05 14:35:57
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Lover, Architect, Dreamer, Knight, Gemcrafter
+- Outcasts: Wretch
+- Minions: Poisoner, Puppeteer
+- Demons: Lilis
+
+#### [14:36:03] Solver Output
+Scenarios: 756/756
+Evil probabilities: #1=44%, #2=44%, #3=44%, #4=44%, #5=44%, #6=44%, #7=44%, #8=44%, #9=44%
+  Generated 756 candidate scenarios
+  756 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:36:03] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 44% evil, entropy 1.091
+
+### [14:37:02] Revealed #1 Wretch
+Info: {}
+
+#### [14:37:02] Solver Output
+Scenarios: 756/756
+Evil probabilities: #1=44%, #2=44%, #3=44%, #4=44%, #5=44%, #6=44%, #7=44%, #8=44%, #9=44%
+  Generated 756 candidate scenarios
+  756 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:37:02] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 44% evil, entropy 1.091
+
+### [14:37:58] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+#### [14:37:59] Claude Reasoning
+Lover #2 says 0 evil adjacent. But Wretch #1 is adjacent and registers as Evil. If Lover truthful+Good, should see Wretch as Evil = at least 1. Says 0 = either Lover is lying (evil/corrupted) or solver handles Wretch-Lover differently. Key deduction point.
+
+#### [14:37:59] Solver Output
+Scenarios: 472/756
+Evil probabilities: #2=53%, #4=46%, #9=46%, #1=44%, #3=44%, #6=42%, #7=42%, #5=41%, #8=41%
+  Generated 756 candidate scenarios
+  472 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:37:59] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 46% evil, entropy 1.095
+
+### [14:38:31] Revealed #4 Hunter
+Info: {'distance': 4}
+
+#### [14:38:31] Solver Output
+Scenarios: 266/796
+Evil probabilities: #2=63%, #4=63%, #6=41%, #9=41%, #1=39%, #5=39%, #3=38%, #7=38%, #8=38%
+  Generated 796 candidate scenarios
+  266 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:38:31] Recommendation
+Action: **REVEAL** #6
+Reason: #6: 41% evil, entropy 1.078
+
+### [14:39:32] Revealed #6 Hunter
+Info: {'distance': 1}
+
+#### [14:39:33] Solver Output
+Scenarios: 157/860
+Evil probabilities: #2=62%, #4=61%, #5=44%, #7=41%, #9=41%, #8=40%, #1=38%, #6=38%, #3=34%
+  Generated 860 candidate scenarios
+  157 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:39:33] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 44% evil, entropy 1.089
+
+### [14:40:06] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+#### [14:40:07] Solver Output
+Scenarios: 63/1042
+Evil probabilities: #2=67%, #4=59%, #9=48%, #5=46%, #6=41%, #7=41%, #8=37%, #1=32%, #3=30%
+  Generated 1042 candidate scenarios
+  63 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:40:07] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 48% evil, entropy 1.098
+
+### [14:40:36] Revealed #9 Dreamer
+Info: {}
+
+#### [14:40:36] Solver Output
+Scenarios: 63/1176
+Evil probabilities: #2=67%, #4=59%, #9=48%, #5=46%, #6=41%, #7=41%, #8=37%, #1=32%, #3=30%
+  Generated 1176 candidate scenarios
+  63 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:40:36] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#2']
+Reason: Entropy 2.768 (adjusted 2.724) | timing x0.99
+WARNING: Corruption risk: 3%
+
+### [14:42:04] Revealed #9 Dreamer
+Info: {'target': 2, 'evil_role': 'Poisoner'}
+
+### [14:42:04] Ability used at #9
+
+#### [14:42:04] Solver Output
+Scenarios: 31/1176
+Evil probabilities: #9=71%, #4=68%, #5=52%, #6=45%, #8=45%, #7=39%, #2=32%, #1=29%, #3=19%
+  Generated 1176 candidate scenarios
+  31 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:42:04] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 45% evil, entropy 0.993
+
+### [14:42:38] Revealed #8 Gemcrafter
+Info: {'good_position': 7}
+
+#### [14:42:38] Solver Output
+Scenarios: 22/1352
+Evil probabilities: #5=64%, #4=59%, #9=59%, #6=45%, #1=41%, #2=41%, #8=36%, #3=27%, #7=27%
+  Generated 1352 candidate scenarios
+  22 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:42:38] Recommendation
+Action: **REVEAL** #3
+Reason: #3: 27% evil, entropy 0.845
+
+### [14:43:31] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+#### [14:43:32] Solver Output
+Scenarios: 3/1560
+Definite evil: ['#3', '#5', '#6']
+Definite good: ['#1', '#7', '#8', '#9']
+Evil probabilities: #4=67%, #2=33%
+  Generated 1560 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner', 'Lilis'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #6 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [14:43:32] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Poisoner', 'Lilis'})
+
+### [14:44:52] Executed #3 -> Lover (EVIL)
+
+### [14:44:52] Executed #5 -> Architect (EVIL)
+
+#### [14:44:52] WRONG EXEC
+#5 Architect was Good. Solver said DEFINITELY EVIL Puppeteer in all 3 scenarios - all wrong. HP 6->1. Zero budget for mistakes. Need to find 3 more evils with no room for error.
+
+#### [14:46:11] Manual Deduction
+Hunter #4 said 4 away from evil. But #3 was evil at distance 1 from #4. Direct contradiction = #4 is evil/corrupted. With Poisoner in deck, could be corrupted. But leave-one-out removing #4 info gives 3 scenarios. Hunter #6 said 1 away = evil at #5 or #7. #5 is Good. So #7 is evil. Going to execute #4 first (direct contradiction).
+
+### [15:03:33] Executed #6 -> Hunter (EVIL)
+
+#### [15:03:33] Win
+Executed #6 as Lilis (disguised as Hunter). Won with 1 HP. Deduction: Puppet #3 said 2 evils adjacent (truthful), confirming #2 and #4 evil. Hunter #6 said 1 card from evil = wrong if no adjacent evil exists, must be Lilis. Dreamer #9 updated to show #6 could be Lili after #2 died.
+
+## [15:03:40] GAME OVER — WIN
+Final HP: 1
+Notes: Solver had bugs (0 scenarios, wrong definitely evil on #5). Manual deduction saved the game. Puppet truthful info was key. Won with 1 HP.
+
+
+---
+
+# New Game — 2026-03-05 15:05:09
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune Teller, Gemcrafter, Medium, Alchemist, Scout, Dreamer
+- Outcasts: Drunk
+- Minions: Chancellor
+- Demons: Baa
+
+### [15:06:57] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+#### [15:06:57] Claude Reasoning
+Alchemist #1 says cured 2 corruptions, but NO corruption source in deck (no PD, no Poisoner, no Pooka). Real Alchemist would cure 0. This means #1 is LYING = Evil. Since no corruption source, #1 must be Evil disguised as Alchemist.
+
+### [15:07:30] Revealed #4 Medium
+Info: {'good_position': 3, 'good_role': 'Bombardier'}
+
+#### [15:07:30] Claude Reasoning
+Medium #4 says #3 is real Bombardier. If truthful, #3 is confirmed Good Bombardier. Bombardier is in deck as Outcast but Baa adds fake outcasts. If Medium is truthful, this confirms #3 Good. But if Medium is Evil, this is a lie.
+
+### [15:08:08] Revealed #6 Wretch
+Info: {}
+
+### [15:08:37] Revealed #8 Dreamer
+Info: {}
+
+#### [15:08:43] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [15:08:43] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [15:08:58] Claude Reasoning
+Solver says #1 and #4 definitely evil. #1 Alchemist lied about curing 2 (no corruption source). #4 Medium also evil - probably lied about #3 being Bombardier. Executing #1 first as recommended.
+
+### [15:09:33] Executed #1 -> Baa (EVIL)
+
+### [15:10:15] Executed #4 -> Medium (EVIL)
+
+#### [15:10:15] WRONG EXEC
+#4 Medium was GOOD! Lost 5 HP (10->5). Solver said #4 was DEFINITELY EVIL but it was wrong. Medium said #3 is real Bombardier - this was TRUE. Need to find the real 2nd evil among remaining: #2, #3, #5, #7.
+
+#### [15:10:41] Solver Output
+Scenarios: 6/6
+Definite evil: ['#1']
+Definite good: ['#4']
+Evil probabilities: #2=17%, #3=17%, #5=17%, #6=17%, #7=17%, #8=17%
+  Generated 6 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #4 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 7, 8]
+
+#### [15:10:41] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 17% evil, entropy 0.750
+
+### [15:11:50] Revealed #2 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+#### [15:11:57] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #8 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [15:11:57] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+#### [15:12:12] Claude Reasoning
+Solver says #8 definitely Chancellor. Logic: Scout #2 says Chancellor is 1 from closest evil (Baa at #1). Adjacent to #1 = #2 or #8. #2 is Scout itself. So #8 = Chancellor. Medium #4 (confirmed Good) said #3 is Bombardier = true. Executing #8.
+
+### [15:14:29] Executed #8 -> Dreamer (EVIL)
+
+## [15:14:29] GAME OVER — LOSS
+Final HP: 0
+Notes: Solver bug: Scout distance calculation didn't account for Wretch registering as Evil. Scout said Chancellor 1 from closest evil, solver assumed closest evil = Baa (distance 4 from #5), so concluded Chancellor at #8 (distance 1 from Baa). But truth: Wretch at #6 registers as Evil, Chancellor at #5 is distance 1 from Wretch. Also solver wrongly said #4 Medium was DEFINITELY EVIL on first run.
+
+
+---
+
+# New Game — 2026-03-05 15:18:24
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Knitter, Medium, Dreamer, Alchemist, Fortune Teller, Gemcrafter
+- Outcasts: Drunk
+- Minions: Chancellor, Puppeteer
+- Demons: Baa
+
+## Deck
+- Villagers: Lover, Knitter, Medium, Dreamer, Alchemist, Fortune Teller, Gemcrafter
+- Outcasts: Wretch
+- Minions: Chancellor, Puppeteer
+- Demons: Baa
+
+### [15:20:02] Revealed #1 Wretch
+Info: {}
+
+### [15:20:36] Revealed #5 Medium
+Info: {'good_position': 7, 'good_role': 'Knitter'}
+
+### [15:21:12] Revealed #7 Knitter
+Info: {'evil_pairs': 0}
+
+### [15:22:16] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+#### [15:22:16] Solver Output
+Scenarios: 14/720
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#9']
+Evil probabilities: #3=86%, #4=43%, #2=29%, #6=29%, #8=14%
+  Generated 720 candidate scenarios
+  14 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Puppeteer', 'Chancellor'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Puppeteer', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 6, 8]
+
+#### [15:22:16] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Baa', 'Puppeteer', 'Chancellor'})
+
+#### [15:22:39] Claude Reasoning
+Solver says #5 Medium and #7 Knitter are DEFINITELY EVIL. Logic check: If Knitter truthful (0 pairs), then Wretch#1 can't be adjacent to evil. But Lover#3 says 2 evils adjacent = #2 and #4. Wretch#1 adjacent to #2 would create a pair, contradicting Knitter. So Lover OR Knitter is lying. Solver says both Medium and Knitter are evil. Cautious: revealing #4 first to get more info before executing.
+
+### [15:23:16] Revealed #4 Dreamer
+Info: {}
+
+#### [15:23:16] Solver Output
+Scenarios: 14/720
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#9']
+Evil probabilities: #3=86%, #4=43%, #2=29%, #6=29%, #8=14%
+  Generated 720 candidate scenarios
+  14 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Chancellor', 'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Chancellor', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 6, 8]
+
+#### [15:23:16] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Puppeteer', 'Chancellor', 'Baa'})
+
+### [15:24:01] Executed #5 -> Puppeteer (EVIL)
+
+#### [15:24:01] Solver Output
+Scenarios: 6/56
+Definite evil: ['#3', '#5']
+Definite good: ['#2', '#4', '#7', '#9']
+Evil probabilities: #1=33%, #6=33%, #8=33%
+  Generated 56 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 6, 8]
+
+#### [15:24:01] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [15:24:49] Executed #3 -> Lover (EVIL)
+
+#### [15:24:50] WRONG EXEC
+#3 Lover was GOOD\! HP 10->5. Solver said #3 definitely evil but wrong. Lover's '2 evils adjacent' was TRUE = #2 and #4 are evil.
+
+#### [15:25:15] Solver Output
+Scenarios: 20/42
+Definite evil: ['#5']
+Definite good: ['#3']
+Evil probabilities: #6=40%, #7=40%, #8=40%, #1=30%, #4=30%, #2=10%, #9=10%
+  Generated 42 candidate scenarios
+  20 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6, 7, 8, 9]
+
+#### [15:25:15] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.246 (adjusted 2.246) | timing x0.59
+
+### [15:27:14] Revealed #4 Dreamer
+Info: {'target': 6, 'evil_role': 'Chancellor'}
+
+### [15:27:14] Ability used at #4
+
+#### [15:27:14] Solver Output
+Scenarios: 16/42
+Definite evil: ['#5']
+Definite good: ['#3']
+Evil probabilities: #7=44%, #8=44%, #1=31%, #4=31%, #6=25%, #2=12%, #9=12%
+  Generated 42 candidate scenarios
+  16 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6, 7, 8, 9]
+
+#### [15:27:14] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 44% evil, entropy 1.089
+
+### [15:28:20] Revealed #8 Bard
+Info: {'corruption_distance': 2}
+
+#### [15:28:20] Solver Output
+Scenarios: 7/42
+Definite evil: ['#5', '#8']
+Definite good: ['#2', '#3', '#9']
+Evil probabilities: #1=29%, #4=29%, #7=29%, #6=14%
+  Generated 42 candidate scenarios
+  7 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 4, 6, 7]
+
+#### [15:28:20] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 7 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [15:29:25] Executed #8 -> Bard (EVIL)
+
+## [15:31:13] GAME OVER — LOSS
+Final HP: 0
+Notes: Solver bugs: (1) Didn't know Chancellor conversion causes CORRUPTION on converted target. Drunk#6 was corrupted by Chancellor#7 conversion. (2) Bard#8 said 2-from-corrupted = TRUE (#6 corrupted, distance 2). Solver wrongly said #8 definitely evil. (3) First solver run also wrongly said #5+#7 definitely evil — should have been right about #5 but #7 was wrong initially (solver flip-flopped after execution).
+
