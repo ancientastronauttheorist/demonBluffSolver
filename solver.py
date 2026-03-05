@@ -895,6 +895,7 @@ def _validate_druid(card: CardInfo, scenario: Scenario,
 
     # Check which targets are actually outcasts (Wretch registers as Evil, not Outcast)
     actual_outcasts = []
+    has_unrevealed_good_target = False
     for t in targets:
         if _is_evil_in_scenario(t, scenario):
             continue
@@ -905,19 +906,29 @@ def _validate_druid(card: CardInfo, scenario: Scenario,
                 if card_at.apparent_role == "Wretch":
                     continue  # Wretch registers as Evil to abilities
                 actual_outcasts.append(card_at.apparent_role)
+        else:
+            # Unrevealed Good target — could be any Good role including Outcast
+            has_unrevealed_good_target = True
 
     has_outcast = len(actual_outcasts) > 0
 
     if truth == TruthStatus.TRUTHFUL:
         if found_outcast:
-            return has_outcast and found_outcast in actual_outcasts
+            # Outcast found: must be among targets. If unrevealed Good targets exist,
+            # the Outcast could plausibly be one of them.
+            return has_outcast and found_outcast in actual_outcasts or has_unrevealed_good_target
         else:
-            return not has_outcast
+            # No outcast found: no revealed outcasts AND no unrevealed Good targets
+            # that could be an outcast (conservative: allow if unrevealed exist)
+            return not has_outcast and not has_unrevealed_good_target
     else:
         if found_outcast:
-            return not has_outcast or found_outcast not in actual_outcasts
+            # Lying about finding outcast: truth is no outcast among targets
+            # Only valid if no revealed outcasts AND no unrevealed Good targets
+            return not has_outcast and not has_unrevealed_good_target
         else:
-            return has_outcast
+            # Lying about no outcast: truth is there IS an outcast
+            return has_outcast or has_unrevealed_good_target
 
 
 def _validate_bishop(card: CardInfo, scenario: Scenario,
