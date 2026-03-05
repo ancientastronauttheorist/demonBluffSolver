@@ -1,0 +1,122 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dirty": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          8
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 9
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    2,
+    8,
+    9
+  ],
+  "confirmed_evil": [
+    2,
+    8,
+    9
+  ],
+  "confirmed_good": [
+    7,
+    10
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Chancellor",
+    "8": "Poisoner",
+    "9": "Lilis"
+  },
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "name": "session28_v6_asc5",
+  "true_evil_positions": {
+    "2": "Chancellor",
+    "8": "Poisoner",
+    "9": "Lilis"
+  },
+  "notes": "",
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Baker",
+      "Scout",
+      "Jester",
+      "Gemcrafter",
+      "Confessor",
+      "Lover"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Chancellor",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
+}
