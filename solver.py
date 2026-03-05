@@ -118,6 +118,7 @@ class Scenario:
     pd_corrupted: Optional[int] = None  # Plague Doctor corruption target
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
     drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always corrupted)
+    alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
 
 
 @dataclass
@@ -354,6 +355,59 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
             corrupted.add(card.position)
 
     return corrupted
+
+
+def _apply_post_corruption(corrupted: set[int], placement: dict[int, str],
+                           state: GameState,
+                           puppet_pos: Optional[int] = None,
+                           drunk_pos: Optional[int] = None
+                           ) -> tuple[set[int], dict[int, int]]:
+    """Apply setup-order post-processing: Puppet cure + Alchemist cures.
+
+    Returns (final_corrupted, alchemist_cures) where alchemist_cures maps
+    Alchemist position -> number of positions cured (for validator use).
+    """
+    result = set(corrupted)
+
+    # 1. Puppeteer removes corruption from Puppet
+    # If Puppeteer converts a corrupted Villager, corruption is removed
+    if puppet_pos is not None and puppet_pos in result:
+        result.discard(puppet_pos)
+
+    # 2. Alchemist cures corruption (acts after all corruption sources)
+    # Find all apparent Alchemist positions
+    alchemist_positions = []
+    for card in state.cards:
+        if card.apparent_role == "Alchemist":
+            alchemist_positions.append(card.position)
+
+    # Reverse seat order (higher seat acts first)
+    alchemist_positions.sort(reverse=True)
+    alch_cures = {}
+
+    for alch_pos in alchemist_positions:
+        # Evil Alchemist can't cure
+        if alch_pos in placement:
+            alch_cures[alch_pos] = 0
+            continue
+        # Corrupted Alchemist can't cure
+        if alch_pos in result:
+            alch_cures[alch_pos] = 0
+            continue
+        # Cure positions in range 2 (except Drunk — can't be cured)
+        in_range = positions_in_range(alch_pos, 2, state.n_cards)
+        count = 0
+        for p in in_range:
+            if p in result and p != drunk_pos:
+                # Also skip explicitly revealed Drunk
+                card_at = _get_card_at(p, state)
+                if card_at and card_at.apparent_role == "Drunk":
+                    continue
+                result.discard(p)
+                count += 1
+        alch_cures[alch_pos] = count
+
+    return result, alch_cures
 
 
 def _corruption_variants(placement: dict[int, str], state: GameState,
@@ -921,25 +975,23 @@ def _validate_judge(card: CardInfo, scenario: Scenario,
 
 def _validate_alchemist(card: CardInfo, scenario: Scenario,
                         state: GameState) -> bool:
-    """Alchemist: 'Cured N' — cures corruption in range 2."""
+    """Alchemist: 'Cured N' — cures corruption in range 2.
+
+    Uses pre-computed cure count from scenario.alchemist_cures (computed
+    during setup-order post-processing, before cures are applied to the
+    corruption set).
+    """
     info = card.info_parsed
     if "cured_count" not in info:
         return True
 
     claimed = info["cured_count"]
     pos = card.position
-    n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
-    # Alchemist cures villagers in range 2 of corruption
-    # But if Alchemist itself is corrupted, it can't cure anyone
-    # Drunk "can not be Cured" — exclude from cure count
-    if pos in scenario.corrupted:
-        actual = 0
-    else:
-        in_range = positions_in_range(pos, 2, n)
-        actual = sum(1 for p in in_range
-                     if p in scenario.corrupted and p != scenario.drunk_position)
+    # Use pre-computed cure count (accounts for setup order, Drunk immunity,
+    # corrupted/evil Alchemist can't cure, reverse seat order)
+    actual = scenario.alchemist_cures.get(pos, 0)
 
     if truth == TruthStatus.TRUTHFUL:
         return claimed == actual
@@ -1114,7 +1166,18 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if ex_pos in state.executed and ex_pos not in full_evil:
                 full_evil[ex_pos] = "Unknown"
 
+        # Compute Pooka-corrupted positions (for Poisoner to skip)
+        pooka_corrupted = set()
+        for pos, role in full_evil.items():
+            if role == "Pooka":
+                for adj in adjacent_positions(pos, state.n_cards):
+                    if adj not in full_evil:
+                        card = _get_card_at(adj, state)
+                        if card and _is_villager_role(card.apparent_role, state):
+                            pooka_corrupted.add(adj)
+
         # Determine Poisoner corruption targets (adjacent, 1 Villager)
+        # Poisoner acts AFTER Pooka — won't target already-corrupted positions
         poisoner_targets = [None]
         for pos, role in full_evil.items():
             if role == "Poisoner":
@@ -1122,6 +1185,8 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 for p in adjacent_positions(pos, state.n_cards):
                     if p in full_evil:
                         continue
+                    if p in pooka_corrupted:
+                        continue  # Poisoner skips Pooka's victims
                     card = _get_card_at(p, state)
                     if card and _is_villager_role(card.apparent_role, state):
                         candidates.append(p)
@@ -1171,21 +1236,27 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                         # Drunk and Doppelganger can't be the same position
                         if drunk_pos is not None and drunk_pos == dopp_pos:
                             continue
-                        corrupted = _compute_corruption(
+                        raw_corrupted = _compute_corruption(
                             full_evil, state, pd_t, dopp_pos, pois_t,
                             drunk_pos)
+                        # Apply setup-order post-processing:
+                        # Puppet cure + Alchemist cures
+                        final_corrupted, alch_cures = _apply_post_corruption(
+                            raw_corrupted, full_evil, state,
+                            puppet_pos, drunk_pos)
                         # Deduplicate scenarios with same corruption+dopp+drunk combo
-                        key = (frozenset(corrupted), dopp_pos, drunk_pos)
+                        key = (frozenset(final_corrupted), dopp_pos, drunk_pos)
                         if key in seen:
                             continue
                         seen.add(key)
                         scenario = Scenario(
                             evil_positions=dict(full_evil),
                             puppet_position=puppet_pos,
-                            corrupted=corrupted,
+                            corrupted=final_corrupted,
                             pd_corrupted=pd_t,
                             doppelganger_position=dopp_pos,
                             drunk_position=drunk_pos,
+                            alchemist_cures=alch_cures,
                         )
                         scenarios.append(scenario)
 
