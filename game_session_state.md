@@ -1576,3 +1576,200 @@ Reason: #8 is evil in ALL 7 scenarios (roles: {'Chancellor', 'Baa'})
 Final HP: 0
 Notes: Solver bugs: (1) Didn't know Chancellor conversion causes CORRUPTION on converted target. Drunk#6 was corrupted by Chancellor#7 conversion. (2) Bard#8 said 2-from-corrupted = TRUE (#6 corrupted, distance 2). Solver wrongly said #8 definitely evil. (3) First solver run also wrongly said #5+#7 definitely evil — should have been right about #5 but #7 was wrong initially (solver flip-flopped after execution).
 
+
+---
+
+# New Game — 2026-03-05 16:19:17
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Bishop, Alchemist, Bard, Knitter
+- Outcasts: Wretch
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [16:19:17] Revealed #5 Alchemist
+Info: {'cured_count': 2}
+
+
+---
+
+# New Game — 2026-03-05 16:30:12
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Jester, Confessor, Slayer, Knight, Medium, Oracle
+- Outcasts: Bombardier, Doppelganger, Plague_Doctor
+- Minions: Chancellor
+- Demons: Lilis
+
+#### [16:30:20] Game Start
+Asc6 V5/7, 9 cards, 2 evil (Chancellor+Lilis). Deck: V=Bishop,Jester,Confessor,Slayer,Knight,Medium,Oracle (7 shown, 5 real). O=Bombardier,Doppelganger,PD (3 shown, 2 real). Lilis game = night every 4 reveals. Strategy: reveal all first, use Slayer before reveal 4 if found.
+
+### [16:31:50] Revealed #1 Jester
+Info: {}
+
+### [16:37:43] Revealed #2 Oracle
+Info: {'targets': [3], 'minion_role': '5'}
+
+### [16:38:13] Revealed #2 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Chancellor'}
+
+### [16:38:39] Revealed #3 Plague_Doctor
+Info: {}
+
+### [16:39:23] Revealed #4 Confessor
+Info: {'dirty': False}
+
+#### [16:39:23] Night 1
+Lilis killed #9 (skull visible). HP 10->8. Moon icon visible on right side. Confessor #4 says I am Good = confirmed not evil, not corrupted.
+
+### [16:40:21] Revealed #5 Slayer
+Info: {}
+
+### [16:41:42] Revealed #6 Knight
+Info: {}
+
+### [16:42:38] Revealed #7 Slayer
+Info: {}
+
+### [16:44:31] Revealed #8 Bishop
+Info: {'targets': [4, 6, 9]}
+
+#### [16:44:31] Night 2
+HP 8->6. All face-down cards now revealed except #9 (killed by Lilis night 1). Bishop #8 says between #4,#6,#9: Villager, Outcast, Minion. #4=Confessor(confirmed Good), so #4=Villager. Then #6 or #9 is Outcast, other is Minion(Chancellor).
+
+#### [16:45:20] Solver Output
+Scenarios: 429/1962
+Definite good: ['#4']
+Evil probabilities: #2=46%, #9=39%, #6=30%, #8=30%, #5=24%, #1=13%, #7=13%, #3=5%
+  Generated 1962 candidate scenarios
+  429 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8, 9]
+
+#### [16:45:20] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 39% evil, entropy 0.967
+
+#### [16:45:34] Solver Output
+Scenarios: 260/1358
+Definite good: ['#4', '#9']
+Evil probabilities: #2=48%, #6=44%, #8=44%, #5=25%, #1=16%, #7=16%, #3=5%
+  Generated 1358 candidate scenarios
+  260 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8]
+
+#### [16:45:34] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#2']
+Reason: Target #2 is 48% evil (adjusted 0.44)
+WARNING: Corruption risk: 9% -- Slayer ability disabled if corrupted
+
+### [16:47:14] Revealed #5 Slayer
+Info: {}
+
+### [16:47:14] Ability used at #5
+
+#### [16:47:14] Slayer #5
+Used Slayer #5 on #2 (Oracle). Result: miss. #2 is confirmed Good. Oracle info is likely truthful: #3 or #5 is Chancellor.
+
+#### [16:47:23] Solver Output
+Scenarios: 134/984
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #6=50%, #8=50%, #5=45%, #1=22%, #7=22%, #3=10%
+  Generated 984 candidate scenarios
+  134 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 6, 7, 8]
+
+#### [16:47:23] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#8']
+Reason: Target #8 is 50% evil (adjusted 0.46)
+WARNING: Corruption risk: 9% -- Slayer ability disabled if corrupted
+
+### [16:50:47] Revealed #7 Slayer
+Info: {}
+
+### [16:50:51] Ability used at #7
+
+#### [16:50:54] Solver Output
+Scenarios: 67/670
+Definite good: ['#2', '#4', '#8', '#9']
+Evil probabilities: #6=82%, #5=54%, #1=27%, #7=27%, #3=10%
+  Generated 670 candidate scenarios
+  67 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 6, 7]
+
+#### [16:50:54] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 0% evil, entropy 0.000
+
+#### [16:51:18] Claude Reasoning
+All cards revealed. Solver: #6=82% evil, #5=54%, #1=#7=27%, #3=10%. Oracle#2 (Good) says #3 or #5 is Chancellor. Bishop#8 (Good) says among #4,#6,#9: Villager+Outcast+Minion. Since #4=Confessor(Good Villager), one of #6/#9 is Outcast and other is Minion. #9 dead by Lilis. If #6 is Minion that fits Bishop. Should use PD#3 ability on #6 to check corruption, or just execute #6 first since 82% evil.
+
+#### [16:55:23] Knight Block
+#6 Knight said 'I cant die' - execution blocked. Confirmed Good. Solver was 82% confident it was evil - big miss.
+
+#### [16:55:27] Solver Output
+Scenarios: 12/416
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6', '#8', '#9']
+Evil probabilities: #1=50%, #7=50%
+  Generated 416 candidate scenarios
+  12 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [16:55:27] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 12 scenarios (roles: {'Chancellor'})
+
+#### [16:56:46] WRONG EXEC
+#5 was Doppelganger (Good Outcast), not Chancellor! Solver said DEFINITELY EVIL in all 12 scenarios. HP 6->1. Major solver bug - Doppelganger disguised as Slayer was not accounted for.
+
+#### [16:56:51] Solver Output
+Scenarios: 0/222
+  Generated 222 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Oracle: rejected 165/222 (74%)
+    #4 Confessor: rejected 146/222 (66%)
+    #8 Bishop: rejected 76/222 (34%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Jester: still 0
+    WITHOUT #2 Oracle: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Confessor: 31 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Bishop: 26 scenarios survive  <-- SUSPECT
+
+#### [16:56:51] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [16:58:15] Manual Deduction
+0 scenarios. Manual reasoning: Oracle#2(Good) says #3 or #5 is Chancellor. #5=Doppelganger, so #3=Chancellor. Lilis at #1 or #7. Plan: use Jester#1 ability to learn more, then execute #3 + Lilis. Only 1 HP so 0 mistakes allowed.
+
+#### [17:06:51] Jester Deduction
+Jester#1 result: 'Among #2,#4,#8: There is 1 Evil'. All 3 are confirmed Good. This is a LIE -> Jester#1 = Lilis (Evil). Oracle#2(Good) says #3=Chancellor. Evils: #3=Chancellor, #1=Lilis. Executing #3 then #1.
+
+## [17:10:40] GAME OVER — LOSS
+Final HP: 1
+Notes: Chancellor disguised as Knight blocked execution with 'I cant die'. Oracle#2 corrupted by PD#3 (adjacent), Oracle lied about Chancellor position. Jester#1=Lilis, result '1 Evil among confirmed goods' was a lie.
+
