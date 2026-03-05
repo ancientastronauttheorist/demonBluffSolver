@@ -15,6 +15,14 @@ Usage:
     python template_match.py find_all <name> [screenshot]
         Find ALL occurrences of a template (e.g., multiple cards).
 
+    python template_match.py safe_click <name>
+        Find template → focus game → hover → verify screenshot → click.
+        Most reliable click method. Verify screenshot saved for review.
+
+    python template_match.py safe_click_at <x> <y> [label]
+        Focus game → hover at coords → verify screenshot → click.
+        For known coordinates (e.g., detected card positions).
+
     python template_match.py list
         List all saved templates.
 
@@ -220,6 +228,75 @@ def hover_template(name: str, screenshot_path: str = None, threshold: float = 0.
     return match
 
 
+def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (1280, 720)) -> dict | None:
+    """Find template → focus game → hover → screenshot to verify → click.
+
+    The most reliable click method:
+    1. Take screenshot, find template position
+    2. Focus game window (click center pentagram area to avoid hitting UI)
+    3. Hover over the found position
+    4. Take verification screenshot (button should highlight)
+    5. Click
+
+    Args:
+        name: template name
+        threshold: match confidence threshold
+        focus_pos: safe position to click for game focus (default: screen center)
+    Returns: match dict with added 'verify_screenshot' key, or None
+    """
+    import mouse as mouse_mod
+    import game_utils
+    import time
+
+    # Step 1: Screenshot and find
+    ss1 = screenshot.capture("_safe_find")
+    match = find(name, ss1, threshold)
+    if match is None:
+        print(f"[safe_click] FAILED: '{name}' not found")
+        return None
+
+    # Step 2: Focus game
+    game_utils.focus_game()
+    time.sleep(0.2)
+
+    # Step 3: Hover
+    mouse_mod.move(match["x"], match["y"])
+    time.sleep(0.3)
+
+    # Step 4: Verification screenshot
+    verify_ss = screenshot.capture("_safe_verify")
+    match["verify_screenshot"] = verify_ss
+    print(f"[safe_click] Hovering '{name}' at ({match['x']}, {match['y']}) — verify: {verify_ss}")
+
+    # Step 5: Click
+    mouse_mod.click(match["x"], match["y"])
+    time.sleep(0.3)
+    print(f"[safe_click] Clicked '{name}' at ({match['x']}, {match['y']})")
+    return match
+
+
+def safe_click_at(x: int, y: int, label: str = "target") -> str:
+    """Focus game → hover at coords → verification screenshot → click.
+
+    For when you already know the coordinates (e.g. from card detection).
+    Returns the verification screenshot path.
+    """
+    import mouse as mouse_mod
+    import game_utils
+    import time
+
+    game_utils.focus_game()
+    time.sleep(0.2)
+    mouse_mod.move(x, y)
+    time.sleep(0.3)
+    verify_ss = screenshot.capture("_safe_verify")
+    print(f"[safe_click_at] Hovering '{label}' at ({x}, {y}) — verify: {verify_ss}")
+    mouse_mod.click(x, y)
+    time.sleep(0.3)
+    print(f"[safe_click_at] Clicked '{label}' at ({x}, {y})")
+    return verify_ss
+
+
 def debug(name: str, screenshot_path: str = None) -> str:
     """Save annotated screenshot showing match location."""
     if screenshot_path is None:
@@ -316,6 +393,15 @@ def main():
         name = sys.argv[2]
         ss = sys.argv[3] if len(sys.argv) > 3 else None
         hover_template(name, ss)
+
+    elif cmd == "safe_click":
+        name = sys.argv[2]
+        safe_click(name)
+
+    elif cmd == "safe_click_at":
+        x, y = int(sys.argv[2]), int(sys.argv[3])
+        label = sys.argv[4] if len(sys.argv) > 4 else "target"
+        safe_click_at(x, y, label)
 
     elif cmd == "list":
         list_templates()
