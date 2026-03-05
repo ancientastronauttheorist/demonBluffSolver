@@ -553,9 +553,10 @@ def _validate_scout(card: CardInfo, scenario: Scenario,
     if target_pos is None:
         return True  # Can't validate
 
-    # Find distance to closest OTHER evil
+    # Find distance to closest OTHER evil (Wretch registers as Evil)
     other_evil = [p for p in range(1, n + 1)
-                  if _is_evil_in_scenario(p, scenario) and p != target_pos]
+                  if _effective_alignment(p, scenario, state) == Alignment.EVIL
+                  and p != target_pos]
     if not other_evil:
         return True
 

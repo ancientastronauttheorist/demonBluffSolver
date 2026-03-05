@@ -1,0 +1,120 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "evil_role": "Poisoner"
+      }
+    }
+  ],
+  "executed": [
+    3,
+    5,
+    6
+  ],
+  "confirmed_evil": [
+    3,
+    5,
+    6
+  ],
+  "confirmed_good": [
+    5
+  ],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    9
+  ],
+  "executed_evil_roles": {
+    "3": "Lover",
+    "6": "Hunter"
+  },
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "name": "asc6_v6",
+  "true_evil_positions": {
+    "2": "Poisoner",
+    "3": "Puppet",
+    "4": "Puppeteer",
+    "6": "Lilis"
+  },
+  "notes": "Solver had bugs (0 scenarios, wrong definitely evil on #5). Manual deduction saved the game. Puppet truthful info was key. Won with 1 HP.",
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Lover",
+      "Architect",
+      "Dreamer",
+      "Knight",
+      "Gemcrafter"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Poisoner",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
+}
