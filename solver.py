@@ -257,7 +257,8 @@ def _apply_placement_constraints(placement: dict[int, str],
 
 def _compute_corruption(placement: dict[int, str], state: GameState,
                         pd_target: Optional[int] = None,
-                        doppelganger_pos: Optional[int] = None) -> set[int]:
+                        doppelganger_pos: Optional[int] = None,
+                        poisoner_target: Optional[int] = None) -> set[int]:
     """Compute which positions are corrupted given evil placement.
 
     doppelganger_pos: if set, this position is Doppelganger (Outcast) and
@@ -275,13 +276,10 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
         elif role == "Poisoner":
-            # Poisoner corrupts 1 adjacent Villager (Doppelganger immune)
-            for adj in adjacent_positions(pos, n):
-                if adj not in placement and adj != doppelganger_pos:
-                    card = _get_card_at(adj, state)
-                    if card and _is_villager_role(card.apparent_role, state):
-                        corrupted.add(adj)
-                        break  # Only 1
+            # Poisoner corrupts 1 Villager within 2 cards (Doppelganger immune)
+            # Target is enumerated externally via poisoner_target parameter
+            if poisoner_target and poisoner_target not in placement and poisoner_target != doppelganger_pos:
+                corrupted.add(poisoner_target)
 
     # Plague Doctor corruption
     if pd_target and pd_target not in placement:
@@ -296,7 +294,8 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
 
 
 def _corruption_variants(placement: dict[int, str], state: GameState,
-                         pd_target: Optional[int] = None) -> list[set[int]]:
+                         pd_target: Optional[int] = None,
+                         poisoner_target: Optional[int] = None) -> list[set[int]]:
     """Generate corruption set variants accounting for Doppelganger immunity.
 
     If Doppelganger is in the deck, any apparent Villager adjacent to a
@@ -305,25 +304,31 @@ def _corruption_variants(placement: dict[int, str], state: GameState,
     """
     has_doppelganger = "Doppelganger" in state.deck.outcasts
     if not has_doppelganger:
-        return [_compute_corruption(placement, state, pd_target)]
+        return [_compute_corruption(placement, state, pd_target, poisoner_target=poisoner_target)]
 
     n = state.n_cards
-    # Find positions adjacent to corruption sources that appear as Villagers
-    corruption_adjacent = set()
+    # Find positions near corruption sources that appear as Villagers
+    corruption_nearby = set()
     for pos, role in placement.items():
-        if role in ("Pooka", "Poisoner"):
+        if role == "Pooka":
             for adj in adjacent_positions(pos, n):
                 if adj not in placement:
                     card = _get_card_at(adj, state)
                     if card and _is_villager_role(card.apparent_role, state):
-                        corruption_adjacent.add(adj)
+                        corruption_nearby.add(adj)
+        elif role == "Poisoner":
+            for p in positions_in_range(pos, 2, n):
+                if p not in placement:
+                    card = _get_card_at(p, state)
+                    if card and _is_villager_role(card.apparent_role, state):
+                        corruption_nearby.add(p)
 
     # Try Doppelganger at each relevant position (or nowhere relevant)
-    dopp_options = [None] + list(corruption_adjacent)
+    dopp_options = [None] + list(corruption_nearby)
     seen = set()
     variants = []
     for dopp_pos in dopp_options:
-        corrupted = _compute_corruption(placement, state, pd_target, dopp_pos)
+        corrupted = _compute_corruption(placement, state, pd_target, dopp_pos, poisoner_target)
         key = frozenset(corrupted)
         if key not in seen:
             seen.add(key)
@@ -1030,6 +1035,21 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if ex_pos in state.executed and ex_pos not in full_evil:
                 full_evil[ex_pos] = "Unknown"
 
+        # Determine Poisoner corruption targets (range 2, 1 Villager)
+        poisoner_targets = [None]
+        for pos, role in full_evil.items():
+            if role == "Poisoner":
+                candidates = []
+                for p in positions_in_range(pos, 2, state.n_cards):
+                    if p in full_evil:
+                        continue
+                    card = _get_card_at(p, state)
+                    if card and _is_villager_role(card.apparent_role, state):
+                        candidates.append(p)
+                if candidates:
+                    poisoner_targets = candidates
+                break  # Only one Poisoner
+
         # Determine possible Doppelganger positions
         has_doppelganger = "Doppelganger" in state.deck.outcasts
         dopp_candidates = [None]  # None = Doppelganger not in play / not relevant
@@ -1044,23 +1064,24 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                     dopp_candidates.append(p)
 
         for pd_t in pd_targets:
-            seen = set()
-            for dopp_pos in dopp_candidates:
-                corrupted = _compute_corruption(
-                    full_evil, state, pd_t, dopp_pos)
-                # Deduplicate scenarios with same corruption+dopp combo
-                key = (frozenset(corrupted), dopp_pos)
-                if key in seen:
-                    continue
-                seen.add(key)
-                scenario = Scenario(
-                    evil_positions=dict(full_evil),
-                    puppet_position=puppet_pos,
-                    corrupted=corrupted,
-                    pd_corrupted=pd_t,
-                    doppelganger_position=dopp_pos,
-                )
-                scenarios.append(scenario)
+            for pois_t in poisoner_targets:
+                seen = set()
+                for dopp_pos in dopp_candidates:
+                    corrupted = _compute_corruption(
+                        full_evil, state, pd_t, dopp_pos, pois_t)
+                    # Deduplicate scenarios with same corruption+dopp combo
+                    key = (frozenset(corrupted), dopp_pos)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    scenario = Scenario(
+                        evil_positions=dict(full_evil),
+                        puppet_position=puppet_pos,
+                        corrupted=corrupted,
+                        pd_corrupted=pd_t,
+                        doppelganger_position=dopp_pos,
+                    )
+                    scenarios.append(scenario)
 
     return scenarios
 
