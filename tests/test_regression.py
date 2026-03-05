@@ -169,6 +169,15 @@ def save_test_case(session_path: str, name: str, true_evil_positions: dict[int, 
     case["true_evil_positions"] = {str(k): v for k, v in true_evil_positions.items()}
     case["notes"] = notes
 
+    # Nest deck fields into "deck" key if stored flat (session format)
+    if "deck" not in case and "villagers" in case:
+        case["deck"] = {
+            "villagers": case.pop("villagers"),
+            "outcasts": case.pop("outcasts"),
+            "minions": case.pop("minions"),
+            "demons": case.pop("demons"),
+        }
+
     os.makedirs(CASES_DIR, exist_ok=True)
     out_path = os.path.join(CASES_DIR, f"{name}.json")
     with open(out_path, "w") as f:

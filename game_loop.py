@@ -558,8 +558,8 @@ def main():
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
         print("  log <label> <text>                    Add reasoning to decision log")
-        print("  game_over <win|loss> [notes]           Log game result to decision log")
-        print("  save_test <name> [true_evils_json]    Save game as regression test")
+        print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
+        print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
         print()
         print("Card examples:")
         print("  card enlightened 3 CW")
@@ -708,12 +708,34 @@ def main():
         return
 
     if cmd == "game_over":
-        # Log game result: python game_loop.py game_over win/loss [notes]
+        # Log game result + auto-save regression test
+        # Usage: python game_loop.py game_over win/loss <test_name> <true_evils> [notes]
+        # Example: python game_loop.py game_over loss s34_v1_asc6 "3=Shaman,7=Baa" "trusted fake PD"
         session = GameSession.load()
         result = sys.argv[2] if len(sys.argv) > 2 else "unknown"
-        notes = sys.argv[3] if len(sys.argv) > 3 else ""
+        test_name = sys.argv[3] if len(sys.argv) > 3 else None
+        true_evils_str = sys.argv[4] if len(sys.argv) > 4 else None
+        notes = sys.argv[5] if len(sys.argv) > 5 else ""
         DecisionLog.log_game_over(result, session.hp, notes)
         print(f"[game_over] Logged: {result.upper()}, HP={session.hp}")
+
+        # Auto-save regression test if true evils provided
+        if test_name and true_evils_str:
+            true_evils = {}
+            for pair in true_evils_str.split(","):
+                pos_str, role = pair.split("=")
+                true_evils[int(pos_str)] = role
+            from tests.test_regression import save_test_case, load_test_case, run_test
+            save_test_case(SESSION_FILE, test_name, true_evils, notes)
+            case = load_test_case(os.path.join("tests", "cases", f"{test_name}.json"))
+            passed, messages = run_test(case)
+            status = "PASS" if passed else "FAIL"
+            print(f"\n[{status}] {test_name}")
+            for msg in messages:
+                print(f"  {msg}")
+        elif not test_name:
+            print("[game_over] Tip: add test name + true evils to auto-save regression test:")
+            print("  game_over win/loss <name> <pos=Role,...> [notes]")
         return
 
     if cmd == "save_test":
