@@ -335,7 +335,7 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
         elif role == "Poisoner":
-            # Poisoner corrupts 1 Villager within 2 cards (Doppelganger immune)
+            # Poisoner corrupts 1 adjacent Villager (Doppelganger immune)
             # Target is enumerated externally via poisoner_target parameter
             if poisoner_target and poisoner_target not in placement and poisoner_target != doppelganger_pos:
                 corrupted.add(poisoner_target)
@@ -380,7 +380,7 @@ def _corruption_variants(placement: dict[int, str], state: GameState,
                     if card and _is_villager_role(card.apparent_role, state):
                         corruption_nearby.add(adj)
         elif role == "Poisoner":
-            for p in positions_in_range(pos, 2, n):
+            for p in adjacent_positions(pos, n):
                 if p not in placement:
                     card = _get_card_at(p, state)
                     if card and _is_villager_role(card.apparent_role, state):
@@ -1114,12 +1114,12 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if ex_pos in state.executed and ex_pos not in full_evil:
                 full_evil[ex_pos] = "Unknown"
 
-        # Determine Poisoner corruption targets (range 2, 1 Villager)
+        # Determine Poisoner corruption targets (adjacent, 1 Villager)
         poisoner_targets = [None]
         for pos, role in full_evil.items():
             if role == "Poisoner":
                 candidates = []
-                for p in positions_in_range(pos, 2, state.n_cards):
+                for p in adjacent_positions(pos, state.n_cards):
                     if p in full_evil:
                         continue
                     card = _get_card_at(p, state)
