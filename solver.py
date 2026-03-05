@@ -455,8 +455,10 @@ def _validate_knitter(card: CardInfo, scenario: Scenario,
     truth = _truth_status(pos := card.position, scenario, state)
 
     # Count pairs of adjacent evil positions (Wretch registers as Evil)
+    # Exclude executed (dead) positions — they don't count for adjacency
     evil_set = {p for p in range(1, n + 1)
-                if _effective_alignment(p, scenario, state) == Alignment.EVIL}
+                if _effective_alignment(p, scenario, state) == Alignment.EVIL
+                and p not in state.executed}
     pairs = 0
     for p in evil_set:
         for adj in adjacent_positions(p, n):
