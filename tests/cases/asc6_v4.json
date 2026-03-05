@@ -1,0 +1,99 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7,
+        "good_role": "Knight"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    1
+  ],
+  "confirmed_evil": [
+    1
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "used_abilities": [],
+  "executed_evil_roles": {
+    "1": "Scout"
+  },
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "name": "asc6_v4",
+  "true_evil_positions": {
+    "3": "Chancellor",
+    "4": "Lilis"
+  },
+  "notes": "Bombardier blew up. Knight test fooled by Doppelganger-as-Knight. Evils were (3,4) - original theory correct but Knight test caused wrong pivot to (8,9).",
+  "deck": {
+    "villagers": [
+      "Scout",
+      "Baker",
+      "Knight",
+      "Empress",
+      "Medium",
+      "Lover"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
+}
