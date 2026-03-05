@@ -1,24 +1,6 @@
 {
   "n_cards": 8,
   "n_evil": 2,
-  "villagers": [
-    "Medium",
-    "Slayer",
-    "Bishop",
-    "Druid",
-    "Gemcrafter",
-    "Lover",
-    "Oracle"
-  ],
-  "outcasts": [
-    "Plague Doctor"
-  ],
-  "minions": [
-    "Minion"
-  ],
-  "demons": [
-    "Pooka"
-  ],
   "cards": [
     {
       "position": 1,
@@ -116,5 +98,31 @@
     "8": "Minion"
   },
   "hp": 0,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "asc6_v3_pooka",
+  "true_evil_positions": {
+    "2": "Pooka",
+    "8": "Minion"
+  },
+  "notes": "Lost: Medium corrupted by adjacent Pooka, wrong exec on #7 and #1",
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Slayer",
+      "Bishop",
+      "Druid",
+      "Gemcrafter",
+      "Lover",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  }
 }
