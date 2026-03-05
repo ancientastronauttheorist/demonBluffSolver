@@ -11,8 +11,7 @@ Claude runs continuously in this cycle:
 1. **Play** — screenshot → analyze board → reason about deductions → click to act
 2. **Learn** — after each puzzle, record new insights in memory files
 3. **Build/Refine** — periodically update solver code with deduction logic learned from playing
-4. **Journal** — update journal after each puzzle for crash recovery
-5. **Repeat** — start next puzzle, keep going
+4. **Repeat** — start next puzzle, keep going
 
 ## Setup
 - Screen: 2560x1440
