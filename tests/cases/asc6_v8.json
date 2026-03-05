@@ -57,19 +57,18 @@
     8
   ],
   "confirmed_evil": [
-    5,
-    8
+    5
   ],
   "confirmed_good": [
-    3
+    3,
+    8
   ],
   "pd_corruption_target": null,
   "used_abilities": [
     4
   ],
   "executed_evil_roles": {
-    "5": "Puppeteer",
-    "8": "Bard"
+    "5": "Puppeteer"
   },
   "hp": 0,
   "wrong_exec_cost": 5,
@@ -92,7 +91,8 @@
       "Gemcrafter"
     ],
     "outcasts": [
-      "Wretch"
+      "Wretch",
+      "Drunk"
     ],
     "minions": [
       "Chancellor",

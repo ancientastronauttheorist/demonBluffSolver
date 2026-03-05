@@ -117,6 +117,7 @@ class Scenario:
     corrupted: set[int] = field(default_factory=set)  # Corrupted positions
     pd_corrupted: Optional[int] = None  # Plague Doctor corruption target
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
+    drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always corrupted)
 
 
 @dataclass
@@ -170,18 +171,60 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     # Confirmed evil positions (not yet executed) must get an evil role
     has_puppeteer = "Puppeteer" in evil_roles
 
+    # Check if Puppeteer was already executed but Puppet still needs placing
+    puppeteer_executed_pos = None
+    puppet_still_alive = False
+    for ex_pos_str, ex_role in state.executed_evil_roles.items():
+        if ex_role == "Puppeteer":
+            puppeteer_executed_pos = int(ex_pos_str)
+    if puppeteer_executed_pos is not None and not has_puppeteer:
+        # Puppeteer was executed — check if Puppet was also executed
+        puppet_executed = any(r == "Puppet" for r in state.executed_evil_roles.values())
+        if not puppet_executed:
+            puppet_still_alive = True
+
+    # If Puppet might still be alive (Puppeteer executed, Puppet not)
+    if puppet_still_alive:
+        adj = adjacent_positions(puppeteer_executed_pos, n)
+        puppet_candidates = [a for a in adj if a in available]
+        placements = []
+        # Case 1: Puppet exists at an adjacent position
+        for puppet_pos in puppet_candidates:
+            remaining_avail = [p for p in available if p != puppet_pos]
+            n_other = len(evil_roles)
+            if n_other == 0:
+                placements.append({puppet_pos: "Puppet"})
+            else:
+                for combo in combinations(remaining_avail, n_other):
+                    for role_perms in _permutations_of(evil_roles):
+                        p = {puppet_pos: "Puppet"}
+                        for i, pos in enumerate(combo):
+                            p[pos] = role_perms[i]
+                        placements.append(p)
+        # Case 2: No Puppet was created (both adjacent were evil/non-Villager)
+        n_other = len(evil_roles)
+        for combo in combinations(available, n_other):
+            for role_perms in _permutations_of(evil_roles):
+                p = {}
+                for i, pos in enumerate(combo):
+                    p[pos] = role_perms[i]
+                placements.append(p)
+        return placements
+
     # If Puppeteer is present, we need an extra slot for Puppet
     if has_puppeteer:
         # Puppet isn't in evil_roles from deck — it's created at game start
         # We need to place Puppeteer + Puppet + other evils
+        # BUT: Puppet creation is optional ("if possible") — if both adjacent
+        # positions are evil or non-Villager (Outcast), no Puppet is created.
         base_evil = [r for r in evil_roles if r != "Puppeteer"]
         placements = []
-        # Choose positions for base evils (non-Puppeteer, non-Puppet)
         n_base = len(base_evil)
-        # Puppeteer position + Puppet position + base evil positions
         for puppeteer_pos in available:
             adj = adjacent_positions(puppeteer_pos, n)
             puppet_candidates = [a for a in adj if a in available and a != puppeteer_pos]
+
+            # Case 1: Puppet IS created (at each adjacent candidate)
             for puppet_pos in puppet_candidates:
                 remaining = [p for p in available
                              if p != puppeteer_pos and p != puppet_pos]
@@ -198,6 +241,20 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                             for i, pos in enumerate(combo):
                                 p[pos] = role_perms[i]
                             placements.append(p)
+
+            # Case 2: Puppet NOT created (Puppeteer without Puppet)
+            remaining = [p for p in available if p != puppeteer_pos]
+            if n_base == 0:
+                placements.append({puppeteer_pos: "Puppeteer"})
+            else:
+                for combo in combinations(remaining, n_base):
+                    placement = {puppeteer_pos: "Puppeteer"}
+                    for role_perms in _permutations_of(base_evil):
+                        p = dict(placement)
+                        for i, pos in enumerate(combo):
+                            p[pos] = role_perms[i]
+                        placements.append(p)
+
         return placements
 
     # No Puppeteer — straightforward combinations
@@ -258,11 +315,13 @@ def _apply_placement_constraints(placement: dict[int, str],
 def _compute_corruption(placement: dict[int, str], state: GameState,
                         pd_target: Optional[int] = None,
                         doppelganger_pos: Optional[int] = None,
-                        poisoner_target: Optional[int] = None) -> set[int]:
+                        poisoner_target: Optional[int] = None,
+                        drunk_pos: Optional[int] = None) -> set[int]:
     """Compute which positions are corrupted given evil placement.
 
     doppelganger_pos: if set, this position is Doppelganger (Outcast) and
     immune to Pooka/Poisoner corruption (they only target Villagers).
+    drunk_pos: if set, this position is Drunk (always corrupted, can't be cured).
     """
     n = state.n_cards
     corrupted = set()
@@ -285,7 +344,11 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
     if pd_target and pd_target not in placement:
         corrupted.add(pd_target)
 
-    # Drunk is always corrupted (and can't be cured)
+    # Drunk is always corrupted (can't be cured by Alchemist)
+    # Two cases: (1) explicitly revealed as "Drunk" via Medium, or
+    # (2) enumerated drunk_pos (Drunk disguised as Villager)
+    if drunk_pos is not None and drunk_pos not in placement:
+        corrupted.add(drunk_pos)
     for card in state.cards:
         if card.apparent_role == "Drunk" and card.position not in placement:
             corrupted.add(card.position)
@@ -870,11 +933,13 @@ def _validate_alchemist(card: CardInfo, scenario: Scenario,
 
     # Alchemist cures villagers in range 2 of corruption
     # But if Alchemist itself is corrupted, it can't cure anyone
+    # Drunk "can not be Cured" — exclude from cure count
     if pos in scenario.corrupted:
         actual = 0
     else:
         in_range = positions_in_range(pos, 2, n)
-        actual = sum(1 for p in in_range if p in scenario.corrupted)
+        actual = sum(1 for p in in_range
+                     if p in scenario.corrupted and p != scenario.drunk_position)
 
     if truth == TruthStatus.TRUTHFUL:
         return claimed == actual
@@ -1012,10 +1077,10 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             continue
 
         puppet_pos = None
-        if "Puppeteer" in placement.values():
-            for pos, role in placement.items():
-                if role == "Puppet":
-                    puppet_pos = pos
+        for pos, role in placement.items():
+            if role == "Puppet":
+                puppet_pos = pos
+                break
 
         # Determine PD corruption targets
         # PD corrupts 1 random Good Villager — we need to try all possibilities
@@ -1077,25 +1142,52 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 if card and _is_villager_role(card.apparent_role, state):
                     dopp_candidates.append(p)
 
+        # Determine possible Drunk positions
+        # Drunk (Outcast) disguises as a not-in-play Villager, is always
+        # corrupted, and can't be cured. Enumerate possible positions.
+        has_drunk = "Drunk" in state.deck.outcasts
+        drunk_candidates = [None]  # None = no hidden Drunk (or Drunk already identified)
+        # Check if Drunk is already explicitly revealed (e.g., by Medium)
+        drunk_already_known = any(
+            c.apparent_role == "Drunk" for c in state.cards
+        )
+        if has_drunk and not drunk_already_known:
+            for p in range(1, state.n_cards + 1):
+                if p in full_evil or p == puppet_pos:
+                    continue
+                if p in state.executed:
+                    continue
+                card = _get_card_at(p, state)
+                # Drunk appears as a Villager, so it could be at any
+                # position showing as a Villager, OR any unrevealed position
+                if card is None or _is_villager_role(card.apparent_role, state):
+                    drunk_candidates.append(p)
+
         for pd_t in pd_targets:
             for pois_t in poisoner_targets:
                 seen = set()
                 for dopp_pos in dopp_candidates:
-                    corrupted = _compute_corruption(
-                        full_evil, state, pd_t, dopp_pos, pois_t)
-                    # Deduplicate scenarios with same corruption+dopp combo
-                    key = (frozenset(corrupted), dopp_pos)
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    scenario = Scenario(
-                        evil_positions=dict(full_evil),
-                        puppet_position=puppet_pos,
-                        corrupted=corrupted,
-                        pd_corrupted=pd_t,
-                        doppelganger_position=dopp_pos,
-                    )
-                    scenarios.append(scenario)
+                    for drunk_pos in drunk_candidates:
+                        # Drunk and Doppelganger can't be the same position
+                        if drunk_pos is not None and drunk_pos == dopp_pos:
+                            continue
+                        corrupted = _compute_corruption(
+                            full_evil, state, pd_t, dopp_pos, pois_t,
+                            drunk_pos)
+                        # Deduplicate scenarios with same corruption+dopp+drunk combo
+                        key = (frozenset(corrupted), dopp_pos, drunk_pos)
+                        if key in seen:
+                            continue
+                        seen.add(key)
+                        scenario = Scenario(
+                            evil_positions=dict(full_evil),
+                            puppet_position=puppet_pos,
+                            corrupted=corrupted,
+                            pd_corrupted=pd_t,
+                            doppelganger_position=dopp_pos,
+                            drunk_position=drunk_pos,
+                        )
+                        scenarios.append(scenario)
 
     return scenarios
 
