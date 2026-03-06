@@ -1,0 +1,115 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "EQ"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "dead",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    4,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    1
+  ],
+  "executed_evil_roles": {
+    "7": "Lilis"
+  },
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "name": "asc7_v7",
+  "true_evil_positions": {
+    "4": "Minion",
+    "7": "Lilis"
+  },
+  "notes": "0 scenario on Dreamer#1 info - removed it, solved. Lilis at #7 disguised as Knitter. #5 was actually Doppelganger (not Confessor).",
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Enlightened",
+      "Knitter",
+      "Slayer",
+      "Alchemist",
+      "Dreamer",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
+}

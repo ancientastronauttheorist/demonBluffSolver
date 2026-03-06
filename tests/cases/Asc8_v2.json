@@ -1,24 +1,6 @@
 {
   "n_cards": 9,
   "n_evil": 2,
-  "villagers": [
-    "Judge",
-    "Bard",
-    "Knight",
-    "Empress",
-    "Dreamer",
-    "Gemcrafter"
-  ],
-  "outcasts": [
-    "Wretch",
-    "Plague_Doctor"
-  ],
-  "minions": [
-    "Twin_Minion"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -84,12 +66,8 @@
     }
   ],
   "executed": [],
-  "confirmed_evil": [
-    6
-  ],
-  "confirmed_good": [
-    1
-  ],
+  "confirmed_evil": [],
+  "confirmed_good": [],
   "pd_corruption_target": null,
   "used_abilities": [
     1,
@@ -98,5 +76,31 @@
   ],
   "executed_evil_roles": {},
   "hp": 0,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "Asc8_v2",
+  "true_evil_positions": {
+    "5": "Lilis",
+    "7": "Twin_Minion"
+  },
+  "notes": "Lost. #6 Knight was corrupted (PD target). Judge correctly said #6 lying (corrupted). Dreamer 'could be' is AMBIGUOUS not definitive. Manually confirm_evil #6 was fatal error. #5 Lilis disguised as Gemcrafter lied about #7 being good.",
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Bard",
+      "Knight",
+      "Empress",
+      "Dreamer",
+      "Gemcrafter"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
 }

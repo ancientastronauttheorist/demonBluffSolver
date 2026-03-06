@@ -59,17 +59,17 @@
   ],
   "confirmed_evil": [
     3,
-    5,
     1
   ],
-  "confirmed_good": [],
+  "confirmed_good": [
+    5
+  ],
   "pd_corruption_target": null,
   "used_abilities": [
     6
   ],
   "executed_evil_roles": {
     "3": "Baa",
-    "5": "Drunk",
     "1": "Witch"
   },
   "hp": 8,
