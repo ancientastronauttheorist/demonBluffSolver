@@ -1,26 +1,6 @@
 {
   "n_cards": 9,
   "n_evil": 2,
-  "villagers": [
-    "Poet",
-    "Gemcrafter",
-    "Bishop",
-    "Architect",
-    "Knight",
-    "Enlightened",
-    "Lover",
-    "Baker"
-  ],
-  "outcasts": [
-    "Plague_Doctor",
-    "Drunk"
-  ],
-  "minions": [
-    "Shaman"
-  ],
-  "demons": [
-    "Pooka"
-  ],
   "cards": [
     {
       "position": 1,
@@ -109,5 +89,33 @@
     "6": "Shaman"
   },
   "hp": 5,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "asc8_v3",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "6": "Shaman"
+  },
+  "notes": "Knight free-test play found Shaman at #6. Solver 100% on #5=Pooka. 1 wrong exec (#1 Architect). PD corruption on #3,#4,#9.",
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Gemcrafter",
+      "Bishop",
+      "Architect",
+      "Knight",
+      "Enlightened",
+      "Lover",
+      "Baker"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  }
 }

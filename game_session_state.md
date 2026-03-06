@@ -1,7 +1,7 @@
 
 ---
 
-# New Game — 2026-03-05 12:03:20
+# New Game ï¿½ 2026-03-05 12:03:20
 Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -246,7 +246,7 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Minion'})
 
 ### [12:31:49] Executed #8 -> Minion (EVIL)
 
-#### [12:31:49] Executed #8 — Minion\! Score 1470. Evils killed 1/2. #8 was Minion disguised as Druid. Medium #1 said #8 was real Druid — Medium was LYING = Medium #1 is evil too? Or... Minion's role was Minion, not the demon. Need to find Pooka now.
+#### [12:31:49] Executed #8 ï¿½ Minion\! Score 1470. Evils killed 1/2. #8 was Minion disguised as Druid. Medium #1 said #8 was real Druid ï¿½ Medium was LYING = Medium #1 is evil too? Or... Minion's role was Minion, not the demon. Need to find Pooka now.
 
 
 #### [12:31:49] Solver Output
@@ -278,14 +278,14 @@ WARNING: CRITICAL: HP=5, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 #### [12:34:14] GAME OVER - LOSS. True evils: #2=Pooka, #8=Minion. Fatal error: assumed Medium #1 false info meant Evil, but Medium was CORRUPTED by adjacent Pooka #2. Corrupted Medium lies. LESSON: When info is false, consider BOTH Evil and Corruption. Pooka at #2 corrupts adjacent #1 and #3.
 
 
-## [12:34:22] GAME OVER — LOSS
+## [12:34:22] GAME OVER ï¿½ LOSS
 Final HP: 0
 Notes: Lost: Medium corrupted by adjacent Pooka, wrong exec on #7 and #1
 
 
 ---
 
-# New Game — 2026-03-05 12:40:03
+# New Game ï¿½ 2026-03-05 12:40:03
 Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -523,7 +523,7 @@ Knitter #4 says 1 pair adjacent evils. Solver cross-references all info: #4 must
 Scenarios: 0/20
   Generated 20 candidate scenarios
   0 scenarios survived validation
-  NO VALID SCENARIOS — check input data
+  NO VALID SCENARIOS ï¿½ check input data
   
   === ZERO-SCENARIO DIAGNOSTICS ===
   Rejection counts (card -> how many scenarios it rejected):
@@ -555,14 +555,14 @@ Reason: No surviving scenarios -- check input data
 
 ### [13:30:14] Executed #2 -> Twin Minion (EVIL)
 
-## [13:30:23] GAME OVER — WIN
+## [13:30:23] GAME OVER ï¿½ WIN
 Final HP: 1
 Notes: Solver broke on Drunk-as-Knitter #4 (0 scenarios). Wrong exec on #4 (Knitter/Drunk was Good). Manual deduction saved game: Bishop TRUE categories proved #7=real Druid, leaving #2+#9 as evils. Won at 1 HP.
 
 
 ---
 
-# New Game — 2026-03-05 13:33:43
+# New Game ï¿½ 2026-03-05 13:33:43
 Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -746,7 +746,7 @@ Oracle #8 (definitely Good) says {5,6} has Twin Minion. Combined with all other 
 Scenarios: 0/42
   Generated 42 candidate scenarios
   0 scenarios survived validation
-  NO VALID SCENARIOS — check input data
+  NO VALID SCENARIOS ï¿½ check input data
   
   === ZERO-SCENARIO DIAGNOSTICS ===
   Rejection counts (card -> how many scenarios it rejected):
@@ -776,14 +776,14 @@ Manual deduction: #5=Twin Minion (executed). Scout says TM is 1 from closest evi
 
 ### [13:52:39] Executed #4 -> Pooka (EVIL)
 
-## [13:52:50] GAME OVER — WIN
+## [13:52:50] GAME OVER ï¿½ WIN
 Final HP: 5
 Notes: Solver had 1-scenario 100% confidence but was WRONG (#6 not evil). 7-Villager-for-5-slot deck caused solver to over-constrain. #5=TM confirmed by exec. Manual deduction: Scout distance=1 from TM -> Pooka adjacent to #5 -> #4. Bishop info contradicted but all other sources agreed.
 
 
 ---
 
-# New Game — 2026-03-05 13:53:51
+# New Game ï¿½ 2026-03-05 13:53:51
 Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -913,7 +913,7 @@ Info: {'evil_adjacent': 1}
 Scenarios: 0/266
   Generated 266 candidate scenarios
   0 scenarios survived validation
-  NO VALID SCENARIOS — check input data
+  NO VALID SCENARIOS ï¿½ check input data
   
   === ZERO-SCENARIO DIAGNOSTICS ===
   Rejection counts (card -> how many scenarios it rejected):
@@ -946,14 +946,14 @@ Lover #6 says 1 evil adjacent (neighbors #5, #7). Solver had #5 and #7 as defini
 #### [14:20:22] Deduction Complete
 Knight test blocked = #7 real Knight. Medium #4 truthful = Good. #3 cant be evil (neighbors #2,#4 both Good, Scout says evils adjacent). Only valid pair: (8,9). Lover corrupted by PD. Executing #8 then #9.
 
-## [14:21:28] GAME OVER — LOSS
+## [14:21:28] GAME OVER ï¿½ LOSS
 Final HP: 3
 Notes: Bombardier blew up. Knight test fooled by Doppelganger-as-Knight. Evils were (3,4) - original theory correct but Knight test caused wrong pivot to (8,9).
 
 
 ---
 
-# New Game — 2026-03-05 14:25:21
+# New Game ï¿½ 2026-03-05 14:25:21
 Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1126,14 +1126,14 @@ SOLVER NAILED IT. #3 and #8 both definitely Evil. Bard corruption distance confi
 
 ### [14:33:50] Executed #8 -> Judge (EVIL)
 
-## [14:33:58] GAME OVER — WIN
+## [14:33:58] GAME OVER ï¿½ WIN
 Final HP: 8
 Notes: Solver 100% correct. Bard corruption distance was key. Judge (evil) said #4 lying = corruption not evil.
 
 
 ---
 
-# New Game — 2026-03-05 14:35:57
+# New Game ï¿½ 2026-03-05 14:35:57
 Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1309,14 +1309,14 @@ Hunter #4 said 4 away from evil. But #3 was evil at distance 1 from #4. Direct c
 #### [15:03:33] Win
 Executed #6 as Lilis (disguised as Hunter). Won with 1 HP. Deduction: Puppet #3 said 2 evils adjacent (truthful), confirming #2 and #4 evil. Hunter #6 said 1 card from evil = wrong if no adjacent evil exists, must be Lilis. Dreamer #9 updated to show #6 could be Lili after #2 died.
 
-## [15:03:40] GAME OVER — WIN
+## [15:03:40] GAME OVER ï¿½ WIN
 Final HP: 1
 Notes: Solver had bugs (0 scenarios, wrong definitely evil on #5). Manual deduction saved the game. Puppet truthful info was key. Won with 1 HP.
 
 
 ---
 
-# New Game — 2026-03-05 15:05:09
+# New Game ï¿½ 2026-03-05 15:05:09
 Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1414,14 +1414,14 @@ Solver says #8 definitely Chancellor. Logic: Scout #2 says Chancellor is 1 from 
 
 ### [15:14:29] Executed #8 -> Dreamer (EVIL)
 
-## [15:14:29] GAME OVER — LOSS
+## [15:14:29] GAME OVER ï¿½ LOSS
 Final HP: 0
 Notes: Solver bug: Scout distance calculation didn't account for Wretch registering as Evil. Scout said Chancellor 1 from closest evil, solver assumed closest evil = Baa (distance 4 from #5), so concluded Chancellor at #8 (distance 1 from Baa). But truth: Wretch at #6 registers as Evil, Chancellor at #5 is distance 1 from Wretch. Also solver wrongly said #4 Medium was DEFINITELY EVIL on first run.
 
 
 ---
 
-# New Game — 2026-03-05 15:18:24
+# New Game ï¿½ 2026-03-05 15:18:24
 Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1572,29 +1572,14 @@ Reason: #8 is evil in ALL 7 scenarios (roles: {'Chancellor', 'Baa'})
 
 ### [15:29:25] Executed #8 -> Bard (EVIL)
 
-## [15:31:13] GAME OVER — LOSS
+## [15:31:13] GAME OVER ï¿½ LOSS
 Final HP: 0
-Notes: Solver bugs: (1) Didn't know Chancellor conversion causes CORRUPTION on converted target. Drunk#6 was corrupted by Chancellor#7 conversion. (2) Bard#8 said 2-from-corrupted = TRUE (#6 corrupted, distance 2). Solver wrongly said #8 definitely evil. (3) First solver run also wrongly said #5+#7 definitely evil — should have been right about #5 but #7 was wrong initially (solver flip-flopped after execution).
+Notes: Solver bugs: (1) Didn't know Chancellor conversion causes CORRUPTION on converted target. Drunk#6 was corrupted by Chancellor#7 conversion. (2) Bard#8 said 2-from-corrupted = TRUE (#6 corrupted, distance 2). Solver wrongly said #8 definitely evil. (3) First solver run also wrongly said #5+#7 definitely evil ï¿½ should have been right about #5 but #7 was wrong initially (solver flip-flopped after execution).
 
 
 ---
 
-# New Game — 2026-03-05 16:19:17
-Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
-
-## Deck
-- Villagers: Oracle, Bishop, Alchemist, Bard, Knitter
-- Outcasts: Wretch
-- Minions: Puppeteer
-- Demons: Pooka
-
-### [16:19:17] Revealed #5 Alchemist
-Info: {'cured_count': 2}
-
-
----
-
-# New Game — 2026-03-05 16:30:12
+# New Game ï¿½ 2026-03-05 16:30:12
 Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1745,7 +1730,7 @@ Reason: #5 is evil in ALL 12 scenarios (roles: {'Chancellor'})
 Scenarios: 0/222
   Generated 222 candidate scenarios
   0 scenarios survived validation
-  NO VALID SCENARIOS — check input data
+  NO VALID SCENARIOS ï¿½ check input data
   
   === ZERO-SCENARIO DIAGNOSTICS ===
   Rejection counts (card -> how many scenarios it rejected):
@@ -1769,14 +1754,14 @@ Reason: No surviving scenarios -- check input data
 #### [17:06:51] Jester Deduction
 Jester#1 result: 'Among #2,#4,#8: There is 1 Evil'. All 3 are confirmed Good. This is a LIE -> Jester#1 = Lilis (Evil). Oracle#2(Good) says #3=Chancellor. Evils: #3=Chancellor, #1=Lilis. Executing #3 then #1.
 
-## [17:10:40] GAME OVER — LOSS
+## [17:10:40] GAME OVER ï¿½ LOSS
 Final HP: 1
 Notes: Chancellor disguised as Knight blocked execution with 'I cant die'. Oracle#2 corrupted by PD#3 (adjacent), Oracle lied about Chancellor position. Jester#1=Lilis, result '1 Evil among confirmed goods' was a lie.
 
 
 ---
 
-# New Game — 2026-03-05 18:24:47
+# New Game ï¿½ 2026-03-05 18:24:47
 Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1885,14 +1870,14 @@ WARNING: Probabilistic execution -- 55% confident
 
 ### [18:35:55] Executed #1 -> Witch (EVIL)
 
-## [18:35:55] GAME OVER — WIN
+## [18:35:55] GAME OVER ï¿½ WIN
 Final HP: 8
 Notes: Hunter #2 info correctly pointed to #1 as Witch. Drunk at #5 cost 2 HP wrong exec.
 
 
 ---
 
-# New Game — 2026-03-05 18:36:41
+# New Game ï¿½ 2026-03-05 18:36:41
 Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -1940,7 +1925,7 @@ Info: {'targets': [3, 6]}
 Scenarios: 0/56
   Generated 56 candidate scenarios
   0 scenarios survived validation
-  NO VALID SCENARIOS — check input data
+  NO VALID SCENARIOS ï¿½ check input data
   
   === ZERO-SCENARIO DIAGNOSTICS ===
   Rejection counts (card -> how many scenarios it rejected):
@@ -1964,14 +1949,14 @@ Reason: No surviving scenarios -- check input data
 
 ### [18:51:48] Executed #8 -> Lilis (EVIL)
 
-## [18:51:48] GAME OVER — WIN
+## [18:51:48] GAME OVER ï¿½ WIN
 Final HP: 8
 Notes: Confessor cant lie + Knitter/Wretch adjacency deduction. Fixed solver: Confessor truthful for Judge.
 
 
 ---
 
-# New Game — 2026-03-05 19:12:39
+# New Game ï¿½ 2026-03-05 19:12:39
 Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -2105,14 +2090,14 @@ Bishop #3 told truth (Minion+Villager matches #1=Poisoner, #4=Dreamer). Judge #6
 
 ### [19:38:34] Executed #8 -> Shaman (EVIL)
 
-## [19:39:10] GAME OVER — WIN
+## [19:39:10] GAME OVER ï¿½ WIN
 Final HP: 1
 Notes: Lilis game. Dreamer+Judge abilities confirmed #1=Poisoner, deduced #6=Evil Judge=Lilis via Bishop truth check. 50-50 on #5/#8 outcasts, picked wrong first but survived at 1HP.
 
 
 ---
 
-# New Game — 2026-03-05 19:40:33
+# New Game ï¿½ 2026-03-05 19:40:33
 Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
 
 ## Deck
@@ -2227,7 +2212,2091 @@ CORRECTED: PD corrupts ANY Good Villager (not just adjacent). In-game screenshot
 
 ### [20:24:08] Executed #7 -> Baa (EVIL)
 
-## [20:24:16] GAME OVER — WIN
+## [20:24:16] GAME OVER ï¿½ WIN
 Final HP: 5
 Notes: PD corrupts ANY Good Villager not just adjacent. Witness#1 was corrupted by PD, showed <Corrupted> tag. Wrong exec on #1 Witness cost 5HP. Key learnings: PD range is global, corrupted cards show tag in-game, card position detection must be programmatic.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 21:02:55
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Empress, Scout, Judge, Baker, Enlightened, Medium
+- Outcasts: Plague Doctor, Bombardier
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+#### [21:04:42] Deck Analysis
+Villagers 6, Outcasts 1, Minions 2, Demons 1. Display shows: V=Jester,Empress,Scout,Judge,Baker,Enlightened,Medium (7 names = Shaman duplicated one). O=PD,Bombardier (but header says 1 outcast). M=Minion,Shaman. D=Pooka. Pooka corrupts adjacent villagers. 3 evils to find.
+
+### [21:07:13] Revealed #1 Medium
+Info: {'good_position': 5, 'good_role': 'Medium'}
+
+### [21:08:18] Revealed #2 Baker
+Info: {}
+
+#### [21:08:25] Baker Info
+Card #2 Baker says 'I was a Medium'. Shaman likely duplicated Medium, so original deck had 2 Mediums. One at #5 (per Medium#1 info), one became Baker#2.
+
+### [21:09:11] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [21:10:04] Revealed #4 Scout
+Info: {'evil_role': 'Shaman', 'distance': 2}
+
+### [21:11:20] Revealed #5 Medium
+Info: {'good_position': 8, 'good_role': 'Plague Doctor'}
+
+### [21:12:16] Revealed #6 Empress
+Info: {'targets': [1]}
+
+### [21:13:14] Revealed #7 Bombardier
+Info: {}
+
+### [21:13:44] Revealed #8 Plague Doctor
+Info: {}
+
+### [21:15:10] Ability used at #8
+
+### [21:15:40] Revealed #9 Judge
+Info: {}
+
+### [21:18:20] Revealed #9 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [21:18:28] Ability used at #9
+
+### [21:19:54] Revealed #10 Scout
+Info: {'evil_role': 'Shaman', 'distance': 1}
+
+#### [21:20:26] Solver Output
+Scenarios: 1/2904
+Definite evil: ['#5', '#8', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7', '#9']
+  Generated 2904 candidate scenarios
+  1 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [21:20:26] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+#### [21:21:53] Claude Reasoning
+Solver: 1 scenario. #5=Minion, #8=Shaman, #10=Pooka. Pooka#10 corrupts adj #9(Judge) and #1(Medium). Corrupted Judge result unreliable - explains Judge saying #6 lying when #6 is actually Good. #8 (Shaman as PD) lied about #1 not corrupted. Medium#1 corrupted so #5 is real Medium claim is a lie. Medium#5 is Minion disguised. Trust chain broken by corruption. Executing #5 first.
+
+#### [21:24:22] WRONG EXECUTION
+#5 was Good (Medium). HP 10->5. Solver had only 1 scenario and it was WRONG. Need to investigate why the solver failed. Key issue: solver said #5=Minion, #8=Shaman, #10=Pooka but #5 is confirmed Good.
+
+#### [21:24:30] Solver Output
+Scenarios: 0/1974
+  Generated 1974 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Medium: rejected 1202/1974 (61%)
+    #4 Scout: rejected 1028/1974 (52%)
+    #10 Scout: rejected 956/1974 (48%)
+    #6 Empress: rejected 944/1974 (48%)
+    #3 Enlightened: rejected 938/1974 (48%)
+    #5 Medium: rejected 836/1974 (42%)
+    #9 Judge: rejected 646/1974 (33%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 9 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Enlightened: still 0
+    WITHOUT #4 Scout: still 0
+    WITHOUT #5 Medium: still 0
+    WITHOUT #6 Empress: still 0
+    WITHOUT #9 Judge: still 0
+    WITHOUT #10 Scout: still 0
+
+#### [21:24:30] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [21:37:08] Solver Output
+Scenarios: 0/1974
+  Generated 1974 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Medium: rejected 1202/1974 (61%)
+    #4 Scout: rejected 1028/1974 (52%)
+    #10 Scout: rejected 956/1974 (48%)
+    #6 Empress: rejected 944/1974 (48%)
+    #3 Enlightened: rejected 938/1974 (48%)
+    #5 Medium: rejected 836/1974 (42%)
+    #9 Judge: rejected 646/1974 (33%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 9 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Enlightened: still 0
+    WITHOUT #4 Scout: still 0
+    WITHOUT #5 Medium: still 0
+    WITHOUT #6 Empress: still 0
+    WITHOUT #9 Judge: still 0
+    WITHOUT #10 Scout: still 0
+
+#### [21:37:08] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [21:44:02] Manual Analysis
+Solver gives 0 scenarios - reasoning manually. Trust chain: Med#1 says #5 real Med, Med#5 says #8 real PD, PD#8 says #1 not corrupted. Circular trust chain = all 3 likely Good. Judge#9 says #6 lying. If #9 Good, #6 evil/corrupted. Empress#6 says 'One of #1,#5,#9 evil'. If Good+truthful, #9 is the evil one. Enlightened#3 says CW = #4 is evil (CW dist 1). Three scenarios: A={4,7,9}, B={4,9,10}, C={4,7,10}. All agree #4 evil. A+B agree #9 evil (Empress reliable). Executing #4 first, then #9.
+
+### [21:46:10] Executed #4 -> Shaman (EVIL)
+
+### [21:49:19] Executed #9 -> Pooka (EVIL)
+
+#### [21:49:20] Third Evil Decision
+50/50 between #7 Bombardier and #10 Scout. Both scenarios valid. Avoiding Bombardier execution per safety rule (not 100% certain). Executing #10 Scout. If wrong, it costs 5 HP (= death). If right, win.
+
+### [21:52:00] Executed #10 -> GOOD (WRONG!)
+
+## [21:52:00] GAME OVER ï¿½ LOSS
+Final HP: 5
+Notes: 50/50 on third evil. Chose #10 Scout (wrong - was corrupted Good). Correct was #7 Minion disguised as Bombardier. Solver had 0 scenarios (bug). Bombardier safety rule steered away from correct answer.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 22:07:36
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Bishop, Enlightened, Architect, Knight, Gemcrafter, Lover
+- Outcasts: Bombardier, Wretch
+- Minions: Minion, TwinMinion
+- Demons: Baa
+
+### [22:13:44] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Knight'}
+
+### [22:13:44] Revealed #2 Knight
+Info: {}
+
+### [22:13:44] Revealed #3 Knight
+Info: {}
+
+### [22:13:44] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [22:13:45] Revealed #5 Enlightened
+Info: {'direction': 'equal'}
+
+### [22:13:45] Revealed #6 Architect
+Info: {'side': 'left'}
+
+### [22:13:45] Revealed #7 Wretch
+Info: {}
+
+### [22:13:45] Revealed #8 Gemcrafter
+Info: {'good_position': 3}
+
+### [22:13:45] Revealed #9 Bishop
+Info: {'targets': [1, 2, 6]}
+
+#### [22:14:03] Solver Output
+Scenarios: 6/504
+Definite evil: ['#1', '#2', '#5']
+Definite good: ['#3', '#4', '#6', '#7', '#8', '#9']
+  Generated 504 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'TwinMinion', 'Minion', 'Baa'})
+    #2 is DEFINITELY EVIL (possible roles: {'TwinMinion', 'Baa', 'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'TwinMinion', 'Baa', 'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [22:14:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'TwinMinion', 'Minion', 'Baa'})
+
+#### [22:14:13] Claude Reasoning
+All 9 cards revealed. Solver says #1, #2, #5 are definitely evil. Medium#1 said '#2 is real Knight' but #2 is evil = Medium is evil and lying. Two Knights (#2, #3) but deck has 1 Knight = one is disguised evil. Bishop#9 says among #1,#2,#6: Villager, Outcast, Minion ï¿½ if truthful, #6 is the Villager (Architect), #1 or #2 is Outcast/Minion. Makes sense with #1 and #2 evil. Executing all 3.
+
+#### [22:15:25] WRONG EXEC
+#1 Medium was GOOD. HP 10->5. Solver said #1 definitely evil but it was wrong. Medium said #2 is real Knight - this was TRUE. Need to re-evaluate. Bishop said among #1,#2,#6: Villager,Outcast,Minion. If #1 was the Villager(Medium), that checks out.
+
+#### [22:15:31] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Enlightened: rejected 210/336 (62%)
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #4 Lover: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #6 Architect: rejected 114/336 (34%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: still 0
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:15:31] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [22:15:40] Executed #1 -> Medium (EVIL)
+
+#### [22:15:40] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Architect: rejected 222/336 (66%)
+    #5 Enlightened: rejected 210/336 (62%)
+    #1 Medium: rejected 210/336 (62%)
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #4 Lover: rejected 150/336 (45%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: still 0
+    WITHOUT #4 Lover: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: 18 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Gemcrafter: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #9 Bishop: still 0
+
+#### [22:15:40] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:15:57] Manual Analysis
+Medium#1=Good, confirmed #2=real Knight (Good). Two Knights showing (#2,#3) but deck has 1. So #3 must be evil disguised as Knight. But Gemcrafter#8 says #3 is Good -- if #3 is evil, Gemcrafter is lying=evil. Bishop#9: among #1,#2,#6 = Villager,Outcast,Minion. #1=Medium(Villager). #2=Knight(Villager). But Bishop says Villager+Outcast+Minion among them. Two Villagers breaks that unless one is actually Outcast/Minion. #2 is confirmed real Knight by Medium. So Bishop might be lying=evil. Or maybe I misread the Architect side. Architect#6 said Left=more evil. Architect right=CW. Left=CCW. From #6: CCW is #7,#8,#9,#1. CW is #5,#4,#3,#2. Left(CCW) has more evil. Without Architect, 18 scenarios survive -- Architect info might be the bug.
+
+#### [22:16:59] Solver Output
+Scenarios: 6/336
+Definite evil: ['#1', '#2', '#5', '#6']
+Definite good: ['#3', '#4', '#7', '#8', '#9']
+  Generated 336 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Medium'})
+    #2 is DEFINITELY EVIL (possible roles: {'Baa', 'TwinMinion', 'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'TwinMinion', 'Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'TwinMinion', 'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [22:16:59] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 6 scenarios (roles: {'Baa', 'TwinMinion', 'Minion'})
+
+#### [22:17:32] Solver Output
+Scenarios: 0/56
+  Generated 56 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Enlightened: rejected 42/56 (75%)
+    #6 Architect: rejected 42/56 (75%)
+    #1 Medium: rejected 42/56 (75%)
+    #4 Lover: rejected 26/56 (46%)
+    #8 Gemcrafter: rejected 24/56 (43%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: still 0
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: still 0
+    WITHOUT #6 Architect: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:17:32] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:19:33] Solver Output
+Scenarios: 6/336
+Definite evil: ['#2', '#5', '#7']
+Definite good: ['#1', '#3', '#4', '#6', '#8', '#9']
+  Generated 336 candidate scenarios
+  6 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [22:19:33] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 6 scenarios (roles: {'Baa', 'Minion', 'TwinMinion'})
+
+#### [22:20:36] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Enlightened: rejected 210/336 (62%)
+    #6 Architect: rejected 186/336 (55%)
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #4 Lover: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: still 0
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:20:36] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:24:21] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Enlightened: rejected 210/336 (62%)
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #4 Lover: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #6 Architect: rejected 114/336 (34%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: still 0
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:24:21] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [22:25:28] Revealed #5 Enlightened
+Info: {'direction': 'equidistant'}
+
+#### [22:25:48] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #5 Enlightened: rejected 174/336 (52%)
+    #4 Lover: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #6 Architect: rejected 114/336 (34%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: still 0
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:25:48] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:27:16] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #5 Enlightened: rejected 174/336 (52%)
+    #4 Lover: rejected 150/336 (45%)
+    #6 Architect: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: still 0
+    WITHOUT #8 Gemcrafter: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #9 Bishop: 6 scenarios survive  <-- SUSPECT
+
+#### [22:27:16] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:29:46] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Architect: rejected 186/336 (55%)
+    #8 Gemcrafter: rejected 180/336 (54%)
+    #5 Enlightened: rejected 174/336 (52%)
+    #4 Lover: rejected 150/336 (45%)
+    #1 Medium: rejected 126/336 (38%)
+    #9 Bishop: rejected 60/336 (18%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Enlightened: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Architect: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Gemcrafter: still 0
+    WITHOUT #9 Bishop: still 0
+
+#### [22:29:46] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:30:19] Solver Output
+Scenarios: 6/336
+Definite evil: ['#3', '#8', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+  Generated 336 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'TwinMinion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [22:30:19] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Baa', 'Minion', 'TwinMinion'})
+
+#### [22:30:34] Claude Reasoning
+Solver found 6 valid scenarios, all agree: evils at #3,#8,#9. #3=fake Knight (Medium confirms #2 is real). #8=fake Gemcrafter (lied about #3 being Good). #9=fake Bishop (lied about types). Fixed: Architect uses CW=Left not CW=Right, equidistant counts for both sides, Wretch counts as evil. Enlightened also counts Wretch.
+
+## [22:34:42] GAME OVER ï¿½ WIN
+Final HP: 5
+Notes: Wrong exec on #1 Medium cost 5HP. Fixed Architect CW=Left, Enlightened+Architect Wretch-as-evil, equidistant counts both sides, Enlightened direction normalization, executed good card validation
+
+#### [22:35:33] Known Issue
+asc6_v1_win regression test now fails with 0 scenarios after executed-good card fix. Needs investigation - likely Drunk/Doppelganger interaction with new validation. Will fix after current game.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 22:39:03
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Poet, Oracle, Slayer, Architect, Jester, Confessor, Knitter
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Chancellor
+- Demons: Pooka
+
+### [22:41:35] Revealed #1 Jester
+Info: {}
+
+### [22:41:35] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [22:41:35] Revealed #3 Slayer
+Info: {}
+
+### [22:41:35] Revealed #4 Plague_Doctor
+Info: {}
+
+### [22:41:36] Revealed #5 Architect
+Info: {'side': 'right'}
+
+### [22:41:36] Revealed #6 Oracle
+Info: {'targets': [1, 3], 'minion_role': 'Chancellor'}
+
+### [22:41:36] Revealed #7 Gemcrafter
+Info: {'good_position': 5}
+
+### [22:41:36] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [22:41:42] Solver Output
+Scenarios: 42/1358
+Definite good: ['#8']
+Evil probabilities: #6=74%, #5=62%, #3=19%, #7=19%, #2=17%, #1=5%, #4=5%
+  Generated 1358 candidate scenarios
+  42 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [22:41:42] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#6']
+Reason: Target #6 is 74% evil (adjusted 0.42)
+WARNING: Corruption risk: 43% -- Slayer ability disabled if corrupted
+
+### [22:43:00] Ability used at #3
+
+#### [22:43:00] Solver Output
+Scenarios: 11/984
+Definite good: ['#6', '#8']
+Evil probabilities: #5=73%, #7=73%, #1=18%, #3=18%, #2=9%, #4=9%
+  Generated 984 candidate scenarios
+  11 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7]
+
+#### [22:43:00] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#5']
+Reason: Expected posterior 5.3 scenarios (adjusted 6.0) | timing x1.00
+WARNING: Corruption risk: 27%
+
+### [22:46:09] Revealed #1 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 0}
+
+### [22:46:13] Ability used at #1
+
+### [22:46:52] Revealed #4 Plague Doctor
+Info: {}
+
+### [22:47:22] Ability used at #4
+
+#### [22:47:22] Solver Output
+Scenarios: 5/984
+Definite good: ['#6', '#8']
+Evil probabilities: #1=40%, #3=40%, #5=40%, #7=40%, #2=20%, #4=20%
+  Generated 984 candidate scenarios
+  5 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7]
+
+#### [22:47:22] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 40% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 40% confident
+WARNING: Low confidence (40%) -- consider gathering more info
+
+#### [22:48:41] Claude Reasoning
+PD#4 said #2 not corrupted. Solver has 5 scenarios but none account for PD ability result. Manual deduction: Oracle#6 (Good) says #1 or #3 is Chancellor. Jester#1 says 0 evils in {2,3,5}. If Jester is Good, #3 is clean, so #1 is Chancellor. Executing #1 first.
+
+#### [22:50:29] Solver Output
+Scenarios: 3/670
+Definite good: ['#1', '#3', '#6', '#8']
+Evil probabilities: #5=67%, #7=67%, #2=33%, #4=33%
+  Generated 670 candidate scenarios
+  3 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 7]
+
+#### [22:50:29] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 67% likely evil but HP too low to risk (HP=5, cost=5). Need more info.
+WARNING: Probabilistic execution -- 67% confident
+WARNING: CRITICAL: HP=5, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+#### [22:50:44] Claude Reasoning
+PD#4 ability result '#2 not corrupted' eliminates Scenarios 1 and 3. Only Scenario 2 survives: evils={5:Pooka, 7:Chancellor}. S1 fails because PD#4 is evil(Chancellor) but told truth. S3 fails because PD#4 is Good but lied (#2 IS corrupted in S3). Executing #5 and #7.
+
+### [22:51:23] Executed #5 -> Chancellor (EVIL)
+
+## [22:52:15] GAME OVER ï¿½ LOSS
+Final HP: 5
+Notes: PD#4 corrupted Slayer#3, making ability fail. Slayer test on #6 was unreliable. Wrongly confirmed #6 Good. Also wrong exec on #1 (Good Jester). Solver had 0 PD ability validation - missed that only S2-variant with Pooka at #6 was valid.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 23:00:03
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Dreamer, Slayer, Bishop, Architect, Gemcrafter
+- Outcasts: Wretch, Bombardier
+- Minions: Twin_Minion, Chancellor
+- Demons: Lilis
+
+### [23:03:20] Revealed #1 Fortune_Teller
+Info: {}
+
+### [23:03:20] Revealed #2 Fortune_Teller
+Info: {}
+
+### [23:03:20] Revealed #3 Gemcrafter
+Info: {'good_position': 4}
+
+### [23:03:21] Revealed #4 Architect
+Info: {'side': 'equidistant'}
+
+### [23:03:21] Revealed #5 Bombardier
+Info: {}
+
+### [23:03:21] Revealed #6 Slayer
+Info: {}
+
+### [23:03:21] Revealed #7 Wretch
+Info: {}
+
+### [23:03:21] Revealed #8 Slayer
+Info: {}
+
+### [23:05:57] Ability used at #6
+
+### [23:07:00] Executed #1 -> Twin_Minion (EVIL)
+
+### [23:07:00] Ability used at #8
+
+### [23:08:37] Revealed #2 Fortune Teller
+Info: {'targets': [6, 9], 'has_evil': False}
+
+### [23:08:37] Ability used at #2
+
+### [23:09:23] Executed #6 -> Chancellor (EVIL)
+
+### [23:10:06] Executed #2 -> Lilis (EVIL)
+
+## [23:10:06] GAME OVER ï¿½ WIN
+Final HP: 6
+Notes: Slayer#8 killed TwinMinion#1 (free). FT#2 lied about #6+#9 (said False but #6 evil) = confirmed FT#2 evil. Architect equidistant fix enabled correct solve. Clean win despite 2 Lilis nights.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 23:11:29
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Alchemist, Medium, Enlightened, Baker, Judge
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [23:14:16] Revealed #1 Enlightened
+Info: {'direction': 'equidistant'}
+
+### [23:14:16] Revealed #2 Medium
+Info: {'good_position': 4, 'good_role': 'Judge'}
+
+### [23:14:16] Revealed #3 Empress
+Info: {'targets': [1, 2, 7]}
+
+### [23:14:16] Revealed #4 Judge
+Info: {}
+
+### [23:14:16] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+### [23:14:16] Revealed #6 Baker
+Info: {}
+
+### [23:15:25] Revealed #4 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [23:15:25] Ability used at #4
+
+#### [23:15:42] Claude Reasoning
+Judge says #1 lying. 83% evil. 8/12 scenarios have both #1+#5 evil. Executing #1 first (83%), then will re-solve.
+
+### [23:16:27] Executed #1 -> Witch (EVIL)
+
+### [23:16:59] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [23:18:02] Executed #5 -> Baa (EVIL)
+
+## [23:18:03] GAME OVER ï¿½ WIN
+Final HP: 10
+Notes: Final village of Asc6 run. Judge#4 confirmed #1 lying. Witch killed first, unlocked #7 Alchemist. Solver gave #5 at 75% evil = correct. Clean win, no wrong execs.
+
+
+---
+
+# New Game ï¿½ 2026-03-05 23:48:51
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Scout, Medium, Baker, Knight, Confessor
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [23:49:42] Revealed #1 Bombardier
+Info: {}
+
+### [23:52:27] Revealed #2 Medium
+Info: {'good_position': 6, 'good_role': 'Scout'}
+
+### [23:52:59] Revealed #3 Dreamer
+Info: {}
+
+### [23:53:32] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [23:54:02] Revealed #5 Knight
+Info: {}
+
+### [23:54:36] Revealed #6 Scout
+Info: {'evil_role': 'Pooka', 'distance': 2}
+
+### [23:55:41] Revealed #7 Baker
+Info: {}
+
+### [23:57:40] Revealed #3 Dreamer
+Info: {'target': 5, 'evil_role': 'Pooka'}
+
+### [23:57:40] Ability used at #3
+
+#### [23:57:50] Solver Output
+Scenarios: 2/7
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 5]
+
+#### [23:57:50] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 50% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident
+
+#### [23:58:51] Claude Reasoning
+50/50 between #4 and #5. Knight at #5 blocks execution for ALL disguises. Must execute #4. If wrong, we cant execute #5 either (Knight block). Confessor dizzy = Evil or Corrupted. If Pooka at #5, it corrupts adjacent #4 and #6.
+
+## [00:01:52] GAME OVER ï¿½ WIN
+Final HP: 5
+Notes: Knight block does NOT apply to evil disguised as Knight! Pooka at #5 disguised as Knight was successfully executed. Wrong exec on #4 Confessor (Good, corrupted by adjacent Pooka). Scout info uninformative with only 1 evil.
+
+
+---
+
+# New Game ï¿½ 2026-03-06 00:06:03
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Bard, Knight, Confessor, Judge, Empress
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [00:11:42] Revealed #1 Wretch
+Info: {}
+
+### [00:12:23] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [00:12:23] Revealed #4 Empress
+Info: {'targets': [3, 5, 6]}
+
+### [00:12:23] Revealed #6 Bard
+Info: {'corruption_distance': 2}
+
+### [00:21:05] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [00:21:05] Revealed #3 Judge
+Info: {}
+
+### [00:21:05] Revealed #4 Empress
+Info: {'targets': [3, 5, 6]}
+
+### [00:21:05] Revealed #5 Fortune_Teller
+Info: {}
+
+### [00:21:05] Revealed #6 Bard
+Info: {'corruption_distance': 2}
+
+### [00:21:19] Revealed #5 Fortune Teller
+Info: {'targets': [3, 7], 'has_evil': True}
+
+### [00:21:24] Ability used at #5
+
+#### [00:21:24] Solver Output
+Scenarios: 0/42
+  Generated 42 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Bard: rejected 30/42 (71%)
+    #4 Empress: rejected 18/42 (43%)
+    #5 Fortune Teller: rejected 16/42 (38%)
+    #2 Confessor: rejected 12/42 (29%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Confessor: still 0
+    WITHOUT #3 Judge: still 0
+    WITHOUT #4 Empress: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Fortune Teller: still 0
+    WITHOUT #6 Bard: 2 scenarios survive  <-- SUSPECT
+
+#### [00:21:24] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [00:21:41] zero_scenarios
+0 scenarios. Suspects: Empress #4 (rejected 43%), Bard #6 (rejected 71%). Either one is evil/lying or corrupted. Leave-one-out: removing #4 OR #6 yields 2 scenarios each.
+
+#### [00:27:25] witch_block
+Card #7 cannot be revealed - Witch block! This confirms Witch is active in this game. FT says one of {3,7} is evil. We need to find and execute Witch first to unlock #7.
+
+#### [00:36:12] judge_result
+#### [00:36:19] judge_result
+Judge #3 says #6 is Lying. Bard #6 is CORRUPTED (tag visible). PD at #7. Judge truthful (correct about Bard lying) so #3 Good. FT says one of {3,7} evil but #3 Good and #7=PD Good. FT info contradicted unless FT evil or corrupted.
+
+### [00:37:38] Revealed #3 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [00:37:38] Ability used at #3
+
+### [00:43:02] Executed #5 -> GOOD (WRONG!)
+
+### [00:45:04] Executed #6 -> Witch (EVIL)
+
+#### [00:45:04] witch_dead
+Executed #6 Bard = WITCH (Minion). Witch block lifted. #7 should be Baa (demon). Need to execute #7 next.
+
+### [00:50:06] Revealed #7 Knight
+Info: {}
+
+#### [00:56:32] Execute Decision
+Solver confirms #7 is Baa (demon). Only 1 surviving scenario. Executing #7.
+
+## [00:56:32] GAME OVER â€” WIN
+Final HP: 5
+Notes: Retroactively closed. Witch at #6, Baa at #7. Wrong exec on #5 (FT) cost 5HP.
+
+
+---
+
+# New Game ï¿½ 2026-03-06 01:34:04
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+### [01:37:51] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [01:37:51] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [01:37:51] Revealed #3 Poet
+Info: {}
+
+### [01:37:52] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [01:37:52] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [01:37:52] Revealed #6 Plague Doctor
+Info: {}
+
+### [01:37:52] Revealed #7 Slayer
+Info: {}
+
+### [01:37:52] Revealed #8 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 3}
+
+#### [01:37:56] Solver Output
+Scenarios: 0/1
+  Generated 1 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Alchemist: rejected 1/1 (100%)
+    #2 Confessor: rejected 1/1 (100%)
+    #4 Lover: rejected 1/1 (100%)
+    #5 Confessor: rejected 1/1 (100%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Alchemist: still 0
+    WITHOUT #2 Confessor: still 0
+    WITHOUT #4 Lover: still 0
+    WITHOUT #5 Confessor: still 0
+    WITHOUT #8 Scout: still 0
+
+#### [01:37:56] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## Deck
+- Villagers: Poet, Alchemist, Knight, Scout, Confessor, Slayer, Lover
+- Outcasts: Drunk, Plague Doctor, Doppelganger
+- Minions: Chancellor
+- Demons: Baa
+
+#### [01:38:59] Solver Output
+Scenarios: 102/7112
+Definite good: ['#3', '#6', '#7', '#8']
+Evil probabilities: #5=80%, #2=61%, #1=39%, #4=20%
+  Generated 7112 candidate scenarios
+  102 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [01:38:59] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 0.966 (adjusted 0.966) | timing x1.00
+
+### [01:39:49] Ability used at #6
+
+#### [01:39:49] PD result
+#5 is Evil, #1 is Corrupted
+
+#### [01:39:54] Solver Output
+Scenarios: 102/7112
+Definite good: ['#3', '#6', '#7', '#8']
+Evil probabilities: #5=80%, #2=61%, #1=39%, #4=20%
+  Generated 7112 candidate scenarios
+  102 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [01:39:54] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#5']
+Reason: Target #5 is 80% evil (adjusted 0.65)
+WARNING: Corruption risk: 20% -- Slayer ability disabled if corrupted
+
+### [01:40:34] Ability used at #7
+
+### [01:40:34] Executed #5 -> Chancellor (EVIL)
+
+#### [01:40:35] Solver Output
+Scenarios: 46/1159
+Definite evil: ['#5']
+Definite good: ['#3', '#4', '#6', '#7', '#8']
+Evil probabilities: #2=78%, #1=22%
+  Generated 1159 candidate scenarios
+  46 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2]
+
+#### [01:40:35] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 78% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 78% confident
+
+### [01:42:13] Executed #2 -> Baa (EVIL)
+
+## [01:42:13] GAME OVER ï¿½ WIN
+Final HP: 10
+Notes: Perfect game. Slayer killed Chancellor, solver 78% on Baa at #2. PD confirmed.
+
+
+---
+
+# New Game ï¿½ 2026-03-06 01:42:53
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Slayer, Baker, Lover, Alchemist, Medium
+- Outcasts: Pooka
+- Minions: 
+- Demons: Bombardier
+
+### [01:44:26] Revealed #1 Architect
+Info: {'side': 'CW'}
+
+### [01:44:42] Revealed #2 Baker
+Info: {}
+
+### [01:44:42] Revealed #3 Baker
+Info: {}
+
+### [01:44:43] Revealed #4 Baker
+Info: {}
+
+### [01:44:43] Revealed #5 Slayer
+Info: {}
+
+### [01:44:43] Revealed #6 Bombardier
+Info: {}
+
+### [01:44:43] Revealed #7 Baker
+Info: {}
+
+#### [01:44:50] Solver Output
+Scenarios: 0/7
+  Generated 7 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Architect: rejected 6/7 (86%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Architect: still 0
+
+#### [01:44:50] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [01:44:56] Revealed #1 Architect
+Info: {'side': 'CCW'}
+
+#### [01:44:56] Solver Output
+Scenarios: 0/7
+  Generated 7 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Architect: rejected 6/7 (86%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Architect: still 0
+
+#### [01:44:56] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [01:45:03] Revealed #1 Architect
+Info: {'side': 'Equidistant'}
+
+#### [01:45:03] Solver Output
+Scenarios: 0/7
+  Generated 7 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Architect: rejected 7/7 (100%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Architect: still 0
+
+#### [01:45:03] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [01:45:13] 0 scenarios
+Architect rejects all. Trying Slayer on #6 (shows Bombardier=Demon name)
+
+### [01:46:03] Revealed #1 Architect
+Info: {'side': 'CW'}
+
+### [01:46:03] Ability used at #5
+
+#### [01:46:03] Solver Output
+Scenarios: 0/7
+  Generated 7 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS ï¿½ check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Architect: rejected 6/7 (86%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Architect: still 0
+
+#### [01:46:03] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [01:47:00] Executed #4 -> GOOD (WRONG!)
+
+### [01:47:58] Executed #7 -> GOOD (WRONG!)
+
+## [01:47:58] GAME OVER ï¿½ LOSS
+Final HP: 0
+Notes: 0 scenarios from Architect. Slayer corrupted by adjacent Pooka couldn't kill Bombardier#6. Guessed wrong twice.
+
+
+---
+
+# New Game — 2026-03-06 11:09:14
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Poet, Lover, Gemcrafter, Druid, Dreamer, Knitter, Bard
+- Outcasts: Jester
+- Minions: Minion, Poisoner
+- Demons: Lilis
+
+## Deck
+- Villagers: Poet, Lover, Gemcrafter, Druid, Dreamer, Knitter, Bard, Jester
+- Outcasts: Plague_Doctor
+- Minions: Minion, Poisoner
+- Demons: Lilis
+
+### [11:19:17] Revealed #1 Gemcrafter
+Info: {'good_position': 6}
+
+### [11:19:23] Revealed #2 Lover
+Info: {'evil_adjacent': 2}
+
+### [11:19:39] Revealed #3 Druid
+Info: {}
+
+### [11:19:39] Revealed #4 Poet
+Info: {}
+
+### [11:19:39] Revealed #5 Dreamer
+Info: {}
+
+### [11:19:39] Revealed #6 Plague Doctor
+Info: {}
+
+### [11:19:39] Revealed #7 Bard
+Info: {'corruption_distance': 2}
+
+### [11:19:46] Revealed #8 dead
+Info: {}
+
+### [11:19:46] Revealed #9 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+#### [11:19:59] Solver Output
+Scenarios: 150/2170
+Evil probabilities: #2=67%, #8=52%, #4=43%, #9=43%, #3=39%, #5=32%, #7=20%, #1=3%, #6=3%
+  Generated 2170 candidate scenarios
+  150 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [11:19:59] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#2']
+Reason: Entropy 2.932 (adjusted 2.638) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [11:21:24] Revealed #5 Dreamer
+Info: {'target': 2, 'evil_role': 'Lilis'}
+
+### [11:22:46] Revealed #3 Druid
+Info: {'targets': [1, 2, 6], 'found_outcast': None}
+
+### [11:22:46] Ability used at #3
+
+### [11:22:47] Ability used at #5
+
+### [11:22:47] Ability used at #9
+
+### [11:23:52] Ability used at #6
+
+#### [11:23:58] Solver Output
+Scenarios: 20/684
+Evil probabilities: #3=75%, #7=50%, #9=50%, #8=45%, #4=40%, #5=20%, #2=10%, #1=5%, #6=5%
+  Generated 684 candidate scenarios
+  20 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [11:23:58] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 75% likely evil (HP=6, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 75% confident
+
+### [11:25:33] Executed #3 -> Poisoner (EVIL)
+
+#### [11:25:33] Solver Output
+Scenarios: 4/86
+Definite evil: ['#3', '#7', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+  Generated 86 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #7 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [11:25:33] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Minion', 'Lilis'})
+
+### [11:27:01] Executed #7 -> GOOD (WRONG!)
+
+### [11:27:26] Revealed #7 Bard
+Info: {}
+
+#### [11:27:36] Solver Output
+Scenarios: 11/62
+Definite evil: ['#3', '#9']
+Definite good: ['#1', '#6', '#7']
+Evil probabilities: #5=36%, #8=36%, #4=18%, #2=9%
+  Generated 62 candidate scenarios
+  11 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 8]
+
+#### [11:27:36] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 11 scenarios (roles: {'Minion', 'Lilis'})
+
+### [11:28:22] Executed #9 -> EVIL
+
+#### [11:28:22] Solver Output
+Scenarios: 6/10
+Definite evil: ['#3', '#9']
+Definite good: ['#1', '#6', '#7']
+Evil probabilities: #5=33%, #8=33%, #2=17%, #4=17%
+  Generated 10 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 8]
+
+#### [11:28:22] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 33% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 33% confident
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [11:31:21] Executed #2 -> Lilis (EVIL)
+
+## [11:31:21] GAME OVER — WIN
+Final HP: 1
+Notes: Bard#7 corrupted, solver missed it. PD result not used by solver. Manual deduction saved #2=Lilis.
+
+
+---
+
+# New Game — 2026-03-06 11:32:29
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Slayer, Lover, Knight, Knitter, Medium, Druid, Alchemist
+- Outcasts: Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [11:35:53] Revealed #1 Slayer
+Info: {}
+
+### [11:35:53] Revealed #2 Medium
+Info: {'good_position': 1, 'good_role': 'Slayer'}
+
+### [11:35:53] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [11:35:53] Revealed #4 Medium
+Info: {'good_position': 7, 'good_role': 'Lover'}
+
+### [11:35:54] Revealed #5 Druid
+Info: {}
+
+### [11:35:54] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:35:54] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:35:54] Revealed #8 Knight
+Info: {}
+
+#### [11:36:00] Solver Output
+Scenarios: 9/392
+Definite good: ['#2', '#8']
+Evil probabilities: #4=56%, #7=56%, #5=33%, #6=33%, #1=11%, #3=11%
+  Generated 392 candidate scenarios
+  9 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7]
+
+#### [11:36:00] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#4']
+Reason: Target #4 is 56% evil (adjusted 0.43)
+WARNING: Corruption risk: 22% -- Slayer ability disabled if corrupted
+
+### [11:37:25] Ability used at #1
+
+#### [11:37:25] Solver Output
+Scenarios: 9/392
+Definite good: ['#2', '#8']
+Evil probabilities: #4=56%, #7=56%, #5=33%, #6=33%, #1=11%, #3=11%
+  Generated 392 candidate scenarios
+  9 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7]
+
+#### [11:37:25] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.503 (adjusted 0.363) | timing x1.00
+WARNING: Corruption risk: 56%
+
+### [11:39:02] Revealed #5 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [11:39:02] Ability used at #5
+
+#### [11:39:02] Solver Output
+Scenarios: 1/392
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+  Generated 392 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [11:39:02] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:40:19] Executed #1 -> Pooka (EVIL)
+
+### [11:40:19] Executed #3 -> Shaman (EVIL)
+
+## [11:40:19] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect solve. Slayer failed on #4 (not evil). Druid no_outcasts narrowed to 1 scenario.
+
+
+---
+
+# New Game — 2026-03-06 11:43:59
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Jester, Baker, Poet, Scout, Oracle, Lover
+- Outcasts: Drunk, Bombardier
+- Minions: Puppeteer, Puppet
+- Demons: Pooka
+
+### [11:46:15] Revealed #1 Poet
+Info: {}
+
+### [11:46:15] Revealed #2 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:46:16] Revealed #3 Oracle
+Info: {'targets': [2, 9], 'minion_role': 'Puppeteer'}
+
+### [11:46:16] Revealed #4 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [11:46:16] Revealed #5 Jester
+Info: {}
+
+### [11:46:16] Revealed #6 Bombardier
+Info: {}
+
+### [11:46:16] Revealed #7 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:46:16] Revealed #8 Baker
+Info: {}
+
+### [11:46:16] Revealed #9 Jester
+Info: {}
+
+#### [11:46:23] Solver Output
+Scenarios: 578/7308
+Evil probabilities: #3=54%, #2=51%, #6=42%, #8=40%, #1=40%, #4=36%, #7=36%, #9=34%, #5=25%
+  Generated 7308 candidate scenarios
+  578 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [11:46:23] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#2', '#7', '#8']
+Reason: Expected posterior 259.8 scenarios (adjusted 286.9) | timing x1.00
+WARNING: Corruption risk: 21%
+
+### [11:47:38] Revealed #9 Jester
+Info: {'targets': [2, 7, 8], 'evil_count': 3}
+
+### [11:47:38] Ability used at #9
+
+### [11:49:10] Revealed #5 Jester
+Info: {'targets': [2, 6, 7], 'evil_count': 0}
+
+### [11:49:10] Ability used at #5
+
+#### [11:49:11] Solver Output
+Scenarios: 98/7308
+Evil probabilities: #8=62%, #9=55%, #1=54%, #3=51%, #6=43%, #4=36%, #2=27%, #5=17%, #7=17%
+  Generated 7308 candidate scenarios
+  98 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [11:49:11] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 62% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 62% confident
+
+### [11:49:57] Executed #8 -> EVIL
+
+#### [11:49:57] Solver Output
+Scenarios: 2/350
+Definite evil: ['#8']
+Definite good: ['#4', '#5', '#6', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #7=50%
+  Generated 350 candidate scenarios
+  2 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 7]
+
+#### [11:49:57] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident
+
+### [11:50:52] Executed #1 -> EVIL
+
+#### [11:50:52] Solver Output
+Scenarios: 2/43
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+Evil probabilities: #3=50%, #9=50%
+  Generated 43 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #8 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [3, 9]
+
+#### [11:50:52] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 50% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident
+
+### [11:52:03] Executed #3 -> GOOD (WRONG!)
+
+### [11:52:36] Executed #9 -> EVIL
+
+## [11:52:36] GAME OVER — WIN
+Final HP: 5
+Notes: Wrong exec on #3 (Oracle). 50/50 between #3 and #9, guessed wrong. Pooka at #8 corrupted Knitter#7.
+
+
+---
+
+# New Game — 2026-03-06 11:54:04
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Enlightened, Knitter, Slayer, Alchemist, Dreamer, Confessor
+- Outcasts: Doppelganger, Bombardier
+- Minions: Minion
+- Demons: Lilis
+
+### [11:56:15] Revealed #1 Dreamer
+Info: {}
+
+### [11:56:15] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [11:56:15] Revealed #3 Slayer
+Info: {}
+
+### [11:56:16] Revealed #4 Enlightened
+Info: {'direction': 'EQ'}
+
+### [11:56:16] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [11:56:16] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [11:56:16] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [11:56:16] Revealed #8 dead
+Info: {}
+
+### [11:56:16] Revealed #9 Bombardier
+Info: {}
+
+#### [11:56:24] Solver Output
+Scenarios: 24/464
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#5', '#6', '#8', '#9']
+Evil probabilities: #3=50%, #7=50%
+  Generated 464 candidate scenarios
+  24 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 7]
+
+#### [11:56:24] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 24 scenarios (roles: {'Lilis', 'Minion'})
+
+### [11:57:09] Executed #4 -> EVIL
+
+### [11:58:01] Revealed #1 Dreamer
+Info: {'target': 3, 'evil_role': 'Minion'}
+
+### [11:58:01] Ability used at #1
+
+#### [11:58:01] Solver Output
+Scenarios: 0/50
+  Generated 50 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #7 Knitter: rejected 44/50 (88%)
+    #1 Dreamer: rejected 44/50 (88%)
+    #2 Alchemist: rejected 6/50 (12%)
+    #5 Confessor: rejected 6/50 (12%)
+    #6 Confessor: rejected 6/50 (12%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Dreamer: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Alchemist: still 0
+    WITHOUT #4 Enlightened: still 0
+    WITHOUT #5 Confessor: still 0
+    WITHOUT #6 Confessor: still 0
+    WITHOUT #7 Knitter: 6 scenarios survive  <-- SUSPECT
+
+#### [11:58:01] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [11:58:33] Revealed #1 Dreamer
+Info: {}
+
+#### [11:58:33] Solver Output
+Scenarios: 6/50
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8', '#9']
+  Generated 50 candidate scenarios
+  6 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #7 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [11:58:33] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Lilis'})
+
+### [11:59:10] Executed #7 -> Lilis (EVIL)
+
+## [11:59:10] GAME OVER — WIN
+Final HP: 6
+Notes: 0 scenario on Dreamer#1 info - removed it, solved. Lilis at #7 disguised as Knitter. #5 was actually Doppelganger (not Confessor).
+
+
+---
+
+# New Game — 2026-03-06 12:00:15
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bard, Baker, Druid, Hunter, Slayer, Gemcrafter
+- Outcasts: Wretch, Drunk
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [12:09:13] Revealed #1 Slayer
+Info: {}
+
+### [12:09:14] Revealed #2 Wretch
+Info: {}
+
+### [12:09:14] Revealed #3 Baker
+Info: {}
+
+### [12:09:14] Revealed #4 Hunter
+Info: {'distance': 1}
+
+### [12:09:14] Revealed #5 Baker
+Info: {}
+
+### [12:09:14] Revealed #6 Gemcrafter
+Info: {'good_position': 2}
+
+### [12:09:14] Revealed #7 Baker
+Info: {}
+
+#### [12:09:18] Solver Output
+Scenarios: 52/222
+Evil probabilities: #6=62%, #3=31%, #4=31%, #5=31%, #1=15%, #2=15%, #7=15%
+  Generated 222 candidate scenarios
+  52 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [12:09:18] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#6']
+Reason: Target #6 is 62% evil (adjusted 0.54)
+WARNING: Corruption risk: 12% -- Slayer ability disabled if corrupted
+
+### [12:17:41] Ability used at #1
+
+### [12:17:41] Executed #6 -> Baa (EVIL)
+
+#### [12:17:47] Solver Output
+Scenarios: 16/31
+Definite evil: ['#6']
+Evil probabilities: #4=31%, #3=25%, #5=25%, #1=6%, #2=6%, #7=6%
+  Generated 31 candidate scenarios
+  16 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    Uncertain: [1, 2, 3, 4, 5, 7]
+
+#### [12:17:47] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 31% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 31% confident
+WARNING: Low confidence (31%) -- consider gathering more info
+
+#### [12:18:47] Solver Output
+Scenarios: 11/21
+Definite evil: ['#6']
+Definite good: ['#5', '#7']
+Evil probabilities: #4=45%, #3=36%, #1=9%, #2=9%
+  Generated 21 candidate scenarios
+  11 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4]
+
+#### [12:18:47] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 45% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 45% confident
+WARNING: Low confidence (45%) -- consider gathering more info
+
+### [12:21:28] Executed #4 -> Twin_Minion (EVIL)
+
+## [12:21:35] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game. Slayer killed Baa at #6 (disguised Gemcrafter). Hunter #4 was Twin_Minion (distance=1 lie). Baker chain confirmed #5,#7 good.
+
+
+---
+
+# New Game — 2026-03-06 12:25:27
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Slayer, Fortune_Teller, Jester, Hunter, Scout, Medium, Bombardier
+- Outcasts: Wretch
+- Minions: Shaman
+- Demons: Baa
+
+### [12:33:17] Revealed #1 Jester
+Info: {}
+
+### [12:33:18] Revealed #2 Bishop
+Info: {'targets': [1, 4, 7]}
+
+### [12:33:18] Revealed #3 Medium
+Info: {'good_position': 7, 'good_role': 'Fortune_Teller'}
+
+### [12:33:18] Revealed #4 Bombardier
+Info: {}
+
+### [12:33:18] Revealed #5 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [12:33:18] Revealed #6 Bishop
+Info: {'targets': [1, 2, 4]}
+
+### [12:33:18] Revealed #7 Fortune_Teller
+Info: {}
+
+### [12:33:18] Revealed #8 Hunter
+Info: {'distance': 1}
+
+#### [12:33:22] Solver Output
+Scenarios: 4/56
+Definite good: ['#3', '#4', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%, #5=50%, #8=50%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 8]
+
+#### [12:33:22] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#5']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.0) | timing x1.00
+
+### [12:34:46] Revealed #1 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 0}
+
+### [12:34:47] Ability used at #1
+
+#### [12:34:51] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Shaman', 'Baa'})
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman', 'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [12:34:51] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Shaman', 'Baa'})
+
+### [12:36:09] Executed #1 -> EVIL
+
+### [12:36:10] Executed #5 -> EVIL
+
+## [12:36:10] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game. Jester #1 lied (0 evils among 2,3,5 but was evil itself). Scout #5 was Baa. Solver nailed both with only 2 scenarios.
+
+
+---
+
+# New Game — 2026-03-06 12:41:02
+Cards: 9, Evil: 2, HP: 6, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Bard, Knight, Empress, Dreamer, Gemcrafter
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [12:51:49] Revealed #1 Dreamer
+Info: {}
+
+### [12:51:49] Revealed #2 Judge
+Info: {}
+
+### [12:51:49] Revealed #3 Empress
+Info: {'targets': [2, 7, 9]}
+
+### [12:51:49] Revealed #4 Plague_Doctor
+Info: {}
+
+### [12:51:50] Revealed #5 Gemcrafter
+Info: {'good_position': 7}
+
+### [12:51:50] Revealed #6 Knight
+Info: {}
+
+### [12:51:50] Revealed #7 Knight
+Info: {}
+
+### [12:51:50] Revealed #8 Wretch
+Info: {}
+
+#### [12:51:54] Solver Output
+Scenarios: 32/268
+Definite good: ['#4']
+Evil probabilities: #6=69%, #7=38%, #3=19%, #5=19%, #9=19%, #1=12%, #2=12%, #8=12%
+  Generated 268 candidate scenarios
+  32 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8, 9]
+
+#### [12:51:54] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.537 (adjusted 2.220) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [12:53:40] Revealed #1 Dreamer
+Info: {'target': 6, 'evil_role': 'Lilis'}
+
+### [12:53:40] Ability used at #1
+
+#### [12:53:44] Solver Output
+Scenarios: 21/268
+Definite good: ['#4']
+Evil probabilities: #6=52%, #7=52%, #5=29%, #1=14%, #3=14%, #8=14%, #9=14%, #2=10%
+  Generated 268 candidate scenarios
+  21 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8, 9]
+
+#### [12:53:44] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#6']
+Reason: Entropy 0.998 (adjusted 0.903) | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [12:55:00] Revealed #2 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [12:55:00] Ability used at #2
+
+#### [12:55:05] Solver Output
+Scenarios: 13/268
+Definite good: ['#2', '#4']
+Evil probabilities: #6=69%, #7=38%, #5=31%, #3=23%, #9=23%, #1=8%, #8=8%
+  Generated 268 candidate scenarios
+  13 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 6, 7, 8, 9]
+
+#### [12:55:05] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 23% evil, entropy 0.779
+
+### [12:56:57] Ability used at #4
+
+#### [12:57:02] Solver Output
+Scenarios: 8/54
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#4', '#5']
+Evil probabilities: #3=38%, #9=38%, #7=12%, #8=12%
+  Generated 54 candidate scenarios
+  8 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis', 'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [3, 7, 8, 9]
+
+#### [12:57:02] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 38% evil, entropy 0.954
+
+## [13:03:09] GAME OVER — LOSS
+Final HP: 0
+Notes: Lost. #6 Knight was corrupted (PD target). Judge correctly said #6 lying (corrupted). Dreamer 'could be' is AMBIGUOUS not definitive. Manually confirm_evil #6 was fatal error. #5 Lilis disguised as Gemcrafter lied about #7 being good.
+
+
+---
+
+# New Game — 2026-03-06 13:33:27
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Gemcrafter, Bishop, Architect, Knight, Enlightened, Lover, Baker
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [13:46:38] Revealed #1 Architect
+Info: {'side': 'left'}
+
+### [13:46:38] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [13:46:38] Revealed #3 Gemcrafter
+Info: {'good_position': 5}
+
+### [13:46:38] Revealed #4 Bishop
+Info: {'targets': [1, 3, 7]}
+
+### [13:46:39] Revealed #5 Poet
+Info: {}
+
+### [13:46:39] Revealed #6 Knight
+Info: {}
+
+### [13:46:39] Revealed #7 Gemcrafter
+Info: {'good_position': 8}
+
+### [13:46:39] Revealed #8 Plague Doctor
+Info: {}
+
+### [13:46:39] Revealed #9 Lover
+Info: {}
+
+#### [13:46:44] Solver Output
+Scenarios: 147/2480
+Evil probabilities: #1=69%, #9=31%, #4=27%, #5=26%, #2=19%, #6=18%, #3=5%, #8=3%, #7=1%
+  Generated 2480 candidate scenarios
+  147 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [13:46:44] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.763 (adjusted 1.763) | timing x1.00
+
+
+---
+
+# New Game — 2026-03-06 13:49:13
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Gemcrafter, Bishop, Architect, Knight, Enlightened, Lover, Baker
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [13:49:18] Revealed #1 Architect
+Info: {'side': 'left'}
+
+### [13:49:18] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [13:49:19] Revealed #3 Gemcrafter
+Info: {'good_position': 5}
+
+### [13:49:19] Revealed #4 Bishop
+Info: {'targets': [1, 3, 7]}
+
+### [13:49:19] Revealed #5 Poet
+Info: {}
+
+### [13:49:19] Revealed #6 Knight
+Info: {}
+
+### [13:49:19] Revealed #7 Gemcrafter
+Info: {'good_position': 8}
+
+### [13:49:19] Revealed #8 Plague_Doctor
+Info: {}
+
+### [13:49:19] Revealed #9 Lover
+Info: {'evil_adjacent': 2}
+
+#### [13:49:51] Solver Output
+Scenarios: 124/2480
+Evil probabilities: #1=79%, #9=37%, #4=25%, #2=23%, #6=18%, #5=15%, #3=2%, #8=2%, #7=1%
+  Generated 2480 candidate scenarios
+  124 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [13:49:51] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 79% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 79% confident
+
+### [14:00:22] Executed #1 -> GOOD (WRONG!)
+
+#### [14:00:26] Solver Output
+Scenarios: 26/1876
+Definite good: ['#1']
+Evil probabilities: #9=69%, #4=42%, #2=31%, #5=31%, #3=8%, #6=8%, #8=8%, #7=4%
+  Generated 1876 candidate scenarios
+  26 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:00:26] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 69% likely evil but HP too low to risk (HP=5, cost=5). Need more info.
+WARNING: Probabilistic execution -- 69% confident
+WARNING: CRITICAL: HP=5, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [14:01:55] Executed #6 -> Shaman (EVIL)
+
+#### [14:01:56] Solver Output
+Scenarios: 2/302
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+  Generated 302 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #6 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [14:01:56] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+## [14:02:59] GAME OVER — WIN
+Final HP: 5
+Notes: Knight free-test play found Shaman at #6. Solver 100% on #5=Pooka. 1 wrong exec (#1 Architect). PD corruption on #3,#4,#9.
 

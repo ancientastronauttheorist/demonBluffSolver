@@ -132,6 +132,13 @@
       "name": "Asc8_v2",
       "notes": "Lost. #6 Knight was corrupted (PD target). Judge correctly said #6 lying (corrupted). Dreamer 'could be' is AMBIGUOUS not definitive. Manually confirm_evil #6 was fatal error. #5 Lilis disguised as Gemcrafter lied about #7 being good.",
       "date": "2026-03-06 13:03"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc8_v3",
+      "notes": "Knight free-test play found Shaman at #6. Solver 100% on #5=Pooka. 1 wrong exec (#1 Architect). PD corruption on #3,#4,#9.",
+      "date": "2026-03-06 14:02"
     }
   ]
 }
