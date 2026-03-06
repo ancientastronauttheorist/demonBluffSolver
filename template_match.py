@@ -255,8 +255,8 @@ def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (
         print(f"[safe_click] FAILED: '{name}' not found")
         return None
 
-    # Step 2: Focus game
-    game_utils.focus_game()
+    # Step 2: Ensure game is focused
+    game_utils.ensure_game_focused()
     time.sleep(0.2)
 
     # Step 3: Hover
@@ -285,7 +285,7 @@ def safe_click_at(x: int, y: int, label: str = "target") -> str:
     import game_utils
     import time
 
-    game_utils.focus_game()
+    game_utils.ensure_game_focused()
     time.sleep(0.2)
     mouse_mod.move(x, y)
     time.sleep(0.3)

@@ -24,6 +24,28 @@ import mouse
 # Window Focus
 # ============================================================
 
+def is_game_focused(title_substring: str = "Demon Bluff") -> bool:
+    """Check if the game window is currently in the foreground."""
+    user32 = ctypes.windll.user32
+    hwnd = user32.GetForegroundWindow()
+    buf = ctypes.create_unicode_buffer(256)
+    user32.GetWindowTextW(hwnd, buf, 256)
+    focused = title_substring.lower() in buf.value.lower()
+    if not focused:
+        try:
+            print(f"[focus] Game NOT focused. Active window: '{buf.value}'")
+        except UnicodeEncodeError:
+            print(f"[focus] Game NOT focused. Active window: (non-ASCII title)")
+    return focused
+
+
+def ensure_game_focused(title_substring: str = "Demon Bluff") -> bool:
+    """Check if game is focused; if not, focus it. Returns True if game is now focused."""
+    if is_game_focused(title_substring):
+        return True
+    return focus_game(title_substring)
+
+
 def focus_game(title_substring: str = "Demon Bluff") -> bool:
     """Bring the game window to foreground using Win32 API.
     Returns True if window was found and focused."""
@@ -304,7 +326,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     cmd = sys.argv[1]
-    if cmd == "focus":
+    if cmd == "check":
+        is_game_focused()
+    elif cmd == "focus":
         focus_game()
     elif cmd == "cards":
         if len(sys.argv) > 2:
