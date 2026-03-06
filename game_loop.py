@@ -81,6 +81,25 @@ def card_druid(pos: int, targets: list[int], found_outcast: Optional[str] = None
 def card_bishop(pos: int, targets: list[int]) -> CardInfo:
     return CardInfo(pos, "Bishop", info_parsed={"targets": targets})
 
+def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> CardInfo:
+    """Poet that copied another role's ability. Parse the copied role's info.
+
+    Usage: card poet <pos> <copied_role> <copied_role_args...>
+    Examples:
+        card poet 5 knitter 0          (copied Knitter, claimed 0 adjacent evil pairs)
+        card poet 3 lover 2            (copied Lover, claimed 2 adjacent evils)
+        card poet 7 architect left     (copied Architect, claimed left more evil)
+        card poet 2 gemcrafter 5       (copied Gemcrafter, claimed #5 is good)
+        card poet 4 enlightened cw     (copied Enlightened, claimed CW)
+    """
+    # Build the copied role's info_parsed by delegating to _parse_card_cli
+    fake_args = [copied_role, str(pos)] + copied_args
+    copied_card = _parse_card_cli(fake_args)
+    info = copied_card.info_parsed.copy()
+    info["copied_role"] = copied_card.apparent_role  # Use canonical role name
+    return CardInfo(pos, "Poet", info_parsed=info)
+
+
 def card_no_info(pos: int, role: str) -> CardInfo:
     """For cards with no deduction info: Slayer, Knight, Bombardier, Wretch, Baker, etc."""
     return CardInfo(pos, role, info_parsed={})
@@ -532,6 +551,12 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
     elif role == "bishop":
         targets = [int(x) for x in args[2].split(",")]
         return card_bishop(pos, targets)
+    elif role == "poet":
+        if len(args) > 2:
+            # Poet with identified copied ability: poet <pos> <copied_role> <args...>
+            return card_poet_with_info(pos, args[2], args[3:])
+        else:
+            return card_no_info(pos, "Poet")  # No info identified
     elif role == "no_info":
         return card_no_info(pos, args[2])  # actual role name
     else:
@@ -568,6 +593,8 @@ def main():
         print("  card fortune_teller 4 1,3 yes")
         print("  card oracle 5 2,6 Shaman")
         print("  card jester 7 1,3,5 1")
+        print("  card poet 5 knitter 0       (Poet copied Knitter, claimed 0 evil pairs)")
+        print("  card poet 3 lover 2          (Poet copied Lover, claimed 2 adjacent)")
         print("  card no_info 2 Slayer")
         return
 

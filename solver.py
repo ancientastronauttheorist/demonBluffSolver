@@ -1118,6 +1118,30 @@ def _validate_bishop(card: CardInfo, scenario: Scenario,
         return True  # Hard to validate lying Bishop
 
 
+def _validate_poet(card: CardInfo, scenario: Scenario,
+                    state: GameState) -> bool:
+    """Poet: copies a random Villager's ability.
+
+    If 'copied_role' is identified in info_parsed, delegate to that role's
+    validator. The truth status comes from the Poet's own position (good Poet
+    = truthful, evil disguised as Poet = lying, corrupted Poet = lying).
+    """
+    info = card.info_parsed
+    copied_role = info.get("copied_role")
+    if not copied_role:
+        return True  # No copied role identified — can't validate
+
+    # Look up the copied role's validator
+    # (use late binding since VALIDATORS dict is defined below)
+    validator = VALIDATORS.get(copied_role)
+    if not validator:
+        return True  # No validator for this copied role
+
+    # Delegate: the card keeps its original position (for truth status)
+    # but we pass the copied role's info fields through info_parsed
+    return validator(card, scenario, state)
+
+
 # ============================================================
 # Validator Registry
 # ============================================================
@@ -1143,10 +1167,7 @@ VALIDATORS = {
     "Alchemist": _validate_alchemist,
     "Druid": _validate_druid,
     "Bishop": _validate_bishop,
-    # NOTE: "Poet" is intentionally excluded — Poet's info is randomly generated
-    # (not truth-based), so it can't be validated for consistency. Good Poets can
-    # display false info. Judge detecting "lying" on a Poet just means the random
-    # info didn't match reality, NOT that the Poet is evil.
+    "Poet": _validate_poet,
     # NOTE: "Knight" has no info to validate — Knight's ability is "I can't die"
     # (execution immunity). See EXECUTION_IMMUNE_ROLES below.
 }
