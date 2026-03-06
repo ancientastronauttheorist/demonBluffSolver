@@ -1249,8 +1249,8 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             for p in range(1, state.n_cards + 1):
                 if p in full_evil or p == puppet_pos:
                     continue
-                if p in state.executed:
-                    continue
+                # Don't skip executed positions — an executed Good card
+                # could have been the Doppelganger
                 card = _get_card_at(p, state)
                 if card and _is_villager_role(card.apparent_role, state):
                     dopp_candidates.append(p)
@@ -1268,8 +1268,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             for p in range(1, state.n_cards + 1):
                 if p in full_evil or p == puppet_pos:
                     continue
-                if p in state.executed:
-                    continue
+                # Don't skip executed positions — an executed Good card
+                # could have been the Drunk, and its pre-execution info
+                # still needs to be validated as corrupted
                 card = _get_card_at(p, state)
                 # Drunk appears as a Villager, so it could be at any
                 # position showing as a Villager, OR any unrevealed position
