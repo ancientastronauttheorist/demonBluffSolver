@@ -823,14 +823,43 @@ def _validate_hunter(card: CardInfo, scenario: Scenario,
         return claimed != actual
 
 
+def _architect_sides(n: int) -> tuple[set[int], set[int], set[int]]:
+    """Return (left, right, both) position sets for n-card circle.
+
+    The board has a fixed vertical line down the center.
+    Card #N is always at top (12 o'clock), cards go CW: N, 1, 2, ...
+    Right side = CW half (positions 1 .. floor(N/2)-1 for even, 1..floor(N/2) for odd)
+    Left side = CCW half (positions floor(N/2)+1 .. N-1)
+    Both = top (#N), and for even N also bottom (#N/2).
+    Positions in 'both' count toward BOTH left and right evil totals.
+    """
+    half = n // 2
+    both = {n}
+    right = set()
+    left = set()
+
+    if n % 2 == 0:
+        both.add(half)
+        for i in range(1, half):
+            right.add(i)
+        for i in range(half + 1, n):
+            left.add(i)
+    else:
+        for i in range(1, half + 1):
+            right.add(i)
+        for i in range(half + 1, n):
+            left.add(i)
+
+    return left, right, both
+
+
 def _validate_architect(card: CardInfo, scenario: Scenario,
                         state: GameState) -> bool:
     """Architect: 'Left'/'Right'/'Equal' — which side has more Evil.
 
-    The circle is split by a vertical line through the Architect's position.
-    Cards equidistant (directly opposite) count for BOTH sides.
-    Wretch counts as Evil (confirmed by wiki).
-    Direction mapping: CW = Left side, CCW = Right side on screen.
+    The board is split by a fixed vertical line (not relative to Architect).
+    Card #N at top and #N/2 at bottom (even N) are on the line = BOTH sides.
+    Wretch counts as Evil (wiki confirmed).
     """
     info = card.info_parsed
     if "side" not in info:
@@ -844,20 +873,18 @@ def _validate_architect(card: CardInfo, scenario: Scenario,
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
+    left_set, right_set, both_set = _architect_sides(n)
+
     left_count = 0
     right_count = 0
     for p in range(1, n + 1):
-        if p == pos:
-            continue
-        # Wretch counts as Evil for Architect (wiki confirmed)
         if _effective_alignment(p, scenario, state) == Alignment.EVIL:
-            d = circle_direction(pos, p, n)
-            if d == "CW":
+            if p in both_set:
                 left_count += 1
-            elif d == "CCW":
                 right_count += 1
-            else:  # Equidistant (opposite) — count for BOTH sides
+            elif p in left_set:
                 left_count += 1
+            elif p in right_set:
                 right_count += 1
 
     if left_count > right_count:
