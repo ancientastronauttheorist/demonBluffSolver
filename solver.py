@@ -110,6 +110,7 @@ class GameState:
     night_kill_evil_count: int = 0  # How many of the night kills were evil
     hp: int = 10                    # Current health points
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
+    pd_ability_results: list[dict] = field(default_factory=list)  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
 
 
 @dataclass
@@ -1182,6 +1183,47 @@ def _validate_slayer_results(scenario: Scenario, state: GameState) -> bool:
     return True
 
 
+def _validate_pd_ability(scenario: Scenario, state: GameState) -> bool:
+    """Validate Plague Doctor active ability results.
+
+    PD picks a target and checks if they're corrupted.
+    - Good PD + corrupted target: says "Is Corrupted" + reveals an evil position (truthful)
+    - Good PD + clean target: says "Not Corrupted" (truthful)
+    - Evil PD + corrupted target: lies, says "Not Corrupted"
+    - Evil PD + clean target: lies, says "Is Corrupted" + points to a good position as evil
+
+    PD is an Outcast, immune to corruption, so no corrupted-PD case.
+    """
+    for result in state.pd_ability_results:
+        pd_pos = result["pd_pos"]
+        target = result["target"]
+        claimed_corrupted = result["is_corrupted"]
+        evil_revealed = result.get("evil_revealed")
+
+        pd_is_evil = pd_pos in scenario.evil_positions
+
+        actual_corrupted = target in scenario.corrupted
+
+        if pd_is_evil:
+            # Evil PD lies about corruption status
+            if claimed_corrupted == actual_corrupted:
+                return False
+            # Evil PD lies about evil reveal: claimed evil should be good
+            if claimed_corrupted and evil_revealed is not None:
+                if evil_revealed in scenario.evil_positions:
+                    return False
+        else:
+            # Good PD tells truth about corruption
+            if claimed_corrupted != actual_corrupted:
+                return False
+            # Good PD reveals a real evil
+            if claimed_corrupted and evil_revealed is not None:
+                if evil_revealed not in scenario.evil_positions:
+                    return False
+
+    return True
+
+
 def _validate_poet(card: CardInfo, scenario: Scenario,
                     state: GameState) -> bool:
     """Poet: copies a random Villager's ability.
@@ -1532,6 +1574,11 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     # Validate Slayer ability results
     if state.slayer_results:
         if not _validate_slayer_results(scenario, state):
+            return False
+
+    # Validate Plague Doctor active ability results
+    if state.pd_ability_results:
+        if not _validate_pd_ability(scenario, state):
             return False
 
     # Validate Lilis night kill constraint: exactly N evils among night-killed positions

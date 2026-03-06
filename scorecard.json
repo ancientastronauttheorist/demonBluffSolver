@@ -1,1 +1,11 @@
-{"games": []}
+{
+  "games": [
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc8_g1",
+      "notes": "PD ability revealed #2 evil. Manual logic deduced #1 over #7 via Judge corruption analysis.",
+      "date": "2026-03-06 16:53"
+    }
+  ]
+}

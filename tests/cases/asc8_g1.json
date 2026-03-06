@@ -1,0 +1,144 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          6
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 6,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5,
+        "good_role": "Judge"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    6,
+    2,
+    1
+  ],
+  "confirmed_evil": [
+    6,
+    2,
+    1
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    5,
+    1,
+    9
+  ],
+  "pd_ability_results": [
+    {"pd_pos": 9, "target": 4, "is_corrupted": true, "evil_revealed": 2}
+  ],
+  "executed_evil_roles": {
+    "6": "Poisoner",
+    "2": "Pooka",
+    "1": "Minion"
+  },
+  "slayer_results": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "name": "asc8_g1",
+  "true_evil_positions": {
+    "1": "Minion",
+    "2": "Pooka",
+    "6": "Poisoner"
+  },
+  "notes": "PD ability revealed #2 evil. Manual logic deduced #1 over #7 via Judge corruption analysis.",
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Confessor",
+      "Hunter",
+      "Lover",
+      "Alchemist",
+      "Judge",
+      "Jester"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Poisoner",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  }
+}

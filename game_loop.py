@@ -263,6 +263,7 @@ class GameSession:
         self.night_kill_evil_count: int = 0  # How many night kills were evil
         self.hp: int = 10
         self.wrong_exec_cost: int = 2  # Ascension 4 default
+        self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
 
     # -- Deck --
 
@@ -294,6 +295,16 @@ class GameSession:
 
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
+
+    def add_pd_ability_result(self, pd_pos: int, target: int, is_corrupted: bool,
+                              evil_revealed: Optional[int] = None):
+        self.pd_ability_results.append({
+            "pd_pos": pd_pos,
+            "target": target,
+            "is_corrupted": is_corrupted,
+            "evil_revealed": evil_revealed,
+        })
+        self.mark_ability_used(pd_pos)
 
     def mark_ability_used(self, pos: int):
         if pos not in self.used_abilities:
@@ -327,6 +338,7 @@ class GameSession:
             pd_corruption_target=self.pd_corruption_target,
             executed_evil_roles=dict(self.executed_evil_roles),
             slayer_results=list(self.slayer_results),
+            pd_ability_results=list(self.pd_ability_results),
             night_kills=list(self.night_kills),
             night_kill_evil_count=self.night_kill_evil_count,
             hp=self.hp,
@@ -462,6 +474,7 @@ class GameSession:
             "used_abilities": self.used_abilities,
             "executed_evil_roles": self.executed_evil_roles,
             "slayer_results": self.slayer_results,
+            "pd_ability_results": self.pd_ability_results,
             "night_kills": self.night_kills,
             "night_kill_evil_count": self.night_kill_evil_count,
             "hp": self.hp,
@@ -490,6 +503,7 @@ class GameSession:
         session.pd_corruption_target = data.get("pd_corruption_target")
         session.used_abilities = data.get("used_abilities", [])
         session.slayer_results = data.get("slayer_results", [])
+        session.pd_ability_results = data.get("pd_ability_results", [])
         session.night_kills = data.get("night_kills", [])
         session.night_kill_evil_count = data.get("night_kill_evil_count", 0)
         # Convert executed_evil_roles keys from str (JSON) back to int
@@ -595,6 +609,8 @@ def main():
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
         print("  pd_target <pos>                       Set Plague Doctor corruption target")
+        print("  pd_check <pd_pos> <target> corrupted <evil_pos>  PD found corruption + evil")
+        print("  pd_check <pd_pos> <target> clean                 PD found no corruption")
         print("  set_hp <hp> [wrong_exec_cost]         Update HP and wrong execution cost")
         print("  solve                                 Run solver")
         print("  status                                Print session state")
@@ -719,6 +735,24 @@ def main():
         session.set_pd_target(pos)
         session.save()
         print(f"PD corruption target set to #{pos}")
+        return
+
+    if cmd == "pd_check":
+        session = GameSession.load()
+        pd_pos = int(sys.argv[2])
+        target = int(sys.argv[3])
+        status = sys.argv[4].lower()
+        if status == "corrupted":
+            evil_revealed = int(sys.argv[5])
+            session.add_pd_ability_result(pd_pos, target, True, evil_revealed)
+            session.save()
+            print(f"PD #{pd_pos} checked #{target}: Corrupted, #{evil_revealed} is Evil")
+        elif status == "clean":
+            session.add_pd_ability_result(pd_pos, target, False)
+            session.save()
+            print(f"PD #{pd_pos} checked #{target}: Not Corrupted")
+        else:
+            print(f"Unknown PD check status: {status} (use 'corrupted' or 'clean')")
         return
 
     if cmd == "solve":
