@@ -217,6 +217,33 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                 placements.append(p)
         return placements
 
+    # Check if Puppet was already executed but Puppeteer is still alive
+    puppet_executed_pos = None
+    for ex_pos, ex_role in state.executed_evil_roles.items():
+        if ex_role == "Puppet":
+            puppet_executed_pos = int(ex_pos)
+
+    # If Puppet was executed, Puppeteer must be adjacent to the Puppet's position
+    if puppet_executed_pos is not None and has_puppeteer:
+        base_evil = [r for r in evil_roles if r != "Puppeteer"]
+        placements = []
+        n_base = len(base_evil)
+        # Puppeteer must be adjacent to the executed Puppet
+        puppeteer_candidates = [a for a in adjacent_positions(puppet_executed_pos, n)
+                                if a in available]
+        for puppeteer_pos in puppeteer_candidates:
+            remaining = [p for p in available if p != puppeteer_pos]
+            if n_base == 0:
+                placements.append({puppeteer_pos: "Puppeteer"})
+            else:
+                for combo in combinations(remaining, n_base):
+                    for role_perms in _permutations_of(base_evil):
+                        p = {puppeteer_pos: "Puppeteer"}
+                        for i, pos in enumerate(combo):
+                            p[pos] = role_perms[i]
+                        placements.append(p)
+        return placements
+
     # If Puppeteer is present, we need an extra slot for Puppet
     if has_puppeteer:
         # Puppet isn't in evil_roles from deck — it's created at game start

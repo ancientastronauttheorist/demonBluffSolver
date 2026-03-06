@@ -4663,3 +4663,76 @@ Info: {'targets': [2, 3], 'has_evil': False}
 Final HP: 6
 Notes: Clean solver win. Druid lie caught Lilis, FT confirmed #6 evil. No wrong execs.
 
+
+---
+
+# New Game — 2026-03-06 15:40:09
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 2
+
+### [15:43:09] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [15:43:09] Revealed #2 Plague Doctor
+Info: {}
+
+### [15:43:09] Revealed #3 Fortune Teller
+Info: {}
+
+### [15:43:09] Revealed #4 Judge
+Info: {}
+
+### [15:43:09] Revealed #5 Medium
+Info: {'good_position': 1, 'good_role': 'Knitter'}
+
+### [15:43:09] Revealed #6 Alchemist
+Info: {'cured_count': 1}
+
+### [15:43:09] Revealed #8 Empress
+Info: {'targets': [1, 2, 6]}
+
+#### [15:44:46] Solver Output
+Scenarios: 19/438
+Definite good: ['#2', '#7']
+Evil probabilities: #5=53%, #4=47%, #6=42%, #1=37%, #3=37%, #8=32%
+  Generated 438 candidate scenarios
+  19 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 8]
+
+#### [15:44:46] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.361 (adjusted 1.361) | timing x1.00
+
+### [15:47:25] Ability used at #2
+
+#### [15:47:35] Solver Output
+Scenarios: 12/304
+Definite good: ['#1', '#2', '#7']
+Evil probabilities: #4=75%, #3=58%, #6=58%, #8=42%, #5=33%
+  Generated 304 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 8]
+
+#### [15:47:35] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#6']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:49:19] Ability used at #3
+
+### [15:49:19] Revealed #3 Fortune Teller
+Info: {'targets': [1, 6], 'has_evil': True}
+
+### [15:50:06] Executed #4 -> Puppet (EVIL)
+
+### [15:57:32] Executed #3 -> Puppeteer (EVIL)
+
+### [15:57:32] Executed #8 -> Lilis (EVIL)
+
+## [15:57:32] GAME OVER — WIN
+Final HP: 8
+Notes: Clean solve. PD confirmed Knitter, FT caught lying, Puppeteer constraint nailed it.
+

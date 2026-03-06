@@ -626,12 +626,27 @@ def main():
         n_cards = int(sys.argv[2])
         n_evil = int(sys.argv[3])
         session = GameSession(n_cards, n_evil)
-        # Optional: hp and wrong_exec_cost
-        for arg in sys.argv[4:]:
+        # Optional: hp, wrong_exec_cost, and deck via --flags
+        i = 4
+        while i < len(sys.argv):
+            arg = sys.argv[i]
             if arg.startswith("hp="):
                 session.hp = int(arg[3:])
             elif arg.startswith("cost="):
                 session.wrong_exec_cost = int(arg[5:])
+            elif arg == "--villagers" and i + 1 < len(sys.argv):
+                i += 1
+                session.villagers = _parse_role_list(sys.argv[i])
+            elif arg == "--outcasts" and i + 1 < len(sys.argv):
+                i += 1
+                session.outcasts = _parse_role_list(sys.argv[i])
+            elif arg == "--minions" and i + 1 < len(sys.argv):
+                i += 1
+                session.minions = _parse_role_list(sys.argv[i])
+            elif arg == "--demons" and i + 1 < len(sys.argv):
+                i += 1
+                session.demons = _parse_role_list(sys.argv[i])
+            i += 1
         session.save()
         DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
         print(f"New session: {n_cards} cards, {n_evil} evil, HP={session.hp}, cost={session.wrong_exec_cost}")

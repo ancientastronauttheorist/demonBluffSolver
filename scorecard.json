@@ -160,6 +160,13 @@
       "name": "Lilis",
       "notes": "Clean solver win. Druid lie caught Lilis, FT confirmed #6 evil. No wrong execs.",
       "date": "2026-03-06 15:38"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "Lilis",
+      "notes": "Clean solve. PD confirmed Knitter, FT caught lying, Puppeteer constraint nailed it.",
+      "date": "2026-03-06 15:57"
     }
   ]
 }
