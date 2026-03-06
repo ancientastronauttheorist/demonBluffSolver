@@ -69,6 +69,20 @@
       "name": "asc7_v1",
       "notes": "Knight block does NOT apply to evil disguised as Knight",
       "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc7_v2",
+      "notes": "Perfect game. Slayer killed Chancellor, solver 78% on Baa at #2. PD confirmed.",
+      "date": "2026-03-06 01:42"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc7_v3_loss",
+      "notes": "0 scenarios from Architect. Slayer corrupted by adjacent Pooka couldn't kill Bombardier#6. Guessed wrong twice.",
+      "date": "2026-03-06 01:47"
     }
   ]
 }

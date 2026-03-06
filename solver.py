@@ -837,8 +837,9 @@ def _validate_architect(card: CardInfo, scenario: Scenario,
         return True
 
     raw_side = info["side"].lower()
-    claimed = {"left": "Left", "right": "Right", "equal": "Equal",
-               "equidistant": "Equal", "both": "Equal"}.get(raw_side, raw_side.capitalize())
+    claimed = {"left": "Left", "cw": "Left", "right": "Right", "ccw": "Right",
+               "equal": "Equal", "equidistant": "Equal", "both": "Equal"}.get(
+               raw_side, raw_side.capitalize())
     pos = card.position
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
@@ -1302,7 +1303,8 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     good_outcast_counts = Counter()   # outcast_role -> count
 
     deck_villager_set = set(state.deck.villagers)
-    deck_outcast_set = set(state.deck.outcasts)
+    # Normalize outcast names for comparison (spaces vs underscores)
+    deck_outcast_set = set(state.deck.outcasts) | set(o.replace("_", " ") for o in state.deck.outcasts)
 
     for card in state.cards:
         pos = card.position
@@ -1338,10 +1340,17 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
             n_disguisers += 1
 
     # Check Villager roles: excess Good appearances over deck count
-    deck_v_counts = Counter(state.deck.villagers)
+    # Normalize names: spaces <-> underscores (card apparent_role may differ from deck)
+    def _normalize(name: str) -> str:
+        return name.replace(" ", "_")
+    deck_v_counts = Counter(_normalize(v) for v in state.deck.villagers)
     total_excess = 0
     for role, count in good_villager_counts.items():
-        deck_count = deck_v_counts.get(role, 0)
+        # Baker converts other villagers into Bakers (cascading), so any
+        # number of Good Bakers is valid when Baker is in the deck
+        if _normalize(role) == "Baker" and "Baker" in state.deck.villagers:
+            continue
+        deck_count = deck_v_counts.get(_normalize(role), 0)
         if count > deck_count:
             total_excess += count - deck_count
 
@@ -1358,9 +1367,9 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
 
     # Check Outcast roles: no disguiser can fake an Outcast appearance,
     # so Good Outcast appearances can't exceed deck counts
-    deck_o_counts = Counter(state.deck.outcasts)
+    deck_o_counts = Counter(_normalize(o) for o in state.deck.outcasts)
     for role, count in good_outcast_counts.items():
-        if count > deck_o_counts.get(role, 0):
+        if count > deck_o_counts.get(_normalize(role), 0):
             return False
 
     return True
