@@ -2,6 +2,14 @@
 import sys
 import os
 import time
+import ctypes
+
+# Fix DPI scaling on Windows — without this, coordinates are wrong!
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except Exception:
+    pass
+
 import mss
 from PIL import Image
 
@@ -19,7 +27,7 @@ def capture(name=None, region=None):
     if name is None:
         name = f"screen_{int(time.time())}"
 
-    filepath = os.path.join(SCREENSHOT_DIR, f"{name}.png")
+    filepath = os.path.join(SCREENSHOT_DIR, f"{name}.jpg")
 
     with mss.mss() as sct:
         if region:
@@ -28,7 +36,7 @@ def capture(name=None, region=None):
             monitor = sct.monitors[1]  # Primary monitor
 
         img = sct.grab(monitor)
-        Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX").save(filepath)
+        Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX").save(filepath, "JPEG", quality=85)
 
     print(filepath)
     return filepath
