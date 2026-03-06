@@ -1773,3 +1773,198 @@ Jester#1 result: 'Among #2,#4,#8: There is 1 Evil'. All 3 are confirmed Good. Th
 Final HP: 1
 Notes: Chancellor disguised as Knight blocked execution with 'I cant die'. Oracle#2 corrupted by PD#3 (adjacent), Oracle lied about Chancellor position. Jester#1=Lilis, result '1 Evil among confirmed goods' was a lie.
 
+
+---
+
+# New Game — 2026-03-05 18:24:47
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Judge, Lover, Medium, Hunter, Enlightened
+- Outcasts: Doppelganger, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [18:25:35] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [18:27:29] Revealed #2 Hunter
+Info: {'distance': 1}
+
+### [18:27:29] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [18:27:29] Revealed #4 Alchemist
+Info: {'cured_count': 0}
+
+### [18:27:29] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:27:29] Revealed #6 Judge
+Info: {}
+
+### [18:28:27] Revealed #6 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [18:28:27] Ability used at #6
+
+#### [18:28:33] Solver Output
+Scenarios: 34/1152
+Definite good: ['#4']
+Evil probabilities: #3=53%, #1=47%, #7=29%, #2=24%, #5=24%, #6=24%
+  Generated 1152 candidate scenarios
+  34 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7]
+
+#### [18:28:33] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 53% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 53% confident
+
+### [18:29:29] Executed #3 -> Baa (EVIL)
+
+#### [18:29:29] Solver Output
+Scenarios: 13/161
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#6']
+Evil probabilities: #7=38%, #1=31%, #5=31%
+  Generated 161 candidate scenarios
+  13 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 5, 7]
+
+#### [18:29:29] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 38% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 38% confident
+WARNING: Low confidence (38%) -- consider gathering more info
+
+#### [18:32:25] Solver Output
+Scenarios: 13/161
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#6']
+Evil probabilities: #7=38%, #1=31%, #5=31%
+  Generated 161 candidate scenarios
+  13 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 5, 7]
+
+#### [18:32:25] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 38% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 38% confident
+WARNING: Low confidence (38%) -- consider gathering more info
+
+### [18:32:34] Executed #5 -> Drunk (EVIL)
+
+#### [18:32:37] Solver Output
+Scenarios: 20/89
+Definite evil: ['#3', '#5']
+Definite good: ['#2', '#4', '#6']
+Evil probabilities: #1=55%, #7=45%
+  Generated 89 candidate scenarios
+  20 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #5 is DEFINITELY EVIL (possible roles: {'Drunk'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [18:32:37] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 55% likely evil (HP=8, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 55% confident
+
+### [18:35:55] Executed #1 -> Witch (EVIL)
+
+## [18:35:55] GAME OVER — WIN
+Final HP: 8
+Notes: Hunter #2 info correctly pointed to #1 as Witch. Drunk at #5 cost 2 HP wrong exec.
+
+
+---
+
+# New Game — 2026-03-05 18:36:41
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Bishop, Knitter, Architect, Confessor, Judge
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Lilis
+
+### [18:37:43] Revealed #8 Knitter
+Info: {'evil_pairs': 0}
+
+### [18:38:23] Revealed #1 Confessor
+Info: {'dirty': False}
+
+### [18:39:12] Revealed #2 Confessor
+Info: {'dirty': False}
+
+### [18:39:17] Revealed #2 Confessor
+Info: {'dirty': True}
+
+### [18:39:45] Revealed #3 Wretch
+Info: {}
+
+#### [18:40:12] Night 1
+Lilis killed #5. HP 10->8. #5 was unrevealed Good (killed by Lilis).
+
+### [18:40:37] Revealed #4 Judge
+Info: {}
+
+### [18:41:52] Revealed #4 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [18:41:52] Ability used at #4
+
+### [18:42:43] Revealed #6 Bishop
+Info: {'targets': [3]}
+
+### [18:43:09] Revealed #6 Bishop
+Info: {'targets': [4, 5]}
+
+### [18:45:30] Revealed #6 Bishop
+Info: {'targets': [3, 6]}
+
+#### [18:45:59] Solver Output
+Scenarios: 0/56
+  Generated 56 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Confessor: rejected 42/56 (75%)
+    #8 Knitter: rejected 32/56 (57%)
+    #4 Judge: rejected 24/56 (43%)
+    #1 Confessor: rejected 14/56 (25%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Confessor: still 0
+    WITHOUT #2 Confessor: 10 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Judge: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Bishop: still 0
+    WITHOUT #8 Knitter: 2 scenarios survive  <-- SUSPECT
+
+#### [18:45:59] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [18:51:48] Executed #2 -> Witch (EVIL)
+
+### [18:51:48] Executed #8 -> Lilis (EVIL)
+
+## [18:51:48] GAME OVER — WIN
+Final HP: 8
+Notes: Confessor cant lie + Knitter/Wretch adjacency deduction. Fixed solver: Confessor truthful for Judge.
+

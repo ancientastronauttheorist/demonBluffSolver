@@ -500,6 +500,12 @@ def _effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Alig
 
 def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
     """Determine if a card tells truth or lies in this scenario."""
+    # Confessor can't lie — always truthful regardless of Evil/Corrupted status.
+    # This affects Judge validation: Judge sees Confessor as "truthful" even if Evil.
+    card = _get_card_at(pos, state)
+    if card and card.apparent_role == "Confessor":
+        return TruthStatus.TRUTHFUL
+
     # Evil characters lie (except Puppet)
     if pos in scenario.evil_positions:
         role = scenario.evil_positions[pos]
@@ -1263,8 +1269,87 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
     return scenarios
 
 
+def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
+    """Check that apparent roles among Good positions don't exceed deck counts.
+
+    If deck has 1 Hunter but 2 Good positions show Hunter, the excess must be
+    explainable by disguising Outcasts (Drunk/Doppelganger) that are Good in
+    this scenario. Evil positions are excluded (their apparent role is a disguise
+    that doesn't consume a deck slot).
+
+    Also checks Outcast role counts: Good positions showing an Outcast role
+    can't exceed that role's deck count (no disguiser can fake an Outcast role).
+    """
+    from collections import Counter
+
+    # Count apparent roles among Good (non-evil, non-puppet) revealed positions,
+    # PLUS puppet (Puppet keeps its apparent Villager role, consuming a deck slot)
+    good_villager_counts = Counter()  # villager_role -> count
+    good_outcast_counts = Counter()   # outcast_role -> count
+
+    deck_villager_set = set(state.deck.villagers)
+    deck_outcast_set = set(state.deck.outcasts)
+
+    for card in state.cards:
+        pos = card.position
+        # Evil positions use a disguise — don't consume a Good deck slot
+        if pos in scenario.evil_positions:
+            continue
+        # Puppet is Evil but keeps its original Villager appearance,
+        # consuming a Villager deck slot
+        role = card.apparent_role
+        if _is_villager_role(role, state):
+            good_villager_counts[role] += 1
+        elif role in deck_outcast_set:
+            good_outcast_counts[role] += 1
+
+    # Count how many disguising Outcasts are Good in this scenario.
+    # Drunk and Doppelganger appear as Villagers on the board but are
+    # actually Outcasts — each can explain 1 extra apparent Villager.
+    n_disguisers = 0
+    disguise_outcasts = {"Drunk", "Doppelganger"}
+    for outcast in state.deck.outcasts:
+        if outcast not in disguise_outcasts:
+            continue
+        # Check if this outcast is Good (not at an evil position) in this scenario.
+        # Use tracked positions if available, otherwise assume Good (conservative).
+        if outcast == "Doppelganger" and scenario.doppelganger_position is not None:
+            if scenario.doppelganger_position not in scenario.evil_positions:
+                n_disguisers += 1
+        elif outcast == "Drunk" and scenario.drunk_position is not None:
+            if scenario.drunk_position not in scenario.evil_positions:
+                n_disguisers += 1
+        else:
+            # Position unknown — conservatively assume it's Good
+            n_disguisers += 1
+
+    # Check Villager roles: excess Good appearances over deck count
+    deck_v_counts = Counter(state.deck.villagers)
+    total_excess = 0
+    for role, count in good_villager_counts.items():
+        deck_count = deck_v_counts.get(role, 0)
+        if count > deck_count:
+            total_excess += count - deck_count
+
+    if total_excess > n_disguisers:
+        return False
+
+    # Check Outcast roles: no disguiser can fake an Outcast appearance,
+    # so Good Outcast appearances can't exceed deck counts
+    deck_o_counts = Counter(state.deck.outcasts)
+    for role, count in good_outcast_counts.items():
+        if count > deck_o_counts.get(role, 0):
+            return False
+
+    return True
+
+
 def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     """Check if a scenario is consistent with all revealed card info."""
+    # Structural check: role counts must be explainable by deck + disguisers
+    if not _validate_role_counts(scenario, state):
+        return False
+
     for card in state.cards:
         # Skip executed cards UNLESS they are corrupted in this scenario —
         # corrupted cards' info must still be validated (lies constrain scenarios)
