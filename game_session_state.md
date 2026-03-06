@@ -4580,3 +4580,86 @@ Reason: Entropy 2.595 (adjusted 2.595) | timing x1.00
 Final HP: 1
 Notes: Night kill fix test. 50/50 on #8 vs #6, got lucky. Wrong exec on #9 due to Bard data entry error (0 vs -1).
 
+
+---
+
+# New Game — 2026-03-06 15:29:02
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 2
+
+### [15:30:54] Revealed #1 Druid
+Info: {}
+
+### [15:30:58] Revealed #2 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:30:58] Revealed #3 Bombardier
+Info: {}
+
+### [15:31:07] Revealed #4 Oracle
+Info: {'targets': [5, 6], 'minion_role': 'Twin Minion'}
+
+### [15:31:12] Revealed #5 Fortune Teller
+Info: {}
+
+### [15:31:12] Revealed #6 Judge
+Info: {}
+
+### [15:31:12] Revealed #8 Knight
+Info: {}
+
+### [15:31:12] Revealed #9 Empress
+Info: {'targets': [5, 6, 8]}
+
+#### [15:32:33] Solver Output
+Scenarios: 16/504
+Definite good: ['#3', '#4', '#8', '#9']
+Evil probabilities: #1=50%, #2=50%, #5=50%, #6=50%
+  Generated 504 candidate scenarios
+  16 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 7, 10]
+
+#### [15:32:33] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:35:36] Ability used at #1
+
+### [15:35:36] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [15:36:37] Executed #1 -> Lilis (EVIL)
+
+#### [15:36:43] Solver Output
+Scenarios: 4/56
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 6, 7, 10]
+
+#### [15:36:43] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#2', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:37:27] Ability used at #5
+
+### [15:37:27] Revealed #5 Fortune Teller
+Info: {'targets': [2, 3], 'has_evil': False}
+
+### [15:38:33] Executed #6 -> Twin Minion (EVIL)
+
+## [15:38:33] GAME OVER — WIN
+Final HP: 6
+Notes: Clean solver win. Druid lie caught Lilis, FT confirmed #6 evil. No wrong execs.
+

@@ -153,6 +153,13 @@
       "name": "Lilis",
       "notes": "Night kill fix test. 50/50 on #8 vs #6, got lucky. Wrong exec on #9 due to Bard data entry error (0 vs -1).",
       "date": "2026-03-06 15:25"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "Lilis",
+      "notes": "Clean solver win. Druid lie caught Lilis, FT confirmed #6 evil. No wrong execs.",
+      "date": "2026-03-06 15:38"
     }
   ]
 }

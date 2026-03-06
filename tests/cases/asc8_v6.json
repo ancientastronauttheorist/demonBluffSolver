@@ -1,26 +1,6 @@
 {
   "n_cards": 10,
   "n_evil": 3,
-  "villagers": [
-    "Druid",
-    "Lover",
-    "Oracle",
-    "Empress",
-    "Knight",
-    "Bishop",
-    "Judge",
-    "Fortune Teller"
-  ],
-  "outcasts": [
-    "Bombardier"
-  ],
-  "minions": [
-    "Witch",
-    "Twin Minion"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -127,5 +107,34 @@
   ],
   "night_kill_evil_count": 1,
   "hp": 6,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "Lilis",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "6": "Twin Minion",
+    "7": "Witch"
+  },
+  "notes": "Clean solver win. Druid lie caught Lilis, FT confirmed #6 evil. No wrong execs.",
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Lover",
+      "Oracle",
+      "Empress",
+      "Knight",
+      "Bishop",
+      "Judge",
+      "Fortune Teller"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Witch",
+      "Twin Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
 }
