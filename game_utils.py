@@ -85,6 +85,48 @@ def focus_game(title_substring: str = "Demon Bluff") -> bool:
 
 
 # ============================================================
+# Card Position Formula
+# ============================================================
+
+def card_position(pos: int, n_cards: int,
+                  center: tuple[int, int] = (1280, 690),
+                  radius: int = 494) -> tuple[int, int]:
+    """Compute the pixel coordinates of card `pos` in an N-card circle.
+
+    Cards are arranged clockwise starting from top-center (12 o'clock).
+    pos is 1-indexed (1 = top card, then clockwise).
+
+    Verified to sub-pixel accuracy against template-matched facedown cards
+    on a 2560x1440 screen with 9 cards.
+    """
+    import math
+    angle = -math.pi / 2 + (pos - 1) * 2 * math.pi / n_cards
+    x = round(center[0] + radius * math.cos(angle))
+    y = round(center[1] + radius * math.sin(angle))
+    return (x, y)
+
+
+def all_card_positions(n_cards: int, **kwargs) -> list[tuple[int, int]]:
+    """Return list of (x, y) for all card positions 1..n_cards."""
+    return [card_position(p, n_cards, **kwargs) for p in range(1, n_cards + 1)]
+
+
+def game_card_coords(card_num: int, n_cards: int, **kwargs) -> tuple[int, int]:
+    """Get pixel coords for a game card number (as labeled in-game).
+
+    The game labels card N at top (12 o'clock), then #1 clockwise from there.
+    So game card c maps to circle position (c % N) + 1.
+    """
+    formula_pos = (card_num % n_cards) + 1
+    return card_position(formula_pos, n_cards, **kwargs)
+
+
+def all_game_card_coords(n_cards: int, **kwargs) -> dict[int, tuple[int, int]]:
+    """Return dict mapping game card number -> (x, y) for all cards."""
+    return {c: game_card_coords(c, n_cards, **kwargs) for c in range(1, n_cards + 1)}
+
+
+# ============================================================
 # Card Position Detection
 # ============================================================
 
