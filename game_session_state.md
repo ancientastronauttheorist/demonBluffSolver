@@ -1968,3 +1968,266 @@ Reason: No surviving scenarios -- check input data
 Final HP: 8
 Notes: Confessor cant lie + Knitter/Wretch adjacency deduction. Fixed solver: Confessor truthful for Judge.
 
+
+---
+
+# New Game — 2026-03-05 19:12:39
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Dreamer, Poet, Judge, Empress, Bishop
+- Outcasts: Wretch, Bombardier
+- Minions: Poisoner, Shaman
+- Demons: Lilis
+
+### [19:13:56] Revealed #1 Poet
+Info: {}
+
+### [19:16:03] Revealed #2 Empress
+Info: {'targets': [1]}
+
+### [19:16:17] Revealed #2 Empress
+Info: {'targets': [1, 4, 7]}
+
+### [19:18:20] Revealed #3 Bishop
+Info: {'targets': [1, 4]}
+
+### [19:19:21] Revealed #4 Dreamer
+Info: {}
+
+#### [19:19:21] Night 1
+Lilis killed #7. HP 10->8. Card #7 is dead (unrevealed good). Dreamer #4 just revealed - need to use active ability.
+
+### [19:20:26] Revealed #4 Dreamer
+Info: {'target': 9, 'evil_role': 'Lilis'}
+
+### [19:20:26] Ability used at #4
+
+### [19:20:58] Revealed #5 Wretch
+Info: {}
+
+### [19:21:36] Revealed #6 Judge
+Info: {}
+
+### [19:22:41] Revealed #6 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [19:22:41] Ability used at #6
+
+### [19:23:09] Revealed #8 Bombardier
+Info: {}
+
+### [19:24:41] Revealed #9 Poet
+Info: {}
+
+#### [19:24:41] Night 2
+HP 8->6. All cards now revealed except dead #7. Lilis had no unrevealed targets so only dealt damage.
+
+#### [19:25:21] Solver Output
+Scenarios: 68/624
+Evil probabilities: #1=82%, #6=34%, #4=32%, #3=31%, #5=26%, #7=26%, #2=24%, #9=24%, #8=21%
+  Generated 624 candidate scenarios
+  68 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [19:25:21] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 26% evil, entropy 0.834
+
+#### [19:25:29] Solver Output
+Scenarios: 50/416
+Definite good: ['#7']
+Evil probabilities: #1=78%, #6=46%, #4=40%, #3=32%, #5=32%, #9=28%, #8=24%, #2=20%
+  Generated 416 candidate scenarios
+  50 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [19:25:29] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 0% evil, entropy 0.000
+
+#### [19:27:23] Dreamer2
+Second Dreamer use: #1 could be Poisoner. First was #9 could be Lilis. Both are Bayesian - 100% accurate if target is evil, 1/3 random if good.
+
+#### [19:29:01] Judge2
+Second Judge use: #3 (Bishop) is Lying. First was #2 (Empress) is Lying. Both info-givers caught lying. Either both are evil/corrupted, or Judge is evil (inverting results). Poisoner can only corrupt 1 adjacent villager, so if Judge is truthful, at least one of #2/#3 must be Evil (not just corrupted).
+
+### [19:29:06] Revealed #6 Judge
+Info: {'target': 3, 'is_lying': True}
+
+#### [19:29:06] Solver Output
+Scenarios: 56/416
+Definite good: ['#7']
+Evil probabilities: #1=73%, #3=46%, #5=38%, #4=34%, #6=32%, #9=32%, #8=30%, #2=14%
+  Generated 416 candidate scenarios
+  56 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [19:29:06] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 0% evil, entropy 0.000
+
+### [19:31:08] Executed #1 -> Poisoner (EVIL)
+
+#### [19:31:08] Exec1
+Executed #1 = Poisoner (correct). Dreamer confirmed. HP still 6. Now: Poisoner at #1 was adjacent to #2 and #9. If Poisoner corrupted #2, that explains why Empress was lying. Need Shaman + Lilis locations.
+
+#### [19:31:38] Solver Output
+Scenarios: 12/62
+Definite evil: ['#1']
+Definite good: ['#2', '#7', '#9']
+Evil probabilities: #3=50%, #6=50%, #4=33%, #5=33%, #8=33%
+  Generated 62 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 8]
+
+#### [19:31:38] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 0% evil, entropy 0.000
+
+#### [19:33:27] Deduction
+Dreamer #4 said '#1 could be Poisoner' and #1 WAS Poisoner. A lying Dreamer targeting evil must show WRONG role. Since result was correct, Dreamer #4 is PROVEN Good.
+
+#### [19:35:03] Deduction2
+#### [19:35:11] Deduction2
+Bishop #3 told truth (Minion+Villager matches #1=Poisoner, #4=Dreamer). Judge #6 lied about #3. #6 not adjacent to Poisoner so cant be corrupted. #6 is EVIL.
+
+### [19:36:49] Executed #6 -> Lilis (EVIL)
+
+#### [19:36:49] Exec2
+#6 was Lilis (demon). 1 evil left: Shaman among #5 or #8. #8=Bombardier (instant loss if real). Safer to try #5 first.
+
+### [19:38:34] Executed #8 -> Shaman (EVIL)
+
+## [19:39:10] GAME OVER — WIN
+Final HP: 1
+Notes: Lilis game. Dreamer+Judge abilities confirmed #1=Poisoner, deduced #6=Evil Judge=Lilis via Bishop truth check. 50-50 on #5/#8 outcasts, picked wrong first but survived at 1HP.
+
+
+---
+
+# New Game — 2026-03-05 19:40:33
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Knight, Oracle, Baker, Lover
+- Outcasts: Bombardier, PlaugeDoctor
+- Minions: Minion
+- Demons: Baa
+
+## Deck
+- Villagers: Witness, Knight, Oracle, Baker, Lover
+- Outcasts: Bombardier, Plague Doctor
+- Minions: Minion
+- Demons: Baa
+
+### [19:43:47] Revealed #1 Witness
+Info: {'affected_position': 4}
+
+### [19:44:47] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [19:45:33] Revealed #3 Plague Doctor
+Info: {}
+
+### [19:46:43] Revealed #3 Pd
+Info: {}
+
+### [19:46:43] Ability used at #3
+
+#### [19:46:44] PD result
+PD #3 says #4 Not Corrupted. PD corrupts adjacent villager (#2 or #4). So PD corrupted #2 (Lover). Lover info is LIE (corrupted). Also: Witness #1 said #4 affected by Evil but PD says #4 not corrupted. Interesting - what evil ability affected #4?
+
+### [19:47:33] Revealed #3 Plague Doctor
+Info: {}
+
+### [19:48:04] Revealed #4 Knight
+Info: {}
+
+### [19:48:54] Revealed #5 Baker
+Info: {}
+
+### [19:49:46] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [19:57:54] Revealed #7 Oracle
+Info: {'targets': [2], 'minion_role': '3'}
+
+#### [19:58:20] Claude Reasoning
+Key deduction: Minion+Baa have NO character-affecting abilities. Witness #1 claims #4 was affected by Evil - this is impossible if Witness is truthful. PD corruption target=#2 (not #1), no Pooka/Poisoner in deck, so #1 CANNOT be corrupted. Therefore #1 is EVIL (lying Witness). If #1=Baa: Oracle #7 says #2 or #3 is Minion. If #3=Minion (disguised as PD), no real PD, #2 not corrupted, #2 Lover truthful -> #1 not Evil, contradiction. So #2=Minion. Check: #6 Lover adjacent to #5,#7 - neither Evil, truthful. #2 Lover corrupted by real PD#3, lies about no Evils adjacent - truth: #1(Baa) IS adjacent. All consistent. If #1=Minion: Oracle lie -> #7=Baa, but #6 Lover adjacent to #7(Evil) would lie with no corruption explanation -> contradiction. CONCLUSION: #1=Baa, #2=Minion.
+
+#### [19:58:23] Solver Output
+Scenarios: 1/42
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+  Generated 42 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [19:58:23] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [20:01:04] Executed #1 -> GOOD (WRONG!)
+
+#### [20:01:12] WRONG EXEC
+Executed #1 Witness as Baa but #1 was GOOD. HP 10->5. Fatal flaw in reasoning: assumed Minion+Baa have no character-affecting abilities. But Witness said #4 was affected by Evil and the info was TRUE. Need to check: what Evil ability affects characters? Is the deck correct? Maybe Minion has an ability I dont know about, or maybe I entered the deck wrong.
+
+#### [20:18:20] Solver Output
+Scenarios: 4/30
+Definite good: ['#1', '#4', '#5']
+Evil probabilities: #2=50%, #3=50%, #6=50%, #7=50%
+  Generated 30 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [2, 3, 6, 7]
+
+#### [20:18:20] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 50% likely evil but HP too low to risk (HP=5, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident
+WARNING: CRITICAL: HP=5, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+#### [20:18:47] Solver Output
+Scenarios: 2/20
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+  Generated 20 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+
+#### [20:18:47] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa', 'Minion'})
+
+#### [20:18:56] Claude Reasoning
+CORRECTED: PD corrupts ANY Good Villager (not just adjacent). In-game screenshot shows #1 Witness has <Corrupted> tag. This proves: (1) PD#3 is real/Good (only real PD creates corruption), (2) Witness#1 is corrupted and LIES, (3) '#4 affected by Evil' is a LIE (truth: no one affected, correct for Minion+Baa). With PD#3 confirmed Good, #2 Lover truthful (no Evil adj to #1,#3), #6 Lover must be Evil (only way to place 2 evils). #6+#7 = definite evil.
+
+### [20:23:14] Executed #6 -> Minion (EVIL)
+
+### [20:24:08] Executed #7 -> Baa (EVIL)
+
+## [20:24:16] GAME OVER — WIN
+Final HP: 5
+Notes: PD corrupts ANY Good Villager not just adjacent. Witness#1 was corrupted by PD, showed <Corrupted> tag. Wrong exec on #1 Witness cost 5HP. Key learnings: PD range is global, corrupted cards show tag in-game, card position detection must be programmatic.
+

@@ -1,0 +1,108 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 4
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "minion_role": "Minion"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [
+    1,
+    3
+  ],
+  "pd_corruption_target": 1,
+  "used_abilities": [
+    3
+  ],
+  "executed_evil_roles": {
+    "6": "Minion",
+    "7": "Baa"
+  },
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "name": "asc6_v10_baa",
+  "true_evil_positions": {
+    "6": "Minion",
+    "7": "Baa"
+  },
+  "notes": "PD corrupts ANY Good Villager not just adjacent. Witness#1 was corrupted by PD, showed <Corrupted> tag. Wrong exec on #1 Witness cost 5HP. Key learnings: PD range is global, corrupted cards show tag in-game, card position detection must be programmatic.",
+  "deck": {
+    "villagers": [
+      "Witness",
+      "Knight",
+      "Oracle",
+      "Baker",
+      "Lover"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  }
+}
