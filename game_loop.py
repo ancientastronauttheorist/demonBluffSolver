@@ -719,6 +719,10 @@ def main():
         DecisionLog.log_game_over(result, session.hp, notes)
         print(f"[game_over] Logged: {result.upper()}, HP={session.hp}")
 
+        # Record to scorecard
+        from scorecard import record as scorecard_record
+        scorecard_record(result, session.hp, test_name or "", notes)
+
         # Auto-save regression test if true evils provided
         if test_name and true_evils_str:
             true_evils = {}

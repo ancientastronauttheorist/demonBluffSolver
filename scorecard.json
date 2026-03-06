@@ -1,0 +1,74 @@
+{
+  "games": [
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc6_v1_win",
+      "notes": "Hunter #2 info correctly pointed to #1 as Witch",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc6_v2_win",
+      "notes": "Confessor cant lie + Knitter/Wretch adjacency deduction",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc6_v3_lilis",
+      "notes": "Lilis game, 50-50 on outcasts, picked wrong first but survived",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc6_v5",
+      "notes": "Wrong exec on #1 Medium cost 5HP",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc6_v6_pooka",
+      "notes": "Trusted corrupted Slayer result",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc6_v7_lilis",
+      "notes": "Clean win despite 2 Lilis nights",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc6_v8_final",
+      "notes": "Perfect game, no wrong execs",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc6_v9",
+      "notes": "Chancellor disguised as Knight blocked execution",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc6_v10_baa",
+      "notes": "PD corrupts ANY Good Villager",
+      "date": "2026-03-06 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc7_v1",
+      "notes": "Knight block does NOT apply to evil disguised as Knight",
+      "date": "2026-03-06 01:26"
+    }
+  ]
+}
