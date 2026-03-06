@@ -45,13 +45,13 @@ class TestSyntheticSimple(unittest.TestCase):
         # #2 Lover: adj = #1(Good), #3(Good). 0 evil adj. Truthful → claims 0.
         # #3 Knitter: evil pairs adj? Evil = {#5}. Only 1 evil, can't have pair. 0 pairs.
         #   Truthful → claims 0.
-        # #4 Confessor: not evil, not corrupted → dirty=False. Can't lie → claims False.
+        # #4 Confessor: not evil, not corrupted → dizzy=False. Can't lie → claims False.
         # #5 Minion (disguised as Slayer): no info to validate.
         cards = [
             CardInfo(1, "Enlightened", info_parsed={"direction": "CCW"}),
             CardInfo(2, "Lover", info_parsed={"evil_adjacent": 0}),
             CardInfo(3, "Knitter", info_parsed={"evil_pairs": 0}),
-            CardInfo(4, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(4, "Confessor", info_parsed={"dizzy": False}),
             CardInfo(5, "Slayer"),
         ]
         return GameState(n_cards=5, deck=deck, cards=cards, n_evil=1)
@@ -149,7 +149,7 @@ class TestSession11(unittest.TestCase):
         # Pooka at #5 corrupts adj villagers: #4 is Puppet(evil)→skip, #6 Slayer→corrupted
         # Corrupted = {#6}
         #
-        # #1 Confessor (truthful, can't lie): not evil, not corrupted → dirty=False
+        # #1 Confessor (truthful, can't lie): not evil, not corrupted → dizzy=False
         # #2 Knitter (truthful): evil pairs adj.
         #   Evil effective: {#3,#4,#5}. Pairs: (#3,#4) ✓, (#4,#5) ✓. 2 pairs. Claims 2.
         # #3 Enlightened (Puppeteer, evil→lying): nearest evil from #3.
@@ -166,7 +166,7 @@ class TestSession11(unittest.TestCase):
         #   #1=Good, #3=Evil, #5=Evil. Count=2. Claims 2 ✓
         # #8 Plague Doctor: no standard info to validate
         cards = [
-            CardInfo(1, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(1, "Confessor", info_parsed={"dizzy": False}),
             CardInfo(2, "Knitter", info_parsed={"evil_pairs": 2}),
             CardInfo(3, "Enlightened", info_parsed={"direction": "CCW"}),
             CardInfo(4, "Enlightened", info_parsed={"direction": "Equidistant"}),
@@ -208,12 +208,12 @@ class TestExecutedEvil(unittest.TestCase):
         )
         # 5 cards, 2 evils. Minion at #3 already executed.
         # Remaining: Baa at #5 (disguised as Enlightened, lying)
-        # Confessors at #1, #2, #4 all say dirty=False → can't be evil
+        # Confessors at #1, #2, #4 all say dizzy=False → can't be evil
         # Only #5 can be Baa
         cards = [
-            CardInfo(1, "Confessor", info_parsed={"dirty": False}),
-            CardInfo(2, "Confessor", info_parsed={"dirty": False}),
-            CardInfo(4, "Confessor", info_parsed={"dirty": False}),
+            CardInfo(1, "Confessor", info_parsed={"dizzy": False}),
+            CardInfo(2, "Confessor", info_parsed={"dizzy": False}),
+            CardInfo(4, "Confessor", info_parsed={"dizzy": False}),
             CardInfo(5, "Enlightened"),
         ]
         state = GameState(

@@ -26,8 +26,8 @@ def card_enlightened(pos: int, direction: str) -> CardInfo:
 def card_knitter(pos: int, evil_pairs: int) -> CardInfo:
     return CardInfo(pos, "Knitter", info_parsed={"evil_pairs": evil_pairs})
 
-def card_confessor(pos: int, dirty: bool) -> CardInfo:
-    return CardInfo(pos, "Confessor", info_parsed={"dirty": dirty})
+def card_confessor(pos: int, dizzy: bool) -> CardInfo:
+    return CardInfo(pos, "Confessor", info_parsed={"dizzy": dizzy})
 
 def card_gemcrafter(pos: int, good_position: int) -> CardInfo:
     return CardInfo(pos, "Gemcrafter", info_parsed={"good_position": good_position})
@@ -487,8 +487,8 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
     elif role == "knitter":
         return card_knitter(pos, int(args[2]))
     elif role == "confessor":
-        dirty = args[2].lower() in ("dirty", "true", "1", "yes")
-        return card_confessor(pos, dirty)
+        dizzy = args[2].lower() in ("dizzy", "dirty", "true", "1", "yes")
+        return card_confessor(pos, dizzy)
     elif role == "gemcrafter":
         return card_gemcrafter(pos, int(args[2]))
     elif role == "lover":

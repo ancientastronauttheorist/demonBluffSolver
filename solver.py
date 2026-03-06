@@ -596,20 +596,24 @@ def _validate_knitter(card: CardInfo, scenario: Scenario,
 
 def _validate_confessor(card: CardInfo, scenario: Scenario,
                         state: GameState) -> bool:
-    """Confessor: 'I am dirty' if Evil or Corrupted. Can't lie."""
+    """Confessor: 'I am dizzy' if Evil or Corrupted. Can't lie."""
     info = card.info_parsed
-    if "dirty" not in info:
+    # Support both old "dirty" key and new "dizzy" key
+    if "dizzy" in info:
+        claimed_dizzy = info["dizzy"]
+    elif "dirty" in info:
+        claimed_dizzy = info["dirty"]
+    else:
         return True
 
-    claimed_dirty = info["dirty"]  # True = "I am dirty", False = "I am clean"
     pos = card.position
 
     # Confessor CAN'T LIE — always tells truth regardless of corruption/evil
     is_evil = _is_evil_in_scenario(pos, scenario)
     is_corrupted = pos in scenario.corrupted
-    actually_dirty = is_evil or is_corrupted
+    actually_dizzy = is_evil or is_corrupted
 
-    return claimed_dirty == actually_dirty
+    return claimed_dizzy == actually_dizzy
 
 
 def _validate_gemcrafter(card: CardInfo, scenario: Scenario,
