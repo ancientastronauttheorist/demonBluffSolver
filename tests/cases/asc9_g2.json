@@ -1,27 +1,6 @@
 {
   "n_cards": 9,
   "n_evil": 4,
-  "villagers": [
-    "Oracle",
-    "Medium",
-    "Baker",
-    "Empress",
-    "Slayer",
-    "Judge",
-    "Bishop"
-  ],
-  "outcasts": [
-    "Wretch",
-    "Doppelganger",
-    "Plague_Doctor"
-  ],
-  "minions": [
-    "Chancellor",
-    "Puppeteer"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -146,5 +125,36 @@
   ],
   "night_kill_evil_count": 0,
   "hp": 6,
-  "wrong_exec_cost": 2
+  "wrong_exec_cost": 2,
+  "name": "asc9_g2",
+  "true_evil_positions": {
+    "1": "Chancellor",
+    "3": "Puppeteer",
+    "4": "Puppet",
+    "5": "Lilis"
+  },
+  "notes": "Perfect deduction. PD found corruption+evil, Judge confirmed Medium truthful, Slayer fail revealed Lilis. Puppet was 4th evil.",
+  "deck": {
+    "villagers": [
+      "Oracle",
+      "Medium",
+      "Baker",
+      "Empress",
+      "Slayer",
+      "Judge",
+      "Bishop"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Chancellor",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
 }

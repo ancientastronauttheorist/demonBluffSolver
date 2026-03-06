@@ -13,6 +13,13 @@
       "name": "asc9_g1",
       "notes": "Witch blocked #9 reveal. PD confirmed #8 corrupted, revealed #3 evil. Wrong exec on #7 (corrupted Bishop) narrowed to 2 scenarios, then solver found #6 and #1.",
       "date": "2026-03-06 17:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc9_g2",
+      "notes": "Perfect deduction. PD found corruption+evil, Judge confirmed Medium truthful, Slayer fail revealed Lilis. Puppet was 4th evil.",
+      "date": "2026-03-06 17:57"
     }
   ]
 }

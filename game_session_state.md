@@ -367,3 +367,212 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: Witch blocked #9 reveal. PD confirmed #8 corrupted, revealed #3 evil. Wrong exec on #7 (corrupted Bishop) narrowed to 2 scenarios, then solver found #6 and #1.
 
+
+---
+
+# New Game — 2026-03-06 17:38:54
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: 
+- Outcasts: 
+- Minions: 
+- Demons: 
+
+## Deck
+- Villagers: 
+- Outcasts: 
+- Minions: 
+- Demons: 
+
+## Deck
+- Villagers: Oracle, Medium, Baker, Empress, Slayer, Judge, Bishop
+- Outcasts: Wretch, Doppelganger
+- Minions: Plague_Doctor, Chancellor, Puppeteer
+- Demons: Lilis
+
+## Deck
+- Villagers: Oracle, Medium, Baker, Empress, Slayer, Judge, Bishop
+- Outcasts: Wretch, Doppelganger, Plague_Doctor
+- Minions: Chancellor, Puppeteer
+- Demons: Lilis
+
+### [17:46:36] Revealed #1 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [17:46:37] Revealed #2 Medium
+Info: {'good_position': 9, 'good_role': 'Oracle'}
+
+### [17:46:37] Revealed #3 Plague Doctor
+Info: {}
+
+### [17:46:51] Revealed #4 Judge
+Info: {}
+
+### [17:46:51] Revealed #5 Slayer
+Info: {}
+
+### [17:46:51] Revealed #6 Baker
+Info: {}
+
+### [17:46:51] Revealed #7 Medium
+Info: {'good_position': 6, 'good_role': 'Baker'}
+
+### [17:46:51] Revealed #8 Wretch
+Info: {}
+
+### [17:46:52] Revealed #9 Oracle
+Info: {'targets': [3, 9], 'minion_role': 'Puppeteer'}
+
+#### [17:47:00] Solver Output
+Scenarios: 573/16842
+Definite good: ['#6']
+Evil probabilities: #9=61%, #2=57%, #8=49%, #4=48%, #5=44%, #1=41%, #3=23%, #7=17%
+  Generated 16842 candidate scenarios
+  573 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [17:47:00] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 2.009 (adjusted 2.009) | timing x1.00
+
+#### [17:52:20] Solver Output
+Scenarios: 86/16842
+Definite good: ['#6', '#9']
+Evil probabilities: #1=63%, #3=58%, #4=58%, #8=53%, #5=47%, #2=42%, #7=21%
+  Generated 16842 candidate scenarios
+  86 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [17:52:20] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#7']
+Reason: Entropy 0.990 (adjusted 0.990) | timing x1.00
+
+### [17:52:52] Revealed #4 Judge
+Info: {'target': 7, 'is_lying': False}
+
+#### [17:52:56] Solver Output
+Scenarios: 48/16842
+Definite good: ['#6', '#9']
+Evil probabilities: #1=79%, #3=71%, #8=62%, #5=50%, #4=42%, #2=29%, #7=12%
+  Generated 16842 candidate scenarios
+  48 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [17:52:56] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#5']
+Reason: Entropy 0.980 (adjusted 0.980) | timing x1.00
+
+### [17:53:27] Ability used at #4
+
+### [17:53:31] Ability used at #3
+
+#### [17:53:31] Solver Output
+Scenarios: 48/16842
+Definite good: ['#6', '#9']
+Evil probabilities: #1=79%, #3=71%, #8=62%, #5=50%, #4=42%, #2=29%, #7=12%
+  Generated 16842 candidate scenarios
+  48 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [17:53:31] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#1']
+Reason: Target #1 is 79% evil (adjusted 0.79)
+
+### [17:54:09] Ability used at #5
+
+#### [17:54:10] Solver Output
+Scenarios: 26/16842
+Definite good: ['#6', '#9']
+Evil probabilities: #5=92%, #1=62%, #3=62%, #2=38%, #4=38%, #8=38%, #7=8%
+  Generated 16842 candidate scenarios
+  26 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [17:54:10] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 92% likely evil (HP=6, can afford 3 wrong execs)
+WARNING: Probabilistic execution -- 92% confident
+
+### [17:54:43] Executed #5 -> Lilis (EVIL)
+
+#### [17:54:43] Solver Output
+Scenarios: 10/2480
+Definite evil: ['#5']
+Definite good: ['#6', '#7', '#9']
+Evil probabilities: #1=80%, #3=70%, #2=30%, #4=30%, #8=30%
+  Generated 2480 candidate scenarios
+  10 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 8]
+
+#### [17:54:43] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 80% likely evil (HP=6, can afford 3 wrong execs)
+WARNING: Probabilistic execution -- 80% confident
+
+### [17:55:16] Executed #1 -> Chancellor (EVIL)
+
+#### [17:55:16] Solver Output
+Scenarios: 8/378
+Definite evil: ['#1', '#5']
+Definite good: ['#6', '#7', '#8', '#9']
+Evil probabilities: #3=88%, #4=38%, #2=12%
+  Generated 378 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4]
+
+#### [17:55:16] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 88% likely evil (HP=6, can afford 3 wrong execs)
+WARNING: Probabilistic execution -- 88% confident
+
+### [17:56:01] Executed #3 -> Puppeteer (EVIL)
+
+#### [17:56:01] Solver Output
+Scenarios: 27/102
+Definite evil: ['#1', '#3', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9']
+Evil probabilities: #4=37%
+  Generated 102 candidate scenarios
+  27 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4]
+
+#### [17:56:01] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 37% likely evil (HP=6, can afford 3 wrong execs)
+WARNING: Probabilistic execution -- 37% confident
+WARNING: Low confidence (37%) -- consider gathering more info
+
+### [17:57:01] Executed #4 -> Puppet (EVIL)
+
+## [17:57:08] GAME OVER — WIN
+Final HP: 6
+Notes: Perfect deduction. PD found corruption+evil, Judge confirmed Medium truthful, Slayer fail revealed Lilis. Puppet was 4th evil.
+

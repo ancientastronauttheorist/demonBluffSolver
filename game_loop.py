@@ -285,6 +285,10 @@ class GameSession:
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
         self.cards.sort(key=lambda c: c.position)
+        # Auto-mark ability used for active abilities entered with results
+        # (Judge with target info; PD and Slayer have dedicated commands)
+        if card.apparent_role == "Judge" and card.info_parsed.get("target"):
+            self.mark_ability_used(card.position)
 
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
                       evil_role: Optional[str] = None):
