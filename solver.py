@@ -535,14 +535,16 @@ def _validate_enlightened(card: CardInfo, scenario: Scenario,
     if "direction" not in info:
         return True  # Can't validate without parsed info
 
-    claimed = info["direction"]  # "CW", "CCW", or "Equidistant"
+    raw = info["direction"].lower()
+    claimed = {"cw": "CW", "ccw": "CCW", "equidistant": "Equidistant", "equal": "Equidistant"}.get(raw, raw.capitalize())
     pos = card.position
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
     # Find closest evil(s) and their direction (exclude self)
+    # Wretch counts as Evil for Enlightened (wiki confirmed)
     evil_positions = [p for p in range(1, n + 1)
-                      if _is_evil_in_scenario(p, scenario) and p != pos]
+                      if _effective_alignment(p, scenario, state) == Alignment.EVIL and p != pos]
     if not evil_positions:
         return True
 
@@ -823,31 +825,39 @@ def _validate_hunter(card: CardInfo, scenario: Scenario,
 
 def _validate_architect(card: CardInfo, scenario: Scenario,
                         state: GameState) -> bool:
-    """Architect: 'Left'/'Right'/'Equal' — which side has more Evil."""
+    """Architect: 'Left'/'Right'/'Equal' — which side has more Evil.
+
+    The circle is split by a vertical line through the Architect's position.
+    Cards equidistant (directly opposite) count for BOTH sides.
+    Wretch counts as Evil (confirmed by wiki).
+    Direction mapping: CW = Left side, CCW = Right side on screen.
+    """
     info = card.info_parsed
     if "side" not in info:
         return True
 
-    claimed = info["side"].capitalize()  # Normalize: "right" -> "Right", etc.
+    raw_side = info["side"].lower()
+    claimed = {"left": "Left", "right": "Right", "equal": "Equal",
+               "equidistant": "Equal", "both": "Equal"}.get(raw_side, raw_side.capitalize())
     pos = card.position
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
-    # CW = right side, CCW = left side
     left_count = 0
     right_count = 0
     for p in range(1, n + 1):
         if p == pos:
             continue
-        if _is_evil_in_scenario(p, scenario):
+        # Wretch counts as Evil for Architect (wiki confirmed)
+        if _effective_alignment(p, scenario, state) == Alignment.EVIL:
             d = circle_direction(pos, p, n)
             if d == "CW":
-                right_count += 1
-            elif d == "CCW":
                 left_count += 1
-            else:  # Equidistant — count for both? Skip?
-                left_count += 0.5
-                right_count += 0.5
+            elif d == "CCW":
+                right_count += 1
+            else:  # Equidistant (opposite) — count for BOTH sides
+                left_count += 1
+                right_count += 1
 
     if left_count > right_count:
         actual = "Left"
@@ -1335,7 +1345,15 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         if count > deck_count:
             total_excess += count - deck_count
 
-    if total_excess > n_disguisers:
+    # Shaman creates "2 same Villager roles" — allows 1 extra copy of a Villager
+    shaman_allowance = 0
+    if "Shaman" in state.deck.minions:
+        for role in scenario.evil_positions.values():
+            if role == "Shaman":
+                shaman_allowance = 1
+                break
+
+    if total_excess > n_disguisers + shaman_allowance:
         return False
 
     # Check Outcast roles: no disguiser can fake an Outcast appearance,
@@ -1355,10 +1373,15 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
         return False
 
     for card in state.cards:
-        # Skip executed cards UNLESS they are corrupted in this scenario —
-        # corrupted cards' info must still be validated (lies constrain scenarios)
-        if card.position in state.executed and card.position not in scenario.corrupted:
-            continue
+        # Skip executed EVIL cards (their disguise info is already handled by
+        # executed_evil_roles). But keep executed GOOD cards — their info was
+        # truthful and still constrains scenarios.
+        if card.position in state.executed:
+            if card.position in state.executed_evil_roles:
+                continue  # Evil card already accounted for
+            if card.position in scenario.evil_positions:
+                continue  # Evil in this scenario but not yet executed as evil
+            # Good executed card — still validate its info
 
         if card.position in scenario.evil_positions:
             # Evil card — its apparent role is a disguise, skip role-based validation
