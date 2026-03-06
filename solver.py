@@ -106,6 +106,8 @@ class GameState:
     pd_corruption_target: Optional[int] = None  # If PD target is known
     executed_evil_roles: dict[int, str] = field(default_factory=dict)  # pos -> evil role name (e.g. {2: "Chancellor"})
     slayer_results: list[dict] = field(default_factory=list)  # [{slayer_pos, target_pos, killed}]
+    night_kills: list[int] = field(default_factory=list)  # Positions killed by Lilis night (unrevealed)
+    night_kill_evil_count: int = 0  # How many of the night kills were evil
     hp: int = 10                    # Current health points
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
 
@@ -165,7 +167,9 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     evil_roles = remaining_evil_roles
 
     # Remove already-executed positions from candidates
-    available = [p for p in all_positions if p not in state.executed]
+    # Night-killed positions stay eligible (evil could have been among them)
+    player_executed = [p for p in state.executed if p not in state.night_kills]
+    available = [p for p in all_positions if p not in player_executed]
 
     # Positions confirmed good can't be evil
     available = [p for p in available if p not in state.confirmed_good]
@@ -1502,6 +1506,13 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     # Validate Slayer ability results
     if state.slayer_results:
         if not _validate_slayer_results(scenario, state):
+            return False
+
+    # Validate Lilis night kill constraint: exactly N evils among night-killed positions
+    if state.night_kills:
+        evil_in_night_kills = sum(1 for p in state.night_kills
+                                  if p in scenario.evil_positions)
+        if evil_in_night_kills != state.night_kill_evil_count:
             return False
 
     return True

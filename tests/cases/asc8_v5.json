@@ -1,25 +1,6 @@
 {
   "n_cards": 10,
   "n_evil": 3,
-  "villagers": [
-    "Poet",
-    "Empress",
-    "Lover",
-    "Medium",
-    "Dreamer",
-    "Knight",
-    "Bard"
-  ],
-  "outcasts": [
-    "Bombardier"
-  ],
-  "minions": [
-    "Minion",
-    "Shaman"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -88,10 +69,12 @@
     5,
     10,
     9,
-    7
+    7,
+    8
   ],
   "confirmed_evil": [
-    7
+    7,
+    8
   ],
   "confirmed_good": [
     1,
@@ -103,7 +86,8 @@
     8
   ],
   "executed_evil_roles": {
-    "7": "Shaman"
+    "7": "Shaman",
+    "8": "Lilis"
   },
   "slayer_results": [],
   "night_kills": [
@@ -112,5 +96,38 @@
   ],
   "night_kill_evil_count": 1,
   "hp": 1,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "Lilis",
+  "true_evil_positions": {
+    "7": "Shaman",
+    "8": "Lilis",
+    "10": "Minion"
+  },
+  "notes": "Night kill fix test. 50/50 on #8 vs #6, got lucky. Wrong exec on #9 due to Bard data entry error (0 vs -1).",
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Empress",
+      "Lover",
+      "Medium",
+      "Dreamer",
+      "Knight",
+      "Bard"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion",
+      "Shaman"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "true_evils": {
+    "7": "Shaman",
+    "8": "Lilis",
+    "10": "Minion"
+  }
 }

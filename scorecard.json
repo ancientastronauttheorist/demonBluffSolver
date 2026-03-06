@@ -146,6 +146,13 @@
       "name": "asc8_v4",
       "notes": "Perfect game 10HP. Slayer validator identified all 3 evils. Both Slayers were evil (couldn't kill). #1=Doppelganger, #2=Oracle(corrupted).",
       "date": "2026-03-06 14:34"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "Lilis",
+      "notes": "Night kill fix test. 50/50 on #8 vs #6, got lucky. Wrong exec on #9 due to Bard data entry error (0 vs -1).",
+      "date": "2026-03-06 15:25"
     }
   ]
 }

@@ -57,6 +57,9 @@ def build_game_state(case: dict) -> GameState:
         confirmed_good=case.get("confirmed_good", []),
         pd_corruption_target=case.get("pd_corruption_target"),
         executed_evil_roles=eer,
+        slayer_results=case.get("slayer_results", []),
+        night_kills=case.get("night_kills", []),
+        night_kill_evil_count=case.get("night_kill_evil_count", 0),
         hp=case.get("hp", 10),
         wrong_exec_cost=case.get("wrong_exec_cost", 2),
     )

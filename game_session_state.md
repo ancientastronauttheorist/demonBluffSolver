@@ -4459,3 +4459,124 @@ WARNING: Probabilistic execution -- 82% confident
 Final HP: 10
 Notes: Perfect game 10HP. Slayer validator identified all 3 evils. Both Slayers were evil (couldn't kill). #1=Doppelganger, #2=Oracle(corrupted).
 
+
+---
+
+# New Game — 2026-03-06 14:37:39
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Empress, Lover, Medium, Dreamer, Knight, Bard
+- Outcasts: Bombardier
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [14:40:21] Revealed #1 Bombardier
+Info: {}
+
+### [14:40:21] Revealed #2 Medium
+Info: {'good_position': 1, 'good_role': 'Bombardier'}
+
+### [14:40:21] Revealed #3 Knight
+Info: {}
+
+### [14:40:21] Revealed #4 Knight
+Info: {}
+
+### [14:40:21] Revealed #6 Empress
+Info: {'targets': [1, 3, 10]}
+
+### [14:40:21] Revealed #7 Knight
+Info: {}
+
+### [14:40:21] Revealed #8 Dreamer
+Info: {}
+
+### [14:40:21] Revealed #9 Bard
+Info: {'corruption_distance': 0}
+
+### [14:40:28] Executed #5
+
+### [14:40:28] Executed #10
+
+#### [14:40:39] Solver Output
+Scenarios: 30/210
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#10']
+Evil probabilities: #3=60%, #4=40%, #6=40%, #7=40%, #8=20%
+  Generated 210 candidate scenarios
+  30 scenarios survived validation
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis', 'Shaman'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7, 8]
+
+#### [14:40:39] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 30 scenarios (roles: {'Minion', 'Lilis', 'Shaman'})
+
+### [14:42:39] Executed #9 -> GOOD (WRONG!)
+
+
+---
+
+# New Game — 2026-03-06 14:45:29
+Cards: 10, Evil: 3, HP: 6, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Empress, Lover, Medium, Dreamer, Knight, Bard
+- Outcasts: Bombardier
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [14:45:30] Revealed #1 Bombardier
+Info: {}
+
+### [14:45:30] Revealed #2 Medium
+Info: {'good_position': 1, 'good_role': 'Bombardier'}
+
+### [14:45:30] Revealed #3 Knight
+Info: {}
+
+### [14:45:30] Revealed #4 Knight
+Info: {}
+
+### [14:45:30] Revealed #6 Empress
+Info: {'targets': [1, 3, 10]}
+
+### [14:45:30] Revealed #7 Knight
+Info: {}
+
+### [14:45:30] Revealed #8 Dreamer
+Info: {}
+
+### [14:45:31] Revealed #9 Bard
+Info: {'corruption_distance': 0}
+
+### [14:55:11] Executed #9
+
+#### [14:55:21] Solver Output
+Scenarios: 54/336
+Definite good: ['#1', '#2', '#9']
+Evil probabilities: #3=44%, #4=44%, #7=44%, #6=33%, #8=33%
+  Generated 336 candidate scenarios
+  54 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 7, 8, 10]
+
+#### [14:55:21] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.595 (adjusted 2.595) | timing x1.00
+
+### [14:56:43] Ability used at #8
+
+### [15:21:45] Executed #7 -> Shaman (EVIL)
+
+## [15:25:10] GAME OVER — WIN
+Final HP: 1
+Notes: Night kill fix test. 50/50 on #8 vs #6, got lucky. Wrong exec on #9 due to Bard data entry error (0 vs -1).
+

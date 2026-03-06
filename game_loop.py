@@ -259,6 +259,8 @@ class GameSession:
         self.used_abilities: list[int] = []
         self.executed_evil_roles: dict[int, str] = {}  # pos -> evil role name
         self.slayer_results: list[dict] = []  # [{slayer_pos, target_pos, killed}]
+        self.night_kills: list[int] = []  # Positions killed by Lilis night
+        self.night_kill_evil_count: int = 0  # How many night kills were evil
         self.hp: int = 10
         self.wrong_exec_cost: int = 2  # Ascension 4 default
 
@@ -325,6 +327,8 @@ class GameSession:
             pd_corruption_target=self.pd_corruption_target,
             executed_evil_roles=dict(self.executed_evil_roles),
             slayer_results=list(self.slayer_results),
+            night_kills=list(self.night_kills),
+            night_kill_evil_count=self.night_kill_evil_count,
             hp=self.hp,
             wrong_exec_cost=self.wrong_exec_cost,
         )
@@ -458,6 +462,8 @@ class GameSession:
             "used_abilities": self.used_abilities,
             "executed_evil_roles": self.executed_evil_roles,
             "slayer_results": self.slayer_results,
+            "night_kills": self.night_kills,
+            "night_kill_evil_count": self.night_kill_evil_count,
             "hp": self.hp,
             "wrong_exec_cost": self.wrong_exec_cost,
         }
@@ -484,6 +490,8 @@ class GameSession:
         session.pd_corruption_target = data.get("pd_corruption_target")
         session.used_abilities = data.get("used_abilities", [])
         session.slayer_results = data.get("slayer_results", [])
+        session.night_kills = data.get("night_kills", [])
+        session.night_kill_evil_count = data.get("night_kill_evil_count", 0)
         # Convert executed_evil_roles keys from str (JSON) back to int
         raw_eer = data.get("executed_evil_roles", {})
         session.executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
@@ -595,6 +603,7 @@ def main():
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
         print("  slayer_result <pos> <target> kill/fail Slayer ability result")
+        print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
         print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
@@ -748,6 +757,20 @@ def main():
         session.save()
         result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"
         print(f"Slayer #{slayer_pos} {result_str}")
+        return
+
+    if cmd == "night_kill":
+        session = GameSession.load()
+        positions = [int(x) for x in sys.argv[2].split(",")]
+        n_evil = int(sys.argv[3])
+        session.night_kills = positions
+        session.night_kill_evil_count = n_evil
+        # Also mark as executed (dead)
+        for p in positions:
+            if p not in session.executed:
+                session.executed.append(p)
+        session.save()
+        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them")
         return
 
     if cmd == "log":
