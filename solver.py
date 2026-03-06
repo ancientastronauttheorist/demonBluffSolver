@@ -105,6 +105,7 @@ class GameState:
     confirmed_good: list[int] = field(default_factory=list)
     pd_corruption_target: Optional[int] = None  # If PD target is known
     executed_evil_roles: dict[int, str] = field(default_factory=dict)  # pos -> evil role name (e.g. {2: "Chancellor"})
+    slayer_results: list[dict] = field(default_factory=list)  # [{slayer_pos, target_pos, killed}]
     hp: int = 10                    # Current health points
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
 
@@ -1118,6 +1119,39 @@ def _validate_bishop(card: CardInfo, scenario: Scenario,
         return True  # Hard to validate lying Bishop
 
 
+def _validate_slayer_results(scenario: Scenario, state: GameState) -> bool:
+    """Validate Slayer ability results against a scenario.
+
+    Each result is {slayer_pos, target_pos, killed}.
+    - "killed": Slayer must be good+uncorrupted AND target must be evil.
+    - "couldn't kill": Inconsistent ONLY if Slayer is good+uncorrupted AND target is evil
+      (a working Slayer facing an evil target MUST kill).
+    """
+    for result in state.slayer_results:
+        slayer_pos = result["slayer_pos"]
+        target_pos = result["target_pos"]
+        killed = result["killed"]
+
+        slayer_is_evil = slayer_pos in scenario.evil_positions
+        slayer_is_corrupted = slayer_pos in scenario.corrupted
+        target_is_evil = _effective_alignment(target_pos, scenario, state) == Alignment.EVIL
+
+        if killed:
+            # Kill succeeded: Slayer must be real (good) + uncorrupted + target evil
+            if slayer_is_evil:
+                return False  # Evil can't really use Slayer ability
+            if slayer_is_corrupted:
+                return False  # Corrupted Slayer can't kill
+            if not target_is_evil:
+                return False  # Can't kill a good target
+        else:
+            # Couldn't kill: inconsistent if a working Slayer faces an evil target
+            if not slayer_is_evil and not slayer_is_corrupted and target_is_evil:
+                return False  # Good uncorrupted Slayer MUST kill evil target
+
+    return True
+
+
 def _validate_poet(card: CardInfo, scenario: Scenario,
                     state: GameState) -> bool:
     """Poet: copies a random Villager's ability.
@@ -1464,6 +1498,11 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
         if role in VALIDATORS:
             if not VALIDATORS[role](card, scenario, state):
                 return False
+
+    # Validate Slayer ability results
+    if state.slayer_results:
+        if not _validate_slayer_results(scenario, state):
+            return False
 
     return True
 

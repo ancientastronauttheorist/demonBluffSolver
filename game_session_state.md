@@ -4300,3 +4300,162 @@ Reason: #5 is evil in ALL 2 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: Knight free-test play found Shaman at #6. Solver 100% on #5=Pooka. 1 wrong exec (#1 Architect). PD corruption on #3,#4,#9.
 
+
+---
+
+# New Game — 2026-03-06 14:11:13
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Gemcrafter, Bishop, Architect, Knight, Enlightened, Lover, Baker
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [14:11:13] Revealed #1 Architect
+Info: {'side': 'left'}
+
+### [14:11:13] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [14:11:13] Revealed #3 Gemcrafter
+Info: {'good_position': 5}
+
+### [14:11:13] Revealed #4 Bishop
+Info: {'targets': [1, 3, 7]}
+
+### [14:11:13] Revealed #5 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+### [14:11:13] Revealed #6 Knight
+Info: {}
+
+### [14:11:14] Revealed #7 Gemcrafter
+Info: {'good_position': 8}
+
+### [14:11:14] Revealed #8 Plague_Doctor
+Info: {}
+
+### [14:11:14] Revealed #9 Lover
+Info: {'evil_adjacent': 2}
+
+
+---
+
+# New Game — 2026-03-06 14:13:54
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Enlightened, Witness, Oracle, Slayer, Gemcrafter
+- Outcasts: Doppelganger
+- Minions: Chancellor, Poisoner
+- Demons: Baa
+
+
+---
+
+# New Game — 2026-03-06 14:14:16
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Enlightened, Witness, Oracle, Slayer, Gemcrafter
+- Outcasts: Bombardier
+- Minions: Chancellor, Poisoner
+- Demons: Baa
+
+
+---
+
+# New Game — 2026-03-06 14:17:20
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Enlightened, Witness, Oracle, Slayer, Gemcrafter
+- Outcasts: Bombardier, Plague_Doctor, Doppelganger
+- Minions: Chancellor, Poisoner
+- Demons: Baa
+
+### [14:18:12] Revealed #1 Oracle
+Info: {'targets': [3, 4], 'minion_role': 'Poisoner'}
+
+### [14:18:12] Revealed #2 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Chancellor'}
+
+### [14:18:12] Revealed #3 Enlightened
+Info: {'direction': 'ccw'}
+
+### [14:18:12] Revealed #4 Enlightened
+Info: {'direction': 'ccw'}
+
+### [14:18:12] Revealed #5 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [14:18:12] Revealed #6 Slayer
+Info: {}
+
+### [14:18:13] Revealed #7 Gemcrafter
+Info: {'good_position': 4}
+
+### [14:18:13] Revealed #8 Slayer
+Info: {}
+
+### [14:18:13] Revealed #9 Bombardier
+Info: {}
+
+#### [14:18:18] Solver Output
+Scenarios: 28/4428
+Definite good: ['#4', '#7']
+Evil probabilities: #8=82%, #3=54%, #6=54%, #2=46%, #1=25%, #9=21%, #5=18%
+  Generated 4428 candidate scenarios
+  28 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 8, 9]
+
+#### [14:18:18] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#8']
+Reason: Target #8 is 82% evil (adjusted 0.82)
+
+### [14:20:50] Ability used at #6
+
+#### [14:20:50] Solver Output
+Scenarios: 28/4428
+Definite good: ['#4', '#7']
+Evil probabilities: #8=82%, #3=54%, #6=54%, #2=46%, #1=25%, #9=21%, #5=18%
+  Generated 4428 candidate scenarios
+  28 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 8, 9]
+
+#### [14:20:50] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#3']
+Reason: Target #3 is 54% evil (adjusted 0.54)
+
+### [14:22:04] Ability used at #8
+
+#### [14:22:12] Solver Output
+Scenarios: 28/4428
+Definite good: ['#4', '#7']
+Evil probabilities: #8=82%, #3=54%, #6=54%, #2=46%, #1=25%, #9=21%, #5=18%
+  Generated 4428 candidate scenarios
+  28 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 8, 9]
+
+#### [14:22:12] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 82% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 82% confident
+
+### [14:34:16] Executed #3 -> Poisoner (EVIL)
+
+### [14:34:17] Executed #6 -> Baa (EVIL)
+
+### [14:34:17] Executed #8 -> Chancellor (EVIL)
+
+## [14:34:17] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game 10HP. Slayer validator identified all 3 evils. Both Slayers were evil (couldn't kill). #1=Doppelganger, #2=Oracle(corrupted).
+

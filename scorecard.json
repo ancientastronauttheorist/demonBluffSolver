@@ -139,6 +139,13 @@
       "name": "asc8_v3",
       "notes": "Knight free-test play found Shaman at #6. Solver 100% on #5=Pooka. 1 wrong exec (#1 Architect). PD corruption on #3,#4,#9.",
       "date": "2026-03-06 14:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc8_v4",
+      "notes": "Perfect game 10HP. Slayer validator identified all 3 evils. Both Slayers were evil (couldn't kill). #1=Doppelganger, #2=Oracle(corrupted).",
+      "date": "2026-03-06 14:34"
     }
   ]
 }

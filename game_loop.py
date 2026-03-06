@@ -258,6 +258,7 @@ class GameSession:
         self.pd_corruption_target: Optional[int] = None
         self.used_abilities: list[int] = []
         self.executed_evil_roles: dict[int, str] = {}  # pos -> evil role name
+        self.slayer_results: list[dict] = []  # [{slayer_pos, target_pos, killed}]
         self.hp: int = 10
         self.wrong_exec_cost: int = 2  # Ascension 4 default
 
@@ -296,6 +297,14 @@ class GameSession:
         if pos not in self.used_abilities:
             self.used_abilities.append(pos)
 
+    def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool):
+        self.slayer_results.append({
+            "slayer_pos": slayer_pos,
+            "target_pos": target_pos,
+            "killed": killed,
+        })
+        self.mark_ability_used(slayer_pos)
+
     # -- Solver --
 
     def _build_game_state(self) -> GameState:
@@ -315,6 +324,7 @@ class GameSession:
             confirmed_good=list(self.confirmed_good),
             pd_corruption_target=self.pd_corruption_target,
             executed_evil_roles=dict(self.executed_evil_roles),
+            slayer_results=list(self.slayer_results),
             hp=self.hp,
             wrong_exec_cost=self.wrong_exec_cost,
         )
@@ -447,6 +457,7 @@ class GameSession:
             "pd_corruption_target": self.pd_corruption_target,
             "used_abilities": self.used_abilities,
             "executed_evil_roles": self.executed_evil_roles,
+            "slayer_results": self.slayer_results,
             "hp": self.hp,
             "wrong_exec_cost": self.wrong_exec_cost,
         }
@@ -472,6 +483,7 @@ class GameSession:
         session.confirmed_good = data.get("confirmed_good", [])
         session.pd_corruption_target = data.get("pd_corruption_target")
         session.used_abilities = data.get("used_abilities", [])
+        session.slayer_results = data.get("slayer_results", [])
         # Convert executed_evil_roles keys from str (JSON) back to int
         raw_eer = data.get("executed_evil_roles", {})
         session.executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
@@ -582,6 +594,7 @@ def main():
         print("  confirm_good <pos>                    Mark position as confirmed good")
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
+        print("  slayer_result <pos> <target> kill/fail Slayer ability result")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
         print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
@@ -724,6 +737,17 @@ def main():
         session.save()
         DecisionLog.log_ability_used(pos)
         print(f"Ability at #{pos} marked as used")
+        return
+
+    if cmd == "slayer_result":
+        session = GameSession.load()
+        slayer_pos = int(sys.argv[2])
+        target_pos = int(sys.argv[3])
+        killed = sys.argv[4].lower() in ("kill", "killed", "true", "1", "yes")
+        session.add_slayer_result(slayer_pos, target_pos, killed)
+        session.save()
+        result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"
+        print(f"Slayer #{slayer_pos} {result_str}")
         return
 
     if cmd == "log":
