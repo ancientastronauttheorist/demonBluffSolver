@@ -111,6 +111,7 @@ class GameState:
     hp: int = 10                    # Current health points
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
     pd_ability_results: list[dict] = field(default_factory=list)  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
+    blocked_positions: list[int] = field(default_factory=list)  # Positions blocked from reveal (Witch)
 
 
 @dataclass
@@ -500,6 +501,36 @@ def _is_villager_role(role_name: str, state: GameState) -> bool:
     if card_def:
         return card_def.role == Role.VILLAGER
     return role_name in state.deck.villagers
+
+
+def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
+    """Get the type category of a position: 'Villager', 'Outcast', 'Minion', or 'Demon'.
+    Returns None if type can't be determined (unrevealed good card)."""
+    if pos in scenario.evil_positions:
+        role = scenario.evil_positions[pos]
+        if role in state.deck.demons:
+            return "Demon"
+        return "Minion"  # Minion, Puppet, Witch, etc.
+
+    if pos == scenario.puppet_position:
+        return "Minion"
+
+    card = _get_card_at(pos, state)
+    if card is None:
+        return None  # Unrevealed, can't determine
+
+    role_name = card.apparent_role
+    # Check knowledge base
+    card_def = get_card(role_name)
+    if card_def:
+        return card_def.role.value  # "Villager", "Outcast", "Minion", "Demon"
+    # Fallback: check deck lists
+    norm = role_name.replace(" ", "_")
+    for lst, typ in [(state.deck.outcasts, "Outcast"), (state.deck.villagers, "Villager"),
+                     (state.deck.minions, "Minion"), (state.deck.demons, "Demon")]:
+        if role_name in lst or norm in lst:
+            return typ
+    return "Villager"
 
 
 def _get_real_role(pos: int, scenario: Scenario, state: GameState) -> str:
@@ -1131,23 +1162,41 @@ def _validate_druid(card: CardInfo, scenario: Scenario,
 
 def _validate_bishop(card: CardInfo, scenario: Scenario,
                      state: GameState) -> bool:
-    """Bishop: 'Learn 3 chars: 1 Villager, 1 Outcast, 1 Evil if possible'."""
+    """Bishop: 'Learn 3 chars' — reports their type categories (Villager/Outcast/Minion/Demon)."""
     info = card.info_parsed
     if "targets" not in info:
         return True
-    # Bishop's info is structural — hard to validate without knowing which is which
-    # For now, just check that at least one target is Evil
+
     targets = info["targets"]
     pos = card.position
     truth = _truth_status(pos, scenario, state)
+    claimed_types = info.get("types")
 
+    # Full type validation if claimed types are provided
+    if claimed_types:
+        actual_types = []
+        for t in targets:
+            t_type = _get_position_type(t, scenario, state)
+            if t_type is None:
+                # Can't determine type (unrevealed good card) — fall through to weak check
+                actual_types = None
+                break
+            actual_types.append(t_type)
+
+        if actual_types is not None:
+            types_match = sorted(actual_types) == sorted(claimed_types)
+            if truth == TruthStatus.TRUTHFUL:
+                return types_match
+            else:
+                return not types_match
+
+    # Weak validation fallback (no claimed types or unrevealed targets)
     has_evil = any(_effective_alignment(t, scenario, state) == Alignment.EVIL
                    for t in targets)
-
     if truth == TruthStatus.TRUTHFUL:
-        return has_evil  # Should contain 1 Evil if possible
+        return has_evil
     else:
-        return True  # Hard to validate lying Bishop
+        return True
 
 
 def _validate_slayer_results(scenario: Scenario, state: GameState) -> bool:

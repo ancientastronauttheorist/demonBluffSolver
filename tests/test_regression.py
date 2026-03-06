@@ -59,6 +59,7 @@ def build_game_state(case: dict) -> GameState:
         executed_evil_roles=eer,
         slayer_results=case.get("slayer_results", []),
         pd_ability_results=case.get("pd_ability_results", []),
+        blocked_positions=case.get("blocked_positions", []),
         night_kills=case.get("night_kills", []),
         night_kill_evil_count=case.get("night_kill_evil_count", 0),
         hp=case.get("hp", 10),

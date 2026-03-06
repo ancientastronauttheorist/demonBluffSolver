@@ -78,8 +78,11 @@ def card_alchemist(pos: int, cured_count: int) -> CardInfo:
 def card_druid(pos: int, targets: list[int], found_outcast: Optional[str] = None) -> CardInfo:
     return CardInfo(pos, "Druid", info_parsed={"targets": targets, "found_outcast": found_outcast})
 
-def card_bishop(pos: int, targets: list[int]) -> CardInfo:
-    return CardInfo(pos, "Bishop", info_parsed={"targets": targets})
+def card_bishop(pos: int, targets: list[int], types: list[str] = None) -> CardInfo:
+    info = {"targets": targets}
+    if types:
+        info["types"] = types
+    return CardInfo(pos, "Bishop", info_parsed=info)
 
 def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> CardInfo:
     """Poet that copied another role's ability. Parse the copied role's info.
@@ -264,6 +267,7 @@ class GameSession:
         self.hp: int = 10
         self.wrong_exec_cost: int = 2  # Ascension 4 default
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
+        self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
 
     # -- Deck --
 
@@ -339,6 +343,7 @@ class GameSession:
             executed_evil_roles=dict(self.executed_evil_roles),
             slayer_results=list(self.slayer_results),
             pd_ability_results=list(self.pd_ability_results),
+            blocked_positions=list(self.blocked_positions),
             night_kills=list(self.night_kills),
             night_kill_evil_count=self.night_kill_evil_count,
             hp=self.hp,
@@ -475,6 +480,7 @@ class GameSession:
             "executed_evil_roles": self.executed_evil_roles,
             "slayer_results": self.slayer_results,
             "pd_ability_results": self.pd_ability_results,
+            "blocked_positions": self.blocked_positions,
             "night_kills": self.night_kills,
             "night_kill_evil_count": self.night_kill_evil_count,
             "hp": self.hp,
@@ -504,6 +510,7 @@ class GameSession:
         session.used_abilities = data.get("used_abilities", [])
         session.slayer_results = data.get("slayer_results", [])
         session.pd_ability_results = data.get("pd_ability_results", [])
+        session.blocked_positions = data.get("blocked_positions", [])
         session.night_kills = data.get("night_kills", [])
         session.night_kill_evil_count = data.get("night_kill_evil_count", 0)
         # Convert executed_evil_roles keys from str (JSON) back to int
@@ -584,7 +591,10 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_druid(pos, targets, found)
     elif role == "bishop":
         targets = [int(x) for x in args[2].split(",")]
-        return card_bishop(pos, targets)
+        types = None
+        if len(args) > 3:
+            types = [t.strip().capitalize() for t in args[3].split(",")]
+        return card_bishop(pos, targets, types)
     elif role == "poet":
         if len(args) > 2:
             # Poet with identified copied ability: poet <pos> <copied_role> <args...>
@@ -619,6 +629,8 @@ def main():
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
         print("  slayer_result <pos> <target> kill/fail Slayer ability result")
+        print("  block <pos>                           Mark position as blocked (Witch)")
+        print("  unblock <pos>                         Unblock position (after Witch dies)")
         print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
@@ -630,6 +642,7 @@ def main():
         print("  card knitter 2 2")
         print("  card fortune_teller 4 1,3 yes")
         print("  card oracle 5 2,6 Shaman")
+        print("  card bishop 7 4,7,9 Outcast,Minion,Villager")
         print("  card jester 7 1,3,5 1")
         print("  card poet 5 knitter 0       (Poet copied Knitter, claimed 0 evil pairs)")
         print("  card poet 3 lover 2          (Poet copied Lover, claimed 2 adjacent)")
@@ -772,6 +785,24 @@ def main():
             session.confirmed_evil.append(pos)
         session.save()
         print(f"#{pos} confirmed evil")
+        return
+
+    if cmd == "block":
+        session = GameSession.load()
+        pos = int(sys.argv[2])
+        if pos not in session.blocked_positions:
+            session.blocked_positions.append(pos)
+        session.save()
+        print(f"#{pos} blocked (Witch)")
+        return
+
+    if cmd == "unblock":
+        session = GameSession.load()
+        pos = int(sys.argv[2])
+        if pos in session.blocked_positions:
+            session.blocked_positions.remove(pos)
+        session.save()
+        print(f"#{pos} unblocked")
         return
 
     if cmd == "confirm_good":

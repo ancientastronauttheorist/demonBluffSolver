@@ -441,7 +441,7 @@ def recommend_abilities(
 
     # Build sets of useless targets
     # Poet targets are useless for Judge (random info = meaningless "lying" check)
-    poet_positions = {c.position for c in state.cards if c.apparent_role == "Poet"}
+    poet_positions = {c.position for c in state.cards if c.apparent_role.replace("_", " ") == "Poet"}
     # Bombardier targets are dangerous for Slayer (auto-lose if killed)
     bombardier_safe = set(result.bombardier_positions)
     # Execution-immune targets are useless for Slayer
@@ -453,7 +453,7 @@ def recommend_abilities(
         if pos in state.executed or pos in used_abilities:
             continue
 
-        role = card.apparent_role
+        role = card.apparent_role.replace("_", " ")
         card_def = get_card(role)
         if not card_def or not card_def.activated_ability:
             continue
@@ -560,6 +560,9 @@ def recommend_reveal(
 ) -> Optional[RevealRecommendation]:
     """Pick the most informative unrevealed position to reveal next."""
     unrevealed = _unrevealed_positions(state)
+    # Filter out blocked positions (Witch)
+    blocked = set(getattr(state, 'blocked_positions', []))
+    unrevealed = [p for p in unrevealed if p not in blocked]
     if not unrevealed:
         return None
 
