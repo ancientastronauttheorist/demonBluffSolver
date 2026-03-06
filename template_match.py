@@ -36,6 +36,14 @@ Usage:
 import sys
 import os
 import glob
+import ctypes
+
+# Fix DPI scaling on Windows — without this, coordinates are wrong!
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except Exception:
+    pass
+
 import cv2
 import numpy as np
 from PIL import Image
