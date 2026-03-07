@@ -789,7 +789,7 @@ def recommend_action(
     # 3. Execute definite evil (skip Bombardier and execution-immune roles)
     immune_positions = set()
     for card in state.cards:
-        if card.apparent_role in EXECUTION_IMMUNE_ROLES:
+        if card.apparent_role in EXECUTION_IMMUNE_ROLES and card.position not in result.definite_evil:
             immune_positions.add(card.position)
     safe_executions = [p for p in result.definite_evil
                        if p not in state.executed

@@ -250,6 +250,72 @@ def find_button_in_region(screenshot_path: str,
     return None
 
 
+def find_execute_button_center(screenshot_path: str) -> tuple[int, int] | None:
+    """Find the large red execute button in the lower-right HUD.
+
+    The generic bright-text detector is too easy to confuse with the nearby
+    settings icons. This detector keys off the button's red ring instead.
+    """
+    from scipy import ndimage
+
+    img = np.array(Image.open(screenshot_path).convert("RGB"))
+    height, width = img.shape[:2]
+
+    left = int(width * 0.72)
+    top = int(height * 0.68)
+    right = int(width * 0.95)
+    bottom = int(height * 0.96)
+    region = img[top:bottom, left:right]
+
+    r = region[:, :, 0].astype(int)
+    g = region[:, :, 1].astype(int)
+    b = region[:, :, 2].astype(int)
+    max_gb = np.maximum(g, b)
+
+    # The execute button is the only large saturated red control in this area.
+    mask = (r > 110) & (g < 95) & (b < 95) & ((r - max_gb) > 35)
+    labeled, n_features = ndimage.label(mask)
+    if n_features == 0:
+        return None
+
+    components = []
+    for i in range(1, n_features + 1):
+        component = labeled == i
+        size = int(component.sum())
+        if size < 200:
+            continue
+        cy, cx = ndimage.center_of_mass(component)
+        ys, xs = np.where(component)
+        components.append({
+            "size": size,
+            "cx": int(cx) + left,
+            "cy": int(cy) + top,
+            "bbox": (
+                int(xs.min()) + left,
+                int(ys.min()) + top,
+                int(xs.max()) + left,
+                int(ys.max()) + top,
+            ),
+        })
+
+    if not components:
+        return None
+
+    best = max(components, key=lambda c: c["size"])
+
+    # Merge nearby red clusters from the same circular button while excluding
+    # the smaller red settings glyphs further down/right.
+    cluster = [
+        comp for comp in components
+        if abs(comp["cx"] - best["cx"]) <= 120 and abs(comp["cy"] - best["cy"]) <= 120
+    ]
+    total = sum(comp["size"] for comp in cluster)
+    cx = round(sum(comp["cx"] * comp["size"] for comp in cluster) / total)
+    cy = round(sum(comp["cy"] * comp["size"] for comp in cluster) / total)
+    print(f"[execute] Found execute button at ({cx}, {cy}) from {len(cluster)} red clusters")
+    return cx, cy
+
+
 def find_and_click_button(screenshot_path: str,
                           left: int, top: int, right: int, bottom: int,
                           min_brightness: int = 200) -> bool:
@@ -386,17 +452,16 @@ def click_execute_button():
     """Click the Execute button (red sword, bottom-right corner).
     Takes a screenshot first to find it."""
     path = screenshot.capture("_exec_detect")
-    # Execute button is typically in bottom-right quadrant
-    pos = find_button_in_region(path, 2200, 1200, 2500, 1400, min_brightness=150)
+    pos = find_execute_button_center(path)
     if pos:
         focus_game()
         mouse.click(pos[0], pos[1])
         time.sleep(0.5)
         print("[execute] Clicked execute button")
         return True
-    # Fallback to known approximate position
+    # Fallback to a verified approximate center on 2560x1440.
     focus_game()
-    mouse.click(2380, 1330)
+    mouse.click(2280, 1220)
     time.sleep(0.5)
     print("[execute] Clicked execute button (fallback position)")
     return True

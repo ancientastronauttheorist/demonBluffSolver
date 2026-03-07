@@ -4,9 +4,11 @@ Card builder functions, session tracking, CLI interface.
 """
 
 from __future__ import annotations
+import atexit
 import json
 import os
 import sys
+import time
 from datetime import datetime
 from typing import Optional
 
@@ -146,6 +148,71 @@ CARD_BUILDERS = {
 
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
 DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
+_SESSION_LOCK_HANDLE = None
+_SESSION_LOCK_PATH: Optional[str] = None
+
+
+def _release_session_lock():
+    global _SESSION_LOCK_HANDLE, _SESSION_LOCK_PATH
+    if _SESSION_LOCK_HANDLE is None:
+        return
+
+    handle = _SESSION_LOCK_HANDLE
+    path = _SESSION_LOCK_PATH or ""
+    try:
+        if os.name == "nt":
+            import msvcrt
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+    finally:
+        handle.close()
+        _SESSION_LOCK_HANDLE = None
+        _SESSION_LOCK_PATH = None
+
+
+def _acquire_session_lock(path: str = SESSION_FILE, timeout_s: float = 5.0):
+    """Acquire a process-wide lock for the session file.
+
+    Each CLI invocation is a short-lived process. Holding the lock from load
+    until process exit serializes read-modify-write commands and prevents
+    `game_session.json` corruption under rapid repeated automation.
+    """
+    global _SESSION_LOCK_HANDLE, _SESSION_LOCK_PATH
+    if _SESSION_LOCK_HANDLE is not None:
+        if _SESSION_LOCK_PATH == path:
+            return _SESSION_LOCK_HANDLE
+        _release_session_lock()
+
+    lock_path = f"{path}.lock"
+    os.makedirs(os.path.dirname(lock_path), exist_ok=True)
+    handle = open(lock_path, "a+b")
+    deadline = time.time() + timeout_s
+
+    while True:
+        try:
+            handle.seek(0)
+            if os.name == "nt":
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            break
+        except OSError:
+            if time.time() >= deadline:
+                handle.close()
+                raise TimeoutError(f"Timed out acquiring session lock for {path}")
+            time.sleep(0.05)
+
+    _SESSION_LOCK_HANDLE = handle
+    _SESSION_LOCK_PATH = path
+    return handle
+
+
+atexit.register(_release_session_lock)
 
 
 # ============================================================
@@ -505,14 +572,21 @@ class GameSession:
     # -- Persistence --
 
     def save(self, path: str = SESSION_FILE):
+        _acquire_session_lock(path)
         data = self.to_game_state().to_dict()
         data["used_abilities"] = list(self.used_abilities)
-        with open(path, "w") as f:
+
+        tmp_path = f"{path}.tmp.{os.getpid()}"
+        with open(tmp_path, "w") as f:
             json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
         print(f"[save] Session saved to {path}")
 
     @classmethod
     def load(cls, path: str = SESSION_FILE) -> "GameSession":
+        _acquire_session_lock(path)
         with open(path) as f:
             data = json.load(f)
         state = GameState.from_dict(data)

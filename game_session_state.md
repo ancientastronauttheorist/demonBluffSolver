@@ -2818,3 +2818,195 @@ Info: {'targets': [1, 3, 5]}
 Final HP: 1
 Notes: Autonomous live run. #7 was the good Lilis night kill. PD #6 found #1 corrupted and #2 evil. FT #5 on #1/#3 was false. Judge #3 found #1 lying. #1 and #9 were corrupted. Final evils: #2 Lilis, #4 Shaman, #8 Poisoner.
 
+## Deck
+- Villagers: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop
+- Outcasts: Plague_Doctor
+- Minions: Minion, Twin_Minion
+- Demons: Pooka
+
+
+---
+
+# New Game — 2026-03-07 15:48:40
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+### [15:50:56] Revealed #1 Bishop
+Info: {'targets': [1, 4, 6], 'types': ['Minion', 'Villager', 'Outcast']}
+
+### [15:50:56] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [15:50:57] Revealed #3 Dreamer
+Info: {}
+
+### [15:50:57] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [15:50:57] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:50:57] Revealed #8 Plague_Doctor
+Info: {}
+
+### [15:50:57] Revealed #4 Slayer
+Info: {}
+
+### [15:50:59] Revealed #9 Plague_Doctor
+Info: {}
+
+## Deck
+- Villagers: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop
+- Outcasts: Plague_Doctor
+- Minions: Minion, Twin_Minion
+- Demons: Pooka
+
+### [15:51:19] Revealed #7 Knight
+Info: {}
+
+#### [15:51:28] Solver Output
+Scenarios: 106/2142
+Definite good: ['#2']
+Evil probabilities: #9=60%, #5=58%, #1=42%, #8=40%, #4=32%, #6=26%, #3=21%, #7=21%
+  Generated 2142 candidate scenarios
+  106 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [15:51:28] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.776 (adjusted 2.776) | timing x1.00
+
+#### [15:52:46] Solver Output
+Scenarios: 64/2142
+Definite good: ['#2']
+Evil probabilities: #9=66%, #5=59%, #1=34%, #4=34%, #8=34%, #3=25%, #6=25%, #7=22%
+  Generated 2142 candidate scenarios
+  64 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [15:52:46] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.776 (adjusted 2.429) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [15:53:23] Ability used at #3
+
+### [15:53:23] Revealed #3 Dreamer
+Info: {'target': 9, 'evil_role': 'Twin_Minion'}
+
+#### [15:53:23] Solver Output
+Scenarios: 44/2142
+Definite good: ['#2']
+Evil probabilities: #5=59%, #1=50%, #8=50%, #9=50%, #3=32%, #6=25%, #4=18%, #7=16%
+  Generated 2142 candidate scenarios
+  44 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [15:53:23] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.143 (adjusted 2.143) | timing x1.00
+
+#### [15:53:57] Solver Output
+Scenarios: 44/2142
+Definite good: ['#2']
+Evil probabilities: #5=59%, #1=50%, #8=50%, #9=50%, #3=32%, #6=25%, #4=18%, #7=16%
+  Generated 2142 candidate scenarios
+  44 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [15:53:57] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.143 (adjusted 2.143) | timing x1.00
+
+#### [15:55:02] Solver Output
+Scenarios: 14/2142
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#6', '#8']
+Evil probabilities: #3=64%, #4=21%, #7=14%
+  Generated 2142 candidate scenarios
+  14 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Minion', 'Pooka'})
+    #9 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Minion', 'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 7]
+
+#### [15:55:02] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Twin_Minion', 'Minion', 'Pooka'})
+
+### [15:56:47] Executed #5 -> Minion (EVIL)
+
+#### [15:56:48] Solver Output
+Scenarios: 6/242
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#6', '#8']
+Evil probabilities: #3=67%, #4=17%, #7=17%
+  Generated 242 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 7]
+
+#### [15:56:48] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Twin_Minion', 'Pooka'})
+
+#### [15:57:18] Solver Output
+Scenarios: 6/242
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#6', '#8']
+Evil probabilities: #3=67%, #4=17%, #7=17%
+  Generated 242 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 7]
+
+#### [15:57:18] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Twin_Minion', 'Pooka'})
+
+### [15:57:18] Executed #9 -> Twin_Minion (EVIL)
+
+#### [15:57:26] Solver Output
+Scenarios: 1/36
+Definite evil: ['#5', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#8']
+  Generated 36 candidate scenarios
+  1 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #9 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [15:57:26] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 0% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 2 wrong execs)
+WARNING: Low confidence (0%) -- consider gathering more info
+
+### [15:58:19] Executed #7 -> Pooka (EVIL)
+
+## [15:58:19] GAME OVER — WIN
+Final HP: 10
+Notes: Autonomous live run. Deck: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop, Plague Doctor, Minion, Twin Minion, Pooka. #1 Bishop and #6 Lover were corrupted. PD #8 found #1 corrupted and #9 evil. Dreamer #3 found #9 could be Twin Minion. PD #9 found #5 corrupted and #2 evil; that branch was treated as corrupted PD misinformation. Final evils: #5 Minion, #7 Pooka, #9 Twin Minion. Finished at 10 HP.
+

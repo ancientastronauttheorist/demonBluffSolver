@@ -142,6 +142,26 @@ class TestStrategyRecommendations(unittest.TestCase):
         self.assertEqual(action.action_type, "reveal")
         self.assertEqual(action.position, 4)
 
+    def test_definite_evil_disguised_as_knight_is_executed(self):
+        case_path = Path(__file__).parent / "cases" / "asc11_g1_live.json"
+        state = GameState.from_dict(json.loads(case_path.read_text()))
+
+        state.executed = [5, 9]
+        state.confirmed_evil = [5, 9]
+        state.executed_evil_roles = {
+            5: "Minion",
+            9: "Twin_Minion",
+        }
+        state.hp = 10
+        state.used_abilities = [8, 3, 9]
+
+        result = solve(state)
+        action = recommend_action(state, result, used_abilities=state.used_abilities)
+
+        self.assertEqual(set(result.definite_evil), {5, 7, 9})
+        self.assertEqual(action.action_type, "execute")
+        self.assertEqual(action.position, 7)
+
 
 if __name__ == "__main__":
     unittest.main()
