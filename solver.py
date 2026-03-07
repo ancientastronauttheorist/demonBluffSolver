@@ -381,6 +381,9 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
                     card = _get_card_at(adj, state)
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
+                    elif card is None and _unrevealed_must_be_villager(
+                            adj, placement, state, doppelganger_pos, drunk_pos):
+                        corrupted.add(adj)
         elif role == "Poisoner":
             # Poisoner corrupts 1 adjacent Villager (Doppelganger immune)
             # Target is enumerated externally via poisoner_target parameter
@@ -513,6 +516,37 @@ def _is_villager_role(role_name: str, state: GameState) -> bool:
     if card_def:
         return card_def.role == Role.VILLAGER
     return role_name in state.deck.villagers
+
+
+def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
+                                  state: GameState,
+                                  doppelganger_pos: Optional[int] = None,
+                                  drunk_pos: Optional[int] = None) -> bool:
+    """Check if an unrevealed good position must be a Villager.
+
+    When all Outcast slots on the board are occupied by other positions,
+    any remaining unrevealed good position must be a Villager.
+    evil_positions should include ALL evil positions (remaining + executed).
+    """
+    max_outcasts = state.board_outcast_count
+    if max_outcasts is None:
+        max_outcasts = len(state.deck.outcasts)
+
+    occupied = 0
+    for card in state.cards:
+        if card.position in evil_positions or card.position == pos:
+            continue
+        card_def = get_card(card.apparent_role)
+        if card_def and card_def.role == Role.OUTCAST:
+            occupied += 1
+
+    # Doppelganger/Drunk take outcast slots but appear as Villagers
+    if doppelganger_pos is not None and doppelganger_pos != pos and doppelganger_pos not in evil_positions:
+        occupied += 1
+    if drunk_pos is not None and drunk_pos != pos and drunk_pos not in evil_positions:
+        occupied += 1
+
+    return occupied >= max_outcasts
 
 
 def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
@@ -1421,6 +1455,15 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 puppet_pos = pos
                 break
 
+        # Build full evil set including executed evils (needed for corruption
+        # computation, validator evil counting, and target enumeration)
+        full_evil = dict(placement)
+        for ex_pos, ex_role in state.executed_evil_roles.items():
+            full_evil[ex_pos] = ex_role
+        for ex_pos in state.confirmed_evil:
+            if ex_pos in state.executed and ex_pos not in full_evil:
+                full_evil[ex_pos] = "Unknown"
+
         # Determine PD corruption targets
         # PD corrupts 1 random Good Villager — we need to try all possibilities
         # For simplicity, if PD is in play and not evil, try each villager position
@@ -1441,24 +1484,18 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 else:
                     candidates = []
                     for p in range(1, state.n_cards + 1):
-                        if p == pd_pos or p in placement:
+                        if p == pd_pos or p in full_evil:
                             continue
                         c = _get_card_at(p, state)
                         if c and _is_villager_role(c.apparent_role, state):
+                            candidates.append(p)
+                        elif c is None and _unrevealed_must_be_villager(
+                                p, full_evil, state):
                             candidates.append(p)
                     if candidates:
                         pd_targets = candidates
                     else:
                         pd_targets = [None]
-
-        # Build full evil set including executed evils (needed for corruption
-        # computation and validator evil counting)
-        full_evil = dict(placement)
-        for ex_pos, ex_role in state.executed_evil_roles.items():
-            full_evil[ex_pos] = ex_role
-        for ex_pos in state.confirmed_evil:
-            if ex_pos in state.executed and ex_pos not in full_evil:
-                full_evil[ex_pos] = "Unknown"
 
         # Compute Pooka-corrupted positions (for Poisoner to skip)
         pooka_corrupted = set()
@@ -1468,6 +1505,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                     if adj not in full_evil:
                         card = _get_card_at(adj, state)
                         if card and _is_villager_role(card.apparent_role, state):
+                            pooka_corrupted.add(adj)
+                        elif card is None and _unrevealed_must_be_villager(
+                                adj, full_evil, state):
                             pooka_corrupted.add(adj)
 
         # Determine Poisoner corruption targets (adjacent, 1 Villager)
@@ -1483,6 +1523,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                         continue  # Poisoner skips Pooka's victims
                     card = _get_card_at(p, state)
                     if card and _is_villager_role(card.apparent_role, state):
+                        candidates.append(p)
+                    elif card is None and _unrevealed_must_be_villager(
+                            p, full_evil, state):
                         candidates.append(p)
                 if candidates:
                     poisoner_targets = candidates
