@@ -27,6 +27,20 @@
       "name": "asc9_g3",
       "notes": "Perfect game 10HP. Slayer killed Minion, Dreamer+PD+Jester confirmed Puppet adjacent to Puppeteer.",
       "date": "2026-03-06 18:44"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc9_g4",
+      "notes": "Perfect 10HP. Dreamer ability on #9 solved entire board. #9 Gemcrafter, #7 Confessor, #4 Dreamer all corrupted.",
+      "date": "2026-03-06 18:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc9_g5",
+      "notes": "Perfect 10HP. Baker conversion confirmed #6/#7 good. PD clean checks narrowed field. Corrupted FT inversion solved the 50/50 \u2014 #2 Pooka.",
+      "date": "2026-03-06 19:08"
     }
   ]
 }

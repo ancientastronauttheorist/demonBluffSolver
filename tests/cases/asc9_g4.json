@@ -1,0 +1,152 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5,
+          6
+        ],
+        "types": [
+          "Outcast",
+          "Villager",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    2,
+    1,
+    8
+  ],
+  "confirmed_evil": [
+    2,
+    1,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    4
+  ],
+  "executed_evil_roles": {
+    "2": "Minion",
+    "1": "Chancellor",
+    "8": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "name": "asc9_g4",
+  "true_evil_positions": {
+    "1": "Chancellor",
+    "2": "Minion",
+    "8": "Pooka"
+  },
+  "notes": "Perfect 10HP. Dreamer ability on #9 solved entire board. #9 Gemcrafter, #7 Confessor, #4 Dreamer all corrupted.",
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Confessor",
+      "Dreamer",
+      "Oracle",
+      "Enlightened",
+      "Alchemist",
+      "Gemcrafter"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Chancellor",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  }
+}

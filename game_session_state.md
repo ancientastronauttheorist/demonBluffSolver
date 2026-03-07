@@ -798,3 +798,256 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: Perfect game 10HP. Slayer killed Minion, Dreamer+PD+Jester confirmed Puppet adjacent to Puppeteer.
 
+
+---
+
+# New Game — 2026-03-06 18:50:47
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Confessor, Dreamer, Oracle, Enlightened, Alchemist, Gemcrafter
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Chancellor, Minion
+- Demons: Pooka
+
+### [18:55:21] Revealed #1 Gemcrafter
+Info: {'good_position': 2}
+
+### [18:55:21] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [18:55:21] Revealed #3 Bombardier
+Info: {}
+
+### [18:55:22] Revealed #4 Dreamer
+Info: {}
+
+### [18:55:22] Revealed #5 Oracle
+Info: {'targets': [2, 6], 'minion_role': 'Minion'}
+
+### [18:55:22] Revealed #6 Enlightened
+Info: {'direction': 'CW'}
+
+### [18:55:22] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [18:55:22] Revealed #8 Bishop
+Info: {'targets': [4, 5, 6], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [18:55:22] Revealed #9 Gemcrafter
+Info: {'good_position': 2}
+
+### [18:55:22] Revealed #10 Plague_Doctor
+Info: {}
+
+#### [18:55:28] Solver Output
+Scenarios: 7/2822
+Definite evil: ['#2']
+Definite good: ['#3', '#4', '#5', '#6', '#10']
+Evil probabilities: #1=71%, #8=71%, #9=43%, #7=14%
+  Generated 2822 candidate scenarios
+  7 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion', 'Chancellor'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [1, 7, 8, 9]
+
+#### [18:55:28] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 7 scenarios (roles: {'Minion', 'Chancellor'})
+
+### [18:56:06] Executed #2 -> Minion (EVIL)
+
+#### [18:56:06] Solver Output
+Scenarios: 7/366
+Definite evil: ['#2']
+Definite good: ['#3', '#4', '#5', '#6', '#10']
+Evil probabilities: #1=71%, #8=71%, #9=43%, #7=14%
+  Generated 366 candidate scenarios
+  7 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [1, 7, 8, 9]
+
+#### [18:56:06] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#9']
+Reason: Entropy 1.842 (adjusted 1.711) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [18:56:43] Ability used at #4
+
+### [18:56:43] Revealed #4 Dreamer
+Info: {'target': 9, 'evil_role': 'Minion'}
+
+#### [18:56:43] Solver Output
+Scenarios: 4/366
+Definite evil: ['#1', '#2', '#8']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#9', '#10']
+  Generated 366 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+
+#### [18:56:43] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Chancellor'})
+
+### [18:58:21] Executed #1 -> Chancellor (EVIL)
+
+### [18:58:21] Executed #8 -> Pooka (EVIL)
+
+## [18:58:28] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Dreamer ability on #9 solved entire board. #9 Gemcrafter, #7 Confessor, #4 Dreamer all corrupted.
+
+
+---
+
+# New Game — 2026-03-06 18:59:48
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Scout, Druid, Bishop, Baker, Fortune_Teller
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Chancellor
+- Demons: Pooka
+
+### [19:03:48] Revealed #1 Plague_Doctor
+Info: {}
+
+### [19:03:49] Revealed #2 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [19:03:49] Revealed #3 Fortune_Teller
+Info: {}
+
+### [19:03:49] Revealed #4 Wretch
+Info: {}
+
+### [19:03:49] Revealed #5 Bishop
+Info: {'targets': [3, 5, 7], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [19:03:49] Revealed #6 Baker
+Info: {}
+
+### [19:03:50] Revealed #7 Baker
+Info: {}
+
+### [19:03:50] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [19:03:56] Solver Output
+Scenarios: 10/86
+Definite good: ['#6', '#7']
+Evil probabilities: #1=90%, #4=40%, #2=20%, #3=20%, #5=20%, #8=10%
+  Generated 86 candidate scenarios
+  10 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 8]
+
+#### [19:03:56] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.361 (adjusted 1.361) | timing x1.00
+
+#### [19:04:56] Solver Output
+Scenarios: 6/86
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #1=83%, #4=67%, #2=17%, #5=17%, #8=17%
+  Generated 86 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 8]
+
+#### [19:04:56] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.252 (adjusted 1.252) | timing x1.00
+
+#### [19:05:36] Solver Output
+Scenarios: 4/86
+Definite evil: ['#1']
+Definite good: ['#3', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=75%, #2=25%
+  Generated 86 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [19:05:36] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Chancellor'})
+
+### [19:06:36] Executed #1 -> Chancellor (EVIL)
+
+#### [19:06:36] Solver Output
+Scenarios: 4/18
+Definite evil: ['#1']
+Definite good: ['#3', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=75%, #2=25%
+  Generated 18 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [19:06:36] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#2', '#5']
+Reason: Entropy 0.811 (adjusted 0.406) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [19:07:32] Ability used at #3
+
+### [19:07:32] Revealed #3 Fortune Teller
+Info: {'targets': [2, 5], 'has_evil': False}
+
+#### [19:07:32] Solver Output
+Scenarios: 1/18
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8']
+  Generated 18 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [19:07:32] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [19:08:23] Executed #2 -> Pooka (EVIL)
+
+## [19:08:23] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Baker conversion confirmed #6/#7 good. PD clean checks narrowed field. Corrupted FT inversion solved the 50/50 — #2 Pooka.
+
