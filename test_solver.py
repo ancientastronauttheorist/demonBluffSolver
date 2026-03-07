@@ -225,5 +225,58 @@ class TestExecutedEvil(unittest.TestCase):
                       f"Expected #5 evil. Reasoning: {result.reasoning}")
 
 
+class TestHiddenOutcastPresence(unittest.TestCase):
+    @staticmethod
+    def _revealed_villager_board():
+        return [
+            CardInfo(1, "Gemcrafter"),
+            CardInfo(2, "Knitter"),
+            CardInfo(3, "Architect"),
+            CardInfo(4, "Knitter"),
+        ]
+
+    def test_doppelganger_forced_when_only_outcast_slot(self):
+        deck = DeckComposition(
+            villagers=["Gemcrafter", "Knitter", "Architect"],
+            outcasts=["Doppelganger"],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=self._revealed_villager_board(),
+            n_evil=1,
+            board_villager_count=3,
+            board_outcast_count=1,
+        )
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0)
+        self.assertTrue(all(s.doppelganger_position is not None for s in result.surviving_scenarios))
+
+    def test_doppelganger_absent_when_zero_outcast_slots(self):
+        deck = DeckComposition(
+            villagers=["Gemcrafter", "Knitter", "Architect"],
+            outcasts=["Doppelganger"],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=self._revealed_villager_board(),
+            n_evil=1,
+            board_villager_count=3,
+            board_outcast_count=0,
+        )
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0)
+        self.assertTrue(all(s.doppelganger_position is None for s in result.surviving_scenarios))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -111,6 +111,13 @@
       "name": "asc10_g8",
       "notes": "1-in-3 guess at end, solver found 2/3 evils definitively. Fixed PD normalization bug and role_counts normalization bug mid-game.",
       "date": "2026-03-06 22:48"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc10_g9_live",
+      "notes": "Live run. #3=Doppelganger, #1/#7 corrupted. Dreamer #8 -> #5 Pooka. Wrong exec #6, then solved via #5 Minion and #8 Pooka.",
+      "date": "2026-03-07 11:27"
     }
   ]
 }

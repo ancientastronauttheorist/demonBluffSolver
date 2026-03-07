@@ -2624,3 +2624,147 @@ WARNING: CAUTION: budget=1, confidence 33% < 80% threshold. Consider manual over
 Final HP: 0
 Notes: 1-in-3 guess at end, solver found 2/3 evils definitively. Fixed PD normalization bug and role_counts normalization bug mid-game.
 
+
+---
+
+# New Game — 2026-03-07 11:15:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Baker, Knitter, Architect, Dreamer, Empress
+- Outcasts: Doppelganger
+- Minions: Minion
+- Demons: Pooka
+
+## Deck
+- Villagers: Gemcrafter, Baker, Knitter, Architect, Dreamer, Empress
+- Outcasts: Doppelganger
+- Minions: Minion
+- Demons: Pooka
+
+#### [11:16:16] Solver Output
+Scenarios: 56/56
+Evil probabilities: #1=25%, #2=25%, #3=25%, #4=25%, #5=25%, #6=25%, #7=25%, #8=25%
+  Generated 56 candidate scenarios
+  56 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [11:16:16] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 25% evil, entropy 0.911
+
+### [11:20:13] Revealed #1 Gemcrafter
+Info: {'good_position': 8}
+
+### [11:20:13] Revealed #3 Empress
+Info: {'targets': [2, 6, 8]}
+
+### [11:20:13] Revealed #2 Empress
+Info: {'targets': [4, 6, 8]}
+
+### [11:20:13] Revealed #4 Architect
+Info: {'side': 'Left'}
+
+#### [11:21:10] Solver Output
+Scenarios: 20/392
+Definite good: ['#1', '#4']
+Evil probabilities: #5=60%, #6=40%, #7=40%, #8=30%, #3=25%, #2=5%
+  Generated 392 candidate scenarios
+  20 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 7, 8]
+
+#### [11:21:10] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.090 (adjusted 1.777) | timing x1.00
+WARNING: Corruption risk: 30%
+
+### [11:22:23] Revealed #8 Dreamer
+Info: {'target': 5, 'evil_role': 'Pooka'}
+
+### [11:22:23] Ability used at #8
+
+#### [11:22:31] Solver Output
+Scenarios: 15/392
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #6=53%, #7=53%, #5=47%, #8=40%, #2=7%
+  Generated 392 candidate scenarios
+  15 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [2, 5, 6, 7, 8]
+
+#### [11:22:31] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 53% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 53% confident (budget: 2 wrong execs)
+
+### [11:23:15] Executed #6 -> GOOD (WRONG!)
+
+#### [11:23:22] Solver Output
+Scenarios: 7/294
+Definite evil: ['#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7']
+Evil probabilities: #8=86%, #2=14%
+  Generated 294 candidate scenarios
+  7 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 8]
+
+#### [11:23:22] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 7 scenarios (roles: {'Pooka', 'Minion'})
+
+#### [11:23:45] Solver Output
+Scenarios: 7/294
+Definite evil: ['#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7']
+Evil probabilities: #8=86%, #2=14%
+  Generated 294 candidate scenarios
+  7 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion', 'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 8]
+
+#### [11:23:45] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 7 scenarios (roles: {'Minion', 'Pooka'})
+
+### [11:24:26] Executed #5 -> Minion (EVIL)
+
+#### [11:24:31] Solver Output
+Scenarios: 6/42
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 42 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [11:24:31] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Pooka'})
+
+### [11:25:09] Executed #8 -> Pooka (EVIL)
+
+## [11:27:47] GAME OVER — WIN
+Final HP: 5
+Notes: Live run. #3=Doppelganger, #1/#7 corrupted. Dreamer #8 -> #5 Pooka. Wrong exec #6, then solved via #5 Minion and #8 Pooka.
+

@@ -123,5 +123,11 @@
   },
   "used_abilities": [
     8
-  ]
+  ],
+  "name": "asc10_g9_live",
+  "true_evil_positions": {
+    "5": "Minion",
+    "8": "Pooka"
+  },
+  "notes": "Live run. #3=Doppelganger, #1/#7 corrupted. Dreamer #8 -> #5 Pooka. Wrong exec #6, then solved via #5 Minion and #8 Pooka."
 }

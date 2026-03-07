@@ -19,7 +19,7 @@ import glob
 # Add parent to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from solver import CardInfo, DeckComposition, GameState, SolverResult, solve
+from solver import GameState, solve
 
 
 CASES_DIR = os.path.join(os.path.dirname(__file__), "cases")
@@ -32,41 +32,7 @@ def load_test_case(path: str) -> dict:
 
 def build_game_state(case: dict) -> GameState:
     """Build a GameState from a test case JSON."""
-    deck = DeckComposition(
-        villagers=case["deck"]["villagers"],
-        outcasts=case["deck"]["outcasts"],
-        minions=case["deck"]["minions"],
-        demons=case["deck"]["demons"],
-    )
-    cards = [
-        CardInfo(c["position"], c["apparent_role"], c.get("info_text", ""),
-                 c.get("info_parsed", {}))
-        for c in case.get("cards", [])
-    ]
-    # Convert executed_evil_roles keys from str (JSON) to int
-    raw_eer = case.get("executed_evil_roles", {})
-    eer = {int(k): v for k, v in raw_eer.items()}
-
-    return GameState(
-        n_cards=case["n_cards"],
-        deck=deck,
-        cards=cards,
-        n_evil=case.get("n_evil", 0),
-        executed=case.get("executed", []),
-        confirmed_evil=case.get("confirmed_evil", []),
-        confirmed_good=case.get("confirmed_good", []),
-        pd_corruption_target=case.get("pd_corruption_target"),
-        executed_evil_roles=eer,
-        slayer_results=case.get("slayer_results", []),
-        pd_ability_results=case.get("pd_ability_results", []),
-        blocked_positions=case.get("blocked_positions", []),
-        night_kills=case.get("night_kills", []),
-        night_kill_evil_count=case.get("night_kill_evil_count", 0),
-        hp=case.get("hp", 10),
-        wrong_exec_cost=case.get("wrong_exec_cost", 2),
-        board_villager_count=case.get("board_villager_count"),
-        board_outcast_count=case.get("board_outcast_count"),
-    )
+    return GameState.from_dict(case)
 
 
 def run_test(case: dict, verbose: bool = True) -> tuple[bool, list[str]]:

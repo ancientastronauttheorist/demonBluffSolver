@@ -15,9 +15,8 @@ from typing import Optional
 from knowledge_base import get_card, Role, CARDS_BY_NAME
 from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
-    _truth_status, _is_evil_in_scenario, _effective_alignment,
-    _get_card_at, _get_real_role,
-    circle_distance, adjacent_positions, Alignment,
+    truth_status, scenario_is_evil, effective_alignment,
+    get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
 )
 
@@ -80,7 +79,7 @@ def evil_probabilities(state: GameState, result: SolverResult) -> dict[int, floa
         if pos in state.executed:
             continue
         count = sum(1 for s in result.surviving_scenarios
-                    if _is_evil_in_scenario(pos, s))
+                    if scenario_is_evil(pos, s))
         probs[pos] = count / result.n_surviving
     return probs
 
@@ -123,18 +122,22 @@ def _ability_timing_factor(state: GameState) -> float:
     return 0.05 + 0.95 * (t * t * (3 - 2 * t))  # smoothstep
 
 
-def _count_remaining_evil(state: GameState, result: SolverResult) -> int:
-    """Count evil characters not yet executed, using first surviving scenario."""
+def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int, int]:
+    """Return min/max evil characters still alive across surviving scenarios."""
     if not result.surviving_scenarios:
-        return 0
-    s = result.surviving_scenarios[0]
-    count = 0
-    for pos in range(1, state.n_cards + 1):
-        if pos in state.executed:
-            continue
-        if _is_evil_in_scenario(pos, s):
-            count += 1
-    return count
+        return (0, 0)
+
+    counts = []
+    for scenario in result.surviving_scenarios:
+        count = 0
+        for pos in range(1, state.n_cards + 1):
+            if pos in state.executed:
+                continue
+            if scenario_is_evil(pos, scenario):
+                count += 1
+        counts.append(count)
+
+    return (min(counts), max(counts))
 
 
 def _witch_might_be_alive(state: GameState, result: SolverResult) -> bool:
@@ -164,7 +167,11 @@ def _could_have_active_ability(pos: int, state: GameState, result: SolverResult)
     all_deck_roles = state.deck.villagers + state.deck.outcasts
     unplaced_active = [r for r in all_deck_roles
                        if r in active_roles and r not in placed_roles]
-    return len(unplaced_active) > 0
+    if not unplaced_active or result.n_surviving == 0:
+        return False
+
+    return any(not scenario_is_evil(pos, scenario)
+               for scenario in result.surviving_scenarios)
 
 
 # ============================================================
@@ -173,24 +180,24 @@ def _could_have_active_ability(pos: int, state: GameState, result: SolverResult)
 
 def _ft_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> bool:
     """Fortune Teller: any target evil?"""
-    return any(_effective_alignment(t, scenario, state) == Alignment.EVIL
+    return any(effective_alignment(t, scenario, state) == Alignment.EVIL
                for t in targets)
 
 
 def _jester_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> int:
     """Jester: count evil among targets."""
     return sum(1 for t in targets
-               if _effective_alignment(t, scenario, state) == Alignment.EVIL)
+               if effective_alignment(t, scenario, state) == Alignment.EVIL)
 
 
 def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bool:
     """Judge: is target lying?"""
-    return _truth_status(target, scenario, state) == TruthStatus.LYING
+    return truth_status(target, scenario, state) == TruthStatus.LYING
 
 
 def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> str:
     """Dreamer: if target is evil, return evil role name. Else 'any_evil'."""
-    if _is_evil_in_scenario(target, scenario):
+    if scenario_is_evil(target, scenario):
         return scenario.evil_positions.get(target, "Puppet")
     return "any_evil"
 
@@ -198,9 +205,9 @@ def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> 
 def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
     """Druid: find outcast among targets, or 'none'."""
     for t in targets:
-        if _is_evil_in_scenario(t, scenario):
+        if scenario_is_evil(t, scenario):
             continue
-        card = _get_card_at(t, state)
+        card = get_card_at(t, state)
         if card:
             card_def = get_card(card.apparent_role)
             if card_def and card_def.role == Role.OUTCAST and card.apparent_role != "Wretch":
@@ -210,7 +217,7 @@ def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState
 
 def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
     """Slayer: is target evil?"""
-    return _is_evil_in_scenario(target, scenario)
+    return scenario_is_evil(target, scenario)
 
 
 def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple:
@@ -245,7 +252,7 @@ def _recommend_boolean_ability(
         true_count = 0
         false_count = 0
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             if isinstance(targets, list):
                 real = ground_truth_fn(targets, s, state)
             else:
@@ -291,15 +298,15 @@ def _recommend_count_ability(
     """Recommend targets for a count-outcome ability (Jester).
     Uses expected-posterior-size metric since lying makes multiple values compatible."""
     best_targets = None
-    best_score = float('inf')
+    best_expected_posterior = float('inf')
+    scenario_count = len(result.surviving_scenarios)
 
     for targets in candidate_targets:
         # For each possible observed value, count compatible scenarios
         compatible = {v: 0 for v in range(max_count + 1)}
-        scenario_count = len(result.surviving_scenarios)
 
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             real = ground_truth_fn(targets, s, state)
             if truth == TruthStatus.TRUTHFUL:
                 compatible[real] += 1
@@ -314,26 +321,31 @@ def _recommend_count_ability(
         if total_weight == 0:
             continue
         expected_posterior = sum(c * c for c in compatible.values()) / total_weight
-        if expected_posterior < best_score:
-            best_score = expected_posterior
+        if expected_posterior < best_expected_posterior:
+            best_expected_posterior = expected_posterior
             best_targets = targets
 
     if best_targets is None:
         return None
 
     corr = _corruption_risk(ability_pos, result)
-    adjusted = best_score * (1 + 0.5 * corr)  # Higher posterior = worse, so penalize upward
+    adjusted = best_expected_posterior * (1 + 0.5 * corr)
+    info_gain = 0.0
+    if scenario_count > 0 and adjusted > 0:
+        info_gain = max(0.0, math.log2(scenario_count) - math.log2(adjusted))
     warnings = []
     if corr > 0:
         warnings.append(f"Corruption risk: {corr:.0%}")
 
-    # Convert to a positive "goodness" score (negative expected posterior)
     return AbilityRecommendation(
         position=ability_pos,
         ability_name=ability_name,
         targets=best_targets,
-        score=-adjusted,  # Negative: lower posterior = higher score
-        reasoning=f"Expected posterior {best_score:.1f} scenarios (adjusted {adjusted:.1f})",
+        score=info_gain,
+        reasoning=(
+            f"Expected posterior {best_expected_posterior:.1f} scenarios "
+            f"(adjusted {adjusted:.1f}, info gain {info_gain:.3f} bits)"
+        ),
         warnings=warnings,
     )
 
@@ -353,7 +365,7 @@ def _recommend_partition_ability(
     for targets in candidate_targets:
         partition: dict[str, int] = {}
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             if isinstance(targets, list):
                 real = ground_truth_fn(targets, s, state)
             else:
@@ -623,8 +635,8 @@ def recommend_action(
         return Action("error", reasoning="No surviving scenarios -- check input data")
 
     # 2. Win check
-    remaining = _count_remaining_evil(state, result)
-    if remaining == 0:
+    _, max_remaining = _remaining_evil_bounds(state, result)
+    if max_remaining == 0:
         return Action("win", reasoning="All evil characters have been executed!")
 
     # 3. Execute definite evil (skip Bombardier and execution-immune roles)

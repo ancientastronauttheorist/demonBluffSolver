@@ -76,6 +76,23 @@ class CardInfo:
     info_text: str = ""     # Raw info text from the card
     info_parsed: dict = field(default_factory=dict)  # Structured info (type-specific)
 
+    def to_dict(self) -> dict:
+        return {
+            "position": self.position,
+            "apparent_role": self.apparent_role,
+            "info_text": self.info_text,
+            "info_parsed": dict(self.info_parsed),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "CardInfo":
+        return cls(
+            data["position"],
+            data["apparent_role"],
+            data.get("info_text", ""),
+            data.get("info_parsed", {}),
+        )
+
 
 @dataclass
 class DeckComposition:
@@ -92,6 +109,23 @@ class DeckComposition:
     @property
     def all_roles(self) -> list[str]:
         return self.villagers + self.outcasts + self.minions + self.demons
+
+    def to_dict(self) -> dict:
+        return {
+            "villagers": list(self.villagers),
+            "outcasts": list(self.outcasts),
+            "minions": list(self.minions),
+            "demons": list(self.demons),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "DeckComposition":
+        return cls(
+            villagers=list(data.get("villagers", [])),
+            outcasts=list(data.get("outcasts", [])),
+            minions=list(data.get("minions", [])),
+            demons=list(data.get("demons", [])),
+        )
 
 
 @dataclass
@@ -115,6 +149,67 @@ class GameState:
     blocked_positions: list[int] = field(default_factory=list)  # Positions blocked from reveal (Witch)
     board_villager_count: Optional[int] = None  # Actual villagers on board (when pool > board)
     board_outcast_count: Optional[int] = None   # Actual outcasts on board (when pool > board)
+
+    def to_dict(self, *, nest_deck: bool = True) -> dict:
+        data = {
+            "n_cards": self.n_cards,
+            "n_evil": self.n_evil,
+            "cards": [card.to_dict() for card in self.cards],
+            "executed": list(self.executed),
+            "confirmed_evil": list(self.confirmed_evil),
+            "confirmed_good": list(self.confirmed_good),
+            "pd_corruption_target": self.pd_corruption_target,
+            "executed_evil_roles": {str(k): v for k, v in self.executed_evil_roles.items()},
+            "slayer_results": list(self.slayer_results),
+            "pd_ability_results": list(self.pd_ability_results),
+            "blocked_positions": list(self.blocked_positions),
+            "night_kills": list(self.night_kills),
+            "night_kill_evil_count": self.night_kill_evil_count,
+            "hp": self.hp,
+            "wrong_exec_cost": self.wrong_exec_cost,
+            "board_villager_count": self.board_villager_count,
+            "board_outcast_count": self.board_outcast_count,
+        }
+        if nest_deck:
+            data["deck"] = self.deck.to_dict()
+        else:
+            data.update(self.deck.to_dict())
+        return data
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "GameState":
+        deck_data = data.get("deck")
+        if deck_data is None:
+            deck_data = {
+                "villagers": data.get("villagers", []),
+                "outcasts": data.get("outcasts", []),
+                "minions": data.get("minions", []),
+                "demons": data.get("demons", []),
+            }
+
+        raw_eer = data.get("executed_evil_roles", {})
+        executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
+
+        return cls(
+            n_cards=data["n_cards"],
+            deck=DeckComposition.from_dict(deck_data),
+            cards=[CardInfo.from_dict(c) for c in data.get("cards", [])],
+            n_evil=data.get("n_evil", 0),
+            executed=list(data.get("executed", [])),
+            confirmed_evil=list(data.get("confirmed_evil", [])),
+            confirmed_good=list(data.get("confirmed_good", [])),
+            pd_corruption_target=data.get("pd_corruption_target"),
+            executed_evil_roles=executed_evil_roles,
+            slayer_results=list(data.get("slayer_results", [])),
+            pd_ability_results=list(data.get("pd_ability_results", [])),
+            blocked_positions=list(data.get("blocked_positions", [])),
+            night_kills=list(data.get("night_kills", [])),
+            night_kill_evil_count=data.get("night_kill_evil_count", 0),
+            hp=data.get("hp", 10),
+            wrong_exec_cost=data.get("wrong_exec_cost", 2),
+            board_villager_count=data.get("board_villager_count"),
+            board_outcast_count=data.get("board_outcast_count"),
+        )
 
 
 @dataclass
@@ -172,7 +267,9 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     evil_roles = remaining_evil_roles
 
     # How many evil positions remain to be placed?
-    n_executed_evil = len(state.executed_evil_roles)
+    # Old sessions may only know that an executed position was evil, not which
+    # role it was. Those positions still reduce the number of remaining evils.
+    n_executed_evil = len(state.executed_evil_roles) + len(executed_evil_without_role)
     expected_remaining = state.n_evil - n_executed_evil
 
     # Remove already-executed positions from candidates
@@ -510,6 +607,11 @@ def _get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
     return None
 
 
+def get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
+    """Public query helper for revealed card lookup."""
+    return _get_card_at(pos, state)
+
+
 def _is_villager_role(role_name: str, state: GameState) -> bool:
     """Check if a role name is a Villager (corruption target)."""
     card_def = get_card(role_name)
@@ -547,6 +649,27 @@ def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
         occupied += 1
 
     return occupied >= max_outcasts
+
+
+def _hidden_outcast_presence_flags(role_name: str, state: GameState) -> tuple[bool, bool]:
+    """Return (can_be_on_board, can_be_absent) for a hidden outcast role.
+
+    Uses board_outcast_count when available. This matters for hidden outcasts
+    like Doppelganger/Drunk: if the board header says there is exactly one
+    outcast and the pool's only outcast is Doppelganger, then Doppelganger
+    cannot be treated as optional.
+    """
+    if role_name not in state.deck.outcasts:
+        return (False, True)
+
+    slots = state.board_outcast_count
+    if slots is None:
+        return (True, True)
+
+    other_outcasts = len(state.deck.outcasts) - 1
+    can_be_on = slots > 0
+    can_be_absent = other_outcasts >= slots
+    return (can_be_on, can_be_absent)
 
 
 def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
@@ -593,9 +716,19 @@ def _get_real_role(pos: int, scenario: Scenario, state: GameState) -> str:
     return "Unknown"
 
 
+def get_real_role(pos: int, scenario: Scenario, state: GameState) -> str:
+    """Public query helper for a position's real role in a scenario."""
+    return _get_real_role(pos, scenario, state)
+
+
 def _is_evil_in_scenario(pos: int, scenario: Scenario) -> bool:
     """Check if a position is evil in this scenario (includes Puppet)."""
     return pos in scenario.evil_positions or pos == scenario.puppet_position
+
+
+def scenario_is_evil(pos: int, scenario: Scenario) -> bool:
+    """Public query helper for scenario evil membership."""
+    return _is_evil_in_scenario(pos, scenario)
 
 
 def _effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Alignment:
@@ -606,6 +739,11 @@ def _effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Alig
     if card and card.apparent_role == "Wretch":
         return Alignment.EVIL  # Wretch registers as Evil to abilities
     return Alignment.GOOD
+
+
+def effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Alignment:
+    """Public query helper for effective alignment in a scenario."""
+    return _effective_alignment(pos, scenario, state)
 
 
 def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
@@ -632,6 +770,11 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
 
     # Good uncorrupted = truthful
     return TruthStatus.TRUTHFUL
+
+
+def truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
+    """Public query helper for whether a position tells the truth in a scenario."""
+    return _truth_status(pos, scenario, state)
 
 
 # ============================================================
@@ -1533,8 +1676,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
 
         # Determine possible Doppelganger positions
         has_doppelganger = "Doppelganger" in state.deck.outcasts
-        dopp_candidates = [None]  # None = Doppelganger not in play / not relevant
-        if has_doppelganger:
+        can_have_dopp, can_skip_dopp = _hidden_outcast_presence_flags("Doppelganger", state)
+        dopp_candidates = [None] if can_skip_dopp else []
+        if has_doppelganger and can_have_dopp:
             for p in range(1, state.n_cards + 1):
                 if p in full_evil or p == puppet_pos:
                     continue
@@ -1548,12 +1692,13 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         # Drunk (Outcast) disguises as a not-in-play Villager, is always
         # corrupted, and can't be cured. Enumerate possible positions.
         has_drunk = "Drunk" in state.deck.outcasts
-        drunk_candidates = [None]  # None = no hidden Drunk (or Drunk already identified)
         # Check if Drunk is already explicitly revealed (e.g., by Medium)
         drunk_already_known = any(
             c.apparent_role == "Drunk" for c in state.cards
         )
-        if has_drunk and not drunk_already_known:
+        can_have_drunk, can_skip_drunk = _hidden_outcast_presence_flags("Drunk", state)
+        drunk_candidates = [None] if (drunk_already_known or can_skip_drunk) else []
+        if has_drunk and not drunk_already_known and can_have_drunk:
             for p in range(1, state.n_cards + 1):
                 if p in full_evil or p == puppet_pos:
                     continue
