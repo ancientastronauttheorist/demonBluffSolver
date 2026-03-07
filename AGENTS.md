@@ -23,6 +23,19 @@ Codex should operate in this cycle:
 - To open the current deck, click the purple card icon in the top-right corner instead of using `Tab`.
 - Prefer hover-and-screenshot verification before committing to a click when a UI target is ambiguous.
 
+## Mouse Parking
+- Before taking screenshots, park the mouse in a neutral area so hover tooltips do not block card text or UI.
+- Preferred parking spots on a 2560x1440 screen:
+  - Board-center void: around `(1280, 690)` when no modal is open. This keeps the cursor off cards and side UI.
+  - Lower-right dark margin: around `(2400, 1300)` when no settings tooltip is open.
+- Avoid parking on:
+  - the left status panel
+  - the purple deck icon / top-right markers
+  - the eye button on the right
+  - the execute/settings cluster in the lower-right
+  - any revealed or facedown card
+- If a screenshot includes a hover panel, move to a parking spot and immediately retake it instead of trying to read through the obstruction.
+
 ## Setup
 - Screen: 2560x1440
 - Python 3.13
