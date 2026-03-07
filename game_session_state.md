@@ -1237,3 +1237,158 @@ WARNING: Probabilistic execution -- 57% confident
 Final HP: 10
 Notes: Perfect 10HP. Ascension 9 complete! Baker triple-chain confirmed #2/#3/#8 good. PD clean + Empress/Architect/Scout/Bard constraints narrowed to #5 Baa + #6 Shaman.
 
+
+---
+
+# New Game — 2026-03-06 19:40:22
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Slayer, Bishop, Confessor, Scout, Architect, Oracle
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [19:44:07] Revealed #1 Slayer
+Info: {}
+
+### [19:44:07] Revealed #2 Plague_Doctor
+Info: {}
+
+### [19:44:07] Revealed #3 Bombardier
+Info: {}
+
+### [19:44:07] Revealed #4 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [19:44:07] Revealed #5 Oracle
+Info: {'targets': [6, 9], 'minion_role': 'Minion'}
+
+### [19:44:07] Revealed #6 Scout
+Info: {'evil_role': 'Shaman', 'distance': 4}
+
+### [19:44:07] Revealed #8 Architect
+Info: {'side': 'right'}
+
+### [19:44:07] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+#### [19:44:19] Solver Output
+Scenarios: 32/846
+Definite good: ['#2', '#7', '#10']
+Evil probabilities: #9=78%, #6=62%, #4=56%, #8=41%, #3=38%, #1=12%, #5=12%
+  Generated 846 candidate scenarios
+  32 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 8, 9]
+
+#### [19:44:19] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 1.505 (adjusted 1.505) | timing x1.00
+
+#### [19:46:01] Solver Output
+Scenarios: 21/846
+Definite good: ['#2', '#7', '#10']
+Evil probabilities: #9=67%, #4=62%, #8=62%, #6=52%, #3=38%, #1=14%, #5=5%
+  Generated 846 candidate scenarios
+  21 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 8, 9]
+
+#### [19:46:01] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#9']
+Reason: Target #9 is 67% evil (adjusted 0.63)
+WARNING: Corruption risk: 5% -- Slayer ability disabled if corrupted
+
+### [19:46:47] Executed #9 -> Minion (EVIL)
+
+#### [19:46:51] Solver Output
+Scenarios: 7/142
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#7', '#10']
+Evil probabilities: #8=71%, #4=57%, #3=43%, #6=29%
+  Generated 142 candidate scenarios
+  7 scenarios survived validation
+    #9 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 8]
+
+#### [19:46:51] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 71% likely evil (HP=6, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 71% confident
+
+### [19:47:28] Executed #8 -> Lilis (EVIL)
+
+#### [19:47:31] Solver Output
+Scenarios: 4/27
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#5', '#7', '#10']
+Evil probabilities: #4=50%, #3=25%, #6=25%
+  Generated 27 candidate scenarios
+  4 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6]
+
+#### [19:47:31] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 50% likely evil (HP=6, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 50% confident
+
+### [19:48:25] Executed #4 -> GOOD (WRONG!)
+
+#### [19:48:25] Solver Output
+Scenarios: 2/22
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#10']
+Evil probabilities: #3=50%, #6=50%
+  Generated 22 candidate scenarios
+  2 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [3, 6]
+
+#### [19:48:25] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [19:52:05] Executed #3 -> Shaman (EVIL)
+
+## [19:52:05] GAME OVER — WIN
+Final HP: 1
+Notes: Extra roles mechanic: 12 pool / 10 board. Solver had 50/50 but outcast count deduction (1O on board, both PD and Bombardier visible, PD confirmed good -> Bombardier must be evil disguise) broke the tie. Need to add deck pool vs board count validation to solver.
+
+
+---
+
+# New Game — 2026-03-06 19:55:25
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Empress, Slayer, Bishop, Confessor, Scout, Architect, Oracle
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Lilis
+

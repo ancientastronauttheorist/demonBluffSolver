@@ -55,6 +55,13 @@
       "name": "asc9_g7",
       "notes": "Perfect 10HP. Ascension 9 complete! Baker triple-chain confirmed #2/#3/#8 good. PD clean + Empress/Architect/Scout/Bard constraints narrowed to #5 Baa + #6 Shaman.",
       "date": "2026-03-06 19:20"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc10_g1",
+      "notes": "Extra roles mechanic: 12 pool / 10 board. Solver had 50/50 but outcast count deduction (1O on board, both PD and Bombardier visible, PD confirmed good -> Bombardier must be evil disguise) broke the tie. Need to add deck pool vs board count validation to solver.",
+      "date": "2026-03-06 19:52"
     }
   ]
 }

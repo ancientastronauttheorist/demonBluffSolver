@@ -1,0 +1,152 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 3
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          9
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Shaman",
+        "distance": 4
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    }
+  ],
+  "executed": [
+    7,
+    10,
+    9,
+    8,
+    4,
+    3
+  ],
+  "confirmed_evil": [
+    9,
+    8,
+    3
+  ],
+  "confirmed_good": [
+    7,
+    10,
+    4
+  ],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    2,
+    1
+  ],
+  "executed_evil_roles": {
+    "9": "Minion",
+    "8": "Lilis",
+    "3": "Shaman"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 1,
+      "target_pos": 9,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 8,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    7,
+    10
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "name": "asc10_g1",
+  "true_evil_positions": {
+    "3": "Shaman",
+    "8": "Lilis",
+    "9": "Minion"
+  },
+  "notes": "Extra roles mechanic: 12 pool / 10 board. Solver had 50/50 but outcast count deduction (1O on board, both PD and Bombardier visible, PD confirmed good -> Bombardier must be evil disguise) broke the tie. Need to add deck pool vs board count validation to solver.",
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Slayer",
+      "Bishop",
+      "Confessor",
+      "Scout",
+      "Architect",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Shaman"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
+}

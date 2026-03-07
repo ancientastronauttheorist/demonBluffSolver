@@ -64,6 +64,8 @@ def build_game_state(case: dict) -> GameState:
         night_kill_evil_count=case.get("night_kill_evil_count", 0),
         hp=case.get("hp", 10),
         wrong_exec_cost=case.get("wrong_exec_cost", 2),
+        board_villager_count=case.get("board_villager_count"),
+        board_outcast_count=case.get("board_outcast_count"),
     )
 
 

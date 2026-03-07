@@ -268,6 +268,8 @@ class GameSession:
         self.wrong_exec_cost: int = 2  # Ascension 4 default
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
+        self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
+        self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
 
     # -- Deck --
 
@@ -352,6 +354,8 @@ class GameSession:
             night_kill_evil_count=self.night_kill_evil_count,
             hp=self.hp,
             wrong_exec_cost=self.wrong_exec_cost,
+            board_villager_count=self.board_villager_count,
+            board_outcast_count=self.board_outcast_count,
         )
 
     def solve(self) -> SolverResult:
@@ -489,6 +493,8 @@ class GameSession:
             "night_kill_evil_count": self.night_kill_evil_count,
             "hp": self.hp,
             "wrong_exec_cost": self.wrong_exec_cost,
+            "board_villager_count": self.board_villager_count,
+            "board_outcast_count": self.board_outcast_count,
         }
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
@@ -522,6 +528,8 @@ class GameSession:
         session.executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
         session.hp = data.get("hp", 10)
         session.wrong_exec_cost = data.get("wrong_exec_cost", 2)
+        session.board_villager_count = data.get("board_villager_count")
+        session.board_outcast_count = data.get("board_outcast_count")
         print(f"[load] Session loaded from {path}")
         return session
 
@@ -706,10 +714,35 @@ def main():
                 minions = _parse_role_list(arg[2:])
             elif arg.startswith("D=") or arg.startswith("d="):
                 demons = _parse_role_list(arg[2:])
+            elif arg.lower().startswith("nv="):
+                session.board_villager_count = int(arg[3:])
+            elif arg.lower().startswith("no="):
+                session.board_outcast_count = int(arg[3:])
         session.set_deck(villagers, outcasts, minions, demons)
+        # Auto-detect extra roles: if pool > board, infer board counts
+        pool_size = len(villagers) + len(outcasts) + len(minions) + len(demons)
+        if pool_size > session.n_cards and session.board_villager_count is None:
+            # Evil roles are always all on board; extra roles are among good
+            board_good = session.n_cards - session.n_evil
+            board_evil = len(minions) + len(demons)
+            if board_evil == session.n_evil:
+                # Derive: board_outcasts + board_villagers = board_good
+                # Pool has extra villagers and/or outcasts
+                extra = pool_size - session.n_cards
+                extra_v = len(villagers) - (board_good - len(outcasts))
+                extra_o = len(outcasts) - (board_good - len(villagers))
+                # Simpler: we know total good = n_cards - n_evil
+                # board_v + board_o = board_good
+                # pool_v + pool_o = board_good + extra
+                # We can't determine split without header info, so prompt user
+                print(f"  NOTE: Pool has {pool_size} roles for {session.n_cards} board positions.")
+                print(f"  Use nv=N no=N to specify actual board counts (e.g., deck ... nv=6 no=1)")
         session.save()
         DecisionLog.log_deck(villagers, outcasts, minions, demons)
-        print(f"Deck set: V={villagers} O={outcasts} M={minions} D={demons}")
+        extra_info = ""
+        if session.board_villager_count is not None or session.board_outcast_count is not None:
+            extra_info = f" [board: nv={session.board_villager_count} no={session.board_outcast_count}]"
+        print(f"Deck set: V={villagers} O={outcasts} M={minions} D={demons}{extra_info}")
         return
 
     if cmd == "card":

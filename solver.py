@@ -112,6 +112,8 @@ class GameState:
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
     pd_ability_results: list[dict] = field(default_factory=list)  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
     blocked_positions: list[int] = field(default_factory=list)  # Positions blocked from reveal (Witch)
+    board_villager_count: Optional[int] = None  # Actual villagers on board (when pool > board)
+    board_outcast_count: Optional[int] = None   # Actual outcasts on board (when pool > board)
 
 
 @dataclass
@@ -1583,6 +1585,20 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     deck_o_counts = Counter(_normalize(o) for o in state.deck.outcasts)
     for role, count in good_outcast_counts.items():
         if count > deck_o_counts.get(_normalize(role), 0):
+            return False
+
+    # Extra roles mechanic (Asc10+): pool has more roles than board positions.
+    # Total good outcasts on board can't exceed actual board outcast count.
+    if state.board_outcast_count is not None:
+        total_good_outcasts = sum(good_outcast_counts.values())
+        if total_good_outcasts > state.board_outcast_count:
+            return False
+
+    # Similarly, total good villager appearances can't exceed board villager
+    # count + disguiser allowance (Drunk/Doppelganger appear as Villagers).
+    if state.board_villager_count is not None:
+        total_good_villagers = sum(good_villager_counts.values())
+        if total_good_villagers > state.board_villager_count + n_disguisers + shaman_allowance:
             return False
 
     return True
