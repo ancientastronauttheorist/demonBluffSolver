@@ -650,7 +650,22 @@ def recommend_action(
                 pd_found = any(c.apparent_role.replace(" ", "_") == "Plague_Doctor"
                                for c in state.cards)
                 if not pd_found:
-                    corruption_unmodeled = True
+                    # Check if all outcast slots are filled by other outcasts
+                    # (extra roles mechanic: PD might not be on the board)
+                    if state.board_outcast_count is not None:
+                        found_outcasts = 0
+                        for c in state.cards:
+                            if c.position in state.confirmed_evil:
+                                continue  # Evil disguise, not a real outcast
+                            card_def = get_card(c.apparent_role)
+                            if card_def and card_def.role == Role.OUTCAST:
+                                found_outcasts += 1
+                        if found_outcasts >= state.board_outcast_count:
+                            pass  # All outcast slots filled — PD not on board
+                        else:
+                            corruption_unmodeled = True
+                    else:
+                        corruption_unmodeled = True
 
         if not corruption_unmodeled:
             pos = safe_executions[0]
