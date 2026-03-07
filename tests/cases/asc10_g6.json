@@ -1,0 +1,160 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "FortuneTeller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5,
+        "good_role": "Drunk"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "types": [
+          "Villager",
+          "Minion",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          8
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    }
+  ],
+  "executed": [
+    5,
+    6,
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [
+    5,
+    4
+  ],
+  "pd_corruption_target": null,
+  "used_abilities": [
+    8,
+    2,
+    7
+  ],
+  "executed_evil_roles": {
+    "6": "Pooka",
+    "7": "Shaman"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 7,
+      "target_pos": 5,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "name": "asc10_g6",
+  "true_evil_positions": {
+    "6": "Pooka",
+    "7": "Shaman"
+  },
+  "notes": "FT active ability clutch on 50/50. get_card bug found \u2014 CamelCase roles not matching KB.",
+  "deck": {
+    "villagers": [
+      "FortuneTeller",
+      "Baker",
+      "Slayer",
+      "Confessor",
+      "Medium",
+      "Bishop",
+      "Druid"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  }
+}

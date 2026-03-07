@@ -1,25 +1,6 @@
 {
   "n_cards": 9,
   "n_evil": 3,
-  "villagers": [
-    "Bishop",
-    "Judge",
-    "Baker",
-    "Poet",
-    "Medium",
-    "Enlightened",
-    "Alchemist"
-  ],
-  "outcasts": [
-    "Drunk"
-  ],
-  "minions": [
-    "Witch",
-    "Poisoner"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -119,5 +100,33 @@
   "hp": 0,
   "wrong_exec_cost": 5,
   "board_villager_count": 5,
-  "board_outcast_count": 1
+  "board_outcast_count": 1,
+  "name": "asc10_g7",
+  "true_evil_positions": {
+    "2": "Witch",
+    "5": "Poisoner",
+    "9": "Lilis"
+  },
+  "notes": "Lilis game. Wrong exec #4 Alchemist (-5HP), wrong exec #8 Drunk-corrupted (-2HP). Poet corruption fake-out \u2014 assumed lying Poet=evil but was corrupted Drunk. Alchemist cured 1 of 2 corruptions. Baker 'I was X' mechanic still unclear.",
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Judge",
+      "Baker",
+      "Poet",
+      "Medium",
+      "Enlightened",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Witch",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
 }

@@ -2082,3 +2082,235 @@ WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 
 ### [21:25:10] Executed #7 -> Shaman (EVIL)
 
+## [21:27:56] GAME OVER — WIN
+Final HP: 3
+Notes: FT active ability clutch on 50/50. get_card bug found — CamelCase roles not matching KB.
+
+
+---
+
+# New Game — 2026-03-06 21:34:30
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bishop, Judge, Baker, Poet, Medium, Enlightened, Alchemist
+- Outcasts: Drunk
+- Minions: Witch, Poisoner
+- Demons: Lilis
+
+### [21:36:03] Revealed #1 Baker
+Info: {}
+
+#### [21:36:34] Solver Output
+Scenarios: 3528/3528
+Evil probabilities: #1=33%, #2=33%, #3=33%, #4=33%, #5=33%, #6=33%, #7=33%, #8=33%, #9=33%
+  Generated 3528 candidate scenarios
+  3528 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:36:34] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 33% evil, entropy 1.018
+
+### [21:37:06] Revealed #2 Bishop
+Info: {'targets': [3, 4, 6], 'types': ['Minion', 'Villager', 'Outcast']}
+
+#### [21:37:07] Solver Output
+Scenarios: 3216/3528
+Evil probabilities: #2=37%, #3=36%, #4=36%, #6=36%, #1=32%, #5=31%, #7=31%, #8=31%, #9=31%
+  Generated 3528 candidate scenarios
+  3216 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:37:07] Recommendation
+Action: **REVEAL** #3
+Reason: #3: 36% evil, entropy 1.041
+
+### [21:37:41] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [21:37:42] Solver Output
+Scenarios: 1720/3738
+Evil probabilities: #2=41%, #4=38%, #3=38%, #5=32%, #6=32%, #7=31%, #8=31%, #9=29%, #1=28%
+  Generated 3738 candidate scenarios
+  1720 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:37:42] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 38% evil, entropy 1.057
+
+### [21:39:32] Revealed #4 Alchemist
+Info: {'cured_count': 1}
+
+#### [21:39:37] Solver Output
+Scenarios: 996/3948
+Definite good: ['#6']
+Evil probabilities: #4=59%, #3=46%, #5=43%, #2=39%, #7=30%, #8=30%, #1=27%, #9=27%
+  Generated 3948 candidate scenarios
+  996 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:39:37] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 43% evil, entropy 1.085
+
+### [21:44:02] Revealed #5 Baker
+Info: {}
+
+#### [21:44:07] Solver Output
+Scenarios: 1016/4158
+Definite good: ['#6']
+Evil probabilities: #4=60%, #3=45%, #5=42%, #2=39%, #7=30%, #8=30%, #1=27%, #9=27%
+  Generated 4158 candidate scenarios
+  1016 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:44:07] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 30% evil, entropy 0.978
+
+### [21:44:52] Revealed #7 Baker
+Info: {}
+
+#### [21:44:52] Solver Output
+Scenarios: 1016/4368
+Definite good: ['#6']
+Evil probabilities: #4=60%, #3=45%, #5=42%, #2=39%, #7=30%, #8=30%, #1=27%, #9=27%
+  Generated 4368 candidate scenarios
+  1016 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:44:52] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 30% evil, entropy 0.978
+WARNING: Witch may be alive -- be cautious about revealing
+
+### [21:45:43] Revealed #8 Poet
+Info: {'good_position': 5, 'copied_role': 'Gemcrafter'}
+
+#### [21:45:43] Solver Output
+Scenarios: 446/4578
+Definite good: ['#6']
+Evil probabilities: #4=68%, #3=46%, #2=45%, #5=33%, #9=31%, #1=30%, #7=28%, #8=19%
+  Generated 4578 candidate scenarios
+  446 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:45:43] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 68% likely evil (HP=8, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 68% confident
+
+### [21:46:34] Executed #4 -> GOOD (WRONG!)
+
+#### [21:46:35] Solver Output
+Scenarios: 142/2982
+Definite good: ['#4', '#6']
+Evil probabilities: #5=76%, #2=52%, #8=48%, #3=46%, #7=27%, #9=27%, #1=24%
+  Generated 2982 candidate scenarios
+  142 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 7, 8, 9]
+
+#### [21:46:35] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 76% likely evil but HP too low to risk (HP=3, cost=5). Need more info.
+WARNING: Probabilistic execution -- 76% confident
+WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:48:00] Executed #5 -> Poisoner (EVIL)
+
+#### [21:48:00] Solver Output
+Scenarios: 38/294
+Definite evil: ['#5']
+Definite good: ['#4', '#6']
+Evil probabilities: #8=68%, #3=53%, #2=47%, #1=11%, #7=11%, #9=11%
+  Generated 294 candidate scenarios
+  38 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 7, 8, 9]
+
+#### [21:48:00] Recommendation
+Action: **ERROR** #8
+Reason: #8 is 68% likely evil but HP too low to risk (HP=3, cost=5). Need more info.
+WARNING: Probabilistic execution -- 68% confident
+WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:49:40] Executed #8 -> GOOD (WRONG!)
+
+#### [21:49:40] Solver Output
+Scenarios: 12/210
+Definite evil: ['#5']
+Definite good: ['#4', '#6', '#8']
+Evil probabilities: #2=50%, #3=50%, #1=33%, #7=33%, #9=33%
+  Generated 210 candidate scenarios
+  12 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 7, 9]
+
+#### [21:49:40] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 50% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:50:38] Executed #2 -> Witch (EVIL)
+
+#### [21:50:38] Solver Output
+Scenarios: 3/35
+Definite evil: ['#2', '#5']
+Definite good: ['#3', '#4', '#6', '#8']
+Evil probabilities: #1=33%, #7=33%, #9=33%
+  Generated 35 candidate scenarios
+  3 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7, 9]
+
+#### [21:50:38] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 33% evil, entropy 1.018
+
+### [21:52:40] Revealed #9 Poet
+Info: {}
+
+#### [21:52:40] Solver Output
+Scenarios: 3/35
+Definite evil: ['#2', '#5']
+Definite good: ['#3', '#4', '#6', '#8']
+Evil probabilities: #1=33%, #7=33%, #9=33%
+  Generated 35 candidate scenarios
+  3 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7, 9]
+
+#### [21:52:40] Recommendation
+Action: **ERROR** #1
+Reason: #1 is 33% likely evil but HP too low to risk (HP=0, cost=5). Need more info.
+WARNING: Probabilistic execution -- 33% confident
+WARNING: CRITICAL: HP=0, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+## [21:53:33] GAME OVER — LOSS
+Final HP: 0
+Notes: Lilis game. Wrong exec #4 Alchemist (-5HP), wrong exec #8 Drunk-corrupted (-2HP). Poet corruption fake-out — assumed lying Poet=evil but was corrupted Drunk. Alchemist cured 1 of 2 corruptions. Baker 'I was X' mechanic still unclear.
+

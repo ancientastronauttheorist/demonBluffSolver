@@ -90,6 +90,20 @@
       "name": "asc10_g5",
       "notes": "Lilis game, 1-at-a-time flipping. Wrong exec #3 (PD outcast) because PD card wasn't entered \u2014 solver couldn't model corruption. #1 Poet was corrupted explaining Knitter contradiction. Recovered by entering PD card post-exec. HP 3/10 survived.",
       "date": "2026-03-06 20:54"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc10_g6",
+      "notes": "FT active ability clutch on 50/50. get_card bug found \u2014 CamelCase roles not matching KB.",
+      "date": "2026-03-06 21:27"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc10_g7",
+      "notes": "Lilis game. Wrong exec #4 Alchemist (-5HP), wrong exec #8 Drunk-corrupted (-2HP). Poet corruption fake-out \u2014 assumed lying Poet=evil but was corrupted Drunk. Alchemist cured 1 of 2 corruptions. Baker 'I was X' mechanic still unclear.",
+      "date": "2026-03-06 21:53"
     }
   ]
 }

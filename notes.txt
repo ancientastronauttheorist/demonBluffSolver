@@ -1,0 +1,56 @@
+we can start the loop. have fun :D, stay curious, build anything you need (especially if you're have trouble pressing buttons) and get your info from the compendium/hovering over cards for the best ground truth. the ground truth will always be able to be found in the game: just hover over the cards, screenshot and see what they say and adjust the solver and other files in the project as necessary. if you need to search the steam forums or the wiki you can do that too.
+
+say the deck has only 1 hunter card and we flip all the cards over and there are 2 hunter cards. does our solver know this is sus? think it through, would that mean one has to be evil? or could it be corrupted? or a doppelganger? ugh this game is confusing af. --ultrathink
+
+Great question, and yeah, this game has a LOT of overlapping mechanics. Let me break it down systematically.
+
+  If deck shows 1 Hunter but board has 2 Hunters, what explains it?                                                 
+  1. Evil disguise (most common)                                                                                    
+  One is the real Hunter, the other is an Evil (Witch/Lilis/Minion/etc.) disguised as Hunter. The evil one lies — so
+   their Hunter info (distance to closest evil) would be FALSE. The solver handles this well: it tests each position
+   as evil, checks if the info is consistent as a lie, and filters.
+
+  2. Drunk (if in deck)
+
+  Drunk "disguises as a random Villager" and is inherently corrupted (lies, ability doesn't work). In our V1 game,
+  Drunk appeared as Lover when Lover was already in the deck — so Drunk CAN duplicate an existing role. One "Hunter"
+   would be Drunk (Good Outcast, but corrupted = lies, ability broken). The solver should treat Drunk's info as
+  unreliable.
+
+  3. Doppelganger (if in deck)
+
+  Similar idea — disguises as a Villager. Whether it can pick a role already in the deck is less clear, but same
+  concept as Drunk.
+
+  4. Puppet (if Puppeteer in deck)
+
+  Puppeteer converts an adjacent Villager into Puppet. The Puppet keeps its original appearance but becomes Evil. If
+   the converted card WAS the Hunter, it still looks like Hunter but is now Evil. Then if the Puppeteer ALSO
+  disguises as Hunter — boom, 2 Hunters. Except Puppet can't lie, so its Hunter info would be TRUE despite being
+  Evil.
+
+  NOT corruption
+
+  Corruption doesn't change apparent roles. A corrupted Hunter still shows as Hunter — you just wouldn't see a
+  duplicate from corruption. Corruption makes them lie, not change identity.
+
+  NOT Shaman
+
+  If Shaman created 2 Hunters, the deck view would show 2 Hunters. So if deck shows 1, Shaman didn't do it.
+
+  Does our solver catch this?
+
+  Indirectly, through info validation — yes, usually. The solver tests every possible evil placement and checks if
+  each card's info is consistent as truth (Good) or lie (Evil). A fake Hunter's distance info would need to be a
+  valid lie, which usually doesn't match what a real Hunter would say.
+
+  Explicitly checking role counts — no. The solver never says "hey, there are 2 Hunters but the deck only has 1." It
+   could miss edge cases where both Hunters' info happens to be consistent in both truth/lie interpretations.
+
+  We could add a duplicate role validator that cross-references apparent roles against deck composition:
+  - Count apparent roles vs deck counts
+  - Excess copies MUST be explained by: evil disguise, Drunk, Doppelganger, or Puppet
+  - This would add constraints that help narrow down scenarios
+
+  Want me to add that to the solver? It would be especially useful in games where the info alone doesn't clearly
+  distinguish the duplicate.
