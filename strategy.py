@@ -654,8 +654,8 @@ def recommend_action(
                 found_outcasts = sum(
                     1 for c in state.cards
                     if c.position not in state.confirmed_evil
-                    and get_card(c.apparent_role)
-                    and get_card(c.apparent_role).role == Role.OUTCAST
+                    and (cd := get_card(c.apparent_role))
+                    and cd.role == Role.OUTCAST
                 )
                 if found_outcasts < state.board_outcast_count:
                     corruption_unmodeled = True

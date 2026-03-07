@@ -178,14 +178,15 @@ ALL_CARDS = VILLAGERS + OUTCASTS + MINIONS + DEMONS
 
 CARDS_BY_NAME = {card.name: card for card in ALL_CARDS}
 
+_NORMALIZED_CARDS = {
+    card.name.lower().replace(" ", "").replace("_", ""): card
+    for card in ALL_CARDS
+}
+
 
 def get_card(name: str) -> Card:
     """Look up a card by name (case-insensitive, space-insensitive)."""
-    normalized = name.lower().replace(" ", "").replace("_", "")
-    for card in ALL_CARDS:
-        if card.name.lower().replace(" ", "").replace("_", "") == normalized:
-            return card
-    return None
+    return _NORMALIZED_CARDS.get(name.lower().replace(" ", "").replace("_", ""))
 
 
 if __name__ == "__main__":
