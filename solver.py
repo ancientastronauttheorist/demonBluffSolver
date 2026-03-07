@@ -864,7 +864,8 @@ def _validate_medium(card: CardInfo, scenario: Scenario,
     # Check if the claimed position is actually that good role
     is_good = _effective_alignment(claimed_pos, scenario, state) == Alignment.GOOD
     actual_role = _get_real_role(claimed_pos, scenario, state)
-    actual_match = is_good and actual_role == claimed_role
+    # Normalize spaces/underscores for comparison (e.g., "Fortune Teller" vs "Fortune_Teller")
+    actual_match = is_good and actual_role.replace(" ", "_") == claimed_role.replace(" ", "_")
 
     if truth == TruthStatus.TRUTHFUL:
         return actual_match
@@ -1352,12 +1353,11 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
     placements = _generate_evil_placements(state)
     scenarios = []
 
-    # Find Plague Doctor position (if any) for corruption
-    pd_pos = None
+    # Find ALL Plague Doctor positions (there may be 2 if evil disguised as PD)
+    all_pd_positions = []
     for card in state.cards:
         if card.apparent_role in ("Plague_Doctor", "Plague Doctor"):
-            if card.position not in []:  # Not evil (check later per scenario)
-                pd_pos = card.position
+            all_pd_positions.append(card.position)
 
     for placement in placements:
         if not _apply_placement_constraints(placement, state):
@@ -1372,8 +1372,15 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         # Determine PD corruption targets
         # PD corrupts 1 random Good Villager — we need to try all possibilities
         # For simplicity, if PD is in play and not evil, try each villager position
+        # When multiple PD cards exist, use the one that's NOT evil in this placement
+        pd_pos = None
+        for p in all_pd_positions:
+            if p not in placement:
+                pd_pos = p
+                break  # First non-evil PD is the real one
+
         pd_targets = [None]
-        if pd_pos and pd_pos not in placement:
+        if pd_pos:
             # PD is good — it corrupted someone
             if "Plague_Doctor" in state.deck.outcasts or "Plague Doctor" in state.deck.outcasts:
                 if state.pd_corruption_target is not None:
