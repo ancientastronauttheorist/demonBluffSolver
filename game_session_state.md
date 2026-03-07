@@ -1909,3 +1909,176 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
 Final HP: 3
 Notes: Lilis game, 1-at-a-time flipping. Wrong exec #3 (PD outcast) because PD card wasn't entered — solver couldn't model corruption. #1 Poet was corrupted explaining Knitter contradiction. Recovered by entering PD card post-exec. HP 3/10 survived.
 
+
+---
+
+# New Game — 2026-03-06 21:12:38
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: FortuneTeller, Baker, Slayer, Confessor, Medium, Bishop, Druid
+- Outcasts: Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [21:15:45] Revealed #1 FortuneTeller
+Info: {}
+
+### [21:15:45] Revealed #2 Druid
+Info: {}
+
+### [21:15:45] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [21:15:46] Revealed #4 Medium
+Info: {'good_position': 5, 'good_role': 'Drunk'}
+
+### [21:15:46] Revealed #5 Bishop
+Info: {'targets': [1, 3, 4], 'types': ['Villager', 'Minion', 'Outcast']}
+
+### [21:15:46] Revealed #6 Bishop
+Info: {'targets': [1, 4, 8], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [21:15:46] Revealed #7 Slayer
+Info: {}
+
+### [21:15:46] Revealed #8 Druid
+Info: {}
+
+#### [21:15:50] Solver Output
+Scenarios: 49/392
+Definite good: ['#3']
+Evil probabilities: #5=78%, #6=35%, #4=27%, #7=18%, #1=14%, #2=14%, #8=14%
+  Generated 392 candidate scenarios
+  49 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 8]
+
+#### [21:15:50] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.889 (adjusted 0.816) | timing x1.00
+WARNING: Corruption risk: 16%
+
+### [21:16:52] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [21:16:55] Ability used at #8
+
+#### [21:16:59] Solver Output
+Scenarios: 34/392
+Definite good: ['#3', '#8']
+Evil probabilities: #5=76%, #6=41%, #4=29%, #1=18%, #2=18%, #7=18%
+  Generated 392 candidate scenarios
+  34 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7]
+
+#### [21:16:59] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.908 (adjusted 0.841) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [21:18:18] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': None}
+
+### [21:18:18] Ability used at #2
+
+#### [21:18:19] Solver Output
+Scenarios: 23/392
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #5=74%, #6=48%, #4=35%, #1=22%, #7=22%
+  Generated 392 candidate scenarios
+  23 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [21:18:19] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#5']
+Reason: Target #5 is 74% evil (adjusted 0.45)
+WARNING: Corruption risk: 39% -- Slayer ability disabled if corrupted
+
+#### [21:18:59] Solver Output
+Scenarios: 14/392
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #5=57%, #6=57%, #4=36%, #7=36%, #1=14%
+  Generated 392 candidate scenarios
+  14 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [21:18:59] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 57% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 57% confident
+
+### [21:19:37] Executed #5 -> GOOD (WRONG!)
+
+#### [21:19:38] Solver Output
+Scenarios: 6/294
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#5', '#8']
+Evil probabilities: #4=67%, #1=17%, #7=17%
+  Generated 294 candidate scenarios
+  6 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 7]
+
+#### [21:19:38] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Pooka'})
+
+### [21:20:11] Executed #6 -> Pooka (EVIL)
+
+#### [21:20:11] Solver Output
+Scenarios: 6/42
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#5', '#8']
+Evil probabilities: #4=67%, #1=17%, #7=17%
+  Generated 42 candidate scenarios
+  6 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 7]
+
+#### [21:20:11] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 67% likely evil (HP=8, can afford 1 wrong execs)
+WARNING: Probabilistic execution -- 67% confident
+
+### [21:20:42] Executed #4 -> GOOD (WRONG!)
+
+#### [21:20:42] Solver Output
+Scenarios: 2/35
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #7=50%
+  Generated 35 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [21:20:42] Recommendation
+Action: **ERROR** #1
+Reason: #1 is 50% likely evil but HP too low to risk (HP=3, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident
+WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:25:10] Executed #7 -> Shaman (EVIL)
+

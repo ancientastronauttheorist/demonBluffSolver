@@ -180,9 +180,10 @@ CARDS_BY_NAME = {card.name: card for card in ALL_CARDS}
 
 
 def get_card(name: str) -> Card:
-    """Look up a card by name (case-insensitive)."""
+    """Look up a card by name (case-insensitive, space-insensitive)."""
+    normalized = name.lower().replace(" ", "").replace("_", "")
     for card in ALL_CARDS:
-        if card.name.lower() == name.lower():
+        if card.name.lower().replace(" ", "").replace("_", "") == normalized:
             return card
     return None
 
