@@ -637,12 +637,22 @@ def recommend_action(
                        and p not in result.bombardier_positions
                        and p not in immune_positions]
     if safe_executions:
-        # Safety check: don't trust "definite evil" when too few cards are revealed.
-        # With incomplete info, the solver may over-prune scenarios (e.g. missing PD
-        # corruption modeling) leading to false "definite" conclusions.
+        # Safety check: if PD is in the deck but hasn't been found among revealed
+        # cards, corruption can't be modeled. The solver may over-prune scenarios
+        # (corrupted cards treated as truthful) leading to false "definite evil".
+        # Prefer revealing to locate the PD first.
         unrevealed = _unrevealed_positions(state)
-        reveal_frac = _revealed_fraction(state)
-        if reveal_frac >= 0.6 or not unrevealed:
+        corruption_unmodeled = False
+        if unrevealed:
+            pd_in_deck = any(r.replace(" ", "_") == "Plague_Doctor"
+                             for r in state.deck.outcasts)
+            if pd_in_deck:
+                pd_found = any(c.apparent_role.replace(" ", "_") == "Plague_Doctor"
+                               for c in state.cards)
+                if not pd_found:
+                    corruption_unmodeled = True
+
+        if not corruption_unmodeled:
             pos = safe_executions[0]
             roles = set()
             for s in result.surviving_scenarios:
@@ -651,7 +661,7 @@ def recommend_action(
             return Action(
                 "execute", position=pos,
                 reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
-        # else: fall through to abilities/reveal — need more info first
+        # else: PD corruption unmodeled — fall through to reveal to find PD
 
     # 4. Check available abilities
     ability_recs = recommend_abilities(state, result, used_abilities)
