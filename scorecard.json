@@ -104,6 +104,13 @@
       "name": "asc10_g7",
       "notes": "Lilis game. Wrong exec #4 Alchemist (-5HP), wrong exec #8 Drunk-corrupted (-2HP). Poet corruption fake-out \u2014 assumed lying Poet=evil but was corrupted Drunk. Alchemist cured 1 of 2 corruptions. Baker 'I was X' mechanic still unclear.",
       "date": "2026-03-06 21:53"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc10_g8",
+      "notes": "1-in-3 guess at end, solver found 2/3 evils definitively. Fixed PD normalization bug and role_counts normalization bug mid-game.",
+      "date": "2026-03-06 22:48"
     }
   ]
 }

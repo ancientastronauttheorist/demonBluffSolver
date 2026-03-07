@@ -2314,3 +2314,313 @@ WARNING: CRITICAL: HP=0, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 0
 Notes: Lilis game. Wrong exec #4 Alchemist (-5HP), wrong exec #8 Drunk-corrupted (-2HP). Poet corruption fake-out — assumed lying Poet=evil but was corrupted Drunk. Alchemist cured 1 of 2 corruptions. Baker 'I was X' mechanic still unclear.
 
+
+---
+
+# New Game — 2026-03-06 22:17:15
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Alchemist, Dreamer, Enlightened, FortuneTeller, Bard
+- Outcasts: Bombardier, PlagueDoctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [22:19:46] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [22:20:02] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [22:20:02] Revealed #3 FortuneTeller
+Info: {}
+
+### [22:20:03] Revealed #4 Enlightened
+Info: {'direction': 'cw'}
+
+### [22:20:03] Revealed #5 Dreamer
+Info: {}
+
+### [22:20:03] Revealed #6 Bombardier
+Info: {}
+
+### [22:20:03] Revealed #7 PlagueDoctor
+Info: {}
+
+### [22:20:03] Revealed #8 Confessor
+Info: {'dizzy': True}
+
+#### [22:20:14] Solver Output
+Scenarios: 2/504
+Definite evil: ['#1', '#6', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#9']
+  Generated 504 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #6 is DEFINITELY EVIL (possible roles: {'Minion', 'Witch'})
+    #8 is DEFINITELY EVIL (possible roles: {'Minion', 'Witch'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [22:20:14] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [22:21:23] Executed #1 -> wrong (EVIL)
+
+#### [22:21:35] Claude Reasoning
+
+
+#### [22:22:38] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Alchemist: rejected 180/336 (54%)
+    #1 Bard: rejected 162/336 (48%)
+    #4 Enlightened: rejected 162/336 (48%)
+    #8 Confessor: rejected 150/336 (45%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: 30 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Alchemist: 50 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Enlightened: 38 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Dreamer: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Confessor: 30 scenarios survive  <-- SUSPECT
+
+#### [22:22:38] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:22:56] Solver Output
+Scenarios: 8/336
+Definite good: ['#1', '#9']
+Evil probabilities: #7=75%, #2=50%, #3=50%, #8=50%, #4=25%, #5=25%, #6=25%
+  Generated 336 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8]
+
+#### [22:22:56] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.250 (adjusted 2.250) | timing x1.00
+
+### [22:23:54] Revealed #5 Dreamer
+Info: {'target': 7, 'evil_role': 'Minion'}
+
+### [22:23:54] Ability used at #5
+
+#### [22:23:55] Solver Output
+Scenarios: 5/336
+Definite good: ['#1', '#4', '#9']
+Evil probabilities: #3=60%, #7=60%, #8=60%, #2=40%, #5=40%, #6=40%
+  Generated 336 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 7, 8]
+
+#### [22:24:04] Solver Output
+Scenarios: 5/336
+Definite good: ['#1', '#4', '#9']
+Evil probabilities: #3=60%, #7=60%, #8=60%, #2=40%, #5=40%, #6=40%
+  Generated 336 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 7, 8]
+
+#### [22:24:04] Recommendation
+Action: **ERROR** #8
+Reason: #8 is 60% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 60% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 60% < 80% threshold. Consider manual override if you have extra information.
+
+### [22:24:53] Revealed #3 Fortune Teller
+Info: {'targets': [7, 8], 'has_evil': True}
+
+### [22:24:53] Ability used at #3
+
+#### [22:24:53] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Alchemist: rejected 180/336 (54%)
+    #4 Enlightened: rejected 162/336 (48%)
+    #8 Confessor: rejected 150/336 (45%)
+    #3 Fortune Teller: rejected 130/336 (39%)
+    #5 Dreamer: rejected 72/336 (21%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: still 0
+    WITHOUT #2 Alchemist: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Fortune Teller: 11 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Enlightened: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Dreamer: still 0
+    WITHOUT #8 Confessor: 26 scenarios survive  <-- SUSPECT
+
+#### [22:24:53] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [22:25:54] Ability used at #7
+
+#### [22:25:54] Solver Output
+Scenarios: 0/336
+  Generated 336 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Alchemist: rejected 180/336 (54%)
+    #4 Enlightened: rejected 162/336 (48%)
+    #8 Confessor: rejected 150/336 (45%)
+    #3 Fortune Teller: rejected 130/336 (39%)
+    #5 Dreamer: rejected 72/336 (21%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: still 0
+    WITHOUT #2 Alchemist: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Fortune Teller: 11 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Enlightened: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Dreamer: still 0
+    WITHOUT #8 Confessor: 26 scenarios survive  <-- SUSPECT
+
+#### [22:25:54] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:29:57] Solver Output
+Scenarios: 0/936
+  Generated 936 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Enlightened: rejected 428/936 (46%)
+    #3 Fortune Teller: rejected 362/936 (39%)
+    #8 Confessor: rejected 342/936 (37%)
+    #2 Alchemist: rejected 330/936 (35%)
+    #5 Dreamer: rejected 72/936 (8%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: 30 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Alchemist: 46 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Fortune Teller: 75 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Enlightened: 52 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Dreamer: 30 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Confessor: 120 scenarios survive  <-- SUSPECT
+
+#### [22:29:57] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:33:54] Solver Output
+Scenarios: 0/936
+  Generated 936 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Enlightened: rejected 480/936 (51%)
+    #3 Fortune Teller: rejected 362/936 (39%)
+    #8 Confessor: rejected 342/936 (37%)
+    #2 Alchemist: rejected 330/936 (35%)
+    #5 Dreamer: rejected 72/936 (8%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: 26 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Alchemist: 38 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Fortune Teller: 52 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Enlightened: 52 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Dreamer: 26 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Confessor: 74 scenarios survive  <-- SUSPECT
+
+#### [22:33:54] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:37:32] Solver Output
+Scenarios: 24/936
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #6=92%, #8=92%, #5=42%, #9=42%, #2=25%, #7=8%
+  Generated 936 candidate scenarios
+  24 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [2, 5, 6, 7, 8, 9]
+
+#### [22:37:32] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 92% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 92% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [22:45:12] Executed #8 -> Pooka (EVIL)
+
+#### [22:45:13] Solver Output
+Scenarios: 6/152
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#3', '#4', '#7']
+Evil probabilities: #2=33%, #5=33%, #9=33%
+  Generated 152 candidate scenarios
+  6 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Minion', 'Witch'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 5, 9]
+
+#### [22:45:13] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Minion', 'Witch'})
+
+### [22:47:13] Executed #6 -> Minion (EVIL)
+
+#### [22:47:14] Solver Output
+Scenarios: 3/27
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#3', '#4', '#7']
+Evil probabilities: #2=33%, #5=33%, #9=33%
+  Generated 27 candidate scenarios
+  3 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 5, 9]
+
+#### [22:47:14] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 33% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 33% < 80% threshold. Consider manual override if you have extra information.
+
+## [22:48:53] GAME OVER — LOSS
+Final HP: 0
+Notes: 1-in-3 guess at end, solver found 2/3 evils definitively. Fixed PD normalization bug and role_counts normalization bug mid-game.
+
