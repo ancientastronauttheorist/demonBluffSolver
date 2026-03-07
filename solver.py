@@ -168,6 +168,10 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
 
     evil_roles = remaining_evil_roles
 
+    # How many evil positions remain to be placed?
+    n_executed_evil = len(state.executed_evil_roles)
+    expected_remaining = state.n_evil - n_executed_evil
+
     # Remove already-executed positions from candidates
     # Night-killed positions stay eligible (evil could have been among them)
     player_executed = [p for p in state.executed if p not in state.night_kills]
@@ -217,7 +221,8 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                 for i, pos in enumerate(combo):
                     p[pos] = role_perms[i]
                 placements.append(p)
-        return placements
+        # Filter: placement size must match expected remaining evil count
+        return [p for p in placements if len(p) == expected_remaining]
 
     # Check if Puppet was already executed but Puppeteer is still alive
     puppet_executed_pos = None
@@ -244,7 +249,8 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                         for i, pos in enumerate(combo):
                             p[pos] = role_perms[i]
                         placements.append(p)
-        return placements
+        # Filter: placement size must match expected remaining evil count
+        return [p for p in placements if len(p) == expected_remaining]
 
     # If Puppeteer is present, we need an extra slot for Puppet
     if has_puppeteer:
@@ -290,10 +296,13 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                             p[pos] = role_perms[i]
                         placements.append(p)
 
-        return placements
+        # Filter: placement size must match expected remaining evil count
+        return [p for p in placements if len(p) == expected_remaining]
 
     # No Puppeteer — straightforward combinations
     n_evil = len(evil_roles)
+    assert n_evil == expected_remaining, \
+        f"Evil role count {n_evil} != expected remaining {expected_remaining}"
     placements = []
     for combo in combinations(available, n_evil):
         for role_perms in _permutations_of(evil_roles):

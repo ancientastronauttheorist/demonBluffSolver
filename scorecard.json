@@ -20,6 +20,13 @@
       "name": "asc9_g2",
       "notes": "Perfect deduction. PD found corruption+evil, Judge confirmed Medium truthful, Slayer fail revealed Lilis. Puppet was 4th evil.",
       "date": "2026-03-06 17:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc9_g3",
+      "notes": "Perfect game 10HP. Slayer killed Minion, Dreamer+PD+Jester confirmed Puppet adjacent to Puppeteer.",
+      "date": "2026-03-06 18:44"
     }
   ]
 }
