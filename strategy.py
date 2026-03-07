@@ -722,8 +722,8 @@ def recommend_action(
             warnings=best_ability.warnings)
 
     # 6. Witch fallback -- can't reveal, execute by probability
-    # HP-aware gating: only allow probabilistic execution if we can afford a wrong guess
-    can_afford_wrong = state.hp > state.wrong_exec_cost
+    # HP-aware gating with budget-based confidence thresholds
+    wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
     probs = evil_probabilities(state, result)
     active_probs = {p: prob for p, prob in probs.items()
                     if p not in state.executed and p not in result.bombardier_positions
@@ -732,16 +732,51 @@ def recommend_action(
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
 
-        warnings = [f"Probabilistic execution -- {best_prob:.0%} confident"]
-        if not can_afford_wrong:
+        # If Witch is blocking reveals, prefer executing the most likely Witch
+        # position -- killing the Witch unblocks the last card reveal
+        witch_blocked = (not reveal_rec and _witch_might_be_alive(state, result)
+                         and len(_unrevealed_positions(state)) > 0)
+        if witch_blocked:
+            witch_probs = {}
+            for p in active_probs:
+                witch_count = sum(1 for s in result.surviving_scenarios
+                                 if s.evil_positions.get(p) == "Witch")
+                if witch_count > 0:
+                    witch_probs[p] = witch_count / result.n_surviving
+            if witch_probs:
+                best_witch_pos = max(witch_probs, key=witch_probs.get)
+                best_witch_prob = witch_probs[best_witch_pos]
+                # If a position is both likely evil AND likely Witch, prefer it
+                # since killing Witch unblocks reveals for remaining deduction
+                if (active_probs.get(best_witch_pos, 0) > 0.5
+                        and best_witch_prob > 0.3):
+                    best_pos = best_witch_pos
+                    best_prob = active_probs[best_pos]
+
+        warnings = [f"Probabilistic execution -- {best_prob:.0%} confident "
+                    f"(budget: {wrong_exec_budget} wrong execs)"]
+        if witch_blocked:
+            warnings.append("Witch is blocking reveals -- killing Witch would unblock last card")
+
+        if wrong_exec_budget == 0:
             warnings.append(f"CRITICAL: HP={state.hp}, wrong exec costs {state.wrong_exec_cost} -- "
                             f"CANNOT afford a mistake! Only execute if certain.")
-            # Block execution below 100% if we can't afford wrong
             if best_prob < 1.0:
                 return Action(
                     "error", position=best_pos,
                     reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but HP too low to risk "
                               f"(HP={state.hp}, cost={state.wrong_exec_cost}). Need more info.",
+                    warnings=warnings)
+        elif wrong_exec_budget == 1:
+            # One wrong guess = death. Require high confidence.
+            min_threshold = 0.80
+            if best_prob < min_threshold:
+                warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_threshold:.0%} threshold. "
+                                f"Consider manual override if you have extra information.")
+                return Action(
+                    "error", position=best_pos,
+                    reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
+                              f"≥{min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
                     warnings=warnings)
         elif best_prob < 0.5:
             warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")
@@ -749,7 +784,7 @@ def recommend_action(
         return Action(
             "execute", position=best_pos,
             reasoning=f"No reveals available. #{best_pos} is {best_prob:.0%} likely evil "
-                      f"(HP={state.hp}, can afford {state.hp // state.wrong_exec_cost} wrong execs)",
+                      f"(HP={state.hp}, budget={wrong_exec_budget} wrong execs)",
             warnings=warnings)
 
     # 7. Shouldn't reach here

@@ -1285,6 +1285,54 @@ def _validate_pd_ability(scenario: Scenario, state: GameState) -> bool:
     return True
 
 
+def _validate_baker(card: CardInfo, scenario: Scenario,
+                    state: GameState) -> bool:
+    """Baker: 'I am the original Baker' or 'I was a <Role>'.
+
+    When a Baker is revealed, a random unrevealed Good Villager becomes a Baker
+    and learns its original role. The 'original' Baker says 'I am the original Baker'.
+    Converted Bakers say 'I was a <Role>'.
+
+    Validation:
+    - Truthful Baker claiming 'original': Baker must be in the deck (always true if Baker appears)
+    - Truthful Baker claiming role X: X must be a Villager in the deck
+    - Lying Baker: claimed info doesn't match reality (inverted checks)
+    """
+    info = card.info_parsed
+    if "original_role" not in info:
+        return True
+
+    claimed = info["original_role"]
+    pos = card.position
+    truth = _truth_status(pos, scenario, state)
+
+    if claimed.lower() == "original":
+        # Claims to be the original Baker (not converted)
+        # Truthful: Baker is in the deck (basic sanity — always true if we see a Baker)
+        # Lying: would falsely claim to be original
+        # This is hard to validate further without tracking conversion order,
+        # so just return True (no additional constraint)
+        return True
+
+    # Claims "I was a <Role>" — the role they were before Baker conversion
+    # Normalize the claimed role for lookup
+    claimed_card = get_card(claimed)
+    if not claimed_card:
+        return True  # Unknown role, can't validate
+
+    is_villager = claimed_card.role == Role.VILLAGER
+
+    if truth == TruthStatus.TRUTHFUL:
+        # Must claim a real Villager role from the deck
+        return is_villager and claimed_card.name in state.deck.villagers
+    else:
+        # Lying: claimed role is NOT a valid Villager from the deck,
+        # OR the claim is simply wrong. Since we can't verify the exact
+        # original role, we only reject if a truthful claim would be invalid.
+        # A lie could claim anything, so allow it.
+        return True
+
+
 def _validate_poet(card: CardInfo, scenario: Scenario,
                     state: GameState) -> bool:
     """Poet: copies a random Villager's ability.
@@ -1334,6 +1382,7 @@ VALIDATORS = {
     "Alchemist": _validate_alchemist,
     "Druid": _validate_druid,
     "Bishop": _validate_bishop,
+    "Baker": _validate_baker,
     "Poet": _validate_poet,
     # NOTE: "Knight" has no info to validate — Knight's ability is "I can't die"
     # (execution immunity). See EXECUTION_IMMUNE_ROLES below.

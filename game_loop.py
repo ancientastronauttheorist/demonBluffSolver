@@ -106,8 +106,17 @@ def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> C
     return CardInfo(pos, "Poet", info_parsed=info)
 
 
+def card_baker(pos: int, original_role: str) -> CardInfo:
+    """Baker: 'I am the original Baker' or 'I was a <Role>'.
+
+    original_role: 'original' for the first Baker, or the Villager role name
+    the Baker claims to have been before conversion.
+    """
+    return CardInfo(pos, "Baker", info_parsed={"original_role": original_role})
+
+
 def card_no_info(pos: int, role: str) -> CardInfo:
-    """For cards with no deduction info: Slayer, Knight, Bombardier, Wretch, Baker, etc."""
+    """For cards with no deduction info: Slayer, Knight, Bombardier, Wretch, etc."""
     return CardInfo(pos, role, info_parsed={})
 
 
@@ -610,6 +619,11 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         if len(args) > 3:
             types = [t.strip().capitalize() for t in args[3].split(",")]
         return card_bishop(pos, targets, types)
+    elif role == "baker":
+        if len(args) > 2:
+            return card_baker(pos, args[2])  # original / role_name
+        else:
+            return card_no_info(pos, "Baker")
     elif role == "poet":
         if len(args) > 2:
             # Poet with identified copied ability: poet <pos> <copied_role> <args...>
