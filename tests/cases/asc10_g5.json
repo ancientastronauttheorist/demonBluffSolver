@@ -1,24 +1,6 @@
 {
   "n_cards": 9,
   "n_evil": 3,
-  "villagers": [
-    "Confessor",
-    "Poet",
-    "Jester",
-    "Knitter",
-    "Gemcrafter",
-    "Hunter"
-  ],
-  "outcasts": [
-    "Plague_Doctor"
-  ],
-  "minions": [
-    "Shaman",
-    "Witch"
-  ],
-  "demons": [
-    "Lilis"
-  ],
   "cards": [
     {
       "position": 1,
@@ -98,5 +80,32 @@
   "hp": 3,
   "wrong_exec_cost": 5,
   "board_villager_count": 5,
-  "board_outcast_count": 1
+  "board_outcast_count": 1,
+  "name": "asc10_g5",
+  "true_evil_positions": {
+    "4": "Witch",
+    "8": "Shaman",
+    "9": "Lilis"
+  },
+  "notes": "Lilis game, 1-at-a-time flipping. Wrong exec #3 (PD outcast) because PD card wasn't entered \u2014 solver couldn't model corruption. #1 Poet was corrupted explaining Knitter contradiction. Recovered by entering PD card post-exec. HP 3/10 survived.",
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Poet",
+      "Jester",
+      "Knitter",
+      "Gemcrafter",
+      "Hunter"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Shaman",
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  }
 }

@@ -1773,3 +1773,139 @@ WARNING: Probabilistic execution -- 50% confident
 Final HP: 5
 Notes: Bombardier blew up\! Trusted corrupted Drunk's Druid info. #5 was Drunk<Corrupted> not real Druid. Need: 1) Druid validator 2) NEVER execute Bombardier unless confirmed evil 3) Drunk counts as Villager in header board counts
 
+
+---
+
+# New Game — 2026-03-06 20:46:45
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Poet, Jester, Knitter, Gemcrafter, Hunter
+- Outcasts: Plague_Doctor
+- Minions: Shaman, Witch
+- Demons: Lilis
+
+### [20:48:10] Revealed #1 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+#### [20:49:34] Solver Output
+Scenarios: 228/504
+Evil probabilities: #1=47%, #2=45%, #9=45%, #4=29%, #5=29%, #6=29%, #7=29%, #3=24%, #8=24%
+  Generated 504 candidate scenarios
+  228 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [20:49:34] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 45% evil, entropy 1.093
+
+### [20:50:02] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+#### [20:50:02] Solver Output
+Scenarios: 126/504
+Definite good: ['#2']
+Evil probabilities: #9=57%, #1=52%, #3=38%, #5=33%, #6=33%, #7=33%, #4=29%, #8=24%
+  Generated 504 candidate scenarios
+  126 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [20:50:02] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 57% evil, entropy 1.085
+
+### [20:50:33] Revealed #9 Gemcrafter
+Info: {'good_position': 8}
+
+#### [20:50:34] Solver Output
+Scenarios: 36/504
+Definite good: ['#2']
+Evil probabilities: #1=83%, #5=50%, #3=33%, #4=33%, #6=33%, #7=33%, #8=17%, #9=17%
+  Generated 504 candidate scenarios
+  36 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [20:50:34] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 50% evil, entropy 1.100
+
+### [20:51:15] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+#### [20:51:16] Solver Output
+Scenarios: 12/504
+Definite evil: ['#3']
+Definite good: ['#2', '#6', '#8', '#9']
+Evil probabilities: #1=50%, #4=50%, #5=50%, #7=50%
+  Generated 504 candidate scenarios
+  12 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis', 'Witch', 'Shaman'})
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 7]
+
+#### [20:51:16] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 12 scenarios (roles: {'Lilis', 'Witch', 'Shaman'})
+
+### [20:52:00] Executed #3 -> GOOD (WRONG!)
+
+### [20:52:30] Revealed #3 Plague_Doctor
+Info: {}
+
+### [20:53:21] Executed #8 -> Shaman (EVIL)
+
+#### [20:53:21] Solver Output
+Scenarios: 6/120
+Definite evil: ['#8']
+Definite good: ['#2', '#3', '#5', '#6']
+Evil probabilities: #1=67%, #9=67%, #4=33%, #7=33%
+  Generated 120 candidate scenarios
+  6 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 4, 7, 9]
+
+#### [20:53:21] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 33% evil, entropy 1.018
+WARNING: Witch may be alive -- be cautious about revealing
+
+### [20:54:06] Revealed #4 Plague_Doctor
+Info: {}
+
+#### [20:54:06] Solver Output
+Scenarios: 2/120
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+  Generated 120 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Lilis', 'Witch'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Lilis', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [20:54:06] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
+
+### [20:54:50] Executed #4 -> Witch (EVIL)
+
+### [20:54:50] Executed #9 -> Lilis (EVIL)
+
+## [20:54:51] GAME OVER — WIN
+Final HP: 3
+Notes: Lilis game, 1-at-a-time flipping. Wrong exec #3 (PD outcast) because PD card wasn't entered — solver couldn't model corruption. #1 Poet was corrupted explaining Knitter contradiction. Recovered by entering PD card post-exec. HP 3/10 survived.
+

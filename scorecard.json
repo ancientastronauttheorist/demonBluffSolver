@@ -83,6 +83,13 @@
       "name": "asc10_g4",
       "notes": "Bombardier blew up\\! Trusted corrupted Drunk's Druid info. #5 was Drunk<Corrupted> not real Druid. Need: 1) Druid validator 2) NEVER execute Bombardier unless confirmed evil 3) Drunk counts as Villager in header board counts",
       "date": "2026-03-06 20:42"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc10_g5",
+      "notes": "Lilis game, 1-at-a-time flipping. Wrong exec #3 (PD outcast) because PD card wasn't entered \u2014 solver couldn't model corruption. #1 Poet was corrupted explaining Knitter contradiction. Recovered by entering PD card post-exec. HP 3/10 survived.",
+      "date": "2026-03-06 20:54"
     }
   ]
 }
