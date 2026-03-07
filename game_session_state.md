@@ -1051,3 +1051,189 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. Baker conversion confirmed #6/#7 good. PD clean checks narrowed field. Corrupted FT inversion solved the 50/50 — #2 Pooka.
 
+
+---
+
+# New Game — 2026-03-06 19:10:05
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Oracle, Empress, Confessor, Slayer
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [19:11:16] Revealed #1 Oracle
+Info: {}
+
+### [19:11:16] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [19:11:17] Revealed #3 Empress
+Info: {'targets': [2, 4, 6]}
+
+### [19:11:17] Revealed #4 Druid
+Info: {}
+
+### [19:11:17] Revealed #5 Plague_Doctor
+Info: {}
+
+### [19:11:17] Revealed #6 Slayer
+Info: {}
+
+#### [19:11:22] Solver Output
+Scenarios: 6/21
+Definite good: ['#2', '#4', '#5']
+Evil probabilities: #3=67%, #1=17%, #6=17%
+  Generated 21 candidate scenarios
+  6 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 3, 6]
+
+#### [19:11:22] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.252 (adjusted 1.252) | timing x1.00
+
+#### [19:12:15] Solver Output
+Scenarios: 4/21
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #3=75%, #1=25%
+  Generated 21 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3]
+
+#### [19:12:15] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.811 (adjusted 0.507) | timing x1.00
+WARNING: Corruption risk: 75%
+
+### [19:13:03] Ability used at #4
+
+### [19:13:03] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Doppelganger'}
+
+#### [19:13:03] Solver Output
+Scenarios: 3/21
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+  Generated 21 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [19:13:03] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [19:14:09] Executed #3 -> Pooka (EVIL)
+
+## [19:14:09] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD clean on #1 + corrupted Druid claiming Doppelganger (not in deck) solved it. Heavy corruption: #2 #4 #6 all corrupted.
+
+
+---
+
+# New Game — 2026-03-06 19:16:14
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Judge, Knight, Architect, Scout, Empress, Baker
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Baa
+
+### [19:17:40] Revealed #1 Scout
+Info: {'evil_role': 'Shaman', 'distance': 1}
+
+### [19:17:40] Revealed #2 Baker
+Info: {}
+
+### [19:17:40] Revealed #3 Baker
+Info: {}
+
+### [19:17:40] Revealed #4 Plague_Doctor
+Info: {}
+
+### [19:17:40] Revealed #5 Empress
+Info: {'targets': [3, 7, 8]}
+
+### [19:17:40] Revealed #6 Architect
+Info: {'side': 'right'}
+
+### [19:17:41] Revealed #7 Bard
+Info: {'corruption_distance': 1}
+
+### [19:17:41] Revealed #8 Baker
+Info: {}
+
+#### [19:17:48] Solver Output
+Scenarios: 70/416
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #5=71%, #6=69%, #1=40%, #7=17%, #4=3%
+  Generated 416 candidate scenarios
+  70 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [19:17:48] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.471 (adjusted 1.471) | timing x1.00
+
+#### [19:18:50] Solver Output
+Scenarios: 48/416
+Definite good: ['#2', '#3', '#4', '#8']
+Evil probabilities: #5=75%, #6=67%, #1=50%, #7=8%
+  Generated 416 candidate scenarios
+  48 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 5, 6, 7]
+
+#### [19:18:50] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 75% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 75% confident
+
+### [19:19:51] Executed #5 -> Baa (EVIL)
+
+#### [19:19:51] Solver Output
+Scenarios: 21/115
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#7', '#8']
+Evil probabilities: #6=57%, #1=43%
+  Generated 115 candidate scenarios
+  21 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 6]
+
+#### [19:19:51] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 57% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 57% confident
+
+### [19:20:53] Executed #6 -> Shaman (EVIL)
+
+## [19:20:53] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Ascension 9 complete! Baker triple-chain confirmed #2/#3/#8 good. PD clean + Empress/Architect/Scout/Bard constraints narrowed to #5 Baa + #6 Shaman.
+

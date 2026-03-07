@@ -41,6 +41,20 @@
       "name": "asc9_g5",
       "notes": "Perfect 10HP. Baker conversion confirmed #6/#7 good. PD clean checks narrowed field. Corrupted FT inversion solved the 50/50 \u2014 #2 Pooka.",
       "date": "2026-03-06 19:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc9_g6",
+      "notes": "Perfect 10HP. PD clean on #1 + corrupted Druid claiming Doppelganger (not in deck) solved it. Heavy corruption: #2 #4 #6 all corrupted.",
+      "date": "2026-03-06 19:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc9_g7",
+      "notes": "Perfect 10HP. Ascension 9 complete! Baker triple-chain confirmed #2/#3/#8 good. PD clean + Empress/Architect/Scout/Bard constraints narrowed to #5 Baa + #6 Shaman.",
+      "date": "2026-03-06 19:20"
     }
   ]
 }

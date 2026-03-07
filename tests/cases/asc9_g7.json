@@ -1,25 +1,6 @@
 {
   "n_cards": 8,
   "n_evil": 2,
-  "villagers": [
-    "Bard",
-    "Judge",
-    "Knight",
-    "Architect",
-    "Scout",
-    "Empress",
-    "Baker"
-  ],
-  "outcasts": [
-    "Plague_Doctor",
-    "Drunk"
-  ],
-  "minions": [
-    "Shaman"
-  ],
-  "demons": [
-    "Baa"
-  ],
   "cards": [
     {
       "position": 1,
@@ -117,5 +98,32 @@
   "night_kills": [],
   "night_kill_evil_count": 0,
   "hp": 10,
-  "wrong_exec_cost": 5
+  "wrong_exec_cost": 5,
+  "name": "asc9_g7",
+  "true_evil_positions": {
+    "5": "Baa",
+    "6": "Shaman"
+  },
+  "notes": "Perfect 10HP. Ascension 9 complete! Baker triple-chain confirmed #2/#3/#8 good. PD clean + Empress/Architect/Scout/Bard constraints narrowed to #5 Baa + #6 Shaman.",
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Judge",
+      "Knight",
+      "Architect",
+      "Scout",
+      "Empress",
+      "Baker"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  }
 }
