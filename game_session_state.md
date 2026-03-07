@@ -1673,3 +1673,103 @@ Info: {}
 Final HP: 5
 Notes: Bard 0-corrupted bug: solver used 0 as distance instead of -1 sentinel for 'no corrupted exist'. Wrong exec on #3 (Bard was good). Fixed card_bard to map 0->-1. After fix, solver correctly found #5+#8.
 
+
+---
+
+# New Game — 2026-03-06 20:34:15
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Druid, Medium, Hunter, Confessor, Lover, Bard, Enlightened
+- Outcasts: Judge, Wretch, Plague_Doctor, Drunk, Bombardier
+- Minions: Chancellor, Shaman
+- Demons: Baa
+
+## Deck
+- Villagers: Druid, Medium, Hunter, Confessor, Lover, Bard, Enlightened, Judge
+- Outcasts: Wretch, Plague_Doctor, Drunk, Bombardier
+- Minions: Chancellor, Shaman
+- Demons: Baa
+
+### [20:36:31] Revealed #1 Bard
+Info: {'corruption_distance': 1}
+
+### [20:36:32] Revealed #2 Enlightened
+Info: {'direction': 'CW'}
+
+### [20:36:32] Revealed #3 Bombardier
+Info: {}
+
+### [20:36:32] Revealed #4 Plague_Doctor
+Info: {}
+
+### [20:36:32] Revealed #5 Druid
+Info: {}
+
+### [20:36:32] Revealed #6 Hunter
+Info: {'distance': 2}
+
+### [20:36:32] Revealed #7 Hunter
+Info: {'distance': 3}
+
+### [20:36:32] Revealed #8 Medium
+Info: {'good_position': 7, 'good_role': 'Hunter'}
+
+### [20:36:32] Revealed #9 Confessor
+Info: {'dizzy': False}
+
+#### [20:36:40] Solver Output
+Scenarios: 64/8730
+Definite good: ['#9']
+Evil probabilities: #3=81%, #1=44%, #2=44%, #6=38%, #7=38%, #4=19%, #5=19%, #8=19%
+  Generated 8730 candidate scenarios
+  64 scenarios survived validation
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [20:36:40] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.936 (adjusted 1.936) | timing x1.00
+
+### [20:37:49] Ability used at #4
+
+#### [20:37:51] Solver Output
+Scenarios: 24/8730
+Definite good: ['#5', '#6', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #4=50%, #7=50%, #8=50%
+  Generated 8730 candidate scenarios
+  24 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 7, 8]
+
+#### [20:37:51] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.500 (adjusted 1.312) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [20:39:10] Ability used at #5
+
+#### [20:39:10] Solver Output
+Scenarios: 24/8730
+Definite good: ['#5', '#6', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #4=50%, #7=50%, #8=50%
+  Generated 8730 candidate scenarios
+  24 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 7, 8]
+
+#### [20:39:10] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=10, can afford 2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident
+
+### [20:42:09] Executed #3 -> GOOD (WRONG!)
+
+## [20:42:09] GAME OVER — LOSS
+Final HP: 5
+Notes: Bombardier blew up\! Trusted corrupted Drunk's Druid info. #5 was Drunk<Corrupted> not real Druid. Need: 1) Druid validator 2) NEVER execute Bombardier unless confirmed evil 3) Drunk counts as Villager in header board counts
+

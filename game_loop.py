@@ -661,6 +661,8 @@ def main():
         print("  card jester 7 1,3,5 1")
         print("  card poet 5 knitter 0       (Poet copied Knitter, claimed 0 evil pairs)")
         print("  card poet 3 lover 2          (Poet copied Lover, claimed 2 adjacent)")
+        print("  card druid 5 1,2,3 none      (Druid checked 1,2,3: no outcasts)")
+        print("  card druid 5 1,2,3 Bombardier (Druid found Bombardier among 1,2,3)")
         print("  card no_info 2 Slayer")
         return
 

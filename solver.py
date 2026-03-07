@@ -1765,10 +1765,11 @@ def solve(state: GameState) -> SolverResult:
         if all(not _is_evil_in_scenario(pos, s) for s in surviving):
             definite_good.append(pos)
 
-    # Bombardier positions — never execute
+    # Bombardier positions — never execute unless confirmed evil
+    # (executing a good Bombardier = instant loss, so exclude ALL non-confirmed-evil Bombardiers)
     bombardier_positions = []
     for card in state.cards:
-        if card.apparent_role == "Bombardier" and card.position in definite_good:
+        if card.apparent_role == "Bombardier" and card.position not in definite_evil:
             bombardier_positions.append(card.position)
 
     # Knight (execution-immune) positions — can't execute, but confirms Good
