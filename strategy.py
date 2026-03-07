@@ -86,10 +86,11 @@ def evil_probabilities(state: GameState, result: SolverResult) -> dict[int, floa
 
 
 def _unrevealed_positions(state: GameState) -> list[int]:
-    """Positions that haven't been revealed yet (no CardInfo)."""
+    """Positions that haven't been revealed yet (no CardInfo) and can still be flipped."""
     revealed = {c.position for c in state.cards}
+    dead = set(state.executed) | set(state.night_kills)
     return [p for p in range(1, state.n_cards + 1)
-            if p not in revealed and p not in state.executed]
+            if p not in revealed and p not in dead]
 
 
 def _revealed_fraction(state: GameState) -> float:
@@ -636,14 +637,21 @@ def recommend_action(
                        and p not in result.bombardier_positions
                        and p not in immune_positions]
     if safe_executions:
-        pos = safe_executions[0]
-        roles = set()
-        for s in result.surviving_scenarios:
-            if pos in s.evil_positions:
-                roles.add(s.evil_positions[pos])
-        return Action(
-            "execute", position=pos,
-            reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
+        # Safety check: don't trust "definite evil" when too few cards are revealed.
+        # With incomplete info, the solver may over-prune scenarios (e.g. missing PD
+        # corruption modeling) leading to false "definite" conclusions.
+        unrevealed = _unrevealed_positions(state)
+        reveal_frac = _revealed_fraction(state)
+        if reveal_frac >= 0.6 or not unrevealed:
+            pos = safe_executions[0]
+            roles = set()
+            for s in result.surviving_scenarios:
+                if pos in s.evil_positions:
+                    roles.add(s.evil_positions[pos])
+            return Action(
+                "execute", position=pos,
+                reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
+        # else: fall through to abilities/reveal — need more info first
 
     # 4. Check available abilities
     ability_recs = recommend_abilities(state, result, used_abilities)
