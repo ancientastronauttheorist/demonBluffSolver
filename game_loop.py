@@ -39,6 +39,9 @@ def card_scout(pos: int, evil_role: str, distance: int) -> CardInfo:
     return CardInfo(pos, "Scout", info_parsed={"evil_role": evil_role, "distance": distance})
 
 def card_bard(pos: int, corruption_distance: int) -> CardInfo:
+    # 0 means "no corrupted characters exist" — map to -1 sentinel
+    if corruption_distance == 0:
+        corruption_distance = -1
     return CardInfo(pos, "Bard", info_parsed={"corruption_distance": corruption_distance})
 
 def card_fortune_teller(pos: int, targets: list[int], has_evil: bool) -> CardInfo:

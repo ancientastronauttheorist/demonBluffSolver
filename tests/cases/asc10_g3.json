@@ -1,25 +1,6 @@
 {
   "n_cards": 8,
   "n_evil": 2,
-  "villagers": [
-    "Bard",
-    "Hunter",
-    "Medium",
-    "Gemcrafter",
-    "Druid",
-    "Judge",
-    "Lover"
-  ],
-  "outcasts": [
-    "Doppelganger",
-    "Drunk"
-  ],
-  "minions": [
-    "Twin_Minion"
-  ],
-  "demons": [
-    "Baa"
-  ],
   "cards": [
     {
       "position": 1,
@@ -110,5 +91,32 @@
   "hp": 5,
   "wrong_exec_cost": 5,
   "board_villager_count": 5,
-  "board_outcast_count": 1
+  "board_outcast_count": 1,
+  "name": "asc10_g3",
+  "true_evil_positions": {
+    "5": "Baa",
+    "8": "Twin_Minion"
+  },
+  "notes": "Bard 0-corrupted bug: solver used 0 as distance instead of -1 sentinel for 'no corrupted exist'. Wrong exec on #3 (Bard was good). Fixed card_bard to map 0->-1. After fix, solver correctly found #5+#8.",
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Hunter",
+      "Medium",
+      "Gemcrafter",
+      "Druid",
+      "Judge",
+      "Lover"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  }
 }

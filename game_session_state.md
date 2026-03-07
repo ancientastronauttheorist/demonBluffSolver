@@ -1621,3 +1621,55 @@ WARNING: Corruption risk: 50%
 Final HP: 5
 Notes: 50/50 on #9 was wrong (was real PD). PD #7 was evil Shaman lying. Multi-PD fix + Medium normalization fix enabled correct solving.
 
+
+---
+
+# New Game — 2026-03-06 20:27:12
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: 
+- Outcasts: 
+- Minions: 
+- Demons: 
+
+## Deck
+- Villagers: Bard, Hunter, Medium, Gemcrafter, Druid, Judge, Lover
+- Outcasts: Doppelganger, Drunk
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [20:29:06] Revealed #1 Medium
+Info: {'good_position': 4, 'good_role': 'Lover'}
+
+### [20:29:06] Revealed #2 Hunter
+Info: {'distance': 2}
+
+### [20:29:06] Revealed #3 Bard
+Info: {'corruption_distance': 0}
+
+### [20:29:06] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [20:29:07] Revealed #5 Gemcrafter
+Info: {'good_position': 8}
+
+### [20:29:07] Revealed #6 Medium
+Info: {'good_position': 1, 'good_role': 'Medium'}
+
+### [20:29:07] Revealed #7 Druid
+Info: {}
+
+### [20:29:07] Revealed #8 Judge
+Info: {}
+
+### [20:30:40] Executed #3 -> GOOD (WRONG!)
+
+### [20:32:57] Executed #5 -> Baa (EVIL)
+
+### [20:32:57] Executed #8 -> Twin_Minion (EVIL)
+
+## [20:33:03] GAME OVER — WIN
+Final HP: 5
+Notes: Bard 0-corrupted bug: solver used 0 as distance instead of -1 sentinel for 'no corrupted exist'. Wrong exec on #3 (Bard was good). Fixed card_bard to map 0->-1. After fix, solver correctly found #5+#8.
+

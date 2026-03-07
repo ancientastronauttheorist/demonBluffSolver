@@ -69,6 +69,13 @@
       "name": "asc10_g2",
       "notes": "50/50 on #9 was wrong (was real PD). PD #7 was evil Shaman lying. Multi-PD fix + Medium normalization fix enabled correct solving.",
       "date": "2026-03-06 20:25"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc10_g3",
+      "notes": "Bard 0-corrupted bug: solver used 0 as distance instead of -1 sentinel for 'no corrupted exist'. Wrong exec on #3 (Bard was good). Fixed card_bard to map 0->-1. After fix, solver correctly found #5+#8.",
+      "date": "2026-03-06 20:33"
     }
   ]
 }
