@@ -1,10 +1,36 @@
+import json
 import unittest
+from pathlib import Path
 
-from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult
+from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult, solve
 from strategy import recommend_action
 
 
 class TestStrategyRecommendations(unittest.TestCase):
+    def _load_live_case_midstate(self) -> GameState:
+        case_path = Path(__file__).parent / "cases" / "asc10_g10_live.json"
+        state = GameState.from_dict(json.loads(case_path.read_text()))
+
+        state.executed = [7]
+        state.confirmed_evil = []
+        state.confirmed_good = [7]
+        state.executed_evil_roles = {}
+        state.slayer_results = []
+        state.pd_ability_results = [{
+            "pd_pos": 6,
+            "target": 1,
+            "is_corrupted": True,
+            "evil_revealed": 2,
+        }]
+        state.used_abilities = [6]
+        state.hp = 6
+
+        for card in state.cards:
+            if card.position in {3, 5, 8}:
+                card.info_parsed = {}
+
+        return state
+
     def test_does_not_declare_win_when_scenarios_disagree(self):
         state = GameState(
             n_cards=2,
@@ -70,6 +96,51 @@ class TestStrategyRecommendations(unittest.TestCase):
 
         self.assertEqual(action.action_type, "use_ability")
         self.assertEqual(action.ability_name, "Jester")
+
+    def test_live_midgame_prefers_better_fortune_teller_pair(self):
+        state = self._load_live_case_midstate()
+        result = solve(state)
+
+        action = recommend_action(state, result, used_abilities=state.used_abilities)
+
+        self.assertEqual(action.action_type, "use_ability")
+        self.assertEqual(action.ability_name, "Fortune Teller")
+        self.assertEqual(action.targets, [1, 9])
+
+    def test_corrupted_judge_is_not_treated_as_clean_liar(self):
+        state = GameState(
+            n_cards=4,
+            deck=DeckComposition(
+                villagers=["Judge", "Baker", "Baker"],
+                outcasts=[],
+                minions=["Minion"],
+                demons=[],
+            ),
+            cards=[
+                CardInfo(1, "Judge"),
+                CardInfo(2, "Baker"),
+                CardInfo(3, "Baker"),
+            ],
+            n_evil=1,
+        )
+        scenarios = [
+            Scenario(evil_positions={2: "Minion"}, corrupted={1}),
+            Scenario(evil_positions={4: "Minion"}, corrupted={1}),
+        ]
+        result = SolverResult(
+            definite_evil=[],
+            definite_good=[],
+            bombardier_positions=[],
+            n_scenarios=len(scenarios),
+            n_surviving=len(scenarios),
+            surviving_scenarios=scenarios,
+            reasoning=[],
+        )
+
+        action = recommend_action(state, result, used_abilities=[])
+
+        self.assertEqual(action.action_type, "reveal")
+        self.assertEqual(action.position, 4)
 
 
 if __name__ == "__main__":

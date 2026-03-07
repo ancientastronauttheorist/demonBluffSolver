@@ -144,5 +144,12 @@
     5,
     6,
     8
-  ]
+  ],
+  "name": "asc10_g10_live",
+  "true_evil_positions": {
+    "2": "Lilis",
+    "4": "Shaman",
+    "8": "Poisoner"
+  },
+  "notes": "Autonomous live run. #7 was the good Lilis night kill. PD #6 found #1 corrupted and #2 evil. FT #5 on #1/#3 was false. Judge #3 found #1 lying. #1 and #9 were corrupted. Final evils: #2 Lilis, #4 Shaman, #8 Poisoner."
 }

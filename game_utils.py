@@ -8,7 +8,7 @@ import ctypes
 import time
 import os
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 # Fix DPI scaling
 try:
@@ -265,6 +265,112 @@ def find_and_click_button(screenshot_path: str,
 
 
 # ============================================================
+# Deck Capture Helpers
+# ============================================================
+
+def _to_pil_image(image_or_path):
+    if isinstance(image_or_path, Image.Image):
+        return image_or_path
+    return Image.open(image_or_path).convert("RGB")
+
+
+def _deck_roi_bounds(size: tuple[int, int]) -> tuple[int, int, int, int]:
+    width, height = size
+    return (
+        int(width * 0.15),
+        int(height * 0.12),
+        int(width * 0.85),
+        int(height * 0.80),
+    )
+
+
+def _deck_card_mask(image_or_path) -> tuple[np.ndarray, tuple[int, int, int, int]]:
+    image = _to_pil_image(image_or_path)
+    img = np.array(image)
+    left, top, right, bottom = _deck_roi_bounds(image.size)
+    roi = img[top:bottom, left:right]
+
+    rgb_max = roi.max(axis=2)
+    rgb_min = roi.min(axis=2)
+    spread = rgb_max - rgb_min
+
+    # Deck cards stand out by having strong colored borders and labels.
+    mask = (rgb_max > 70) & (spread > 35)
+    return mask, (left, top, right, bottom)
+
+
+def score_deck_frame(image_or_path) -> float:
+    """Score how complete/readable a deck screenshot looks."""
+    image = _to_pil_image(image_or_path)
+    img = np.array(image)
+    mask, (left, top, right, bottom) = _deck_card_mask(image)
+
+    roi = img[top:bottom, left:right]
+    luminance = roi.mean(axis=2)
+    edge_energy = float(np.abs(np.diff(luminance, axis=0)).mean() +
+                        np.abs(np.diff(luminance, axis=1)).mean())
+
+    row_threshold = max(20, int(mask.shape[1] * 0.01))
+    col_threshold = max(10, int(mask.shape[0] * 0.01))
+    active_rows = int((mask.sum(axis=1) > row_threshold).sum())
+    active_cols = int((mask.sum(axis=0) > col_threshold).sum())
+
+    return float(mask.sum()) + active_rows * 250 + active_cols * 75 + edge_energy * 400
+
+
+def deck_overlay_visible(image_or_path) -> bool:
+    mask, _ = _deck_card_mask(image_or_path)
+    visible_pixels = int(mask.sum())
+    minimum_pixels = max(4000, mask.size // 450)
+    return visible_pixels >= minimum_pixels
+
+
+def find_deck_content_bounds(image_or_path, padding: int = 36) -> tuple[int, int, int, int]:
+    """Find the deck panel bounds inside a full-screen deck screenshot."""
+    image = _to_pil_image(image_or_path)
+    mask, (left, top, right, bottom) = _deck_card_mask(image)
+
+    row_threshold = max(20, int(mask.shape[1] * 0.01))
+    col_threshold = max(10, int(mask.shape[0] * 0.01))
+    rows = np.where(mask.sum(axis=1) > row_threshold)[0]
+    cols = np.where(mask.sum(axis=0) > col_threshold)[0]
+
+    if len(rows) == 0 or len(cols) == 0:
+        return left, top, right, bottom
+
+    width, height = image.size
+    crop_left = max(0, left + int(cols[0]) - padding)
+    crop_top = max(0, top + int(rows[0]) - padding)
+    crop_right = min(width, left + int(cols[-1]) + padding + 1)
+    crop_bottom = min(height, top + int(rows[-1]) + padding + 1)
+    return crop_left, crop_top, crop_right, crop_bottom
+
+
+def crop_deck_view(image_or_path, padding: int = 36) -> Image.Image:
+    """Crop a full-screen deck screenshot down to the deck content."""
+    image = _to_pil_image(image_or_path)
+    bounds = find_deck_content_bounds(image, padding=padding)
+    return image.crop(bounds)
+
+
+def enhance_deck_crop(image_or_path, upscale: float = 1.35) -> Image.Image:
+    """Make the deck crop easier to read during manual verification."""
+    image = _to_pil_image(image_or_path)
+    image = ImageOps.autocontrast(image)
+    image = ImageEnhance.Contrast(image).enhance(1.25)
+    image = ImageEnhance.Brightness(image).enhance(1.12)
+    image = image.filter(ImageFilter.SHARPEN)
+
+    if upscale > 1.0:
+        new_size = (
+            int(round(image.size[0] * upscale)),
+            int(round(image.size[1] * upscale)),
+        )
+        image = image.resize(new_size, Image.Resampling.LANCZOS)
+    return image
+
+
+# ============================================================
 # Common Game Actions
 # ============================================================
 
@@ -306,17 +412,47 @@ def execute_card(card_pos: tuple[int, int], wait: float = 2.0):
 
 
 def hold_tab_screenshot(name: str = "deck_view") -> str:
-    """Hold Tab to show deck view, capture screenshot, release Tab.
-    Returns the screenshot path."""
+    """Capture a robust deck screenshot while holding Tab.
+
+    Writes a full-screen PNG plus an enhanced cropped PNG for easier review.
+    Returns the full-screen screenshot path.
+    """
     import pyautogui
 
     focus_game()
     time.sleep(0.3)
-    pyautogui.keyDown('tab')
-    time.sleep(0.5)  # Wait for deck view to appear
-    path = screenshot.capture(name)
-    pyautogui.keyUp('tab')
-    print(f"[deck] Captured deck view: {path}")
+
+    best_image = None
+    best_score = float("-inf")
+    best_visible = False
+
+    try:
+        pyautogui.keyDown('tab')
+        time.sleep(0.28)
+
+        for frame_idx in range(5):
+            if frame_idx:
+                time.sleep(0.12)
+            frame = screenshot.grab()
+            score = score_deck_frame(frame)
+            visible = deck_overlay_visible(frame)
+            if (best_image is None or
+                    visible and not best_visible or
+                    (visible == best_visible and score > best_score)):
+                best_image = frame.copy()
+                best_score = score
+                best_visible = visible
+    finally:
+        pyautogui.keyUp('tab')
+
+    if best_image is None:
+        best_image = screenshot.grab()
+
+    path = screenshot.save_image(best_image, name=name, fmt="PNG")
+    crop = enhance_deck_crop(crop_deck_view(best_image))
+    crop_path = screenshot.save_image(crop, name=f"{name}_crop", fmt="PNG")
+    print(f"[deck] Captured deck view: {path} (score={best_score:.0f}, visible={best_visible})")
+    print(f"[deck] Saved enhanced crop: {crop_path}")
     return path
 
 

@@ -2768,3 +2768,53 @@ Reason: #8 is evil in ALL 6 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: Live run. #3=Doppelganger, #1/#7 corrupted. Dreamer #8 -> #5 Pooka. Wrong exec #6, then solved via #5 Minion and #8 Pooka.
 
+
+---
+
+# New Game — 2026-03-07 13:08:27
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Bard, Judge, Empress, Architect, Hunter, Fortune_Teller, Gemcrafter
+- Outcasts: Plague_Doctor
+- Minions: Shaman, Poisoner
+- Demons: Lilis
+
+### [13:08:28] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [13:08:28] Revealed #2 Hunter
+Info: {'distance': 3}
+
+### [13:08:28] Revealed #3 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [13:08:28] Revealed #4 Architect
+Info: {'side': 'Left'}
+
+### [13:08:28] Revealed #5 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': False}
+
+### [13:08:28] Ability used at #5
+
+### [13:08:28] Revealed #6 Plague Doctor
+Info: {}
+
+### [13:08:29] Revealed #8 Slayer
+Info: {}
+
+### [13:08:29] Revealed #9 Empress
+Info: {'targets': [1, 3, 5]}
+
+### [13:08:29] Executed #2 -> Lilis (EVIL)
+
+### [13:08:29] Executed #4 -> Shaman (EVIL)
+
+### [13:08:29] Executed #9 -> GOOD (WRONG!)
+
+### [13:08:30] Executed #8 -> Poisoner (EVIL)
+
+## [13:08:30] GAME OVER — WIN
+Final HP: 1
+Notes: Autonomous live run. #7 was the good Lilis night kill. PD #6 found #1 corrupted and #2 evil. FT #5 on #1/#3 was false. Judge #3 found #1 lying. #1 and #9 were corrupted. Final evils: #2 Lilis, #4 Shaman, #8 Poisoner.
+

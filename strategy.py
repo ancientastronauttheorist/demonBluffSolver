@@ -174,6 +174,60 @@ def _could_have_active_ability(pos: int, state: GameState, result: SolverResult)
                for scenario in result.surviving_scenarios)
 
 
+def _lie_probability(pos: int, state: GameState, result: SolverResult) -> float:
+    """Probability that a position would present false information."""
+    if result.n_surviving == 0:
+        return 0.0
+    lying = sum(
+        1 for scenario in result.surviving_scenarios
+        if truth_status(pos, scenario, state) == TruthStatus.LYING
+    )
+    return lying / result.n_surviving
+
+
+def _ambiguity_score(prob: float) -> float:
+    """How close a probability is to a 50/50 split."""
+    return max(0.0, 1.0 - abs(0.5 - prob) * 2.0)
+
+
+def _has_unused_followup(state: GameState, used_abilities: list[int]) -> bool:
+    """Check whether Judge or Slayer can still follow an FT result."""
+    for card in state.cards:
+        if card.position in state.executed or card.position in used_abilities:
+            continue
+        role = card.apparent_role.replace("_", " ")
+        if role in {"Judge", "Slayer"}:
+            return True
+    return False
+
+
+def _fortune_teller_followup_bonus(
+    targets: list[int],
+    state: GameState,
+    result: SolverResult,
+    used_abilities: list[int],
+) -> float:
+    """Late-game FT tie-breaker favoring cleaner Judge/Slayer follow-up lines."""
+    if result.n_surviving == 0 or _revealed_fraction(state) < 0.75:
+        return 0.0
+    if not _has_unused_followup(state, used_abilities):
+        return 0.0
+
+    probs = evil_probabilities(state, result)
+
+    def control_value(pos: int) -> float:
+        return _lie_probability(pos, state, result) * (1.0 - probs.get(pos, 0.0))
+
+    def suspect_value(pos: int) -> float:
+        return _ambiguity_score(probs.get(pos, 0.0))
+
+    a, b = targets
+    return max(
+        control_value(a) * suspect_value(b),
+        control_value(b) * suspect_value(a),
+    )
+
+
 # ============================================================
 # Ground Truth Simulators (per ability)
 # ============================================================
@@ -243,10 +297,14 @@ def _recommend_boolean_ability(
     candidate_targets: list[list[int]],
     state: GameState,
     result: SolverResult,
+    tie_break_bonus_fn=None,
+    bonus_weight: float = 0.0,
+    tie_break_margin: float = 0.0,
+    used_abilities: Optional[list[int]] = None,
 ) -> Optional[AbilityRecommendation]:
-    """Recommend targets for a boolean-outcome ability (FT, Judge)."""
-    best_targets = None
-    best_entropy = -1.0
+    """Recommend targets for a deterministic boolean-outcome ability."""
+    best_primary = -1.0
+    scored_candidates = []
 
     for targets in candidate_targets:
         true_count = 0
@@ -263,12 +321,28 @@ def _recommend_boolean_ability(
             else:
                 false_count += 1
         ent = _shannon_entropy([true_count, false_count])
-        if ent > best_entropy:
-            best_entropy = ent
-            best_targets = targets if isinstance(targets, list) else [targets]
+        normalized_targets = targets if isinstance(targets, list) else [targets]
+        bonus = 0.0
+        if tie_break_bonus_fn is not None:
+            bonus = tie_break_bonus_fn(
+                normalized_targets, state, result, used_abilities or []
+            )
+        ranking_score = ent + bonus_weight * bonus
+        best_primary = max(best_primary, ranking_score)
+        scored_candidates.append((ranking_score, ent, bonus, normalized_targets))
 
-    if best_targets is None:
+    if not scored_candidates:
         return None
+
+    shortlist = [
+        candidate
+        for candidate in scored_candidates
+        if candidate[0] >= best_primary - tie_break_margin
+    ]
+    _, best_entropy, best_bonus, best_targets = max(
+        shortlist,
+        key=lambda item: (item[0], item[1], item[2]),
+    )
 
     corr = _corruption_risk(ability_pos, result)
     adjusted = best_entropy * (1 - 0.5 * corr)
@@ -276,12 +350,86 @@ def _recommend_boolean_ability(
     if corr > 0:
         warnings.append(f"Corruption risk: {corr:.0%}")
 
+    reasoning = f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})"
+    if best_bonus > 0:
+        reasoning += f" | follow-up bonus {best_bonus:.3f}"
+
     return AbilityRecommendation(
         position=ability_pos,
         ability_name=ability_name,
         targets=best_targets,
         score=adjusted,
-        reasoning=f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})",
+        reasoning=reasoning,
+        warnings=warnings,
+    )
+
+
+def _recommend_judge(
+    ability_pos: int,
+    state: GameState,
+    result: SolverResult,
+    judge_targets: list[int],
+) -> Optional[AbilityRecommendation]:
+    """Recommend a Judge target using compatible posterior size.
+
+    A corrupted Judge does not produce a clean inversion; its observed result is
+    effectively unconstrained, so entropy over disjoint branches is the wrong
+    metric here.
+    """
+    scenario_count = len(result.surviving_scenarios)
+    if scenario_count == 0:
+        return None
+
+    best_target = None
+    best_expected_posterior = float('inf')
+
+    for target in judge_targets:
+        compatible = {True: 0, False: 0}
+
+        for scenario in result.surviving_scenarios:
+            actual = _judge_ground_truth(target, scenario, state)
+            if ability_pos in scenario.corrupted:
+                compatible[True] += 1
+                compatible[False] += 1
+                continue
+
+            truth = truth_status(ability_pos, scenario, state)
+            observed = actual if truth == TruthStatus.TRUTHFUL else (not actual)
+            compatible[observed] += 1
+
+        total_weight = sum(compatible.values())
+        if total_weight == 0:
+            continue
+
+        expected_posterior = sum(c * c for c in compatible.values()) / total_weight
+        if expected_posterior < best_expected_posterior:
+            best_expected_posterior = expected_posterior
+            best_target = target
+
+    if best_target is None:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_expected_posterior * (1 + 0.5 * corr)
+    info_gain = 0.0
+    if adjusted > 0:
+        info_gain = max(0.0, math.log2(scenario_count) - math.log2(adjusted))
+
+    warnings = []
+    if corr > 0:
+        warnings.append(
+            f"Corruption risk: {corr:.0%} -- corrupted Judge results are unreliable"
+        )
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Judge",
+        targets=[best_target],
+        score=info_gain,
+        reasoning=(
+            f"Expected posterior {best_expected_posterior:.1f} scenarios "
+            f"(adjusted {adjusted:.1f}, info gain {info_gain:.3f} bits)"
+        ),
         warnings=warnings,
     )
 
@@ -478,7 +626,10 @@ def recommend_abilities(
             candidates = [list(c) for c in combinations(others, 2)]
             rec = _recommend_boolean_ability(
                 "Fortune Teller", pos,
-                _ft_ground_truth, candidates, state, result)
+                _ft_ground_truth, candidates, state, result,
+                tie_break_bonus_fn=_fortune_teller_followup_bonus,
+                bonus_weight=0.25,
+                used_abilities=used_abilities)
             if rec:
                 rec.score *= timing
                 rec.reasoning += f" | timing x{timing:.2f}"
@@ -503,11 +654,7 @@ def recommend_abilities(
             judge_targets = [t for t in others if t not in poet_positions]
             if not judge_targets:
                 continue
-            candidates = [[t] for t in judge_targets]
-            rec = _recommend_boolean_ability(
-                "Judge", pos,
-                lambda t, s, st: _judge_ground_truth(t[0], s, st),
-                candidates, state, result)
+            rec = _recommend_judge(pos, state, result, judge_targets)
             if rec:
                 if rec.targets and rec.targets[0] in poet_positions:
                     rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
