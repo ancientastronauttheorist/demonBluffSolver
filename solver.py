@@ -1307,11 +1307,13 @@ def _validate_baker(card: CardInfo, scenario: Scenario,
     truth = _truth_status(pos, scenario, state)
 
     if claimed.lower() == "original":
-        # Claims to be the original Baker (not converted)
-        # Truthful: Baker is in the deck (basic sanity — always true if we see a Baker)
-        # Lying: would falsely claim to be original
-        # This is hard to validate further without tracking conversion order,
-        # so just return True (no additional constraint)
+        # Claims to be the original Baker (not converted).
+        # The original Baker is immune to corruption, and corrupted converted
+        # Bakers say "I was [wrong role]", not "I am the original Baker".
+        # So a good corrupted position claiming "original" is impossible.
+        if truth == TruthStatus.LYING:
+            if pos not in scenario.evil_positions and pos in scenario.corrupted:
+                return False  # Corrupted good card can't claim "I am the original Baker"
         return True
 
     # Claims "I was a <Role>" — the role they were before Baker conversion
