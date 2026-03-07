@@ -643,9 +643,9 @@ def recommend_action(
         # Prefer revealing to locate the PD first.
         unrevealed = _unrevealed_positions(state)
         corruption_unmodeled = False
-        pd_in_deck = ("Plague_Doctor" in state.deck.outcasts
-                      or "Plague Doctor" in state.deck.outcasts)
-        pd_found = any(c.apparent_role in ("Plague_Doctor", "Plague Doctor")
+        pd_in_deck = any(o in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor")
+                         for o in state.deck.outcasts)
+        pd_found = any(c.apparent_role in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor")
                        for c in state.cards)
         if unrevealed and pd_in_deck and not pd_found:
             if state.board_outcast_count is None:
@@ -776,7 +776,7 @@ def recommend_action(
                 return Action(
                     "error", position=best_pos,
                     reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
-                              f"≥{min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
+                              f">={min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
                     warnings=warnings)
         elif best_prob < 0.5:
             warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")

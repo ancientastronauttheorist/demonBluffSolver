@@ -26,7 +26,8 @@ def circle_distance(a: int, b: int, n: int) -> int:
 def circle_direction(from_pos: int, to_pos: int, n: int) -> str:
     """Direction from from_pos to to_pos on a circle (CW or CCW).
     Returns 'Equidistant' if exactly opposite. Positions 1-indexed.
-    CW means increasing position numbers (1->2->3...)."""
+    CW means increasing position numbers (1->2->3...) matching the game's
+    visual clockwise layout."""
     if from_pos == to_pos:
         return "Equidistant"
     cw_dist = (to_pos - from_pos) % n
@@ -1407,7 +1408,7 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
     # Find ALL Plague Doctor positions (there may be 2 if evil disguised as PD)
     all_pd_positions = []
     for card in state.cards:
-        if card.apparent_role in ("Plague_Doctor", "Plague Doctor"):
+        if card.apparent_role in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor"):
             all_pd_positions.append(card.position)
 
     for placement in placements:
@@ -1433,7 +1434,7 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         pd_targets = [None]
         if pd_pos:
             # PD is good — it corrupted someone
-            if "Plague_Doctor" in state.deck.outcasts or "Plague Doctor" in state.deck.outcasts:
+            if any(o in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor") for o in state.deck.outcasts):
                 if state.pd_corruption_target is not None:
                     # Known PD target — only use that
                     pd_targets = [state.pd_corruption_target]
@@ -1613,15 +1614,16 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
             n_disguisers += 1
 
     # Check Villager roles: excess Good appearances over deck count
-    # Normalize names: spaces <-> underscores (card apparent_role may differ from deck)
+    # Normalize names: strip spaces/underscores and lowercase (handles CamelCase,
+    # "Fortune Teller", "FortuneTeller", "Fortune_Teller" all mapping to same key)
     def _normalize(name: str) -> str:
-        return name.replace(" ", "_")
+        return name.lower().replace(" ", "").replace("_", "")
     deck_v_counts = Counter(_normalize(v) for v in state.deck.villagers)
     total_excess = 0
     for role, count in good_villager_counts.items():
         # Baker converts other villagers into Bakers (cascading), so any
         # number of Good Bakers is valid when Baker is in the deck
-        if _normalize(role) == "Baker" and "Baker" in state.deck.villagers:
+        if _normalize(role) == "baker" and any(_normalize(v) == "baker" for v in state.deck.villagers):
             continue
         deck_count = deck_v_counts.get(_normalize(role), 0)
         if count > deck_count:
