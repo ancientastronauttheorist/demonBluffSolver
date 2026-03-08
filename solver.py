@@ -5,6 +5,7 @@ reports positions that are Evil in ALL surviving scenarios.
 """
 
 from __future__ import annotations
+from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
 from itertools import combinations, product
@@ -224,6 +225,9 @@ class Scenario:
     pd_corrupted: Optional[int] = None  # Plague Doctor corruption target
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
     drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always corrupted)
+    chancellor_target: Optional[int] = None  # Villager converted to Outcast before corruption
+    baa_fake_outcast: Optional[str] = None  # Fake outcast shown in deck by Baa
+    shaman_role: Optional[str] = None  # Villager role duplicated by Shaman
     alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
 
 
@@ -237,6 +241,10 @@ class SolverResult:
     n_surviving: int                # Scenarios that passed all checks
     surviving_scenarios: list[Scenario] = field(default_factory=list)
     reasoning: list[str] = field(default_factory=list)
+
+
+def _normalize_role_name(name: str) -> str:
+    return name.lower().replace(" ", "").replace("_", "")
 
 
 # ============================================================
@@ -463,7 +471,8 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
                         pd_target: Optional[int] = None,
                         doppelganger_pos: Optional[int] = None,
                         poisoner_target: Optional[int] = None,
-                        drunk_pos: Optional[int] = None) -> set[int]:
+                        drunk_pos: Optional[int] = None,
+                        chancellor_target: Optional[int] = None) -> set[int]:
     """Compute which positions are corrupted given evil placement.
 
     doppelganger_pos: if set, this position is Doppelganger (Outcast) and
@@ -477,17 +486,23 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
         if role == "Pooka":
             # Pooka corrupts adjacent Villagers (Doppelganger immune)
             for adj in adjacent_positions(pos, n):
-                if adj not in placement and adj != doppelganger_pos:
+                if adj not in placement and adj != doppelganger_pos and adj != chancellor_target:
                     card = _get_card_at(adj, state)
                     if card and _is_villager_role(card.apparent_role, state):
                         corrupted.add(adj)
                     elif card is None and _unrevealed_must_be_villager(
-                            adj, placement, state, doppelganger_pos, drunk_pos):
+                            adj, placement, state, doppelganger_pos, drunk_pos,
+                            chancellor_target=chancellor_target):
                         corrupted.add(adj)
         elif role == "Poisoner":
             # Poisoner corrupts 1 adjacent Villager (Doppelganger immune)
             # Target is enumerated externally via poisoner_target parameter
-            if poisoner_target and poisoner_target not in placement and poisoner_target != doppelganger_pos:
+            if (
+                poisoner_target
+                and poisoner_target not in placement
+                and poisoner_target != doppelganger_pos
+                and poisoner_target != chancellor_target
+            ):
                 corrupted.add(poisoner_target)
 
     # Plague Doctor corruption
@@ -569,7 +584,8 @@ def _apply_post_corruption(corrupted: set[int], placement: dict[int, str],
 
 def _corruption_variants(placement: dict[int, str], state: GameState,
                          pd_target: Optional[int] = None,
-                         poisoner_target: Optional[int] = None) -> list[set[int]]:
+                         poisoner_target: Optional[int] = None,
+                         chancellor_target: Optional[int] = None) -> list[set[int]]:
     """Generate corruption set variants accounting for Doppelganger immunity.
 
     If Doppelganger is in the deck, any apparent Villager adjacent to a
@@ -578,7 +594,10 @@ def _corruption_variants(placement: dict[int, str], state: GameState,
     """
     has_doppelganger = "Doppelganger" in state.deck.outcasts
     if not has_doppelganger:
-        return [_compute_corruption(placement, state, pd_target, poisoner_target=poisoner_target)]
+        return [_compute_corruption(
+            placement, state, pd_target, poisoner_target=poisoner_target,
+            chancellor_target=chancellor_target,
+        )]
 
     n = state.n_cards
     # Find positions near corruption sources that appear as Villagers
@@ -602,7 +621,10 @@ def _corruption_variants(placement: dict[int, str], state: GameState,
     seen = set()
     variants = []
     for dopp_pos in dopp_options:
-        corrupted = _compute_corruption(placement, state, pd_target, dopp_pos, poisoner_target)
+        corrupted = _compute_corruption(
+            placement, state, pd_target, dopp_pos, poisoner_target,
+            chancellor_target=chancellor_target,
+        )
         key = frozenset(corrupted)
         if key not in seen:
             seen.add(key)
@@ -634,7 +656,9 @@ def _is_villager_role(role_name: str, state: GameState) -> bool:
 def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
                                   state: GameState,
                                   doppelganger_pos: Optional[int] = None,
-                                  drunk_pos: Optional[int] = None) -> bool:
+                                  drunk_pos: Optional[int] = None,
+                                  chancellor_target: Optional[int] = None,
+                                  baa_fake_outcast: Optional[str] = None) -> bool:
     """Check if an unrevealed good position must be a Villager.
 
     When all Outcast slots on the board are occupied by other positions,
@@ -643,7 +667,9 @@ def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
     """
     max_outcasts = state.board_outcast_count
     if max_outcasts is None:
-        max_outcasts = len(state.deck.outcasts)
+        max_outcasts = sum(_actual_outcast_counter(state, baa_fake_outcast).values())
+        if chancellor_target is not None:
+            max_outcasts += 1
 
     occupied = 0
     for card in state.cards:
@@ -658,11 +684,20 @@ def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
         occupied += 1
     if drunk_pos is not None and drunk_pos != pos and drunk_pos not in evil_positions:
         occupied += 1
+    if (
+        state.board_outcast_count is None
+        and chancellor_target is not None
+        and chancellor_target != pos
+        and chancellor_target not in evil_positions
+    ):
+        occupied += 1
 
     return occupied >= max_outcasts
 
 
-def _hidden_outcast_presence_flags(role_name: str, state: GameState) -> tuple[bool, bool]:
+def _hidden_outcast_presence_flags(role_name: str, state: GameState,
+                                   baa_fake_outcast: Optional[str] = None,
+                                   extra_outcast_slots: int = 0) -> tuple[bool, bool]:
     """Return (can_be_on_board, can_be_absent) for a hidden outcast role.
 
     Uses board_outcast_count when available. This matters for hidden outcasts
@@ -670,17 +705,41 @@ def _hidden_outcast_presence_flags(role_name: str, state: GameState) -> tuple[bo
     outcast and the pool's only outcast is Doppelganger, then Doppelganger
     cannot be treated as optional.
     """
-    if role_name not in state.deck.outcasts:
+    actual_outcasts = _actual_outcast_counter(state, baa_fake_outcast)
+    role_key = _normalize_role_name(role_name)
+    if actual_outcasts.get(role_key, 0) <= 0:
         return (False, True)
 
     slots = state.board_outcast_count
     if slots is None:
         return (True, True)
 
-    other_outcasts = len(state.deck.outcasts) - 1
-    can_be_on = slots > 0
-    can_be_absent = other_outcasts >= slots
+    real_outcast_slots = slots
+    other_outcasts = sum(actual_outcasts.values()) - 1
+    can_be_on = real_outcast_slots > 0
+    can_be_absent = other_outcasts >= real_outcast_slots
     return (can_be_on, can_be_absent)
+
+
+def _is_setup_villager_position(pos: int, evil_positions: dict[int, str],
+                                state: GameState,
+                                doppelganger_pos: Optional[int] = None,
+                                drunk_pos: Optional[int] = None,
+                                chancellor_target: Optional[int] = None,
+                                baa_fake_outcast: Optional[str] = None) -> bool:
+    """Whether a position is a Villager at round-start before later conversions."""
+    if pos in evil_positions or pos == doppelganger_pos or pos == drunk_pos or pos == chancellor_target:
+        return False
+    card = _get_card_at(pos, state)
+    if card:
+        return _is_villager_role(card.apparent_role, state)
+    return _unrevealed_must_be_villager(
+        pos, evil_positions, state,
+        doppelganger_pos=doppelganger_pos,
+        drunk_pos=drunk_pos,
+        chancellor_target=chancellor_target,
+        baa_fake_outcast=baa_fake_outcast,
+    )
 
 
 def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
@@ -695,6 +754,8 @@ def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Option
         return "Minion"  # Minion, Puppet, Witch, etc.
 
     if pos == scenario.doppelganger_position or pos == scenario.drunk_position:
+        return "Outcast"
+    if pos == scenario.chancellor_target:
         return "Outcast"
 
     card = _get_card_at(pos, state)
@@ -727,6 +788,11 @@ def _get_real_role(pos: int, scenario: Scenario, state: GameState) -> str:
         return "Doppelganger"
     if pos == scenario.drunk_position:
         return "Drunk"
+    if pos == scenario.chancellor_target:
+        card = _get_card_at(pos, state)
+        if card:
+            return card.apparent_role
+        return "Converted Outcast"
     card = _get_card_at(pos, state)
     if card:
         return card.apparent_role
@@ -1216,10 +1282,11 @@ def _validate_witness(card: CardInfo, scenario: Scenario,
     pos = card.position
     truth = _truth_status(pos, scenario, state)
 
-    # "Affected by evil ability" = corrupted, puppeted, or adjacent to Chancellor conversion
+    # "Affected by evil ability" = corrupted, puppeted, or directly converted by Chancellor
     actually_affected = (
         claimed_pos in scenario.corrupted or
-        claimed_pos == scenario.puppet_position
+        claimed_pos == scenario.puppet_position or
+        claimed_pos == scenario.chancellor_target
     )
 
     if truth == TruthStatus.TRUTHFUL:
@@ -1359,6 +1426,17 @@ def _validate_druid(card: CardInfo, scenario: Scenario,
             continue
         if t == scenario.drunk_position:
             actual_outcasts.append("Drunk")
+            continue
+        if t == scenario.chancellor_target:
+            card_at = _get_card_at(t, state)
+            if card_at:
+                card_def = get_card(card_at.apparent_role)
+                if card_def and card_def.role == Role.OUTCAST and card_at.apparent_role != "Wretch":
+                    actual_outcasts.append(card_at.apparent_role)
+                else:
+                    return False
+            else:
+                has_unrevealed_good_target = True
             continue
         card_at = _get_card_at(t, state)
         if card_at:
@@ -1627,7 +1705,12 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
         if _truth_status(card.position, scenario, state) == TruthStatus.TRUTHFUL:
             truthful_originals.append(card.position)
 
-    shaman_extra = 1 if any(role == "Shaman" for role in scenario.evil_positions.values()) else 0
+    shaman_present = any(role == "Shaman" for role in scenario.evil_positions.values())
+    shaman_role_key = _normalize_role_name(scenario.shaman_role) if scenario.shaman_role else None
+    shaman_extra = 1 if (
+        shaman_role_key == _normalize_role_name("Baker")
+        or (shaman_present and shaman_role_key is None)
+    ) else 0
     doppel_originals = sum(1 for pos in truthful_originals if pos == scenario.doppelganger_position)
     if len(truthful_originals) > 1 + shaman_extra + doppel_originals:
         return False
@@ -1664,10 +1747,15 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
     total_claim_excess = 0
     for claimed, count in truthful_baker_claim_counts.items():
         deck_count = deck_role_counts.get(claimed, 0)
-        if count > deck_count:
-            total_claim_excess += count - deck_count
+        excess = max(0, count - deck_count)
+        if excess and (
+            (shaman_role_key and claimed == shaman_role_key)
+            or (shaman_present and shaman_role_key is None)
+        ):
+            excess -= 1
+        total_claim_excess += excess
 
-    if total_claim_excess > shaman_extra:
+    if total_claim_excess > 0:
         return False
 
     baker_cards = [card for card in state.cards if card.apparent_role == "Baker"]
@@ -1707,6 +1795,36 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
                 generated_slots += 1
 
     return True
+
+
+def _validate_witch_blocks(scenario: Scenario, state: GameState) -> bool:
+    """Blocked positions are only valid while a Witch is still alive."""
+    if not state.blocked_positions:
+        return True
+
+    witch_alive = any(role == "Witch" for role in scenario.evil_positions.values())
+    if not witch_alive:
+        return False
+
+    for pos in state.blocked_positions:
+        if pos in state.executed:
+            return False
+        if _get_card_at(pos, state) is not None:
+            return False
+
+    return True
+
+
+def _actual_outcast_counter(state: GameState, baa_fake_outcast: Optional[str] = None) -> Counter:
+    """Count real outcast roles from the deck after applying Baa's fake card."""
+    counter = Counter(_normalize_role_name(role) for role in state.deck.outcasts)
+    if baa_fake_outcast:
+        fake_key = _normalize_role_name(baa_fake_outcast)
+        if counter.get(fake_key, 0) > 0:
+            counter[fake_key] -= 1
+            if counter[fake_key] <= 0:
+                del counter[fake_key]
+    return counter
 
 
 # ============================================================
@@ -1750,6 +1868,75 @@ EXECUTION_IMMUNE_ROLES = {"Knight"}
 # Main Solver
 # ============================================================
 
+def _baa_fake_outcast_options(evil_positions: dict[int, str], state: GameState) -> list[Optional[str]]:
+    if "Baa" not in evil_positions.values():
+        return [None]
+    if not state.deck.outcasts:
+        return [None]
+    options: list[Optional[str]] = []
+    seen = set()
+    for role in state.deck.outcasts:
+        key = _normalize_role_name(role)
+        if key in seen:
+            continue
+        seen.add(key)
+        options.append(role)
+    return options or [None]
+
+
+def _chancellor_target_candidates(evil_positions: dict[int, str], state: GameState,
+                                  doppelganger_pos: Optional[int] = None,
+                                  drunk_pos: Optional[int] = None,
+                                  baa_fake_outcast: Optional[str] = None) -> list[Optional[int]]:
+    chancellor_positions = [pos for pos, role in evil_positions.items() if role == "Chancellor"]
+    if not chancellor_positions:
+        return [None]
+
+    candidates: list[int] = []
+    chancellor_pos = chancellor_positions[0]
+    for pos in adjacent_positions(chancellor_pos, state.n_cards):
+        if pos in evil_positions or pos == doppelganger_pos or pos == drunk_pos:
+            continue
+        card = _get_card_at(pos, state)
+        if card is not None:
+            card_def = get_card(card.apparent_role)
+            if card_def and card_def.role in (Role.VILLAGER, Role.OUTCAST):
+                candidates.append(pos)
+            continue
+        if _is_setup_villager_position(
+            pos, evil_positions, state,
+            doppelganger_pos=doppelganger_pos,
+            drunk_pos=drunk_pos,
+            baa_fake_outcast=baa_fake_outcast,
+        ):
+            candidates.append(pos)
+    return candidates
+
+
+def _shaman_role_options(evil_positions: dict[int, str], state: GameState) -> list[Optional[str]]:
+    if "Shaman" not in evil_positions.values():
+        return [None]
+
+    options: list[str] = []
+    seen = set()
+
+    for role in state.deck.villagers:
+        key = _normalize_role_name(role)
+        if key not in seen:
+            seen.add(key)
+            options.append(role)
+
+    for card in state.cards:
+        if card.apparent_role == "Baker":
+            claimed = str(card.info_parsed.get("original_role", ""))
+            if claimed and claimed.lower() != "original":
+                key = _normalize_role_name(claimed)
+                if key not in seen:
+                    seen.add(key)
+                    options.append(claimed)
+
+    return options or [None]
+
 def _build_scenarios(state: GameState) -> list[Scenario]:
     """Build all candidate scenarios from evil placements."""
     placements = _generate_evil_placements(state)
@@ -1780,141 +1967,173 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if ex_pos in state.executed and ex_pos not in full_evil:
                 full_evil[ex_pos] = "Unknown"
 
-        # Determine PD corruption targets
-        # PD corrupts 1 random Good Villager — we need to try all possibilities
-        # For simplicity, if PD is in play and not evil, try each villager position
-        # When multiple PD cards exist, use the one that's NOT evil in this placement
-        pd_pos = None
-        for p in all_pd_positions:
-            if p not in placement:
-                pd_pos = p
-                break  # First non-evil PD is the real one
+        extra_outcast_slots = 1 if any(role == "Chancellor" for role in full_evil.values()) else 0
 
-        pd_targets = [None]
-        if pd_pos:
-            # PD is good — it corrupted someone
-            if any(o in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor") for o in state.deck.outcasts):
-                if state.pd_corruption_target is not None:
-                    # Known PD target — only use that
-                    pd_targets = [state.pd_corruption_target]
-                else:
-                    candidates = []
-                    for p in range(1, state.n_cards + 1):
-                        if p == pd_pos or p in full_evil:
-                            continue
-                        c = _get_card_at(p, state)
-                        if c and _is_villager_role(c.apparent_role, state):
-                            candidates.append(p)
-                        elif c is None and _unrevealed_must_be_villager(
-                                p, full_evil, state):
-                            candidates.append(p)
-                    if candidates:
-                        pd_targets = candidates
-                    else:
-                        pd_targets = [None]
-
-        # Compute Pooka-corrupted positions (for Poisoner to skip)
-        pooka_corrupted = set()
-        for pos, role in full_evil.items():
-            if role == "Pooka":
-                for adj in adjacent_positions(pos, state.n_cards):
-                    if adj not in full_evil:
-                        card = _get_card_at(adj, state)
-                        if card and _is_villager_role(card.apparent_role, state):
-                            pooka_corrupted.add(adj)
-                        elif card is None and _unrevealed_must_be_villager(
-                                adj, full_evil, state):
-                            pooka_corrupted.add(adj)
-
-        # Determine Poisoner corruption targets (adjacent, 1 Villager)
-        # Poisoner acts AFTER Pooka — won't target already-corrupted positions
-        poisoner_targets = [None]
-        for pos, role in full_evil.items():
-            if role == "Poisoner":
-                candidates = []
-                for p in adjacent_positions(pos, state.n_cards):
-                    if p in full_evil:
+        for baa_fake_outcast in _baa_fake_outcast_options(full_evil, state):
+            # Determine possible Doppelganger positions
+            has_doppelganger = _actual_outcast_counter(state, baa_fake_outcast).get(
+                _normalize_role_name("Doppelganger"), 0
+            ) > 0
+            can_have_dopp, can_skip_dopp = _hidden_outcast_presence_flags(
+                "Doppelganger", state,
+                baa_fake_outcast=baa_fake_outcast,
+                extra_outcast_slots=extra_outcast_slots,
+            )
+            dopp_candidates = [None] if can_skip_dopp else []
+            if has_doppelganger and can_have_dopp:
+                for p in range(1, state.n_cards + 1):
+                    if p in full_evil or p == puppet_pos:
                         continue
-                    if p in pooka_corrupted:
-                        continue  # Poisoner skips Pooka's victims
                     card = _get_card_at(p, state)
                     if card and _is_villager_role(card.apparent_role, state):
-                        candidates.append(p)
-                    elif card is None and _unrevealed_must_be_villager(
-                            p, full_evil, state):
-                        candidates.append(p)
-                if candidates:
-                    poisoner_targets = candidates
-                break  # Only one Poisoner
+                        dopp_candidates.append(p)
 
-        # Determine possible Doppelganger positions
-        has_doppelganger = "Doppelganger" in state.deck.outcasts
-        can_have_dopp, can_skip_dopp = _hidden_outcast_presence_flags("Doppelganger", state)
-        dopp_candidates = [None] if can_skip_dopp else []
-        if has_doppelganger and can_have_dopp:
-            for p in range(1, state.n_cards + 1):
-                if p in full_evil or p == puppet_pos:
-                    continue
-                # Don't skip executed positions — an executed Good card
-                # could have been the Doppelganger
-                card = _get_card_at(p, state)
-                if card and _is_villager_role(card.apparent_role, state):
-                    dopp_candidates.append(p)
+            # Determine possible Drunk positions
+            has_drunk = _actual_outcast_counter(state, baa_fake_outcast).get(
+                _normalize_role_name("Drunk"), 0
+            ) > 0
+            drunk_already_known = any(c.apparent_role == "Drunk" for c in state.cards)
+            can_have_drunk, can_skip_drunk = _hidden_outcast_presence_flags(
+                "Drunk", state,
+                baa_fake_outcast=baa_fake_outcast,
+                extra_outcast_slots=extra_outcast_slots,
+            )
+            drunk_candidates = [None] if (drunk_already_known or can_skip_drunk) else []
+            if has_drunk and not drunk_already_known and can_have_drunk:
+                for p in range(1, state.n_cards + 1):
+                    if p in full_evil or p == puppet_pos:
+                        continue
+                    card = _get_card_at(p, state)
+                    if card is None or _is_villager_role(card.apparent_role, state):
+                        drunk_candidates.append(p)
 
-        # Determine possible Drunk positions
-        # Drunk (Outcast) disguises as a not-in-play Villager, is always
-        # corrupted, and can't be cured. Enumerate possible positions.
-        has_drunk = "Drunk" in state.deck.outcasts
-        # Check if Drunk is already explicitly revealed (e.g., by Medium)
-        drunk_already_known = any(
-            c.apparent_role == "Drunk" for c in state.cards
-        )
-        can_have_drunk, can_skip_drunk = _hidden_outcast_presence_flags("Drunk", state)
-        drunk_candidates = [None] if (drunk_already_known or can_skip_drunk) else []
-        if has_drunk and not drunk_already_known and can_have_drunk:
-            for p in range(1, state.n_cards + 1):
-                if p in full_evil or p == puppet_pos:
-                    continue
-                # Don't skip executed positions — an executed Good card
-                # could have been the Drunk, and its pre-execution info
-                # still needs to be validated as corrupted
-                card = _get_card_at(p, state)
-                # Drunk appears as a Villager, so it could be at any
-                # position showing as a Villager, OR any unrevealed position
-                if card is None or _is_villager_role(card.apparent_role, state):
-                    drunk_candidates.append(p)
+            for dopp_pos in dopp_candidates:
+                for drunk_pos in drunk_candidates:
+                    if drunk_pos is not None and drunk_pos == dopp_pos:
+                        continue
 
-        for pd_t in pd_targets:
-            for pois_t in poisoner_targets:
-                seen = set()
-                for dopp_pos in dopp_candidates:
-                    for drunk_pos in drunk_candidates:
-                        # Drunk and Doppelganger can't be the same position
-                        if drunk_pos is not None and drunk_pos == dopp_pos:
+                    chancellor_targets = _chancellor_target_candidates(
+                        full_evil, state,
+                        doppelganger_pos=dopp_pos,
+                        drunk_pos=drunk_pos,
+                        baa_fake_outcast=baa_fake_outcast,
+                    )
+                    if not chancellor_targets:
+                        continue
+
+                    for chancellor_target in chancellor_targets:
+                        setup_evil = dict(full_evil)
+                        if puppet_pos is not None:
+                            setup_evil.pop(puppet_pos, None)
+
+                        if puppet_pos is not None and not _is_setup_villager_position(
+                            puppet_pos, setup_evil, state,
+                            doppelganger_pos=dopp_pos,
+                            drunk_pos=drunk_pos,
+                            chancellor_target=chancellor_target,
+                            baa_fake_outcast=baa_fake_outcast,
+                        ):
                             continue
-                        raw_corrupted = _compute_corruption(
-                            full_evil, state, pd_t, dopp_pos, pois_t,
-                            drunk_pos)
-                        # Apply setup-order post-processing:
-                        # Puppet cure + Alchemist cures
-                        final_corrupted, alch_cures = _apply_post_corruption(
-                            raw_corrupted, full_evil, state,
-                            puppet_pos, drunk_pos)
-                        # Deduplicate scenarios with same corruption+dopp+drunk combo
-                        key = (frozenset(final_corrupted), dopp_pos, drunk_pos)
-                        if key in seen:
-                            continue
-                        seen.add(key)
-                        scenario = Scenario(
-                            evil_positions=dict(full_evil),
-                            puppet_position=puppet_pos,
-                            corrupted=final_corrupted,
-                            pd_corrupted=pd_t,
-                            doppelganger_position=dopp_pos,
-                            drunk_position=drunk_pos,
-                            alchemist_cures=alch_cures,
-                        )
-                        scenarios.append(scenario)
+
+                        # Determine PD corruption targets (after Puppeteer).
+                        pd_pos = None
+                        for p in all_pd_positions:
+                            if p not in placement:
+                                pd_pos = p
+                                break
+
+                        pd_targets = [None]
+                        if pd_pos:
+                            if any(o in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor") for o in state.deck.outcasts):
+                                if state.pd_corruption_target is not None:
+                                    pd_targets = [state.pd_corruption_target]
+                                else:
+                                    candidates = []
+                                    for p in range(1, state.n_cards + 1):
+                                        if p == pd_pos or p in full_evil:
+                                            continue
+                                        if _is_setup_villager_position(
+                                            p, full_evil, state,
+                                            doppelganger_pos=dopp_pos,
+                                            drunk_pos=drunk_pos,
+                                            chancellor_target=chancellor_target,
+                                            baa_fake_outcast=baa_fake_outcast,
+                                        ):
+                                            candidates.append(p)
+                                    if candidates:
+                                        pd_targets = candidates
+
+                        # Compute Pooka-corrupted positions (before Puppeteer).
+                        pooka_corrupted = set()
+                        for pos, role in setup_evil.items():
+                            if role != "Pooka":
+                                continue
+                            for adj in adjacent_positions(pos, state.n_cards):
+                                if _is_setup_villager_position(
+                                    adj, setup_evil, state,
+                                    doppelganger_pos=dopp_pos,
+                                    drunk_pos=drunk_pos,
+                                    chancellor_target=chancellor_target,
+                                    baa_fake_outcast=baa_fake_outcast,
+                                ):
+                                    pooka_corrupted.add(adj)
+
+                        poisoner_targets = [None]
+                        for pos, role in setup_evil.items():
+                            if role != "Poisoner":
+                                continue
+                            candidates = []
+                            for p in adjacent_positions(pos, state.n_cards):
+                                if p in pooka_corrupted:
+                                    continue
+                                if _is_setup_villager_position(
+                                    p, setup_evil, state,
+                                    doppelganger_pos=dopp_pos,
+                                    drunk_pos=drunk_pos,
+                                    chancellor_target=chancellor_target,
+                                    baa_fake_outcast=baa_fake_outcast,
+                                ):
+                                    candidates.append(p)
+                            if candidates:
+                                poisoner_targets = candidates
+                            break
+
+                        seen = set()
+                        for pd_t in pd_targets:
+                            for pois_t in poisoner_targets:
+                                raw_corrupted = _compute_corruption(
+                                    setup_evil, state, pd_t, dopp_pos, pois_t,
+                                    drunk_pos, chancellor_target,
+                                )
+                                final_corrupted, alch_cures = _apply_post_corruption(
+                                    raw_corrupted, full_evil, state,
+                                    puppet_pos, drunk_pos,
+                                )
+                                for shaman_role in _shaman_role_options(full_evil, state):
+                                    key = (
+                                        frozenset(final_corrupted),
+                                        dopp_pos,
+                                        drunk_pos,
+                                        chancellor_target,
+                                        _normalize_role_name(baa_fake_outcast) if baa_fake_outcast else None,
+                                        _normalize_role_name(shaman_role) if shaman_role else None,
+                                    )
+                                    if key in seen:
+                                        continue
+                                    seen.add(key)
+                                    scenario = Scenario(
+                                        evil_positions=dict(full_evil),
+                                        puppet_position=puppet_pos,
+                                        corrupted=final_corrupted,
+                                        pd_corrupted=pd_t,
+                                        doppelganger_position=dopp_pos,
+                                        drunk_position=drunk_pos,
+                                        chancellor_target=chancellor_target,
+                                        baa_fake_outcast=baa_fake_outcast,
+                                        shaman_role=shaman_role,
+                                        alchemist_cures=alch_cures,
+                                    )
+                                    scenarios.append(scenario)
 
     return scenarios
 
@@ -1930,8 +2149,6 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     Also checks Outcast role counts: Good positions showing an Outcast role
     can't exceed that role's deck count (no disguiser can fake an Outcast role).
     """
-    from collections import Counter
-
     # Count apparent roles among Good (non-evil, non-puppet) revealed positions,
     # PLUS puppet (Puppet keeps its apparent Villager role, consuming a deck slot)
     good_villager_counts = Counter()  # villager_role -> count
@@ -1978,6 +2195,8 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     def _normalize(name: str) -> str:
         return name.lower().replace(" ", "").replace("_", "")
     deck_v_counts = Counter(_normalize(v) for v in state.deck.villagers)
+    shaman_present = any(role == "Shaman" for role in scenario.evil_positions.values())
+    shaman_role_key = _normalize(scenario.shaman_role) if scenario.shaman_role else None
     total_excess = 0
     for role, count in good_villager_counts.items():
         # Baker converts other villagers into Bakers (cascading), so any
@@ -1985,26 +2204,35 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         if _normalize(role) == "baker" and any(_normalize(v) == "baker" for v in state.deck.villagers):
             continue
         deck_count = deck_v_counts.get(_normalize(role), 0)
-        if count > deck_count:
-            total_excess += count - deck_count
+        excess = max(0, count - deck_count)
+        role_key = _normalize(role)
+        if excess and (
+            (shaman_role_key and role_key == shaman_role_key)
+            or (shaman_present and shaman_role_key is None)
+        ):
+            excess -= 1
+        total_excess += excess
 
-    # Shaman creates "2 same Villager roles" — allows 1 extra copy of a Villager
-    shaman_allowance = 0
-    if "Shaman" in state.deck.minions:
-        for p in range(1, state.n_cards + 1):
-            role = _known_evil_role(p, scenario, state)
-            if role == "Shaman":
-                shaman_allowance = 1
-                break
+    shaman_allowance = 1 if (shaman_role_key or (shaman_present and shaman_role_key is None)) else 0
 
-    if total_excess > n_disguisers + shaman_allowance:
+    if total_excess > n_disguisers:
         return False
 
     # Check Outcast roles: no disguiser can fake an Outcast appearance,
     # so Good Outcast appearances can't exceed deck counts
-    deck_o_counts = Counter(_normalize(o) for o in state.deck.outcasts)
+    deck_o_counts = Counter({
+        key: count for key, count in _actual_outcast_counter(
+            state, scenario.baa_fake_outcast
+        ).items()
+    })
+    chancellor_bonus = Counter()
+    if scenario.chancellor_target is not None:
+        ch_card = _get_card_at(scenario.chancellor_target, state)
+        if ch_card is not None:
+            chancellor_bonus[_normalize(ch_card.apparent_role)] += 1
     for role, count in good_outcast_counts.items():
-        if count > deck_o_counts.get(_normalize(role), 0):
+        role_key = _normalize(role)
+        if count > deck_o_counts.get(role_key, 0) + chancellor_bonus.get(role_key, 0):
             return False
 
     # Extra roles mechanic (Asc10+): pool has more roles than board positions.
@@ -2074,6 +2302,9 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
             return False
 
     if not _validate_baker_constraints(scenario, state):
+        return False
+
+    if not _validate_witch_blocks(scenario, state):
         return False
 
     # Validate Lilis night kill constraint: exactly N evils among night-killed positions

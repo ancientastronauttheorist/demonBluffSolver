@@ -3,7 +3,7 @@
 import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
-    _apply_post_corruption, circle_distance, circle_direction, adjacent_positions, solve,
+    _apply_post_corruption, _compute_corruption, circle_distance, circle_direction, adjacent_positions, solve,
     _check_scenario, _is_evil_in_scenario, _validate_baker, _validate_bishop,
     _validate_poet, _validate_role_counts,
 )
@@ -369,6 +369,120 @@ class TestHiddenOutcastValidation(unittest.TestCase):
         self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
 
 
+class TestRoundStartOrder(unittest.TestCase):
+    def test_chancellor_target_counts_as_outcast_for_bishop(self):
+        deck = DeckComposition(
+            villagers=["Bishop", "Hunter"],
+            outcasts=["Bombardier"],
+            minions=["Chancellor"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Bishop", info_parsed={"targets": [2, 3], "types": ["Outcast", "Minion"]}),
+                CardInfo(2, "Bombardier"),
+                CardInfo(3, "Hunter"),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={3: "Chancellor"}, chancellor_target=2)
+
+        self.assertTrue(_check_scenario(scenario, state))
+
+    def test_chancellor_target_not_corrupted_by_pooka(self):
+        deck = DeckComposition(
+            villagers=["Hunter", "Scout"],
+            outcasts=["Bombardier"],
+            minions=["Chancellor"],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Bombardier"),
+                CardInfo(3, "Hunter"),
+            ],
+            n_evil=2,
+        )
+
+        corrupted = _compute_corruption(
+            {2: "Chancellor", 4: "Pooka"},
+            state,
+            chancellor_target=1,
+        )
+
+        self.assertEqual(corrupted, {3})
+
+    def test_baa_fake_outcast_does_not_count_as_real_outcast(self):
+        deck = DeckComposition(
+            villagers=["Scout"],
+            outcasts=["Bombardier"],
+            minions=[],
+            demons=["Baa"],
+        )
+        state = GameState(
+            n_cards=2,
+            deck=deck,
+            cards=[CardInfo(1, "Bombardier")],
+            n_evil=1,
+            board_villager_count=1,
+            board_outcast_count=0,
+        )
+        scenario = Scenario(evil_positions={2: "Baa"}, baa_fake_outcast="Bombardier")
+
+        self.assertFalse(_validate_role_counts(scenario, state))
+
+    def test_pooka_can_corrupt_future_puppet_before_puppet_cure(self):
+        deck = DeckComposition(
+            villagers=["Enlightened", "Slayer", "Hunter"],
+            outcasts=[],
+            minions=["Puppeteer"],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Enlightened"),
+                CardInfo(2, "Enlightened"),
+                CardInfo(3, "Slayer"),
+            ],
+            n_evil=3,
+        )
+
+        raw_corrupted = _compute_corruption({1: "Pooka"}, state)
+        final_corrupted, _ = _apply_post_corruption(
+            raw_corrupted,
+            {1: "Pooka", 2: "Puppet", 4: "Puppeteer"},
+            state,
+            puppet_pos=2,
+        )
+
+        self.assertIn(2, raw_corrupted)
+        self.assertNotIn(2, final_corrupted)
+
+    def test_blocked_positions_require_witch(self):
+        deck = DeckComposition(
+            villagers=["Scout", "Hunter"],
+            outcasts=[],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[CardInfo(1, "Scout")],
+            n_evil=1,
+            blocked_positions=[3],
+        )
+
+        self.assertFalse(_check_scenario(Scenario(evil_positions={2: "Minion"}), state))
+        self.assertTrue(_check_scenario(Scenario(evil_positions={2: "Witch"}), state))
+
+
 class TestPoetRandomInfo(unittest.TestCase):
     def test_poet_random_clue_type_not_in_deck_still_validates(self):
         deck = DeckComposition(
@@ -619,9 +733,51 @@ class TestWretchTypeRegistration(unittest.TestCase):
             ],
             n_evil=1,
         )
-        scenario = Scenario(evil_positions={4: "Shaman"})
+        scenario = Scenario(evil_positions={4: "Shaman"}, shaman_role="Scout")
 
         self.assertTrue(_check_scenario(scenario, state))
+
+    def test_duplicate_truthful_baker_prior_role_claims_need_matching_shaman_role(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=["Shaman"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "Scout"}),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={4: "Shaman"}, shaman_role="Hunter")
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_two_truthful_original_bakers_need_baker_shaman_role(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=["Shaman"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}),
+            ],
+            n_evil=1,
+        )
+        wrong_role = Scenario(evil_positions={4: "Shaman"}, shaman_role="Scout")
+        right_role = Scenario(evil_positions={4: "Shaman"}, shaman_role="Baker")
+
+        self.assertFalse(_check_scenario(wrong_role, state))
+        self.assertTrue(_check_scenario(right_role, state))
 
     def test_first_revealed_baker_cannot_truthfully_be_converted_without_prior_trigger(self):
         deck = DeckComposition(
