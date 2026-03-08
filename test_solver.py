@@ -4,7 +4,7 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     _apply_post_corruption, _compute_corruption, circle_distance, circle_direction, adjacent_positions, solve,
-    _check_scenario, _is_evil_in_scenario, _validate_baker, _validate_bishop,
+    _check_scenario, _is_evil_in_scenario, _validate_baker, _validate_bishop, _validate_empress,
     _validate_poet, _validate_role_counts,
 )
 
@@ -481,6 +481,48 @@ class TestRoundStartOrder(unittest.TestCase):
 
         self.assertFalse(_check_scenario(Scenario(evil_positions={2: "Minion"}), state))
         self.assertTrue(_check_scenario(Scenario(evil_positions={2: "Witch"}), state))
+
+
+class TestEmpressRules(unittest.TestCase):
+    def test_lying_empress_requires_all_targets_good(self):
+        deck = DeckComposition(
+            villagers=["Empress", "Scout", "Hunter"],
+            outcasts=[],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[CardInfo(1, "Empress", info_parsed={"targets": [2, 3, 4]})],
+            n_evil=1,
+        )
+        lying_good_targets = Scenario(evil_positions={1: "Minion"})
+        lying_with_targeted_evil = Scenario(evil_positions={1: "Minion", 2: "Twin Minion"})
+
+        self.assertTrue(_validate_empress(state.cards[0], lying_good_targets, state))
+        self.assertFalse(_validate_empress(state.cards[0], lying_with_targeted_evil, state))
+
+    def test_empress_cannot_include_self_unless_puppet(self):
+        deck = DeckComposition(
+            villagers=["Empress", "Scout", "Hunter"],
+            outcasts=[],
+            minions=["Puppeteer"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[CardInfo(1, "Empress", info_parsed={"targets": [1, 2, 3]})],
+            n_evil=2,
+        )
+
+        self.assertFalse(_validate_empress(state.cards[0], Scenario(evil_positions={4: "Puppeteer"}), state))
+        self.assertTrue(_validate_empress(
+            state.cards[0],
+            Scenario(evil_positions={4: "Puppeteer"}, puppet_position=1),
+            state,
+        ))
 
 
 class TestPoetRandomInfo(unittest.TestCase):

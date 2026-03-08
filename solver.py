@@ -1262,13 +1262,16 @@ def _validate_empress(card: CardInfo, scenario: Scenario,
     pos = card.position
     truth = _truth_status(pos, scenario, state)
 
+    if pos in targets and pos != scenario.puppet_position:
+        return False
+
     evil_count = sum(1 for t in targets
                      if _effective_alignment(t, scenario, state) == Alignment.EVIL)
 
     if truth == TruthStatus.TRUTHFUL:
         return evil_count == 1
     else:
-        return evil_count != 1
+        return evil_count == 0
 
 
 def _validate_witness(card: CardInfo, scenario: Scenario,
