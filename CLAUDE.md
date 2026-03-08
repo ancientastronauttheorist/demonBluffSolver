@@ -10,6 +10,8 @@ Priority order:
 4. Increase win rate and push to higher ascension levels.
 
 ## Autonomous Workflow
+**Always do what the solver recommends. No second-guessing, no manual overrides.** If the solver returns 0 scenarios or an error, stop and fix the problem immediately — do not guess, do not pick a random target, do not continue hoping for the best. Diagnose the root cause (bad data entry, missing constraint, wrong rule), fix the solver code, re-run, and only proceed when the solver gives a valid recommendation. (One-time exception: the empirical dead-card targeting test — see Empirical Tests.)
+
 Claude should operate in this cycle:
 1. Capture the current puzzle state from screenshots, hover text, compendium pages, and other in-game ground truth.
 2. Enter or infer that state into the solver, then choose the best next action.
@@ -87,8 +89,7 @@ Claude should operate in this cycle:
 
 ### 6. Run Solver and Execute Recommendations
 - `python game_loop.py next` — runs solver, gives strategy recommendation.
-- **Always do what the solver recommends. No second-guessing, no manual overrides.**
-- **0 scenarios or ERROR = stop and fix immediately.** Do not guess, do not pick a random target, do not continue the game hoping for the best. Diagnose the root cause (bad data entry, missing constraint, wrong rule), fix the solver code, re-run, and only proceed when the solver gives a valid recommendation. The one exception is the empirical dead-card targeting test (see Empirical Tests below).
+- **Always do what the solver recommends.**
 
 #### Using Active Abilities
 - Click the card with the ability icon to activate it.
