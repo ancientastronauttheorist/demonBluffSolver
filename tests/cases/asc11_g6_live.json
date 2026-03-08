@@ -111,5 +111,13 @@
       "Baa"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc11_g6_live",
+  "true_evil_positions": {
+    "1": "Baa",
+    "2": "Puppeteer",
+    "3": "Puppet",
+    "6": "Shaman"
+  },
+  "notes": "Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman."
 }

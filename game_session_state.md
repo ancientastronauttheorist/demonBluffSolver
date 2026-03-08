@@ -3637,3 +3637,60 @@ Reason: #5 is evil in ALL 4 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.
 
+
+---
+
+# New Game — 2026-03-07 23:42:40
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Baker, Hunter, Medium, Architect, Slayer, Bard
+- Outcasts: PlagueDoctor, Doppelganger
+- Minions: Shaman, Puppeteer
+- Demons: Baa
+
+### [23:47:47] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'real'}
+
+### [23:47:47] Revealed #2 Plaguedoctor
+Info: {}
+
+### [23:47:48] Revealed #3 Bard
+Info: {'corruption_distance': 2}
+
+### [23:47:48] Revealed #4 Hunter
+Info: {'distance': 1}
+
+### [23:47:48] Revealed #5 Slayer
+Info: {}
+
+### [23:47:48] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [23:47:48] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [23:47:49] Revealed #8 Baker
+Info: {'original_role': 'hunter'}
+
+### [23:47:49] Revealed #9 Plaguedoctor
+Info: {}
+
+### [23:49:22] Executed #1
+
+### [23:49:22] Executed #3
+
+### [23:49:22] Executed #6
+
+## Deck
+- Villagers: Baker, Hunter, Medium, Architect, Slayer, Bard
+- Outcasts: PlagueDoctor, Doppelganger
+- Minions: Shaman, Puppeteer, Puppet
+- Demons: Baa
+
+### [00:16:07] Executed #2
+
+## [00:16:08] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman.
+

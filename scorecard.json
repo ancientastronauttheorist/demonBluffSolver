@@ -160,6 +160,13 @@
       "name": "asc11_g5_live",
       "notes": "Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.",
       "date": "2026-03-07 20:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g6_live",
+      "notes": "Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman.",
+      "date": "2026-03-08 00:16"
     }
   ]
 }
