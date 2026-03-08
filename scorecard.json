@@ -132,6 +132,13 @@
       "name": "asc11_g1_live",
       "notes": "Autonomous live run. Deck: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop, Plague Doctor, Minion, Twin Minion, Pooka. #1 Bishop and #6 Lover were corrupted. PD #8 found #1 corrupted and #9 evil. Dreamer #3 found #9 could be Twin Minion. PD #9 found #5 corrupted and #2 evil; that branch was treated as corrupted PD misinformation. Final evils: #5 Minion, #7 Pooka, #9 Twin Minion. Finished at 10 HP.",
       "date": "2026-03-07 15:58"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc11_g2_live",
+      "notes": "Safe endgame line was execute #5 first; #5 revealed Drunk (corrupted) and the final screen showed #9 as Doppelganger. This exposed an execution lookahead gap in strategy.",
+      "date": "2026-03-07 19:07"
     }
   ]
 }

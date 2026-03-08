@@ -157,5 +157,11 @@
     9,
     8,
     5
-  ]
+  ],
+  "name": "asc11_g2_live",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "8": "Shaman"
+  },
+  "notes": "Safe endgame line was execute #5 first; #5 revealed Drunk (corrupted) and the final screen showed #9 as Doppelganger. This exposed an execution lookahead gap in strategy."
 }

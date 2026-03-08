@@ -162,6 +162,30 @@ class TestStrategyRecommendations(unittest.TestCase):
         self.assertEqual(action.action_type, "execute")
         self.assertEqual(action.position, 7)
 
+    def test_execution_lookahead_picks_forced_win_line(self):
+        case_path = Path(__file__).parent / "cases" / "asc11_g2_live.json"
+        state = GameState.from_dict(json.loads(case_path.read_text()))
+
+        state.executed = [7]
+        state.confirmed_evil = []
+        state.confirmed_good = [7]
+        state.executed_evil_roles = {}
+        state.slayer_results = [{
+            "slayer_pos": 5,
+            "target_pos": 8,
+            "killed": False,
+        }]
+        state.used_abilities = [1, 4, 5, 8, 9]
+        state.hp = 6
+        state.wrong_exec_cost = 5
+
+        result = solve(state)
+        action = recommend_action(state, result, used_abilities=state.used_abilities)
+
+        self.assertEqual(action.action_type, "execute")
+        self.assertEqual(action.position, 5)
+        self.assertIn("guarantees a win", action.reasoning)
+
 
 if __name__ == "__main__":
     unittest.main()

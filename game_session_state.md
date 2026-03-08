@@ -3010,3 +3010,186 @@ WARNING: Low confidence (0%) -- consider gathering more info
 Final HP: 10
 Notes: Autonomous live run. Deck: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop, Plague Doctor, Minion, Twin Minion, Pooka. #1 Bishop and #6 Lover were corrupted. PD #8 found #1 corrupted and #9 evil. Dreamer #3 found #9 could be Twin Minion. PD #9 found #5 corrupted and #2 evil; that branch was treated as corrupted PD misinformation. Final evils: #5 Minion, #7 Pooka, #9 Twin Minion. Finished at 10 HP.
 
+#### [16:23:27] Solver Output
+Scenarios: 632/2016
+Definite good: ['#7']
+Evil probabilities: #5=41%, #8=41%, #3=23%, #1=21%, #4=21%, #9=21%, #6=19%, #2=13%
+  Generated 2016 candidate scenarios
+  632 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [16:23:28] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#5', '#8']
+Reason: Expected posterior 264.9 scenarios (adjusted 279.5, info gain 1.177 bits) | timing x1.00
+WARNING: Corruption risk: 11%
+
+#### [16:26:00] Solver Output
+Scenarios: 300/2016
+Definite good: ['#7']
+Evil probabilities: #5=65%, #8=31%, #1=29%, #3=21%, #4=19%, #9=19%, #6=10%, #2=7%
+  Generated 2016 candidate scenarios
+  300 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [16:26:00] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#2', '#4', '#5']
+Reason: Expected posterior 123.1 scenarios (adjusted 130.1, info gain 1.205 bits) | timing x1.00
+WARNING: Corruption risk: 11%
+
+#### [16:27:24] Solver Output
+Scenarios: 300/2016
+Definite good: ['#7']
+Evil probabilities: #5=65%, #8=31%, #1=29%, #3=21%, #4=19%, #9=19%, #6=10%, #2=7%
+  Generated 2016 candidate scenarios
+  300 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [16:27:24] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#2', '#4', '#5']
+Reason: Expected posterior 123.1 scenarios (adjusted 130.1, info gain 1.205 bits) | timing x1.00
+WARNING: Corruption risk: 11%
+
+#### [18:38:30] Solver Output
+Scenarios: 220/2016
+Definite good: ['#7']
+Evil probabilities: #5=69%, #1=31%, #8=31%, #3=22%, #9=18%, #4=17%, #6=9%, #2=3%
+  Generated 2016 candidate scenarios
+  220 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [18:38:30] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#1', '#2', '#8']
+Reason: Expected posterior 93.2 scenarios (adjusted 100.4, info gain 1.132 bits) | timing x1.00
+WARNING: Corruption risk: 15%
+
+#### [18:47:28] Solver Output
+Scenarios: 96/2016
+Definite good: ['#6', '#7']
+Evil probabilities: #5=58%, #1=42%, #9=42%, #8=40%, #3=8%, #4=8%, #2=2%
+  Generated 2016 candidate scenarios
+  96 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 8, 9]
+
+#### [18:47:28] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#5']
+Reason: Expected posterior 47.0 scenarios (adjusted 49.0, info gain 0.971 bits) | timing x1.00
+WARNING: Corruption risk: 8%
+
+### [18:54:53] Revealed #8 Jester
+Info: {'targets': [1, 2, 5], 'evil_count': 3}
+
+### [18:54:57] Ability used at #8
+
+#### [18:55:05] Solver Output
+Scenarios: 46/2016
+Definite good: ['#2', '#3', '#4', '#6', '#7']
+Evil probabilities: #8=83%, #1=65%, #5=35%, #9=17%
+  Generated 2016 candidate scenarios
+  46 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 5, 8, 9]
+
+#### [18:55:05] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#8']
+Reason: Target #8 is 83% evil (adjusted 0.68)
+WARNING: Corruption risk: 17% -- Slayer ability disabled if corrupted
+
+#### [18:58:37] Solver Output
+Scenarios: 24/2016
+Definite good: ['#2', '#3', '#4', '#6', '#7']
+Evil probabilities: #5=67%, #8=67%, #1=33%, #9=33%
+  Generated 2016 candidate scenarios
+  24 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 5, 8, 9]
+
+#### [18:58:37] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 67% likely evil but budget=1 requires >=80% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 67% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 67% < 80% threshold. Consider manual override if you have extra information.
+
+### [19:02:54] Executed #5 -> GOOD (WRONG!)
+
+#### [19:03:05] Solver Output
+Scenarios: 8/1512
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#9']
+  Generated 1512 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [19:03:05] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 8 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [19:04:24] Executed #1 -> Lilis (EVIL)
+
+#### [19:04:28] Solver Output
+Scenarios: 4/216
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#9']
+  Generated 216 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [19:04:28] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 4 scenarios (roles: {'Shaman'})
+
+### [19:05:54] Executed #8 -> Shaman (EVIL)
+
+## [19:07:14] GAME OVER — WIN
+Final HP: 4
+Notes: Safe endgame line was execute #5 first; #5 revealed Drunk (corrupted) and the final screen showed #9 as Doppelganger. This exposed an execution lookahead gap in strategy.
+
+#### [19:09:22] Solver Output
+Scenarios: 4/36
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#9']
+  Generated 36 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [19:09:22] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+

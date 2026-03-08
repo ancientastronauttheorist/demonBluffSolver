@@ -1789,17 +1789,15 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     for outcast in state.deck.outcasts:
         if outcast not in disguise_outcasts:
             continue
-        # Check if this outcast is Good (not at an evil position) in this scenario.
-        # Use tracked positions if available, otherwise assume Good (conservative).
+        # Only hidden outcasts that are actually present in this scenario can
+        # explain an extra apparent Villager copy. `None` means absent here,
+        # not "present but unknown."
         if outcast == "Doppelganger" and scenario.doppelganger_position is not None:
             if scenario.doppelganger_position not in scenario.evil_positions:
                 n_disguisers += 1
         elif outcast == "Drunk" and scenario.drunk_position is not None:
             if scenario.drunk_position not in scenario.evil_positions:
                 n_disguisers += 1
-        else:
-            # Position unknown — conservatively assume it's Good
-            n_disguisers += 1
 
     # Check Villager roles: excess Good appearances over deck count
     # Normalize names: strip spaces/underscores and lowercase (handles CamelCase,

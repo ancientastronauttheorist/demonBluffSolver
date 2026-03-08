@@ -4,7 +4,7 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     circle_distance, circle_direction, adjacent_positions, solve,
-    _is_evil_in_scenario,
+    _is_evil_in_scenario, _validate_role_counts,
 )
 
 
@@ -276,6 +276,46 @@ class TestHiddenOutcastPresence(unittest.TestCase):
 
         self.assertGreater(result.n_surviving, 0)
         self.assertTrue(all(s.doppelganger_position is None for s in result.surviving_scenarios))
+
+
+class TestDuplicateRoleAllowance(unittest.TestCase):
+    def test_absent_hidden_outcast_does_not_explain_duplicate_villager(self):
+        deck = DeckComposition(
+            villagers=["Jester"],
+            outcasts=["Drunk"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=2,
+            deck=deck,
+            cards=[CardInfo(1, "Jester"), CardInfo(2, "Jester")],
+            n_evil=0,
+            board_villager_count=2,
+            board_outcast_count=0,
+        )
+        scenario = Scenario(evil_positions={}, drunk_position=None)
+
+        self.assertFalse(_validate_role_counts(scenario, state))
+
+    def test_present_hidden_outcast_can_explain_duplicate_villager(self):
+        deck = DeckComposition(
+            villagers=["Jester"],
+            outcasts=["Drunk"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=2,
+            deck=deck,
+            cards=[CardInfo(1, "Jester"), CardInfo(2, "Jester")],
+            n_evil=0,
+            board_villager_count=1,
+            board_outcast_count=1,
+        )
+        scenario = Scenario(evil_positions={}, drunk_position=2)
+
+        self.assertTrue(_validate_role_counts(scenario, state))
 
 
 if __name__ == "__main__":

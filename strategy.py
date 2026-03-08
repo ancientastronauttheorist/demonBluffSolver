@@ -157,6 +157,147 @@ def _corruption_risk(pos: int, result: SolverResult) -> float:
     return count / result.n_surviving
 
 
+def _execution_reveal_outcome(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> tuple[str, bool, bool]:
+    """Observed outcome if `pos` is executed in a scenario.
+
+    Returns `(revealed_role, was_evil, was_corrupted)` using the real revealed
+    role when a hidden outcast flips over.
+    """
+    if pos in scenario.evil_positions:
+        return (scenario.evil_positions[pos], True, False)
+
+    if pos == scenario.puppet_position:
+        return ("Puppet", True, False)
+
+    if pos == scenario.drunk_position:
+        return ("Drunk", False, True)
+
+    if pos == scenario.doppelganger_position:
+        return ("Doppelganger", False, pos in scenario.corrupted)
+
+    card = get_card_at(pos, state)
+    role = card.apparent_role if card else "Unknown"
+    return (role, False, pos in scenario.corrupted)
+
+
+def _find_forced_execution(
+    state: GameState,
+    result: SolverResult,
+    candidate_positions: list[int],
+) -> Optional[int]:
+    """Return an execution that guarantees a win across all reveal branches.
+
+    This is a shallow endgame planner for the "all revealed / no more info"
+    state. It explores execution outcomes by exact revealed role and only
+    returns a position when every branch still has a forced execution-only win
+    under the current HP budget.
+    """
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_positions:
+        return None
+
+    probs = evil_probabilities(state, result)
+    ordered_candidates = sorted(
+        candidate_positions,
+        key=lambda p: (-probs.get(p, 0.0), p),
+    )
+    all_positions = tuple(range(1, state.n_cards + 1))
+    memo: dict[tuple[tuple[int, ...], tuple[int, ...], int], tuple[bool, Optional[int]]] = {}
+
+    def all_evils_gone(indices: tuple[int, ...], executed_now: frozenset[int]) -> bool:
+        for idx in indices:
+            scenario = scenarios[idx]
+            for pos in all_positions:
+                if pos in state.executed or pos in executed_now:
+                    continue
+                if scenario_is_evil(pos, scenario):
+                    return False
+        return True
+
+    def can_force(indices: tuple[int, ...], executed_now: frozenset[int], hp: int
+                  ) -> tuple[bool, Optional[int]]:
+        key = (indices, tuple(sorted(executed_now)), hp)
+        if key in memo:
+            return memo[key]
+
+        if all_evils_gone(indices, executed_now):
+            memo[key] = (True, None)
+            return memo[key]
+
+        available = [
+            pos for pos in ordered_candidates
+            if pos not in executed_now and pos not in state.executed
+        ]
+        if not available:
+            memo[key] = (False, None)
+            return memo[key]
+
+        for pos in available:
+            branches: dict[tuple[str, bool, bool], list[int]] = {}
+            for idx in indices:
+                outcome = _execution_reveal_outcome(pos, scenarios[idx], state)
+                branches.setdefault(outcome, []).append(idx)
+
+            branch_ok = True
+            for (_, was_evil, _), branch_indices in branches.items():
+                next_hp = hp if was_evil else hp - state.wrong_exec_cost
+                if next_hp < 0:
+                    branch_ok = False
+                    break
+
+                can_win, _ = can_force(
+                    tuple(sorted(branch_indices)),
+                    executed_now | {pos},
+                    next_hp,
+                )
+                if not can_win:
+                    branch_ok = False
+                    break
+
+            if branch_ok:
+                memo[key] = (True, pos)
+                return memo[key]
+
+        memo[key] = (False, None)
+        return memo[key]
+
+    success, pos = can_force(tuple(range(len(scenarios))), frozenset(), state.hp)
+    if success:
+        return pos
+    return None
+
+
+def _forced_execution_reasoning(
+    pos: int,
+    state: GameState,
+    result: SolverResult,
+) -> str:
+    """Explain why an execution is safe under lookahead."""
+    branches: dict[tuple[str, bool, bool], int] = {}
+    for scenario in result.surviving_scenarios:
+        outcome = _execution_reveal_outcome(pos, scenario, state)
+        branches[outcome] = branches.get(outcome, 0) + 1
+
+    parts = []
+    total = max(1, result.n_surviving)
+    for (role, was_evil, was_corrupted), count in sorted(
+        branches.items(),
+        key=lambda item: (-item[1], item[0][0], item[0][1], item[0][2]),
+    ):
+        label = f"{'evil' if was_evil else 'good'} {role}"
+        if was_corrupted and not was_evil:
+            label += " (corrupted)"
+        parts.append(f"{count / total:.0%} {label}")
+
+    summary = ", ".join(parts[:3])
+    return (f"Execution lookahead: #{pos} guarantees a win across all reveal branches "
+            f"with current HP budget ({summary}).")
+
+
 def _could_have_active_ability(pos: int, state: GameState, result: SolverResult) -> bool:
     """Check if an unrevealed position might have an active ability."""
     # Active ability roles from knowledge base
@@ -890,6 +1031,26 @@ def recommend_action(
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
+
+        forced_pos = _find_forced_execution(
+            state,
+            result,
+            [p for p, prob in active_probs.items() if prob > 0.0],
+        )
+        if forced_pos is not None:
+            warnings = []
+            forced_prob = active_probs.get(forced_pos, 0.0)
+            if forced_prob < 1.0:
+                warnings.append(
+                    f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
+                    f"but all reveal branches still lead to a forced win."
+                )
+            return Action(
+                "execute",
+                position=forced_pos,
+                reasoning=_forced_execution_reasoning(forced_pos, state, result),
+                warnings=warnings,
+            )
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
