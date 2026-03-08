@@ -87,7 +87,8 @@ Claude should operate in this cycle:
 
 ### 6. Run Solver and Execute Recommendations
 - `python game_loop.py next` — runs solver, gives strategy recommendation.
-- **Always do what the solver recommends.**
+- **Always do what the solver recommends. No second-guessing, no manual overrides.**
+- **0 scenarios or ERROR = stop and fix immediately.** Do not guess, do not pick a random target, do not continue the game hoping for the best. Diagnose the root cause (bad data entry, missing constraint, wrong rule), fix the solver code, re-run, and only proceed when the solver gives a valid recommendation. The one exception is the empirical dead-card targeting test (see Empirical Tests below).
 
 #### Using Active Abilities
 - Click the card with the ability icon to activate it.
