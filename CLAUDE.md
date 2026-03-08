@@ -16,7 +16,7 @@ Claude should operate in this cycle:
 3. Act in game, observe the result, and update the state.
 4. After each puzzle, log what happened and save regression coverage for anything learned.
 5. Refine solver logic, strategy, and vision tooling whenever the live game exposes a weakness.
-6. At the end of each completed loop, commit the resulting code, test, and regression updates locally.
+6. At the end of each completed loop, commit and push the resulting code, test, and regression updates.
 
 ## Interaction Rules
 - Use the mouse only for in-game interaction. Do not use keyboard shortcuts during live runs.
