@@ -120,9 +120,6 @@ Claude should operate in this cycle:
 - Run regression: `python -m tests.test_regression`
 - Commit and push.
 
-## Known Solver Issues to Fix
-- **Killing a good card**: `slayer_result` now auto-marks killed positions as executed. Strategy layer penalizes Slayer-on-Wretch (factors in wrong_exec_cost HP penalty). Blocks targeting Wretch entirely when HP ≤ wrong_exec_cost. If new dead-good-card edge cases arise, extend this handling.
-
 ## Empirical Tests (run when opportunity arises)
 - **Can active abilities target dead/Lilis-killed cards?** E.g. can Fortune Teller pick a dead seat as one of its 2 targets? Wiki and forums have no answer. Next time we have an active ability and a dead card on the board, try targeting it and note whether the game allows it.
 
