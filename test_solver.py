@@ -4,7 +4,8 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     _apply_post_corruption, circle_distance, circle_direction, adjacent_positions, solve,
-    _check_scenario, _is_evil_in_scenario, _validate_bishop, _validate_poet, _validate_role_counts,
+    _check_scenario, _is_evil_in_scenario, _validate_baker, _validate_bishop,
+    _validate_poet, _validate_role_counts,
 )
 
 
@@ -467,6 +468,160 @@ class TestWretchTypeRegistration(unittest.TestCase):
 
         self.assertEqual(final_corrupted, set())
         self.assertEqual(alch_cures.get(6), 1)
+
+    def test_puppet_baker_truthfully_claims_it_was_a_baker(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=["Puppeteer"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[CardInfo(1, "Baker", info_parsed={"original_role": "Baker"})],
+            n_evil=2,
+        )
+        scenario = Scenario(evil_positions={2: "Puppeteer"}, puppet_position=1)
+
+        self.assertTrue(_validate_baker(state.cards[0], scenario, state))
+
+    def test_puppet_baker_cannot_claim_original(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=["Puppeteer"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[CardInfo(1, "Baker", info_parsed={"original_role": "original"})],
+            n_evil=2,
+        )
+        scenario = Scenario(evil_positions={2: "Puppeteer"}, puppet_position=1)
+
+        self.assertFalse(_validate_baker(state.cards[0], scenario, state))
+
+    def test_two_truthful_original_bakers_need_extra_source(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_two_truthful_original_bakers_allowed_with_doppelganger(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=["Doppelganger"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={}, doppelganger_position=2)
+
+        self.assertTrue(_check_scenario(scenario, state))
+
+    def test_truthful_original_baker_rules_out_demon_baker_disguise(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=[],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(2, "Baker"),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={2: "Pooka"})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_truthful_original_baker_rules_out_drunk_baker_disguise(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=["Drunk"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(2, "Baker"),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={}, drunk_position=2)
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_duplicate_truthful_baker_prior_role_claims_need_shaman(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "Scout"}),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_duplicate_truthful_baker_prior_role_claims_allowed_with_shaman(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout"],
+            outcasts=[],
+            minions=["Shaman"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "Scout"}),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={4: "Shaman"})
+
+        self.assertTrue(_check_scenario(scenario, state))
 
     def test_live_baker_wretch_board_recovers_after_two_wrong_execs(self):
         deck = DeckComposition(

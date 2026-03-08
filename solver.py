@@ -1541,8 +1541,14 @@ def _validate_baker(card: CardInfo, scenario: Scenario,
     claimed = info["original_role"]
     pos = card.position
     truth = _truth_status(pos, scenario, state)
+    claimed_key = str(claimed).lower().replace(" ", "_")
 
-    if claimed.lower() == "original":
+    # A Puppeteer-converted Baker becomes a truthful Puppet that says
+    # "I was a Baker". It does not keep any other original-role claim.
+    if pos == scenario.puppet_position and truth == TruthStatus.TRUTHFUL:
+        return claimed_key == "baker"
+
+    if claimed_key == "original":
         # Claims to be the original Baker (not converted).
         # The original Baker is immune to corruption, and corrupted converted
         # Bakers say "I was [wrong role]", not "I am the original Baker".
@@ -1592,6 +1598,66 @@ def _validate_poet(card: CardInfo, scenario: Scenario,
     # Delegate: the card keeps its original position (for truth status)
     # but we pass the copied role's info fields through info_parsed
     return validator(card, scenario, state)
+
+
+def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
+    """Validate Baker-wide constraints that depend on multiple cards.
+
+    Wiki-backed cases handled here:
+    - Extra truthful "original Baker" claims require an extra Baker source
+      (Shaman and/or Doppelganger-as-Baker).
+    - Once a truthful original Baker exists, Demon and Drunk disguises cannot
+      also appear as Baker. Minions still can.
+    - Duplicate truthful "I was a <Villager>" claims need enough real copies
+      of that Villager in the deck, plus at most one Shaman-created extra copy.
+    """
+    truthful_originals: list[int] = []
+
+    for card in state.cards:
+        if card.apparent_role != "Baker":
+            continue
+        claimed = str(card.info_parsed.get("original_role", "")).lower().replace(" ", "_")
+        if claimed != "original":
+            continue
+        if _truth_status(card.position, scenario, state) == TruthStatus.TRUTHFUL:
+            truthful_originals.append(card.position)
+
+    shaman_extra = 1 if any(role == "Shaman" for role in scenario.evil_positions.values()) else 0
+    doppel_originals = sum(1 for pos in truthful_originals if pos == scenario.doppelganger_position)
+    if len(truthful_originals) > 1 + shaman_extra + doppel_originals:
+        return False
+
+    demon_roles = set(state.deck.demons)
+    truthful_baker_claim_counts: dict[str, int] = {}
+    for card in state.cards:
+        if card.apparent_role != "Baker":
+            continue
+        pos = card.position
+        claimed = str(card.info_parsed.get("original_role", "")).lower().replace(" ", "_")
+        evil_role = _known_evil_role(pos, scenario, state)
+        if truthful_originals and (evil_role in demon_roles or pos == scenario.drunk_position):
+            return False
+        if _truth_status(pos, scenario, state) != TruthStatus.TRUTHFUL:
+            continue
+        if claimed in ("", "original", "baker"):
+            continue
+        truthful_baker_claim_counts[claimed] = truthful_baker_claim_counts.get(claimed, 0) + 1
+
+    deck_role_counts: dict[str, int] = {}
+    for role in state.deck.villagers:
+        key = role.lower().replace(" ", "_")
+        deck_role_counts[key] = deck_role_counts.get(key, 0) + 1
+
+    total_claim_excess = 0
+    for claimed, count in truthful_baker_claim_counts.items():
+        deck_count = deck_role_counts.get(claimed, 0)
+        if count > deck_count:
+            total_claim_excess += count - deck_count
+
+    if total_claim_excess > shaman_extra:
+        return False
+
+    return True
 
 
 # ============================================================
@@ -1957,6 +2023,9 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     if state.pd_ability_results:
         if not _validate_pd_ability(scenario, state):
             return False
+
+    if not _validate_baker_constraints(scenario, state):
+        return False
 
     # Validate Lilis night kill constraint: exactly N evils among night-killed positions
     if state.night_kills:
