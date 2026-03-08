@@ -149,6 +149,8 @@ class GameState:
     blocked_positions: list[int] = field(default_factory=list)  # Positions blocked from reveal (Witch)
     board_villager_count: Optional[int] = None  # Actual villagers on board (when pool > board)
     board_outcast_count: Optional[int] = None   # Actual outcasts on board (when pool > board)
+    board_minion_count: Optional[int] = None    # Actual minions on board (when pool > board)
+    board_demon_count: Optional[int] = None     # Actual demons on board (when pool > board)
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -169,6 +171,8 @@ class GameState:
             "wrong_exec_cost": self.wrong_exec_cost,
             "board_villager_count": self.board_villager_count,
             "board_outcast_count": self.board_outcast_count,
+            "board_minion_count": self.board_minion_count,
+            "board_demon_count": self.board_demon_count,
         }
         if nest_deck:
             data["deck"] = self.deck.to_dict()
@@ -209,6 +213,8 @@ class GameState:
             wrong_exec_cost=data.get("wrong_exec_cost", 2),
             board_villager_count=data.get("board_villager_count"),
             board_outcast_count=data.get("board_outcast_count"),
+            board_minion_count=data.get("board_minion_count"),
+            board_demon_count=data.get("board_demon_count"),
         )
 
 
@@ -409,20 +415,82 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
 
     # No Puppeteer — straightforward combinations
     n_evil = len(evil_roles)
-    if not puppet_in_deck:
+
+    # When evil pool > board evil count (Asc10+), generate all valid subsets
+    # of evil roles that match board minion/demon counts.
+    if n_evil > expected_remaining and expected_remaining > 0:
+        evil_role_subsets = _evil_role_subsets(
+            evil_roles, state, expected_remaining
+        )
+    elif n_evil == expected_remaining:
+        evil_role_subsets = [evil_roles]
+    elif not puppet_in_deck:
         assert n_evil == expected_remaining, \
             f"Evil role count {n_evil} != expected remaining {expected_remaining}"
+        evil_role_subsets = [evil_roles]
+    else:
+        evil_role_subsets = [evil_roles] if evil_roles else []
+
     placements = []
-    if n_evil > 0:
-        for combo in combinations(available, n_evil):
-            for role_perms in _permutations_of(evil_roles):
-                p = {}
-                for i, pos in enumerate(combo):
-                    p[pos] = role_perms[i]
-                placements.append(p)
+    if expected_remaining > 0:
+        for role_set in evil_role_subsets:
+            n_roles = len(role_set)
+            for combo in combinations(available, n_roles):
+                for role_perms in _permutations_of(role_set):
+                    p = {}
+                    for i, pos in enumerate(combo):
+                        p[pos] = role_perms[i]
+                    placements.append(p)
     elif expected_remaining <= 0:
         placements.append({})  # No evil left to place
     return placements
+
+
+def _evil_role_subsets(
+    evil_roles: list[str], state: GameState, expected_remaining: int
+) -> list[list[str]]:
+    """Generate all valid subsets of evil roles when pool > board count.
+
+    Uses board_minion_count and board_demon_count to pick the right number
+    of minions and demons from the pool.  Falls back to plain combinations
+    when counts are not available.
+    """
+    from knowledge_base import CARDS_BY_NAME, Role
+    minion_pool = [r for r in evil_roles
+                   if r in CARDS_BY_NAME and CARDS_BY_NAME[r].role == Role.MINION]
+    demon_pool  = [r for r in evil_roles
+                   if r in CARDS_BY_NAME and CARDS_BY_NAME[r].role == Role.DEMON]
+
+    # Determine how many of each to pick
+    bm = state.board_minion_count
+    bd = state.board_demon_count
+
+    # Subtract already-executed evil roles from counts
+    for _pos, role in state.executed_evil_roles.items():
+        if role in minion_pool:
+            if bm is not None:
+                bm -= 1
+            minion_pool = [r for r in minion_pool if r != role]  # remove first
+        elif role in demon_pool:
+            if bd is not None:
+                bd -= 1
+            demon_pool = [r for r in demon_pool if r != role]
+
+    if bm is not None and bd is not None:
+        # Pick bm minions from pool and bd demons from pool
+        subsets = []
+        for m_combo in combinations(minion_pool, max(bm, 0)):
+            for d_combo in combinations(demon_pool, max(bd, 0)):
+                subset = list(m_combo) + list(d_combo)
+                if len(subset) == expected_remaining:
+                    subsets.append(subset)
+        return subsets if subsets else [evil_roles[:expected_remaining]]
+
+    # Fallback: try all combinations of expected_remaining from evil_roles
+    subsets = []
+    for combo in combinations(evil_roles, expected_remaining):
+        subsets.append(list(combo))
+    return subsets
 
 
 def _permutations_of(roles: list[str]) -> list[list[str]]:

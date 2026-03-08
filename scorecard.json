@@ -188,6 +188,20 @@
       "name": "asc12_v2",
       "notes": "4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP.",
       "date": "2026-03-08 03:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v3",
+      "notes": "perfect 10HP, 1-shot solve. Corrupted: 1=Hunter,3=Bishop,6=Scout",
+      "date": "2026-03-08 11:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc12_v4",
+      "notes": "5HP. Slayer killed Wretch (registers evil)=-5HP. Corrupted: 2=Jester,3=Drunk(disguised as Architect). Drunk was in Outcast pool.",
+      "date": "2026-03-08 11:32"
     }
   ]
 }
