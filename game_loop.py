@@ -375,9 +375,15 @@ class GameSession:
 
     def add_card(self, card: CardInfo):
         # Replace if same position already exists (re-read)
+        existing = next((c for c in self.cards if c.position == card.position), None)
+        if card.reveal_index is None:
+            if existing and existing.reveal_index is not None:
+                card.reveal_index = existing.reveal_index
+            else:
+                known_indexes = [c.reveal_index for c in self.cards if c.reveal_index is not None]
+                card.reveal_index = (max(known_indexes) + 1) if known_indexes else 1
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
-        self.cards.sort(key=lambda c: c.position)
         # Auto-mark ability used for active abilities entered with results
         # (Judge with target info; PD and Slayer have dedicated commands)
         if card.apparent_role == "Judge" and card.info_parsed.get("target"):
@@ -532,7 +538,7 @@ class GameSession:
             print(f"       D: {', '.join(self.demons)}")
         if self.cards:
             print(f"  Revealed cards:")
-            for c in self.cards:
+            for c in sorted(self.cards, key=lambda c: c.position):
                 extra = ""
                 if c.position in self.executed:
                     extra = " [EXECUTED]"

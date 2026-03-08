@@ -80,6 +80,34 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.used_abilities, [4])
         self.assertEqual(loaded.pd_ability_results, session.pd_ability_results)
 
+    def test_reveal_index_round_trip_and_session_assignment(self):
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition(
+                villagers=["Baker", "Scout"],
+                outcasts=[],
+                minions=[],
+                demons=[],
+            ),
+            cards=[
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}, reveal_index=1),
+                CardInfo(1, "Scout", reveal_index=2),
+            ],
+            n_evil=0,
+        )
+
+        loaded = GameState.from_dict(state.to_dict())
+        self.assertEqual([c.reveal_index for c in loaded.cards], [1, 2])
+
+        session = GameSession(3, 0)
+        session.add_card(CardInfo(3, "Baker"))
+        session.add_card(CardInfo(1, "Scout"))
+        session.add_card(CardInfo(3, "Baker", info_parsed={"original_role": "original"}))
+
+        reveal_indexes = {c.position: c.reveal_index for c in session.cards}
+        self.assertEqual(reveal_indexes[3], 1)
+        self.assertEqual(reveal_indexes[1], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

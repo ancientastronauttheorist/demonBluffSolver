@@ -623,6 +623,94 @@ class TestWretchTypeRegistration(unittest.TestCase):
 
         self.assertTrue(_check_scenario(scenario, state))
 
+    def test_first_revealed_baker_cannot_truthfully_be_converted_without_prior_trigger(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout", "Architect"],
+            outcasts=[],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}, reveal_index=1),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}, reveal_index=2),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_hidden_good_night_kill_can_explain_first_revealed_converted_baker(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout", "Architect", "Hunter"],
+            outcasts=[],
+            minions=[],
+            demons=["Lilis"],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}, reveal_index=1),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}, reveal_index=2),
+            ],
+            n_evil=1,
+            night_kills=[4],
+            night_kill_evil_count=0,
+        )
+        scenario = Scenario(evil_positions={3: "Lilis"})
+
+        self.assertTrue(_check_scenario(scenario, state))
+
+    def test_corrupted_baker_breaks_chain_for_later_truthful_baker(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout", "Architect", "Hunter"],
+            outcasts=[],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "original"}, reveal_index=1),
+                CardInfo(2, "Baker", info_parsed={"original_role": "Scout"}, reveal_index=2),
+                CardInfo(3, "Baker", info_parsed={"original_role": "Architect"}, reveal_index=3),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={}, corrupted={2})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
+    def test_baker_cannot_truthfully_claim_role_used_by_known_demon_disguise(self):
+        deck = DeckComposition(
+            villagers=["Baker", "Scout", "Architect"],
+            outcasts=[],
+            minions=[],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Baker", info_parsed={"original_role": "Scout"}, reveal_index=2),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}, reveal_index=1),
+                CardInfo(3, "Scout"),
+                CardInfo(4, "Scout"),
+            ],
+            n_evil=1,
+            executed=[4],
+            confirmed_evil=[4],
+            executed_evil_roles={4: "Pooka"},
+        )
+        scenario = Scenario(evil_positions={4: "Pooka"})
+
+        self.assertFalse(_check_scenario(scenario, state))
+
     def test_live_baker_wretch_board_recovers_after_two_wrong_execs(self):
         deck = DeckComposition(
             villagers=["Alchemist", "Fortune_Teller", "Bishop", "Empress", "Knitter", "Baker"],

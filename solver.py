@@ -75,6 +75,7 @@ class CardInfo:
     apparent_role: str      # What role it appears as (may be disguise)
     info_text: str = ""     # Raw info text from the card
     info_parsed: dict = field(default_factory=dict)  # Structured info (type-specific)
+    reveal_index: Optional[int] = None  # Reveal order for Baker-chain logic
 
     def to_dict(self) -> dict:
         return {
@@ -82,6 +83,7 @@ class CardInfo:
             "apparent_role": self.apparent_role,
             "info_text": self.info_text,
             "info_parsed": dict(self.info_parsed),
+            "reveal_index": self.reveal_index,
         }
 
     @classmethod
@@ -91,6 +93,7 @@ class CardInfo:
             data["apparent_role"],
             data.get("info_text", ""),
             data.get("info_parsed", {}),
+            data.get("reveal_index"),
         )
 
 
@@ -1610,6 +1613,8 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
       also appear as Baker. Minions still can.
     - Duplicate truthful "I was a <Villager>" claims need enough real copies
       of that Villager in the deck, plus at most one Shaman-created extra copy.
+    - When reveal order is known, truthful and corrupted Baker chains must be
+      explainable by prior Baker reveals or hidden Lilis kills.
     """
     truthful_originals: list[int] = []
 
@@ -1648,6 +1653,14 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
         key = role.lower().replace(" ", "_")
         deck_role_counts[key] = deck_role_counts.get(key, 0) + 1
 
+    for card in state.cards:
+        evil_role = _known_evil_role(card.position, scenario, state)
+        if evil_role not in demon_roles:
+            continue
+        key = card.apparent_role.lower().replace(" ", "_")
+        if key in deck_role_counts and deck_role_counts[key] > 0:
+            deck_role_counts[key] -= 1
+
     total_claim_excess = 0
     for claimed, count in truthful_baker_claim_counts.items():
         deck_count = deck_role_counts.get(claimed, 0)
@@ -1656,6 +1669,42 @@ def _validate_baker_constraints(scenario: Scenario, state: GameState) -> bool:
 
     if total_claim_excess > shaman_extra:
         return False
+
+    baker_cards = [card for card in state.cards if card.apparent_role == "Baker"]
+    if baker_cards and all(card.reveal_index is not None for card in baker_cards):
+        ordered_bakers = sorted(baker_cards, key=lambda c: (c.reveal_index, c.position))
+        generated_slots = 0
+        for pos in state.night_kills:
+            if _is_evil_in_board_state(pos, scenario, state):
+                continue
+            if pos == scenario.drunk_position or pos == scenario.doppelganger_position:
+                continue
+            generated_slots += 1
+
+        for card in ordered_bakers:
+            pos = card.position
+            claimed = str(card.info_parsed.get("original_role", "")).lower().replace(" ", "_")
+            truth = _truth_status(pos, scenario, state)
+            evil_role = _known_evil_role(pos, scenario, state)
+            is_puppet = pos == scenario.puppet_position
+            is_drunk = pos == scenario.drunk_position
+            is_good_baker = evil_role is None and not is_drunk
+            can_trigger = is_good_baker and not is_puppet and pos not in scenario.corrupted
+
+            needs_prior_bake = False
+            if truth == TruthStatus.TRUTHFUL:
+                if claimed not in ("", "original") and not is_puppet:
+                    needs_prior_bake = True
+            elif is_good_baker and pos in scenario.corrupted:
+                needs_prior_bake = True
+
+            if needs_prior_bake:
+                if generated_slots <= 0:
+                    return False
+                generated_slots -= 1
+
+            if can_trigger:
+                generated_slots += 1
 
     return True
 
