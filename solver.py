@@ -279,6 +279,10 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     n_executed_evil = len(state.executed_evil_roles) + len(executed_evil_without_role)
     expected_remaining = state.n_evil - n_executed_evil
 
+    # Pre-compute valid placement sizes: when Puppet ambiguity exists
+    # (game dialog may or may not count Puppet in n_evil), accept +1
+    valid_sizes = {expected_remaining, expected_remaining + 1} if puppet_in_deck else {expected_remaining}
+
     # Remove already-executed positions from candidates
     # Night-killed positions stay eligible (evil could have been among them)
     player_executed = [p for p in state.executed if p not in state.night_kills]
@@ -328,9 +332,6 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                 for i, pos in enumerate(combo):
                     p[pos] = role_perms[i]
                 placements.append(p)
-        # Filter: accept expected_remaining or +1 (Puppet may or may not
-        # be counted in n_evil depending on how the game reports it)
-        valid_sizes = {expected_remaining, expected_remaining + 1} if puppet_in_deck else {expected_remaining}
         return [p for p in placements if len(p) in valid_sizes]
 
     # Check if Puppet was already executed but Puppeteer is still alive
@@ -358,8 +359,6 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                         for i, pos in enumerate(combo):
                             p[pos] = role_perms[i]
                         placements.append(p)
-        # Filter: accept expected_remaining or +1 for Puppet ambiguity
-        valid_sizes = {expected_remaining, expected_remaining + 1} if puppet_in_deck else {expected_remaining}
         return [p for p in placements if len(p) in valid_sizes]
 
     # If Puppeteer is present, we need an extra slot for Puppet
@@ -406,8 +405,6 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
                             p[pos] = role_perms[i]
                         placements.append(p)
 
-        # Filter: accept expected_remaining or +1 for Puppet ambiguity
-        valid_sizes = {expected_remaining, expected_remaining + 1} if puppet_in_deck else {expected_remaining}
         return [p for p in placements if len(p) in valid_sizes]
 
     # No Puppeteer — straightforward combinations
@@ -448,9 +445,14 @@ def _permutations_of(roles: list[str]) -> list[list[str]]:
 # Constraint Filtering
 # ============================================================
 
+def _normalize_role(name: str) -> str:
+    """Normalize role names: lowercase, remove spaces and underscores."""
+    return name.lower().replace("_", "").replace(" ", "")
+
+
 def _is_plague_doctor(name: str) -> bool:
     """Case-insensitive check for any variant of Plague Doctor."""
-    return name.lower().replace("_", "").replace(" ", "") == "plaguedoctor"
+    return _normalize_role(name) == "plaguedoctor"
 
 
 def _apply_placement_constraints(placement: dict[int, str],
@@ -1469,14 +1471,14 @@ def _validate_slayer_results(scenario: Scenario, state: GameState) -> bool:
         target_pos = result["target_pos"]
         killed = result["killed"]
 
-        slayer_is_evil = _is_evil_in_board_state(slayer_pos, scenario, state)
-        slayer_is_corrupted = slayer_pos in scenario.corrupted
-        target_is_evil = _effective_alignment(target_pos, scenario, state) == Alignment.EVIL
-
+        # Cache evil role lookup (avoids duplicate traversal via _is_evil_in_board_state)
+        slayer_evil_role = _known_evil_role(slayer_pos, scenario, state)
+        slayer_is_evil = slayer_evil_role is not None
         # Puppet disguised as Slayer can use the ability (Puppet can't lie,
         # so its abilities work).  Other evil Slayers cannot.
-        slayer_evil_role = _known_evil_role(slayer_pos, scenario, state)
         slayer_is_puppet = slayer_evil_role == "Puppet"
+        slayer_is_corrupted = slayer_pos in scenario.corrupted
+        target_is_evil = _effective_alignment(target_pos, scenario, state) == Alignment.EVIL
 
         if killed:
             # Kill succeeded: Slayer must be real (good or Puppet) + uncorrupted + target evil
@@ -1873,18 +1875,14 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
                 n_disguisers += 1
 
     # Check Villager roles: excess Good appearances over deck count
-    # Normalize names: strip spaces/underscores and lowercase (handles CamelCase,
-    # "Fortune Teller", "FortuneTeller", "Fortune_Teller" all mapping to same key)
-    def _normalize(name: str) -> str:
-        return name.lower().replace(" ", "").replace("_", "")
-    deck_v_counts = Counter(_normalize(v) for v in state.deck.villagers)
+    deck_v_counts = Counter(_normalize_role(v) for v in state.deck.villagers)
     total_excess = 0
     for role, count in good_villager_counts.items():
         # Baker converts other villagers into Bakers (cascading), so any
         # number of Good Bakers is valid when Baker is in the deck
-        if _normalize(role) == "baker" and any(_normalize(v) == "baker" for v in state.deck.villagers):
+        if _normalize_role(role) == "baker" and any(_normalize_role(v) == "baker" for v in state.deck.villagers):
             continue
-        deck_count = deck_v_counts.get(_normalize(role), 0)
+        deck_count = deck_v_counts.get(_normalize_role(role), 0)
         if count > deck_count:
             total_excess += count - deck_count
 
@@ -1902,9 +1900,9 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
 
     # Check Outcast roles: no disguiser can fake an Outcast appearance,
     # so Good Outcast appearances can't exceed deck counts
-    deck_o_counts = Counter(_normalize(o) for o in state.deck.outcasts)
+    deck_o_counts = Counter(_normalize_role(o) for o in state.deck.outcasts)
     for role, count in good_outcast_counts.items():
-        if count > deck_o_counts.get(_normalize(role), 0):
+        if count > deck_o_counts.get(_normalize_role(role), 0):
             return False
 
     # Extra roles mechanic (Asc10+): pool has more roles than board positions.
