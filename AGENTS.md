@@ -15,8 +15,9 @@ Codex should operate in this cycle:
 2. Enter or infer that state into the solver, then choose the best next action.
 3. Act in game, observe the result, and update the state.
 4. After each puzzle, log what happened and save regression coverage for anything learned.
-5. Refine solver logic, strategy, and vision tooling whenever the live game exposes a weakness.
-6. At the end of each completed loop, commit the resulting code, test, and regression updates locally, then push the current branch to `origin`.
+5. If a live game exposes a rule mismatch or solver weakness, consult the wiki before changing solver logic.
+6. Refine solver logic, strategy, and vision tooling whenever the live game exposes a weakness.
+7. At the end of each completed loop, commit the resulting code, test, and regression updates locally, then push the current branch to `origin`.
 
 ## Interaction Rules
 - Use the mouse only for in-game interaction. Do not use keyboard shortcuts during live runs.
