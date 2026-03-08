@@ -243,8 +243,14 @@ def _find_forced_execution(
                 branches.setdefault(outcome, []).append(idx)
 
             branch_ok = True
-            for (_, was_evil, _), branch_indices in branches.items():
-                next_hp = hp if was_evil else hp - state.wrong_exec_cost
+            for (role, was_evil, was_corrupted), branch_indices in branches.items():
+                if was_evil:
+                    next_hp = hp
+                elif role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
+                    # Execution blocked by immunity — no HP cost, confirms good
+                    next_hp = hp
+                else:
+                    next_hp = hp - state.wrong_exec_cost
                 if next_hp < 0:
                     branch_ok = False
                     break
@@ -289,7 +295,9 @@ def _forced_execution_reasoning(
         key=lambda item: (-item[1], item[0][0], item[0][1], item[0][2]),
     ):
         label = f"{'evil' if was_evil else 'good'} {role}"
-        if was_corrupted and not was_evil:
+        if not was_evil and role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
+            label += " (immune, 0 HP)"
+        elif was_corrupted and not was_evil:
             label += " (corrupted)"
         parts.append(f"{count / total:.0%} {label}")
 
@@ -970,15 +978,12 @@ def recommend_action(
     if max_remaining == 0:
         return Action("win", reasoning="All evil characters have been executed!")
 
-    # 3. Execute definite evil (skip Bombardier and execution-immune roles)
-    immune_positions = set()
-    for card in state.cards:
-        if card.apparent_role in EXECUTION_IMMUNE_ROLES and card.position not in result.definite_evil:
-            immune_positions.add(card.position)
+    # 3. Execute definite evil (skip Bombardier)
+    # Note: Knights are NOT blanket-immune -- see "Knight free check" below.
+    # Executing an uncertain Knight is a free check (0 HP) when uncorrupted.
     safe_executions = [p for p in result.definite_evil
                        if p not in state.executed
-                       and p not in result.bombardier_positions
-                       and p not in immune_positions]
+                       and p not in result.bombardier_positions]
     if safe_executions:
         # Safety check: if PD is in the deck but hasn't been found among revealed
         # cards, corruption can't be modeled. The solver may over-prune scenarios
@@ -1013,6 +1018,42 @@ def recommend_action(
                 "execute", position=pos,
                 reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
         # else: PD corruption unmodeled — fall through to reveal to find PD
+
+    # 3.5 Knight free check — executing an uncertain Knight is free info
+    # Real Knight (uncorrupted): execution blocked, confirms good, 0 HP cost
+    # Evil disguised as Knight: evil dies
+    # Corrupted Knight: execution succeeds, costs HP (risky)
+    knight_checks = []
+    for card in state.cards:
+        if (card.apparent_role in EXECUTION_IMMUNE_ROLES
+                and card.position not in state.executed
+                and card.position not in result.definite_good
+                and card.position not in result.definite_evil):
+            corr_risk = _corruption_risk(card.position, result)
+            evil_prob = evil_probabilities(state, result).get(card.position, 0)
+            knight_checks.append((card.position, evil_prob, corr_risk))
+
+    if knight_checks:
+        knight_checks.sort(key=lambda x: -x[1])  # highest evil prob first
+        kpos, evil_prob, corr_risk = knight_checks[0]
+        if corr_risk == 0:
+            # Truly free: 0% corruption means execution is either blocked or kills evil
+            return Action(
+                "execute", position=kpos,
+                reasoning=f"Knight free check: #{kpos} is {evil_prob:.0%} evil. "
+                          f"If real Knight, execution blocked (confirms good, 0 HP). "
+                          f"If evil disguise, evil dies. No corruption risk.")
+        elif corr_risk < 0.3:
+            # Mostly free: small corruption risk lowers the expected cost
+            expected_cost = corr_risk * (1 - evil_prob) * state.wrong_exec_cost
+            wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
+            if expected_cost < state.wrong_exec_cost * 0.3 and wrong_exec_budget > 0:
+                return Action(
+                    "execute", position=kpos,
+                    reasoning=f"Knight check: #{kpos} is {evil_prob:.0%} evil, "
+                              f"{corr_risk:.0%} corruption risk. Expected HP cost: "
+                              f"{expected_cost:.1f} (vs normal {state.wrong_exec_cost}).",
+                    warnings=[f"Corruption risk: {corr_risk:.0%} -- corrupted Knight loses immunity"])
 
     # 4. Check available abilities
     ability_recs = recommend_abilities(state, result, used_abilities)
@@ -1069,8 +1110,7 @@ def recommend_action(
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
     probs = evil_probabilities(state, result)
     active_probs = {p: prob for p, prob in probs.items()
-                    if p not in state.executed and p not in result.bombardier_positions
-                    and p not in immune_positions}
+                    if p not in state.executed and p not in result.bombardier_positions}
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
