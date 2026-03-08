@@ -4,7 +4,7 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     circle_distance, circle_direction, adjacent_positions, solve,
-    _is_evil_in_scenario,
+    _check_scenario, _is_evil_in_scenario, _validate_poet, _validate_role_counts,
 )
 
 
@@ -223,6 +223,193 @@ class TestExecutedEvil(unittest.TestCase):
         result = solve(state)
         self.assertIn(5, result.definite_evil,
                       f"Expected #5 evil. Reasoning: {result.reasoning}")
+
+
+class TestHiddenOutcastPresence(unittest.TestCase):
+    @staticmethod
+    def _revealed_villager_board():
+        return [
+            CardInfo(1, "Gemcrafter"),
+            CardInfo(2, "Knitter"),
+            CardInfo(3, "Architect"),
+            CardInfo(4, "Knitter"),
+        ]
+
+    def test_doppelganger_forced_when_only_outcast_slot(self):
+        deck = DeckComposition(
+            villagers=["Gemcrafter", "Knitter", "Architect"],
+            outcasts=["Doppelganger"],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=self._revealed_villager_board(),
+            n_evil=1,
+            board_villager_count=3,
+            board_outcast_count=1,
+        )
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0)
+        self.assertTrue(all(s.doppelganger_position is not None for s in result.surviving_scenarios))
+
+    def test_doppelganger_absent_when_zero_outcast_slots(self):
+        deck = DeckComposition(
+            villagers=["Gemcrafter", "Knitter", "Architect"],
+            outcasts=["Doppelganger"],
+            minions=["Minion"],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=deck,
+            cards=self._revealed_villager_board(),
+            n_evil=1,
+            board_villager_count=3,
+            board_outcast_count=0,
+        )
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0)
+        self.assertTrue(all(s.doppelganger_position is None for s in result.surviving_scenarios))
+
+
+class TestDuplicateRoleAllowance(unittest.TestCase):
+    def test_absent_hidden_outcast_does_not_explain_duplicate_villager(self):
+        deck = DeckComposition(
+            villagers=["Jester"],
+            outcasts=["Drunk"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=2,
+            deck=deck,
+            cards=[CardInfo(1, "Jester"), CardInfo(2, "Jester")],
+            n_evil=0,
+            board_villager_count=2,
+            board_outcast_count=0,
+        )
+        scenario = Scenario(evil_positions={}, drunk_position=None)
+
+        self.assertFalse(_validate_role_counts(scenario, state))
+
+    def test_present_hidden_outcast_can_explain_duplicate_villager(self):
+        deck = DeckComposition(
+            villagers=["Jester"],
+            outcasts=["Drunk"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=2,
+            deck=deck,
+            cards=[CardInfo(1, "Jester"), CardInfo(2, "Jester")],
+            n_evil=0,
+            board_villager_count=1,
+            board_outcast_count=1,
+        )
+        scenario = Scenario(evil_positions={}, drunk_position=2)
+
+        self.assertTrue(_validate_role_counts(scenario, state))
+
+
+class TestHiddenOutcastValidation(unittest.TestCase):
+    def _make_live_midstate(self):
+        deck = DeckComposition(
+            villagers=["Bishop", "Scout", "Hunter", "Alchemist", "Poet", "Jester", "Witness"],
+            outcasts=["Drunk", "Plague_Doctor", "Doppelganger"],
+            minions=["Minion", "Chancellor"],
+            demons=["Baa"],
+        )
+        cards = [
+            CardInfo(1, "Scout", info_parsed={"evil_role": "Baa", "distance": 2}),
+            CardInfo(2, "Scout", info_parsed={"evil_role": "Minion", "distance": 3}),
+            CardInfo(3, "Hunter", info_parsed={"distance": 1}),
+            CardInfo(4, "Scout", info_parsed={"evil_role": "Chancellor", "distance": 1}),
+            CardInfo(5, "Poet"),
+            CardInfo(6, "Bishop", info_parsed={"targets": [4, 7, 8], "types": ["Minion", "Outcast", "Villager"]}),
+            CardInfo(7, "Hunter", info_parsed={"distance": 2}),
+            CardInfo(8, "Alchemist", info_parsed={"cured_count": 0}),
+            CardInfo(9, "Jester", info_parsed={"targets": [1, 4, 5], "evil_count": 2}),
+        ]
+        return GameState(
+            n_cards=9,
+            deck=deck,
+            cards=cards,
+            n_evil=3,
+            executed=[4, 2, 9],
+            confirmed_evil=[4, 2],
+            confirmed_good=[9],
+            executed_evil_roles={4: "Minion", 2: "Chancellor"},
+            hp=5,
+            wrong_exec_cost=5,
+            board_villager_count=5,
+            board_outcast_count=1,
+        )
+
+    def test_hidden_outcasts_count_as_outcasts_for_bishop(self):
+        state = self._make_live_midstate()
+        scenario = Scenario(
+            evil_positions={5: "Baa"},
+            drunk_position=1,
+            doppelganger_position=8,
+            corrupted={1},
+        )
+        self.assertTrue(_check_scenario(scenario, state))
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0, f"Reasoning: {result.reasoning}")
+        self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
+
+
+class TestPoetRandomInfo(unittest.TestCase):
+    def test_poet_random_clue_type_not_in_deck_still_validates(self):
+        deck = DeckComposition(
+            villagers=["Poet", "Hunter", "Lover", "Knitter"],
+            outcasts=[],
+            minions=[],
+            demons=["Baa"],
+        )
+        state = GameState(
+            n_cards=5,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Poet", info_parsed={"copied_role": "Gemcrafter", "good_position": 3}),
+                CardInfo(2, "Hunter", info_parsed={"distance": 2}),
+                CardInfo(3, "Lover", info_parsed={"evil_adjacent": 0}),
+                CardInfo(4, "Knitter", info_parsed={"evil_pairs": 0}),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={5: "Baa"})
+
+        self.assertTrue(_validate_poet(state.cards[0], scenario, state))
+
+        result = solve(state)
+        self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
+
+    def test_poet_bounty_hunter_style_clue_validates(self):
+        deck = DeckComposition(
+            villagers=["Poet", "Hunter", "Lover", "Knitter"],
+            outcasts=[],
+            minions=[],
+            demons=["Baa"],
+        )
+        state = GameState(
+            n_cards=5,
+            deck=deck,
+            cards=[CardInfo(1, "Poet", info_parsed={"copied_role": "Bounty Hunter", "evil_position": 5})],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={5: "Baa"})
+
+        self.assertTrue(_validate_poet(state.cards[0], scenario, state))
 
 
 if __name__ == "__main__":

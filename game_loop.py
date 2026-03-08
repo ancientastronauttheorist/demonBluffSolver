@@ -4,10 +4,11 @@ Card builder functions, session tracking, CLI interface.
 """
 
 from __future__ import annotations
+import atexit
 import json
 import os
 import sys
-from dataclasses import dataclass, field, asdict
+import time
 from datetime import datetime
 from typing import Optional
 
@@ -87,22 +88,35 @@ def card_bishop(pos: int, targets: list[int], types: list[str] = None) -> CardIn
         info["types"] = types
     return CardInfo(pos, "Bishop", info_parsed=info)
 
+def card_bounty_hunter(pos: int, evil_position: int) -> CardInfo:
+    """Pseudo-clue used for Poet's direct evil-call variant."""
+    return CardInfo(pos, "Poet", info_parsed={
+        "copied_role": "Bounty Hunter",
+        "evil_position": evil_position,
+    })
+
+
 def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> CardInfo:
-    """Poet that copied another role's ability. Parse the copied role's info.
+    """Poet clue parser.
 
     Usage: card poet <pos> <copied_role> <copied_role_args...>
     Examples:
-        card poet 5 knitter 0          (copied Knitter, claimed 0 adjacent evil pairs)
-        card poet 3 lover 2            (copied Lover, claimed 2 adjacent evils)
-        card poet 7 architect left     (copied Architect, claimed left more evil)
-        card poet 2 gemcrafter 5       (copied Gemcrafter, claimed #5 is good)
-        card poet 4 enlightened cw     (copied Enlightened, claimed CW)
+        card poet 5 knitter 0          (Poet gave Knitter-style clue)
+        card poet 3 lover 2            (Poet gave Lover-style clue)
+        card poet 7 architect left     (Poet gave Architect-style clue)
+        card poet 2 gemcrafter 5       (Poet gave Gemcrafter-style clue)
+        card poet 4 bard 1             (Poet gave Bard-style clue)
+        card poet 1 bounty_hunter 6    (Poet directly named #6 as Evil)
     """
+    copied_key = copied_role.lower().replace(" ", "_")
+    if copied_key in ("bounty_hunter", "bountyhunter", "evil"):
+        return card_bounty_hunter(pos, int(copied_args[0]))
+
     # Build the copied role's info_parsed by delegating to _parse_card_cli
     fake_args = [copied_role, str(pos)] + copied_args
     copied_card = _parse_card_cli(fake_args)
     info = copied_card.info_parsed.copy()
-    info["copied_role"] = copied_card.apparent_role  # Use canonical role name
+    info["copied_role"] = copied_card.apparent_role  # Clue type, not necessarily in play
     return CardInfo(pos, "Poet", info_parsed=info)
 
 
@@ -147,6 +161,71 @@ CARD_BUILDERS = {
 
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
 DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
+_SESSION_LOCK_HANDLE = None
+_SESSION_LOCK_PATH: Optional[str] = None
+
+
+def _release_session_lock():
+    global _SESSION_LOCK_HANDLE, _SESSION_LOCK_PATH
+    if _SESSION_LOCK_HANDLE is None:
+        return
+
+    handle = _SESSION_LOCK_HANDLE
+    path = _SESSION_LOCK_PATH or ""
+    try:
+        if os.name == "nt":
+            import msvcrt
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+    finally:
+        handle.close()
+        _SESSION_LOCK_HANDLE = None
+        _SESSION_LOCK_PATH = None
+
+
+def _acquire_session_lock(path: str = SESSION_FILE, timeout_s: float = 5.0):
+    """Acquire a process-wide lock for the session file.
+
+    Each CLI invocation is a short-lived process. Holding the lock from load
+    until process exit serializes read-modify-write commands and prevents
+    `game_session.json` corruption under rapid repeated automation.
+    """
+    global _SESSION_LOCK_HANDLE, _SESSION_LOCK_PATH
+    if _SESSION_LOCK_HANDLE is not None:
+        if _SESSION_LOCK_PATH == path:
+            return _SESSION_LOCK_HANDLE
+        _release_session_lock()
+
+    lock_path = f"{path}.lock"
+    os.makedirs(os.path.dirname(lock_path), exist_ok=True)
+    handle = open(lock_path, "a+b")
+    deadline = time.time() + timeout_s
+
+    while True:
+        try:
+            handle.seek(0)
+            if os.name == "nt":
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            break
+        except OSError:
+            if time.time() >= deadline:
+                handle.close()
+                raise TimeoutError(f"Timed out acquiring session lock for {path}")
+            time.sleep(0.05)
+
+    _SESSION_LOCK_HANDLE = handle
+    _SESSION_LOCK_PATH = path
+    return handle
+
+
+atexit.register(_release_session_lock)
 
 
 # ============================================================
@@ -342,12 +421,12 @@ class GameSession:
 
     # -- Solver --
 
-    def _build_game_state(self) -> GameState:
+    def to_game_state(self) -> GameState:
         deck = DeckComposition(
-            villagers=self.villagers,
-            outcasts=self.outcasts,
-            minions=self.minions,
-            demons=self.demons,
+            villagers=list(self.villagers),
+            outcasts=list(self.outcasts),
+            minions=list(self.minions),
+            demons=list(self.demons),
         )
         return GameState(
             n_cards=self.n_cards,
@@ -370,8 +449,34 @@ class GameSession:
             board_outcast_count=self.board_outcast_count,
         )
 
+    @classmethod
+    def from_game_state(cls, state: GameState,
+                        used_abilities: Optional[list[int]] = None) -> "GameSession":
+        session = cls(state.n_cards, state.n_evil)
+        session.villagers = list(state.deck.villagers)
+        session.outcasts = list(state.deck.outcasts)
+        session.minions = list(state.deck.minions)
+        session.demons = list(state.deck.demons)
+        session.cards = list(state.cards)
+        session.executed = list(state.executed)
+        session.confirmed_evil = list(state.confirmed_evil)
+        session.confirmed_good = list(state.confirmed_good)
+        session.pd_corruption_target = state.pd_corruption_target
+        session.executed_evil_roles = dict(state.executed_evil_roles)
+        session.slayer_results = list(state.slayer_results)
+        session.pd_ability_results = list(state.pd_ability_results)
+        session.blocked_positions = list(state.blocked_positions)
+        session.night_kills = list(state.night_kills)
+        session.night_kill_evil_count = state.night_kill_evil_count
+        session.hp = state.hp
+        session.wrong_exec_cost = state.wrong_exec_cost
+        session.board_villager_count = state.board_villager_count
+        session.board_outcast_count = state.board_outcast_count
+        session.used_abilities = list(used_abilities or [])
+        return session
+
     def solve(self) -> SolverResult:
-        state = self._build_game_state()
+        state = self.to_game_state()
         result = solve(state)
         print(f"\n=== SOLVER RESULT ===")
         for line in result.reasoning:
@@ -406,7 +511,7 @@ class GameSession:
 
     def next_action(self):
         """Run solver + strategy, print full recommendation."""
-        state = self._build_game_state()
+        state = self.to_game_state()
         result = solve(state)
         for line in result.reasoning:
             print(f"  {line}")
@@ -463,12 +568,12 @@ class GameSession:
     def execute(self, pos: int):
         """Execute card at position."""
         import game_utils
+        import card_vision
         path = game_utils.take_game_screenshot("_card_detect")
-        positions = game_utils.detect_card_positions(path)
-        if pos < 1 or pos > len(positions):
-            print(f"[execute] Position #{pos} out of range (detected {len(positions)} cards)")
+        if pos < 1 or pos > self.n_cards:
+            print(f"[execute] Position #{pos} out of range (board has {self.n_cards} cards)")
             return
-        x, y = positions[pos - 1]
+        x, y = card_vision.resolved_board_seat_center(path, pos, self.n_cards)
         game_utils.execute_card((x, y))
         print(f"[execute] Executed card #{pos} at ({x}, {y})")
 
@@ -480,68 +585,25 @@ class GameSession:
     # -- Persistence --
 
     def save(self, path: str = SESSION_FILE):
-        data = {
-            "n_cards": self.n_cards,
-            "n_evil": self.n_evil,
-            "villagers": self.villagers,
-            "outcasts": self.outcasts,
-            "minions": self.minions,
-            "demons": self.demons,
-            "cards": [
-                {"position": c.position, "apparent_role": c.apparent_role,
-                 "info_text": c.info_text, "info_parsed": c.info_parsed}
-                for c in self.cards
-            ],
-            "executed": self.executed,
-            "confirmed_evil": self.confirmed_evil,
-            "confirmed_good": self.confirmed_good,
-            "pd_corruption_target": self.pd_corruption_target,
-            "used_abilities": self.used_abilities,
-            "executed_evil_roles": self.executed_evil_roles,
-            "slayer_results": self.slayer_results,
-            "pd_ability_results": self.pd_ability_results,
-            "blocked_positions": self.blocked_positions,
-            "night_kills": self.night_kills,
-            "night_kill_evil_count": self.night_kill_evil_count,
-            "hp": self.hp,
-            "wrong_exec_cost": self.wrong_exec_cost,
-            "board_villager_count": self.board_villager_count,
-            "board_outcast_count": self.board_outcast_count,
-        }
-        with open(path, "w") as f:
+        _acquire_session_lock(path)
+        data = self.to_game_state().to_dict()
+        data["used_abilities"] = list(self.used_abilities)
+
+        tmp_path = f"{path}.tmp.{os.getpid()}"
+        with open(tmp_path, "w") as f:
             json.dump(data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
         print(f"[save] Session saved to {path}")
 
     @classmethod
     def load(cls, path: str = SESSION_FILE) -> "GameSession":
+        _acquire_session_lock(path)
         with open(path) as f:
             data = json.load(f)
-        session = cls(data["n_cards"], data["n_evil"])
-        session.villagers = data["villagers"]
-        session.outcasts = data["outcasts"]
-        session.minions = data["minions"]
-        session.demons = data["demons"]
-        session.cards = [
-            CardInfo(c["position"], c["apparent_role"], c.get("info_text", ""), c["info_parsed"])
-            for c in data["cards"]
-        ]
-        session.executed = data.get("executed", [])
-        session.confirmed_evil = data.get("confirmed_evil", [])
-        session.confirmed_good = data.get("confirmed_good", [])
-        session.pd_corruption_target = data.get("pd_corruption_target")
-        session.used_abilities = data.get("used_abilities", [])
-        session.slayer_results = data.get("slayer_results", [])
-        session.pd_ability_results = data.get("pd_ability_results", [])
-        session.blocked_positions = data.get("blocked_positions", [])
-        session.night_kills = data.get("night_kills", [])
-        session.night_kill_evil_count = data.get("night_kill_evil_count", 0)
-        # Convert executed_evil_roles keys from str (JSON) back to int
-        raw_eer = data.get("executed_evil_roles", {})
-        session.executed_evil_roles = {int(k): v for k, v in raw_eer.items()}
-        session.hp = data.get("hp", 10)
-        session.wrong_exec_cost = data.get("wrong_exec_cost", 2)
-        session.board_villager_count = data.get("board_villager_count")
-        session.board_outcast_count = data.get("board_outcast_count")
+        state = GameState.from_dict(data)
+        session = cls.from_game_state(state, used_abilities=data.get("used_abilities", []))
         print(f"[load] Session loaded from {path}")
         return session
 
@@ -626,10 +688,12 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
             return card_no_info(pos, "Baker")
     elif role == "poet":
         if len(args) > 2:
-            # Poet with identified copied ability: poet <pos> <copied_role> <args...>
+            # Poet clue variant: poet <pos> <clue_type> <args...>
             return card_poet_with_info(pos, args[2], args[3:])
         else:
             return card_no_info(pos, "Poet")  # No info identified
+    elif role in ("bounty_hunter", "bountyhunter"):
+        return card_bounty_hunter(pos, int(args[2]))
     elif role == "no_info":
         return card_no_info(pos, args[2])  # actual role name
     else:
@@ -673,8 +737,11 @@ def main():
         print("  card oracle 5 2,6 Shaman")
         print("  card bishop 7 4,7,9 Outcast,Minion,Villager")
         print("  card jester 7 1,3,5 1")
-        print("  card poet 5 knitter 0       (Poet copied Knitter, claimed 0 evil pairs)")
-        print("  card poet 3 lover 2          (Poet copied Lover, claimed 2 adjacent)")
+        print("  card poet 5 knitter 0       (Poet gave Knitter-style clue)")
+        print("  card poet 3 lover 2         (Poet gave Lover-style clue)")
+        print("  card poet 4 bard 1          (Poet gave Bard-style clue)")
+        print("  card poet 2 gemcrafter 6    (Poet gave Gemcrafter-style clue)")
+        print("  card poet 1 bounty_hunter 6 (Poet directly named #6 as Evil)")
         print("  card druid 5 1,2,3 none      (Druid checked 1,2,3: no outcasts)")
         print("  card druid 5 1,2,3 Bombardier (Druid found Bombardier among 1,2,3)")
         print("  card no_info 2 Slayer")

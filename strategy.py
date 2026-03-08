@@ -15,9 +15,8 @@ from typing import Optional
 from knowledge_base import get_card, Role, CARDS_BY_NAME
 from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
-    _truth_status, _is_evil_in_scenario, _effective_alignment,
-    _get_card_at, _get_real_role,
-    circle_distance, adjacent_positions, Alignment,
+    truth_status, scenario_is_evil, effective_alignment,
+    get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
 )
 
@@ -80,7 +79,7 @@ def evil_probabilities(state: GameState, result: SolverResult) -> dict[int, floa
         if pos in state.executed:
             continue
         count = sum(1 for s in result.surviving_scenarios
-                    if _is_evil_in_scenario(pos, s))
+                    if scenario_is_evil(pos, s))
         probs[pos] = count / result.n_surviving
     return probs
 
@@ -123,18 +122,22 @@ def _ability_timing_factor(state: GameState) -> float:
     return 0.05 + 0.95 * (t * t * (3 - 2 * t))  # smoothstep
 
 
-def _count_remaining_evil(state: GameState, result: SolverResult) -> int:
-    """Count evil characters not yet executed, using first surviving scenario."""
+def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int, int]:
+    """Return min/max evil characters still alive across surviving scenarios."""
     if not result.surviving_scenarios:
-        return 0
-    s = result.surviving_scenarios[0]
-    count = 0
-    for pos in range(1, state.n_cards + 1):
-        if pos in state.executed:
-            continue
-        if _is_evil_in_scenario(pos, s):
-            count += 1
-    return count
+        return (0, 0)
+
+    counts = []
+    for scenario in result.surviving_scenarios:
+        count = 0
+        for pos in range(1, state.n_cards + 1):
+            if pos in state.executed:
+                continue
+            if scenario_is_evil(pos, scenario):
+                count += 1
+        counts.append(count)
+
+    return (min(counts), max(counts))
 
 
 def _witch_might_be_alive(state: GameState, result: SolverResult) -> bool:
@@ -154,6 +157,147 @@ def _corruption_risk(pos: int, result: SolverResult) -> float:
     return count / result.n_surviving
 
 
+def _execution_reveal_outcome(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> tuple[str, bool, bool]:
+    """Observed outcome if `pos` is executed in a scenario.
+
+    Returns `(revealed_role, was_evil, was_corrupted)` using the real revealed
+    role when a hidden outcast flips over.
+    """
+    if pos in scenario.evil_positions:
+        return (scenario.evil_positions[pos], True, False)
+
+    if pos == scenario.puppet_position:
+        return ("Puppet", True, False)
+
+    if pos == scenario.drunk_position:
+        return ("Drunk", False, True)
+
+    if pos == scenario.doppelganger_position:
+        return ("Doppelganger", False, pos in scenario.corrupted)
+
+    card = get_card_at(pos, state)
+    role = card.apparent_role if card else "Unknown"
+    return (role, False, pos in scenario.corrupted)
+
+
+def _find_forced_execution(
+    state: GameState,
+    result: SolverResult,
+    candidate_positions: list[int],
+) -> Optional[int]:
+    """Return an execution that guarantees a win across all reveal branches.
+
+    This is a shallow endgame planner for the "all revealed / no more info"
+    state. It explores execution outcomes by exact revealed role and only
+    returns a position when every branch still has a forced execution-only win
+    under the current HP budget.
+    """
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_positions:
+        return None
+
+    probs = evil_probabilities(state, result)
+    ordered_candidates = sorted(
+        candidate_positions,
+        key=lambda p: (-probs.get(p, 0.0), p),
+    )
+    all_positions = tuple(range(1, state.n_cards + 1))
+    memo: dict[tuple[tuple[int, ...], tuple[int, ...], int], tuple[bool, Optional[int]]] = {}
+
+    def all_evils_gone(indices: tuple[int, ...], executed_now: frozenset[int]) -> bool:
+        for idx in indices:
+            scenario = scenarios[idx]
+            for pos in all_positions:
+                if pos in state.executed or pos in executed_now:
+                    continue
+                if scenario_is_evil(pos, scenario):
+                    return False
+        return True
+
+    def can_force(indices: tuple[int, ...], executed_now: frozenset[int], hp: int
+                  ) -> tuple[bool, Optional[int]]:
+        key = (indices, tuple(sorted(executed_now)), hp)
+        if key in memo:
+            return memo[key]
+
+        if all_evils_gone(indices, executed_now):
+            memo[key] = (True, None)
+            return memo[key]
+
+        available = [
+            pos for pos in ordered_candidates
+            if pos not in executed_now and pos not in state.executed
+        ]
+        if not available:
+            memo[key] = (False, None)
+            return memo[key]
+
+        for pos in available:
+            branches: dict[tuple[str, bool, bool], list[int]] = {}
+            for idx in indices:
+                outcome = _execution_reveal_outcome(pos, scenarios[idx], state)
+                branches.setdefault(outcome, []).append(idx)
+
+            branch_ok = True
+            for (_, was_evil, _), branch_indices in branches.items():
+                next_hp = hp if was_evil else hp - state.wrong_exec_cost
+                if next_hp < 0:
+                    branch_ok = False
+                    break
+
+                can_win, _ = can_force(
+                    tuple(sorted(branch_indices)),
+                    executed_now | {pos},
+                    next_hp,
+                )
+                if not can_win:
+                    branch_ok = False
+                    break
+
+            if branch_ok:
+                memo[key] = (True, pos)
+                return memo[key]
+
+        memo[key] = (False, None)
+        return memo[key]
+
+    success, pos = can_force(tuple(range(len(scenarios))), frozenset(), state.hp)
+    if success:
+        return pos
+    return None
+
+
+def _forced_execution_reasoning(
+    pos: int,
+    state: GameState,
+    result: SolverResult,
+) -> str:
+    """Explain why an execution is safe under lookahead."""
+    branches: dict[tuple[str, bool, bool], int] = {}
+    for scenario in result.surviving_scenarios:
+        outcome = _execution_reveal_outcome(pos, scenario, state)
+        branches[outcome] = branches.get(outcome, 0) + 1
+
+    parts = []
+    total = max(1, result.n_surviving)
+    for (role, was_evil, was_corrupted), count in sorted(
+        branches.items(),
+        key=lambda item: (-item[1], item[0][0], item[0][1], item[0][2]),
+    ):
+        label = f"{'evil' if was_evil else 'good'} {role}"
+        if was_corrupted and not was_evil:
+            label += " (corrupted)"
+        parts.append(f"{count / total:.0%} {label}")
+
+    summary = ", ".join(parts[:3])
+    return (f"Execution lookahead: #{pos} guarantees a win across all reveal branches "
+            f"with current HP budget ({summary}).")
+
+
 def _could_have_active_ability(pos: int, state: GameState, result: SolverResult) -> bool:
     """Check if an unrevealed position might have an active ability."""
     # Active ability roles from knowledge base
@@ -164,7 +308,65 @@ def _could_have_active_ability(pos: int, state: GameState, result: SolverResult)
     all_deck_roles = state.deck.villagers + state.deck.outcasts
     unplaced_active = [r for r in all_deck_roles
                        if r in active_roles and r not in placed_roles]
-    return len(unplaced_active) > 0
+    if not unplaced_active or result.n_surviving == 0:
+        return False
+
+    return any(not scenario_is_evil(pos, scenario)
+               for scenario in result.surviving_scenarios)
+
+
+def _lie_probability(pos: int, state: GameState, result: SolverResult) -> float:
+    """Probability that a position would present false information."""
+    if result.n_surviving == 0:
+        return 0.0
+    lying = sum(
+        1 for scenario in result.surviving_scenarios
+        if truth_status(pos, scenario, state) == TruthStatus.LYING
+    )
+    return lying / result.n_surviving
+
+
+def _ambiguity_score(prob: float) -> float:
+    """How close a probability is to a 50/50 split."""
+    return max(0.0, 1.0 - abs(0.5 - prob) * 2.0)
+
+
+def _has_unused_followup(state: GameState, used_abilities: list[int]) -> bool:
+    """Check whether Judge or Slayer can still follow an FT result."""
+    for card in state.cards:
+        if card.position in state.executed or card.position in used_abilities:
+            continue
+        role = card.apparent_role.replace("_", " ")
+        if role in {"Judge", "Slayer"}:
+            return True
+    return False
+
+
+def _fortune_teller_followup_bonus(
+    targets: list[int],
+    state: GameState,
+    result: SolverResult,
+    used_abilities: list[int],
+) -> float:
+    """Late-game FT tie-breaker favoring cleaner Judge/Slayer follow-up lines."""
+    if result.n_surviving == 0 or _revealed_fraction(state) < 0.75:
+        return 0.0
+    if not _has_unused_followup(state, used_abilities):
+        return 0.0
+
+    probs = evil_probabilities(state, result)
+
+    def control_value(pos: int) -> float:
+        return _lie_probability(pos, state, result) * (1.0 - probs.get(pos, 0.0))
+
+    def suspect_value(pos: int) -> float:
+        return _ambiguity_score(probs.get(pos, 0.0))
+
+    a, b = targets
+    return max(
+        control_value(a) * suspect_value(b),
+        control_value(b) * suspect_value(a),
+    )
 
 
 # ============================================================
@@ -173,24 +375,24 @@ def _could_have_active_ability(pos: int, state: GameState, result: SolverResult)
 
 def _ft_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> bool:
     """Fortune Teller: any target evil?"""
-    return any(_effective_alignment(t, scenario, state) == Alignment.EVIL
+    return any(effective_alignment(t, scenario, state) == Alignment.EVIL
                for t in targets)
 
 
 def _jester_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> int:
     """Jester: count evil among targets."""
     return sum(1 for t in targets
-               if _effective_alignment(t, scenario, state) == Alignment.EVIL)
+               if effective_alignment(t, scenario, state) == Alignment.EVIL)
 
 
 def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bool:
     """Judge: is target lying?"""
-    return _truth_status(target, scenario, state) == TruthStatus.LYING
+    return truth_status(target, scenario, state) == TruthStatus.LYING
 
 
 def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> str:
     """Dreamer: if target is evil, return evil role name. Else 'any_evil'."""
-    if _is_evil_in_scenario(target, scenario):
+    if scenario_is_evil(target, scenario):
         return scenario.evil_positions.get(target, "Puppet")
     return "any_evil"
 
@@ -198,9 +400,9 @@ def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> 
 def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
     """Druid: find outcast among targets, or 'none'."""
     for t in targets:
-        if _is_evil_in_scenario(t, scenario):
+        if scenario_is_evil(t, scenario):
             continue
-        card = _get_card_at(t, state)
+        card = get_card_at(t, state)
         if card:
             card_def = get_card(card.apparent_role)
             if card_def and card_def.role == Role.OUTCAST and card.apparent_role != "Wretch":
@@ -210,7 +412,7 @@ def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState
 
 def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
     """Slayer: is target evil?"""
-    return _is_evil_in_scenario(target, scenario)
+    return scenario_is_evil(target, scenario)
 
 
 def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple:
@@ -236,16 +438,20 @@ def _recommend_boolean_ability(
     candidate_targets: list[list[int]],
     state: GameState,
     result: SolverResult,
+    tie_break_bonus_fn=None,
+    bonus_weight: float = 0.0,
+    tie_break_margin: float = 0.0,
+    used_abilities: Optional[list[int]] = None,
 ) -> Optional[AbilityRecommendation]:
-    """Recommend targets for a boolean-outcome ability (FT, Judge)."""
-    best_targets = None
-    best_entropy = -1.0
+    """Recommend targets for a deterministic boolean-outcome ability."""
+    best_primary = -1.0
+    scored_candidates = []
 
     for targets in candidate_targets:
         true_count = 0
         false_count = 0
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             if isinstance(targets, list):
                 real = ground_truth_fn(targets, s, state)
             else:
@@ -256,12 +462,28 @@ def _recommend_boolean_ability(
             else:
                 false_count += 1
         ent = _shannon_entropy([true_count, false_count])
-        if ent > best_entropy:
-            best_entropy = ent
-            best_targets = targets if isinstance(targets, list) else [targets]
+        normalized_targets = targets if isinstance(targets, list) else [targets]
+        bonus = 0.0
+        if tie_break_bonus_fn is not None:
+            bonus = tie_break_bonus_fn(
+                normalized_targets, state, result, used_abilities or []
+            )
+        ranking_score = ent + bonus_weight * bonus
+        best_primary = max(best_primary, ranking_score)
+        scored_candidates.append((ranking_score, ent, bonus, normalized_targets))
 
-    if best_targets is None:
+    if not scored_candidates:
         return None
+
+    shortlist = [
+        candidate
+        for candidate in scored_candidates
+        if candidate[0] >= best_primary - tie_break_margin
+    ]
+    _, best_entropy, best_bonus, best_targets = max(
+        shortlist,
+        key=lambda item: (item[0], item[1], item[2]),
+    )
 
     corr = _corruption_risk(ability_pos, result)
     adjusted = best_entropy * (1 - 0.5 * corr)
@@ -269,12 +491,86 @@ def _recommend_boolean_ability(
     if corr > 0:
         warnings.append(f"Corruption risk: {corr:.0%}")
 
+    reasoning = f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})"
+    if best_bonus > 0:
+        reasoning += f" | follow-up bonus {best_bonus:.3f}"
+
     return AbilityRecommendation(
         position=ability_pos,
         ability_name=ability_name,
         targets=best_targets,
         score=adjusted,
-        reasoning=f"Entropy {best_entropy:.3f} (adjusted {adjusted:.3f})",
+        reasoning=reasoning,
+        warnings=warnings,
+    )
+
+
+def _recommend_judge(
+    ability_pos: int,
+    state: GameState,
+    result: SolverResult,
+    judge_targets: list[int],
+) -> Optional[AbilityRecommendation]:
+    """Recommend a Judge target using compatible posterior size.
+
+    A corrupted Judge does not produce a clean inversion; its observed result is
+    effectively unconstrained, so entropy over disjoint branches is the wrong
+    metric here.
+    """
+    scenario_count = len(result.surviving_scenarios)
+    if scenario_count == 0:
+        return None
+
+    best_target = None
+    best_expected_posterior = float('inf')
+
+    for target in judge_targets:
+        compatible = {True: 0, False: 0}
+
+        for scenario in result.surviving_scenarios:
+            actual = _judge_ground_truth(target, scenario, state)
+            if ability_pos in scenario.corrupted:
+                compatible[True] += 1
+                compatible[False] += 1
+                continue
+
+            truth = truth_status(ability_pos, scenario, state)
+            observed = actual if truth == TruthStatus.TRUTHFUL else (not actual)
+            compatible[observed] += 1
+
+        total_weight = sum(compatible.values())
+        if total_weight == 0:
+            continue
+
+        expected_posterior = sum(c * c for c in compatible.values()) / total_weight
+        if expected_posterior < best_expected_posterior:
+            best_expected_posterior = expected_posterior
+            best_target = target
+
+    if best_target is None:
+        return None
+
+    corr = _corruption_risk(ability_pos, result)
+    adjusted = best_expected_posterior * (1 + 0.5 * corr)
+    info_gain = 0.0
+    if adjusted > 0:
+        info_gain = max(0.0, math.log2(scenario_count) - math.log2(adjusted))
+
+    warnings = []
+    if corr > 0:
+        warnings.append(
+            f"Corruption risk: {corr:.0%} -- corrupted Judge results are unreliable"
+        )
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Judge",
+        targets=[best_target],
+        score=info_gain,
+        reasoning=(
+            f"Expected posterior {best_expected_posterior:.1f} scenarios "
+            f"(adjusted {adjusted:.1f}, info gain {info_gain:.3f} bits)"
+        ),
         warnings=warnings,
     )
 
@@ -291,15 +587,15 @@ def _recommend_count_ability(
     """Recommend targets for a count-outcome ability (Jester).
     Uses expected-posterior-size metric since lying makes multiple values compatible."""
     best_targets = None
-    best_score = float('inf')
+    best_expected_posterior = float('inf')
+    scenario_count = len(result.surviving_scenarios)
 
     for targets in candidate_targets:
         # For each possible observed value, count compatible scenarios
         compatible = {v: 0 for v in range(max_count + 1)}
-        scenario_count = len(result.surviving_scenarios)
 
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             real = ground_truth_fn(targets, s, state)
             if truth == TruthStatus.TRUTHFUL:
                 compatible[real] += 1
@@ -314,26 +610,31 @@ def _recommend_count_ability(
         if total_weight == 0:
             continue
         expected_posterior = sum(c * c for c in compatible.values()) / total_weight
-        if expected_posterior < best_score:
-            best_score = expected_posterior
+        if expected_posterior < best_expected_posterior:
+            best_expected_posterior = expected_posterior
             best_targets = targets
 
     if best_targets is None:
         return None
 
     corr = _corruption_risk(ability_pos, result)
-    adjusted = best_score * (1 + 0.5 * corr)  # Higher posterior = worse, so penalize upward
+    adjusted = best_expected_posterior * (1 + 0.5 * corr)
+    info_gain = 0.0
+    if scenario_count > 0 and adjusted > 0:
+        info_gain = max(0.0, math.log2(scenario_count) - math.log2(adjusted))
     warnings = []
     if corr > 0:
         warnings.append(f"Corruption risk: {corr:.0%}")
 
-    # Convert to a positive "goodness" score (negative expected posterior)
     return AbilityRecommendation(
         position=ability_pos,
         ability_name=ability_name,
         targets=best_targets,
-        score=-adjusted,  # Negative: lower posterior = higher score
-        reasoning=f"Expected posterior {best_score:.1f} scenarios (adjusted {adjusted:.1f})",
+        score=info_gain,
+        reasoning=(
+            f"Expected posterior {best_expected_posterior:.1f} scenarios "
+            f"(adjusted {adjusted:.1f}, info gain {info_gain:.3f} bits)"
+        ),
         warnings=warnings,
     )
 
@@ -353,7 +654,7 @@ def _recommend_partition_ability(
     for targets in candidate_targets:
         partition: dict[str, int] = {}
         for s in result.surviving_scenarios:
-            truth = _truth_status(ability_pos, s, state)
+            truth = truth_status(ability_pos, s, state)
             if isinstance(targets, list):
                 real = ground_truth_fn(targets, s, state)
             else:
@@ -466,7 +767,10 @@ def recommend_abilities(
             candidates = [list(c) for c in combinations(others, 2)]
             rec = _recommend_boolean_ability(
                 "Fortune Teller", pos,
-                _ft_ground_truth, candidates, state, result)
+                _ft_ground_truth, candidates, state, result,
+                tie_break_bonus_fn=_fortune_teller_followup_bonus,
+                bonus_weight=0.25,
+                used_abilities=used_abilities)
             if rec:
                 rec.score *= timing
                 rec.reasoning += f" | timing x{timing:.2f}"
@@ -491,11 +795,7 @@ def recommend_abilities(
             judge_targets = [t for t in others if t not in poet_positions]
             if not judge_targets:
                 continue
-            candidates = [[t] for t in judge_targets]
-            rec = _recommend_boolean_ability(
-                "Judge", pos,
-                lambda t, s, st: _judge_ground_truth(t[0], s, st),
-                candidates, state, result)
+            rec = _recommend_judge(pos, state, result, judge_targets)
             if rec:
                 if rec.targets and rec.targets[0] in poet_positions:
                     rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
@@ -623,14 +923,14 @@ def recommend_action(
         return Action("error", reasoning="No surviving scenarios -- check input data")
 
     # 2. Win check
-    remaining = _count_remaining_evil(state, result)
-    if remaining == 0:
+    _, max_remaining = _remaining_evil_bounds(state, result)
+    if max_remaining == 0:
         return Action("win", reasoning="All evil characters have been executed!")
 
     # 3. Execute definite evil (skip Bombardier and execution-immune roles)
     immune_positions = set()
     for card in state.cards:
-        if card.apparent_role in EXECUTION_IMMUNE_ROLES:
+        if card.apparent_role in EXECUTION_IMMUNE_ROLES and card.position not in result.definite_evil:
             immune_positions.add(card.position)
     safe_executions = [p for p in result.definite_evil
                        if p not in state.executed
@@ -731,6 +1031,26 @@ def recommend_action(
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
+
+        forced_pos = _find_forced_execution(
+            state,
+            result,
+            [p for p, prob in active_probs.items() if prob > 0.0],
+        )
+        if forced_pos is not None:
+            warnings = []
+            forced_prob = active_probs.get(forced_pos, 0.0)
+            if forced_prob < 1.0:
+                warnings.append(
+                    f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
+                    f"but all reveal branches still lead to a forced win."
+                )
+            return Action(
+                "execute",
+                position=forced_pos,
+                reasoning=_forced_execution_reasoning(forced_pos, state, result),
+                warnings=warnings,
+            )
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal

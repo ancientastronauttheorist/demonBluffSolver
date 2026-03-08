@@ -18,12 +18,14 @@ import sys
 import os
 import time
 import numpy as np
+import cv2
 from PIL import Image, ImageDraw
 from dataclasses import dataclass
 
 import screenshot
 import mouse
 import game_utils
+import template_match
 
 
 # ============================================================
@@ -64,6 +66,70 @@ class UIButton:
     label: str      # best-guess label
     confidence: float
     region: TextRegion
+
+
+TEMPLATE_TARGETS: dict[str, list[tuple[str, float]]] = {
+    "next": [
+        ("btn_next_dialog", 0.90),
+        ("btn_next_ascension", 0.88),
+        ("btn_next_asc", 0.88),
+        ("btn_next_wide", 0.82),
+        ("btn_next", 0.72),
+        ("btn_continue_score", 0.88),
+        ("btn_continue", 0.88),
+    ],
+    "continue": [
+        ("btn_continue_score", 0.88),
+        ("btn_continue", 0.88),
+        ("btn_next_dialog", 0.90),
+        ("btn_next_wide", 0.82),
+        ("btn_next", 0.72),
+    ],
+    "close": [
+        ("btn_close_dialog", 0.90),
+        ("btn_close_hover", 0.88),
+        ("btn_close", 0.82),
+        ("btn_back", 0.85),
+    ],
+    "back": [
+        ("btn_back", 0.85),
+        ("btn_close_dialog", 0.90),
+        ("btn_close", 0.82),
+    ],
+    "restart": [
+        ("btn_restart", 0.88),
+    ],
+    "cancel": [
+        ("btn_cancel_dialog", 0.75),
+    ],
+    "summary": [
+        ("btn_summary", 0.88),
+    ],
+    "compendium": [
+        ("menu_compendium", 0.88),
+    ],
+    "settings": [
+        ("menu_settings", 0.88),
+        ("pause_settings", 0.88),
+    ],
+    "exit": [
+        ("menu_exit", 0.88),
+    ],
+    "play": [
+        ("menu_play_demo", 0.88),
+    ],
+    "standard": [
+        ("mode_standard", 0.88),
+    ],
+    "endless": [
+        ("mode_endless", 0.88),
+    ],
+}
+
+TARGET_ALIASES = {
+    "ok": "continue",
+    "button": "next",
+}
 
 
 # ============================================================
@@ -208,6 +274,103 @@ def _find_dialog_region(arr: np.ndarray) -> tuple[int, int, int, int] | None:
         return None
 
     return (left, y_min, right, y_max)
+
+
+def _match_template_on_image(img_gray: np.ndarray,
+                             template_name: str,
+                             threshold: float) -> dict | None:
+    template_path = os.path.join(template_match.TEMPLATE_DIR, f"{template_name}.png")
+    if not os.path.exists(template_path):
+        return None
+
+    tmpl_gray = cv2.imread(template_path, cv2.IMREAD_GRAYSCALE)
+    if tmpl_gray is None:
+        return None
+
+    th, tw = tmpl_gray.shape[:2]
+    ih, iw = img_gray.shape[:2]
+    if th > ih or tw > iw:
+        return None
+
+    result = cv2.matchTemplate(img_gray, tmpl_gray, cv2.TM_CCOEFF_NORMED)
+    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    if max_val < threshold:
+        return None
+
+    return {
+        "template": template_name,
+        "confidence": float(max_val),
+        "top_left": max_loc,
+        "bottom_right": (max_loc[0] + tw, max_loc[1] + th),
+        "x": max_loc[0] + tw // 2,
+        "y": max_loc[1] + th // 2,
+    }
+
+
+def _match_is_plausible(label: str, match: dict, image_size: tuple[int, int]) -> bool:
+    width, height = image_size
+    centered = abs(match["x"] - width // 2) <= int(width * 0.12)
+    lower_half = match["y"] >= int(height * 0.45)
+
+    if label in {"next", "continue", "restart", "summary", "cancel"}:
+        return centered and lower_half
+    return True
+
+
+def _template_label_candidates(target: str) -> list[str]:
+    target = target.lower()
+    target = TARGET_ALIASES.get(target, target)
+
+    if target in TEMPLATE_TARGETS:
+        return [target]
+    if target == "button":
+        return ["next", "continue", "close", "back"]
+    return []
+
+
+def _find_button_by_template(target: str, screenshot_path: str) -> UIButton | None:
+    labels = _template_label_candidates(target)
+    if not labels:
+        return None
+
+    img_gray = cv2.imread(screenshot_path, cv2.IMREAD_GRAYSCALE)
+    if img_gray is None:
+        return None
+
+    height, width = img_gray.shape[:2]
+    best = None
+    best_label = None
+
+    for label in labels:
+        for template_name, threshold in TEMPLATE_TARGETS.get(label, []):
+            match = _match_template_on_image(img_gray, template_name, threshold)
+            if match is None:
+                continue
+            if not _match_is_plausible(label, match, (width, height)):
+                continue
+            if best is None or match["confidence"] > best["confidence"]:
+                best = match
+                best_label = label
+
+    if best is None:
+        return None
+
+    top_left = best["top_left"]
+    bottom_right = best["bottom_right"]
+    region = TextRegion(
+        x_min=top_left[0],
+        y_min=top_left[1],
+        x_max=bottom_right[0],
+        y_max=bottom_right[1],
+        pixel_count=(bottom_right[0] - top_left[0]) * (bottom_right[1] - top_left[1]),
+    )
+    return UIButton(
+        x=best["x"],
+        y=best["y"],
+        label=best_label,
+        confidence=best["confidence"],
+        region=region,
+    )
 
 
 # ============================================================
@@ -373,8 +536,7 @@ def hover(target: str, screenshot_path: str = None) -> bool:
 
     target: "close", "next", "ok", or an integer index.
     """
-    buttons = find_dialog_buttons(screenshot_path)
-    btn = _resolve_target(target, buttons)
+    btn = find_target_button(target, screenshot_path)
     if btn is None:
         return False
 
@@ -389,8 +551,7 @@ def click(target: str, screenshot_path: str = None) -> bool:
 
     target: "close", "next", "ok", or an integer index.
     """
-    buttons = find_dialog_buttons(screenshot_path)
-    btn = _resolve_target(target, buttons)
+    btn = find_target_button(target, screenshot_path)
     if btn is None:
         return False
 
@@ -433,6 +594,23 @@ def _resolve_target(target: str, buttons: list[UIButton]) -> UIButton | None:
         return dialog_buttons[-1]
     print(f"Unknown target '{target}', using last detected element")
     return buttons[-1]
+
+
+def find_target_button(target: str, screenshot_path: str = None) -> UIButton | None:
+    """Resolve a named or indexed UI target from a screenshot."""
+    if screenshot_path is None:
+        screenshot_path = screenshot.capture("_ui_detect")
+
+    # Numeric targets only make sense against the heuristic scan output.
+    try:
+        int(target)
+    except ValueError:
+        template_btn = _find_button_by_template(target, screenshot_path)
+        if template_btn is not None:
+            return template_btn
+
+    buttons = find_dialog_buttons(screenshot_path)
+    return _resolve_target(target, buttons)
 
 
 def debug(screenshot_path: str = None):

@@ -111,6 +111,55 @@
       "name": "asc10_g8",
       "notes": "1-in-3 guess at end, solver found 2/3 evils definitively. Fixed PD normalization bug and role_counts normalization bug mid-game.",
       "date": "2026-03-06 22:48"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc10_g9_live",
+      "notes": "Live run. #3=Doppelganger, #1/#7 corrupted. Dreamer #8 -> #5 Pooka. Wrong exec #6, then solved via #5 Minion and #8 Pooka.",
+      "date": "2026-03-07 11:27"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc10_g10_live",
+      "notes": "Autonomous live run. #7 was the good Lilis night kill. PD #6 found #1 corrupted and #2 evil. FT #5 on #1/#3 was false. Judge #3 found #1 lying. #1 and #9 were corrupted. Final evils: #2 Lilis, #4 Shaman, #8 Poisoner.",
+      "date": "2026-03-07 13:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g1_live",
+      "notes": "Autonomous live run. Deck: Lover, Slayer, Knight, Bard, Confessor, Dreamer, Bishop, Plague Doctor, Minion, Twin Minion, Pooka. #1 Bishop and #6 Lover were corrupted. PD #8 found #1 corrupted and #9 evil. Dreamer #3 found #9 could be Twin Minion. PD #9 found #5 corrupted and #2 evil; that branch was treated as corrupted PD misinformation. Final evils: #5 Minion, #7 Pooka, #9 Twin Minion. Finished at 10 HP.",
+      "date": "2026-03-07 15:58"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc11_g2_live",
+      "notes": "Safe endgame line was execute #5 first; #5 revealed Drunk (corrupted) and the final screen showed #9 as Doppelganger. This exposed an execution lookahead gap in strategy.",
+      "date": "2026-03-07 19:07"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc11_g3_live",
+      "notes": "#1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run.",
+      "date": "2026-03-07 20:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g4_live",
+      "notes": "Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka.",
+      "date": "2026-03-07 20:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g5_live",
+      "notes": "Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.",
+      "date": "2026-03-07 20:41"
     }
   ]
 }
