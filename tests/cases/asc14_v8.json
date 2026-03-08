@@ -129,5 +129,11 @@
   "used_abilities": [
     1,
     2
-  ]
+  ],
+  "name": "asc14_v8",
+  "true_evil_positions": {
+    "5": "Lilis",
+    "8": "Minion"
+  },
+  "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10 to 6). PD passive corrupted Jester #1. Jester lie (3 evils in 2-evil game) key signal. Wrong exec on corrupted Jester (HP 6 to 1). Knight #6 execution immunity = free check. Poet #5 no corrupted contradicted known corruption = identified as Lilis. 1 HP finish. Corrupted: #1 Jester."
 }

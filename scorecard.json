@@ -272,6 +272,62 @@
       "name": "asc13_v7",
       "notes": "8 cards, 2 evils. Slayer #4 killed Pooka #2. Judge #2 was Pooka (lying Judge). Dreamer #1, Scout #3, Drunk #8 corrupted by Pooka. HP 10/10 perfect. Ascension 13 complete \u2014 7/7 wins!",
       "date": "2026-03-08 13:43"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc14_v1",
+      "notes": "10 cards, 4 evils. SOLVER BUG: all 9 scenarios had #4 as DEFINITELY evil but #4 was good corrupted Knight. Wrong exec cost 9 HP (new Asc14 mechanic?). Corrupted: #4 Knight, #6 Bishop, #10 Empress. Pooka at #5 corrupted adjacent #4 and #6. Heart system: lose 1 heart per village loss.",
+      "date": "2026-03-08 14:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc14_v2",
+      "notes": "7 cards, 2 evils. 3 Alchemists narrowed to 2 fakes. Solver found both evils at #5 and #7 definitively. HP 10/10 perfect.",
+      "date": "2026-03-08 14:57"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc14_v3",
+      "notes": "10 cards, 3 evils. Lilis game with 2 night kills (#5 Minion, #7 unknown). Wrong exec #2 Drunk Corrupted (-2 HP). Final HP 4/10. Corrupted: #2 Drunk.",
+      "date": "2026-03-08 15:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc14_v4",
+      "notes": "9 cards, 2 evils. Wrong exec #1 Architect Corrupted (-5 HP). Corrupted: #1 Architect, #8 Medium. #6 was Doppelganger. Final HP 5/10.",
+      "date": "2026-03-08 15:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc14_v5",
+      "notes": "8 cards, 2 evils. Wrong exec #1 Hunter (-5 HP). Corrupted: #7 Dreamer, #5 Gemcrafter, #4 Architect. Pooka at #3 corrupted adjacent #4 and #2 area. Final HP 5/10.",
+      "date": "2026-03-08 15:16"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc14_v6",
+      "notes": "9 cards, 3 evils. Lilis game. Night kill #5 (good). #9 Lilis blocked by Witch (#6) \u2014 could not reveal #9. Wrong exec #1 Knitter (-5 HP), wrong exec #2 Drunk Corrupted (-2 HP). Manual deduction: Knitter 3-pair count + Wretch-as-evil identified Witch at #6. Solver had 50/50, Knitter+Wretch interaction not wired. Final HP 1/10. CLOSE CALL.",
+      "date": "2026-03-08 15:29"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc14_v7",
+      "notes": "9 cards, 3 evils. Witch at #9 was blocking reveals (facedown). Executed facedown Witch directly - works! No wrong execs. HP 8/10.",
+      "date": "2026-03-08 15:43"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc14_v8",
+      "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10 to 6). PD passive corrupted Jester #1. Jester lie (3 evils in 2-evil game) key signal. Wrong exec on corrupted Jester (HP 6 to 1). Knight #6 execution immunity = free check. Poet #5 no corrupted contradicted known corruption = identified as Lilis. 1 HP finish. Corrupted: #1 Jester.",
+      "date": "2026-03-08 15:57"
     }
   ]
 }
