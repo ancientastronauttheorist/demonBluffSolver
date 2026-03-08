@@ -568,12 +568,12 @@ class GameSession:
     def execute(self, pos: int):
         """Execute card at position."""
         import game_utils
+        import card_vision
         path = game_utils.take_game_screenshot("_card_detect")
-        positions = game_utils.detect_card_positions(path)
-        if pos < 1 or pos > len(positions):
-            print(f"[execute] Position #{pos} out of range (detected {len(positions)} cards)")
+        if pos < 1 or pos > self.n_cards:
+            print(f"[execute] Position #{pos} out of range (board has {self.n_cards} cards)")
             return
-        x, y = positions[pos - 1]
+        x, y = card_vision.resolved_board_seat_center(path, pos, self.n_cards)
         game_utils.execute_card((x, y))
         print(f"[execute] Executed card #{pos} at ({x}, {y})")
 

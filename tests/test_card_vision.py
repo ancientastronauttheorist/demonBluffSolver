@@ -9,9 +9,11 @@ from card_vision import (
     CardTemplate,
     classify_normalized_card,
     detect_dead_board_positions,
+    detect_board_seat_centers,
     detect_card_boxes,
     extract_card_signature,
     normalize_card_crop,
+    resolved_board_seat_center,
 )
 
 
@@ -128,6 +130,20 @@ class TestCardVision(unittest.TestCase):
 
         self.assertTrue(prediction.accepted)
         self.assertEqual(prediction.name, "alpha")
+
+    def test_detect_board_seat_centers_prefers_detected_boxes_on_live_board(self):
+        path = Path(__file__).resolve().parent.parent / "screenshots" / "full_flip7_clean.jpg"
+
+        centers = detect_board_seat_centers(path, 7)
+
+        self.assertEqual(centers[1], (1666, 406))
+        self.assertEqual(centers[2], (1761, 823))
+        self.assertEqual(centers[7], (1280, 220))
+
+    def test_resolved_board_seat_center_falls_back_to_detected_live_center(self):
+        path = Path(__file__).resolve().parent.parent / "screenshots" / "full_flip7_clean.jpg"
+
+        self.assertEqual(resolved_board_seat_center(path, 7, 7), (1280, 220))
 
     def test_unknown_card_remains_unaccepted_against_small_library(self):
         alpha = _make_synthetic_card("ALPHA", (180, 50, 220), (70, 200, 90), (30, 210, 240))

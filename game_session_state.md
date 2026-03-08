@@ -3518,3 +3518,122 @@ Reason: #5 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka.
 
+
+---
+
+# New Game — 2026-03-07 20:26:24
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Confessor, Dreamer, Slayer, Gemcrafter
+- Outcasts: Drunk, Plague_Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+### [20:29:04] Revealed #1 Gemcrafter
+Info: {'good_position': 5}
+
+### [20:29:04] Revealed #2 Slayer
+Info: {}
+
+### [20:29:04] Revealed #3 Plague_Doctor
+Info: {}
+
+### [20:29:13] Revealed #4 Knight
+Info: {}
+
+### [20:29:13] Revealed #5 Gemcrafter
+Info: {'good_position': 1}
+
+### [20:29:13] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [20:29:21] Revealed #6 Dreamer
+Info: {}
+
+#### [20:29:26] Solver Output
+Scenarios: 103/630
+Evil probabilities: #7=63%, #1=57%, #5=49%, #2=37%, #4=37%, #6=37%, #3=20%
+  Generated 630 candidate scenarios
+  103 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [20:29:26] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.915 (adjusted 2.604) | timing x1.00
+WARNING: Corruption risk: 21%
+
+### [20:30:21] Revealed #6 Dreamer
+Info: {'target': 7, 'evil_role': 'Baa'}
+
+### [20:30:21] Ability used at #6
+
+#### [20:30:30] Solver Output
+Scenarios: 70/630
+Evil probabilities: #1=60%, #5=51%, #7=46%, #2=41%, #4=41%, #6=40%, #3=20%
+  Generated 630 candidate scenarios
+  70 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [20:30:30] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.584 (adjusted 2.584) | timing x1.00
+
+#### [20:32:15] Solver Output
+Scenarios: 34/630
+Evil probabilities: #7=76%, #1=59%, #2=38%, #4=38%, #6=35%, #5=29%, #3=24%
+  Generated 630 candidate scenarios
+  34 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [20:32:15] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#7']
+Reason: Target #7 is 76% evil (adjusted 0.61)
+WARNING: Corruption risk: 21% -- Slayer ability disabled if corrupted
+
+### [20:39:44] Executed #7 -> Puppet (EVIL)
+
+#### [20:39:50] Solver Output
+Scenarios: 4/106
+Definite evil: ['#1', '#5', '#7']
+Definite good: ['#2', '#3', '#4', '#6']
+  Generated 106 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [20:39:50] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Puppeteer'})
+
+### [20:40:47] Executed #1 -> Puppeteer (EVIL)
+
+#### [20:40:54] Solver Output
+Scenarios: 4/53
+Definite evil: ['#1', '#5', '#7']
+Definite good: ['#2', '#3', '#4', '#6']
+  Generated 53 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [20:40:54] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [20:41:53] Executed #5 -> Baa (EVIL)
+
+## [20:41:59] GAME OVER — WIN
+Final HP: 10
+Notes: Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.
+

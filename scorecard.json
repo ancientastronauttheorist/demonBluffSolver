@@ -153,6 +153,13 @@
       "name": "asc11_g4_live",
       "notes": "Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka.",
       "date": "2026-03-07 20:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g5_live",
+      "notes": "Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.",
+      "date": "2026-03-07 20:41"
     }
   ]
 }

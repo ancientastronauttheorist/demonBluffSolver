@@ -22,6 +22,7 @@ Codex should operate in this cycle:
 - Use the mouse only for in-game interaction. Do not use keyboard shortcuts during live runs.
 - To open the current deck, click the purple card icon in the top-right corner instead of using `Tab`.
 - Prefer hover-and-screenshot verification before committing to a click when a UI target is ambiguous.
+- For revealed-board clicks, prefer detected card-box centers from the current screenshot over the rough circle formula. The formula is only a fallback.
 - Do not issue state-mutating `game_loop.py` commands in parallel. The session lock prevents file corruption, but it does not preserve command ordering. For `new`, `deck`, `card`, `execute`, `ability_used`, `slayer_result`, and similar updates, use one serialized command stream or a single in-process script.
 
 ## Mouse Parking

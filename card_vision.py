@@ -214,6 +214,63 @@ def board_seat_center(
     return x, y
 
 
+def detect_board_seat_centers(
+    image_or_path,
+    n_cards: int,
+) -> dict[int, tuple[int, int]]:
+    """Map numbered board seats to detected card-box centers.
+
+    Uses the rough circle formula only to assign each detected board card box to
+    the nearest seat number, then returns exact box centers for clicking.
+    """
+    image = _load_bgr(image_or_path)
+    height, width = image.shape[:2]
+    boxes = detect_card_boxes(image, context="board")
+    if not boxes:
+        return {}
+
+    predicted = {
+        seat: board_seat_center(seat, n_cards, (width, height))
+        for seat in range(1, n_cards + 1)
+    }
+
+    candidates: list[tuple[float, int, CardBox]] = []
+    for seat, (px, py) in predicted.items():
+        for box in boxes:
+            bx, by = box.center
+            distance_sq = float((bx - px) ** 2 + (by - py) ** 2)
+            candidates.append((distance_sq, seat, box))
+
+    centers: dict[int, tuple[int, int]] = {}
+    used_seats: set[int] = set()
+    used_boxes: set[CardBox] = set()
+
+    for _, seat, box in sorted(candidates, key=lambda item: item[0]):
+        if seat in used_seats or box in used_boxes:
+            continue
+        used_seats.add(seat)
+        used_boxes.add(box)
+        centers[seat] = box.center
+
+    return centers
+
+
+def resolved_board_seat_center(
+    image_or_path,
+    seat_num: int,
+    n_cards: int,
+) -> tuple[int, int]:
+    """Return the best click center for a numbered board seat.
+
+    Prefers the detected card-box center from the current screenshot and falls
+    back to the circle formula if no box could be assigned.
+    """
+    image = _load_bgr(image_or_path)
+    height, width = image.shape[:2]
+    detected = detect_board_seat_centers(image, n_cards)
+    return detected.get(seat_num, board_seat_center(seat_num, n_cards, (width, height)))
+
+
 def extract_board_seat_crop(
     image_or_path,
     seat_num: int,
@@ -227,7 +284,7 @@ def extract_board_seat_crop(
     scale = min(width / REFERENCE_SCREEN[0], height / REFERENCE_SCREEN[1])
     crop_w = int(round(crop_size[0] * scale))
     crop_h = int(round(crop_size[1] * scale))
-    center_x, center_y = board_seat_center(seat_num, n_cards, (width, height))
+    center_x, center_y = resolved_board_seat_center(image, seat_num, n_cards)
 
     x1 = max(0, center_x - crop_w // 2)
     y1 = max(0, center_y - crop_h // 2)
