@@ -202,6 +202,27 @@
       "name": "asc12_v4",
       "notes": "5HP. Slayer killed Wretch (registers evil)=-5HP. Corrupted: 2=Jester,3=Drunk(disguised as Architect). Drunk was in Outcast pool.",
       "date": "2026-03-08 11:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v5",
+      "notes": "perfect 10HP, 1-shot solve. Doppelganger#4 disguised as Alchemist.",
+      "date": "2026-03-08 11:52"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v6",
+      "notes": "perfect 10HP. Corrupted: 2=Architect,3=Knitter. Slayer failed on #3 (good but corrupted Knitter).",
+      "date": "2026-03-08 11:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v7",
+      "notes": "perfect 10HP. Dreamer correctly identified #3 as Minion. Doppelganger#2. Corrupted: 5=Baker,7=Bishop.",
+      "date": "2026-03-08 12:01"
     }
   ]
 }
