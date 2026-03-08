@@ -15,7 +15,11 @@ Claude should operate in this cycle:
 2. Enter or infer that state into the solver, then choose the best next action.
 3. Act in game, observe the result, and update the state.
 4. After each puzzle, log what happened and save regression coverage for anything learned.
-5. Refine solver logic, strategy, and vision tooling whenever the live game exposes a weakness.
+5. **Fix solver issues before the next game.** If the game exposed a bug, wrong assumption, missing rule, or bad heuristic — fix the code NOW, run regression, and verify the fix. Do not just log the issue and move on. Common triggers:
+   - 0 scenarios (constraint bug or missing rule)
+   - Wrong execution the solver was confident about (bad validation logic)
+   - Solver couldn't narrow candidates (missing constraint or strategy gap)
+   - New game mechanic or role interaction discovered
 6. At the end of each completed loop, commit and push the resulting code, test, and regression updates.
 
 ## Interaction Rules
