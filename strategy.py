@@ -690,6 +690,24 @@ def _recommend_partition_ability(
     )
 
 
+def _wretch_kill_probability(target: int, state: GameState, result: SolverResult) -> float:
+    """Probability that Slayer targeting this position kills a Wretch (not truly evil).
+
+    Wretch registers as evil for abilities, so Slayer kills it — but the game
+    treats it as a wrong execution (costs wrong_exec_cost HP).
+    """
+    if result.n_surviving == 0:
+        return 0.0
+    count = 0
+    for s in result.surviving_scenarios:
+        if not scenario_is_evil(target, s):
+            # Target is good in this scenario — check if it's Wretch
+            card = get_card_at(target, state)
+            if card and card.apparent_role == "Wretch":
+                count += 1
+    return count / result.n_surviving
+
+
 def _recommend_slayer(
     ability_pos: int,
     state: GameState,
@@ -707,16 +725,41 @@ def _recommend_slayer(
     if not candidates:
         return None
 
-    best_pos = max(candidates, key=lambda p: probs.get(p, 0))
-    best_prob = probs.get(best_pos, 0)
-    if best_prob == 0:
+    # Score each candidate accounting for Wretch HP penalty
+    corr = _corruption_risk(ability_pos, result)
+    best_pos = None
+    best_score = -1
+    best_prob = 0
+    best_wretch = 0
+    for pos in candidates:
+        prob = probs.get(pos, 0)
+        wretch_prob = _wretch_kill_probability(pos, state, result)
+
+        # Base score: true evil probability (successful kill)
+        # Penalty: Wretch kill costs wrong_exec_cost HP
+        if wretch_prob > 0 and state.hp <= state.wrong_exec_cost:
+            # Killing Wretch would be fatal — skip this target entirely
+            score = prob - wretch_prob  # Only count if truly evil, not Wretch
+        else:
+            # Penalize proportionally: Wretch kill wastes HP but isn't fatal
+            score = prob - wretch_prob * 0.5  # Wretch kill is costly but not catastrophic
+        score *= (1 - corr)  # Corrupted Slayer = ability disabled
+
+        if score > best_score:
+            best_score = score
+            best_pos = pos
+            best_prob = prob
+            best_wretch = wretch_prob
+
+    if best_pos is None or best_score <= 0:
         return None
 
-    corr = _corruption_risk(ability_pos, result)
-    adjusted = best_prob * (1 - corr)  # Corrupted Slayer = ability disabled
+    adjusted = best_score
     warnings = []
     if corr > 0:
         warnings.append(f"Corruption risk: {corr:.0%} -- Slayer ability disabled if corrupted")
+    if best_wretch > 0:
+        warnings.append(f"Wretch kill risk: {best_wretch:.0%} -- costs {state.wrong_exec_cost} HP")
 
     return AbilityRecommendation(
         position=ability_pos,

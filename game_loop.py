@@ -418,6 +418,9 @@ class GameSession:
             "killed": killed,
         })
         self.mark_ability_used(slayer_pos)
+        # Auto-mark killed target as executed (dead)
+        if killed and target_pos not in self.executed:
+            self.executed.append(target_pos)
 
     # -- Solver --
 
