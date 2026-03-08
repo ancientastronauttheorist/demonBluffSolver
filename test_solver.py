@@ -4,7 +4,7 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     circle_distance, circle_direction, adjacent_positions, solve,
-    _is_evil_in_scenario, _validate_role_counts,
+    _check_scenario, _is_evil_in_scenario, _validate_role_counts,
 )
 
 
@@ -316,6 +316,56 @@ class TestDuplicateRoleAllowance(unittest.TestCase):
         scenario = Scenario(evil_positions={}, drunk_position=2)
 
         self.assertTrue(_validate_role_counts(scenario, state))
+
+
+class TestHiddenOutcastValidation(unittest.TestCase):
+    def _make_live_midstate(self):
+        deck = DeckComposition(
+            villagers=["Bishop", "Scout", "Hunter", "Alchemist", "Poet", "Jester", "Witness"],
+            outcasts=["Drunk", "Plague_Doctor", "Doppelganger"],
+            minions=["Minion", "Chancellor"],
+            demons=["Baa"],
+        )
+        cards = [
+            CardInfo(1, "Scout", info_parsed={"evil_role": "Baa", "distance": 2}),
+            CardInfo(2, "Scout", info_parsed={"evil_role": "Minion", "distance": 3}),
+            CardInfo(3, "Hunter", info_parsed={"distance": 1}),
+            CardInfo(4, "Scout", info_parsed={"evil_role": "Chancellor", "distance": 1}),
+            CardInfo(5, "Poet"),
+            CardInfo(6, "Bishop", info_parsed={"targets": [4, 7, 8], "types": ["Minion", "Outcast", "Villager"]}),
+            CardInfo(7, "Hunter", info_parsed={"distance": 2}),
+            CardInfo(8, "Alchemist", info_parsed={"cured_count": 0}),
+            CardInfo(9, "Jester", info_parsed={"targets": [1, 4, 5], "evil_count": 2}),
+        ]
+        return GameState(
+            n_cards=9,
+            deck=deck,
+            cards=cards,
+            n_evil=3,
+            executed=[4, 2, 9],
+            confirmed_evil=[4, 2],
+            confirmed_good=[9],
+            executed_evil_roles={4: "Minion", 2: "Chancellor"},
+            hp=5,
+            wrong_exec_cost=5,
+            board_villager_count=5,
+            board_outcast_count=1,
+        )
+
+    def test_hidden_outcasts_count_as_outcasts_for_bishop(self):
+        state = self._make_live_midstate()
+        scenario = Scenario(
+            evil_positions={5: "Baa"},
+            drunk_position=1,
+            doppelganger_position=8,
+            corrupted={1},
+        )
+        self.assertTrue(_check_scenario(scenario, state))
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0, f"Reasoning: {result.reasoning}")
+        self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
 
 
 if __name__ == "__main__":

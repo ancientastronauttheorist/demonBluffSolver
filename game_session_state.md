@@ -3193,3 +3193,275 @@ Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#9']
 Action: **WIN**
 Reason: All evil characters have been executed!
 
+## Deck
+- Villagers: Bishop, Scout, Hunter, Alchemist, Poet, Jester, Witness
+- Outcasts: Drunk, Plague_Doctor, Doppelganger
+- Minions: Minion, Chancellor
+- Demons: Baa
+
+
+---
+
+# New Game — 2026-03-07 19:33:11
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+### [19:35:41] Revealed #2 Scout
+Info: {'evil_role': 'Minion', 'distance': 3}
+
+### [19:35:41] Revealed #6 Bishop
+Info: {'targets': [4, 7, 8], 'types': ['Minion', 'Outcast', 'Villager']}
+
+### [19:35:41] Revealed #5 Poet
+Info: {}
+
+### [19:35:41] Revealed #4 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [19:35:41] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [19:35:41] Revealed #9 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [19:35:41] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [19:35:41] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [19:35:52] Revealed #9 Jester
+Info: {}
+
+#### [19:36:37] Solver Output
+Scenarios: 402/18954
+Definite good: ['#8']
+Evil probabilities: #2=67%, #6=64%, #7=60%, #4=39%, #1=33%, #9=16%, #3=13%, #5=8%
+  Generated 18954 candidate scenarios
+  402 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 9]
+
+#### [19:36:37] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#1', '#4', '#5']
+Reason: Expected posterior 155.1 scenarios (adjusted 160.9, info gain 1.321 bits) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [19:38:48] Revealed #9 Jester
+Info: {'targets': [1, 4, 5], 'evil_count': 2}
+
+### [19:38:53] Ability used at #9
+
+#### [19:38:59] Solver Output
+Scenarios: 164/18954
+Definite good: ['#8']
+Evil probabilities: #4=60%, #2=59%, #1=51%, #7=40%, #9=39%, #6=32%, #5=13%, #3=6%
+  Generated 18954 candidate scenarios
+  164 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 9]
+
+#### [19:38:59] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 51% evil, entropy 1.000
+
+### [19:40:17] Revealed #1 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+#### [19:40:24] Solver Output
+Scenarios: 118/20898
+Definite good: ['#3', '#8']
+Evil probabilities: #4=69%, #1=61%, #2=61%, #9=59%, #7=31%, #5=10%, #6=8%
+  Generated 20898 candidate scenarios
+  118 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 9]
+
+#### [19:40:24] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (25% good Scout, 25% evil Baa, 25% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 69%, but all reveal branches still lead to a forced win.
+
+### [19:41:55] Executed #4 -> Minion (EVIL)
+
+#### [19:42:02] Solver Output
+Scenarios: 30/2408
+Definite evil: ['#4']
+Definite good: ['#3', '#6', '#8']
+Evil probabilities: #2=60%, #1=40%, #7=40%, #9=40%, #5=20%
+  Generated 2408 candidate scenarios
+  30 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 7, 9]
+
+#### [19:42:02] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (40% evil Baa, 33% good Scout, 20% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [19:46:10] Executed #2 -> Chancellor (EVIL)
+
+#### [19:46:18] Solver Output
+Scenarios: 6/301
+Definite evil: ['#2', '#4', '#9']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+  Generated 301 candidate scenarios
+  6 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [19:46:18] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [19:47:54] Executed #9 -> GOOD (WRONG!)
+
+#### [19:48:09] Solver Output
+Scenarios: 0/258
+  Generated 258 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Bishop: rejected 185/258 (72%)
+    #9 Jester: rejected 160/258 (62%)
+    #7 Hunter: rejected 154/258 (60%)
+    #1 Scout: rejected 154/258 (60%)
+    #4 Scout: rejected 86/258 (33%)
+    #3 Hunter: rejected 73/258 (28%)
+    #8 Alchemist: rejected 73/258 (28%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Scout: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Scout: still 0
+    WITHOUT #3 Hunter: still 0
+    WITHOUT #4 Scout: still 0
+    WITHOUT #5 Poet: still 0
+    WITHOUT #6 Bishop: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Hunter: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Alchemist: still 0
+    WITHOUT #9 Jester: 6 scenarios survive  <-- SUSPECT
+
+#### [19:48:09] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [19:54:35] Solver Output
+Scenarios: 0/258
+  Generated 258 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Bishop: rejected 185/258 (72%)
+    #9 Jester: rejected 160/258 (62%)
+    #7 Hunter: rejected 154/258 (60%)
+    #1 Scout: rejected 154/258 (60%)
+    #4 Scout: rejected 86/258 (33%)
+    #3 Hunter: rejected 73/258 (28%)
+    #8 Alchemist: rejected 73/258 (28%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Scout: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Scout: still 0
+    WITHOUT #3 Hunter: still 0
+    WITHOUT #4 Scout: still 0
+    WITHOUT #5 Poet: still 0
+    WITHOUT #6 Bishop: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Hunter: 12 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Alchemist: still 0
+    WITHOUT #9 Jester: 6 scenarios survive  <-- SUSPECT
+
+#### [19:54:35] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [19:59:26] Solver Output
+Scenarios: 0/258
+  Generated 258 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Bishop: rejected 185/258 (72%)
+    #9 Jester: rejected 160/258 (62%)
+    #7 Hunter: rejected 154/258 (60%)
+    #1 Scout: rejected 154/258 (60%)
+    #4 Scout: rejected 86/258 (33%)
+    #3 Hunter: rejected 73/258 (28%)
+    #8 Alchemist: rejected 73/258 (28%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Scout: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Scout: still 0
+    WITHOUT #3 Hunter: still 0
+    WITHOUT #4 Scout: still 0
+    WITHOUT #5 Poet: still 0
+    WITHOUT #6 Bishop: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Hunter: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Alchemist: still 0
+    WITHOUT #9 Jester: 6 scenarios survive  <-- SUSPECT
+
+#### [19:59:26] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [20:04:17] Solver Output
+Scenarios: 2/258
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+  Generated 258 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [20:04:17] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+#### [20:05:13] Solver Output
+Scenarios: 2/258
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+  Generated 258 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [20:05:13] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [20:07:26] Executed #5 -> Baa (EVIL)
+
+## [20:07:35] GAME OVER — WIN
+Final HP: 5
+Notes: #1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run.
+

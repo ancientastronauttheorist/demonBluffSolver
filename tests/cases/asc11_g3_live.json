@@ -144,5 +144,12 @@
   },
   "used_abilities": [
     9
-  ]
+  ],
+  "name": "asc11_g3_live",
+  "true_evil_positions": {
+    "2": "Chancellor",
+    "4": "Minion",
+    "5": "Baa"
+  },
+  "notes": "#1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run."
 }

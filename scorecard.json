@@ -139,6 +139,13 @@
       "name": "asc11_g2_live",
       "notes": "Safe endgame line was execute #5 first; #5 revealed Drunk (corrupted) and the final screen showed #9 as Doppelganger. This exposed an execution lookahead gap in strategy.",
       "date": "2026-03-07 19:07"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc11_g3_live",
+      "notes": "#1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run.",
+      "date": "2026-03-07 20:07"
     }
   ]
 }
