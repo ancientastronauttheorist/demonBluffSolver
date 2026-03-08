@@ -695,6 +695,62 @@ def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
     return occupied >= max_outcasts
 
 
+def _unrevealed_can_be_villager(pos: int, evil_positions: dict[int, str],
+                                state: GameState,
+                                doppelganger_pos: Optional[int] = None,
+                                drunk_pos: Optional[int] = None,
+                                chancellor_target: Optional[int] = None,
+                                baa_fake_outcast: Optional[str] = None) -> bool:
+    """Check if an unrevealed good position can still be a Villager.
+
+    This is weaker than _unrevealed_must_be_villager(): setup abilities like
+    Puppeteer only need a position that could have started as a Villager, even
+    if the hidden Outcast assignment is still ambiguous elsewhere on the board.
+    """
+    max_outcasts = state.board_outcast_count
+    if max_outcasts is None:
+        max_outcasts = sum(_actual_outcast_counter(state, baa_fake_outcast).values())
+        if chancellor_target is not None:
+            max_outcasts += 1
+
+    occupied = 0
+    for card in state.cards:
+        if card.position in evil_positions or card.position == pos:
+            continue
+        card_def = get_card(card.apparent_role)
+        if card_def and card_def.role == Role.OUTCAST:
+            occupied += 1
+
+    if doppelganger_pos is not None and doppelganger_pos != pos and doppelganger_pos not in evil_positions:
+        occupied += 1
+    if drunk_pos is not None and drunk_pos != pos and drunk_pos not in evil_positions:
+        occupied += 1
+    if (
+        state.board_outcast_count is None
+        and chancellor_target is not None
+        and chancellor_target != pos
+        and chancellor_target not in evil_positions
+    ):
+        occupied += 1
+
+    if occupied >= max_outcasts:
+        return True
+
+    hidden_other_positions = 0
+    revealed_positions = {card.position for card in state.cards}
+    for other_pos in range(1, state.n_cards + 1):
+        if other_pos == pos or other_pos in evil_positions or other_pos in revealed_positions:
+            continue
+        if other_pos == doppelganger_pos or other_pos == drunk_pos:
+            continue
+        if state.board_outcast_count is None and other_pos == chancellor_target:
+            continue
+        hidden_other_positions += 1
+
+    remaining_outcasts = max_outcasts - occupied
+    return hidden_other_positions >= remaining_outcasts
+
+
 def _hidden_outcast_presence_flags(role_name: str, state: GameState,
                                    baa_fake_outcast: Optional[str] = None,
                                    extra_outcast_slots: int = 0) -> tuple[bool, bool]:
@@ -733,7 +789,7 @@ def _is_setup_villager_position(pos: int, evil_positions: dict[int, str],
     card = _get_card_at(pos, state)
     if card:
         return _is_villager_role(card.apparent_role, state)
-    return _unrevealed_must_be_villager(
+    return _unrevealed_can_be_villager(
         pos, evil_positions, state,
         doppelganger_pos=doppelganger_pos,
         drunk_pos=drunk_pos,
