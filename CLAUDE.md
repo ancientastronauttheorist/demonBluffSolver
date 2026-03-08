@@ -1,13 +1,13 @@
 # Demon Bluff Solver
 
 ## Current Goal
-The project already has a working solver. The current goal is to make the full loop reliable enough that the game can be solved from live screenshots with minimal manual help.
+Harden the solver. The automation loop works — vision, data entry, and game interaction are reliable. The focus now is on eliminating rule gaps, fixing bad heuristics, and handling edge cases so the solver wins consistently at high ascensions.
 
 Priority order:
-1. Improve vision and automation so deck state, flipped cards, dead seats, and ability results are captured accurately.
-2. Use live runs to find rule gaps, bad heuristics, and incorrect assumptions in the solver.
-3. Convert each real-game discovery into code changes, regression cases, and better tooling.
-4. Push toward a standalone Python workflow that can read the board, reason correctly, and act without a model in the loop.
+1. Use live runs to find rule gaps, wrong assumptions, and missing constraints in the solver.
+2. Research each issue on the wiki, fix the code, and add regression tests.
+3. Improve strategy decisions — ability timing, execution ordering, corruption-aware reasoning.
+4. Increase win rate and push to higher ascension levels.
 
 ## Autonomous Workflow
 Claude should operate in this cycle:
