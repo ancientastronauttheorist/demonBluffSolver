@@ -3694,3 +3694,85 @@ Info: {}
 Final HP: 10
 Notes: Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman.
 
+
+---
+
+# New Game — 2026-03-08 00:24:05
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bard, Bishop, Scout, Confessor, Hunter, Slayer
+- Outcasts: Wretch, Drunk
+- Minions: Puppeteer
+- Demons: Baa
+
+### [00:26:38] Revealed #1 Slayer
+Info: {}
+
+### [00:26:38] Revealed #2 Bishop
+Info: {'targets': [5, 6, 7], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [00:26:39] Revealed #3 Wretch
+Info: {}
+
+### [00:26:39] Revealed #4 Bard
+Info: {'corruption_distance': 3}
+
+### [00:26:39] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [00:26:39] Revealed #6 Scout
+Info: {'evil_role': 'Puppet', 'distance': 1}
+
+### [00:26:40] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+#### [00:26:52] Solver Output
+Scenarios: 22/930
+Definite good: ['#7']
+Evil probabilities: #4=73%, #2=64%, #3=55%, #5=55%, #1=45%, #6=9%
+  Generated 930 candidate scenarios
+  22 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6]
+
+#### [00:26:52] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#4']
+Reason: Target #4 is 73% evil (adjusted 0.60)
+WARNING: Corruption risk: 18% -- Slayer ability disabled if corrupted
+
+### [00:27:58] Executed #4
+
+#### [00:27:59] Solver Output
+Scenarios: 0/540
+  Generated 540 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #7 Confessor: rejected 324/540 (60%)
+    #2 Bishop: rejected 304/540 (56%)
+    #4 Bard: rejected 300/540 (56%)
+    #6 Scout: rejected 286/540 (53%)
+    #5 Hunter: rejected 248/540 (46%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Bishop: 16 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Bard: 20 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Hunter: 14 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Scout: 22 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Confessor: 16 scenarios survive  <-- SUSPECT
+
+#### [00:27:59] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [00:33:43] Executed #3
+
+### [00:33:43] Executed #5
+
+## [00:33:43] GAME OVER — LOSS
+Final HP: 0
+Notes: Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning.
+

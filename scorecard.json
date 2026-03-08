@@ -167,6 +167,13 @@
       "name": "asc11_g6_live",
       "notes": "Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman.",
       "date": "2026-03-08 00:16"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc12_g1_live",
+      "notes": "Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning.",
+      "date": "2026-03-08 00:33"
     }
   ]
 }

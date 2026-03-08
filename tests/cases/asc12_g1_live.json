@@ -112,5 +112,12 @@
   },
   "used_abilities": [
     1
-  ]
+  ],
+  "name": "asc12_g1_live",
+  "true_evil_positions": {
+    "1": "Puppet",
+    "2": "Puppeteer",
+    "4": "Baa"
+  },
+  "notes": "Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning."
 }
