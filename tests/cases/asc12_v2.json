@@ -123,5 +123,13 @@
       "Lilis"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc12_v2",
+  "true_evil_positions": {
+    "1": "Puppeteer",
+    "2": "Puppet",
+    "3": "Shaman",
+    "8": "Lilis"
+  },
+  "notes": "4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP."
 }

@@ -181,6 +181,13 @@
       "name": "asc12_v1",
       "notes": "Lilis killed #5. Druid+Jester abilities. Clean win 6HP.",
       "date": "2026-03-08 01:58"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc12_v2",
+      "notes": "4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP.",
+      "date": "2026-03-08 03:14"
     }
   ]
 }

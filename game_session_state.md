@@ -3930,3 +3930,157 @@ WARNING: Execution lookahead override -- immediate hit chance is 64%, but all re
 Final HP: 6
 Notes: Lilis killed #5. Druid+Jester abilities. Clean win 6HP.
 
+
+---
+
+# New Game — 2026-03-08 03:09:45
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Hunter, Knitter, Empress, Enlightened, Poet, Jester, FortuneTeller
+- Outcasts: Baker, Bombardier
+- Minions: Puppeteer, Shaman
+- Demons: Lilis
+
+### [03:11:07] Revealed #1 Hunter
+Info: {'distance': 5}
+
+### [03:11:07] Revealed #2 Enlightened
+Info: {'direction': 'equidistant'}
+
+### [03:11:07] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [03:11:07] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [03:11:07] Revealed #7 FortuneTeller
+Info: {}
+
+### [03:11:07] Revealed #8 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 7}
+
+### [03:11:08] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+### [03:11:08] Revealed #10 Bombardier
+Info: {}
+
+#### [03:11:16] Solver Output
+Scenarios: 12/1120
+Definite evil: ['#1', '#3']
+Definite good: ['#5', '#6', '#9', '#10']
+Evil probabilities: #2=67%, #7=50%, #8=50%, #4=33%
+  Generated 1120 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis', 'Puppeteer'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppet', 'Puppeteer', 'Lilis', 'Shaman'})
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [2, 4, 7, 8]
+
+#### [03:11:16] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 12 scenarios (roles: {'Shaman', 'Lilis', 'Puppeteer'})
+
+### [03:11:52] Executed #1 -> Puppeteer (EVIL)
+
+#### [03:11:52] Solver Output
+Scenarios: 4/112
+Definite evil: ['#1', '#2', '#3']
+Definite good: ['#4', '#5', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+  Generated 112 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis', 'Shaman'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [03:11:52] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [03:12:29] Executed #2 -> Puppet (EVIL)
+
+#### [03:12:29] Solver Output
+Scenarios: 4/56
+Definite evil: ['#1', '#2', '#3']
+Definite good: ['#4', '#5', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [03:12:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [03:13:03] Executed #3 -> Shaman (EVIL)
+
+#### [03:13:03] Solver Output
+Scenarios: 2/7
+Definite evil: ['#1', '#2', '#3']
+Definite good: ['#4', '#5', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [03:13:03] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good FortuneTeller, 50% evil Lilis).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [03:13:44] Executed #7 -> GOOD (WRONG!)
+
+#### [03:13:44] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#2', '#3', '#8']
+Definite good: ['#4', '#5', '#6', '#7', '#9', '#10']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+
+#### [03:13:44] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [03:14:25] Executed #8 -> Lilis (EVIL)
+
+## [03:14:26] GAME OVER — WIN
+Final HP: 1
+Notes: 4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP.
+
