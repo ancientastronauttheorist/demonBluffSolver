@@ -114,6 +114,9 @@ Claude should operate in this cycle:
 - Run regression: `python -m tests.test_regression`
 - Commit and push.
 
+## Empirical Tests (run when opportunity arises)
+- **Can active abilities target dead/Lilis-killed cards?** E.g. can Fortune Teller pick a dead seat as one of its 2 targets? Wiki and forums have no answer. Next time we have an active ability and a dead card on the board, try targeting it and note whether the game allows it.
+
 ## Setup
 - Screen: 2560x1440
 - Python 3.13
