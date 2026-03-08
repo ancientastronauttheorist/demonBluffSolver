@@ -46,7 +46,7 @@ Claude should operate in this cycle:
   - any revealed or facedown card
 - If a screenshot includes a hover panel, move to a parking spot and immediately retake it instead of trying to read through the obstruction.
 
-## Step-by-Step Game Loop
+## Step-by-Step Game Loop (a real game example)
 
 ### Pre-Interaction
 - **Focus the game window first** before any mouse interaction. Hover highlights won't show and clicks may not register if the game isn't focused.
