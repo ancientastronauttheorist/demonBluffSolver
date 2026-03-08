@@ -20,6 +20,8 @@ Claude should operate in this cycle:
    - Wrong execution the solver was confident about (bad validation logic)
    - Solver couldn't narrow candidates (missing constraint or strategy gap)
    - New game mechanic or role interaction discovered
+
+   **Research first:** Search the Demon Bluff wiki (https://demon-bluff.fandom.com) for the specific cards involved in the issue. Look for edge cases, interaction rules, and ability details that may not be in our knowledge base. Update `cards/` memory files and solver code with any new findings.
 6. At the end of each completed loop, commit and push the resulting code, test, and regression updates.
 
 ## Interaction Rules
