@@ -223,6 +223,55 @@
       "name": "asc12_v7",
       "notes": "perfect 10HP. Dreamer correctly identified #3 as Minion. Doppelganger#2. Corrupted: 5=Baker,7=Bishop.",
       "date": "2026-03-08 12:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc13_v1",
+      "notes": "Perfect deduction, Lilis game with 2 night kills",
+      "date": "2026-03-08 13:03"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc13_v2",
+      "notes": "Bard#1 corrupted. Druid lied (was Lilis). 8-card Lilis game, 1 night kill.",
+      "date": "2026-03-08 13:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v3",
+      "notes": "Perfect 10HP. Empress#2 and Medium#4 corrupted. 1-scenario solve.",
+      "date": "2026-03-08 13:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc13_v4",
+      "notes": "Slayer#3 and Knight#6 corrupted. PD broke 50/50 tie. 1 wrong exec (corrupted Slayer). HP=5.",
+      "date": "2026-03-08 13:21"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v5",
+      "notes": "Perfect 10HP, 1-scenario solve. Gemcrafter#8 corrupted.",
+      "date": "2026-03-08 13:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v6",
+      "notes": "10 cards, 3 evils. Blocked card at #10 (new Asc13 mechanic). Slayer at #9 killed Witch at #7. Enlightened #8 was corrupted. HP 10/10.",
+      "date": "2026-03-08 13:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v7",
+      "notes": "8 cards, 2 evils. Slayer #4 killed Pooka #2. Judge #2 was Pooka (lying Judge). Dreamer #1, Scout #3, Drunk #8 corrupted by Pooka. HP 10/10 perfect. Ascension 13 complete \u2014 7/7 wins!",
+      "date": "2026-03-08 13:43"
     }
   ]
 }

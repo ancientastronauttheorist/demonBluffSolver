@@ -1,0 +1,99 @@
+{
+  "n_cards": 6,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Alchemist"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3
+  ],
+  "confirmed_evil": [
+    3
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Alchemist",
+      "Knitter",
+      "Jester",
+      "Medium"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc13_v3",
+  "true_evil_positions": {
+    "3": "Pooka"
+  },
+  "notes": "Perfect 10HP. Empress#2 and Medium#4 corrupted. 1-scenario solve."
+}

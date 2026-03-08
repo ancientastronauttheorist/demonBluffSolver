@@ -135,5 +135,11 @@
     1,
     2,
     4
-  ]
+  ],
+  "name": "asc13_v7",
+  "true_evil_positions": {
+    "2": "Pooka",
+    "6": "Chancellor"
+  },
+  "notes": "8 cards, 2 evils. Slayer #4 killed Pooka #2. Judge #2 was Pooka (lying Judge). Dreamer #1, Scout #3, Drunk #8 corrupted by Pooka. HP 10/10 perfect. Ascension 13 complete \u2014 7/7 wins!"
 }
