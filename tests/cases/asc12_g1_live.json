@@ -73,7 +73,7 @@
   "confirmed_evil": [],
   "confirmed_good": [],
   "pd_corruption_target": null,
-  "executed_evil_roles": {},
+  "executed_evil_roles": {"4": "Baa"},
   "slayer_results": [
     {
       "slayer_pos": 1,
