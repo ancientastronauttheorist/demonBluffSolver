@@ -1,0 +1,149 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "PlagueDoctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "TwinMinion",
+        "distance": 3
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          10
+        ],
+        "minion_role": "TwinMinion"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "PlagueDoctor"
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    7,
+    6
+  ],
+  "confirmed_evil": [],
+  "confirmed_good": [
+    7,
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {},
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Knitter",
+      "Knight",
+      "Empress",
+      "Scout",
+      "Medium",
+      "Poet",
+      "Bard",
+      "Oracle"
+    ],
+    "outcasts": [
+      "PlagueDoctor"
+    ],
+    "minions": [
+      "TwinMinion",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "name": "asc15_v2",
+  "true_evil_positions": {
+    "1": "Minion",
+    "5": "Pooka",
+    "10": "TwinMinion"
+  },
+  "notes": "Loss: Oracle misclassified as Outcast in deck caused wrong exec #7. Knight #6 corrupted by Pooka #5, immunity failed, second wrong exec. Corrupted: #3,#4,#6. Bard #5 was Pooka, lied about no corruption. PD corrupted #3."
+}

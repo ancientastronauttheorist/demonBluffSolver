@@ -328,6 +328,48 @@
       "name": "asc14_v8",
       "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10 to 6). PD passive corrupted Jester #1. Jester lie (3 evils in 2-evil game) key signal. Wrong exec on corrupted Jester (HP 6 to 1). Knight #6 execution immunity = free check. Poet #5 no corrupted contradicted known corruption = identified as Lilis. 1 HP finish. Corrupted: #1 Jester.",
       "date": "2026-03-08 15:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc15_v1",
+      "notes": "9 cards, 4 evils. Witch blocked #9 until killed. Bard contradiction (#1 no corrupted vs #7 1-away) caught Puppeteer. Knight immunity free-check on #8 revealed Lilis. No wrong execs. HP 6/10.",
+      "date": "2026-03-08 16:10"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc15_v2",
+      "notes": "Loss: Oracle misclassified as Outcast in deck caused wrong exec #7. Knight #6 corrupted by Pooka #5, immunity failed, second wrong exec. Corrupted: #3,#4,#6. Bard #5 was Pooka, lied about no corruption. PD corrupted #3.",
+      "date": "2026-03-08 16:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v2b",
+      "notes": "6 cards, 1 evil. Pooka at #5 disguised as Judge, corrupted #3,#4,#6. Judge lied about #4 truthfulness. Drunk at #3 disguised as Oracle. Perfect HP.",
+      "date": "2026-03-08 16:40"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc15_v3",
+      "notes": "9 cards, 3 evils. Witch blocked #9, killed Witch first. Poisoner at #4 found via Oracle cross-reference. 50/50 Baa at #3 vs #5, got it right. Corrupted: #5 Empress. Wrong exec #1 Baker (HP 10 to 5).",
+      "date": "2026-03-08 16:46"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc15_v4",
+      "notes": "9 cards, 2 evils. Pooka at #5 corrupted #6 Lover and #8 Drunk. Doppelganger at #4 immune to corruption. Wrong exec #3 Baker (HP 10 to 5). Druid x2 found both outcasts in 1-2-3 group.",
+      "date": "2026-03-08 16:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v5",
+      "notes": "7 cards, 2 evils. Slayer killed Minion at #5 (free kill). Baa at #1 found via 50/50. Perfect HP. Doppelganger at #4. 0-scenario issue after slayer_result - needed explicit execute to set evil role.",
+      "date": "2026-03-08 17:00"
     }
   ]
 }

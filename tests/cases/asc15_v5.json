@@ -1,0 +1,139 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          6
+        ],
+        "types": [
+          "Minion",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    }
+  ],
+  "executed": [
+    5,
+    1
+  ],
+  "confirmed_evil": [
+    5,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Minion",
+    "1": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 6,
+      "target_pos": 5,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Baker",
+      "Hunter",
+      "Oracle",
+      "Slayer",
+      "Dreamer"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "PlagueDoctor"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    3,
+    6
+  ],
+  "name": "asc15_v5",
+  "true_evil_positions": {
+    "1": "Baa",
+    "5": "Minion"
+  },
+  "notes": "7 cards, 2 evils. Slayer killed Minion at #5 (free kill). Baa at #1 found via 50/50. Perfect HP. Doppelganger at #4. 0-scenario issue after slayer_result - needed explicit execute to set evil role."
+}
