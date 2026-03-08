@@ -3637,3 +3637,141 @@ Reason: #5 is evil in ALL 4 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.
 
+
+---
+
+# New Game — 2026-03-07 20:45:50
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Fortune_Teller, Bishop, Empress, Knitter, Baker
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [20:55:11] Revealed #1 Bishop
+Info: {'targets': [3, 7], 'types': ['Villager', 'Minion']}
+
+### [20:55:11] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [20:55:11] Revealed #3 Wretch
+Info: {}
+
+### [20:55:11] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [20:55:11] Revealed #5 Empress
+Info: {'targets': [2, 4, 7]}
+
+### [20:55:11] Revealed #6 Baker
+Info: {'original_role': 'Alchemist'}
+
+### [20:55:11] Revealed #7 Fortune Teller
+Info: {}
+
+#### [20:55:20] Solver Output
+Scenarios: 1/7
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [20:55:20] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [20:56:41] Executed #7 -> GOOD (WRONG!)
+
+#### [20:56:53] Solver Output
+Scenarios: 0/6
+  Generated 6 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Bishop: rejected 4/6 (67%)
+    #5 Empress: rejected 3/6 (50%)
+    #4 Knitter: rejected 3/6 (50%)
+    #2 Baker: rejected 2/6 (33%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bishop: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Baker: still 0
+    WITHOUT #4 Knitter: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Empress: still 0
+    WITHOUT #6 Baker: still 0
+    WITHOUT #7 Fortune Teller: still 0
+
+#### [20:56:53] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [20:59:00] Solver Output
+Scenarios: 1/6
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [20:59:00] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+#### [20:59:21] Solver Output
+Scenarios: 1/6
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [20:59:21] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [21:03:52] Executed #6 -> GOOD (WRONG!)
+
+#### [21:06:48] Solver Output
+Scenarios: 1/5
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+  Generated 5 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:06:48] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+## [21:08:02] GAME OVER — LOSS
+Final HP: 0
+Notes: Autonomous live run. Wrong execute on #7 exposed two issues: Wretch must register as Minion for Bishop, and a Baker claiming 'I was an Alchemist' still applies the original Alchemist cure during setup. After the first fix the board still lost; final truth was #4=Pooka and #6 was good.
+

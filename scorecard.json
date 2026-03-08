@@ -160,6 +160,13 @@
       "name": "asc11_g5_live",
       "notes": "Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.",
       "date": "2026-03-07 20:41"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc11_g6_live",
+      "notes": "Autonomous live run. Wrong execute on #7 exposed two issues: Wretch must register as Minion for Bishop, and a Baker claiming 'I was an Alchemist' still applies the original Alchemist cure during setup. After the first fix the board still lost; final truth was #4=Pooka and #6 was good.",
+      "date": "2026-03-07 21:08"
     }
   ]
 }

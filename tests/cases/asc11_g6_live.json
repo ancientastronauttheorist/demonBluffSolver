@@ -103,5 +103,10 @@
       "Pooka"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc11_g6_live",
+  "true_evil_positions": {
+    "4": "Pooka"
+  },
+  "notes": "Autonomous live run. Wrong execute on #7 exposed two issues: Wretch must register as Minion for Bishop, and a Baker claiming 'I was an Alchemist' still applies the original Alchemist cure during setup. After the first fix the board still lost; final truth was #4=Pooka and #6 was good."
 }

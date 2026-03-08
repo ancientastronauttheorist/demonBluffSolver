@@ -3,8 +3,8 @@
 import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
-    circle_distance, circle_direction, adjacent_positions, solve,
-    _check_scenario, _is_evil_in_scenario, _validate_poet, _validate_role_counts,
+    _apply_post_corruption, circle_distance, circle_direction, adjacent_positions, solve,
+    _check_scenario, _is_evil_in_scenario, _validate_bishop, _validate_poet, _validate_role_counts,
 )
 
 
@@ -410,6 +410,97 @@ class TestPoetRandomInfo(unittest.TestCase):
         scenario = Scenario(evil_positions={5: "Baa"})
 
         self.assertTrue(_validate_poet(state.cards[0], scenario, state))
+
+
+class TestWretchTypeRegistration(unittest.TestCase):
+    def test_bishop_treats_wretch_as_minion_type(self):
+        deck = DeckComposition(
+            villagers=["Bishop", "Fortune_Teller"],
+            outcasts=["Wretch"],
+            minions=[],
+            demons=[],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Bishop", info_parsed={"targets": [2, 3], "types": ["Minion", "Villager"]}),
+                CardInfo(2, "Wretch"),
+                CardInfo(3, "Fortune Teller"),
+            ],
+            n_evil=0,
+        )
+        scenario = Scenario(evil_positions={})
+
+        self.assertTrue(_validate_bishop(state.cards[0], scenario, state))
+
+    def test_baked_alchemist_cures_before_baker_conversion(self):
+        deck = DeckComposition(
+            villagers=["Alchemist", "Fortune_Teller", "Bishop", "Empress", "Knitter", "Baker"],
+            outcasts=["Wretch"],
+            minions=[],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=7,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Bishop", info_parsed={"targets": [3, 7], "types": ["Villager", "Minion"]}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(3, "Wretch"),
+                CardInfo(4, "Knitter", info_parsed={"evil_pairs": 0}),
+                CardInfo(5, "Empress", info_parsed={"targets": [2, 4, 7]}),
+                CardInfo(6, "Baker", info_parsed={"original_role": "Alchemist"}),
+                CardInfo(7, "Fortune Teller"),
+            ],
+            n_evil=1,
+            board_villager_count=5,
+            board_outcast_count=1,
+        )
+        raw_corrupted = {5}
+
+        final_corrupted, alch_cures = _apply_post_corruption(
+            raw_corrupted,
+            {4: "Pooka"},
+            state,
+        )
+
+        self.assertEqual(final_corrupted, set())
+        self.assertEqual(alch_cures.get(6), 1)
+
+    def test_live_baker_wretch_board_recovers_after_two_wrong_execs(self):
+        deck = DeckComposition(
+            villagers=["Alchemist", "Fortune_Teller", "Bishop", "Empress", "Knitter", "Baker"],
+            outcasts=["Wretch"],
+            minions=[],
+            demons=["Pooka"],
+        )
+        state = GameState(
+            n_cards=7,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Bishop", info_parsed={"targets": [3, 7], "types": ["Villager", "Minion"]}),
+                CardInfo(2, "Baker", info_parsed={"original_role": "original"}),
+                CardInfo(3, "Wretch"),
+                CardInfo(4, "Knitter", info_parsed={"evil_pairs": 0}),
+                CardInfo(5, "Empress", info_parsed={"targets": [2, 4, 7]}),
+                CardInfo(6, "Baker", info_parsed={"original_role": "Alchemist"}),
+                CardInfo(7, "Fortune Teller"),
+            ],
+            n_evil=1,
+            executed=[6, 7],
+            confirmed_good=[6, 7],
+            hp=0,
+            wrong_exec_cost=5,
+            board_villager_count=5,
+            board_outcast_count=1,
+        )
+
+        result = solve(state)
+
+        self.assertGreater(result.n_surviving, 0, f"Reasoning: {result.reasoning}")
+        self.assertIn(4, result.definite_evil, f"Reasoning: {result.reasoning}")
+        self.assertIn(2, result.definite_good, f"Reasoning: {result.reasoning}")
 
 
 if __name__ == "__main__":

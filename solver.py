@@ -521,10 +521,18 @@ def _apply_post_corruption(corrupted: set[int], placement: dict[int, str],
         result.discard(puppet_pos)
 
     # 2. Alchemist cures corruption (acts after all corruption sources)
-    # Find all apparent Alchemist positions
+    # Find all setup-stage Alchemist positions.
+    # A Baker that truthfully says "I was an Alchemist" was still an
+    # Alchemist during round-start setup and can apply the cure before the
+    # Baker conversion happened.
     alchemist_positions = []
     for card in state.cards:
         if card.apparent_role == "Alchemist":
+            alchemist_positions.append(card.position)
+        elif (
+            card.apparent_role == "Baker"
+            and card.info_parsed.get("original_role") == "Alchemist"
+        ):
             alchemist_positions.append(card.position)
 
     # Reverse seat order (higher seat acts first)
@@ -691,6 +699,9 @@ def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Option
         return None  # Unrevealed, can't determine
 
     role_name = card.apparent_role
+    if role_name == "Wretch":
+        # Wretch registers as a random evil minion to other characters.
+        return "Minion"
     # Check knowledge base
     card_def = get_card(role_name)
     if card_def:
