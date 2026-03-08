@@ -151,6 +151,7 @@ class GameState:
     board_outcast_count: Optional[int] = None   # Actual outcasts on board (when pool > board)
     board_minion_count: Optional[int] = None    # Actual minions on board (when pool > board)
     board_demon_count: Optional[int] = None     # Actual demons on board (when pool > board)
+    reveal_order: list[int] = field(default_factory=list)  # Order positions were flipped (for Baker)
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -173,6 +174,7 @@ class GameState:
             "board_outcast_count": self.board_outcast_count,
             "board_minion_count": self.board_minion_count,
             "board_demon_count": self.board_demon_count,
+            "reveal_order": list(self.reveal_order),
         }
         if nest_deck:
             data["deck"] = self.deck.to_dict()
@@ -215,6 +217,7 @@ class GameState:
             board_outcast_count=data.get("board_outcast_count"),
             board_minion_count=data.get("board_minion_count"),
             board_demon_count=data.get("board_demon_count"),
+            reveal_order=list(data.get("reveal_order", [])),
         )
 
 

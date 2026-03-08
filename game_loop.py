@@ -361,6 +361,7 @@ class GameSession:
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
         self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
         self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
+        self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
 
     # -- Deck --
 
@@ -374,6 +375,9 @@ class GameSession:
     # -- Cards --
 
     def add_card(self, card: CardInfo):
+        # Track reveal order (first entry per position)
+        if card.position not in self.reveal_order:
+            self.reveal_order.append(card.position)
         # Replace if same position already exists (re-read)
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
@@ -450,6 +454,7 @@ class GameSession:
             wrong_exec_cost=self.wrong_exec_cost,
             board_villager_count=self.board_villager_count,
             board_outcast_count=self.board_outcast_count,
+            reveal_order=list(self.reveal_order),
         )
 
     @classmethod
@@ -475,6 +480,7 @@ class GameSession:
         session.wrong_exec_cost = state.wrong_exec_cost
         session.board_villager_count = state.board_villager_count
         session.board_outcast_count = state.board_outcast_count
+        session.reveal_order = list(state.reveal_order)
         session.used_abilities = list(used_abilities or [])
         return session
 

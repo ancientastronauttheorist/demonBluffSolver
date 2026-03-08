@@ -22,6 +22,7 @@ class TestGameStateIO(unittest.TestCase):
             executed_evil_roles={4: "Minion"},
             hp=7,
             wrong_exec_cost=5,
+            reveal_order=[2, 4],
         )
 
         data = state.to_dict()
@@ -79,6 +80,45 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.board_outcast_count, 1)
         self.assertEqual(loaded.used_abilities, [4])
         self.assertEqual(loaded.pd_ability_results, session.pd_ability_results)
+
+    def test_reveal_order_defaults_empty_for_legacy_data(self):
+        data = {
+            "n_cards": 4,
+            "n_evil": 1,
+            "villagers": ["Confessor"],
+            "outcasts": [],
+            "minions": ["Minion"],
+            "demons": [],
+            "cards": [],
+        }
+        loaded = GameState.from_dict(data)
+        self.assertEqual(loaded.reveal_order, [])
+
+    def test_reveal_order_round_trip(self):
+        state = GameState(
+            n_cards=5,
+            deck=DeckComposition(
+                villagers=["Confessor"],
+                outcasts=[],
+                minions=["Minion"],
+                demons=["Baa"],
+            ),
+            cards=[CardInfo(3, "Confessor")],
+            n_evil=1,
+            reveal_order=[3, 1, 5],
+        )
+        data = state.to_dict()
+        self.assertEqual(data["reveal_order"], [3, 1, 5])
+        loaded = GameState.from_dict(data)
+        self.assertEqual(loaded.reveal_order, [3, 1, 5])
+
+    def test_session_add_card_populates_reveal_order(self):
+        session = GameSession(5, 1)
+        session.set_deck(["Confessor", "Bard"], [], ["Minion"], ["Baa"])
+        session.add_card(CardInfo(3, "Confessor"))
+        session.add_card(CardInfo(1, "Bard"))
+        session.add_card(CardInfo(3, "Confessor"))  # re-read, should not duplicate
+        self.assertEqual(session.reveal_order, [3, 1])
 
 
 if __name__ == "__main__":
