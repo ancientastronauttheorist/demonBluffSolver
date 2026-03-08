@@ -134,5 +134,11 @@
   "used_abilities": [
     2,
     3
-  ]
+  ],
+  "name": "asc12_v1",
+  "true_evil_positions": {
+    "3": "Lilis",
+    "7": "Poisoner"
+  },
+  "notes": "Lilis killed #5. Druid+Jester abilities. Clean win 6HP."
 }

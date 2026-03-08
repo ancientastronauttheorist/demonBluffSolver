@@ -174,6 +174,13 @@
       "name": "asc12_g1_live",
       "notes": "Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning.",
       "date": "2026-03-08 00:33"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc12_v1",
+      "notes": "Lilis killed #5. Druid+Jester abilities. Clean win 6HP.",
+      "date": "2026-03-08 01:58"
     }
   ]
 }

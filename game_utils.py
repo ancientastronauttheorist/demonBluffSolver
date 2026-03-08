@@ -477,38 +477,49 @@ def execute_card(card_pos: tuple[int, int], wait: float = 2.0):
 
 
 def hold_tab_screenshot(name: str = "deck_view") -> str:
-    """Capture a robust deck screenshot while holding Tab.
+    """Capture a deck screenshot by clicking the purple deck icon.
 
-    Writes a full-screen PNG plus an enhanced cropped PNG for easier review.
+    Clicks the icon to open the deck overlay, captures frames to find the
+    best one, then clicks again to close it.  Writes a full-screen PNG plus
+    an enhanced cropped PNG for easier review.
     Returns the full-screen screenshot path.
     """
-    import pyautogui
+    import template_match as tm
 
     focus_game()
     time.sleep(0.3)
+
+    # Click the purple deck icon to open the overlay
+    hit = tm.find("icon_deck_purple")
+    if hit is None:
+        print("[deck] WARNING: could not find icon_deck_purple, falling back to Tab")
+        import pyautogui
+        pyautogui.press('tab')
+        time.sleep(0.4)
+    else:
+        mouse.click(hit["x"], hit["y"])
+        time.sleep(0.4)
+
+    # Park mouse out of the way before capturing
+    mouse.move(400, 780)
+    time.sleep(0.15)
 
     best_image = None
     best_score = float("-inf")
     best_visible = False
 
-    try:
-        pyautogui.keyDown('tab')
-        time.sleep(0.28)
-
-        for frame_idx in range(5):
-            if frame_idx:
-                time.sleep(0.12)
-            frame = screenshot.grab()
-            score = score_deck_frame(frame)
-            visible = deck_overlay_visible(frame)
-            if (best_image is None or
-                    visible and not best_visible or
-                    (visible == best_visible and score > best_score)):
-                best_image = frame.copy()
-                best_score = score
-                best_visible = visible
-    finally:
-        pyautogui.keyUp('tab')
+    for frame_idx in range(5):
+        if frame_idx:
+            time.sleep(0.12)
+        frame = screenshot.grab()
+        score = score_deck_frame(frame)
+        visible = deck_overlay_visible(frame)
+        if (best_image is None or
+                visible and not best_visible or
+                (visible == best_visible and score > best_score)):
+            best_image = frame.copy()
+            best_score = score
+            best_visible = visible
 
     if best_image is None:
         best_image = screenshot.grab()

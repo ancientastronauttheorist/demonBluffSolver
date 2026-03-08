@@ -38,6 +38,82 @@ Claude should operate in this cycle:
   - any revealed or facedown card
 - If a screenshot includes a hover panel, move to a parking spot and immediately retake it instead of trying to read through the obstruction.
 
+## Step-by-Step Game Loop
+
+### Pre-Interaction
+- **Focus the game window first** before any mouse interaction. Hover highlights won't show and clicks may not register if the game isn't focused.
+- `safe_click` handles this automatically — it detects if the game is unfocused and focuses it before proceeding. **Prefer `safe_click` over manual move+click.**
+- For manual hover/click sequences, click a neutral area first to focus.
+
+### 1. Start a New Game
+- `safe_click menu_play_demo` → `safe_click mode_standard` → intro dialog appears.
+- Intro dialog shows evil count. Dismiss with `safe_click btn_close_dialog`.
+- Evil count and kill progress always visible in top-left panel ("Evils killed: 0/2").
+- After closing dialog, the deck auto-opens.
+
+### 2. Read the Deck
+- Use `python capture_deck.py <name>` for an enhanced crop of the deck view (`_crop.png`).
+- The header under "CURRENT DECK" shows board counts: e.g. "Villagers 5, Outcasts 2, Minions 1, Demons 1".
+- Same numbers always visible as icons in the top-right next to the purple deck icon (V, O, M, D order).
+- These are the **actual board counts**, NOT the pool size. The pool is larger at Ascension 10+.
+- Close the deck by clicking anywhere (e.g. the mouse parking spot at 400, 780).
+
+### 3. Enter Deck into Solver
+- `python game_loop.py new <n_cards> <n_evil>`
+- `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>`
+- Include ALL roles from the pool, not just the board. Prefixes (V=, O=, M=, D=) are REQUIRED.
+
+### 4. Flip All Cards
+- Use `detect_card_positions` or `all_game_card_coords(n)` to get coords.
+- Click each card #1 through #N in order. No popup dismissal needed between flips.
+- **Lilis night** triggers every 4 reveals — kills a random unrevealed card (red skull, 2 HP damage). This interrupts the flip sequence with a death animation.
+- After clicking all cards, **verify all are flipped**:
+  - `python template_match.py find_all card_facedown` — finds remaining unflipped cards.
+  - **Visually check for skull icons** — dead cards (Lilis kills) have a red skull overlay, role unknown. `detect_dead` in card_vision.py is unreliable.
+  - If any facedown cards remain, click them to flip.
+- Check "Evils killed:" in top-left after Lilis night to see if she killed any evils.
+
+### 5. Enter Card Info
+- Cards with **active abilities** (lightning bolt icon) like Jester, Fortune Teller, Druid, Slayer — enter as `card no_info <pos> <RoleName>` until ability is used.
+- Cards with **passive info** (speech bubbles) like Oracle, Bard, Confessor, Alchemist — enter info immediately with appropriate `card` command.
+- `python game_loop.py night_kill <positions> <n_evil>` — for Lilis kills.
+- `python game_loop.py set_hp <hp>` — update HP after Lilis nights or wrong executions.
+
+### 6. Run Solver and Execute Recommendations
+- `python game_loop.py next` — runs solver, gives strategy recommendation.
+- **Always do what the solver recommends.**
+
+#### Using Active Abilities
+- Click the card with the ability icon to activate it.
+- "Pick N characters" prompt appears → click the target cards → speech bubble shows result.
+- **After using an active ability, immediately run `ability_used <pos>`** to tell the solver it's been consumed.
+- Enter the result (e.g. `card jester <pos> <targets> <evil_count>`, `card druid <pos> <targets> none`).
+- **WARNING**: When clicking targets for an ability, clicking a card with an unused active ability will activate THAT card's ability instead of selecting it as a target.
+
+#### Executing a Card
+- **First click the red execute sword button** (bottom-right) using `safe_click btn_execute_sword`.
+- **Then click the target card** to execute it. Do NOT click the card first.
+- Screenshot after to see the result (evil role revealed, HP change, evils killed count).
+- Feed result into solver: `python game_loop.py execute <pos> <evil_role>` or `execute <pos> good`.
+
+#### Loop
+- After each ability use or execution, run `python game_loop.py next` again for the next recommendation.
+- Repeat until all evils are executed or game over.
+
+### 7. End of Game
+- "Village is safe!" = WIN. All true roles are revealed on the board.
+- Record the final execution: `python game_loop.py execute <pos> <role>`
+- Set final HP: `python game_loop.py set_hp <hp>`
+- Screenshot the end screen. Read true evil positions/roles and **check for "<Corrupted>" tags** on any cards.
+- Log game over: `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"`
+- This auto-saves a regression test and validates it.
+- Click "Next" to proceed to next village.
+
+### 8. Post-Game
+- If loss or 0 scenarios: diagnose and fix solver immediately.
+- Run regression: `python -m tests.test_regression`
+- Commit and push.
+
 ## Setup
 - Screen: 2560x1440
 - Python 3.13

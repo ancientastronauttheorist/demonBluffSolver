@@ -3776,3 +3776,157 @@ Reason: No surviving scenarios -- check input data
 Final HP: 0
 Notes: Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning.
 
+
+---
+
+# New Game — 2026-03-08 01:42:45
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Jester, FortuneTeller, Alchemist, Druid, Bard
+- Outcasts: Lover, Oracle
+- Minions: Poisoner
+- Demons: Lilis
+
+## Deck
+- Villagers: Jester, FortuneTeller, Alchemist, Druid, Bard, Confessor
+- Outcasts: Lover, Oracle, Drunk, Doppelganger
+- Minions: Poisoner
+- Demons: Lilis
+
+### [01:43:19] Revealed #1 FortuneTeller
+Info: {}
+
+### [01:44:22] Revealed #2 Jester
+Info: {}
+
+### [01:44:27] Revealed #3 Druid
+Info: {}
+
+### [01:44:27] Revealed #4 Bard
+Info: {'corruption_distance': 1}
+
+### [01:44:28] Revealed #6 Oracle
+Info: {'targets': [7, 9], 'minion_role': 'Poisoner'}
+
+### [01:44:28] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [01:44:28] Revealed #8 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Poisoner'}
+
+### [01:44:28] Revealed #9 Alchemist
+Info: {'cured_count': 1}
+
+#### [01:45:10] Solver Output
+Scenarios: 68/5896
+Definite good: ['#5', '#6', '#8']
+Evil probabilities: #7=94%, #9=34%, #4=21%, #1=19%, #2=19%, #3=13%
+  Generated 5896 candidate scenarios
+  68 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 7, 9]
+
+#### [01:45:10] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#6', '#7']
+Reason: Expected posterior 27.3 scenarios (adjusted 28.1, info gain 1.274 bits) | timing x1.00
+WARNING: Corruption risk: 6%
+
+### [01:49:14] Revealed #2 Jester
+Info: {'targets': [1, 6, 7], 'evil_count': 1}
+
+#### [01:49:19] Solver Output
+Scenarios: 34/5896
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8']
+Evil probabilities: #9=56%, #3=26%, #4=18%
+  Generated 5896 candidate scenarios
+  34 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 9]
+
+#### [01:49:19] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 34 scenarios (roles: {'Poisoner', 'Lilis'})
+
+### [01:52:56] Executed #7 -> Poisoner (EVIL)
+
+#### [01:52:56] Solver Output
+Scenarios: 21/714
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8']
+Evil probabilities: #3=43%, #4=29%, #9=29%
+  Generated 714 candidate scenarios
+  21 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 9]
+
+#### [01:52:56] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#3', '#6']
+Reason: Expected posterior 10.7 scenarios (adjusted 10.7, info gain 0.971 bits) | timing x1.00
+
+### [01:54:55] Ability used at #2
+
+#### [01:56:20] Solver Output
+Scenarios: 21/714
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8']
+Evil probabilities: #3=43%, #4=29%, #9=29%
+  Generated 714 candidate scenarios
+  21 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 9]
+
+#### [01:56:20] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 0.998 (adjusted 0.951) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [01:57:26] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+### [01:57:26] Ability used at #3
+
+#### [01:57:27] Solver Output
+Scenarios: 11/714
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8']
+Evil probabilities: #3=64%, #4=18%, #9=18%
+  Generated 714 candidate scenarios
+  11 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 9]
+
+#### [01:57:27] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (64% evil Lilis, 36% good Druid).
+WARNING: Execution lookahead override -- immediate hit chance is 64%, but all reveal branches still lead to a forced win.
+
+### [01:58:04] Executed #3 -> Lilis (EVIL)
+
+## [01:58:12] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis killed #5. Druid+Jester abilities. Clean win 6HP.
+
