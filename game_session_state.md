@@ -3775,3 +3775,225 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 0
 Notes: Autonomous live run. Wrong execute on #7 exposed two issues: Wretch must register as Minion for Bishop, and a Baker claiming 'I was an Alchemist' still applies the original Alchemist cure during setup. After the first fix the board still lost; final truth was #4=Pooka and #6 was good.
 
+
+---
+
+# New Game — 2026-03-07 22:16:52
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Fortune_Teller, Knitter, Empress, Baker, Jester, Architect, Judge
+- Outcasts: Plague_Doctor, Drunk, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+#### [22:17:03] Solver Output
+Scenarios: 960/960
+Evil probabilities: #1=25%, #2=25%, #3=25%, #4=25%, #5=25%, #6=25%, #7=25%, #8=25%
+  Generated 960 candidate scenarios
+  960 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:17:03] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 25% evil, entropy 0.911
+
+### [22:18:42] Revealed #8 Knitter
+Info: {'evil_pairs': 0}
+
+#### [22:18:47] Solver Output
+Scenarios: 590/996
+Evil probabilities: #1=36%, #7=36%, #3=25%, #4=25%, #5=25%, #2=24%, #6=24%, #8=7%
+  Generated 996 candidate scenarios
+  590 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:18:47] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 36% evil, entropy 1.042
+
+### [22:20:09] Revealed #1 Jester
+Info: {}
+
+#### [22:20:15] Solver Output
+Scenarios: 605/1032
+Evil probabilities: #7=36%, #1=35%, #2=25%, #4=25%, #5=25%, #3=24%, #6=23%, #8=7%
+  Generated 1032 candidate scenarios
+  605 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:20:15] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 36% evil, entropy 1.043
+
+### [22:21:31] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [22:21:36] Solver Output
+Scenarios: 620/1068
+Evil probabilities: #1=35%, #7=35%, #2=25%, #6=25%, #4=25%, #3=24%, #5=24%, #8=7%
+  Generated 1068 candidate scenarios
+  620 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:21:36] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 25% evil, entropy 0.909
+
+### [22:22:27] Revealed #2 Wretch
+Info: {}
+
+#### [22:22:32] Solver Output
+Scenarios: 320/1089
+Evil probabilities: #2=48%, #7=32%, #4=27%, #6=22%, #5=22%, #8=19%, #3=18%, #1=13%
+  Generated 1089 candidate scenarios
+  320 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:22:32] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#3', '#7', '#8']
+Reason: Expected posterior 126.8 scenarios (adjusted 134.9, info gain 1.246 bits) | timing x0.75
+WARNING: Corruption risk: 13%
+
+### [22:26:26] Revealed #1 Jester
+Info: {'targets': [3, 7, 8], 'evil_count': 2}
+
+### [22:26:33] Ability used at #1
+
+#### [22:26:40] Solver Output
+Scenarios: 119/1089
+Evil probabilities: #8=48%, #1=34%, #3=30%, #7=27%, #2=22%, #4=15%, #5=12%, #6=12%
+  Generated 1089 candidate scenarios
+  119 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:26:40] Recommendation
+Action: **REVEAL** #3
+Reason: #3: 30% evil, entropy 0.984
+
+### [22:27:48] Revealed #3 Fortune_Teller
+Info: {}
+
+#### [22:27:54] Solver Output
+Scenarios: 114/1110
+Evil probabilities: #8=46%, #1=32%, #3=32%, #7=28%, #2=23%, #4=16%, #5=12%, #6=12%
+  Generated 1110 candidate scenarios
+  114 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:27:54] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#3', '#8']
+Reason: Entropy 1.000 (adjusted 0.974) | timing x0.96
+WARNING: Corruption risk: 5%
+
+### [22:29:07] Revealed #7 Fortune Teller
+Info: {'targets': [3, 8], 'has_evil': False}
+
+### [22:29:12] Ability used at #7
+
+#### [22:29:19] Solver Output
+Scenarios: 57/1110
+Evil probabilities: #2=35%, #8=30%, #1=28%, #7=26%, #4=25%, #6=25%, #5=18%, #3=14%
+  Generated 1110 candidate scenarios
+  57 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:29:19] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 0.982) | timing x0.96
+WARNING: Corruption risk: 4%
+
+### [22:30:20] Revealed #3 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': False}
+
+### [22:30:27] Ability used at #3
+
+#### [22:30:33] Solver Output
+Scenarios: 28/1110
+Definite good: ['#1']
+Evil probabilities: #2=64%, #4=36%, #6=36%, #5=21%, #7=21%, #3=14%, #8=7%
+  Generated 1110 candidate scenarios
+  28 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8]
+
+#### [22:30:33] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 36% evil, entropy 1.040
+
+### [22:31:24] Revealed #4 Empress
+Info: {'targets': [2, 5, 6]}
+
+#### [22:31:31] Solver Output
+Scenarios: 6/1116
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+Evil probabilities: #3=67%, #8=33%
+  Generated 1116 candidate scenarios
+  6 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 8]
+
+#### [22:31:31] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [22:31:43] Executed #7
+
+#### [22:32:33] Correction
+Reverted mistaken CLI-only execute on #7; live board was unchanged before the real click.
+
+### [22:33:51] Executed #7 -> Baa (EVIL)
+
+#### [22:33:57] Solver Output
+Scenarios: 4/140
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+Evil probabilities: #3=75%, #8=25%
+  Generated 140 candidate scenarios
+  4 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 8]
+
+#### [22:33:57] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 0% evil, entropy 0.100
+
+### [22:34:48] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+#### [22:34:57] Solver Output
+Scenarios: 3/140
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+  Generated 140 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [22:34:57] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Chancellor'})
+
+### [22:36:07] Executed #3 -> Chancellor (EVIL)
+
+## [22:36:15] GAME OVER — WIN
+Final HP: 10
+Notes: Solved live board; #8 was Drunk and corrupted. Revealed a seat-numbering bug in the live reveal helper.
+

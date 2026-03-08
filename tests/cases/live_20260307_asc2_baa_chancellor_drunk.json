@@ -1,0 +1,140 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 8,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      },
+      "reveal_index": 1
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {},
+      "reveal_index": 4
+    },
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7,
+          8
+        ],
+        "evil_count": 2
+      },
+      "reveal_index": 2
+    },
+    {
+      "position": 7,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          8
+        ],
+        "has_evil": false
+      },
+      "reveal_index": 3
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          7
+        ],
+        "has_evil": false
+      },
+      "reveal_index": 5
+    },
+    {
+      "position": 4,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5,
+          6
+        ]
+      },
+      "reveal_index": 6
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      },
+      "reveal_index": 7
+    }
+  ],
+  "executed": [
+    7,
+    3
+  ],
+  "confirmed_evil": [
+    7,
+    3
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Baa",
+    "3": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 2,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Knitter",
+      "Empress",
+      "Baker",
+      "Jester",
+      "Architect",
+      "Judge"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1,
+    7,
+    3
+  ],
+  "name": "live_20260307_asc2_baa_chancellor_drunk",
+  "true_evil_positions": {
+    "3": "Chancellor",
+    "7": "Baa"
+  },
+  "notes": "Solved live board; #8 was Drunk and corrupted. Revealed a seat-numbering bug in the live reveal helper."
+}

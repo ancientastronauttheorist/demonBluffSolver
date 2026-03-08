@@ -167,6 +167,13 @@
       "name": "asc11_g6_live",
       "notes": "Autonomous live run. Wrong execute on #7 exposed two issues: Wretch must register as Minion for Bishop, and a Baker claiming 'I was an Alchemist' still applies the original Alchemist cure during setup. After the first fix the board still lost; final truth was #4=Pooka and #6 was good.",
       "date": "2026-03-07 21:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "live_20260307_asc2_baa_chancellor_drunk",
+      "notes": "Solved live board; #8 was Drunk and corrupted. Revealed a seat-numbering bug in the live reveal helper.",
+      "date": "2026-03-07 22:36"
     }
   ]
 }

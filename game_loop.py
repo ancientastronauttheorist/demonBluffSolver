@@ -562,12 +562,12 @@ class GameSession:
     def reveal(self, pos: int):
         """Click card at position to reveal it. Requires card detection."""
         import game_utils
+        import card_vision
         path = game_utils.take_game_screenshot("_card_detect")
-        positions = game_utils.detect_card_positions(path)
-        if pos < 1 or pos > len(positions):
-            print(f"[reveal] Position #{pos} out of range (detected {len(positions)} cards)")
+        if pos < 1 or pos > self.n_cards:
+            print(f"[reveal] Position #{pos} out of range (board has {self.n_cards} cards)")
             return
-        x, y = positions[pos - 1]
+        x, y = card_vision.resolved_board_seat_center(path, pos, self.n_cards)
         game_utils.reveal_card((x, y))
         print(f"[reveal] Revealed card #{pos} at ({x}, {y})")
 
