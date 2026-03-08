@@ -145,5 +145,12 @@
   "used_abilities": [
     1,
     7
-  ]
+  ],
+  "name": "asc15_v7",
+  "true_evil_positions": {
+    "3": "Lilis",
+    "4": "Poisoner",
+    "9": "Chancellor"
+  },
+  "notes": "10 cards, 3 evils. Final village of Asc15. Lilis game with 2 night kills (#5, #10, both good). HP 6/10. Corrupted: #1 Judge (by Poisoner #4 adjacent). Two Bards: #3 was Lilis disguised, #9 was Chancellor disguised. Judge ability was corrupted so said #9 truthful (wrong). PD #7 saved the game revealing #4 evil and #1 corrupted. #8 was Doppelganger copying Medium."
 }

@@ -370,6 +370,20 @@
       "name": "asc15_v5",
       "notes": "7 cards, 2 evils. Slayer killed Minion at #5 (free kill). Baa at #1 found via 50/50. Perfect HP. Doppelganger at #4. 0-scenario issue after slayer_result - needed explicit execute to set evil role.",
       "date": "2026-03-08 17:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v6",
+      "notes": "8 cards, 2 evils. Perfect game 10HP. Baa at #5, Poisoner at #7. Corrupted: #4 Oracle, #6 Hunter (both adjacent to Baa #5). Jester found 2 evils in {1,6,7}, solver narrowed to 7 scenarios then guaranteed win path.",
+      "date": "2026-03-08 17:08"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc15_v7",
+      "notes": "10 cards, 3 evils. Final village of Asc15. Lilis game with 2 night kills (#5, #10, both good). HP 6/10. Corrupted: #1 Judge (by Poisoner #4 adjacent). Two Bards: #3 was Lilis disguised, #9 was Chancellor disguised. Judge ability was corrupted so said #9 truthful (wrong). PD #7 saved the game revealing #4 evil and #1 corrupted. #8 was Doppelganger copying Medium.",
+      "date": "2026-03-08 17:16"
     }
   ]
 }
