@@ -4,7 +4,7 @@ import unittest
 from solver import (
     GameState, DeckComposition, CardInfo, SolverResult, Scenario,
     circle_distance, circle_direction, adjacent_positions, solve,
-    _check_scenario, _is_evil_in_scenario, _validate_role_counts,
+    _check_scenario, _is_evil_in_scenario, _validate_poet, _validate_role_counts,
 )
 
 
@@ -366,6 +366,50 @@ class TestHiddenOutcastValidation(unittest.TestCase):
 
         self.assertGreater(result.n_surviving, 0, f"Reasoning: {result.reasoning}")
         self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
+
+
+class TestPoetRandomInfo(unittest.TestCase):
+    def test_poet_random_clue_type_not_in_deck_still_validates(self):
+        deck = DeckComposition(
+            villagers=["Poet", "Hunter", "Lover", "Knitter"],
+            outcasts=[],
+            minions=[],
+            demons=["Baa"],
+        )
+        state = GameState(
+            n_cards=5,
+            deck=deck,
+            cards=[
+                CardInfo(1, "Poet", info_parsed={"copied_role": "Gemcrafter", "good_position": 3}),
+                CardInfo(2, "Hunter", info_parsed={"distance": 2}),
+                CardInfo(3, "Lover", info_parsed={"evil_adjacent": 0}),
+                CardInfo(4, "Knitter", info_parsed={"evil_pairs": 0}),
+            ],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={5: "Baa"})
+
+        self.assertTrue(_validate_poet(state.cards[0], scenario, state))
+
+        result = solve(state)
+        self.assertIn(5, result.definite_evil, f"Reasoning: {result.reasoning}")
+
+    def test_poet_bounty_hunter_style_clue_validates(self):
+        deck = DeckComposition(
+            villagers=["Poet", "Hunter", "Lover", "Knitter"],
+            outcasts=[],
+            minions=[],
+            demons=["Baa"],
+        )
+        state = GameState(
+            n_cards=5,
+            deck=deck,
+            cards=[CardInfo(1, "Poet", info_parsed={"copied_role": "Bounty Hunter", "evil_position": 5})],
+            n_evil=1,
+        )
+        scenario = Scenario(evil_positions={5: "Baa"})
+
+        self.assertTrue(_validate_poet(state.cards[0], scenario, state))
 
 
 if __name__ == "__main__":

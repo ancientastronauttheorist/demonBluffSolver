@@ -3465,3 +3465,56 @@ Reason: #5 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: #1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run.
 
+
+---
+
+# New Game — 2026-03-07 20:09:32
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Hunter, Lover, Knitter, Enlightened
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [20:22:41] Revealed #1 Poet
+Info: {'corruption_distance': 1, 'copied_role': 'Bard'}
+
+### [20:22:48] Revealed #2 Poet
+Info: {'good_position': 6, 'copied_role': 'Gemcrafter'}
+
+### [20:22:58] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [20:23:05] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [20:23:11] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [20:23:15] Revealed #6 Enlightened
+Info: {'direction': 'CW'}
+
+#### [20:23:21] Solver Output
+Scenarios: 3/30
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+  Generated 30 candidate scenarios
+  3 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [20:23:21] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [20:23:52] Executed #5 -> Pooka (EVIL)
+
+## [20:24:11] GAME OVER — WIN
+Final HP: 10
+Notes: Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka.
+

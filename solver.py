@@ -1417,6 +1417,25 @@ def _validate_bishop(card: CardInfo, scenario: Scenario,
         return True
 
 
+def _validate_bounty_hunter(card: CardInfo, scenario: Scenario,
+                            state: GameState) -> bool:
+    """Pseudo-validator for Poet's direct evil-call clue variant."""
+    info = card.info_parsed
+    if "evil_position" not in info:
+        return True
+
+    claimed_pos = info["evil_position"]
+    pos = card.position
+    truth = _truth_status(pos, scenario, state)
+
+    actual_evil = _effective_alignment(claimed_pos, scenario, state) == Alignment.EVIL
+
+    if truth == TruthStatus.TRUTHFUL:
+        return actual_evil
+    else:
+        return not actual_evil
+
+
 def _validate_slayer_results(scenario: Scenario, state: GameState) -> bool:
     """Validate Slayer ability results against a scenario.
 
@@ -1543,11 +1562,10 @@ def _validate_baker(card: CardInfo, scenario: Scenario,
 
 def _validate_poet(card: CardInfo, scenario: Scenario,
                     state: GameState) -> bool:
-    """Poet: copies a random Villager's ability.
+    """Poet: learns one random clue pattern.
 
-    If 'copied_role' is identified in info_parsed, delegate to that role's
-    validator. The truth status comes from the Poet's own position (good Poet
-    = truthful, evil disguised as Poet = lying, corrupted Poet = lying).
+    The clue type is encoded in `copied_role` for validator reuse, but it is
+    not constrained to roles currently in play.
     """
     info = card.info_parsed
     copied_role = info.get("copied_role")
@@ -1590,6 +1608,7 @@ VALIDATORS = {
     "Alchemist": _validate_alchemist,
     "Druid": _validate_druid,
     "Bishop": _validate_bishop,
+    "Bounty Hunter": _validate_bounty_hunter,
     "Baker": _validate_baker,
     "Poet": _validate_poet,
     # NOTE: "Knight" has no info to validate — Knight's ability is "I can't die"

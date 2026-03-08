@@ -146,6 +146,13 @@
       "name": "asc11_g3_live",
       "notes": "#1=Drunk(corrupted), #7=Doppelganger. Fixed executed-evil clue handling and hidden-outcast Bishop typing from this run.",
       "date": "2026-03-07 20:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g4_live",
+      "notes": "Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka.",
+      "date": "2026-03-07 20:24"
     }
   ]
 }

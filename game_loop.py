@@ -88,22 +88,35 @@ def card_bishop(pos: int, targets: list[int], types: list[str] = None) -> CardIn
         info["types"] = types
     return CardInfo(pos, "Bishop", info_parsed=info)
 
+def card_bounty_hunter(pos: int, evil_position: int) -> CardInfo:
+    """Pseudo-clue used for Poet's direct evil-call variant."""
+    return CardInfo(pos, "Poet", info_parsed={
+        "copied_role": "Bounty Hunter",
+        "evil_position": evil_position,
+    })
+
+
 def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> CardInfo:
-    """Poet that copied another role's ability. Parse the copied role's info.
+    """Poet clue parser.
 
     Usage: card poet <pos> <copied_role> <copied_role_args...>
     Examples:
-        card poet 5 knitter 0          (copied Knitter, claimed 0 adjacent evil pairs)
-        card poet 3 lover 2            (copied Lover, claimed 2 adjacent evils)
-        card poet 7 architect left     (copied Architect, claimed left more evil)
-        card poet 2 gemcrafter 5       (copied Gemcrafter, claimed #5 is good)
-        card poet 4 enlightened cw     (copied Enlightened, claimed CW)
+        card poet 5 knitter 0          (Poet gave Knitter-style clue)
+        card poet 3 lover 2            (Poet gave Lover-style clue)
+        card poet 7 architect left     (Poet gave Architect-style clue)
+        card poet 2 gemcrafter 5       (Poet gave Gemcrafter-style clue)
+        card poet 4 bard 1             (Poet gave Bard-style clue)
+        card poet 1 bounty_hunter 6    (Poet directly named #6 as Evil)
     """
+    copied_key = copied_role.lower().replace(" ", "_")
+    if copied_key in ("bounty_hunter", "bountyhunter", "evil"):
+        return card_bounty_hunter(pos, int(copied_args[0]))
+
     # Build the copied role's info_parsed by delegating to _parse_card_cli
     fake_args = [copied_role, str(pos)] + copied_args
     copied_card = _parse_card_cli(fake_args)
     info = copied_card.info_parsed.copy()
-    info["copied_role"] = copied_card.apparent_role  # Use canonical role name
+    info["copied_role"] = copied_card.apparent_role  # Clue type, not necessarily in play
     return CardInfo(pos, "Poet", info_parsed=info)
 
 
@@ -675,10 +688,12 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
             return card_no_info(pos, "Baker")
     elif role == "poet":
         if len(args) > 2:
-            # Poet with identified copied ability: poet <pos> <copied_role> <args...>
+            # Poet clue variant: poet <pos> <clue_type> <args...>
             return card_poet_with_info(pos, args[2], args[3:])
         else:
             return card_no_info(pos, "Poet")  # No info identified
+    elif role in ("bounty_hunter", "bountyhunter"):
+        return card_bounty_hunter(pos, int(args[2]))
     elif role == "no_info":
         return card_no_info(pos, args[2])  # actual role name
     else:
@@ -722,8 +737,11 @@ def main():
         print("  card oracle 5 2,6 Shaman")
         print("  card bishop 7 4,7,9 Outcast,Minion,Villager")
         print("  card jester 7 1,3,5 1")
-        print("  card poet 5 knitter 0       (Poet copied Knitter, claimed 0 evil pairs)")
-        print("  card poet 3 lover 2          (Poet copied Lover, claimed 2 adjacent)")
+        print("  card poet 5 knitter 0       (Poet gave Knitter-style clue)")
+        print("  card poet 3 lover 2         (Poet gave Lover-style clue)")
+        print("  card poet 4 bard 1          (Poet gave Bard-style clue)")
+        print("  card poet 2 gemcrafter 6    (Poet gave Gemcrafter-style clue)")
+        print("  card poet 1 bounty_hunter 6 (Poet directly named #6 as Evil)")
         print("  card druid 5 1,2,3 none      (Druid checked 1,2,3: no outcasts)")
         print("  card druid 5 1,2,3 Bombardier (Druid found Bombardier among 1,2,3)")
         print("  card no_info 2 Slayer")

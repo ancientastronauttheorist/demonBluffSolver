@@ -89,5 +89,10 @@
       "Pooka"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc11_g4_live",
+  "true_evil_positions": {
+    "5": "Pooka"
+  },
+  "notes": "Poet clues came from Bard/Gemcrafter patterns not in play. Final screen: #1=Doppelganger, #4 and #6 corrupted by Pooka."
 }
