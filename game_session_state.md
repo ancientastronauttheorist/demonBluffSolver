@@ -15493,3 +15493,79 @@ Reason: #8 is evil in ALL 3 scenarios (roles: {'Puppet'})
 Final HP: 6
 Notes: Lilis+Puppeteer+Poisoner game, 4 evils. Slayer#7 killed Poisoner#5 (fake Judge), exec lookahead found Puppeteer#9+Lilis#1+Puppet#8. Drunk#4 corrupted.
 
+
+---
+
+# New Game — 2026-03-09 17:51:40
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bishop, Architect, Alchemist, Judge, Knitter, Scout, Druid
+- Outcasts: Drunk, Doppelganger, Plague_Doctor
+- Minions: Chancellor
+- Demons: Baa
+
+### [17:53:13] Revealed #1 Judge
+Info: {}
+
+### [17:53:13] Revealed #2 Bishop
+Info: {'targets': [1, 7, 8], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [17:53:14] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [17:53:14] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [17:53:14] Revealed #5 Plague_Doctor
+Info: {}
+
+### [17:53:14] Revealed #6 Alchemist
+Info: {'cured_count': 1}
+
+### [17:53:14] Revealed #7 Druid
+Info: {}
+
+### [17:53:14] Revealed #8 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+#### [17:53:20] Solver Output
+Scenarios: 130/7112
+Evil probabilities: #1=51%, #2=51%, #6=40%, #7=28%, #8=12%, #5=9%, #3=5%, #4=5%
+  Generated 7112 candidate scenarios
+  130 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [17:53:20] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.546 (adjusted 1.546) | timing x1.00
+
+### [17:54:17] Ability used at #5
+
+#### [17:54:23] Solver Output
+Scenarios: 12/7112
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8']
+  Generated 7112 candidate scenarios
+  12 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Chancellor'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:54:23] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 12 scenarios (roles: {'Baa', 'Chancellor'})
+
+### [17:55:06] Executed #5 -> Chancellor (EVIL)
+
+### [17:55:39] Executed #6 -> Baa (EVIL)
+
+## [17:55:39] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP, PD#5 was evil Chancellor (lied about #7 evil/#6 corrupted), Baa#6 was fake Alchemist. Drunk#2 corrupted.
+
