@@ -1671,15 +1671,15 @@ def _validate_pd_ability(scenario: Scenario, state: GameState) -> bool:
                 return False
             # Evil PD lies about evil reveal: claimed evil should be good
             if claimed_corrupted and evil_revealed is not None:
-                if _is_evil_in_board_state(evil_revealed, scenario, state):
+                if _effective_alignment(evil_revealed, scenario, state) == Alignment.EVIL:
                     return False
         else:
             # Good PD tells truth about corruption
             if claimed_corrupted != actual_corrupted:
                 return False
-            # Good PD reveals a real evil
+            # Good PD reveals a real evil (Wretch registers as evil to PD)
             if claimed_corrupted and evil_revealed is not None:
-                if not _is_evil_in_board_state(evil_revealed, scenario, state):
+                if _effective_alignment(evil_revealed, scenario, state) != Alignment.EVIL:
                     return False
 
     return True

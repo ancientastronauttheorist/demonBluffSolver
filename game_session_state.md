@@ -10775,3 +10775,152 @@ Reason: #6 is evil in ALL 5 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: Lilis game with night kills. Drunk#3 corrupted (displayed as Knitter), Doppelganger#5 as Architect. Poet copied Scout ability showing Lilis distance. 0 wrong execs, 6HP (4HP lost to 2 Lilis nights).
 
+
+---
+
+# New Game — 2026-03-09 11:34:14
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knight, Baker, Judge, Slayer, Bard, Hunter, Confessor, Plague_Doctor
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+## Deck
+- Villagers: Knight, Baker, Judge, Slayer, Bard, Hunter, Confessor, Plague_Doctor
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+## Deck
+- Villagers: Knight, Baker, Judge, Slayer, Bard, Hunter, Confessor, Plague_Doctor
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+### [11:39:10] Revealed #1 Slayer
+Info: {}
+
+### [11:39:10] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [11:39:10] Revealed #3 Hunter
+Info: {'distance': 4}
+
+### [11:39:10] Revealed #4 Baker
+Info: {'original_role': 'Judge'}
+
+### [11:39:10] Revealed #5 Baker
+Info: {'original_role': 'Knight'}
+
+### [11:39:11] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [11:39:11] Revealed #7 Plague_Doctor
+Info: {}
+
+### [11:39:11] Revealed #8 Wretch
+Info: {}
+
+#### [11:39:18] Solver Output
+Scenarios: 30/252
+Evil probabilities: #3=60%, #6=60%, #1=13%, #2=13%, #4=13%, #5=13%, #7=13%, #8=13%
+  Generated 252 candidate scenarios
+  30 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [11:39:18] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.307 (adjusted 2.307) | timing x1.00
+
+### [11:40:34] Ability used at #7
+
+#### [11:40:40] Solver Output
+Scenarios: 4/252
+Definite good: ['#1', '#2', '#4', '#5']
+Evil probabilities: #3=50%, #6=50%, #7=50%, #8=50%
+  Generated 252 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [3, 6, 7, 8]
+
+#### [11:40:40] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#3']
+Reason: Target #3 is 50% evil (adjusted 0.50)
+
+### [11:41:48] Ability used at #1
+
+#### [11:41:55] Solver Output
+Scenarios: 2/252
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+  Generated 252 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #8 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [11:41:55] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [11:42:36] Executed #6 -> Chancellor (EVIL)
+
+### [11:43:36] Executed #8 -> GOOD (WRONG!)
+
+#### [11:43:43] Solver Output
+Scenarios: 0/25
+  Generated 25 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #3 Hunter: rejected 16/25 (64%)
+    #2 Baker: rejected 5/25 (20%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Baker: 9 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Hunter: 20 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Baker: 8 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Baker: 8 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Confessor: 8 scenarios survive  <-- SUSPECT
+
+#### [11:43:43] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [11:45:18] Solver Output
+Scenarios: 4/25
+Definite evil: ['#6']
+Definite good: ['#3', '#7', '#8']
+Evil probabilities: #1=25%, #2=25%, #4=25%, #5=25%
+  Generated 25 candidate scenarios
+  4 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [11:45:18] Recommendation
+Action: **ERROR** #1
+Reason: #1 is 25% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 25% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 25% < 80% threshold. Consider manual override if you have extra information.
+
+### [11:49:21] Executed #5 -> GOOD (WRONG!)
+
+## [11:49:21] GAME OVER — LOSS
+Final HP: 0
+Notes: LOSS: PD evil reveal pointed at Wretch#8 (registers as Evil), solver treated as truly evil. Executed Wretch (5HP), then couldn't find Baa#1 among 4 candidates. Baker chain analysis ruled out #2 but failed to correctly handle #1. Need to fix: PD evil reveal should not confirm Wretch as truly evil.
+

@@ -573,6 +573,13 @@
       "name": "asc19_v2",
       "notes": "Lilis game with night kills. Drunk#3 corrupted (displayed as Knitter), Doppelganger#5 as Architect. Poet copied Scout ability showing Lilis distance. 0 wrong execs, 6HP (4HP lost to 2 Lilis nights).",
       "date": "2026-03-09 11:32"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc19_v3",
+      "notes": "LOSS: PD evil reveal pointed at Wretch#8 (registers as Evil), solver treated as truly evil. Executed Wretch (5HP), then couldn't find Baa#1 among 4 candidates. Baker chain analysis ruled out #2 but failed to correctly handle #1. Need to fix: PD evil reveal should not confirm Wretch as truly evil.",
+      "date": "2026-03-09 11:49"
     }
   ]
 }
