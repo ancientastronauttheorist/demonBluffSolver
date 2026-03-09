@@ -594,6 +594,13 @@
       "name": "asc19_v5",
       "notes": "Win 5HP, 1 wrong exec (#9 Hunter), Doppelganger disguised as Alchemist at #1",
       "date": "2026-03-09 12:07"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc19_v6",
+      "notes": "Win 5HP, 1 wrong exec (#6 Drunk corrupted), Knight#8 survived exec (immunity). PD check #2 clean. Druid#6 was corrupted Drunk. Knitter#1 <Corrupted>. Bard#4 was actually Drunk<Corrupted>?",
+      "date": "2026-03-09 12:16"
     }
   ]
 }
