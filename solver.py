@@ -783,6 +783,10 @@ def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Option
     if card is None:
         return None  # Unrevealed, can't determine
 
+    # Wretch registers as Evil Minion to abilities (wiki: Bishop sees Wretch as "Minion")
+    if card.apparent_role == "Wretch":
+        return "Minion"
+
     role_name = card.apparent_role
     # Check knowledge base
     card_def = get_card(role_name)
@@ -1129,8 +1133,20 @@ def _validate_oracle(card: CardInfo, scenario: Scenario,
     pos = card.position
     truth = _truth_status(pos, scenario, state)
 
-    # Check if either target actually IS that minion role
-    actual = any(_known_evil_role(t, scenario, state) == minion_role for t in targets)
+    # Check if either target actually IS that minion role.
+    # Wretch registers as a random Evil Minion — Oracle can identify Wretch
+    # as any Minion role (wiki: "Bishop can only see Wretch as a Minion").
+    def _target_matches(t):
+        if _known_evil_role(t, scenario, state) == minion_role:
+            return True
+        # Wretch registers as any Evil Minion to Oracle
+        card_at = _get_card_at(t, state)
+        if card_at and card_at.apparent_role == "Wretch":
+            # Wretch can match any minion role in the deck
+            return minion_role in state.deck.minions
+        return False
+
+    actual = any(_target_matches(t) for t in targets)
 
     if truth == TruthStatus.TRUTHFUL:
         return actual
@@ -1174,8 +1190,9 @@ def _validate_hunter(card: CardInfo, scenario: Scenario,
     n = state.n_cards
     truth = _truth_status(pos, scenario, state)
 
+    # Wretch registers as Evil for Hunter (wiki confirmed)
     evil_positions = [p for p in range(1, n + 1)
-                      if _is_evil_in_board_state(p, scenario, state) and p != pos]
+                      if _effective_alignment(p, scenario, state) == Alignment.EVIL and p != pos]
     if not evil_positions:
         return True
 
@@ -1295,10 +1312,11 @@ def _validate_witness(card: CardInfo, scenario: Scenario,
     pos = card.position
     truth = _truth_status(pos, scenario, state)
 
-    # "Affected by evil ability" = corrupted, puppeted, or adjacent to Chancellor conversion
+    # "Affected by evil ability" = corrupted, puppeted, or killed by Lilis
     actually_affected = (
         claimed_pos in scenario.corrupted or
-        claimed_pos == scenario.puppet_position
+        claimed_pos == scenario.puppet_position or
+        claimed_pos in state.night_kills
     )
 
     if truth == TruthStatus.TRUTHFUL:
@@ -1341,13 +1359,20 @@ def _validate_dreamer(card: CardInfo, scenario: Scenario,
     truth = _truth_status(pos, scenario, state)
 
     target_is_evil = _is_evil_in_board_state(target, scenario, state)
+    # Wretch registers as Evil Minion — Dreamer sees "Cabbage" for Wretch
+    target_card = _get_card_at(target, state)
+    target_is_wretch = target_card and target_card.apparent_role == "Wretch"
+
     evil_roles = [
         role for p in range(1, state.n_cards + 1)
         if (role := _known_evil_role(p, scenario, state)) not in (None, "Puppet", "Unknown")
     ]
 
     if truth == TruthStatus.TRUTHFUL:
-        if target_is_evil:
+        if target_is_wretch:
+            # Wiki: "When targeting a Wretch, a truthful Dreamer always reports 'a Cabbage'"
+            return claimed_role.lower() == "cabbage"
+        elif target_is_evil:
             # Must show correct evil role
             actual_role = _known_evil_role(target, scenario, state)
             return claimed_role == actual_role
@@ -1356,7 +1381,10 @@ def _validate_dreamer(card: CardInfo, scenario: Scenario,
             return claimed_role in evil_roles
     else:
         # Lying — info is false
-        if target_is_evil:
+        if target_is_wretch:
+            # Lying Dreamer on Wretch: would NOT say Cabbage
+            return claimed_role.lower() != "cabbage"
+        elif target_is_evil:
             actual_role = _known_evil_role(target, scenario, state)
             return claimed_role != actual_role
         else:
