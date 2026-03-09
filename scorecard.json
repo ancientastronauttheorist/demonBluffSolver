@@ -566,6 +566,13 @@
       "name": "asc19_v1",
       "notes": "Perfect game 10HP. Doppelganger at #5 as Confessor. FT#7 corrupted by Pooka#6, Jester#8 corrupted by Poisoner#1. Solver nailed it with 1 scenario.",
       "date": "2026-03-09 11:18"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc19_v2",
+      "notes": "Lilis game with night kills. Drunk#3 corrupted (displayed as Knitter), Doppelganger#5 as Architect. Poet copied Scout ability showing Lilis distance. 0 wrong execs, 6HP (4HP lost to 2 Lilis nights).",
+      "date": "2026-03-09 11:32"
     }
   ]
 }

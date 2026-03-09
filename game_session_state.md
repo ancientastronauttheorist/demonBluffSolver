@@ -10626,3 +10626,152 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: Perfect game 10HP. Doppelganger at #5 as Confessor. FT#7 corrupted by Pooka#6, Jester#8 corrupted by Poisoner#1. Solver nailed it with 1 scenario.
 
+
+---
+
+# New Game — 2026-03-09 11:21:01
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Slayer, Poet, Fortune_Teller, Jester, Judge, Druid, Architect, Bombardier
+- Outcasts: Drunk, Doppelganger
+- Minions: Chancellor
+- Demons: Lilis
+
+### [11:22:08] Revealed #1 Slayer
+Info: {}
+
+### [11:22:09] Revealed #2 Architect
+Info: {'side': 'equal'}
+
+### [11:22:09] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [11:22:09] Revealed #4 Jester
+Info: {}
+
+### [11:26:59] Revealed #5 Architect
+Info: {'side': 'equal'}
+
+### [11:26:59] Revealed #6 Druid
+Info: {}
+
+### [11:26:59] Revealed #8 Judge
+Info: {}
+
+### [11:26:59] Revealed #9 Poet
+Info: {'evil_role': 'Lilis', 'distance': 4, 'copied_role': 'Scout'}
+
+#### [11:27:07] Solver Output
+Scenarios: 72/2688
+Definite good: ['#2', '#5', '#7', '#9']
+Evil probabilities: #3=72%, #8=72%, #6=28%, #1=14%, #4=14%
+  Generated 2688 candidate scenarios
+  72 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 6, 8]
+
+#### [11:27:07] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#2', '#6']
+Reason: Expected posterior 28.8 scenarios (adjusted 30.8, info gain 1.226 bits) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [11:28:08] Ability used at #4
+
+### [11:28:08] Revealed #4 Jester
+Info: {'targets': [1, 2, 6], 'evil_count': 2}
+
+#### [11:28:14] Solver Output
+Scenarios: 30/2688
+Definite good: ['#2', '#5', '#7', '#9']
+Evil probabilities: #8=67%, #1=33%, #3=33%, #4=33%, #6=33%
+  Generated 2688 candidate scenarios
+  30 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 6, 8]
+
+#### [11:28:14] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [11:29:25] Ability used at #6
+
+### [11:29:25] Revealed #6 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+#### [11:29:33] Solver Output
+Scenarios: 16/2688
+Definite good: ['#2', '#4', '#5', '#7', '#9']
+Evil probabilities: #1=62%, #6=62%, #3=38%, #8=38%
+  Generated 2688 candidate scenarios
+  16 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 6, 8]
+
+#### [11:29:33] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#2']
+Reason: Expected posterior 8.5 scenarios (adjusted 8.5, info gain 0.913 bits) | timing x1.00
+
+### [11:30:31] Ability used at #8
+
+### [11:30:31] Revealed #8 Judge
+Info: {'target': 2, 'is_lying': False}
+
+#### [11:30:37] Solver Output
+Scenarios: 10/2688
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8', '#9']
+  Generated 2688 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Lilis'})
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [11:30:37] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 10 scenarios (roles: {'Chancellor', 'Lilis'})
+
+### [11:31:17] Executed #1 -> Lilis (EVIL)
+
+#### [11:31:29] Solver Output
+Scenarios: 5/294
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8', '#9']
+  Generated 294 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [11:31:29] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [11:32:16] Executed #6 -> Chancellor (EVIL)
+
+## [11:32:16] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis game with night kills. Drunk#3 corrupted (displayed as Knitter), Doppelganger#5 as Architect. Poet copied Scout ability showing Lilis distance. 0 wrong execs, 6HP (4HP lost to 2 Lilis nights).
+
