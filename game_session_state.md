@@ -12471,3 +12471,176 @@ WARNING: Corruption risk: 100%
 Final HP: 5
 Notes: WIN 5HP. Slayer#8 killed Pooka#5 (75% confidence). 50/50 between #1 and #7 for Twin_Minion — wrong exec on #1 Knitter (-5HP), then #7=Twin_Minion. Pooka corrupted adjacent #4(Baker) and #6(Druid). Ascension 20 complete!
 
+
+---
+
+# New Game — 2026-03-09 13:33:14
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bishop, Druid, Slayer, Knight, Fortune_Teller, Knitter
+- Outcasts: Doppelganger, Bombardier, Plague_Doctor
+- Minions: Twin_Minion, Poisoner
+- Demons: Baa
+
+### [13:34:16] Revealed #1 Plague_Doctor
+Info: {}
+
+### [13:34:16] Revealed #2 Knight
+Info: {}
+
+### [13:34:16] Revealed #3 Fortune_Teller
+Info: {}
+
+### [13:34:16] Revealed #4 Slayer
+Info: {}
+
+### [13:34:16] Revealed #5 Bombardier
+Info: {}
+
+### [13:34:17] Revealed #6 Druid
+Info: {}
+
+### [13:34:17] Revealed #7 Bishop
+Info: {'targets': [1, 3, 5], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [13:34:17] Revealed #8 Knitter
+Info: {'evil_pairs': 2}
+
+### [13:34:17] Revealed #9 Slayer
+Info: {}
+
+#### [13:34:24] Solver Output
+Scenarios: 1492/11516
+Evil probabilities: #5=88%, #8=56%, #7=29%, #4=27%, #9=26%, #6=23%, #2=21%, #3=17%, #1=13%
+  Generated 11516 candidate scenarios
+  1492 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [13:34:24] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight check: #2 is 21% evil, 14% corruption risk. Expected HP cost: 0.6 (vs normal 5).
+WARNING: Corruption risk: 14% -- corrupted Knight loses immunity
+
+### [13:35:20] Executed #2 -> GOOD (WRONG!)
+
+#### [13:35:26] Solver Output
+Scenarios: 214/7740
+Definite good: ['#2']
+Evil probabilities: #5=93%, #8=61%, #4=36%, #6=30%, #7=29%, #9=24%, #3=20%, #1=7%
+  Generated 7740 candidate scenarios
+  214 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [13:35:27] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.547 (adjusted 1.547) | timing x1.00
+
+### [13:36:34] Ability used at #1
+
+#### [13:36:41] Solver Output
+Scenarios: 144/7740
+Definite evil: ['#5']
+Definite good: ['#1', '#2']
+Evil probabilities: #8=53%, #7=41%, #4=33%, #9=32%, #6=30%, #3=11%
+  Generated 7740 candidate scenarios
+  144 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Twin_Minion', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7, 8, 9]
+
+#### [13:36:41] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 144 scenarios (roles: {'Baa', 'Twin_Minion', 'Poisoner'})
+
+### [13:37:23] Executed #5 -> Twin_Minion (EVIL)
+
+#### [13:37:24] Solver Output
+Scenarios: 51/1340
+Definite evil: ['#5']
+Definite good: ['#1', '#2']
+Evil probabilities: #8=49%, #4=43%, #6=33%, #9=31%, #7=27%, #3=16%
+  Generated 1340 candidate scenarios
+  51 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7, 8, 9]
+
+#### [13:37:24] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.937 (adjusted 0.927) | timing x1.00
+WARNING: Corruption risk: 2%
+
+### [13:38:42] Ability used at #6
+
+### [13:38:42] Revealed #6 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': None}
+
+#### [13:38:50] Solver Output
+Scenarios: 18/1340
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #6=94%, #8=39%, #4=33%, #9=22%, #7=11%
+  Generated 1340 candidate scenarios
+  18 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7, 8, 9]
+
+#### [13:38:50] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#6']
+Reason: Target #6 is 94% evil (adjusted 0.94)
+
+### [13:41:54] Ability used at #4
+
+#### [13:41:58] Solver Output
+Scenarios: 7/1340
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#9']
+Evil probabilities: #4=86%, #6=86%, #7=14%, #8=14%
+  Generated 1340 candidate scenarios
+  7 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7, 8]
+
+#### [13:41:58] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#4']
+Reason: Target #4 is 86% evil (adjusted 0.86)
+
+### [13:45:35] Ability used at #9
+
+#### [13:45:39] Solver Output
+Scenarios: 5/157
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+  Generated 157 candidate scenarios
+  5 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [13:45:39] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [13:46:29] Executed #6 -> Baa (EVIL)
+
+## [13:46:42] GAME OVER — WIN
+Final HP: 1
+Notes: WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty
+

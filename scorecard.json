@@ -664,6 +664,13 @@
       "name": "asc20_v7",
       "notes": "WIN 5HP. Slayer#8 killed Pooka#5 (75% confidence). 50/50 between #1 and #7 for Twin_Minion \u2014 wrong exec on #1 Knitter (-5HP), then #7=Twin_Minion. Pooka corrupted adjacent #4(Baker) and #6(Druid). Ascension 20 complete!",
       "date": "2026-03-09 13:29"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc21_v1",
+      "notes": "WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty",
+      "date": "2026-03-09 13:46"
     }
   ]
 }
