@@ -11874,3 +11874,161 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: WIN: Pooka only evil, perfect 10HP 1-scenario solve. Pooka corrupted adjacent #4 Confessor and #6 Baker. Confessor dizzy confirmed corruption. Bombardier at #2 safely avoided.
 
+
+---
+
+# New Game — 2026-03-09 12:46:41
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Baker, Slayer, Enlightened, Judge, Druid, Knitter, Fortune_Teller
+- Outcasts: Wretch, Drunk, Bombardier
+- Minions: Poisoner
+- Demons: Lilis
+
+### [12:47:31] Revealed #1 Fortune_Teller
+Info: {}
+
+### [12:47:31] Revealed #2 Druid
+Info: {}
+
+### [12:47:31] Revealed #3 Bombardier
+Info: {}
+
+### [12:47:31] Revealed #4 Slayer
+Info: {}
+
+### [12:48:44] Revealed #5 Judge
+Info: {}
+
+### [12:48:44] Revealed #6 Wretch
+Info: {}
+
+### [12:48:44] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [12:48:44] Revealed #8 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [12:48:51] Solver Output
+Scenarios: 97/636
+Definite good: ['#9']
+Evil probabilities: #3=45%, #5=39%, #6=32%, #2=31%, #4=23%, #1=15%, #8=9%, #7=5%
+  Generated 636 candidate scenarios
+  97 scenarios survived validation
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [12:48:51] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 1.988 (adjusted 1.772) | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [12:50:00] Ability used at #2
+
+### [12:50:00] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': None}
+
+#### [12:50:06] Solver Output
+Scenarios: 45/636
+Definite good: ['#9']
+Evil probabilities: #2=53%, #3=42%, #5=38%, #6=33%, #4=16%, #1=11%, #8=4%, #7=2%
+  Generated 636 candidate scenarios
+  45 scenarios survived validation
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [12:50:06] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.982 (adjusted 0.841) | follow-up bonus 0.420 | timing x1.00
+WARNING: Corruption risk: 29%
+
+### [12:51:03] Ability used at #1
+
+### [12:51:03] Revealed #1 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': False}
+
+#### [12:51:09] Solver Output
+Scenarios: 26/636
+Definite good: ['#8', '#9']
+Evil probabilities: #3=54%, #2=50%, #5=46%, #6=31%, #1=8%, #4=8%, #7=4%
+  Generated 636 candidate scenarios
+  26 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [12:51:09] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#2']
+Reason: Expected posterior 14.1 scenarios (adjusted 14.6, info gain 0.831 bits) | timing x1.00
+WARNING: Corruption risk: 8% -- corrupted Judge results are unreliable
+
+### [12:52:14] Ability used at #5
+
+### [12:52:15] Revealed #5 Judge
+Info: {'target': 2, 'is_lying': True}
+
+#### [12:52:21] Solver Output
+Scenarios: 15/636
+Definite good: ['#7', '#8', '#9']
+Evil probabilities: #3=67%, #2=53%, #5=27%, #6=27%, #1=13%, #4=13%
+  Generated 636 candidate scenarios
+  15 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6]
+
+#### [12:52:21] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#2']
+Reason: Target #2 is 53% evil (adjusted 0.32)
+WARNING: Corruption risk: 40% -- Slayer ability disabled if corrupted
+
+### [12:53:34] Ability used at #4
+
+#### [12:53:41] Solver Output
+Scenarios: 10/636
+Definite good: ['#1', '#7', '#8', '#9']
+Evil probabilities: #3=90%, #5=40%, #2=30%, #4=20%, #6=20%
+  Generated 636 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6]
+
+#### [12:53:41] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 40% likely evil but budget=1 requires >=80% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 40% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 40% < 80% threshold. Consider manual override if you have extra information.
+
+### [12:55:22] Executed #5 -> Lilis (EVIL)
+
+#### [12:55:29] Solver Output
+Scenarios: 2/75
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7', '#8', '#9']
+  Generated 75 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [12:55:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [12:56:14] Executed #3 -> Poisoner (EVIL)
+
+## [12:56:15] GAME OVER — WIN
+Final HP: 6
+Notes: WIN: Poisoner+Lilis, 6HP. Lilis killed #9 in night (good). Poisoner disguised as Bombardier at #3 — corrupted adjacent Slayer#4. Druid said no outcasts among #1,#3,#4 — correct (Poisoner disguised, not real outcast). Judge confirmed Druid lying (corrupted by Poisoner adjacency? No — Druid at #2 not adjacent to Poisoner#3 in 9-card circle). Solver found Lilis at 40% confidence — risky but paid off.
+

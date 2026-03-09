@@ -629,6 +629,13 @@
       "name": "asc20_v2",
       "notes": "WIN: Pooka only evil, perfect 10HP 1-scenario solve. Pooka corrupted adjacent #4 Confessor and #6 Baker. Confessor dizzy confirmed corruption. Bombardier at #2 safely avoided.",
       "date": "2026-03-09 12:45"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc20_v3",
+      "notes": "WIN: Poisoner+Lilis, 6HP. Lilis killed #9 in night (good). Poisoner disguised as Bombardier at #3 \u2014 corrupted adjacent Slayer#4. Druid said no outcasts among #1,#3,#4 \u2014 correct (Poisoner disguised, not real outcast). Judge confirmed Druid lying (corrupted by Poisoner adjacency? No \u2014 Druid at #2 not adjacent to Poisoner#3 in 9-card circle). Solver found Lilis at 40% confidence \u2014 risky but paid off.",
+      "date": "2026-03-09 12:56"
     }
   ]
 }
