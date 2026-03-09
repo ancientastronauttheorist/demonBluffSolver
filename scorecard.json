@@ -559,6 +559,13 @@
       "name": "asc18_v7",
       "notes": "WIN: Perfect 3-evil game! Confessor confirmed #2 evil. Bishop+Enlightened+Poet narrowed candidates. Knight check free. All 3 evils found with 0 wrong execs. Ascension 18 complete!",
       "date": "2026-03-09 01:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v1",
+      "notes": "Perfect game 10HP. Doppelganger at #5 as Confessor. FT#7 corrupted by Pooka#6, Jester#8 corrupted by Poisoner#1. Solver nailed it with 1 scenario.",
+      "date": "2026-03-09 11:18"
     }
   ]
 }

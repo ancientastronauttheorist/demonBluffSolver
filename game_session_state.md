@@ -10497,3 +10497,132 @@ Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
 Final HP: 10
 Notes: WIN: Perfect 3-evil game! Confessor confirmed #2 evil. Bishop+Enlightened+Poet narrowed candidates. Knight check free. All 3 evils found with 0 wrong execs. Ascension 18 complete!
 
+
+---
+
+# New Game — 2026-03-09 11:11:05
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Fortune_Teller, Knitter, Bard, Architect, Jester, Confessor
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Pooka
+
+### [11:14:48] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [11:14:48] Revealed #2 Bard
+Info: {'corruption_distance': 2}
+
+### [11:14:49] Revealed #3 Architect
+Info: {'side': 'equal'}
+
+### [11:14:49] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [11:14:49] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [11:14:49] Revealed #6 Knitter
+Info: {'evil_pairs': 1}
+
+### [11:14:49] Revealed #7 Fortune_Teller
+Info: {}
+
+### [11:14:49] Revealed #8 Jester
+Info: {}
+
+#### [11:14:55] Solver Output
+Scenarios: 21/480
+Definite good: ['#3', '#4', '#5', '#8']
+Evil probabilities: #1=90%, #6=52%, #7=48%, #2=10%
+  Generated 480 candidate scenarios
+  21 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 6, 7]
+
+#### [11:14:55] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#2', '#6']
+Reason: Entropy 0.985 (adjusted 0.774) | timing x1.00
+WARNING: Corruption risk: 43%
+
+### [11:15:48] Ability used at #7
+
+### [11:15:49] Revealed #7 Fortune Teller
+Info: {'targets': [2, 6], 'has_evil': False}
+
+#### [11:15:55] Solver Output
+Scenarios: 9/480
+Definite evil: ['#6']
+Definite good: ['#3', '#4', '#5', '#7', '#8']
+Evil probabilities: #1=78%, #2=22%
+  Generated 480 candidate scenarios
+  9 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka', 'Poisoner'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2]
+
+#### [11:15:55] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 9 scenarios (roles: {'Pooka', 'Poisoner'})
+
+### [11:16:48] Executed #6 -> Pooka (EVIL)
+
+#### [11:16:53] Solver Output
+Scenarios: 3/60
+Definite evil: ['#6']
+Definite good: ['#3', '#4', '#5', '#7', '#8']
+Evil probabilities: #1=67%, #2=33%
+  Generated 60 candidate scenarios
+  3 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2]
+
+#### [11:16:53] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 1.4 scenarios (adjusted 1.6, info gain 0.877 bits) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [11:17:54] Ability used at #8
+
+### [11:17:54] Revealed #8 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 2}
+
+#### [11:17:59] Solver Output
+Scenarios: 1/60
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+  Generated 60 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [11:17:59] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [11:18:40] Executed #1 -> Poisoner (EVIL)
+
+## [11:18:47] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game 10HP. Doppelganger at #5 as Confessor. FT#7 corrupted by Pooka#6, Jester#8 corrupted by Poisoner#1. Solver nailed it with 1 scenario.
+
