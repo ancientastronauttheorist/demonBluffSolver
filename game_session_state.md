@@ -12893,3 +12893,199 @@ Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa', 'Shaman'})
 Final HP: 10
 Notes: WIN perfect 10HP, Shaman duplicated Knitter, two Bombardiers (1 real 1 Baa-fake), solver found both evils immediately from 2 scenarios
 
+
+---
+
+# New Game — 2026-03-09 14:04:30
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Empress, Judge, Druid, Bishop, Knight, Bard, Jester
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion, Witch
+- Demons: Pooka
+
+### [14:05:30] Revealed #2 Judge
+Info: {}
+
+### [14:05:30] Revealed #3 Empress
+Info: {'targets': [1, 7, 8]}
+
+### [14:05:30] Revealed #4 Druid
+Info: {}
+
+### [14:05:30] Revealed #5 Bombardier
+Info: {}
+
+### [14:05:30] Revealed #6 Jester
+Info: {}
+
+### [14:05:30] Revealed #7 Knight
+Info: {}
+
+### [14:05:30] Revealed #8 Plague_Doctor
+Info: {}
+
+### [14:05:31] Revealed #9 Bard
+Info: {'corruption_distance': 1}
+
+#### [14:05:42] Solver Output
+Scenarios: 234/1638
+Evil probabilities: #5=91%, #9=35%, #2=31%, #4=28%, #3=27%, #6=27%, #1=26%, #7=20%, #8=15%
+  Generated 1638 candidate scenarios
+  234 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:05:42] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 2.359 (adjusted 2.359) | timing x1.00
+
+### [14:06:43] Ability used at #8
+
+#### [14:06:43] Solver Output
+Scenarios: 144/1638
+Evil probabilities: #5=92%, #9=47%, #3=32%, #2=29%, #4=26%, #6=22%, #1=19%, #7=19%, #8=12%
+  Generated 1638 candidate scenarios
+  144 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:06:43] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#5', '#8']
+Reason: Entropy 1.546 (adjusted 1.245) | timing x1.00
+WARNING: Corruption risk: 39%
+
+### [14:07:59] Revealed #4 Druid
+Info: {'targets': [1, 5, 8], 'found_outcast': 'Plague_Doctor'}
+
+### [14:07:59] Ability used at #4
+
+#### [14:07:59] Solver Output
+Scenarios: 46/1638
+Definite good: ['#4']
+Evil probabilities: #5=91%, #2=39%, #6=39%, #9=39%, #1=26%, #7=26%, #3=22%, #8=17%
+  Generated 1638 candidate scenarios
+  46 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8, 9]
+
+#### [14:07:59] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#5', '#7', '#9']
+Reason: Expected posterior 26.5 scenarios (adjusted 30.0, info gain 0.617 bits) | timing x1.00
+WARNING: Corruption risk: 26%
+
+### [14:09:02] Revealed #6 Jester
+Info: {'targets': [5, 7, 9], 'evil_count': 0}
+
+### [14:09:02] Ability used at #6
+
+#### [14:09:02] Solver Output
+Scenarios: 28/1638
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #6=57%, #2=36%, #7=36%, #9=36%, #1=14%, #3=14%, #8=7%
+  Generated 1638 candidate scenarios
+  28 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion', 'Witch'})
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 6, 7, 8, 9]
+
+#### [14:09:02] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 28 scenarios (roles: {'Minion', 'Witch'})
+
+### [14:09:43] Executed #5 -> Witch (EVIL)
+
+### [14:10:07] Revealed #1 Bishop
+Info: {'targets': [3, 4, 7], 'types': ['Villager', 'Minion', 'Outcast']}
+
+#### [14:10:08] Solver Output
+Scenarios: 10/224
+Definite evil: ['#5']
+Definite good: ['#4', '#8']
+Evil probabilities: #6=60%, #2=50%, #7=30%, #1=20%, #3=20%, #9=20%
+  Generated 224 candidate scenarios
+  10 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 6, 7, 9]
+
+#### [14:10:08] Recommendation
+Action: **EXECUTE** #7
+Reason: Knight check: #7 is 30% evil, 20% corruption risk. Expected HP cost: 1.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 20% -- corrupted Knight loses immunity + 4 extra damage
+
+### [14:10:57] Executed #7 -> GOOD (WRONG!)
+
+#### [14:10:57] Solver Output
+Scenarios: 5/162
+Definite evil: ['#5']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #2=60%, #1=40%, #6=40%, #9=40%, #3=20%
+  Generated 162 candidate scenarios
+  5 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 6, 9]
+
+#### [14:10:57] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 3.3 scenarios (adjusted 3.7, info gain 0.447 bits) | timing x1.00
+WARNING: Corruption risk: 20% -- corrupted Judge results are unreliable
+
+### [14:12:00] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [14:12:00] Ability used at #2
+
+#### [14:12:00] Solver Output
+Scenarios: 4/162
+Definite evil: ['#5']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #2=75%, #6=50%, #1=25%, #3=25%, #9=25%
+  Generated 162 candidate scenarios
+  4 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 6, 9]
+
+#### [14:12:00] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 75% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 75% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [14:14:48] Executed #2 -> Pooka (EVIL)
+
+#### [14:14:51] Solver Output
+Scenarios: 3/26
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#4', '#7', '#8', '#9']
+Evil probabilities: #6=67%, #3=33%
+  Generated 26 candidate scenarios
+  3 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 6]
+
+#### [14:14:51] Recommendation
+Action: **ERROR** #6
+Reason: #6 is 67% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 67% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [14:17:31] Executed #6 -> Minion (EVIL)
+
+## [14:17:37] GAME OVER — WIN
+Final HP: 1
+Notes: WIN 1HP: Pooka+Witch+Minion. Corrupted Knight cost 9HP. Bishop#1 and Empress#3 corrupted by Pooka#2. Solver 67% on #6 Minion — correct call.
+

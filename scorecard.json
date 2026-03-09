@@ -692,6 +692,13 @@
       "name": "asc21_v4",
       "notes": "WIN perfect 10HP, Shaman duplicated Knitter, two Bombardiers (1 real 1 Baa-fake), solver found both evils immediately from 2 scenarios",
       "date": "2026-03-09 14:02"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc21_v5",
+      "notes": "WIN 1HP: Pooka+Witch+Minion. Corrupted Knight cost 9HP. Bishop#1 and Empress#3 corrupted by Pooka#2. Solver 67% on #6 Minion \u2014 correct call.",
+      "date": "2026-03-09 14:17"
     }
   ]
 }
