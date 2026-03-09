@@ -11362,3 +11362,106 @@ Reason: #5 is evil in ALL 2 scenarios (roles: {'Chancellor'})
 Final HP: 5
 Notes: Win 5HP, 1 wrong exec (#6 Drunk corrupted), Knight#8 survived exec (immunity). PD check #2 clean. Druid#6 was corrupted Drunk. Knitter#1 <Corrupted>. Bard#4 was actually Drunk<Corrupted>?
 
+
+---
+
+# New Game — 2026-03-09 12:18:47
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Alchemist, Oracle, Knight, Jester, Knitter, Hunter
+- Outcasts: Drunk, Bombardier
+- Minions: Shaman
+- Demons: Baa
+
+### [12:19:42] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [12:19:42] Revealed #2 Bombardier
+Info: {}
+
+### [12:19:42] Revealed #3 Hunter
+Info: {'distance': 3}
+
+### [12:19:42] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [12:19:43] Revealed #5 Knight
+Info: {}
+
+### [12:19:43] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [12:19:43] Revealed #7 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Shaman'}
+
+### [12:19:43] Revealed #8 Jester
+Info: {}
+
+#### [12:19:49] Solver Output
+Scenarios: 6/350
+Definite good: ['#1', '#4', '#6']
+Evil probabilities: #5=83%, #2=33%, #3=33%, #7=33%, #8=17%
+  Generated 350 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 7, 8]
+
+#### [12:19:49] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight free check: #5 is 83% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:20:28] Executed #5 -> Baa (EVIL)
+
+#### [12:20:28] Solver Output
+Scenarios: 4/43
+Definite evil: ['#5']
+Definite good: ['#1', '#4', '#6', '#8']
+Evil probabilities: #3=50%, #2=25%, #7=25%
+  Generated 43 candidate scenarios
+  4 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3, 7]
+
+#### [12:20:28] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 1.7 scenarios (adjusted 1.9, info gain 1.093 bits) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [12:21:31] Revealed #8 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 1}
+
+### [12:21:31] Ability used at #8
+
+#### [12:21:32] Solver Output
+Scenarios: 2/43
+Definite evil: ['#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%
+  Generated 43 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [12:21:32] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+
+### [12:22:13] Executed #3 -> Shaman (EVIL)
+
+## [12:22:13] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP, Knight free check caught Baa#5, Jester narrowed to #2/#3, Bombardier protection avoided #2, 50/50 on #3 hit Shaman
+

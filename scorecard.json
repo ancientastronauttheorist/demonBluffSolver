@@ -601,6 +601,13 @@
       "name": "asc19_v6",
       "notes": "Win 5HP, 1 wrong exec (#6 Drunk corrupted), Knight#8 survived exec (immunity). PD check #2 clean. Druid#6 was corrupted Drunk. Knitter#1 <Corrupted>. Bard#4 was actually Drunk<Corrupted>?",
       "date": "2026-03-09 12:16"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v7",
+      "notes": "Perfect 10HP, Knight free check caught Baa#5, Jester narrowed to #2/#3, Bombardier protection avoided #2, 50/50 on #3 hit Shaman",
+      "date": "2026-03-09 12:22"
     }
   ]
 }
