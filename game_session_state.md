@@ -9774,3 +9774,107 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 0
 Notes: LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why.
 
+
+---
+
+# New Game — 2026-03-09 00:57:56
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Dreamer, Alchemist, Confessor, Poet, Knitter, Baker
+- Outcasts: Doppelganger
+- Minions: Twin Minion
+- Demons: Lilis
+
+### [00:58:52] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [00:58:52] Revealed #2 Dreamer
+Info: {}
+
+### [00:58:53] Revealed #3 Baker
+Info: {'original_role': 'Knitter'}
+
+### [00:58:53] Revealed #4 Alchemist
+Info: {'cured_count': 0}
+
+### [00:59:29] Revealed #8 Dreamer
+Info: {}
+
+### [00:59:29] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [00:59:29] Revealed #6 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+#### [00:59:36] Solver Output
+Scenarios: 20/294
+Definite evil: ['#8']
+Definite good: ['#1', '#4', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #3=50%
+  Generated 294 candidate scenarios
+  20 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Twin Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [00:59:36] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 20 scenarios (roles: {'Twin Minion', 'Lilis'})
+
+### [01:00:08] Executed #8 -> Lilis (EVIL)
+
+#### [01:00:13] Solver Output
+Scenarios: 10/36
+Definite evil: ['#8']
+Definite good: ['#1', '#4', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #3=50%
+  Generated 36 candidate scenarios
+  10 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [01:00:13] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#1']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [01:01:27] Ability used at #2
+
+### [01:01:28] Revealed #2 Dreamer
+Info: {'target': 3, 'evil_role': 'Twin Minion'}
+
+#### [01:01:33] Solver Output
+Scenarios: 10/36
+Definite evil: ['#8']
+Definite good: ['#1', '#4', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #3=50%
+  Generated 36 candidate scenarios
+  10 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [01:01:33] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% evil Twin Minion, 40% good Dreamer, 10% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [01:02:19] Executed #2 -> Twin Minion (EVIL)
+
+## [01:02:19] GAME OVER — WIN
+Final HP: 8
+Notes: Lilis game, night kill #5. Both evils identified cleanly: #8 definite Lilis, #2 Twin Minion. Dreamer confirmed. HP 8/10.
+

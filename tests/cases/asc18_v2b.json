@@ -1,0 +1,128 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "evil_role": "Twin Minion"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Knitter"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0,
+        "copied_role": "Knitter"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    8,
+    2
+  ],
+  "confirmed_evil": [
+    8,
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Lilis",
+    "2": "Twin Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    7,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Dreamer",
+      "Alchemist",
+      "Confessor",
+      "Poet",
+      "Knitter",
+      "Baker"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "name": "asc18_v2b",
+  "true_evil_positions": {
+    "2": "Twin Minion",
+    "8": "Lilis"
+  },
+  "notes": "Lilis game, night kill #5. Both evils identified cleanly: #8 definite Lilis, #2 Twin Minion. Dreamer confirmed. HP 8/10."
+}

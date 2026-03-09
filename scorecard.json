@@ -517,6 +517,13 @@
       "name": "asc18_v2",
       "notes": "LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why.",
       "date": "2026-03-09 00:42"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc18_v2b",
+      "notes": "Lilis game, night kill #5. Both evils identified cleanly: #8 definite Lilis, #2 Twin Minion. Dreamer confirmed. HP 8/10.",
+      "date": "2026-03-09 01:02"
     }
   ]
 }
