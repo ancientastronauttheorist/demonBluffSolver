@@ -1,0 +1,162 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Poisoner",
+        "distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 4,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    6,
+    5,
+    9,
+    1,
+    8
+  ],
+  "confirmed_evil": [
+    5,
+    9,
+    1,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Poisoner",
+    "9": "Puppeteer",
+    "1": "Lilis",
+    "8": "Puppet"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 9,
+      "target_pos": 1,
+      "killed": false
+    },
+    {
+      "slayer_pos": 7,
+      "target_pos": 5,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Slayer",
+      "Medium",
+      "Scout",
+      "Judge",
+      "Knitter",
+      "Empress"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    8,
+    5,
+    9,
+    7
+  ],
+  "name": "asc24_v4",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "5": "Poisoner",
+    "8": "Puppet",
+    "9": "Puppeteer"
+  },
+  "notes": "Lilis+Puppeteer+Poisoner game, 4 evils. Slayer#7 killed Poisoner#5 (fake Judge), exec lookahead found Puppeteer#9+Lilis#1+Puppet#8. Drunk#4 corrupted."
+}

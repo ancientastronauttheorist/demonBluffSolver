@@ -832,6 +832,13 @@
       "name": "asc24_v3",
       "notes": "Lilis game, Poisoner target fix saved us \u2014 dead #9 needed to be valid Poisoner target for Bard distance-1 deduction",
       "date": "2026-03-09 17:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v4",
+      "notes": "Lilis+Puppeteer+Poisoner game, 4 evils. Slayer#7 killed Poisoner#5 (fake Judge), exec lookahead found Puppeteer#9+Lilis#1+Puppet#8. Drunk#4 corrupted.",
+      "date": "2026-03-09 17:47"
     }
   ]
 }

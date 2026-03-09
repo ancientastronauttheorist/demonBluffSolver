@@ -15321,3 +15321,175 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
 Final HP: 6
 Notes: Lilis game, Poisoner target fix saved us — dead #9 needed to be valid Poisoner target for Bard distance-1 deduction
 
+
+---
+
+# New Game — 2026-03-09 17:40:40
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knight, Slayer, Medium, Scout, Judge, Knitter, Empress
+- Outcasts: Drunk
+- Minions: Puppeteer, Poisoner
+- Demons: Lilis
+
+### [17:41:31] Revealed #1 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 1}
+
+### [17:41:31] Revealed #2 Knitter
+Info: {'evil_pairs': 2}
+
+### [17:41:32] Revealed #3 Empress
+Info: {'targets': [1, 6, 7]}
+
+### [17:41:32] Revealed #4 Knight
+Info: {}
+
+### [17:42:18] Revealed #5 Judge
+Info: {}
+
+### [17:42:18] Revealed #7 Slayer
+Info: {}
+
+### [17:42:18] Revealed #8 Judge
+Info: {}
+
+### [17:42:18] Revealed #9 Slayer
+Info: {}
+
+#### [17:42:23] Solver Output
+Scenarios: 343/5500
+Definite good: ['#6']
+Evil probabilities: #8=61%, #4=60%, #5=51%, #9=49%, #3=48%, #7=47%, #1=44%, #2=41%
+  Generated 5500 candidate scenarios
+  343 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [17:42:23] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#4']
+Reason: Expected posterior 194.2 scenarios (adjusted 206.9, info gain 0.729 bits) | timing x1.00
+WARNING: Corruption risk: 13% -- corrupted Judge results are unreliable
+
+### [17:43:31] Ability used at #8
+
+### [17:43:31] Revealed #8 Judge
+Info: {'target': 4, 'is_lying': True}
+
+#### [17:43:39] Solver Output
+Scenarios: 188/5500
+Definite good: ['#6']
+Evil probabilities: #4=58%, #5=53%, #8=52%, #9=52%, #3=48%, #2=47%, #7=46%, #1=44%
+  Generated 5500 candidate scenarios
+  188 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [17:43:39] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#9']
+Reason: Expected posterior 108.6 scenarios (adjusted 116.9, info gain 0.685 bits) | timing x1.00
+WARNING: Corruption risk: 15% -- corrupted Judge results are unreliable
+
+### [17:44:14] Ability used at #5
+
+### [17:44:14] Revealed #5 Judge
+Info: {'target': 9, 'is_lying': False}
+
+#### [17:44:20] Solver Output
+Scenarios: 111/5500
+Definite good: ['#6']
+Evil probabilities: #4=59%, #1=57%, #9=51%, #8=50%, #5=49%, #3=48%, #7=48%, #2=40%
+  Generated 5500 candidate scenarios
+  111 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [17:44:20] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#1']
+Reason: Target #1 is 57% evil (adjusted 0.49)
+WARNING: Corruption risk: 14% -- Slayer ability disabled if corrupted
+
+### [17:45:01] Ability used at #9
+
+#### [17:45:06] Solver Output
+Scenarios: 80/5500
+Definite good: ['#6']
+Evil probabilities: #4=74%, #5=66%, #9=65%, #8=55%, #1=40%, #2=40%, #3=32%, #7=28%
+  Generated 5500 candidate scenarios
+  80 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [17:45:06] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#5']
+Reason: Target #5 is 66% evil (adjusted 0.52)
+WARNING: Corruption risk: 21% -- Slayer ability disabled if corrupted
+
+### [17:45:48] Ability used at #7
+
+#### [17:45:54] Solver Output
+Scenarios: 14/580
+Definite evil: ['#5']
+Definite good: ['#6']
+Evil probabilities: #9=93%, #1=71%, #8=43%, #2=36%, #4=36%, #3=14%, #7=7%
+  Generated 580 candidate scenarios
+  14 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 7, 8, 9]
+
+#### [17:45:54] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (50% evil Lilis, 43% evil Puppeteer, 7% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 93%, but all reveal branches still lead to a forced win.
+
+### [17:46:28] Executed #9 -> Puppeteer (EVIL)
+
+#### [17:46:34] Solver Output
+Scenarios: 6/92
+Definite evil: ['#5', '#9']
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #1=83%, #8=67%, #4=50%
+  Generated 92 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 4, 8]
+
+#### [17:46:34] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Lilis, 33% evil Puppet, 17% good Scout).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [17:47:12] Executed #1 -> Lilis (EVIL)
+
+#### [17:47:12] Solver Output
+Scenarios: 3/9
+Definite evil: ['#1', '#5', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#6', '#7']
+  Generated 9 candidate scenarios
+  3 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #8 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #9 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [17:47:12] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 3 scenarios (roles: {'Puppet'})
+
+### [17:47:46] Executed #8 -> Puppet (EVIL)
+
+## [17:47:54] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis+Puppeteer+Poisoner game, 4 evils. Slayer#7 killed Poisoner#5 (fake Judge), exec lookahead found Puppeteer#9+Lilis#1+Puppet#8. Drunk#4 corrupted.
+
