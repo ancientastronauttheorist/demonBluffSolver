@@ -622,6 +622,13 @@
       "name": "asc20_v1",
       "notes": "WIN: Puppeteer+Minion+Pooka+Puppet, 5HP (1 wrong exec on corrupted Alchemist#8). Pooka corrupted #6,#8,#9. Both Confessors dizzy \u2014 #1 was Puppeteer, #2 was Minion adjacent. Solver execution lookahead correctly budgeted wrong exec. First Ascension 20 village cleared!",
       "date": "2026-03-09 12:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc20_v2",
+      "notes": "WIN: Pooka only evil, perfect 10HP 1-scenario solve. Pooka corrupted adjacent #4 Confessor and #6 Baker. Confessor dizzy confirmed corruption. Bombardier at #2 safely avoided.",
+      "date": "2026-03-09 12:45"
     }
   ]
 }

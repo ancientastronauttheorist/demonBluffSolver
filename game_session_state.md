@@ -11811,3 +11811,66 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: WIN: Puppeteer+Minion+Pooka+Puppet, 5HP (1 wrong exec on corrupted Alchemist#8). Pooka corrupted #6,#8,#9. Both Confessors dizzy — #1 was Puppeteer, #2 was Minion adjacent. Solver execution lookahead correctly budgeted wrong exec. First Ascension 20 village cleared!
 
+
+---
+
+# New Game — 2026-03-09 12:43:30
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Gemcrafter, Confessor, Lover, Bard, Medium
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+## Deck
+- Villagers: Gemcrafter, Confessor, Lover, Bard, Medium, Baker
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [12:44:20] Revealed #1 Gemcrafter
+Info: {'good_position': 2}
+
+### [12:44:21] Revealed #2 Bombardier
+Info: {}
+
+### [12:44:22] Revealed #3 Bard
+Info: {'corruption_distance': 1}
+
+### [12:44:22] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [12:44:23] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [12:44:24] Revealed #6 Baker
+Info: {'original_role': 'Confessor'}
+
+### [12:44:24] Revealed #7 Medium
+Info: {'good_position': 6, 'good_role': 'Baker'}
+
+#### [12:44:30] Solver Output
+Scenarios: 1/7
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [12:44:30] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:45:08] Executed #5 -> Pooka (EVIL)
+
+## [12:45:08] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Pooka only evil, perfect 10HP 1-scenario solve. Pooka corrupted adjacent #4 Confessor and #6 Baker. Confessor dizzy confirmed corruption. Bombardier at #2 safely avoided.
+
