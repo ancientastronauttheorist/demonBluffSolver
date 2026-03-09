@@ -1,0 +1,165 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Poisoner",
+        "distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          4
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Baker"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Scout"
+      }
+    }
+  ],
+  "executed": [
+    9,
+    6,
+    2,
+    7,
+    4
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [
+    2,
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Lilis",
+    "7": "Poisoner"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 7,
+      "target_pos": 6,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Hunter",
+      "Druid",
+      "Scout",
+      "Baker",
+      "Fortune_Teller",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4,
+    3,
+    7
+  ],
+  "name": "asc16_v6",
+  "true_evil_positions": {
+    "5": "Chancellor",
+    "6": "Lilis",
+    "7": "Poisoner"
+  },
+  "notes": "Drunk#1 as Empress (corrupted lie). Doppelganger#4 as FT (truthful but killed). Chancellor#5 as Baker. Poisoner#7 as Slayer corrupted #8. Solver missed Doppelganger-FT truthfulness deduction."
+}

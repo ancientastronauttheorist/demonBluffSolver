@@ -384,6 +384,62 @@
       "name": "asc15_v7",
       "notes": "10 cards, 3 evils. Final village of Asc15. Lilis game with 2 night kills (#5, #10, both good). HP 6/10. Corrupted: #1 Judge (by Poisoner #4 adjacent). Two Bards: #3 was Lilis disguised, #9 was Chancellor disguised. Judge ability was corrupted so said #9 truthful (wrong). PD #7 saved the game revealing #4 evil and #1 corrupted. #8 was Doppelganger copying Medium.",
       "date": "2026-03-08 17:16"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc16_v1",
+      "notes": "Lilis game. Night killed #8. Dreamer lie exposed Minion at #2. Chancellor at #7 (67%). #1 was Doppelganger showing Medium. Confessor #9 corrupted (dizzy). 6HP.",
+      "date": "2026-03-08 19:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v2",
+      "notes": "Witch blocked #7. Slayer#6 killed Baa#3. Forced exec #1=Witch. Perfect game 10HP.",
+      "date": "2026-03-08 19:37"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc16_v3",
+      "notes": "Pooka#3 corrupted Bard#4. 50/50 between #2/#3, exec lookahead won. Wrong exec #2 cost 5HP. HP=5.",
+      "date": "2026-03-08 19:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v4",
+      "notes": "Pooka#4 corrupted Bishop#3 and Slayer#5. FT#6 eliminated #2/#3, solved to 1 scenario. Perfect 10HP.",
+      "date": "2026-03-08 19:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v5",
+      "notes": "Pooka#4 corrupted Slayer#3+Gemcrafter#5. Bishop#6 also corrupted (PD passive?). Knight free check at #1 won the game. Perfect 10HP.",
+      "date": "2026-03-08 19:52"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc16_v6",
+      "notes": "Drunk#1 as Empress (corrupted lie). Doppelganger#4 as FT (truthful but killed). Chancellor#5 as Baker. Poisoner#7 as Slayer corrupted #8. Solver missed Doppelganger-FT truthfulness deduction.",
+      "date": "2026-03-08 20:03"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc16_v6b",
+      "notes": "Lilis game. Poisoner#10 corrupted Medium#1. Lilis killed #5(Good) and #10(Poisoner). Clean solve after Judge ability.",
+      "date": "2026-03-08 20:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v7",
+      "notes": "Perfect game. Jester+Judge combo identified all 3 evils. Witch blocked #9 reveal. No corruption.",
+      "date": "2026-03-08 20:26"
     }
   ]
 }

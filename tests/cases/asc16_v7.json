@@ -1,0 +1,168 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          6
+        ],
+        "types": [
+          "Minion",
+          "Outcast",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          9
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7,
+        "good_role": "Knitter"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          9
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": true
+      }
+    }
+  ],
+  "executed": [
+    2,
+    5,
+    9
+  ],
+  "confirmed_evil": [
+    2,
+    5,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Twin_Minion",
+    "5": "Baa",
+    "9": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Lover",
+      "Architect",
+      "Bishop",
+      "Judge",
+      "Jester",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin_Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2,
+    8
+  ],
+  "name": "asc16_v7",
+  "true_evil_positions": {
+    "2": "Twin_Minion",
+    "5": "Baa",
+    "9": "Witch"
+  },
+  "notes": "Perfect game. Jester+Judge combo identified all 3 evils. Witch blocked #9 reveal. No corruption."
+}
