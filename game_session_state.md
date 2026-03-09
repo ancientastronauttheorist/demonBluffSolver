@@ -14315,3 +14315,178 @@ WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 4
 Notes: WIN: 50/50 Poisoner at #3 vs #2. Drunk#1(Jester) corrupted, Scout#2 corrupted by Poisoner#3. Empress#4 truthful in winning scenario. HP=4, 0 wrong execs. Lilis killed #8 at night.
 
+
+---
+
+# New Game — 2026-03-09 16:19:30
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Alchemist, Enlightened, Druid, Dreamer, Witness, Plague_Doctor
+- Outcasts: Bombardier
+- Minions: Twin_Minion
+- Demons: Baa
+
+## Deck
+- Villagers: Alchemist, Enlightened, Druid, Dreamer, Witness, Plague_Doctor
+- Outcasts: Bombardier
+- Minions: Twin_Minion
+- Demons: Baa
+
+## Deck
+- Villagers: Alchemist, Enlightened, Druid, Dreamer, Witness, Plague_Doctor
+- Outcasts: Bombardier
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [16:22:37] Revealed #5 Enlightened
+Info: {'direction': 'ccw'}
+
+### [16:22:37] Revealed #6 Alchemist
+Info: {'cured_count': 0}
+
+### [16:22:51] Revealed #7 Witness
+Info: {'affected_position': 0}
+
+### [16:22:51] Revealed #1 Dreamer
+Info: {}
+
+### [16:22:51] Revealed #2 Dreamer
+Info: {}
+
+### [16:22:51] Revealed #3 Bombardier
+Info: {}
+
+### [16:22:51] Revealed #4 Druid
+Info: {}
+
+#### [16:22:55] Solver Output
+Scenarios: 0/42
+  Generated 42 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #7 Witness: rejected 30/42 (71%)
+    #5 Enlightened: rejected 24/42 (57%)
+    #6 Alchemist: rejected 12/42 (29%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Dreamer: still 0
+    WITHOUT #2 Dreamer: still 0
+    WITHOUT #4 Druid: still 0
+    WITHOUT #5 Enlightened: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Alchemist: still 0
+    WITHOUT #7 Witness: 10 scenarios survive  <-- SUSPECT
+
+#### [16:22:55] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [16:25:15] Solver Output
+Scenarios: 6/42
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #1=67%, #4=67%, #2=33%, #5=33%
+  Generated 42 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [16:25:15] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.252 (adjusted 2.252) | timing x1.00
+
+### [16:26:00] Revealed #1 Dreamer
+Info: {'target': 4, 'evil_role': 'Twin_Minion'}
+
+### [16:26:00] Ability used at #1
+
+#### [16:26:04] Solver Output
+Scenarios: 4/42
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #1=75%, #4=50%, #5=50%, #2=25%
+  Generated 42 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [16:26:04] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.000 (adjusted 2.000) | timing x1.00
+
+### [16:26:49] Revealed #2 Dreamer
+Info: {'target': 5, 'evil_role': 'Twin_Minion'}
+
+### [16:26:49] Ability used at #2
+
+#### [16:26:49] Solver Output
+Scenarios: 3/42
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #1=67%, #4=67%, #2=33%, #5=33%
+  Generated 42 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5]
+
+#### [16:26:49] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [16:27:43] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [16:27:43] Ability used at #4
+
+#### [16:27:43] Solver Output
+Scenarios: 2/42
+Definite evil: ['#4']
+Definite good: ['#3', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+  Generated 42 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Baa'})
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2]
+
+#### [16:27:43] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Baa'})
+
+### [16:28:15] Executed #4 -> Baa (EVIL)
+
+#### [16:28:15] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [16:28:15] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [16:28:49] Executed #1 -> Twin_Minion (EVIL)
+
+## [16:28:49] GAME OVER — WIN
+Final HP: 10
+## [16:28:55] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP.
+

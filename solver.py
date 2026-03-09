@@ -1371,17 +1371,38 @@ def _validate_witness(card: CardInfo, scenario: Scenario,
     pos = card.position
     truth = _truth_status(pos, scenario, state)
 
-    # "Affected by evil ability" = corrupted, puppeted, or killed by Lilis
-    actually_affected = (
-        claimed_pos in scenario.corrupted or
-        claimed_pos == scenario.puppet_position or
-        claimed_pos in state.night_kills
-    )
+    # "Affected by Evil ability" = corrupted by an Evil character (Poisoner/Pooka),
+    # puppeted by Puppeteer, or killed by Lilis at night.
+    # Does NOT include: PD corruption (PD is Good), Drunk inherent corruption.
+    evil_corrupted = set(scenario.corrupted)
+    # Remove PD corruption target (Good ability, not evil)
+    if scenario.pd_corrupted is not None:
+        evil_corrupted.discard(scenario.pd_corrupted)
+    # Remove Drunk position (inherent corruption, not from evil)
+    if scenario.drunk_position is not None:
+        evil_corrupted.discard(scenario.drunk_position)
+    # Remove revealed Drunk cards
+    for c in state.cards:
+        if c.apparent_role == "Drunk":
+            evil_corrupted.discard(c.position)
 
-    if truth == TruthStatus.TRUTHFUL:
-        return actually_affected
+    affected_set = evil_corrupted
+    if scenario.puppet_position is not None:
+        affected_set.add(scenario.puppet_position)
+    affected_set.update(state.night_kills)
+
+    # claimed_pos == 0 means "NO character was affected by Evil"
+    if claimed_pos == 0:
+        if truth == TruthStatus.TRUTHFUL:
+            return len(affected_set) == 0
+        else:
+            return len(affected_set) > 0
     else:
-        return not actually_affected
+        actually_affected = claimed_pos in affected_set
+        if truth == TruthStatus.TRUTHFUL:
+            return actually_affected
+        else:
+            return not actually_affected
 
 
 def _validate_jester(card: CardInfo, scenario: Scenario,

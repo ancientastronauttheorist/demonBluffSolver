@@ -769,6 +769,13 @@
       "name": "asc23_v1",
       "notes": "WIN: 50/50 Poisoner at #3 vs #2. Drunk#1(Jester) corrupted, Scout#2 corrupted by Poisoner#3. Empress#4 truthful in winning scenario. HP=4, 0 wrong execs. Lilis killed #8 at night.",
       "date": "2026-03-09 16:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v2",
+      "notes": "WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:28"
     }
   ]
 }
