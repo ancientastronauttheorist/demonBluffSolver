@@ -552,6 +552,13 @@
       "name": "asc18_v6",
       "notes": "WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs.",
       "date": "2026-03-09 01:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v7",
+      "notes": "WIN: Perfect 3-evil game! Confessor confirmed #2 evil. Bishop+Enlightened+Poet narrowed candidates. Knight check free. All 3 evils found with 0 wrong execs. Ascension 18 complete!",
+      "date": "2026-03-09 01:42"
     }
   ]
 }

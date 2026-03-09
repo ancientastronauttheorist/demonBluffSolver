@@ -10372,3 +10372,128 @@ Reason: #7 is evil in ALL 3 scenarios (roles: {'Pooka', 'Minion'})
 Final HP: 10
 Notes: WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs.
 
+
+---
+
+# New Game — 2026-03-09 01:37:48
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Bishop, Enlightened, Poet, Knight, Alchemist, Druid
+- Outcasts: Doppelganger, Wretch
+- Minions: Poisoner, Minion
+- Demons: Baa
+
+### [01:39:09] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [01:39:09] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [01:39:09] Revealed #3 Bishop
+Info: {'targets': [1, 8, 9], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [01:39:09] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [01:39:09] Revealed #5 Knight
+Info: {}
+
+### [01:39:09] Revealed #6 Wretch
+Info: {}
+
+### [01:39:10] Revealed #7 Druid
+Info: {}
+
+### [01:39:10] Revealed #8 Poet
+Info: {'direction': 'ccw', 'copied_role': 'Enlightened'}
+
+### [01:39:10] Revealed #9 Enlightened
+Info: {'direction': 'cw'}
+
+#### [01:39:17] Solver Output
+Scenarios: 96/4542
+Definite evil: ['#2']
+Definite good: ['#1', '#7', '#8', '#9']
+Evil probabilities: #4=69%, #3=58%, #5=42%, #6=31%
+  Generated 4542 candidate scenarios
+  96 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion', 'Baa', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6]
+
+#### [01:39:17] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 96 scenarios (roles: {'Minion', 'Baa', 'Poisoner'})
+
+### [01:39:58] Executed #2 -> Minion (EVIL)
+
+#### [01:39:58] Solver Output
+Scenarios: 37/478
+Definite evil: ['#2']
+Definite good: ['#1', '#7', '#8', '#9']
+Evil probabilities: #3=73%, #4=59%, #5=41%, #6=27%
+  Generated 478 candidate scenarios
+  37 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6]
+
+#### [01:39:58] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight check: #5 is 41% evil, 14% corruption risk. Expected HP cost: 0.4 (vs normal 5).
+WARNING: Corruption risk: 14% -- corrupted Knight loses immunity
+
+#### [01:40:43] Solver Output
+Scenarios: 22/380
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#7', '#8', '#9']
+Evil probabilities: #3=77%, #4=77%, #6=45%
+  Generated 380 candidate scenarios
+  22 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6]
+
+#### [01:40:43] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [01:41:45] Executed #3 -> Poisoner (EVIL)
+
+#### [01:41:46] Solver Output
+Scenarios: 11/37
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#5', '#7', '#8', '#9']
+Evil probabilities: #4=55%, #6=45%
+  Generated 37 candidate scenarios
+  11 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [01:41:46] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#4', '#5']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [01:42:30] Executed #4 -> Baa (EVIL)
+
+## [01:42:31] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect 3-evil game! Confessor confirmed #2 evil. Bishop+Enlightened+Poet narrowed candidates. Knight check free. All 3 evils found with 0 wrong execs. Ascension 18 complete!
+
