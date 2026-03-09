@@ -14844,3 +14844,63 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect game, PD found Chancellor#1, Judge confirmed, Baa#4 disguised as Poet. Drunk#3 and Judge#5 both corrupted.
 
+
+---
+
+# New Game — 2026-03-09 16:57:57
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Jester, Knight, Architect, Slayer, Judge, Scout, Enlightened
+- Outcasts: Bombardier
+- Minions: Shaman
+- Demons: Lilis
+
+### [16:59:34] Revealed #1 Knight
+Info: {}
+
+### [16:59:34] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [16:59:34] Revealed #3 Knight
+Info: {}
+
+### [16:59:34] Revealed #4 Architect
+Info: {'side': 'cw'}
+
+### [16:59:42] Revealed #5 Jester
+Info: {}
+
+### [16:59:42] Revealed #6 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [16:59:42] Revealed #8 Slayer
+Info: {}
+
+#### [16:59:53] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8']
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #6 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:59:53] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [17:00:32] Executed #5 -> Lilis (EVIL)
+
+### [17:01:15] Executed #6 -> Shaman (EVIL)
+
+## [17:01:15] GAME OVER — WIN
+Final HP: 8
+Notes: Perfect game, Lilis night killed #7 (Good). Solver found both evils with only 2 scenarios via Scout+Enlightened+Architect info. 8HP, 0 wrong execs.
+

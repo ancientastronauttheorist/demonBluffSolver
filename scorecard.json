@@ -797,6 +797,13 @@
       "name": "asc23_v5",
       "notes": "Perfect game, PD found Chancellor#1, Judge confirmed, Baa#4 disguised as Poet. Drunk#3 and Judge#5 both corrupted.",
       "date": "2026-03-09 16:56"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc23_v6",
+      "notes": "Perfect game, Lilis night killed #7 (Good). Solver found both evils with only 2 scenarios via Scout+Enlightened+Architect info. 8HP, 0 wrong execs.",
+      "date": "2026-03-09 17:01"
     }
   ]
 }
