@@ -538,6 +538,13 @@
       "name": "asc18_v4",
       "notes": "WIN: Perfect game. Confessor dizzy confirmed Baa#6. Jester confirmed Poisoner#1 via Wretch counting. Baker#8 was corrupted by Poisoner. 0 wrong execs.",
       "date": "2026-03-09 01:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v5",
+      "notes": "WIN: Perfect game. PD revealed #3 evil + #7 corrupted. Knight check on #2 free. Pooka#8 corrupted #7 Empress and #6 Druid. #9=Doppelganger. 0 wrong execs.",
+      "date": "2026-03-09 01:29"
     }
   ]
 }

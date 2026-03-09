@@ -10166,3 +10166,102 @@ Reason: #1 is evil in ALL 10 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: WIN: Perfect game. Confessor dizzy confirmed Baa#6. Jester confirmed Poisoner#1 via Wretch counting. Baker#8 was corrupted by Poisoner. 0 wrong execs.
 
+
+---
+
+# New Game — 2026-03-09 01:24:29
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Hunter, Knight, Judge, Empress, Druid, Gemcrafter
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [01:25:42] Revealed #1 Gemcrafter
+Info: {'good_position': 5}
+
+### [01:25:43] Revealed #2 Knight
+Info: {}
+
+### [01:25:43] Revealed #3 Gemcrafter
+Info: {'good_position': 8}
+
+### [01:25:43] Revealed #4 Judge
+Info: {}
+
+### [01:25:43] Revealed #5 Plague_Doctor
+Info: {}
+
+### [01:25:43] Revealed #6 Druid
+Info: {}
+
+### [01:25:43] Revealed #7 Empress
+Info: {'targets': [2, 4, 6]}
+
+### [01:25:43] Revealed #8 Hunter
+Info: {'distance': 2}
+
+### [01:25:44] Revealed #9 Judge
+Info: {}
+
+#### [01:25:49] Solver Output
+Scenarios: 112/2128
+Definite good: ['#1', '#5']
+Evil probabilities: #8=53%, #4=38%, #9=37%, #3=29%, #7=22%, #6=19%, #2=3%
+  Generated 2128 candidate scenarios
+  112 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 6, 7, 8, 9]
+
+#### [01:25:49] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight check: #2 is 3% evil, 25% corruption risk. Expected HP cost: 1.2 (vs normal 5).
+WARNING: Corruption risk: 25% -- corrupted Knight loses immunity
+
+#### [01:27:04] Solver Output
+Scenarios: 109/1610
+Definite good: ['#1', '#2', '#5']
+Evil probabilities: #8=54%, #4=39%, #9=35%, #3=29%, #7=23%, #6=19%
+  Generated 1610 candidate scenarios
+  109 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7, 8, 9]
+
+#### [01:27:04] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.639 (adjusted 1.639) | timing x1.00
+
+### [01:28:15] Ability used at #5
+
+#### [01:28:15] Solver Output
+Scenarios: 32/1610
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7', '#9']
+  Generated 1610 candidate scenarios
+  32 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka', 'Twin_Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka', 'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [01:28:15] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 32 scenarios (roles: {'Pooka', 'Twin_Minion'})
+
+### [01:28:54] Executed #3 -> Twin_Minion (EVIL)
+
+### [01:29:36] Executed #8 -> Pooka (EVIL)
+
+## [01:29:36] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect game. PD revealed #3 evil + #7 corrupted. Knight check on #2 free. Pooka#8 corrupted #7 Empress and #6 Druid. #9=Doppelganger. 0 wrong execs.
+
