@@ -678,6 +678,13 @@
       "name": "asc21_v2",
       "notes": "WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy",
       "date": "2026-03-09 13:53"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc21_v3",
+      "notes": "WIN 8HP, Lilis killed #5 night 1, Witch blocked #9, solver found all 3 evils with certainty, executed facedown #9",
+      "date": "2026-03-09 13:58"
     }
   ]
 }

@@ -12751,3 +12751,86 @@ Reason: #6 is evil in ALL 11 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy
 
+
+---
+
+# New Game — 2026-03-09 13:55:07
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Scout, Fortune_Teller, Empress, Dreamer, Confessor, Knitter, Jester
+- Outcasts: Doppelganger
+- Minions: Twin_Minion, Witch
+- Demons: Lilis
+
+### [13:56:16] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [13:56:17] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 1}
+
+### [13:56:17] Revealed #3 Empress
+Info: {'targets': [5, 6, 8]}
+
+### [13:56:17] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [13:57:21] Revealed #6 Fortune_Teller
+Info: {}
+
+### [13:57:21] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [13:57:21] Revealed #8 Empress
+Info: {'targets': [3, 5, 7]}
+
+#### [13:57:21] Solver Output
+Scenarios: 28/2352
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#8']
+Evil probabilities: #9=71%, #2=29%
+  Generated 2352 candidate scenarios
+  28 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Witch', 'Lilis', 'Twin_Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Witch', 'Lilis', 'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9]
+
+#### [13:57:21] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 28 scenarios (roles: {'Witch', 'Lilis', 'Twin_Minion'})
+
+### [13:57:52] Executed #6 -> Lilis (EVIL)
+
+#### [13:57:52] Solver Output
+Scenarios: 10/252
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 252 candidate scenarios
+  10 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #7 is DEFINITELY EVIL (possible roles: {'Witch', 'Twin_Minion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [13:57:52] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 10 scenarios (roles: {'Witch', 'Twin_Minion'})
+
+### [13:58:22] Executed #7 -> Witch (EVIL)
+
+### [13:58:55] Executed #9 -> Twin_Minion (EVIL)
+
+## [13:58:55] GAME OVER — WIN
+Final HP: 8
+Notes: WIN 8HP, Lilis killed #5 night 1, Witch blocked #9, solver found all 3 evils with certainty, executed facedown #9
+
