@@ -1631,14 +1631,15 @@ def _validate_baker(card: CardInfo, scenario: Scenario,
     truth = _truth_status(pos, scenario, state)
 
     if claimed.lower() == "original":
-        # Wiki: "I am the original Baker cannot be false under any scenario."
-        # Evil Baker always says "I was [random Good Villager role]", never "original".
-        if _is_evil_in_board_state(pos, scenario, state):
-            return False  # Evil card cannot claim "original"
-        # Original Baker is immune to corruption. Corrupted converted Bakers
-        # say "I was [wrong role]", not "I am the original Baker".
-        if pos in scenario.corrupted:
-            return False  # Corrupted good card can't be the original Baker
+        # Claims to be the original Baker (not converted).
+        # The original Baker is immune to corruption, and corrupted converted
+        # Bakers say "I was [wrong role]", not "I am the original Baker".
+        # So a good corrupted position claiming "original" is impossible.
+        # Note: evil Bakers CAN claim "original" in-game (observed), despite
+        # wiki saying otherwise. So we only reject corrupted good, not evil.
+        if truth == TruthStatus.LYING:
+            if not _is_evil_in_board_state(pos, scenario, state) and pos in scenario.corrupted:
+                return False  # Corrupted good card can't claim "I am the original Baker"
         return True
 
     # Claims "I was a <Role>" — the role they were before Baker conversion
