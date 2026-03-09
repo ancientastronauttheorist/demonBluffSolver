@@ -671,6 +671,13 @@
       "name": "asc21_v1",
       "notes": "WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty",
       "date": "2026-03-09 13:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v2",
+      "notes": "WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy",
+      "date": "2026-03-09 13:53"
     }
   ]
 }

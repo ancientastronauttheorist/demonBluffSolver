@@ -1,0 +1,141 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          7,
+          8
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Witch"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    6
+  ],
+  "confirmed_evil": [
+    7,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Witch",
+    "6": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Slayer",
+      "Confessor",
+      "Bishop",
+      "Knitter",
+      "Gemcrafter",
+      "Dreamer"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    8
+  ],
+  "name": "asc21_v2",
+  "true_evil_positions": {
+    "6": "Baa",
+    "7": "Witch"
+  },
+  "notes": "WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy"
+}

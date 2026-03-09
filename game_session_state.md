@@ -12644,3 +12644,110 @@ Reason: #6 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 1
 Notes: WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty
 
+
+---
+
+# New Game — 2026-03-09 13:49:33
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Slayer, Confessor, Bishop, Knitter, Gemcrafter, Dreamer
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Witch
+- Demons: Baa
+
+### [13:50:59] Revealed #1 Plague_Doctor
+Info: {}
+
+### [13:50:59] Revealed #2 Slayer
+Info: {}
+
+### [13:51:00] Revealed #3 Gemcrafter
+Info: {'good_position': 4}
+
+### [13:51:00] Revealed #4 Bishop
+Info: {'targets': [1, 7, 8], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [13:51:00] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [13:51:00] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [13:51:00] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+#### [13:51:05] Solver Output
+Scenarios: 40/1196
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #6=75%, #5=25%
+  Generated 1196 candidate scenarios
+  40 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Witch', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6]
+
+#### [13:51:05] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 40 scenarios (roles: {'Witch', 'Baa'})
+
+### [13:51:38] Executed #7 -> Witch (EVIL)
+
+### [13:52:05] Revealed #8 Dreamer
+Info: {}
+
+#### [13:52:05] Solver Output
+Scenarios: 16/187
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #6=69%, #5=31%
+  Generated 187 candidate scenarios
+  16 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6]
+
+#### [13:52:05] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#5']
+Reason: Entropy 1.579 (adjusted 1.333) | timing x1.00
+WARNING: Corruption risk: 31%
+
+### [13:53:02] Revealed #8 Dreamer
+Info: {'target': 5, 'evil_role': 'Witch'}
+
+### [13:53:07] Ability used at #8
+
+#### [13:53:07] Solver Output
+Scenarios: 11/187
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 187 candidate scenarios
+  11 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [13:53:07] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 11 scenarios (roles: {'Baa'})
+
+### [13:53:42] Executed #6 -> Baa (EVIL)
+
+## [13:53:42] GAME OVER — WIN
+Final HP: 10
+Notes: WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy
+
