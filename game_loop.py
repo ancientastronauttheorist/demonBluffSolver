@@ -824,6 +824,10 @@ def main():
             elif arg.lower().startswith("no="):
                 session.board_outcast_count = int(arg[3:])
         session.set_deck(villagers, outcasts, minions, demons)
+        # Warn about Baa inflating outcast count in deck view
+        if any(d.lower() == "baa" for d in demons):
+            print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
+                  "Subtract 1 from displayed outcast count for no= value.")
         # Auto-detect extra roles: if pool > board, infer board counts
         pool_size = len(villagers) + len(outcasts) + len(minions) + len(demons)
         if pool_size > session.n_cards and session.board_villager_count is None:

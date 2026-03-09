@@ -74,7 +74,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Medium lying target = Evil/Drunk/Dopp** — FIXED. Lying Medium must point at Evil, Drunk, or Doppelganger.
 
-- [ ] **Lilis can't kill uncorrupted Knight** — Wiki confirms. Not constrained in night-kill validation. Fix: exclude uncorrupted Knight from possible night-kill victims.
+- [x] **Lilis can't kill uncorrupted Knight** — FIXED. Night-kill validation rejects scenarios where Knight is forced to an uncorrupted night-killed position. Handles pool > board (Knight might be off-board) and corrupted Knight (loses immunity).
 
 - [ ] **Lilis prioritizes Good kills** — Wiki says Lilis prioritizes killing Good characters. Could weight night-kill probabilities or reject scenarios where Lilis kills Evil when Good was available.
 
@@ -90,6 +90,14 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [ ] **Baker reveal_order validation** — `reveal_order` is tracked but unused in Baker validator. Converted Baker must be revealed after original. Could narrow scenarios in Baker-heavy games.
 
+- [x] **Baa fake Outcast in deck view** — FIXED. `game_loop.py deck` prints a warning when Baa is in the demon list, reminding to subtract 1 from the displayed outcast count for the `no=` value.
+
+- [ ] **Endless mode +1 fake Outcast in deck view** — Endless mode automatically adds a fake Outcast to deck view every round (confirmed by dev on Steam). Same fix needed: subtract 1 from displayed outcast count.
+
+- [x] **Puppeteer targets Villagers only when possible** — FIXED. Placement generator restricts Puppet candidates to Villager (+ unrevealed) positions when a known Villager is adjacent to Puppeteer. Outcasts only eligible when no Villagers are adjacent.
+
+- [ ] **Corrupted Knight = 4 HP damage** — Patch v0.310a: "Knight deals 4 damage if Executed while Corrupted." Solver currently uses `wrong_exec_cost` (5 at Asc4+). Should be 4 specifically for corrupted Knight.
+
 ### P3: Low Priority
 
 - [ ] **Poet copied_role whitelist** — Validate that entered `copied_role` is one of the 13 valid Villager abilities (+ Bounty Hunter). Catches data entry errors.
@@ -101,6 +109,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [ ] **Puppeteer can't convert Shaman clones** — Wiki says Puppeteer acts before Shaman. Shaman-cloned Villagers can't be Puppet targets.
 
 - [ ] **Shaman clones can't be cured by Alchemist** — Wiki says cloned Villagers retain corruption and can't be cured.
+
+- [ ] **Lilis won't kill herself when last revealed** — Patch v0.320a. Edge case for night kill validation — if Lilis is the last unrevealed card, she can't be her own night kill victim.
+
+- [x] **Alchemist "0 cured" = always truthful** — Already handled. Evil/corrupted Alchemist has actual_cures=0 and must lie, so claiming 0 is rejected by `claimed != actual`.
 
 ### Test Coverage Gaps
 

@@ -383,6 +383,21 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
             adj = adjacent_positions(puppeteer_pos, n)
             puppet_candidates = [a for a in adj if a in available and a != puppeteer_pos]
 
+            # Puppeteer targets Villagers only when possible (patch v0.131a).
+            # If any adjacent candidate appears as a Villager, restrict to
+            # Villagers + unrevealed (which might be Villagers).
+            villager_or_unknown = []
+            has_known_villager = False
+            for pc in puppet_candidates:
+                card_at = _get_card_at(pc, state)
+                if card_at is None:
+                    villager_or_unknown.append(pc)  # unrevealed, could be Villager
+                elif _is_villager_role(card_at.apparent_role, state):
+                    villager_or_unknown.append(pc)
+                    has_known_villager = True
+            if has_known_villager:
+                puppet_candidates = villager_or_unknown
+
             # Case 1: Puppet IS created (at each adjacent candidate)
             for puppet_pos in puppet_candidates:
                 remaining = [p for p in available
@@ -2120,6 +2135,30 @@ def _check_scenario(scenario: Scenario, state: GameState) -> bool:
                                   if p in scenario.evil_positions)
         if evil_in_night_kills != state.night_kill_evil_count:
             return False
+
+        # Knight immunity: Lilis can't kill uncorrupted Knight.
+        # If Knight is in the deck, it can't be at a night-killed uncorrupted
+        # Good position.  Reject scenarios where Knight has no valid placement.
+        if "Knight" in state.deck.villagers:
+            # Knight already revealed at a Good position → accounted for
+            knight_revealed = any(
+                c.apparent_role == "Knight" and c.position not in scenario.evil_positions
+                for c in state.cards
+            )
+            if not knight_revealed:
+                revealed_positions = {c.position for c in state.cards}
+                # Unrevealed Good positions where Knight could be
+                valid_for_knight = [
+                    p for p in range(1, state.n_cards + 1)
+                    if p not in scenario.evil_positions
+                    and p not in revealed_positions
+                    and not (p in state.night_kills and p not in scenario.corrupted)
+                ]
+                # In pool > board games, Knight might not be on the board
+                pool_gt_board = (state.board_villager_count is not None
+                                 and len(state.deck.villagers) > state.board_villager_count)
+                if not valid_for_knight and not pool_gt_board:
+                    return False
 
     return True
 
