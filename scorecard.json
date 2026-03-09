@@ -748,6 +748,13 @@
       "name": "asc22_v5",
       "notes": "WIN 8HP: Lilis+Witch+Minion. Witch blocked #9, Lilis killed #7. Jester lying about 2 evils confirmed all 3 evil positions. Dopp#2 disguised as Medium.",
       "date": "2026-03-09 15:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v6",
+      "notes": "WIN: Witch+Minion+Lilis, 6HP, 0 wrong execs. PD#9 dead corrupted #7 Judge. Both Judges lied (one evil one corrupted) but Bishop+Empress combo solved it. Had to manually add PD#9 card entry for solver to model corruption.",
+      "date": "2026-03-09 15:35"
     }
   ]
 }

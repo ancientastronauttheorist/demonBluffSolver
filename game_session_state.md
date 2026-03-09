@@ -13907,3 +13907,176 @@ Reason: #6 is evil in ALL 24 scenarios (roles: {'Lilis', 'Minion', 'Witch'})
 Final HP: 8
 Notes: WIN 8HP: Lilis+Witch+Minion. Witch blocked #9, Lilis killed #7. Jester lying about 2 evils confirmed all 3 evil positions. Dopp#2 disguised as Medium.
 
+
+---
+
+# New Game — 2026-03-09 15:18:30
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Judge, Bard, Bishop, Gemcrafter, Dreamer, Empress
+- Outcasts: Plague_Doctor
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [15:24:17] Revealed #1 Gemcrafter
+Info: {'good_position': 2}
+
+### [15:24:21] Revealed #2 Bard
+Info: {'corruption_distance': 4}
+
+### [15:24:25] Revealed #3 Empress
+Info: {'targets': [2, 7, 9]}
+
+### [15:24:29] Revealed #4 Judge
+Info: {}
+
+### [15:24:33] Revealed #5 Dreamer
+Info: {}
+
+### [15:24:37] Revealed #6 Empress
+Info: {'targets': [1, 2, 9]}
+
+### [15:24:41] Revealed #7 Judge
+Info: {}
+
+#### [15:24:48] Solver Output
+Scenarios: 0/504
+  Generated 504 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Bard: rejected 336/504 (67%)
+    #1 Gemcrafter: rejected 252/504 (50%)
+    #3 Empress: rejected 246/504 (49%)
+    #6 Empress: rejected 246/504 (49%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Gemcrafter: 6 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Bard: 30 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Empress: still 0
+    WITHOUT #4 Judge: still 0
+    WITHOUT #5 Dreamer: still 0
+    WITHOUT #6 Empress: still 0
+    WITHOUT #7 Judge: still 0
+
+#### [15:24:48] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [15:28:31] Revealed #9 Plague Doctor
+Info: {}
+
+#### [15:28:34] Solver Output
+Scenarios: 48/1848
+Definite good: ['#1', '#9']
+Evil probabilities: #3=62%, #4=62%, #6=62%, #7=50%, #5=25%, #8=25%, #2=12%
+  Generated 1848 candidate scenarios
+  48 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8]
+
+#### [15:28:34] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.741 (adjusted 2.741) | timing x1.00
+
+### [15:29:33] Revealed #5 Dreamer
+Info: {'target': 3, 'evil_role': 'Minion'}
+
+### [15:29:33] Ability used at #5
+
+#### [15:29:38] Solver Output
+Scenarios: 30/1848
+Definite good: ['#1', '#9']
+Evil probabilities: #6=73%, #7=67%, #4=53%, #3=40%, #5=33%, #8=27%, #2=7%
+  Generated 1848 candidate scenarios
+  30 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8]
+
+#### [15:29:38] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#1']
+Reason: Expected posterior 15.6 scenarios (adjusted 15.6, info gain 0.943 bits) | timing x1.00
+
+### [15:30:40] Revealed #4 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [15:30:40] Ability used at #4
+
+#### [15:30:45] Solver Output
+Scenarios: 18/1848
+Definite good: ['#1', '#9']
+Evil probabilities: #4=89%, #3=67%, #6=56%, #7=44%, #5=22%, #2=11%, #8=11%
+  Generated 1848 candidate scenarios
+  18 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8]
+
+#### [15:30:45] Recommendation
+Action: **USE_ABILITY** #7 (Judge) -> targets ['#1']
+Reason: Expected posterior 10.4 scenarios (adjusted 11.0, info gain 0.713 bits) | timing x1.00
+WARNING: Corruption risk: 11% -- corrupted Judge results are unreliable
+
+### [15:31:41] Revealed #7 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [15:31:41] Ability used at #7
+
+#### [15:31:46] Solver Output
+Scenarios: 8/1848
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#5', '#8', '#9']
+Evil probabilities: #7=75%, #3=25%
+  Generated 1848 candidate scenarios
+  8 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis', 'Witch'})
+    #6 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 7]
+
+#### [15:31:46] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 8 scenarios (roles: {'Minion', 'Lilis', 'Witch'})
+
+### [15:32:33] Executed #4 -> Witch (EVIL)
+
+### [15:33:45] Revealed #8 Bishop
+Info: {'targets': [3, 8, 9], 'types': ['Outcast', 'Villager', 'Minion']}
+
+#### [15:33:49] Solver Output
+Scenarios: 1/224
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#2', '#5', '#7', '#8', '#9']
+  Generated 224 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [15:33:49] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [15:34:29] Executed #3 -> Minion (EVIL)
+
+### [15:35:35] Executed #6 -> Lilis (EVIL)
+
+## [15:35:43] GAME OVER — WIN
+Final HP: 6
+Notes: WIN: Witch+Minion+Lilis, 6HP, 0 wrong execs. PD#9 dead corrupted #7 Judge. Both Judges lied (one evil one corrupted) but Bishop+Empress combo solved it. Had to manually add PD#9 card entry for solver to model corruption.
+
