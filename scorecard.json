@@ -545,6 +545,13 @@
       "name": "asc18_v5",
       "notes": "WIN: Perfect game. PD revealed #3 evil + #7 corrupted. Knight check on #2 free. Pooka#8 corrupted #7 Empress and #6 Druid. #9=Doppelganger. 0 wrong execs.",
       "date": "2026-03-09 01:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v6",
+      "notes": "WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs.",
+      "date": "2026-03-09 01:36"
     }
   ]
 }

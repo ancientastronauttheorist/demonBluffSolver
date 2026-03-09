@@ -10265,3 +10265,110 @@ Reason: #3 is evil in ALL 32 scenarios (roles: {'Pooka', 'Twin_Minion'})
 Final HP: 10
 Notes: WIN: Perfect game. PD revealed #3 evil + #7 corrupted. Knight check on #2 free. Pooka#8 corrupted #7 Empress and #6 Druid. #9=Doppelganger. 0 wrong execs.
 
+
+---
+
+# New Game — 2026-03-09 01:30:49
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Medium, Gemcrafter, Knitter, Empress, Poet, Knight
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Chancellor, Minion
+- Demons: Pooka
+
+### [01:32:23] Revealed #1 Poet
+Info: {'copied_role': 'Pooka'}
+
+### [01:32:24] Revealed #2 Plague_Doctor
+Info: {}
+
+### [01:32:24] Revealed #3 Medium
+Info: {'good_position': 9, 'good_role': 'Empress'}
+
+### [01:32:24] Revealed #4 Wretch
+Info: {}
+
+### [01:32:24] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [01:32:24] Revealed #6 Knight
+Info: {}
+
+### [01:32:24] Revealed #7 Gemcrafter
+Info: {'good_position': 1}
+
+### [01:32:24] Revealed #8 Empress
+Info: {'targets': [2, 6, 9]}
+
+### [01:32:25] Revealed #9 Empress
+Info: {'targets': [2, 5, 6]}
+
+### [01:33:21] Revealed #1 Poet
+Info: {'evil_role': 'Pooka', 'distance': 2, 'copied_role': 'Scout'}
+
+#### [01:33:27] Solver Output
+Scenarios: 12/1580
+Definite good: ['#2']
+Evil probabilities: #1=67%, #7=67%, #8=50%, #9=50%, #3=17%, #4=17%, #5=17%, #6=17%
+  Generated 1580 candidate scenarios
+  12 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [01:33:27] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.252 (adjusted 1.252) | timing x1.00
+
+### [01:34:10] Ability used at #2
+
+#### [01:34:10] Solver Output
+Scenarios: 8/1580
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+Evil probabilities: #8=75%, #9=25%
+  Generated 1580 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka', 'Chancellor', 'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka', 'Chancellor', 'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [8, 9]
+
+#### [01:34:10] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 8 scenarios (roles: {'Pooka', 'Chancellor', 'Minion'})
+
+### [01:34:50] Executed #1 -> Chancellor (EVIL)
+
+#### [01:34:50] Solver Output
+Scenarios: 3/194
+Definite evil: ['#1', '#7', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#9']
+  Generated 194 candidate scenarios
+  3 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [01:34:50] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 3 scenarios (roles: {'Pooka', 'Minion'})
+
+### [01:35:40] Executed #7 -> Pooka (EVIL)
+
+### [01:36:23] Executed #8 -> Minion (EVIL)
+
+## [01:36:23] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs.
+
