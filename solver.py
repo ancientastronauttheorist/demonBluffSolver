@@ -1714,8 +1714,9 @@ VALIDATORS = {
     # (execution immunity). See EXECUTION_IMMUNE_ROLES below.
 }
 
-# Roles that cannot be executed (game blocks it). If execution attempt fails,
-# it CONFIRMS the card is the real role (evil disguise wouldn't have immunity).
+# Roles with execution immunity when Good and not corrupted.
+# Evil disguised as Knight CAN be executed (immunity doesn't transfer).
+# Corrupted Knight LOSES immunity. Doppelganger-as-Knight DOES block execution.
 EXECUTION_IMMUNE_ROLES = {"Knight"}
 
 

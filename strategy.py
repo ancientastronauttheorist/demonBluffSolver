@@ -249,6 +249,9 @@ def _find_forced_execution(
                 elif role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
                     # Execution blocked by immunity — no HP cost, confirms good
                     next_hp = hp
+                elif role == "Drunk":
+                    # Drunk execution always costs 2 HP regardless of ascension
+                    next_hp = hp - 2
                 else:
                     next_hp = hp - state.wrong_exec_cost
                 if next_hp < 0:

@@ -415,7 +415,8 @@ class GameSession:
         if pos not in self.used_abilities:
             self.used_abilities.append(pos)
 
-    def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool):
+    def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool,
+                          evil_role: Optional[str] = None):
         self.slayer_results.append({
             "slayer_pos": slayer_pos,
             "target_pos": target_pos,
@@ -423,8 +424,13 @@ class GameSession:
         })
         self.mark_ability_used(slayer_pos)
         # Auto-mark killed target as executed (dead)
-        if killed and target_pos not in self.executed:
-            self.executed.append(target_pos)
+        if killed:
+            if target_pos not in self.executed:
+                self.executed.append(target_pos)
+            if target_pos not in self.confirmed_evil:
+                self.confirmed_evil.append(target_pos)
+            if evil_role:
+                self.executed_evil_roles[target_pos] = evil_role
 
     # -- Solver --
 
@@ -730,7 +736,7 @@ def main():
         print("  confirm_good <pos>                    Mark position as confirmed good")
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
-        print("  slayer_result <pos> <target> kill/fail Slayer ability result")
+        print("  slayer_result <pos> <target> kill/fail [evil_role]  Slayer ability result")
         print("  block <pos>                           Mark position as blocked (Witch)")
         print("  unblock <pos>                         Unblock position (after Witch dies)")
         print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
@@ -965,9 +971,12 @@ def main():
         slayer_pos = int(sys.argv[2])
         target_pos = int(sys.argv[3])
         killed = sys.argv[4].lower() in ("kill", "killed", "true", "1", "yes")
-        session.add_slayer_result(slayer_pos, target_pos, killed)
+        evil_role = sys.argv[5] if len(sys.argv) > 5 else None
+        session.add_slayer_result(slayer_pos, target_pos, killed, evil_role=evil_role)
         session.save()
         result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"
+        if evil_role:
+            result_str += f" (revealed: {evil_role})"
         print(f"Slayer #{slayer_pos} {result_str}")
         return
 
