@@ -762,6 +762,13 @@
       "name": "asc22_v7",
       "notes": "WIN: Lilis+Shaman, 8HP, 0 wrong execs. Perfect instant 1-scenario solve. Bishop+Enlightened+Hunter+Medium all cross-referenced cleanly. Bombardier safely avoided.",
       "date": "2026-03-09 15:41"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc23_v1",
+      "notes": "WIN: 50/50 Poisoner at #3 vs #2. Drunk#1(Jester) corrupted, Scout#2 corrupted by Poisoner#3. Empress#4 truthful in winning scenario. HP=4, 0 wrong execs. Lilis killed #8 at night.",
+      "date": "2026-03-09 16:17"
     }
   ]
 }

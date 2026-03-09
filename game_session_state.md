@@ -14140,3 +14140,178 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: WIN: Lilis+Shaman, 8HP, 0 wrong execs. Perfect instant 1-scenario solve. Bishop+Enlightened+Hunter+Medium all cross-referenced cleanly. Bombardier safely avoided.
 
+
+---
+
+# New Game — 2026-03-09 15:44:50
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Enlightened, Empress, Fortune_Teller, Scout, Poet, Architect, Jester
+- Outcasts: Drunk, Bombardier
+- Minions: Poisoner
+- Demons: Lilis
+
+### [15:57:51] Revealed #1 Jester
+Info: {}
+
+### [15:57:51] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 1}
+
+### [15:57:52] Revealed #3 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 3}
+
+### [15:57:52] Revealed #4 Empress
+Info: {'targets': [2, 5, 9]}
+
+### [15:57:52] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [15:57:52] Revealed #6 Enlightened
+Info: {'direction': 'ccw'}
+
+### [15:57:52] Revealed #7 Fortune_Teller
+Info: {}
+
+### [15:57:52] Revealed #9 Bombardier
+Info: {}
+
+#### [15:57:58] Solver Output
+Scenarios: 17/633
+Definite good: ['#7', '#8']
+Evil probabilities: #5=59%, #1=41%, #3=41%, #2=29%, #4=18%, #6=6%, #9=6%
+  Generated 633 candidate scenarios
+  17 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 9]
+
+#### [15:57:58] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 0.998 (adjusted 0.909) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [15:59:53] Revealed #1 Jester
+Info: {'targets': [2, 4, 6], 'evil_count': 3}
+
+### [15:59:53] Ability used at #1
+
+#### [16:00:00] Solver Output
+Scenarios: 10/633
+Definite good: ['#6', '#7', '#8', '#9']
+Evil probabilities: #1=70%, #3=40%, #5=40%, #4=30%, #2=20%
+  Generated 633 candidate scenarios
+  10 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5]
+
+#### [16:00:00] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#2', '#5']
+Reason: Entropy 1.000 (adjusted 0.950) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [16:00:56] Revealed #7 Fortune Teller
+Info: {'targets': [2, 5], 'has_evil': True}
+
+### [16:00:56] Ability used at #7
+
+#### [16:01:04] Solver Output
+Scenarios: 5/633
+Definite good: ['#6', '#7', '#8', '#9']
+Evil probabilities: #5=80%, #1=40%, #2=40%, #3=20%, #4=20%
+  Generated 633 candidate scenarios
+  5 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5]
+
+#### [16:01:04] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (60% evil Lilis, 20% good Architect, 20% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [16:02:03] Executed #5 -> Lilis (EVIL)
+
+#### [16:02:03] Solver Output
+Scenarios: 3/61
+Definite evil: ['#5']
+Definite good: ['#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=33%, #2=33%, #3=33%
+  Generated 61 candidate scenarios
+  3 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3]
+
+#### [16:02:03] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (33% good Drunk (corrupted), 33% good Jester (corrupted), 33% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 33%, but all reveal branches still lead to a forced win.
+
+### [16:02:58] Executed #1 -> GOOD (WRONG!)
+
+#### [16:02:58] Solver Output
+Scenarios: 0/55
+  Generated 55 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Jester: rejected 35/55 (64%)
+    #4 Empress: rejected 32/55 (58%)
+    #3 Scout: rejected 24/55 (44%)
+    #7 Fortune Teller: rejected 24/55 (44%)
+    #2 Scout: rejected 23/55 (42%)
+    #6 Enlightened: rejected 13/55 (24%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Jester: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Scout: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Scout: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Empress: 5 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Architect: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Enlightened: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Fortune Teller: 2 scenarios survive  <-- SUSPECT
+
+#### [16:02:58] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [16:03:56] Solver Output
+Scenarios: 2/55
+Definite evil: ['#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #3=50%
+  Generated 55 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [16:03:56] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 50% likely evil but HP too low to risk (HP=4, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [16:17:28] Executed #3 -> Poisoner (EVIL)
+
+## [16:17:36] GAME OVER — WIN
+Final HP: 4
+Notes: WIN: 50/50 Poisoner at #3 vs #2. Drunk#1(Jester) corrupted, Scout#2 corrupted by Poisoner#3. Empress#4 truthful in winning scenario. HP=4, 0 wrong execs. Lilis killed #8 at night.
+
