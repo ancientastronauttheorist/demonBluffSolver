@@ -643,6 +643,13 @@
       "name": "asc20_v4",
       "notes": "Perfect game 10HP. Doppelganger#1 disguised as Poet, Bombardier#2. Solver found both evils definitively in 10 scenarios. Clean 2-exec win.",
       "date": "2026-03-09 13:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc20_v5",
+      "notes": "Perfect 10HP. PD#7 was Minion (lied about #1 evil+corrupted). PD#6 was real (clean check on #2). Judge#5=Chancellor gave false lying result. Pooka#4 corrupted adjacent #3(Drunk) and #5(Chancellor's neighbor). 50/50 coin flip on #5 vs #6, got lucky.",
+      "date": "2026-03-09 13:14"
     }
   ]
 }
