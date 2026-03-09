@@ -10924,3 +10924,106 @@ WARNING: CAUTION: budget=1, confidence 25% < 80% threshold. Consider manual over
 Final HP: 0
 Notes: LOSS: PD evil reveal pointed at Wretch#8 (registers as Evil), solver treated as truly evil. Executed Wretch (5HP), then couldn't find Baa#1 among 4 candidates. Baker chain analysis ruled out #2 but failed to correctly handle #1. Need to fix: PD evil reveal should not confirm Wretch as truly evil.
 
+
+---
+
+# New Game — 2026-03-09 11:58:25
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Oracle, Medium, Alchemist, Bishop, Empress, Enlightened
+- Outcasts: Wretch
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [11:59:35] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Oracle'}
+
+### [11:59:39] Revealed #2 Oracle
+Info: {'targets': [2, 5], 'minion_role': 'Puppeteer'}
+
+### [11:59:44] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [11:59:47] Revealed #4 Enlightened
+Info: {'direction': 'CW'}
+
+### [11:59:51] Revealed #5 Medium
+Info: {'good_position': 8, 'good_role': 'Bishop'}
+
+### [11:59:55] Revealed #6 Empress
+Info: {'targets': [1, 3, 4]}
+
+### [11:59:58] Revealed #7 Wretch
+Info: {}
+
+### [12:00:20] Revealed #8 Bishop
+Info: {'targets': [2, 3, 6], 'types': ['Outcast', 'Villager', 'Minion']}
+
+#### [12:00:26] Solver Output
+Scenarios: 1/84
+Definite evil: ['#4', '#5', '#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+  Generated 84 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [12:00:26] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [12:00:59] Executed #4 -> Puppet (EVIL)
+
+#### [12:01:04] Solver Output
+Scenarios: 1/12
+Definite evil: ['#4', '#5', '#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+  Generated 12 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [12:01:04] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [12:01:29] Executed #5 -> Puppeteer (EVIL)
+
+#### [12:01:32] Solver Output
+Scenarios: 1/6
+Definite evil: ['#4', '#5', '#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [12:01:32] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:01:57] Executed #8 -> Pooka (EVIL)
+
+## [12:02:03] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game, 1 scenario solve, Puppeteer+Puppet+Pooka
+
