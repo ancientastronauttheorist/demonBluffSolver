@@ -685,6 +685,13 @@
       "name": "asc21_v3",
       "notes": "WIN 8HP, Lilis killed #5 night 1, Witch blocked #9, solver found all 3 evils with certainty, executed facedown #9",
       "date": "2026-03-09 13:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v4",
+      "notes": "WIN perfect 10HP, Shaman duplicated Knitter, two Bombardiers (1 real 1 Baa-fake), solver found both evils immediately from 2 scenarios",
+      "date": "2026-03-09 14:02"
     }
   ]
 }

@@ -12834,3 +12834,62 @@ Reason: #7 is evil in ALL 10 scenarios (roles: {'Witch', 'Twin_Minion'})
 Final HP: 8
 Notes: WIN 8HP, Lilis killed #5 night 1, Witch blocked #9, solver found all 3 evils with certainty, executed facedown #9
 
+
+---
+
+# New Game — 2026-03-09 14:00:32
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Medium, Knitter, Empress, Knight, Confessor
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Shaman
+- Demons: Baa
+
+### [14:01:33] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:01:33] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:01:33] Revealed #3 Medium
+Info: {'good_position': 1, 'good_role': 'Knitter'}
+
+### [14:01:33] Revealed #4 Bombardier
+Info: {}
+
+### [14:01:33] Revealed #5 Empress
+Info: {'targets': [2, 4, 6]}
+
+### [14:01:34] Revealed #6 Knight
+Info: {}
+
+### [14:01:34] Revealed #7 Bombardier
+Info: {}
+
+#### [14:01:40] Solver Output
+Scenarios: 2/42
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+  Generated 42 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Shaman'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Shaman'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+
+#### [14:01:40] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa', 'Shaman'})
+
+### [14:02:11] Executed #6 -> Baa (EVIL)
+
+### [14:02:38] Executed #7 -> Shaman (EVIL)
+
+## [14:02:38] GAME OVER — WIN
+Final HP: 10
+Notes: WIN perfect 10HP, Shaman duplicated Knitter, two Bombardiers (1 real 1 Baa-fake), solver found both evils immediately from 2 scenarios
+
