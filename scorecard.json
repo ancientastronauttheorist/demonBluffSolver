@@ -846,6 +846,13 @@
       "name": "asc24_v5",
       "notes": "Perfect 10HP, PD#5 was evil Chancellor (lied about #7 evil/#6 corrupted), Baa#6 was fake Alchemist. Drunk#2 corrupted.",
       "date": "2026-03-09 17:55"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v6",
+      "notes": "WIN 6HP. Lilis night killed Poisoner#5 (evil). Evils killed counter delayed update (0/3 after night1 kill, 1/3 after batch2). Doppelganger#3 copied Knight. No corruption (Poisoner adjacent to 2 evils). Witch#4 disguised as Lover, Lilis#6 disguised as Lover.",
+      "date": "2026-03-09 18:13"
     }
   ]
 }

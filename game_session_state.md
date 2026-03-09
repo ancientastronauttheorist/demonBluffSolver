@@ -15569,3 +15569,109 @@ Reason: #5 is evil in ALL 12 scenarios (roles: {'Baa', 'Chancellor'})
 Final HP: 10
 Notes: Perfect 10HP, PD#5 was evil Chancellor (lied about #7 evil/#6 corrupted), Baa#6 was fake Alchemist. Drunk#2 corrupted.
 
+
+---
+
+# New Game — 2026-03-09 17:56:49
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Lover, Judge, Knight, Medium, Bishop, Hunter
+- Outcasts: Doppelganger
+- Minions: Witch, Poisoner
+- Demons: Lilis
+
+### [17:59:36] Revealed #1 Bishop
+Info: {'targets': [3, 4, 7], 'types': ['Minion', 'Outcast', 'Villager']}
+
+### [17:59:37] Revealed #2 Judge
+Info: {}
+
+### [17:59:37] Revealed #3 Knight
+Info: {}
+
+### [17:59:38] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [18:05:29] Revealed #6 Lover
+Info: {'evil_adjacent': 2}
+
+### [18:05:30] Revealed #7 Knight
+Info: {}
+
+### [18:05:31] Revealed #8 Medium
+Info: {'good_position': 2, 'good_role': 'Judge'}
+
+### [18:05:31] Revealed #9 Hunter
+Info: {'distance': 3}
+
+#### [18:09:48] Solver Output
+Scenarios: 14/4128
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#8']
+Evil probabilities: #6=79%, #4=71%, #3=21%, #9=21%, #7=7%
+  Generated 4128 candidate scenarios
+  14 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis', 'Witch', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7, 9]
+
+#### [18:09:48] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#3']
+Reason: Expected posterior 7.6 scenarios (adjusted 7.6, info gain 0.887 bits) | timing x1.00
+
+### [18:10:56] Ability used at #2
+
+### [18:10:56] Revealed #2 Judge
+Info: {'target': 3, 'is_lying': False}
+
+#### [18:11:00] Solver Output
+Scenarios: 9/4128
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#8']
+Evil probabilities: #4=89%, #6=67%, #9=33%, #7=11%
+  Generated 4128 candidate scenarios
+  9 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner', 'Witch', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7, 9]
+
+#### [18:11:00] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (67% evil Witch, 22% evil Poisoner, 11% good Lover (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 89%, but all reveal branches still lead to a forced win.
+
+### [18:11:47] Executed #4 -> Witch (EVIL)
+
+#### [18:11:52] Solver Output
+Scenarios: 6/449
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #6=67%, #9=33%
+  Generated 449 candidate scenarios
+  6 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [6, 9]
+
+#### [18:11:52] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (33% evil Lilis, 33% good Lover (corrupted), 33% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [18:13:21] Executed #6 -> Lilis (EVIL)
+
+## [18:13:28] GAME OVER — WIN
+Final HP: 6
+Notes: WIN 6HP. Lilis night killed Poisoner#5 (evil). Evils killed counter delayed update (0/3 after night1 kill, 1/3 after batch2). Doppelganger#3 copied Knight. No corruption (Poisoner adjacent to 2 evils). Witch#4 disguised as Lover, Lilis#6 disguised as Lover.
+
