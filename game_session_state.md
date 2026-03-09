@@ -9878,3 +9878,185 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 8
 Notes: Lilis game, night kill #5. Both evils identified cleanly: #8 definite Lilis, #2 Twin Minion. Dreamer confirmed. HP 8/10.
 
+
+---
+
+# New Game — 2026-03-09 01:03:40
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Baker, Empress, Confessor, Jester, Oracle, Dreamer
+- Outcasts: Doppelganger, Plague Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+## Deck
+- Villagers: Baker, Empress, Confessor, Jester, Oracle, Dreamer
+- Outcasts: Doppelganger, Plague Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+### [01:04:45] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [01:04:45] Revealed #2 Jester
+Info: {}
+
+### [01:04:45] Revealed #3 Dreamer
+Info: {}
+
+### [01:04:46] Revealed #4 Empress
+Info: {'targets': [3, 6, 7]}
+
+### [01:04:46] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [01:04:46] Revealed #6 Baker
+Info: {'original_role': 'Oracle'}
+
+### [01:04:46] Revealed #7 Plague Doctor
+Info: {}
+
+#### [01:04:52] Solver Output
+Scenarios: 0/132
+  Generated 132 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Confessor: rejected 70/132 (53%)
+    #4 Empress: rejected 58/132 (44%)
+    #5 Baker: rejected 20/132 (15%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Confessor: 62 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Jester: 32 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Dreamer: 32 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Empress: 54 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Baker: 38 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Baker: 32 scenarios survive  <-- SUSPECT
+
+#### [01:04:52] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## Deck
+- Villagers: Baker, Empress, Confessor, Jester, Oracle, Dreamer
+- Outcasts: Doppelganger, Plague Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+#### [01:05:39] Solver Output
+Scenarios: 160/672
+Evil probabilities: #1=62%, #4=31%, #2=25%, #3=25%, #5=25%, #6=25%, #7=6%
+  Generated 672 candidate scenarios
+  160 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [01:05:39] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.531 (adjusted 2.372) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [01:06:32] Ability used at #3
+
+### [01:06:32] Revealed #3 Dreamer
+Info: {'target': 1, 'evil_role': 'Puppeteer'}
+
+#### [01:06:37] Solver Output
+Scenarios: 110/672
+Evil probabilities: #1=45%, #2=32%, #4=32%, #5=32%, #3=27%, #6=27%, #7=5%
+  Generated 672 candidate scenarios
+  110 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [01:06:37] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.458 (adjusted 2.458) | timing x1.00
+
+### [01:08:59] Ability used at #7
+
+#### [01:09:03] Solver Output
+Scenarios: 45/672
+Definite evil: ['#1']
+Definite good: ['#7']
+Evil probabilities: #4=33%, #3=22%, #6=22%, #2=11%, #5=11%
+  Generated 672 candidate scenarios
+  45 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa', 'Puppeteer'})
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6]
+
+#### [01:09:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 45 scenarios (roles: {'Baa', 'Puppeteer'})
+
+### [01:14:30] Executed #1 -> Puppeteer (EVIL)
+
+#### [01:14:34] Solver Output
+Scenarios: 25/106
+Definite evil: ['#1']
+Definite good: ['#3', '#7']
+Evil probabilities: #4=40%, #2=20%, #5=20%, #6=20%
+  Generated 106 candidate scenarios
+  25 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 6]
+
+#### [01:14:34] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#3', '#4', '#6']
+Reason: Expected posterior 14.1 scenarios (adjusted 16.9, info gain 0.564 bits) | timing x1.00
+WARNING: Corruption risk: 40%
+
+### [01:15:44] Revealed #2 Jester
+Info: {'targets': [3, 4, 6], 'evil_count': 3}
+
+### [01:15:50] Ability used at #2
+
+#### [01:15:54] Solver Output
+Scenarios: 15/106
+Definite evil: ['#1']
+Definite good: ['#3', '#5', '#7']
+Evil probabilities: #2=33%, #4=33%, #6=33%
+  Generated 106 candidate scenarios
+  15 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 6]
+
+#### [01:15:54] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (33% evil Baa, 27% good Empress, 27% good Empress (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 33%, but all reveal branches still lead to a forced win.
+
+### [01:16:39] Executed #4 -> GOOD (WRONG!)
+
+#### [01:16:49] Solver Output
+Scenarios: 5/86
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+  Generated 86 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [01:16:49] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [01:17:28] Executed #2 -> Baa (EVIL)
+
+## [01:17:36] GAME OVER — WIN
+Final HP: 5
+Notes: WIN: PD confirmed #1 not corrupted -> definite evil. Jester corrupted by Puppeteer (said 3 evils). Empress#4 corrupted. Lookahead guaranteed win via #4 exec. 1 wrong exec.
+
