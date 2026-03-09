@@ -698,9 +698,13 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_bishop(pos, targets, types)
     elif role == "baker":
         if len(args) > 2:
-            return card_baker(pos, args[2])  # original / role_name
+            claim = args[2]
+            # Normalize: "Baker" or "original" both mean the original Baker
+            if claim.lower() in ("original", "baker"):
+                claim = "original"
+            return card_baker(pos, claim)
         else:
-            return card_no_info(pos, "Baker")
+            return card_baker(pos, "original")  # no arg = original Baker
     elif role == "poet":
         if len(args) > 2:
             # Poet clue variant: poet <pos> <clue_type> <args...>
