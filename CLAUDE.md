@@ -17,14 +17,23 @@ Claude should operate in this cycle:
 2. Enter or infer that state into the solver, then choose the best next action.
 3. Act in game, observe the result, and update the state.
 4. After each puzzle, log what happened and save regression coverage for anything learned.
-5. **Fix solver issues before the next game.** If the game exposed a bug, wrong assumption, missing rule, or bad heuristic — fix the code NOW, run regression, and verify the fix. Do not just log the issue and move on. Common triggers:
+5. **After every loss, stop and deeply analyze whether the solver could have done better.** Do not move on to the next game until this analysis is complete. Spawn an agent to examine the surviving scenarios at each critical decision point, check for missing constraints or deductions the solver should have made, and determine if the loss was genuinely unwinnable or if there's a solver improvement to make. Only proceed once you've either fixed the issue or confirmed the loss was unavoidable.
+6. **Fix solver issues before the next game.** If the game exposed a bug, wrong assumption, missing rule, or bad heuristic — fix the code NOW, run regression, and verify the fix. Do not just log the issue and move on. Common triggers:
    - 0 scenarios (constraint bug or missing rule)
    - Wrong execution the solver was confident about (bad validation logic)
    - Solver couldn't narrow candidates (missing constraint or strategy gap)
    - New game mechanic or role interaction discovered
 
    **Research first:** Search the Demon Bluff wiki (https://demon-bluff.fandom.com) for the specific cards involved in the issue. Look for edge cases, interaction rules, and ability details that may not be in our knowledge base. Update `cards/` memory files and solver code with any new findings.
-6. At the end of each completed loop, commit and push the resulting code, test, and regression updates.
+7. At the end of each completed game, commit and push the resulting code, test, and regression updates immediately. Do not batch multiple games into one commit.
+
+### Lilis Night Handling
+When the deck contains Lilis, night falls every 4 card reveals (kills 1 random unrevealed card + 2 HP damage). To correctly track which cards were flipped vs killed:
+- Flip cards in batches of 4 (e.g., #1-#4, then #5-#8).
+- **After each batch of 4 flips, wait 5 seconds** for the Lilis kill animation to complete, then take a screenshot.
+- Read the screenshot to identify which card was killed (red skull overlay) vs which cards you successfully flipped.
+- Enter the flipped card info and `night_kill` before continuing to the next batch.
+- This ensures reveal_order and night_kill tracking stay accurate.
 
 ## Interaction Rules
 - Use the mouse only for in-game interaction. Do not use keyboard shortcuts during live runs.
