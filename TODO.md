@@ -80,11 +80,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### P2: Medium Priority
 
-- [ ] **Gemcrafter self-pointing** — Wiki says Gemcrafter can't point at self unless no other valid Good targets. Could eliminate scenarios where Gemcrafter points at self unnecessarily.
+- [x] **Gemcrafter self-pointing** — FIXED. Truthful Gemcrafter can't self-point when other Good targets exist.
 
-- [ ] **Empress self-pointing** — Wiki says Empress can't include self in targets unless she is a Puppet. Game enforces this at input, but constraint could catch data entry errors.
+- [x] **Empress self-pointing** — FIXED. Can't include self in targets unless Puppet.
 
-- [ ] **Drunk-as-Knight HP cost** — Wiki says 6 HP (not flat 2 HP). Strategy lookahead underestimates execution cost for Drunk disguised as Knight.
+- [x] **Drunk-as-Knight HP cost** — FIXED. Strategy lookahead uses 6 HP for Drunk-as-Knight.
 
 - [ ] **Chancellor +1 outcast count** — Board outcast count from header doesn't include Chancellor's Villager-to-Outcast conversion. Solver's `<=` bound partially handles this but could be tighter.
 
