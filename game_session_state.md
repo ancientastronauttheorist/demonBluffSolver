@@ -14593,3 +14593,140 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: WIN: Perfect game. Judge#4(Baa) lied about Knight#2 lying. Knitter+Architect+Medium cross-referenced to lock both evils at adjacent #4,#5. 0 wrong execs, 10HP.
 
+
+---
+
+# New Game — 2026-03-09 16:34:43
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Slayer, Oracle, Poet, Druid, Lover, Knitter
+- Outcasts: Doppelganger, Drunk, Wretch
+- Minions: Witch, Chancellor
+- Demons: Baa
+
+### [16:36:47] Revealed #1 Oracle
+Info: {'targets': [5, 8], 'minion_role': 'Witch'}
+
+### [16:36:47] Revealed #2 Poet
+Info: {'targets': [1, 8, 9], 'types': ['Outcast', 'Minion', 'Villager'], 'copied_role': 'Bishop'}
+
+### [16:36:47] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [16:36:48] Revealed #4 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 7}
+
+### [16:36:48] Revealed #5 Slayer
+Info: {}
+
+### [16:36:48] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [16:36:48] Revealed #7 Druid
+Info: {}
+
+### [16:36:48] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [16:36:54] Solver Output
+Scenarios: 372/18954
+Definite good: ['#8']
+Evil probabilities: #6=82%, #1=78%, #4=48%, #7=33%, #2=30%, #3=15%, #5=9%, #9=6%
+  Generated 18954 candidate scenarios
+  372 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 9]
+
+#### [16:36:54] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.979 (adjusted 0.939) | timing x1.00
+WARNING: Corruption risk: 8%
+
+### [16:37:57] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+### [16:37:57] Ability used at #7
+
+#### [16:37:57] Solver Output
+Scenarios: 126/18954
+Definite good: ['#8']
+Evil probabilities: #1=71%, #4=62%, #6=62%, #7=38%, #2=24%, #9=16%, #3=14%, #5=13%
+  Generated 18954 candidate scenarios
+  126 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 9]
+
+#### [16:37:57] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#1']
+Reason: Target #1 is 71% evil (adjusted 0.71)
+
+### [16:39:28] Ability used at #5
+
+#### [16:39:29] Solver Output
+Scenarios: 36/18954
+Definite good: ['#1', '#3', '#8']
+Evil probabilities: #4=83%, #6=83%, #9=56%, #5=44%, #2=17%, #7=17%
+  Generated 18954 candidate scenarios
+  36 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 6, 7, 9]
+
+#### [16:39:29] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (42% evil Baa, 28% evil Chancellor, 14% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [16:40:10] Executed #4 -> Baa (EVIL)
+
+#### [16:40:10] Solver Output
+Scenarios: 15/2156
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #9=67%, #5=33%
+  Generated 2156 candidate scenarios
+  15 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #6 is DEFINITELY EVIL (possible roles: {'Witch', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 9]
+
+#### [16:40:10] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 15 scenarios (roles: {'Witch', 'Chancellor'})
+
+### [16:40:50] Executed #6 -> Chancellor (EVIL)
+
+#### [16:40:50] Solver Output
+Scenarios: 10/265
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #5=50%, #9=50%
+  Generated 265 candidate scenarios
+  10 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 9]
+
+#### [16:40:50] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% evil Witch, 40% good Slayer, 10% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:41:42] Executed #5 -> Witch (EVIL)
+
+## [16:41:42] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect 3-evil game\! Baa+Witch+Chancellor. Druid found Drunk, Slayer couldn't kill Doppelganger#1(Wretch). 0 wrong execs, 10HP.
+

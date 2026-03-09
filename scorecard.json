@@ -783,6 +783,13 @@
       "name": "asc23_v3",
       "notes": "WIN: Perfect game. Judge#4(Baa) lied about Knight#2 lying. Knitter+Architect+Medium cross-referenced to lock both evils at adjacent #4,#5. 0 wrong execs, 10HP.",
       "date": "2026-03-09 16:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v4",
+      "notes": "WIN: Perfect 3-evil game\\! Baa+Witch+Chancellor. Druid found Drunk, Slayer couldn't kill Doppelganger#1(Wretch). 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:41"
     }
   ]
 }
