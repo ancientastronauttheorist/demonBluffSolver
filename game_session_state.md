@@ -14904,3 +14904,103 @@ Reason: #5 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
 Final HP: 8
 Notes: Perfect game, Lilis night killed #7 (Good). Solver found both evils with only 2 scenarios via Scout+Enlightened+Architect info. 8HP, 0 wrong execs.
 
+
+---
+
+# New Game — 2026-03-09 17:03:00
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Bishop, Empress, Fortune_Teller, Enlightened, Medium, Hunter
+- Outcasts: Drunk
+- Minions: Witch
+- Demons: Lilis
+
+### [17:04:33] Revealed #1 Fortune_Teller
+Info: {}
+
+### [17:04:34] Revealed #2 Hunter
+Info: {'distance': 4}
+
+### [17:04:34] Revealed #3 Hunter
+Info: {'distance': 4}
+
+### [17:04:34] Revealed #4 Empress
+Info: {'targets': [6, 7, 8]}
+
+### [17:04:40] Revealed #5 Bishop
+Info: {'targets': [1, 3, 4], 'types': ['Villager', 'Minion', 'Outcast']}
+
+### [17:04:46] Revealed #6 Architect
+Info: {'side': 'ccw'}
+
+#### [17:05:04] Solver Output
+Scenarios: 2/336
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #4=50%
+  Generated 336 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4]
+
+#### [17:05:04] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Lilis'})
+
+### [17:06:26] Executed #2 -> Lilis (EVIL)
+
+#### [17:06:32] Solver Output
+Scenarios: 2/42
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #4=50%
+  Generated 42 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4]
+
+#### [17:06:32] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#3', '#5']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [17:07:45] Ability used at #1
+
+### [17:07:46] Revealed #1 Fortune Teller
+Info: {'targets': [3, 5], 'has_evil': False}
+
+#### [17:07:52] Solver Output
+Scenarios: 1/42
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+  Generated 42 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:07:52] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [17:08:40] Executed #4 -> Witch (EVIL)
+
+## [17:08:40] GAME OVER — WIN
+Final HP: 8
+Notes: Perfect game. Lilis killed #8 night 1. Witch blocked #7 but solver found Witch at #4 via FT(#3,#5)=False. Drunk#3 corrupted. 8HP, 0 wrong execs. ASCENSION 23 COMPLETE 7/7!
+

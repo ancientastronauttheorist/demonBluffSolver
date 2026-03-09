@@ -804,6 +804,13 @@
       "name": "asc23_v6",
       "notes": "Perfect game, Lilis night killed #7 (Good). Solver found both evils with only 2 scenarios via Scout+Enlightened+Architect info. 8HP, 0 wrong execs.",
       "date": "2026-03-09 17:01"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc23_v7",
+      "notes": "Perfect game. Lilis killed #8 night 1. Witch blocked #7 but solver found Witch at #4 via FT(#3,#5)=False. Drunk#3 corrupted. 8HP, 0 wrong execs. ASCENSION 23 COMPLETE 7/7!",
+      "date": "2026-03-09 17:08"
     }
   ]
 }
