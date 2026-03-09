@@ -9475,3 +9475,179 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: Clean 2-exec win. Poisoner corrupted Slayer#3 (couldn't kill). Jester+Judge+Slayer-miss narrowed to 1 scenario.
 
+
+---
+
+# New Game — 2026-03-09 00:25:26
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knight, Druid, Oracle, Fortune Teller, Dreamer, Bishop, Empress
+- Outcasts: Plague Doctor, Drunk
+- Minions: Minion
+- Demons: Pooka
+
+### [00:26:36] Revealed #1 Fortune Teller
+Info: {}
+
+### [00:26:36] Revealed #2 Empress
+Info: {'targets': [4, 7, 8]}
+
+### [00:26:36] Revealed #3 Dreamer
+Info: {}
+
+### [00:26:36] Revealed #4 Bishop
+Info: {'targets': [1, 2, 9], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [00:26:37] Revealed #5 Knight
+Info: {}
+
+### [00:26:37] Revealed #6 Druid
+Info: {}
+
+### [00:26:37] Revealed #7 Plague Doctor
+Info: {}
+
+### [00:26:37] Revealed #8 Oracle
+Info: {'targets': [1, 5], 'minion_role': 'Minion'}
+
+### [00:26:37] Revealed #9 Empress
+Info: {'targets': [3, 6, 7]}
+
+#### [00:26:43] Solver Output
+Scenarios: 182/2128
+Definite good: ['#7']
+Evil probabilities: #4=42%, #9=37%, #3=26%, #8=23%, #5=20%, #6=19%, #2=18%, #1=16%
+  Generated 2128 candidate scenarios
+  182 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [00:26:43] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.223 (adjusted 2.223) | timing x1.00
+
+### [00:27:48] Ability used at #7
+
+#### [00:27:55] Solver Output
+Scenarios: 85/2128
+Definite good: ['#7']
+Evil probabilities: #4=91%, #9=44%, #6=21%, #8=20%, #3=8%, #5=8%, #1=7%, #2=1%
+  Generated 2128 candidate scenarios
+  85 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [00:27:56] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.305 (adjusted 1.735) | timing x1.00
+WARNING: Corruption risk: 49%
+
+### [00:28:45] Revealed #3 Dreamer
+Info: {'target': 9, 'evil_role': 'Minion'}
+
+### [00:28:46] Ability used at #3
+
+#### [00:28:52] Solver Output
+Scenarios: 60/2128
+Definite good: ['#7']
+Evil probabilities: #4=88%, #6=30%, #8=27%, #9=20%, #3=12%, #5=12%, #1=10%, #2=2%
+  Generated 2128 candidate scenarios
+  60 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [00:28:52] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.997 (adjusted 0.914) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [00:29:41] Revealed #6 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [00:29:42] Ability used at #6
+
+#### [00:29:50] Solver Output
+Scenarios: 24/2128
+Definite good: ['#7']
+Evil probabilities: #4=79%, #6=33%, #8=21%, #1=17%, #3=17%, #9=17%, #5=12%, #2=4%
+  Generated 2128 candidate scenarios
+  24 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8, 9]
+
+#### [00:29:50] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#7']
+Reason: Entropy 1.000 (adjusted 0.812) | timing x1.00
+WARNING: Corruption risk: 38%
+
+### [00:30:41] Revealed #1 Fortune Teller
+Info: {'targets': [2, 7], 'has_evil': True}
+
+### [00:30:41] Ability used at #1
+
+#### [00:30:48] Solver Output
+Scenarios: 12/2128
+Definite good: ['#2', '#7']
+Evil probabilities: #4=67%, #6=42%, #1=33%, #9=33%, #3=8%, #5=8%, #8=8%
+  Generated 2128 candidate scenarios
+  12 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 8, 9]
+
+#### [00:30:48] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (33% good Bishop, 33% evil Minion, 33% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [00:32:54] Executed #4 -> GOOD (WRONG!)
+
+#### [00:32:57] Solver Output
+Scenarios: 4/1610
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #1=75%, #6=75%, #8=25%, #9=25%
+  Generated 1610 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 6, 8, 9]
+
+#### [00:32:57] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (75% evil Minion, 25% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [00:33:33] Executed #1 -> GOOD (WRONG!)
+
+#### [00:33:36] Solver Output
+Scenarios: 1/1164
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+  Generated 1164 candidate scenarios
+  1 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [00:33:36] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [00:34:06] Executed #8 -> Pooka (EVIL)
+
+### [00:34:38] Executed #9 -> Minion (EVIL)
+
+## [00:34:45] GAME OVER — WIN
+Final HP: 3
+Notes: Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10.
+

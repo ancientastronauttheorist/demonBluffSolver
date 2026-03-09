@@ -1,0 +1,186 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          9
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Plague Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          5
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6,
+          7
+        ]
+      }
+    }
+  ],
+  "executed": [
+    4,
+    1,
+    8,
+    9
+  ],
+  "confirmed_evil": [
+    8,
+    9
+  ],
+  "confirmed_good": [
+    4,
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Pooka",
+    "9": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 7,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Druid",
+      "Oracle",
+      "Fortune Teller",
+      "Dreamer",
+      "Bishop",
+      "Empress"
+    ],
+    "outcasts": [
+      "Plague Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7,
+    3,
+    6,
+    1
+  ],
+  "name": "asc18_v1",
+  "true_evil_positions": {
+    "8": "Pooka",
+    "9": "Minion"
+  },
+  "notes": "Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10."
+}

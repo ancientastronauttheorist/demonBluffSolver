@@ -503,6 +503,13 @@
       "name": "asc17_v7",
       "notes": "Clean 2-exec win. Poisoner corrupted Slayer#3 (couldn't kill). Jester+Judge+Slayer-miss narrowed to 1 scenario.",
       "date": "2026-03-09 00:20"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc18_v1",
+      "notes": "Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10.",
+      "date": "2026-03-09 00:34"
     }
   ]
 }
