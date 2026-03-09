@@ -755,6 +755,13 @@
       "name": "asc22_v6",
       "notes": "WIN: Witch+Minion+Lilis, 6HP, 0 wrong execs. PD#9 dead corrupted #7 Judge. Both Judges lied (one evil one corrupted) but Bishop+Empress combo solved it. Had to manually add PD#9 card entry for solver to model corruption.",
       "date": "2026-03-09 15:35"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc22_v7",
+      "notes": "WIN: Lilis+Shaman, 8HP, 0 wrong execs. Perfect instant 1-scenario solve. Bishop+Enlightened+Hunter+Medium all cross-referenced cleanly. Bombardier safely avoided.",
+      "date": "2026-03-09 15:41"
     }
   ]
 }
