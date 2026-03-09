@@ -12032,3 +12032,85 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: WIN: Poisoner+Lilis, 6HP. Lilis killed #9 in night (good). Poisoner disguised as Bombardier at #3 — corrupted adjacent Slayer#4. Druid said no outcasts among #1,#3,#4 — correct (Poisoner disguised, not real outcast). Judge confirmed Druid lying (corrupted by Poisoner adjacency? No — Druid at #2 not adjacent to Poisoner#3 in 9-card circle). Solver found Lilis at 40% confidence — risky but paid off.
 
+
+---
+
+# New Game — 2026-03-09 12:57:57
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Empress, Gemcrafter, Poet, Knitter, Hunter, Enlightened
+- Outcasts: Doppelganger, Wretch, Bombardier
+- Minions: Chancellor
+- Demons: Baa
+
+### [12:59:36] Revealed #1 Poet
+Info: {'direction': 'CCW', 'copied_role': 'Enlightened'}
+
+### [12:59:37] Revealed #2 Bombardier
+Info: {}
+
+### [12:59:37] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [12:59:38] Revealed #4 Poet
+Info: {'good_position': 1, 'copied_role': 'Gemcrafter'}
+
+### [12:59:39] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [12:59:40] Revealed #6 Empress
+Info: {'targets': [2, 4, 8]}
+
+### [12:59:40] Revealed #7 Gemcrafter
+Info: {'good_position': 6}
+
+### [12:59:40] Revealed #8 Poet
+Info: {'targets': [2, 6, 7], 'copied_role': 'Empress'}
+
+#### [12:59:48] Solver Output
+Scenarios: 10/350
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 350 candidate scenarios
+  10 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Chancellor'})
+    #8 is DEFINITELY EVIL (possible roles: {'Baa', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [12:59:48] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 10 scenarios (roles: {'Baa', 'Chancellor'})
+
+### [13:02:06] Executed #5 -> Baa (EVIL)
+
+#### [13:02:08] Solver Output
+Scenarios: 5/43
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 43 candidate scenarios
+  5 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #8 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [13:02:08] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [13:02:48] Executed #8 -> Chancellor (EVIL)
+
+## [13:02:57] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game 10HP. Doppelganger#1 disguised as Poet, Bombardier#2. Solver found both evils definitively in 10 scenarios. Clean 2-exec win.
+
