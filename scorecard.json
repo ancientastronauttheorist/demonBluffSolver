@@ -713,6 +713,13 @@
       "name": "asc21_v7",
       "notes": "WIN 10HP perfect: Poisoner+Baa. PD revealed #3 evil + #1 corrupted. Poisoner corrupted #2 (Judge). Bishop#1 corrupted by PD passive. Ascension 21 complete 7/7!",
       "date": "2026-03-09 14:33"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v1",
+      "notes": "WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively.",
+      "date": "2026-03-09 14:43"
     }
   ]
 }

@@ -1,0 +1,165 @@
+{
+  "n_cards": 10,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          7
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          9,
+          10
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    10,
+    1,
+    5,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    1,
+    5,
+    4,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Twin_Minion",
+    "5": "Puppeteer",
+    "4": "Lilis",
+    "6": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    10
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Hunter",
+      "Knight",
+      "Dreamer",
+      "Alchemist",
+      "Oracle",
+      "Baker",
+      "Empress"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc22_v1",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "4": "Lilis",
+    "5": "Puppeteer",
+    "6": "Puppet"
+  },
+  "notes": "WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively."
+}

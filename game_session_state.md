@@ -13378,3 +13378,113 @@ Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: WIN 10HP perfect: Poisoner+Baa. PD revealed #3 evil + #1 corrupted. Poisoner corrupted #2 (Judge). Bishop#1 corrupted by PD passive. Ascension 21 complete 7/7!
 
+
+---
+
+# New Game — 2026-03-09 14:36:07
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Druid, Hunter, Knight, Dreamer, Alchemist, Oracle, Baker, Empress
+- Outcasts: Doppelganger
+- Minions: Puppeteer, Twin_Minion
+- Demons: Lilis
+
+### [14:38:46] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [14:38:47] Revealed #2 Empress
+Info: {'targets': [6, 8, 9]}
+
+### [14:38:47] Revealed #3 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Puppeteer'}
+
+### [14:38:47] Revealed #4 Dreamer
+Info: {}
+
+### [14:38:47] Revealed #5 Empress
+Info: {'targets': [2, 9, 10]}
+
+### [14:38:47] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [14:38:47] Revealed #7 Empress
+Info: {'targets': [1, 2, 8]}
+
+### [14:38:48] Revealed #8 Knight
+Info: {}
+
+### [14:41:00] Revealed #9 Druid
+Info: {}
+
+#### [14:41:06] Solver Output
+Scenarios: 30/6048
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#9', '#10']
+Evil probabilities: #4=67%, #6=67%, #7=33%, #8=33%
+  Generated 6048 candidate scenarios
+  30 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Lilis'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Twin_Minion', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7, 8]
+
+#### [14:41:06] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 30 scenarios (roles: {'Twin_Minion', 'Lilis'})
+
+### [14:41:51] Executed #1 -> Twin_Minion (EVIL)
+
+#### [14:41:51] Solver Output
+Scenarios: 15/588
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#9', '#10']
+Evil probabilities: #4=67%, #6=67%, #7=33%, #8=33%
+  Generated 588 candidate scenarios
+  15 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7, 8]
+
+#### [14:41:51] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 15 scenarios (roles: {'Puppeteer', 'Lilis'})
+
+### [14:42:25] Executed #5 -> Puppeteer (EVIL)
+
+#### [14:42:25] Solver Output
+Scenarios: 10/72
+Definite evil: ['#1', '#4', '#5', '#6']
+Definite good: ['#2', '#3', '#7', '#8', '#9', '#10']
+  Generated 72 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet', 'Lilis'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #6 is DEFINITELY EVIL (possible roles: {'Puppet', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+
+#### [14:42:25] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 10 scenarios (roles: {'Puppet', 'Lilis'})
+
+### [14:42:59] Executed #4 -> Lilis (EVIL)
+
+### [14:43:35] Executed #6 -> Puppet (EVIL)
+
+## [14:43:35] GAME OVER — WIN
+Final HP: 6
+Notes: WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively.
+
