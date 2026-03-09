@@ -11614,3 +11614,200 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE — all 7 villages cleared!
 
+
+---
+
+# New Game — 2026-03-09 12:34:47
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Baker, Enlightened, Gemcrafter, Alchemist, Confessor, Medium, Oracle
+- Outcasts: Plague_Doctor
+- Minions: Minion, Puppeteer
+- Demons: Pooka
+
+### [12:35:48] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [12:35:49] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [12:35:49] Revealed #3 Knitter
+Info: {'evil_pairs': 2}
+
+### [12:35:50] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [12:35:50] Revealed #5 Plague_Doctor
+Info: {}
+
+### [12:35:51] Revealed #6 Baker
+Info: {'original_role': 'Oracle'}
+
+### [12:35:51] Revealed #7 Gemcrafter
+Info: {'good_position': 10}
+
+### [12:35:52] Revealed #8 Alchemist
+Info: {'cured_count': 1}
+
+### [12:35:53] Revealed #9 Oracle
+Info: {'targets': [4], 'minion_role': '5'}
+
+### [12:35:53] Revealed #10 Enlightened
+Info: {'direction': 'CW'}
+
+### [12:36:09] Revealed #9 Oracle
+Info: {'targets': [4, 5], 'minion_role': 'Minion'}
+
+#### [12:36:15] Solver Output
+Scenarios: 57/3696
+Evil probabilities: #1=81%, #2=75%, #4=44%, #3=40%, #8=37%, #9=37%, #7=28%, #6=26%, #10=18%, #5=14%
+  Generated 3696 candidate scenarios
+  57 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+#### [12:36:15] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#10']
+Reason: Entropy 2.015 (adjusted 2.015) | timing x1.00
+
+### [12:37:05] Ability used at #5
+
+#### [12:37:11] Solver Output
+Scenarios: 29/3696
+Definite good: ['#5']
+Evil probabilities: #1=79%, #2=79%, #4=62%, #3=52%, #10=34%, #7=31%, #6=28%, #8=28%, #9=7%
+  Generated 3696 candidate scenarios
+  29 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8, 9, 10]
+
+#### [12:37:11] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 79% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 79% confident (budget: 2 wrong execs)
+
+### [12:37:50] Executed #1 -> Puppeteer (EVIL)
+
+#### [12:37:54] Solver Output
+Scenarios: 12/448
+Definite evil: ['#1']
+Definite good: ['#5', '#9']
+Evil probabilities: #2=83%, #3=50%, #4=50%, #10=50%, #8=42%, #7=17%, #6=8%
+  Generated 448 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 6, 7, 8, 10]
+
+#### [12:37:54] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 83% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 83% confident (budget: 2 wrong execs)
+
+### [12:38:40] Executed #2 -> Minion (EVIL)
+
+#### [12:38:45] Solver Output
+Scenarios: 4/31
+Definite evil: ['#1', '#2', '#10']
+Definite good: ['#3', '#4', '#5', '#6', '#9']
+Evil probabilities: #8=75%, #7=25%
+  Generated 31 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #10 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [12:38:45] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [12:39:18] Executed #10 -> Puppet (EVIL)
+
+#### [12:39:23] Solver Output
+Scenarios: 4/31
+Definite evil: ['#1', '#2', '#10']
+Definite good: ['#3', '#4', '#5', '#6', '#9']
+Evil probabilities: #8=75%, #7=25%
+  Generated 31 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #10 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [12:39:23] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (75% evil Pooka, 25% good Alchemist (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [12:40:01] Executed #8 -> GOOD (WRONG!)
+
+#### [12:40:06] Solver Output
+Scenarios: 0/26
+  Generated 26 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #9 Oracle: rejected 20/26 (77%)
+    #7 Gemcrafter: rejected 19/26 (73%)
+    #3 Knitter: rejected 11/26 (42%)
+    #4 Baker: rejected 9/26 (35%)
+    #10 Enlightened: rejected 5/26 (19%)
+    #8 Alchemist: rejected 3/26 (12%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Confessor: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Confessor: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Knitter: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Baker: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Baker: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Gemcrafter: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Alchemist: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #9 Oracle: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #10 Enlightened: 1 scenarios survive  <-- SUSPECT
+
+#### [12:40:06] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [12:40:36] Solver Output
+Scenarios: 1/26
+Definite evil: ['#1', '#2', '#7', '#10']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9']
+  Generated 26 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #10 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [12:40:36] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:41:14] Executed #7 -> Pooka (EVIL)
+
+## [12:41:26] GAME OVER — WIN
+Final HP: 5
+Notes: WIN: Puppeteer+Minion+Pooka+Puppet, 5HP (1 wrong exec on corrupted Alchemist#8). Pooka corrupted #6,#8,#9. Both Confessors dizzy — #1 was Puppeteer, #2 was Minion adjacent. Solver execution lookahead correctly budgeted wrong exec. First Ascension 20 village cleared!
+

@@ -615,6 +615,13 @@
       "name": "asc19_v8",
       "notes": "WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE \u2014 all 7 villages cleared!",
       "date": "2026-03-09 12:30"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc20_v1",
+      "notes": "WIN: Puppeteer+Minion+Pooka+Puppet, 5HP (1 wrong exec on corrupted Alchemist#8). Pooka corrupted #6,#8,#9. Both Confessors dizzy \u2014 #1 was Puppeteer, #2 was Minion adjacent. Solver execution lookahead correctly budgeted wrong exec. First Ascension 20 village cleared!",
+      "date": "2026-03-09 12:41"
     }
   ]
 }
