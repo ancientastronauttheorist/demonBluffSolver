@@ -489,6 +489,13 @@
       "name": "asc17_v6",
       "notes": "Lost to Bombardier protection. Minion at #9 disguised as Bombardier. Solver refused to execute #9 (57% evil). Forced to guess #2 (43%) \u2014 wrong. Jester #5 corrupted by Pooka, bad Jester info cascaded. Two corrupted cards (#4 Empress, #5 Jester).",
       "date": "2026-03-08 23:53"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v6b",
+      "notes": "Lilis game, Witch-blocked #6 confirmed evil via night kill. Drunk#8 corrupted. 50/50 Lilis at #9 with budget.",
+      "date": "2026-03-09 00:10"
     }
   ]
 }

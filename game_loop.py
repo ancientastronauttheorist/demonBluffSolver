@@ -992,14 +992,22 @@ def main():
         session = GameSession.load()
         positions = [int(x) for x in sys.argv[2].split(",")]
         n_evil = int(sys.argv[3])
-        session.night_kills = positions
-        session.night_kill_evil_count = n_evil
+        session.night_kills.extend(positions)
+        session.night_kill_evil_count += n_evil
         # Also mark as executed (dead)
         for p in positions:
             if p not in session.executed:
                 session.executed.append(p)
+        # Auto-confirm: if all positions in this batch are evil, confirm them
+        if n_evil == len(positions) and n_evil > 0:
+            for p in positions:
+                if p not in session.confirmed_evil:
+                    session.confirmed_evil.append(p)
         session.save()
-        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them")
+        confirmed_msg = ""
+        if n_evil == len(positions) and n_evil > 0:
+            confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
+        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
         return
 
     if cmd == "log":
