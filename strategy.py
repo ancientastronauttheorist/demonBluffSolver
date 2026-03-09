@@ -250,8 +250,12 @@ def _find_forced_execution(
                     # Execution blocked by immunity — no HP cost, confirms good
                     next_hp = hp
                 elif role == "Drunk":
-                    # Drunk execution always costs 2 HP regardless of ascension
-                    next_hp = hp - 2
+                    # Drunk execution costs 2 HP, but Drunk-as-Knight costs 6 HP (wiki)
+                    card_at = next((c for c in state.cards if c.position == pos), None)
+                    if card_at and card_at.apparent_role == "Knight":
+                        next_hp = hp - 6
+                    else:
+                        next_hp = hp - 2
                 else:
                     next_hp = hp - state.wrong_exec_cost
                 if next_hp < 0:

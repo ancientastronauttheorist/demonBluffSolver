@@ -1000,7 +1000,18 @@ def _validate_gemcrafter(card: CardInfo, scenario: Scenario,
     actual_good = _effective_alignment(claimed_pos, scenario, state) == Alignment.GOOD
 
     if truth == TruthStatus.TRUTHFUL:
-        return actual_good
+        if not actual_good:
+            return False
+        # Wiki: Gemcrafter can't point at self unless no other Good targets exist
+        if claimed_pos == pos:
+            other_good = any(
+                _effective_alignment(p, scenario, state) == Alignment.GOOD
+                for p in range(1, state.n_cards + 1)
+                if p != pos
+            )
+            if other_good:
+                return False  # Self-pointing invalid when other Good targets exist
+        return True
     else:
         return not actual_good
 
@@ -1300,6 +1311,10 @@ def _validate_empress(card: CardInfo, scenario: Scenario,
     targets = info["targets"]  # list of 3 positions
     pos = card.position
     truth = _truth_status(pos, scenario, state)
+
+    # Wiki: Empress can't include self in targets unless she is a Puppet
+    if pos in targets and pos != scenario.puppet_position:
+        return False
 
     evil_count = sum(1 for t in targets
                      if _effective_alignment(t, scenario, state) == Alignment.EVIL)
