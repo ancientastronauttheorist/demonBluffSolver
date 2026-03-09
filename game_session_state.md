@@ -15004,3 +15004,84 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 8
 Notes: Perfect game. Lilis killed #8 night 1. Witch blocked #7 but solver found Witch at #4 via FT(#3,#5)=False. Drunk#3 corrupted. 8HP, 0 wrong execs. ASCENSION 23 COMPLETE 7/7!
 
+
+---
+
+# New Game — 2026-03-09 17:11:24
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Lover, Bishop, Empress, Druid, Dreamer, Fortune_Teller
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Pooka
+
+### [17:12:15] Revealed #1 Druid
+Info: {}
+
+### [17:12:15] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:12:15] Revealed #3 Empress
+Info: {'targets': [5, 6, 8]}
+
+### [17:12:16] Revealed #4 Dreamer
+Info: {}
+
+### [17:12:16] Revealed #5 Fortune_Teller
+Info: {}
+
+### [17:12:16] Revealed #6 Wretch
+Info: {}
+
+### [17:12:16] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+#### [17:12:22] Solver Output
+Scenarios: 4/56
+Definite evil: ['#7']
+Definite good: ['#2', '#3', '#5', '#8']
+Evil probabilities: #6=50%, #1=25%, #4=25%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Witch', 'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 6]
+
+#### [17:12:22] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Witch', 'Pooka'})
+
+### [17:13:06] Executed #7 -> Witch (EVIL)
+
+### [17:13:41] Revealed #8 Bishop
+Info: {'targets': [2, 4, 8], 'types': ['Minion', 'Villager', 'Outcast']}
+
+#### [17:13:48] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:13:48] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:14:37] Executed #1 -> Pooka (EVIL)
+
+## [17:14:37] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs.
+

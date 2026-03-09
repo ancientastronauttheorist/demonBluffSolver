@@ -1,0 +1,137 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          8
+        ],
+        "types": [
+          "Minion",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    }
+  ],
+  "executed": [
+    7,
+    1
+  ],
+  "confirmed_evil": [
+    7,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Witch",
+    "1": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Bishop",
+      "Empress",
+      "Druid",
+      "Dreamer",
+      "Fortune_Teller"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc24_v1",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "7": "Witch"
+  },
+  "notes": "Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs."
+}

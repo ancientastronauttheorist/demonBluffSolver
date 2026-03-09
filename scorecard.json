@@ -811,6 +811,13 @@
       "name": "asc23_v7",
       "notes": "Perfect game. Lilis killed #8 night 1. Witch blocked #7 but solver found Witch at #4 via FT(#3,#5)=False. Drunk#3 corrupted. 8HP, 0 wrong execs. ASCENSION 23 COMPLETE 7/7!",
       "date": "2026-03-09 17:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v1",
+      "notes": "Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs.",
+      "date": "2026-03-09 17:14"
     }
   ]
 }
