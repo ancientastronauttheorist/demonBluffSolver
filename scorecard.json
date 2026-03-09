@@ -706,6 +706,13 @@
       "name": "asc21_v6",
       "notes": "WIN 10HP perfect: Baa+Chancellor+Witch. Witch blocked #9 all game. Jester cross-checks narrowed to 10 scenarios. Execution lookahead guaranteed win.",
       "date": "2026-03-09 14:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v7",
+      "notes": "WIN 10HP perfect: Poisoner+Baa. PD revealed #3 evil + #1 corrupted. Poisoner corrupted #2 (Judge). Bishop#1 corrupted by PD passive. Ascension 21 complete 7/7!",
+      "date": "2026-03-09 14:33"
     }
   ]
 }

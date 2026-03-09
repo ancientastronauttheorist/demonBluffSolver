@@ -13264,3 +13264,117 @@ Reason: #7 is evil in ALL 4 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: WIN 10HP perfect: Baa+Chancellor+Witch. Witch blocked #9 all game. Jester cross-checks narrowed to 10 scenarios. Execution lookahead guaranteed win.
 
+
+---
+
+# New Game — 2026-03-09 14:27:44
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bishop, Enlightened, Hunter, Fortune_Teller, Druid, Judge
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Poisoner
+- Demons: Baa
+
+### [14:28:40] Revealed #1 Bishop
+Info: {'targets': [1, 5, 7], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [14:28:40] Revealed #2 Judge
+Info: {}
+
+### [14:28:40] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [14:28:40] Revealed #4 Plague_Doctor
+Info: {}
+
+### [14:28:41] Revealed #5 Enlightened
+Info: {'direction': 'CW'}
+
+### [14:28:41] Revealed #6 Druid
+Info: {}
+
+### [14:28:41] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [14:28:46] Solver Output
+Scenarios: 124/960
+Evil probabilities: #2=56%, #6=36%, #7=35%, #1=30%, #3=25%, #5=15%, #4=3%
+  Generated 960 candidate scenarios
+  124 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [14:28:46] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.823 (adjusted 1.823) | timing x1.00
+
+### [14:29:39] Ability used at #4
+
+#### [14:29:44] Solver Output
+Scenarios: 29/960
+Definite good: ['#5']
+Evil probabilities: #3=93%, #6=41%, #2=34%, #7=17%, #1=7%, #4=7%
+  Generated 960 candidate scenarios
+  29 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7]
+
+#### [14:29:44] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.285 (adjusted 1.218) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [14:30:44] Ability used at #2
+
+### [14:30:44] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [14:31:42] Ability used at #6
+
+### [14:31:42] Revealed #6 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+#### [14:31:48] Solver Output
+Scenarios: 10/960
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#5', '#7']
+Evil probabilities: #6=80%, #2=20%
+  Generated 960 candidate scenarios
+  10 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 6]
+
+#### [14:31:48] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 10 scenarios (roles: {'Baa', 'Poisoner'})
+
+### [14:32:20] Executed #3 -> Poisoner (EVIL)
+
+#### [14:32:25] Solver Output
+Scenarios: 6/106
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+  Generated 106 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [14:32:25] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [14:33:03] Executed #6 -> Baa (EVIL)
+
+## [14:33:03] GAME OVER — WIN
+Final HP: 10
+Notes: WIN 10HP perfect: Poisoner+Baa. PD revealed #3 evil + #1 corrupted. Poisoner corrupted #2 (Judge). Bishop#1 corrupted by PD passive. Ascension 21 complete 7/7!
+
