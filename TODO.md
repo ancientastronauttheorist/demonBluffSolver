@@ -52,27 +52,27 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### P0: Critical Bugs (wrong scenario filtering)
 
-- [ ] **Hunter Wretch bug** — `_validate_hunter` uses `_is_evil_in_board_state` instead of `_effective_alignment`. Only validator that doesn't count Wretch as Evil. Could reject valid scenarios or accept invalid ones in Hunter+Wretch games.
+- [x] **Hunter Wretch bug** — FIXED. Uses `_effective_alignment` now.
 
-- [ ] **Oracle Wretch bug** — `_validate_oracle` uses `_known_evil_role()` which returns None for Wretch. Truthful Oracle pointing at Wretch as any Minion role is incorrectly rejected. Fix: add Wretch check (registers as random Evil Minion).
+- [x] **Oracle Wretch bug** — FIXED. Added Wretch special case (registers as any Minion in deck).
 
-- [ ] **Dreamer Wretch "Cabbage" bug** — `_validate_dreamer` has no special case for Wretch target. Truthful Dreamer targeting Wretch reports "Cabbage" but validator rejects it (Cabbage not in `evil_roles`). Fix: when target is Wretch and truthful, require "Cabbage"; when lying, require != "Cabbage".
+- [x] **Dreamer Wretch "Cabbage" bug** — FIXED. Truthful → require "Cabbage", lying → require != "Cabbage".
 
-- [ ] **Bishop Wretch type bug** — `_get_position_type` returns "Outcast" (real KB role) for Wretch, but Bishop should see Wretch as "Minion" (registers as Evil Minion to abilities). Fix: override return value for Wretch positions.
+- [x] **Bishop Wretch type bug** — FIXED. `_get_position_type` returns "Minion" for Wretch.
 
-- [ ] **Witness + Lilis kills** — `_validate_witness` only checks `corrupted` and `puppet_position` for "affected by evil". Wiki says Lilis night-killed chars are also "affected by evil ability". Fix: add `state.night_kills` to `actually_affected` check.
+- [x] **Witness + Lilis kills** — FIXED. Added `night_kills` to `actually_affected` check.
 
 - [ ] **Witness + Chancellor conversion** — Chancellor-converted positions should count as "affected by evil ability" for Witness. Requires tracking which position Chancellor converted in Scenario.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 
-- [ ] **Shaman guaranteed duplicate** — When Shaman is on the board, there MUST be exactly 2 identical Villager roles. Solver currently allows but doesn't require duplication. Fix: reject scenarios where Shaman is placed but no villager pair exists.
+- [x] **Shaman guaranteed duplicate** — FIXED. Requires visible Villager pair when all Good positions revealed (accounts for unrevealed/night-killed positions).
 
-- [ ] **Bishop lying = all Villagers** — Wiki says lying Bishop always shows 3 Villager types. Validator only checks type mismatch. Fix: enforce that lying Bishop's claimed types are all "Villager".
+- [x] ~~**Bishop lying = all Villagers**~~ — DROPPED. Wiki claim doesn't match game: corrupted Bishops show mixed types, not all Villagers.
 
-- [ ] **Oracle lying = both targets Good** — Wiki says lying Oracle can't include two Evil characters. Validator only checks neither is named role. Fix: add constraint that both targets must be Good (via `_effective_alignment`).
+- [x] **Oracle lying = both targets Good** — FIXED. Lying Oracle's targets must both be Good.
 
-- [ ] **Medium lying target = Evil/Drunk/Dopp** — Wiki says lying Medium points at Evil, Drunk, or Doppelganger. Validator allows any wrong-claim target. Fix: restrict lying Medium's target to evil/Drunk/Doppelganger positions.
+- [x] **Medium lying target = Evil/Drunk/Dopp** — FIXED. Lying Medium must point at Evil, Drunk, or Doppelganger.
 
 - [ ] **Lilis can't kill uncorrupted Knight** — Wiki confirms. Not constrained in night-kill validation. Fix: exclude uncorrupted Knight from possible night-kill victims.
 
