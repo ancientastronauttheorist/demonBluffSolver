@@ -15085,3 +15085,239 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs.
 
+
+---
+
+# New Game — 2026-03-09 17:16:22
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Fortune_Teller, Bard, Druid, Jester, Poet, Confessor, Gemcrafter
+- Outcasts: Drunk, Bombardier
+- Minions: Witch
+- Demons: Baa
+
+### [17:17:27] Revealed #1 Jester
+Info: {}
+
+### [17:17:27] Revealed #2 Druid
+Info: {}
+
+### [17:17:27] Revealed #3 Bard
+Info: {'corruption_distance': -1}
+
+### [17:17:27] Revealed #4 Bombardier
+Info: {}
+
+### [17:17:27] Revealed #5 Gemcrafter
+Info: {'good_position': 2}
+
+### [17:17:28] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [17:17:28] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [17:17:37] Solver Output
+Scenarios: 54/350
+Definite good: ['#6']
+Evil probabilities: #3=52%, #1=33%, #4=33%, #7=33%, #8=30%, #2=11%, #5=7%
+  Generated 350 candidate scenarios
+  54 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [17:17:37] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 1.698 (adjusted 1.572) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [17:18:50] Ability used at #2
+
+### [17:18:50] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': 'Bombardier'}
+
+#### [17:18:57] Solver Output
+Scenarios: 26/350
+Definite good: ['#2', '#5', '#6']
+Evil probabilities: #3=54%, #1=46%, #7=46%, #8=46%, #4=8%
+  Generated 350 candidate scenarios
+  26 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 7, 8]
+
+#### [17:18:57] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 0.996 (adjusted 0.919) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [17:20:08] Ability used at #7
+
+### [17:20:08] Revealed #7 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': True}
+
+#### [17:20:15] Solver Output
+Scenarios: 14/350
+Definite good: ['#2', '#5', '#6']
+Evil probabilities: #8=71%, #1=43%, #3=43%, #7=29%, #4=14%
+  Generated 350 candidate scenarios
+  14 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 7, 8]
+
+#### [17:20:15] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#5']
+Reason: Expected posterior 7.6 scenarios (adjusted 8.1, info gain 0.782 bits) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [17:22:41] Ability used at #1
+
+### [17:22:41] Revealed #1 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 0}
+
+#### [17:22:44] Solver Output
+Scenarios: 8/350
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #8=75%, #3=50%, #7=50%, #1=25%
+  Generated 350 candidate scenarios
+  8 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 7, 8]
+
+#### [17:22:44] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (38% evil Baa, 38% evil Witch, 25% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [17:23:22] Executed #8 -> Witch (EVIL)
+
+#### [17:23:25] Solver Output
+Scenarios: 3/43
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+Evil probabilities: #7=67%, #3=33%
+  Generated 43 candidate scenarios
+  3 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 7]
+
+#### [17:23:25] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (67% evil Baa, 33% good Fortune Teller).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [17:23:57] Executed #7 -> Baa (EVIL)
+
+## [17:24:26] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game, Witch+Baa, Jester confirmed 3 good, execution lookahead won
+
+
+---
+
+# New Game — 2026-03-09 17:25:26
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bard, Empress, Medium, Gemcrafter, Knitter, Hunter
+- Outcasts: Doppelganger
+- Minions: Minion, Poisoner
+- Demons: Lilis
+
+### [17:26:17] Revealed #1 Bard
+Info: {'corruption_distance': 1}
+
+### [17:26:17] Revealed #2 Empress
+Info: {'targets': [1, 4, 8]}
+
+### [17:26:17] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [17:26:18] Revealed #4 Gemcrafter
+Info: {'good_position': 5}
+
+### [17:27:26] Revealed #5 Medium
+Info: {'good_position': 2, 'good_role': 'Doppelganger'}
+
+### [17:27:30] Revealed #6 Empress
+Info: {'targets': [1, 3, 4]}
+
+### [17:27:30] Revealed #7 Empress
+Info: {'targets': [1, 2, 4]}
+
+### [17:27:30] Revealed #8 Empress
+Info: {'targets': [1, 4, 6]}
+
+#### [17:27:37] Solver Output
+Scenarios: 0/3828
+  Generated 3828 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Medium: rejected 3152/3828 (82%)
+    #1 Bard: rejected 2396/3828 (63%)
+    #8 Empress: rejected 1932/3828 (50%)
+    #4 Gemcrafter: rejected 1920/3828 (50%)
+    #7 Empress: rejected 1912/3828 (50%)
+    #6 Empress: rejected 1902/3828 (50%)
+    #2 Empress: rejected 1872/3828 (49%)
+    #3 Hunter: rejected 1666/3828 (44%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: 22 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Empress: still 0
+    WITHOUT #3 Hunter: still 0
+    WITHOUT #4 Gemcrafter: 8 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Medium: 20 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Empress: still 0
+    WITHOUT #7 Empress: still 0
+    WITHOUT #8 Empress: still 0
+
+#### [17:27:37] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [17:36:53] Solver Output
+Scenarios: 2/4128
+Definite evil: ['#3', '#7', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#9']
+  Generated 4128 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #7 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [17:36:53] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+### [17:37:40] Executed #3 -> Lilis (EVIL)
+
+### [17:38:07] Executed #7 -> Minion (EVIL)
+
+### [17:38:37] Executed #8 -> Poisoner (EVIL)
+
+## [17:38:43] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis game, Poisoner target fix saved us — dead #9 needed to be valid Poisoner target for Bard distance-1 deduction
+

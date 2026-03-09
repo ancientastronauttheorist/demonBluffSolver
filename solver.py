@@ -1910,26 +1910,16 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                                 adj, full_evil, state):
                             pooka_corrupted.add(adj)
 
-        # Determine Poisoner corruption targets (adjacent, 1 Villager)
-        # Poisoner acts AFTER Pooka — won't target already-corrupted positions
-        poisoner_targets = [None]
-        for pos, role in full_evil.items():
-            if role == "Poisoner":
-                candidates = []
-                for p in adjacent_positions(pos, state.n_cards):
-                    if p in full_evil:
-                        continue
-                    if p in pooka_corrupted:
-                        continue  # Poisoner skips Pooka's victims
-                    card = _get_card_at(p, state)
-                    if card and _is_villager_role(card.apparent_role, state):
-                        candidates.append(p)
-                    elif card is None and _unrevealed_must_be_villager(
-                            p, full_evil, state):
-                        candidates.append(p)
-                if candidates:
-                    poisoner_targets = candidates
-                break  # Only one Poisoner
+        # Poisoner target computation moved inside dopp/drunk loop below
+        # so _unrevealed_must_be_villager can use dopp_pos and drunk_pos
+        # to correctly account for outcast slots filled by hidden outcasts.
+        has_poisoner = any(r == "Poisoner" for r in full_evil.values())
+        poisoner_pos = None
+        if has_poisoner:
+            for epos, erole in full_evil.items():
+                if erole == "Poisoner":
+                    poisoner_pos = epos
+                    break
 
         # Determine possible Doppelganger positions
         has_doppelganger = "Doppelganger" in state.deck.outcasts
@@ -1969,13 +1959,38 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                     drunk_candidates.append(p)
 
         for pd_t in pd_targets:
-            for pois_t in poisoner_targets:
-                seen = set()
-                for dopp_pos in dopp_candidates:
-                    for drunk_pos in drunk_candidates:
-                        # Drunk and Doppelganger can't be the same position
-                        if drunk_pos is not None and drunk_pos == dopp_pos:
-                            continue
+            seen = set()
+            for dopp_pos in dopp_candidates:
+                for drunk_pos in drunk_candidates:
+                    # Drunk and Doppelganger can't be the same position
+                    if drunk_pos is not None and drunk_pos == dopp_pos:
+                        continue
+
+                    # Determine Poisoner targets with knowledge of dopp/drunk
+                    # positions so _unrevealed_must_be_villager can account
+                    # for outcast slots filled by hidden outcasts.
+                    pois_targets = [None]
+                    if poisoner_pos is not None:
+                        candidates = []
+                        for p in adjacent_positions(
+                                poisoner_pos, state.n_cards):
+                            if p in full_evil:
+                                continue
+                            if p in pooka_corrupted:
+                                continue  # Poisoner skips Pooka's victims
+                            card = _get_card_at(p, state)
+                            if card and _is_villager_role(
+                                    card.apparent_role, state):
+                                candidates.append(p)
+                            elif card is None and \
+                                    _unrevealed_must_be_villager(
+                                        p, full_evil, state,
+                                        dopp_pos, drunk_pos):
+                                candidates.append(p)
+                        if candidates:
+                            pois_targets = candidates
+
+                    for pois_t in pois_targets:
                         raw_corrupted = _compute_corruption(
                             full_evil, state, pd_t, dopp_pos, pois_t,
                             drunk_pos)

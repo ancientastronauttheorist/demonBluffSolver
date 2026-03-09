@@ -818,6 +818,20 @@
       "name": "asc24_v1",
       "notes": "Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs.",
       "date": "2026-03-09 17:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v2",
+      "notes": "Perfect game, Witch+Baa, Jester confirmed 3 good, execution lookahead won",
+      "date": "2026-03-09 17:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v3",
+      "notes": "Lilis game, Poisoner target fix saved us \u2014 dead #9 needed to be valid Poisoner target for Bard distance-1 deduction",
+      "date": "2026-03-09 17:38"
     }
   ]
 }
