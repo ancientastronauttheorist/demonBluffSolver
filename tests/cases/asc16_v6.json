@@ -161,5 +161,5 @@
     "6": "Lilis",
     "7": "Poisoner"
   },
-  "notes": "Drunk#1 as Empress (corrupted lie). Doppelganger#4 as FT (truthful but killed). Chancellor#5 as Baker. Poisoner#7 as Slayer corrupted #8. Solver missed Doppelganger-FT truthfulness deduction."
+  "notes": "Drunk#1 as Empress (corrupted lie). Doppelganger#4 as FT (truthful but killed). Chancellor#5 as Baker. Poisoner#7 as Slayer corrupted #8. Genuinely unwinnable: Empress asymmetry created 75/17 split (#4 vs #5). Empress targets {2,3,4} — #4-evil gives evil_count=1 (truthful, many configs), #5-evil gives evil_count=0 (requires Drunk@1 specifically). Solver correctly picked the 75% candidate. No bug."
 }
