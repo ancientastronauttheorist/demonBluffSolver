@@ -699,6 +699,13 @@
       "name": "asc21_v5",
       "notes": "WIN 1HP: Pooka+Witch+Minion. Corrupted Knight cost 9HP. Bishop#1 and Empress#3 corrupted by Pooka#2. Solver 67% on #6 Minion \u2014 correct call.",
       "date": "2026-03-09 14:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v6",
+      "notes": "WIN 10HP perfect: Baa+Chancellor+Witch. Witch blocked #9 all game. Jester cross-checks narrowed to 10 scenarios. Execution lookahead guaranteed win.",
+      "date": "2026-03-09 14:26"
     }
   ]
 }
