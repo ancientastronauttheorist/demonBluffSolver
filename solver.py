@@ -1151,6 +1151,9 @@ def _validate_oracle(card: CardInfo, scenario: Scenario,
     if truth == TruthStatus.TRUTHFUL:
         return actual
     else:
+        # Wiki: lying Oracle can't include two Evil characters — both targets must be Good
+        if not all(_effective_alignment(t, scenario, state) == Alignment.GOOD for t in targets):
+            return False
         return not actual
 
 
@@ -1175,6 +1178,12 @@ def _validate_medium(card: CardInfo, scenario: Scenario,
     if truth == TruthStatus.TRUTHFUL:
         return actual_match
     else:
+        # Wiki: lying Medium points at Evil, Drunk, or Doppelganger (not normal Good)
+        target_is_evil = _is_evil_in_board_state(claimed_pos, scenario, state)
+        target_is_drunk = claimed_pos == scenario.drunk_position
+        target_is_dopp = claimed_pos == scenario.doppelganger_position
+        if not (target_is_evil or target_is_drunk or target_is_dopp):
+            return False
         return not actual_match
 
 
@@ -1996,6 +2005,23 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
             if role == "Shaman":
                 shaman_allowance = 1
                 break
+
+    # Shaman REQUIRES a duplicate: if Shaman is on the board, there MUST be
+    # at least one Villager role appearing 2+ times among Good positions.
+    # Note: total_excess skips Baker (conversion allows unlimited), so check
+    # raw counts directly to catch Baker duplicates satisfying Shaman.
+    # Only enforce when all Good positions are visible — the duplicate could
+    # be at an unrevealed or night-killed position.
+    if shaman_allowance > 0:
+        has_any_duplicate = any(count >= 2 for count in good_villager_counts.values())
+        if not has_any_duplicate:
+            revealed_positions = {c.position for c in state.cards}
+            # Night-killed positions are unrevealed — could hold the duplicate
+            unrevealed_good = sum(1 for p in range(1, state.n_cards + 1)
+                                 if p not in revealed_positions
+                                 and _known_evil_role(p, scenario, state) is None)
+            if unrevealed_good == 0:
+                return False  # All Good positions visible, no villager duplicate
 
     if total_excess > n_disguisers + shaman_allowance:
         return False
