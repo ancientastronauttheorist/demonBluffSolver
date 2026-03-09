@@ -587,6 +587,13 @@
       "name": "asc19_v4",
       "notes": "Perfect game, 1 scenario solve, Puppeteer+Puppet+Pooka",
       "date": "2026-03-09 12:02"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc19_v5",
+      "notes": "Win 5HP, 1 wrong exec (#9 Hunter), Doppelganger disguised as Alchemist at #1",
+      "date": "2026-03-09 12:07"
     }
   ]
 }

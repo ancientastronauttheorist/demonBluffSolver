@@ -11027,3 +11027,157 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect game, 1 scenario solve, Puppeteer+Puppet+Pooka
 
+
+---
+
+# New Game — 2026-03-09 12:03:51
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Medium, Confessor, Oracle, Alchemist, Hunter, Enlightened
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Puppeteer, Poisoner
+- Demons: Baa
+
+### [12:04:58] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [12:05:04] Revealed #2 Medium
+Info: {'good_position': 1, 'good_role': 'Alchemist'}
+
+### [12:05:04] Revealed #3 Medium
+Info: {'good_position': 6, 'good_role': 'Alchemist'}
+
+### [12:05:04] Revealed #4 Oracle
+Info: {'targets': [3, 9], 'minion_role': 'Puppeteer'}
+
+### [12:05:04] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [12:05:04] Revealed #6 Alchemist
+Info: {'cured_count': 2}
+
+### [12:05:05] Revealed #7 Enlightened
+Info: {'direction': 'CCW'}
+
+### [12:05:05] Revealed #8 Alchemist
+Info: {'cured_count': 1}
+
+### [12:05:05] Revealed #9 Hunter
+Info: {'distance': 2}
+
+#### [12:05:10] Solver Output
+Scenarios: 8/6696
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #9=88%, #2=12%
+  Generated 6696 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9]
+
+#### [12:05:10] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 8 scenarios (roles: {'Puppeteer'})
+
+### [12:05:40] Executed #3 -> Puppeteer (EVIL)
+
+#### [12:05:40] Solver Output
+Scenarios: 8/744
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #9=88%, #2=12%
+  Generated 744 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9]
+
+#### [12:05:40] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 8 scenarios (roles: {'Puppet'})
+
+### [12:06:10] Executed #4 -> Puppet (EVIL)
+
+#### [12:06:10] Solver Output
+Scenarios: 8/372
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #9=88%, #2=12%
+  Generated 372 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9]
+
+#### [12:06:10] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Baa', 'Poisoner'})
+
+### [12:06:37] Executed #6 -> Poisoner (EVIL)
+
+#### [12:06:37] Solver Output
+Scenarios: 4/60
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #9=75%, #2=25%
+  Generated 60 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9]
+
+#### [12:06:37] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (75% evil Baa, 25% good Hunter).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [12:07:09] Executed #9 -> GOOD (WRONG!)
+
+#### [12:07:10] Solver Output
+Scenarios: 1/48
+Definite evil: ['#2', '#3', '#4', '#6']
+Definite good: ['#1', '#5', '#7', '#8', '#9']
+  Generated 48 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [12:07:10] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [12:07:44] Executed #2 -> Baa (EVIL)
+
+## [12:07:45] GAME OVER — WIN
+Final HP: 5
+Notes: Win 5HP, 1 wrong exec (#9 Hunter), Doppelganger disguised as Alchemist at #1
+
