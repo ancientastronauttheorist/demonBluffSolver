@@ -741,6 +741,9 @@ def _unrevealed_must_be_villager(pos: int, evil_positions: dict[int, str],
     max_outcasts = state.board_outcast_count
     if max_outcasts is None:
         max_outcasts = len(state.deck.outcasts)
+    # Chancellor converts 1 Villager to Outcast, increasing real outcast count
+    if "Chancellor" in state.deck.minions:
+        max_outcasts += 1
 
     occupied = 0
     for card in state.cards:
@@ -773,6 +776,9 @@ def _hidden_outcast_presence_flags(role_name: str, state: GameState) -> tuple[bo
     slots = state.board_outcast_count
     if slots is None:
         return (True, True)
+    # Chancellor converts 1 Villager to Outcast, increasing real outcast count
+    if "Chancellor" in state.deck.minions:
+        slots += 1
 
     other_outcasts = len(state.deck.outcasts) - 1
     can_be_on = slots > 0
@@ -2065,9 +2071,12 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
 
     # Extra roles mechanic (Asc10+): pool has more roles than board positions.
     # Total good outcasts on board can't exceed actual board outcast count.
+    # Chancellor converts 1 Villager to Outcast at game start, so the real
+    # outcast count can be +1 higher than the header reports.
     if state.board_outcast_count is not None:
+        chancellor_allowance = 1 if "Chancellor" in state.deck.minions else 0
         total_good_outcasts = sum(good_outcast_counts.values())
-        if total_good_outcasts > state.board_outcast_count:
+        if total_good_outcasts > state.board_outcast_count + chancellor_allowance:
             return False
 
     # Similarly, total good villager appearances can't exceed board villager

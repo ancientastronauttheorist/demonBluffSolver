@@ -8379,3 +8379,121 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: 9 cards, 2 evils. Lilis game, 2 nights (HP 10->6). Solver nailed both evils from passive info alone (2 scenarios). Gemcrafter #5 lied about #6 being Good, Confessor #6 dizzy = evil. No abilities needed.
 
+
+---
+
+# New Game — 2026-03-08 23:07:36
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Hunter, Bard, Knight, Baker, Slayer, Confessor
+- Outcasts: Bombardier, Wretch
+- Minions: Chancellor
+- Demons: Pooka
+
+### [23:08:40] Revealed #1 Slayer
+Info: {}
+
+### [23:08:40] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [23:08:40] Revealed #3 Bombardier
+Info: {}
+
+### [23:08:40] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [23:08:40] Revealed #5 Knight
+Info: {}
+
+### [23:08:40] Revealed #6 Wretch
+Info: {}
+
+### [23:08:41] Revealed #7 Baker
+Info: {'original_role': 'Knight'}
+
+### [23:08:41] Revealed #8 Baker
+Info: {'original_role': 'Bard'}
+
+#### [23:08:48] Solver Output
+Scenarios: 6/56
+Definite good: ['#5', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%, #6=50%, #1=33%, #4=17%
+  Generated 56 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6]
+
+#### [23:08:48] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#2']
+Reason: Target #2 is 50% evil (adjusted 0.33)
+WARNING: Corruption risk: 33% -- Slayer ability disabled if corrupted
+
+#### [23:09:43] Solver Output
+Scenarios: 5/56
+Definite good: ['#5', '#7', '#8']
+Evil probabilities: #3=60%, #1=40%, #2=40%, #6=40%, #4=20%
+  Generated 56 candidate scenarios
+  5 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6]
+
+#### [23:09:43] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 40% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 40% confident (budget: 2 wrong execs)
+WARNING: Low confidence (40%) -- consider gathering more info
+
+### [23:10:19] Executed #1 -> Pooka (EVIL)
+
+#### [23:10:19] Solver Output
+Scenarios: 2/7
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#5', '#7', '#8']
+Evil probabilities: #3=50%, #6=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 6]
+
+#### [23:10:19] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+
+### [23:10:58] Executed #6 -> GOOD (WRONG!)
+
+#### [23:10:58] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [23:10:58] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [23:13:26] Executed #3 -> GOOD (WRONG!)
+
+## [23:13:27] GAME OVER — LOSS
+Final HP: 0
+Notes: SOLVER BUG: Solver said #3 was definitely Chancellor but #5 was actually Chancellor disguised as Knight. Root cause likely board_outcast_count constraint rejecting 2 Good Outcasts (Bombardier #3 + Wretch #6) when no=1. Chancellor converts 1 Villager to Outcast, making actual count 2. Corrupted: #2 Confessor, #7 Baker.
+

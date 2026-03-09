@@ -86,7 +86,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Drunk-as-Knight HP cost** — FIXED. Strategy lookahead uses 6 HP for Drunk-as-Knight.
 
-- [ ] **Chancellor +1 outcast count** — Board outcast count from header doesn't include Chancellor's Villager-to-Outcast conversion. Solver's `<=` bound partially handles this but could be tighter.
+- [x] **Chancellor +1 outcast count** — FIXED. When Chancellor is in the deck, allow +1 on board_outcast_count in role count validation, _must_be_villager, and hidden outcast presence checks. Lost asc17_v2 to this — solver rejected true scenario with 2 Good Outcasts when header said O=1.
 
 - [ ] **Baker reveal_order validation** — `reveal_order` is tracked but unused in Baker validator. Converted Baker must be revealed after original. Could narrow scenarios in Baker-heavy games.
 
