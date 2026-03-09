@@ -531,6 +531,13 @@
       "name": "asc18_v3",
       "notes": "WIN: PD confirmed #1 not corrupted -> definite evil. Jester corrupted by Puppeteer (said 3 evils). Empress#4 corrupted. Lookahead guaranteed win via #4 exec. 1 wrong exec.",
       "date": "2026-03-09 01:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v4",
+      "notes": "WIN: Perfect game. Confessor dizzy confirmed Baa#6. Jester confirmed Poisoner#1 via Wretch counting. Baker#8 was corrupted by Poisoner. 0 wrong execs.",
+      "date": "2026-03-09 01:23"
     }
   ]
 }
