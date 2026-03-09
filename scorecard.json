@@ -734,6 +734,13 @@
       "name": "asc22_v3",
       "notes": "WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7.",
       "date": "2026-03-09 14:56"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v4",
+      "notes": "WIN 6HP: Puppeteer+Lilis, PD#8 killed by Lilis night. Medium confirmed dead PD. PD corrupted Architect#4. Required manual dead card entry to fix 0-scenario bug \u2014 need solver fix for Medium-revealed dead cards.",
+      "date": "2026-03-09 15:08"
     }
   ]
 }

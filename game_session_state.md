@@ -13728,3 +13728,96 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7.
 
+
+---
+
+# New Game — 2026-03-09 14:58:20
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Empress, Architect, Bard, Knight, Medium, Hunter
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [15:00:17] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [15:00:18] Revealed #2 Empress
+Info: {'targets': [3, 5, 7]}
+
+### [15:00:19] Revealed #3 Knight
+Info: {}
+
+### [15:00:19] Revealed #4 Architect
+Info: {'side': 'right'}
+
+### [15:00:20] Revealed #5 Empress
+Info: {'targets': [3, 4, 7]}
+
+### [15:00:21] Revealed #6 Bard
+Info: {'corruption_distance': -1}
+
+### [15:00:21] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [15:00:22] Revealed #9 Medium
+Info: {'good_position': 8, 'good_role': 'Plague_Doctor'}
+
+#### [15:00:27] Solver Output
+Scenarios: 0/448
+  Generated 448 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #9 Medium: rejected 434/448 (97%)
+    #1 Bard: rejected 350/448 (78%)
+    #4 Architect: rejected 326/448 (73%)
+    #7 Hunter: rejected 266/448 (59%)
+    #5 Empress: rejected 200/448 (45%)
+    #2 Empress: rejected 200/448 (45%)
+    #6 Bard: rejected 98/448 (22%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Bard: still 0
+    WITHOUT #2 Empress: still 0
+    WITHOUT #4 Architect: still 0
+    WITHOUT #5 Empress: still 0
+    WITHOUT #6 Bard: still 0
+    WITHOUT #7 Hunter: still 0
+    WITHOUT #9 Medium: still 0
+
+#### [15:00:27] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [15:07:07] Solver Output
+Scenarios: 12/2128
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8', '#9']
+  Generated 2128 candidate scenarios
+  12 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Lilis'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [15:07:07] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 12 scenarios (roles: {'Puppeteer', 'Lilis'})
+
+### [15:07:42] Executed #6 -> Puppeteer (EVIL)
+
+### [15:08:17] Executed #7 -> Lilis (EVIL)
+
+## [15:08:25] GAME OVER — WIN
+Final HP: 6
+Notes: WIN 6HP: Puppeteer+Lilis, PD#8 killed by Lilis night. Medium confirmed dead PD. PD corrupted Architect#4. Required manual dead card entry to fix 0-scenario bug — need solver fix for Medium-revealed dead cards.
+

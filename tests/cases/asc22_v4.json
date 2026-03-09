@@ -1,0 +1,149 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          7
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Plague_Doctor"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    8,
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Puppeteer",
+    "7": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Architect",
+      "Bard",
+      "Knight",
+      "Medium",
+      "Hunter"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc22_v4",
+  "true_evil_positions": {
+    "6": "Puppeteer",
+    "7": "Lilis"
+  },
+  "notes": "WIN 6HP: Puppeteer+Lilis, PD#8 killed by Lilis night. Medium confirmed dead PD. PD corrupted Architect#4. Required manual dead card entry to fix 0-scenario bug \u2014 need solver fix for Medium-revealed dead cards."
+}

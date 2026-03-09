@@ -387,6 +387,18 @@ class GameSession:
         # (Judge with target info; PD and Slayer have dedicated commands)
         if card.apparent_role == "Judge" and card.info_parsed.get("target"):
             self.mark_ability_used(card.position)
+        # Medium reveals a dead card's role — auto-create card entry for
+        # night-killed positions so the solver can track PD corruption etc.
+        if card.apparent_role == "Medium":
+            gp = card.info_parsed.get("good_position")
+            gr = card.info_parsed.get("good_role")
+            if gp and gr and gp in self.night_kills:
+                existing = [c for c in self.cards if c.position == gp]
+                if not existing:
+                    dead_card = CardInfo(gp, gr, info_parsed={})
+                    self.cards.append(dead_card)
+                    self.cards.sort(key=lambda c: c.position)
+                    print(f"  [auto] Created card entry for dead #{gp} ({gr}) from Medium info")
 
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
                       evil_role: Optional[str] = None,

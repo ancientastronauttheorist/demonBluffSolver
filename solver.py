@@ -1210,6 +1210,17 @@ def _validate_medium(card: CardInfo, scenario: Scenario,
     # Normalize spaces/underscores for comparison (e.g., "Fortune Teller" vs "Fortune_Teller")
     actual_match = is_good and actual_role.replace(" ", "_") == claimed_role.replace(" ", "_")
 
+    # Night-killed cards have no card entry, so actual_role is "Unknown".
+    # For a truthful Medium, the claim IS the ground truth about the dead
+    # card's role.  Accept the match if the position is Good and the claimed
+    # role is a valid Good role in the deck (Villager or Outcast).
+    if actual_role == "Unknown" and is_good:
+        norm_claimed = claimed_role.replace(" ", "_")
+        valid_good_roles = [r.replace(" ", "_") for r in
+                            state.deck.villagers + state.deck.outcasts]
+        if norm_claimed in valid_good_roles:
+            actual_match = True
+
     if truth == TruthStatus.TRUTHFUL:
         return actual_match
     else:
