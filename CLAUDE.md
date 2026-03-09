@@ -24,7 +24,13 @@ Claude should operate in this cycle:
    - Solver couldn't narrow candidates (missing constraint or strategy gap)
    - New game mechanic or role interaction discovered
 
-   **Research first:** Search the Demon Bluff wiki (https://demon-bluff.fandom.com) for the specific cards involved in the issue. Look for edge cases, interaction rules, and ability details that may not be in our knowledge base. Update `cards/` memory files and solver code with any new findings.
+   **Research first:** Search the Demon Bluff wiki (https://demonbluff.wiki.gg) for the specific cards involved in the issue. Look for edge cases, interaction rules, and ability details that may not be in our knowledge base. Update `cards/` memory files and solver code with any new findings.
+
+   **Known remaining gaps (see TODO.md for full list):**
+   - Witness + Chancellor conversion (needs Scenario-level tracking)
+   - Lilis can't kill uncorrupted Knight / prioritizes Good kills (needs unrevealed role tracking)
+   - Chancellor +1 outcast count, Baker reveal_order validation
+   - Wiki-vs-game discrepancies: Baker "original" and Bishop lying types don't match wiki claims — trust game data over wiki.
 7. At the end of each completed game, commit and push the resulting code, test, and regression updates immediately. Do not batch multiple games into one commit.
 
 ### Lilis Night Handling
