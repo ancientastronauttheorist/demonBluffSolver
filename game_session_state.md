@@ -13821,3 +13821,89 @@ Reason: #6 is evil in ALL 12 scenarios (roles: {'Puppeteer', 'Lilis'})
 Final HP: 6
 Notes: WIN 6HP: Puppeteer+Lilis, PD#8 killed by Lilis night. Medium confirmed dead PD. PD corrupted Architect#4. Required manual dead card entry to fix 0-scenario bug — need solver fix for Medium-revealed dead cards.
 
+
+---
+
+# New Game — 2026-03-09 15:10:27
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Hunter, Druid, Poet, Oracle, Medium, Jester
+- Outcasts: Doppelganger
+- Minions: Witch, Minion
+- Demons: Lilis
+
+### [15:12:49] Revealed #1 Druid
+Info: {}
+
+### [15:12:49] Revealed #2 Medium
+Info: {'good_position': 3, 'good_role': 'Hunter'}
+
+### [15:12:49] Revealed #3 Hunter
+Info: {'distance': 3}
+
+### [15:12:49] Revealed #4 Poet
+Info: {'copied_role': '5,7,8'}
+
+### [15:12:49] Revealed #5 Medium
+Info: {'good_position': 3, 'good_role': 'Hunter'}
+
+### [15:12:49] Revealed #6 Jester
+Info: {}
+
+### [15:12:50] Revealed #8 Jester
+Info: {}
+
+### [15:13:17] Revealed #4 Poet
+Info: {'targets': [5, 7, 8], 'copied_role': 'Empress'}
+
+#### [15:13:29] Solver Output
+Scenarios: 48/2352
+Definite good: ['#1', '#4', '#7']
+Evil probabilities: #2=50%, #3=50%, #5=50%, #6=50%, #8=50%, #9=50%
+  Generated 2352 candidate scenarios
+  48 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 8, 9]
+
+#### [15:13:29] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#1', '#2', '#8']
+Reason: Expected posterior 24.0 scenarios (adjusted 24.0, info gain 1.000 bits) | timing x1.00
+
+### [15:14:34] Ability used at #8
+
+### [15:14:34] Revealed #8 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 2}
+
+#### [15:14:40] Solver Output
+Scenarios: 24/2352
+Definite evil: ['#6', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+  Generated 2352 candidate scenarios
+  24 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion', 'Witch'})
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion', 'Witch'})
+    #9 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [15:14:40] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 24 scenarios (roles: {'Lilis', 'Minion', 'Witch'})
+
+### [15:15:18] Executed #6 -> Lilis (EVIL)
+
+### [15:15:53] Executed #8 -> Witch (EVIL)
+
+### [15:17:00] Executed #9 -> Minion (EVIL)
+
+## [15:17:00] GAME OVER — WIN
+Final HP: 8
+Notes: WIN 8HP: Lilis+Witch+Minion. Witch blocked #9, Lilis killed #7. Jester lying about 2 evils confirmed all 3 evil positions. Dopp#2 disguised as Medium.
+
