@@ -1,0 +1,157 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Poet"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5,
+        "good_role": "Confessor"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "equal"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4,
+        "copied_role": "Hunter"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "equal"
+      }
+    }
+  ],
+  "executed": [
+    8,
+    1,
+    6
+  ],
+  "confirmed_evil": [
+    8,
+    1,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Pooka",
+    "1": "Shaman",
+    "6": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 7,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Medium",
+      "Confessor",
+      "Architect",
+      "Dreamer",
+      "Poet",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    7
+  ],
+  "name": "asc19_v8",
+  "true_evil_positions": {
+    "1": "Shaman",
+    "6": "Minion",
+    "8": "Pooka"
+  },
+  "notes": "WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE \u2014 all 7 villages cleared!"
+}

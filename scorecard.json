@@ -608,6 +608,13 @@
       "name": "asc19_v7",
       "notes": "Perfect 10HP, Knight free check caught Baa#5, Jester narrowed to #2/#3, Bombardier protection avoided #2, 50/50 on #3 hit Shaman",
       "date": "2026-03-09 12:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v8",
+      "notes": "WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE \u2014 all 7 villages cleared!",
+      "date": "2026-03-09 12:30"
     }
   ]
 }

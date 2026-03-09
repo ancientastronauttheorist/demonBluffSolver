@@ -11465,3 +11465,152 @@ WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
 Final HP: 10
 Notes: Perfect 10HP, Knight free check caught Baa#5, Jester narrowed to #2/#3, Bombardier protection avoided #2, 50/50 on #3 hit Shaman
 
+
+---
+
+# New Game — 2026-03-09 12:23:46
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Fortune_Teller, Medium, Confessor, Architect, Dreamer, Poet, Alchemist
+- Outcasts: Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+### [12:24:50] Revealed #1 Medium
+Info: {'good_position': 8, 'good_role': 'Poet'}
+
+### [12:24:50] Revealed #2 Medium
+Info: {'good_position': 5, 'good_role': 'Confessor'}
+
+### [12:24:50] Revealed #3 Architect
+Info: {'side': 'equal'}
+
+### [12:24:51] Revealed #4 Fortune_Teller
+Info: {}
+
+### [12:24:51] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [12:24:51] Revealed #6 Dreamer
+Info: {}
+
+### [12:24:51] Revealed #7 Plague_Doctor
+Info: {}
+
+### [12:24:51] Revealed #9 Architect
+Info: {'side': 'equal'}
+
+### [12:24:59] Revealed #8 Poet
+Info: {'distance': 4, 'copied_role': 'Hunter'}
+
+#### [12:25:06] Solver Output
+Scenarios: 8/1848
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#7']
+Evil probabilities: #6=75%, #1=50%, #3=25%, #4=25%, #9=25%
+  Generated 1848 candidate scenarios
+  8 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman', 'Minion', 'Pooka'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 6, 9]
+
+#### [12:25:06] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 8 scenarios (roles: {'Shaman', 'Minion', 'Pooka'})
+
+### [12:27:16] Executed #8 -> Pooka (EVIL)
+
+#### [12:27:18] Solver Output
+Scenarios: 6/224
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#7', '#9']
+Evil probabilities: #1=67%, #6=67%, #3=33%, #4=33%
+  Generated 224 candidate scenarios
+  6 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 6]
+
+#### [12:27:18] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.252 (adjusted 2.252) | timing x1.00
+
+### [12:28:10] Ability used at #6
+
+### [12:28:10] Revealed #6 Dreamer
+Info: {'target': 1, 'evil_role': 'Minion'}
+
+#### [12:28:14] Solver Output
+Scenarios: 4/224
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#7', '#9']
+Evil probabilities: #6=75%, #1=50%, #3=50%, #4=25%
+  Generated 224 candidate scenarios
+  4 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 6]
+
+#### [12:28:14] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [12:28:59] Ability used at #7
+
+#### [12:29:03] Solver Output
+Scenarios: 2/224
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#5', '#7', '#9']
+Evil probabilities: #4=50%, #6=50%
+  Generated 224 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Shaman', 'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [12:29:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Shaman', 'Minion'})
+
+### [12:29:33] Executed #1 -> Shaman (EVIL)
+
+#### [12:29:37] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#6', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#9']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #6 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [12:29:37] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [12:30:13] Executed #6 -> Minion (EVIL)
+
+## [12:30:21] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE — all 7 villages cleared!
+
