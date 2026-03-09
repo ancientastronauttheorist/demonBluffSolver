@@ -650,6 +650,13 @@
       "name": "asc20_v5",
       "notes": "Perfect 10HP. PD#7 was Minion (lied about #1 evil+corrupted). PD#6 was real (clean check on #2). Judge#5=Chancellor gave false lying result. Pooka#4 corrupted adjacent #3(Drunk) and #5(Chancellor's neighbor). 50/50 coin flip on #5 vs #6, got lucky.",
       "date": "2026-03-09 13:14"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc20_v6",
+      "notes": "WIN 3HP. Lilis game with Witch blocking #8. Lilis killed #7 (night). PD#4 found #6 corrupted + revealed #2 evil \u2014 but #2 was good Oracle (PD was Witch, lied!). Wrong exec on #2 Oracle (-5HP). Single scenario survived after wrong exec: #4=Witch, #6=Lilis. Knight check on #3 confirmed good. #1=Drunk<Corrupted>.",
+      "date": "2026-03-09 13:23"
     }
   ]
 }

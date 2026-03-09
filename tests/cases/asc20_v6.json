@@ -1,0 +1,139 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    }
+  ],
+  "executed": [
+    7,
+    3,
+    2,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    4,
+    6
+  ],
+  "confirmed_good": [
+    3,
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Witch",
+    "6": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 4,
+      "target": 6,
+      "is_corrupted": true,
+      "evil_revealed": 2
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {
+    "3": false,
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Oracle",
+      "Empress",
+      "Hunter",
+      "Alchemist",
+      "Knight"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4
+  ],
+  "name": "asc20_v6",
+  "true_evil_positions": {
+    "4": "Witch",
+    "6": "Lilis"
+  },
+  "notes": "WIN 3HP. Lilis game with Witch blocking #8. Lilis killed #7 (night). PD#4 found #6 corrupted + revealed #2 evil \u2014 but #2 was good Oracle (PD was Witch, lied!). Wrong exec on #2 Oracle (-5HP). Single scenario survived after wrong exec: #4=Witch, #6=Lilis. Knight check on #3 confirmed good. #1=Drunk<Corrupted>."
+}

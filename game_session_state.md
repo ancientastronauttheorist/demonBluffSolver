@@ -12282,3 +12282,110 @@ WARNING: Corruption risk: 100% -- corrupted Judge results are unreliable
 Final HP: 10
 Notes: Perfect 10HP. PD#7 was Minion (lied about #1 evil+corrupted). PD#6 was real (clean check on #2). Judge#5=Chancellor gave false lying result. Pooka#4 corrupted adjacent #3(Drunk) and #5(Chancellor's neighbor). 50/50 coin flip on #5 vs #6, got lucky.
 
+
+---
+
+# New Game — 2026-03-09 13:16:06
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Medium, Oracle, Empress, Hunter, Alchemist, Knight
+- Outcasts: Drunk, Plague_Doctor
+- Minions: Witch
+- Demons: Lilis
+
+### [13:18:00] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [13:18:00] Revealed #2 Oracle
+Info: {'targets': [1, 4], 'minion_role': 'Witch'}
+
+### [13:18:00] Revealed #3 Knight
+Info: {}
+
+### [13:18:00] Revealed #4 Plague_Doctor
+Info: {}
+
+### [13:18:01] Revealed #5 Empress
+Info: {'targets': [3, 4, 8]}
+
+### [13:18:01] Revealed #6 Hunter
+Info: {'distance': 4}
+
+#### [13:18:08] Solver Output
+Scenarios: 79/1358
+Definite good: ['#7']
+Evil probabilities: #2=43%, #6=37%, #5=33%, #1=30%, #8=28%, #3=25%, #4=4%
+  Generated 1358 candidate scenarios
+  79 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 8]
+
+#### [13:18:08] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight check: #3 is 25% evil, 20% corruption risk. Expected HP cost: 0.8 (vs normal 5).
+WARNING: Corruption risk: 20% -- corrupted Knight loses immunity
+
+### [13:19:13] Executed #3 -> GOOD (WRONG!)
+
+#### [13:19:24] Solver Output
+Scenarios: 43/984
+Definite good: ['#3', '#7']
+Evil probabilities: #5=47%, #6=44%, #2=37%, #1=33%, #8=33%, #4=7%
+  Generated 984 candidate scenarios
+  43 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 8]
+
+#### [13:19:24] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.785 (adjusted 1.785) | timing x1.00
+
+### [13:20:27] Ability used at #4
+
+#### [13:20:34] Solver Output
+Scenarios: 17/984
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #2=94%, #5=59%, #8=35%, #4=6%, #6=6%
+  Generated 984 candidate scenarios
+  17 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 6, 8]
+
+#### [13:20:34] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (47% evil Lilis, 47% evil Witch, 6% good Oracle).
+WARNING: Execution lookahead override -- immediate hit chance is 94%, but all reveal branches still lead to a forced win.
+
+### [13:21:22] Executed #2 -> GOOD (WRONG!)
+
+#### [13:21:28] Solver Output
+Scenarios: 1/670
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+  Generated 670 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [13:21:28] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [13:22:18] Executed #4 -> Witch (EVIL)
+
+### [13:23:04] Executed #6 -> Lilis (EVIL)
+
+## [13:23:05] GAME OVER — WIN
+Final HP: 3
+Notes: WIN 3HP. Lilis game with Witch blocking #8. Lilis killed #7 (night). PD#4 found #6 corrupted + revealed #2 evil — but #2 was good Oracle (PD was Witch, lied!). Wrong exec on #2 Oracle (-5HP). Single scenario survived after wrong exec: #4=Witch, #6=Lilis. Knight check on #3 confirmed good. #1=Drunk<Corrupted>.
+
