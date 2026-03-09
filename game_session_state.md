@@ -14490,3 +14490,106 @@ Final HP: 10
 Final HP: 10
 Notes: WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP.
 
+
+---
+
+# New Game — 2026-03-09 16:30:26
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Knight, Architect, Judge, Medium, Confessor
+- Outcasts: Bombardier, Wretch, Doppelganger
+- Minions: Minion
+- Demons: Baa
+
+### [16:31:24] Revealed #1 Wretch
+Info: {}
+
+### [16:31:25] Revealed #2 Knight
+Info: {}
+
+### [16:31:25] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [16:31:25] Revealed #4 Judge
+Info: {}
+
+### [16:31:25] Revealed #5 Bombardier
+Info: {}
+
+### [16:31:25] Revealed #6 Medium
+Info: {'good_position': 7, 'good_role': 'Knitter'}
+
+### [16:31:25] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [16:31:25] Revealed #8 Architect
+Info: {'side': 'Equal'}
+
+#### [16:31:31] Solver Output
+Scenarios: 20/308
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #1=50%, #4=50%, #5=50%, #8=50%
+  Generated 308 candidate scenarios
+  20 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 8]
+
+#### [16:31:31] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#2']
+Reason: Expected posterior 10.0 scenarios (adjusted 10.0, info gain 1.000 bits) | timing x1.00
+
+### [16:32:15] Revealed #4 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [16:32:15] Ability used at #4
+
+#### [16:32:16] Solver Output
+Scenarios: 10/308
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+  Generated 308 candidate scenarios
+  10 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:32:16] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 10 scenarios (roles: {'Baa', 'Minion'})
+
+### [16:32:55] Executed #4 -> Baa (EVIL)
+
+#### [16:32:55] Solver Output
+Scenarios: 5/37
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+  Generated 37 candidate scenarios
+  5 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:32:55] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Minion'})
+
+### [16:33:31] Executed #5 -> Minion (EVIL)
+
+## [16:33:31] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: Perfect game. Judge#4(Baa) lied about Knight#2 lying. Knitter+Architect+Medium cross-referenced to lock both evils at adjacent #4,#5. 0 wrong execs, 10HP.
+

@@ -776,6 +776,13 @@
       "name": "asc23_v2",
       "notes": "WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP.",
       "date": "2026-03-09 16:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v3",
+      "notes": "WIN: Perfect game. Judge#4(Baa) lied about Knight#2 lying. Knitter+Architect+Medium cross-referenced to lock both evils at adjacent #4,#5. 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:33"
     }
   ]
 }
