@@ -720,6 +720,13 @@
       "name": "asc22_v1",
       "notes": "WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively.",
       "date": "2026-03-09 14:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc22_v2",
+      "notes": "WIN: PD evil reveal confirmed Pooka#4, perfect game 10HP. Pooka corrupted #2,#3,#5.",
+      "date": "2026-03-09 14:49"
     }
   ]
 }

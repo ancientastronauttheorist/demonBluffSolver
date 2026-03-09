@@ -13488,3 +13488,79 @@ Reason: #4 is evil in ALL 10 scenarios (roles: {'Puppet', 'Lilis'})
 Final HP: 6
 Notes: WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively.
 
+
+---
+
+# New Game — 2026-03-09 14:45:03
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Judge, Empress, Knight, Medium, Knitter, Jester
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [14:45:54] Revealed #1 Empress
+Info: {'targets': [4, 5, 7]}
+
+### [14:45:54] Revealed #2 Medium
+Info: {'good_position': 4, 'good_role': 'Jester'}
+
+### [14:45:54] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:45:55] Revealed #4 Jester
+Info: {}
+
+### [14:45:55] Revealed #5 Knight
+Info: {}
+
+### [14:45:55] Revealed #6 Judge
+Info: {}
+
+### [14:45:55] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [14:46:01] Solver Output
+Scenarios: 2/31
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%
+  Generated 31 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 5]
+
+#### [14:46:01] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [14:48:40] Ability used at #7
+
+#### [14:48:44] Solver Output
+Scenarios: 1/31
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [14:48:44] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:49:28] Executed #4 -> Pooka (EVIL)
+
+## [14:49:34] GAME OVER — WIN
+Final HP: 10
+Notes: WIN: PD evil reveal confirmed Pooka#4, perfect game 10HP. Pooka corrupted #2,#3,#5.
+
