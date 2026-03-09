@@ -510,6 +510,13 @@
       "name": "asc18_v1",
       "notes": "Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10.",
       "date": "2026-03-09 00:34"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc18_v2",
+      "notes": "LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why.",
+      "date": "2026-03-09 00:42"
     }
   ]
 }

@@ -152,6 +152,7 @@ class GameState:
     board_minion_count: Optional[int] = None    # Actual minions on board (when pool > board)
     board_demon_count: Optional[int] = None     # Actual demons on board (when pool > board)
     reveal_order: list[int] = field(default_factory=list)  # Order positions were flipped (for Baker)
+    executed_good_corrupted: dict[int, bool] = field(default_factory=dict)  # Corruption status of executed good cards
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -175,6 +176,7 @@ class GameState:
             "board_minion_count": self.board_minion_count,
             "board_demon_count": self.board_demon_count,
             "reveal_order": list(self.reveal_order),
+            "executed_good_corrupted": {str(k): v for k, v in self.executed_good_corrupted.items()},
         }
         if nest_deck:
             data["deck"] = self.deck.to_dict()
@@ -218,6 +220,7 @@ class GameState:
             board_minion_count=data.get("board_minion_count"),
             board_demon_count=data.get("board_demon_count"),
             reveal_order=list(data.get("reveal_order", [])),
+            executed_good_corrupted={int(k): v for k, v in data.get("executed_good_corrupted", {}).items()},
         )
 
 
@@ -2091,6 +2094,13 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
 
 def _check_scenario(scenario: Scenario, state: GameState) -> bool:
     """Check if a scenario is consistent with all revealed card info."""
+    # Check observed corruption status of executed good cards
+    for pos, was_corrupted in state.executed_good_corrupted.items():
+        if was_corrupted and pos not in scenario.corrupted:
+            return False  # Observed corrupted but scenario says not corrupted
+        if not was_corrupted and pos in scenario.corrupted:
+            return False  # Observed clean but scenario says corrupted
+
     # Structural check: role counts must be explainable by deck + disguisers
     if not _validate_role_counts(scenario, state):
         return False

@@ -9651,3 +9651,126 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 3
 Notes: Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10.
 
+
+---
+
+# New Game — 2026-03-09 00:35:53
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Baker, Confessor, Lover, Jester, Druid
+- Outcasts: Drunk
+- Minions: 
+- Demons: Pooka
+
+### [00:36:47] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [00:36:47] Revealed #2 Architect
+Info: {'side': 'equal'}
+
+### [00:36:48] Revealed #3 Lover
+Info: {'evil_adjacent': 0}
+
+### [00:36:49] Revealed #4 Druid
+Info: {}
+
+### [00:36:49] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [00:36:50] Revealed #6 Baker
+Info: {'original_role': 'Architect'}
+
+### [00:36:50] Revealed #7 Druid
+Info: {}
+
+### [00:37:09] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+#### [00:37:14] Solver Output
+Scenarios: 12/42
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #2=42%, #1=33%, #7=25%
+  Generated 42 candidate scenarios
+  12 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7]
+
+#### [00:37:14] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.918 (adjusted 0.727) | timing x1.00
+WARNING: Corruption risk: 42%
+
+### [00:38:01] Ability used at #7
+
+### [00:38:02] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+#### [00:38:06] Solver Output
+Scenarios: 8/42
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #1=38%, #2=38%, #7=25%
+  Generated 42 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7]
+
+#### [00:38:06] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.811 (adjusted 0.710) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [00:38:54] Ability used at #4
+
+### [00:38:54] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+#### [00:38:58] Solver Output
+Scenarios: 4/42
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #2=50%, #1=25%, #7=25%
+  Generated 42 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7]
+
+#### [00:38:58] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% evil Pooka, 25% good Architect, 25% good Architect (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:39:30] Executed #2 -> GOOD (WRONG!)
+
+#### [00:39:35] Solver Output
+Scenarios: 2/36
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #7=50%
+  Generated 36 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [00:39:35] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Confessor (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:42:51] Executed #1 -> GOOD (WRONG!)
+
+## [00:42:57] GAME OVER — LOSS
+Final HP: 0
+Notes: LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why.
+

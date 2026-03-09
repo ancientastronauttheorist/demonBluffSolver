@@ -258,7 +258,7 @@ def _find_forced_execution(
                         next_hp = hp - 2
                 else:
                     next_hp = hp - state.wrong_exec_cost
-                if next_hp < 0:
+                if next_hp <= 0:
                     branch_ok = False
                     break
 

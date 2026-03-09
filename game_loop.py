@@ -359,6 +359,7 @@ class GameSession:
         self.wrong_exec_cost: int = 2  # Ascension 4 default
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
+        self.executed_good_corrupted: dict[int, bool] = {}  # pos -> was corrupted (from execution observation)
         self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
         self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
@@ -388,7 +389,8 @@ class GameSession:
             self.mark_ability_used(card.position)
 
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
-                      evil_role: Optional[str] = None):
+                      evil_role: Optional[str] = None,
+                      was_corrupted: Optional[bool] = None):
         if pos not in self.executed:
             self.executed.append(pos)
         if was_evil is True and pos not in self.confirmed_evil:
@@ -397,6 +399,9 @@ class GameSession:
             self.confirmed_good.append(pos)
         if evil_role:
             self.executed_evil_roles[pos] = evil_role
+        # Track corruption status for executed good cards
+        if was_evil is False and was_corrupted is not None:
+            self.executed_good_corrupted[pos] = was_corrupted
 
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
@@ -461,6 +466,7 @@ class GameSession:
             board_villager_count=self.board_villager_count,
             board_outcast_count=self.board_outcast_count,
             reveal_order=list(self.reveal_order),
+            executed_good_corrupted=dict(self.executed_good_corrupted),
         )
 
     @classmethod
@@ -487,6 +493,7 @@ class GameSession:
         session.board_villager_count = state.board_villager_count
         session.board_outcast_count = state.board_outcast_count
         session.reveal_order = list(state.reveal_order)
+        session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.used_abilities = list(used_abilities or [])
         return session
 
@@ -868,6 +875,7 @@ def main():
         pos = int(sys.argv[2])
         was_evil = None
         evil_role = None
+        was_corrupted = None
         if len(sys.argv) > 3:
             w = sys.argv[3].lower()
             if w in ("evil", "true", "1", "yes"):
@@ -877,15 +885,30 @@ def main():
                     evil_role = sys.argv[4]
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
+                # Optional 4th arg: corruption status (corrupted/clean)
+                if len(sys.argv) > 4:
+                    c = sys.argv[4].lower()
+                    if c in ("corrupted", "corrupt", "c"):
+                        was_corrupted = True
+                    elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
+                        was_corrupted = False
+                else:
+                    # Default: if game didn't show <Corrupted>, assume clean
+                    was_corrupted = False
             else:
                 # Treat as evil role name directly: execute 2 Chancellor
                 was_evil = True
                 evil_role = sys.argv[3]
-        session.mark_executed(pos, was_evil, evil_role)
+        session.mark_executed(pos, was_evil, evil_role, was_corrupted)
         session.save()
         DecisionLog.log_execution(pos, was_evil, evil_role)
         tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
-        print(f"Executed #{pos}{tag}")
+        corr_tag = ""
+        if was_corrupted is True:
+            corr_tag = " <Corrupted>"
+        elif was_corrupted is False and was_evil is False:
+            corr_tag = " (clean)"
+        print(f"Executed #{pos}{tag}{corr_tag}")
         return
 
     if cmd == "pd_target":
