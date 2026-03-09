@@ -727,6 +727,13 @@
       "name": "asc22_v2",
       "notes": "WIN: PD evil reveal confirmed Pooka#4, perfect game 10HP. Pooka corrupted #2,#3,#5.",
       "date": "2026-03-09 14:49"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc22_v3",
+      "notes": "WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7.",
+      "date": "2026-03-09 14:56"
     }
   ]
 }

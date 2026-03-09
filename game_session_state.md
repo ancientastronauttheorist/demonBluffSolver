@@ -13564,3 +13564,167 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: WIN: PD evil reveal confirmed Pooka#4, perfect game 10HP. Pooka corrupted #2,#3,#5.
 
+
+---
+
+# New Game — 2026-03-09 14:51:03
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Fortune_Teller, Architect, Confessor, Bard, Oracle, Baker, Scout, Bishop
+- Outcasts: Bombardier, Drunk
+- Minions: Poisoner, Puppeteer
+- Demons: Baa
+
+### [14:52:36] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [14:52:37] Revealed #2 Bard
+Info: {'corruption_distance': 3}
+
+### [14:52:38] Revealed #3 Oracle
+Info: {'targets': [2, 7], 'minion_role': 'Poisoner'}
+
+### [14:52:38] Revealed #4 Baker
+Info: {'original_role': 'Confessor'}
+
+### [14:52:44] Revealed #5 Bishop
+Info: {'targets': [2, 3, 8], 'types': ['Minion', 'Outcast', 'Villager']}
+
+### [14:52:44] Revealed #6 Architect
+Info: {'side': 'right'}
+
+### [14:52:46] Revealed #7 Fortune_Teller
+Info: {}
+
+### [14:52:46] Revealed #8 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 2}
+
+### [14:52:46] Revealed #9 Fortune_Teller
+Info: {}
+
+#### [14:52:53] Solver Output
+Scenarios: 61/5418
+Definite good: ['#1']
+Evil probabilities: #3=59%, #4=44%, #8=43%, #7=41%, #9=39%, #6=38%, #5=31%, #2=5%
+  Generated 5418 candidate scenarios
+  61 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:52:53] Recommendation
+Action: **USE_ABILITY** #9 (Fortune Teller) -> targets ['#1', '#6']
+Reason: Entropy 1.000 (adjusted 0.992) | timing x1.00
+WARNING: Corruption risk: 2%
+
+### [14:53:41] Ability used at #9
+
+### [14:53:42] Revealed #9 Fortune Teller
+Info: {'targets': [1, 6], 'has_evil': False}
+
+#### [14:53:46] Solver Output
+Scenarios: 31/5418
+Definite good: ['#1']
+Evil probabilities: #3=68%, #4=58%, #8=48%, #7=32%, #5=29%, #6=29%, #9=29%, #2=6%
+  Generated 5418 candidate scenarios
+  31 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:53:46] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#8']
+Reason: Entropy 0.999 (adjusted 0.919) | timing x1.00
+WARNING: Corruption risk: 16%
+
+### [14:54:18] Ability used at #7
+
+### [14:54:19] Revealed #7 Fortune Teller
+Info: {'targets': [1, 8], 'has_evil': True}
+
+#### [14:54:23] Solver Output
+Scenarios: 16/5418
+Definite good: ['#1']
+Evil probabilities: #4=62%, #3=56%, #5=50%, #8=50%, #7=44%, #2=12%, #6=12%, #9=12%
+  Generated 5418 candidate scenarios
+  16 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [14:54:23] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (31% good Drunk (corrupted), 25% evil Puppeteer, 19% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:55:00] Executed #5 -> Puppeteer (EVIL)
+
+#### [14:55:04] Solver Output
+Scenarios: 4/602
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#3', '#6', '#8', '#9']
+Evil probabilities: #2=50%, #4=50%
+  Generated 602 candidate scenarios
+  4 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [14:55:04] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Poisoner'})
+
+### [14:55:31] Executed #7 -> Poisoner (EVIL)
+
+#### [14:55:35] Solver Output
+Scenarios: 4/84
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#3', '#6', '#8', '#9']
+Evil probabilities: #2=50%, #4=50%
+  Generated 84 candidate scenarios
+  4 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [14:55:35] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Bard).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:56:04] Executed #2 -> GOOD (WRONG!)
+
+#### [14:56:08] Solver Output
+Scenarios: 2/70
+Definite evil: ['#4', '#5', '#7']
+Definite good: ['#1', '#2', '#3', '#6', '#8', '#9']
+  Generated 70 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [14:56:08] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [14:56:38] Executed #4 -> Baa (EVIL)
+
+## [14:56:44] GAME OVER — WIN
+Final HP: 5
+Notes: WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7.
+
