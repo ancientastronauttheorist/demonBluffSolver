@@ -853,6 +853,13 @@
       "name": "asc24_v6",
       "notes": "WIN 6HP. Lilis night killed Poisoner#5 (evil). Evils killed counter delayed update (0/3 after night1 kill, 1/3 after batch2). Doppelganger#3 copied Knight. No corruption (Poisoner adjacent to 2 evils). Witch#4 disguised as Lover, Lilis#6 disguised as Lover.",
       "date": "2026-03-09 18:13"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v7",
+      "notes": "WIN 10HP perfect. PD#4 confirmed #7 not corrupted, solver narrowed to Pooka#7. Chancellor#5 disguised as Hunter, Pooka#7 disguised as Hunter. Fixed: (1) PD is Outcast not Villager \u2014 data entry error caused 0 scenarios. (2) Added Chancellor conversion tracking in solver for Bishop type validation. Ascension 24 COMPLETE!",
+      "date": "2026-03-09 18:35"
     }
   ]
 }

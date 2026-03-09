@@ -234,6 +234,7 @@ class Scenario:
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
     drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always corrupted)
     alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
+    chancellor_conversion: Optional[int] = None  # Position converted to Outcast by Chancellor
 
 
 @dataclass
@@ -801,6 +802,9 @@ def _get_position_type(pos: int, scenario: Scenario, state: GameState) -> Option
         return "Minion"  # Minion, Puppet, Witch, etc.
 
     if pos == scenario.doppelganger_position or pos == scenario.drunk_position:
+        return "Outcast"
+
+    if pos == scenario.chancellor_conversion:
         return "Outcast"
 
     card = _get_card_at(pos, state)
@@ -1958,62 +1962,86 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 if card is None or _is_villager_role(card.apparent_role, state):
                     drunk_candidates.append(p)
 
-        for pd_t in pd_targets:
-            seen = set()
-            for dopp_pos in dopp_candidates:
-                for drunk_pos in drunk_candidates:
-                    # Drunk and Doppelganger can't be the same position
-                    if drunk_pos is not None and drunk_pos == dopp_pos:
-                        continue
+        # Determine possible Chancellor conversion targets
+        # Chancellor converts 1 adjacent Villager to Outcast at game start
+        chancellor_conv_candidates = [None]
+        chancellor_pos = None
+        for epos, erole in full_evil.items():
+            if erole == "Chancellor":
+                chancellor_pos = epos
+                break
+        if chancellor_pos is not None:
+            conv_candidates = []
+            for adj in adjacent_positions(chancellor_pos, state.n_cards):
+                if adj in full_evil:
+                    continue
+                card = _get_card_at(adj, state)
+                if card and _is_villager_role(card.apparent_role, state):
+                    conv_candidates.append(adj)
+                elif card is None and _unrevealed_must_be_villager(
+                        adj, full_evil, state):
+                    conv_candidates.append(adj)
+            if conv_candidates:
+                chancellor_conv_candidates = conv_candidates
 
-                    # Determine Poisoner targets with knowledge of dopp/drunk
-                    # positions so _unrevealed_must_be_villager can account
-                    # for outcast slots filled by hidden outcasts.
-                    pois_targets = [None]
-                    if poisoner_pos is not None:
-                        candidates = []
-                        for p in adjacent_positions(
-                                poisoner_pos, state.n_cards):
-                            if p in full_evil:
-                                continue
-                            if p in pooka_corrupted:
-                                continue  # Poisoner skips Pooka's victims
-                            card = _get_card_at(p, state)
-                            if card and _is_villager_role(
-                                    card.apparent_role, state):
-                                candidates.append(p)
-                            elif card is None and \
-                                    _unrevealed_must_be_villager(
-                                        p, full_evil, state,
-                                        dopp_pos, drunk_pos):
-                                candidates.append(p)
-                        if candidates:
-                            pois_targets = candidates
-
-                    for pois_t in pois_targets:
-                        raw_corrupted = _compute_corruption(
-                            full_evil, state, pd_t, dopp_pos, pois_t,
-                            drunk_pos)
-                        # Apply setup-order post-processing:
-                        # Puppet cure + Alchemist cures
-                        final_corrupted, alch_cures = _apply_post_corruption(
-                            raw_corrupted, full_evil, state,
-                            puppet_pos, drunk_pos)
-                        # Deduplicate scenarios with same corruption+dopp+drunk combo
-                        key = (frozenset(final_corrupted), dopp_pos, drunk_pos)
-                        if key in seen:
+        for chan_conv in chancellor_conv_candidates:
+            for pd_t in pd_targets:
+                seen = set()
+                for dopp_pos in dopp_candidates:
+                    for drunk_pos in drunk_candidates:
+                        # Drunk and Doppelganger can't be the same position
+                        if drunk_pos is not None and drunk_pos == dopp_pos:
                             continue
-                        seen.add(key)
-                        scenario = Scenario(
-                            evil_positions=dict(full_evil),
-                            puppet_position=puppet_pos,
-                            corrupted=final_corrupted,
-                            pd_corrupted=pd_t,
-                            doppelganger_position=dopp_pos,
-                            drunk_position=drunk_pos,
-                            alchemist_cures=alch_cures,
-                        )
-                        scenarios.append(scenario)
+
+                        # Determine Poisoner targets with knowledge of dopp/drunk
+                        # positions so _unrevealed_must_be_villager can account
+                        # for outcast slots filled by hidden outcasts.
+                        pois_targets = [None]
+                        if poisoner_pos is not None:
+                            candidates = []
+                            for p in adjacent_positions(
+                                    poisoner_pos, state.n_cards):
+                                if p in full_evil:
+                                    continue
+                                if p in pooka_corrupted:
+                                    continue  # Poisoner skips Pooka's victims
+                                card = _get_card_at(p, state)
+                                if card and _is_villager_role(
+                                        card.apparent_role, state):
+                                    candidates.append(p)
+                                elif card is None and \
+                                        _unrevealed_must_be_villager(
+                                            p, full_evil, state,
+                                            dopp_pos, drunk_pos):
+                                    candidates.append(p)
+                            if candidates:
+                                pois_targets = candidates
+
+                        for pois_t in pois_targets:
+                            raw_corrupted = _compute_corruption(
+                                full_evil, state, pd_t, dopp_pos, pois_t,
+                                drunk_pos)
+                            # Apply setup-order post-processing:
+                            # Puppet cure + Alchemist cures
+                            final_corrupted, alch_cures = _apply_post_corruption(
+                                raw_corrupted, full_evil, state,
+                                puppet_pos, drunk_pos)
+                            # Deduplicate scenarios with same corruption+dopp+drunk+chancellor combo
+                            key = (frozenset(final_corrupted), dopp_pos, drunk_pos, chan_conv)
+                            if key in seen:
+                                continue
+                            seen.add(key)
+                            scenario = Scenario(
+                                evil_positions=dict(full_evil),
+                                puppet_position=puppet_pos,
+                                corrupted=final_corrupted,
+                                pd_corrupted=pd_t,
+                                doppelganger_position=dopp_pos,
+                                drunk_position=drunk_pos,
+                                alchemist_cures=alch_cures,
+                                chancellor_conversion=chan_conv,
+                            )
+                            scenarios.append(scenario)
 
     return scenarios
 

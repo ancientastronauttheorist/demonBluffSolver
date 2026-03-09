@@ -15675,3 +15675,169 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 6
 Notes: WIN 6HP. Lilis night killed Poisoner#5 (evil). Evils killed counter delayed update (0/3 after night1 kill, 1/3 after batch2). Doppelganger#3 copied Knight. No corruption (Poisoner adjacent to 2 evils). Witch#4 disguised as Lover, Lilis#6 disguised as Lover.
 
+
+---
+
+# New Game — 2026-03-09 18:16:02
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Jester, Alchemist, Bishop, Hunter, Architect, Empress, Plague_Doctor
+- Outcasts: Wretch
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:17:44] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [18:17:44] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [18:17:45] Revealed #3 Empress
+Info: {'targets': [2, 4, 5]}
+
+### [18:17:46] Revealed #4 Plague_Doctor
+Info: {}
+
+### [18:17:46] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [18:17:47] Revealed #6 Wretch
+Info: {}
+
+### [18:17:47] Revealed #7 Hunter
+Info: {'distance': 4}
+
+### [18:17:48] Revealed #8 Bishop
+Info: {'targets': [4, 6, 8], 'types': ['Minion', 'Villager', 'Outcast']}
+
+#### [18:17:52] Solver Output
+Scenarios: 0/56
+  Generated 56 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Hunter: rejected 30/56 (54%)
+    #7 Hunter: rejected 30/56 (54%)
+    #2 Alchemist: rejected 30/56 (54%)
+    #3 Empress: rejected 25/56 (45%)
+    #8 Bishop: rejected 22/56 (39%)
+    #1 Architect: rejected 15/56 (27%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Architect: still 0
+    WITHOUT #2 Alchemist: 3 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Empress: still 0
+    WITHOUT #5 Hunter: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Hunter: still 0
+    WITHOUT #8 Bishop: still 0
+
+#### [18:17:52] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+
+---
+
+# New Game — 2026-03-09 18:32:25
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Jester, Alchemist, Bishop, Hunter, Architect, Empress
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:32:33] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [18:32:33] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [18:32:33] Revealed #3 Empress
+Info: {'targets': [2, 4, 5]}
+
+### [18:32:33] Revealed #4 Plague_Doctor
+Info: {}
+
+### [18:32:34] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [18:32:34] Revealed #6 Wretch
+Info: {}
+
+### [18:32:34] Revealed #7 Hunter
+Info: {'distance': 4}
+
+### [18:32:34] Revealed #8 Bishop
+Info: {'targets': [4, 6, 8], 'types': ['Minion', 'Villager', 'Outcast']}
+
+#### [18:32:39] Solver Output
+Scenarios: 3/274
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #7=67%, #8=33%
+  Generated 274 candidate scenarios
+  3 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [18:32:39] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Chancellor'})
+
+### [18:33:33] Executed #5 -> Chancellor (EVIL)
+
+#### [18:33:33] Solver Output
+Scenarios: 3/26
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #7=67%, #8=33%
+  Generated 26 candidate scenarios
+  3 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [18:33:33] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [18:34:42] Ability used at #4
+
+#### [18:34:47] Solver Output
+Scenarios: 2/26
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#8']
+  Generated 26 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #7 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [18:34:47] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [18:35:34] Executed #7 -> Pooka (EVIL)
+
+## [18:35:34] GAME OVER — WIN
+Final HP: 10
+Notes: WIN 10HP perfect. PD#4 confirmed #7 not corrupted, solver narrowed to Pooka#7. Chancellor#5 disguised as Hunter, Pooka#7 disguised as Hunter. Fixed: (1) PD is Outcast not Villager — data entry error caused 0 scenarios. (2) Added Chancellor conversion tracking in solver for Bishop type validation. Ascension 24 COMPLETE!
+
