@@ -1052,15 +1052,17 @@ def recommend_action(
                           f"If evil disguise, evil dies. No corruption risk.")
         elif corr_risk < 0.3:
             # Mostly free: small corruption risk lowers the expected cost
-            expected_cost = corr_risk * (1 - evil_prob) * state.wrong_exec_cost
-            wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
-            if expected_cost < state.wrong_exec_cost * 0.3 and wrong_exec_budget > 0:
+            # Corrupted Knight deals 4 EXTRA damage on top of wrong exec cost
+            corrupted_knight_cost = state.wrong_exec_cost + 4
+            expected_cost = corr_risk * (1 - evil_prob) * corrupted_knight_cost
+            # Never attempt if corrupted Knight would kill us
+            if state.hp > corrupted_knight_cost and expected_cost < state.wrong_exec_cost * 0.3:
                 return Action(
                     "execute", position=kpos,
                     reasoning=f"Knight check: #{kpos} is {evil_prob:.0%} evil, "
                               f"{corr_risk:.0%} corruption risk. Expected HP cost: "
-                              f"{expected_cost:.1f} (vs normal {state.wrong_exec_cost}).",
-                    warnings=[f"Corruption risk: {corr_risk:.0%} -- corrupted Knight loses immunity"])
+                              f"{expected_cost:.1f} (corrupted Knight = {corrupted_knight_cost} HP).",
+                    warnings=[f"Corruption risk: {corr_risk:.0%} -- corrupted Knight loses immunity + 4 extra damage"])
 
     # 4. Check available abilities
     ability_recs = recommend_abilities(state, result, used_abilities)
