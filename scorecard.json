@@ -790,6 +790,13 @@
       "name": "asc23_v4",
       "notes": "WIN: Perfect 3-evil game\\! Baa+Witch+Chancellor. Druid found Drunk, Slayer couldn't kill Doppelganger#1(Wretch). 0 wrong execs, 10HP.",
       "date": "2026-03-09 16:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v5",
+      "notes": "Perfect game, PD found Chancellor#1, Judge confirmed, Baa#4 disguised as Poet. Drunk#3 and Judge#5 both corrupted.",
+      "date": "2026-03-09 16:56"
     }
   ]
 }

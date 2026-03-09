@@ -14730,3 +14730,117 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: WIN: Perfect 3-evil game\! Baa+Witch+Chancellor. Druid found Drunk, Slayer couldn't kill Doppelganger#1(Wretch). 0 wrong execs, 10HP.
 
+
+---
+
+# New Game — 2026-03-09 16:43:08
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Slayer, Enlightened, Poet, Judge, Baker
+- Outcasts: Drunk, Plague_Doctor, Doppelganger, Bombardier
+- Minions: Chancellor
+- Demons: Baa
+
+### [16:46:29] Revealed #1 Enlightened
+Info: {'direction': 'ccw'}
+
+### [16:46:30] Revealed #2 Bombardier
+Info: {}
+
+### [16:46:33] Revealed #3 Enlightened
+Info: {'direction': 'ccw'}
+
+### [16:46:42] Revealed #4 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [16:46:46] Revealed #5 Judge
+Info: {}
+
+### [16:46:46] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [16:46:50] Revealed #7 Baker
+Info: {'original_role': 'Slayer'}
+
+### [16:46:50] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [16:46:54] Solver Output
+Scenarios: 412/4838
+Evil probabilities: #2=34%, #7=33%, #4=31%, #1=31%, #6=28%, #5=24%, #3=12%, #8=7%
+  Generated 4838 candidate scenarios
+  412 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [16:46:54] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.514 (adjusted 2.514) | timing x1.00
+
+### [16:53:09] Ability used at #8
+
+#### [16:53:20] Solver Output
+Scenarios: 86/4838
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #1=77%, #4=58%, #7=23%, #8=23%, #5=19%
+  Generated 4838 candidate scenarios
+  86 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 7, 8]
+
+#### [16:53:20] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#1']
+Reason: Expected posterior 56.3 scenarios (adjusted 64.8, info gain 0.408 bits) | timing x1.00
+WARNING: Corruption risk: 30% -- corrupted Judge results are unreliable
+
+### [16:54:16] Ability used at #5
+
+### [16:54:21] Revealed #5 Judge
+Info: {'target': 1, 'is_lying': False}
+
+#### [16:54:26] Solver Output
+Scenarios: 52/4838
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #1=62%, #7=38%, #8=38%, #4=31%, #5=31%
+  Generated 4838 candidate scenarios
+  52 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 7, 8]
+
+#### [16:54:26] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (31% evil Baa, 31% evil Chancellor, 31% good Enlightened).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [16:55:03] Executed #1 -> Chancellor (EVIL)
+
+#### [16:55:08] Solver Output
+Scenarios: 16/606
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#7', '#8']
+Evil probabilities: #4=50%, #5=50%
+  Generated 606 candidate scenarios
+  16 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [4, 5]
+
+#### [16:55:08] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 25% good Drunk (corrupted), 19% good Poet (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:55:54] Executed #4 -> Baa (EVIL)
+
+## [16:56:00] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect game, PD found Chancellor#1, Judge confirmed, Baa#4 disguised as Poet. Drunk#3 and Judge#5 both corrupted.
+
