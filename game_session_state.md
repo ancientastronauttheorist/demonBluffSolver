@@ -12389,3 +12389,85 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 3
 Notes: WIN 3HP. Lilis game with Witch blocking #8. Lilis killed #7 (night). PD#4 found #6 corrupted + revealed #2 evil — but #2 was good Oracle (PD was Witch, lied!). Wrong exec on #2 Oracle (-5HP). Single scenario survived after wrong exec: #4=Witch, #6=Lilis. Knight check on #3 confirmed good. #1=Drunk<Corrupted>.
 
+
+---
+
+# New Game — 2026-03-09 13:24:42
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Bishop, Slayer, Gemcrafter, Druid, Baker, Scout, Knitter
+- Outcasts: Wretch
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [13:26:26] Revealed #1 Knitter
+Info: {'evil_pairs': 0}
+
+### [13:26:26] Revealed #2 Wretch
+Info: {}
+
+### [13:26:26] Revealed #3 Bishop
+Info: {'targets': [2, 8], 'types': ['Minion', 'Villager']}
+
+### [13:26:26] Revealed #4 Baker
+Info: {'original_role': 'Scout'}
+
+### [13:26:26] Revealed #5 Gemcrafter
+Info: {'good_position': 2}
+
+### [13:26:26] Revealed #6 Druid
+Info: {}
+
+### [13:26:26] Revealed #7 Scout
+Info: {'evil_role': 'Twin_Minion', 'distance': 1}
+
+### [13:26:27] Revealed #8 Slayer
+Info: {}
+
+#### [13:26:32] Solver Output
+Scenarios: 4/56
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #5=75%, #7=50%, #1=25%, #4=25%, #6=25%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [13:26:32] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#5']
+Reason: Target #5 is 75% evil (adjusted 0.56)
+WARNING: Corruption risk: 25% -- Slayer ability disabled if corrupted
+
+### [13:27:31] Ability used at #8
+
+#### [13:27:38] Solver Output
+Scenarios: 2/7
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6', '#8']
+Evil probabilities: #1=50%, #7=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [13:27:38] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [13:28:28] Executed #1 -> GOOD (WRONG!)
+
+### [13:29:13] Executed #7 -> Twin_Minion (EVIL)
+
+## [13:29:14] GAME OVER — WIN
+Final HP: 5
+Notes: WIN 5HP. Slayer#8 killed Pooka#5 (75% confidence). 50/50 between #1 and #7 for Twin_Minion — wrong exec on #1 Knitter (-5HP), then #7=Twin_Minion. Pooka corrupted adjacent #4(Baker) and #6(Druid). Ascension 20 complete!
+

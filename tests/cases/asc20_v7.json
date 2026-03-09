@@ -1,0 +1,148 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          8
+        ],
+        "types": [
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Scout"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Twin_Minion",
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    1,
+    7
+  ],
+  "confirmed_evil": [
+    5,
+    7
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Pooka",
+    "7": "Twin_Minion"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 8,
+      "target_pos": 5,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "1": false
+  },
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Slayer",
+      "Gemcrafter",
+      "Druid",
+      "Baker",
+      "Scout",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    8
+  ],
+  "name": "asc20_v7",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "7": "Twin_Minion"
+  },
+  "notes": "WIN 5HP. Slayer#8 killed Pooka#5 (75% confidence). 50/50 between #1 and #7 for Twin_Minion \u2014 wrong exec on #1 Knitter (-5HP), then #7=Twin_Minion. Pooka corrupted adjacent #4(Baker) and #6(Druid). Ascension 20 complete!"
+}
