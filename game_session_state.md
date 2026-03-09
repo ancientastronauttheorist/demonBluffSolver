@@ -9331,3 +9331,147 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: Lilis game, Witch-blocked #6 confirmed evil via night kill. Drunk#8 corrupted. 50/50 Lilis at #9 with budget.
 
+
+---
+
+# New Game — 2026-03-09 00:13:17
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Scout, Enlightened, Slayer, Jester, Alchemist, Judge
+- Outcasts: Wretch, Bombardier
+- Minions: Poisoner
+- Demons: Lilis
+
+### [00:15:10] Revealed #1 Bombardier
+Info: {}
+
+### [00:15:11] Revealed #2 Jester
+Info: {}
+
+### [00:15:11] Revealed #3 Slayer
+Info: {}
+
+### [00:15:11] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [00:15:11] Revealed #5 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 2}
+
+### [00:15:11] Revealed #7 Enlightened
+Info: {'direction': 'cw'}
+
+### [00:15:11] Revealed #8 Wretch
+Info: {}
+
+### [00:15:12] Revealed #9 Judge
+Info: {}
+
+#### [00:15:17] Solver Output
+Scenarios: 15/106
+Definite good: ['#6', '#7']
+Evil probabilities: #4=67%, #5=40%, #1=33%, #2=20%, #3=13%, #8=13%, #9=13%
+  Generated 106 candidate scenarios
+  15 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 8, 9]
+
+#### [00:15:17] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#3', '#4']
+Reason: Expected posterior 6.0 scenarios (adjusted 6.2, info gain 1.264 bits) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [00:16:13] Revealed #2 Jester
+Info: {'targets': [1, 3, 4], 'evil_count': 1}
+
+### [00:16:14] Ability used at #2
+
+#### [00:16:19] Solver Output
+Scenarios: 7/106
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #4=71%, #5=57%, #1=29%, #2=14%, #8=14%, #9=14%
+  Generated 106 candidate scenarios
+  7 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 8, 9]
+
+#### [00:16:19] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#1']
+Reason: Expected posterior 3.6 scenarios (adjusted 3.6, info gain 0.971 bits) | timing x1.00
+
+### [00:17:19] Revealed #9 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [00:17:19] Ability used at #9
+
+#### [00:17:25] Solver Output
+Scenarios: 4/106
+Definite good: ['#1', '#3', '#6', '#7', '#9']
+Evil probabilities: #4=75%, #5=75%, #2=25%, #8=25%
+  Generated 106 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 8]
+
+#### [00:17:25] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#4']
+Reason: Target #4 is 75% evil (adjusted 0.56)
+WARNING: Corruption risk: 25% -- Slayer ability disabled if corrupted
+
+### [00:18:22] Ability used at #3
+
+#### [00:18:28] Solver Output
+Scenarios: 2/106
+Definite evil: ['#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #4=50%
+  Generated 106 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Poisoner', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [00:18:28] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Poisoner', 'Lilis'})
+
+### [00:19:14] Executed #5 -> Lilis (EVIL)
+
+#### [00:19:20] Solver Output
+Scenarios: 1/11
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8', '#9']
+  Generated 11 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [00:19:20] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [00:20:03] Executed #4 -> Poisoner (EVIL)
+
+## [00:20:10] GAME OVER — WIN
+Final HP: 6
+Notes: Clean 2-exec win. Poisoner corrupted Slayer#3 (couldn't kill). Jester+Judge+Slayer-miss narrowed to 1 scenario.
+

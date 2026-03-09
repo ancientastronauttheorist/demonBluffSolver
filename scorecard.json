@@ -496,6 +496,13 @@
       "name": "asc17_v6b",
       "notes": "Lilis game, Witch-blocked #6 confirmed evil via night kill. Drunk#8 corrupted. 50/50 Lilis at #9 with budget.",
       "date": "2026-03-09 00:10"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v7",
+      "notes": "Clean 2-exec win. Poisoner corrupted Slayer#3 (couldn't kill). Jester+Judge+Slayer-miss narrowed to 1 scenario.",
+      "date": "2026-03-09 00:20"
     }
   ]
 }
