@@ -8265,3 +8265,117 @@ Reason: #2 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Witch'})
 Final HP: 10
 Notes: Perfect game. Jester+Judge combo identified all 3 evils. Witch blocked #9 reveal. No corruption.
 
+
+---
+
+# New Game — 2026-03-08 22:49:19
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+
+---
+
+# New Game — 2026-03-08 22:49:25
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Knight, Baker, Bard, Enlightened
+- Outcasts: Bombardier, Wretch
+- Minions: Minion
+- Demons: Baa
+
+
+---
+
+# New Game — 2026-03-08 22:49:30
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Confessor, Knight, Baker, Bard, Enlightened
+- Outcasts: Bombardier, Wretch
+- Minions: Minion
+- Demons: Lilis
+
+
+---
+
+# New Game — 2026-03-08 22:59:32
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Gemcrafter, Confessor, Hunter, Judge, Dreamer, Alchemist
+- Outcasts: Wretch, Bombardier
+- Minions: Minion
+- Demons: Lilis
+
+### [23:01:14] Revealed #1 Judge
+Info: {}
+
+### [23:01:14] Revealed #2 Dreamer
+Info: {}
+
+### [23:01:14] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [23:01:14] Revealed #4 Wretch
+Info: {}
+
+### [23:01:14] Revealed #5 Gemcrafter
+Info: {'good_position': 6}
+
+### [23:01:15] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [23:01:15] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [23:01:15] Revealed #8 Gemcrafter
+Info: {'good_position': 3}
+
+#### [23:01:22] Solver Output
+Scenarios: 2/72
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+  Generated 72 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [23:01:22] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Lilis', 'Minion'})
+
+### [23:01:58] Executed #5 -> Minion (EVIL)
+
+#### [23:02:02] Solver Output
+Scenarios: 1/8
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+  Generated 8 candidate scenarios
+  1 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [23:02:02] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [23:02:36] Executed #6 -> Lilis (EVIL)
+
+## [23:02:36] GAME OVER — WIN
+Final HP: 6
+Notes: 9 cards, 2 evils. Lilis game, 2 nights (HP 10->6). Solver nailed both evils from passive info alone (2 scenarios). Gemcrafter #5 lied about #6 being Good, Confessor #6 dizzy = evil. No abilities needed.
+
