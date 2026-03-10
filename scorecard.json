@@ -888,6 +888,13 @@
       "name": "asc25_v4",
       "notes": "Slayer couldn't kill revealed Chancellor. Doppelganger#1 as Hunter, Drunk#8 as Knitter corrupted. Lilis night killed #6. 6HP.",
       "date": "2026-03-09 21:19"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc25_v5",
+      "notes": "Perfect 3-evil deduction. Two Knitters, contradicting pairs, Scout+Empress+Bard constraints narrowed all evils. 8HP.",
+      "date": "2026-03-09 21:25"
     }
   ]
 }

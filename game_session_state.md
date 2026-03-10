@@ -16450,3 +16450,65 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: Slayer couldn't kill revealed Chancellor. Doppelganger#1 as Hunter, Drunk#8 as Knitter corrupted. Lilis night killed #6. 6HP.
 
+
+---
+
+# New Game — 2026-03-09 21:21:32
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Scout, Gemcrafter, Empress, Knitter, Bard, Jester
+- Outcasts: Doppelganger
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [21:22:54] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [21:22:54] Revealed #2 Empress
+Info: {'targets': [1, 7, 8]}
+
+### [21:22:54] Revealed #3 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:22:54] Revealed #4 Jester
+Info: {}
+
+### [21:23:43] Revealed #5 Knitter
+Info: {'evil_pairs': 2}
+
+### [21:23:43] Revealed #6 Gemcrafter
+Info: {'good_position': 8}
+
+### [21:23:44] Revealed #7 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+#### [21:23:48] Solver Output
+Scenarios: 4/420
+Definite evil: ['#2', '#3', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+  Generated 420 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [21:23:48] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Lilis'})
+
+### [21:24:26] Executed #2 -> Lilis (EVIL)
+
+### [21:24:54] Executed #3 -> Puppeteer (EVIL)
+
+### [21:25:32] Executed #4 -> Puppet (EVIL)
+
+## [21:25:32] GAME OVER — WIN
+Final HP: 8
+Notes: Perfect 3-evil deduction. Two Knitters, contradicting pairs, Scout+Empress+Bard constraints narrowed all evils. 8HP.
+
