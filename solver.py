@@ -2242,6 +2242,57 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         if non_baker_real + baker_count > deck_count + shaman_allowance:
             return False
 
+    # Baker conversion chain: evil Baker disguises do NOT trigger conversion,
+    # so a truthful good converted Baker ("I was a X") requires a good Baker
+    # to have been revealed BEFORE it in reveal_order to start the chain.
+    # If no good Baker claims "original", the original Baker is off-board and
+    # no conversion chain can start — so no good converted Bakers are allowed.
+    if state.reveal_order and baker_claimed_counts:
+        # Find earliest good Baker claiming "original" in reveal_order
+        original_baker_reveal_idx = None
+        for card in state.cards:
+            if _normalize_role(card.apparent_role) != "baker":
+                continue
+            pos = card.position
+            if _known_evil_role(pos, scenario, state) is not None:
+                continue
+            if pos == scenario.puppet_position:
+                continue
+            truth = _truth_status(pos, scenario, state)
+            if truth != TruthStatus.TRUTHFUL:
+                continue
+            claimed = card.info_parsed.get("original_role", "")
+            if claimed.lower() == "original" and pos in state.reveal_order:
+                original_baker_reveal_idx = state.reveal_order.index(pos)
+                break
+
+        if original_baker_reveal_idx is None:
+            # No good original Baker on board — no conversion chain possible.
+            # Any truthful good converted Baker is impossible.
+            return False
+        else:
+            # Every truthful good converted Baker must be revealed AFTER the
+            # original Baker (so the conversion chain can reach them).
+            for card in state.cards:
+                if _normalize_role(card.apparent_role) != "baker":
+                    continue
+                pos = card.position
+                if _known_evil_role(pos, scenario, state) is not None:
+                    continue
+                if pos == scenario.puppet_position:
+                    continue
+                claimed = card.info_parsed.get("original_role", "")
+                if not claimed or claimed.lower() == "original":
+                    continue
+                truth = _truth_status(pos, scenario, state)
+                if truth != TruthStatus.TRUTHFUL:
+                    continue
+                if pos not in state.reveal_order:
+                    continue
+                converted_reveal_idx = state.reveal_order.index(pos)
+                if converted_reveal_idx < original_baker_reveal_idx:
+                    return False  # Converted Baker revealed before original
+
     return True
 
 

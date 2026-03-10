@@ -323,3 +323,178 @@ Reason: #2 is evil in ALL 4 scenarios (roles: {'Baa', 'Witch'})
 Final HP: 5
 Notes: Wretch Slayer kill cost 5HP. Fixed Druid unrevealed-target bug + Wretch-Oracle minion pool. Baa warning wrong - no=2 was correct.
 
+
+---
+
+# New Game — 2026-03-10 13:55:57
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Medium, Enlightened, Confessor, Baker, Dreamer
+- Outcasts: Bombardier, Drunk, Doppelganger
+- Minions: Witch
+- Demons: Baa
+
+### [13:58:05] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [13:58:09] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [13:58:14] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [13:58:18] Revealed #5 Baker
+Info: {'original_role': 'Medium'}
+
+### [13:58:22] Revealed #6 Dreamer
+Info: {}
+
+### [13:58:27] Revealed #7 Enlightened
+Info: {'direction': 'cw'}
+
+### [13:58:31] Revealed #8 Baker
+Info: {'original_role': 'Medium'}
+
+#### [13:58:37] Solver Output
+Scenarios: 236/2156
+Definite good: ['#2', '#3']
+Evil probabilities: #5=44%, #8=44%, #4=39%, #7=35%, #1=21%, #6=17%
+  Generated 2156 candidate scenarios
+  236 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7, 8]
+
+#### [13:58:37] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#8']
+Reason: Entropy 2.349 (adjusted 2.150) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [13:59:24] Revealed #6 Dreamer
+Info: {'target': 8, 'evil_role': 'Witch'}
+
+### [13:59:29] Ability used at #6
+
+#### [13:59:35] Solver Output
+Scenarios: 184/2156
+Definite good: ['#2', '#3']
+Evil probabilities: #5=48%, #7=45%, #4=39%, #8=28%, #1=22%, #6=19%
+  Generated 2156 candidate scenarios
+  184 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7, 8]
+
+#### [13:59:35] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 48% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 48% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (48%) -- consider gathering more info
+
+### [14:00:18] Executed #5 -> Witch (EVIL)
+
+### [14:00:57] Revealed #1 Medium
+Info: {'good_position': 8, 'good_role': 'real'}
+
+#### [14:01:02] Solver Output
+Scenarios: 2/301
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6', '#8']
+Evil probabilities: #1=50%, #7=50%
+  Generated 301 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [14:01:02] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:01:47] Executed #1 -> GOOD (WRONG!)
+
+#### [14:01:57] Solver Output
+Scenarios: 0/258
+  Generated 258 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #1 Medium: rejected 247/258 (96%)
+    #7 Enlightened: rejected 154/258 (60%)
+    #2 Confessor: rejected 73/258 (28%)
+    #3 Alchemist: rejected 73/258 (28%)
+    #6 Dreamer: rejected 37/258 (14%)
+    #4 Baker: rejected 30/258 (12%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 22 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Confessor: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Alchemist: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Baker: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Baker: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Dreamer: 7 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Enlightened: 3 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Baker: 1 scenarios survive  <-- SUSPECT
+
+#### [14:01:57] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [14:03:47] Claude Reasoning
+
+
+#### [14:08:42] Solver Output
+Scenarios: 3/258
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#8']
+Evil probabilities: #4=33%, #6=33%, #7=33%
+  Generated 258 candidate scenarios
+  3 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [4, 6, 7]
+
+#### [14:08:42] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 33% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 33% < 80% threshold. Consider manual override if you have extra information.
+
+#### [14:26:33] Solver Output
+Scenarios: 2/258
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #6=50%, #7=50%
+  Generated 258 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [6, 7]
+
+#### [14:26:33] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:27:59] Executed #6 -> Baa (EVIL)
+
+## [14:28:08] GAME OVER — WIN
+Final HP: 5
+Notes: Baker conversion chain constraint added: evil Bakers don't trigger conversion, so converted Baker needs a good Baker revealed before it. Fixed 0-scenario bug (Medium good_role=real not parsed). Went from 3 scenarios (33%) to 2 (50%) with chain fix. 5HP, 1 wrong exec (#1 Doppelganger).
+

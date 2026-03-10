@@ -652,7 +652,17 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         targets = [int(x) for x in args[2].split(",")]
         return card_oracle(pos, targets, args[3])
     elif role == "medium":
-        return card_medium(pos, int(args[2]), args[3])
+        target_pos = int(args[2])
+        claimed_role = args[3]
+        # "real" means target IS their displayed role — resolve to actual role name
+        if claimed_role.lower() == "real":
+            target_card = next((c for c in session.cards if c.position == target_pos), None)
+            if target_card:
+                claimed_role = target_card.apparent_role
+                print(f"  [medium] Resolved 'real' -> '{claimed_role}' (target #{target_pos} apparent role)")
+            else:
+                print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
+        return card_medium(pos, target_pos, claimed_role)
     elif role == "hunter":
         return card_hunter(pos, int(args[2]))
     elif role == "architect":

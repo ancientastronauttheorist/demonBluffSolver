@@ -133,5 +133,11 @@
   },
   "used_abilities": [
     6
-  ]
+  ],
+  "name": "asc27_v1",
+  "true_evil_positions": {
+    "5": "Witch",
+    "6": "Baa"
+  },
+  "notes": "Baker conversion chain constraint added: evil Bakers don't trigger conversion, so converted Baker needs a good Baker revealed before it. Fixed 0-scenario bug (Medium good_role=real not parsed). Went from 3 scenarios (33%) to 2 (50%) with chain fix. 5HP, 1 wrong exec (#1 Doppelganger)."
 }
