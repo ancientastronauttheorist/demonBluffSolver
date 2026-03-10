@@ -1042,6 +1042,13 @@
       "name": "asc28_v2",
       "notes": "Perfect 10HP. PD check solved it to 1 scenario.",
       "date": "2026-03-10 16:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v3",
+      "notes": "Perfect 10HP. FT on confirmed-Good caught the lie. Jester corruption confirmed Pooka position.",
+      "date": "2026-03-10 16:53"
     }
   ]
 }

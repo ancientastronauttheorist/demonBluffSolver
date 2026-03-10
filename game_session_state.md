@@ -1795,3 +1795,116 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: Perfect 10HP. PD check solved it to 1 scenario.
 
+
+---
+
+# New Game — 2026-03-10 16:47:58
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Empress, Jester, Oracle, Knight
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [16:50:16] Revealed #1 Knight
+Info: {}
+
+### [16:50:16] Revealed #2 Empress
+Info: {'targets': [1, 5, 6]}
+
+### [16:50:16] Revealed #3 Fortune_Teller
+Info: {}
+
+### [16:50:16] Revealed #4 Plague_Doctor
+Info: {}
+
+### [16:50:16] Revealed #5 Oracle
+Info: {}
+
+### [16:50:17] Revealed #6 Jester
+Info: {}
+
+#### [16:50:22] Solver Output
+Scenarios: 14/21
+Definite good: ['#1', '#4']
+Evil probabilities: #2=29%, #3=29%, #5=21%, #6=21%
+  Generated 21 candidate scenarios
+  14 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6]
+
+#### [16:50:22] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.067 (adjusted 2.067) | timing x1.00
+
+### [16:51:06] Ability used at #4
+
+#### [16:51:06] Solver Output
+Scenarios: 5/21
+Definite good: ['#1', '#2', '#4', '#6']
+Evil probabilities: #3=60%, #5=40%
+  Generated 21 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 5]
+
+#### [16:51:06] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.722 (adjusted 0.650) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [16:51:53] Revealed #3 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [16:51:53] Ability used at #3
+
+#### [16:51:53] Solver Output
+Scenarios: 4/21
+Definite good: ['#1', '#2', '#4', '#6']
+Evil probabilities: #3=75%, #5=25%
+  Generated 21 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 5]
+
+#### [16:51:53] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#1', '#2', '#4']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.5, info gain 0.678 bits) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [16:52:56] Revealed #6 Jester
+Info: {'targets': [1, 2, 4], 'evil_count': 2}
+
+### [16:52:56] Ability used at #6
+
+#### [16:52:56] Solver Output
+Scenarios: 2/21
+Definite good: ['#1', '#2', '#4', '#6']
+Evil probabilities: #3=50%, #5=50%
+  Generated 21 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 5]
+
+#### [16:52:56] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Fortune Teller (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:53:44] Executed #3 -> Pooka (EVIL)
+
+## [16:53:44] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. FT on confirmed-Good caught the lie. Jester corruption confirmed Pooka position.
+
