@@ -2092,3 +2092,109 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: PD active confirmed #3 evil + #9 corrupted. Jester on #1,#2,#4 found 1 evil. Druid #4 lied (Doppelganger). Perfect 10HP.
 
+
+---
+
+# New Game — 2026-03-10 17:09:39
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Dreamer, Judge, Gemcrafter, Hunter, Bishop
+- Outcasts: Bombardier
+- Minions: Minion
+- Demons: Pooka
+
+### [17:10:55] Revealed #1 Scout
+Info: {'evil_role': 'Pooka', 'distance': 4}
+
+### [17:11:00] Revealed #2 Hunter
+Info: {'distance': 4}
+
+### [17:11:06] Revealed #3 Gemcrafter
+Info: {'good_position': 7}
+
+### [17:11:11] Revealed #4 Dreamer
+Info: {}
+
+### [17:11:17] Revealed #5 Bishop
+Info: {'targets': [4, 6, 7], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [17:11:22] Revealed #6 Bombardier
+Info: {}
+
+### [17:11:28] Revealed #7 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [17:11:36] Revealed #8 Judge
+Info: {}
+
+#### [17:11:41] Solver Output
+Scenarios: 2/56
+Definite evil: ['#7']
+Definite good: ['#1', '#4', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #3=50%
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [17:11:41] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [17:12:22] Executed #7 -> Minion (EVIL)
+
+#### [17:12:28] Solver Output
+Scenarios: 2/7
+Definite evil: ['#7']
+Definite good: ['#1', '#4', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #3=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [17:12:28] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#1']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [17:13:30] Revealed #8 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [17:13:36] Ability used at #8
+
+#### [17:13:41] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:13:41] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:14:23] Executed #3 -> Pooka (EVIL)
+
+## [17:14:31] GAME OVER — WIN
+Final HP: 10
+Notes: Judge #8 on #1 = truthful, confirmed #3=Pooka. Corrupted: #2 Hunter, #4 Dreamer. Perfect 10HP.
+
