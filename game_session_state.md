@@ -1908,3 +1908,187 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect 10HP. FT on confirmed-Good caught the lie. Jester corruption confirmed Pooka position.
 
+
+---
+
+# New Game — 2026-03-10 16:55:00
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Hunter, Architect, Bard, Jester, Knitter, Enlightened
+- Outcasts: Plague_Doctor
+- Minions: Shaman, Minion
+- Demons: Pooka
+
+### [16:56:29] Revealed #1 Enlightened
+Info: {'direction': 'cw'}
+
+### [16:56:29] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [16:56:29] Revealed #3 Jester
+Info: {}
+
+### [16:56:30] Revealed #4 Druid
+Info: {}
+
+### [16:56:30] Revealed #5 Jester
+Info: {}
+
+### [16:56:30] Revealed #6 Plague_Doctor
+Info: {}
+
+### [16:56:30] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [16:56:30] Revealed #8 Druid
+Info: {}
+
+### [16:56:30] Revealed #9 Bard
+Info: {'corruption_distance': 1}
+
+### [16:56:31] Revealed #10 Architect
+Info: {'side': 'left'}
+
+#### [16:56:38] Solver Output
+Scenarios: 66/3240
+Definite good: ['#6', '#9']
+Evil probabilities: #8=58%, #10=45%, #1=39%, #4=39%, #5=33%, #7=33%, #3=27%, #2=24%
+  Generated 3240 candidate scenarios
+  66 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 10]
+
+#### [16:56:38] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.783 (adjusted 1.783) | timing x1.00
+
+### [16:57:19] Ability used at #6
+
+#### [16:57:20] Solver Output
+Scenarios: 10/3240
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #8=80%, #4=20%
+  Generated 3240 candidate scenarios
+  10 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman', 'Minion'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [16:57:20] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 10 scenarios (roles: {'Shaman', 'Minion'})
+
+### [16:59:09] Executed #3 -> Shaman (EVIL)
+
+#### [16:59:17] Solver Output
+Scenarios: 5/352
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #8=80%, #4=20%
+  Generated 352 candidate scenarios
+  5 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [16:59:17] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 5 scenarios (roles: {'Pooka'})
+
+### [17:03:19] Executed #10 -> Pooka (EVIL)
+
+#### [17:03:24] Solver Output
+Scenarios: 5/43
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #8=80%, #4=20%
+  Generated 43 candidate scenarios
+  5 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [17:03:24] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#4']
+Reason: Expected posterior 2.1 scenarios (adjusted 2.4, info gain 1.085 bits) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [17:04:41] Revealed #5 Jester
+Info: {'targets': [1, 2, 4], 'evil_count': 1}
+
+### [17:04:46] Ability used at #5
+
+#### [17:04:52] Solver Output
+Scenarios: 2/43
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #4=50%, #8=50%
+  Generated 43 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [17:04:52] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#5']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [17:06:15] Revealed #4 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': 'Doppelganger'}
+
+### [17:06:20] Ability used at #4
+
+#### [17:06:25] Solver Output
+Scenarios: 1/43
+Definite evil: ['#3', '#4', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8', '#9']
+  Generated 43 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #10 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [17:06:25] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [17:07:35] Executed #4 -> Minion (EVIL)
+
+## [17:07:43] GAME OVER — WIN
+Final HP: 10
+Notes: PD active confirmed #3 evil + #9 corrupted. Jester on #1,#2,#4 found 1 evil. Druid #4 lied (Doppelganger). Perfect 10HP.
+

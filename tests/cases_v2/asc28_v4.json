@@ -1,0 +1,171 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          5
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          4
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "left"
+      }
+    }
+  ],
+  "executed": [
+    3,
+    10,
+    4
+  ],
+  "confirmed_evil": [
+    3,
+    10,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Shaman",
+    "10": "Pooka",
+    "4": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 9,
+      "is_corrupted": true,
+      "evil_revealed": 3
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Hunter",
+      "Architect",
+      "Bard",
+      "Jester",
+      "Knitter",
+      "Enlightened"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Shaman",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    5,
+    4
+  ],
+  "name": "asc28_v4",
+  "true_evil_positions": {
+    "3": "Shaman",
+    "4": "Minion",
+    "10": "Pooka"
+  },
+  "notes": "PD active confirmed #3 evil + #9 corrupted. Jester on #1,#2,#4 found 1 evil. Druid #4 lied (Doppelganger). Perfect 10HP."
+}

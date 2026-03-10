@@ -1049,6 +1049,13 @@
       "name": "asc28_v3",
       "notes": "Perfect 10HP. FT on confirmed-Good caught the lie. Jester corruption confirmed Pooka position.",
       "date": "2026-03-10 16:53"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v4",
+      "notes": "PD active confirmed #3 evil + #9 corrupted. Jester on #1,#2,#4 found 1 evil. Druid #4 lied (Doppelganger). Perfect 10HP.",
+      "date": "2026-03-10 17:07"
     }
   ]
 }
