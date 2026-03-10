@@ -1,0 +1,176 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          6
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          8
+        ],
+        "types": [
+          "Minion",
+          "Outcast",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6,
+          7
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "copied_role": "Bounty Hunter",
+        "evil_position": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Judge"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          6
+        ],
+        "evil_count": 2
+      }
+    }
+  ],
+  "executed": [
+    8,
+    2,
+    6,
+    7,
+    9
+  ],
+  "confirmed_evil": [
+    6,
+    7,
+    9
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Puppeteer",
+    "7": "Poisoner",
+    "9": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    5,
+    9
+  ],
+  "executed_good_corrupted": {
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Knight",
+      "Jester",
+      "Poet",
+      "Judge",
+      "Druid",
+      "Oracle",
+      "Bishop"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    9,
+    5,
+    1
+  ],
+  "name": "asc26_v4b",
+  "true_evil_positions": {
+    "6": "Puppeteer",
+    "7": "Poisoner",
+    "9": "Lilis"
+  },
+  "notes": "Solver correct. #7 Poisoner at 57%, #9 Lilis at 33%. Execution lookahead guaranteed win. #5 Drunk corrupted. Lilis night killed #8. Knight at #2 blocked execution (confirmed good). Execute mode coordinate bug caused delay - clicked (641,135) instead of (1280,196) for card #9."
+}
