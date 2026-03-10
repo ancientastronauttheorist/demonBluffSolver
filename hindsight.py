@@ -21,7 +21,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from solver import GameState, CardInfo, DeckComposition, solve
 from knowledge_base import get_card, Role
 
-CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases")
+CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "tests", "cases")
+CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases_v2")
 
 
 @dataclass
@@ -439,7 +440,11 @@ def main():
     losses_only = "--losses-only" in flags or "-l" in flags
     filter_name = args[0] if args else None
 
-    case_files = sorted(glob.glob(os.path.join(CASES_DIR, "*.json")))
+    case_files = []
+    for d in (CASES_DIR_LEGACY, CASES_DIR):
+        if os.path.isdir(d):
+            case_files.extend(glob.glob(os.path.join(d, "*.json")))
+    case_files.sort(key=lambda p: os.path.basename(p))
     if not case_files:
         print("No test cases found.")
         return

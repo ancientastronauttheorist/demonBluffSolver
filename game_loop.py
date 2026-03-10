@@ -719,7 +719,7 @@ def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
     """Save a regression test case and immediately run it."""
     from tests.test_regression import save_test_case, load_test_case, run_test
     save_test_case(SESSION_FILE, name, true_evils, notes)
-    case = load_test_case(os.path.join("tests", "cases", f"{name}.json"))
+    case = load_test_case(os.path.join("tests", "cases_v2", f"{name}.json"))
     passed, messages = run_test(case)
     status = "PASS" if passed else "FAIL"
     print(f"\n[{status}] {name}")

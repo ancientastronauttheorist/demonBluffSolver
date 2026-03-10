@@ -29,7 +29,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from solver import GameState, CardInfo, DeckComposition, solve
 
 
-CASES_DIR = os.path.join(os.path.dirname(__file__), "cases")
+CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "cases")
+CASES_DIR = os.path.join(os.path.dirname(__file__), "cases_v2")
 
 
 @dataclass
@@ -383,11 +384,11 @@ def replay_game(case: dict, verbose: bool = False, strict: bool = False) -> Repl
 def run_all_replays(filter_name: str = None, verbose: bool = False,
                     strict: bool = False) -> bool:
     """Run all replay tests. Returns True if all passed."""
-    if not os.path.isdir(CASES_DIR):
-        print(f"No test cases directory: {CASES_DIR}")
-        return True
-
-    case_files = sorted(glob.glob(os.path.join(CASES_DIR, "*.json")))
+    case_files = []
+    for d in (CASES_DIR_LEGACY, CASES_DIR):
+        if os.path.isdir(d):
+            case_files.extend(glob.glob(os.path.join(d, "*.json")))
+    case_files.sort(key=lambda p: os.path.basename(p))
     if not case_files:
         print("No test cases found.")
         return True
