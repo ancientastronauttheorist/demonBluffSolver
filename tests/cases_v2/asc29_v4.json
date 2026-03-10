@@ -1,0 +1,133 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    }
+  ],
+  "executed": [
+    8,
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Chancellor",
+    "7": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 4,
+      "target": 6,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Druid",
+      "Knitter",
+      "Slayer",
+      "Architect",
+      "Gemcrafter",
+      "Enlightened"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4
+  ],
+  "name": "asc29_v4",
+  "true_evil_positions": {
+    "6": "Chancellor",
+    "7": "Lilis"
+  },
+  "notes": "Lilis game, 8HP. Night killed #8. PD clean check on #6 confirmed evil. Both evils adjacent (#6,#7). Corrupted: #2 Knitter."
+}
