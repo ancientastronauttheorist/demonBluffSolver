@@ -132,5 +132,11 @@
   },
   "used_abilities": [
     2
-  ]
+  ],
+  "name": "asc26_v5",
+  "true_evil_positions": {
+    "1": "Baa",
+    "5": "Poisoner"
+  },
+  "notes": "5HP remaining, wrong exec on #4 corrupted Confessor"
 }

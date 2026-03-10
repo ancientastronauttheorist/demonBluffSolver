@@ -17692,3 +17692,156 @@ WARNING: Execution lookahead override -- immediate hit chance is 33%, but all re
 Final HP: 6
 Notes: Solver correct. #7 Poisoner at 57%, #9 Lilis at 33%. Execution lookahead guaranteed win. #5 Drunk corrupted. Lilis night killed #8. Knight at #2 blocked execution (confirmed good). Execute mode coordinate bug caused delay - clicked (641,135) instead of (1280,196) for card #9.
 
+
+---
+
+# New Game — 2026-03-10 00:33:35
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Baker, Confessor, Judge, Enlightened, Empress, Drunk
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Baa
+
+## Deck
+- Villagers: Architect, Baker, Confessor, Judge, Enlightened, Empress
+- Outcasts: Doppelganger, Drunk
+- Minions: Poisoner
+- Demons: Baa
+
+### [00:37:56] Revealed #1 Empress
+Info: {'targets': [2, 3, 4]}
+
+### [00:37:59] Revealed #2 Judge
+Info: {}
+
+### [00:38:02] Revealed #3 Architect
+Info: {'side': 'equal'}
+
+### [00:38:05] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [00:38:08] Revealed #5 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [00:38:12] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [00:38:15] Revealed #7 Enlightened
+Info: {'direction': 'equidistant'}
+
+### [00:38:18] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+#### [00:38:22] Solver Output
+Scenarios: 127/4048
+Definite good: ['#6']
+Evil probabilities: #4=60%, #7=32%, #8=30%, #5=26%, #1=25%, #2=19%, #3=8%
+  Generated 4048 candidate scenarios
+  127 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [00:38:22] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#3']
+Reason: Expected posterior 76.2 scenarios (adjusted 83.7, info gain 0.601 bits) | timing x1.00
+WARNING: Corruption risk: 20% -- corrupted Judge results are unreliable
+
+### [00:39:03] Revealed #2 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [00:39:07] Ability used at #2
+
+#### [00:39:11] Solver Output
+Scenarios: 80/4048
+Definite good: ['#3', '#6']
+Evil probabilities: #4=60%, #1=40%, #8=35%, #5=29%, #2=19%, #7=18%
+  Generated 4048 candidate scenarios
+  80 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 7, 8]
+
+#### [00:39:11] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (39% evil Baa, 28% good Drunk (corrupted), 21% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [00:39:48] Executed #4 -> GOOD (WRONG!)
+
+#### [00:39:56] Solver Output
+Scenarios: 0/3036
+  Generated 3036 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Confessor: rejected 2242/3036 (74%)
+    #7 Enlightened: rejected 1626/3036 (54%)
+    #3 Architect: rejected 1623/3036 (53%)
+    #6 Confessor: rejected 1457/3036 (48%)
+    #1 Empress: rejected 1232/3036 (41%)
+    #2 Judge: rejected 1211/3036 (40%)
+    #8 Baker: rejected 614/3036 (20%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Empress: 37 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Judge: 51 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Architect: 52 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Confessor: 100 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Baker: 32 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Confessor: 52 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Enlightened: 62 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Baker: 52 scenarios survive  <-- SUSPECT
+
+#### [00:39:56] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [00:40:35] Solver Output
+Scenarios: 32/3036
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#6', '#8']
+Evil probabilities: #5=72%, #7=28%
+  Generated 3036 candidate scenarios
+  32 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa', 'Poisoner'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 7]
+
+#### [00:40:35] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 32 scenarios (roles: {'Baa', 'Poisoner'})
+
+### [00:41:21] Executed #1 -> Baa (EVIL)
+
+#### [00:41:25] Solver Output
+Scenarios: 18/422
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#6', '#8']
+Evil probabilities: #5=89%, #7=11%
+  Generated 422 candidate scenarios
+  18 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 7]
+
+#### [00:41:25] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 89% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 89% confident (budget: 1 wrong execs)
+
+## [00:43:09] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP remaining, wrong exec on #4 corrupted Confessor
+
