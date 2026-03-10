@@ -763,6 +763,7 @@ def main():
         print("  block <pos>                           Mark position as blocked (Witch)")
         print("  unblock <pos>                         Unblock position (after Witch dies)")
         print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
+        print("  night_no_kill                         Lilis night dealt 2HP but killed nobody (she's last unrevealed)")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
         print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
@@ -1043,6 +1044,28 @@ def main():
         if n_evil == len(positions) and n_evil > 0:
             confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
         print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
+        return
+
+    if cmd == "night_no_kill":
+        session = GameSession.load()
+        # Find unrevealed positions (not in cards and not executed/night-killed)
+        revealed = {c.position for c in session.cards}
+        dead = set(session.executed)
+        all_positions = set(range(1, session.n_cards + 1))
+        unrevealed = all_positions - revealed - dead
+        if len(unrevealed) == 1:
+            lilis_pos = unrevealed.pop()
+            if lilis_pos not in session.confirmed_evil:
+                session.confirmed_evil.append(lilis_pos)
+            session.save()
+            print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos}")
+            print(f"  => #{lilis_pos} confirmed as Lilis (can't kill herself)")
+        elif len(unrevealed) == 0:
+            print("WARNING: No unrevealed positions. Night shouldn't have triggered.")
+        else:
+            print(f"WARNING: {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
+            print("  Cannot auto-deduce Lilis — multiple unrevealed cards exist.")
+            print("  Check if a card was actually killed and use night_kill instead.")
         return
 
     if cmd == "log":
