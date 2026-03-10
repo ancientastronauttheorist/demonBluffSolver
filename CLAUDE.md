@@ -26,7 +26,11 @@
 
 ### Start
 1. `safe_click menu_play_demo` → `safe_click mode_standard` → dismiss intro with `safe_click btn_close_dialog`
-2. Deck auto-opens. `python capture_deck.py <name>` → read pool roles + board counts (V, O, M, D icons top-right)
+2. Deck auto-opens. **Park mouse to bottom-left corner** `(50, 1350)` before screenshotting to avoid hover tooltips. Take screenshot, then **ALWAYS run card_vision.py** to read the deck:
+   ```
+   python card_vision.py classify_dirs <screenshot> --context deck --library-dir templates/compendium/page1 --library-dir templates/compendium/page3 --library-dir templates/compendium/page4 --library-dir templates/compendium/page5
+   ```
+   This returns each card's name, faction (Villager/Outcast/Minion/Demon), and confidence score. Use this as ground truth for the `deck` command. Also read board counts (V, O, M, D icons top-right).
 3. `python game_loop.py new <n_cards> <n_evil>`
 4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` — include ALL pool roles, prefixes REQUIRED
 5. Close deck by clicking neutral area
