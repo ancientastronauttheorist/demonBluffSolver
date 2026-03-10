@@ -110,7 +110,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [ ] **Shaman clones can't be cured by Alchemist** — Wiki says cloned Villagers retain corruption and can't be cured.
 
-- [ ] **Lilis won't kill herself when last revealed** — Patch v0.320a. Edge case for night kill validation — if Lilis is the last unrevealed card, she can't be her own night kill victim.
+- [x] **Lilis won't kill herself when last revealed** — Confirmed in asc25_v1: Lilis deals 2 HP even with no valid kill target (can't self-kill). No code fix needed — this is a data entry issue (don't assume last card was killed). Documented in CLAUDE.md.
 
 - [x] **Alchemist "0 cured" = always truthful** — Already handled. Evil/corrupted Alchemist has actual_cures=0 and must lie, so claiming 0 is rejected by `claimed != actual`.
 
