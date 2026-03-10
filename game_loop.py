@@ -644,7 +644,7 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_scout(pos, args[2], int(args[3]))
     elif role == "bard":
         return card_bard(pos, int(args[2]))
-    elif role == "fortune_teller":
+    elif role in ("fortune_teller", "ft"):
         targets = [int(x) for x in args[2].split(",")]
         has_evil = args[3].lower() in ("yes", "true", "1")
         return card_fortune_teller(pos, targets, has_evil)
@@ -906,8 +906,9 @@ def main():
                     elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
                         was_corrupted = False
                 else:
-                    # Default: if game didn't show <Corrupted>, assume clean
-                    was_corrupted = False
+                    # Default: unknown — don't assume clean, let solver keep both possibilities
+                    was_corrupted = None
+                    print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
             else:
                 # Treat as evil role name directly: execute 2 Chancellor
                 was_evil = True

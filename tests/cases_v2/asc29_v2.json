@@ -1,0 +1,172 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Bombardier"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          10
+        ],
+        "copied_role": "Empress"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Ft",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          8
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 3
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    9,
+    1
+  ],
+  "confirmed_evil": [
+    9
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "9": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 10,
+      "target": 6,
+      "is_corrupted": true,
+      "evil_revealed": 9
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Oracle",
+      "Poet",
+      "Druid",
+      "Medium",
+      "Fortune_Teller",
+      "Scout",
+      "Judge"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7,
+    10,
+    4,
+    6
+  ],
+  "name": "asc29_v2",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "8": "Minion",
+    "9": "Chancellor"
+  },
+  "notes": "Solver had 1 wrong scenario: predicted #3=Minion #7=Pooka but truth was #5=Pooka #8=Minion. Executed #3 (real Bombardier) = instant loss. Corrupted: #1(PD), #4/#6(Pooka). Need to investigate why correct scenario was eliminated."
+}
