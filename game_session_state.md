@@ -16672,3 +16672,116 @@ Reason: #7 is evil in ALL 2 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: Witch blocked #9. PD active revealed #7 evil. Perfect 10HP. Corrupted: #1 Druid (PD), #3 Bishop (Pooka), #5 Knight (Pooka)
 
+
+---
+
+# New Game — 2026-03-09 21:38:50
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knight, Medium, Baker, Confessor, Knitter, Gemcrafter
+- Outcasts: PlagueDr, Bombardier, Wretch
+- Minions: Witch
+- Demons: Baa
+
+## Deck
+- Villagers: Knight, Medium, Baker, Confessor, Knitter, Gemcrafter
+- Outcasts: PlagueDr, Bombardier, Wretch
+- Minions: Witch
+- Demons: Baa
+
+## Deck
+- Villagers: Knight, Medium, Baker, Confessor, Knitter, Gemcrafter
+- Outcasts: PlagueDr, Bombardier, Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [21:42:53] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [21:42:53] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:42:53] Revealed #3 PlagueDr
+Info: {}
+
+### [21:42:53] Revealed #4 Baker
+Info: {'original_role': 'Medium'}
+
+### [21:42:53] Revealed #5 Bombardier
+Info: {}
+
+### [21:42:54] Revealed #6 Knight
+Info: {}
+
+### [21:42:54] Revealed #7 Medium
+Info: {'good_position': 3, 'good_role': 'PlagueDr'}
+
+### [21:42:54] Revealed #8 Gemcrafter
+Info: {'good_position': 5}
+
+#### [21:42:59] Solver Output
+Scenarios: 6/194
+Definite good: ['#1', '#2', '#4', '#6']
+Evil probabilities: #5=67%, #8=67%, #3=33%, #7=33%
+  Generated 194 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 5, 7, 8]
+
+#### [21:42:59] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 67% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 67% confident (budget: 2 wrong execs)
+
+### [21:44:32] Ability used at #3
+
+#### [21:44:35] Solver Output
+Scenarios: 4/194
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 194 candidate scenarios
+  4 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch', 'Baa'})
+    #8 is DEFINITELY EVIL (possible roles: {'Witch', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:44:35] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 4 scenarios (roles: {'Witch', 'Baa'})
+
+### [21:45:27] Executed #5 -> Witch (EVIL)
+
+#### [21:45:31] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 31 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #8 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:45:31] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [21:46:06] Executed #8 -> Baa (EVIL)
+
+## [21:46:13] GAME OVER — WIN
+Final HP: 10
+Notes: Asc25 COMPLETE! PD check on Medium decisive — both evils identified with certainty. Perfect 10HP. Corrupted: #4 Baker (PD passive). Baa warning for outcast count was a false alarm — no=1 correct.
+

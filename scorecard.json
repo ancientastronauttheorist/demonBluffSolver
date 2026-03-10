@@ -902,6 +902,13 @@
       "name": "asc25_v6",
       "notes": "Witch blocked #9. PD active revealed #7 evil. Perfect 10HP. Corrupted: #1 Druid (PD), #3 Bishop (Pooka), #5 Knight (Pooka)",
       "date": "2026-03-09 21:35"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc25_v7",
+      "notes": "Asc25 COMPLETE! PD check on Medium decisive \u2014 both evils identified with certainty. Perfect 10HP. Corrupted: #4 Baker (PD passive). Baa warning for outcast count was a false alarm \u2014 no=1 correct.",
+      "date": "2026-03-09 21:46"
     }
   ]
 }
