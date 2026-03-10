@@ -213,7 +213,7 @@ def _find_forced_execution(
     probs = evil_probabilities(state, result)
     ordered_candidates = sorted(
         candidate_positions,
-        key=lambda p: (-probs.get(p, 0.0), p),
+        key=lambda p: (-probs.get(p, 0.0), p in result.bombardier_positions, p),
     )
     all_positions = tuple(range(1, state.n_cards + 1))
     memo: dict[tuple[tuple[int, ...], tuple[int, ...], int], tuple[bool, Optional[int]]] = {}
@@ -256,6 +256,10 @@ def _find_forced_execution(
             for (role, was_evil, was_corrupted), branch_indices in branches.items():
                 if was_evil:
                     next_hp = hp
+                elif role == "Bombardier":
+                    # Executing a good Bombardier = instant game loss
+                    branch_ok = False
+                    break
                 elif role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
                     # Execution blocked by immunity — no HP cost, confirms good
                     next_hp = hp
@@ -1098,6 +1102,36 @@ def recommend_action(
     # 6. Witch fallback -- can't reveal, execute by probability
     # HP-aware gating with budget-based confidence thresholds
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
+
+    # 6a. Forced execution lookahead — includes Bombardier/Wretch.
+    # The lookahead models Bombardier as instant game loss, so it naturally
+    # prefers executing non-Bombardier candidates first.
+    all_uncertain = [p for p, prob in probs.items()
+                     if prob > 0.0 and p not in state.executed]
+    if all_uncertain:
+        forced_pos = _find_forced_execution(state, result, all_uncertain)
+        if forced_pos is not None:
+            warnings = []
+            forced_prob = probs.get(forced_pos, 0.0)
+            if forced_pos in result.bombardier_positions:
+                warnings.append(
+                    "Bombardier targeted by lookahead — confirmed safe across all branches")
+            if forced_prob < 1.0:
+                warnings.append(
+                    f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
+                    f"but all reveal branches still lead to a forced win."
+                )
+            return _with_ability_recs(Action(
+                "execute",
+                position=forced_pos,
+                reasoning=_forced_execution_reasoning(forced_pos, state, result),
+                warnings=warnings,
+            ))
+
+    # 6b. Probabilistic execution
+    # Bombardier candidates excluded from normal probability selection
+    bombardier_candidates = {p: probs.get(p, 0) for p in result.bombardier_positions
+                            if p not in state.executed and probs.get(p, 0) > 0.0}
     # Exclude Bombardier (instant loss) and Wretch (always wrong exec —
     # abilities see Wretch as evil, inflating evil_probability, but executing
     # Wretch is guaranteed wrong exec penalty with zero upside).
@@ -1111,26 +1145,6 @@ def recommend_action(
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
-
-        forced_pos = _find_forced_execution(
-            state,
-            result,
-            [p for p, prob in active_probs.items() if prob > 0.0],
-        )
-        if forced_pos is not None:
-            warnings = []
-            forced_prob = active_probs.get(forced_pos, 0.0)
-            if forced_prob < 1.0:
-                warnings.append(
-                    f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
-                    f"but all reveal branches still lead to a forced win."
-                )
-            return _with_ability_recs(Action(
-                "execute",
-                position=forced_pos,
-                reasoning=_forced_execution_reasoning(forced_pos, state, result),
-                warnings=warnings,
-            ))
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
@@ -1171,13 +1185,21 @@ def recommend_action(
             # One wrong guess = death. Require high confidence.
             min_threshold = 0.80
             if best_prob < min_threshold:
-                warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_threshold:.0%} threshold. "
-                                f"Consider manual override if you have extra information.")
-                return _with_ability_recs(Action(
-                    "error", position=best_pos,
-                    reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
-                              f">={min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
-                    warnings=warnings))
+                if bombardier_candidates:
+                    # Bombardier safety: bypass threshold — wrong exec on non-Bombardier
+                    # costs HP, wrong exec on Bombardier = instant game loss.
+                    warnings.append(
+                        f"Bombardier safety: executing #{best_pos} ({best_prob:.0%}) despite "
+                        f"low confidence — Bombardier candidate(s) {sorted(bombardier_candidates.keys())} "
+                        f"risk instant game loss if executed first.")
+                else:
+                    warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_threshold:.0%} threshold. "
+                                    f"Consider manual override if you have extra information.")
+                    return _with_ability_recs(Action(
+                        "error", position=best_pos,
+                        reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
+                                  f">={min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
+                        warnings=warnings))
         elif best_prob < 0.5:
             warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")
 
@@ -1186,6 +1208,30 @@ def recommend_action(
             reasoning=f"No reveals available. #{best_pos} is {best_prob:.0%} likely evil "
                       f"(HP={state.hp}, budget={wrong_exec_budget} wrong execs)",
             warnings=warnings))
+
+    # 6c. Bombardier safety fallback: when all high-probability candidates are
+    # Bombardier (excluded from active_probs), prefer a non-Bombardier uncertain
+    # position. Wrong exec on non-Bombardier = HP cost; Bombardier = game loss.
+    if bombardier_candidates:
+        # Include Wretch — wrong exec on Wretch = HP cost, not game loss
+        safety_probs = {p: prob for p, prob in probs.items()
+                       if p not in state.executed
+                       and p not in result.bombardier_positions
+                       and prob > 0.0}
+        if safety_probs:
+            safe_pos = max(safety_probs, key=safety_probs.get)
+            safe_prob = safety_probs[safe_pos]
+            card = next((c for c in state.cards if c.position == safe_pos), None)
+            role_label = card.apparent_role if card else "?"
+            bomb_positions = sorted(bombardier_candidates.keys())
+            return _with_ability_recs(Action(
+                "execute", position=safe_pos,
+                reasoning=f"Bombardier safety: #{safe_pos} ({role_label}, {safe_prob:.0%} evil) "
+                          f"preferred over Bombardier candidate(s) {bomb_positions}. "
+                          f"Wrong exec costs {state.wrong_exec_cost} HP; "
+                          f"Bombardier wrong exec = instant game loss.",
+                warnings=[f"Bombardier safety play — testing non-Bombardier first "
+                         f"(HP={state.hp}, budget={wrong_exec_budget} wrong execs)"]))
 
     # 7. Shouldn't reach here
     return _with_ability_recs(Action("error", reasoning="No valid action found"))
