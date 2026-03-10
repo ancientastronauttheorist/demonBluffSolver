@@ -1098,8 +1098,16 @@ def recommend_action(
     # 6. Witch fallback -- can't reveal, execute by probability
     # HP-aware gating with budget-based confidence thresholds
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
+    # Exclude Bombardier (instant loss) and Wretch (always wrong exec —
+    # abilities see Wretch as evil, inflating evil_probability, but executing
+    # Wretch is guaranteed wrong exec penalty with zero upside).
+    wretch_positions = {c.position for c in state.cards
+                        if c.apparent_role == "Wretch"
+                        and c.position not in result.definite_evil}
     active_probs = {p: prob for p, prob in probs.items()
-                    if p not in state.executed and p not in result.bombardier_positions}
+                    if p not in state.executed
+                    and p not in result.bombardier_positions
+                    and p not in wretch_positions}
     if active_probs:
         best_pos = max(active_probs, key=active_probs.get)
         best_prob = active_probs[best_pos]
