@@ -1077,6 +1077,13 @@
       "name": "asc28_v7",
       "notes": "Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP.",
       "date": "2026-03-10 17:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v1",
+      "notes": "Jester #2 lied (2 evils among confirmed good). #8 Enlightened + #4 Bard corrupted by Poisoner. Perfect 10HP.",
+      "date": "2026-03-10 17:35"
     }
   ]
 }

@@ -2385,3 +2385,109 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP.
 
+
+---
+
+# New Game — 2026-03-10 17:29:12
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Witness, Enlightened, Bard, Lover, Poet
+- Outcasts: Wretch, Plague_Doctor, Bombardier
+- Minions: Poisoner
+- Demons: Baa
+
+### [17:32:17] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [17:32:27] Revealed #2 Jester
+Info: {}
+
+### [17:32:27] Revealed #3 Witness
+Info: {'affected_position': 8}
+
+### [17:32:27] Revealed #4 Bard
+Info: {'corruption_distance': 2}
+
+### [17:32:28] Revealed #5 Plague_Doctor
+Info: {}
+
+### [17:32:28] Revealed #6 Poet
+Info: {'evil_role': 'Poisoner', 'distance': 3, 'copied_role': 'Scout'}
+
+### [17:32:28] Revealed #7 Bombardier
+Info: {}
+
+### [17:32:28] Revealed #8 Enlightened
+Info: {'direction': 'equidistant'}
+
+#### [17:32:35] Solver Output
+Scenarios: 2/274
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #4=50%
+  Generated 274 candidate scenarios
+  2 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [17:32:35] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [17:33:16] Executed #7 -> Poisoner (EVIL)
+
+#### [17:33:16] Solver Output
+Scenarios: 2/52
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #4=50%
+  Generated 52 candidate scenarios
+  2 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 4]
+
+#### [17:33:16] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#3', '#5']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [17:34:30] Revealed #2 Jester
+Info: {'targets': [1, 3, 5], 'evil_count': 2}
+
+### [17:34:30] Ability used at #2
+
+#### [17:34:30] Solver Output
+Scenarios: 1/52
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+  Generated 52 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:34:30] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [17:35:13] Executed #2 -> Baa (EVIL)
+
+## [17:35:13] GAME OVER — WIN
+Final HP: 10
+Notes: Jester #2 lied (2 evils among confirmed good). #8 Enlightened + #4 Bard corrupted by Poisoner. Perfect 10HP.
+
