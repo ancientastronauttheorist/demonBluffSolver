@@ -17305,3 +17305,67 @@ Reason: #2 is evil in ALL 4 scenarios (roles: {'Pooka'})
 Final HP: 0
 Notes: LOSS: Druid misclassified as Outcast in deck entry. Solver wrongly had 1 scenario claiming #1=Pooka. Actually #1=Judge(corrupted). Wrong exec #1 cost 5HP. After fixing deck (Druid=Villager), solver correctly found #2=Pooka. Executed #2 but HP still hit 0 (mystery: evils killed stayed 1/2, unclear why correct exec cost HP). True: #7=Doppelganger, #1=Judge(corrupted by Pooka#2). Root cause: data entry error.
 
+
+---
+
+# New Game — 2026-03-09 23:04:07
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Scout, Alchemist, Dreamer, Medium, Enlightened
+- Outcasts: Bombardier, Doppelganger
+- Minions: Minion
+- Demons: Lilis
+
+### [23:06:33] Revealed #1 Knitter
+Info: {'evil_pairs': 0}
+
+### [23:06:33] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [23:06:33] Revealed #3 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [23:06:34] Revealed #4 Dreamer
+Info: {}
+
+### [23:06:34] Revealed #6 Alchemist
+Info: {'cured_count': 0}
+
+### [23:06:34] Revealed #7 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [23:06:34] Revealed #8 Bombardier
+Info: {}
+
+### [23:06:34] Revealed #9 Enlightened
+Info: {'direction': 'equidistant'}
+
+#### [23:06:40] Solver Output
+Scenarios: 10/392
+Definite evil: ['#1', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#8']
+  Generated 392 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [23:06:40] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 10 scenarios (roles: {'Minion', 'Lilis'})
+
+### [23:07:19] Executed #1 -> Minion (EVIL)
+
+### [23:07:53] Executed #9 -> Lilis (EVIL)
+
+## [23:07:53] GAME OVER — WIN
+Final HP: 6
+Notes: WIN 6HP. Lilis game, 9 cards. Two Knitters + two Scouts. Solver immediately found #1 and #9 as definite evil (10 scenarios). #7=Doppelganger. Night killed #5. Perfect deduction.
+

@@ -930,6 +930,13 @@
       "name": "asc26_v3",
       "notes": "LOSS: Druid misclassified as Outcast in deck entry. Solver wrongly had 1 scenario claiming #1=Pooka. Actually #1=Judge(corrupted). Wrong exec #1 cost 5HP. After fixing deck (Druid=Villager), solver correctly found #2=Pooka. Executed #2 but HP still hit 0 (mystery: evils killed stayed 1/2, unclear why correct exec cost HP). True: #7=Doppelganger, #1=Judge(corrupted by Pooka#2). Root cause: data entry error.",
       "date": "2026-03-09 23:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc26_v3b",
+      "notes": "WIN 6HP. Lilis game, 9 cards. Two Knitters + two Scouts. Solver immediately found #1 and #9 as definite evil (10 scenarios). #7=Doppelganger. Night killed #5. Perfect deduction.",
+      "date": "2026-03-09 23:07"
     }
   ]
 }
