@@ -1007,6 +1007,27 @@
       "name": "asc27_v4",
       "notes": "Perfect 10HP. Two Bombardiers on board, Druid found no outcasts among 1,2,4 confirming #1 evil. Dreamer tagged #6 as Pooka.",
       "date": "2026-03-10 15:20"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc27_v5",
+      "notes": "Clean solve with Knight free check and FT abilities. Puppeteer+Puppet+Lilis game. HP mystery: showed 6/10 but no night kills visible.",
+      "date": "2026-03-10 15:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v6",
+      "notes": "Perfect solve at 10HP. PD checks narrowed from 27->13->7->1 scenarios. Pooka corrupted #5 Poet, PD corrupted #4 Baker.",
+      "date": "2026-03-10 15:49"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc27_v7",
+      "notes": "Close win at 1HP. Lilis killed #5 Oracle. Solver stuck 50/50 on #6/#7 (both outcasts, only 1 on board). Manual deduction: execute Wretch first (safe -5HP) then Bombardier. Wretch wrong exec cost 5HP, survived.",
+      "date": "2026-03-10 16:01"
     }
   ]
 }
