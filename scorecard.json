@@ -958,6 +958,13 @@
       "name": "asc26_v5",
       "notes": "5HP remaining, wrong exec on #4 corrupted Confessor",
       "date": "2026-03-10 00:43"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc26_v6",
+      "notes": "0-scenario bug fixed (Medium+Baker conversion). Misclicked #7 instead of #2 (wrong coords). Even correct click would hit Drunk (#2=75% evil but was Good Drunk). Solver had wrong scenario distribution.",
+      "date": "2026-03-10 01:32"
     }
   ]
 }

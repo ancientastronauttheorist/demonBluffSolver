@@ -120,5 +120,12 @@
       "Pooka"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc26_v6",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "3": "Puppeteer",
+    "4": "Puppet"
+  },
+  "notes": "0-scenario bug fixed (Medium+Baker conversion). Misclicked #7 instead of #2 (wrong coords). Even correct click would hit Drunk (#2=75% evil but was Good Drunk). Solver had wrong scenario distribution."
 }

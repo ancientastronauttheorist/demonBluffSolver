@@ -1229,6 +1229,15 @@ def _validate_medium(card: CardInfo, scenario: Scenario,
     # Normalize spaces/underscores for comparison (e.g., "Fortune Teller" vs "Fortune_Teller")
     actual_match = is_good and actual_role.replace(" ", "_") == claimed_role.replace(" ", "_")
 
+    # Baker conversion: Medium may have been revealed before Baker triggered,
+    # seeing the target's ORIGINAL role (e.g. Empress) rather than "Baker".
+    # Accept the match if the target is a converted Baker whose original role
+    # matches the Medium's claim.
+    if not actual_match and is_good and actual_role == "Baker":
+        target_card = _get_card_at(claimed_pos, state)
+        if target_card and target_card.info_parsed.get("original_role", "").replace(" ", "_") == claimed_role.replace(" ", "_"):
+            actual_match = True
+
     # Night-killed cards have no card entry, so actual_role is "Unknown".
     # For a truthful Medium, the claim IS the ground truth about the dead
     # card's role.  Accept the match if the position is Good and the claimed

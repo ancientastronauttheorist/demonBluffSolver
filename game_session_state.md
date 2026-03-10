@@ -17845,3 +17845,111 @@ WARNING: Probabilistic execution -- 89% confident (budget: 1 wrong execs)
 Final HP: 5
 Notes: 5HP remaining, wrong exec on #4 corrupted Confessor
 
+
+---
+
+# New Game — 2026-03-10 01:22:13
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Architect, Alchemist, Medium, Baker, Enlightened, Empress
+- Outcasts: Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [01:22:26] Revealed #1 Enlightened
+Info: {'direction': 'direction=cw'}
+
+### [01:22:36] Revealed #1 Enlightened
+Info: {'direction': 'CCW'}
+
+### [01:22:39] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [01:22:49] Revealed #3 Alchemist
+Info: {'cured_count': 2}
+
+### [01:22:54] Revealed #4 Medium
+Info: {'good_position': 8, 'good_role': 'Empress'}
+
+### [01:22:57] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [01:23:01] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [01:23:04] Revealed #7 Alchemist
+Info: {'cured_count': 1}
+
+### [01:23:07] Revealed #8 Baker
+Info: {'original_role': 'Empress'}
+
+#### [01:23:12] Solver Output
+Scenarios: 6/480
+Definite good: ['#6']
+Evil probabilities: #8=83%, #1=67%, #4=50%, #3=33%, #7=33%, #2=17%, #5=17%
+  Generated 480 candidate scenarios
+  6 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [01:23:12] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (50% evil Puppeteer, 33% evil Puppet, 17% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [01:24:11] Executed #8 -> GOOD (WRONG!)
+
+#### [01:24:20] Solver Output
+Scenarios: 0/300
+  Generated 300 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Medium: rejected 274/300 (91%)
+    #1 Enlightened: rejected 167/300 (56%)
+    #2 Enlightened: rejected 144/300 (48%)
+    #5 Architect: rejected 136/300 (45%)
+    #3 Alchemist: rejected 130/300 (43%)
+    #7 Alchemist: rejected 81/300 (27%)
+    #6 Baker: rejected 70/300 (23%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Enlightened: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Enlightened: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Alchemist: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Medium: 8 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Architect: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Baker: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Alchemist: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Baker: 1 scenarios survive  <-- SUSPECT
+
+#### [01:24:20] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [01:27:04] Claude Reasoning
+
+
+#### [01:30:41] Solver Output
+Scenarios: 4/300
+Definite good: ['#7', '#8']
+Evil probabilities: #2=75%, #4=75%, #3=50%, #5=50%, #1=25%, #6=25%
+  Generated 300 candidate scenarios
+  4 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6]
+
+#### [01:30:41] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 75% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 75% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 75% < 80% threshold. Consider manual override if you have extra information.
+
+## [01:32:23] GAME OVER — LOSS
+Final HP: 5
+Notes: 0-scenario bug fixed (Medium+Baker conversion). Misclicked #7 instead of #2 (wrong coords). Even correct click would hit Drunk (#2=75% evil but was Good Drunk). Solver had wrong scenario distribution.
+
