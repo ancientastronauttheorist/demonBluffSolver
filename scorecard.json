@@ -1126,6 +1126,13 @@
       "name": "asc29_v7",
       "notes": "Clutch win 1HP! Lilis game. Slayer killed Puppet#8. Wrong exec Bishop#4 cost 5HP. Needed to manually add Puppet role to executed_evil_roles for solver to deduce Puppeteer at #7. Corrupted: #1(Gemcrafter by Poisoner), #6(Drunk always corrupted).",
       "date": "2026-03-10 18:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v8",
+      "notes": "Perfect 10HP. Druid abilities narrowed down, then execution lookahead guaranteed wins. Corrupted: #1(Poet), #2(Scout) from Pooka#3. #7 was Doppelganger (as Scout). Final village of Asc29!",
+      "date": "2026-03-10 18:50"
     }
   ]
 }

@@ -3285,3 +3285,158 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: Clutch win 1HP! Lilis game. Slayer killed Puppet#8. Wrong exec Bishop#4 cost 5HP. Needed to manually add Puppet role to executed_evil_roles for solver to deduce Puppeteer at #7. Corrupted: #1(Gemcrafter by Poisoner), #6(Drunk always corrupted).
 
+
+---
+
+# New Game — 2026-03-10 18:39:14
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Poet, Scout, Gemcrafter, Judge, Enlightened, Empress
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Minion, Chancellor
+- Demons: Pooka
+
+### [18:41:46] Revealed #1 Poet
+Info: {'copied_role': '2,9'}
+
+### [18:42:13] Revealed #1 Poet
+Info: {'evil_adjacent': 1, 'copied_role': 'Lover'}
+
+### [18:42:19] Revealed #2 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 3}
+
+### [18:42:25] Revealed #3 Gemcrafter
+Info: {'good_position': 8}
+
+### [18:42:33] Revealed #4 Plague_Doctor
+Info: {}
+
+### [18:42:33] Revealed #5 Empress
+Info: {'targets': [1, 3, 7]}
+
+### [18:42:33] Revealed #6 Druid
+Info: {}
+
+### [18:42:33] Revealed #7 Scout
+Info: {'evil_role': 'Minion', 'distance': 2}
+
+### [18:42:33] Revealed #8 Druid
+Info: {}
+
+### [18:42:33] Revealed #9 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [18:42:40] Solver Output
+Scenarios: 169/12612
+Evil probabilities: #2=60%, #6=56%, #1=40%, #8=40%, #9=30%, #7=25%, #3=21%, #5=20%, #4=9%
+  Generated 12612 candidate scenarios
+  169 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [18:42:40] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.639 (adjusted 1.639) | timing x1.00
+
+### [18:43:40] Ability used at #4
+
+#### [18:43:46] Solver Output
+Scenarios: 112/12612
+Evil probabilities: #2=71%, #9=45%, #6=41%, #8=41%, #1=29%, #5=27%, #3=23%, #4=14%, #7=9%
+  Generated 12612 candidate scenarios
+  112 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [18:43:46] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.432 (adjusted 1.368) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [18:44:55] Revealed #8 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+### [18:44:55] Ability used at #8
+
+#### [18:45:03] Solver Output
+Scenarios: 72/12612
+Evil probabilities: #8=64%, #6=58%, #2=56%, #3=36%, #1=28%, #4=22%, #7=14%, #9=14%, #5=8%
+  Generated 12612 candidate scenarios
+  72 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [18:45:03] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.516 (adjusted 1.432) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [18:46:11] Revealed #6 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+### [18:46:11] Ability used at #6
+
+#### [18:46:20] Solver Output
+Scenarios: 34/12612
+Definite evil: ['#8']
+Definite good: ['#1', '#4', '#5', '#9']
+Evil probabilities: #6=76%, #2=53%, #3=53%, #7=18%
+  Generated 12612 candidate scenarios
+  34 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 6, 7]
+
+#### [18:46:20] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 34 scenarios (roles: {'Pooka', 'Minion', 'Chancellor'})
+
+### [18:48:35] Executed #8 -> Minion (EVIL)
+
+#### [18:48:35] Solver Output
+Scenarios: 11/1482
+Definite evil: ['#8']
+Definite good: ['#1', '#4', '#5', '#9']
+Evil probabilities: #6=91%, #3=73%, #2=27%, #7=9%
+  Generated 1482 candidate scenarios
+  11 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 6, 7]
+
+#### [18:48:35] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (91% evil Chancellor, 9% good Druid (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 91%, but all reveal branches still lead to a forced win.
+
+### [18:49:13] Executed #6 -> Chancellor (EVIL)
+
+#### [18:49:13] Solver Output
+Scenarios: 10/262
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#4', '#5', '#7', '#9']
+Evil probabilities: #3=80%, #2=20%
+  Generated 262 candidate scenarios
+  10 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #8 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [18:49:13] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (80% evil Pooka, 20% good Gemcrafter (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+## [18:50:07] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Druid abilities narrowed down, then execution lookahead guaranteed wins. Corrupted: #1(Poet), #2(Scout) from Pooka#3. #7 was Doppelganger (as Scout). Final village of Asc29!
+
