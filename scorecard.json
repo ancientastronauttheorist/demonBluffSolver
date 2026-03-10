@@ -1084,6 +1084,48 @@
       "name": "asc29_v1",
       "notes": "Jester #2 lied (2 evils among confirmed good). #8 Enlightened + #4 Bard corrupted by Poisoner. Perfect 10HP.",
       "date": "2026-03-10 17:35"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc29_v2",
+      "notes": "Solver had 1 wrong scenario: predicted #3=Minion #7=Pooka but truth was #5=Pooka #8=Minion. Executed #3 (real Bombardier) = instant loss. Corrupted: #1(PD), #4/#6(Pooka). Need to investigate why correct scenario was eliminated.",
+      "date": "2026-03-10 17:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v3",
+      "notes": "Perfect game 10HP. Jester narrowed to 6 scenarios, exec #9 Minion, exec #2 Twin_Minion, exec #5 Baa.",
+      "date": "2026-03-10 18:01"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc29_v4",
+      "notes": "Lilis game, 8HP. Night killed #8. PD clean check on #6 confirmed evil. Both evils adjacent (#6,#7). Corrupted: #2 Knitter.",
+      "date": "2026-03-10 18:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v5",
+      "notes": "Perfect 10HP, solver found single scenario immediately. Bishop+Lover+Alchemist constraints very powerful.",
+      "date": "2026-03-10 18:10"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc29_v6",
+      "notes": "Win 3HP. Lilis game, night killed #5. Judge self-targeted (wasted ability). PD found #4 clean. Corrupted: #8(Lover). Wrong exec #1 cost 5HP.",
+      "date": "2026-03-10 18:21"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc29_v7",
+      "notes": "Clutch win 1HP! Lilis game. Slayer killed Puppet#8. Wrong exec Bishop#4 cost 5HP. Needed to manually add Puppet role to executed_evil_roles for solver to deduce Puppeteer at #7. Corrupted: #1(Gemcrafter by Poisoner), #6(Drunk always corrupted).",
+      "date": "2026-03-10 18:36"
     }
   ]
 }
