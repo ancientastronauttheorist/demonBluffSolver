@@ -1028,6 +1028,20 @@
       "name": "asc27_v7",
       "notes": "Close win at 1HP. Lilis killed #5 Oracle. Solver stuck 50/50 on #6/#7 (both outcasts, only 1 on board). Manual deduction: execute Wretch first (safe -5HP) then Bombardier. Wretch wrong exec cost 5HP, survived.",
       "date": "2026-03-10 16:01"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc28_v1",
+      "notes": "PD+Pooka dual corruption. 0-scenario bug from executed_good_corrupted=false when #3 was corrupted. Fixed mid-game.",
+      "date": "2026-03-10 16:38"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v2",
+      "notes": "Perfect 10HP. PD check solved it to 1 scenario.",
+      "date": "2026-03-10 16:46"
     }
   ]
 }
