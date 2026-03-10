@@ -35,6 +35,12 @@ IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
 GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x8
 GAMEPLAY_CHARACTERS_OFFSET = 0x60
 
+# Gameplay deck lists (List<CharacterData>)
+GAMEPLAY_TOWNSFOLKS_OFFSET = 0x20
+GAMEPLAY_OUTSIDERS_OFFSET = 0x28
+GAMEPLAY_MINIONS_OFFSET = 0x30
+GAMEPLAY_DEMONS_OFFSET = 0x38
+
 # Characters class
 CHARACTERS_LIST_OFFSET = 0x20
 
@@ -55,7 +61,9 @@ CHAR_ID_OFFSET = 0xF8            # int32 (position)
 CHAR_KILLED_HIDDEN_OFFSET = 0xCC # bool (killed by Lilis)
 
 # CharacterData class field offsets
-CD_CHARACTER_ID_OFFSET = 0x18    # string (role name)
+CD_CHARACTER_ID_OFFSET = 0x18    # string (role name) -- STALE in multi-village!
+CD_CACHED_PTR_OFFSET = 0x10      # IntPtr m_CachedPtr (Unity native object)
+CD_NATIVE_NAME_OFFSET = 0x48     # char* name in Unity native object (RELIABLE)
 CD_TYPE_OFFSET = 0xF8            # ECharacterType (int32)
 CD_ALIGNMENT_OFFSET = 0xFC       # EAlignment (int32)
 
@@ -89,7 +97,7 @@ DISPLAY_NAMES = {
     'Noble': 'Noble',
     'Gossip': 'Gossip',
     'Gambler': 'Gemcrafter',
-    'Lookout': 'Lookout',
+    'Lookout': 'Medium',
     'Sapper': 'Sapper',
     'Archivist': 'Archivist',
     'Shugenja': 'Shugenja',
@@ -211,6 +219,41 @@ class MemoryReader:
             return buf.raw[0] != 0
         return None
 
+    def _read_native_name(self, cd_ptr):
+        """Read the true role name from a CharacterData's Unity native object.
+
+        The managed characterId field (0x18) is stale in multi-village.
+        The native ScriptableObject stores the correct name at m_CachedPtr+0x48.
+        """
+        if not cd_ptr or cd_ptr < 0x10000:
+            return None
+        cached_ptr = self._read_ptr(cd_ptr + CD_CACHED_PTR_OFFSET)
+        if not cached_ptr or cached_ptr < 0x10000:
+            return None
+        buf = ctypes.create_string_buffer(64)
+        br = ctypes.c_size_t()
+        if kernel32.ReadProcessMemory(
+            self.handle, ctypes.c_void_p(cached_ptr + CD_NATIVE_NAME_OFFSET),
+            buf, 64, ctypes.byref(br)
+        ):
+            end = buf.raw[:64].find(b'\x00')
+            if end > 0:
+                try:
+                    return buf.raw[:end].decode('ascii')
+                except (UnicodeDecodeError, ValueError):
+                    pass
+        return None
+
+    def _read_cd_name(self, cd_ptr):
+        """Read role name from CharacterData, preferring native name over characterId."""
+        native = self._read_native_name(cd_ptr)
+        if native:
+            return clean_name(native)
+        # Fallback to managed characterId
+        name_ptr = self._read_ptr(cd_ptr + CD_CHARACTER_ID_OFFSET)
+        raw = self._read_string(name_ptr)
+        return clean_name(raw)
+
     def _read_string(self, str_ptr):
         if not str_ptr or str_ptr < 0x10000:
             return None
@@ -264,19 +307,15 @@ class MemoryReader:
             if not char_ptr:
                 continue
 
-            # Read true role
+            # Read true role (prefer native name for multi-village correctness)
             data_ref = self._read_ptr(char_ptr + CHAR_DATAREF_OFFSET)
-            true_role_raw = None
-            if data_ref:
-                name_ptr = self._read_ptr(data_ref + CD_CHARACTER_ID_OFFSET)
-                true_role_raw = self._read_string(name_ptr)
+            true_role = self._read_cd_name(data_ref) if data_ref else '?'
 
             # Read bluff/disguise
             bluff_ptr = self._read_ptr(char_ptr + CHAR_BLUFF_OFFSET)
-            disguise_raw = None
+            disguise = None
             if bluff_ptr and bluff_ptr > 0x10000:
-                name_ptr = self._read_ptr(bluff_ptr + CD_CHARACTER_ID_OFFSET)
-                disguise_raw = self._read_string(name_ptr)
+                disguise = self._read_cd_name(bluff_ptr)
 
             # Read other fields
             alignment = self._read_i32(char_ptr + CHAR_ALIGNMENT_OFFSET)
@@ -286,10 +325,8 @@ class MemoryReader:
 
             cards.append({
                 'position': card_id,
-                'true_role': clean_name(true_role_raw),
-                'true_role_raw': true_role_raw,
-                'disguise': clean_name(disguise_raw) if disguise_raw else None,
-                'disguise_raw': disguise_raw,
+                'true_role': true_role,
+                'disguise': disguise,
                 'alignment': ALIGNMENT.get(alignment, f'?{alignment}'),
                 'is_evil': alignment == 20,
                 'state': STATE.get(state, f'?{state}'),
@@ -298,6 +335,52 @@ class MemoryReader:
 
         cards.sort(key=lambda c: c['position'])
         return cards
+
+    def _read_character_data_list(self, list_ptr):
+        """Read a List<CharacterData> and return role names."""
+        if not list_ptr or list_ptr < 0x10000:
+            return []
+        items_array = self._read_ptr(list_ptr + LIST_ITEMS_OFFSET)
+        list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
+        if not items_array or not list_size or list_size <= 0:
+            return []
+        names = []
+        for i in range(list_size):
+            cd_ptr = self._read_ptr(items_array + ARRAY_FIRST_ELEMENT_OFFSET + i * 8)
+            if not cd_ptr:
+                continue
+            names.append(self._read_cd_name(cd_ptr))
+        return names
+
+    def read_deck(self):
+        """Read the current deck (pool of possible roles)."""
+        gameplay = self._get_gameplay_instance()
+        if not gameplay:
+            return None
+        deck = {}
+        for faction, offset in [
+            ('Villager', GAMEPLAY_TOWNSFOLKS_OFFSET),
+            ('Outcast', GAMEPLAY_OUTSIDERS_OFFSET),
+            ('Minion', GAMEPLAY_MINIONS_OFFSET),
+            ('Demon', GAMEPLAY_DEMONS_OFFSET),
+        ]:
+            list_ptr = self._read_ptr(gameplay + offset)
+            deck[faction] = self._read_character_data_list(list_ptr)
+        return deck
+
+
+def print_deck(deck):
+    """Pretty-print the current deck pool."""
+    if not deck:
+        print("No deck found.")
+        return
+    print()
+    total = 0
+    for faction in ['Villager', 'Outcast', 'Minion', 'Demon']:
+        roles = deck.get(faction, [])
+        total += len(roles)
+        print(f"  {faction}s ({len(roles)}): {', '.join(roles)}")
+    print(f"  Total: {total}")
 
 
 def print_board(cards):
@@ -329,6 +412,7 @@ def print_board(cards):
 def main():
     parser = argparse.ArgumentParser(description='Demon Bluff Memory Reader')
     parser.add_argument('--watch', action='store_true', help='Watch for changes')
+    parser.add_argument('--deck', action='store_true', help='Show current deck pool')
     parser.add_argument('--interval', type=float, default=2.0, help='Watch interval')
     parser.add_argument('--pid', type=int, help='Process ID override')
     args = parser.parse_args()
@@ -338,7 +422,10 @@ def main():
         sys.exit(1)
 
     try:
-        if args.watch:
+        if args.deck:
+            deck = reader.read_deck()
+            print_deck(deck)
+        elif args.watch:
             prev = None
             while True:
                 cards = reader.read_board()
