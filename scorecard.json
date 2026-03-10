@@ -867,6 +867,13 @@
       "name": "asc25_v1",
       "notes": "Lilis at #10 survived night 2 (can't kill self, still deals 2HP). Wrongly assumed #10 dead, executed Baker #4 (corrupted good), HP 6->1. User caught the error. Corrupted: #2 Dreamer, #4 Baker.",
       "date": "2026-03-09 19:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc25_v2",
+      "notes": "Memory reader side-quest game. Solver worked well but missed FT ability. Wretch wrong exec cost 5 HP.",
+      "date": "2026-03-09 20:52"
     }
   ]
 }

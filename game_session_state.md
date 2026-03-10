@@ -16078,3 +16078,164 @@ Reason: #10 is evil in ALL 2 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: Lilis at #10 survived night 2 (can't kill self, still deals 2HP). Wrongly assumed #10 dead, executed Baker #4 (corrupted good), HP 6->1. User caught the error. Corrupted: #2 Dreamer, #4 Baker.
 
+
+---
+
+# New Game — 2026-03-09 20:25:06
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Alchemist, Knight, Slayer, Poet, FortuneTeller, Confessor, Lover
+- Outcasts: Wretch, Doppelganger
+- Minions: Minion, Puppeteer
+- Demons: Baa
+
+## Deck
+- Villagers: Alchemist, Knight, Slayer, Poet, FortuneTeller, Confessor, Lover
+- Outcasts: Wretch, Doppelganger
+- Minions: Minion, Puppeteer
+- Demons: Baa
+
+## Deck
+- Villagers: Alchemist, Knight, Slayer, Poet, FortuneTeller, Confessor, Lover
+- Outcasts: Wretch, Doppelganger
+- Minions: Minion, Puppeteer
+- Demons: Baa
+
+### [20:45:29] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [20:45:29] Revealed #2 Slayer
+Info: {}
+
+### [20:45:30] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [20:45:31] Revealed #4 FortuneTeller
+Info: {}
+
+### [20:45:34] Revealed #5 Knight
+Info: {}
+
+### [20:45:34] Revealed #6 Poet
+Info: {'copied_role': 'False'}
+
+### [20:45:35] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [20:45:36] Revealed #8 FortuneTeller
+Info: {}
+
+### [20:45:36] Revealed #9 Wretch
+Info: {}
+
+#### [20:45:55] Solver Output
+Scenarios: 612/3612
+Definite good: ['#1']
+Evil probabilities: #3=81%, #4=62%, #5=55%, #2=50%, #6=48%, #8=45%, #9=40%, #7=19%
+  Generated 3612 candidate scenarios
+  612 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [20:45:55] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight free check: #5 is 55% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [20:46:42] Executed #5 -> Puppet (EVIL)
+
+#### [20:46:46] Solver Output
+Scenarios: 112/444
+Definite evil: ['#5']
+Definite good: ['#1', '#7']
+Evil probabilities: #4=75%, #3=62%, #6=61%, #2=45%, #9=30%, #8=27%
+  Generated 444 candidate scenarios
+  112 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 6, 8, 9]
+
+#### [20:46:46] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#4']
+Reason: Target #4 is 75% evil (adjusted 0.75)
+
+#### [20:47:29] Solver Output
+Scenarios: 32/222
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#7']
+Evil probabilities: #9=38%, #6=31%, #8=31%
+  Generated 222 candidate scenarios
+  32 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion', 'Baa'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [6, 8, 9]
+
+#### [20:47:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 32 scenarios (roles: {'Minion', 'Baa'})
+
+### [20:48:06] Executed #3 -> Minion (EVIL)
+
+#### [20:48:10] Solver Output
+Scenarios: 16/31
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#7']
+Evil probabilities: #9=38%, #6=31%, #8=31%
+  Generated 31 candidate scenarios
+  16 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [6, 8, 9]
+
+#### [20:48:10] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 38% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 38% confident (budget: 2 wrong execs)
+WARNING: Low confidence (38%) -- consider gathering more info
+
+#### [20:48:26] Claude Reasoning
+
+
+### [20:50:04] Ability used at #8
+
+### [20:50:09] Revealed #8 Fortune Teller
+Info: {'targets': [6, 9], 'has_evil': True}
+
+#### [20:50:15] Solver Output
+Scenarios: 11/31
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#7', '#8']
+Evil probabilities: #9=55%, #6=45%
+  Generated 31 candidate scenarios
+  11 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [6, 9]
+
+#### [20:50:15] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (55% evil Baa, 45% good Wretch).
+WARNING: Execution lookahead override -- immediate hit chance is 55%, but all reveal branches still lead to a forced win.
+
+### [20:51:13] Executed #9 -> GOOD (WRONG!)
+
+### [20:51:56] Executed #6 -> Baa (EVIL)
+
+## [20:52:04] GAME OVER — WIN
+Final HP: 5
+Notes: Memory reader side-quest game. Solver worked well but missed FT ability. Wretch wrong exec cost 5 HP.
+
