@@ -62,6 +62,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Witness + Lilis kills** — FIXED. Added `night_kills` to `actually_affected` check.
 
+- [x] **Witness "no one affected" (position=0)** — FIXED. `affected_position=0` means "nobody affected," not position 0. Also excluded PD/Drunk corruption from "affected by Evil" set — only Poisoner/Pooka/Puppeteer/Lilis count.
+
 - [ ] **Witness + Chancellor conversion** — Chancellor-converted positions should count as "affected by evil ability" for Witness. Requires tracking which position Chancellor converted in Scenario.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
@@ -75,6 +77,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] **Medium lying target = Evil/Drunk/Dopp** — FIXED. Lying Medium must point at Evil, Drunk, or Doppelganger.
 
 - [x] **Lilis can't kill uncorrupted Knight** — FIXED. Night-kill validation rejects scenarios where Knight is forced to an uncorrupted night-killed position. Handles pool > board (Knight might be off-board) and corrupted Knight (loses immunity).
+
+- [x] **Poisoner target enum missing dead positions** — FIXED. Restructured Poisoner target enumeration to run inside Dopp/Drunk loop so `_unrevealed_must_be_villager` has access to dopp_pos/drunk_pos. Dead night-killed positions adjacent to Poisoner were incorrectly excluded.
+
+- [x] **Medium validation for dead/night-killed cards** — FIXED. Medium pointing at a night-killed position no longer causes 0 scenarios. Accept Unknown role as match when position is Good and claimed role is valid.
 
 - [ ] **Lilis prioritizes Good kills** — Wiki says Lilis prioritizes killing Good characters. Could weight night-kill probabilities or reject scenarios where Lilis kills Evil when Good was available.
 
@@ -116,5 +122,5 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### Test Coverage Gaps
 
-- [ ] **Witness**: 0 test cases with Witness on board. Need regression tests covering corruption, puppeting, and Lilis kills.
+- [x] **Witness**: 2 test cases now (asc11_g3_live, asc23_v2). Fixed validator for "no one affected" (position=0) and PD/Drunk corruption exclusion. Still no coverage for Chancellor conversion tracking (see P0).
 - [ ] **Plague Doctor**: Only 2 test cases. Need more coverage for active ability validation.
