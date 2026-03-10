@@ -874,6 +874,13 @@
       "name": "asc25_v2",
       "notes": "Memory reader side-quest game. Solver worked well but missed FT ability. Wretch wrong exec cost 5 HP.",
       "date": "2026-03-09 20:52"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc25_v3",
+      "notes": "PD name bug fix (PlagueDr vs Plague Doctor). Oracle#1 corrupted by PD. 1HP clutch after wrong exec on #8.",
+      "date": "2026-03-09 21:13"
     }
   ]
 }

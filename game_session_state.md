@@ -16239,3 +16239,111 @@ WARNING: Execution lookahead override -- immediate hit chance is 55%, but all re
 Final HP: 5
 Notes: Memory reader side-quest game. Solver worked well but missed FT ability. Wretch wrong exec cost 5 HP.
 
+
+---
+
+# New Game — 2026-03-09 20:54:52
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Medium, Oracle, Lover, Bishop, Druid
+- Outcasts: Bombardier, PlagueDr
+- Minions: Shaman
+- Demons: Lilis
+
+### [20:56:55] Revealed #1 Oracle
+Info: {'targets': [5, 9], 'minion_role': 'Shaman'}
+
+### [20:56:55] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [20:57:00] Revealed #3 Bombardier
+Info: {}
+
+### [20:57:00] Revealed #4 Druid
+Info: {}
+
+### [20:57:01] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [20:57:05] Revealed #7 Medium
+Info: {'good_position': 2, 'good_role': 'Knitter'}
+
+### [20:57:05] Revealed #8 PlagueDr
+Info: {}
+
+### [20:57:06] Revealed #9 Druid
+Info: {}
+
+#### [20:57:11] Solver Output
+Scenarios: 2/72
+Definite good: ['#1', '#2', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%, #8=50%, #9=50%
+  Generated 72 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 5, 8, 9]
+
+#### [20:57:11] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [20:58:08] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Bombardier'}
+
+### [20:58:16] Ability used at #4
+
+#### [20:58:16] Solver Output
+Scenarios: 1/72
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+  Generated 72 candidate scenarios
+  1 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [20:58:16] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [21:01:01] Executed #8 -> GOOD (WRONG!)
+
+### [21:12:09] Executed #2 -> Shaman (EVIL)
+
+#### [21:12:14] Solver Output
+Scenarios: 1/30
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8', '#9']
+  Generated 30 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #7 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [21:12:14] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [21:12:54] Executed #7 -> Lilis (EVIL)
+
+## [21:13:01] GAME OVER — WIN
+Final HP: 1
+Notes: PD name bug fix (PlagueDr vs Plague Doctor). Oracle#1 corrupted by PD. 1HP clutch after wrong exec on #8.
+

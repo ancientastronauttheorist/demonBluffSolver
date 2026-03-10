@@ -542,7 +542,8 @@ def _normalize_role(name: str) -> str:
 
 def _is_plague_doctor(name: str) -> bool:
     """Case-insensitive check for any variant of Plague Doctor."""
-    return _normalize_role(name) == "plaguedoctor"
+    norm = _normalize_role(name)
+    return norm in ("plaguedoctor", "plaguedr")
 
 
 def _apply_placement_constraints(placement: dict[int, str],
