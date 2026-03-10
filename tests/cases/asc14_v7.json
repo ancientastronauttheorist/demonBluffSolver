@@ -91,7 +91,7 @@
   },
   "slayer_results": [],
   "pd_ability_results": [],
-  "blocked_positions": [],
+  "blocked_positions": [9],
   "night_kills": [
     7
   ],

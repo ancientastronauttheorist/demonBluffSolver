@@ -2187,6 +2187,55 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         if total_good_villagers > state.board_villager_count + n_disguisers + shaman_allowance:
             return False
 
+    # Baker original-role uniqueness: a truthful Good Baker claiming "I was X"
+    # means the real X was converted to Baker, consuming X's deck slot.
+    # Combined with non-Baker Good positions also showing X, the total can't
+    # exceed deck count (+ Shaman allowance). Disguisers (Drunk/Doppelganger)
+    # at non-Baker X positions don't consume a deck slot.
+    baker_claimed_counts = Counter()  # normalized_role -> count
+    for card in state.cards:
+        if _normalize_role(card.apparent_role) != "baker":
+            continue
+        pos = card.position
+        if _known_evil_role(pos, scenario, state) is not None:
+            continue
+        if pos == scenario.puppet_position:
+            continue
+        claimed = card.info_parsed.get("original_role", "")
+        if not claimed or claimed.lower() == "original":
+            continue
+        truth = _truth_status(pos, scenario, state)
+        if truth != TruthStatus.TRUTHFUL:
+            continue
+        claimed_card_def = get_card(claimed)
+        if not claimed_card_def or claimed_card_def.role != Role.VILLAGER:
+            continue
+        if claimed_card_def.name not in state.deck.villagers:
+            continue
+        baker_claimed_counts[_normalize_role(claimed)] += 1
+
+    for norm_role, baker_count in baker_claimed_counts.items():
+        if norm_role == "baker":
+            continue  # Baker conversion allows unlimited Bakers
+        # Count non-Baker Good positions genuinely holding this role
+        # (exclude evil, puppet, and disguisers)
+        non_baker_real = 0
+        for card_c in state.cards:
+            if _normalize_role(card_c.apparent_role) != norm_role:
+                continue
+            pos_c = card_c.position
+            if _known_evil_role(pos_c, scenario, state) is not None:
+                continue
+            if pos_c == scenario.puppet_position:
+                continue
+            if pos_c == scenario.drunk_position or pos_c == scenario.doppelganger_position:
+                continue
+            non_baker_real += 1
+
+        deck_count = deck_v_counts.get(norm_role, 0)
+        if non_baker_real + baker_count > deck_count + shaman_allowance:
+            return False
+
     return True
 
 
