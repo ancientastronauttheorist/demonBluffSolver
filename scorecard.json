@@ -1063,6 +1063,13 @@
       "name": "asc28_v5",
       "notes": "Judge #8 on #1 = truthful, confirmed #3=Pooka. Corrupted: #2 Hunter, #4 Dreamer. Perfect 10HP.",
       "date": "2026-03-10 17:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v6",
+      "notes": "Witch blocked #10. PD clean on #5. Solver found #4+#5 definite evil, then 1 scenario after Minion exec. Medium #1 corrupted. Perfect 10HP.",
+      "date": "2026-03-10 17:22"
     }
   ]
 }

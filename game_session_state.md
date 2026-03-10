@@ -2198,3 +2198,109 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Judge #8 on #1 = truthful, confirmed #3=Pooka. Corrupted: #2 Hunter, #4 Dreamer. Perfect 10HP.
 
+
+---
+
+# New Game — 2026-03-10 17:15:25
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Oracle, Medium, Baker, Dreamer, Gemcrafter, Empress
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [17:17:02] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Baker'}
+
+### [17:17:09] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [17:18:30] Revealed #3 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [17:18:37] Revealed #4 Bombardier
+Info: {}
+
+### [17:18:37] Revealed #5 Knitter
+Info: {'evil_pairs': 2}
+
+### [17:18:37] Revealed #6 Plague_Doctor
+Info: {}
+
+### [17:18:37] Revealed #7 Gemcrafter
+Info: {'good_position': 8}
+
+### [17:18:37] Revealed #8 Dreamer
+Info: {}
+
+### [17:18:37] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+#### [17:19:03] Solver Output
+Scenarios: 20/2904
+Definite good: ['#7', '#8']
+Evil probabilities: #4=90%, #3=40%, #5=40%, #9=40%, #10=40%, #2=30%, #1=10%, #6=10%
+  Generated 2904 candidate scenarios
+  20 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 9, 10]
+
+#### [17:19:03] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.046 (adjusted 2.046) | timing x1.00
+
+### [17:20:05] Ability used at #6
+
+#### [17:20:11] Solver Output
+Scenarios: 6/2904
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8']
+Evil probabilities: #2=33%, #9=33%, #10=33%
+  Generated 2904 candidate scenarios
+  6 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Minion', 'Pooka', 'Witch'})
+    #5 is DEFINITELY EVIL (possible roles: {'Minion', 'Pooka', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 9, 10]
+
+#### [17:20:11] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 6 scenarios (roles: {'Minion', 'Pooka', 'Witch'})
+
+### [17:20:48] Executed #4 -> Minion (EVIL)
+
+#### [17:20:48] Solver Output
+Scenarios: 1/352
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9', '#10']
+  Generated 352 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+
+#### [17:20:48] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [17:21:22] Executed #2 -> Witch (EVIL)
+
+### [17:22:02] Executed #5 -> Pooka (EVIL)
+
+## [17:22:02] GAME OVER — WIN
+Final HP: 10
+Notes: Witch blocked #10. PD clean on #5. Solver found #4+#5 definite evil, then 1 scenario after Minion exec. Medium #1 corrupted. Perfect 10HP.
+
