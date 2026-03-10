@@ -1875,7 +1875,7 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         # When multiple PD cards exist, use the one that's NOT evil in this placement
         pd_pos = None
         for p in all_pd_positions:
-            if p not in placement:
+            if p not in full_evil:
                 pd_pos = p
                 break  # First non-evil PD is the real one
 

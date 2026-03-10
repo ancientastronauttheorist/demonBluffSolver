@@ -17369,3 +17369,131 @@ Reason: #1 is evil in ALL 10 scenarios (roles: {'Minion', 'Lilis'})
 Final HP: 6
 Notes: WIN 6HP. Lilis game, 9 cards. Two Knitters + two Scouts. Solver immediately found #1 and #9 as definite evil (10 scenarios). #7=Doppelganger. Night killed #5. Perfect deduction.
 
+
+---
+
+# New Game — 2026-03-09 23:09:35
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Dreamer, Bard, Confessor, Baker, Knitter, Lover
+- Outcasts: Drunk, Wretch, PlagueDoctor
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [23:11:14] Revealed #1 Wretch
+Info: {}
+
+### [23:11:14] Revealed #2 PlagueDoctor
+Info: {}
+
+### [23:11:14] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [23:11:14] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [23:11:14] Revealed #5 Bard
+Info: {'corruption_distance': -1}
+
+### [23:11:15] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [23:11:15] Revealed #7 Baker
+Info: {'original_role': 'Dreamer'}
+
+### [23:11:15] Revealed #8 Baker
+Info: {'original_role': 'Knitter'}
+
+#### [23:11:32] Solver Output
+Scenarios: 474/9030
+Evil probabilities: #1=85%, #6=52%, #5=47%, #3=28%, #4=28%, #2=19%, #7=14%, #8=14%, #9=14%
+  Generated 9030 candidate scenarios
+  474 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [23:11:33] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 85% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 85% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [23:12:55] Executed #1 -> GOOD (WRONG!)
+
+#### [23:12:55] Solver Output
+Scenarios: 72/4956
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #6=75%, #5=50%, #7=25%, #8=25%, #9=25%
+  Generated 4956 candidate scenarios
+  72 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion', 'Baa', 'Witch'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [5, 6, 7, 8, 9]
+
+#### [23:12:55] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 72 scenarios (roles: {'Minion', 'Baa', 'Witch'})
+
+### [23:13:30] Executed #2 -> Witch (EVIL)
+
+#### [23:13:30] Solver Output
+Scenarios: 120/1260
+Definite evil: ['#2']
+Definite good: ['#1']
+Evil probabilities: #5=53%, #6=53%, #7=27%, #8=27%, #9=27%, #4=10%, #3=3%
+  Generated 1260 candidate scenarios
+  120 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 7, 8, 9]
+
+#### [23:13:30] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 27% evil, entropy 0.937
+
+### [23:14:07] Revealed #9 Baker
+Info: {'original_role': 'Dreamer'}
+
+#### [23:14:08] Solver Output
+Scenarios: 120/1260
+Definite evil: ['#2']
+Definite good: ['#1']
+Evil probabilities: #5=53%, #6=53%, #7=27%, #8=27%, #9=27%, #4=10%, #3=3%
+  Generated 1260 candidate scenarios
+  120 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 7, 8, 9]
+
+#### [23:14:08] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 53% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 53% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 53% < 80% threshold. Consider manual override if you have extra information.
+
+#### [23:18:26] Solver Output
+Scenarios: 120/1260
+Definite evil: ['#2']
+Definite good: ['#1']
+Evil probabilities: #5=53%, #6=53%, #7=27%, #8=27%, #9=27%, #4=10%, #3=3%
+  Generated 1260 candidate scenarios
+  120 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 6, 7, 8, 9]
+
+#### [23:18:26] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 53% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 53% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 53% < 80% threshold. Consider manual override if you have extra information.
+
+### [23:23:08] Executed #5 -> GOOD (WRONG!)
+
+## [23:23:18] GAME OVER — LOSS
+Final HP: 0
+Notes: SOLVER BUG: PD corruption generated in ALL scenarios even though PD cannot be on board (board_outcast_count=1, Wretch fills it). Without PD, no corruption source exists. Bard truthful -> no corrupted -> Confessor dizzy = evil -> #6 definitely evil. Solver incorrectly had 53/53 split. Fix: validate PD is on board before generating PD corruption.
+
