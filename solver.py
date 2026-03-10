@@ -1196,8 +1196,11 @@ def _validate_oracle(card: CardInfo, scenario: Scenario,
         # Wretch registers as any Evil Minion to Oracle
         card_at = _get_card_at(t, state)
         if card_at and card_at.apparent_role == "Wretch":
-            # Wretch can match any minion role in the deck
-            return minion_role in state.deck.minions
+            # Wretch can match ANY minion role (game picks from full pool,
+            # not just deck minions — important when deck has no minions)
+            from knowledge_base import get_card, Role as KBRole
+            claimed_card = get_card(minion_role)
+            return claimed_card is not None and claimed_card.role == KBRole.MINION
         return False
 
     actual = any(_target_matches(t) for t in targets)
@@ -1205,9 +1208,12 @@ def _validate_oracle(card: CardInfo, scenario: Scenario,
     if truth == TruthStatus.TRUTHFUL:
         return actual
     else:
-        # Wiki: lying Oracle can't include two Evil characters — both targets must be Good
-        if not all(_effective_alignment(t, scenario, state) == Alignment.GOOD for t in targets):
-            return False
+        # Wiki: lying Oracle can't include two Evil characters — both targets must be Good.
+        # But Poet copies Oracle with random targets (not Oracle's target selection rules),
+        # so skip the target constraint for Poet-Oracle.
+        if card.apparent_role != "Poet":
+            if not all(_effective_alignment(t, scenario, state) == Alignment.GOOD for t in targets):
+                return False
         return not actual
 
 

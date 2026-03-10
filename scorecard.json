@@ -965,6 +965,13 @@
       "name": "asc26_v6",
       "notes": "0-scenario bug fixed (Medium+Baker conversion). Misclicked #7 instead of #2 (wrong coords). Even correct click would hit Drunk (#2=75% evil but was Good Drunk). Solver had wrong scenario distribution.",
       "date": "2026-03-10 01:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc26_v7",
+      "notes": "Poet-Oracle+Wretch bug fix game. 0 scenarios initially, fixed Wretch-Oracle minion pool check",
+      "date": "2026-03-10 13:20"
     }
   ]
 }

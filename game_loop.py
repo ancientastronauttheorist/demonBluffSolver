@@ -331,7 +331,7 @@ class GameSession:
         self.night_kills: list[int] = []  # Positions killed by Lilis night
         self.night_kill_evil_count: int = 0  # How many night kills were evil
         self.hp: int = 10
-        self.wrong_exec_cost: int = 2  # Ascension 4 default
+        self.wrong_exec_cost: int = 5  # Asc4+ default (Drunk=2, Lilis=2 are exceptions)
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
         self.executed_good_corrupted: dict[int, bool] = {}  # pos -> was corrupted (from execution observation)

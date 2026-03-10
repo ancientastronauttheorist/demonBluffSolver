@@ -120,5 +120,10 @@
       "Pooka"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc26_v7",
+  "true_evil_positions": {
+    "7": "Pooka"
+  },
+  "notes": "Poet-Oracle+Wretch bug fix game. 0 scenarios initially, fixed Wretch-Oracle minion pool check"
 }

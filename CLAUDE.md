@@ -26,32 +26,34 @@
 
 ### Start
 1. `safe_click menu_play_demo` → `safe_click mode_standard` → dismiss intro with `safe_click btn_close_dialog`
-2. Deck auto-opens. **Park mouse to bottom-left corner** `(50, 1350)` before screenshotting to avoid hover tooltips. Take screenshot, then **ALWAYS run card_vision.py** to read the deck:
+2. Deck auto-opens. **Park mouse to bottom-left corner** `(50, 1350)` before screenshotting to avoid hover tooltips. Take screenshot, then read the deck with **both** card_vision and memory reader:
    ```
    python card_vision.py classify_dirs <screenshot> --context deck --library-dir templates/compendium/page1 --library-dir templates/compendium/page3 --library-dir templates/compendium/page4 --library-dir templates/compendium/page5
+   python memory_reader.py --deck
    ```
-   This returns each card's name, faction (Villager/Outcast/Minion/Demon), and confidence score. Use this as ground truth for the `deck` command. Also read board counts (V, O, M, D icons top-right).
+   **Cross-check both outputs — they must match.** Any mismatch = stop and fix. Use card_vision + memory reader as ground truth for the `deck` command. Also read board counts (V, O, M, D icons top-right) from screenshot.
 3. `python game_loop.py new <n_cards> <n_evil>`
 4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` — include ALL pool roles, prefixes REQUIRED
 5. Close deck by clicking neutral area
 
 ### Reveal & Enter
 6. Click all cards #1→#N (use `detect_card_positions` or `all_game_card_coords(n)`). Verify: `python template_match.py find_all card_facedown`
-7. Enter card info. Active abilities (lightning bolt icon): `card no_info <pos> <Role>` until used. Passive info: enter immediately.
-8. `set_hp <hp> <wrong_exec_cost>` at game start (5 at Asc4+)
+7. After all cards flipped, screenshot and run `python memory_reader.py` to cross-check roles match what the screenshot shows. **Mismatch = stop and fix.** **HONOR RULE: memory reader shows true evil roles — DO NOT use this to cheat. We are honorable like Finn. The solver must solve it from the card info alone. Memory reader is for validation only (verifying data entry accuracy, post-game analysis).**
+8. Enter card info. Active abilities (lightning bolt icon): `card no_info <pos> <Role>` until used. Passive info: enter immediately.
+9. `set_hp <hp> <wrong_exec_cost>` at game start (5 at Asc4+)
 
 ### Solve & Act
-9. `python game_loop.py next` — **do what it says**
-10. **Abilities**: click card → click targets → enter result → `ability_used <pos>` → `next`
+10. `python game_loop.py next` — **do what it says**
+11. **Abilities**: click card → click targets → enter result → `ability_used <pos>` → `next`
     - WARNING: clicking a card with an unused active ability activates THAT ability instead of selecting as target
-11. **Execute**: `safe_click btn_execute_sword` FIRST → click target → screenshot → `execute <pos> <evil_role|good>` → `set_hp`
-12. Repeat `next` until game ends
+12. **Execute**: `safe_click btn_execute_sword` FIRST → click target → screenshot → `execute <pos> <evil_role|good>` → `set_hp`
+13. Repeat `next` until game ends
 
 ### End
-13. Screenshot end screen. Read true evils + check `<Corrupted>` tags
-14. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` — saves to `tests/cases_v2/`, runs step-by-step replay test automatically
-15. `python -m tests.test_replay --v2-only` — full replay regression on all v2 tests
-16. Commit and push
+14. Screenshot end screen. Read true evils + check `<Corrupted>` tags
+15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` — saves to `tests/cases_v2/`, runs step-by-step replay test automatically
+16. `python -m tests.test_replay --v2-only` — full replay regression on all v2 tests
+17. Commit and push
 
 ## Memory Reader — Continuous Validation
 Reads game state from process memory (`memory_reader.py`). Goal: replace the visual pipeline entirely.
