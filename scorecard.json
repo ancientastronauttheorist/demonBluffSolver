@@ -909,6 +909,13 @@
       "name": "asc25_v7",
       "notes": "Asc25 COMPLETE! PD check on Medium decisive \u2014 both evils identified with certainty. Perfect 10HP. Corrupted: #4 Baker (PD passive). Baa warning for outcast count was a false alarm \u2014 no=1 correct.",
       "date": "2026-03-09 21:46"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc26_v1",
+      "notes": "Drunk at #7 corrupted. 0-scenario bug: forgot to mark executed Drunk as corrupted. Solver perfect deduction once fixed.",
+      "date": "2026-03-09 22:27"
     }
   ]
 }

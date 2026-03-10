@@ -157,5 +157,12 @@
       "Baa"
     ]
   },
-  "used_abilities": []
+  "used_abilities": [],
+  "name": "asc26_v1",
+  "true_evil_positions": {
+    "3": "Minion",
+    "4": "Baa",
+    "5": "Chancellor"
+  },
+  "notes": "Drunk at #7 corrupted. 0-scenario bug: forgot to mark executed Drunk as corrupted. Solver perfect deduction once fixed."
 }
