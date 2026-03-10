@@ -1600,14 +1600,14 @@ def _validate_druid(card: CardInfo, scenario: Scenario,
             # the Outcast could plausibly be one of them.
             return has_outcast and found_outcast in actual_outcasts or has_unrevealed_good_target
         else:
-            # No outcast found: no revealed outcasts AND no unrevealed Good targets
-            # that could be an outcast (conservative: allow if unrevealed exist)
-            return not has_outcast and not has_unrevealed_good_target
+            # No outcast found: no revealed outcasts among targets.
+            # Unrevealed Good targets are deduced to NOT be Outcasts (must be Villagers).
+            return not has_outcast
     else:
         if found_outcast:
-            # Lying about finding outcast: truth is no outcast among targets
-            # Only valid if no revealed outcasts AND no unrevealed Good targets
-            return not has_outcast and not has_unrevealed_good_target
+            # Lying about finding outcast: truth is no outcast among targets.
+            # Unrevealed Good targets are deduced to NOT be Outcasts.
+            return not has_outcast
         else:
             # Lying about no outcast: truth is there IS an outcast
             return has_outcast or has_unrevealed_good_target

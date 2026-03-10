@@ -972,6 +972,13 @@
       "name": "asc26_v7",
       "notes": "Poet-Oracle+Wretch bug fix game. 0 scenarios initially, fixed Wretch-Oracle minion pool check",
       "date": "2026-03-10 13:20"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc26_v8",
+      "notes": "Wretch Slayer kill cost 5HP. Fixed Druid unrevealed-target bug + Wretch-Oracle minion pool. Baa warning wrong - no=2 was correct.",
+      "date": "2026-03-10 13:49"
     }
   ]
 }

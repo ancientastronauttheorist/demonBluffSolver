@@ -67,7 +67,9 @@
     2,
     6
   ],
-  "confirmed_good": [],
+  "confirmed_good": [
+    3
+  ],
   "pd_corruption_target": null,
   "executed_evil_roles": {
     "2": "Baa",
@@ -135,5 +137,11 @@
     5,
     2,
     8
-  ]
+  ],
+  "name": "asc26_v8",
+  "true_evil_positions": {
+    "2": "Baa",
+    "6": "Witch"
+  },
+  "notes": "Wretch Slayer kill cost 5HP. Fixed Druid unrevealed-target bug + Wretch-Oracle minion pool. Baa warning wrong - no=2 was correct."
 }
