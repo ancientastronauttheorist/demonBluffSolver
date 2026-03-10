@@ -5,14 +5,14 @@ Two parallel tracks, both driven by live games:
 
 **Track A — Solver hardening (primary).** The automation loop works. Eliminate rule gaps, fix bad heuristics, handle edge cases. Win consistently at high ascensions.
 
-**Track B — Memory reader development (secondary).** Build `memory_reader.py` into a complete replacement for the visual pipeline (screenshots, OCR, template matching). The current hardened loop is ground truth — every game trains and validates the memory reader.
+**Track B — Memory reader development (secondary).** Build `memory_reader.py` into a complete replacement for the visual pipeline (screenshots, OCR, template matching). The memory reader runs alongside every screenshot — any mismatch is caught and fixed immediately.
 
 Priority order:
 1. Use live runs to find rule gaps, wrong assumptions, and missing constraints in the solver.
 2. Research each issue on the wiki, fix the code, and add regression tests.
 3. Improve strategy decisions — ability timing, execution ordering, corruption-aware reasoning.
 4. Increase win rate and push to higher ascension levels.
-5. Every game, run the memory reader in shadow mode, compare against visual ground truth, and fix discrepancies immediately.
+5. Every screenshot, cross-check the memory reader against what the screenshot shows. Any discrepancy = stop and fix immediately.
 
 ## Autonomous Workflow
 **Always do what the solver recommends. No second-guessing, no manual overrides.** If the solver returns 0 scenarios or an error, stop and fix the problem immediately — do not guess, do not pick a random target, do not continue hoping for the best. Diagnose the root cause (bad data entry, missing constraint, wrong rule), fix the solver code, re-run, and only proceed when the solver gives a valid recommendation. (One-time exception: the empirical dead-card targeting test — see Empirical Tests.)
@@ -36,7 +36,7 @@ Claude should operate in this cycle:
    - Lilis can't kill uncorrupted Knight / prioritizes Good kills (needs unrevealed role tracking)
    - Chancellor +1 outcast count, Baker reveal_order validation
    - Wiki-vs-game discrepancies: Baker "original" and Bishop lying types don't match wiki claims — trust game data over wiki.
-7. **Fix memory reader issues the same way as solver issues.** After each game, run the memory reader (see Memory Reader Shadow Mode below) and compare its output against the visual pipeline's verified data. Any discrepancy is a memory reader bug — fix it NOW, same discipline as solver bugs. Common triggers:
+7. **Fix memory reader issues the same way as solver issues.** The memory reader runs alongside every screenshot during gameplay. When the memory reader's output doesn't match what the screenshot shows, STOP and fix the memory reader immediately — same discipline as solver bugs. Do not continue the game until the discrepancy is resolved. Common triggers:
    - Memory reader returns wrong role names (name mapping issue)
    - Memory reader returns stale data from a previous village (multi-village pointer bug)
    - Memory reader can't find the process or GameAssembly.dll (process detection issue)
@@ -146,11 +146,7 @@ When the deck contains Lilis, night falls every 4 card reveals (kills 1 random u
 
 ### 8. Post-Game
 - If loss or 0 scenarios: diagnose and fix solver immediately.
-- **Memory reader shadow check** (see Memory Reader Shadow Mode below):
-  - Run `python memory_reader.py` and/or parse Player.log for true roles.
-  - Compare against the visual pipeline's end-screen data (the `game_over` true evil string).
-  - If they match: memory reader is working for this game config. Log the success.
-  - If they differ: memory reader bug. Fix it NOW before the next game, same as a solver bug.
+- Memory reader issues should already be caught during gameplay (it runs with every screenshot). If any slipped through, do a final comparison of memory reader state vs end-screen ground truth and fix before moving on.
 - Run regression: `python -m tests.test_regression`
 - Commit and push.
 
@@ -169,41 +165,30 @@ When the deck contains Lilis, night falls every 4 card reveals (kills 1 random u
 - `strategy.py`: action selection
 - `knowledge_base.py`: card role database
 
-## Memory Reader Shadow Mode
-The memory reader (`memory_reader.py`) reads true game state directly from process memory. It's being developed alongside the main visual loop — every game is a test case.
+## Memory Reader — Continuous Validation
+The memory reader (`memory_reader.py`) reads true game state directly from process memory. It runs alongside every screenshot taken during gameplay. The goal is to eventually replace the visual pipeline entirely.
 
 ### How It Works
-The current visual pipeline (screenshots, OCR, template matching) is the **source of truth** for ~50 games. The memory reader runs in shadow mode after each game, and its output is compared against the visual pipeline's verified results. Discrepancies are bugs to fix immediately.
+Every time a screenshot is taken, the memory reader also reads the current game state from memory. Its output is compared against what the screenshot shows. **Any mismatch = stop and fix immediately.** The screenshot is ground truth — when the memory reader disagrees, the memory reader is wrong.
 
-### Per-Game Memory Reader Checklist
-1. **Post-game**: Run `python memory_reader.py` after the game ends (before clicking Next).
-2. **Compare**: Check memory reader output against the `game_over` true evil positions/roles.
-3. **Also try Player.log**: Parse `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` for INIT entries — these have true roles in reverse position order and work for all villages.
-4. **Match?** → memory reader is correct for this game config. No action needed.
-5. **Mismatch?** → Fix the memory reader NOW. Common issues:
-   - Stale `dataRef` pointers (multi-village bug — Village 1 data persists)
-   - Missing or wrong `DISPLAY_NAMES` mapping
-   - Offset drift after a game update
-   - Player.log INIT parsing not implemented yet
-6. **Commit** memory reader fixes in the same post-game commit.
+This applies to everything the memory reader can read: roles, alignment, corruption, card state (hidden/alive/dead), deck composition, board counts, HP, evils killed — whatever it has access to, it should be checked against the screenshot every time.
 
-### Development Phases
-The goal is to replace the visual pipeline entirely. Each phase replaces one stage:
+### When a Mismatch Is Found
+1. **STOP the game.** Do not continue playing with potentially wrong memory reader data.
+2. **Diagnose** — is it a stale pointer, wrong offset, missing name mapping, multi-village bug?
+3. **Fix the memory reader code** — same urgency as a solver bug.
+4. **Verify the fix** — re-run memory reader and confirm it now matches the screenshot.
+5. **Resume the game** only after the fix is verified.
 
-| Phase | Status | Replace | With |
-|-------|--------|---------|------|
-| 0 | **NOW** | Nothing | Shadow mode — compare memory reader vs visual pipeline every game |
-| 1 | TODO | End-screen role reading | Memory reader / Player.log for true roles |
-| 2 | TODO | Deck OCR | Read role pool + board counts from memory |
-| 3 | TODO | Card info entry | Read revealed roles, alignment, state from memory |
-| 4 | TODO | Card flip detection | Read state changes (Hidden→Alive→Dead) from memory |
-| 5 | TODO | Full visual pipeline | Memory reader drives the entire game loop |
+Common issues:
+- Stale `dataRef` pointers (multi-village bug — Village 1 data persists)
+- Missing or wrong `DISPLAY_NAMES` mapping
+- Offset drift after a game update
+- Player.log parse returns different data than memory read (use log as tiebreaker — it's more reliable)
 
-**Phase transitions**: Move to the next phase only after the memory reader has matched the visual pipeline for that stage across multiple consecutive games with zero discrepancies. Don't rush — the visual loop works fine, and a wrong memory read is worse than a slow screenshot.
-
-### Known Issues (from MEMORY.md)
+### Known Issues
 - **Multi-village**: `dataRef` (0x50) is NOT updated for subsequent villages. UI text (`chName.m_text`) IS updated. Fix options: (a) read chName.m_text, (b) parse Player.log INIT entries, (c) find current CharacterData pointer.
-- **Player.log parsing**: Not implemented yet. INIT entries have true roles in reverse position order — should be the quickest win for multi-village ground truth.
+- **Player.log parsing**: Not implemented yet. INIT entries have true roles in reverse position order — reliable ground truth for all villages.
 - **Internal name mappings**: Some game-internal names differ from display names (Gambler→Gemcrafter, Imp→Chancellor, etc.). `DISPLAY_NAMES` dict handles known mappings but may be incomplete.
 
 ## Game Overview
