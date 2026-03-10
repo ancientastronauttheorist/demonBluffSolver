@@ -74,20 +74,48 @@ def _evil_probs(result, n_cards, executed):
     return probs
 
 
-def _pick_target(result, probs, bombardier_positions):
+def _pick_target(result, probs, bombardier_positions, wretch_positions):
     """Pick the best execution target (mirrors strategy.py logic)."""
-    # Definite evil first (Bombardiers safe to execute if definite evil)
+    # Definite evil first (Bombardiers/Wretch safe to execute if definite evil)
     for pos in sorted(result.definite_evil):
         if pos not in probs:
             continue  # already executed
         return pos
 
-    # Highest probability (skip Bombardiers unless 100% — too risky)
-    candidates = {p: pr for p, pr in probs.items()
-                  if p not in bombardier_positions or pr >= 1.0}
-    if not candidates:
-        return None
-    return max(candidates, key=candidates.get)
+    # Never voluntarily execute Wretch — it's always good, abilities just
+    # "see" it as evil. Executing Wretch = guaranteed wrong exec penalty.
+    # Only exception: definite evil (evil disguised as Wretch, handled above).
+    safe = {p: pr for p, pr in probs.items() if p not in wretch_positions}
+
+    # Bombardier: risky but not suicidal. Allow execution when it's the
+    # top candidate and clearly the best choice (prob > 0.5 and beats
+    # non-Bombardier alternatives by a margin).
+    non_bomb = {p: pr for p, pr in safe.items() if p not in bombardier_positions}
+    if non_bomb:
+        best_non_bomb = max(non_bomb, key=non_bomb.get)
+        best_non_bomb_pr = non_bomb[best_non_bomb]
+
+        # Check if a Bombardier clearly dominates
+        bomb_candidates = {p: pr for p, pr in safe.items()
+                          if p in bombardier_positions and pr > 0.5}
+        if bomb_candidates:
+            best_bomb = max(bomb_candidates, key=bomb_candidates.get)
+            best_bomb_pr = bomb_candidates[best_bomb]
+            # Pick Bombardier if it's significantly better
+            if best_bomb_pr > best_non_bomb_pr + 0.1:
+                return best_bomb
+
+        return best_non_bomb
+
+    # Only Bombardier candidates left (all non-Bombardier/Wretch exhausted)
+    bomb_only = {p: pr for p, pr in safe.items() if p in bombardier_positions}
+    if bomb_only:
+        return max(bomb_only, key=bomb_only.get)
+
+    # Absolute fallback: even Wretch
+    if probs:
+        return max(probs, key=probs.get)
+    return None
 
 
 def _reconstruct_starting_hp(case: dict) -> int:
@@ -108,18 +136,27 @@ def _reconstruct_starting_hp(case: dict) -> int:
     exec_good_corrupted = case.get("executed_good_corrupted", {})
 
     # Cards executed as wrong (good, not night-killed)
+    # Use confirmed_good if available; otherwise use true_evil_set to detect
+    # wrong execs (older test cases may not track confirmed_good).
+    confirmed_evil = set(case.get("confirmed_evil", []))
+    exec_evil_roles = {int(k) for k in case.get("executed_evil_roles", {}).keys()}
+    slayer_killed = {sr["target_pos"] for sr in case.get("slayer_results", [])
+                     if sr.get("killed")}
+
     for pos in executed:
-        if pos in night_kills:
-            continue  # night kills don't cost wrong-exec HP
-        if pos not in true_evil_set and pos in confirmed_good:
-            # Check if Drunk (costs 2 instead of wrong_exec_cost)
-            card = next((c for c in case.get("cards", [])
-                         if c["position"] == pos), None)
-            is_drunk = False
-            if card:
-                cd = get_card(card.get("apparent_role", ""))
-                is_drunk = cd and cd.name == "Drunk"
-            hp += 2 if is_drunk else wrong_exec_cost
+        if pos in night_kills or pos in slayer_killed:
+            continue  # no execution HP cost
+        if pos in confirmed_evil or pos in exec_evil_roles or pos in true_evil_set:
+            continue  # correct execution, no HP cost
+
+        # This was a wrong execution
+        card = next((c for c in case.get("cards", [])
+                     if c["position"] == pos), None)
+        is_drunk = False
+        if card:
+            cd = get_card(card.get("apparent_role", ""))
+            is_drunk = cd and cd.name == "Drunk"
+        hp += 2 if is_drunk else wrong_exec_cost
 
     # Lilis night kills cost 2 HP each
     hp += len(night_kills) * 2
@@ -209,11 +246,14 @@ def replay_hindsight(case: dict) -> HindsightResult:
     evils_found = len([p for p in confirmed_evil if p in true_evil_set])
     evils_found += night_kill_evil_count
 
-    # Bombardier positions (never execute)
+    # Dangerous positions to avoid executing
     bombardier_positions = set()
+    wretch_positions = set()
     for c in case.get("cards", []):
         if c.get("apparent_role") == "Bombardier":
             bombardier_positions.add(c["position"])
+        if c.get("apparent_role") == "Wretch":
+            wretch_positions.add(c["position"])
 
     steps = []
     step_num = 0
@@ -243,7 +283,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
             break
 
         probs = _evil_probs(result, n_cards, set(executed))
-        target = _pick_target(result, probs, bombardier_positions)
+        target = _pick_target(result, probs, bombardier_positions, wretch_positions)
 
         if target is None:
             steps.append(ExecStep(
