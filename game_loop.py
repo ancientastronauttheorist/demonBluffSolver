@@ -716,15 +716,17 @@ def _parse_true_evils(raw: str) -> dict[int, str]:
 
 
 def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
-    """Save a regression test case and immediately run it."""
-    from tests.test_regression import save_test_case, load_test_case, run_test
+    """Save a regression test case and run step-by-step replay test."""
+    from tests.test_regression import save_test_case, load_test_case
+    from tests.test_replay import replay_game
     save_test_case(SESSION_FILE, name, true_evils, notes)
     case = load_test_case(os.path.join("tests", "cases_v2", f"{name}.json"))
-    passed, messages = run_test(case)
-    status = "PASS" if passed else "FAIL"
-    print(f"\n[{status}] {name}")
-    for msg in messages:
-        print(f"  {msg}")
+    result = replay_game(case, verbose=True, strict=False)
+    status = "PASS" if result.passed else "FAIL"
+    total = len(result.steps)
+    print(f"\n[{status}] {name} ({total} steps)")
+    if not result.passed:
+        print(f"  Failure: {result.failure_reason}")
 
 
 def main():

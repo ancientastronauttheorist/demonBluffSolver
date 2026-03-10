@@ -382,10 +382,11 @@ def replay_game(case: dict, verbose: bool = False, strict: bool = False) -> Repl
 
 
 def run_all_replays(filter_name: str = None, verbose: bool = False,
-                    strict: bool = False) -> bool:
+                    strict: bool = False, v2_only: bool = False) -> bool:
     """Run all replay tests. Returns True if all passed."""
     case_files = []
-    for d in (CASES_DIR_LEGACY, CASES_DIR):
+    dirs = [CASES_DIR] if v2_only else [CASES_DIR_LEGACY, CASES_DIR]
+    for d in dirs:
         if os.path.isdir(d):
             case_files.extend(glob.glob(os.path.join(d, "*.json")))
     case_files.sort(key=lambda p: os.path.basename(p))
@@ -439,8 +440,9 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     verbose = "--verbose" in args or "-v" in args
     strict = "--strict" in args
-    args = [a for a in args if a not in ("--verbose", "-v", "--strict")]
+    v2_only = "--v2-only" in args or "--v2" in args
+    args = [a for a in args if a not in ("--verbose", "-v", "--strict", "--v2-only", "--v2")]
     filter_name = args[0] if args else None
 
-    all_passed = run_all_replays(filter_name, verbose=verbose, strict=strict)
+    all_passed = run_all_replays(filter_name, verbose=verbose, strict=strict, v2_only=v2_only)
     sys.exit(0 if all_passed else 1)
