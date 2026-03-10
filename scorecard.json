@@ -916,6 +916,13 @@
       "name": "asc26_v1",
       "notes": "Drunk at #7 corrupted. 0-scenario bug: forgot to mark executed Drunk as corrupted. Solver perfect deduction once fixed.",
       "date": "2026-03-09 22:27"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc26_v2",
+      "notes": "4 evils. Wrong exec on #3 Bishop (86% was unlucky 14%). Solver perfect deduction after. Judge corrupted by Poisoner. Doppelganger at #7 disguised as Witness.",
+      "date": "2026-03-09 22:37"
     }
   ]
 }

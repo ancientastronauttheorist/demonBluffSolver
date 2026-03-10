@@ -162,5 +162,13 @@
   "used_abilities": [
     9,
     5
-  ]
+  ],
+  "name": "asc26_v2",
+  "true_evil_positions": {
+    "1": "Puppet",
+    "6": "Poisoner",
+    "8": "Baa",
+    "9": "Puppeteer"
+  },
+  "notes": "4 evils. Wrong exec on #3 Bishop (86% was unlucky 14%). Solver perfect deduction after. Judge corrupted by Poisoner. Doppelganger at #7 disguised as Witness."
 }
