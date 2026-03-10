@@ -33,6 +33,7 @@ class Action:
     ability_name: Optional[str] = None
     reasoning: str = ""
     warnings: list[str] = field(default_factory=list)
+    _ability_recs: Optional[list] = field(default_factory=lambda: None, repr=False)  # cached for display
 
 
 @dataclass
@@ -122,19 +123,28 @@ def _ability_timing_factor(state: GameState) -> float:
     return 0.05 + 0.95 * (t * t * (3 - 2 * t))  # smoothstep
 
 
+def _apply_timing(rec: Optional[AbilityRecommendation], timing: float,
+                   state: GameState, recommendations: list[AbilityRecommendation]):
+    """Apply timing factor to an ability recommendation and append if valid."""
+    if rec:
+        rec.score *= timing
+        rec.reasoning += f" | timing x{timing:.2f}"
+        if timing < 0.5:
+            rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
+        recommendations.append(rec)
+
+
 def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int, int]:
     """Return min/max evil characters still alive across surviving scenarios."""
     if not result.surviving_scenarios:
         return (0, 0)
 
+    executed_set = set(state.executed)
     counts = []
     for scenario in result.surviving_scenarios:
-        count = 0
-        for pos in range(1, state.n_cards + 1):
-            if pos in state.executed:
-                continue
-            if scenario_is_evil(pos, scenario):
-                count += 1
+        count = sum(1 for p in scenario.evil_positions if p not in executed_set)
+        if scenario.puppet_position and scenario.puppet_position not in executed_set:
+            count += 1
         counts.append(count)
 
     return (min(counts), max(counts))
@@ -220,7 +230,7 @@ def _find_forced_execution(
 
     def can_force(indices: tuple[int, ...], executed_now: frozenset[int], hp: int
                   ) -> tuple[bool, Optional[int]]:
-        key = (indices, tuple(sorted(executed_now)), hp)
+        key = (indices, executed_now, hp)
         if key in memo:
             return memo[key]
 
@@ -467,10 +477,7 @@ def _recommend_boolean_ability(
         false_count = 0
         for s in result.surviving_scenarios:
             truth = truth_status(ability_pos, s, state)
-            if isinstance(targets, list):
-                real = ground_truth_fn(targets, s, state)
-            else:
-                real = ground_truth_fn(targets, s, state)
+            real = ground_truth_fn(targets, s, state)
             observed = real if truth == TruthStatus.TRUTHFUL else (not real)
             if observed:
                 true_count += 1
@@ -670,10 +677,7 @@ def _recommend_partition_ability(
         partition: dict[str, int] = {}
         for s in result.surviving_scenarios:
             truth = truth_status(ability_pos, s, state)
-            if isinstance(targets, list):
-                real = ground_truth_fn(targets, s, state)
-            else:
-                real = ground_truth_fn(targets, s, state)
+            real = ground_truth_fn(targets, s, state)
 
             if truth == TruthStatus.TRUTHFUL:
                 key = str(real)
@@ -829,24 +833,14 @@ def recommend_abilities(
                 tie_break_bonus_fn=_fortune_teller_followup_bonus,
                 bonus_weight=0.25,
                 used_abilities=used_abilities)
-            if rec:
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Jester" and len(others) >= 3:
             candidates = [list(c) for c in combinations(others, 3)]
             rec = _recommend_count_ability(
                 "Jester", pos, _jester_ground_truth,
                 candidates, 3, state, result)
-            if rec:
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Judge":
             # Filter out Poets — their info is random, so Judge result is meaningless
@@ -854,38 +848,23 @@ def recommend_abilities(
             if not judge_targets:
                 continue
             rec = _recommend_judge(pos, state, result, judge_targets)
-            if rec:
-                if rec.targets and rec.targets[0] in poet_positions:
-                    rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            if rec and rec.targets and rec.targets[0] in poet_positions:
+                rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
+            _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Dreamer":
             candidates = others
             rec = _recommend_partition_ability(
                 "Dreamer", pos,
                 _dreamer_ground_truth, candidates, state, result)
-            if rec:
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Druid" and len(others) >= 3:
             candidates = [list(c) for c in combinations(others, 3)]
             rec = _recommend_partition_ability(
                 "Druid", pos,
                 _druid_ground_truth, candidates, state, result)
-            if rec:
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Slayer":
             # Slayer is exempt from timing penalty — killing evil early is always good
@@ -899,12 +878,7 @@ def recommend_abilities(
                 "Plague Doctor", pos,
                 lambda t, s, st: str(_pd_ground_truth(t, s, st)),
                 candidates, state, result)
-            if rec:
-                rec.score *= timing
-                rec.reasoning += f" | timing x{timing:.2f}"
-                if timing < 0.5:
-                    rec.warnings.append(f"Only {_revealed_fraction(state):.0%} revealed — consider waiting")
-                recommendations.append(rec)
+            _apply_timing(rec, timing, state, recommendations)
 
     return recommendations
 
@@ -976,6 +950,9 @@ def recommend_action(
     6. Witch fallback -- can't reveal, execute best guess
     7. Probability fallback -- all revealed, no certainty
     """
+    # Pre-compute evil probabilities (used in knight check, witch fallback, etc.)
+    probs = evil_probabilities(state, result)
+
     # 1. Error
     if result.n_surviving == 0:
         return Action("error", reasoning="No surviving scenarios -- check input data")
@@ -1037,7 +1014,7 @@ def recommend_action(
                 and card.position not in result.definite_good
                 and card.position not in result.definite_evil):
             corr_risk = _corruption_risk(card.position, result)
-            evil_prob = evil_probabilities(state, result).get(card.position, 0)
+            evil_prob = probs.get(card.position, 0)
             knight_checks.append((card.position, evil_prob, corr_risk))
 
     if knight_checks:
@@ -1068,6 +1045,10 @@ def recommend_action(
     ability_recs = recommend_abilities(state, result, used_abilities)
     ability_recs.sort(key=lambda r: r.score, reverse=True)
 
+    def _with_ability_recs(action: Action) -> Action:
+        action._ability_recs = ability_recs
+        return action
+
     # 5. Check reveal
     reveal_rec = recommend_reveal(state, result)
 
@@ -1075,12 +1056,12 @@ def recommend_action(
     best_ability = ability_recs[0] if ability_recs else None
     if best_ability and best_ability.ability_name == "Slayer" and best_ability.score > 0.8:
         # Slayer with high confidence -- use it
-        return Action(
+        return _with_ability_recs(Action(
             "use_ability", position=best_ability.position,
             targets=best_ability.targets,
             ability_name="Slayer",
             reasoning=best_ability.reasoning,
-            warnings=best_ability.warnings)
+            warnings=best_ability.warnings))
 
     if best_ability and reveal_rec:
         # Compare ability info gain vs reveal info gain
@@ -1088,12 +1069,12 @@ def recommend_action(
         # For entropy-based, higher = better
         # Use ability if it has meaningful info gain
         if best_ability.score > reveal_rec.entropy and best_ability.score > 0.3:
-            return Action(
+            return _with_ability_recs(Action(
                 "use_ability", position=best_ability.position,
                 targets=best_ability.targets,
                 ability_name=best_ability.ability_name,
                 reasoning=best_ability.reasoning,
-                warnings=best_ability.warnings)
+                warnings=best_ability.warnings))
 
     if reveal_rec:
         warnings = []
@@ -1101,23 +1082,22 @@ def recommend_action(
             n_unrevealed = len(_unrevealed_positions(state))
             if n_unrevealed <= 2:
                 warnings.append("Witch may be alive -- be cautious about revealing")
-        return Action(
+        return _with_ability_recs(Action(
             "reveal", position=reveal_rec.position,
             reasoning=reveal_rec.reasoning,
-            warnings=warnings)
+            warnings=warnings))
 
     if best_ability:
-        return Action(
+        return _with_ability_recs(Action(
             "use_ability", position=best_ability.position,
             targets=best_ability.targets,
             ability_name=best_ability.ability_name,
             reasoning=best_ability.reasoning,
-            warnings=best_ability.warnings)
+            warnings=best_ability.warnings))
 
     # 6. Witch fallback -- can't reveal, execute by probability
     # HP-aware gating with budget-based confidence thresholds
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
-    probs = evil_probabilities(state, result)
     active_probs = {p: prob for p, prob in probs.items()
                     if p not in state.executed and p not in result.bombardier_positions}
     if active_probs:
@@ -1137,12 +1117,12 @@ def recommend_action(
                     f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
                     f"but all reveal branches still lead to a forced win."
                 )
-            return Action(
+            return _with_ability_recs(Action(
                 "execute",
                 position=forced_pos,
                 reasoning=_forced_execution_reasoning(forced_pos, state, result),
                 warnings=warnings,
-            )
+            ))
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
@@ -1174,33 +1154,33 @@ def recommend_action(
             warnings.append(f"CRITICAL: HP={state.hp}, wrong exec costs {state.wrong_exec_cost} -- "
                             f"CANNOT afford a mistake! Only execute if certain.")
             if best_prob < 1.0:
-                return Action(
+                return _with_ability_recs(Action(
                     "error", position=best_pos,
                     reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but HP too low to risk "
                               f"(HP={state.hp}, cost={state.wrong_exec_cost}). Need more info.",
-                    warnings=warnings)
+                    warnings=warnings))
         elif wrong_exec_budget == 1:
             # One wrong guess = death. Require high confidence.
             min_threshold = 0.80
             if best_prob < min_threshold:
                 warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_threshold:.0%} threshold. "
                                 f"Consider manual override if you have extra information.")
-                return Action(
+                return _with_ability_recs(Action(
                     "error", position=best_pos,
                     reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
                               f">={min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
-                    warnings=warnings)
+                    warnings=warnings))
         elif best_prob < 0.5:
             warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")
 
-        return Action(
+        return _with_ability_recs(Action(
             "execute", position=best_pos,
             reasoning=f"No reveals available. #{best_pos} is {best_prob:.0%} likely evil "
                       f"(HP={state.hp}, budget={wrong_exec_budget} wrong execs)",
-            warnings=warnings)
+            warnings=warnings))
 
     # 7. Shouldn't reach here
-    return Action("error", reasoning="No valid action found")
+    return _with_ability_recs(Action("error", reasoning="No valid action found"))
 
 
 # ============================================================
@@ -1236,8 +1216,8 @@ def print_recommendation(state: GameState, result: SolverResult,
                 marker = " <-- RECOMMEND" if pos == action.position and action.action_type == "reveal" else ""
                 print(f"    #{pos}: {p:.0%} evil{marker}")
 
-    # Show available abilities
-    recs = recommend_abilities(state, result, used_abilities)
+    # Show available abilities (reuse cached recs from recommend_action)
+    recs = action._ability_recs if action._ability_recs is not None else recommend_abilities(state, result, used_abilities)
     if recs:
         print(f"\n  Available abilities:")
         recs.sort(key=lambda r: r.score, reverse=True)

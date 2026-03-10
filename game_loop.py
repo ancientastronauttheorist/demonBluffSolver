@@ -134,31 +134,6 @@ def card_no_info(pos: int, role: str) -> CardInfo:
     return CardInfo(pos, role, info_parsed={})
 
 
-# Builder dispatch table for CLI
-CARD_BUILDERS = {
-    "enlightened":     card_enlightened,
-    "knitter":         card_knitter,
-    "confessor":       card_confessor,
-    "gemcrafter":      card_gemcrafter,
-    "lover":           card_lover,
-    "scout":           card_scout,
-    "bard":            card_bard,
-    "fortune_teller":  card_fortune_teller,
-    "oracle":          card_oracle,
-    "medium":          card_medium,
-    "hunter":          card_hunter,
-    "architect":       card_architect,
-    "empress":         card_empress,
-    "witness":         card_witness,
-    "jester":          card_jester,
-    "dreamer":         card_dreamer,
-    "judge":           card_judge,
-    "alchemist":       card_alchemist,
-    "druid":           card_druid,
-    "bishop":          card_bishop,
-    "no_info":         card_no_info,
-}
-
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
 DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
 _SESSION_LOCK_HANDLE = None
@@ -525,23 +500,15 @@ class GameSession:
             print(f"\n  >> No definite evil yet. Reveal more cards.")
             # Show per-position evil probability
             if result.n_surviving > 0:
-                unrevealed = set(range(1, self.n_cards + 1)) - set(self.executed) - set(result.definite_good)
-                for pos in sorted(unrevealed):
-                    evil_count = sum(1 for s in result.surviving_scenarios
-                                     if pos in s.evil_positions or pos == s.puppet_position)
-                    pct = evil_count / result.n_surviving * 100
+                state = self.to_game_state()
+                probs = evil_probabilities(state, result)
+                for pos in sorted(probs):
+                    pct = probs[pos] * 100
                     if 0 < pct < 100:
+                        evil_count = int(round(probs[pos] * result.n_surviving))
                         print(f"     #{pos}: {pct:.0f}% chance evil ({evil_count}/{result.n_surviving})")
         print(f"  ({result.n_surviving} surviving scenarios out of {result.n_scenarios})\n")
         return result
-
-    def recommend(self) -> str:
-        result = self.solve()
-        safe_to_execute = [p for p in result.definite_evil
-                           if p not in self.executed and p not in result.bombardier_positions]
-        if safe_to_execute:
-            return f"Execute #{safe_to_execute[0]}"
-        return "Reveal more cards"
 
     def next_action(self):
         """Run solver + strategy, print full recommendation."""
@@ -737,6 +704,27 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
     else:
         # Treat unknown as no_info with the role name capitalized
         return card_no_info(pos, role.replace("_", " ").title())
+
+
+def _parse_true_evils(raw: str) -> dict[int, str]:
+    """Parse '3=Shaman,7=Baa' format into {3: 'Shaman', 7: 'Baa'}."""
+    result = {}
+    for pair in raw.split(","):
+        pos_str, role = pair.split("=")
+        result[int(pos_str)] = role
+    return result
+
+
+def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
+    """Save a regression test case and immediately run it."""
+    from tests.test_regression import save_test_case, load_test_case, run_test
+    save_test_case(SESSION_FILE, name, true_evils, notes)
+    case = load_test_case(os.path.join("tests", "cases", f"{name}.json"))
+    passed, messages = run_test(case)
+    status = "PASS" if passed else "FAIL"
+    print(f"\n[{status}] {name}")
+    for msg in messages:
+        print(f"  {msg}")
 
 
 def main():
@@ -1094,18 +1082,8 @@ def main():
 
         # Auto-save regression test if true evils provided
         if test_name and true_evils_str:
-            true_evils = {}
-            for pair in true_evils_str.split(","):
-                pos_str, role = pair.split("=")
-                true_evils[int(pos_str)] = role
-            from tests.test_regression import save_test_case, load_test_case, run_test
-            save_test_case(SESSION_FILE, test_name, true_evils, notes)
-            case = load_test_case(os.path.join("tests", "cases", f"{test_name}.json"))
-            passed, messages = run_test(case)
-            status = "PASS" if passed else "FAIL"
-            print(f"\n[{status}] {test_name}")
-            for msg in messages:
-                print(f"  {msg}")
+            true_evils = _parse_true_evils(true_evils_str)
+            _save_and_run_test(test_name, true_evils, notes)
         elif not test_name:
             print("[game_over] Tip: add test name + true evils to auto-save regression test:")
             print("  game_over win/loss <name> <pos=Role,...> [notes]")
@@ -1122,19 +1100,8 @@ def main():
                 import ast
                 true_evils = {int(k): v for k, v in ast.literal_eval(raw).items()}
             else:
-                for pair in raw.split(","):
-                    pos_str, role = pair.split("=")
-                    true_evils[int(pos_str)] = role
-        from tests.test_regression import save_test_case
-        save_test_case(SESSION_FILE, name, true_evils)
-        # Also run the test immediately
-        from tests.test_regression import load_test_case, run_test
-        case = load_test_case(os.path.join("tests", "cases", f"{name}.json"))
-        passed, messages = run_test(case)
-        status = "PASS" if passed else "FAIL"
-        print(f"\n[{status}] {name}")
-        for msg in messages:
-            print(f"  {msg}")
+                true_evils = _parse_true_evils(raw)
+        _save_and_run_test(name, true_evils)
         return
 
     # Game action commands (require game running)

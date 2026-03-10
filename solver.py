@@ -5,6 +5,7 @@ reports positions that are Evil in ALL surviving scenarios.
 """
 
 from __future__ import annotations
+from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
 from itertools import combinations, product
@@ -298,11 +299,12 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
 
     # Remove already-executed positions from candidates
     # Night-killed positions stay eligible (evil could have been among them)
-    player_executed = [p for p in state.executed if p not in state.night_kills]
-    available = [p for p in all_positions if p not in player_executed]
+    night_kills_set = set(state.night_kills)
+    player_executed = {p for p in state.executed if p not in night_kills_set}
+    confirmed_good_set = set(state.confirmed_good)
 
     # Positions confirmed good can't be evil
-    available = [p for p in available if p not in state.confirmed_good]
+    available = [p for p in all_positions if p not in player_executed and p not in confirmed_good_set]
 
     # Confirmed evil positions (not yet executed) must get an evil role
     has_puppeteer = "Puppeteer" in evil_roles
@@ -712,12 +714,24 @@ def _corruption_variants(placement: dict[int, str], state: GameState,
     return variants
 
 
+def _build_card_lookup(state: GameState) -> dict[int, CardInfo]:
+    """Build position -> CardInfo lookup dict for O(1) access."""
+    return {card.position: card for card in state.cards}
+
+
+# Module-level cache for the current state's card lookup
+_card_lookup: dict[int, CardInfo] = {}
+_card_lookup_id: int = -1  # id of the state.cards list we built from
+
+
 def _get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
-    """Get revealed card at position, or None."""
-    for card in state.cards:
-        if card.position == pos:
-            return card
-    return None
+    """Get revealed card at position, or None. Uses cached dict lookup."""
+    global _card_lookup, _card_lookup_id
+    cards_id = id(state.cards)
+    if cards_id != _card_lookup_id:
+        _card_lookup = _build_card_lookup(state)
+        _card_lookup_id = cards_id
+    return _card_lookup.get(pos)
 
 
 def get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
@@ -2058,7 +2072,6 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     Also checks Outcast role counts: Good positions showing an Outcast role
     can't exceed that role's deck count (no disguiser can fake an Outcast role).
     """
-    from collections import Counter
 
     # Count apparent roles among Good (non-evil, non-puppet) revealed positions,
     # PLUS puppet (Puppet keeps its apparent Villager role, consuming a deck slot)
