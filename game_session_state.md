@@ -16512,3 +16512,163 @@ Reason: #2 is evil in ALL 4 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: Perfect 3-evil deduction. Two Knitters, contradicting pairs, Scout+Empress+Bard constraints narrowed all evils. 8HP.
 
+
+---
+
+# New Game — 2026-03-09 21:26:45
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knight, Fortune Teller, Druid, Architect, Bishop, Confessor
+- Outcasts: Wretch, PlagueDr
+- Minions: Witch
+- Demons: Pooka
+
+### [21:28:19] Revealed #1 Druid
+Info: {}
+
+### [21:28:19] Revealed #2 PlagueDr
+Info: {}
+
+### [21:28:19] Revealed #3 Bishop
+Info: {'targets': [1, 3, 5], 'types': ['Minion', 'Outcast', 'Villager']}
+
+### [21:28:19] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [21:28:20] Revealed #5 Knight
+Info: {}
+
+### [21:28:20] Revealed #6 Fortune Teller
+Info: {}
+
+### [21:28:20] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [21:28:20] Revealed #8 Wretch
+Info: {}
+
+#### [21:28:43] Solver Output
+Scenarios: 20/268
+Definite good: ['#2']
+Evil probabilities: #4=70%, #7=55%, #3=35%, #5=10%, #6=10%, #8=10%, #1=5%, #9=5%
+  Generated 268 candidate scenarios
+  20 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:28:43] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#2', '#3']
+Reason: Entropy 1.000 (adjusted 0.875) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [21:29:54] Revealed #6 Ft
+Info: {}
+
+### [21:29:55] Ability used at #6
+
+#### [21:29:55] Solver Output
+Scenarios: 18/226
+Definite good: ['#2']
+Evil probabilities: #4=72%, #7=50%, #3=33%, #5=11%, #6=11%, #8=11%, #1=6%, #9=6%
+  Generated 226 candidate scenarios
+  18 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:29:55] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.650 (adjusted 0.614) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [21:30:11] Revealed #6 Fortune Teller
+Info: {'targets': [2, 3], 'has_evil': False}
+
+#### [21:30:16] Solver Output
+Scenarios: 10/268
+Definite good: ['#2', '#6']
+Evil probabilities: #4=80%, #7=50%, #3=20%, #8=20%, #1=10%, #5=10%, #9=10%
+  Generated 268 candidate scenarios
+  10 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 7, 8, 9]
+
+#### [21:30:16] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.722 (adjusted 0.686) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [21:31:23] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [21:31:23] Ability used at #1
+
+#### [21:31:24] Solver Output
+Scenarios: 8/268
+Definite good: ['#1', '#2', '#6']
+Evil probabilities: #4=75%, #7=50%, #3=25%, #8=25%, #5=12%, #9=12%
+  Generated 268 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 4, 5, 7, 8, 9]
+
+#### [21:31:24] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 75% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 75% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [21:32:09] Executed #4 -> Pooka (EVIL)
+
+#### [21:32:09] Solver Output
+Scenarios: 5/31
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #7=40%, #5=20%, #8=20%, #9=20%
+  Generated 31 candidate scenarios
+  5 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [5, 7, 8, 9]
+
+#### [21:32:09] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 40% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 40% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (40%) -- consider gathering more info
+
+### [21:33:28] Ability used at #2
+
+#### [21:33:28] Solver Output
+Scenarios: 2/31
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8', '#9']
+  Generated 31 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [21:33:28] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Witch'})
+
+### [21:35:45] Executed #7 -> Witch (EVIL)
+
+## [21:35:50] GAME OVER — WIN
+Final HP: 10
+Notes: Witch blocked #9. PD active revealed #7 evil. Perfect 10HP. Corrupted: #1 Druid (PD), #3 Bishop (Pooka), #5 Knight (Pooka)
+

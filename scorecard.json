@@ -895,6 +895,13 @@
       "name": "asc25_v5",
       "notes": "Perfect 3-evil deduction. Two Knitters, contradicting pairs, Scout+Empress+Bard constraints narrowed all evils. 8HP.",
       "date": "2026-03-09 21:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc25_v6",
+      "notes": "Witch blocked #9. PD active revealed #7 evil. Perfect 10HP. Corrupted: #1 Druid (PD), #3 Bishop (Pooka), #5 Knight (Pooka)",
+      "date": "2026-03-09 21:35"
     }
   ]
 }
