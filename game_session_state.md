@@ -16347,3 +16347,106 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: PD name bug fix (PlagueDr vs Plague Doctor). Oracle#1 corrupted by PD. 1HP clutch after wrong exec on #8.
 
+
+---
+
+# New Game — 2026-03-09 21:15:12
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: Knitter, Alchemist, Slayer, Scout, Hunter, Lover, Medium
+- Outcasts: Doppelganger, Wretch, Drunk
+- Minions: Chancellor
+- Demons: Lilis
+
+### [21:16:13] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [21:16:13] Revealed #2 Slayer
+Info: {}
+
+### [21:16:13] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [21:16:13] Revealed #4 Wretch
+Info: {}
+
+### [21:16:59] Revealed #5 Medium
+Info: {'good_position': 2, 'good_role': 'Slayer'}
+
+### [21:16:59] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [21:16:59] Revealed #8 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:16:59] Revealed #9 Scout
+Info: {'evil_role': 'Lilis', 'distance': 1}
+
+#### [21:17:06] Solver Output
+Scenarios: 43/3136
+Definite good: ['#1', '#6', '#7', '#8']
+Evil probabilities: #9=81%, #2=56%, #4=37%, #5=19%, #3=7%
+  Generated 3136 candidate scenarios
+  43 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 9]
+
+#### [21:17:06] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#9']
+Reason: Target #9 is 81% evil (adjusted 0.81)
+
+### [21:17:57] Ability used at #2
+
+#### [21:18:02] Solver Output
+Scenarios: 24/3136
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+Evil probabilities: #9=67%, #5=33%
+  Generated 3136 candidate scenarios
+  24 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 9]
+
+#### [21:18:02] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 24 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [21:18:36] Executed #2 -> Chancellor (EVIL)
+
+#### [21:18:40] Solver Output
+Scenarios: 16/382
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+Evil probabilities: #5=50%, #9=50%
+  Generated 382 candidate scenarios
+  16 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 9]
+
+#### [21:18:40] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Lilis).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:19:28] Executed #5 -> Lilis (EVIL)
+
+## [21:19:28] GAME OVER — WIN
+Final HP: 6
+Notes: Slayer couldn't kill revealed Chancellor. Doppelganger#1 as Hunter, Drunk#8 as Knitter corrupted. Lilis night killed #6. 6HP.
+

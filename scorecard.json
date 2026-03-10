@@ -881,6 +881,13 @@
       "name": "asc25_v3",
       "notes": "PD name bug fix (PlagueDr vs Plague Doctor). Oracle#1 corrupted by PD. 1HP clutch after wrong exec on #8.",
       "date": "2026-03-09 21:13"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc25_v4",
+      "notes": "Slayer couldn't kill revealed Chancellor. Doppelganger#1 as Hunter, Drunk#8 as Knitter corrupted. Lilis night killed #6. 6HP.",
+      "date": "2026-03-09 21:19"
     }
   ]
 }
