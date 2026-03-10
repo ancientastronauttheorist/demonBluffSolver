@@ -986,6 +986,27 @@
       "name": "asc27_v1",
       "notes": "Baker conversion chain constraint added: evil Bakers don't trigger conversion, so converted Baker needs a good Baker revealed before it. Fixed 0-scenario bug (Medium good_role=real not parsed). Went from 3 scenarios (33%) to 2 (50%) with chain fix. 5HP, 1 wrong exec (#1 Doppelganger).",
       "date": "2026-03-10 14:28"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc27_v2",
+      "notes": "Solver WIN bug: recommended WIN at 3/4 evils, didn't track Puppet needing execution. Manual deduction found #8=Puppet via Jester elimination.",
+      "date": "2026-03-10 14:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v3",
+      "notes": "Perfect village 10HP. Knight check on #10 found Pooka demon immediately. PD confirmed #1 corrupted by Pooka.",
+      "date": "2026-03-10 15:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v4",
+      "notes": "Perfect 10HP. Two Bombardiers on board, Druid found no outcasts among 1,2,4 confirming #1 evil. Dreamer tagged #6 as Pooka.",
+      "date": "2026-03-10 15:20"
     }
   ]
 }

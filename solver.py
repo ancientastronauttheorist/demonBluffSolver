@@ -261,10 +261,11 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     all_positions = list(range(1, n + 1))
 
     # Puppet is created dynamically by Puppeteer's game-start ability, not
-    # independently placed.  When both are in the deck, remove Puppet from
-    # evil_roles to avoid double-counting (the Puppeteer branch creates it).
-    puppet_in_deck = "Puppet" in evil_roles and "Puppeteer" in evil_roles
-    if puppet_in_deck:
+    # independently placed.  When Puppeteer is in the deck, Puppet scenarios
+    # are generated (with +1 evil position).  Remove "Puppet" from evil_roles
+    # if it happens to be listed explicitly to avoid double-counting.
+    puppet_in_deck = "Puppeteer" in evil_roles
+    if puppet_in_deck and "Puppet" in evil_roles:
         evil_roles.remove("Puppet")
 
     # Remove already-executed evil roles from what we need to place
