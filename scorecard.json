@@ -923,6 +923,13 @@
       "name": "asc26_v2",
       "notes": "4 evils. Wrong exec on #3 Bishop (86% was unlucky 14%). Solver perfect deduction after. Judge corrupted by Poisoner. Doppelganger at #7 disguised as Witness.",
       "date": "2026-03-09 22:37"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc26_v3",
+      "notes": "LOSS: Druid misclassified as Outcast in deck entry. Solver wrongly had 1 scenario claiming #1=Pooka. Actually #1=Judge(corrupted). Wrong exec #1 cost 5HP. After fixing deck (Druid=Villager), solver correctly found #2=Pooka. Executed #2 but HP still hit 0 (mystery: evils killed stayed 1/2, unclear why correct exec cost HP). True: #7=Doppelganger, #1=Judge(corrupted by Pooka#2). Root cause: data entry error.",
+      "date": "2026-03-09 23:01"
     }
   ]
 }

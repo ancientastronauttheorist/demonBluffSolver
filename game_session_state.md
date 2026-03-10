@@ -17102,3 +17102,206 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 5
 Notes: 4 evils. Wrong exec on #3 Bishop (86% was unlucky 14%). Solver perfect deduction after. Judge corrupted by Poisoner. Doppelganger at #7 disguised as Witness.
 
+
+---
+
+# New Game — 2026-03-09 22:38:52
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 2
+
+## Deck
+- Villagers: FortuneTeller, Confessor, Judge, Hunter, Lover
+- Outcasts: Druid, Doppelganger
+- Minions: Minion
+- Demons: Pooka
+
+### [22:39:55] Revealed #1 Judge
+Info: {}
+
+### [22:39:55] Revealed #2 FortuneTeller
+Info: {}
+
+### [22:39:56] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [22:39:56] Revealed #4 Druid
+Info: {}
+
+### [22:39:56] Revealed #5 Hunter
+Info: {'distance': 2}
+
+### [22:39:56] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [22:39:56] Revealed #7 Judge
+Info: {}
+
+### [22:39:56] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [22:40:02] Solver Output
+Scenarios: 17/392
+Definite good: ['#2', '#5', '#6', '#8']
+Evil probabilities: #3=76%, #1=65%, #4=53%, #7=6%
+  Generated 392 candidate scenarios
+  17 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 7]
+
+#### [22:40:02] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#4']
+Reason: Expected posterior 8.8 scenarios (adjusted 8.8, info gain 0.956 bits) | timing x1.00
+
+### [22:40:53] Ability used at #1
+
+### [22:40:53] Revealed #1 Judge
+Info: {'target': 4, 'is_lying': True}
+
+#### [22:40:53] Solver Output
+Scenarios: 7/392
+Definite evil: ['#3']
+Definite good: ['#2', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=71%, #1=29%
+  Generated 392 candidate scenarios
+  7 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4]
+
+#### [22:40:53] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 7 scenarios (roles: {'Pooka', 'Minion'})
+
+### [22:41:30] Executed #3 -> Minion (EVIL)
+
+#### [22:41:30] Solver Output
+Scenarios: 6/49
+Definite evil: ['#3']
+Definite good: ['#2', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=83%, #1=17%
+  Generated 49 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4]
+
+#### [22:41:30] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#5']
+Reason: Entropy 0.650 (adjusted 0.650) | timing x1.00
+
+### [22:42:36] Ability used at #4
+
+### [22:42:36] Revealed #4 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': None}
+
+#### [22:42:36] Solver Output
+Scenarios: 3/49
+Definite evil: ['#3']
+Definite good: ['#2', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=67%, #1=33%
+  Generated 49 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 4]
+
+#### [22:42:36] Recommendation
+Action: **USE_ABILITY** #7 (Judge) -> targets ['#1']
+Reason: Expected posterior 1.7 scenarios (adjusted 1.7, info gain 0.848 bits) | timing x1.00
+
+### [22:43:11] Ability used at #7
+
+### [22:43:11] Revealed #7 Judge
+Info: {'target': 1, 'is_lying': True}
+
+#### [22:43:11] Solver Output
+Scenarios: 1/49
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+  Generated 49 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [22:43:11] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [22:45:39] Executed #1 -> GOOD (WRONG!)
+
+#### [22:45:42] Solver Output
+Scenarios: 0/42
+  Generated 42 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Druid: rejected 19/42 (45%)
+    #1 Judge: rejected 17/42 (40%)
+    #7 Judge: rejected 16/42 (38%)
+    #8 Confessor: rejected 13/42 (31%)
+    #5 Hunter: rejected 9/42 (21%)
+    #6 Lover: rejected 9/42 (21%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Judge: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Confessor: still 0
+    WITHOUT #4 Druid: still 0
+    WITHOUT #5 Hunter: still 0
+    WITHOUT #6 Lover: still 0
+    WITHOUT #7 Judge: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Confessor: still 0
+
+#### [22:45:42] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [22:45:47] Claude Reasoning
+
+
+#### [22:52:48] Solver Output
+Scenarios: 4/36
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+  Generated 36 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [22:52:48] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [23:00:51] Executed #2 -> Pooka (EVIL)
+
+## [23:01:03] GAME OVER — LOSS
+Final HP: 0
+Notes: LOSS: Druid misclassified as Outcast in deck entry. Solver wrongly had 1 scenario claiming #1=Pooka. Actually #1=Judge(corrupted). Wrong exec #1 cost 5HP. After fixing deck (Druid=Villager), solver correctly found #2=Pooka. Executed #2 but HP still hit 0 (mystery: evils killed stayed 1/2, unclear why correct exec cost HP). True: #7=Doppelganger, #1=Judge(corrupted by Pooka#2). Root cause: data entry error.
+
