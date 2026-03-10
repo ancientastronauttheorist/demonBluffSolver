@@ -2304,3 +2304,84 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: Witch blocked #10. PD clean on #5. Solver found #4+#5 definite evil, then 1 scenario after Minion exec. Medium #1 corrupted. Perfect 10HP.
 
+
+---
+
+# New Game — 2026-03-10 17:23:11
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Hunter, Baker, Alchemist, Bishop, Empress, Oracle
+- Outcasts: Doppelganger, Drunk
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [17:24:18] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [17:24:18] Revealed #2 Architect
+Info: {'side': 'left'}
+
+### [17:24:18] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [17:24:18] Revealed #4 Oracle
+Info: {'targets': [2, 6], 'minion_role': 'Twin_Minion'}
+
+### [17:24:18] Revealed #5 Empress
+Info: {'targets': [3, 6, 8]}
+
+### [17:24:18] Revealed #6 Bishop
+Info: {'targets': [1, 4, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:24:19] Revealed #7 Empress
+Info: {'targets': [1, 2, 8]}
+
+### [17:24:19] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+#### [17:24:25] Solver Output
+Scenarios: 29/2408
+Definite good: ['#3', '#4', '#8']
+Evil probabilities: #6=83%, #2=41%, #7=38%, #1=21%, #5=17%
+  Generated 2408 candidate scenarios
+  29 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 7]
+
+#### [17:24:25] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (62% evil Twin_Minion, 21% evil Baa, 14% good Bishop).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [17:25:11] Executed #6 -> GOOD (WRONG!)
+
+#### [17:25:17] Solver Output
+Scenarios: 5/1806
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#8']
+  Generated 1806 candidate scenarios
+  5 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:25:17] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [17:25:55] Executed #5 -> Baa (EVIL)
+
+### [17:26:37] Executed #7 -> Twin_Minion (EVIL)
+
+## [17:26:37] GAME OVER — WIN
+Final HP: 5
+Notes: Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP.
+

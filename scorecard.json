@@ -1070,6 +1070,13 @@
       "name": "asc28_v6",
       "notes": "Witch blocked #10. PD clean on #5. Solver found #4+#5 definite evil, then 1 scenario after Minion exec. Medium #1 corrupted. Perfect 10HP.",
       "date": "2026-03-10 17:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc28_v7",
+      "notes": "Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP.",
+      "date": "2026-03-10 17:26"
     }
   ]
 }
