@@ -40,6 +40,7 @@ When the deck contains Lilis, night falls every 4 card reveals (kills 1 random u
 - Read the screenshot to identify which card was killed (red skull overlay) vs which cards you successfully flipped.
 - Enter the flipped card info and `night_kill` before continuing to the next batch.
 - This ensures reveal_order and night_kill tracking stay accurate.
+- **CRITICAL: Lilis deals 2 HP damage even if she cannot kill anyone** (e.g., when she is the only unrevealed card left, she can't kill herself). In this case, HP still drops but NO card dies. **Do NOT assume the last unrevealed card was killed** — visually verify a skull overlay before entering `night_kill`. If no skull appears, the card survived and must be flipped.
 
 ## Interaction Rules
 - Use the mouse only for in-game interaction. Do not use keyboard shortcuts during live runs.
