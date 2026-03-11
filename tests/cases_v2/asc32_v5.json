@@ -154,5 +154,12 @@
     5,
     2,
     1
-  ]
+  ],
+  "name": "asc32_v5",
+  "true_evil_positions": {
+    "3": "Witch",
+    "4": "Lilis",
+    "5": "Puppeteer"
+  },
+  "notes": "Lilis game, 8HP. Corrupted: #1 Judge. Slayer killed Puppeteer. Two FTs (both evil lies), two Judges. Solver found all 3."
 }
