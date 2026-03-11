@@ -1406,6 +1406,13 @@
       "name": "asc35_v2",
       "notes": "8HP. Lilis game, 8 cards. Shaman dup Alchemist. Confessor dizzy+no corruption source=evil disguise. FT alignment test confirmed.",
       "date": "2026-03-11 18:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc35_v3",
+      "notes": "Perfect 10HP. 7 cards, 1 evil Pooka. Solver 1 scenario, instant solve. Pooka corrupted #4 Dreamer and #6 Poet. Drunk at #3 disguised as Lover.",
+      "date": "2026-03-11 18:55"
     }
   ]
 }

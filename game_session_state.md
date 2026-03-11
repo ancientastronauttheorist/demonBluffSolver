@@ -8447,3 +8447,60 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
 Final HP: 8
 Notes: 8HP. Lilis game, 8 cards. Shaman dup Alchemist. Confessor dizzy+no corruption source=evil disguise. FT alignment test confirmed.
 
+
+---
+
+# New Game — 2026-03-11 18:52:52
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Confessor, Lover, Scout, Dreamer, Poet
+- Outcasts: Drunk
+- Minions: 
+- Demons: Pooka
+
+### [18:53:58] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [18:54:33] Revealed #2 Scout
+Info: {}
+
+### [18:54:37] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:54:40] Revealed #4 Dreamer
+Info: {}
+
+### [18:54:44] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:54:54] Revealed #6 Poet
+Info: {'evil_role': 'Pooka', 'distance': 2, 'copied_role': 'Scout'}
+
+### [18:54:59] Revealed #7 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [18:55:02] Solver Output
+Scenarios: 1/42
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 42 candidate scenarios
+  1 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [18:55:02] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [18:55:36] Executed #5 -> Pooka (EVIL)
+
+## [18:55:42] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. 7 cards, 1 evil Pooka. Solver 1 scenario, instant solve. Pooka corrupted #4 Dreamer and #6 Poet. Drunk at #3 disguised as Lover.
+
