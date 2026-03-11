@@ -30,7 +30,7 @@
 2. Verify the deck output, read board counts (V, O, M, D icons top-right) from screenshot.
 3. `python game_loop.py new <n_cards> <n_evil>`
 4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` -- prefixes REQUIRED (command errors on missing prefix instead of silently ignoring).
-5. Close deck: `safe_click icon_deck_purple`
+5. Close deck: `safe_click icon_deck_purple` (at ~(2485, 100)). **NEVER click near the top-center area (e.g., ~(1230, 62)) thinking it's the deck icon — that hits card #7 in a 7-card game.**
 
 ### Reveal & Enter
 6. **`python game_loop.py flip`** -- flips all cards #1->#N in strict order, then auto-runs memory_reader to show board state.
@@ -51,11 +51,11 @@
 10. `python game_loop.py next` -- **do what it says**. Warns if card entries missing or HP inconsistent.
 11. **Abilities**: click card -> click targets -> enter result -> `ability_used <pos>` -> `next`
     - WARNING: clicking a card with an unused active ability activates THAT ability instead of selecting as target
-12. **Execute**: `safe_click btn_execute_sword` FIRST -> click target -> screenshot -> `execute <pos> <evil_role|good>`. Execute command auto-prints HP reminder.
+12. **Execute**: Dismiss mark menu first by clicking center board `(1280, 690)`, THEN `safe_click btn_execute_sword` -> click target -> screenshot -> `execute <pos> <evil_role|good>`. Execute command auto-prints HP reminder. The mark menu (bottom-right) can overlap `btn_execute_sword` causing template match failure.
 13. Repeat `next` until game ends
 
 ### End
-14. Screenshot end screen. Read true evils + check `<Corrupted>` tags
+14. Screenshot end screen. Read true evils + check `<Corrupted>` tags. **Note: game auto-advances to next village after "Next" click — screenshot BEFORE clicking Next if you need end-screen details.**
 15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist.
 16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
