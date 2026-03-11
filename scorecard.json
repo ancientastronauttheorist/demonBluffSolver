@@ -1385,6 +1385,13 @@
       "name": "asc34_v6",
       "notes": "Perfect game 10HP. PD#2 clean on #5, PD#4 (evil) lied about #7/#10. Judge#8 corrupted said #2 lying -> solver narrowed to 1 scenario. 3 correct execs.",
       "date": "2026-03-11 18:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v7",
+      "notes": "Perfect 10HP. Corrupted Jester said 2 evils among 1,2,4 (impossible with 1 evil) -> solver narrowed to 1 scenario confirming #6 Pooka. Ascension 34 complete 7/7!",
+      "date": "2026-03-11 18:09"
     }
   ]
 }

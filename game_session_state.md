@@ -8117,3 +8117,83 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: Perfect game 10HP. PD#2 clean on #5, PD#4 (evil) lied about #7/#10. Judge#8 corrupted said #2 lying -> solver narrowed to 1 scenario. 3 correct execs.
 
+
+---
+
+# New Game — 2026-03-11 18:04:38
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Bishop, Jester, Poet, Scout, Judge
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [18:04:56] Revealed #7 Bishop
+Info: {'targets': [1, 4, 7], 'types': ['Villager', 'Demon', 'Outcast']}
+
+### [18:06:03] Revealed #1 Empress
+Info: {'targets': [4, 6, 7]}
+
+### [18:06:08] Revealed #2 Plague_Doctor
+Info: {}
+
+### [18:07:36] Revealed #3 Jester
+Info: {}
+
+### [18:07:43] Revealed #4 Judge
+Info: {}
+
+### [18:07:43] Revealed #5 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [18:07:43] Revealed #6 Poet
+Info: {'targets': [1, 3, 5], 'types': ['Demon', 'Villager', 'Outcast'], 'copied_role': 'Bishop'}
+
+#### [18:07:49] Solver Output
+Scenarios: 5/31
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #6=80%, #1=20%
+  Generated 31 candidate scenarios
+  5 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 6]
+
+#### [18:07:49] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#2', '#4']
+Reason: Expected posterior 2.1 scenarios (adjusted 2.4, info gain 1.085 bits) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [18:08:49] Revealed #3 Jester
+Info: {'targets': [1, 2, 4], 'evil_count': 2}
+
+### [18:08:54] Ability used at #3
+
+#### [18:09:00] Solver Output
+Scenarios: 1/31
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [18:09:00] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [18:09:40] Executed #6 -> Pooka (EVIL)
+
+## [18:09:47] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Corrupted Jester said 2 evils among 1,2,4 (impossible with 1 evil) -> solver narrowed to 1 scenario confirming #6 Pooka. Ascension 34 complete 7/7!
+
