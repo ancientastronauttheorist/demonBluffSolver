@@ -1224,6 +1224,20 @@
       "name": "asc31_v5",
       "notes": "Perfect 10HP. Jester#7 claimed 3 evils among 3 positions (impossible with 2 evils) = lying = evil. Witch#2 blocked #8. Judge confirmed #5 truthful. All confident execs.",
       "date": "2026-03-10 21:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v6",
+      "notes": "Perfect 10HP. 1 scenario, solver nailed it instantly. Corrupted: #2(Baker), #4(Empress) adjacent to Pooka.",
+      "date": "2026-03-10 21:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v7",
+      "notes": "Perfect 10HP. Shaman duplicated Confessor. PD clean check on #7, solver narrowed to 1 scenario after 2 execs. Corrupted: #1(Gemcrafter), #5(Lover) from Pooka#6.",
+      "date": "2026-03-10 21:24"
     }
   ]
 }

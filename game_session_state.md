@@ -4978,3 +4978,183 @@ Reason: #7 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. Jester#7 claimed 3 evils among 3 positions (impossible with 2 evils) = lying = evil. Witch#2 blocked #8. Judge confirmed #5 truthful. All confident execs.
 
+
+---
+
+# New Game — 2026-03-10 21:12:01
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Architect, Knitter, Baker, Alchemist, Empress
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [21:14:15] Revealed #1 Bombardier
+Info: {}
+
+### [21:14:18] Revealed #2 Baker
+Info: {'original_role': 'Baker'}
+
+### [21:14:20] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [21:14:23] Revealed #4 Empress
+Info: {'targets': [1, 6, 7]}
+
+### [21:14:25] Revealed #5 Architect
+Info: {'side': 'CCW'}
+
+### [21:14:28] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:14:32] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+#### [21:14:35] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:14:35] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [21:15:33] Executed #3 -> Pooka (EVIL)
+
+## [21:15:39] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. 1 scenario, solver nailed it instantly. Corrupted: #2(Baker), #4(Empress) adjacent to Pooka.
+
+
+---
+
+# New Game — 2026-03-10 21:17:45
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Oracle, Knitter, Druid, Confessor, Gemcrafter, Lover
+- Outcasts: Plague_Doctor
+- Minions: Shaman, Minion
+- Demons: Pooka
+
+### [21:20:03] Revealed #1 Gemcrafter
+Info: {'good_position': 9}
+
+### [21:20:07] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [21:20:12] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [21:20:16] Revealed #4 Poet
+Info: {'direction': 'CW', 'copied_role': 'Enlightened'}
+
+### [21:20:21] Revealed #5 Lover
+Info: {'evil_adjacent': 2}
+
+### [21:20:25] Revealed #6 Knitter
+Info: {'evil_pairs': 2}
+
+### [21:20:29] Revealed #7 Knitter
+Info: {'evil_pairs': 2}
+
+### [21:20:34] Revealed #8 Plague_Doctor
+Info: {}
+
+### [21:20:38] Revealed #9 Oracle
+Info: {'targets': [2, 8], 'minion_role': 'Minion'}
+
+#### [21:20:44] Solver Output
+Scenarios: 18/1848
+Definite good: ['#2', '#3', '#4']
+Evil probabilities: #9=89%, #6=72%, #5=56%, #7=50%, #1=22%, #8=11%
+  Generated 1848 candidate scenarios
+  18 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 5, 6, 7, 8, 9]
+
+#### [21:20:44] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.948 (adjusted 1.948) | timing x1.00
+
+### [21:21:34] Ability used at #8
+
+#### [21:21:39] Solver Output
+Scenarios: 9/1848
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #7=89%, #9=89%, #5=56%, #6=56%, #8=11%
+  Generated 1848 candidate scenarios
+  9 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [5, 6, 7, 8, 9]
+
+#### [21:21:39] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (33% evil Minion, 33% evil Shaman, 22% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 89%, but all reveal branches still lead to a forced win.
+
+### [21:22:21] Executed #7 -> Shaman (EVIL)
+
+#### [21:22:25] Solver Output
+Scenarios: 3/224
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #6=67%, #5=33%
+  Generated 224 candidate scenarios
+  3 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6]
+
+#### [21:22:25] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 3 scenarios (roles: {'Minion', 'Pooka'})
+
+### [21:23:08] Executed #9 -> Minion (EVIL)
+
+#### [21:23:14] Solver Output
+Scenarios: 1/31
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [21:23:14] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [21:24:00] Executed #6 -> Pooka (EVIL)
+
+## [21:24:08] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Shaman duplicated Confessor. PD clean check on #7, solver narrowed to 1 scenario after 2 execs. Corrupted: #1(Gemcrafter), #5(Lover) from Pooka#6.
+
