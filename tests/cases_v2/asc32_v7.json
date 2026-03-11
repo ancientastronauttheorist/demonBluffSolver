@@ -150,5 +150,11 @@
     6,
     7,
     1
-  ]
+  ],
+  "name": "asc32_v7",
+  "true_evil_positions": {
+    "1": "Baa",
+    "4": "Poisoner"
+  },
+  "notes": "Perfect game, 10HP. PD check nailed #4 as evil. Slayer no-kill on #7 confirmed #1=Baa. Corrupted: #3 Lover, #6 Druid."
 }
