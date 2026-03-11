@@ -1133,6 +1133,62 @@
       "name": "asc29_v8",
       "notes": "Perfect 10HP. Druid abilities narrowed down, then execution lookahead guaranteed wins. Corrupted: #1(Poet), #2(Scout) from Pooka#3. #7 was Doppelganger (as Scout). Final village of Asc29!",
       "date": "2026-03-10 18:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v1",
+      "notes": "Perfect game 10HP. FT#8 on 1,6=True confirmed #6 evil. Witch blocked #1(Slayer). #2=Doppelganger appeared as Alchemist.",
+      "date": "2026-03-10 19:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v2",
+      "notes": "Perfect 10HP. 1 scenario from all info. #7 Knitter corrupted by Pooka.",
+      "date": "2026-03-10 19:10"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc30_v3",
+      "notes": "Lilis game, 1HP clutch. Puppet#9 disguised as Slayer - its ability WORKED and killed Twin_Minion#4! Drunk#3 disguised as Dreamer was corrupted. Wrong exec on #7 Enlightened cost 5HP. Night killed #5 Poet.",
+      "date": "2026-03-10 19:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v4",
+      "notes": "Clean win 10HP. Dreamer#8 was Drunk(Corrupted), gave false info '#6 could be Baa'. Druid#1 found no outcasts among 2,3,4. Knight#7 free check confirmed good. Solver nailed both evils.",
+      "date": "2026-03-10 19:53"
+    },
+    {
+      "result": "loss",
+      "hp": 6,
+      "name": "asc30_v5",
+      "notes": "BOMBARDIER LOSS. Solver said #5 DEFINITELY EVIL but was Good Bombardier. True evils #3=Lilis #4=Chancellor. Bug: Chancellor at #4 has neighbors #3(evil) and #5(Outcast) - no adjacent Villager to convert. Solver likely rejected this Chancellor placement. PD#2 corrupted #8(FT). Need to fix Chancellor constraint to allow no-conversion when no adjacent Villager exists.",
+      "date": "2026-03-10 20:04"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc30_v5b",
+      "notes": "Lilis game, 8HP. Fake Slayer #1 couldn't kill #7 Wretch - proved #1 evil. Night killed #5 Architect. FT#6 confirmed evil in {1,7}. Empress#3 correctly identified as evil. Clean solver deduction.",
+      "date": "2026-03-10 20:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc30_v6",
+      "notes": "Lilis+Puppeteer game 4 evils. 6HP. Judge#5 confirmed Lover#4 truthful, narrowed to 1 scenario. Bard#7 confirmed no corruption. Night killed #6 Bombardier. Solver nailed all 4 evils.",
+      "date": "2026-03-10 20:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v7",
+      "notes": "Perfect win 10HP. PD#4 clean check on #10 narrowed to 3 scenarios. Dreamer#8 on #2 got Shaman (noise, confirmed #2 good). 50/50 on #5/#6, exec #5=Pooka. Corrupted: #2(PD), #6(Pooka). Ascension 30 complete!",
+      "date": "2026-03-10 20:43"
     }
   ]
 }
