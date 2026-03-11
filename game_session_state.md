@@ -5247,3 +5247,102 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
 Final HP: 6
 Notes: 6HP. Both evils disguised as Medium, mutually lying. PD corrupted #5(Empress). Lilis killed #6(Poet). Baker chain bug found and fixed: 'Baker' as original_role wasn't recognized as original.
 
+
+---
+
+# New Game — 2026-03-10 21:46:08
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Slayer, Alchemist, Judge, Baker, Medium
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [21:47:27] Revealed #1 Judge
+Info: {}
+
+### [21:47:33] Revealed #2 Medium
+Info: {'good_position': 7, 'good_role': 'Slayer'}
+
+### [21:47:40] Revealed #3 Judge
+Info: {}
+
+### [21:47:46] Revealed #4 Alchemist
+Info: {'cured_count': 1}
+
+### [21:47:54] Revealed #5 Bishop
+Info: {'targets': [2, 3, 7], 'types': ['Outcast', 'Villager', 'Demon']}
+
+### [21:48:00] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [21:48:07] Revealed #7 Baker
+Info: {'original_role': 'Slayer'}
+
+#### [21:48:14] Solver Output
+Scenarios: 9/42
+Definite good: ['#1', '#6', '#7']
+Evil probabilities: #4=44%, #3=22%, #5=22%, #2=11%
+  Generated 42 candidate scenarios
+  9 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5]
+
+#### [21:48:14] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#3']
+Reason: Expected posterior 5.2 scenarios (adjusted 5.5, info gain 0.713 bits) | timing x1.00
+WARNING: Corruption risk: 11% -- corrupted Judge results are unreliable
+
+### [21:49:11] Revealed #1 Judge
+Info: {'target': 3, 'is_lying': True}
+
+### [21:49:19] Ability used at #1
+
+#### [21:49:26] Solver Output
+Scenarios: 6/42
+Definite good: ['#1', '#5', '#6', '#7']
+Evil probabilities: #4=50%, #3=33%, #2=17%
+  Generated 42 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4]
+
+#### [21:49:26] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#2']
+Reason: Expected posterior 4.6 scenarios (adjusted 5.7, info gain 0.075 bits) | timing x1.00
+WARNING: Corruption risk: 50% -- corrupted Judge results are unreliable
+
+### [21:50:16] Revealed #3 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [21:50:16] Ability used at #3
+
+#### [21:50:24] Solver Output
+Scenarios: 5/42
+Definite good: ['#1', '#5', '#6', '#7']
+Evil probabilities: #4=60%, #2=20%, #3=20%
+  Generated 42 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4]
+
+#### [21:50:24] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (60% evil Pooka, 20% good Alchemist, 20% good Alchemist (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [21:51:22] Executed #4 -> Pooka (EVIL)
+
+## [21:51:32] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Doppelganger#1 disguised as Judge. Pooka#4 corrupted #3(Judge) and #5(Bishop). Both Judges caught lying targets. Solver exec lookahead guaranteed win at 60% hit.
+
