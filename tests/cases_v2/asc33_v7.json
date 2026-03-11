@@ -147,5 +147,12 @@
     7,
     2,
     3
-  ]
+  ],
+  "name": "asc33_v7",
+  "true_evil_positions": {
+    "1": "Minion",
+    "6": "Lilis",
+    "8": "Chancellor"
+  },
+  "notes": "Lilis game, Wretch in deck. Night killed #5 (good Dreamer). Oracle #1 (evil Minion) lied '#3 or #5 is Minion'. Judge #2 found #3 truthful. Jester #3 (Empress) found 2 evils in #1,#2,#6 -> locked #1 and #6 as evil. HP 6/10. Ascension 33 complete (7/7)."
 }
