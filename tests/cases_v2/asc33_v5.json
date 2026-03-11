@@ -139,5 +139,12 @@
   "used_abilities": [
     5,
     8
-  ]
+  ],
+  "name": "asc33_v5",
+  "true_evil_positions": {
+    "7": "Lilis",
+    "8": "Twin_Minion",
+    "9": "Shaman"
+  },
+  "notes": "Lilis game. Night killed #9 (Shaman, evil). Druid #8 (Twin Minion) lied about Drunk among #1,#2,#3 -> solver locked #8 as evil. Exec lookahead guaranteed win on #7 (75% Lilis). HP 6/10. Corrupted: #2."
 }
