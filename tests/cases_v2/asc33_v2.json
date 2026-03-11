@@ -128,5 +128,12 @@
   },
   "used_abilities": [
     3
-  ]
+  ],
+  "name": "asc33_v2",
+  "true_evil_positions": {
+    "3": "Chancellor",
+    "6": "Poisoner",
+    "8": "Lilis"
+  },
+  "notes": "Lilis game, 6HP. Jester-Empress ability (lie about 2 evils in #1,#2,#8) actually exposed #3 and #8 as evil. Corrupted: #5 Enlightened. Night killed: #9."
 }
