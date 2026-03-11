@@ -1392,6 +1392,13 @@
       "name": "asc34_v7",
       "notes": "Perfect 10HP. Corrupted Jester said 2 evils among 1,2,4 (impossible with 1 evil) -> solver narrowed to 1 scenario confirming #6 Pooka. Ascension 34 complete 7/7!",
       "date": "2026-03-11 18:09"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc35_v1",
+      "notes": "6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil.",
+      "date": "2026-03-11 18:41"
     }
   ]
 }

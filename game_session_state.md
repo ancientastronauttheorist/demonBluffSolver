@@ -8197,3 +8197,172 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. Corrupted Jester said 2 evils among 1,2,4 (impossible with 1 evil) -> solver narrowed to 1 scenario confirming #6 Pooka. Ascension 34 complete 7/7!
 
+
+---
+
+# New Game — 2026-03-11 18:30:06
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Knight, Medium, Druid, Jester, Fortune_Teller, Bard
+- Outcasts: Bombardier, Wretch
+- Minions: Chancellor, Shaman
+- Demons: Lilis
+
+### [18:31:46] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Bombardier'}
+
+### [18:31:51] Revealed #2 Medium
+Info: {'good_position': 4, 'good_role': 'Fortune_Teller'}
+
+### [18:31:56] Revealed #3 Bombardier
+Info: {}
+
+### [18:32:02] Revealed #4 Fortune_Teller
+Info: {}
+
+#### [18:32:13] Solver Output
+Scenarios: 126/742
+Definite good: ['#6']
+Evil probabilities: #5=40%, #7=38%, #10=38%, #8=37%, #9=37%, #1=32%, #3=32%, #2=24%, #4=24%
+  Generated 742 candidate scenarios
+  126 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+
+#### [18:32:13] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 40% evil, entropy 1.069
+
+### [18:34:06] Revealed #5 Jester
+Info: {}
+
+### [18:34:11] Revealed #7 Knitter
+Info: {'evil_pairs': 2}
+
+### [18:34:16] Revealed #8 Wretch
+Info: {}
+
+### [18:34:22] Revealed #9 Bombardier
+Info: {}
+
+### [18:35:08] Revealed #10 Knight
+Info: {}
+
+#### [18:35:14] Solver Output
+Scenarios: 28/862
+Definite good: ['#2', '#4', '#6']
+Evil probabilities: #9=64%, #10=64%, #7=57%, #1=36%, #3=36%, #5=29%, #8=14%
+  Generated 862 candidate scenarios
+  28 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 7, 8, 9, 10]
+
+#### [18:35:14] Recommendation
+Action: **EXECUTE** #10
+Reason: Knight free check: #10 is 64% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [18:36:21] Executed #10 -> Lilis (EVIL)
+
+#### [18:36:26] Solver Output
+Scenarios: 7/90
+Definite evil: ['#9', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #5=43%, #7=29%, #8=29%
+  Generated 90 candidate scenarios
+  7 scenarios survived validation
+    #9 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Shaman'})
+    #10 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [5, 7, 8]
+
+#### [18:36:26] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 7 scenarios (roles: {'Chancellor', 'Shaman'})
+
+### [18:37:13] Executed #9 -> Chancellor (EVIL)
+
+#### [18:37:19] Solver Output
+Scenarios: 3/8
+Definite evil: ['#9', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #5=33%, #7=33%, #8=33%
+  Generated 8 candidate scenarios
+  3 scenarios survived validation
+    #9 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #10 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [5, 7, 8]
+
+#### [18:37:19] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 1.4 scenarios (adjusted 1.4, info gain 1.100 bits) | timing x1.00
+
+### [18:38:43] Revealed #5 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [18:38:49] Ability used at #5
+
+#### [18:38:54] Solver Output
+Scenarios: 2/8
+Definite evil: ['#9', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+Evil probabilities: #7=50%, #8=50%
+  Generated 8 candidate scenarios
+  2 scenarios survived validation
+    #9 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #10 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [18:38:54] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:40:05] Revealed #4 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': True}
+
+### [18:40:11] Ability used at #4
+
+#### [18:40:20] Solver Output
+Scenarios: 1/8
+Definite evil: ['#7', '#9', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#8']
+  Generated 8 candidate scenarios
+  1 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #10 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [18:40:20] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [18:41:21] Executed #7 -> Shaman (EVIL)
+
+## [18:41:29] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil.
+

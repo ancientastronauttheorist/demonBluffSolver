@@ -146,5 +146,12 @@
   "used_abilities": [
     5,
     4
-  ]
+  ],
+  "name": "asc35_v1",
+  "true_evil_positions": {
+    "7": "Shaman",
+    "9": "Chancellor",
+    "10": "Lilis"
+  },
+  "notes": "6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil."
 }
