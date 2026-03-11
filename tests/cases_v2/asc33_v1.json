@@ -144,5 +144,11 @@
   "used_abilities": [
     7,
     6
-  ]
+  ],
+  "name": "asc33_v1",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "5": "Shaman"
+  },
+  "notes": "Perfect game, 10HP. PD nailed #1 evil, Judge confirmed #3 truth -> solver locked #5=Shaman. Corrupted: #2 Drunk, #4 Alchemist, #9 Enlightened."
 }
