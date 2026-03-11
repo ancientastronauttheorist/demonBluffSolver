@@ -1343,6 +1343,27 @@
       "name": "asc34_v1",
       "notes": "Witch blocked #8. PD corrupted #4 Poet and #9 Oracle. Memory reader perfect match.",
       "date": "2026-03-11 17:03"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v2",
+      "notes": "Perfect game 10HP. Dreamer on #7 got Twin_Minion, FT confirmed #1/#2 good. #1 Drunk Corrupted.",
+      "date": "2026-03-11 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v3",
+      "notes": "Perfect 10HP. 3 Confessors on board (2 evil disguises + Drunk). Bishop+Hunter nailed it. #7 Drunk Corrupted.",
+      "date": "2026-03-11 17:16"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc34_v4",
+      "notes": "Lilis game 6HP. Night killed #6 Doppelganger. #9 Scout corrupted. FT confirmed evil in #1/#7 -> solver locked #7. flip --lilis bug: re-clicked already-flipped cards on 2nd batch, accidentally activated FT ability (cancelled).",
+      "date": "2026-03-11 17:26"
     }
   ]
 }

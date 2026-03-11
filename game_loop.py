@@ -1067,26 +1067,32 @@ def main():
             return
 
         # Full flip: all cards #1->#N in strict order
-        positions = sorted(coords.keys())
+        # Skip already-flipped (in reveal_order) and dead (night_kills/executed) positions
+        already_done = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
+        positions = [p for p in sorted(coords.keys()) if p not in already_done]
+        if not positions:
+            print("All cards already flipped/dead. Nothing to flip.")
+            return
         if lilis:
             # Batch in groups of 4 for Lilis night kills
             batch_size = 4
-            for batch_start in range(0, len(positions), batch_size):
-                batch = positions[batch_start:batch_start + batch_size]
-                if batch_start > 0:
-                    print(f"\n  --- Lilis night phase (wait 5s for kill animation) ---")
-                    time.sleep(5)
-                    print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
-                    print(f"  Run: python screenshot.py night_check && python memory_reader.py")
-                    return  # Stop here — user must screenshot, enter night_kill, then run flip again
-                print(f"Flipping batch: {['#'+str(p) for p in batch]}")
-                for pos in batch:
-                    x, y = coords[pos]
-                    print(f"  #{pos} at ({x},{y})")
-                    subprocess.run(["python", "template_match.py", "safe_click_at",
-                                    str(x), str(y), f"card{pos}"], check=True)
-                    time.sleep(0.3)
-                print(f"Batch complete: {['#'+str(p) for p in batch]}")
+            batch = positions[:batch_size]
+            print(f"Flipping batch: {['#'+str(p) for p in batch]}")
+            for pos in batch:
+                x, y = coords[pos]
+                print(f"  #{pos} at ({x},{y})")
+                subprocess.run(["python", "template_match.py", "safe_click_at",
+                                str(x), str(y), f"card{pos}"], check=True)
+                time.sleep(0.3)
+            print(f"Batch complete: {['#'+str(p) for p in batch]}")
+            remaining = positions[batch_size:]
+            if remaining:
+                print(f"\n  --- Lilis night phase (wait 5s for kill animation) ---")
+                time.sleep(5)
+                print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
+                print(f"  Run: python screenshot.py night_check && python memory_reader.py")
+                print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
+                # Stop here -- user must screenshot, enter night_kill, then run flip --lilis again
         else:
             print(f"Flipping all {len(positions)} cards: #1 -> #{positions[-1]}")
             for pos in positions:
