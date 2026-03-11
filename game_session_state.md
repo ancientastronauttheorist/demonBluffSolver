@@ -4571,3 +4571,56 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect 10HP. Witch blocked #8. Exec #3=Witch (60% hit). Unblocked #8=Hunter. 50/50 #5/#6, exec #5=Baa. #6=Drunk(corrupted) disguised as Empress.
 
+
+---
+
+# New Game — 2026-03-10 20:51:46
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Gemcrafter, Dreamer, Empress, Confessor
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [20:52:43] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [20:52:49] Revealed #2 Gemcrafter
+Info: {'good_position': 2}
+
+### [20:52:56] Revealed #3 Dreamer
+Info: {}
+
+### [20:53:02] Revealed #4 Judge
+Info: {}
+
+### [20:53:08] Revealed #5 Dreamer
+Info: {}
+
+### [20:53:16] Revealed #6 Empress
+Info: {'targets': [2, 4, 5]}
+
+#### [20:53:22] Solver Output
+Scenarios: 4/30
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+  Generated 30 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [20:53:22] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [20:54:12] Executed #2 -> Pooka (EVIL)
+
+## [20:54:12] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP, 1 exec. Pooka at #2 disguised as Gemcrafter said self-is-Good (lie). Confessor corrupted by adjacent Pooka. #3=Doppelganger.
+
