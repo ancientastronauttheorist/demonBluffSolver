@@ -156,5 +156,12 @@
   "used_abilities": [
     4,
     2
-  ]
+  ],
+  "name": "asc32_v4",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "5": "Twin_Minion",
+    "8": "Chancellor"
+  },
+  "notes": "Lilis game, 6HP. Corrupted: #9 Empress. Night killed #7. PD checked #1 clean. Solver nailed all 3 evils."
 }

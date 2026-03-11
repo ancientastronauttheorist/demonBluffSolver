@@ -905,7 +905,7 @@ def main():
                 was_evil = True
                 # Optional 4th arg: evil role name (e.g., "Chancellor")
                 if len(sys.argv) > 4:
-                    evil_role = sys.argv[4]
+                    evil_role = _normalize_role_name(sys.argv[4])
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
                 # Optional 4th arg: corruption status (corrupted/clean)
@@ -922,7 +922,7 @@ def main():
             else:
                 # Treat as evil role name directly: execute 2 Chancellor
                 was_evil = True
-                evil_role = sys.argv[3]
+                evil_role = _normalize_role_name(sys.argv[3])
         session.mark_executed(pos, was_evil, evil_role, was_corrupted)
         session.save()
         DecisionLog.log_execution(pos, was_evil, evil_role)
