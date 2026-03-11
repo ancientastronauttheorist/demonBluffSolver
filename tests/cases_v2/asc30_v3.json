@@ -1,0 +1,166 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Twin_Minion",
+        "distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "evil_role": "Lilis"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Twin_Minion",
+        "distance": 3
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "Equidistant"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Twin_Minion",
+        "distance": 3,
+        "copied_role": "Scout"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    4,
+    6,
+    8,
+    7,
+    9
+  ],
+  "confirmed_evil": [
+    4,
+    6,
+    8,
+    9
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Twin_Minion",
+    "6": "Lilis",
+    "8": "Puppeteer",
+    "9": "Puppet"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 9,
+      "target_pos": 4,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Dreamer",
+      "Druid",
+      "Slayer",
+      "Alchemist",
+      "Enlightened",
+      "Scout"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    6,
+    9
+  ],
+  "name": "asc30_v3",
+  "true_evil_positions": {
+    "4": "Twin_Minion",
+    "6": "Lilis",
+    "8": "Puppeteer",
+    "9": "Puppet"
+  },
+  "notes": "Lilis game, 1HP clutch. Puppet#9 disguised as Slayer - its ability WORKED and killed Twin_Minion#4! Drunk#3 disguised as Dreamer was corrupted. Wrong exec on #7 Enlightened cost 5HP. Night killed #5 Poet."
+}

@@ -282,11 +282,23 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
         p for p in state.confirmed_evil
         if p in state.executed and p not in state.executed_evil_roles
     ]
-    for _ in executed_evil_without_role:
-        if remaining_evil_roles:
-            remaining_evil_roles.pop(0)  # Best-effort: remove first available
-
-    evil_roles = remaining_evil_roles
+    # Instead of blindly popping the first role, enumerate all possible role
+    # subsets that could have been at the unknown executed positions.  This
+    # prevents accidentally removing Puppeteer (which has special Puppet
+    # generation logic) or other role-specific mechanics.
+    n_to_remove = min(len(executed_evil_without_role), len(remaining_evil_roles))
+    if n_to_remove > 0:
+        _seen_remaining = set()
+        possible_remaining_lists = []
+        for removal in combinations(range(len(remaining_evil_roles)), n_to_remove):
+            kept = [remaining_evil_roles[i]
+                    for i in range(len(remaining_evil_roles)) if i not in removal]
+            key = tuple(sorted(kept))
+            if key not in _seen_remaining:
+                _seen_remaining.add(key)
+                possible_remaining_lists.append(kept)
+    else:
+        possible_remaining_lists = [remaining_evil_roles]
 
     # How many evil positions remain to be placed?
     # Old sessions may only know that an executed position was evil, not which
@@ -307,168 +319,186 @@ def _generate_evil_placements(state: GameState) -> list[dict[int, str]]:
     # Positions confirmed good can't be evil
     available = [p for p in all_positions if p not in player_executed and p not in confirmed_good_set]
 
-    # Confirmed evil positions (not yet executed) must get an evil role
-    has_puppeteer = "Puppeteer" in evil_roles
-
     # Check if Puppeteer was already executed but Puppet still needs placing
     puppeteer_executed_pos = None
-    puppet_still_alive = False
     for ex_pos_str, ex_role in state.executed_evil_roles.items():
         if ex_role == "Puppeteer":
             puppeteer_executed_pos = int(ex_pos_str)
-    if puppeteer_executed_pos is not None and not has_puppeteer:
-        # Puppeteer was executed — check if Puppet was also executed
-        puppet_executed = any(r == "Puppet" for r in state.executed_evil_roles.values())
-        if not puppet_executed:
-            puppet_still_alive = True
-
-    # If Puppet might still be alive (Puppeteer executed, Puppet not)
-    if puppet_still_alive:
-        adj = adjacent_positions(puppeteer_executed_pos, n)
-        puppet_candidates = [a for a in adj if a in available]
-        placements = []
-        # Case 1: Puppet exists at an adjacent position
-        for puppet_pos in puppet_candidates:
-            remaining_avail = [p for p in available if p != puppet_pos]
-            n_other = len(evil_roles)
-            if n_other == 0:
-                placements.append({puppet_pos: "Puppet"})
-            else:
-                for combo in combinations(remaining_avail, n_other):
-                    for role_perms in _permutations_of(evil_roles):
-                        p = {puppet_pos: "Puppet"}
-                        for i, pos in enumerate(combo):
-                            p[pos] = role_perms[i]
-                        placements.append(p)
-        # Case 2: No Puppet was created (both adjacent were evil/non-Villager)
-        n_other = len(evil_roles)
-        for combo in combinations(available, n_other):
-            for role_perms in _permutations_of(evil_roles):
-                p = {}
-                for i, pos in enumerate(combo):
-                    p[pos] = role_perms[i]
-                placements.append(p)
-        return [p for p in placements if len(p) in valid_sizes]
-
     # Check if Puppet was already executed but Puppeteer is still alive
     puppet_executed_pos = None
     for ex_pos, ex_role in state.executed_evil_roles.items():
         if ex_role == "Puppet":
             puppet_executed_pos = int(ex_pos)
 
-    # If Puppet was executed, Puppeteer must be adjacent to the Puppet's position
-    if puppet_executed_pos is not None and has_puppeteer:
-        base_evil = [r for r in evil_roles if r != "Puppeteer"]
-        placements = []
-        n_base = len(base_evil)
-        # Puppeteer must be adjacent to the executed Puppet
-        puppeteer_candidates = [a for a in adjacent_positions(puppet_executed_pos, n)
-                                if a in available]
-        for puppeteer_pos in puppeteer_candidates:
-            remaining = [p for p in available if p != puppeteer_pos]
-            if n_base == 0:
-                placements.append({puppeteer_pos: "Puppeteer"})
-            else:
-                for combo in combinations(remaining, n_base):
-                    for role_perms in _permutations_of(base_evil):
-                        p = {puppeteer_pos: "Puppeteer"}
-                        for i, pos in enumerate(combo):
-                            p[pos] = role_perms[i]
-                        placements.append(p)
-        return [p for p in placements if len(p) in valid_sizes]
+    # Loop over all possible remaining role lists (handles unknown executed
+    # evil roles by trying all possible role assignments)
+    all_placements = []
+    seen_placements = set()
+    for evil_roles in possible_remaining_lists:
+        has_puppeteer = "Puppeteer" in evil_roles
 
-    # If Puppeteer is present, we need an extra slot for Puppet
-    if has_puppeteer:
-        # Puppet isn't in evil_roles from deck — it's created at game start
-        # We need to place Puppeteer + Puppet + other evils
-        # BUT: Puppet creation is optional ("if possible") — if both adjacent
-        # positions are evil or non-Villager (Outcast), no Puppet is created.
-        base_evil = [r for r in evil_roles if r != "Puppeteer"]
-        placements = []
-        n_base = len(base_evil)
-        for puppeteer_pos in available:
-            adj = adjacent_positions(puppeteer_pos, n)
-            puppet_candidates = [a for a in adj if a in available and a != puppeteer_pos]
+        puppet_still_alive = False
+        if puppeteer_executed_pos is not None and not has_puppeteer:
+            puppet_executed = any(r == "Puppet" for r in state.executed_evil_roles.values())
+            if not puppet_executed:
+                puppet_still_alive = True
 
-            # Puppeteer targets Villagers only when possible (patch v0.131a).
-            # If any adjacent candidate appears as a Villager, restrict to
-            # Villagers + unrevealed (which might be Villagers).
-            villager_or_unknown = []
-            has_known_villager = False
-            for pc in puppet_candidates:
-                card_at = _get_card_at(pc, state)
-                if card_at is None:
-                    villager_or_unknown.append(pc)  # unrevealed, could be Villager
-                elif _is_villager_role(card_at.apparent_role, state):
-                    villager_or_unknown.append(pc)
-                    has_known_villager = True
-            if has_known_villager:
-                puppet_candidates = villager_or_unknown
-
-            # Case 1: Puppet IS created (at each adjacent candidate)
+        # If Puppet might still be alive (Puppeteer executed, Puppet not)
+        if puppet_still_alive:
+            adj = adjacent_positions(puppeteer_executed_pos, n)
+            puppet_candidates = [a for a in adj if a in available]
+            placements = []
+            # Case 1: Puppet exists at an adjacent position
             for puppet_pos in puppet_candidates:
-                remaining = [p for p in available
-                             if p != puppeteer_pos and p != puppet_pos]
+                remaining_avail = [p for p in available if p != puppet_pos]
+                n_other = len(evil_roles)
+                if n_other == 0:
+                    placements.append({puppet_pos: "Puppet"})
+                else:
+                    for combo in combinations(remaining_avail, n_other):
+                        for role_perms in _permutations_of(evil_roles):
+                            p = {puppet_pos: "Puppet"}
+                            for i, pos in enumerate(combo):
+                                p[pos] = role_perms[i]
+                            placements.append(p)
+            # Case 2: No Puppet was created (both adjacent were evil/non-Villager)
+            n_other = len(evil_roles)
+            for combo in combinations(available, n_other):
+                for role_perms in _permutations_of(evil_roles):
+                    p = {}
+                    for i, pos in enumerate(combo):
+                        p[pos] = role_perms[i]
+                    placements.append(p)
+            for p in placements:
+                if len(p) in valid_sizes:
+                    key = tuple(sorted(p.items()))
+                    if key not in seen_placements:
+                        seen_placements.add(key)
+                        all_placements.append(p)
+            continue
+
+        # If Puppet was executed, Puppeteer must be adjacent to the Puppet's position
+        if puppet_executed_pos is not None and has_puppeteer:
+            base_evil = [r for r in evil_roles if r != "Puppeteer"]
+            placements = []
+            n_base = len(base_evil)
+            puppeteer_candidates = [a for a in adjacent_positions(puppet_executed_pos, n)
+                                    if a in available]
+            for puppeteer_pos in puppeteer_candidates:
+                remaining = [p for p in available if p != puppeteer_pos]
                 if n_base == 0:
-                    placements.append({
-                        puppeteer_pos: "Puppeteer",
-                        puppet_pos: "Puppet",
-                    })
+                    placements.append({puppeteer_pos: "Puppeteer"})
                 else:
                     for combo in combinations(remaining, n_base):
-                        placement = {puppeteer_pos: "Puppeteer", puppet_pos: "Puppet"}
+                        for role_perms in _permutations_of(base_evil):
+                            p = {puppeteer_pos: "Puppeteer"}
+                            for i, pos in enumerate(combo):
+                                p[pos] = role_perms[i]
+                            placements.append(p)
+            for p in placements:
+                if len(p) in valid_sizes:
+                    key = tuple(sorted(p.items()))
+                    if key not in seen_placements:
+                        seen_placements.add(key)
+                        all_placements.append(p)
+            continue
+
+        # If Puppeteer is present, we need an extra slot for Puppet
+        if has_puppeteer:
+            base_evil = [r for r in evil_roles if r != "Puppeteer"]
+            placements = []
+            n_base = len(base_evil)
+            for puppeteer_pos in available:
+                adj = adjacent_positions(puppeteer_pos, n)
+                puppet_candidates = [a for a in adj if a in available and a != puppeteer_pos]
+
+                villager_or_unknown = []
+                has_known_villager = False
+                for pc in puppet_candidates:
+                    card_at = _get_card_at(pc, state)
+                    if card_at is None:
+                        villager_or_unknown.append(pc)
+                    elif _is_villager_role(card_at.apparent_role, state):
+                        villager_or_unknown.append(pc)
+                        has_known_villager = True
+                if has_known_villager:
+                    puppet_candidates = villager_or_unknown
+
+                # Case 1: Puppet IS created (at each adjacent candidate)
+                for puppet_pos in puppet_candidates:
+                    remaining = [p for p in available
+                                 if p != puppeteer_pos and p != puppet_pos]
+                    if n_base == 0:
+                        placements.append({
+                            puppeteer_pos: "Puppeteer",
+                            puppet_pos: "Puppet",
+                        })
+                    else:
+                        for combo in combinations(remaining, n_base):
+                            placement = {puppeteer_pos: "Puppeteer", puppet_pos: "Puppet"}
+                            for role_perms in _permutations_of(base_evil):
+                                p = dict(placement)
+                                for i, pos in enumerate(combo):
+                                    p[pos] = role_perms[i]
+                                placements.append(p)
+
+                # Case 2: Puppet NOT created (Puppeteer without Puppet)
+                remaining = [p for p in available if p != puppeteer_pos]
+                if n_base == 0:
+                    placements.append({puppeteer_pos: "Puppeteer"})
+                else:
+                    for combo in combinations(remaining, n_base):
+                        placement = {puppeteer_pos: "Puppeteer"}
                         for role_perms in _permutations_of(base_evil):
                             p = dict(placement)
                             for i, pos in enumerate(combo):
                                 p[pos] = role_perms[i]
                             placements.append(p)
 
-            # Case 2: Puppet NOT created (Puppeteer without Puppet)
-            remaining = [p for p in available if p != puppeteer_pos]
-            if n_base == 0:
-                placements.append({puppeteer_pos: "Puppeteer"})
-            else:
-                for combo in combinations(remaining, n_base):
-                    placement = {puppeteer_pos: "Puppeteer"}
-                    for role_perms in _permutations_of(base_evil):
-                        p = dict(placement)
+            for p in placements:
+                if len(p) in valid_sizes:
+                    key = tuple(sorted(p.items()))
+                    if key not in seen_placements:
+                        seen_placements.add(key)
+                        all_placements.append(p)
+            continue
+
+        # No Puppeteer — straightforward combinations
+        n_evil_count = len(evil_roles)
+
+        if n_evil_count > expected_remaining and expected_remaining > 0:
+            evil_role_subsets = _evil_role_subsets(
+                evil_roles, state, expected_remaining
+            )
+        elif n_evil_count == expected_remaining:
+            evil_role_subsets = [evil_roles]
+        elif not puppet_in_deck:
+            if n_evil_count != expected_remaining:
+                continue  # Skip invalid branch (role count mismatch)
+            evil_role_subsets = [evil_roles]
+        else:
+            evil_role_subsets = [evil_roles] if evil_roles else []
+
+        placements = []
+        if expected_remaining > 0:
+            for role_set in evil_role_subsets:
+                n_roles = len(role_set)
+                for combo in combinations(available, n_roles):
+                    for role_perms in _permutations_of(role_set):
+                        p = {}
                         for i, pos in enumerate(combo):
                             p[pos] = role_perms[i]
                         placements.append(p)
+        elif expected_remaining <= 0:
+            placements.append({})  # No evil left to place
 
-        return [p for p in placements if len(p) in valid_sizes]
+        for p in placements:
+            key = tuple(sorted(p.items()))
+            if key not in seen_placements:
+                seen_placements.add(key)
+                all_placements.append(p)
 
-    # No Puppeteer — straightforward combinations
-    n_evil = len(evil_roles)
-
-    # When evil pool > board evil count (Asc10+), generate all valid subsets
-    # of evil roles that match board minion/demon counts.
-    if n_evil > expected_remaining and expected_remaining > 0:
-        evil_role_subsets = _evil_role_subsets(
-            evil_roles, state, expected_remaining
-        )
-    elif n_evil == expected_remaining:
-        evil_role_subsets = [evil_roles]
-    elif not puppet_in_deck:
-        assert n_evil == expected_remaining, \
-            f"Evil role count {n_evil} != expected remaining {expected_remaining}"
-        evil_role_subsets = [evil_roles]
-    else:
-        evil_role_subsets = [evil_roles] if evil_roles else []
-
-    placements = []
-    if expected_remaining > 0:
-        for role_set in evil_role_subsets:
-            n_roles = len(role_set)
-            for combo in combinations(available, n_roles):
-                for role_perms in _permutations_of(role_set):
-                    p = {}
-                    for i, pos in enumerate(combo):
-                        p[pos] = role_perms[i]
-                    placements.append(p)
-    elif expected_remaining <= 0:
-        placements.append({})  # No evil left to place
-    return placements
+    return all_placements
 
 
 def _evil_role_subsets(
