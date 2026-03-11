@@ -129,8 +129,18 @@ def card_baker(pos: int, original_role: str) -> CardInfo:
     return CardInfo(pos, "Baker", info_parsed={"original_role": original_role})
 
 
+def _normalize_role_name(role: str) -> str:
+    """Normalize a role name to its canonical form using the knowledge base."""
+    from knowledge_base import get_card
+    card_def = get_card(role)
+    if card_def:
+        return card_def.name.replace(" ", "_")
+    return role
+
+
 def card_no_info(pos: int, role: str) -> CardInfo:
     """For cards with no deduction info: Slayer, Knight, Bombardier, Wretch, etc."""
+    role = _normalize_role_name(role)
     return CardInfo(pos, role, info_parsed={})
 
 
