@@ -2293,7 +2293,7 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
             if truth != TruthStatus.TRUTHFUL:
                 continue
             claimed = card.info_parsed.get("original_role", "")
-            if claimed.lower() == "original" and pos in state.reveal_order:
+            if claimed.lower() in ("original", "baker") and pos in state.reveal_order:
                 original_baker_reveal_idx = state.reveal_order.index(pos)
                 break
 

@@ -705,8 +705,8 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
     elif role == "baker":
         if len(args) > 2:
             claim = args[2]
-            # Only "original" means the original Baker; a role name (even "Baker") means converted
-            if claim.lower() == "original":
+            # "original" or "Baker" (same role) means the original Baker
+            if claim.lower() in ("original", "baker"):
                 claim = "original"
             return card_baker(pos, claim)
         else:

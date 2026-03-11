@@ -1238,6 +1238,13 @@
       "name": "asc31_v7",
       "notes": "Perfect 10HP. Shaman duplicated Confessor. PD clean check on #7, solver narrowed to 1 scenario after 2 execs. Corrupted: #1(Gemcrafter), #5(Lover) from Pooka#6.",
       "date": "2026-03-10 21:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc32_v1",
+      "notes": "6HP. Both evils disguised as Medium, mutually lying. PD corrupted #5(Empress). Lilis killed #6(Poet). Baker chain bug found and fixed: 'Baker' as original_role wasn't recognized as original.",
+      "date": "2026-03-10 21:44"
     }
   ]
 }

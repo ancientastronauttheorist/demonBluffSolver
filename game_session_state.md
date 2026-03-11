@@ -5158,3 +5158,92 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. Shaman duplicated Confessor. PD clean check on #7, solver narrowed to 1 scenario after 2 execs. Corrupted: #1(Gemcrafter), #5(Lover) from Pooka#6.
 
+
+---
+
+# New Game — 2026-03-10 21:29:05
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Knight, Baker, Medium, Poet, Bard
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion
+- Demons: Lilis
+
+### [21:31:28] Revealed #1 Medium
+Info: {'good_position': 7, 'good_role': 'Medium'}
+
+### [21:31:34] Revealed #2 Baker
+Info: {'original_role': 'Baker'}
+
+### [21:31:39] Revealed #3 Plague_Doctor
+Info: {}
+
+### [21:31:44] Revealed #4 Bard
+Info: {'corruption_distance': 1}
+
+### [21:33:10] Revealed #5 Empress
+Info: {'targets': [2, 8, 9]}
+
+### [21:33:16] Revealed #7 Medium
+Info: {'good_position': 1, 'good_role': 'Medium'}
+
+### [21:33:22] Revealed #8 Baker
+Info: {'original_role': 'Knight'}
+
+### [21:33:29] Revealed #9 Bombardier
+Info: {}
+
+#### [21:33:41] Solver Output
+Scenarios: 0/298
+  Generated 298 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Bard: rejected 166/298 (56%)
+    #1 Medium: rejected 142/298 (48%)
+    #7 Medium: rejected 142/298 (48%)
+    #5 Empress: rejected 134/298 (45%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Medium: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Baker: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Bard: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Empress: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Medium: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Baker: 2 scenarios survive  <-- SUSPECT
+
+#### [21:33:41] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [21:42:26] Solver Output
+Scenarios: 2/298
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8', '#9']
+  Generated 298 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #7 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [21:42:26] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+### [21:42:59] Executed #1 -> Minion (EVIL)
+
+### [21:43:46] Executed #7 -> Lilis (EVIL)
+
+## [21:44:06] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Both evils disguised as Medium, mutually lying. PD corrupted #5(Empress). Lilis killed #6(Poet). Baker chain bug found and fixed: 'Baker' as original_role wasn't recognized as original.
+
