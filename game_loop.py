@@ -540,14 +540,11 @@ class GameSession:
         if missing:
             print(f"  WARNING: No card entry for positions {sorted(missing)}. "
                   f"Did you forget to enter info for flipped cards?")
-        # Validate: check HP consistency
-        wrong_execs = [p for p in self.executed if p not in [e for e in self.confirmed_evil]]
-        if wrong_execs:
-            expected_hp_loss = len(wrong_execs) * self.wrong_exec_cost
-            # Can't know exact HP without tracking, but warn if HP seems too high
-            if self.hp > 10 - expected_hp_loss and self.hp == 10:
-                print(f"  WARNING: {len(wrong_execs)} wrong execution(s) recorded but HP is still 10. "
-                      f"Did you forget to run set_hp?")
+        # Validate: check HP consistency — warn if wrong execs exist but HP unchanged
+        wrong_execs = [p for p in self.executed if p not in self.confirmed_evil]
+        if wrong_execs and self.hp == 10:
+            print(f"  WARNING: {len(wrong_execs)} wrong execution(s) recorded but HP is still 10. "
+                  f"Did you forget to run set_hp?")
         state = self.to_game_state()
         result = solve(state)
         for line in result.reasoning:
@@ -656,7 +653,7 @@ def _parse_role_list(spec: str) -> list[str]:
     return [r.strip() for r in spec.split(",") if r.strip()]
 
 
-def _parse_card_cli(args: list[str]) -> CardInfo:
+def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     """Parse CLI args for a card builder call.
 
     Format: <role> <pos> [args...]
@@ -692,12 +689,16 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         claimed_role = args[3]
         # "real" means target IS their displayed role — resolve to actual role name
         if claimed_role.lower() == "real":
-            target_card = next((c for c in session.cards if c.position == target_pos), None)
-            if target_card:
-                claimed_role = target_card.apparent_role
-                print(f"  [medium] Resolved 'real' -> '{claimed_role}' (target #{target_pos} apparent role)")
+            if session is None:
+                print(f"  ERROR: 'real' keyword requires session context — enter role name instead")
+                claimed_role = args[3]
             else:
-                print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
+                target_card = next((c for c in session.cards if c.position == target_pos), None)
+                if target_card:
+                    claimed_role = target_card.apparent_role
+                    print(f"  [medium] Resolved 'real' -> '{claimed_role}' (target #{target_pos} apparent role)")
+                else:
+                    print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
         return card_medium(pos, target_pos, claimed_role)
     elif role == "hunter":
         return card_hunter(pos, int(args[2]))
@@ -1007,7 +1008,7 @@ def main():
             else:
                 print(f"  ERROR: Unrecognized arg '{arg}' -- missing prefix?")
                 print(f"  Required: V=roles O=roles M=roles D=roles nv=N no=N")
-                print(f"  This arg was SILENTLY IGNORED. Fix and re-run deck command.")
+                print(f"  Command aborted. Fix and re-run deck command.")
                 return
         session.set_deck(villagers, outcasts, minions, demons)
         # Warn about Baa inflating outcast count in deck view
@@ -1119,7 +1120,7 @@ def main():
 
     if cmd == "card":
         session = GameSession.load()
-        card = _parse_card_cli(sys.argv[2:])
+        card = _parse_card_cli(sys.argv[2:], session=session)
         session.add_card(card)
         session.save()
         DecisionLog.log_card(card)

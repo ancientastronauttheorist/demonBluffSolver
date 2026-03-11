@@ -64,8 +64,8 @@ Reads game state from process memory (`memory_reader.py`). Goal: replace the vis
 
 Every screenshot, memory reader reads state and compares against what the screenshot shows. Screenshot is ground truth. **Any mismatch = stop the game, diagnose, fix, verify, resume.**
 
-**Known issues**:
-- Multi-village: `dataRef` (0x50) not updated. `chName.m_text` IS updated. Fix: read chName, parse Player.log, or find current CharacterData pointer.
+**Notes**:
+- Multi-village: FIXED. Uses Unity native object name at `m_CachedPtr(0x10)+0x48` (always correct) with `characterId` fallback.
 - Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` -- INIT entries have true roles in reverse position order.
 - Name mappings: Gambler->Gemcrafter, Imp->Chancellor, etc. (see DISPLAY_NAMES dict).
 
