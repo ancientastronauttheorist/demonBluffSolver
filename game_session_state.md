@@ -4775,3 +4775,78 @@ Reason: #4 is evil in ALL 4 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: Perfect 10HP. Fake PD#8 lied about corruption, solver caught it. Druid confirmed #6=Bombardier. Poisoner#4 corrupted adjacent #5. 3 confident execs, 0 wrong.
 
+
+---
+
+# New Game — 2026-03-10 21:02:37
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Fortune_Teller, Poet, Scout, Hunter, Bishop
+- Outcasts: Drunk
+- Minions: 
+- Demons: Pooka
+
+### [21:03:38] Revealed #1 Poet
+Info: {'good_position': 2, 'copied_role': 'Gemcrafter'}
+
+### [21:03:38] Revealed #2 Scout
+Info: {'evil_role': 'Pooka', 'distance': 2}
+
+### [21:03:38] Revealed #3 Bishop
+Info: {'targets': [3, 4, 5], 'types': ['Villager', 'Outcast', 'Demon']}
+
+### [21:03:38] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [21:03:38] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:03:39] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [21:03:45] Solver Output
+Scenarios: 5/30
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #2=60%, #3=40%
+  Generated 30 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [21:03:45] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.971 (adjusted 0.777) | timing x1.00
+WARNING: Corruption risk: 40%
+
+### [21:04:38] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [21:04:38] Ability used at #6
+
+#### [21:04:38] Solver Output
+Scenarios: 2/30
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #2=50%, #3=50%
+  Generated 30 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [21:04:38] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:05:34] Executed #2 -> Pooka (EVIL)
+
+## [21:05:35] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. FT#6 was Drunk(corrupted), lied about #1/#2. 50/50 exec #2=Pooka. Pooka corrupted #1(Poet), #3(Bishop). #6=Drunk corrupted.
+

@@ -1210,6 +1210,13 @@
       "name": "asc31_v3",
       "notes": "Perfect 10HP. Fake PD#8 lied about corruption, solver caught it. Druid confirmed #6=Bombardier. Poisoner#4 corrupted adjacent #5. 3 confident execs, 0 wrong.",
       "date": "2026-03-10 21:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v4",
+      "notes": "Perfect 10HP. FT#6 was Drunk(corrupted), lied about #1/#2. 50/50 exec #2=Pooka. Pooka corrupted #1(Poet), #3(Bishop). #6=Drunk corrupted.",
+      "date": "2026-03-10 21:05"
     }
   ]
 }
