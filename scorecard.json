@@ -1364,6 +1364,13 @@
       "name": "asc34_v4",
       "notes": "Lilis game 6HP. Night killed #6 Doppelganger. #9 Scout corrupted. FT confirmed evil in #1/#7 -> solver locked #7. flip --lilis bug: re-clicked already-flipped cards on 2nd batch, accidentally activated FT ability (cancelled).",
       "date": "2026-03-11 17:26"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc34_v5",
+      "notes": "LOSS from Baker normalization bug. Solver had 1 scenario (wrong: #2=TM,#9=Pooka) due to 'Fortune_Teller' vs 'Fortune Teller' mismatch in Baker validator. Wrong exec #2 cost 5HP. After hotfix, solver had 7 scenarios with true pair only 1/7. Then 71% on #5 (good Doppelganger) killed us. #3 Gemcrafter Corrupted by adjacent Pooka.",
+      "date": "2026-03-11 17:39"
     }
   ]
 }

@@ -1830,7 +1830,8 @@ def _validate_baker(card: CardInfo, scenario: Scenario,
 
     if truth == TruthStatus.TRUTHFUL:
         # Must claim a real Villager role from the deck
-        return is_villager and claimed_card.name in state.deck.villagers
+        deck_villagers_normalized = {_normalize_role(v) for v in state.deck.villagers}
+        return is_villager and _normalize_role(claimed_card.name) in deck_villagers_normalized
     else:
         # Lying: claimed role is NOT a valid Villager from the deck,
         # OR the claim is simply wrong. Since we can't verify the exact
@@ -2252,7 +2253,8 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         claimed_card_def = get_card(claimed)
         if not claimed_card_def or claimed_card_def.role != Role.VILLAGER:
             continue
-        if claimed_card_def.name not in state.deck.villagers:
+        deck_villagers_normalized = {_normalize_role(v) for v in state.deck.villagers}
+        if _normalize_role(claimed_card_def.name) not in deck_villagers_normalized:
             continue
         baker_claimed_counts[_normalize_role(claimed)] += 1
 

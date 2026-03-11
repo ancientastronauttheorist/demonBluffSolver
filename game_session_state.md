@@ -7649,3 +7649,133 @@ Reason: #7 is evil in ALL 4 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: Lilis game 6HP. Night killed #6 Doppelganger. #9 Scout corrupted. FT confirmed evil in #1/#7 -> solver locked #7. flip --lilis bug: re-clicked already-flipped cards on 2nd batch, accidentally activated FT ability (cancelled).
 
+
+---
+
+# New Game — 2026-03-11 17:28:51
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Lover, Fortune_Teller, Gemcrafter, Scout, Dreamer
+- Outcasts: Doppelganger, Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [17:29:59] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [17:30:04] Revealed #2 Baker
+Info: {'original_role': 'Fortune_Teller'}
+
+### [17:30:09] Revealed #3 Gemcrafter
+Info: {'good_position': 4}
+
+### [17:30:16] Revealed #4 Scout
+Info: {'evil_role': 'Twin_Minion', 'distance': 2}
+
+### [17:30:21] Revealed #5 Fortune_Teller
+Info: {}
+
+### [17:30:31] Revealed #6 Baker
+Info: {'original_role': 'Dreamer'}
+
+### [17:30:31] Revealed #7 Baker
+Info: {'original_role': 'Lover'}
+
+### [17:30:31] Revealed #8 Bombardier
+Info: {}
+
+### [17:30:32] Revealed #9 Bombardier
+Info: {}
+
+#### [17:30:37] Solver Output
+Scenarios: 1/392
+Definite evil: ['#2', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7', '#8']
+  Generated 392 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #9 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:30:37] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [17:31:36] Executed #2 -> GOOD (WRONG!)
+
+#### [17:31:47] Solver Output
+Scenarios: 0/308
+  Generated 308 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #2 Baker: rejected 248/308 (81%)
+    #4 Scout: rejected 158/308 (51%)
+    #3 Gemcrafter: rejected 102/308 (33%)
+    #1 Baker: rejected 31/308 (10%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Baker: 5 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Baker: 51 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Gemcrafter: 13 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Scout: 10 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Baker: 5 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Baker: 5 scenarios survive  <-- SUSPECT
+
+#### [17:31:47] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [17:37:14] Solver Output
+Scenarios: 15/308
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #5=67%, #8=53%, #9=47%, #4=13%, #6=13%, #7=7%
+  Generated 308 candidate scenarios
+  15 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [4, 5, 6, 7, 8, 9]
+
+#### [17:37:14] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#1', '#8']
+Reason: Entropy 0.997 (adjusted 0.997) | timing x1.00
+
+### [17:37:56] Revealed #5 Fortune Teller
+Info: {'targets': [1, 8], 'has_evil': False}
+
+### [17:37:56] Ability used at #5
+
+#### [17:38:01] Solver Output
+Scenarios: 7/308
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #5=71%, #8=71%, #9=29%, #4=14%, #7=14%
+  Generated 308 candidate scenarios
+  7 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [4, 5, 7, 8, 9]
+
+#### [17:38:01] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 71% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 71% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #5 (71%) despite low confidence — Bombardier candidate(s) [8, 9] risk instant game loss if executed first.
+
+### [17:39:42] Executed #5 -> GOOD (WRONG!)
+
+## [17:39:57] GAME OVER — LOSS
+Final HP: 0
+Notes: LOSS from Baker normalization bug. Solver had 1 scenario (wrong: #2=TM,#9=Pooka) due to 'Fortune_Teller' vs 'Fortune Teller' mismatch in Baker validator. Wrong exec #2 cost 5HP. After hotfix, solver had 7 scenarios with true pair only 1/7. Then 71% on #5 (good Doppelganger) killed us. #3 Gemcrafter Corrupted by adjacent Pooka.
+
