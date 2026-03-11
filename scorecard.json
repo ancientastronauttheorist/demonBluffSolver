@@ -1371,6 +1371,20 @@
       "name": "asc34_v5",
       "notes": "LOSS from Baker normalization bug. Solver had 1 scenario (wrong: #2=TM,#9=Pooka) due to 'Fortune_Teller' vs 'Fortune Teller' mismatch in Baker validator. Wrong exec #2 cost 5HP. After hotfix, solver had 7 scenarios with true pair only 1/7. Then 71% on #5 (good Doppelganger) killed us. #3 Gemcrafter Corrupted by adjacent Pooka.",
       "date": "2026-03-11 17:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v5b",
+      "notes": "Perfect 10HP on 3-evil retry. Massive corruption from Pooka (#2): Oracle#1, Empress#3, Drunk#4, Gemcrafter#6 all corrupted. PD check + Druid ability narrowed to 19 scenarios, then 5->1.",
+      "date": "2026-03-11 17:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v6",
+      "notes": "Perfect game 10HP. PD#2 clean on #5, PD#4 (evil) lied about #7/#10. Judge#8 corrupted said #2 lying -> solver narrowed to 1 scenario. 3 correct execs.",
+      "date": "2026-03-11 18:02"
     }
   ]
 }
