@@ -8366,3 +8366,84 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 6
 Notes: 6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil.
 
+
+---
+
+# New Game — 2026-03-11 18:43:57
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Alchemist, Confessor, Enlightened, Judge, Knitter, Fortune_Teller
+- Outcasts: Bombardier
+- Minions: Shaman
+- Demons: Lilis
+
+### [18:45:14] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [18:45:14] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [18:45:14] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [18:45:14] Revealed #4 Bombardier
+Info: {}
+
+### [18:46:37] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+### [18:46:37] Revealed #6 Fortune_Teller
+Info: {}
+
+### [18:46:37] Revealed #8 Confessor
+Info: {}
+
+#### [18:46:46] Solver Output
+Scenarios: 4/56
+Definite good: ['#1', '#2', '#4', '#7']
+Evil probabilities: #3=50%, #5=50%, #6=50%, #8=50%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [3, 5, 6, 8]
+
+#### [18:46:46] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:48:02] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [18:48:02] Ability used at #6
+
+#### [18:48:03] Solver Output
+Scenarios: 2/56
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [18:48:03] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [18:48:54] Executed #3 -> Lilis (EVIL)
+
+### [18:51:03] Executed #8 -> Shaman (EVIL)
+
+## [18:51:06] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP. Lilis game, 8 cards. Shaman dup Alchemist. Confessor dizzy+no corruption source=evil disguise. FT alignment test confirmed.
+

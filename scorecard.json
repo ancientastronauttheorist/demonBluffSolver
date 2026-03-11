@@ -1399,6 +1399,13 @@
       "name": "asc35_v1",
       "notes": "6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil.",
       "date": "2026-03-11 18:41"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc35_v2",
+      "notes": "8HP. Lilis game, 8 cards. Shaman dup Alchemist. Confessor dizzy+no corruption source=evil disguise. FT alignment test confirmed.",
+      "date": "2026-03-11 18:51"
     }
   ]
 }
