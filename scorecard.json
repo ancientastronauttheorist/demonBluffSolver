@@ -1217,6 +1217,13 @@
       "name": "asc31_v4",
       "notes": "Perfect 10HP. FT#6 was Drunk(corrupted), lied about #1/#2. 50/50 exec #2=Pooka. Pooka corrupted #1(Poet), #3(Bishop). #6=Drunk corrupted.",
       "date": "2026-03-10 21:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v5",
+      "notes": "Perfect 10HP. Jester#7 claimed 3 evils among 3 positions (impossible with 2 evils) = lying = evil. Witch#2 blocked #8. Judge confirmed #5 truthful. All confident execs.",
+      "date": "2026-03-10 21:11"
     }
   ]
 }
