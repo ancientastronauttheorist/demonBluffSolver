@@ -157,5 +157,11 @@
   "used_abilities": [
     1,
     4
-  ]
+  ],
+  "name": "asc33_v3",
+  "true_evil_positions": {
+    "3": "Pooka",
+    "7": "Twin_Minion"
+  },
+  "notes": "Perfect game, 10HP. PD found #7 evil, Slayer killed #3=Pooka. Corrupted: #2 Bard, #9 Drunk."
 }
