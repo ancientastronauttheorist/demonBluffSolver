@@ -4490,3 +4490,84 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect win 10HP. PD#4 clean check on #10 narrowed to 3 scenarios. Dreamer#8 on #2 got Shaman (noise, confirmed #2 good). 50/50 on #5/#6, exec #5=Pooka. Corrupted: #2(PD), #6(Pooka). Ascension 30 complete!
 
+
+---
+
+# New Game — 2026-03-10 20:45:55
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Empress, Hunter, Bard, Gemcrafter, Confessor
+- Outcasts: Drunk, Wretch, Plague_Doctor
+- Minions: Witch
+- Demons: Baa
+
+### [20:48:03] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [20:48:08] Revealed #2 Wretch
+Info: {}
+
+### [20:48:14] Revealed #3 Empress
+Info: {'targets': [4, 7, 8]}
+
+### [20:48:19] Revealed #4 Gemcrafter
+Info: {'good_position': 8}
+
+### [20:48:25] Revealed #5 Bard
+Info: {'corruption_distance': -1}
+
+### [20:48:29] Revealed #6 Empress
+Info: {'targets': [4, 7, 8]}
+
+### [20:48:34] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+#### [20:48:46] Solver Output
+Scenarios: 10/350
+Definite good: ['#1', '#2', '#4', '#7']
+Evil probabilities: #3=60%, #5=60%, #6=60%, #8=20%
+  Generated 350 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [3, 5, 6, 8]
+
+#### [20:48:46] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (30% evil Baa, 30% evil Witch, 20% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [20:49:27] Executed #3 -> Witch (EVIL)
+
+### [20:50:01] Revealed #8 Hunter
+Info: {'distance': 2}
+
+#### [20:50:06] Solver Output
+Scenarios: 2/43
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#7', '#8']
+Evil probabilities: #5=50%, #6=50%
+  Generated 43 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6]
+
+#### [20:50:06] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [20:50:54] Executed #5 -> Baa (EVIL)
+
+## [20:51:02] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Witch blocked #8. Exec #3=Witch (60% hit). Unblocked #8=Hunter. 50/50 #5/#6, exec #5=Baa. #6=Drunk(corrupted) disguised as Empress.
+

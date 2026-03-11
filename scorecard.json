@@ -1189,6 +1189,13 @@
       "name": "asc30_v7",
       "notes": "Perfect win 10HP. PD#4 clean check on #10 narrowed to 3 scenarios. Dreamer#8 on #2 got Shaman (noise, confirmed #2 good). 50/50 on #5/#6, exec #5=Pooka. Corrupted: #2(PD), #6(Pooka). Ascension 30 complete!",
       "date": "2026-03-10 20:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v1",
+      "notes": "Perfect 10HP. Witch blocked #8. Exec #3=Witch (60% hit). Unblocked #8=Hunter. 50/50 #5/#6, exec #5=Baa. #6=Drunk(corrupted) disguised as Empress.",
+      "date": "2026-03-10 20:51"
     }
   ]
 }
