@@ -121,5 +121,11 @@
     2,
     6,
     1
-  ]
+  ],
+  "name": "asc32_v6",
+  "true_evil_positions": {
+    "6": "Witch",
+    "7": "Baa"
+  },
+  "notes": "Perfect game 10HP. Knight checks on #3 and #5 both passed (uncorrupted). Dreamer said #7=Baa, confirmed. #5=Doppelganger-as-Knight had immunity."
 }
