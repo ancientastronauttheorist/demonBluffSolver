@@ -14,10 +14,11 @@
 6. **Mouse only.** No keyboard shortcuts during live runs.
 7. **Memory reader with every screenshot.** Compare against screenshot (ground truth). Mismatch = stop and fix.
 8. **Serialize state-mutating commands.** Do not issue `game_loop.py` commands (`new`, `deck`, `card`, `execute`, `ability_used`, etc.) in parallel.
+9. **Self-improving CLAUDE.md.** When any process error occurs during the game loop (wrong flip order, missed step, data entry mistake, wrong coordinates, etc.): STOP immediately -> identify root cause -> update THIS FILE with a guard/fix to prevent recurrence -> think about related edge cases -> resume. Every mistake should make the process permanently better.
 
 ## Screen & Coordinates
 - **Resolution**: 2560x1440
-- **Mouse parking** (before screenshots): `(1280, 690)` — board center void. Avoid cards, panels, buttons, deck icon.
+- **Mouse parking** (before screenshots): `(1280, 690)` -- board center void. Avoid cards, panels, buttons, deck icon.
 - If a screenshot has a hover tooltip, park and retake.
 - `safe_click` auto-focuses the game window. **Prefer `safe_click` over manual move+click.**
 - For card clicks, prefer detected card-box centers from the current screenshot. Circle formula is a fallback only.
@@ -25,45 +26,48 @@
 ## Game Loop
 
 ### Start
-1. `safe_click menu_play_demo` → `safe_click mode_standard` → dismiss intro with `safe_click btn_close_dialog`
-2. Deck auto-opens. **Park mouse to bottom-left corner** `(50, 1350)` before screenshotting to avoid hover tooltips. Take screenshot, then read the deck with **both** card_vision and memory reader:
-   ```
-   python card_vision.py classify_dirs <screenshot> --context deck --library-dir templates/compendium/page1 --library-dir templates/compendium/page3 --library-dir templates/compendium/page4 --library-dir templates/compendium/page5
-   python memory_reader.py --deck
-   ```
-   **Cross-check both outputs — they must match.** Any mismatch = stop and fix. Use card_vision + memory reader as ground truth for the `deck` command. Also read board counts (V, O, M, D icons top-right) from screenshot.
+1. **`python game_loop.py start`** -- automates: Play Demo -> Standard -> dismiss intro -> park mouse -> screenshot deck -> run card_vision + memory_reader with cross-check. Or use `read_deck <screenshot>` to just re-read an existing screenshot.
+2. Verify the deck output, read board counts (V, O, M, D icons top-right) from screenshot.
 3. `python game_loop.py new <n_cards> <n_evil>`
-4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` — include ALL pool roles, prefixes REQUIRED
-5. Close deck by clicking neutral area
+4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` -- prefixes REQUIRED (command errors on missing prefix instead of silently ignoring).
+5. Close deck: `safe_click icon_deck_purple`
 
 ### Reveal & Enter
-6. Click all cards #1→#N (use `detect_card_positions` or `all_game_card_coords(n)`). Verify: `python template_match.py find_all card_facedown`
-7. After all cards flipped, screenshot and run `python memory_reader.py` to cross-check roles match what the screenshot shows. **Mismatch = stop and fix.** **HONOR RULE: memory reader shows true evil roles — DO NOT use this to cheat. We are honorable like Finn. The solver must solve it from the card info alone. Memory reader is for validation only (verifying data entry accuracy, post-game analysis).**
-8. Enter card info. Active abilities (lightning bolt icon): `card no_info <pos> <Role>` until used. Passive info: enter immediately.
-9. `set_hp <hp> <wrong_exec_cost>` at game start (5 at Asc4+)
+6. **`python game_loop.py flip`** -- flips all cards #1->#N in strict order, then auto-runs memory_reader to show board state.
+   ```
+   python game_loop.py flip              # Standard: all cards #1->#N
+   python game_loop.py flip --lilis      # Lilis: batches of 4, stops for night phase
+   python game_loop.py flip <pos>        # Single card (after Witch death)
+   ```
+   - **NEVER manually construct click chains.** The `flip` command handles ordering.
+   - **Why order matters**: (a) Witch blocks the LAST card attempted -- consistent order makes blocked card predictable (#N). (b) `reveal_order` must match flip order for Baker. (c) Card info must be entered in same order.
+   - **After Witch death**: `flip <blocked_pos>` -- only flips that one card.
+   - **Night-killed cards (Lilis)**: Show skull overlay, skip them.
+7. Screenshot and verify memory_reader output (auto-printed by `flip`). **HONOR RULE: memory reader shows true evil roles -- DO NOT use for solving. Validation only.**
+8. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
+9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
 
 ### Solve & Act
-10. `python game_loop.py next` — **do what it says**
-11. **Abilities**: click card → click targets → enter result → `ability_used <pos>` → `next`
+10. `python game_loop.py next` -- **do what it says**. Warns if card entries missing or HP inconsistent.
+11. **Abilities**: click card -> click targets -> enter result -> `ability_used <pos>` -> `next`
     - WARNING: clicking a card with an unused active ability activates THAT ability instead of selecting as target
-12. **Execute**: `safe_click btn_execute_sword` FIRST → click target → screenshot → `execute <pos> <evil_role|good>` → `set_hp`
+12. **Execute**: `safe_click btn_execute_sword` FIRST -> click target -> screenshot -> `execute <pos> <evil_role|good>`. Execute command auto-prints HP reminder.
 13. Repeat `next` until game ends
 
 ### End
 14. Screenshot end screen. Read true evils + check `<Corrupted>` tags
-15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` — saves to `tests/cases_v2/`, runs step-by-step replay test automatically
-16. `python -m tests.test_replay --v2-only` — full replay regression on all v2 tests
-17. Commit and push
+15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist.
+16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
-## Memory Reader — Continuous Validation
+## Memory Reader -- Continuous Validation
 Reads game state from process memory (`memory_reader.py`). Goal: replace the visual pipeline entirely.
 
 Every screenshot, memory reader reads state and compares against what the screenshot shows. Screenshot is ground truth. **Any mismatch = stop the game, diagnose, fix, verify, resume.**
 
 **Known issues**:
 - Multi-village: `dataRef` (0x50) not updated. `chName.m_text` IS updated. Fix: read chName, parse Player.log, or find current CharacterData pointer.
-- Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` — INIT entries have true roles in reverse position order.
-- Name mappings: Gambler→Gemcrafter, Imp→Chancellor, etc. (see DISPLAY_NAMES dict).
+- Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` -- INIT entries have true roles in reverse position order.
+- Name mappings: Gambler->Gemcrafter, Imp->Chancellor, etc. (see DISPLAY_NAMES dict).
 
 ## Setup
 - Screen: 2560x1440, Python 3.13
@@ -72,4 +76,4 @@ Every screenshot, memory reader reads state and compares against what the screen
 - **Test directories**: `tests/cases_v2/` (new, card_vision pipeline), `tests/cases/` (legacy, manual entry). Solver work validates against v2 only.
 
 ## Game Overview
-Puzzle/deduction game. Circle of face-down cards — reveal for role info, deduce Evil, execute them. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.
+Puzzle/deduction game. Circle of face-down cards -- reveal for role info, deduce Evil, execute them. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.

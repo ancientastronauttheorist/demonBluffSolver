@@ -59,6 +59,19 @@ CHAR_STATE_OFFSET = 0xC4         # ECharacterState (int32)
 CHAR_ALIGNMENT_OFFSET = 0xD8     # EAlignment (int32)
 CHAR_ID_OFFSET = 0xF8            # int32 (position)
 CHAR_KILLED_HIDDEN_OFFSET = 0xCC # bool (killed by Lilis)
+CHAR_REVEALED_OFFSET = 0xB8      # bool (card has been flipped)
+CHAR_STATUSES_OFFSET = 0xD0      # CharacterStatuses object
+
+# CharacterStatuses field offsets
+CSTATUS_LIST_OFFSET = 0x10       # List<ECharacterStatus>
+
+# ECharacterStatus enum
+CHAR_STATUS = {
+    0: 'None', 10: 'Corrupted', 20: 'Mad', 30: 'HealthyBluff',
+    35: 'BrokenAbility', 40: 'NoDamage', 45: 'CorruptionResistant',
+    50: 'MessedUpByEvil', 55: 'KilledByEvil', 60: 'UnkillableByDemon',
+    70: 'AlteredCharacter',
+}
 
 # CharacterData class field offsets
 CD_CHARACTER_ID_OFFSET = 0x18    # string (role name) -- STALE in multi-village!
@@ -282,6 +295,25 @@ class MemoryReader:
             return None
         return self._read_ptr(static_fields + GAMEPLAY_INSTANCE_STATIC_OFFSET)
 
+    def _read_statuses(self, char_ptr):
+        """Read the CharacterStatuses list from a Character."""
+        statuses_obj = self._read_ptr(char_ptr + CHAR_STATUSES_OFFSET)
+        if not statuses_obj or statuses_obj < 0x10000:
+            return []
+        status_list = self._read_ptr(statuses_obj + CSTATUS_LIST_OFFSET)
+        if not status_list or status_list < 0x10000:
+            return []
+        items_array = self._read_ptr(status_list + LIST_ITEMS_OFFSET)
+        list_size = self._read_i32(status_list + LIST_SIZE_OFFSET)
+        if not items_array or not list_size or list_size <= 0:
+            return []
+        result = []
+        for i in range(list_size):
+            val = self._read_i32(items_array + ARRAY_FIRST_ELEMENT_OFFSET + i * 4)
+            if val is not None:
+                result.append(CHAR_STATUS.get(val, f'?{val}'))
+        return result
+
     def read_board(self):
         """Read all cards on the current board."""
         gameplay = self._get_gameplay_instance()
@@ -322,6 +354,10 @@ class MemoryReader:
             state = self._read_i32(char_ptr + CHAR_STATE_OFFSET)
             card_id = self._read_i32(char_ptr + CHAR_ID_OFFSET)
             killed_hidden = self._read_bool(char_ptr + CHAR_KILLED_HIDDEN_OFFSET)
+            revealed = self._read_bool(char_ptr + CHAR_REVEALED_OFFSET)
+
+            # Read statuses
+            statuses = self._read_statuses(char_ptr)
 
             cards.append({
                 'position': card_id,
@@ -331,6 +367,8 @@ class MemoryReader:
                 'is_evil': alignment == 20,
                 'state': STATE.get(state, f'?{state}'),
                 'killed_hidden': killed_hidden,
+                'revealed': revealed,
+                'statuses': statuses,
             })
 
         cards.sort(key=lambda c: c['position'])
@@ -390,15 +428,25 @@ def print_board(cards):
         return
 
     print()
-    print(f"{'POS':>3}  {'TRUE ROLE':<18} {'SHOWS AS':<18} {'ALIGN':>5}  {'STATE':<8}")
-    print("-" * 62)
+    print(f"{'POS':>3}  {'TRUE ROLE':<18} {'SHOWS AS':<18} {'ALIGN':>5}  {'STATE':<8} {'FLIP':>4}  FLAGS")
+    print("-" * 85)
     for c in cards:
         shows_as = c['disguise'] if c['disguise'] else c['true_role']
         evil_marker = '*' if c['is_evil'] else ' '
-        skull = 'LILIS-KILL' if c['killed_hidden'] else ''
+        flipped = 'YES' if c.get('state') in ('Alive', 'Dead', 'Revealed') else 'NO'
+        flags = []
+        if c['killed_hidden']:
+            flags.append('LILIS-KILL')
+        statuses = c.get('statuses', [])
+        for s in statuses:
+            if s != 'None':
+                flags.append(s)
+        if c.get('state') == 'Hidden' and not c['killed_hidden']:
+            flags.append('BLOCKED')
+        flags_str = ', '.join(flags) if flags else ''
         print(
             f"#{c['position']:>2}{evil_marker} {c['true_role']:<18} "
-            f"{shows_as:<18} {c['alignment']:>5}  {c['state']:<8} {skull}"
+            f"{shows_as:<18} {c['alignment']:>5}  {c['state']:<8} {flipped:>4}  {flags_str}"
         )
 
     evils = [c for c in cards if c['is_evil']]
