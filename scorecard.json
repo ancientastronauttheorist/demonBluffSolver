@@ -1203,6 +1203,13 @@
       "name": "asc31_v2",
       "notes": "Perfect 10HP, 1 exec. Pooka at #2 disguised as Gemcrafter said self-is-Good (lie). Confessor corrupted by adjacent Pooka. #3=Doppelganger.",
       "date": "2026-03-10 20:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v3",
+      "notes": "Perfect 10HP. Fake PD#8 lied about corruption, solver caught it. Druid confirmed #6=Bombardier. Poisoner#4 corrupted adjacent #5. 3 confident execs, 0 wrong.",
+      "date": "2026-03-10 21:01"
     }
   ]
 }

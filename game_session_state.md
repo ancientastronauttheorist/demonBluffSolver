@@ -4624,3 +4624,154 @@ Reason: #2 is evil in ALL 4 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP, 1 exec. Pooka at #2 disguised as Gemcrafter said self-is-Good (lie). Confessor corrupted by adjacent Pooka. #3=Doppelganger.
 
+
+---
+
+# New Game — 2026-03-10 20:55:15
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Hunter, Gemcrafter, Medium, Bard, Druid, Knight
+- Outcasts: Bombardier, Doppelganger, Plague_Doctor
+- Minions: Poisoner, Shaman
+- Demons: Baa
+
+### [20:56:27] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Druid'}
+
+### [20:56:33] Revealed #2 Druid
+Info: {}
+
+### [20:56:38] Revealed #3 Gemcrafter
+Info: {'good_position': 5}
+
+### [20:56:45] Revealed #4 Poet
+Info: {'targets': [1, 2, 6], 'copied_role': 'Empress'}
+
+### [20:56:52] Revealed #5 Gemcrafter
+Info: {'good_position': 9}
+
+### [20:56:58] Revealed #6 Bombardier
+Info: {}
+
+### [20:56:59] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [20:56:59] Revealed #8 Plague_Doctor
+Info: {}
+
+### [20:56:59] Revealed #9 Bard
+Info: {'corruption_distance': -1}
+
+#### [20:57:06] Solver Output
+Scenarios: 44/11858
+Definite good: ['#3', '#5', '#7']
+Evil probabilities: #6=82%, #4=50%, #2=45%, #9=45%, #8=41%, #1=36%
+  Generated 11858 candidate scenarios
+  44 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6, 8, 9]
+
+#### [20:57:06] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.742 (adjusted 1.742) | timing x1.00
+
+### [20:58:07] Ability used at #8
+
+#### [20:58:13] Solver Output
+Scenarios: 18/11858
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=56%, #4=44%
+  Generated 11858 candidate scenarios
+  18 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman', 'Baa'})
+    #9 is DEFINITELY EVIL (possible roles: {'Shaman', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [20:58:13] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 18 scenarios (roles: {'Shaman', 'Baa'})
+
+### [20:59:00] Executed #8 -> Shaman (EVIL)
+
+#### [20:59:06] Solver Output
+Scenarios: 9/509
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=56%, #4=44%
+  Generated 509 candidate scenarios
+  9 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [20:59:06] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 9 scenarios (roles: {'Baa'})
+
+### [20:59:46] Executed #9 -> Baa (EVIL)
+
+#### [20:59:53] Solver Output
+Scenarios: 9/68
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=56%, #4=44%
+  Generated 68 candidate scenarios
+  9 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [20:59:53] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#6']
+Reason: Entropy 0.991 (adjusted 0.991) | timing x1.00
+
+### [21:00:47] Revealed #2 Druid
+Info: {'targets': [1, 3, 6], 'found_outcast': 'Bombardier'}
+
+### [21:00:47] Ability used at #2
+
+#### [21:00:54] Solver Output
+Scenarios: 4/68
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+  Generated 68 candidate scenarios
+  4 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #8 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:00:54] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Poisoner'})
+
+### [21:01:46] Executed #4 -> Poisoner (EVIL)
+
+## [21:01:46] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Fake PD#8 lied about corruption, solver caught it. Druid confirmed #6=Bombardier. Poisoner#4 corrupted adjacent #5. 3 confident execs, 0 wrong.
+
