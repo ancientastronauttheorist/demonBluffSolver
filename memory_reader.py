@@ -34,6 +34,20 @@ GAMEPLAY_STATIC_CLASS_PTR_DISP = 0x0222A57C  # RIP-relative displacement from Aw
 IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
 GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x8
 GAMEPLAY_CHARACTERS_OFFSET = 0x60
+GAMEPLAY_SCORE_STATIC_OFFSET = 0x0   # static Score score (first static field)
+
+# Score class field offsets
+SCORE_KILLED_GOODS_OFFSET = 0x10
+SCORE_COMPLETED_STAGES_OFFSET = 0x14
+SCORE_TEMP_UNREVEALED_OFFSET = 0x18
+SCORE_UNREVEALED_CARDS_OFFSET = 0x1C
+SCORE_KILLED_EVILS_OFFSET = 0x20
+SCORE_TEMP_KILLED_EVILS_OFFSET = 0x24
+SCORE_POINT_PER_KILL_OFFSET = 0x28
+SCORE_POINTS_PER_UNREVEALED_OFFSET = 0x2C
+SCORE_POINTS_FOR_COMPLETING_OFFSET = 0x30
+SCORE_COMPLETED_DAYS_OFFSET = 0x34
+SCORE_MULTIPLIER_OFFSET = 0x38
 
 # Gameplay deck lists (List<CharacterData>)
 GAMEPLAY_TOWNSFOLKS_OFFSET = 0x20
@@ -282,18 +296,43 @@ class MemoryReader:
             return buf.raw[:length * 2].decode('utf-16-le', errors='replace')
         return None
 
-    def _get_gameplay_instance(self):
-        """Follow the pointer chain to get Gameplay.Instance."""
+    def _get_static_fields(self):
+        """Get the Gameplay class static fields pointer."""
         awake_addr = self.ga_base + GAMEPLAY_AWAKE_RVA
-        # RIP-relative address of Il2CppClass* pointer
         class_ptr_addr = awake_addr + 44 + GAMEPLAY_STATIC_CLASS_PTR_DISP
         il2cpp_class = self._read_ptr(class_ptr_addr)
         if not il2cpp_class:
             return None
-        static_fields = self._read_ptr(il2cpp_class + IL2CPP_CLASS_STATIC_FIELDS_OFFSET)
+        return self._read_ptr(il2cpp_class + IL2CPP_CLASS_STATIC_FIELDS_OFFSET)
+
+    def _get_gameplay_instance(self):
+        """Follow the pointer chain to get Gameplay.Instance."""
+        static_fields = self._get_static_fields()
         if not static_fields:
             return None
         return self._read_ptr(static_fields + GAMEPLAY_INSTANCE_STATIC_OFFSET)
+
+    def read_score(self):
+        """Read the Score object from Gameplay's static fields."""
+        static_fields = self._get_static_fields()
+        if not static_fields:
+            return None
+        score_ptr = self._read_ptr(static_fields + GAMEPLAY_SCORE_STATIC_OFFSET)
+        if not score_ptr or score_ptr < 0x10000:
+            return None
+        return {
+            'killedGoods': self._read_i32(score_ptr + SCORE_KILLED_GOODS_OFFSET),
+            'completedStages': self._read_i32(score_ptr + SCORE_COMPLETED_STAGES_OFFSET),
+            'tempUnrevealedCards': self._read_i32(score_ptr + SCORE_TEMP_UNREVEALED_OFFSET),
+            'unrevealedCards': self._read_i32(score_ptr + SCORE_UNREVEALED_CARDS_OFFSET),
+            'killedEvils': self._read_i32(score_ptr + SCORE_KILLED_EVILS_OFFSET),
+            'tempKilledEvils': self._read_i32(score_ptr + SCORE_TEMP_KILLED_EVILS_OFFSET),
+            'pointPerKill': self._read_i32(score_ptr + SCORE_POINT_PER_KILL_OFFSET),
+            'pointsPerUnrevealed': self._read_i32(score_ptr + SCORE_POINTS_PER_UNREVEALED_OFFSET),
+            'pointsForCompleting': self._read_i32(score_ptr + SCORE_POINTS_FOR_COMPLETING_OFFSET),
+            'completedDays': self._read_i32(score_ptr + SCORE_COMPLETED_DAYS_OFFSET),
+            'multiplier': self._read_i32(score_ptr + SCORE_MULTIPLIER_OFFSET),
+        }
 
     def _read_statuses(self, char_ptr):
         """Read the CharacterStatuses list from a Character."""
@@ -457,10 +496,49 @@ def print_board(cards):
         print(f"  #{c['position']} {c['true_role']}{disguise_info}")
 
 
+def print_score(score):
+    """Pretty-print the Score object."""
+    if not score:
+        print("No score found.")
+        return
+    print()
+    print("=== SCORE CONFIG ===")
+    print(f"  pointPerKill:         {score['pointPerKill']}")
+    print(f"  pointsPerUnrevealed:  {score['pointsPerUnrevealed']}")
+    print(f"  pointsForCompleting:  {score['pointsForCompleting']}")
+    print(f"  multiplier:           {score['multiplier']}")
+    print()
+    print("=== CURRENT RUN ===")
+    print(f"  completedStages:      {score['completedStages']}")
+    print(f"  completedDays:        {score['completedDays']}")
+    print(f"  killedEvils (total):  {score['killedEvils']}")
+    print(f"  killedGoods (total):  {score['killedGoods']}")
+    print(f"  unrevealedCards:      {score['unrevealedCards']}")
+    print()
+    print("=== THIS VILLAGE ===")
+    print(f"  tempKilledEvils:      {score['tempKilledEvils']}")
+    print(f"  tempUnrevealedCards:  {score['tempUnrevealedCards']}")
+    print()
+    # Estimated formula
+    kill_pts = (score['killedEvils'] or 0) * (score['pointPerKill'] or 0)
+    unrevealed_pts = (score['unrevealedCards'] or 0) * (score['pointsPerUnrevealed'] or 0)
+    complete_pts = (score['completedDays'] or 0) * (score['pointsForCompleting'] or 0)
+    mult = score['multiplier'] or 1
+    estimated = (kill_pts + unrevealed_pts + complete_pts) * mult
+    print(f"=== ESTIMATED TOTAL ===")
+    print(f"  kills:      {score['killedEvils']} x {score['pointPerKill']} = {kill_pts}")
+    print(f"  unrevealed: {score['unrevealedCards']} x {score['pointsPerUnrevealed']} = {unrevealed_pts}")
+    print(f"  completed:  {score['completedDays']} x {score['pointsForCompleting']} = {complete_pts}")
+    print(f"  subtotal:   {kill_pts + unrevealed_pts + complete_pts}")
+    print(f"  multiplier: x{mult}")
+    print(f"  estimated:  {estimated}")
+
+
 def main():
     parser = argparse.ArgumentParser(description='Demon Bluff Memory Reader')
     parser.add_argument('--watch', action='store_true', help='Watch for changes')
     parser.add_argument('--deck', action='store_true', help='Show current deck pool')
+    parser.add_argument('--score', action='store_true', help='Show score details')
     parser.add_argument('--interval', type=float, default=2.0, help='Watch interval')
     parser.add_argument('--pid', type=int, help='Process ID override')
     args = parser.parse_args()
@@ -470,7 +548,10 @@ def main():
         sys.exit(1)
 
     try:
-        if args.deck:
+        if args.score:
+            score = reader.read_score()
+            print_score(score)
+        elif args.deck:
             deck = reader.read_deck()
             print_deck(deck)
         elif args.watch:
