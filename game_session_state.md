@@ -9267,3 +9267,262 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Minimum flips strategy. Shaman duplicated Scout+Bard. Fingerprint entropy guided flips. 8/9 flipped, 10HP perfect.
 
+
+---
+
+# New Game — 2026-03-11 21:36:28
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Gemcrafter, Bishop, Bard, Medium, Fortune_Teller, Alchemist
+- Outcasts: Wretch, Plague_Doctor, Doppelganger
+- Minions: Chancellor
+- Demons: Pooka
+
+#### [21:36:34] Solver Output
+Scenarios: 0/0
+  Generated 0 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  No candidate scenarios were generated (structural constraint failure)
+  Check: confirmed_evil/confirmed_good, deck composition, n_evil count
+
+#### [21:36:34] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+
+---
+
+# New Game — 2026-03-11 21:40:52
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Gemcrafter, Bishop, Bard, Medium, Fortune_Teller, Alchemist
+- Outcasts: Wretch, Plague_Doctor, Doppelganger
+- Minions: Chancellor
+- Demons: Pooka
+
+#### [21:40:58] Solver Output
+Scenarios: 504/504
+Evil probabilities: #1=22%, #2=22%, #3=22%, #4=22%, #5=22%, #6=22%, #7=22%, #8=22%, #9=22%
+  Generated 504 candidate scenarios
+  504 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:40:58] Recommendation
+Action: **REVEAL** #9
+Reason: #9: 22% evil, 5.006 bits (36 outcomes)
+
+### [21:41:28] Revealed #9 Bard
+Info: {'corruption_distance': 1}
+
+#### [21:41:28] Solver Output
+Scenarios: 196/504
+Evil probabilities: #9=57%, #1=32%, #8=32%, #2=13%, #3=13%, #4=13%, #5=13%, #6=13%, #7=13%
+  Generated 504 candidate scenarios
+  196 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:41:28] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 13% evil, 4.441 bits (22 outcomes)
+
+### [21:42:02] Revealed #4 Bishop
+Info: {'targets': [1, 2, 9], 'types': ['Outcast', 'Minion', 'Villager']}
+
+#### [21:42:02] Solver Output
+Scenarios: 156/504
+Evil probabilities: #9=69%, #1=31%, #8=23%, #4=17%, #3=12%, #5=12%, #6=12%, #7=12%, #2=12%
+  Generated 504 candidate scenarios
+  156 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:42:02] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 12% evil, 4.180 bits (19 outcomes)
+
+### [21:42:37] Revealed #5 Bishop
+Info: {'targets': [2, 6, 8], 'types': ['Villager', 'Minion', 'Outcast']}
+
+#### [21:42:37] Solver Output
+Scenarios: 91/504
+Definite good: ['#3', '#7']
+Evil probabilities: #9=66%, #8=38%, #1=22%, #5=21%, #6=21%, #2=19%, #4=13%
+  Generated 504 candidate scenarios
+  91 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 8, 9]
+
+#### [21:42:37] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 38% evil, 3.680 bits (13 outcomes)
+
+### [21:43:11] Revealed #8 Medium
+Info: {'good_position': 3, 'good_role': 'Gemcrafter'}
+
+#### [21:43:11] Solver Output
+Scenarios: 39/504
+Definite good: ['#3']
+Evil probabilities: #9=67%, #5=28%, #6=28%, #1=26%, #2=18%, #4=15%, #8=15%, #7=3%
+  Generated 504 candidate scenarios
+  39 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 8, 9]
+
+#### [21:43:11] Recommendation
+Action: **REVEAL** #6
+Reason: #6: 28% evil, 3.560 bits (13 outcomes)
+
+### [21:43:49] Revealed #6 Plague_Doctor
+Info: {}
+
+#### [21:43:49] Solver Output
+Scenarios: 145/1120
+Evil probabilities: #5=39%, #1=32%, #4=30%, #9=24%, #3=19%, #8=17%, #2=17%, #7=15%, #6=8%
+  Generated 1120 candidate scenarios
+  145 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:43:49] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 2.454 (adjusted 2.454) | timing x0.86
+
+### [21:46:19] Ability used at #6
+
+#### [21:46:22] Solver Output
+Scenarios: 63/1120
+Evil probabilities: #9=44%, #5=35%, #3=30%, #4=25%, #1=19%, #2=19%, #7=14%, #6=6%, #8=6%
+  Generated 1120 candidate scenarios
+  63 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [21:46:22] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 19% evil, 4.112 bits (21 outcomes)
+
+### [21:47:34] Revealed #2 Alchemist
+Info: {'cured_count': 1}
+
+#### [21:47:39] Solver Output
+Scenarios: 34/1650
+Definite good: ['#6']
+Evil probabilities: #9=62%, #5=53%, #2=35%, #3=24%, #4=9%, #1=6%, #7=6%, #8=6%
+  Generated 1650 candidate scenarios
+  34 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:47:39] Recommendation
+Action: **REVEAL** #3
+Reason: #3: 24% evil, 3.416 bits (12 outcomes)
+
+### [21:48:08] Revealed #3 Gemcrafter
+Info: {}
+
+#### [21:48:11] Solver Output
+Scenarios: 45/2065
+Definite good: ['#6']
+Evil probabilities: #9=69%, #5=44%, #2=29%, #4=22%, #3=18%, #7=7%, #8=7%, #1=4%
+  Generated 2065 candidate scenarios
+  45 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [21:48:11] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 4% evil, 3.458 bits (12 outcomes)
+
+### [21:48:48] Revealed #3 Gemcrafter
+Info: {'good_position': 7}
+
+### [21:48:51] Revealed #1 Fortune_Teller
+Info: {}
+
+#### [21:48:55] Solver Output
+Scenarios: 25/2691
+Definite good: ['#3', '#6', '#8']
+Evil probabilities: #9=84%, #5=60%, #4=36%, #1=8%, #2=8%, #7=4%
+  Generated 2691 candidate scenarios
+  25 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 7, 9]
+
+#### [21:48:55] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.999 (adjusted 0.979) | timing x1.00
+WARNING: Corruption risk: 4%
+
+### [21:49:45] Revealed #1 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [21:49:49] Ability used at #1
+
+#### [21:49:52] Solver Output
+Scenarios: 12/2691
+Definite good: ['#3', '#6', '#8']
+Evil probabilities: #4=75%, #9=75%, #1=17%, #5=17%, #2=8%, #7=8%
+  Generated 2691 candidate scenarios
+  12 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 7, 9]
+
+#### [21:49:52] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 8% evil, 1.141 bits (3 outcomes)
+
+### [21:50:15] Revealed #7 Wretch
+Info: {}
+
+#### [21:50:18] Solver Output
+Scenarios: 8/2362
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #3=62%, #2=38%, #8=38%, #4=25%, #9=25%, #7=12%
+  Generated 2362 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 7, 8, 9]
+
+#### [21:50:18] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (62% evil Pooka, 25% good Gemcrafter (corrupted), 12% good Doppelganger (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [21:50:50] Executed #3 -> Pooka (EVIL)
+
+#### [21:50:53] Solver Output
+Scenarios: 5/242
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#9']
+Evil probabilities: #8=60%, #2=40%
+  Generated 242 candidate scenarios
+  5 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 8]
+
+#### [21:50:53] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (60% evil Chancellor, 40% good Medium (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [22:01:12] Executed #8 -> Chancellor (EVIL)
+
+## [22:01:21] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Fingerprint entropy guided selective reveals. PD check + 2 Bishops + Alchemist + Gemcrafter + FT. Exec lookahead found guaranteed win line at 8 scenarios.
+

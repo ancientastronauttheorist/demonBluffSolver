@@ -1101,39 +1101,14 @@ def recommend_action(
                        if p not in state.executed
                        and p not in result.bombardier_positions]
     if safe_executions:
-        # Safety check: if PD is in the deck but hasn't been found among revealed
-        # cards, corruption can't be modeled. The solver may over-prune scenarios
-        # (corrupted cards treated as truthful) leading to false "definite evil".
-        # Prefer revealing to locate the PD first.
-        unrevealed = _unrevealed_positions(state)
-        corruption_unmodeled = False
-        pd_in_deck = any(o in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor")
-                         for o in state.deck.outcasts)
-        pd_found = any(c.apparent_role in ("Plague_Doctor", "Plague Doctor", "PlagueDoctor")
-                       for c in state.cards)
-        if unrevealed and pd_in_deck and not pd_found:
-            if state.board_outcast_count is None:
-                corruption_unmodeled = True
-            else:
-                found_outcasts = sum(
-                    1 for c in state.cards
-                    if c.position not in state.confirmed_evil
-                    and (cd := get_card(c.apparent_role))
-                    and cd.role == Role.OUTCAST
-                )
-                if found_outcasts < state.board_outcast_count:
-                    corruption_unmodeled = True
-
-        if not corruption_unmodeled:
-            pos = safe_executions[0]
-            roles = set()
-            for s in result.surviving_scenarios:
-                if pos in s.evil_positions:
-                    roles.add(s.evil_positions[pos])
-            return Action(
-                "execute", position=pos,
-                reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
-        # else: PD corruption unmodeled — fall through to reveal to find PD
+        pos = safe_executions[0]
+        roles = set()
+        for s in result.surviving_scenarios:
+            if pos in s.evil_positions:
+                roles.add(s.evil_positions[pos])
+        return Action(
+            "execute", position=pos,
+            reasoning=f"#{pos} is evil in ALL {result.n_surviving} scenarios (roles: {roles})")
 
     # 3.5 Knight free check — executing an uncertain Knight is free info
     # Real Knight (uncorrupted): execution blocked, confirms good, 0 HP cost

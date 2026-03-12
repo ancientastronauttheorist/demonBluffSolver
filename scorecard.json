@@ -1448,6 +1448,13 @@
       "name": "asc36_v3",
       "notes": "Minimum flips strategy. Shaman duplicated Scout+Bard. Fingerprint entropy guided flips. 8/9 flipped, 10HP perfect.",
       "date": "2026-03-11 21:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v4",
+      "notes": "Perfect 10HP. Fingerprint entropy guided selective reveals. PD check + 2 Bishops + Alchemist + Gemcrafter + FT. Exec lookahead found guaranteed win line at 8 scenarios.",
+      "date": "2026-03-11 22:01"
     }
   ]
 }

@@ -1990,7 +1990,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 # Don't skip executed positions — an executed Good card
                 # could have been the Doppelganger
                 card = _get_card_at(p, state)
-                if card and _is_villager_role(card.apparent_role, state):
+                # Doppelganger disguises as a Villager, so it can be at any
+                # revealed Villager position OR any unrevealed position
+                if card is None or _is_villager_role(card.apparent_role, state):
                     dopp_candidates.append(p)
 
         # Determine possible Drunk positions

@@ -1,0 +1,173 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          9
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6,
+          8
+        ],
+        "types": [
+          "Villager",
+          "Minion",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Gemcrafter"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    }
+  ],
+  "executed": [
+    3,
+    8
+  ],
+  "confirmed_evil": [
+    3,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Pooka",
+    "8": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 9,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    9,
+    4,
+    5,
+    8,
+    6,
+    2,
+    3,
+    1,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Gemcrafter",
+      "Bishop",
+      "Bard",
+      "Medium",
+      "Fortune_Teller",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    1
+  ],
+  "name": "asc36_v4",
+  "true_evil_positions": {
+    "3": "Pooka",
+    "8": "Chancellor"
+  },
+  "notes": "Perfect 10HP. Fingerprint entropy guided selective reveals. PD check + 2 Bishops + Alchemist + Gemcrafter + FT. Exec lookahead found guaranteed win line at 8 scenarios."
+}
