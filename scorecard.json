@@ -1413,6 +1413,13 @@
       "name": "asc35_v3",
       "notes": "Perfect 10HP. 7 cards, 1 evil Pooka. Solver 1 scenario, instant solve. Pooka corrupted #4 Dreamer and #6 Poet. Drunk at #3 disguised as Lover.",
       "date": "2026-03-11 18:55"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc35_v4",
+      "notes": "Perfect 10HP. 8 cards, 2 evil. Both Mediums were evil (Minion+Baa disguised). Scout+Poet both reported Baa 1 from Minion. Execution lookahead guaranteed win on #2.",
+      "date": "2026-03-11 19:00"
     }
   ]
 }

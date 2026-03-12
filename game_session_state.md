@@ -8504,3 +8504,83 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. 7 cards, 1 evil Pooka. Solver 1 scenario, instant solve. Pooka corrupted #4 Dreamer and #6 Poet. Drunk at #3 disguised as Lover.
 
+
+---
+
+# New Game — 2026-03-11 18:57:24
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Confessor, Medium, Witness, Poet, Scout
+- Outcasts: Bombardier, Doppelganger
+- Minions: Minion
+- Demons: Baa
+
+### [18:58:23] Revealed #1 Poet
+Info: {'evil_role': 'Baa', 'distance': 1, 'copied_role': 'Scout'}
+
+### [18:58:27] Revealed #2 Medium
+Info: {'good_position': 3, 'good_role': 'Medium'}
+
+### [18:58:30] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Medium'}
+
+### [18:58:34] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [18:58:39] Revealed #5 Bombardier
+Info: {}
+
+### [18:58:43] Revealed #6 Hunter
+Info: {'distance': 3}
+
+### [18:58:48] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [18:59:09] Revealed #8 Witness
+Info: {'affected_position': 0}
+
+#### [18:59:14] Solver Output
+Scenarios: 20/350
+Definite good: ['#1', '#4', '#7', '#8']
+Evil probabilities: #2=60%, #3=60%, #5=40%, #6=40%
+  Generated 350 candidate scenarios
+  20 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6]
+
+#### [18:59:14] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (40% good Medium, 30% evil Baa, 30% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [18:59:50] Executed #2 -> Minion (EVIL)
+
+#### [18:59:54] Solver Output
+Scenarios: 6/43
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+  Generated 43 candidate scenarios
+  6 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [18:59:54] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [19:00:26] Executed #3 -> Baa (EVIL)
+
+## [19:00:33] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. 8 cards, 2 evil. Both Mediums were evil (Minion+Baa disguised). Scout+Poet both reported Baa 1 from Minion. Execution lookahead guaranteed win on #2.
+
