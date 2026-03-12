@@ -1504,6 +1504,13 @@
       "name": "asc37_v4",
       "notes": "5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop.",
       "date": "2026-03-11 23:36"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc37_v5",
+      "notes": "Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong.",
+      "date": "2026-03-11 23:49"
     }
   ]
 }

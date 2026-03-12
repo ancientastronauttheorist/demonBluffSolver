@@ -10541,3 +10541,114 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 5
 Notes: 5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop.
 
+
+---
+
+# New Game — 2026-03-11 23:38:13
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Bishop, Architect, Baker, Knitter, Bard, Slayer
+- Outcasts: Bombardier, Drunk, Wretch
+- Minions: Shaman
+- Demons: Baa
+
+### [23:41:30] Revealed #2 Bishop
+Info: {'targets': [1, 4, 5], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [23:41:34] Revealed #3 Slayer
+Info: {}
+
+### [23:41:34] Revealed #4 Slayer
+Info: {}
+
+### [23:41:38] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [23:41:38] Revealed #6 Bombardier
+Info: {}
+
+### [23:41:42] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [23:41:42] Revealed #8 Architect
+Info: {'side': 'Equal'}
+
+#### [23:41:45] Solver Output
+Scenarios: 40/350
+Evil probabilities: #2=45%, #7=42%, #5=30%, #1=20%, #3=20%, #8=18%, #4=15%, #6=10%
+  Generated 350 candidate scenarios
+  40 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [23:41:45] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#2']
+Reason: Target #2 is 45% evil (adjusted 0.43)
+WARNING: Corruption risk: 5% -- Slayer ability disabled if corrupted
+
+### [23:43:24] Ability used at #3
+
+#### [23:43:28] Solver Output
+Scenarios: 7/43
+Definite evil: ['#2']
+Definite good: ['#3', '#4']
+Evil probabilities: #7=43%, #1=14%, #5=14%, #6=14%, #8=14%
+  Generated 43 candidate scenarios
+  7 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 5, 6, 7, 8]
+
+#### [23:43:28] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#7']
+Reason: Target #7 is 43% evil (adjusted 0.37)
+WARNING: Corruption risk: 14% -- Slayer ability disabled if corrupted
+
+### [23:44:20] Ability used at #4
+
+#### [23:44:24] Solver Output
+Scenarios: 5/43
+Definite evil: ['#2']
+Definite good: ['#3', '#4']
+Evil probabilities: #1=20%, #5=20%, #6=20%, #7=20%, #8=20%
+  Generated 43 candidate scenarios
+  5 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 5, 6, 7, 8]
+
+#### [23:44:24] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 20% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 20% confident (budget: 2 wrong execs)
+WARNING: Low confidence (20%) -- consider gathering more info
+
+### [23:47:24] Executed #1 -> GOOD (WRONG!)
+
+#### [23:47:43] Solver Output
+Scenarios: 4/37
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #5=25%, #6=25%, #7=25%, #8=25%
+  Generated 37 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [5, 6, 7, 8]
+
+#### [23:47:43] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 25% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 25% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #5 (25%) despite low confidence — Bombardier candidate(s) [6] risk instant game loss if executed first.
+
+### [23:49:09] Executed #5 -> GOOD (WRONG!)
+
+## [23:49:19] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong.
+
