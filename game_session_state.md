@@ -9886,3 +9886,66 @@ Reason: #6 is evil in ALL 4 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect. PD check + Judge ability. 3 corrupted (Judge, Drunk, Confessor). Minion disguised as Alchemist x3.
 
+
+---
+
+# New Game — 2026-03-11 22:38:51
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Poet, Scout, Slayer, Architect, Enlightened
+- Outcasts: Doppelganger, Bombardier
+- Minions: Shaman
+- Demons: Baa
+
+### [22:40:52] Revealed #1 Architect
+Info: {'side': 'Right'}
+
+### [22:40:53] Revealed #2 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [22:40:58] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Scout'}
+
+### [22:40:59] Revealed #4 Slayer
+Info: {}
+
+### [22:41:00] Revealed #5 Poet
+Info: {'targets': [3, 5], 'minion_role': 'Shaman', 'copied_role': 'Oracle'}
+
+### [22:41:01] Revealed #6 Enlightened
+Info: {'direction': 'CCW'}
+
+### [22:41:02] Revealed #7 Bombardier
+Info: {}
+
+### [22:41:02] Revealed #8 Poet
+Info: {'good_position': 5, 'copied_role': 'Gemcrafter'}
+
+#### [22:41:09] Solver Output
+Scenarios: 6/350
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+  Generated 350 candidate scenarios
+  6 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [22:41:09] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [22:41:54] Executed #2 -> Baa (EVIL)
+
+### [22:42:39] Executed #3 -> Shaman (EVIL)
+
+## [22:42:47] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Both evils identified from first solve (6 scenarios). Shaman duped Poet role. Baa added fake Outcast to deck.
+

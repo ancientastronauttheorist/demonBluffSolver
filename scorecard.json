@@ -1469,6 +1469,13 @@
       "name": "asc36_v6",
       "notes": "10HP perfect. PD check + Judge ability. 3 corrupted (Judge, Drunk, Confessor). Minion disguised as Alchemist x3.",
       "date": "2026-03-11 22:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v7",
+      "notes": "10HP perfect. Both evils identified from first solve (6 scenarios). Shaman duped Poet role. Baa added fake Outcast to deck.",
+      "date": "2026-03-11 22:42"
     }
   ]
 }
