@@ -8860,3 +8860,56 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: 5HP. 9 cards, 3 evil. Shaman dup Poet. Pooka corrupted #1,#3. PD#5 corrupted #6. PD abilities narrowed to 2 scenarios. Execution lookahead on #1 (50% wrong exec, still wins). Medium #6 lying (corrupted) said #2 real Knitter (lie).
 
+
+---
+
+# New Game — 2026-03-11 19:19:48
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Confessor, Empress, Poet, Hunter
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [19:21:51] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [19:21:57] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [19:22:04] Revealed #3 Bombardier
+Info: {}
+
+### [19:22:20] Revealed #4 Poet
+Info: {'targets': [3, 4, 6], 'types': ['Outcast', 'Demon', 'Villager'], 'copied_role': 'Bishop'}
+
+### [19:22:27] Revealed #5 Bishop
+Info: {'targets': [1, 2, 5], 'types': ['Outcast', 'Villager', 'Demon']}
+
+### [19:22:34] Revealed #6 Empress
+Info: {'targets': [2, 4, 5]}
+
+#### [19:22:41] Solver Output
+Scenarios: 1/6
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+
+#### [19:22:41] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [19:23:28] Executed #6 -> Pooka (EVIL)
+
+## [19:23:37] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. 6 cards, 1 evil Pooka. 1-scenario instant solve. Pooka corrupted #1 Hunter and #5 Bishop. Ascension 35 complete (7/7).
+
