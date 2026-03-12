@@ -3,6 +3,12 @@
   "n_evil": 2,
   "cards": [
     {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
       "position": 2,
       "apparent_role": "Bishop",
       "info_text": "",
@@ -64,19 +70,17 @@
   ],
   "executed": [
     2,
-    1,
-    5
+    6
   ],
   "confirmed_evil": [
-    2
+    2,
+    6
   ],
-  "confirmed_good": [
-    1,
-    5
-  ],
+  "confirmed_good": [],
   "pd_corruption_target": null,
   "executed_evil_roles": {
-    "2": "Baa"
+    "2": "Baa",
+    "6": "Shaman"
   },
   "slayer_results": [
     {
@@ -86,23 +90,22 @@
     },
     {
       "slayer_pos": 4,
-      "target_pos": 7,
-      "killed": false
+      "target_pos": 6,
+      "killed": true
     }
   ],
   "pd_ability_results": [],
-  "blocked_positions": [
-    1
-  ],
+  "blocked_positions": [],
   "night_kills": [],
   "night_kill_evil_count": 0,
-  "hp": 0,
+  "hp": 10,
   "wrong_exec_cost": 5,
   "board_villager_count": 5,
   "board_outcast_count": 1,
   "board_minion_count": null,
   "board_demon_count": null,
   "reveal_order": [
+    1,
     2,
     3,
     4,
@@ -143,5 +146,5 @@
     "2": "Baa",
     "6": "Shaman"
   },
-  "notes": "Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong."
+  "notes": "Corrected: #1 was unflipped (click failure, not Witch block). Added #1 as Bombardier. Slayer#4 targets #6 instead of #7. Both evils found via Slayer kills. Originally lost to 25% gamble."
 }

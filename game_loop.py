@@ -540,6 +540,20 @@ class GameSession:
         if missing:
             print(f"  WARNING: No card entry for positions {sorted(missing)}. "
                   f"Did you forget to enter info for flipped cards?")
+        # Validate: blocked positions without Witch in deck = likely click failure
+        if blocked:
+            has_witch = any(
+                _normalize_role_name(v) == "Witch"
+                for faction in [self.deck.get('villagers', []),
+                                self.deck.get('outcasts', []),
+                                self.deck.get('minions', []),
+                                self.deck.get('demons', [])]
+                for v in faction
+            ) if self.deck else False
+            if not has_witch:
+                print(f"  !! BLOCKED positions {sorted(blocked)} but NO WITCH in deck!")
+                print(f"  !! This is likely a click failure. Re-flip these cards!")
+                print(f"  !! Run: python game_loop.py flip")
         # Validate: check HP consistency — warn if wrong execs exist but HP unchanged
         wrong_execs = [p for p in self.executed if p not in self.confirmed_evil]
         if wrong_execs and self.hp == 10:
@@ -640,6 +654,51 @@ class GameSession:
         session = cls.from_game_state(state, used_abilities=data.get("used_abilities", []))
         print(f"[load] Session loaded from {path}")
         return session
+
+
+# ============================================================
+# Flip Verification
+# ============================================================
+
+def _verify_flips(mr_output: str, expected_positions: list[int], session):
+    """Check memory reader output to verify all targeted cards actually flipped.
+
+    Parses memory reader table for state=Hidden lines and cross-references
+    against positions we tried to flip. Flags unflipped cards loudly.
+    """
+    import re
+    still_hidden = []
+    for line in mr_output.splitlines():
+        # Memory reader format: "# 1  RoleName   ... Hidden   NO  BLOCKED"
+        m = re.match(r'^\s*#\s*(\d+)', line)
+        if not m:
+            continue
+        pos = int(m.group(1))
+        if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
+            still_hidden.append(pos)
+
+    if still_hidden:
+        print()
+        print("!" * 60)
+        print("  FLIP VERIFICATION FAILED")
+        print(f"  Positions still face-down: {still_hidden}")
+        print(f"  Click likely didn't register (game unfocused?).")
+        # Check if Witch is in the deck -- if not, this is definitely a click failure
+        has_witch = any(
+            _normalize_role_name(v) == "Witch"
+            for faction in [session.deck.get('villagers', []),
+                            session.deck.get('outcasts', []),
+                            session.deck.get('minions', []),
+                            session.deck.get('demons', [])]
+            for v in faction
+        ) if hasattr(session, 'deck') and session.deck else False
+        if not has_witch:
+            print("  No Witch in deck -- this is NOT a Witch block.")
+            print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
+        else:
+            print("  Witch IS in deck -- could be Witch blocking last card.")
+            print("  If only last card is hidden, likely Witch. Otherwise re-flip.")
+        print("!" * 60)
 
 
 # ============================================================
@@ -1113,6 +1172,8 @@ def main():
         mr = subprocess.run(["python", "memory_reader.py"], capture_output=True, text=True)
         if mr.returncode == 0:
             print(mr.stdout.strip())
+            # Verify all targeted positions actually flipped
+            _verify_flips(mr.stdout, positions, session)
         else:
             print(f"  WARNING: memory_reader failed: {mr.stderr[:200]}")
         print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
@@ -1225,10 +1286,34 @@ def main():
     if cmd == "block":
         session = GameSession.load()
         pos = int(sys.argv[2])
+        # Warn if no Witch in deck -- likely a click failure, not a real block
+        has_witch = any(
+            _normalize_role_name(v) == "Witch"
+            for faction in [session.deck.get('villagers', []),
+                            session.deck.get('outcasts', []),
+                            session.deck.get('minions', []),
+                            session.deck.get('demons', [])]
+            for v in faction
+        ) if session.deck else False
+        if not has_witch:
+            print(f"  !! WARNING: No Witch in deck! Only Witch can block cards.")
+            print(f"  !! This is likely a click failure. Try re-flipping instead:")
+            print(f"  !! Run: python game_loop.py flip {pos}")
+            print(f"  !! If you still want to mark as blocked, run: block_force {pos}")
+            return
         if pos not in session.blocked_positions:
             session.blocked_positions.append(pos)
         session.save()
         print(f"#{pos} blocked (Witch)")
+        return
+
+    if cmd == "block_force":
+        session = GameSession.load()
+        pos = int(sys.argv[2])
+        if pos not in session.blocked_positions:
+            session.blocked_positions.append(pos)
+        session.save()
+        print(f"#{pos} force-blocked (override -- no Witch check)")
         return
 
     if cmd == "unblock":

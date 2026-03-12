@@ -43,7 +43,8 @@
    - **Why order matters**: (a) Witch blocks the LAST card attempted -- consistent order makes blocked card predictable (#N). (b) `reveal_order` must match flip order for Baker. (c) Card info must be entered in same order.
    - **After Witch death**: `flip <blocked_pos>` -- only flips that one card.
    - **Night-killed cards (Lilis)**: Show skull overlay, skip them.
-7. Screenshot and verify memory_reader output (auto-printed by `flip`). **HONOR RULE: memory reader shows true evil roles -- DO NOT use for solving. Validation only.**
+7. **Verify ALL cards flipped** -- `flip` auto-runs memory_reader and checks for unflipped cards. **If flip verification fails (positions still Hidden), DO NOT proceed.** Re-run `python game_loop.py flip` to retry. Card #1 is especially prone to click-not-registering (game unfocused). **NEVER mark a position as blocked without Witch in the deck** -- `block` command now rejects this and suggests re-flipping instead. Lost asc37_v5 (40% win instead of 71%) because unflipped #1 was wrongly treated as blocked.
+   - Screenshot and verify memory_reader output. **HONOR RULE: memory reader shows true evil roles -- DO NOT use for solving. Validation only.**
 8. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
    - **Poet "#X is Evil" format**: Use `card poet <pos> bounty_hunter <target>` (NOT medium). The bounty_hunter pseudo-role handles direct evil-call. Lost asc37_v3 wrong exec from using wrong format.
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
