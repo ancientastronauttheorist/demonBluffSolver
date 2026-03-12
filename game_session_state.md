@@ -9750,3 +9750,139 @@ Reason: #8 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. All 8 flipped. Jester lie (3 evils among 3 targets) was key constraint. Druid found Drunk. Exec lookahead guaranteed win at 4 scenarios.
 
+
+---
+
+# New Game — 2026-03-11 22:22:41
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Alchemist, Confessor, Architect, Bard, Judge
+- Outcasts: Drunk
+- Minions: Plague_Doctor, Chancellor, Minion
+- Demons: Pooka
+
+### [22:26:00] Revealed #1 Bard
+Info: {'corruption_distance': 2}
+
+### [22:26:01] Revealed #2 Plague_Doctor
+Info: {}
+
+### [22:26:46] Revealed #3 Judge
+Info: {}
+
+### [22:26:47] Revealed #4 Empress
+Info: {'targets': [2, 3, 9]}
+
+### [22:26:48] Revealed #5 Alchemist
+Info: {'cured_count': 1}
+
+### [22:26:49] Revealed #6 Alchemist
+Info: {'cured_count': 1}
+
+### [22:26:49] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [22:26:50] Revealed #8 Alchemist
+Info: {'cured_count': 2}
+
+### [22:26:50] Revealed #9 Architect
+Info: {'side': 'Left'}
+
+#### [22:27:01] Solver Output
+Scenarios: 308/13884
+Definite good: ['#9']
+Evil probabilities: #7=67%, #6=53%, #5=49%, #8=37%, #2=34%, #4=32%, #3=21%, #1=5%
+  Generated 13884 candidate scenarios
+  308 scenarios survived validation
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:27:01] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.394 (adjusted 2.394) | timing x1.00
+
+### [22:28:48] Ability used at #2
+
+#### [22:28:52] Solver Output
+Scenarios: 148/13884
+Definite good: ['#9']
+Evil probabilities: #7=58%, #8=53%, #6=51%, #2=47%, #5=46%, #4=28%, #1=11%, #3=5%
+  Generated 13884 candidate scenarios
+  148 scenarios survived validation
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:28:52] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#1']
+Reason: Expected posterior 95.0 scenarios (adjusted 108.5, info gain 0.448 bits) | timing x1.00
+WARNING: Corruption risk: 28% -- corrupted Judge results are unreliable
+
+### [22:29:45] Revealed #3 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [22:29:45] Ability used at #3
+
+#### [22:29:51] Solver Output
+Scenarios: 96/13884
+Definite good: ['#3', '#9']
+Evil probabilities: #8=73%, #7=52%, #6=46%, #4=44%, #5=42%, #2=27%, #1=17%
+  Generated 13884 candidate scenarios
+  96 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 8]
+
+#### [22:29:51] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (29% evil Chancellor, 22% evil Minion, 22% evil Plague_Doctor).
+WARNING: Execution lookahead override -- immediate hit chance is 73%, but all reveal branches still lead to a forced win.
+
+### [22:30:32] Executed #8 -> Minion (EVIL)
+
+#### [22:30:36] Solver Output
+Scenarios: 21/1098
+Definite evil: ['#8']
+Definite good: ['#2', '#3', '#9']
+Evil probabilities: #4=62%, #6=52%, #7=38%, #5=29%, #1=19%
+  Generated 1098 candidate scenarios
+  21 scenarios survived validation
+    #8 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [22:30:36] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (33% evil Pooka, 29% good Empress (corrupted), 19% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [22:31:16] Executed #4 -> Chancellor (EVIL)
+
+#### [22:31:20] Solver Output
+Scenarios: 4/124
+Definite evil: ['#4', '#6', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#9']
+  Generated 124 candidate scenarios
+  4 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #6 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #8 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [22:31:20] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [22:32:07] Executed #6 -> Pooka (EVIL)
+
+## [22:32:14] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD check + Judge ability. 3 corrupted (Judge, Drunk, Confessor). Minion disguised as Alchemist x3.
+

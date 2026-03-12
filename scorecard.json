@@ -1462,6 +1462,13 @@
       "name": "asc36_v5",
       "notes": "Perfect 10HP. All 8 flipped. Jester lie (3 evils among 3 targets) was key constraint. Druid found Drunk. Exec lookahead guaranteed win at 4 scenarios.",
       "date": "2026-03-11 22:18"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v6",
+      "notes": "10HP perfect. PD check + Judge ability. 3 corrupted (Judge, Drunk, Confessor). Minion disguised as Alchemist x3.",
+      "date": "2026-03-11 22:32"
     }
   ]
 }

@@ -29,7 +29,7 @@
 1. **`python game_loop.py start`** -- automates: Play Demo -> Standard -> dismiss intro -> park mouse -> screenshot deck -> run card_vision + memory_reader with cross-check. Or use `read_deck <screenshot>` to just re-read an existing screenshot.
 2. Verify the deck output, read board counts (V, O, M, D icons top-right) from screenshot.
 3. `python game_loop.py new <n_cards> <n_evil>`
-4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` -- prefixes REQUIRED (command errors on missing prefix instead of silently ignoring).
+4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` -- prefixes REQUIRED (command errors on missing prefix instead of silently ignoring). **CRITICAL: Plague Doctor = OUTCAST (Good), NOT a Minion! Enter as O=...,Plague_Doctor. Lost asc36_v6 replay test to this. Check knowledge_base.py when unsure about a role's faction.**
 5. Close deck: `safe_click icon_deck_purple` (at ~(2485, 100)). **NEVER click near the top-center area (e.g., ~(1230, 62)) thinking it's the deck icon — that hits card #7 in a 7-card game.**
 
 ### Reveal & Enter
