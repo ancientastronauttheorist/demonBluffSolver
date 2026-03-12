@@ -657,12 +657,16 @@ def _compute_corruption(placement: dict[int, str], state: GameState,
 def _apply_post_corruption(corrupted: set[int], placement: dict[int, str],
                            state: GameState,
                            puppet_pos: Optional[int] = None,
-                           drunk_pos: Optional[int] = None
+                           drunk_pos: Optional[int] = None,
+                           extra_alch_positions: Optional[list[int]] = None
                            ) -> tuple[set[int], dict[int, int]]:
     """Apply setup-order post-processing: Puppet cure + Alchemist cures.
 
     Returns (final_corrupted, alchemist_cures) where alchemist_cures maps
     Alchemist position -> number of positions cured (for validator use).
+
+    extra_alch_positions: additional positions to treat as Alchemists
+    (e.g., night-killed positions that could be Alchemist).
     """
     result = set(corrupted)
 
@@ -677,6 +681,9 @@ def _apply_post_corruption(corrupted: set[int], placement: dict[int, str],
     for card in state.cards:
         if card.apparent_role == "Alchemist":
             alchemist_positions.append(card.position)
+    # Include extra positions (night-killed potential Alchemists)
+    if extra_alch_positions:
+        alchemist_positions.extend(extra_alch_positions)
 
     # Reverse seat order (higher seat acts first)
     alchemist_positions.sort(reverse=True)
@@ -2081,31 +2088,58 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                             if candidates:
                                 pois_targets = candidates
 
+                        # Determine night-killed good positions that could be
+                        # Alchemists (unrevealed, good in this scenario, Alchemist
+                        # in deck).  We must branch: each such position may or may
+                        # not be the Alchemist, producing different cure outcomes.
+                        nk_alch_candidates = []
+                        if state.night_kills and "Alchemist" in state.deck.villagers:
+                            revealed_positions = {c.position for c in state.cards}
+                            known_alch_count = sum(
+                                1 for c in state.cards
+                                if c.apparent_role == "Alchemist"
+                                and c.position not in full_evil)
+                            # How many Alchemists could still be unaccounted for
+                            deck_alch_count = state.deck.villagers.count("Alchemist")
+                            if known_alch_count < deck_alch_count:
+                                for nk in state.night_kills:
+                                    if nk not in full_evil and nk not in revealed_positions:
+                                        nk_alch_candidates.append(nk)
+
+                        # Generate subsets: empty (no night-killed Alchemist) + each
+                        # individual candidate.  Full powerset is overkill — at most
+                        # 1 extra Alchemist matters in practice.
+                        nk_alch_variants: list[list[int]] = [[]]
+                        for nk_pos in nk_alch_candidates:
+                            nk_alch_variants.append([nk_pos])
+
                         for pois_t in pois_targets:
                             raw_corrupted = _compute_corruption(
                                 full_evil, state, pd_t, dopp_pos, pois_t,
                                 drunk_pos)
-                            # Apply setup-order post-processing:
-                            # Puppet cure + Alchemist cures
-                            final_corrupted, alch_cures = _apply_post_corruption(
-                                raw_corrupted, full_evil, state,
-                                puppet_pos, drunk_pos)
-                            # Deduplicate scenarios with same corruption+dopp+drunk+chancellor combo
-                            key = (frozenset(final_corrupted), dopp_pos, drunk_pos, chan_conv)
-                            if key in seen:
-                                continue
-                            seen.add(key)
-                            scenario = Scenario(
-                                evil_positions=dict(full_evil),
-                                puppet_position=puppet_pos,
-                                corrupted=final_corrupted,
-                                pd_corrupted=pd_t,
-                                doppelganger_position=dopp_pos,
-                                drunk_position=drunk_pos,
-                                alchemist_cures=alch_cures,
-                                chancellor_conversion=chan_conv,
-                            )
-                            scenarios.append(scenario)
+                            for nk_alch in nk_alch_variants:
+                                # Apply setup-order post-processing:
+                                # Puppet cure + Alchemist cures
+                                final_corrupted, alch_cures = _apply_post_corruption(
+                                    raw_corrupted, full_evil, state,
+                                    puppet_pos, drunk_pos,
+                                    extra_alch_positions=nk_alch if nk_alch else None)
+                                # Deduplicate scenarios with same corruption+dopp+drunk+chancellor combo
+                                key = (frozenset(final_corrupted), dopp_pos, drunk_pos, chan_conv)
+                                if key in seen:
+                                    continue
+                                seen.add(key)
+                                scenario = Scenario(
+                                    evil_positions=dict(full_evil),
+                                    puppet_position=puppet_pos,
+                                    corrupted=final_corrupted,
+                                    pd_corrupted=pd_t,
+                                    doppelganger_position=dopp_pos,
+                                    drunk_position=drunk_pos,
+                                    alchemist_cures=alch_cures,
+                                    chancellor_conversion=chan_conv,
+                                )
+                                scenarios.append(scenario)
 
     return scenarios
 

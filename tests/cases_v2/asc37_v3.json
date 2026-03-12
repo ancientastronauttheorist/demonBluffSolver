@@ -1,0 +1,143 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "ccw"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 3
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "copied_role": "Bounty Hunter",
+        "evil_position": 4
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    1,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    1,
+    6
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Twin_Minion",
+    "6": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Alchemist",
+      "Poet",
+      "Lover",
+      "Empress",
+      "Enlightened",
+      "Scout",
+      "Bard"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    8
+  ],
+  "name": "asc37_v3",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "6": "Lilis"
+  },
+  "notes": "3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format."
+}

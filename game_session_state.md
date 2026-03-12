@@ -10194,3 +10194,161 @@ Reason: Target #7 is 50% evil (adjusted 0.50)
 Final HP: 10
 Notes: 10HP perfect. Puppet_pos bug fix (executed Puppet not in scenario.puppet_position). FT+Slayer combo. Corrupted: #6 FT.
 
+
+---
+
+# New Game — 2026-03-11 23:09:11
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Poet, Lover, Empress, Enlightened, Scout, Bard
+- Outcasts: Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [23:11:16] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [23:11:20] Revealed #2 Enlightened
+Info: {'direction': 'ccw'}
+
+### [23:11:24] Revealed #3 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [23:11:29] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [23:12:44] Revealed #6 Poet
+Info: {'good_position': 4, 'good_role': 'evil', 'copied_role': 'Medium'}
+
+### [23:12:55] Revealed #7 Empress
+Info: {'targets': [3, 5, 6]}
+
+### [23:13:00] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [23:13:03] Solver Output
+Scenarios: 0/224
+  Generated 224 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #6 Poet: rejected 204/224 (91%)
+    #1 Lover: rejected 130/224 (58%)
+    #4 Bard: rejected 122/224 (54%)
+    #2 Enlightened: rejected 116/224 (52%)
+    #3 Scout: rejected 112/224 (50%)
+    #7 Empress: rejected 102/224 (46%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Lover: still 0
+    WITHOUT #2 Enlightened: still 0
+    WITHOUT #3 Scout: still 0
+    WITHOUT #4 Bard: still 0
+    WITHOUT #6 Poet: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Empress: 2 scenarios survive  <-- SUSPECT
+
+#### [23:13:03] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [23:14:30] Revealed #6 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 4}
+
+#### [23:14:33] Solver Output
+Scenarios: 4/224
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#7', '#8']
+Evil probabilities: #4=50%, #6=50%
+  Generated 224 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis', 'Twin_Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [23:14:33] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [23:15:08] Executed #1 -> Twin_Minion (EVIL)
+
+#### [23:15:12] Solver Output
+Scenarios: 2/31
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#7', '#8']
+Evil probabilities: #4=50%, #6=50%
+  Generated 31 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [23:15:12] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [23:16:04] Ability used at #8
+
+#### [23:16:09] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #4 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [23:16:09] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [23:16:55] Executed #4 -> GOOD (WRONG!)
+
+#### [23:17:04] Solver Output
+Scenarios: 0/26
+  Generated 26 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Bard: rejected 20/26 (77%)
+    #6 Poet: rejected 17/26 (65%)
+    #3 Scout: rejected 14/26 (54%)
+    #2 Enlightened: rejected 12/26 (46%)
+    #7 Empress: rejected 8/26 (31%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Lover: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #2 Enlightened: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Scout: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #4 Bard: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Poet: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Empress: 1 scenarios survive  <-- SUSPECT
+
+#### [23:17:04] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [23:18:19] Executed #6 -> Lilis (EVIL)
+
+## [23:18:27] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format.
+

@@ -1490,6 +1490,13 @@
       "name": "asc37_v2",
       "notes": "10HP perfect. Puppet_pos bug fix (executed Puppet not in scenario.puppet_position). FT+Slayer combo. Corrupted: #6 FT.",
       "date": "2026-03-11 23:07"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc37_v3",
+      "notes": "3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format.",
+      "date": "2026-03-11 23:18"
     }
   ]
 }
