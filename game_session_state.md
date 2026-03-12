@@ -9526,3 +9526,227 @@ WARNING: Execution lookahead override -- immediate hit chance is 60%, but all re
 Final HP: 10
 Notes: Perfect 10HP. Fingerprint entropy guided selective reveals. PD check + 2 Bishops + Alchemist + Gemcrafter + FT. Exec lookahead found guaranteed win line at 8 scenarios.
 
+
+---
+
+# New Game — 2026-03-11 22:03:49
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Bishop, Scout, Jester, Dreamer, Empress, Gemcrafter
+- Outcasts: Drunk, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+#### [22:04:08] Solver Output
+Scenarios: 336/336
+Evil probabilities: #1=25%, #2=25%, #3=25%, #4=25%, #5=25%, #6=25%, #7=25%, #8=25%
+  Generated 336 candidate scenarios
+  336 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:04:08] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 25% evil, 6.942 bits (132 outcomes)
+
+### [22:04:51] Revealed #8 Gemcrafter
+Info: {'good_position': 4}
+
+#### [22:04:57] Solver Output
+Scenarios: 134/336
+Evil probabilities: #2=31%, #3=31%, #5=31%, #6=31%, #4=25%, #1=20%, #7=20%, #8=9%
+  Generated 336 candidate scenarios
+  134 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:04:57] Recommendation
+Action: **REVEAL** #3
+Reason: #3: 31% evil, 6.065 bits (75 outcomes)
+
+### [22:05:33] Revealed #3 Dreamer
+Info: {}
+
+#### [22:05:45] Solver Output
+Scenarios: 134/336
+Evil probabilities: #2=31%, #3=31%, #5=31%, #6=31%, #4=25%, #1=20%, #7=20%, #8=9%
+  Generated 336 candidate scenarios
+  134 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:05:45] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 31% evil, 6.018 bits (74 outcomes)
+
+### [22:06:23] Revealed #5 Bishop
+Info: {'targets': [2, 3, 4], 'types': ['Outcast', 'Minion', 'Villager']}
+
+#### [22:06:29] Solver Output
+Scenarios: 144/366
+Evil probabilities: #4=34%, #5=29%, #6=29%, #3=28%, #2=25%, #1=22%, #7=22%, #8=12%
+  Generated 366 candidate scenarios
+  144 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:06:29] Recommendation
+Action: **REVEAL** #4
+Reason: #4: 34% evil, 5.636 bits (55 outcomes)
+
+### [22:07:03] Revealed #4 Jester
+Info: {}
+
+#### [22:07:09] Solver Output
+Scenarios: 118/366
+Evil probabilities: #4=42%, #5=32%, #6=29%, #3=26%, #1=23%, #7=23%, #8=14%, #2=11%
+  Generated 366 candidate scenarios
+  118 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:07:09] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.186 (adjusted 1.899) | timing x0.75
+WARNING: Corruption risk: 26%
+
+### [22:08:18] Revealed #3 Dreamer
+Info: {'target': 5, 'evil_role': 'Chancellor'}
+
+### [22:08:25] Ability used at #3
+
+#### [22:08:32] Solver Output
+Scenarios: 92/366
+Evil probabilities: #4=51%, #6=32%, #3=28%, #1=25%, #7=25%, #8=18%, #5=13%, #2=8%
+  Generated 366 candidate scenarios
+  92 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:08:32] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 25% evil, 4.956 bits (41 outcomes)
+
+### [22:09:51] Revealed #1 Empress
+Info: {'targets': [2, 5, 7]}
+
+#### [22:09:57] Solver Output
+Scenarios: 67/396
+Evil probabilities: #4=54%, #1=31%, #6=27%, #7=27%, #3=21%, #8=18%, #5=12%, #2=10%
+  Generated 396 candidate scenarios
+  67 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:09:57] Recommendation
+Action: **REVEAL** #6
+Reason: #6: 27% evil, 4.566 bits (28 outcomes)
+
+### [22:10:34] Revealed #6 Bombardier
+Info: {}
+
+#### [22:10:45] Solver Output
+Scenarios: 58/346
+Evil probabilities: #4=52%, #1=31%, #6=31%, #7=26%, #3=19%, #8=17%, #2=12%, #5=12%
+  Generated 346 candidate scenarios
+  58 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:10:45] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 12% evil, 4.418 bits (28 outcomes)
+
+### [22:11:19] Revealed #2 Druid
+Info: {}
+
+#### [22:11:26] Solver Output
+Scenarios: 51/398
+Evil probabilities: #4=45%, #6=41%, #1=39%, #7=24%, #2=14%, #8=14%, #3=12%, #5=12%
+  Generated 398 candidate scenarios
+  51 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [22:11:26] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#6']
+Reason: Entropy 1.942 (adjusted 1.637) | timing x1.00
+WARNING: Corruption risk: 31%
+
+### [22:12:59] Revealed #2 Druid
+Info: {'targets': [1, 3, 6], 'found_outcast': 'Drunk'}
+
+### [22:13:06] Ability used at #2
+
+#### [22:13:14] Solver Output
+Scenarios: 17/398
+Definite good: ['#3']
+Evil probabilities: #6=65%, #4=35%, #1=24%, #7=24%, #8=24%, #2=18%, #5=12%
+  Generated 398 candidate scenarios
+  17 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 8]
+
+#### [22:13:14] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#2', '#8']
+Reason: Expected posterior 8.3 scenarios (adjusted 8.8, info gain 0.957 bits) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [22:14:29] Revealed #4 Jester
+Info: {'targets': [1, 2, 8], 'evil_count': 3}
+
+### [22:14:37] Ability used at #4
+
+#### [22:14:45] Solver Output
+Scenarios: 8/398
+Definite good: ['#1', '#3']
+Evil probabilities: #4=75%, #8=50%, #6=25%, #7=25%, #2=12%, #5=12%
+  Generated 398 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 6, 7, 8]
+
+#### [22:14:45] Recommendation
+Action: **REVEAL** #7
+Reason: #7: 25% evil, 2.156 bits (5 outcomes)
+
+### [22:15:38] Revealed #7 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+#### [22:15:46] Solver Output
+Scenarios: 4/454
+Definite good: ['#1', '#3', '#5', '#7']
+Evil probabilities: #4=75%, #8=75%, #2=25%, #6=25%
+  Generated 454 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 4, 6, 8]
+
+#### [22:15:46] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (75% evil Chancellor, 25% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [22:16:55] Executed #4 -> Chancellor (EVIL)
+
+#### [22:17:03] Solver Output
+Scenarios: 3/62
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+  Generated 62 candidate scenarios
+  3 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #8 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [22:17:03] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [22:18:06] Executed #8 -> Pooka (EVIL)
+
+## [22:18:16] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. All 8 flipped. Jester lie (3 evils among 3 targets) was key constraint. Druid found Drunk. Exec lookahead guaranteed win at 4 scenarios.
+
