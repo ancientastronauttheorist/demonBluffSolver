@@ -1483,6 +1483,13 @@
       "name": "asc37_v1",
       "notes": "8HP win. Lilis night-killed #6 Empress. Puppeteer created Puppet from Scout at #7. 2 scenarios after all reveals, 1 after first exec.",
       "date": "2026-03-11 22:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc37_v2",
+      "notes": "10HP perfect. Puppet_pos bug fix (executed Puppet not in scenario.puppet_position). FT+Slayer combo. Corrupted: #6 FT.",
+      "date": "2026-03-11 23:07"
     }
   ]
 }

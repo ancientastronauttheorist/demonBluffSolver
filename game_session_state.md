@@ -10042,3 +10042,155 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 8
 Notes: 8HP win. Lilis night-killed #6 Empress. Puppeteer created Puppet from Scout at #7. 2 scenarios after all reveals, 1 after first exec.
 
+
+---
+
+# New Game — 2026-03-11 22:56:56
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Fortune_Teller, Slayer, Witness, Lover
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+### [22:58:36] Revealed #1 Slayer
+Info: {}
+
+### [22:58:38] Revealed #2 Plague_Doctor
+Info: {}
+
+### [22:58:39] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [22:58:40] Revealed #4 Witness
+Info: {'affected_position': 4}
+
+### [22:58:41] Revealed #5 Scout
+Info: {'evil_role': 'Puppet', 'distance': 1}
+
+### [22:58:42] Revealed #6 Fortune_Teller
+Info: {}
+
+### [22:58:43] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+#### [22:58:50] Solver Output
+Scenarios: 11/140
+Definite good: ['#2']
+Evil probabilities: #3=73%, #4=73%, #7=64%, #6=36%, #1=27%, #5=27%
+  Generated 140 candidate scenarios
+  11 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 3, 4, 5, 6, 7]
+
+#### [22:58:50] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.278 (adjusted 1.278) | timing x1.00
+
+### [23:01:47] Ability used at #2
+
+#### [23:01:49] Solver Output
+Scenarios: 8/140
+Definite evil: ['#3']
+Definite good: ['#2']
+Evil probabilities: #4=62%, #7=50%, #6=38%, #1=25%, #5=25%
+  Generated 140 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Baa'})
+    #2 is DEFINITELY GOOD
+    Uncertain: [1, 4, 5, 6, 7]
+
+#### [23:01:49] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 8 scenarios (roles: {'Puppeteer', 'Baa'})
+
+### [23:02:17] Executed #3 -> Puppeteer (EVIL)
+
+#### [23:02:20] Solver Output
+Scenarios: 4/18
+Definite evil: ['#3', '#4']
+Definite good: ['#2', '#5']
+Evil probabilities: #7=50%, #1=25%, #6=25%
+  Generated 18 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 6, 7]
+
+#### [23:02:20] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [23:02:53] Executed #4 -> Puppet (EVIL)
+
+#### [23:02:56] Solver Output
+Scenarios: 0/13
+  Generated 13 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #4 Witness: rejected 13/13 (100%)
+    #5 Scout: rejected 6/13 (46%)
+    #7 Lover: rejected 5/13 (38%)
+    #3 Lover: rejected 1/13 (8%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #3 Lover: still 0
+    WITHOUT #4 Witness: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Scout: still 0
+    WITHOUT #7 Lover: still 0
+
+#### [23:02:56] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [23:05:46] Solver Output
+Scenarios: 4/13
+Definite evil: ['#3', '#4']
+Definite good: ['#2', '#5']
+Evil probabilities: #7=50%, #1=25%, #6=25%
+  Generated 13 candidate scenarios
+  4 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 6, 7]
+
+#### [23:05:46] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 0.750) | follow-up bonus 0.562 | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [23:06:36] Revealed #6 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': False}
+
+### [23:06:40] Ability used at #6
+
+#### [23:06:43] Solver Output
+Scenarios: 2/13
+Definite evil: ['#3', '#4']
+Definite good: ['#2', '#5', '#6']
+Evil probabilities: #1=50%, #7=50%
+  Generated 13 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [23:06:43] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#7']
+Reason: Target #7 is 50% evil (adjusted 0.50)
+
+## [23:07:28] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Puppet_pos bug fix (executed Puppet not in scenario.puppet_position). FT+Slayer combo. Corrupted: #6 FT.
+

@@ -1459,6 +1459,10 @@ def _validate_witness(card: CardInfo, scenario: Scenario,
     affected_set = evil_corrupted
     if scenario.puppet_position is not None:
         affected_set.add(scenario.puppet_position)
+    # Also include already-executed Puppet (puppet_position only covers unexecuted)
+    for ex_pos, ex_role in state.executed_evil_roles.items():
+        if ex_role == "Puppet":
+            affected_set.add(ex_pos)
     affected_set.update(state.night_kills)
 
     # claimed_pos == 0 means "NO character was affected by Evil"
@@ -1925,6 +1929,12 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
             if role == "Puppet":
                 puppet_pos = pos
                 break
+        # Also check already-executed positions for Puppet
+        if puppet_pos is None:
+            for ex_pos, ex_role in state.executed_evil_roles.items():
+                if ex_role == "Puppet":
+                    puppet_pos = ex_pos
+                    break
 
         # Build full evil set including executed evils (needed for corruption
         # computation, validator evil counting, and target enumeration)
