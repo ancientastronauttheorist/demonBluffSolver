@@ -10352,3 +10352,192 @@ Reason: No surviving scenarios -- check input data
 Final HP: 3
 Notes: 3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format.
 
+
+---
+
+# New Game — 2026-03-11 23:24:01
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Gemcrafter, Slayer, Judge, Dreamer, Confessor, Knitter
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Poisoner, Witch
+- Demons: Baa
+
+### [23:26:00] Revealed #1 blocked
+Info: {}
+
+### [23:26:11] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [23:26:17] Revealed #3 Knitter
+Info: {'evil_pairs': 2}
+
+### [23:26:23] Revealed #4 Judge
+Info: {}
+
+### [23:26:28] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [23:26:33] Revealed #6 Gemcrafter
+Info: {'good_position': 8}
+
+### [23:26:39] Revealed #7 Dreamer
+Info: {}
+
+### [23:26:44] Revealed #8 Bishop
+Info: {'targets': [5, 6, 8], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [23:26:49] Revealed #9 Slayer
+Info: {}
+
+#### [23:26:54] Solver Output
+Scenarios: 96/4542
+Evil probabilities: #3=68%, #2=57%, #7=35%, #9=33%, #8=31%, #1=24%, #5=23%, #4=18%, #6=10%
+  Generated 4542 candidate scenarios
+  96 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [23:26:54] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.919 (adjusted 2.888) | timing x1.00
+WARNING: Corruption risk: 2%
+
+### [23:27:46] Revealed #7 Dreamer
+Info: {'target': 3, 'evil_role': 'Witch'}
+
+### [23:27:52] Ability used at #7
+
+#### [23:28:00] Solver Output
+Scenarios: 59/4542
+Evil probabilities: #2=71%, #3=47%, #7=44%, #8=34%, #1=25%, #5=25%, #9=25%, #4=15%, #6=12%
+  Generated 4542 candidate scenarios
+  59 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [23:28:00] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#7']
+Reason: Expected posterior 31.5 scenarios (adjusted 32.6, info gain 0.857 bits) | timing x1.00
+WARNING: Corruption risk: 7% -- corrupted Judge results are unreliable
+
+### [23:28:53] Revealed #4 Judge
+Info: {'target': 7, 'is_lying': False}
+
+### [23:28:59] Ability used at #4
+
+#### [23:29:06] Solver Output
+Scenarios: 32/4542
+Evil probabilities: #2=72%, #3=53%, #8=41%, #9=41%, #5=31%, #1=19%, #7=19%, #6=16%, #4=9%
+  Generated 4542 candidate scenarios
+  32 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [23:29:06] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#2']
+Reason: Target #2 is 72% evil (adjusted 0.72)
+
+### [23:30:05] Ability used at #9
+
+#### [23:30:11] Solver Output
+Scenarios: 19/4542
+Evil probabilities: #3=68%, #9=68%, #2=53%, #5=32%, #1=26%, #4=16%, #7=16%, #8=16%, #6=5%
+  Generated 4542 candidate scenarios
+  19 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [23:30:11] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 68% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 68% confident (budget: 2 wrong execs)
+
+### [23:30:55] Executed #3 -> Witch (EVIL)
+
+### [23:32:05] Revealed #1 Slayer
+Info: {}
+
+#### [23:32:12] Solver Output
+Scenarios: 11/602
+Definite evil: ['#3']
+Definite good: ['#4', '#7']
+Evil probabilities: #9=73%, #2=45%, #1=27%, #5=27%, #8=18%, #6=9%
+  Generated 602 candidate scenarios
+  11 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 8, 9]
+
+#### [23:32:12] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#9']
+Reason: Target #9 is 73% evil (adjusted 0.53)
+WARNING: Corruption risk: 27% -- Slayer ability disabled if corrupted
+
+### [23:33:13] Ability used at #1
+
+#### [23:33:20] Solver Output
+Scenarios: 8/602
+Definite evil: ['#3']
+Definite good: ['#4', '#7']
+Evil probabilities: #9=62%, #1=38%, #2=38%, #5=25%, #8=25%, #6=12%
+  Generated 602 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 8, 9]
+
+#### [23:33:20] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 25% evil Baa, 25% good Bishop (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 25%, but all reveal branches still lead to a forced win.
+
+### [23:34:11] Executed #8 -> GOOD (WRONG!)
+
+#### [23:34:25] Solver Output
+Scenarios: 6/448
+Definite evil: ['#3']
+Definite good: ['#4', '#6', '#7', '#8']
+Evil probabilities: #9=83%, #1=50%, #2=50%, #5=17%
+  Generated 448 candidate scenarios
+  6 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 9]
+
+#### [23:34:25] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 83% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 83% confident (budget: 1 wrong execs)
+
+### [23:35:05] Executed #9 -> Poisoner (EVIL)
+
+#### [23:35:12] Solver Output
+Scenarios: 3/77
+Definite evil: ['#3', '#9']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=67%, #1=33%
+  Generated 77 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #9 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2]
+
+#### [23:35:12] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (67% evil Baa, 33% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [23:35:56] Executed #2 -> Baa (EVIL)
+
+## [23:36:05] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop.
+

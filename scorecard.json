@@ -1497,6 +1497,13 @@
       "name": "asc37_v3",
       "notes": "3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format.",
       "date": "2026-03-11 23:18"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc37_v4",
+      "notes": "5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop.",
+      "date": "2026-03-11 23:36"
     }
   ]
 }

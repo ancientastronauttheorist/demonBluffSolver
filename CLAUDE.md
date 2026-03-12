@@ -45,6 +45,7 @@
    - **Night-killed cards (Lilis)**: Show skull overlay, skip them.
 7. Screenshot and verify memory_reader output (auto-printed by `flip`). **HONOR RULE: memory reader shows true evil roles -- DO NOT use for solving. Validation only.**
 8. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
+   - **Poet "#X is Evil" format**: Use `card poet <pos> bounty_hunter <target>` (NOT medium). The bounty_hunter pseudo-role handles direct evil-call. Lost asc37_v3 wrong exec from using wrong format.
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
 
 ### Solve & Act

@@ -1,0 +1,176 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 7,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "evil_role": "Witch"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          8
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    8,
+    9,
+    2
+  ],
+  "confirmed_evil": [
+    3,
+    9,
+    2
+  ],
+  "confirmed_good": [
+    8
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Witch",
+    "9": "Poisoner",
+    "2": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 9,
+      "target_pos": 2,
+      "killed": false
+    },
+    {
+      "slayer_pos": 1,
+      "target_pos": 9,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "8": true
+  },
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Gemcrafter",
+      "Slayer",
+      "Judge",
+      "Dreamer",
+      "Confessor",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    7,
+    4,
+    9,
+    1
+  ],
+  "name": "asc37_v4",
+  "true_evil_positions": {
+    "2": "Baa",
+    "3": "Witch",
+    "9": "Poisoner"
+  },
+  "notes": "5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop."
+}
