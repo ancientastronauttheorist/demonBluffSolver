@@ -1968,19 +1968,6 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                     else:
                         pd_targets = [None]
 
-        # Compute Pooka-corrupted positions (for Poisoner to skip)
-        pooka_corrupted = set()
-        for pos, role in full_evil.items():
-            if role == "Pooka":
-                for adj in adjacent_positions(pos, state.n_cards):
-                    if adj not in full_evil:
-                        card = _get_card_at(adj, state)
-                        if card and _is_villager_role(card.apparent_role, state):
-                            pooka_corrupted.add(adj)
-                        elif card is None and _unrevealed_must_be_villager(
-                                adj, full_evil, state):
-                            pooka_corrupted.add(adj)
-
         # Poisoner target computation moved inside dopp/drunk loop below
         # so _unrevealed_must_be_villager can use dopp_pos and drunk_pos
         # to correctly account for outcast slots filled by hidden outcasts.
@@ -2070,8 +2057,6 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                                     poisoner_pos, state.n_cards):
                                 if p in full_evil:
                                     continue
-                                if p in pooka_corrupted:
-                                    continue  # Poisoner skips Pooka's victims
                                 card = _get_card_at(p, state)
                                 if card and _is_villager_role(
                                         card.apparent_role, state):
