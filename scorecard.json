@@ -1427,6 +1427,13 @@
       "name": "asc35_v5",
       "notes": "6HP. Lilis game, 9 cards. Knight free check caught Twin Minion at #3. Lilis at #6 disguised as Slayer. Lilis killed Bombardier #7 night 1. No corruption sources.",
       "date": "2026-03-11 19:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc35_v6",
+      "notes": "5HP. 9 cards, 3 evil. Shaman dup Poet. Pooka corrupted #1,#3. PD#5 corrupted #6. PD abilities narrowed to 2 scenarios. Execution lookahead on #1 (50% wrong exec, still wins). Medium #6 lying (corrupted) said #2 real Knitter (lie).",
+      "date": "2026-03-11 19:17"
     }
   ]
 }
