@@ -18,6 +18,7 @@ from solver import (
     truth_status, scenario_is_evil, effective_alignment,
     get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
+    circle_distance, circle_direction,
 )
 
 
@@ -39,8 +40,9 @@ class Action:
 @dataclass
 class RevealRecommendation:
     position: int
-    entropy: float
+    entropy: float        # fingerprint-based entropy (for position ranking)
     p_evil: float
+    binary_entropy: float = 0.0  # simple evil/good entropy (for ability comparison)
     reasoning: str = ""
 
 
@@ -891,11 +893,121 @@ def recommend_abilities(
 # Reveal Recommendation
 # ============================================================
 
+def _compute_position_fingerprint(
+    pos: int, scenario: Scenario, state: GameState,
+) -> tuple:
+    """Compute an observation fingerprint for flipping position pos in scenario.
+
+    The fingerprint captures what the player would learn -- two scenarios with
+    different fingerprints will produce observably different card info for at
+    least one possible card role. Entropy over fingerprints across scenarios
+    measures the true information gain from flipping this position.
+
+    Includes: evil/good status, evil role (if evil), corruption status,
+    Hunter distance, Enlightened direction, Lover adjacent count,
+    Knitter evil pairs (global), Architect side (global), Bard corruption distance.
+    """
+    n = state.n_cards
+
+    # Evil status
+    is_evil = scenario_is_evil(pos, scenario)
+    evil_role = None
+    if pos in scenario.evil_positions:
+        evil_role = scenario.evil_positions[pos]
+    elif pos == scenario.puppet_position:
+        evil_role = "Puppet"
+
+    # Corruption status (Confessor)
+    is_corrupted = pos in scenario.corrupted
+
+    # Build set of effective-evil positions (Wretch counts)
+    evil_set = []
+    for p in range(1, n + 1):
+        if p != pos and effective_alignment(p, scenario, state) == Alignment.EVIL:
+            evil_set.append(p)
+
+    if not evil_set:
+        return (is_evil, evil_role, is_corrupted, -1, "None", 0, 0, "Equal", -1)
+
+    # Hunter: distance to nearest evil
+    dist_nearest = min(circle_distance(pos, ep, n) for ep in evil_set)
+
+    # Enlightened: direction to nearest evil
+    closest = [ep for ep in evil_set if circle_distance(pos, ep, n) == dist_nearest]
+    if len(closest) >= 2:
+        dirs = {circle_direction(pos, ep, n) for ep in closest}
+        direction = "Equidistant" if ("CW" in dirs and "CCW" in dirs) else circle_direction(pos, closest[0], n)
+    else:
+        direction = circle_direction(pos, closest[0], n)
+
+    # Lover: adjacent evil count
+    adj = adjacent_positions(pos, n)
+    adj_evil = sum(1 for a in adj
+                   if effective_alignment(a, scenario, state) == Alignment.EVIL)
+
+    # Knitter: global adjacent evil pairs
+    all_evil = set(evil_set)
+    if effective_alignment(pos, scenario, state) == Alignment.EVIL:
+        all_evil.add(pos)
+    pairs = 0
+    for p in all_evil:
+        for a in adjacent_positions(p, n):
+            if a in all_evil and a > p:
+                pairs += 1
+
+    # Architect: left/right/equal (board-relative, not position-relative)
+    half = n // 2
+    both_set = {n}
+    left_set = set()
+    right_set = set()
+    if n % 2 == 0:
+        both_set.add(half)
+        for i in range(1, half):
+            right_set.add(i)
+        for i in range(half + 1, n):
+            left_set.add(i)
+    else:
+        for i in range(1, half + 1):
+            right_set.add(i)
+        for i in range(half + 1, n):
+            left_set.add(i)
+
+    left_count = right_count = 0
+    for p in all_evil:
+        if p in both_set:
+            left_count += 1
+            right_count += 1
+        elif p in left_set:
+            left_count += 1
+        elif p in right_set:
+            right_count += 1
+    if left_count > right_count:
+        arch_side = "Left"
+    elif right_count > left_count:
+        arch_side = "Right"
+    else:
+        arch_side = "Equal"
+
+    # Bard: distance to nearest corrupted
+    if scenario.corrupted:
+        dist_corrupted = min(circle_distance(pos, c, n) for c in scenario.corrupted)
+    else:
+        dist_corrupted = -1  # no corrupted
+
+    return (is_evil, evil_role, is_corrupted, dist_nearest, direction,
+            adj_evil, pairs, arch_side, dist_corrupted)
+
+
 def recommend_reveal(
     state: GameState,
     result: SolverResult,
 ) -> Optional[RevealRecommendation]:
-    """Pick the most informative unrevealed position to reveal next."""
+    """Pick the most informative unrevealed position to reveal next.
+
+    Uses fingerprint-based entropy: for each unrevealed position, computes
+    what the player would observe in each surviving scenario. Positions
+    where observations vary the most (highest entropy) give the most info.
+    """
     unrevealed = _unrevealed_positions(state)
     # Filter out blocked positions (Witch)
     blocked = set(getattr(state, 'blocked_positions', []))
@@ -913,23 +1025,39 @@ def recommend_reveal(
 
     for pos in unrevealed:
         p = probs.get(pos, 0)
-        # Entropy of binary evil/good split
+
+        # Binary entropy (for ability-vs-reveal comparison, same scale as ability scores)
         if p == 0 or p == 1:
-            ent = 0.0
+            bin_ent = 0.0
         else:
-            ent = _shannon_entropy([
+            bin_ent = _shannon_entropy([
                 int(p * result.n_surviving),
                 int((1 - p) * result.n_surviving)
             ])
+
+        # Fingerprint-based entropy: partition scenarios by observation
+        # This captures spatial diversity -- positions where different scenarios
+        # would produce observably different card info score higher
+        fingerprint_groups: dict[tuple, int] = {}
+        for scenario in result.surviving_scenarios:
+            fp = _compute_position_fingerprint(pos, scenario, state)
+            fingerprint_groups[fp] = fingerprint_groups.get(fp, 0) + 1
+
+        counts = list(fingerprint_groups.values())
+        ent = _shannon_entropy(counts)
+
         # Bonus for positions that might have active abilities
         if _could_have_active_ability(pos, state, result):
             ent += 0.1
+            bin_ent += 0.1
 
+        n_outcomes = len(fingerprint_groups)
         if ent > best_entropy:
             best_entropy = ent
             best = RevealRecommendation(
                 position=pos, entropy=ent, p_evil=p,
-                reasoning=f"#{pos}: {p:.0%} evil, entropy {ent:.3f}")
+                binary_entropy=bin_ent,
+                reasoning=f"#{pos}: {p:.0%} evil, {ent:.3f} bits ({n_outcomes} outcomes)")
 
     return best
 
@@ -1069,10 +1197,9 @@ def recommend_action(
 
     if best_ability and reveal_rec:
         # Compare ability info gain vs reveal info gain
-        # For abilities using negative expected posterior, score is negative (lower = better for count)
-        # For entropy-based, higher = better
-        # Use ability if it has meaningful info gain
-        if best_ability.score > reveal_rec.entropy and best_ability.score > 0.3:
+        # Use binary_entropy (evil/good split) for comparison -- same 0-1 scale as ability scores.
+        # Fingerprint entropy (reveal_rec.entropy) is used for position ranking only.
+        if best_ability.score > reveal_rec.binary_entropy and best_ability.score > 0.3:
             return _with_ability_recs(Action(
                 "use_ability", position=best_ability.position,
                 targets=best_ability.targets,
@@ -1259,16 +1386,34 @@ def print_recommendation(state: GameState, result: SolverResult,
     for w in action.warnings:
         print(f"  WARNING: {w}")
 
-    # Show evil probabilities for context
+    # Show smart reveal analysis for context
     if action.action_type in ("reveal", "use_ability", "execute"):
         probs = evil_probabilities(state, result)
         unrevealed = _unrevealed_positions(state)
+        blocked = set(getattr(state, 'blocked_positions', []))
         if unrevealed:
-            print(f"\n  Unrevealed positions:")
+            # Compute fingerprint entropy for each unrevealed position
+            reveal_scores: list[tuple[int, float, float, int]] = []  # (pos, entropy, p_evil, n_outcomes)
             for pos in sorted(unrevealed):
                 p = probs.get(pos, 0)
+                if pos in blocked or result.n_surviving == 0:
+                    reveal_scores.append((pos, 0.0, p, 1))
+                    continue
+                fp_groups: dict[tuple, int] = {}
+                for scenario in result.surviving_scenarios:
+                    fp = _compute_position_fingerprint(pos, scenario, state)
+                    fp_groups[fp] = fp_groups.get(fp, 0) + 1
+                ent = _shannon_entropy(list(fp_groups.values()))
+                if _could_have_active_ability(pos, state, result):
+                    ent += 0.1
+                reveal_scores.append((pos, ent, p, len(fp_groups)))
+
+            reveal_scores.sort(key=lambda x: x[1], reverse=True)
+            print(f"\n  Unrevealed positions (ranked by info gain):")
+            for pos, ent, p, n_out in reveal_scores:
                 marker = " <-- RECOMMEND" if pos == action.position and action.action_type == "reveal" else ""
-                print(f"    #{pos}: {p:.0%} evil{marker}")
+                blk = " [BLOCKED]" if pos in blocked else ""
+                print(f"    #{pos}: {p:.0%} evil, {ent:.2f} bits ({n_out} outcomes){blk}{marker}")
 
     # Show available abilities (reuse cached recs from recommend_action)
     recs = action._ability_recs if action._ability_recs is not None else recommend_abilities(state, result, used_abilities)

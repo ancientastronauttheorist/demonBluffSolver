@@ -1441,6 +1441,13 @@
       "name": "asc35_v7",
       "notes": "Perfect 10HP. 6 cards, 1 evil Pooka. 1-scenario instant solve. Pooka corrupted #1 Hunter and #5 Bishop. Ascension 35 complete (7/7).",
       "date": "2026-03-11 19:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v3",
+      "notes": "Minimum flips strategy. Shaman duplicated Scout+Bard. Fingerprint entropy guided flips. 8/9 flipped, 10HP perfect.",
+      "date": "2026-03-11 21:32"
     }
   ]
 }
