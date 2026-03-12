@@ -9949,3 +9949,96 @@ Reason: #2 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect. Both evils identified from first solve (6 scenarios). Shaman duped Poet role. Baa added fake Outcast to deck.
 
+
+---
+
+# New Game — 2026-03-11 22:47:37
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Gemcrafter, Scout, Dreamer, Knitter, Confessor
+- Outcasts: Bombardier
+- Minions: Puppeteer
+- Demons: Lilis
+
+
+---
+
+# New Game — 2026-03-11 22:48:15
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Gemcrafter, Scout, Dreamer, Knitter, Confessor
+- Outcasts: Bombardier
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [22:50:13] Revealed #1 Bombardier
+Info: {}
+
+### [22:50:14] Revealed #2 Gemcrafter
+Info: {'good_position': 7}
+
+### [22:50:15] Revealed #3 Dreamer
+Info: {}
+
+### [22:50:16] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [22:51:09] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [22:51:10] Revealed #7 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+### [22:51:11] Revealed #8 Bombardier
+Info: {}
+
+#### [22:51:19] Solver Output
+Scenarios: 2/78
+Definite evil: ['#2', '#8']
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #3=50%, #7=50%
+  Generated 78 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet', 'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [3, 7]
+
+#### [22:51:19] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Puppet', 'Lilis'})
+
+### [22:52:17] Executed #2 -> Lilis (EVIL)
+
+#### [22:52:25] Solver Output
+Scenarios: 1/11
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+  Generated 11 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #8 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [22:52:25] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [22:53:18] Executed #7 -> Puppet (EVIL)
+
+### [22:54:07] Executed #8 -> Puppeteer (EVIL)
+
+## [22:54:17] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP win. Lilis night-killed #6 Empress. Puppeteer created Puppet from Scout at #7. 2 scenarios after all reveals, 1 after first exec.
+

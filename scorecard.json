@@ -1476,6 +1476,13 @@
       "name": "asc36_v7",
       "notes": "10HP perfect. Both evils identified from first solve (6 scenarios). Shaman duped Poet role. Baa added fake Outcast to deck.",
       "date": "2026-03-11 22:42"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc37_v1",
+      "notes": "8HP win. Lilis night-killed #6 Empress. Puppeteer created Puppet from Scout at #7. 2 scenarios after all reveals, 1 after first exec.",
+      "date": "2026-03-11 22:54"
     }
   ]
 }
