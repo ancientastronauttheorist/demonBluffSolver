@@ -10841,3 +10841,131 @@ Reason: #3 is evil in ALL 8 scenarios (roles: {'Puppeteer'})
 Final HP: 6
 Notes: 6HP. Hidden PD at #9 (night-killed) corrupted Alchemist. Slayer killed Lilis. Judge ability on #3 confirmed truth. Solver fix: hidden PD corruption for night-killed positions.
 
+
+---
+
+# New Game — 2026-03-12 00:21:41
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Hunter, Slayer, Scout, Knight, Gemcrafter, Empress
+- Outcasts: Drunk
+- Minions: Poisoner
+- Demons: Lilis
+
+### [00:22:49] Revealed #1 Knight
+Info: {}
+
+### [00:22:53] Revealed #2 Hunter
+Info: {'distance': 1}
+
+### [00:22:56] Revealed #3 Slayer
+Info: {}
+
+### [00:22:59] Revealed #4 Gemcrafter
+Info: {'good_position': 6}
+
+#### [00:23:04] Solver Output
+Scenarios: 86/536
+Definite good: ['#5']
+Evil probabilities: #2=48%, #7=41%, #8=37%, #3=27%, #1=22%, #6=21%, #4=5%
+  Generated 536 candidate scenarios
+  86 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8]
+
+#### [00:23:04] Recommendation
+Action: **REVEAL** #8
+Reason: #8: 37% evil, 4.247 bits (26 outcomes)
+
+### [00:23:59] Revealed #6 Empress
+Info: {'targets': [2, 3, 5]}
+
+### [00:24:04] Revealed #7 Knight
+Info: {}
+
+### [00:24:13] Revealed #8 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+#### [00:24:18] Solver Output
+Scenarios: 25/566
+Definite good: ['#5']
+Evil probabilities: #7=52%, #3=36%, #8=32%, #2=24%, #1=20%, #6=20%, #4=16%
+  Generated 566 candidate scenarios
+  25 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8]
+
+#### [00:24:18] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#8']
+Reason: Target #8 is 32% evil (adjusted 0.27)
+WARNING: Corruption risk: 16% -- Slayer ability disabled if corrupted
+
+### [00:26:12] Ability used at #3
+
+#### [00:26:18] Solver Output
+Scenarios: 23/566
+Definite good: ['#5']
+Evil probabilities: #7=52%, #3=39%, #2=26%, #8=26%, #6=22%, #1=17%, #4=17%
+  Generated 566 candidate scenarios
+  23 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8]
+
+#### [00:26:18] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 52% likely evil but budget=1 requires >=80% confidence (HP=8, cost=5).
+WARNING: Probabilistic execution -- 52% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 52% < 80% threshold. Consider manual override if you have extra information.
+
+### [00:27:24] Executed #7 -> Poisoner (EVIL)
+
+#### [00:27:29] Solver Output
+Scenarios: 10/72
+Definite evil: ['#7']
+Definite good: ['#4', '#5', '#6', '#8']
+Evil probabilities: #2=40%, #1=30%, #3=30%
+  Generated 72 candidate scenarios
+  10 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3]
+
+#### [00:27:29] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 40% likely evil but budget=1 requires >=80% confidence (HP=8, cost=5).
+WARNING: Probabilistic execution -- 40% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 40% < 80% threshold. Consider manual override if you have extra information.
+
+#### [00:29:22] Knight #1 execution blocked by immunity - confirmed good
+
+
+#### [00:29:36] Solver Output
+Scenarios: 7/60
+Definite evil: ['#7']
+Definite good: ['#1', '#4', '#5', '#6', '#8']
+Evil probabilities: #2=57%, #3=43%
+  Generated 60 candidate scenarios
+  7 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [00:29:36] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (57% evil Lilis, 43% good Hunter).
+WARNING: Execution lookahead override -- immediate hit chance is 57%, but all reveal branches still lead to a forced win.
+
+### [00:30:20] Executed #2 -> Lilis (EVIL)
+
+## [00:30:27] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP. Knight trick confirmed #1 good (free exec check). Lilis night-killed #5 (Baker). Scout #8 corrupted by Poisoner. Drunk #3 disguised as Slayer. Guaranteed win via lookahead.
+
