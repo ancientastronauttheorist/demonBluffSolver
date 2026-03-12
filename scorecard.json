@@ -1511,6 +1511,13 @@
       "name": "asc37_v5",
       "notes": "Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong.",
       "date": "2026-03-11 23:49"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc37_v5b",
+      "notes": "8HP, Lilis+Puppeteer+Puppet. Solver found all 3 definite evil. Night kill #6.",
+      "date": "2026-03-11 23:59"
     }
   ]
 }

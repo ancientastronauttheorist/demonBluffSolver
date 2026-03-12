@@ -10652,3 +10652,82 @@ WARNING: Bombardier safety: executing #5 (25%) despite low confidence — Bombardi
 Final HP: 0
 Notes: Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong.
 
+
+---
+
+# New Game — 2026-03-11 23:54:45
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Enlightened, Hunter, Lover, Baker, Scout
+- Outcasts: Doppelganger
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [23:56:03] Revealed #1 Enlightened
+Info: {'direction': 'CCW'}
+
+### [23:56:08] Revealed #2 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [23:56:14] Revealed #3 Baker
+Info: {'original_role': 'Lover'}
+
+### [23:56:15] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [23:57:07] Revealed #5 Hunter
+Info: {'distance': 2}
+
+### [23:57:08] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [23:57:12] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+#### [23:57:18] Solver Output
+Scenarios: 15/480
+Definite evil: ['#3']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=67%, #2=67%, #7=33%, #8=33%
+  Generated 480 candidate scenarios
+  15 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Lilis'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7, 8]
+
+#### [23:57:18] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 15 scenarios (roles: {'Puppeteer', 'Lilis'})
+
+### [23:58:04] Executed #3 -> Puppeteer (EVIL)
+
+#### [23:58:09] Solver Output
+Scenarios: 5/60
+Definite evil: ['#1', '#2', '#3']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+  Generated 60 candidate scenarios
+  5 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #2 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [23:58:09] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 5 scenarios (roles: {'Lilis'})
+
+### [23:58:47] Executed #1 -> Lilis (EVIL)
+
+### [23:59:24] Executed #2 -> Puppet (EVIL)
+
+## [23:59:32] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Lilis+Puppeteer+Puppet. Solver found all 3 definite evil. Night kill #6.
+
