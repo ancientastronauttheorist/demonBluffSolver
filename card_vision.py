@@ -21,6 +21,8 @@ from typing import Optional
 import cv2
 import numpy as np
 
+from knowledge_base import get_card
+
 
 CARD_SIZE = (192, 224)
 REFERENCE_SCREEN = (2560, 1440)
@@ -78,6 +80,14 @@ class CardTemplate:
     signature: CardSignature
 
 
+def _faction(name: Optional[str]) -> Optional[str]:
+    """Look up faction (Villager/Outcast/Minion/Demon) from knowledge_base."""
+    if name is None:
+        return None
+    card = get_card(name)
+    return card.role.value if card else None
+
+
 @dataclass
 class CardPrediction:
     box: CardBox
@@ -86,6 +96,10 @@ class CardPrediction:
     margin: float
     accepted: bool
     alternatives: list[tuple[str, float]]
+
+    @property
+    def faction(self) -> Optional[str]:
+        return _faction(self.name) if self.accepted else None
 
 
 def _load_bgr(image_or_path) -> np.ndarray:
@@ -643,6 +657,7 @@ def _predictions_to_json(predictions: list[CardPrediction]) -> list[dict]:
                 "h": prediction.box.h,
             },
             "name": prediction.name,
+            "faction": prediction.faction,
             "score": round(prediction.score, 4),
             "margin": round(prediction.margin, 4),
             "accepted": prediction.accepted,

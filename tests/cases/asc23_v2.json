@@ -1,0 +1,132 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 4,
+        "evil_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "ccw"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 0
+      }
+    }
+  ],
+  "executed": [
+    4,
+    1
+  ],
+  "confirmed_evil": [
+    4,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Baa",
+    "1": "Twin_Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    5,
+    6,
+    7,
+    1,
+    2,
+    3,
+    4
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Alchemist",
+      "Enlightened",
+      "Druid",
+      "Dreamer",
+      "Witness",
+      "Plague_Doctor"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1,
+    2,
+    4
+  ],
+  "name": "asc23_v2",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "4": "Baa"
+  },
+  "notes": "WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP."
+}

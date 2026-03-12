@@ -1,0 +1,148 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW",
+        "copied_role": "Enlightened"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "PlagueDoctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          9,
+          10
+        ],
+        "types": [
+          "Minion",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "FortuneTeller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "EQUAL"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    7,
+    4
+  ],
+  "confirmed_evil": [
+    7,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Witch",
+    "4": "Minion"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 9,
+      "target_pos": 7,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Enlightened",
+      "Slayer",
+      "Baker",
+      "Poet",
+      "FortuneTeller",
+      "Knitter"
+    ],
+    "outcasts": [
+      "PlagueDoctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    9,
+    3
+  ],
+  "name": "asc13_v6",
+  "true_evil_positions": {
+    "4": "Minion",
+    "6": "Pooka",
+    "7": "Witch"
+  },
+  "notes": "10 cards, 3 evils. Blocked card at #10 (new Asc13 mechanic). Slayer at #9 killed Witch at #7. Enlightened #8 was corrupted. HP 10/10."
+}

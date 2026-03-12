@@ -1,0 +1,161 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 2,
+        "copied_role": "Scout"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 9,
+        "good_role": "Empress"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6,
+          9
+        ]
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5,
+          6
+        ]
+      }
+    }
+  ],
+  "executed": [
+    1,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    1,
+    7,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Chancellor",
+    "7": "Pooka",
+    "8": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Gemcrafter",
+      "Knitter",
+      "Empress",
+      "Poet",
+      "Knight"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Chancellor",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "name": "asc18_v6",
+  "true_evil_positions": {
+    "1": "Chancellor",
+    "7": "Pooka",
+    "8": "Minion"
+  },
+  "notes": "WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs."
+}

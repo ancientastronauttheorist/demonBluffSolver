@@ -1,0 +1,160 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "left"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6
+        ],
+        "minion_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          7
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    5,
+    7
+  ],
+  "confirmed_evil": [
+    5,
+    7
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Baa",
+    "7": "Twin_Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "6": false
+  },
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Hunter",
+      "Baker",
+      "Alchemist",
+      "Bishop",
+      "Empress",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc28_v7",
+  "true_evil_positions": {
+    "5": "Baa",
+    "7": "Twin_Minion"
+  },
+  "notes": "Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP."
+}

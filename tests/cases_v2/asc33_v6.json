@@ -1,0 +1,173 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          9
+        ],
+        "types": [
+          "Villager",
+          "Minion",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          6
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "types": [
+          "Minion",
+          "Outcast",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    9,
+    5,
+    1,
+    3,
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    5,
+    1,
+    6,
+    7
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Lilis",
+    "1": "Twin_Minion",
+    "6": "Puppet",
+    "7": "Puppeteer"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Knitter",
+      "Alchemist",
+      "Judge",
+      "Empress",
+      "Bishop",
+      "Lover"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    4
+  ],
+  "name": "asc33_v6",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "5": "Lilis",
+    "6": "Puppet",
+    "7": "Puppeteer"
+  },
+  "notes": "Lilis+Puppeteer game, 4 evil. Night killed #9 (good Empress). Bishop #1 (evil Twin Minion) lied. Jester #3 (Empress) found 2 evils in #1,#2,#6. Judge #4 found #1 lying. Exec #5=Lilis, #1=Twin Minion, then 50/50 on #3 (good Jester, wrong exec HP 6->1), solver locked #6=Puppet #7=Puppeteer. HP 1/10."
+}

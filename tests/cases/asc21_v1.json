@@ -1,0 +1,178 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          5
+        ],
+        "types": [
+          "Outcast",
+          "Villager",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    2,
+    5,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    5,
+    4,
+    6
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Twin_Minion",
+    "4": "Poisoner",
+    "6": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 4,
+      "target_pos": 6,
+      "killed": false
+    },
+    {
+      "slayer_pos": 9,
+      "target_pos": 4,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 1,
+      "target": 7,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "2": true
+  },
+  "deck": {
+    "villagers": [
+      "Bishop",
+      "Druid",
+      "Slayer",
+      "Knight",
+      "Fortune_Teller",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Twin_Minion",
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1,
+    6,
+    4,
+    9
+  ],
+  "name": "asc21_v1",
+  "true_evil_positions": {
+    "4": "Poisoner",
+    "5": "Twin_Minion",
+    "6": "Baa"
+  },
+  "notes": "WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty"
+}

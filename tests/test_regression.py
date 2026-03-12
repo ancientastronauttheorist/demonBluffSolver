@@ -22,7 +22,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from solver import GameState, solve
 
 
-CASES_DIR = os.path.join(os.path.dirname(__file__), "cases")
+CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "cases")
+CASES_DIR = os.path.join(os.path.dirname(__file__), "cases_v2")
 
 
 def load_test_case(path: str) -> dict:
@@ -96,13 +97,15 @@ def run_test(case: dict, verbose: bool = True) -> tuple[bool, list[str]]:
     return passed, messages
 
 
-def run_all_tests(filter_name: str = None, verbose: bool = True) -> bool:
-    """Run all test cases. Returns True if all passed."""
-    if not os.path.isdir(CASES_DIR):
-        print(f"No test cases directory: {CASES_DIR}")
-        return True
-
-    case_files = sorted(glob.glob(os.path.join(CASES_DIR, "*.json")))
+def run_all_tests(filter_name: str = None, verbose: bool = True,
+                  v2_only: bool = False) -> bool:
+    """Run all test cases. Use v2_only=True for card_vision pipeline tests only."""
+    case_files = []
+    dirs = [CASES_DIR] if v2_only else [CASES_DIR_LEGACY, CASES_DIR]
+    for d in dirs:
+        if os.path.isdir(d):
+            case_files.extend(glob.glob(os.path.join(d, "*.json")))
+    case_files.sort(key=lambda p: os.path.basename(p))
     if not case_files:
         print("No test cases found.")
         return True
@@ -160,6 +163,9 @@ def save_test_case(session_path: str, name: str, true_evil_positions: dict[int, 
 
 
 if __name__ == "__main__":
-    filter_name = sys.argv[1] if len(sys.argv) > 1 else None
-    all_passed = run_all_tests(filter_name)
+    args = sys.argv[1:]
+    v2_only = "--v2-only" in args or "--v2" in args
+    args = [a for a in args if a not in ("--v2-only", "--v2")]
+    filter_name = args[0] if args else None
+    all_passed = run_all_tests(filter_name, v2_only=v2_only)
     sys.exit(0 if all_passed else 1)

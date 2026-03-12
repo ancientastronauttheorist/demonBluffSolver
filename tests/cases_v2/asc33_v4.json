@@ -1,0 +1,155 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Baa"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Baa",
+        "distance": 3
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          7
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    2
+  ],
+  "confirmed_evil": [
+    5,
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Poisoner",
+    "2": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 5,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Dreamer",
+      "Lover",
+      "Scout",
+      "Jester",
+      "Gemcrafter",
+      "Fortune_Teller"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1,
+    8,
+    6,
+    7
+  ],
+  "name": "asc33_v4",
+  "true_evil_positions": {
+    "2": "Baa",
+    "5": "Poisoner"
+  },
+  "notes": "Perfect game, 10HP. Dreamer #1 saw #5=Baa, PD #8 found #5 clean, Jester #6 (Empress) found 1 evil in #3,#5,#7, FT #7 found no evil in #1,#3. Solver locked #5=Poisoner then #2=Baa. Corrupted: #1,#4."
+}

@@ -1,0 +1,129 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    }
+  ],
+  "executed": [
+    5,
+    7,
+    2,
+    8,
+    6
+  ],
+  "confirmed_evil": [
+    7,
+    2,
+    8,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Puppeteer",
+    "2": "Witch",
+    "8": "Lilis",
+    "6": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Gemcrafter",
+      "Poet",
+      "Hunter",
+      "Lover",
+      "Bard"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Witch",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc15_v1",
+  "true_evil_positions": {
+    "2": "Witch",
+    "6": "Puppet",
+    "7": "Puppeteer",
+    "8": "Lilis"
+  },
+  "notes": "9 cards, 4 evils. Witch blocked #9 until killed. Bard contradiction (#1 no corrupted vs #7 1-away) caught Puppeteer. Knight immunity free-check on #8 revealed Lilis. No wrong execs. HP 6/10."
+}

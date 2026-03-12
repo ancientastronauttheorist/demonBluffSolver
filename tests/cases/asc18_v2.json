@@ -1,0 +1,133 @@
+{
+  "n_cards": 7,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "equal"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Architect"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    1
+  ],
+  "confirmed_evil": [],
+  "confirmed_good": [
+    2,
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {},
+  "executed_good_corrupted": {
+    "2": false,
+    "1": true
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Baker",
+      "Confessor",
+      "Lover",
+      "Jester",
+      "Druid"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7,
+    4
+  ],
+  "name": "asc18_v2",
+  "true_evil_positions": {
+    "7": "Pooka"
+  },
+  "notes": "LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why."
+}

@@ -1,0 +1,140 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          8
+        ],
+        "minion_role": "Poisoner"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7,
+          8
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "minion_role": "Poisoner"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    6,
+    8
+  ],
+  "confirmed_evil": [
+    6,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Lilis",
+    "8": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Judge",
+      "Oracle",
+      "Bishop",
+      "Druid",
+      "Bard"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    6,
+    4
+  ],
+  "name": "asc13_v2",
+  "true_evil_positions": {
+    "6": "Lilis",
+    "8": "Poisoner"
+  },
+  "notes": "Bard#1 corrupted. Druid lied (was Lilis). 8-card Lilis game, 1 night kill."
+}

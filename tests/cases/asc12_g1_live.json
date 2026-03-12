@@ -1,0 +1,123 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          7
+        ],
+        "types": [
+          "Outcast",
+          "Villager",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppet",
+        "distance": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    }
+  ],
+  "executed": [
+    4,
+    3,
+    5
+  ],
+  "confirmed_evil": [],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {"4": "Baa"},
+  "slayer_results": [
+    {
+      "slayer_pos": 1,
+      "target_pos": 4,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 2,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Bishop",
+      "Scout",
+      "Confessor",
+      "Hunter",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Drunk"
+    ],
+    "minions": [
+      "Puppet",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1
+  ],
+  "name": "asc12_g1_live",
+  "true_evil_positions": {
+    "1": "Puppet",
+    "2": "Puppeteer",
+    "4": "Baa"
+  },
+  "notes": "Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning."
+}

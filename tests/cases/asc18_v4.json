@@ -1,0 +1,143 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          8
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Lover"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    1
+  ],
+  "confirmed_evil": [
+    6,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Baa",
+    "1": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Lover",
+      "Baker",
+      "Empress",
+      "Dreamer",
+      "Jester",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    5
+  ],
+  "name": "asc18_v4",
+  "true_evil_positions": {
+    "1": "Poisoner",
+    "6": "Baa"
+  },
+  "notes": "WIN: Perfect game. Confessor dizzy confirmed Baa#6. Jester confirmed Poisoner#1 via Wretch counting. Baker#8 was corrupted by Poisoner. 0 wrong execs."
+}

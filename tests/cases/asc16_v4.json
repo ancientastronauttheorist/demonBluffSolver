@@ -1,0 +1,117 @@
+{
+  "n_cards": 6,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          5
+        ],
+        "types": [
+          "Outcast",
+          "Villager",
+          "Demon"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "has_evil": false
+      }
+    }
+  ],
+  "executed": [
+    4
+  ],
+  "confirmed_evil": [
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Fortune_Teller",
+      "Gemcrafter",
+      "Bishop",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6
+  ],
+  "name": "asc16_v4",
+  "true_evil_positions": {
+    "4": "Pooka"
+  },
+  "notes": "Pooka#4 corrupted Bishop#3 and Slayer#5. FT#6 eliminated #2/#3, solved to 1 scenario. Perfect 10HP."
+}

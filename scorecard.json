@@ -160,6 +160,1378 @@
       "name": "asc11_g5_live",
       "notes": "Autonomous live run. Slayer #2 killed #7=Puppet after a retarget retry. Final evils: #1 Puppeteer, #5 Baa, #7 Puppet. Final screen showed #6 Dreamer corrupted.",
       "date": "2026-03-07 20:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc11_g6_live",
+      "notes": "Perfect 10HP. Puppeteer+Puppet mechanic = 4 evils from 3-evil deck. Medium lie on #2 revealed Puppeteer. Solver found first 3 instantly (30 scenarios), manual deduction for 4th. #5 Slayer corrupted by Shaman.",
+      "date": "2026-03-08 00:16"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc12_g1_live",
+      "notes": "Ascension 12 first game. Solver 0-scenario on Puppet mechanic. Manual deduction wrong: assumed Scout's Puppet distance was to Baa but Puppet#1 was 1 away from Puppeteer#2. Wrong execs on #5 Hunter and #3 Wretch. Need solver Puppet support and better Scout reasoning.",
+      "date": "2026-03-08 00:33"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc12_v1",
+      "notes": "Lilis killed #5. Druid+Jester abilities. Clean win 6HP.",
+      "date": "2026-03-08 01:58"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc12_v2",
+      "notes": "4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP.",
+      "date": "2026-03-08 03:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v3",
+      "notes": "perfect 10HP, 1-shot solve. Corrupted: 1=Hunter,3=Bishop,6=Scout",
+      "date": "2026-03-08 11:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc12_v4",
+      "notes": "5HP. Slayer killed Wretch (registers evil)=-5HP. Corrupted: 2=Jester,3=Drunk(disguised as Architect). Drunk was in Outcast pool.",
+      "date": "2026-03-08 11:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v5",
+      "notes": "perfect 10HP, 1-shot solve. Doppelganger#4 disguised as Alchemist.",
+      "date": "2026-03-08 11:52"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v6",
+      "notes": "perfect 10HP. Corrupted: 2=Architect,3=Knitter. Slayer failed on #3 (good but corrupted Knitter).",
+      "date": "2026-03-08 11:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc12_v7",
+      "notes": "perfect 10HP. Dreamer correctly identified #3 as Minion. Doppelganger#2. Corrupted: 5=Baker,7=Bishop.",
+      "date": "2026-03-08 12:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc13_v1",
+      "notes": "Perfect deduction, Lilis game with 2 night kills",
+      "date": "2026-03-08 13:03"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc13_v2",
+      "notes": "Bard#1 corrupted. Druid lied (was Lilis). 8-card Lilis game, 1 night kill.",
+      "date": "2026-03-08 13:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v3",
+      "notes": "Perfect 10HP. Empress#2 and Medium#4 corrupted. 1-scenario solve.",
+      "date": "2026-03-08 13:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc13_v4",
+      "notes": "Slayer#3 and Knight#6 corrupted. PD broke 50/50 tie. 1 wrong exec (corrupted Slayer). HP=5.",
+      "date": "2026-03-08 13:21"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v5",
+      "notes": "Perfect 10HP, 1-scenario solve. Gemcrafter#8 corrupted.",
+      "date": "2026-03-08 13:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v6",
+      "notes": "10 cards, 3 evils. Blocked card at #10 (new Asc13 mechanic). Slayer at #9 killed Witch at #7. Enlightened #8 was corrupted. HP 10/10.",
+      "date": "2026-03-08 13:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc13_v7",
+      "notes": "8 cards, 2 evils. Slayer #4 killed Pooka #2. Judge #2 was Pooka (lying Judge). Dreamer #1, Scout #3, Drunk #8 corrupted by Pooka. HP 10/10 perfect. Ascension 13 complete \u2014 7/7 wins!",
+      "date": "2026-03-08 13:43"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc14_v1",
+      "notes": "10 cards, 4 evils. SOLVER BUG: all 9 scenarios had #4 as DEFINITELY evil but #4 was good corrupted Knight. Wrong exec cost 9 HP (new Asc14 mechanic?). Corrupted: #4 Knight, #6 Bishop, #10 Empress. Pooka at #5 corrupted adjacent #4 and #6. Heart system: lose 1 heart per village loss.",
+      "date": "2026-03-08 14:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc14_v2",
+      "notes": "7 cards, 2 evils. 3 Alchemists narrowed to 2 fakes. Solver found both evils at #5 and #7 definitively. HP 10/10 perfect.",
+      "date": "2026-03-08 14:57"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc14_v3",
+      "notes": "10 cards, 3 evils. Lilis game with 2 night kills (#5 Minion, #7 unknown). Wrong exec #2 Drunk Corrupted (-2 HP). Final HP 4/10. Corrupted: #2 Drunk.",
+      "date": "2026-03-08 15:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc14_v4",
+      "notes": "9 cards, 2 evils. Wrong exec #1 Architect Corrupted (-5 HP). Corrupted: #1 Architect, #8 Medium. #6 was Doppelganger. Final HP 5/10.",
+      "date": "2026-03-08 15:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc14_v5",
+      "notes": "8 cards, 2 evils. Wrong exec #1 Hunter (-5 HP). Corrupted: #7 Dreamer, #5 Gemcrafter, #4 Architect. Pooka at #3 corrupted adjacent #4 and #2 area. Final HP 5/10.",
+      "date": "2026-03-08 15:16"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc14_v6",
+      "notes": "9 cards, 3 evils. Lilis game. Night kill #5 (good). #9 Lilis blocked by Witch (#6) \u2014 could not reveal #9. Wrong exec #1 Knitter (-5 HP), wrong exec #2 Drunk Corrupted (-2 HP). Manual deduction: Knitter 3-pair count + Wretch-as-evil identified Witch at #6. Solver had 50/50, Knitter+Wretch interaction not wired. Final HP 1/10. CLOSE CALL.",
+      "date": "2026-03-08 15:29"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc14_v7",
+      "notes": "9 cards, 3 evils. Witch at #9 was blocking reveals (facedown). Executed facedown Witch directly - works! No wrong execs. HP 8/10.",
+      "date": "2026-03-08 15:43"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc14_v8",
+      "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10 to 6). PD passive corrupted Jester #1. Jester lie (3 evils in 2-evil game) key signal. Wrong exec on corrupted Jester (HP 6 to 1). Knight #6 execution immunity = free check. Poet #5 no corrupted contradicted known corruption = identified as Lilis. 1 HP finish. Corrupted: #1 Jester.",
+      "date": "2026-03-08 15:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc15_v1",
+      "notes": "9 cards, 4 evils. Witch blocked #9 until killed. Bard contradiction (#1 no corrupted vs #7 1-away) caught Puppeteer. Knight immunity free-check on #8 revealed Lilis. No wrong execs. HP 6/10.",
+      "date": "2026-03-08 16:10"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc15_v2",
+      "notes": "Loss: Oracle misclassified as Outcast in deck caused wrong exec #7. Knight #6 corrupted by Pooka #5, immunity failed, second wrong exec. Corrupted: #3,#4,#6. Bard #5 was Pooka, lied about no corruption. PD corrupted #3.",
+      "date": "2026-03-08 16:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v2b",
+      "notes": "6 cards, 1 evil. Pooka at #5 disguised as Judge, corrupted #3,#4,#6. Judge lied about #4 truthfulness. Drunk at #3 disguised as Oracle. Perfect HP.",
+      "date": "2026-03-08 16:40"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc15_v3",
+      "notes": "9 cards, 3 evils. Witch blocked #9, killed Witch first. Poisoner at #4 found via Oracle cross-reference. 50/50 Baa at #3 vs #5, got it right. Corrupted: #5 Empress. Wrong exec #1 Baker (HP 10 to 5).",
+      "date": "2026-03-08 16:46"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc15_v4",
+      "notes": "9 cards, 2 evils. Pooka at #5 corrupted #6 Lover and #8 Drunk. Doppelganger at #4 immune to corruption. Wrong exec #3 Baker (HP 10 to 5). Druid x2 found both outcasts in 1-2-3 group.",
+      "date": "2026-03-08 16:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v5",
+      "notes": "7 cards, 2 evils. Slayer killed Minion at #5 (free kill). Baa at #1 found via 50/50. Perfect HP. Doppelganger at #4. 0-scenario issue after slayer_result - needed explicit execute to set evil role.",
+      "date": "2026-03-08 17:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc15_v6",
+      "notes": "8 cards, 2 evils. Perfect game 10HP. Baa at #5, Poisoner at #7. Corrupted: #4 Oracle, #6 Hunter (both adjacent to Baa #5). Jester found 2 evils in {1,6,7}, solver narrowed to 7 scenarios then guaranteed win path.",
+      "date": "2026-03-08 17:08"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc15_v7",
+      "notes": "10 cards, 3 evils. Final village of Asc15. Lilis game with 2 night kills (#5, #10, both good). HP 6/10. Corrupted: #1 Judge (by Poisoner #4 adjacent). Two Bards: #3 was Lilis disguised, #9 was Chancellor disguised. Judge ability was corrupted so said #9 truthful (wrong). PD #7 saved the game revealing #4 evil and #1 corrupted. #8 was Doppelganger copying Medium.",
+      "date": "2026-03-08 17:16"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc16_v1",
+      "notes": "Lilis game. Night killed #8. Dreamer lie exposed Minion at #2. Chancellor at #7 (67%). #1 was Doppelganger showing Medium. Confessor #9 corrupted (dizzy). 6HP.",
+      "date": "2026-03-08 19:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v2",
+      "notes": "Witch blocked #7. Slayer#6 killed Baa#3. Forced exec #1=Witch. Perfect game 10HP.",
+      "date": "2026-03-08 19:37"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc16_v3",
+      "notes": "Pooka#3 corrupted Bard#4. 50/50 between #2/#3, exec lookahead won. Wrong exec #2 cost 5HP. HP=5.",
+      "date": "2026-03-08 19:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v4",
+      "notes": "Pooka#4 corrupted Bishop#3 and Slayer#5. FT#6 eliminated #2/#3, solved to 1 scenario. Perfect 10HP.",
+      "date": "2026-03-08 19:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v5",
+      "notes": "Pooka#4 corrupted Slayer#3+Gemcrafter#5. Bishop#6 also corrupted (PD passive?). Knight free check at #1 won the game. Perfect 10HP.",
+      "date": "2026-03-08 19:52"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc16_v6",
+      "notes": "Drunk#1 as Empress (corrupted lie). Doppelganger#4 as FT (truthful but killed). Chancellor#5 as Baker. Poisoner#7 as Slayer corrupted #8. Solver missed Doppelganger-FT truthfulness deduction.",
+      "date": "2026-03-08 20:03"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc16_v6b",
+      "notes": "Lilis game. Poisoner#10 corrupted Medium#1. Lilis killed #5(Good) and #10(Poisoner). Clean solve after Judge ability.",
+      "date": "2026-03-08 20:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc16_v7",
+      "notes": "Perfect game. Jester+Judge combo identified all 3 evils. Witch blocked #9 reveal. No corruption.",
+      "date": "2026-03-08 20:26"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v1",
+      "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10->6). Solver nailed both evils from passive info alone (2 scenarios). Gemcrafter #5 lied about #6 being Good, Confessor #6 dizzy = evil. No abilities needed.",
+      "date": "2026-03-08 23:02"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc17_v2",
+      "notes": "SOLVER BUG: Solver said #3 was definitely Chancellor but #5 was actually Chancellor disguised as Knight. Root cause likely board_outcast_count constraint rejecting 2 Good Outcasts (Bombardier #3 + Wretch #6) when no=1. Chancellor converts 1 Villager to Outcast, making actual count 2. Corrupted: #2 Confessor, #7 Baker.",
+      "date": "2026-03-08 23:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc17_v2b",
+      "notes": "Witch blocked #10. Judge corrupted by Pooka. PD revealed #8 evil + #9 corrupted. 50/50 on #6/#7, solver chose #6 wrong (corrupted Judge), then #7 Witch. Clean win with 5 HP left.",
+      "date": "2026-03-08 23:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc17_v3",
+      "notes": "Clean sweep - 2 scenarios, both evils identified immediately. Doppelganger at #6 disguised as Bishop. No wrong executions, 10 HP.",
+      "date": "2026-03-08 23:30"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v4",
+      "notes": "Lilis game. Night killed #5 and #10 (both good). Knight check on #6 found Lilis. Jester confirmed #1,#3,#4 clean. Drunk at #1 was corrupted. Clean solve, no wrong execs.",
+      "date": "2026-03-08 23:37"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v5",
+      "notes": "Lilis+Puppeteer game. Lilis killed #9 and #10 (both good). Oracle info + Empress narrowed evils perfectly. Druid corrupted by Poisoner. No wrong execs, 6 HP.",
+      "date": "2026-03-08 23:42"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc17_v6",
+      "notes": "Lost to Bombardier protection. Minion at #9 disguised as Bombardier. Solver refused to execute #9 (57% evil). Forced to guess #2 (43%) \u2014 wrong. Jester #5 corrupted by Pooka, bad Jester info cascaded. Two corrupted cards (#4 Empress, #5 Jester).",
+      "date": "2026-03-08 23:53"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v6b",
+      "notes": "Lilis game, Witch-blocked #6 confirmed evil via night kill. Drunk#8 corrupted. 50/50 Lilis at #9 with budget.",
+      "date": "2026-03-09 00:10"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc17_v7",
+      "notes": "Clean 2-exec win. Poisoner corrupted Slayer#3 (couldn't kill). Jester+Judge+Slayer-miss narrowed to 1 scenario.",
+      "date": "2026-03-09 00:20"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc18_v1",
+      "notes": "Pooka game, 2 wrong execs (#4 Bishop, #1 Drunk), solver narrowed to 1 scenario after Drunk reveal. #1 Drunk corrupted, #6 Druid corrupted by Pooka#8. Score 120, HP 3/10.",
+      "date": "2026-03-09 00:34"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc18_v2",
+      "notes": "LOSS: Solver had only 2 scenarios, missed true scenario. #7=Pooka, #4=Drunk(as Druid), #1=Confessor corrupted. Solver thought #1 was either Pooka or Drunk. True scenario filtered out. Need to investigate why.",
+      "date": "2026-03-09 00:42"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc18_v2b",
+      "notes": "Lilis game, night kill #5. Both evils identified cleanly: #8 definite Lilis, #2 Twin Minion. Dreamer confirmed. HP 8/10.",
+      "date": "2026-03-09 01:02"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc18_v3",
+      "notes": "WIN: PD confirmed #1 not corrupted -> definite evil. Jester corrupted by Puppeteer (said 3 evils). Empress#4 corrupted. Lookahead guaranteed win via #4 exec. 1 wrong exec.",
+      "date": "2026-03-09 01:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v4",
+      "notes": "WIN: Perfect game. Confessor dizzy confirmed Baa#6. Jester confirmed Poisoner#1 via Wretch counting. Baker#8 was corrupted by Poisoner. 0 wrong execs.",
+      "date": "2026-03-09 01:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v5",
+      "notes": "WIN: Perfect game. PD revealed #3 evil + #7 corrupted. Knight check on #2 free. Pooka#8 corrupted #7 Empress and #6 Druid. #9=Doppelganger. 0 wrong execs.",
+      "date": "2026-03-09 01:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v6",
+      "notes": "WIN: Perfect 3-evil game. PD confirmed #1 not corrupted (evil). Poet-as-Scout identified Pooka distance. Solver found all 3 evils definitively. #6 Knight corrupted by Pooka. 0 wrong execs.",
+      "date": "2026-03-09 01:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc18_v7",
+      "notes": "WIN: Perfect 3-evil game! Confessor confirmed #2 evil. Bishop+Enlightened+Poet narrowed candidates. Knight check free. All 3 evils found with 0 wrong execs. Ascension 18 complete!",
+      "date": "2026-03-09 01:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v1",
+      "notes": "Perfect game 10HP. Doppelganger at #5 as Confessor. FT#7 corrupted by Pooka#6, Jester#8 corrupted by Poisoner#1. Solver nailed it with 1 scenario.",
+      "date": "2026-03-09 11:18"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc19_v2",
+      "notes": "Lilis game with night kills. Drunk#3 corrupted (displayed as Knitter), Doppelganger#5 as Architect. Poet copied Scout ability showing Lilis distance. 0 wrong execs, 6HP (4HP lost to 2 Lilis nights).",
+      "date": "2026-03-09 11:32"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc19_v3",
+      "notes": "LOSS: PD evil reveal pointed at Wretch#8 (registers as Evil), solver treated as truly evil. Executed Wretch (5HP), then couldn't find Baa#1 among 4 candidates. Baker chain analysis ruled out #2 but failed to correctly handle #1. Need to fix: PD evil reveal should not confirm Wretch as truly evil.",
+      "date": "2026-03-09 11:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v4",
+      "notes": "Perfect game, 1 scenario solve, Puppeteer+Puppet+Pooka",
+      "date": "2026-03-09 12:02"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc19_v5",
+      "notes": "Win 5HP, 1 wrong exec (#9 Hunter), Doppelganger disguised as Alchemist at #1",
+      "date": "2026-03-09 12:07"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc19_v6",
+      "notes": "Win 5HP, 1 wrong exec (#6 Drunk corrupted), Knight#8 survived exec (immunity). PD check #2 clean. Druid#6 was corrupted Drunk. Knitter#1 <Corrupted>. Bard#4 was actually Drunk<Corrupted>?",
+      "date": "2026-03-09 12:16"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v7",
+      "notes": "Perfect 10HP, Knight free check caught Baa#5, Jester narrowed to #2/#3, Bombardier protection avoided #2, 50/50 on #3 hit Shaman",
+      "date": "2026-03-09 12:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc19_v8",
+      "notes": "WIN: Shaman+Minion+Pooka, perfect game 10HP. Dreamer on #1 said Minion, PD confirmed #1 not corrupted. Solver narrowed to 1 scenario. Both Architects (#3,#9) corrupted by Pooka. Ascension 19 COMPLETE \u2014 all 7 villages cleared!",
+      "date": "2026-03-09 12:30"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc20_v1",
+      "notes": "WIN: Puppeteer+Minion+Pooka+Puppet, 5HP (1 wrong exec on corrupted Alchemist#8). Pooka corrupted #6,#8,#9. Both Confessors dizzy \u2014 #1 was Puppeteer, #2 was Minion adjacent. Solver execution lookahead correctly budgeted wrong exec. First Ascension 20 village cleared!",
+      "date": "2026-03-09 12:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc20_v2",
+      "notes": "WIN: Pooka only evil, perfect 10HP 1-scenario solve. Pooka corrupted adjacent #4 Confessor and #6 Baker. Confessor dizzy confirmed corruption. Bombardier at #2 safely avoided.",
+      "date": "2026-03-09 12:45"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc20_v3",
+      "notes": "WIN: Poisoner+Lilis, 6HP. Lilis killed #9 in night (good). Poisoner disguised as Bombardier at #3 \u2014 corrupted adjacent Slayer#4. Druid said no outcasts among #1,#3,#4 \u2014 correct (Poisoner disguised, not real outcast). Judge confirmed Druid lying (corrupted by Poisoner adjacency? No \u2014 Druid at #2 not adjacent to Poisoner#3 in 9-card circle). Solver found Lilis at 40% confidence \u2014 risky but paid off.",
+      "date": "2026-03-09 12:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc20_v4",
+      "notes": "Perfect game 10HP. Doppelganger#1 disguised as Poet, Bombardier#2. Solver found both evils definitively in 10 scenarios. Clean 2-exec win.",
+      "date": "2026-03-09 13:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc20_v5",
+      "notes": "Perfect 10HP. PD#7 was Minion (lied about #1 evil+corrupted). PD#6 was real (clean check on #2). Judge#5=Chancellor gave false lying result. Pooka#4 corrupted adjacent #3(Drunk) and #5(Chancellor's neighbor). 50/50 coin flip on #5 vs #6, got lucky.",
+      "date": "2026-03-09 13:14"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc20_v6",
+      "notes": "WIN 3HP. Lilis game with Witch blocking #8. Lilis killed #7 (night). PD#4 found #6 corrupted + revealed #2 evil \u2014 but #2 was good Oracle (PD was Witch, lied!). Wrong exec on #2 Oracle (-5HP). Single scenario survived after wrong exec: #4=Witch, #6=Lilis. Knight check on #3 confirmed good. #1=Drunk<Corrupted>.",
+      "date": "2026-03-09 13:23"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc20_v7",
+      "notes": "WIN 5HP. Slayer#8 killed Pooka#5 (75% confidence). 50/50 between #1 and #7 for Twin_Minion \u2014 wrong exec on #1 Knitter (-5HP), then #7=Twin_Minion. Pooka corrupted adjacent #4(Baker) and #6(Druid). Ascension 20 complete!",
+      "date": "2026-03-09 13:29"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc21_v1",
+      "notes": "WIN 1HP, Poisoner corrupted Knight#2+FortuneTeller#3, corrupted Knight exec cost 9HP (5+4 extra damage), Slayer#4 missed #6 (6% bad outcome), Slayer#9 killed Poisoner#4, solver deduced Baa#6 with certainty",
+      "date": "2026-03-09 13:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v2",
+      "notes": "WIN perfect 10HP, Witch blocked #8 (Dreamer), executed Witch first to unblock, Dreamer corrupted but result still narrowed Baa to #6, two Confessors both dizzy",
+      "date": "2026-03-09 13:53"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc21_v3",
+      "notes": "WIN 8HP, Lilis killed #5 night 1, Witch blocked #9, solver found all 3 evils with certainty, executed facedown #9",
+      "date": "2026-03-09 13:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v4",
+      "notes": "WIN perfect 10HP, Shaman duplicated Knitter, two Bombardiers (1 real 1 Baa-fake), solver found both evils immediately from 2 scenarios",
+      "date": "2026-03-09 14:02"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc21_v5",
+      "notes": "WIN 1HP: Pooka+Witch+Minion. Corrupted Knight cost 9HP. Bishop#1 and Empress#3 corrupted by Pooka#2. Solver 67% on #6 Minion \u2014 correct call.",
+      "date": "2026-03-09 14:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v6",
+      "notes": "WIN 10HP perfect: Baa+Chancellor+Witch. Witch blocked #9 all game. Jester cross-checks narrowed to 10 scenarios. Execution lookahead guaranteed win.",
+      "date": "2026-03-09 14:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc21_v7",
+      "notes": "WIN 10HP perfect: Poisoner+Baa. PD revealed #3 evil + #1 corrupted. Poisoner corrupted #2 (Judge). Bishop#1 corrupted by PD passive. Ascension 21 complete 7/7!",
+      "date": "2026-03-09 14:33"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v1",
+      "notes": "WIN 6HP: Twin_Minion+Lilis+Puppeteer+Puppet. First Asc22 game, 4 evils with Puppeteer+Puppet. Lilis killed #10 at night. Solver found all 4 evils definitively.",
+      "date": "2026-03-09 14:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc22_v2",
+      "notes": "WIN: PD evil reveal confirmed Pooka#4, perfect game 10HP. Pooka corrupted #2,#3,#5.",
+      "date": "2026-03-09 14:49"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc22_v3",
+      "notes": "WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7.",
+      "date": "2026-03-09 14:56"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v4",
+      "notes": "WIN 6HP: Puppeteer+Lilis, PD#8 killed by Lilis night. Medium confirmed dead PD. PD corrupted Architect#4. Required manual dead card entry to fix 0-scenario bug \u2014 need solver fix for Medium-revealed dead cards.",
+      "date": "2026-03-09 15:08"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc22_v5",
+      "notes": "WIN 8HP: Lilis+Witch+Minion. Witch blocked #9, Lilis killed #7. Jester lying about 2 evils confirmed all 3 evil positions. Dopp#2 disguised as Medium.",
+      "date": "2026-03-09 15:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc22_v6",
+      "notes": "WIN: Witch+Minion+Lilis, 6HP, 0 wrong execs. PD#9 dead corrupted #7 Judge. Both Judges lied (one evil one corrupted) but Bishop+Empress combo solved it. Had to manually add PD#9 card entry for solver to model corruption.",
+      "date": "2026-03-09 15:35"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc22_v7",
+      "notes": "WIN: Lilis+Shaman, 8HP, 0 wrong execs. Perfect instant 1-scenario solve. Bishop+Enlightened+Hunter+Medium all cross-referenced cleanly. Bombardier safely avoided.",
+      "date": "2026-03-09 15:41"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc23_v1",
+      "notes": "WIN: 50/50 Poisoner at #3 vs #2. Drunk#1(Jester) corrupted, Scout#2 corrupted by Poisoner#3. Empress#4 truthful in winning scenario. HP=4, 0 wrong execs. Lilis killed #8 at night.",
+      "date": "2026-03-09 16:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v2",
+      "notes": "WIN: Perfect game. Witness fix (0=no affected) enabled solve. Druid confirmed no outcast in {1,2,3}, #4 definitely evil. 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v3",
+      "notes": "WIN: Perfect game. Judge#4(Baa) lied about Knight#2 lying. Knitter+Architect+Medium cross-referenced to lock both evils at adjacent #4,#5. 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v4",
+      "notes": "WIN: Perfect 3-evil game\\! Baa+Witch+Chancellor. Druid found Drunk, Slayer couldn't kill Doppelganger#1(Wretch). 0 wrong execs, 10HP.",
+      "date": "2026-03-09 16:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc23_v5",
+      "notes": "Perfect game, PD found Chancellor#1, Judge confirmed, Baa#4 disguised as Poet. Drunk#3 and Judge#5 both corrupted.",
+      "date": "2026-03-09 16:56"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc23_v6",
+      "notes": "Perfect game, Lilis night killed #7 (Good). Solver found both evils with only 2 scenarios via Scout+Enlightened+Architect info. 8HP, 0 wrong execs.",
+      "date": "2026-03-09 17:01"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc23_v7",
+      "notes": "Perfect game. Lilis killed #8 night 1. Witch blocked #7 but solver found Witch at #4 via FT(#3,#5)=False. Drunk#3 corrupted. 8HP, 0 wrong execs. ASCENSION 23 COMPLETE 7/7!",
+      "date": "2026-03-09 17:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v1",
+      "notes": "Perfect game. Witch#7 disguised as Lover, Pooka#1 disguised as Druid. Corrupted #2 Lover and #8 Bishop (both adjacent to Pooka). 10HP, 0 wrong execs.",
+      "date": "2026-03-09 17:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v2",
+      "notes": "Perfect game, Witch+Baa, Jester confirmed 3 good, execution lookahead won",
+      "date": "2026-03-09 17:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v3",
+      "notes": "Lilis game, Poisoner target fix saved us \u2014 dead #9 needed to be valid Poisoner target for Bard distance-1 deduction",
+      "date": "2026-03-09 17:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v4",
+      "notes": "Lilis+Puppeteer+Poisoner game, 4 evils. Slayer#7 killed Poisoner#5 (fake Judge), exec lookahead found Puppeteer#9+Lilis#1+Puppet#8. Drunk#4 corrupted.",
+      "date": "2026-03-09 17:47"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v5",
+      "notes": "Perfect 10HP, PD#5 was evil Chancellor (lied about #7 evil/#6 corrupted), Baa#6 was fake Alchemist. Drunk#2 corrupted.",
+      "date": "2026-03-09 17:55"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc24_v6",
+      "notes": "WIN 6HP. Lilis night killed Poisoner#5 (evil). Evils killed counter delayed update (0/3 after night1 kill, 1/3 after batch2). Doppelganger#3 copied Knight. No corruption (Poisoner adjacent to 2 evils). Witch#4 disguised as Lover, Lilis#6 disguised as Lover.",
+      "date": "2026-03-09 18:13"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc24_v7",
+      "notes": "WIN 10HP perfect. PD#4 confirmed #7 not corrupted, solver narrowed to Pooka#7. Chancellor#5 disguised as Hunter, Pooka#7 disguised as Hunter. Fixed: (1) PD is Outcast not Villager \u2014 data entry error caused 0 scenarios. (2) Added Chancellor conversion tracking in solver for Bishop type validation. Ascension 24 COMPLETE!",
+      "date": "2026-03-09 18:35"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc25_v1",
+      "notes": "Lilis at #10 survived night 2 (can't kill self, still deals 2HP). Wrongly assumed #10 dead, executed Baker #4 (corrupted good), HP 6->1. User caught the error. Corrupted: #2 Dreamer, #4 Baker.",
+      "date": "2026-03-09 19:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc25_v2",
+      "notes": "Memory reader side-quest game. Solver worked well but missed FT ability. Wretch wrong exec cost 5 HP.",
+      "date": "2026-03-09 20:52"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc25_v3",
+      "notes": "PD name bug fix (PlagueDr vs Plague Doctor). Oracle#1 corrupted by PD. 1HP clutch after wrong exec on #8.",
+      "date": "2026-03-09 21:13"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc25_v4",
+      "notes": "Slayer couldn't kill revealed Chancellor. Doppelganger#1 as Hunter, Drunk#8 as Knitter corrupted. Lilis night killed #6. 6HP.",
+      "date": "2026-03-09 21:19"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc25_v5",
+      "notes": "Perfect 3-evil deduction. Two Knitters, contradicting pairs, Scout+Empress+Bard constraints narrowed all evils. 8HP.",
+      "date": "2026-03-09 21:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc25_v6",
+      "notes": "Witch blocked #9. PD active revealed #7 evil. Perfect 10HP. Corrupted: #1 Druid (PD), #3 Bishop (Pooka), #5 Knight (Pooka)",
+      "date": "2026-03-09 21:35"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc25_v7",
+      "notes": "Asc25 COMPLETE! PD check on Medium decisive \u2014 both evils identified with certainty. Perfect 10HP. Corrupted: #4 Baker (PD passive). Baa warning for outcast count was a false alarm \u2014 no=1 correct.",
+      "date": "2026-03-09 21:46"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc26_v1",
+      "notes": "Drunk at #7 corrupted. 0-scenario bug: forgot to mark executed Drunk as corrupted. Solver perfect deduction once fixed.",
+      "date": "2026-03-09 22:27"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc26_v2",
+      "notes": "4 evils. Wrong exec on #3 Bishop (86% was unlucky 14%). Solver perfect deduction after. Judge corrupted by Poisoner. Doppelganger at #7 disguised as Witness.",
+      "date": "2026-03-09 22:37"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc26_v3",
+      "notes": "LOSS: Druid misclassified as Outcast in deck entry. Solver wrongly had 1 scenario claiming #1=Pooka. Actually #1=Judge(corrupted). Wrong exec #1 cost 5HP. After fixing deck (Druid=Villager), solver correctly found #2=Pooka. Executed #2 but HP still hit 0 (mystery: evils killed stayed 1/2, unclear why correct exec cost HP). True: #7=Doppelganger, #1=Judge(corrupted by Pooka#2). Root cause: data entry error.",
+      "date": "2026-03-09 23:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc26_v3b",
+      "notes": "WIN 6HP. Lilis game, 9 cards. Two Knitters + two Scouts. Solver immediately found #1 and #9 as definite evil (10 scenarios). #7=Doppelganger. Night killed #5. Perfect deduction.",
+      "date": "2026-03-09 23:07"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc26_v4",
+      "notes": "SOLVER BUG: PD corruption generated in ALL scenarios even though PD cannot be on board (board_outcast_count=1, Wretch fills it). Without PD, no corruption source exists. Bard truthful -> no corrupted -> Confessor dizzy = evil -> #6 definitely evil. Solver incorrectly had 53/53 split. Fix: validate PD is on board before generating PD corruption.",
+      "date": "2026-03-09 23:23"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc26_v4b",
+      "notes": "Solver correct. #7 Poisoner at 57%, #9 Lilis at 33%. Execution lookahead guaranteed win. #5 Drunk corrupted. Lilis night killed #8. Knight at #2 blocked execution (confirmed good). Execute mode coordinate bug caused delay - clicked (641,135) instead of (1280,196) for card #9.",
+      "date": "2026-03-09 23:57"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc26_v5",
+      "notes": "5HP remaining, wrong exec on #4 corrupted Confessor",
+      "date": "2026-03-10 00:43"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc26_v6",
+      "notes": "0-scenario bug fixed (Medium+Baker conversion). Misclicked #7 instead of #2 (wrong coords). Even correct click would hit Drunk (#2=75% evil but was Good Drunk). Solver had wrong scenario distribution.",
+      "date": "2026-03-10 01:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc26_v7",
+      "notes": "Poet-Oracle+Wretch bug fix game. 0 scenarios initially, fixed Wretch-Oracle minion pool check",
+      "date": "2026-03-10 13:20"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc26_v8",
+      "notes": "Wretch Slayer kill cost 5HP. Fixed Druid unrevealed-target bug + Wretch-Oracle minion pool. Baa warning wrong - no=2 was correct.",
+      "date": "2026-03-10 13:49"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc27_v1",
+      "notes": "Baker conversion chain constraint added: evil Bakers don't trigger conversion, so converted Baker needs a good Baker revealed before it. Fixed 0-scenario bug (Medium good_role=real not parsed). Went from 3 scenarios (33%) to 2 (50%) with chain fix. 5HP, 1 wrong exec (#1 Doppelganger).",
+      "date": "2026-03-10 14:28"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc27_v2",
+      "notes": "Solver WIN bug: recommended WIN at 3/4 evils, didn't track Puppet needing execution. Manual deduction found #8=Puppet via Jester elimination.",
+      "date": "2026-03-10 14:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v3",
+      "notes": "Perfect village 10HP. Knight check on #10 found Pooka demon immediately. PD confirmed #1 corrupted by Pooka.",
+      "date": "2026-03-10 15:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v4",
+      "notes": "Perfect 10HP. Two Bombardiers on board, Druid found no outcasts among 1,2,4 confirming #1 evil. Dreamer tagged #6 as Pooka.",
+      "date": "2026-03-10 15:20"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc27_v5",
+      "notes": "Clean solve with Knight free check and FT abilities. Puppeteer+Puppet+Lilis game. HP mystery: showed 6/10 but no night kills visible.",
+      "date": "2026-03-10 15:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc27_v6",
+      "notes": "Perfect solve at 10HP. PD checks narrowed from 27->13->7->1 scenarios. Pooka corrupted #5 Poet, PD corrupted #4 Baker.",
+      "date": "2026-03-10 15:49"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc27_v7",
+      "notes": "Close win at 1HP. Lilis killed #5 Oracle. Solver stuck 50/50 on #6/#7 (both outcasts, only 1 on board). Manual deduction: execute Wretch first (safe -5HP) then Bombardier. Wretch wrong exec cost 5HP, survived.",
+      "date": "2026-03-10 16:01"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc28_v1",
+      "notes": "PD+Pooka dual corruption. 0-scenario bug from executed_good_corrupted=false when #3 was corrupted. Fixed mid-game.",
+      "date": "2026-03-10 16:38"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v2",
+      "notes": "Perfect 10HP. PD check solved it to 1 scenario.",
+      "date": "2026-03-10 16:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v3",
+      "notes": "Perfect 10HP. FT on confirmed-Good caught the lie. Jester corruption confirmed Pooka position.",
+      "date": "2026-03-10 16:53"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v4",
+      "notes": "PD active confirmed #3 evil + #9 corrupted. Jester on #1,#2,#4 found 1 evil. Druid #4 lied (Doppelganger). Perfect 10HP.",
+      "date": "2026-03-10 17:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v5",
+      "notes": "Judge #8 on #1 = truthful, confirmed #3=Pooka. Corrupted: #2 Hunter, #4 Dreamer. Perfect 10HP.",
+      "date": "2026-03-10 17:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc28_v6",
+      "notes": "Witch blocked #10. PD clean on #5. Solver found #4+#5 definite evil, then 1 scenario after Minion exec. Medium #1 corrupted. Perfect 10HP.",
+      "date": "2026-03-10 17:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc28_v7",
+      "notes": "Wrong exec on #6 Bishop (5HP). Solver found #5+#7 definite evil after. #4 Drunk(Oracle) corrupted. Won at 5HP.",
+      "date": "2026-03-10 17:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v1",
+      "notes": "Jester #2 lied (2 evils among confirmed good). #8 Enlightened + #4 Bard corrupted by Poisoner. Perfect 10HP.",
+      "date": "2026-03-10 17:35"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc29_v2",
+      "notes": "Solver had 1 wrong scenario: predicted #3=Minion #7=Pooka but truth was #5=Pooka #8=Minion. Executed #3 (real Bombardier) = instant loss. Corrupted: #1(PD), #4/#6(Pooka). Need to investigate why correct scenario was eliminated.",
+      "date": "2026-03-10 17:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v3",
+      "notes": "Perfect game 10HP. Jester narrowed to 6 scenarios, exec #9 Minion, exec #2 Twin_Minion, exec #5 Baa.",
+      "date": "2026-03-10 18:01"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc29_v4",
+      "notes": "Lilis game, 8HP. Night killed #8. PD clean check on #6 confirmed evil. Both evils adjacent (#6,#7). Corrupted: #2 Knitter.",
+      "date": "2026-03-10 18:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v5",
+      "notes": "Perfect 10HP, solver found single scenario immediately. Bishop+Lover+Alchemist constraints very powerful.",
+      "date": "2026-03-10 18:10"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc29_v6",
+      "notes": "Win 3HP. Lilis game, night killed #5. Judge self-targeted (wasted ability). PD found #4 clean. Corrupted: #8(Lover). Wrong exec #1 cost 5HP.",
+      "date": "2026-03-10 18:21"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc29_v7",
+      "notes": "Clutch win 1HP! Lilis game. Slayer killed Puppet#8. Wrong exec Bishop#4 cost 5HP. Needed to manually add Puppet role to executed_evil_roles for solver to deduce Puppeteer at #7. Corrupted: #1(Gemcrafter by Poisoner), #6(Drunk always corrupted).",
+      "date": "2026-03-10 18:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc29_v8",
+      "notes": "Perfect 10HP. Druid abilities narrowed down, then execution lookahead guaranteed wins. Corrupted: #1(Poet), #2(Scout) from Pooka#3. #7 was Doppelganger (as Scout). Final village of Asc29!",
+      "date": "2026-03-10 18:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v1",
+      "notes": "Perfect game 10HP. FT#8 on 1,6=True confirmed #6 evil. Witch blocked #1(Slayer). #2=Doppelganger appeared as Alchemist.",
+      "date": "2026-03-10 19:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v2",
+      "notes": "Perfect 10HP. 1 scenario from all info. #7 Knitter corrupted by Pooka.",
+      "date": "2026-03-10 19:10"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc30_v3",
+      "notes": "Lilis game, 1HP clutch. Puppet#9 disguised as Slayer - its ability WORKED and killed Twin_Minion#4! Drunk#3 disguised as Dreamer was corrupted. Wrong exec on #7 Enlightened cost 5HP. Night killed #5 Poet.",
+      "date": "2026-03-10 19:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v4",
+      "notes": "Clean win 10HP. Dreamer#8 was Drunk(Corrupted), gave false info '#6 could be Baa'. Druid#1 found no outcasts among 2,3,4. Knight#7 free check confirmed good. Solver nailed both evils.",
+      "date": "2026-03-10 19:53"
+    },
+    {
+      "result": "loss",
+      "hp": 6,
+      "name": "asc30_v5",
+      "notes": "BOMBARDIER LOSS. Solver said #5 DEFINITELY EVIL but was Good Bombardier. True evils #3=Lilis #4=Chancellor. Bug: Chancellor at #4 has neighbors #3(evil) and #5(Outcast) - no adjacent Villager to convert. Solver likely rejected this Chancellor placement. PD#2 corrupted #8(FT). Need to fix Chancellor constraint to allow no-conversion when no adjacent Villager exists.",
+      "date": "2026-03-10 20:04"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc30_v5b",
+      "notes": "Lilis game, 8HP. Fake Slayer #1 couldn't kill #7 Wretch - proved #1 evil. Night killed #5 Architect. FT#6 confirmed evil in {1,7}. Empress#3 correctly identified as evil. Clean solver deduction.",
+      "date": "2026-03-10 20:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc30_v6",
+      "notes": "Lilis+Puppeteer game 4 evils. 6HP. Judge#5 confirmed Lover#4 truthful, narrowed to 1 scenario. Bard#7 confirmed no corruption. Night killed #6 Bombardier. Solver nailed all 4 evils.",
+      "date": "2026-03-10 20:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc30_v7",
+      "notes": "Perfect win 10HP. PD#4 clean check on #10 narrowed to 3 scenarios. Dreamer#8 on #2 got Shaman (noise, confirmed #2 good). 50/50 on #5/#6, exec #5=Pooka. Corrupted: #2(PD), #6(Pooka). Ascension 30 complete!",
+      "date": "2026-03-10 20:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v1",
+      "notes": "Perfect 10HP. Witch blocked #8. Exec #3=Witch (60% hit). Unblocked #8=Hunter. 50/50 #5/#6, exec #5=Baa. #6=Drunk(corrupted) disguised as Empress.",
+      "date": "2026-03-10 20:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v2",
+      "notes": "Perfect 10HP, 1 exec. Pooka at #2 disguised as Gemcrafter said self-is-Good (lie). Confessor corrupted by adjacent Pooka. #3=Doppelganger.",
+      "date": "2026-03-10 20:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v3",
+      "notes": "Perfect 10HP. Fake PD#8 lied about corruption, solver caught it. Druid confirmed #6=Bombardier. Poisoner#4 corrupted adjacent #5. 3 confident execs, 0 wrong.",
+      "date": "2026-03-10 21:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v4",
+      "notes": "Perfect 10HP. FT#6 was Drunk(corrupted), lied about #1/#2. 50/50 exec #2=Pooka. Pooka corrupted #1(Poet), #3(Bishop). #6=Drunk corrupted.",
+      "date": "2026-03-10 21:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v5",
+      "notes": "Perfect 10HP. Jester#7 claimed 3 evils among 3 positions (impossible with 2 evils) = lying = evil. Witch#2 blocked #8. Judge confirmed #5 truthful. All confident execs.",
+      "date": "2026-03-10 21:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v6",
+      "notes": "Perfect 10HP. 1 scenario, solver nailed it instantly. Corrupted: #2(Baker), #4(Empress) adjacent to Pooka.",
+      "date": "2026-03-10 21:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc31_v7",
+      "notes": "Perfect 10HP. Shaman duplicated Confessor. PD clean check on #7, solver narrowed to 1 scenario after 2 execs. Corrupted: #1(Gemcrafter), #5(Lover) from Pooka#6.",
+      "date": "2026-03-10 21:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc32_v1",
+      "notes": "6HP. Both evils disguised as Medium, mutually lying. PD corrupted #5(Empress). Lilis killed #6(Poet). Baker chain bug found and fixed: 'Baker' as original_role wasn't recognized as original.",
+      "date": "2026-03-10 21:44"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc32_v2",
+      "notes": "Perfect 10HP. Doppelganger#1 disguised as Judge. Pooka#4 corrupted #3(Judge) and #5(Bishop). Both Judges caught lying targets. Solver exec lookahead guaranteed win at 60% hit.",
+      "date": "2026-03-10 21:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc32_v3",
+      "notes": "Perfect game, 10HP. Solver 83% on #5=Baa, then 60% on #4=Witch with guaranteed win.",
+      "date": "2026-03-10 22:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc32_v4",
+      "notes": "Lilis game, 6HP. Corrupted: #9 Empress. Night killed #7. PD checked #1 clean. Solver nailed all 3 evils.",
+      "date": "2026-03-10 22:16"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc32_v5",
+      "notes": "Lilis game, 8HP. Corrupted: #1 Judge. Slayer killed Puppeteer. Two FTs (both evil lies), two Judges. Solver found all 3.",
+      "date": "2026-03-10 22:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc32_v6",
+      "notes": "Perfect game 10HP. Knight checks on #3 and #5 both passed (uncorrupted). Dreamer said #7=Baa, confirmed. #5=Doppelganger-as-Knight had immunity.",
+      "date": "2026-03-10 22:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc32_v7",
+      "notes": "Perfect game, 10HP. PD check nailed #4 as evil. Slayer no-kill on #7 confirmed #1=Baa. Corrupted: #3 Lover, #6 Druid.",
+      "date": "2026-03-10 22:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc33_v1",
+      "notes": "Perfect game, 10HP. PD nailed #1 evil, Judge confirmed #3 truth -> solver locked #5=Shaman. Corrupted: #2 Drunk, #4 Alchemist, #9 Enlightened.",
+      "date": "2026-03-10 22:58"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc33_v2",
+      "notes": "Lilis game, 6HP. Jester-Empress ability (lie about 2 evils in #1,#2,#8) actually exposed #3 and #8 as evil. Corrupted: #5 Enlightened. Night killed: #9.",
+      "date": "2026-03-10 23:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc33_v3",
+      "notes": "Perfect game, 10HP. PD found #7 evil, Slayer killed #3=Pooka. Corrupted: #2 Bard, #9 Drunk.",
+      "date": "2026-03-10 23:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc33_v4",
+      "notes": "Perfect game, 10HP. Dreamer #1 saw #5=Baa, PD #8 found #5 clean, Jester #6 (Empress) found 1 evil in #3,#5,#7, FT #7 found no evil in #1,#3. Solver locked #5=Poisoner then #2=Baa. Corrupted: #1,#4.",
+      "date": "2026-03-10 23:23"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc33_v5",
+      "notes": "Lilis game. Night killed #9 (Shaman, evil). Druid #8 (Twin Minion) lied about Drunk among #1,#2,#3 -> solver locked #8 as evil. Exec lookahead guaranteed win on #7 (75% Lilis). HP 6/10. Corrupted: #2.",
+      "date": "2026-03-10 23:34"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc33_v6",
+      "notes": "Lilis+Puppeteer game, 4 evil. Night killed #9 (good Empress). Bishop #1 (evil Twin Minion) lied. Jester #3 (Empress) found 2 evils in #1,#2,#6. Judge #4 found #1 lying. Exec #5=Lilis, #1=Twin Minion, then 50/50 on #3 (good Jester, wrong exec HP 6->1), solver locked #6=Puppet #7=Puppeteer. HP 1/10.",
+      "date": "2026-03-10 23:45"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc33_v7",
+      "notes": "Lilis game, Wretch in deck. Night killed #5 (good Dreamer). Oracle #1 (evil Minion) lied '#3 or #5 is Minion'. Judge #2 found #3 truthful. Jester #3 (Empress) found 2 evils in #1,#2,#6 -> locked #1 and #6 as evil. HP 6/10. Ascension 33 complete (7/7).",
+      "date": "2026-03-10 23:57"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc34_v1",
+      "notes": "Witch blocked #8. PD corrupted #4 Poet and #9 Oracle. Memory reader perfect match.",
+      "date": "2026-03-11 17:03"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v2",
+      "notes": "Perfect game 10HP. Dreamer on #7 got Twin_Minion, FT confirmed #1/#2 good. #1 Drunk Corrupted.",
+      "date": "2026-03-11 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v3",
+      "notes": "Perfect 10HP. 3 Confessors on board (2 evil disguises + Drunk). Bishop+Hunter nailed it. #7 Drunk Corrupted.",
+      "date": "2026-03-11 17:16"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc34_v4",
+      "notes": "Lilis game 6HP. Night killed #6 Doppelganger. #9 Scout corrupted. FT confirmed evil in #1/#7 -> solver locked #7. flip --lilis bug: re-clicked already-flipped cards on 2nd batch, accidentally activated FT ability (cancelled).",
+      "date": "2026-03-11 17:26"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc34_v5",
+      "notes": "LOSS from Baker normalization bug. Solver had 1 scenario (wrong: #2=TM,#9=Pooka) due to 'Fortune_Teller' vs 'Fortune Teller' mismatch in Baker validator. Wrong exec #2 cost 5HP. After hotfix, solver had 7 scenarios with true pair only 1/7. Then 71% on #5 (good Doppelganger) killed us. #3 Gemcrafter Corrupted by adjacent Pooka.",
+      "date": "2026-03-11 17:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v5b",
+      "notes": "Perfect 10HP on 3-evil retry. Massive corruption from Pooka (#2): Oracle#1, Empress#3, Drunk#4, Gemcrafter#6 all corrupted. PD check + Druid ability narrowed to 19 scenarios, then 5->1.",
+      "date": "2026-03-11 17:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v6",
+      "notes": "Perfect game 10HP. PD#2 clean on #5, PD#4 (evil) lied about #7/#10. Judge#8 corrupted said #2 lying -> solver narrowed to 1 scenario. 3 correct execs.",
+      "date": "2026-03-11 18:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc34_v7",
+      "notes": "Perfect 10HP. Corrupted Jester said 2 evils among 1,2,4 (impossible with 1 evil) -> solver narrowed to 1 scenario confirming #6 Pooka. Ascension 34 complete 7/7!",
+      "date": "2026-03-11 18:09"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc35_v1",
+      "notes": "6HP. Lilis game, 10 cards. Knight free check found Lilis. Shaman dup Medium. FT+Jester narrowed last evil.",
+      "date": "2026-03-11 18:41"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc35_v2",
+      "notes": "8HP. Lilis game, 8 cards. Shaman dup Alchemist. Confessor dizzy+no corruption source=evil disguise. FT alignment test confirmed.",
+      "date": "2026-03-11 18:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc35_v3",
+      "notes": "Perfect 10HP. 7 cards, 1 evil Pooka. Solver 1 scenario, instant solve. Pooka corrupted #4 Dreamer and #6 Poet. Drunk at #3 disguised as Lover.",
+      "date": "2026-03-11 18:55"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc35_v4",
+      "notes": "Perfect 10HP. 8 cards, 2 evil. Both Mediums were evil (Minion+Baa disguised). Scout+Poet both reported Baa 1 from Minion. Execution lookahead guaranteed win on #2.",
+      "date": "2026-03-11 19:00"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc35_v5",
+      "notes": "6HP. Lilis game, 9 cards. Knight free check caught Twin Minion at #3. Lilis at #6 disguised as Slayer. Lilis killed Bombardier #7 night 1. No corruption sources.",
+      "date": "2026-03-11 19:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc35_v6",
+      "notes": "5HP. 9 cards, 3 evil. Shaman dup Poet. Pooka corrupted #1,#3. PD#5 corrupted #6. PD abilities narrowed to 2 scenarios. Execution lookahead on #1 (50% wrong exec, still wins). Medium #6 lying (corrupted) said #2 real Knitter (lie).",
+      "date": "2026-03-11 19:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc35_v7",
+      "notes": "Perfect 10HP. 6 cards, 1 evil Pooka. 1-scenario instant solve. Pooka corrupted #1 Hunter and #5 Bishop. Ascension 35 complete (7/7).",
+      "date": "2026-03-11 19:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v3",
+      "notes": "Minimum flips strategy. Shaman duplicated Scout+Bard. Fingerprint entropy guided flips. 8/9 flipped, 10HP perfect.",
+      "date": "2026-03-11 21:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v4",
+      "notes": "Perfect 10HP. Fingerprint entropy guided selective reveals. PD check + 2 Bishops + Alchemist + Gemcrafter + FT. Exec lookahead found guaranteed win line at 8 scenarios.",
+      "date": "2026-03-11 22:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v5",
+      "notes": "Perfect 10HP. All 8 flipped. Jester lie (3 evils among 3 targets) was key constraint. Druid found Drunk. Exec lookahead guaranteed win at 4 scenarios.",
+      "date": "2026-03-11 22:18"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v6",
+      "notes": "10HP perfect. PD check + Judge ability. 3 corrupted (Judge, Drunk, Confessor). Minion disguised as Alchemist x3.",
+      "date": "2026-03-11 22:32"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc36_v7",
+      "notes": "10HP perfect. Both evils identified from first solve (6 scenarios). Shaman duped Poet role. Baa added fake Outcast to deck.",
+      "date": "2026-03-11 22:42"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc37_v1",
+      "notes": "8HP win. Lilis night-killed #6 Empress. Puppeteer created Puppet from Scout at #7. 2 scenarios after all reveals, 1 after first exec.",
+      "date": "2026-03-11 22:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc37_v2",
+      "notes": "10HP perfect. Puppet_pos bug fix (executed Puppet not in scenario.puppet_position). FT+Slayer combo. Corrupted: #6 FT.",
+      "date": "2026-03-11 23:07"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc37_v3",
+      "notes": "3HP. Wrong exec #4 (Bard). Solver 0-scenario bug: missed #6=Lilis scenario. PD corruption + Bard no-corrupted + Alchemist cure at night-killed #5 not modeled. Poet bounty_hunter format.",
+      "date": "2026-03-11 23:18"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc37_v4",
+      "notes": "5HP. Wrong exec #8 (Bishop corrupted). Witch blocked #1 (not #9). Dreamer confirmed #3=Witch. Drunk-as-Slayer at #1 (both Slayer shots failed). Corrupted: #1 Drunk, #8 Bishop.",
+      "date": "2026-03-11 23:36"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc37_v5",
+      "notes": "Loss: Shaman disguised as Bombardier. Bombardier protection blocked execution. 4 scenarios 25% each, gambled on #5 wrong.",
+      "date": "2026-03-11 23:49"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc37_v5b",
+      "notes": "8HP, Lilis+Puppeteer+Puppet. Solver found all 3 definite evil. Night kill #6.",
+      "date": "2026-03-11 23:59"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc37_v6",
+      "notes": "6HP. Hidden PD at #9 (night-killed) corrupted Alchemist. Slayer killed Lilis. Judge ability on #3 confirmed truth. Solver fix: hidden PD corruption for night-killed positions.",
+      "date": "2026-03-12 00:19"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc37_v7",
+      "notes": "8HP. Knight trick confirmed #1 good (free exec check). Lilis night-killed #5 (Baker). Scout #8 corrupted by Poisoner. Drunk #3 disguised as Slayer. Guaranteed win via lookahead.",
+      "date": "2026-03-12 00:30"
     }
   ]
 }

@@ -1,0 +1,153 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Bard"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          7,
+          8
+        ],
+        "evil_count": 1
+      }
+    }
+  ],
+  "executed": [
+    3,
+    5,
+    9
+  ],
+  "confirmed_evil": [
+    5,
+    9
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Pooka",
+    "9": "Shaman"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Druid",
+      "Jester",
+      "Baker",
+      "Knight",
+      "Knitter",
+      "Bard"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5,
+    9,
+    8
+  ],
+  "name": "asc15_v4",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "9": "Shaman"
+  },
+  "notes": "9 cards, 2 evils. Pooka at #5 corrupted #6 Lover and #8 Drunk. Doppelganger at #4 immune to corruption. Wrong exec #3 Baker (HP 10 to 5). Druid x2 found both outcasts in 1-2-3 group."
+}

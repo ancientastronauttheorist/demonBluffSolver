@@ -1,0 +1,135 @@
+{
+  "n_cards": 10,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 5
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "equidistant"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "FortuneTeller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "copied_role": "Bounty Hunter",
+        "evil_position": 7
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    6,
+    1,
+    2,
+    3,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    1,
+    2,
+    3,
+    8
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Puppeteer",
+    "2": "Puppet",
+    "3": "Shaman",
+    "8": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5,
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 2,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Knitter",
+      "Empress",
+      "Enlightened",
+      "Poet",
+      "Jester",
+      "FortuneTeller"
+    ],
+    "outcasts": [
+      "Baker",
+      "Bombardier"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Shaman"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc12_v2",
+  "true_evil_positions": {
+    "1": "Puppeteer",
+    "2": "Puppet",
+    "3": "Shaman",
+    "8": "Lilis"
+  },
+  "notes": "4 evils, Lilis killed #5 #6. Wrong exec on #7 FortuneTeller. Squeaked by at 1HP."
+}

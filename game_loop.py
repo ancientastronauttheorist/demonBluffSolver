@@ -129,35 +129,20 @@ def card_baker(pos: int, original_role: str) -> CardInfo:
     return CardInfo(pos, "Baker", info_parsed={"original_role": original_role})
 
 
+def _normalize_role_name(role: str) -> str:
+    """Normalize a role name to its canonical form using the knowledge base."""
+    from knowledge_base import get_card
+    card_def = get_card(role)
+    if card_def:
+        return card_def.name.replace(" ", "_")
+    return role
+
+
 def card_no_info(pos: int, role: str) -> CardInfo:
     """For cards with no deduction info: Slayer, Knight, Bombardier, Wretch, etc."""
+    role = _normalize_role_name(role)
     return CardInfo(pos, role, info_parsed={})
 
-
-# Builder dispatch table for CLI
-CARD_BUILDERS = {
-    "enlightened":     card_enlightened,
-    "knitter":         card_knitter,
-    "confessor":       card_confessor,
-    "gemcrafter":      card_gemcrafter,
-    "lover":           card_lover,
-    "scout":           card_scout,
-    "bard":            card_bard,
-    "fortune_teller":  card_fortune_teller,
-    "oracle":          card_oracle,
-    "medium":          card_medium,
-    "hunter":          card_hunter,
-    "architect":       card_architect,
-    "empress":         card_empress,
-    "witness":         card_witness,
-    "jester":          card_jester,
-    "dreamer":         card_dreamer,
-    "judge":           card_judge,
-    "alchemist":       card_alchemist,
-    "druid":           card_druid,
-    "bishop":          card_bishop,
-    "no_info":         card_no_info,
-}
 
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
 DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
@@ -356,11 +341,13 @@ class GameSession:
         self.night_kills: list[int] = []  # Positions killed by Lilis night
         self.night_kill_evil_count: int = 0  # How many night kills were evil
         self.hp: int = 10
-        self.wrong_exec_cost: int = 2  # Ascension 4 default
+        self.wrong_exec_cost: int = 5  # Asc4+ default (Drunk=2, Lilis=2 are exceptions)
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
+        self.executed_good_corrupted: dict[int, bool] = {}  # pos -> was corrupted (from execution observation)
         self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
         self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
+        self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
 
     # -- Deck --
 
@@ -374,6 +361,18 @@ class GameSession:
     # -- Cards --
 
     def add_card(self, card: CardInfo):
+        # Track reveal order (first entry per position)
+        if card.position not in self.reveal_order:
+            self.reveal_order.append(card.position)
+            # Warn if entry order doesn't match expected #1->#N sequence
+            expected_next = len(self.reveal_order)  # 1st entry should be pos 1, 2nd pos 2, etc.
+            if card.position != expected_next:
+                # Check if it's just not sequential (e.g., entering #3 as 2nd card)
+                print(f"  WARNING: Card #{card.position} entered as reveal #{len(self.reveal_order)}, "
+                      f"but sequential order expects #{expected_next}.")
+                print(f"  Current reveal_order: {self.reveal_order}")
+                print(f"  If cards were flipped out of #1->#N order, this is correct.")
+                print(f"  If this is a mistake, fix now — reveal_order affects Baker validation.")
         # Replace if same position already exists (re-read)
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
@@ -382,9 +381,22 @@ class GameSession:
         # (Judge with target info; PD and Slayer have dedicated commands)
         if card.apparent_role == "Judge" and card.info_parsed.get("target"):
             self.mark_ability_used(card.position)
+        # Medium reveals a dead card's role — auto-create card entry for
+        # night-killed positions so the solver can track PD corruption etc.
+        if card.apparent_role == "Medium":
+            gp = card.info_parsed.get("good_position")
+            gr = card.info_parsed.get("good_role")
+            if gp and gr and gp in self.night_kills:
+                existing = [c for c in self.cards if c.position == gp]
+                if not existing:
+                    dead_card = CardInfo(gp, gr, info_parsed={})
+                    self.cards.append(dead_card)
+                    self.cards.sort(key=lambda c: c.position)
+                    print(f"  [auto] Created card entry for dead #{gp} ({gr}) from Medium info")
 
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
-                      evil_role: Optional[str] = None):
+                      evil_role: Optional[str] = None,
+                      was_corrupted: Optional[bool] = None):
         if pos not in self.executed:
             self.executed.append(pos)
         if was_evil is True and pos not in self.confirmed_evil:
@@ -393,6 +405,9 @@ class GameSession:
             self.confirmed_good.append(pos)
         if evil_role:
             self.executed_evil_roles[pos] = evil_role
+        # Track corruption status for executed good cards
+        if was_evil is False and was_corrupted is not None:
+            self.executed_good_corrupted[pos] = was_corrupted
 
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
@@ -411,13 +426,22 @@ class GameSession:
         if pos not in self.used_abilities:
             self.used_abilities.append(pos)
 
-    def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool):
+    def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool,
+                          evil_role: Optional[str] = None):
         self.slayer_results.append({
             "slayer_pos": slayer_pos,
             "target_pos": target_pos,
             "killed": killed,
         })
         self.mark_ability_used(slayer_pos)
+        # Auto-mark killed target as executed (dead)
+        if killed:
+            if target_pos not in self.executed:
+                self.executed.append(target_pos)
+            if target_pos not in self.confirmed_evil:
+                self.confirmed_evil.append(target_pos)
+            if evil_role:
+                self.executed_evil_roles[target_pos] = evil_role
 
     # -- Solver --
 
@@ -447,6 +471,8 @@ class GameSession:
             wrong_exec_cost=self.wrong_exec_cost,
             board_villager_count=self.board_villager_count,
             board_outcast_count=self.board_outcast_count,
+            reveal_order=list(self.reveal_order),
+            executed_good_corrupted=dict(self.executed_good_corrupted),
         )
 
     @classmethod
@@ -472,6 +498,8 @@ class GameSession:
         session.wrong_exec_cost = state.wrong_exec_cost
         session.board_villager_count = state.board_villager_count
         session.board_outcast_count = state.board_outcast_count
+        session.reveal_order = list(state.reveal_order)
+        session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.used_abilities = list(used_abilities or [])
         return session
 
@@ -491,26 +519,46 @@ class GameSession:
             print(f"\n  >> No definite evil yet. Reveal more cards.")
             # Show per-position evil probability
             if result.n_surviving > 0:
-                unrevealed = set(range(1, self.n_cards + 1)) - set(self.executed) - set(result.definite_good)
-                for pos in sorted(unrevealed):
-                    evil_count = sum(1 for s in result.surviving_scenarios
-                                     if pos in s.evil_positions or pos == s.puppet_position)
-                    pct = evil_count / result.n_surviving * 100
+                state = self.to_game_state()
+                probs = evil_probabilities(state, result)
+                for pos in sorted(probs):
+                    pct = probs[pos] * 100
                     if 0 < pct < 100:
+                        evil_count = int(round(probs[pos] * result.n_surviving))
                         print(f"     #{pos}: {pct:.0f}% chance evil ({evil_count}/{result.n_surviving})")
         print(f"  ({result.n_surviving} surviving scenarios out of {result.n_scenarios})\n")
         return result
 
-    def recommend(self) -> str:
-        result = self.solve()
-        safe_to_execute = [p for p in result.definite_evil
-                           if p not in self.executed and p not in result.bombardier_positions]
-        if safe_to_execute:
-            return f"Execute #{safe_to_execute[0]}"
-        return "Reveal more cards"
-
     def next_action(self):
         """Run solver + strategy, print full recommendation."""
+        # Validate: warn about positions with no card entry
+        entered = {c.position for c in self.cards}
+        dead = set(self.executed) | set(self.night_kills)
+        blocked = set(self.blocked_positions)
+        all_pos = set(range(1, self.n_cards + 1))
+        missing = all_pos - entered - dead - blocked
+        if missing:
+            print(f"  WARNING: No card entry for positions {sorted(missing)}. "
+                  f"Did you forget to enter info for flipped cards?")
+        # Validate: blocked positions without Witch in deck = likely click failure
+        if blocked:
+            has_witch = any(
+                _normalize_role_name(v) == "Witch"
+                for faction in [self.deck.get('villagers', []),
+                                self.deck.get('outcasts', []),
+                                self.deck.get('minions', []),
+                                self.deck.get('demons', [])]
+                for v in faction
+            ) if self.deck else False
+            if not has_witch:
+                print(f"  !! BLOCKED positions {sorted(blocked)} but NO WITCH in deck!")
+                print(f"  !! This is likely a click failure. Re-flip these cards!")
+                print(f"  !! Run: python game_loop.py flip")
+        # Validate: check HP consistency — warn if wrong execs exist but HP unchanged
+        wrong_execs = [p for p in self.executed if p not in self.confirmed_evil]
+        if wrong_execs and self.hp == 10:
+            print(f"  WARNING: {len(wrong_execs)} wrong execution(s) recorded but HP is still 10. "
+                  f"Did you forget to run set_hp?")
         state = self.to_game_state()
         result = solve(state)
         for line in result.reasoning:
@@ -609,6 +657,51 @@ class GameSession:
 
 
 # ============================================================
+# Flip Verification
+# ============================================================
+
+def _verify_flips(mr_output: str, expected_positions: list[int], session):
+    """Check memory reader output to verify all targeted cards actually flipped.
+
+    Parses memory reader table for state=Hidden lines and cross-references
+    against positions we tried to flip. Flags unflipped cards loudly.
+    """
+    import re
+    still_hidden = []
+    for line in mr_output.splitlines():
+        # Memory reader format: "# 1  RoleName   ... Hidden   NO  BLOCKED"
+        m = re.match(r'^\s*#\s*(\d+)', line)
+        if not m:
+            continue
+        pos = int(m.group(1))
+        if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
+            still_hidden.append(pos)
+
+    if still_hidden:
+        print()
+        print("!" * 60)
+        print("  FLIP VERIFICATION FAILED")
+        print(f"  Positions still face-down: {still_hidden}")
+        print(f"  Click likely didn't register (game unfocused?).")
+        # Check if Witch is in the deck -- if not, this is definitely a click failure
+        has_witch = any(
+            _normalize_role_name(v) == "Witch"
+            for faction in [session.deck.get('villagers', []),
+                            session.deck.get('outcasts', []),
+                            session.deck.get('minions', []),
+                            session.deck.get('demons', [])]
+            for v in faction
+        ) if hasattr(session, 'deck') and session.deck else False
+        if not has_witch:
+            print("  No Witch in deck -- this is NOT a Witch block.")
+            print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
+        else:
+            print("  Witch IS in deck -- could be Witch blocking last card.")
+            print("  If only last card is hidden, likely Witch. Otherwise re-flip.")
+        print("!" * 60)
+
+
+# ============================================================
 # CLI
 # ============================================================
 
@@ -619,7 +712,7 @@ def _parse_role_list(spec: str) -> list[str]:
     return [r.strip() for r in spec.split(",") if r.strip()]
 
 
-def _parse_card_cli(args: list[str]) -> CardInfo:
+def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     """Parse CLI args for a card builder call.
 
     Format: <role> <pos> [args...]
@@ -643,7 +736,7 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_scout(pos, args[2], int(args[3]))
     elif role == "bard":
         return card_bard(pos, int(args[2]))
-    elif role == "fortune_teller":
+    elif role in ("fortune_teller", "ft"):
         targets = [int(x) for x in args[2].split(",")]
         has_evil = args[3].lower() in ("yes", "true", "1")
         return card_fortune_teller(pos, targets, has_evil)
@@ -651,7 +744,21 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         targets = [int(x) for x in args[2].split(",")]
         return card_oracle(pos, targets, args[3])
     elif role == "medium":
-        return card_medium(pos, int(args[2]), args[3])
+        target_pos = int(args[2])
+        claimed_role = args[3]
+        # "real" means target IS their displayed role — resolve to actual role name
+        if claimed_role.lower() == "real":
+            if session is None:
+                print(f"  ERROR: 'real' keyword requires session context — enter role name instead")
+                claimed_role = args[3]
+            else:
+                target_card = next((c for c in session.cards if c.position == target_pos), None)
+                if target_card:
+                    claimed_role = target_card.apparent_role
+                    print(f"  [medium] Resolved 'real' -> '{claimed_role}' (target #{target_pos} apparent role)")
+                else:
+                    print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
+        return card_medium(pos, target_pos, claimed_role)
     elif role == "hunter":
         return card_hunter(pos, int(args[2]))
     elif role == "architect":
@@ -683,9 +790,13 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_bishop(pos, targets, types)
     elif role == "baker":
         if len(args) > 2:
-            return card_baker(pos, args[2])  # original / role_name
+            claim = args[2]
+            # "original" or "Baker" (same role) means the original Baker
+            if claim.lower() in ("original", "baker"):
+                claim = "original"
+            return card_baker(pos, claim)
         else:
-            return card_no_info(pos, "Baker")
+            return card_baker(pos, "original")  # no arg = original Baker
     elif role == "poet":
         if len(args) > 2:
             # Poet clue variant: poet <pos> <clue_type> <args...>
@@ -701,13 +812,120 @@ def _parse_card_cli(args: list[str]) -> CardInfo:
         return card_no_info(pos, role.replace("_", " ").title())
 
 
+def _parse_true_evils(raw: str) -> dict[int, str]:
+    """Parse '3=Shaman,7=Baa' format into {3: 'Shaman', 7: 'Baa'}."""
+    result = {}
+    for pair in raw.split(","):
+        pos_str, role = pair.split("=")
+        result[int(pos_str)] = role
+    return result
+
+
+def _cmd_read_deck(screenshot_path: str):
+    """Read deck using both card_vision and memory_reader, cross-check results."""
+    import subprocess
+
+    # Card vision
+    print("\n--- Card Vision ---")
+    cv_result = subprocess.run(
+        ["python", "card_vision.py", "classify_dirs", screenshot_path,
+         "--context", "deck",
+         "--library-dir", "templates/compendium/page1",
+         "--library-dir", "templates/compendium/page3",
+         "--library-dir", "templates/compendium/page4",
+         "--library-dir", "templates/compendium/page5"],
+        capture_output=True, text=True
+    )
+    cv_roles = []
+    if cv_result.returncode == 0:
+        try:
+            import json as _json
+            cards = _json.loads(cv_result.stdout)
+            cv_roles = [c["name"] for c in cards if c.get("accepted")]
+            factions = {}
+            for c in cards:
+                if c.get("accepted"):
+                    f = c.get("faction", "?")
+                    factions.setdefault(f, []).append(c["name"])
+            for faction in ["Villager", "Outcast", "Minion", "Demon"]:
+                roles = factions.get(faction, [])
+                if roles:
+                    print(f"  {faction}s ({len(roles)}): {', '.join(roles)}")
+        except Exception as e:
+            print(f"  ERROR parsing card_vision output: {e}")
+            cv_roles = []
+    else:
+        print(f"  ERROR: card_vision failed: {cv_result.stderr[:200]}")
+
+    # Memory reader
+    print("\n--- Memory Reader ---")
+    mr_result = subprocess.run(
+        ["python", "memory_reader.py", "--deck"],
+        capture_output=True, text=True
+    )
+    mr_roles = []
+    if mr_result.returncode == 0:
+        print(mr_result.stdout.strip())
+        # Parse memory reader output to extract role names
+        for line in mr_result.stdout.strip().split("\n"):
+            line = line.strip()
+            if line.startswith("Villager") or line.startswith("Outcast") or \
+               line.startswith("Minion") or line.startswith("Demon"):
+                # Format: "Villagers (7): Oracle, Baker, ..."
+                colon_idx = line.find(":")
+                if colon_idx > 0:
+                    roles_str = line[colon_idx + 1:].strip()
+                    mr_roles.extend([r.strip().lower().replace(" ", "_") for r in roles_str.split(",") if r.strip()])
+    else:
+        print(f"  ERROR: memory_reader failed: {mr_result.stderr[:200]}")
+
+    # Cross-check
+    cv_set = set(r.lower().replace(" ", "_") for r in cv_roles)
+    mr_set = set(mr_roles)
+    if cv_set and mr_set:
+        if cv_set == mr_set:
+            print(f"\n  MATCH: Both pipelines agree ({len(cv_set)} roles)")
+        else:
+            only_cv = cv_set - mr_set
+            only_mr = mr_set - cv_set
+            print(f"\n  MISMATCH!")
+            if only_cv:
+                print(f"    Only in card_vision: {only_cv}")
+            if only_mr:
+                print(f"    Only in memory_reader: {only_mr}")
+            print(f"    STOP AND FIX before proceeding!")
+    elif not cv_set and not mr_set:
+        print("\n  WARNING: Both pipelines returned empty results")
+    else:
+        print(f"\n  WARNING: Only one pipeline returned results (cv={len(cv_set)}, mr={len(mr_set)})")
+
+
+def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
+    """Save a regression test case and run step-by-step replay test."""
+    from tests.test_regression import save_test_case, load_test_case
+    from tests.test_replay import replay_game
+    save_test_case(SESSION_FILE, name, true_evils, notes)
+    case = load_test_case(os.path.join("tests", "cases_v2", f"{name}.json"))
+    result = replay_game(case, verbose=True, strict=False)
+    status = "PASS" if result.passed else "FAIL"
+    total = len(result.steps)
+    print(f"\n[{status}] {name} ({total} steps)")
+    if not result.passed:
+        print(f"  Failure: {result.failure_reason}")
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python game_loop.py <command> [args...]")
         print()
         print("Commands:")
+        print("  start                                 Start new game (menu nav + deck read)")
         print("  new <n_cards> <n_evil> [hp=N cost=N] Start new game session")
         print("  deck V=... O=... M=... D=...         Set deck composition")
+        print("  read_deck <screenshot>                Read deck (card_vision + memory_reader)")
+        print("  flip                                  Flip all cards #1->#N in order")
+        print("  flip <pos>                            Flip single card (after Witch death)")
+        print("  flip --lilis                          Flip in batches of 4 (Lilis games)")
         print("  card <role> <pos> [args...]           Add a revealed card")
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
@@ -721,10 +939,11 @@ def main():
         print("  confirm_good <pos>                    Mark position as confirmed good")
         print("  next                                  Full strategy recommendation")
         print("  ability_used <pos>                    Mark ability as activated")
-        print("  slayer_result <pos> <target> kill/fail Slayer ability result")
+        print("  slayer_result <pos> <target> kill/fail [evil_role]  Slayer ability result")
         print("  block <pos>                           Mark position as blocked (Witch)")
         print("  unblock <pos>                         Unblock position (after Witch dies)")
         print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
+        print("  night_no_kill                         Lilis night dealt 2HP but killed nobody (she's last unrevealed)")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
         print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
@@ -748,6 +967,46 @@ def main():
         return
 
     cmd = sys.argv[1].lower()
+
+    if cmd == "start":
+        import subprocess
+        print("=== STARTING NEW GAME ===")
+        # Step 1: Navigate menus
+        print("[1/5] Play Demo...")
+        subprocess.run(["python", "template_match.py", "safe_click", "menu_play_demo"], check=True)
+        time.sleep(1)
+        print("[2/5] Standard mode...")
+        subprocess.run(["python", "template_match.py", "safe_click", "mode_standard"], check=True)
+        time.sleep(2)
+        print("[3/5] Dismiss intro...")
+        subprocess.run(["python", "template_match.py", "safe_click", "btn_close_dialog"], check=True)
+        time.sleep(1)
+        # Step 2: Park mouse and screenshot deck
+        print("[4/5] Parking mouse, screenshotting deck...")
+        subprocess.run(["python", "mouse.py", "move", "50", "1350"], check=True)
+        time.sleep(0.5)
+        result = subprocess.run(["python", "screenshot.py", "deck_view"],
+                                capture_output=True, text=True, check=True)
+        screenshot_path = result.stdout.strip()
+        print(f"  Deck screenshot: {screenshot_path}")
+        # Step 3: Read deck with both pipelines
+        print("[5/5] Reading deck (card_vision + memory_reader)...")
+        # Run read_deck logic
+        _cmd_read_deck(screenshot_path)
+        print("\n=== START COMPLETE ===")
+        print("Next: verify deck above, then run:")
+        print("  python game_loop.py new <n_cards> <n_evil>")
+        print("  python game_loop.py deck V=... O=... M=... D=... nv=N no=N")
+        print("  python game_loop.py flip")
+        return
+
+    if cmd == "read_deck":
+        screenshot_path = sys.argv[2] if len(sys.argv) > 2 else None
+        if not screenshot_path:
+            print("Usage: python game_loop.py read_deck <screenshot_path>")
+            return
+        _cmd_read_deck(screenshot_path)
+        return
 
     if cmd == "new":
         n_cards = int(sys.argv[2])
@@ -791,6 +1050,7 @@ def main():
     if cmd == "deck":
         session = GameSession.load()
         villagers, outcasts, minions, demons = [], [], [], []
+        known_prefixes = ("v=", "o=", "m=", "d=", "nv=", "no=")
         for arg in sys.argv[2:]:
             if arg.startswith("V=") or arg.startswith("v="):
                 villagers = _parse_role_list(arg[2:])
@@ -804,7 +1064,16 @@ def main():
                 session.board_villager_count = int(arg[3:])
             elif arg.lower().startswith("no="):
                 session.board_outcast_count = int(arg[3:])
+            else:
+                print(f"  ERROR: Unrecognized arg '{arg}' -- missing prefix?")
+                print(f"  Required: V=roles O=roles M=roles D=roles nv=N no=N")
+                print(f"  Command aborted. Fix and re-run deck command.")
+                return
         session.set_deck(villagers, outcasts, minions, demons)
+        # Warn about Baa inflating outcast count in deck view
+        if any(d.lower() == "baa" for d in demons):
+            print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
+                  "Subtract 1 from displayed outcast count for no= value.")
         # Auto-detect extra roles: if pool > board, infer board counts
         pool_size = len(villagers) + len(outcasts) + len(minions) + len(demons)
         if pool_size > session.n_cards and session.board_villager_count is None:
@@ -831,9 +1100,88 @@ def main():
         print(f"Deck set: V={villagers} O={outcasts} M={minions} D={demons}{extra_info}")
         return
 
+    if cmd == "flip":
+        session = GameSession.load()
+        # Optional: --lilis flag for batched flipping
+        lilis = "--lilis" in sys.argv
+        # Optional: single position to flip (e.g., after Witch death)
+        single_pos = None
+        for arg in sys.argv[2:]:
+            if arg.isdigit():
+                single_pos = int(arg)
+
+        from game_utils import all_game_card_coords
+        import subprocess
+        coords = all_game_card_coords(session.n_cards)
+
+        if single_pos:
+            # Flip a single card (e.g., after Witch death unblocks it)
+            if single_pos not in coords:
+                print(f"ERROR: Position {single_pos} not valid for {session.n_cards}-card game")
+                return
+            x, y = coords[single_pos]
+            print(f"Flipping #{single_pos} at ({x},{y})")
+            subprocess.run(["python", "template_match.py", "safe_click_at",
+                            str(x), str(y), f"card{single_pos}"], check=True)
+            print(f"Flipped #{single_pos}")
+            return
+
+        # Full flip: all cards #1->#N in strict order
+        # Skip already-flipped (in reveal_order) and dead (night_kills/executed) positions
+        already_done = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
+        positions = [p for p in sorted(coords.keys()) if p not in already_done]
+        if not positions:
+            print("All cards already flipped/dead. Nothing to flip.")
+            return
+        if lilis:
+            # Batch in groups of 4 for Lilis night kills
+            batch_size = 4
+            batch = positions[:batch_size]
+            print(f"Flipping batch: {['#'+str(p) for p in batch]}")
+            for pos in batch:
+                x, y = coords[pos]
+                print(f"  #{pos} at ({x},{y})")
+                subprocess.run(["python", "template_match.py", "safe_click_at",
+                                str(x), str(y), f"card{pos}"], check=True)
+                time.sleep(0.3)
+            print(f"Batch complete: {['#'+str(p) for p in batch]}")
+            remaining = positions[batch_size:]
+            if remaining:
+                print(f"\n  --- Lilis night phase (wait 5s for kill animation) ---")
+                time.sleep(5)
+                print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
+                print(f"  Run: python screenshot.py night_check && python memory_reader.py")
+                print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
+                # Stop here -- user must screenshot, enter night_kill, then run flip --lilis again
+        else:
+            print(f"Flipping all {len(positions)} cards: #1 -> #{positions[-1]}")
+            for pos in positions:
+                x, y = coords[pos]
+                print(f"  #{pos} at ({x},{y})")
+                subprocess.run(["python", "template_match.py", "safe_click_at",
+                                str(x), str(y), f"card{pos}"], check=True)
+                time.sleep(0.3)
+            print(f"All {len(positions)} cards flipped in order #1->#{positions[-1]}")
+
+        # Auto-run memory reader after flipping (park mouse first)
+        print("\n--- Parking mouse & reading memory ---")
+        time.sleep(1.5)
+        subprocess.run(["python", "mouse.py", "move", "1280", "690"], check=False)
+        time.sleep(0.5)
+        print("\n--- Memory Reader (board state) ---")
+        mr = subprocess.run(["python", "memory_reader.py"], capture_output=True, text=True)
+        if mr.returncode == 0:
+            print(mr.stdout.strip())
+            # Verify all targeted positions actually flipped
+            _verify_flips(mr.stdout, positions, session)
+        else:
+            print(f"  WARNING: memory_reader failed: {mr.stderr[:200]}")
+        print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
+        return
+
     if cmd == "card":
         session = GameSession.load()
-        card = _parse_card_cli(sys.argv[2:])
+        card = _parse_card_cli(sys.argv[2:], session=session)
         session.add_card(card)
         session.save()
         DecisionLog.log_card(card)
@@ -845,24 +1193,49 @@ def main():
         pos = int(sys.argv[2])
         was_evil = None
         evil_role = None
+        was_corrupted = None
         if len(sys.argv) > 3:
             w = sys.argv[3].lower()
             if w in ("evil", "true", "1", "yes"):
                 was_evil = True
                 # Optional 4th arg: evil role name (e.g., "Chancellor")
                 if len(sys.argv) > 4:
-                    evil_role = sys.argv[4]
+                    evil_role = _normalize_role_name(sys.argv[4])
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
+                # Optional 4th arg: corruption status (corrupted/clean)
+                if len(sys.argv) > 4:
+                    c = sys.argv[4].lower()
+                    if c in ("corrupted", "corrupt", "c"):
+                        was_corrupted = True
+                    elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
+                        was_corrupted = False
+                else:
+                    # Default: unknown — don't assume clean, let solver keep both possibilities
+                    was_corrupted = None
+                    print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
             else:
                 # Treat as evil role name directly: execute 2 Chancellor
                 was_evil = True
-                evil_role = sys.argv[3]
-        session.mark_executed(pos, was_evil, evil_role)
+                evil_role = _normalize_role_name(sys.argv[3])
+        session.mark_executed(pos, was_evil, evil_role, was_corrupted)
         session.save()
         DecisionLog.log_execution(pos, was_evil, evil_role)
         tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
-        print(f"Executed #{pos}{tag}")
+        corr_tag = ""
+        if was_corrupted is True:
+            corr_tag = " <Corrupted>"
+        elif was_corrupted is False and was_evil is False:
+            corr_tag = " (clean)"
+        print(f"Executed #{pos}{tag}{corr_tag}")
+        # HP reminder
+        if was_evil:
+            print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
+        elif was_evil is False:
+            new_hp = session.hp - session.wrong_exec_cost
+            print(f"  WARNING: Wrong execution! HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
+        else:
+            print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
         return
 
     if cmd == "pd_target":
@@ -913,10 +1286,34 @@ def main():
     if cmd == "block":
         session = GameSession.load()
         pos = int(sys.argv[2])
+        # Warn if no Witch in deck -- likely a click failure, not a real block
+        has_witch = any(
+            _normalize_role_name(v) == "Witch"
+            for faction in [session.deck.get('villagers', []),
+                            session.deck.get('outcasts', []),
+                            session.deck.get('minions', []),
+                            session.deck.get('demons', [])]
+            for v in faction
+        ) if session.deck else False
+        if not has_witch:
+            print(f"  !! WARNING: No Witch in deck! Only Witch can block cards.")
+            print(f"  !! This is likely a click failure. Try re-flipping instead:")
+            print(f"  !! Run: python game_loop.py flip {pos}")
+            print(f"  !! If you still want to mark as blocked, run: block_force {pos}")
+            return
         if pos not in session.blocked_positions:
             session.blocked_positions.append(pos)
         session.save()
         print(f"#{pos} blocked (Witch)")
+        return
+
+    if cmd == "block_force":
+        session = GameSession.load()
+        pos = int(sys.argv[2])
+        if pos not in session.blocked_positions:
+            session.blocked_positions.append(pos)
+        session.save()
+        print(f"#{pos} force-blocked (override -- no Witch check)")
         return
 
     if cmd == "unblock":
@@ -956,9 +1353,12 @@ def main():
         slayer_pos = int(sys.argv[2])
         target_pos = int(sys.argv[3])
         killed = sys.argv[4].lower() in ("kill", "killed", "true", "1", "yes")
-        session.add_slayer_result(slayer_pos, target_pos, killed)
+        evil_role = sys.argv[5] if len(sys.argv) > 5 else None
+        session.add_slayer_result(slayer_pos, target_pos, killed, evil_role=evil_role)
         session.save()
         result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"
+        if evil_role:
+            result_str += f" (revealed: {evil_role})"
         print(f"Slayer #{slayer_pos} {result_str}")
         return
 
@@ -966,14 +1366,44 @@ def main():
         session = GameSession.load()
         positions = [int(x) for x in sys.argv[2].split(",")]
         n_evil = int(sys.argv[3])
-        session.night_kills = positions
-        session.night_kill_evil_count = n_evil
+        session.night_kills.extend(positions)
+        session.night_kill_evil_count += n_evil
         # Also mark as executed (dead)
         for p in positions:
             if p not in session.executed:
                 session.executed.append(p)
+        # Auto-confirm: if all positions in this batch are evil, confirm them
+        if n_evil == len(positions) and n_evil > 0:
+            for p in positions:
+                if p not in session.confirmed_evil:
+                    session.confirmed_evil.append(p)
         session.save()
-        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them")
+        confirmed_msg = ""
+        if n_evil == len(positions) and n_evil > 0:
+            confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
+        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
+        return
+
+    if cmd == "night_no_kill":
+        session = GameSession.load()
+        # Find unrevealed positions (not in cards and not executed/night-killed)
+        revealed = {c.position for c in session.cards}
+        dead = set(session.executed)
+        all_positions = set(range(1, session.n_cards + 1))
+        unrevealed = all_positions - revealed - dead
+        if len(unrevealed) == 1:
+            lilis_pos = unrevealed.pop()
+            if lilis_pos not in session.confirmed_evil:
+                session.confirmed_evil.append(lilis_pos)
+            session.save()
+            print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos}")
+            print(f"  => #{lilis_pos} confirmed as Lilis (can't kill herself)")
+        elif len(unrevealed) == 0:
+            print("WARNING: No unrevealed positions. Night shouldn't have triggered.")
+        else:
+            print(f"WARNING: {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
+            print("  Cannot auto-deduce Lilis — multiple unrevealed cards exist.")
+            print("  Check if a card was actually killed and use night_kill instead.")
         return
 
     if cmd == "log":
@@ -1002,21 +1432,30 @@ def main():
 
         # Auto-save regression test if true evils provided
         if test_name and true_evils_str:
-            true_evils = {}
-            for pair in true_evils_str.split(","):
-                pos_str, role = pair.split("=")
-                true_evils[int(pos_str)] = role
-            from tests.test_regression import save_test_case, load_test_case, run_test
-            save_test_case(SESSION_FILE, test_name, true_evils, notes)
-            case = load_test_case(os.path.join("tests", "cases", f"{test_name}.json"))
-            passed, messages = run_test(case)
-            status = "PASS" if passed else "FAIL"
-            print(f"\n[{status}] {test_name}")
-            for msg in messages:
-                print(f"  {msg}")
+            true_evils = _parse_true_evils(true_evils_str)
+            _save_and_run_test(test_name, true_evils, notes)
+            # Run full v2 regression suite
+            print("\n--- Full v2 regression ---")
+            import subprocess as _sp
+            reg = _sp.run(["python", "-m", "tests.test_replay", "--v2-only"],
+                          capture_output=True, text=True)
+            # Print just the summary line
+            for line in reg.stdout.strip().split("\n"):
+                if "Results:" in line or "FAIL" in line:
+                    print(f"  {line}")
+            if reg.returncode != 0:
+                print("  WARNING: Regression failures detected! Fix before next game.")
         elif not test_name:
             print("[game_over] Tip: add test name + true evils to auto-save regression test:")
             print("  game_over win/loss <name> <pos=Role,...> [notes]")
+
+        # Commit reminder
+        print("\n=== POST-GAME CHECKLIST ===")
+        print("  [ ] git add + commit (test case, scorecard, game_session_state.md, code fixes)")
+        print("  [ ] git push")
+        if result.lower() in ("loss", "l", "lose"):
+            print("  [ ] Analyze loss: spawn agent to check critical decisions")
+            print("  [ ] Fix solver bugs BEFORE next game")
         return
 
     if cmd == "save_test":
@@ -1030,19 +1469,8 @@ def main():
                 import ast
                 true_evils = {int(k): v for k, v in ast.literal_eval(raw).items()}
             else:
-                for pair in raw.split(","):
-                    pos_str, role = pair.split("=")
-                    true_evils[int(pos_str)] = role
-        from tests.test_regression import save_test_case
-        save_test_case(SESSION_FILE, name, true_evils)
-        # Also run the test immediately
-        from tests.test_regression import load_test_case, run_test
-        case = load_test_case(os.path.join("tests", "cases", f"{name}.json"))
-        passed, messages = run_test(case)
-        status = "PASS" if passed else "FAIL"
-        print(f"\n[{status}] {name}")
-        for msg in messages:
-            print(f"  {msg}")
+                true_evils = _parse_true_evils(raw)
+        _save_and_run_test(name, true_evils)
         return
 
     # Game action commands (require game running)

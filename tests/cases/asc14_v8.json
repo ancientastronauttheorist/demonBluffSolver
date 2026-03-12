@@ -1,0 +1,139 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7,
+          8
+        ],
+        "evil_count": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "PlagueDoctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "good_role": "Jester"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    }
+  ],
+  "executed": [
+    9,
+    8,
+    1,
+    6,
+    5
+  ],
+  "confirmed_evil": [
+    8,
+    5
+  ],
+  "confirmed_good": [
+    1,
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Minion",
+    "5": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 7,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Confessor",
+      "Poet",
+      "Baker",
+      "Knight",
+      "Jester",
+      "Medium"
+    ],
+    "outcasts": [
+      "PlagueDoctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    1,
+    2
+  ],
+  "name": "asc14_v8",
+  "true_evil_positions": {
+    "5": "Lilis",
+    "8": "Minion"
+  },
+  "notes": "9 cards, 2 evils. Lilis game, 2 nights (HP 10 to 6). PD passive corrupted Jester #1. Jester lie (3 evils in 2-evil game) key signal. Wrong exec on corrupted Jester (HP 6 to 1). Knight #6 execution immunity = free check. Poet #5 no corrupted contradicted known corruption = identified as Lilis. 1 HP finish. Corrupted: #1 Jester."
+}

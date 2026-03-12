@@ -183,10 +183,20 @@ _NORMALIZED_CARDS = {
     for card in ALL_CARDS
 }
 
+# Common abbreviations / aliases
+_ALIASES = {
+    "ft": "fortuneteller",
+    "pd": "plaguedoctor",
+    "bh": "bountyhunter",
+    "tm": "twinminion",
+}
+
 
 def get_card(name: str) -> Card:
     """Look up a card by name (case-insensitive, space-insensitive)."""
-    return _NORMALIZED_CARDS.get(name.lower().replace(" ", "").replace("_", ""))
+    key = name.lower().replace(" ", "").replace("_", "")
+    key = _ALIASES.get(key, key)
+    return _NORMALIZED_CARDS.get(key)
 
 
 if __name__ == "__main__":

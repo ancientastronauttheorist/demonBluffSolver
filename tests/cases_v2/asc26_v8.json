@@ -1,0 +1,147 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 2,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3,
+        "copied_role": "Bard"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          6
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Plague Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    2,
+    6
+  ],
+  "confirmed_evil": [
+    2,
+    6
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Baa",
+    "6": "Witch"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 8,
+      "target_pos": 3,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 7,
+      "target": 1,
+      "is_corrupted": true,
+      "evil_revealed": 3
+    }
+  ],
+  "blocked_positions": [
+    1
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Slayer",
+      "Judge",
+      "Druid",
+      "Poet"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Wretch",
+      "Bombardier",
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    7,
+    5,
+    2,
+    8
+  ],
+  "name": "asc26_v8",
+  "true_evil_positions": {
+    "2": "Baa",
+    "6": "Witch"
+  },
+  "notes": "Wretch Slayer kill cost 5HP. Fixed Druid unrevealed-target bug + Wretch-Oracle minion pool. Baa warning wrong - no=2 was correct."
+}

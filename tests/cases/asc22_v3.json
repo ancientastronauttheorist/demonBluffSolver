@@ -1,0 +1,179 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7
+        ],
+        "minion_role": "Poisoner"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Confessor"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          8
+        ],
+        "types": [
+          "Minion",
+          "Outcast",
+          "Villager"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          8
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppeteer",
+        "distance": 2
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6
+        ],
+        "has_evil": false
+      }
+    }
+  ],
+  "executed": [
+    5,
+    7,
+    2,
+    4
+  ],
+  "confirmed_evil": [
+    5,
+    7,
+    4
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Puppeteer",
+    "7": "Poisoner",
+    "4": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Architect",
+      "Confessor",
+      "Bard",
+      "Oracle",
+      "Baker",
+      "Scout",
+      "Bishop"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    9,
+    7
+  ],
+  "name": "asc22_v3",
+  "true_evil_positions": {
+    "4": "Baa",
+    "5": "Puppeteer",
+    "7": "Poisoner"
+  },
+  "notes": "WIN 5HP: Puppeteer+Poisoner+Baa. 1 wrong exec (#2 Bard). Drunk#6 corrupted, Scout#8 corrupted by Poisoner#7."
+}

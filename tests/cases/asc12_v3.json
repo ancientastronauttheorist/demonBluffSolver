@@ -1,0 +1,111 @@
+{
+  "n_cards": 7,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          7
+        ],
+        "types": [
+          "Demon",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "PlagueDoctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 3
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    2
+  ],
+  "confirmed_evil": [
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 2,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "deck": {
+    "villagers": [
+      "Dreamer",
+      "Bard",
+      "Bishop",
+      "Hunter",
+      "Scout",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "PlagueDoctor"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc12_v3",
+  "true_evil_positions": {
+    "2": "Pooka"
+  },
+  "notes": "perfect 10HP, 1-shot solve. Corrupted: 1=Hunter,3=Bishop,6=Scout"
+}
