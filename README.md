@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**191 games played** — 92% win rate (175W / 16L), 83 perfect games (10 HP), 24-game win streak
+**219 games played** — 92% win rate (201W / 18L), 97 perfect games (10 HP)
 
-Tested through **Ascension 33** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
+Tested through **Ascension 37** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
 
 ## How It Works
 
@@ -16,7 +16,7 @@ The solver enumerates all possible evil placements across the board and filters 
 
 The full pipeline:
 
-1. **Screen capture** — `screenshot.py` grabs the game at 2560x1440
+1. **Screen capture** — `screenshot.py` grabs the game at 2560×1440
 2. **Card vision** — `card_vision.py` classifies card roles from screenshots using OpenCV template matching against a compendium library
 3. **Memory validation** — `memory_reader.py` reads live game state via IL2CPP (GameAssembly.dll) and cross-checks against what the screenshot shows
 4. **Data entry** — `game_loop.py` CLI feeds card info into the solver
@@ -31,8 +31,8 @@ The full pipeline:
 | File | Purpose |
 |------|---------|
 | `solver.py` | Constraint-satisfaction engine — generates and filters evil placement scenarios |
-| `strategy.py` | Shannon entropy-based action recommender |
-| `game_loop.py` | CLI interface for entering game state and running the solver |
+| `strategy.py` | Shannon entropy-based action recommender with execution lookahead |
+| `game_loop.py` | CLI interface for game sessions, data entry, and solver interaction |
 | `knowledge_base.py` | Card role database — 30+ roles with abilities, types, factions |
 | `game_utils.py` | Board geometry, coordinate helpers |
 | `scorecard.py` | Win/loss tracking and stats |
@@ -42,7 +42,7 @@ The full pipeline:
 | File | Purpose |
 |------|---------|
 | `card_vision.py` | OpenCV card classification from screenshots (compendium template matching) |
-| `memory_reader.py` | IL2CPP memory reader — reads live game state from process memory |
+| `memory_reader.py` | IL2CPP memory reader — reads live game state from process memory for cross-validation |
 | `replay_analysis.py` | Post-game scenario-narrowing analysis for test cases |
 
 ### Automation
@@ -51,17 +51,30 @@ The full pipeline:
 |------|---------|
 | `screenshot.py` | Screen capture via mss |
 | `mouse.py` | Mouse control via pyautogui |
-| `template_match.py` | Template matching for UI elements + safe clicking |
-| `ui.py` | UI interaction helpers |
+| `template_match.py` | Template matching for UI elements + safe clicking with focus verification |
 
 ### Testing
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 53 test cases — card_vision pipeline, high accuracy |
-| `tests/cases/` | 138 legacy test cases — manual data entry |
-| `tests/test_replay.py` | Step-by-step replay validation against saved games |
+| `tests/cases_v2/` | 81 test cases — card vision pipeline, high accuracy |
+| `tests/cases/` | 137 legacy test cases — manual data entry |
+| `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
 | `tests/test_regression.py` | Full regression suite |
+
+## Solver Features
+
+- Full constraint-satisfaction over all possible evil placements
+- Handles disguises, lying, corruption, and role-specific validation
+- 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
+- Bombardier protection (instant loss if wrongly executed)
+- Execution lookahead with HP-aware decision making
+- Ascension 10+ pool-vs-board role count validation
+- Lilis night-kill tracking and Witch card-blocking mechanics
+- Drunk execution cost modeling (2 HP vs 5 HP)
+- Baker conversion chain validation with reveal-order tracking
+- Shaman role duplication handling
+- Flip verification via memory reader — detects click failures before they become misdiagnosed blocks
 
 ## Game Mechanics
 
@@ -73,18 +86,6 @@ The full pipeline:
 - Wrong executions cost HP (5 at Ascension 4+)
 - At Ascension 10+, the role pool is larger than the board — not all roles are in play
 
-## Solver Features
-
-- Full constraint-satisfaction over all possible evil placements
-- Handles disguises, lying, corruption, and role-specific validation
-- 30+ role abilities modeled: Slayer, Judge, PD, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, and more
-- Bombardier protection (instant loss if wrongly executed)
-- Ascension 10+ pool-vs-board role count validation
-- Lilis night-kill tracking
-- Witch card-blocking mechanics
-- Forced-execution lookahead with HP-aware decision making
-- Drunk execution cost modeling (2 HP vs 5 HP)
-
 ## Requirements
 
 - Python 3.13+
@@ -94,17 +95,16 @@ The full pipeline:
 
 ```bash
 # Start a new game session
-python game_loop.py
+python game_loop.py start
 
-# Commands:
+# Core commands:
 #   new <n_cards> <n_evil>           — start a new puzzle
 #   deck V=... O=... M=... D=...    — set the role pool
+#   flip                             — flip all cards (with auto-verification)
 #   card <role> <pos> <info>         — enter a revealed card
+#   next                             — run solver + get recommended action
 #   execute <pos> <role|good>        — execute a character
-#   ability_used <pos>               — mark ability as used
-#   set_hp <hp> <wrong_exec_cost>   — update HP
-#   solve                            — run the solver
-#   next                             — get recommended action
+#   set_hp <hp> <wrong_exec_cost>    — update HP
 #   game_over win/loss ...           — record result + save test case
 
 # Card vision (classify roles from screenshot)
@@ -117,7 +117,7 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-python -m tests.test_replay --v2-only  # v2 test cases only
+python -m tests.test_replay --v2-only  # 81 v2 replay tests
 python -m tests.test_replay            # all test cases
 
 # View stats
