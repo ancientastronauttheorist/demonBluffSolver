@@ -8584,3 +8584,100 @@ Reason: #3 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. 8 cards, 2 evil. Both Mediums were evil (Minion+Baa disguised). Scout+Poet both reported Baa 1 from Minion. Execution lookahead guaranteed win on #2.
 
+
+---
+
+# New Game — 2026-03-11 19:02:19
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Lover, Slayer, Confessor, Empress, Knight
+- Outcasts: Bombardier, Wretch
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [19:03:18] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [19:03:23] Revealed #2 Empress
+Info: {'targets': [3, 4, 8]}
+
+### [19:03:27] Revealed #3 Knight
+Info: {}
+
+### [19:03:31] Revealed #4 Hunter
+Info: {'distance': 1}
+
+#### [19:03:57] Solver Output
+Scenarios: 14/72
+Definite good: ['#1', '#7']
+Evil probabilities: #3=43%, #5=43%, #4=29%, #6=29%, #9=29%, #2=14%, #8=14%
+  Generated 72 candidate scenarios
+  14 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6, 8, 9]
+
+#### [19:03:57] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight free check: #3 is 43% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [19:04:34] Executed #3 -> Twin_Minion (EVIL)
+
+#### [19:04:38] Solver Output
+Scenarios: 3/8
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#7', '#8']
+Evil probabilities: #5=33%, #6=33%, #9=33%
+  Generated 8 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6, 9]
+
+#### [19:04:38] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 33% evil, entropy 1.018
+
+### [19:05:41] Revealed #5 Wretch
+Info: {}
+
+### [19:05:45] Revealed #6 Slayer
+Info: {}
+
+### [19:05:49] Revealed #8 Lover
+Info: {'evil_adjacent': 0}
+
+### [19:05:53] Revealed #9 Knight
+Info: {}
+
+#### [19:05:59] Solver Output
+Scenarios: 1/8
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+  Generated 8 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [19:05:59] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [19:06:39] Executed #6 -> Lilis (EVIL)
+
+## [19:06:46] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis game, 9 cards. Knight free check caught Twin Minion at #3. Lilis at #6 disguised as Slayer. Lilis killed Bombardier #7 night 1. No corruption sources.
+
