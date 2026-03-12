@@ -10731,3 +10731,113 @@ Reason: #1 is evil in ALL 5 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: 8HP, Lilis+Puppeteer+Puppet. Solver found all 3 definite evil. Night kill #6.
 
+
+---
+
+# New Game — 2026-03-12 00:01:58
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Confessor, Judge, Bishop, Slayer, Alchemist, Architect
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [00:06:13] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [00:06:20] Revealed #2 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [00:06:27] Revealed #3 Oracle
+Info: {'targets': [6, 9], 'minion_role': 'Puppeteer'}
+
+### [00:06:34] Revealed #4 Bombardier
+Info: {}
+
+### [00:06:34] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [00:06:40] Revealed #6 Slayer
+Info: {}
+
+### [00:06:41] Revealed #7 Alchemist
+Info: {'cured_count': 1}
+
+### [00:06:48] Revealed #8 Bishop
+Info: {'targets': [3, 6, 9], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [00:06:55] Ability used at #2
+
+#### [00:07:01] Solver Output
+Scenarios: 0/184
+  Generated 184 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #7 Alchemist: rejected 142/184 (77%)
+    #3 Oracle: rejected 124/184 (67%)
+    #5 Architect: rejected 94/184 (51%)
+    #8 Bishop: rejected 77/184 (42%)
+    #2 Judge: rejected 72/184 (39%)
+    #1 Confessor: rejected 56/184 (30%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #1 Confessor: still 0
+    WITHOUT #2 Judge: 1 scenarios survive  <-- SUSPECT
+    WITHOUT #3 Oracle: 3 scenarios survive  <-- SUSPECT
+    WITHOUT #5 Architect: 2 scenarios survive  <-- SUSPECT
+    WITHOUT #7 Alchemist: 4 scenarios survive  <-- SUSPECT
+    WITHOUT #8 Bishop: still 0
+
+#### [00:07:01] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [00:15:32] Solver Output
+Scenarios: 11/764
+Definite good: ['#1', '#4', '#8', '#9']
+Evil probabilities: #2=73%, #3=73%, #6=27%, #5=18%, #7=9%
+  Generated 764 candidate scenarios
+  11 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 5, 6, 7]
+
+#### [00:15:32] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#2']
+Reason: Target #2 is 73% evil (adjusted 0.73)
+
+### [00:16:45] Ability used at #6
+
+#### [00:16:45] Solver Output
+Scenarios: 8/88
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #4=50%
+  Generated 88 candidate scenarios
+  8 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #3 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #1 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4]
+
+#### [00:16:45] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 8 scenarios (roles: {'Puppeteer'})
+
+### [00:18:56] Executed #3 -> Puppeteer (EVIL)
+
+## [00:19:01] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Hidden PD at #9 (night-killed) corrupted Alchemist. Slayer killed Lilis. Judge ability on #3 confirmed truth. Solver fix: hidden PD corruption for night-killed positions.
+

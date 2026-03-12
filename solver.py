@@ -1927,6 +1927,15 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
         if _is_plague_doctor(card.apparent_role):
             all_pd_positions.append(card.position)
 
+    # If PD is in deck but no visible PD card, PD could be at a night-killed
+    # or unrevealed position (role unknown). Flag this so the per-placement
+    # loop can still model PD corruption even without a specific PD position.
+    pd_in_deck = any(_is_plague_doctor(o) for o in state.deck.outcasts)
+    pd_can_be_on_board, pd_can_be_absent = _hidden_outcast_presence_flags(
+        "Plague_Doctor", state)
+    pd_hidden_but_possible = (pd_in_deck and not all_pd_positions
+                              and pd_can_be_on_board)
+
     for placement in placements:
         if not _apply_placement_constraints(placement, state):
             continue
@@ -1963,7 +1972,17 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                 break  # First non-evil PD is the real one
 
         pd_targets = [None]
-        if pd_pos:
+        # PD corruption: visible PD or hidden PD (night-killed/unrevealed)
+        pd_on_board = pd_pos is not None  # visible PD at known position
+        if not pd_on_board and pd_hidden_but_possible:
+            # PD could be at an unrevealed/night-killed position (not evil)
+            # Check if there's room for a hidden PD at a non-evil position
+            revealed_positions = {c.position for c in state.cards}
+            for p in range(1, state.n_cards + 1):
+                if p not in revealed_positions and p not in full_evil:
+                    pd_on_board = True
+                    break
+        if pd_on_board:
             # PD is good — it corrupted someone
             if any(_is_plague_doctor(o) for o in state.deck.outcasts):
                 if state.pd_corruption_target is not None:
@@ -1984,6 +2003,9 @@ def _build_scenarios(state: GameState) -> list[Scenario]:
                         pd_targets = candidates
                     else:
                         pd_targets = [None]
+        # If PD can be absent from the board, also allow no corruption
+        if pd_can_be_absent and None not in pd_targets:
+            pd_targets.append(None)
 
         # Poisoner target computation moved inside dopp/drunk loop below
         # so _unrevealed_must_be_villager can use dopp_pos and drunk_pos

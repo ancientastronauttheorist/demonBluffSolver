@@ -1518,6 +1518,13 @@
       "name": "asc37_v5b",
       "notes": "8HP, Lilis+Puppeteer+Puppet. Solver found all 3 definite evil. Night kill #6.",
       "date": "2026-03-11 23:59"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc37_v6",
+      "notes": "6HP. Hidden PD at #9 (night-killed) corrupted Alchemist. Slayer killed Lilis. Judge ability on #3 confirmed truth. Solver fix: hidden PD corruption for night-killed positions.",
+      "date": "2026-03-12 00:19"
     }
   ]
 }
