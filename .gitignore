@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .claude/
 calibration.json
+game_session.json
+*.bak
+*.lock
+.env
+dump.cs
