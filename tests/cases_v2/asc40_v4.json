@@ -1,0 +1,125 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Enlightened"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "Equidistant"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "good_role": "Doppelganger"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    7,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Chancellor",
+    "8": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Gemcrafter",
+      "Druid",
+      "Empress",
+      "Judge",
+      "Medium"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc40_v4",
+  "true_evil_positions": {
+    "7": "Chancellor",
+    "8": "Lilis"
+  },
+  "notes": "8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios."
+}

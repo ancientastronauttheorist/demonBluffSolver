@@ -13075,3 +13075,63 @@ Reason: #4 is evil in ALL 10 scenarios (roles: {'Baa', 'Shaman'})
 Final HP: 8
 Notes: 8HP, wrong exec on Drunk #9 (corrupted). Lookahead guaranteed win path.
 
+
+---
+
+# New Game — 2026-03-14 13:53:43
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Gemcrafter, Druid, Empress, Judge, Medium
+- Outcasts: Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Lilis
+
+### [13:54:54] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Enlightened'}
+
+### [13:54:54] Revealed #2 Gemcrafter
+Info: {'good_position': 3}
+
+### [13:54:54] Revealed #3 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [13:54:54] Revealed #4 Medium
+Info: {'good_position': 1, 'good_role': 'Doppelganger'}
+
+### [13:56:03] Revealed #6 Wretch
+Info: {}
+
+### [13:56:03] Revealed #7 Enlightened
+Info: {'direction': 'CW'}
+
+### [13:56:03] Revealed #8 Judge
+Info: {}
+
+#### [13:56:03] Solver Output
+Scenarios: 2/398
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+  Generated 398 candidate scenarios
+  2 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Lilis', 'Chancellor'})
+    #8 is DEFINITELY EVIL (possible roles: {'Lilis', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [13:56:03] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [13:56:51] Executed #7 -> Chancellor (EVIL)
+
+### [13:57:25] Executed #8 -> Lilis (EVIL)
+
+## [13:57:26] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios.
+

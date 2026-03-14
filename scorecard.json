@@ -1651,6 +1651,13 @@
       "name": "asc40_v3",
       "notes": "8HP, wrong exec on Drunk #9 (corrupted). Lookahead guaranteed win path.",
       "date": "2026-03-14 13:50"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc40_v4",
+      "notes": "8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios.",
+      "date": "2026-03-14 13:57"
     }
   ]
 }
