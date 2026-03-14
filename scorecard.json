@@ -1553,6 +1553,13 @@
       "name": "asc38_v3",
       "notes": "1HP survive, Lilis game, wrong exec on #3 corrupted Confessor",
       "date": "2026-03-13 19:38"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc38_v4",
+      "notes": "8HP Lilis game, FT+Judge combo nailed both evils",
+      "date": "2026-03-13 19:47"
     }
   ]
 }

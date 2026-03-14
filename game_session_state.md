@@ -11403,3 +11403,102 @@ Reason: #7 is evil in ALL 2 scenarios (roles: {'Shaman'})
 Final HP: 1
 Notes: 1HP survive, Lilis game, wrong exec on #3 corrupted Confessor
 
+
+---
+
+# New Game — 2026-03-13 19:41:17
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Druid, Poet, Fortune_Teller, Scout, Judge
+- Outcasts: Doppelganger
+- Minions: Minion
+- Demons: Lilis
+
+### [19:42:44] Revealed #1 Poet
+Info: {'side': 'right', 'copied_role': 'Architect'}
+
+### [19:42:51] Revealed #2 Scout
+Info: {'evil_role': 'Minion', 'distance': 3}
+
+### [19:42:58] Revealed #3 Fortune_Teller
+Info: {}
+
+### [19:42:58] Revealed #4 Druid
+Info: {}
+
+### [19:43:45] Revealed #6 Judge
+Info: {}
+
+### [19:43:45] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [19:43:45] Revealed #8 Judge
+Info: {}
+
+#### [19:43:52] Solver Output
+Scenarios: 60/336
+Definite good: ['#5', '#7']
+Evil probabilities: #2=60%, #3=40%, #8=40%, #1=20%, #4=20%, #6=20%
+  Generated 336 candidate scenarios
+  60 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 8]
+
+#### [19:43:52] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#2', '#8']
+Reason: Entropy 0.971 (adjusted 0.971) | follow-up bonus 0.192 | timing x1.00
+
+### [19:44:45] Revealed #3 Fortune Teller
+Info: {'targets': [2, 8], 'has_evil': False}
+
+### [19:44:45] Ability used at #3
+
+#### [19:44:52] Solver Output
+Scenarios: 36/336
+Definite good: ['#4', '#5', '#7']
+Evil probabilities: #3=67%, #1=33%, #2=33%, #6=33%, #8=33%
+  Generated 336 candidate scenarios
+  36 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 6, 8]
+
+#### [19:44:52] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#2']
+Reason: Expected posterior 20.0 scenarios (adjusted 20.0, info gain 0.848 bits) | timing x1.00
+
+### [19:45:38] Revealed #6 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [19:45:38] Ability used at #6
+
+#### [19:45:44] Solver Output
+Scenarios: 12/336
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+  Generated 336 candidate scenarios
+  12 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #8 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [19:45:44] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 12 scenarios (roles: {'Minion', 'Lilis'})
+
+### [19:46:36] Executed #3 -> Lilis (EVIL)
+
+### [19:47:21] Executed #8 -> Minion (EVIL)
+
+## [19:47:30] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP Lilis game, FT+Judge combo nailed both evils
+
