@@ -8,6 +8,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
+from functools import lru_cache
 from itertools import combinations, product
 from typing import Optional
 from knowledge_base import get_card, Role, Alignment, CARDS_BY_NAME
@@ -1336,7 +1337,8 @@ def _validate_hunter(card: CardInfo, scenario: Scenario,
         return claimed != actual
 
 
-def _architect_sides(n: int) -> tuple[set[int], set[int], set[int]]:
+@lru_cache(maxsize=32)
+def _architect_sides(n: int) -> tuple[frozenset[int], frozenset[int], frozenset[int]]:
     """Return (left, right, both) position sets for n-card circle.
 
     The board has a fixed vertical line down the center.
@@ -1363,7 +1365,7 @@ def _architect_sides(n: int) -> tuple[set[int], set[int], set[int]]:
         for i in range(half + 1, n):
             left.add(i)
 
-    return left, right, both
+    return frozenset(left), frozenset(right), frozenset(both)
 
 
 def _validate_architect(card: CardInfo, scenario: Scenario,
@@ -2289,6 +2291,7 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     # exceed deck count (+ Shaman allowance). Disguisers (Drunk/Doppelganger)
     # at non-Baker X positions don't consume a deck slot.
     baker_claimed_counts = Counter()  # normalized_role -> count
+    deck_villagers_normalized = {_normalize_role(v) for v in state.deck.villagers}
     for card in state.cards:
         if _normalize_role(card.apparent_role) != "baker":
             continue
@@ -2306,7 +2309,6 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
         claimed_card_def = get_card(claimed)
         if not claimed_card_def or claimed_card_def.role != Role.VILLAGER:
             continue
-        deck_villagers_normalized = {_normalize_role(v) for v in state.deck.villagers}
         if _normalize_role(claimed_card_def.name) not in deck_villagers_normalized:
             continue
         baker_claimed_counts[_normalize_role(claimed)] += 1
@@ -2339,6 +2341,7 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     # If no good Baker claims "original", the original Baker is off-board and
     # no conversion chain can start — so no good converted Bakers are allowed.
     if state.reveal_order and baker_claimed_counts:
+        reveal_order_idx = {pos: idx for idx, pos in enumerate(state.reveal_order)}
         # Find earliest good Baker claiming "original" in reveal_order
         original_baker_reveal_idx = None
         for card in state.cards:
@@ -2353,8 +2356,8 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
             if truth != TruthStatus.TRUTHFUL:
                 continue
             claimed = card.info_parsed.get("original_role", "")
-            if claimed.lower() in ("original", "baker") and pos in state.reveal_order:
-                original_baker_reveal_idx = state.reveal_order.index(pos)
+            if claimed.lower() in ("original", "baker") and pos in reveal_order_idx:
+                original_baker_reveal_idx = reveal_order_idx[pos]
                 break
 
         if original_baker_reveal_idx is None:
@@ -2378,9 +2381,9 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
                 truth = _truth_status(pos, scenario, state)
                 if truth != TruthStatus.TRUTHFUL:
                     continue
-                if pos not in state.reveal_order:
+                if pos not in reveal_order_idx:
                     continue
-                converted_reveal_idx = state.reveal_order.index(pos)
+                converted_reveal_idx = reveal_order_idx[pos]
                 if converted_reveal_idx < original_baker_reveal_idx:
                     return False  # Converted Baker revealed before original
 
