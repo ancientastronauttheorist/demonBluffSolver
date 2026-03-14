@@ -13135,3 +13135,125 @@ Reason: #7 is evil in ALL 2 scenarios (roles: {'Lilis', 'Chancellor'})
 Final HP: 8
 Notes: 8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios.
 
+
+---
+
+# New Game — 2026-03-14 14:00:35
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Empress, Baker, Hunter, Druid, Medium, Knight
+- Outcasts: Wretch
+- Minions: Poisoner, Shaman
+- Demons: Lilis
+
+### [14:01:39] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [14:01:39] Revealed #2 Empress
+Info: {'targets': [1, 4, 7]}
+
+### [14:01:39] Revealed #3 Wretch
+Info: {}
+
+### [14:01:39] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [14:02:40] Revealed #5 Druid
+Info: {}
+
+### [14:02:40] Revealed #6 Medium
+Info: {'good_position': 7, 'good_role': 'Baker'}
+
+### [14:02:41] Revealed #7 Baker
+Info: {'original_role': 'Empress'}
+
+### [14:02:41] Revealed #9 Knight
+Info: {}
+
+#### [14:02:41] Solver Output
+Scenarios: 22/694
+Definite good: ['#4', '#8']
+Evil probabilities: #9=64%, #2=55%, #1=45%, #3=45%, #5=45%, #7=27%, #6=18%
+  Generated 694 candidate scenarios
+  22 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 9]
+
+#### [14:02:41] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.994 (adjusted 0.994) | timing x1.00
+
+### [14:03:44] Revealed #5 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Wretch'}
+
+### [14:03:45] Ability used at #5
+
+#### [14:03:45] Solver Output
+Scenarios: 10/694
+Definite evil: ['#5']
+Definite good: ['#4', '#6', '#7', '#8']
+Evil probabilities: #2=60%, #9=60%, #1=40%, #3=40%
+  Generated 694 candidate scenarios
+  10 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis', 'Shaman'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 9]
+
+#### [14:03:45] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 10 scenarios (roles: {'Lilis', 'Shaman'})
+
+### [14:04:29] Executed #5 -> Lilis (EVIL)
+
+#### [14:04:30] Solver Output
+Scenarios: 5/79
+Definite evil: ['#5']
+Definite good: ['#4', '#6', '#7', '#8']
+Evil probabilities: #2=60%, #9=60%, #1=40%, #3=40%
+  Generated 79 candidate scenarios
+  5 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 9]
+
+#### [14:04:30] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (40% good Empress, 40% evil Poisoner, 20% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [14:05:21] Executed #2 -> Poisoner (EVIL)
+
+#### [14:05:21] Solver Output
+Scenarios: 2/7
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #9=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #5 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 9]
+
+#### [14:05:21] Recommendation
+Action: **EXECUTE** #9
+Reason: Knight free check: #9 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [14:06:15] Executed #9 -> Shaman (EVIL)
+
+## [14:06:15] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP Lilis. Night killed #8 Empress. Druid found Wretch, solver locked Lilis. Knight check on #9 = Shaman.
+

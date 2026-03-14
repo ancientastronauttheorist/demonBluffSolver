@@ -1658,6 +1658,13 @@
       "name": "asc40_v4",
       "notes": "8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios.",
       "date": "2026-03-14 13:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc40_v5",
+      "notes": "6HP Lilis. Night killed #8 Empress. Druid found Wretch, solver locked Lilis. Knight check on #9 = Shaman.",
+      "date": "2026-03-14 14:06"
     }
   ]
 }
