@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**219 games played** — 92% win rate (201W / 18L), 97 perfect games (10 HP)
+**240 games played** — 92% win rate (222W / 18L), 104 perfect games (10 HP)
 
-Tested through **Ascension 37** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
+Tested through **Ascension 40** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
 
 ## How It Works
 
@@ -57,8 +57,8 @@ The full pipeline:
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 81 test cases — card vision pipeline, high accuracy |
-| `tests/cases/` | 137 legacy test cases — manual data entry |
+| `tests/cases_v2/` | 102 test cases — card vision pipeline, high accuracy |
+| `tests/cases/` | 138 legacy test cases — manual data entry |
 | `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
 | `tests/test_regression.py` | Full regression suite |
 
@@ -117,7 +117,7 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-python -m tests.test_replay --v2-only  # 81 v2 replay tests
+python -m tests.test_replay --v2-only  # 102 v2 replay tests
 python -m tests.test_replay            # all test cases
 
 # View stats
