@@ -11961,3 +11961,60 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 1
 Notes: 1HP survive, wrong exec corrupted Oracle, Asc38 complete
 
+
+---
+
+# New Game — 2026-03-13 20:29:20
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Fortune_Teller, Lover, Slayer, Knitter, Oracle
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [20:30:27] Revealed #1 Oracle
+Info: {'targets': [1, 4], 'minion_role': 'Minion'}
+
+### [20:30:28] Revealed #2 Druid
+Info: {}
+
+### [20:30:28] Revealed #3 Fortune_Teller
+Info: {}
+
+### [20:30:28] Revealed #4 Bombardier
+Info: {}
+
+### [20:30:28] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [20:30:28] Revealed #6 Slayer
+Info: {}
+
+### [20:30:28] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+#### [20:30:38] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [20:30:38] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [20:31:46] Executed #2 -> Pooka (EVIL)
+
+## [20:31:47] GAME OVER — WIN
+Final HP: 10
+Notes: perfect 10HP, 1-scenario solve
+

@@ -1581,6 +1581,13 @@
       "name": "asc38_v7",
       "notes": "1HP survive, wrong exec corrupted Oracle, Asc38 complete",
       "date": "2026-03-13 20:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc39_v1",
+      "notes": "perfect 10HP, 1-scenario solve",
+      "date": "2026-03-13 20:31"
     }
   ]
 }
