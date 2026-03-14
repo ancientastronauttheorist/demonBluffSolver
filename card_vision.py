@@ -291,6 +291,7 @@ def extract_board_seat_crop(
     n_cards: int,
     crop_size: tuple[int, int] = BOARD_SEAT_CROP,
     normalized_size: tuple[int, int] = CARD_SIZE,
+    center: Optional[tuple[int, int]] = None,
 ) -> np.ndarray:
     """Extract a normalized crop around one predicted board seat."""
     image = _load_bgr(image_or_path)
@@ -298,7 +299,9 @@ def extract_board_seat_crop(
     scale = min(width / REFERENCE_SCREEN[0], height / REFERENCE_SCREEN[1])
     crop_w = int(round(crop_size[0] * scale))
     crop_h = int(round(crop_size[1] * scale))
-    center_x, center_y = resolved_board_seat_center(image, seat_num, n_cards)
+    if center is None:
+        center = resolved_board_seat_center(image, seat_num, n_cards)
+    center_x, center_y = center
 
     x1 = max(0, center_x - crop_w // 2)
     y1 = max(0, center_y - crop_h // 2)
@@ -548,9 +551,16 @@ def _gray_similarity(left: np.ndarray, right: np.ndarray) -> float:
     return max(-1.0, min(1.0, score))
 
 
-def _dead_template_score(candidate_bgr: np.ndarray, template_bgr: np.ndarray) -> float:
-    candidate_gray = cv2.cvtColor(candidate_bgr, cv2.COLOR_BGR2GRAY)
-    template_gray = cv2.cvtColor(template_bgr, cv2.COLOR_BGR2GRAY)
+def _dead_template_score(
+    candidate_bgr: np.ndarray,
+    template_bgr: np.ndarray,
+    candidate_gray: Optional[np.ndarray] = None,
+    template_gray: Optional[np.ndarray] = None,
+) -> float:
+    if candidate_gray is None:
+        candidate_gray = cv2.cvtColor(candidate_bgr, cv2.COLOR_BGR2GRAY)
+    if template_gray is None:
+        template_gray = cv2.cvtColor(template_bgr, cv2.COLOR_BGR2GRAY)
 
     # Compare the stable interior of the dead card instead of the full border.
     candidate_center = _crop_relative(candidate_gray, 0.20, 0.25, 0.80, 0.85)
@@ -604,19 +614,29 @@ def detect_dead_board_positions(
         return []
 
     image = _load_bgr(image_or_path)
+    img_size = (image.shape[1], image.shape[0])
+
+    # Pre-compute: detect card boxes once, resolve all seat centers
+    detected_centers = detect_board_seat_centers(image, n_cards)
+    # Pre-compute: grayscale for each template (reused across all seats)
+    template_grays = [cv2.cvtColor(t, cv2.COLOR_BGR2GRAY) for t in templates]
+
     results: list[dict] = []
     for seat_num in range(1, n_cards + 1):
-        crop = extract_board_seat_crop(image, seat_num, n_cards)
+        center = detected_centers.get(
+            seat_num, board_seat_center(seat_num, n_cards, img_size))
+        crop = extract_board_seat_crop(image, seat_num, n_cards, center=center)
+        crop_gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         score = max(
-            _dead_template_score(crop, template)
-            for template in templates
+            _dead_template_score(crop, tmpl, candidate_gray=crop_gray,
+                                 template_gray=tmpl_gray)
+            for tmpl, tmpl_gray in zip(templates, template_grays)
         )
         if score >= threshold:
-            cx, cy = board_seat_center(seat_num, n_cards, (image.shape[1], image.shape[0]))
             results.append({
                 "seat": seat_num,
                 "score": score,
-                "center": (cx, cy),
+                "center": center,
             })
     return results
 
