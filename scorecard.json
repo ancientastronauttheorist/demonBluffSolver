@@ -1637,6 +1637,13 @@
       "name": "asc40_v1",
       "notes": "10HP perfect. Knight check + 3 Slayers (Dopp copy). Accidental #1 execution was lucky (Witch). Slayer9->3 Baa, Slayer5->4 Shaman.",
       "date": "2026-03-14 13:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v2",
+      "notes": "10HP perfect. PD check revealed #10 evil + #4 corrupted. Slayer eliminated #6, confirmed #8 Puppet.",
+      "date": "2026-03-14 13:41"
     }
   ]
 }

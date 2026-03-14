@@ -1,0 +1,166 @@
+{
+  "n_cards": 10,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppet",
+        "distance": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Scout"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Minion",
+        "distance": 1
+      }
+    }
+  ],
+  "executed": [
+    7,
+    5,
+    10,
+    8
+  ],
+  "confirmed_evil": [
+    7,
+    5,
+    10,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Puppeteer",
+    "5": "Pooka",
+    "10": "Minion",
+    "8": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 4,
+      "is_corrupted": true,
+      "evil_revealed": 10
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Lover",
+      "Confessor",
+      "Slayer",
+      "Scout",
+      "Knitter",
+      "Baker"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion",
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "name": "asc40_v2",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "7": "Puppeteer",
+    "8": "Puppet",
+    "10": "Minion"
+  },
+  "notes": "10HP perfect. PD check revealed #10 evil + #4 corrupted. Slayer eliminated #6, confirmed #8 Puppet."
+}

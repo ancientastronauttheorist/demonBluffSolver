@@ -12842,3 +12842,135 @@ WARNING: Corruption risk: 12% -- Slayer ability disabled if corrupted
 Final HP: 10
 Notes: 10HP perfect. Knight check + 3 Slayers (Dopp copy). Accidental #1 execution was lucky (Witch). Slayer9->3 Baa, Slayer5->4 Shaman.
 
+
+---
+
+# New Game — 2026-03-14 13:34:08
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Lover, Confessor, Slayer, Scout, Knitter, Baker
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion, Puppeteer
+- Demons: Pooka
+
+### [13:35:23] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [13:35:23] Revealed #2 Slayer
+Info: {}
+
+### [13:35:23] Revealed #3 Plague_Doctor
+Info: {}
+
+### [13:35:23] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [13:35:24] Revealed #5 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 2}
+
+### [13:35:46] Revealed #6 Baker
+Info: {'original_role': 'Scout'}
+
+### [13:35:46] Revealed #7 Bombardier
+Info: {}
+
+### [13:35:46] Revealed #8 Architect
+Info: {'side': 'Left'}
+
+### [13:35:47] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [13:35:47] Revealed #10 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+#### [13:35:54] Solver Output
+Scenarios: 11/3476
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #10=82%, #5=73%, #9=73%, #6=27%, #8=27%, #4=18%
+  Generated 3476 candidate scenarios
+  11 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Minion', 'Puppeteer'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [4, 5, 6, 8, 9, 10]
+
+#### [13:35:54] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 11 scenarios (roles: {'Minion', 'Puppeteer'})
+
+### [13:36:50] Executed #7 -> Puppeteer (EVIL)
+
+#### [13:36:51] Solver Output
+Scenarios: 4/532
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #5=75%, #10=75%, #6=50%, #8=50%, #4=25%, #9=25%
+  Generated 532 candidate scenarios
+  4 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    Uncertain: [4, 5, 6, 8, 9, 10]
+
+#### [13:36:51] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.500 (adjusted 1.500) | timing x1.00
+
+### [13:38:05] Ability used at #3
+
+#### [13:38:14] Solver Output
+Scenarios: 2/532
+Definite evil: ['#5', '#7', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#9']
+Evil probabilities: #6=50%, #8=50%
+  Generated 532 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #10 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [6, 8]
+
+#### [13:38:14] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [13:39:00] Executed #5 -> Pooka (EVIL)
+
+### [13:39:47] Executed #10 -> Minion (EVIL)
+
+#### [13:39:55] Solver Output
+Scenarios: 2/12
+Definite evil: ['#5', '#7', '#10']
+Definite good: ['#1', '#2', '#3', '#4', '#9']
+Evil probabilities: #6=50%, #8=50%
+  Generated 12 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #10 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [6, 8]
+
+#### [13:39:55] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#6']
+Reason: Target #6 is 50% evil (adjusted 0.50)
+
+### [13:41:41] Executed #8 -> Puppet (EVIL)
+
+## [13:41:41] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD check revealed #10 evil + #4 corrupted. Slayer eliminated #6, confirmed #8 Puppet.
+
