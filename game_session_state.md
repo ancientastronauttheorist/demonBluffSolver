@@ -12599,3 +12599,78 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 8
 Notes: 8HP Lilis, Scout+Empress+Hunter nailed it to 3 scenarios
 
+
+---
+
+# New Game — 2026-03-13 21:51:41
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Architect, Dreamer, Bishop, Slayer
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [21:53:24] Revealed #1 Jester
+Info: {}
+
+### [21:53:24] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [21:53:24] Revealed #3 Dreamer
+Info: {}
+
+### [21:53:25] Revealed #4 Slayer
+Info: {}
+
+### [21:53:25] Revealed #5 Bishop
+Info: {'targets': [1, 6], 'types': ['Minion', 'Villager']}
+
+### [21:53:25] Revealed #6 Wretch
+Info: {}
+
+#### [21:53:25] Solver Output
+Scenarios: 2/6
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #2=50%, #3=50%
+  Generated 6 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 3]
+
+#### [21:53:25] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [21:55:12] Revealed #3 Dreamer
+Info: {'target': 2, 'evil_role': 'Pooka'}
+
+### [21:55:12] Ability used at #3
+
+#### [21:55:13] Solver Output
+Scenarios: 1/6
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+  Generated 6 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+
+#### [21:55:13] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [21:56:51] Executed #3 -> Pooka (EVIL)
+
+## [21:56:51] GAME OVER — WIN
+Final HP: 10
+Notes: perfect 10HP, Dreamer Pooka-claim narrowed to 1 scenario, Asc39 complete
+
