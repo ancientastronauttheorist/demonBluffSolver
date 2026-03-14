@@ -1602,6 +1602,13 @@
       "name": "asc39_v3",
       "notes": "6HP Lilis game, evil PD lie exposed Shaman",
       "date": "2026-03-13 21:15"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc39_v4",
+      "notes": "5HP, wrong exec corrupted Bishop, Pooka at #7",
+      "date": "2026-03-13 21:22"
     }
   ]
 }

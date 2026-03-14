@@ -12301,3 +12301,62 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
 Final HP: 6
 Notes: 6HP Lilis game, evil PD lie exposed Shaman
 
+
+---
+
+# New Game — 2026-03-13 21:18:30
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Baker, Knitter, Empress, Bard, Bishop
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [21:19:34] Revealed #1 Bishop
+Info: {'targets': [1, 4, 5], 'types': ['Outcast', 'Villager', 'Demon']}
+
+### [21:19:34] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [21:19:34] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [21:19:34] Revealed #4 Baker
+Info: {'original_role': 'Empress'}
+
+### [21:19:34] Revealed #5 Baker
+Info: {'original_role': 'Knitter'}
+
+### [21:19:35] Revealed #6 Empress
+Info: {'targets': [1, 3, 7]}
+
+### [21:19:35] Revealed #7 Alchemist
+Info: {'cured_count': 2}
+
+#### [21:19:47] Solver Output
+Scenarios: 2/42
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #7=50%
+  Generated 42 candidate scenarios
+  2 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [21:19:47] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Bishop (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:20:57] Executed #1 -> GOOD (WRONG!)
+
+### [21:22:02] Executed #7 -> Pooka (EVIL)
+
+## [21:22:03] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, wrong exec corrupted Bishop, Pooka at #7
+
