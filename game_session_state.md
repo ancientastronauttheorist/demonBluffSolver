@@ -11647,3 +11647,171 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: 1HP survive, wrong exec Baker #9, Puppeteer created Puppet from Scout
 
+
+---
+
+# New Game — 2026-03-13 20:04:20
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Judge, Alchemist, Jester, Enlightened, Confessor
+- Outcasts: Drunk, Doppelganger
+- Minions: Minion
+- Demons: Lilis
+
+### [20:05:19] Revealed #1 Jester
+Info: {}
+
+### [20:05:19] Revealed #2 Judge
+Info: {}
+
+### [20:05:19] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [20:05:19] Revealed #4 Dreamer
+Info: {}
+
+### [20:06:16] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+### [20:06:16] Revealed #6 Enlightened
+Info: {'direction': 'CCW'}
+
+### [20:06:16] Revealed #7 Dreamer
+Info: {}
+
+### [20:06:17] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [20:06:24] Solver Output
+Scenarios: 132/3024
+Definite good: ['#3', '#8', '#9']
+Evil probabilities: #4=64%, #1=45%, #2=36%, #7=27%, #6=18%, #5=9%
+  Generated 3024 candidate scenarios
+  132 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7]
+
+#### [20:06:24] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.391 (adjusted 2.391) | timing x1.00
+
+### [20:07:16] Revealed #4 Dreamer
+Info: {'target': 1, 'evil_role': 'Minion'}
+
+### [20:07:16] Ability used at #4
+
+#### [20:07:23] Solver Output
+Scenarios: 102/3024
+Definite good: ['#3', '#8', '#9']
+Evil probabilities: #4=65%, #2=41%, #7=35%, #1=29%, #6=18%, #5=12%
+  Generated 3024 candidate scenarios
+  102 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7]
+
+#### [20:07:23] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.514 (adjusted 2.292) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [20:08:06] Revealed #7 Dreamer
+Info: {'target': 4, 'evil_role': 'Lilis'}
+
+### [20:08:07] Ability used at #7
+
+#### [20:08:15] Solver Output
+Scenarios: 66/3024
+Definite good: ['#3', '#8', '#9']
+Evil probabilities: #4=45%, #7=45%, #2=36%, #1=27%, #6=27%, #5=18%
+  Generated 3024 candidate scenarios
+  66 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7]
+
+#### [20:08:15] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#4', '#5']
+Reason: Expected posterior 28.7 scenarios (adjusted 30.0, info gain 1.135 bits) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [20:09:18] Revealed #1 Jester
+Info: {'targets': [2, 4, 5], 'evil_count': 3}
+
+### [20:09:18] Ability used at #1
+
+#### [20:09:26] Solver Output
+Scenarios: 24/3024
+Definite good: ['#3', '#5', '#7', '#8', '#9']
+Evil probabilities: #1=75%, #2=50%, #4=50%, #6=25%
+  Generated 3024 candidate scenarios
+  24 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6]
+
+#### [20:09:26] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 12.0 scenarios (adjusted 12.0, info gain 1.000 bits) | timing x1.00
+
+### [20:10:10] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [20:10:11] Ability used at #2
+
+#### [20:10:19] Solver Output
+Scenarios: 12/3024
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#7', '#8', '#9']
+Evil probabilities: #4=50%, #6=50%
+  Generated 3024 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 6]
+
+#### [20:10:19] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 12 scenarios (roles: {'Minion', 'Lilis'})
+
+### [20:11:20] Executed #1 -> Minion (EVIL)
+
+#### [20:11:20] Solver Output
+Scenarios: 6/336
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8', '#9']
+  Generated 336 candidate scenarios
+  6 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [20:11:20] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Lilis'})
+
+### [20:12:22] Executed #6 -> Lilis (EVIL)
+
+## [20:12:23] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP Lilis game, Jester impossible 3-evil claim exposed by Judge
+

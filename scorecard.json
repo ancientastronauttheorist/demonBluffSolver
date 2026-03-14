@@ -1567,6 +1567,13 @@
       "name": "asc38_v5",
       "notes": "1HP survive, wrong exec Baker #9, Puppeteer created Puppet from Scout",
       "date": "2026-03-13 20:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc38_v6",
+      "notes": "6HP Lilis game, Jester impossible 3-evil claim exposed by Judge",
+      "date": "2026-03-13 20:12"
     }
   ]
 }
