@@ -1560,6 +1560,13 @@
       "name": "asc38_v4",
       "notes": "8HP Lilis game, FT+Judge combo nailed both evils",
       "date": "2026-03-13 19:47"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc38_v5",
+      "notes": "1HP survive, wrong exec Baker #9, Puppeteer created Puppet from Scout",
+      "date": "2026-03-13 20:01"
     }
   ]
 }
