@@ -1546,6 +1546,13 @@
       "name": "asc38_v2",
       "notes": "perfect 10HP, Druid found no outcasts narrowed Witch to #1",
       "date": "2026-03-13 19:23"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc38_v3",
+      "notes": "1HP survive, Lilis game, wrong exec on #3 corrupted Confessor",
+      "date": "2026-03-13 19:38"
     }
   ]
 }
