@@ -1609,6 +1609,13 @@
       "name": "asc39_v4",
       "notes": "5HP, wrong exec corrupted Bishop, Pooka at #7",
       "date": "2026-03-13 21:22"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc39_v5",
+      "notes": "6HP Lilis, dual-Druid disagreement, Judge confirmed #9 truthful",
+      "date": "2026-03-13 21:38"
     }
   ]
 }

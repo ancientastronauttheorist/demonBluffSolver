@@ -12360,3 +12360,165 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 5
 Notes: 5HP, wrong exec corrupted Bishop, Pooka at #7
 
+
+---
+
+# New Game — 2026-03-13 21:28:20
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Scout, Medium, Bard, Alchemist, Judge, Druid
+- Outcasts: Drunk, Bombardier
+- Minions: Poisoner, Chancellor
+- Demons: Lilis
+
+### [21:29:39] Revealed #1 Medium
+Info: {'good_position': 6, 'good_role': 'Bard'}
+
+### [21:29:39] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [21:29:39] Revealed #3 Druid
+Info: {}
+
+### [21:29:39] Revealed #4 Judge
+Info: {}
+
+### [21:30:58] Revealed #6 Bard
+Info: {'corruption_distance': 3}
+
+### [21:30:58] Revealed #7 Druid
+Info: {}
+
+### [21:30:59] Revealed #8 Alchemist
+Info: {'cured_count': 2}
+
+### [21:30:59] Revealed #9 Bombardier
+Info: {}
+
+#### [21:31:12] Solver Output
+Scenarios: 159/4727
+Definite good: ['#5']
+Evil probabilities: #2=70%, #8=70%, #6=48%, #1=34%, #7=31%, #9=19%, #4=14%, #3=13%
+  Generated 4727 candidate scenarios
+  159 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8, 9]
+
+#### [21:31:12] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#9']
+Reason: Entropy 1.632 (adjusted 1.539) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [21:32:26] Revealed #7 Druid
+Info: {'targets': [1, 2, 9], 'found_outcast': None}
+
+### [21:32:26] Ability used at #7
+
+#### [21:32:26] Solver Output
+Scenarios: 81/4727
+Definite good: ['#5']
+Evil probabilities: #2=74%, #8=69%, #7=56%, #6=38%, #1=25%, #9=23%, #4=9%, #3=6%
+  Generated 4727 candidate scenarios
+  81 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8, 9]
+
+#### [21:32:26] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#9']
+Reason: Entropy 1.646 (adjusted 1.463) | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [21:33:40] Revealed #3 Druid
+Info: {'targets': [1, 2, 9], 'found_outcast': 'Drunk'}
+
+### [21:33:40] Ability used at #3
+
+#### [21:33:40] Solver Output
+Scenarios: 23/4727
+Definite good: ['#3', '#5']
+Evil probabilities: #8=78%, #6=65%, #2=61%, #7=35%, #1=26%, #9=26%, #4=9%
+  Generated 4727 candidate scenarios
+  23 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6, 7, 8, 9]
+
+#### [21:33:40] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#9']
+Reason: Expected posterior 12.6 scenarios (adjusted 12.6, info gain 0.872 bits) | timing x1.00
+
+### [21:34:50] Revealed #4 Judge
+Info: {'target': 9, 'is_lying': False}
+
+### [21:34:50] Ability used at #4
+
+#### [21:34:50] Solver Output
+Scenarios: 15/4727
+Definite evil: ['#6']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #8=67%, #2=60%, #1=40%, #7=33%
+  Generated 4727 candidate scenarios
+  15 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis', 'Chancellor', 'Poisoner'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7, 8]
+
+#### [21:34:50] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 15 scenarios (roles: {'Lilis', 'Chancellor', 'Poisoner'})
+
+### [21:35:59] Executed #6 -> Lilis (EVIL)
+
+#### [21:35:59] Solver Output
+Scenarios: 6/500
+Definite evil: ['#6']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #2=67%, #7=50%, #8=50%, #1=33%
+  Generated 500 candidate scenarios
+  6 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7, 8]
+
+#### [21:35:59] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 67% likely evil but budget=1 requires >=80% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 67% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 67% < 80% threshold. Consider manual override if you have extra information.
+
+### [21:37:09] Executed #2 -> Chancellor (EVIL)
+
+#### [21:37:10] Solver Output
+Scenarios: 4/88
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#9']
+Evil probabilities: #7=50%, #8=50%
+  Generated 88 candidate scenarios
+  4 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [7, 8]
+
+#### [21:37:10] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good Druid (corrupted), 50% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:38:22] Executed #7 -> Poisoner (EVIL)
+
+## [21:38:22] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP Lilis, dual-Druid disagreement, Judge confirmed #9 truthful
+
