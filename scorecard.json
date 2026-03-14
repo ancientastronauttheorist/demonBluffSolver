@@ -1665,6 +1665,13 @@
       "name": "asc40_v5",
       "notes": "6HP Lilis. Night killed #8 Empress. Druid found Wretch, solver locked Lilis. Knight check on #9 = Shaman.",
       "date": "2026-03-14 14:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v6",
+      "notes": "10HP perfect. Bishop lied (Baa), two Bombardiers = one fake. Clean solve.",
+      "date": "2026-03-14 14:12"
     }
   ]
 }

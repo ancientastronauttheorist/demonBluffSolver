@@ -13257,3 +13257,85 @@ Reason: Knight free check: #9 is 50% evil. If real Knight, execution blocked (co
 Final HP: 6
 Notes: 6HP Lilis. Night killed #8 Empress. Druid found Wretch, solver locked Lilis. Knight check on #9 = Shaman.
 
+
+---
+
+# New Game — 2026-03-14 14:09:45
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Dreamer, Druid, Jester, Alchemist, Bishop
+- Outcasts: Wretch, Bombardier
+- Minions: Minion
+- Demons: Baa
+
+### [14:11:02] Revealed #1 Bombardier
+Info: {}
+
+### [14:11:02] Revealed #2 Gemcrafter
+Info: {'good_position': 8}
+
+### [14:11:02] Revealed #3 Druid
+Info: {}
+
+### [14:11:03] Revealed #4 Dreamer
+Info: {}
+
+### [14:11:03] Revealed #5 Alchemist
+Info: {'cured_count': 0}
+
+### [14:11:03] Revealed #6 Bishop
+Info: {'targets': [4, 5, 8], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [14:11:03] Revealed #7 Bombardier
+Info: {}
+
+### [14:11:03] Revealed #8 Jester
+Info: {}
+
+#### [14:11:03] Solver Output
+Scenarios: 4/56
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #7=50%
+  Generated 56 candidate scenarios
+  4 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Minion', 'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [14:11:03] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Minion', 'Baa'})
+
+### [14:11:51] Executed #6 -> Baa (EVIL)
+
+#### [14:11:51] Solver Output
+Scenarios: 2/7
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #7=50%
+  Generated 7 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 7]
+
+#### [14:11:51] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [14:12:44] Executed #1 -> Minion (EVIL)
+
+## [14:12:44] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Bishop lied (Baa), two Bombardiers = one fake. Clean solve.
+
