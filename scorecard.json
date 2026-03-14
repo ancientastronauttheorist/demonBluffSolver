@@ -1532,6 +1532,13 @@
       "name": "asc37_v7",
       "notes": "8HP. Knight trick confirmed #1 good (free exec check). Lilis night-killed #5 (Baker). Scout #8 corrupted by Poisoner. Drunk #3 disguised as Slayer. Guaranteed win via lookahead.",
       "date": "2026-03-12 00:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc38_v1",
+      "notes": "perfect 10HP, PD+Slayer combo",
+      "date": "2026-03-13 19:15"
     }
   ]
 }

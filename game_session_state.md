@@ -10969,3 +10969,129 @@ WARNING: Execution lookahead override -- immediate hit chance is 57%, but all re
 Final HP: 8
 Notes: 8HP. Knight trick confirmed #1 good (free exec check). Lilis night-killed #5 (Baker). Scout #8 corrupted by Poisoner. Drunk #3 disguised as Slayer. Guaranteed win via lookahead.
 
+
+---
+
+# New Game — 2026-03-13 19:09:58
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Knight, Dreamer, Slayer, Empress, Scout
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Minion
+- Demons: Pooka
+
+### [19:11:21] Revealed #1 Bombardier
+Info: {}
+
+### [19:11:25] Revealed #2 Slayer
+Info: {}
+
+### [19:11:29] Revealed #3 Dreamer
+Info: {}
+
+### [19:11:32] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [19:11:35] Revealed #5 Plague_Doctor
+Info: {}
+
+### [19:11:39] Revealed #6 Empress
+Info: {'targets': [1, 3, 5]}
+
+### [19:11:42] Revealed #7 Knight
+Info: {}
+
+### [19:11:54] Revealed #8 Scout
+Info: {'evil_role': 'Minion', 'distance': 3}
+
+#### [19:11:58] Solver Output
+Scenarios: 14/236
+Definite evil: ['#1']
+Definite good: ['#3', '#5', '#6']
+Evil probabilities: #7=36%, #4=29%, #8=29%, #2=7%
+  Generated 236 candidate scenarios
+  14 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion'})
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [2, 4, 7, 8]
+
+#### [19:11:58] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 14 scenarios (roles: {'Pooka', 'Minion'})
+
+### [19:12:33] Executed #1 -> Minion (EVIL)
+
+#### [19:12:36] Solver Output
+Scenarios: 7/37
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#6']
+Evil probabilities: #4=57%, #7=29%, #8=14%
+  Generated 37 candidate scenarios
+  7 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [4, 7, 8]
+
+#### [19:12:36] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.149 (adjusted 1.149) | timing x1.00
+
+### [19:13:20] Ability used at #5
+
+#### [19:13:24] Solver Output
+Scenarios: 2/37
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+Evil probabilities: #4=50%, #8=50%
+  Generated 37 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [19:13:24] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [19:14:24] Revealed #3 Dreamer
+Info: {'target': 2, 'evil_role': 'Pooka'}
+
+### [19:14:27] Ability used at #3
+
+#### [19:14:31] Solver Output
+Scenarios: 2/37
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+Evil probabilities: #4=50%, #8=50%
+  Generated 37 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    Uncertain: [4, 8]
+
+#### [19:14:31] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#4']
+Reason: Target #4 is 50% evil (adjusted 0.50)
+
+### [19:15:07] Revealed #2 Slayer Result
+Info: {}
+
+## [19:15:13] GAME OVER — WIN
+Final HP: 10
+Notes: perfect 10HP, PD+Slayer combo
+
