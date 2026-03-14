@@ -12974,3 +12974,104 @@ Reason: Target #6 is 50% evil (adjusted 0.50)
 Final HP: 10
 Notes: 10HP perfect. PD check revealed #10 evil + #4 corrupted. Slayer eliminated #6, confirmed #8 Puppet.
 
+
+---
+
+# New Game — 2026-03-14 13:45:26
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Medium, Oracle, Slayer, Gemcrafter, Alchemist, Knight, Architect
+- Outcasts: Drunk, Doppelganger
+- Minions: Poisoner, Shaman
+- Demons: Baa
+
+### [13:46:43] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [13:46:44] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [13:46:44] Revealed #3 Knight
+Info: {}
+
+### [13:46:44] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [13:46:44] Revealed #5 Gemcrafter
+Info: {'good_position': 4}
+
+### [13:46:44] Revealed #6 Hunter
+Info: {'distance': 1}
+
+### [13:46:45] Revealed #7 Medium
+Info: {'good_position': 6, 'good_role': 'Hunter'}
+
+### [13:46:45] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [13:46:45] Revealed #9 Oracle
+Info: {'targets': [1, 8], 'minion_role': 'Shaman'}
+
+#### [13:47:14] Solver Output
+Scenarios: 78/31722
+Definite good: ['#8']
+Evil probabilities: #2=72%, #9=69%, #4=46%, #5=44%, #6=36%, #7=21%, #3=10%, #1=3%
+  Generated 31722 candidate scenarios
+  78 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 9]
+
+#### [13:47:14] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (29% evil Baa, 29% evil Shaman, 28% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 69%, but all reveal branches still lead to a forced win.
+
+### [13:48:02] Executed #9 -> GOOD (WRONG!)
+
+#### [13:48:10] Solver Output
+Scenarios: 24/21224
+Definite good: ['#6', '#8', '#9']
+Evil probabilities: #2=92%, #4=83%, #5=83%, #3=17%, #7=17%, #1=8%
+  Generated 21224 candidate scenarios
+  24 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7]
+
+#### [13:48:10] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (42% evil Poisoner, 25% evil Baa, 25% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 92%, but all reveal branches still lead to a forced win.
+
+### [13:48:55] Executed #2 -> Poisoner (EVIL)
+
+#### [13:48:55] Solver Output
+Scenarios: 10/2518
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+  Generated 2518 candidate scenarios
+  10 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #4 is DEFINITELY EVIL (possible roles: {'Baa', 'Shaman'})
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [13:48:55] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 10 scenarios (roles: {'Baa', 'Shaman'})
+
+### [13:49:38] Executed #4 -> Shaman (EVIL)
+
+### [13:50:16] Executed #5 -> Baa (EVIL)
+
+## [13:50:16] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, wrong exec on Drunk #9 (corrupted). Lookahead guaranteed win path.
+
