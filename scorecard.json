@@ -1630,6 +1630,55 @@
       "name": "asc39_v7",
       "notes": "perfect 10HP, Dreamer Pooka-claim narrowed to 1 scenario, Asc39 complete",
       "date": "2026-03-13 21:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v1",
+      "notes": "10HP perfect. Knight check + 3 Slayers (Dopp copy). Accidental #1 execution was lucky (Witch). Slayer9->3 Baa, Slayer5->4 Shaman.",
+      "date": "2026-03-14 13:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v2",
+      "notes": "10HP perfect. PD check revealed #10 evil + #4 corrupted. Slayer eliminated #6, confirmed #8 Puppet.",
+      "date": "2026-03-14 13:41"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc40_v3",
+      "notes": "8HP, wrong exec on Drunk #9 (corrupted). Lookahead guaranteed win path.",
+      "date": "2026-03-14 13:50"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc40_v4",
+      "notes": "8HP Lilis game. Night killed Druid #5. Solver found both evils with 2 scenarios.",
+      "date": "2026-03-14 13:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc40_v5",
+      "notes": "6HP Lilis. Night killed #8 Empress. Druid found Wretch, solver locked Lilis. Knight check on #9 = Shaman.",
+      "date": "2026-03-14 14:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v6",
+      "notes": "10HP perfect. Bishop lied (Baa), two Bombardiers = one fake. Clean solve.",
+      "date": "2026-03-14 14:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc40_v7",
+      "notes": "5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!",
+      "date": "2026-03-14 14:24"
     }
   ]
 }

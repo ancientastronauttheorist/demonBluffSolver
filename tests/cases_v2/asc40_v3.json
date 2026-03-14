@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 6,
+        "good_role": "Hunter"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          8
+        ],
+        "minion_role": "Shaman"
+      }
+    }
+  ],
+  "executed": [
+    9,
+    2,
+    4,
+    5
+  ],
+  "confirmed_evil": [
+    2,
+    4,
+    5
+  ],
+  "confirmed_good": [
+    9
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Poisoner",
+    "4": "Shaman",
+    "5": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Medium",
+      "Oracle",
+      "Slayer",
+      "Gemcrafter",
+      "Alchemist",
+      "Knight",
+      "Architect"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner",
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc40_v3",
+  "true_evil_positions": {
+    "2": "Poisoner",
+    "4": "Shaman",
+    "5": "Baa"
+  },
+  "notes": "8HP, wrong exec on Drunk #9 (corrupted). Lookahead guaranteed win path."
+}

@@ -1,0 +1,144 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppeteer",
+        "distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 5
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    3,
+    5,
+    6
+  ],
+  "confirmed_evil": [
+    4,
+    5,
+    6
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Puppeteer",
+    "5": "Puppet",
+    "6": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 6,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "3": false
+  },
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Fortune_Teller",
+      "Knitter",
+      "Judge",
+      "Witness",
+      "Scout"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    8
+  ],
+  "name": "asc40_v7",
+  "true_evil_positions": {
+    "4": "Puppeteer",
+    "5": "Puppet",
+    "6": "Baa"
+  },
+  "notes": "5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!"
+}

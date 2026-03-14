@@ -24,13 +24,6 @@ def _normalize_format(fmt):
     return fmt
 
 
-def _extension_for_format(fmt):
-    fmt = _normalize_format(fmt)
-    if fmt == "PNG":
-        return "png"
-    return "jpg"
-
-
 def grab(region=None):
     """Capture a screenshot and return it as a PIL Image."""
     with mss.mss() as sct:
@@ -49,7 +42,7 @@ def save_image(image, name=None, fmt="JPEG", quality=85):
         name = f"screen_{int(time.time())}"
 
     fmt = _normalize_format(fmt)
-    ext = _extension_for_format(fmt)
+    ext = "png" if fmt == "PNG" else "jpg"
     filepath = os.path.join(SCREENSHOT_DIR, f"{name}.{ext}")
 
     save_kwargs = {}

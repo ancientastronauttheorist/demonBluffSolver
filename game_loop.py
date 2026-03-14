@@ -351,6 +351,16 @@ class GameSession:
 
     # -- Deck --
 
+    def has_role_in_deck(self, role_name: str) -> bool:
+        """Check if a role (by normalized name) is in any deck faction."""
+        norm = _normalize_role_name(role_name)
+        return any(
+            _normalize_role_name(v) == norm
+            for faction in [self.villagers, self.outcasts,
+                            self.minions, self.demons]
+            for v in faction
+        )
+
     def set_deck(self, villagers: list[str], outcasts: list[str],
                  minions: list[str], demons: list[str]):
         self.villagers = villagers
@@ -542,13 +552,7 @@ class GameSession:
                   f"Did you forget to enter info for flipped cards?")
         # Validate: blocked positions without Witch in deck = likely click failure
         if blocked:
-            has_witch = any(
-                _normalize_role_name(v) == "Witch"
-                for faction in [self.villagers, self.outcasts,
-                                self.minions, self.demons]
-                for v in faction
-            )
-            if not has_witch:
+            if not self.has_role_in_deck("Witch"):
                 print(f"  !! BLOCKED positions {sorted(blocked)} but NO WITCH in deck!")
                 print(f"  !! This is likely a click failure. Re-flip these cards!")
                 print(f"  !! Run: python game_loop.py flip")
@@ -682,12 +686,7 @@ def _verify_flips(mr_output: str, expected_positions: list[int], session):
         print(f"  Positions still face-down: {still_hidden}")
         print(f"  Click likely didn't register (game unfocused?).")
         # Check if Witch is in the deck -- if not, this is definitely a click failure
-        has_witch = any(
-            _normalize_role_name(v) == "Witch"
-            for faction in [session.villagers, session.outcasts,
-                            session.minions, session.demons]
-            for v in faction
-        )
+        has_witch = session.has_role_in_deck("Witch")
         if not has_witch:
             print("  No Witch in deck -- this is NOT a Witch block.")
             print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
@@ -1283,13 +1282,7 @@ def main():
         session = GameSession.load()
         pos = int(sys.argv[2])
         # Warn if no Witch in deck -- likely a click failure, not a real block
-        has_witch = any(
-            _normalize_role_name(v) == "Witch"
-            for faction in [session.villagers, session.outcasts,
-                            session.minions, session.demons]
-            for v in faction
-        )
-        if not has_witch:
+        if not session.has_role_in_deck("Witch"):
             print(f"  !! WARNING: No Witch in deck! Only Witch can block cards.")
             print(f"  !! This is likely a click failure. Try re-flipping instead:")
             print(f"  !! Run: python game_loop.py flip {pos}")
