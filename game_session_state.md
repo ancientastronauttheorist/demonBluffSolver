@@ -12018,3 +12018,165 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: perfect 10HP, 1-scenario solve
 
+
+---
+
+# New Game — 2026-03-13 20:56:12
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Bishop, Gemcrafter, Scout, Bard, Druid, Baker
+- Outcasts: Drunk, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+
+---
+
+# New Game — 2026-03-13 20:57:11
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Jester, Fortune_Teller, Slayer, Baker, Lover
+- Outcasts: Plague_Doctor, Drunk, Wretch, Bombardier
+- Minions: Chancellor
+- Demons: Baa
+
+### [20:57:51] Revealed #1 Bombardier
+Info: {}
+
+### [20:57:51] Revealed #2 Fortune_Teller
+Info: {}
+
+### [20:57:51] Revealed #3 Wretch
+Info: {}
+
+### [20:57:52] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [20:57:52] Revealed #5 Slayer
+Info: {}
+
+### [20:57:52] Revealed #6 Knight
+Info: {}
+
+### [20:57:52] Revealed #7 Slayer
+Info: {}
+
+### [20:57:52] Revealed #8 Baker
+Info: {'original_role': 'Lover'}
+
+#### [20:58:01] Solver Output
+Scenarios: 255/451
+Evil probabilities: #5=32%, #7=31%, #3=27%, #6=27%, #1=26%, #8=25%, #2=22%, #4=9%
+  Generated 451 candidate scenarios
+  255 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [20:58:01] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight check: #6 is 27% evil, 17% corruption risk. Expected HP cost: 1.1 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 17% -- corrupted Knight loses immunity + 4 extra damage
+
+### [20:59:22] Executed #6 -> GOOD (WRONG!)
+
+#### [20:59:23] Solver Output
+Scenarios: 44/338
+Definite good: ['#6']
+Evil probabilities: #5=41%, #7=39%, #8=32%, #3=30%, #1=27%, #2=27%, #4=5%
+  Generated 338 candidate scenarios
+  44 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8]
+
+#### [20:59:23] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#4', '#8']
+Reason: Entropy 1.000 (adjusted 1.000) | follow-up bonus 0.028 | timing x1.00
+
+### [21:00:13] Revealed #2 Fortune Teller
+Info: {'targets': [4, 8], 'has_evil': False}
+
+### [21:00:13] Ability used at #2
+
+#### [21:00:13] Solver Output
+Scenarios: 22/338
+Definite good: ['#4', '#6']
+Evil probabilities: #5=55%, #7=55%, #1=36%, #3=36%, #2=9%, #8=9%
+  Generated 338 candidate scenarios
+  22 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 7, 8]
+
+#### [21:00:13] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#7']
+Reason: Target #7 is 55% evil (adjusted 0.55)
+
+### [21:01:01] Revealed #5 Slayer Result
+Info: {}
+
+### [21:01:01] Ability used at #5
+
+#### [21:01:01] Solver Output
+Scenarios: 26/298
+Definite good: ['#4', '#6']
+Evil probabilities: #1=46%, #3=46%, #5=46%, #7=46%, #2=8%, #8=8%
+  Generated 298 candidate scenarios
+  26 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 7, 8]
+
+#### [21:01:01] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#5']
+Reason: Target #5 is 46% evil (adjusted 0.46)
+
+### [21:01:49] Revealed #7 Slayer Result
+Info: {}
+
+### [21:01:50] Ability used at #7
+
+#### [21:01:50] Solver Output
+Scenarios: 26/258
+Definite good: ['#4', '#6']
+Evil probabilities: #1=46%, #3=46%, #5=46%, #7=46%, #2=8%, #8=8%
+  Generated 258 candidate scenarios
+  26 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 7, 8]
+
+#### [21:01:50] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 46% likely evil but HP too low to risk (HP=4, cost=5). Need more info.
+WARNING: Probabilistic execution -- 46% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:03:13] Executed #5 -> Baa (EVIL)
+
+#### [21:03:13] Solver Output
+Scenarios: 6/42
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#8']
+Evil probabilities: #1=33%, #3=33%, #7=33%
+  Generated 42 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 7]
+
+#### [21:03:13] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 33% likely evil but HP too low to risk (HP=4, cost=5). Need more info.
+WARNING: Probabilistic execution -- 33% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [21:04:28] Executed #7 -> Chancellor (EVIL)
+
+## [21:04:28] GAME OVER — WIN
+Final HP: 4
+Notes: 4HP, corrupted Knight check lost 6HP, both Slayers were evil
+

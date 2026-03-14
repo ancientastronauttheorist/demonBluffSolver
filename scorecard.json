@@ -1588,6 +1588,13 @@
       "name": "asc39_v1",
       "notes": "perfect 10HP, 1-scenario solve",
       "date": "2026-03-13 20:31"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc39_v2",
+      "notes": "4HP, corrupted Knight check lost 6HP, both Slayers were evil",
+      "date": "2026-03-13 21:04"
     }
   ]
 }
