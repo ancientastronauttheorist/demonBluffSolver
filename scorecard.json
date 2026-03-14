@@ -1616,6 +1616,13 @@
       "name": "asc39_v5",
       "notes": "6HP Lilis, dual-Druid disagreement, Judge confirmed #9 truthful",
       "date": "2026-03-13 21:38"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc39_v6",
+      "notes": "8HP Lilis, Scout+Empress+Hunter nailed it to 3 scenarios",
+      "date": "2026-03-13 21:48"
     }
   ]
 }

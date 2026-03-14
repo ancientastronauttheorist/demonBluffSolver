@@ -12522,3 +12522,80 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: 6HP Lilis, dual-Druid disagreement, Judge confirmed #9 truthful
 
+
+---
+
+# New Game — 2026-03-13 21:41:27
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Confessor, Judge, Empress, Knight, Scout
+- Outcasts: Bombardier
+- Minions: Poisoner
+- Demons: Lilis
+
+### [21:43:15] Revealed #1 Knight
+Info: {}
+
+### [21:43:15] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [21:43:15] Revealed #3 Empress
+Info: {'targets': [2, 4, 8]}
+
+### [21:43:16] Revealed #4 Hunter
+Info: {'distance': 1}
+
+### [21:44:53] Revealed #6 Bombardier
+Info: {}
+
+### [21:44:53] Revealed #7 Bombardier
+Info: {}
+
+### [21:44:53] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [21:44:53] Solver Output
+Scenarios: 3/76
+Definite good: ['#1', '#2', '#5', '#8']
+Evil probabilities: #3=67%, #7=67%, #4=33%, #6=33%
+  Generated 76 candidate scenarios
+  3 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [3, 4, 6, 7]
+
+#### [21:44:53] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (33% good Empress, 33% evil Lilis, 33% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [21:46:36] Executed #3 -> Lilis (EVIL)
+
+#### [21:46:36] Solver Output
+Scenarios: 1/8
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+  Generated 8 candidate scenarios
+  1 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [21:46:36] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [21:48:21] Executed #6 -> Poisoner (EVIL)
+
+## [21:48:21] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP Lilis, Scout+Empress+Hunter nailed it to 3 scenarios
+

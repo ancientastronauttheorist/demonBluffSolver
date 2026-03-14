@@ -1,0 +1,125 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    }
+  ],
+  "executed": [
+    5,
+    3,
+    6
+  ],
+  "confirmed_evil": [
+    3,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Lilis",
+    "6": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Confessor",
+      "Judge",
+      "Empress",
+      "Knight",
+      "Scout"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc39_v6",
+  "true_evil_positions": {
+    "3": "Lilis",
+    "6": "Poisoner"
+  },
+  "notes": "8HP Lilis, Scout+Empress+Hunter nailed it to 3 scenarios"
+}
