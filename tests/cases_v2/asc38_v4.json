@@ -1,0 +1,132 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right",
+        "copied_role": "Architect"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Minion",
+        "distance": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          8
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    3,
+    8
+  ],
+  "confirmed_evil": [
+    3,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Lilis",
+    "8": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Druid",
+      "Poet",
+      "Fortune_Teller",
+      "Scout",
+      "Judge"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    6
+  ],
+  "name": "asc38_v4",
+  "true_evil_positions": {
+    "3": "Lilis",
+    "8": "Minion"
+  },
+  "notes": "8HP Lilis game, FT+Judge combo nailed both evils"
+}

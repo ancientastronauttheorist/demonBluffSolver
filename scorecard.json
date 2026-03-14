@@ -1532,6 +1532,104 @@
       "name": "asc37_v7",
       "notes": "8HP. Knight trick confirmed #1 good (free exec check). Lilis night-killed #5 (Baker). Scout #8 corrupted by Poisoner. Drunk #3 disguised as Slayer. Guaranteed win via lookahead.",
       "date": "2026-03-12 00:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc38_v1",
+      "notes": "perfect 10HP, PD+Slayer combo",
+      "date": "2026-03-13 19:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc38_v2",
+      "notes": "perfect 10HP, Druid found no outcasts narrowed Witch to #1",
+      "date": "2026-03-13 19:23"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc38_v3",
+      "notes": "1HP survive, Lilis game, wrong exec on #3 corrupted Confessor",
+      "date": "2026-03-13 19:38"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc38_v4",
+      "notes": "8HP Lilis game, FT+Judge combo nailed both evils",
+      "date": "2026-03-13 19:47"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc38_v5",
+      "notes": "1HP survive, wrong exec Baker #9, Puppeteer created Puppet from Scout",
+      "date": "2026-03-13 20:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc38_v6",
+      "notes": "6HP Lilis game, Jester impossible 3-evil claim exposed by Judge",
+      "date": "2026-03-13 20:12"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc38_v7",
+      "notes": "1HP survive, wrong exec corrupted Oracle, Asc38 complete",
+      "date": "2026-03-13 20:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc39_v1",
+      "notes": "perfect 10HP, 1-scenario solve",
+      "date": "2026-03-13 20:31"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc39_v2",
+      "notes": "4HP, corrupted Knight check lost 6HP, both Slayers were evil",
+      "date": "2026-03-13 21:04"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc39_v3",
+      "notes": "6HP Lilis game, evil PD lie exposed Shaman",
+      "date": "2026-03-13 21:15"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc39_v4",
+      "notes": "5HP, wrong exec corrupted Bishop, Pooka at #7",
+      "date": "2026-03-13 21:22"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc39_v5",
+      "notes": "6HP Lilis, dual-Druid disagreement, Judge confirmed #9 truthful",
+      "date": "2026-03-13 21:38"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc39_v6",
+      "notes": "8HP Lilis, Scout+Empress+Hunter nailed it to 3 scenarios",
+      "date": "2026-03-13 21:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc39_v7",
+      "notes": "perfect 10HP, Dreamer Pooka-claim narrowed to 1 scenario, Asc39 complete",
+      "date": "2026-03-13 21:56"
     }
   ]
 }
