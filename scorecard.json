@@ -1595,6 +1595,13 @@
       "name": "asc39_v2",
       "notes": "4HP, corrupted Knight check lost 6HP, both Slayers were evil",
       "date": "2026-03-13 21:04"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc39_v3",
+      "notes": "6HP Lilis game, evil PD lie exposed Shaman",
+      "date": "2026-03-13 21:15"
     }
   ]
 }

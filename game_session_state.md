@@ -12180,3 +12180,124 @@ WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 4
 Notes: 4HP, corrupted Knight check lost 6HP, both Slayers were evil
 
+
+---
+
+# New Game — 2026-03-13 21:07:08
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Hunter, Druid, Slayer, Enlightened, Oracle
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [21:08:22] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [21:08:22] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [21:08:22] Revealed #3 Bombardier
+Info: {}
+
+### [21:08:22] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [21:09:31] Revealed #5 Plague_Doctor
+Info: {}
+
+### [21:09:32] Revealed #7 Enlightened
+Info: {'direction': 'CW'}
+
+### [21:09:32] Revealed #8 Enlightened
+Info: {'direction': 'CCW'}
+
+### [21:09:32] Revealed #9 Druid
+Info: {}
+
+#### [21:09:43] Solver Output
+Scenarios: 54/1974
+Definite good: ['#4', '#6']
+Evil probabilities: #2=67%, #5=56%, #8=56%, #3=44%, #7=44%, #1=22%, #9=11%
+  Generated 1974 candidate scenarios
+  54 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 7, 8, 9]
+
+#### [21:09:43] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.436 (adjusted 1.436) | timing x1.00
+
+### [21:10:47] Ability used at #5
+
+#### [21:10:47] Solver Output
+Scenarios: 30/1974
+Definite evil: ['#5']
+Definite good: ['#3', '#4', '#6']
+Evil probabilities: #8=60%, #1=40%, #2=40%, #7=40%, #9=20%
+  Generated 1974 candidate scenarios
+  30 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman', 'Minion', 'Lilis'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7, 8, 9]
+
+#### [21:10:47] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 30 scenarios (roles: {'Shaman', 'Minion', 'Lilis'})
+
+### [21:12:06] Executed #5 -> Shaman (EVIL)
+
+#### [21:12:06] Solver Output
+Scenarios: 10/56
+Definite evil: ['#5']
+Definite good: ['#3', '#4', '#6']
+Evil probabilities: #8=60%, #1=40%, #2=40%, #7=40%, #9=20%
+  Generated 56 candidate scenarios
+  10 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 7, 8, 9]
+
+#### [21:12:06] Recommendation
+Action: **USE_ABILITY** #9 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.722 (adjusted 0.722) | timing x1.00
+
+### [21:13:20] Revealed #9 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [21:13:20] Ability used at #9
+
+#### [21:13:20] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+  Generated 56 candidate scenarios
+  2 scenarios survived validation
+    #5 is DEFINITELY EVIL (possible roles: {'Shaman'})
+    #8 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #9 is DEFINITELY EVIL (possible roles: {'Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [21:13:20] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+### [21:14:35] Executed #8 -> Minion (EVIL)
+
+### [21:15:49] Executed #9 -> Lilis (EVIL)
+
+## [21:15:50] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP Lilis game, evil PD lie exposed Shaman
+
