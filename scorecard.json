@@ -1672,6 +1672,13 @@
       "name": "asc40_v6",
       "notes": "10HP perfect. Bishop lied (Baa), two Bombardiers = one fake. Clean solve.",
       "date": "2026-03-14 14:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc40_v7",
+      "notes": "5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!",
+      "date": "2026-03-14 14:24"
     }
   ]
 }

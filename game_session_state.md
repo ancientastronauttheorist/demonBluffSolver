@@ -13339,3 +13339,167 @@ Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
 Final HP: 10
 Notes: 10HP perfect. Bishop lied (Baa), two Bombardiers = one fake. Clean solve.
 
+
+---
+
+# New Game — 2026-03-14 14:16:00
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Fortune_Teller, Knitter, Judge, Witness, Scout
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Puppeteer
+- Demons: Baa
+
+### [14:17:19] Revealed #1 Fortune_Teller
+Info: {}
+
+### [14:17:19] Revealed #2 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [14:17:19] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [14:17:19] Revealed #4 Fortune_Teller
+Info: {}
+
+### [14:17:34] Revealed #5 Witness
+Info: {'affected_position': 1}
+
+### [14:17:34] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [14:17:34] Revealed #7 Judge
+Info: {}
+
+### [14:17:35] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [14:17:35] Solver Output
+Scenarios: 8/324
+Definite evil: ['#4']
+Definite good: ['#2', '#8']
+Evil probabilities: #5=75%, #6=62%, #3=25%, #7=25%, #1=12%
+  Generated 324 candidate scenarios
+  8 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppet', 'Baa', 'Puppeteer'})
+    #2 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 6, 7]
+
+#### [14:17:35] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 8 scenarios (roles: {'Puppet', 'Baa', 'Puppeteer'})
+
+### [14:18:29] Executed #4 -> Puppeteer (EVIL)
+
+#### [14:18:29] Solver Output
+Scenarios: 2/52
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#7', '#8']
+Evil probabilities: #5=50%, #6=50%
+  Generated 52 candidate scenarios
+  2 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 6]
+
+#### [14:18:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [14:19:19] Executed #3 -> GOOD (WRONG!)
+
+#### [14:19:19] Solver Output
+Scenarios: 0/21
+  Generated 21 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #5 Witness: rejected 21/21 (100%)
+    #6 Knitter: rejected 13/21 (62%)
+    #2 Scout: rejected 8/21 (38%)
+    #3 Enlightened: rejected 7/21 (33%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Scout: still 0
+    WITHOUT #3 Enlightened: still 0
+    WITHOUT #5 Witness: 5 scenarios survive  <-- SUSPECT
+    WITHOUT #6 Knitter: still 0
+    WITHOUT #7 Judge: still 0
+
+#### [14:19:19] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [14:20:23] Solver Output
+Scenarios: 5/21
+Definite evil: ['#4', '#5']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #6=60%, #1=20%, #7=20%
+  Generated 21 candidate scenarios
+  5 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 6, 7]
+
+#### [14:20:23] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Puppet'})
+
+### [14:21:13] Executed #5 -> Puppet (EVIL)
+
+#### [14:21:13] Solver Output
+Scenarios: 5/21
+Definite evil: ['#4', '#5']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #6=60%, #1=20%, #7=20%
+  Generated 21 candidate scenarios
+  5 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 6, 7]
+
+#### [14:21:13] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.371 (adjusted 1.371) | timing x1.00
+
+### [14:23:18] Ability used at #8
+
+#### [14:23:18] Solver Output
+Scenarios: 3/21
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+  Generated 21 candidate scenarios
+  3 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [14:23:18] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 3 scenarios (roles: {'Baa'})
+
+### [14:24:12] Executed #6 -> Baa (EVIL)
+
+## [14:24:12] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!
+
