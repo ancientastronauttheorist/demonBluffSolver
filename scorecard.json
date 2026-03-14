@@ -1630,6 +1630,13 @@
       "name": "asc39_v7",
       "notes": "perfect 10HP, Dreamer Pooka-claim narrowed to 1 scenario, Asc39 complete",
       "date": "2026-03-13 21:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc40_v1",
+      "notes": "10HP perfect. Knight check + 3 Slayers (Dopp copy). Accidental #1 execution was lucky (Witch). Slayer9->3 Baa, Slayer5->4 Shaman.",
+      "date": "2026-03-14 13:30"
     }
   ]
 }

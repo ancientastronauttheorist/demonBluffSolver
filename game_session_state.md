@@ -12674,3 +12674,171 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: perfect 10HP, Dreamer Pooka-claim narrowed to 1 scenario, Asc39 complete
 
+
+---
+
+# New Game — 2026-03-14 13:17:50
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Baker, Lover, Knight, Oracle, Medium, Fortune_Teller
+- Outcasts: Doppelganger, Drunk
+- Minions: Shaman, Witch
+- Demons: Baa
+
+### [13:19:21] Revealed #1 Fortune_Teller
+Info: {}
+
+### [13:19:25] Revealed #2 Oracle
+Info: {'targets': [1, 9], 'minion_role': 'Witch'}
+
+### [13:19:29] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [13:19:34] Revealed #4 Lover
+Info: {'evil_adjacent': 2}
+
+### [13:19:40] Revealed #5 Slayer
+Info: {}
+
+### [13:19:44] Revealed #6 Knight
+Info: {}
+
+### [13:19:49] Revealed #7 Slayer
+Info: {}
+
+### [13:19:53] Revealed #8 Medium
+Info: {'good_position': 9, 'good_role': 'Doppelganger'}
+
+#### [13:19:59] Solver Output
+Scenarios: 1036/21672
+Evil probabilities: #2=68%, #4=64%, #3=48%, #5=41%, #6=27%, #7=27%, #1=14%, #8=6%, #9=3%
+  Generated 21672 candidate scenarios
+  1036 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+#### [13:19:59] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight check: #6 is 27% evil, 13% corruption risk. Expected HP cost: 0.8 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 13% -- corrupted Knight loses immunity + 4 extra damage
+
+### [13:20:46] Executed #6 -> GOOD (WRONG!)
+
+#### [13:21:02] Solver Output
+Scenarios: 754/14448
+Definite good: ['#6']
+Evil probabilities: #2=69%, #4=62%, #5=51%, #3=51%, #7=37%, #1=16%, #8=8%, #9=5%
+  Generated 14448 candidate scenarios
+  754 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [13:21:02] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#3', '#7']
+Reason: Entropy 0.995 (adjusted 0.924) | follow-up bonus 0.310 | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [13:22:57] Executed #1 -> Witch (EVIL)
+
+### [13:24:34] Revealed #9 Slayer
+Info: {}
+
+### [13:24:42] Revealed #7 Slayer Result
+Info: {}
+
+### [13:24:46] Ability used at #7
+
+#### [13:24:53] Solver Output
+Scenarios: 10/1446
+Definite evil: ['#1']
+Definite good: ['#2', '#5', '#6', '#8', '#9']
+Evil probabilities: #3=80%, #4=80%, #7=40%
+  Generated 1446 candidate scenarios
+  10 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #2 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [3, 4, 7]
+
+#### [13:24:53] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#3']
+Reason: Target #3 is 80% evil (adjusted 0.80)
+
+### [13:27:29] Revealed #9 Slayer Result
+Info: {}
+
+### [13:27:36] Ability used at #9
+
+### [13:27:45] Executed #3 -> Baa (EVIL)
+
+#### [13:27:53] Solver Output
+Scenarios: 0/146
+  Generated 146 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #8 Medium: rejected 141/146 (97%)
+    #4 Lover: rejected 90/146 (62%)
+    #2 Oracle: rejected 43/146 (29%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Oracle: still 0
+    WITHOUT #3 Lover: still 0
+    WITHOUT #4 Lover: still 0
+    WITHOUT #8 Medium: still 0
+
+#### [13:27:53] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [13:28:28] Solver Output
+Scenarios: 0/146
+  Generated 146 candidate scenarios
+  0 scenarios survived validation
+  NO VALID SCENARIOS — check input data
+  
+  === ZERO-SCENARIO DIAGNOSTICS ===
+  Rejection counts (card -> how many scenarios it rejected):
+    #8 Medium: rejected 141/146 (97%)
+    #4 Lover: rejected 90/146 (62%)
+    #2 Oracle: rejected 43/146 (29%)
+  
+  Leave-one-out analysis (removing each card's info):
+    WITHOUT #2 Oracle: still 0
+    WITHOUT #3 Lover: still 0
+    WITHOUT #4 Lover: still 0
+    WITHOUT #8 Medium: still 0
+
+#### [13:28:28] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [13:29:24] Solver Output
+Scenarios: 8/258
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#6', '#8', '#9']
+Evil probabilities: #4=50%, #5=38%, #7=12%
+  Generated 258 candidate scenarios
+  8 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #3 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [4, 5, 7]
+
+#### [13:29:24] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#4']
+Reason: Target #4 is 50% evil (adjusted 0.44)
+WARNING: Corruption risk: 12% -- Slayer ability disabled if corrupted
+
+## [13:30:31] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Knight check + 3 Slayers (Dopp copy). Accidental #1 execution was lucky (Witch). Slayer9->3 Baa, Slayer5->4 Shaman.
+
