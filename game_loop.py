@@ -544,12 +544,10 @@ class GameSession:
         if blocked:
             has_witch = any(
                 _normalize_role_name(v) == "Witch"
-                for faction in [self.deck.get('villagers', []),
-                                self.deck.get('outcasts', []),
-                                self.deck.get('minions', []),
-                                self.deck.get('demons', [])]
+                for faction in [self.villagers, self.outcasts,
+                                self.minions, self.demons]
                 for v in faction
-            ) if self.deck else False
+            )
             if not has_witch:
                 print(f"  !! BLOCKED positions {sorted(blocked)} but NO WITCH in deck!")
                 print(f"  !! This is likely a click failure. Re-flip these cards!")
@@ -686,12 +684,10 @@ def _verify_flips(mr_output: str, expected_positions: list[int], session):
         # Check if Witch is in the deck -- if not, this is definitely a click failure
         has_witch = any(
             _normalize_role_name(v) == "Witch"
-            for faction in [session.deck.get('villagers', []),
-                            session.deck.get('outcasts', []),
-                            session.deck.get('minions', []),
-                            session.deck.get('demons', [])]
+            for faction in [session.villagers, session.outcasts,
+                            session.minions, session.demons]
             for v in faction
-        ) if hasattr(session, 'deck') and session.deck else False
+        )
         if not has_witch:
             print("  No Witch in deck -- this is NOT a Witch block.")
             print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
@@ -1289,12 +1285,10 @@ def main():
         # Warn if no Witch in deck -- likely a click failure, not a real block
         has_witch = any(
             _normalize_role_name(v) == "Witch"
-            for faction in [session.deck.get('villagers', []),
-                            session.deck.get('outcasts', []),
-                            session.deck.get('minions', []),
-                            session.deck.get('demons', [])]
+            for faction in [session.villagers, session.outcasts,
+                            session.minions, session.demons]
             for v in faction
-        ) if session.deck else False
+        )
         if not has_witch:
             print(f"  !! WARNING: No Witch in deck! Only Witch can block cards.")
             print(f"  !! This is likely a click failure. Try re-flipping instead:")

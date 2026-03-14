@@ -1539,6 +1539,13 @@
       "name": "asc38_v1",
       "notes": "perfect 10HP, PD+Slayer combo",
       "date": "2026-03-13 19:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc38_v2",
+      "notes": "perfect 10HP, Druid found no outcasts narrowed Witch to #1",
+      "date": "2026-03-13 19:23"
     }
   ]
 }

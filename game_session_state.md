@@ -11095,3 +11095,99 @@ Info: {}
 Final HP: 10
 Notes: perfect 10HP, PD+Slayer combo
 
+
+---
+
+# New Game — 2026-03-13 19:17:35
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Druid, Hunter, Witness, Knitter, Lover
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [19:19:32] Revealed #1 Knitter
+Info: {'evil_pairs': 0}
+
+### [19:19:38] Revealed #2 Witness
+Info: {'affected_position': 1}
+
+### [19:19:42] Revealed #3 Bard
+Info: {'corruption_distance': 3}
+
+### [19:19:46] Revealed #4 Druid
+Info: {}
+
+### [19:19:50] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [19:19:54] Revealed #6 Hunter
+Info: {'distance': 3}
+
+#### [19:20:25] Solver Output
+Scenarios: 26/972
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=46%, #3=46%, #7=8%
+  Generated 972 candidate scenarios
+  26 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa', 'Witch'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 7]
+
+#### [19:20:25] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 26 scenarios (roles: {'Baa', 'Witch'})
+
+### [19:21:05] Executed #2 -> Baa (EVIL)
+
+#### [19:21:10] Solver Output
+Scenarios: 13/156
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=46%, #3=46%, #7=8%
+  Generated 156 candidate scenarios
+  13 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 7]
+
+#### [19:21:10] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#3', '#5']
+Reason: Entropy 0.619 (adjusted 0.572) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [19:22:07] Revealed #4 Druid
+Info: {'targets': [1, 3, 5], 'found_outcast': None}
+
+### [19:22:12] Ability used at #4
+
+#### [19:22:16] Solver Output
+Scenarios: 9/156
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=56%, #3=33%, #7=11%
+  Generated 156 candidate scenarios
+  9 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    Uncertain: [1, 3, 7]
+
+#### [19:22:16] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (56% evil Witch, 22% good Knitter (corrupted), 11% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 56%, but all reveal branches still lead to a forced win.
+
+### [19:22:59] Executed #1 -> Witch (EVIL)
+
+## [19:23:06] GAME OVER — WIN
+Final HP: 10
+Notes: perfect 10HP, Druid found no outcasts narrowed Witch to #1
+
