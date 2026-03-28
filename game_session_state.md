@@ -14738,3 +14738,63 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 5
 Notes: 5HP. Witch blocked #8. Wrong exec Baker#5 then locked Witch#1+Pooka#3. Pooka corrupted Judge#2+Alchemist#4.
 
+
+---
+
+# New Game — 2026-03-28 16:52:52
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Lover, Poet, Architect, Scout, Alchemist
+- Outcasts: Doppelganger, Bombardier
+- Minions: Witch
+- Demons: Pooka
+
+### [16:53:48] Revealed #1 Bombardier
+Info: {}
+
+### [16:53:49] Revealed #2 Enlightened
+Info: {'direction': 'ccw'}
+
+### [16:53:49] Revealed #3 Alchemist
+Info: {'cured_count': 2}
+
+### [16:53:49] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [16:53:49] Revealed #5 Scout
+Info: {'evil_role': 'Witch', 'distance': 1}
+
+### [16:53:49] Revealed #6 Architect
+Info: {'side': 'right'}
+
+### [16:53:49] Revealed #7 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+#### [16:53:57] Solver Output
+Scenarios: 4/350
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+  Generated 350 candidate scenarios
+  4 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #4 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:53:57] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Witch'})
+
+### [16:54:40] Executed #1 -> Witch (EVIL)
+
+### [16:55:16] Executed #4 -> Pooka (EVIL)
+
+## [16:55:17] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Both evils locked in 4 scenarios from card info alone.
+

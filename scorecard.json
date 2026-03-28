@@ -1749,6 +1749,13 @@
       "name": "asc42_v2",
       "notes": "5HP. Witch blocked #8. Wrong exec Baker#5 then locked Witch#1+Pooka#3. Pooka corrupted Judge#2+Alchemist#4.",
       "date": "2026-03-28 16:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc42_v3",
+      "notes": "Perfect 10HP. Both evils locked in 4 scenarios from card info alone.",
+      "date": "2026-03-28 16:55"
     }
   ]
 }
