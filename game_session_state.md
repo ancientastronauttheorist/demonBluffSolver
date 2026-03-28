@@ -13503,3 +13503,109 @@ Reason: #6 is evil in ALL 3 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!
 
+
+---
+
+# New Game — 2026-03-28 14:10:37
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Architect, Baker, Knitter, Hunter, Medium
+- Outcasts: Bombardier
+- Minions: Poisoner, Twin_Minion
+- Demons: Lilis
+
+### [14:11:50] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Knitter'}
+
+### [14:11:53] Revealed #2 Architect
+Info: {'side': 'left'}
+
+### [14:11:56] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:12:00] Revealed #4 Bombardier
+Info: {}
+
+### [14:13:14] Revealed #6 Architect
+Info: {'side': 'right'}
+
+### [14:13:20] Revealed #7 Baker
+Info: {'original_role': 'Knitter'}
+
+### [14:13:24] Revealed #8 Bishop
+Info: {'targets': [1, 3, 5], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [14:13:27] Revealed #9 Hunter
+Info: {'distance': 1}
+
+#### [14:13:33] Solver Output
+Scenarios: 4/674
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 674 candidate scenarios
+  4 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Lilis', 'Twin_Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Lilis', 'Twin_Minion', 'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Lilis', 'Twin_Minion', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [14:13:33] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [14:14:25] Executed #6 -> Twin_Minion (EVIL)
+
+#### [14:14:29] Solver Output
+Scenarios: 2/76
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 76 candidate scenarios
+  2 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Lilis', 'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Lilis', 'Poisoner'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [14:14:29] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Lilis', 'Poisoner'})
+
+### [14:15:06] Executed #7 -> Poisoner (EVIL)
+
+#### [14:15:10] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+  Generated 7 candidate scenarios
+  1 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #9 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [14:15:10] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [14:15:54] Executed #9 -> Lilis (EVIL)
+
+## [14:15:59] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis game, all 3 evils locked by solver. Poisoner corrupted Bishop#8. Night killed Baker#5.
+

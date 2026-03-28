@@ -1679,6 +1679,13 @@
       "name": "asc40_v7",
       "notes": "5HP, wrong exec on #3 Enlightened (bad Witness data entry). PD check confirmed #6 Baa. Asc40 complete 7/7!",
       "date": "2026-03-14 14:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc41_v1",
+      "notes": "Lilis game, all 3 evils locked by solver. Poisoner corrupted Bishop#8. Night killed Baker#5.",
+      "date": "2026-03-28 14:15"
     }
   ]
 }
