@@ -1700,6 +1700,13 @@
       "name": "asc41_v3",
       "notes": "SOLVER BUG: #9 Chancellor disguised as Oracle, claimed #4/#5 is Shaman. But Slayer confirmed #1=Shaman. Oracle info was a lie but solver marked #9 DEFINITELY GOOD. Solver failed to propagate confirmed-Shaman-at-#1. Wrong exec #6 (good Scout) then #7 (good Scout) killed us.",
       "date": "2026-03-28 14:40"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc41_v3b",
+      "notes": "4 evils with Puppeteer+Puppet. Lilis killed #5. Jester#1 found 3 evils at 3,6,8. Poisoner corrupted Baker#9.",
+      "date": "2026-03-28 15:23"
     }
   ]
 }
