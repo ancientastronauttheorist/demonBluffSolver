@@ -13609,3 +13609,130 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: Lilis game, all 3 evils locked by solver. Poisoner corrupted Bishop#8. Night killed Baker#5.
 
+
+---
+
+# New Game — 2026-03-28 14:22:15
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Witness, Slayer, Baker, Bishop, Oracle
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Twin_Minion, Minion
+- Demons: Baa
+
+### [14:23:33] Revealed #1 Gemcrafter
+Info: {'good_position': 9}
+
+### [14:23:36] Revealed #2 Plague_Doctor
+Info: {}
+
+### [14:23:40] Revealed #3 Bishop
+Info: {'targets': [1, 3, 9], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [14:23:44] Revealed #4 Plague_Doctor
+Info: {}
+
+### [14:23:48] Revealed #5 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Minion'}
+
+### [14:23:52] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [14:23:56] Revealed #7 Oracle
+Info: {'targets': [3, 9], 'minion_role': 'Twin_Minion'}
+
+### [14:24:01] Revealed #8 Slayer
+Info: {}
+
+### [14:24:05] Revealed #9 Baker
+Info: {'original_role': 'Witness'}
+
+#### [14:24:09] Solver Output
+Scenarios: 8/2604
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#6', '#9']
+Evil probabilities: #4=75%, #5=75%, #2=25%, #8=25%
+  Generated 2604 candidate scenarios
+  8 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'Twin_Minion'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 8]
+
+#### [14:24:09] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 8 scenarios (roles: {'Baa', 'Minion', 'Twin_Minion'})
+
+### [14:25:03] Executed #7 -> Baa (EVIL)
+
+#### [14:25:06] Solver Output
+Scenarios: 3/296
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#6', '#9']
+Evil probabilities: #4=67%, #5=67%, #2=33%, #8=33%
+  Generated 296 candidate scenarios
+  3 scenarios survived validation
+    #7 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 8]
+
+#### [14:25:06] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [14:26:05] Ability used at #2
+
+#### [14:26:08] Solver Output
+Scenarios: 2/296
+Definite evil: ['#4', '#5', '#7']
+Definite good: ['#1', '#2', '#3', '#6', '#8', '#9']
+  Generated 296 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [14:26:08] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Minion'})
+
+### [14:26:52] Executed #4 -> Twin_Minion (EVIL)
+
+#### [14:26:58] Solver Output
+Scenarios: 1/37
+Definite evil: ['#4', '#5', '#7']
+Definite good: ['#1', '#2', '#3', '#6', '#8', '#9']
+  Generated 37 candidate scenarios
+  1 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Twin_Minion'})
+    #5 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [14:26:58] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [14:27:46] Executed #5 -> Minion (EVIL)
+
+## [14:27:51] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD check on #1 narrowed to 2 scenarios. Bishop#3 corrupted by PD#2.
+

@@ -1686,6 +1686,13 @@
       "name": "asc41_v1",
       "notes": "Lilis game, all 3 evils locked by solver. Poisoner corrupted Bishop#8. Night killed Baker#5.",
       "date": "2026-03-28 14:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc41_v2",
+      "notes": "Perfect 10HP. PD check on #1 narrowed to 2 scenarios. Bishop#3 corrupted by PD#2.",
+      "date": "2026-03-28 14:27"
     }
   ]
 }
