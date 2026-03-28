@@ -14861,3 +14861,105 @@ Reason: #3 is evil in ALL 8 scenarios (roles: {'Baa', 'Minion'})
 Final HP: 10
 Notes: Perfect 10HP. Both evils locked in 8 scenarios from card info alone. Confessor dizzy = Minion disguise.
 
+
+---
+
+# New Game — 2026-03-28 17:07:00
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Knitter, Baker, Judge, Confessor, Empress
+- Outcasts: Bombardier, Doppelganger
+- Minions: Poisoner
+- Demons: Lilis
+
+### [17:08:07] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [17:08:07] Revealed #2 Baker
+Info: {'original_role': 'Knitter'}
+
+### [17:08:07] Revealed #3 Bombardier
+Info: {}
+
+### [17:08:07] Revealed #4 Bombardier
+Info: {}
+
+### [17:09:15] Revealed #5 Judge
+Info: {}
+
+### [17:09:15] Revealed #6 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 2}
+
+### [17:09:16] Revealed #7 Knitter
+Info: {'evil_pairs': 0}
+
+### [17:09:16] Revealed #8 Empress
+Info: {'targets': [3, 4, 9]}
+
+#### [17:09:16] Solver Output
+Scenarios: 34/654
+Definite good: ['#7', '#8', '#9']
+Evil probabilities: #3=76%, #1=35%, #2=24%, #4=24%, #6=24%, #5=18%
+  Generated 654 candidate scenarios
+  34 scenarios survived validation
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6]
+
+#### [17:09:16] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#6']
+Reason: Expected posterior 20.5 scenarios (adjusted 22.6, info gain 0.588 bits) | timing x1.00
+WARNING: Corruption risk: 21% -- corrupted Judge results are unreliable
+
+### [17:10:08] Revealed #5 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [17:10:08] Ability used at #5
+
+#### [17:10:08] Solver Output
+Scenarios: 20/654
+Definite good: ['#1', '#7', '#8', '#9']
+Evil probabilities: #3=70%, #6=40%, #2=30%, #4=30%, #5=30%
+  Generated 654 candidate scenarios
+  20 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 6]
+
+#### [17:10:08] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 40% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 40% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #6 (40%) despite low confidence — Bombardier candidate(s) [3, 4] risk instant game loss if executed first.
+
+### [17:11:06] Executed #6 -> GOOD (WRONG!)
+
+#### [17:11:06] Solver Output
+Scenarios: 12/498
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #3=50%, #4=50%, #5=50%
+  Generated 498 candidate scenarios
+  12 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5]
+
+#### [17:11:06] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 50% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [17:12:22] Executed #2 -> GOOD (WRONG!)
+
+## [17:12:23] GAME OVER — LOSS
+Final HP: 0
+Notes: 50/50 coin flip loss. Poisoner at #3 disguised as Bombardier. Lilis at #5 disguised as Judge. Solver had 0 budget, 50% on #2 which was wrong.
+

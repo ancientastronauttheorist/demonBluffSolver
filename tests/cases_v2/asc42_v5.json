@@ -1,0 +1,137 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Knitter"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 6,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Poisoner",
+        "distance": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          9
+        ]
+      }
+    }
+  ],
+  "executed": [
+    9,
+    6,
+    2
+  ],
+  "confirmed_evil": [],
+  "confirmed_good": [
+    6,
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {},
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Scout",
+      "Knitter",
+      "Baker",
+      "Judge",
+      "Confessor",
+      "Empress"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    5
+  ],
+  "name": "asc42_v5",
+  "true_evil_positions": {
+    "3": "Poisoner",
+    "5": "Lilis"
+  },
+  "notes": "50/50 coin flip loss. Poisoner at #3 disguised as Bombardier. Lilis at #5 disguised as Judge. Solver had 0 budget, 50% on #2 which was wrong."
+}
