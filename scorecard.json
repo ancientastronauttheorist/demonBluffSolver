@@ -1707,6 +1707,13 @@
       "name": "asc41_v3b",
       "notes": "4 evils with Puppeteer+Puppet. Lilis killed #5. Jester#1 found 3 evils at 3,6,8. Poisoner corrupted Baker#9.",
       "date": "2026-03-28 15:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc41_v4",
+      "notes": "Perfect 10HP, 1-evil game. Solver locked Pooka at #2 in 1 scenario. Pooka corrupted #1,#3,#5.",
+      "date": "2026-03-28 15:30"
     }
   ]
 }

@@ -14036,3 +14036,60 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: 4 evils with Puppeteer+Puppet. Lilis killed #5. Jester#1 found 3 evils at 3,6,8. Poisoner corrupted Baker#9.
 
+
+---
+
+# New Game — 2026-03-28 15:27:55
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Poet, Gemcrafter, Scout, Hunter, Oracle
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [15:29:33] Revealed #1 Architect
+Info: {'side': 'left'}
+
+### [15:29:33] Revealed #2 Poet
+Info: {'targets': [1, 4, 6], 'types': ['Demon', 'Villager', 'Outcast'], 'copied_role': 'Bishop'}
+
+### [15:29:34] Revealed #3 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Witch'}
+
+### [15:29:42] Revealed #4 Scout
+Info: {'evil_role': 'Pooka', 'distance': 0}
+
+### [15:29:48] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [15:29:48] Revealed #6 Gemcrafter
+Info: {'good_position': 7}
+
+### [15:29:48] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [15:29:55] Solver Output
+Scenarios: 1/31
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+  Generated 31 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [15:29:55] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:30:46] Executed #2 -> Pooka (EVIL)
+
+## [15:30:46] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP, 1-evil game. Solver locked Pooka at #2 in 1 scenario. Pooka corrupted #1,#3,#5.
+
