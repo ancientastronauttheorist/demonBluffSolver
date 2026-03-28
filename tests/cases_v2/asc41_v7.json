@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          7
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "left"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 6
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    }
+  ],
+  "executed": [
+    2,
+    7,
+    5
+  ],
+  "confirmed_evil": [
+    2,
+    7,
+    5
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Baa",
+    "7": "Chancellor",
+    "5": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Alchemist",
+      "Enlightened",
+      "Witness",
+      "Bishop",
+      "Lover",
+      "Gemcrafter",
+      "Architect",
+      "Jester"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Doppelganger",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor",
+      "Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1
+  ],
+  "name": "asc41_v7",
+  "true_evil_positions": {
+    "2": "Baa",
+    "5": "Minion",
+    "7": "Chancellor"
+  },
+  "notes": "Perfect 10HP. Jester found 2 evils at #2,#7. 50/50 between #5/#8 for last evil, hit #5=Minion. Asc41 COMPLETE (7/7 villages)."
+}

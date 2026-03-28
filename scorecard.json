@@ -1728,6 +1728,13 @@
       "name": "asc41_v6",
       "notes": "1HP clutch win. Lilis night killed #9. Poisoner corrupted #3(Knitter)+#1(Jester). Wrong exec #1(Jester corrupted) left 1HP, solver narrowed Lilis to #2.",
       "date": "2026-03-28 15:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc41_v7",
+      "notes": "Perfect 10HP. Jester found 2 evils at #2,#7. 50/50 between #5/#8 for last evil, hit #5=Minion. Asc41 COMPLETE (7/7 villages).",
+      "date": "2026-03-28 16:00"
     }
   ]
 }

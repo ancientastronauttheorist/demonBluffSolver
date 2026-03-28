@@ -14362,3 +14362,135 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: 1HP clutch win. Lilis night killed #9. Poisoner corrupted #3(Knitter)+#1(Jester). Wrong exec #1(Jester corrupted) left 1HP, solver narrowed Lilis to #2.
 
+
+---
+
+# New Game — 2026-03-28 15:55:04
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Enlightened, Witness, Bishop, Lover, Gemcrafter, Architect, Jester
+- Outcasts: Drunk, Doppelganger, Wretch
+- Minions: Chancellor, Minion
+- Demons: Baa
+
+### [15:56:51] Revealed #1 Jester
+Info: {}
+
+### [15:56:52] Revealed #2 Lover
+Info: {'evil_adjacent': 2}
+
+### [15:56:52] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [15:56:52] Revealed #4 Architect
+Info: {'side': 'left'}
+
+### [15:56:52] Revealed #5 Witness
+Info: {'affected_position': 6}
+
+### [15:56:52] Revealed #6 Wretch
+Info: {}
+
+### [15:56:52] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:56:53] Revealed #8 Enlightened
+Info: {'direction': 'cw'}
+
+### [15:56:53] Revealed #9 Gemcrafter
+Info: {'good_position': 1}
+
+#### [15:57:01] Solver Output
+Scenarios: 160/24600
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+Evil probabilities: #2=81%, #5=75%, #8=75%, #7=69%
+  Generated 24600 candidate scenarios
+  160 scenarios survived validation
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 5, 7, 8]
+
+#### [15:57:01] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#7']
+Reason: Expected posterior 80.0 scenarios (adjusted 80.0, info gain 1.000 bits) | timing x1.00
+
+### [15:57:53] Revealed #1 Jester
+Info: {'targets': [2, 3, 7], 'evil_count': 2}
+
+### [15:57:53] Ability used at #1
+
+#### [15:57:55] Solver Output
+Scenarios: 80/24600
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+Evil probabilities: #5=50%, #8=50%
+  Generated 24600 candidate scenarios
+  80 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa', 'Chancellor', 'Minion'})
+    #7 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion', 'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 8]
+
+#### [15:57:55] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 80 scenarios (roles: {'Baa', 'Chancellor', 'Minion'})
+
+### [15:58:45] Executed #2 -> Baa (EVIL)
+
+#### [15:58:45] Solver Output
+Scenarios: 20/2620
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+Evil probabilities: #5=50%, #8=50%
+  Generated 2620 candidate scenarios
+  20 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 8]
+
+#### [15:58:45] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 20 scenarios (roles: {'Chancellor', 'Minion'})
+
+### [15:59:28] Executed #7 -> Chancellor (EVIL)
+
+#### [15:59:28] Solver Output
+Scenarios: 10/229
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+Evil probabilities: #5=50%, #8=50%
+  Generated 229 candidate scenarios
+  10 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #7 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 8]
+
+#### [15:59:28] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:00:13] Executed #5 -> Minion (EVIL)
+
+## [16:00:14] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Jester found 2 evils at #2,#7. 50/50 between #5/#8 for last evil, hit #5=Minion. Asc41 COMPLETE (7/7 villages).
+
