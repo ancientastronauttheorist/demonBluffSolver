@@ -1721,6 +1721,13 @@
       "name": "asc41_v5",
       "notes": "Perfect 10HP. Solver locked both evils in 4 scenarios. Confessor dizzy = Baa disguise.",
       "date": "2026-03-28 15:38"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc41_v6",
+      "notes": "1HP clutch win. Lilis night killed #9. Poisoner corrupted #3(Knitter)+#1(Jester). Wrong exec #1(Jester corrupted) left 1HP, solver narrowed Lilis to #2.",
+      "date": "2026-03-28 15:50"
     }
   ]
 }
