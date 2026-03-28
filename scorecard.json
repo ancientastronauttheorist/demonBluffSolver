@@ -1756,6 +1756,13 @@
       "name": "asc42_v3",
       "notes": "Perfect 10HP. Both evils locked in 4 scenarios from card info alone.",
       "date": "2026-03-28 16:55"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc42_v4",
+      "notes": "Perfect 10HP. Both evils locked in 8 scenarios from card info alone. Confessor dizzy = Minion disguise.",
+      "date": "2026-03-28 17:02"
     }
   ]
 }

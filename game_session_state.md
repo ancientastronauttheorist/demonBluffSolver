@@ -14798,3 +14798,66 @@ Reason: #1 is evil in ALL 4 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: Perfect 10HP. Both evils locked in 4 scenarios from card info alone.
 
+
+---
+
+# New Game — 2026-03-28 16:59:26
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Medium, Lover, Scout, Hunter, Druid, Alchemist
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion
+- Demons: Baa
+
+### [17:00:42] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [17:00:42] Revealed #2 Plague_Doctor
+Info: {}
+
+### [17:00:42] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [17:00:42] Revealed #4 Medium
+Info: {'good_position': 5, 'good_role': 'Druid'}
+
+### [17:00:42] Revealed #5 Druid
+Info: {}
+
+### [17:00:43] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [17:00:43] Revealed #7 Alchemist
+Info: {'cured_count': 1}
+
+### [17:00:43] Revealed #8 Scout
+Info: {'evil_role': 'Baa', 'distance': 3}
+
+#### [17:00:50] Solver Output
+Scenarios: 8/266
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+  Generated 266 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [17:00:50] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 8 scenarios (roles: {'Baa', 'Minion'})
+
+### [17:01:48] Executed #3 -> Baa (EVIL)
+
+### [17:02:45] Executed #6 -> Minion (EVIL)
+
+## [17:02:46] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Both evils locked in 8 scenarios from card info alone. Confessor dizzy = Minion disguise.
+
