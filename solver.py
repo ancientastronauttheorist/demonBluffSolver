@@ -1234,31 +1234,41 @@ def _validate_oracle(card: CardInfo, scenario: Scenario,
     # Check if either target actually IS that minion role.
     # Wretch registers as a random Evil Minion — Oracle can identify Wretch
     # as any Minion role (wiki: "Bishop can only see Wretch as a Minion").
-    def _target_matches(t):
-        if _known_evil_role(t, scenario, state) == minion_role:
+    def _target_matches_definite(t):
+        """True only for definite role matches (not Wretch uncertainty)."""
+        return _known_evil_role(t, scenario, state) == minion_role
+
+    def _target_matches_possible(t):
+        """True for definite matches OR Wretch (registers as random minion)."""
+        if _target_matches_definite(t):
             return True
-        # Wretch registers as any Evil Minion to Oracle
+        # Wretch registers as a random specific Evil Minion to Oracle
         card_at = _get_card_at(t, state)
         if card_at and card_at.apparent_role == "Wretch":
-            # Wretch can match ANY minion role (game picks from full pool,
-            # not just deck minions — important when deck has no minions)
             from knowledge_base import get_card, Role as KBRole
             claimed_card = get_card(minion_role)
             return claimed_card is not None and claimed_card.role == KBRole.MINION
         return False
 
-    actual = any(_target_matches(t) for t in targets)
-
     if truth == TruthStatus.TRUTHFUL:
-        return actual
+        # Truthful Oracle: claim must be true. Wretch counts (could have
+        # registered as the claimed role).
+        return any(_target_matches_possible(t) for t in targets)
     else:
+        # Lying Oracle: claim must be false. Only reject if a DEFINITE match
+        # exists. Wretch is uncertain (might have registered as a different
+        # minion role), so don't let it block the lie.
         # Wiki: lying Oracle can't include two Evil characters — both targets must be Good.
+        # Use ACTUAL alignment (not _effective_alignment) because Wretch is truly Good
+        # despite registering as Evil for ability purposes. The Oracle target selection
+        # constraint is about real alignment, not ability perception.
         # But Poet copies Oracle with random targets (not Oracle's target selection rules),
         # so skip the target constraint for Poet-Oracle.
         if card.apparent_role != "Poet":
-            if not all(_effective_alignment(t, scenario, state) == Alignment.GOOD for t in targets):
+            if not all(not _is_evil_in_board_state(t, scenario, state) for t in targets):
                 return False
-        return not actual
+        actual_definite = any(_target_matches_definite(t) for t in targets)
+        return not actual_definite
 
 
 def _validate_medium(card: CardInfo, scenario: Scenario,

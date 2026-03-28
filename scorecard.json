@@ -1693,6 +1693,13 @@
       "name": "asc41_v2",
       "notes": "Perfect 10HP. PD check on #1 narrowed to 2 scenarios. Bishop#3 corrupted by PD#2.",
       "date": "2026-03-28 14:27"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc41_v3",
+      "notes": "SOLVER BUG: #9 Chancellor disguised as Oracle, claimed #4/#5 is Shaman. But Slayer confirmed #1=Shaman. Oracle info was a lie but solver marked #9 DEFINITELY GOOD. Solver failed to propagate confirmed-Shaman-at-#1. Wrong exec #6 (good Scout) then #7 (good Scout) killed us.",
+      "date": "2026-03-28 14:40"
     }
   ]
 }

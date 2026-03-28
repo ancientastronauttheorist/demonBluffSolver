@@ -13736,3 +13736,130 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: Perfect 10HP. PD check on #1 narrowed to 2 scenarios. Bishop#3 corrupted by PD#2.
 
+
+---
+
+# New Game — 2026-03-28 14:33:12
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Bard, Empress, Slayer, Scout, Architect, Oracle
+- Outcasts: Wretch, Doppelganger, Drunk
+- Minions: Shaman, Chancellor
+- Demons: Baa
+
+### [14:35:14] Revealed #1 Bard
+Info: {'corruption_distance': 1}
+
+### [14:35:20] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [14:35:25] Revealed #3 Slayer
+Info: {}
+
+### [14:35:25] Revealed #4 Architect
+Info: {'side': 'right'}
+
+### [14:35:25] Revealed #5 Wretch
+Info: {}
+
+### [14:35:30] Revealed #6 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [14:35:30] Revealed #7 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [14:35:30] Revealed #8 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [14:35:35] Revealed #9 Oracle
+Info: {'targets': [4, 5], 'minion_role': 'Shaman'}
+
+#### [14:35:42] Solver Output
+Scenarios: 108/24600
+Definite good: ['#6', '#7', '#9']
+Evil probabilities: #1=59%, #8=59%, #2=50%, #4=50%, #5=44%, #3=37%
+  Generated 24600 candidate scenarios
+  108 scenarios survived validation
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 8]
+
+#### [14:35:42] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#1']
+Reason: Target #1 is 59% evil (adjusted 0.54)
+WARNING: Corruption risk: 9% -- Slayer ability disabled if corrupted
+
+### [14:36:49] Ability used at #3
+
+#### [14:36:55] Solver Output
+Scenarios: 101/7144
+Definite evil: ['#1']
+Definite good: ['#3', '#9']
+Evil probabilities: #2=70%, #5=41%, #4=30%, #8=30%, #6=20%, #7=10%
+  Generated 7144 candidate scenarios
+  101 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #3 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 4, 5, 6, 7, 8]
+
+#### [14:36:55] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (30% good Drunk (corrupted), 28% evil Baa, 27% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 70%, but all reveal branches still lead to a forced win.
+
+### [14:37:44] Executed #2 -> Baa (EVIL)
+
+#### [14:37:49] Solver Output
+Scenarios: 28/563
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#8', '#9']
+Evil probabilities: #5=64%, #6=18%, #7=18%
+  Generated 563 candidate scenarios
+  28 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 6, 7]
+
+#### [14:37:49] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 18% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 18% confident (budget: 2 wrong execs)
+WARNING: Low confidence (18%) -- consider gathering more info
+
+### [14:38:54] Executed #6 -> GOOD (WRONG!)
+
+#### [14:39:02] Solver Output
+Scenarios: 23/501
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#6', '#8', '#9']
+Evil probabilities: #5=78%, #7=22%
+  Generated 501 candidate scenarios
+  23 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Unknown'})
+    #2 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [5, 7]
+
+#### [14:39:02] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 22% likely evil but budget=1 requires >=80% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 22% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 22% < 80% threshold. Consider manual override if you have extra information.
+
+### [14:40:42] Executed #7 -> GOOD (WRONG!)
+
+## [14:40:53] GAME OVER — LOSS
+Final HP: 0
+Notes: SOLVER BUG: #9 Chancellor disguised as Oracle, claimed #4/#5 is Shaman. But Slayer confirmed #1=Shaman. Oracle info was a lie but solver marked #9 DEFINITELY GOOD. Solver failed to propagate confirmed-Shaman-at-#1. Wrong exec #6 (good Scout) then #7 (good Scout) killed us.
+

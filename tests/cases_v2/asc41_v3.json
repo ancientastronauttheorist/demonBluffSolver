@@ -1,0 +1,163 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Baa",
+        "distance": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5
+        ],
+        "minion_role": "Shaman"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    2,
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    1,
+    2
+  ],
+  "confirmed_good": [
+    6,
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Shaman",
+    "2": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 3,
+      "target_pos": 1,
+      "killed": true,
+      "evil_role": "Shaman"
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Bard",
+      "Empress",
+      "Slayer",
+      "Scout",
+      "Architect",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman",
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "name": "asc41_v3",
+  "true_evil_positions": {
+    "1": "Shaman",
+    "2": "Baa",
+    "9": "Chancellor"
+  },
+  "notes": "SOLVER BUG: #9 Chancellor disguised as Oracle, claimed #4/#5 is Shaman. But Slayer confirmed #1=Shaman. Oracle info was a lie but solver marked #9 DEFINITELY GOOD. Solver failed to propagate confirmed-Shaman-at-#1. Wrong exec #6 (good Scout) then #7 (good Scout) killed us."
+}
