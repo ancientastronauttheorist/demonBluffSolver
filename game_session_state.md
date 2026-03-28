@@ -14093,3 +14093,88 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP, 1-evil game. Solver locked Pooka at #2 in 1 scenario. Pooka corrupted #1,#3,#5.
 
+
+---
+
+# New Game — 2026-03-28 15:34:48
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Scout, Architect, Confessor, Judge, Bard
+- Outcasts: Drunk, Bombardier, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+### [15:36:22] Revealed #1 Wretch
+Info: {}
+
+### [15:36:23] Revealed #2 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [15:36:23] Revealed #3 Judge
+Info: {}
+
+### [15:36:23] Revealed #4 Bombardier
+Info: {}
+
+### [15:36:23] Revealed #5 Bombardier
+Info: {}
+
+### [15:36:30] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [15:36:30] Revealed #7 Druid
+Info: {}
+
+### [15:36:30] Revealed #8 Bard
+Info: {'corruption_distance': -1}
+
+### [15:36:40] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+#### [15:36:46] Solver Output
+Scenarios: 4/316
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+  Generated 316 candidate scenarios
+  4 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #6 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [15:36:46] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [15:37:27] Executed #4 -> Chancellor (EVIL)
+
+#### [15:37:27] Solver Output
+Scenarios: 2/37
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+  Generated 37 candidate scenarios
+  2 scenarios survived validation
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #6 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [15:37:27] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [15:38:14] Executed #6 -> Baa (EVIL)
+
+## [15:38:14] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Solver locked both evils in 4 scenarios. Confessor dizzy = Baa disguise.
+

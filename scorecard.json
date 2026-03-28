@@ -1714,6 +1714,13 @@
       "name": "asc41_v4",
       "notes": "Perfect 10HP, 1-evil game. Solver locked Pooka at #2 in 1 scenario. Pooka corrupted #1,#3,#5.",
       "date": "2026-03-28 15:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc41_v5",
+      "notes": "Perfect 10HP. Solver locked both evils in 4 scenarios. Confessor dizzy = Baa disguise.",
+      "date": "2026-03-28 15:38"
     }
   ]
 }
