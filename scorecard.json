@@ -1742,6 +1742,13 @@
       "name": "asc42_v1",
       "notes": "8HP. Drunk wrong exec cost only 2HP. Wrong exec revealed corruption, solver locked both evils in 1 scenario.",
       "date": "2026-03-28 16:21"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc42_v2",
+      "notes": "5HP. Witch blocked #8. Wrong exec Baker#5 then locked Witch#1+Pooka#3. Pooka corrupted Judge#2+Alchemist#4.",
+      "date": "2026-03-28 16:48"
     }
   ]
 }

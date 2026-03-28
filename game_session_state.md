@@ -14641,3 +14641,100 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
 Final HP: 8
 Notes: 8HP. Drunk wrong exec cost only 2HP. Wrong exec revealed corruption, solver locked both evils in 1 scenario.
 
+
+---
+
+# New Game — 2026-03-28 16:44:35
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Scout, Judge, Empress, Bishop, Baker, Alchemist
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Pooka
+
+### [16:45:52] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Bishop'}
+
+### [16:45:52] Revealed #2 Judge
+Info: {}
+
+### [16:45:52] Revealed #3 Bishop
+Info: {'targets': [5, 6, 8], 'types': ['Minion', 'Villager', 'Outcast']}
+
+### [16:45:53] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [16:45:53] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [16:45:53] Revealed #6 Empress
+Info: {'targets': [1, 4, 8]}
+
+### [16:45:53] Revealed #7 Wretch
+Info: {}
+
+#### [16:46:01] Solver Output
+Scenarios: 5/56
+Definite good: ['#8']
+Evil probabilities: #5=80%, #1=20%, #2=20%, #3=20%, #4=20%, #6=20%, #7=20%
+  Generated 56 candidate scenarios
+  5 scenarios survived validation
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 5, 6, 7]
+
+#### [16:46:01] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#3']
+Reason: Expected posterior 3.0 scenarios (adjusted 3.3, info gain 0.599 bits) | timing x1.00
+WARNING: Corruption risk: 20% -- corrupted Judge results are unreliable
+
+### [16:46:38] Revealed #2 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [16:46:38] Ability used at #2
+
+#### [16:46:38] Solver Output
+Scenarios: 3/56
+Definite good: ['#2', '#4', '#8']
+Evil probabilities: #5=67%, #1=33%, #3=33%, #6=33%, #7=33%
+  Generated 56 candidate scenarios
+  3 scenarios survived validation
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 3, 5, 6, 7]
+
+#### [16:46:38] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 33% good Baker).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [16:47:20] Executed #5 -> GOOD (WRONG!)
+
+#### [16:47:20] Solver Output
+Scenarios: 1/42
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+  Generated 42 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #3 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:47:20] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [16:48:02] Executed #1 -> Witch (EVIL)
+
+### [16:48:47] Executed #3 -> Pooka (EVIL)
+
+## [16:48:47] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Witch blocked #8. Wrong exec Baker#5 then locked Witch#1+Pooka#3. Pooka corrupted Judge#2+Alchemist#4.
+
