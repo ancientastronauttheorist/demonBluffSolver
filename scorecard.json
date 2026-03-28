@@ -1735,6 +1735,13 @@
       "name": "asc41_v7",
       "notes": "Perfect 10HP. Jester found 2 evils at #2,#7. 50/50 between #5/#8 for last evil, hit #5=Minion. Asc41 COMPLETE (7/7 villages).",
       "date": "2026-03-28 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc42_v1",
+      "notes": "8HP. Drunk wrong exec cost only 2HP. Wrong exec revealed corruption, solver locked both evils in 1 scenario.",
+      "date": "2026-03-28 16:21"
     }
   ]
 }

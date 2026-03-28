@@ -14494,3 +14494,150 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect 10HP. Jester found 2 evils at #2,#7. 50/50 between #5/#8 for last evil, hit #5=Minion. Asc41 COMPLETE (7/7 villages).
 
+
+---
+
+# New Game — 2026-03-28 16:14:26
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Enlightened, Knitter, Judge, Gemcrafter, Bishop, Fortune_Teller
+- Outcasts: Wretch, Drunk, Plague_Doctor
+- Minions: Chancellor
+- Demons: Baa
+
+### [16:15:41] Revealed #1 Judge
+Info: {}
+
+### [16:15:41] Revealed #2 Gemcrafter
+Info: {'good_position': 5}
+
+### [16:15:41] Revealed #3 Plague_Doctor
+Info: {}
+
+### [16:15:41] Revealed #4 Gemcrafter
+Info: {'good_position': 1}
+
+### [16:15:42] Revealed #5 Fortune_Teller
+Info: {}
+
+### [16:15:42] Revealed #6 Knitter
+Info: {'evil_pairs': 1}
+
+### [16:15:42] Revealed #7 Bishop
+Info: {'targets': [2, 7, 8], 'types': ['Outcast', 'Minion', 'Villager']}
+
+### [16:15:42] Revealed #8 Slayer
+Info: {}
+
+#### [16:15:49] Solver Output
+Scenarios: 80/2400
+Evil probabilities: #8=51%, #6=40%, #7=34%, #1=32%, #5=18%, #3=10%, #2=8%, #4=8%
+  Generated 2400 candidate scenarios
+  80 scenarios survived validation
+    Uncertain: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#### [16:15:49] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.101 (adjusted 2.101) | timing x1.00
+
+### [16:16:28] Ability used at #3
+
+#### [16:16:29] Solver Output
+Scenarios: 41/2400
+Definite good: ['#4']
+Evil probabilities: #7=59%, #8=59%, #1=24%, #6=24%, #5=22%, #3=10%, #2=2%
+  Generated 2400 candidate scenarios
+  41 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8]
+
+#### [16:16:29] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#6', '#7']
+Reason: Entropy 1.000 (adjusted 0.829) | follow-up bonus 0.382 | timing x1.00
+WARNING: Corruption risk: 34%
+
+### [16:17:10] Revealed #5 Fortune Teller
+Info: {'targets': [6, 7], 'has_evil': True}
+
+### [16:17:10] Ability used at #5
+
+#### [16:17:10] Solver Output
+Scenarios: 21/2400
+Definite good: ['#4']
+Evil probabilities: #7=48%, #8=48%, #1=38%, #6=29%, #3=19%, #5=14%, #2=5%
+  Generated 2400 candidate scenarios
+  21 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8]
+
+#### [16:17:10] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#7']
+Reason: Target #7 is 48% evil (adjusted 0.45)
+WARNING: Corruption risk: 5% -- Slayer ability disabled if corrupted
+
+### [16:17:46] Ability used at #8
+
+#### [16:17:47] Solver Output
+Scenarios: 15/2400
+Definite good: ['#4']
+Evil probabilities: #8=67%, #6=40%, #3=27%, #7=27%, #5=20%, #1=13%, #2=7%
+  Generated 2400 candidate scenarios
+  15 scenarios survived validation
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 5, 6, 7, 8]
+
+#### [16:17:47] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#2']
+Reason: Expected posterior 10.5 scenarios (adjusted 12.6, info gain 0.248 bits) | timing x1.00
+WARNING: Corruption risk: 40% -- corrupted Judge results are unreliable
+
+### [16:18:25] Revealed #1 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [16:18:25] Ability used at #1
+
+#### [16:18:26] Solver Output
+Scenarios: 11/2400
+Definite good: ['#3', '#4']
+Evil probabilities: #8=91%, #7=36%, #5=27%, #1=18%, #6=18%, #2=9%
+  Generated 2400 candidate scenarios
+  11 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 7, 8]
+
+#### [16:18:26] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (73% evil Chancellor, 18% evil Baa, 9% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 91%, but all reveal branches still lead to a forced win.
+
+### [16:19:16] Executed #8 -> GOOD (WRONG!)
+
+#### [16:19:17] Solver Output
+Scenarios: 1/1724
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+  Generated 1724 candidate scenarios
+  1 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #5 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [16:19:17] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [16:20:06] Executed #2 -> Chancellor (EVIL)
+
+### [16:21:00] Executed #5 -> Baa (EVIL)
+
+## [16:21:00] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP. Drunk wrong exec cost only 2HP. Wrong exec revealed corruption, solver locked both evils in 1 scenario.
+
