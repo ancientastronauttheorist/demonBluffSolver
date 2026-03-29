@@ -1341,6 +1341,10 @@ def main():
         target_pos = int(sys.argv[3])
         killed = sys.argv[4].lower() in ("kill", "killed", "true", "1", "yes")
         evil_role = sys.argv[5] if len(sys.argv) > 5 else None
+        if killed and not evil_role:
+            print(f"  ERROR: Slayer kill requires evil_role! Game reveals the role on kill.")
+            print(f"  Usage: slayer_result {slayer_pos} {target_pos} kill <evil_role>")
+            sys.exit(1)
         session.add_slayer_result(slayer_pos, target_pos, killed, evil_role=evil_role)
         session.save()
         result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"

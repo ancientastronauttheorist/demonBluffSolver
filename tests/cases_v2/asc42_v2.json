@@ -1,0 +1,144 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Bishop"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          8
+        ],
+        "types": [
+          "Minion",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    1,
+    3
+  ],
+  "confirmed_evil": [
+    1,
+    3
+  ],
+  "confirmed_good": [
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Witch",
+    "3": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    8
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Scout",
+      "Judge",
+      "Empress",
+      "Bishop",
+      "Baker",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "name": "asc42_v2",
+  "true_evil_positions": {
+    "1": "Witch",
+    "3": "Pooka"
+  },
+  "notes": "5HP. Witch blocked #8. Wrong exec Baker#5 then locked Witch#1+Pooka#3. Pooka corrupted Judge#2+Alchemist#4."
+}

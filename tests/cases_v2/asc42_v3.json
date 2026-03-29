@@ -1,0 +1,126 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "ccw"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Witch",
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "right"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 3
+      }
+    }
+  ],
+  "executed": [
+    1,
+    4
+  ],
+  "confirmed_evil": [
+    1,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Witch",
+    "4": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    8
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Lover",
+      "Poet",
+      "Architect",
+      "Scout",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Bombardier"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc42_v3",
+  "true_evil_positions": {
+    "1": "Witch",
+    "4": "Pooka"
+  },
+  "notes": "Perfect 10HP. Both evils locked in 4 scenarios from card info alone."
+}
