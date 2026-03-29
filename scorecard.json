@@ -1770,6 +1770,13 @@
       "name": "asc42_v5",
       "notes": "50/50 coin flip loss. Poisoner at #3 disguised as Bombardier. Lilis at #5 disguised as Judge. Solver had 0 budget, 50% on #2 which was wrong.",
       "date": "2026-03-28 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc42_v5b",
+      "notes": "Perfect 10HP. PD check on #1 cracked it \u2014 all 3 evils locked in 2 scenarios.",
+      "date": "2026-03-28 19:10"
     }
   ]
 }

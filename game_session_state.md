@@ -14963,3 +14963,91 @@ WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 0
 Notes: 50/50 coin flip loss. Poisoner at #3 disguised as Bombardier. Lilis at #5 disguised as Judge. Solver had 0 budget, 50% on #2 which was wrong.
 
+
+---
+
+# New Game — 2026-03-28 19:05:36
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Scout, Architect, Bard, Bishop, Medium, Poet
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Poisoner, Minion
+- Demons: Pooka
+
+### [19:07:13] Revealed #1 Medium
+Info: {'good_position': 7, 'good_role': 'Bombardier'}
+
+### [19:07:13] Revealed #2 Architect
+Info: {'side': 'left'}
+
+### [19:07:13] Revealed #3 Bard
+Info: {'corruption_distance': 2}
+
+### [19:07:14] Revealed #4 Scout
+Info: {'evil_role': 'Pooka', 'distance': 1}
+
+### [19:07:14] Revealed #5 Gemcrafter
+Info: {'good_position': 7}
+
+### [19:07:14] Revealed #6 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 7}
+
+### [19:07:14] Revealed #7 Bombardier
+Info: {}
+
+### [19:07:15] Revealed #8 Bishop
+Info: {'targets': [4, 9, 10], 'types': ['Outcast', 'Villager', 'Minion']}
+
+### [19:07:15] Revealed #9 Plague_Doctor
+Info: {}
+
+### [19:07:15] Revealed #10 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 1}
+
+#### [19:07:27] Solver Output
+Scenarios: 6/4632
+Definite good: ['#5']
+Evil probabilities: #4=83%, #7=83%, #1=33%, #2=17%, #3=17%, #6=17%, #8=17%, #9=17%, #10=17%
+  Generated 4632 candidate scenarios
+  6 scenarios survived validation
+    #5 is DEFINITELY GOOD
+    Uncertain: [1, 2, 3, 4, 6, 7, 8, 9, 10]
+
+#### [19:07:27] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.252 (adjusted 2.252) | timing x1.00
+
+### [19:08:29] Ability used at #9
+
+#### [19:08:30] Solver Output
+Scenarios: 2/4632
+Definite evil: ['#1', '#4', '#7']
+Definite good: ['#2', '#3', '#5', '#6', '#8', '#9', '#10']
+  Generated 4632 candidate scenarios
+  2 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #4 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #7 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+
+#### [19:08:30] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [19:09:06] Executed #1 -> Pooka (EVIL)
+
+### [19:09:26] Executed #4 -> Poisoner (EVIL)
+
+### [19:10:38] Executed #7 -> Minion (EVIL)
+
+## [19:10:38] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD check on #1 cracked it — all 3 evils locked in 2 scenarios.
+
