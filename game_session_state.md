@@ -15234,3 +15234,152 @@ Notes: 10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dr
 Final HP: 10
 Notes: 10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dreamer.
 
+
+---
+
+# New Game — 2026-03-29 00:14:02
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Druid, Poet, Knight, Gemcrafter, Alchemist, Baker, Fortune_Teller
+- Outcasts: Doppelganger, Wretch
+- Minions: Chancellor, Puppeteer
+- Demons: Lilis
+
+### [00:15:51] Revealed #1 Gemcrafter
+Info: {'good_position': 7}
+
+### [00:15:54] Revealed #2 Wretch
+Info: {}
+
+### [00:15:57] Revealed #3 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 9}
+
+### [00:16:00] Revealed #4 Baker
+Info: {'original_role': 'Fortune_Teller'}
+
+### [00:18:15] Revealed #5 Alchemist
+Info: {'cured_count': 0}
+
+### [00:18:19] Revealed #7 Empress
+Info: {'targets': [2, 6, 9]}
+
+### [00:18:23] Revealed #8 Fortune_Teller
+Info: {}
+
+### [00:18:26] Revealed #9 Empress
+Info: {'targets': [1, 5, 7]}
+
+#### [00:18:41] Solver Output
+Scenarios: 22/3596
+Definite evil: ['#3', '#4']
+Definite good: ['#6', '#7', '#9']
+Evil probabilities: #5=77%, #8=55%, #2=45%, #1=23%
+  Generated 3596 candidate scenarios
+  22 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis', 'Chancellor'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer', 'Chancellor'})
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 8]
+
+#### [00:18:41] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 22 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [00:19:47] Executed #3 -> Lilis (EVIL)
+
+#### [00:19:50] Solver Output
+Scenarios: 18/396
+Definite evil: ['#3', '#4']
+Definite good: ['#6', '#7', '#9']
+Evil probabilities: #5=72%, #2=56%, #8=44%, #1=28%
+  Generated 396 candidate scenarios
+  18 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY EVIL (possible roles: {'Chancellor', 'Puppeteer'})
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 8]
+
+#### [00:19:50] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 18 scenarios (roles: {'Chancellor', 'Puppeteer'})
+
+### [00:20:29] Executed #4 -> Puppeteer (EVIL)
+
+#### [00:20:32] Solver Output
+Scenarios: 13/33
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#9']
+Evil probabilities: #8=62%, #2=38%
+  Generated 33 candidate scenarios
+  13 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 8]
+
+#### [00:20:32] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 13 scenarios (roles: {'Puppet'})
+
+### [00:21:13] Executed #5 -> Puppet (EVIL)
+
+#### [00:21:15] Solver Output
+Scenarios: 13/33
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#9']
+Evil probabilities: #8=62%, #2=38%
+  Generated 33 candidate scenarios
+  13 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #1 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+    Uncertain: [2, 8]
+
+#### [00:21:15] Recommendation
+Action: **USE_ABILITY** #8 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.961 (adjusted 0.961) | timing x1.00
+
+### [00:22:53] Revealed #8 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [00:22:57] Ability used at #8
+
+#### [00:23:00] Solver Output
+Scenarios: 8/33
+Definite evil: ['#3', '#4', '#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+  Generated 33 candidate scenarios
+  8 scenarios survived validation
+    #3 is DEFINITELY EVIL (possible roles: {'Lilis'})
+    #4 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #5 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #8 is DEFINITELY EVIL (possible roles: {'Chancellor'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #9 is DEFINITELY GOOD
+
+#### [00:23:00] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 8 scenarios (roles: {'Chancellor'})
+
+### [00:23:47] Executed #8 -> Chancellor (EVIL)
+
+## [00:23:54] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis game with Puppeteer creating Puppet. FT ability resolved last evil. Night killed #6, -4HP total from nights.
+
