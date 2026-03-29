@@ -15051,3 +15051,186 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. PD check on #1 cracked it — all 3 evils locked in 2 scenarios.
 
+
+---
+
+# New Game — 2026-03-28 19:15:22
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Dreamer, Architect, Scout, Knight, Alchemist, Baker
+- Outcasts: Plague_Doctor
+- Minions: Minion, Poisoner
+- Demons: Pooka
+
+### [19:16:55] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 3}
+
+### [19:16:55] Revealed #2 Architect
+Info: {'side': 'left'}
+
+### [19:16:55] Revealed #3 Plague_Doctor
+Info: {}
+
+### [19:16:56] Revealed #4 Knight
+Info: {}
+
+### [19:16:56] Revealed #5 Alchemist
+Info: {'cured_count': 1}
+
+### [19:16:56] Revealed #6 Architect
+Info: {'side': 'right'}
+
+### [19:16:56] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [19:16:57] Revealed #8 Bard
+Info: {'corruption_distance': -1}
+
+### [19:16:57] Revealed #9 Dreamer
+Info: {}
+
+#### [19:17:17] Solver Output
+Scenarios: 175/2465
+Definite good: ['#3']
+Evil probabilities: #2=67%, #9=51%, #1=43%, #6=38%, #7=30%, #8=30%, #4=27%, #5=14%
+  Generated 2465 candidate scenarios
+  175 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 5, 6, 7, 8, 9]
+
+#### [19:17:17] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight check: #4 is 27% evil, 11% corruption risk. Expected HP cost: 0.7 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 11% -- corrupted Knight loses immunity + 4 extra damage
+
+### [19:18:38] Executed #4 -> GOOD (WRONG!)
+
+#### [19:18:38] Solver Output
+Scenarios: 128/1604
+Definite good: ['#3', '#4']
+Evil probabilities: #2=62%, #9=58%, #1=55%, #6=45%, #7=32%, #8=30%, #5=17%
+  Generated 1604 candidate scenarios
+  128 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    Uncertain: [1, 2, 5, 6, 7, 8, 9]
+
+#### [19:18:38] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.072 (adjusted 2.072) | timing x1.00
+
+### [19:19:43] Ability used at #3
+
+#### [19:19:44] Solver Output
+Scenarios: 40/1604
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#8']
+Evil probabilities: #2=80%, #9=50%, #7=42%, #6=20%, #5=8%
+  Generated 1604 candidate scenarios
+  40 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka', 'Minion', 'Poisoner'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 5, 6, 7, 9]
+
+#### [19:19:44] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 40 scenarios (roles: {'Pooka', 'Minion', 'Poisoner'})
+
+### [19:20:50] Executed #1 -> Pooka (EVIL)
+
+#### [19:20:50] Solver Output
+Scenarios: 11/220
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#8']
+Evil probabilities: #2=82%, #9=55%, #7=36%, #6=18%, #5=9%
+  Generated 220 candidate scenarios
+  11 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 5, 6, 7, 9]
+
+#### [19:20:50] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#7']
+Reason: Entropy 0.946 (adjusted 0.731) | timing x1.00
+WARNING: Corruption risk: 45%
+
+### [19:21:49] Revealed #9 Dreamer
+Info: {'target': 7, 'evil_role': 'Pooka'}
+
+### [19:21:50] Ability used at #9
+
+#### [19:21:50] Solver Output
+Scenarios: 11/220
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#8']
+Evil probabilities: #2=82%, #9=55%, #7=36%, #6=18%, #5=9%
+  Generated 220 candidate scenarios
+  11 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [2, 5, 6, 7, 9]
+
+#### [19:21:50] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 82% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 82% confident (budget: 2 wrong execs)
+
+### [19:22:54] Executed #2 -> Minion (EVIL)
+
+#### [19:22:54] Solver Output
+Scenarios: 9/41
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#6', '#8']
+Evil probabilities: #7=44%, #9=44%, #5=11%
+  Generated 41 candidate scenarios
+  9 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 7, 9]
+
+#### [19:22:54] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 44% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 44% confident (budget: 2 wrong execs)
+WARNING: Low confidence (44%) -- consider gathering more info
+
+#### [00:02:40] Solver Output
+Scenarios: 9/41
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#6', '#8']
+Evil probabilities: #7=44%, #9=44%, #5=11%
+  Generated 41 candidate scenarios
+  9 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #2 is DEFINITELY EVIL (possible roles: {'Minion'})
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [5, 7, 9]
+
+#### [00:02:40] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 44% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 44% confident (budget: 2 wrong execs)
+WARNING: Low confidence (44%) -- consider gathering more info
+
+## [00:04:09] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dreamer.
+
+## [00:06:18] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dreamer.
+

@@ -1777,6 +1777,20 @@
       "name": "asc42_v5b",
       "notes": "Perfect 10HP. PD check on #1 cracked it \u2014 all 3 evils locked in 2 scenarios.",
       "date": "2026-03-28 19:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc42_v6",
+      "notes": "10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dreamer.",
+      "date": "2026-03-29 00:04"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc42_v6",
+      "notes": "10HP perfect. Knight immunity saved wrong exec. Corrupted #8 Bard + #9 Dreamer.",
+      "date": "2026-03-29 00:06"
     }
   ]
 }
