@@ -15912,3 +15912,60 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect, Knight check free info, Jester+Baker chain locked evils
 
+
+---
+
+# New Game — 2026-04-04 01:45:54
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Lover, Knitter, Knight, Confessor, Jester, Slayer
+- Outcasts: Drunk
+- Minions: 
+- Demons: Pooka
+
+### [01:48:03] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [01:48:04] Revealed #2 Slayer
+Info: {}
+
+### [01:48:04] Revealed #3 Jester
+Info: {}
+
+### [01:48:04] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [01:48:04] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [01:48:05] Revealed #6 Knight
+Info: {}
+
+### [01:48:05] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+#### [01:48:13] Solver Output
+Scenarios: 3/42
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+  Generated 42 candidate scenarios
+  3 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #1 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #6 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+
+#### [01:48:13] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [01:50:16] Executed #2 -> Pooka (EVIL)
+
+## [01:50:16] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Alchemist+Knitter+Lover locked Pooka in 3 scenarios
+

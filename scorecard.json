@@ -1833,6 +1833,13 @@
       "name": "asc43_v5",
       "notes": "10HP perfect, Knight check free info, Jester+Baker chain locked evils",
       "date": "2026-04-04 01:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v6",
+      "notes": "10HP perfect, Alchemist+Knitter+Lover locked Pooka in 3 scenarios",
+      "date": "2026-04-04 01:50"
     }
   ]
 }
