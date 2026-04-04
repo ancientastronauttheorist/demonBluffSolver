@@ -1819,6 +1819,20 @@
       "name": "asc43_v3",
       "notes": "10HP perfect, Puppet-Judge truthfully checked Wretch, Lover+Medium+Knitter locked all evils",
       "date": "2026-04-04 01:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v4",
+      "notes": "10HP perfect, dual Lover+Bishop locked Pooka in 1 scenario, corrupted Poet self-call confirmed",
+      "date": "2026-04-04 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v5",
+      "notes": "10HP perfect, Knight check free info, Jester+Baker chain locked evils",
+      "date": "2026-04-04 01:41"
     }
   ]
 }
