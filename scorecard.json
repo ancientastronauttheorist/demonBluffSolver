@@ -1798,6 +1798,55 @@
       "name": "asc42_v7",
       "notes": "6HP. Lilis game with Puppeteer creating Puppet. FT ability resolved last evil. Night killed #6, -4HP total from nights.",
       "date": "2026-03-29 00:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v1",
+      "notes": "10HP perfect, Witch blocked #9, Doppelganger+Dreamer+FT confirmed Puppeteer at #7, Baa faked Baker chain",
+      "date": "2026-04-04 00:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc43_v2",
+      "notes": "6HP, Lilis killed Drunk#5 night1, dual Hunter distance+Druid lie locked evils at #3+#7",
+      "date": "2026-04-04 01:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v3",
+      "notes": "10HP perfect, Puppet-Judge truthfully checked Wretch, Lover+Medium+Knitter locked all evils",
+      "date": "2026-04-04 01:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v4",
+      "notes": "10HP perfect, dual Lover+Bishop locked Pooka in 1 scenario, corrupted Poet self-call confirmed",
+      "date": "2026-04-04 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v5",
+      "notes": "10HP perfect, Knight check free info, Jester+Baker chain locked evils",
+      "date": "2026-04-04 01:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v6",
+      "notes": "10HP perfect, Alchemist+Knitter+Lover locked Pooka in 3 scenarios",
+      "date": "2026-04-04 01:50"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc43_v7",
+      "notes": "5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete",
+      "date": "2026-04-04 02:09"
     }
   ]
 }
