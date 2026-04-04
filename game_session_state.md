@@ -15713,3 +15713,15 @@ Reason: #1 is evil in ALL 6 scenarios (roles: {'Puppeteer'})
 Final HP: 10
 Notes: 10HP perfect, Puppet-Judge truthfully checked Wretch, Lover+Medium+Knitter locked all evils
 
+
+---
+
+# New Game — 2026-04-04 01:22:56
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Hunter, Lover, Bishop, Druid, Slayer
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
