@@ -15383,3 +15383,137 @@ Reason: #8 is evil in ALL 8 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: 6HP. Lilis game with Puppeteer creating Puppet. FT ability resolved last evil. Night killed #6, -4HP total from nights.
 
+
+---
+
+# New Game — 2026-04-04 00:36:28
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Knitter, Dreamer, Baker, Fortune_Teller, Scout, Poet
+- Outcasts: Doppelganger, Bombardier
+- Minions: Witch, Puppeteer
+- Demons: Baa
+
+### [00:43:35] Revealed #1 Knight
+Info: {}
+
+### [00:43:35] Revealed #2 Knitter
+Info: {'evil_pairs': 3}
+
+### [00:43:35] Revealed #3 Poet
+Info: {'evil_role': 'Puppeteer', 'distance': 1, 'copied_role': 'Scout'}
+
+### [00:43:38] Revealed #4 Dreamer
+Info: {}
+
+### [00:43:39] Revealed #5 Dreamer
+Info: {}
+
+### [00:43:42] Revealed #6 Scout
+Info: {'evil_role': 'Puppet', 'distance': 3}
+
+### [00:43:43] Revealed #7 Poet
+Info: {'targets': [1, 2, 5], 'types': ['Minion', 'Outcast', 'Villager'], 'copied_role': 'Bishop'}
+
+### [00:43:43] Revealed #8 Fortune_Teller
+Info: {}
+
+#### [00:44:17] Solver Output
+Scenarios: 138/4536
+Definite evil: ['#6']
+Evil probabilities: #7=88%, #8=49%, #5=45%, #2=42%, #4=26%, #9=26%, #3=16%, #1=7%
+  Generated 4536 candidate scenarios
+  138 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Puppeteer', 'Witch'})
+    Uncertain: [1, 2, 3, 4, 5, 7, 8, 9]
+
+#### [00:44:17] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 138 scenarios (roles: {'Baa', 'Puppeteer', 'Witch'})
+
+### [00:45:51] Revealed #4 Dreamer
+Info: {'target': 7, 'evil_role': 'Puppeteer'}
+
+### [00:45:52] Ability used at #4
+
+### [00:46:29] Revealed #5 Dreamer
+Info: {'target': 7, 'evil_role': 'Puppeteer'}
+
+### [00:46:30] Ability used at #5
+
+### [00:47:20] Revealed #8 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [00:47:21] Ability used at #8
+
+#### [00:47:25] Solver Output
+Scenarios: 18/4536
+Definite evil: ['#6']
+Definite good: ['#1']
+Evil probabilities: #8=78%, #7=67%, #9=56%, #3=33%, #2=22%, #4=22%, #5=22%
+  Generated 4536 candidate scenarios
+  18 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Baa', 'Puppeteer', 'Witch'})
+    #1 is DEFINITELY GOOD
+    Uncertain: [2, 3, 4, 5, 7, 8, 9]
+
+#### [00:47:25] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 18 scenarios (roles: {'Baa', 'Puppeteer', 'Witch'})
+
+### [00:48:26] Executed #6 -> Witch (EVIL)
+
+### [00:51:50] Revealed #9 Baker
+Info: {'original_role': 'Knitter'}
+
+#### [00:51:53] Solver Output
+Scenarios: 5/504
+Definite evil: ['#6', '#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+  Generated 504 candidate scenarios
+  5 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+
+#### [00:51:53] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 5 scenarios (roles: {'Puppeteer'})
+
+### [00:52:46] Executed #7 -> Puppeteer (EVIL)
+
+#### [00:52:50] Solver Output
+Scenarios: 5/36
+Definite evil: ['#6', '#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+  Generated 36 candidate scenarios
+  5 scenarios survived validation
+    #6 is DEFINITELY EVIL (possible roles: {'Witch'})
+    #7 is DEFINITELY EVIL (possible roles: {'Puppeteer'})
+    #8 is DEFINITELY EVIL (possible roles: {'Puppet'})
+    #9 is DEFINITELY EVIL (possible roles: {'Baa'})
+    #1 is DEFINITELY GOOD
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+
+#### [00:52:50] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 5 scenarios (roles: {'Puppet'})
+
+### [00:53:24] Executed #8 -> Puppet (EVIL)
+
+### [00:54:08] Executed #9 -> Baa (EVIL)
+
+## [00:54:13] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Witch blocked #9, Doppelganger+Dreamer+FT confirmed Puppeteer at #7, Baa faked Baker chain
+

@@ -1798,6 +1798,13 @@
       "name": "asc42_v7",
       "notes": "6HP. Lilis game with Puppeteer creating Puppet. FT ability resolved last evil. Night killed #6, -4HP total from nights.",
       "date": "2026-03-29 00:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v1",
+      "notes": "10HP perfect, Witch blocked #9, Doppelganger+Dreamer+FT confirmed Puppeteer at #7, Baa faked Baker chain",
+      "date": "2026-04-04 00:54"
     }
   ]
 }
