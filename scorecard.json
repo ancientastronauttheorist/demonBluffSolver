@@ -1840,6 +1840,13 @@
       "name": "asc43_v6",
       "notes": "10HP perfect, Alchemist+Knitter+Lover locked Pooka in 3 scenarios",
       "date": "2026-04-04 01:50"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc43_v7",
+      "notes": "5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete",
+      "date": "2026-04-04 02:09"
     }
   ]
 }

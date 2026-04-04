@@ -15969,3 +15969,126 @@ Reason: #2 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, Alchemist+Knitter+Lover locked Pooka in 3 scenarios
 
+
+---
+
+# New Game — 2026-04-04 01:53:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Poet, Bard, Knitter, Baker, Empress, Gemcrafter
+- Outcasts: Drunk
+- Minions: Poisoner
+- Demons: Pooka
+
+### [01:55:58] Revealed #1 Medium
+Info: {'good_position': 4, 'good_role': 'Knitter'}
+
+### [01:55:58] Revealed #2 Baker
+Info: {'original_role': 'Bard'}
+
+### [01:55:59] Revealed #3 Empress
+Info: {'targets': [1, 5, 7]}
+
+### [01:55:59] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [01:55:59] Revealed #5 Bard
+Info: {'corruption_distance': 3}
+
+### [01:56:00] Revealed #6 Poet
+Info: {'targets': [2, 4, 7], 'types': ['Outcast', 'Minion', 'Villager'], 'copied_role': 'Bishop'}
+
+### [01:56:00] Revealed #7 Gemcrafter
+Info: {'good_position': 3}
+
+### [01:56:00] Revealed #8 Poet
+Info: {'side': 'ccw', 'copied_role': 'Architect'}
+
+#### [01:56:05] Solver Output
+Scenarios: 3/560
+Definite good: ['#3', '#5', '#7', '#8']
+Evil probabilities: #2=67%, #4=67%, #1=33%, #6=33%
+  Generated 560 candidate scenarios
+  3 scenarios survived validation
+    #3 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    Uncertain: [1, 2, 4, 6]
+
+#### [01:56:05] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (33% good Baker (corrupted), 33% evil Poisoner, 33% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [01:56:55] Executed #2 -> GOOD (WRONG!)
+
+#### [01:56:56] Solver Output
+Scenarios: 1/420
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+  Generated 420 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [01:56:56] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [01:59:02] Executed #6 -> Poisoner (EVIL)
+
+#### [01:59:02] Solver Output
+Scenarios: 1/58
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+  Generated 58 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [01:59:02] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [02:05:14] Revealed #1 Medium
+Info: {'good_position': 4, 'good_role': 'Knitter'}
+
+#### [02:05:18] Solver Output
+Scenarios: 1/58
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+  Generated 58 candidate scenarios
+  1 scenarios survived validation
+    #1 is DEFINITELY EVIL (possible roles: {'Pooka'})
+    #6 is DEFINITELY EVIL (possible roles: {'Poisoner'})
+    #2 is DEFINITELY GOOD
+    #3 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #5 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+
+#### [02:05:18] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [02:09:03] Executed #3 -> Pooka (EVIL)
+
+## [02:09:11] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete
+
