@@ -1,0 +1,152 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4,
+        "good_role": "Knitter"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Bard"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          7
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ],
+        "copied_role": "Bishop"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "side": "ccw",
+        "copied_role": "Architect"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    6,
+    3
+  ],
+  "confirmed_evil": [
+    6,
+    3
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Poisoner",
+    "3": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Poet",
+      "Bard",
+      "Knitter",
+      "Baker",
+      "Empress",
+      "Gemcrafter"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc43_v7",
+  "true_evil_positions": {
+    "3": "Pooka",
+    "6": "Poisoner"
+  },
+  "notes": "5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete"
+}
