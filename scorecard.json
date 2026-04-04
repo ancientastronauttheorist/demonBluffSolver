@@ -1805,6 +1805,20 @@
       "name": "asc43_v1",
       "notes": "10HP perfect, Witch blocked #9, Doppelganger+Dreamer+FT confirmed Puppeteer at #7, Baa faked Baker chain",
       "date": "2026-04-04 00:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc43_v2",
+      "notes": "6HP, Lilis killed Drunk#5 night1, dual Hunter distance+Druid lie locked evils at #3+#7",
+      "date": "2026-04-04 01:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc43_v3",
+      "notes": "10HP perfect, Puppet-Judge truthfully checked Wretch, Lover+Medium+Knitter locked all evils",
+      "date": "2026-04-04 01:19"
     }
   ]
 }
