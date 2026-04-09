@@ -1945,6 +1945,13 @@
       "name": "asc45_v6",
       "notes": "10HP perfect, 3 auto-execs, Puppeteer+Puppet+Baa, solver had only 4 scenarios from start",
       "date": "2026-04-09 18:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc45_v7",
+      "notes": "Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP",
+      "date": "2026-04-09 18:31"
     }
   ]
 }

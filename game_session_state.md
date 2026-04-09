@@ -17299,3 +17299,103 @@ Reason: #6 is evil in ALL 2 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: 10HP perfect, 3 auto-execs, Puppeteer+Puppet+Baa, solver had only 4 scenarios from start
 
+
+---
+
+# New Game — 2026-04-09 18:20:02
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Medium, Baker, Bishop, Poet, Scout, Knight
+- Outcasts: Plague_Doctor
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [18:23:33] Revealed #1 Baker
+Info: {'original_role': 'Hunter'}
+
+### [18:23:37] Revealed #2 Knight
+Info: {}
+
+### [18:23:40] Revealed #3 Plague_Doctor
+Info: {}
+
+### [18:23:43] Revealed #4 Knight
+Info: {}
+
+### [18:24:56] Revealed #5 Scout
+Info: {'evil_role': 'Lilis', 'distance': 1}
+
+### [18:24:59] Revealed #6 Bishop
+Info: {'targets': [4, 8, 9], 'types': ['Villager', 'Minion', 'Outcast']}
+
+### [18:25:02] Revealed #7 Medium
+Info: {'good_position': 2, 'good_role': 'Knight'}
+
+#### [18:25:10] Solver Output
+Scenarios: 50/1848
+Definite good: ['#9']
+Evil probabilities: #1=80%, #4=60%, #2=48%, #8=32%, #6=28%, #7=24%, #5=20%, #3=8%
+
+#### [18:25:10] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight free check: #4 is 60% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [18:26:25] Executed #4 -> GOOD (WRONG!)
+
+#### [18:27:05] Solver Output
+Scenarios: 20/1176
+Definite evil: ['#2']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #1=60%, #7=60%, #6=40%, #8=40%
+
+#### [18:27:05] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 20 scenarios (roles: {'Minion', 'Witch', 'Lilis'})
+
+### [18:27:40] Executed #2 -> Witch (EVIL)
+
+### [18:28:21] Revealed #8 Poet
+Info: {'corruption_distance': 2, 'copied_role': 'Bard'}
+
+#### [18:28:24] Solver Output
+Scenarios: 4/162
+Definite evil: ['#2']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #7=75%, #1=50%, #6=50%, #8=25%
+
+#### [18:28:24] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:29:14] Ability used at #3
+
+#### [18:29:21] Solver Output
+Scenarios: 2/162
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#9']
+Evil probabilities: #7=50%, #8=50%
+
+#### [18:29:21] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Lilis'})
+
+### [18:30:12] Executed #1 -> Lilis (EVIL)
+
+#### [18:30:15] Solver Output
+Scenarios: 2/26
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#9']
+Evil probabilities: #7=50%, #8=50%
+
+#### [18:30:15] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good Medium (corrupted), 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [18:31:00] Executed #7 -> Minion (EVIL)
+
+## [18:31:06] GAME OVER — WIN
+Final HP: 6
+Notes: Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP
+
