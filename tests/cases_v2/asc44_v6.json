@@ -1,0 +1,134 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2,
+        "copied_role": "Hunter"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    7
+  ],
+  "confirmed_evil": [
+    3,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Poisoner",
+    "7": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 7,
+      "target_pos": 6,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    5,
+    6,
+    3,
+    4,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Slayer",
+      "Hunter",
+      "Poet",
+      "Druid"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    4,
+    7
+  ],
+  "name": "asc44_v6",
+  "true_evil_positions": {
+    "3": "Poisoner",
+    "7": "Baa"
+  },
+  "notes": "10HP perfect, card1 reflip needed, Druid+Slayer abilities"
+}

@@ -16595,3 +16595,90 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
 Final HP: 3
 Notes: 3HP, auto_next executed Puppeteer, Slayer killed Pooka, Drunk exec cost 2HP not 5
 
+
+---
+
+# New Game — 2026-04-09 15:57:16
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Slayer, Hunter, Poet, Druid
+- Outcasts: Drunk, Doppelganger
+- Minions: Poisoner
+- Demons: Baa
+
+### [15:57:39] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:57:39] Revealed #2 Poet
+Info: {'distance': 2, 'copied_role': 'Hunter'}
+
+### [15:57:39] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:57:39] Revealed #6 Hunter
+Info: {'distance': 1}
+
+### [15:57:50] Revealed #3 Poet
+Info: {}
+
+### [15:57:50] Revealed #4 Druid
+Info: {}
+
+### [15:57:50] Revealed #7 Slayer
+Info: {}
+
+#### [15:57:51] Solver Output
+Scenarios: 96/2114
+Evil probabilities: #6=47%, #2=39%, #3=34%, #7=32%, #4=25%, #1=17%, #5=6%
+
+#### [15:57:51] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.980 (adjusted 0.898) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [15:58:29] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:58:29] Ability used at #4
+
+#### [15:58:29] Solver Output
+Scenarios: 56/2114
+Evil probabilities: #6=41%, #4=38%, #3=32%, #7=30%, #2=29%, #1=20%, #5=11%
+
+#### [15:58:29] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#6']
+Reason: Target #6 is 41% evil (adjusted 0.38)
+WARNING: Corruption risk: 7% -- Slayer ability disabled if corrupted
+
+### [15:58:56] Ability used at #7
+
+#### [15:58:57] Solver Output
+Scenarios: 37/2114
+Evil probabilities: #3=49%, #7=46%, #4=41%, #1=22%, #2=16%, #5=16%, #6=11%
+
+#### [15:58:57] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 49% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 49% confident (budget: 2 wrong execs)
+WARNING: Low confidence (49%) -- consider gathering more info
+
+### [15:59:25] Executed #3 -> Poisoner (EVIL)
+
+#### [15:59:25] Solver Output
+Scenarios: 14/302
+Definite evil: ['#3']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #7=57%, #1=29%, #2=14%
+
+#### [15:59:25] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 57% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 57% confident (budget: 2 wrong execs)
+
+### [16:00:02] Executed #7 -> Baa (EVIL)
+
+## [16:00:03] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, card1 reflip needed, Druid+Slayer abilities
+
