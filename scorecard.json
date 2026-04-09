@@ -1861,6 +1861,13 @@
       "name": "asc44_v2",
       "notes": "1HP win, auto_card test, Lilis game, both Slayers were evil/corrupted",
       "date": "2026-04-09 15:26"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc44_v3",
+      "notes": "auto_next test, auto-executed #8 Shaman, solver WIN bug when 3rd evil at night-killed pos",
+      "date": "2026-04-09 15:41"
     }
   ]
 }

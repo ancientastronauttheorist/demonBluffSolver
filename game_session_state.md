@@ -16382,3 +16382,81 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 1
 Notes: 1HP win, auto_card test, Lilis game, both Slayers were evil/corrupted
 
+
+---
+
+# New Game — 2026-04-09 15:37:20
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Slayer, Dreamer, Baker, Lover, Oracle, Jester
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Shaman, Twin_Minion
+- Demons: Lilis
+
+### [15:37:59] Revealed #1 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:37:59] Revealed #3 Wretch
+Info: {}
+
+### [15:37:59] Revealed #4 Oracle
+Info: {'targets': [4, 9], 'minion_role': 'Twin Minion'}
+
+### [15:38:09] Revealed #2 Jester
+Info: {}
+
+### [15:38:42] Revealed #5 Medium
+Info: {'good_position': 10, 'good_role': 'Dreamer'}
+
+### [15:38:42] Revealed #6 Oracle
+Info: {'targets': [1, 8], 'minion_role': 'Shaman'}
+
+### [15:38:42] Revealed #8 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:38:49] Revealed #7 Slayer
+Info: {}
+
+#### [15:38:55] Solver Output
+Scenarios: 0/270
+
+#### [15:38:55] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [15:40:10] Solver Output
+Scenarios: 1/270
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7', '#10']
+
+#### [15:40:10] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [15:40:18] Executed #8 -> Shaman (EVIL)
+
+#### [15:40:40] Solver Output
+Scenarios: 1/18
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7', '#10']
+
+#### [15:40:40] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+#### [15:40:56] Solver Output
+Scenarios: 1/18
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7', '#10']
+
+#### [15:40:56] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+### [15:41:38] Executed #7 -> Lilis (EVIL)
+
+## [15:41:38] GAME OVER — WIN
+Final HP: 6
+Notes: auto_next test, auto-executed #8 Shaman, solver WIN bug when 3rd evil at night-killed pos
+

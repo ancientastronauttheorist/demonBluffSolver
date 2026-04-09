@@ -1006,7 +1006,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         # Look for a role name in the clue
         m = re.search(r'is\s+(?:a\s+)?(\w[\w\s]*)', clue, re.IGNORECASE)
         if m:
-            minion_role = m.group(1).strip()
+            minion_role = m.group(1).strip().replace(' ', '_')
             return card_oracle(pos, targets, minion_role)
 
     # --- Scout: "<Role> is N cards away from closest Evil" ---
