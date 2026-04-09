@@ -62,8 +62,26 @@
 15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided manually. Still accepts manual override.
 16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
+## Village Timing (Asc 45+)
+Track time per village from deck read to game_over. Goal: measure automation speedup.
+- **Start timer** when deck is read (after clicking Next on previous victory)
+- **Stop timer** when game_over command completes
+- Log format in commit: `Xm:Ys` (e.g., `3m:45s`)
+
+## Deck Read: Memory vs Screenshot Accuracy
+Memory reader `--deck` reads the role POOL (all possible roles). Screenshot shows pool + HEADER (board counts: V=N, O=N).
+- **Memory reader deck** is 100% accurate for role names (confirmed across 7 Asc44 villages)
+- **Memory reader does NOT read header counts** (nv=, no=). These must come from screenshot or manual entry.
+- **Goal**: If we can read nv/no from memory, eliminate the deck screenshot entirely. Needs `GameData` IL2CPP offset work.
+
 ## Memory Reader -- Continuous Validation
 Reads game state from process memory (`memory_reader.py`). Goal: replace the visual pipeline entirely.
+
+**Clue reading (Phase 2, confirmed working Asc44):**
+- `savedAct` (0x158): speech bubble text string — works for passive AND active ability results
+- `actedInfos` (0x128): List of {desc, targets} — includes referenced position numbers
+- `runtimeData` (0x68): Enlightened direction enum, Alchemist cures, Baker original role
+- `auto_card` uses these to auto-enter cards. Asc44 v7: 6/6 cards auto-entered, fully automated win.
 
 Every screenshot, memory reader reads state and compares against what the screenshot shows. Screenshot is ground truth. **Any mismatch = stop the game, diagnose, fix, verify, resume.**
 
