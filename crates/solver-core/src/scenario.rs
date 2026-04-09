@@ -4,7 +4,7 @@
 use std::collections::{HashMap, HashSet};
 use crate::corruption::{compute_corruption, apply_post_corruption};
 use crate::geometry::adjacent_positions;
-use crate::knowledge_base::{self, get_card, is_villager_role, Faction};
+use crate::knowledge_base::{self, get_card, is_villager_role, normalize_role, Faction};
 use crate::types::{GameState, Scenario};
 
 /// Generate all candidate scenarios for the current game state.
@@ -251,7 +251,8 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
     // Remove executed evil roles
     let mut remaining = evil_roles.clone();
     for (_pos, role) in &state.executed_evil_roles {
-        if let Some(idx) = remaining.iter().position(|r| r.eq_ignore_ascii_case(role)) {
+        let norm = normalize_role(role);
+        if let Some(idx) = remaining.iter().position(|r| normalize_role(r) == norm) {
             remaining.remove(idx);
         }
         // Puppet isn't in evil_roles — silently skip
@@ -570,10 +571,11 @@ fn evil_role_subsets_fn(evil_roles: &[String], state: &GameState, expected_remai
     let mut mp = minion_pool.clone();
     let mut dp = demon_pool.clone();
     for (_pos, role) in &state.executed_evil_roles {
-        if let Some(idx) = mp.iter().position(|r| r == role) {
+        let norm = normalize_role(role);
+        if let Some(idx) = mp.iter().position(|r| normalize_role(r) == norm) {
             if let Some(ref mut b) = bm { *b -= 1; }
             mp.remove(idx);
-        } else if let Some(idx) = dp.iter().position(|r| r == role) {
+        } else if let Some(idx) = dp.iter().position(|r| normalize_role(r) == norm) {
             if let Some(ref mut b) = bd { *b -= 1; }
             dp.remove(idx);
         }
