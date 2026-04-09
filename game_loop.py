@@ -910,17 +910,21 @@ def _cmd_read_deck(screenshot_path: str):
 
 
 def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
-    """Save a regression test case and run step-by-step replay test."""
-    from tests.test_regression import save_test_case, load_test_case
-    from tests.test_replay import replay_game
+    """Save a regression test case. Full regression runs via cargo test afterward."""
+    from tests.test_regression import save_test_case
+    # Check for collision
+    test_path = os.path.join("tests", "cases_v2", f"{name}.json")
+    if os.path.exists(test_path):
+        # Append suffix to avoid overwriting
+        for suffix in "bcdefgh":
+            alt_name = f"{name}{suffix}"
+            alt_path = os.path.join("tests", "cases_v2", f"{alt_name}.json")
+            if not os.path.exists(alt_path):
+                print(f"  WARNING: {name}.json exists, saving as {alt_name}.json instead")
+                name = alt_name
+                break
     save_test_case(SESSION_FILE, name, true_evils, notes)
-    case = load_test_case(os.path.join("tests", "cases_v2", f"{name}.json"))
-    result = replay_game(case, verbose=True, strict=False)
-    status = "PASS" if result.passed else "FAIL"
-    total = len(result.steps)
-    print(f"\n[{status}] {name} ({total} steps)")
-    if not result.passed:
-        print(f"  Failure: {result.failure_reason}")
+    print(f"  Test case saved: tests/cases_v2/{name}.json")
 
 
 def main():
@@ -1468,6 +1472,32 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         test_name = args[1] if len(args) > 1 else None
         true_evils_str = args[2] if len(args) > 2 else None
         notes = args[3] if len(args) > 3 else ""
+
+        # Auto-read true evils from memory_reader if not provided
+        if not true_evils_str and test_name:
+            try:
+                import subprocess as _sp
+                mr = _sp.run(["python", "memory_reader.py"],
+                             capture_output=True, text=True, timeout=10)
+                if mr.returncode == 0:
+                    # Parse memory_reader output for evil cards
+                    auto_evils = {}
+                    for line in mr.stdout.split("\n"):
+                        line = line.strip()
+                        # Format: "#N: RoleName (Evil) ..."
+                        if "(Evil)" in line and line.startswith("#"):
+                            import re
+                            m = re.match(r"#(\d+):\s+(\S+)\s+\(Evil\)", line)
+                            if m:
+                                auto_evils[int(m.group(1))] = m.group(2)
+                    if auto_evils:
+                        true_evils_str = ",".join(f"{p}={r}" for p, r in sorted(auto_evils.items()))
+                        print(f"[game_over] Auto-detected true evils from memory: {true_evils_str}")
+                    else:
+                        print("[game_over] Could not auto-detect evils from memory reader")
+            except Exception as e:
+                print(f"[game_over] Memory reader auto-read failed: {e}")
+
         DecisionLog.log_game_over(result, session.hp, notes)
         print(f"[game_over] Logged: {result.upper()}, HP={session.hp}")
 
@@ -1479,13 +1509,16 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             _save_and_run_test(test_name, true_evils, notes)
             print("\n--- Full v2 regression (Rust) ---")
             import subprocess as _sp
-            reg = _sp.run(["cargo", "test", "--release", "--test", "replay"],
-                          capture_output=True, text=True)
-            for line in reg.stderr.strip().split("\n"):
-                if "test result:" in line or "FAILED" in line:
-                    print(f"  {line.strip()}")
-            if reg.returncode != 0:
-                print("  WARNING: Regression failures detected! Fix before next game.")
+            try:
+                reg = _sp.run(["cargo", "test", "--release", "--test", "replay"],
+                              capture_output=True, text=True, timeout=120)
+                for line in reg.stderr.strip().split("\n"):
+                    if "test result:" in line or "FAILED" in line:
+                        print(f"  {line.strip()}")
+                if reg.returncode != 0:
+                    print("  WARNING: Regression failures detected! Fix before next game.")
+            except _sp.TimeoutExpired:
+                print("  WARNING: cargo test timed out (120s). Run manually.")
         elif not test_name:
             print("[game_over] Tip: add test name + true evils to auto-save regression test:")
             print("  game_over win/loss <name> <pos=Role,...> [notes]")
