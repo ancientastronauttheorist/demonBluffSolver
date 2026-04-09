@@ -12,7 +12,7 @@ import time
 from datetime import datetime
 from typing import Optional
 
-from solver import CardInfo, DeckComposition, GameState, SolverResult
+from solver import CardInfo, DeckComposition, GameState, SolverResult, EXECUTION_IMMUNE_ROLES
 from rust_solver import rust_solve_to_objects
 from strategy import recommend_action, print_recommendation, evil_probabilities
 
@@ -360,6 +360,15 @@ class GameSession:
             for faction in [self.villagers, self.outcasts,
                             self.minions, self.demons]
             for v in faction
+        )
+
+    def is_lilis_alive(self) -> bool:
+        """Check if Lilis is in the deck and has not been executed."""
+        if not self.has_role_in_deck("Lilis"):
+            return False
+        return not any(
+            _normalize_role_name(r) == "Lilis"
+            for r in self.executed_evil_roles.values()
         )
 
     def set_deck(self, villagers: list[str], outcasts: list[str],
@@ -915,6 +924,11 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             return card_enlightened(pos, rd['direction'])
         if rd.get('type') == 'cures':
             return card_alchemist(pos, rd['cures'] or 0)
+        if rd.get('type') == 'baker':
+            original = rd.get('original_role')
+            if not original or original == '?' or original.lower() == 'baker':
+                return card_baker(pos, 'original')
+            return card_baker(pos, original)
 
     # --- Knitter: "X evil pair(s)" / "X pairs of Evil" / "Evils are not adjacent" ---
     if role_lower == 'knitter':
@@ -1020,6 +1034,17 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             minion_role = m.group(1).strip().replace(' ', '_')
             return card_oracle(pos, targets, minion_role)
 
+    # --- Baker: "I was a <Role>" or "I am the original Baker" ---
+    if role_lower == 'baker':
+        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
+        if m:
+            claimed = m.group(1).strip()
+            if claimed.lower() == 'baker':
+                claimed = 'original'
+            return card_baker(pos, claimed)
+        if 'original' in clue.lower() or not clue.strip():
+            return card_baker(pos, 'original')
+
     # --- Scout: "<Role> is N cards away from closest Evil" ---
     if role_lower == 'scout':
         m = re.search(r'(\w[\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
@@ -1083,6 +1108,13 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         if 'dizzy' in cl or 'feeling good' in cl:
             dizzy = 'dizzy' in cl
             return CardInfo(pos, "Poet", info_parsed={"dizzy": dizzy, "copied_role": "Confessor"})
+        # Baker pattern
+        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
+        if m:
+            claimed = m.group(1).strip()
+            if claimed.lower() == 'baker':
+                claimed = 'original'
+            return CardInfo(pos, "Poet", info_parsed={"original_role": claimed, "copied_role": "Baker"})
 
     # --- Wretch: no info ---
     if role_lower == 'wretch':
@@ -1317,6 +1349,7 @@ def main():
         print("  auto_card                             Auto-enter cards from memory reader")
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
+        print("  execute <pos> good blocked            Knight immunity (no HP loss, confirmed good)")
         print("  pd_target <pos>                       Set Plague Doctor corruption target")
         print("  pd_check <pd_pos> <target> corrupted <evil_pos>  PD found corruption + evil")
         print("  pd_check <pd_pos> <target> clean                 PD found no corruption")
@@ -1590,6 +1623,28 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print(f"Flipping #{single_pos} at ({x},{y})")
             _tm.safe_click_at(x, y, f"card{single_pos}")
             print(f"Flipped #{single_pos}")
+            # Record reveal order
+            if single_pos not in session.reveal_order:
+                session.reveal_order.append(single_pos)
+            # Remove from blocked if it was Witch-blocked
+            if single_pos in session.blocked_positions:
+                session.blocked_positions.remove(single_pos)
+                print(f"  (unblocked #{single_pos})")
+            # Lilis night check for single flips
+            if session.is_lilis_alive():
+                total_reveals = len(session.reveal_order)
+                if total_reveals % 4 == 0:
+                    print()
+                    print("!" * 60)
+                    print(f"  LILIS NIGHT PHASE TRIGGERED (reveal #{total_reveals})")
+                    print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
+                    print("!" * 60)
+                    print(f"\n  --- Waiting 5s for Lilis night animation ---")
+                    time.sleep(5)
+                    print(f"  Night phase complete.")
+                    print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
+                    print(f"  Then: set_hp {session.hp - 2}")
+            session.save()
             return None
 
         already_done = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
@@ -1607,12 +1662,26 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 _tm.fast_click_at(x, y, f"card{pos}")
                 time.sleep(0.2)
             print(f"Batch complete: {['#'+str(p) for p in batch]}")
+            # Record reveal order for this batch
+            for p in batch:
+                if p not in session.reveal_order:
+                    session.reveal_order.append(p)
             remaining = positions[batch_size:]
-            if remaining:
+            # Lilis night triggers every 4 reveals, even on last batch
+            total_reveals = len(session.reveal_order)
+            if total_reveals % 4 == 0:
                 print(f"\n  --- Lilis night phase (wait 5s for kill animation) ---")
+                print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
                 time.sleep(5)
                 print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
                 print(f"  Run: python screenshot.py night_check && python memory_reader.py")
+                if remaining:
+                    print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
+                else:
+                    print(f"  No more cards to flip. Check for night kill/damage.")
+                print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
+                print(f"  Then: set_hp {session.hp - 2}")
+            elif remaining:
                 print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
             print(f"Flipping all {len(positions)} cards: #1 -> #{positions[-1]}")
@@ -1622,7 +1691,12 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 _tm.fast_click_at(x, y, f"card{pos}")
                 time.sleep(0.2)
             print(f"All {len(positions)} cards flipped in order #1->#{positions[-1]}")
+            # Record reveal order
+            for p in positions:
+                if p not in session.reveal_order:
+                    session.reveal_order.append(p)
 
+        session.save()
         print("\n--- Parking mouse & reading memory ---")
         time.sleep(1.5)
         _mouse.move(1280, 690)
@@ -1704,6 +1778,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         was_evil = None
         evil_role = None
         was_corrupted = None
+        knight_blocked = False
         if len(args) > 1:
             w = args[1].lower()
             if w in ("evil", "true", "1", "yes"):
@@ -1712,35 +1787,54 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     evil_role = _normalize_role_name(args[2])
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
+                knight_blocked = False
                 if len(args) > 2:
                     c = args[2].lower()
-                    if c in ("corrupted", "corrupt", "c"):
+                    if c in ("blocked", "immune", "knight", "knight_block"):
+                        knight_blocked = True
+                    elif c in ("corrupted", "corrupt", "c"):
                         was_corrupted = True
                     elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
                         was_corrupted = False
                 else:
-                    was_corrupted = None
-                    print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
+                    # Auto-detect Knight immunity from card entry
+                    target_card = next((c for c in session.cards if c.position == pos), None)
+                    if target_card and target_card.apparent_role in EXECUTION_IMMUNE_ROLES:
+                        knight_blocked = True
+                        print(f"  Auto-detected Knight immunity for #{pos} (apparent role: {target_card.apparent_role})")
+                    else:
+                        was_corrupted = None
+                        print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
-        session.mark_executed(pos, was_evil, evil_role, was_corrupted)
-        session.save()
-        DecisionLog.log_execution(pos, was_evil, evil_role)
-        tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
-        corr_tag = ""
-        if was_corrupted is True:
-            corr_tag = " <Corrupted>"
-        elif was_corrupted is False and was_evil is False:
-            corr_tag = " (clean)"
-        print(f"Executed #{pos}{tag}{corr_tag}")
-        if was_evil:
-            print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
-        elif was_evil is False:
-            new_hp = session.hp - session.wrong_exec_cost
-            print(f"  WARNING: Wrong execution! HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
+        if knight_blocked:
+            # Knight immunity: card survives, confirmed good, no HP loss
+            if pos not in session.confirmed_good:
+                session.confirmed_good.append(pos)
+            # Do NOT add to executed list — card is still alive
+            session.save()
+            DecisionLog.log_custom("Execution Blocked", f"#{pos} Knight immunity — confirmed good, no HP loss")
+            print(f"Executed #{pos} -> BLOCKED (Knight immunity)")
+            print(f"  #{pos} confirmed GOOD. No HP loss. HP: {session.hp}/10")
         else:
-            print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
+            session.mark_executed(pos, was_evil, evil_role, was_corrupted)
+            session.save()
+            DecisionLog.log_execution(pos, was_evil, evil_role)
+            tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
+            corr_tag = ""
+            if was_corrupted is True:
+                corr_tag = " <Corrupted>"
+            elif was_corrupted is False and was_evil is False:
+                corr_tag = " (clean)"
+            print(f"Executed #{pos}{tag}{corr_tag}")
+            if was_evil:
+                print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
+            elif was_evil is False:
+                new_hp = session.hp - session.wrong_exec_cost
+                print(f"  WARNING: Wrong execution! HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
+            else:
+                print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
         return None
 
     if cmd == "pd_target":
@@ -1793,6 +1887,9 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             return None
         if pos not in session.blocked_positions:
             session.blocked_positions.append(pos)
+        # Card wasn't actually revealed — remove from reveal_order if flip added it
+        if pos in session.reveal_order:
+            session.reveal_order.remove(pos)
         session.save()
         print(f"#{pos} blocked (Witch)")
         return None
