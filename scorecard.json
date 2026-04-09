@@ -1875,6 +1875,13 @@
       "name": "asc44_v4",
       "notes": "10HP perfect, auto_next one-shot win, 6/7 cards auto-entered",
       "date": "2026-04-09 15:47"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc44_v5",
+      "notes": "3HP, auto_next executed Puppeteer, Slayer killed Pooka, Drunk exec cost 2HP not 5",
+      "date": "2026-04-09 15:53"
     }
   ]
 }

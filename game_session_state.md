@@ -16508,3 +16508,90 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, auto_next one-shot win, 6/7 cards auto-entered
 
+
+---
+
+# New Game — 2026-04-09 15:50:46
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Hunter, Enlightened, Poet, Bard, Scout, Medium
+- Outcasts: Bombardier, Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [15:50:58] Revealed #1 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:50:58] Revealed #2 Medium
+Info: {'good_position': 3, 'good_role': 'Bard'}
+
+### [15:50:58] Revealed #3 Bard
+Info: {'corruption_distance': 3}
+
+### [15:50:58] Revealed #6 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [15:50:58] Revealed #7 Hunter
+Info: {'distance': 3}
+
+### [15:51:11] Revealed #4 Bombardier
+Info: {}
+
+### [15:51:12] Revealed #5 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 2}
+
+### [15:51:12] Revealed #8 Slayer
+Info: {}
+
+#### [15:51:12] Solver Output
+Scenarios: 12/794
+Evil probabilities: #3=50%, #4=50%, #1=25%, #2=25%, #5=25%, #6=25%, #7=25%, #8=25%
+
+#### [15:51:12] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#3']
+Reason: Target #3 is 50% evil (adjusted 0.50)
+
+### [15:51:41] Ability used at #8
+
+#### [15:51:41] Solver Output
+Scenarios: 4/99
+Definite evil: ['#3']
+Definite good: ['#7', '#8']
+Evil probabilities: #2=50%, #1=25%, #4=25%, #5=25%, #6=25%
+
+#### [15:51:41] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Medium (corrupted), 50% evil Puppeteer).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:52:11] Executed #2 -> GOOD (WRONG!)
+
+#### [15:52:11] Solver Output
+Scenarios: 2/83
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#7', '#8']
+Evil probabilities: #4=50%, #5=50%, #6=50%
+
+#### [15:52:11] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Puppeteer).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:52:53] Executed #5 -> GOOD (WRONG!)
+
+#### [15:52:54] Solver Output
+Scenarios: 1/61
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [15:52:54] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [15:53:01] Executed #4 -> Puppeteer (EVIL)
+
+## [15:53:09] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP, auto_next executed Puppeteer, Slayer killed Pooka, Drunk exec cost 2HP not 5
+
