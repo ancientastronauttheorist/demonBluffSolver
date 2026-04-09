@@ -1,0 +1,136 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 6
+      }
+    }
+  ],
+  "executed": [
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    4,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Twin Minion",
+    "6": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 6,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    3,
+    4,
+    7,
+    8,
+    1,
+    2,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Bard",
+      "Druid",
+      "Alchemist",
+      "Gemcrafter",
+      "Jester"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "name": "asc45_v4",
+  "true_evil_positions": {
+    "4": "Twin_Minion",
+    "6": "Baa"
+  },
+  "notes": "10HP perfect, 2 auto-execs, PD resolved, time=111s"
+}

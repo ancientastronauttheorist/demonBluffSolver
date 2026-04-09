@@ -1917,6 +1917,13 @@
       "name": "asc45_v3",
       "notes": "10HP perfect, FT resolved, auto_exec Pooka",
       "date": "2026-04-09 16:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v4",
+      "notes": "10HP perfect, 2 auto-execs, PD resolved, time=111s",
+      "date": "2026-04-09 16:28"
     }
   ]
 }

@@ -16975,3 +16975,88 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, FT resolved, auto_exec Pooka
 
+
+---
+
+# New Game — 2026-04-09 16:27:14
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Bard, Druid, Alchemist, Gemcrafter, Jester
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [16:27:21] Revealed #3 Bard
+Info: {'corruption_distance': 3}
+
+### [16:27:21] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [16:27:21] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [16:27:21] Revealed #8 Gemcrafter
+Info: {'good_position': 6}
+
+### [16:27:44] Revealed #1 Druid
+Info: {}
+
+### [16:27:45] Revealed #2 Plague_Doctor
+Info: {}
+
+### [16:27:45] Revealed #5 Jester
+Info: {}
+
+### [16:27:45] Revealed #6 Alchemist
+Info: {'cured_count': 2}
+
+#### [16:27:45] Solver Output
+Scenarios: 36/1610
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #1=33%, #5=33%, #6=33%
+
+#### [16:27:45] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 36 scenarios (roles: {'Twin_Minion', 'Baa'})
+
+### [16:27:53] Executed #4 -> Twin Minion (EVIL)
+
+#### [16:28:00] Solver Output
+Scenarios: 18/223
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #1=33%, #5=33%, #6=33%
+
+#### [16:28:00] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+#### [16:28:06] Solver Output
+Scenarios: 18/223
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #1=33%, #5=33%, #6=33%
+
+#### [16:28:06] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [16:28:30] Ability used at #2
+
+#### [16:28:30] Solver Output
+Scenarios: 6/223
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+
+#### [16:28:30] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [16:28:38] Executed #6 -> Baa (EVIL)
+
+## [16:28:48] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 2 auto-execs, PD resolved, time=111s
+
