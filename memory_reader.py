@@ -87,6 +87,22 @@ CHAR_STATUS = {
     70: 'AlteredCharacter',
 }
 
+# Character clue/ability field offsets (Phase 2)
+CHAR_RUNTIME_DATA_OFFSET = 0x68  # RuntimeCharacterData (polymorphic per role)
+CHAR_ACTED_OFFSET = 0xA0         # Acted (speech bubble component)
+CHAR_LEFT_ACT_OFFSET = 0xA8      # bool (left ability activated)
+CHAR_USES_OFFSET = 0xBC          # int (ability use count)
+CHAR_ACTED_INFOS_OFFSET = 0x128  # List<ActedInfo>
+CHAR_SAVED_ACT_OFFSET = 0x158    # string (cached clue text)
+CHAR_ACT_OFFSET = 0x161          # bool (ability activated flag)
+
+# ActedInfo class field offsets
+ACTED_INFO_DESC_OFFSET = 0x10    # string (formatted clue text)
+ACTED_INFO_CHARS_OFFSET = 0x18   # List<Character> (referenced positions)
+
+# EnlightenedRuntimeData.direction enum
+EVIL_DIRECTION = {0: 'Equidistant', 10: 'CW', 20: 'CCW'}
+
 # CharacterData class field offsets
 CD_CHARACTER_ID_OFFSET = 0x18    # string (role name) -- STALE in multi-village!
 CD_CACHED_PTR_OFFSET = 0x10      # IntPtr m_CachedPtr (Unity native object)
@@ -353,6 +369,70 @@ class MemoryReader:
                 result.append(CHAR_STATUS.get(val, f'?{val}'))
         return result
 
+    def _read_acted_infos(self, char_ptr):
+        """Read List<ActedInfo> — clue history for a character."""
+        list_ptr = self._read_ptr(char_ptr + CHAR_ACTED_INFOS_OFFSET)
+        if not list_ptr or list_ptr < 0x10000:
+            return []
+        items_array = self._read_ptr(list_ptr + LIST_ITEMS_OFFSET)
+        list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
+        if not items_array or not list_size or list_size <= 0:
+            return []
+        results = []
+        for i in range(min(list_size, 10)):  # cap to prevent runaway
+            info_ptr = self._read_ptr(items_array + ARRAY_FIRST_ELEMENT_OFFSET + i * 8)
+            if not info_ptr or info_ptr < 0x10000:
+                continue
+            # Read desc string
+            desc_ptr = self._read_ptr(info_ptr + ACTED_INFO_DESC_OFFSET)
+            desc = self._read_string(desc_ptr) if desc_ptr else None
+            # Read referenced character positions
+            char_list_ptr = self._read_ptr(info_ptr + ACTED_INFO_CHARS_OFFSET)
+            targets = []
+            if char_list_ptr and char_list_ptr > 0x10000:
+                ref_items = self._read_ptr(char_list_ptr + LIST_ITEMS_OFFSET)
+                ref_size = self._read_i32(char_list_ptr + LIST_SIZE_OFFSET)
+                if ref_items and ref_size and 0 < ref_size <= 20:
+                    for j in range(ref_size):
+                        ref_char = self._read_ptr(ref_items + ARRAY_FIRST_ELEMENT_OFFSET + j * 8)
+                        if ref_char:
+                            ref_id = self._read_i32(ref_char + CHAR_ID_OFFSET)
+                            if ref_id is not None:
+                                targets.append(ref_id)
+            results.append({'desc': desc, 'targets': targets})
+        return results
+
+    def _read_saved_act(self, char_ptr):
+        """Read the cached clue text string (savedAct at 0x158)."""
+        str_ptr = self._read_ptr(char_ptr + CHAR_SAVED_ACT_OFFSET)
+        if not str_ptr or str_ptr < 0x10000:
+            return None
+        return self._read_string(str_ptr)
+
+    def _read_runtime_data(self, char_ptr, role_name):
+        """Read RuntimeCharacterData — dispatches by role name since it's polymorphic."""
+        rd_ptr = self._read_ptr(char_ptr + CHAR_RUNTIME_DATA_OFFSET)
+        if not rd_ptr or rd_ptr < 0x10000:
+            return None
+        role_lower = (role_name or '').lower().replace(' ', '_')
+        if role_lower in ('enlightened', 'shugenja'):
+            val = self._read_i32(rd_ptr + 0x10)
+            return {'type': 'direction', 'direction': EVIL_DIRECTION.get(val, f'?{val}')}
+        elif role_lower == 'alchemist':
+            val = self._read_i32(rd_ptr + 0x10)
+            return {'type': 'cures', 'cures': val}
+        elif role_lower == 'baker':
+            name_ptr = self._read_ptr(rd_ptr + 0x10)
+            name = self._read_string(name_ptr) if name_ptr else None
+            return {'type': 'baker', 'original_role': clean_name(name) if name else None}
+        return None
+
+    def _read_ability_state(self, char_ptr):
+        """Read ability usage state: uses count and act flag."""
+        uses = self._read_i32(char_ptr + CHAR_USES_OFFSET)
+        act = self._read_bool(char_ptr + CHAR_ACT_OFFSET)
+        return {'uses': uses or 0, 'act': act or False}
+
     def read_board(self):
         """Read all cards on the current board."""
         gameplay = self._get_gameplay_instance()
@@ -398,6 +478,12 @@ class MemoryReader:
             # Read statuses
             statuses = self._read_statuses(char_ptr)
 
+            # Read clue/ability data
+            saved_act = self._read_saved_act(char_ptr)
+            acted_infos = self._read_acted_infos(char_ptr)
+            ability_state = self._read_ability_state(char_ptr)
+            runtime_data = self._read_runtime_data(char_ptr, true_role)
+
             cards.append({
                 'position': card_id,
                 'true_role': true_role,
@@ -408,6 +494,11 @@ class MemoryReader:
                 'killed_hidden': killed_hidden,
                 'revealed': revealed,
                 'statuses': statuses,
+                'clue_text': saved_act,
+                'acted_infos': acted_infos,
+                'ability_used': ability_state['act'],
+                'uses': ability_state['uses'],
+                'runtime_data': runtime_data,
             })
 
         cards.sort(key=lambda c: c['position'])
@@ -494,6 +585,30 @@ def print_board(cards):
     for c in evils:
         disguise_info = f" (disguised as {c['disguise']})" if c['disguise'] else ""
         print(f"  #{c['position']} {c['true_role']}{disguise_info}")
+
+    # Show clue data for flipped cards
+    clue_cards = [c for c in cards if c.get('clue_text') or c.get('acted_infos') or c.get('runtime_data')]
+    if clue_cards:
+        print()
+        print("Clue data:")
+        for c in clue_cards:
+            parts = [f"  #{c['position']} {c['true_role']}:"]
+            if c.get('clue_text'):
+                parts.append(f"clue=\"{c['clue_text']}\"")
+            if c.get('runtime_data'):
+                rd = c['runtime_data']
+                if rd.get('type') == 'direction':
+                    parts.append(f"direction={rd['direction']}")
+                elif rd.get('type') == 'cures':
+                    parts.append(f"cures={rd['cures']}")
+                elif rd.get('type') == 'baker':
+                    parts.append(f"original={rd.get('original_role')}")
+            if c.get('acted_infos'):
+                for info in c['acted_infos']:
+                    targets = info.get('targets', [])
+                    if targets:
+                        parts.append(f"targets={targets}")
+            print(' '.join(parts))
 
 
 def print_score(score):
