@@ -1924,6 +1924,13 @@
       "name": "asc45_v4",
       "notes": "10HP perfect, 2 auto-execs, PD resolved, time=111s",
       "date": "2026-04-09 16:28"
+    },
+    {
+      "result": "loss",
+      "hp": 6,
+      "name": "asc45_v5",
+      "notes": "GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen.",
+      "date": "2026-04-09 16:45"
     }
   ]
 }

@@ -17060,3 +17060,123 @@ Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, 2 auto-execs, PD resolved, time=111s
 
+
+---
+
+# New Game — 2026-04-09 16:29:46
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Medium, Druid, Bishop, Fortune_Teller, Knight, Oracle
+- Outcasts: Doppelganger, Drunk
+- Minions: Poisoner
+- Demons: Lilis
+
+### [16:30:11] Revealed #1 Fortune_Teller
+Info: {}
+
+### [16:30:11] Revealed #2 Fortune_Teller
+Info: {}
+
+### [16:30:11] Revealed #3 Judge
+Info: {}
+
+### [16:30:11] Revealed #4 Bishop
+Info: {'targets': [1, 6, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:30:59] Revealed #5 Oracle
+Info: {'targets': [2, 6], 'minion_role': 'Poisoner'}
+
+### [16:30:59] Revealed #7 Knight
+Info: {}
+
+### [16:30:59] Revealed #8 Druid
+Info: {}
+
+### [16:30:59] Revealed #9 Judge
+Info: {}
+
+#### [16:30:59] Solver Output
+Scenarios: 1077/5064
+Definite good: ['#6']
+Evil probabilities: #5=49%, #4=38%, #1=28%, #3=27%, #8=15%, #7=15%, #2=15%, #9=14%
+
+#### [16:31:00] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#5']
+Reason: Entropy 1.000 (adjusted 0.928) | follow-up bonus 0.275 | timing x1.00
+WARNING: Corruption risk: 14%
+
+#### [16:31:07] Solver Output
+Scenarios: 1077/5064
+Definite good: ['#6']
+Evil probabilities: #5=49%, #4=38%, #1=28%, #3=27%, #8=15%, #7=15%, #2=15%, #9=14%
+
+#### [16:31:08] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#5']
+Reason: Entropy 1.000 (adjusted 0.928) | follow-up bonus 0.275 | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [16:33:27] Revealed #1 Fortune Teller
+Info: {'targets': [2, 5], 'has_evil': True}
+
+### [16:33:27] Ability used at #1
+
+#### [16:33:27] Solver Output
+Scenarios: 544/5064
+Definite good: ['#6']
+Evil probabilities: #5=60%, #4=33%, #3=28%, #1=23%, #8=15%, #7=15%, #9=14%, #2=11%
+
+#### [16:33:28] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#3', '#4']
+Reason: Entropy 1.000 (adjusted 0.905) | follow-up bonus 0.281 | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [16:34:25] Revealed #2 Fortune Teller
+Info: {'targets': [3, 4], 'has_evil': False}
+
+### [16:34:25] Ability used at #2
+
+#### [16:34:25] Solver Output
+Scenarios: 274/5064
+Definite good: ['#6']
+Evil probabilities: #5=65%, #8=22%, #7=22%, #1=21%, #3=20%, #4=20%, #9=16%, #2=14%
+
+#### [16:34:26] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.950 (adjusted 0.879) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [16:35:58] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [16:35:59] Ability used at #8
+
+### [16:35:59] Revealed #3 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [16:35:59] Ability used at #3
+
+#### [16:35:59] Solver Output
+Scenarios: 123/5064
+Definite good: ['#6']
+Evil probabilities: #5=62%, #8=27%, #1=25%, #7=23%, #3=20%, #9=15%, #4=15%, #2=13%
+
+#### [16:35:59] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#8']
+Reason: Expected posterior 73.1 scenarios (adjusted 80.0, info gain 0.621 bits) | timing x1.00
+WARNING: Corruption risk: 19% -- corrupted Judge results are unreliable
+
+#### [16:36:43] Solver Output
+Scenarios: 123/5064
+Definite good: ['#6']
+Evil probabilities: #5=62%, #8=27%, #1=25%, #7=23%, #3=20%, #9=15%, #4=15%, #2=13%
+
+#### [16:36:43] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#8']
+Reason: Expected posterior 73.1 scenarios (adjusted 80.0, info gain 0.621 bits) | timing x1.00
+WARNING: Corruption risk: 19% -- corrupted Judge results are unreliable
+
+## [16:45:23] GAME OVER — LOSS
+Final HP: 6
+Notes: GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen.
+
