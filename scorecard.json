@@ -1931,6 +1931,13 @@
       "name": "asc45_v5",
       "notes": "GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen.",
       "date": "2026-04-09 16:45"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc45_v5",
+      "notes": "1HP clutch, wrong coords caused stuck state, judge resolved, 83pct gamble",
+      "date": "2026-04-09 18:03"
     }
   ]
 }

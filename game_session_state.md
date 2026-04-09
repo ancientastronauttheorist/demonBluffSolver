@@ -17180,3 +17180,51 @@ WARNING: Corruption risk: 19% -- corrupted Judge results are unreliable
 Final HP: 6
 Notes: GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen.
 
+### [18:01:07] Executed #5 -> GOOD (WRONG!)
+
+#### [18:01:07] Solver Output
+Scenarios: 47/3982
+Definite good: ['#5', '#6']
+Evil probabilities: #1=66%, #4=38%, #2=34%, #7=21%, #3=19%, #8=15%, #9=6%
+
+#### [18:01:07] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#4']
+Reason: Expected posterior 29.0 scenarios (adjusted 32.4, info gain 0.535 bits) | timing x1.00
+WARNING: Corruption risk: 23% -- corrupted Judge results are unreliable
+
+### [18:01:53] Revealed #9 Judge
+Info: {'target': 4, 'is_lying': True}
+
+### [18:01:53] Ability used at #9
+
+#### [18:01:54] Solver Output
+Scenarios: 28/3982
+Definite good: ['#3', '#5', '#6']
+Evil probabilities: #4=64%, #2=54%, #1=46%, #8=14%, #7=11%, #9=11%
+
+#### [18:01:54] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 64% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 64% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [18:02:25] Executed #4 -> Lilis (EVIL)
+
+#### [18:02:25] Solver Output
+Scenarios: 18/524
+Definite evil: ['#4']
+Definite good: ['#3', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=83%, #1=17%
+
+#### [18:02:25] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 83% likely evil but HP too low to risk (HP=1, cost=5). Need more info.
+WARNING: Probabilistic execution -- 83% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [18:03:06] Executed #2 -> Poisoner (EVIL)
+
+## [18:03:06] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP clutch, wrong coords caused stuck state, judge resolved, 83pct gamble
+
