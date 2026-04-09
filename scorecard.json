@@ -1938,6 +1938,13 @@
       "name": "asc45_v5",
       "notes": "1HP clutch, wrong coords caused stuck state, judge resolved, 83pct gamble",
       "date": "2026-04-09 18:03"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v6",
+      "notes": "10HP perfect, 3 auto-execs, Puppeteer+Puppet+Baa, solver had only 4 scenarios from start",
+      "date": "2026-04-09 18:17"
     }
   ]
 }

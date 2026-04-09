@@ -17228,3 +17228,74 @@ WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 1
 Notes: 1HP clutch, wrong coords caused stuck state, judge resolved, 83pct gamble
 
+
+---
+
+# New Game — 2026-04-09 18:11:34
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Bishop, Knitter, Oracle, Poet, Slayer
+- Outcasts: Doppelganger, Wretch
+- Minions: Puppeteer
+- Demons: Baa
+
+### [18:12:43] Revealed #1 Bishop
+Info: {'targets': [2, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:12:43] Revealed #2 Bishop
+Info: {'targets': [2, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:12:43] Revealed #3 Knitter
+Info: {'evil_pairs': 2}
+
+### [18:12:43] Revealed #6 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Puppet'}
+
+### [18:15:08] Revealed #4 Slayer
+Info: {}
+
+### [18:15:12] Revealed #5 Baker
+Info: {'original_role': 'Poet'}
+
+### [18:15:18] Revealed #7 Poet
+Info: {'good_position': 1, 'good_role': 'Bishop', 'copied_role': 'Medium'}
+
+#### [18:15:32] Solver Output
+Scenarios: 4/350
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#7']
+Evil probabilities: #3=50%, #6=50%
+
+#### [18:15:32] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Puppeteer', 'Baa'})
+
+### [18:16:25] Executed #4 -> Baa (EVIL)
+
+#### [18:16:28] Solver Output
+Scenarios: 2/50
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7']
+
+#### [18:16:28] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [18:17:04] Executed #5 -> Puppeteer (EVIL)
+
+#### [18:17:07] Solver Output
+Scenarios: 2/5
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7']
+
+#### [18:17:07] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [18:17:44] Executed #6 -> Puppet (EVIL)
+
+## [18:17:48] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 3 auto-execs, Puppeteer+Puppet+Baa, solver had only 4 scenarios from start
+
