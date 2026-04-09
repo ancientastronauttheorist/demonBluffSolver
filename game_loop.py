@@ -12,7 +12,8 @@ import time
 from datetime import datetime
 from typing import Optional
 
-from solver import CardInfo, DeckComposition, GameState, SolverResult, solve
+from solver import CardInfo, DeckComposition, GameState, SolverResult
+from rust_solver import rust_solve_to_objects
 from strategy import recommend_action, print_recommendation, evil_probabilities
 
 
@@ -513,68 +514,22 @@ class GameSession:
         session.used_abilities = list(used_abilities or [])
         return session
 
-    def _solve_with_crosscheck(self, state: GameState) -> SolverResult:
-        """Run Python solver, optionally cross-check against Rust solver."""
-        t0 = time.perf_counter()
-        py_result = solve(state)
-        py_ms = (time.perf_counter() - t0) * 1000
-
-        try:
-            from rust_solver import rust_solve
-            rust_data = rust_solve(state.to_dict(), summary_only=True)
-        except Exception:
-            rust_data = None
-
-        if rust_data is not None:
-            rust_ms = rust_data.get("_elapsed_ms", 0)
-            mismatches = []
-            if sorted(py_result.definite_evil) != sorted(rust_data.get("definite_evil", [])):
-                mismatches.append(
-                    f"definite_evil: py={sorted(py_result.definite_evil)} "
-                    f"rust={sorted(rust_data.get('definite_evil', []))}")
-            if sorted(py_result.definite_good) != sorted(rust_data.get("definite_good", [])):
-                mismatches.append(
-                    f"definite_good: py={sorted(py_result.definite_good)} "
-                    f"rust={sorted(rust_data.get('definite_good', []))}")
-            if sorted(py_result.bombardier_positions) != sorted(rust_data.get("bombardier_positions", [])):
-                mismatches.append(
-                    f"bombardier: py={sorted(py_result.bombardier_positions)} "
-                    f"rust={sorted(rust_data.get('bombardier_positions', []))}")
-            if py_result.n_surviving != rust_data.get("n_surviving", -1):
-                mismatches.append(
-                    f"n_surviving: py={py_result.n_surviving} "
-                    f"rust={rust_data.get('n_surviving')}")
-
-            if mismatches:
-                print(f"\n  !! SOLVER MISMATCH — Python vs Rust !!")
-                for m in mismatches:
-                    print(f"     {m}")
-                print(f"  Timing: Python={py_ms:.0f}ms, Rust={rust_ms:.0f}ms")
-                print(f"  STOP AND FIX before proceeding!\n")
-                # Dump state for debugging
-                try:
-                    dump = state.to_dict()
-                    dump["_py_definite_evil"] = sorted(py_result.definite_evil)
-                    dump["_rust_definite_evil"] = sorted(rust_data.get("definite_evil", []))
-                    dump["_py_n_surviving"] = py_result.n_surviving
-                    dump["_rust_n_surviving"] = rust_data.get("n_surviving")
-                    with open("mismatch_state.json", "w") as f:
-                        json.dump(dump, f, indent=2)
-                    print(f"  State saved to mismatch_state.json")
-                except Exception:
-                    pass
-            else:
-                n_scn_note = ""
-                rust_n = rust_data.get("n_scenarios")
-                if rust_n is not None and rust_n != py_result.n_scenarios:
-                    n_scn_note = f" (n_scenarios: py={py_result.n_scenarios} rust={rust_n})"
-                print(f"  [cross-check] MATCH (py={py_ms:.0f}ms, rust={rust_ms:.0f}ms){n_scn_note}")
-
-        return py_result
+    def _solve(self, state: GameState) -> SolverResult:
+        """Run the Rust solver."""
+        result = rust_solve_to_objects(state)
+        if result is None:
+            print("\n  !! RUST SOLVER UNAVAILABLE — run `cargo build --release` !!")
+            print("  Returning empty result.\n")
+            return SolverResult(
+                definite_evil=[], definite_good=[], bombardier_positions=[],
+                n_scenarios=0, n_surviving=0, surviving_scenarios=[],
+                reasoning=["ERROR: Rust solver binary not found"],
+            )
+        return result
 
     def solve(self) -> SolverResult:
         state = self.to_game_state()
-        result = self._solve_with_crosscheck(state)
+        result = self._solve(state)
         print(f"\n=== SOLVER RESULT ===")
         for line in result.reasoning:
             print(f"  {line}")
@@ -621,7 +576,7 @@ class GameSession:
             print(f"  WARNING: {len(wrong_execs)} wrong execution(s) recorded but HP is still 10. "
                   f"Did you forget to run set_hp?")
         state = self.to_game_state()
-        result = self._solve_with_crosscheck(state)
+        result = self._solve(state)
         for line in result.reasoning:
             print(f"  {line}")
         DecisionLog.log_solver_output(result, state)
@@ -1484,15 +1439,15 @@ def main():
         if test_name and true_evils_str:
             true_evils = _parse_true_evils(true_evils_str)
             _save_and_run_test(test_name, true_evils, notes)
-            # Run full v2 regression suite
-            print("\n--- Full v2 regression ---")
+            # Run full v2 regression suite via Rust (much faster than Python harness)
+            print("\n--- Full v2 regression (Rust) ---")
             import subprocess as _sp
-            reg = _sp.run(["python", "-m", "tests.test_replay", "--v2-only"],
+            reg = _sp.run(["cargo", "test", "--release", "--test", "replay"],
                           capture_output=True, text=True)
-            # Print just the summary line
-            for line in reg.stdout.strip().split("\n"):
-                if "Results:" in line or "FAIL" in line:
-                    print(f"  {line}")
+            # Print summary from stderr (cargo test outputs there)
+            for line in reg.stderr.strip().split("\n"):
+                if "test result:" in line or "FAILED" in line:
+                    print(f"  {line.strip()}")
             if reg.returncode != 0:
                 print("  WARNING: Regression failures detected! Fix before next game.")
         elif not test_name:
