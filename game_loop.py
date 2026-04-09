@@ -617,6 +617,17 @@ class GameSession:
                     "error": f"Execute button click failed: {e}"}
         time.sleep(0.5)
 
+        # Step 2.5: Check for active ability on target (clicking would activate it)
+        if pos not in self.used_abilities:
+            from knowledge_base import get_card
+            # Check if the displayed role has an active ability
+            target_card_entry = next((c for c in self.cards if c.position == pos), None)
+            if target_card_entry:
+                kb_card = get_card(target_card_entry.apparent_role)
+                if kb_card and kb_card.activated_ability:
+                    return {"success": False, "was_evil": None, "evil_role": None,
+                            "error": f"#{pos} ({target_card_entry.apparent_role}) has unused active ability — clicking would activate it, not execute. Use ability_used {pos} first or execute manually."}
+
         # Step 3: Click target card
         x, y = coords[pos]
         print(f"  [auto_exec] Clicking #{pos} at ({x}, {y})...")
