@@ -721,6 +721,144 @@ def _parse_role_list(spec: str) -> list[str]:
     return [r.strip() for r in spec.split(",") if r.strip()]
 
 
+def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
+    """Parse memory reader card data into a CardInfo, or None if unparseable.
+
+    Handles passive clues read from savedAct/actedInfos/runtimeData.
+    Active abilities (FT, Judge, Jester, Druid, Dreamer, Slayer) only work
+    if the ability has already been used (acted_infos populated).
+    """
+    import re
+    pos = card['position']
+    role = card.get('disguise') or card.get('true_role', '')
+    clue = card.get('clue_text') or ''
+    infos = card.get('acted_infos', [])
+    rd = card.get('runtime_data')
+    targets = infos[0]['targets'] if infos else []
+    role_lower = role.lower().replace(' ', '_')
+
+    # --- RuntimeData takes priority (structured, no text parsing needed) ---
+    if rd:
+        if rd.get('type') == 'direction':
+            return card_enlightened(pos, rd['direction'])
+        if rd.get('type') == 'cures':
+            return card_alchemist(pos, rd['cures'] or 0)
+
+    # --- Knitter: "X evil pair(s)" or "Evils are not adjacent" ---
+    if role_lower == 'knitter':
+        if 'not adjacent' in clue.lower() or 'no evil' in clue.lower():
+            return card_knitter(pos, 0)
+        m = re.search(r'(\d+)\s+evil\s+pair', clue, re.IGNORECASE)
+        if m:
+            return card_knitter(pos, int(m.group(1)))
+
+    # --- Confessor: "dizzy" or "feeling good" ---
+    if role_lower == 'confessor':
+        if 'dizzy' in clue.lower() or 'dirty' in clue.lower():
+            return card_confessor(pos, True)
+        if 'good' in clue.lower() or 'clean' in clue.lower():
+            return card_confessor(pos, False)
+
+    # --- Bard: "no Corrupted" or "X card(s) away from Corrupted" ---
+    if role_lower == 'bard':
+        if 'no corrupted' in clue.lower() or 'are not corrupted' in clue.lower():
+            return card_bard(pos, -1)
+        m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
+        if m:
+            return card_bard(pos, int(m.group(1)))
+
+    # --- Lover: "X of my neighbors are evil" or "none" ---
+    if role_lower == 'lover':
+        m = re.search(r'(\d+)', clue)
+        if m:
+            return card_lover(pos, int(m.group(1)))
+        if 'none' in clue.lower() or 'no' in clue.lower():
+            return card_lover(pos, 0)
+
+    # --- Hunter: "nearest evil is X away" ---
+    if role_lower == 'hunter':
+        m = re.search(r'(\d+)', clue)
+        if m:
+            return card_hunter(pos, int(m.group(1)))
+
+    # --- Architect: "Left"/"Right"/"Equal" ---
+    if role_lower == 'architect':
+        cl = clue.lower()
+        if 'left' in cl:
+            return card_architect(pos, 'Left')
+        if 'right' in cl:
+            return card_architect(pos, 'Right')
+        if 'equal' in cl:
+            return card_architect(pos, 'Equal')
+
+    # --- Empress: targets from actedInfos ---
+    if role_lower == 'empress' and targets:
+        return card_empress(pos, targets)
+
+    # --- Witness: single target ---
+    if role_lower == 'witness' and targets:
+        return card_witness(pos, targets[0])
+
+    # --- Gemcrafter: single target ---
+    if role_lower == 'gemcrafter' and targets:
+        return card_gemcrafter(pos, targets[0])
+
+    # --- Fortune Teller: "Is #X or #Y Evil?: True/False" ---
+    if role_lower == 'fortune_teller' and targets:
+        has_evil = 'true' in clue.lower()
+        return card_fortune_teller(pos, targets, has_evil)
+
+    # --- Jester: targets + evil count from clue ---
+    if role_lower == 'jester' and targets:
+        m = re.search(r'(\d+)\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE)
+        if m:
+            return card_jester(pos, targets, int(m.group(1)))
+        # "none of them are evil"
+        if 'none' in clue.lower() or 'no' in clue.lower():
+            return card_jester(pos, targets, 0)
+
+    # --- Bishop: targets + types from clue ---
+    if role_lower == 'bishop' and targets:
+        types = []
+        for t in ['Villager', 'Outcast', 'Minion', 'Demon']:
+            if t.lower() in clue.lower():
+                types.append(t)
+        if types:
+            return card_bishop(pos, targets, types)
+        return card_bishop(pos, targets)
+
+    # --- Judge: target + lying from clue ---
+    if role_lower == 'judge' and targets:
+        is_lying = 'lying' in clue.lower() or 'liar' in clue.lower()
+        return card_judge(pos, targets[0], is_lying)
+
+    # --- Dreamer: target + evil role from clue ---
+    if role_lower == 'dreamer' and targets:
+        # Try to extract role name after target info
+        m = re.search(r'is\s+(?:a\s+)?(\w[\w\s]*)', clue, re.IGNORECASE)
+        if m:
+            evil_role = m.group(1).strip()
+            return card_dreamer(pos, targets[0], evil_role)
+
+    # --- Oracle: targets + minion role ---
+    if role_lower == 'oracle' and targets:
+        # Look for a role name in the clue
+        m = re.search(r'is\s+(?:a\s+)?(\w[\w\s]*)', clue, re.IGNORECASE)
+        if m:
+            minion_role = m.group(1).strip()
+            return card_oracle(pos, targets, minion_role)
+
+    # --- Wretch: no info ---
+    if role_lower == 'wretch':
+        return card_no_info(pos, 'Wretch')
+
+    # --- No-info roles (Knight, Bombardier, Slayer pre-ability, etc.) ---
+    if not clue and not infos:
+        return card_no_info(pos, role)
+
+    return None  # Couldn't parse — needs manual entry
+
+
 def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     """Parse CLI args for a card builder call.
 
@@ -940,6 +1078,7 @@ def main():
         print("  flip <pos>                            Flip single card (after Witch death)")
         print("  flip --lilis                          Flip in batches of 4 (Lilis games)")
         print("  card <role> <pos> [args...]           Add a revealed card")
+        print("  auto_card                             Auto-enter cards from memory reader")
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
         print("  pd_target <pos>                       Set Plague Doctor corruption target")
@@ -1260,6 +1399,60 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         else:
             print(f"  WARNING: memory_reader failed: {mr.stderr[:200]}")
         print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
+        return None
+
+    if cmd == "auto_card":
+        import subprocess as _sp
+        mr = _sp.run(["python", "memory_reader.py"], capture_output=True, text=True, timeout=10)
+        if mr.returncode != 0:
+            print(f"ERROR: memory_reader failed: {mr.stderr[:200]}")
+            return None
+
+        from memory_reader import MemoryReader
+        reader = MemoryReader()
+        if not reader.open():
+            print("ERROR: Could not open game process")
+            return None
+        cards = reader.read_board()
+        reader.close()
+        if not cards:
+            print("ERROR: No board data from memory reader")
+            return None
+
+        entered = {c.position for c in session.cards}
+        dead = set(session.executed) | set(session.night_kills)
+        auto_count = 0
+        manual_needed = []
+
+        for mc in cards:
+            pos = mc['position']
+            if pos in entered or pos in dead:
+                continue
+            state = mc.get('state', '')
+            if state not in ('Alive', 'Revealed'):
+                continue  # Hidden/Dead — skip
+
+            parsed = _parse_clue_from_memory(mc)
+            if parsed:
+                session.add_card(parsed)
+                DecisionLog.log_card(parsed)
+                print(f"  [auto] #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
+                auto_count += 1
+            else:
+                clue = mc.get('clue_text', '')
+                role = mc.get('disguise') or mc.get('true_role', '?')
+                if clue:
+                    manual_needed.append(f"  #{pos} {role}: \"{clue}\"")
+                else:
+                    manual_needed.append(f"  #{pos} {role}: (no clue — active ability?)")
+
+        if auto_count > 0:
+            session.save()
+        print(f"\n[auto_card] Entered {auto_count} cards automatically.")
+        if manual_needed:
+            print(f"[auto_card] {len(manual_needed)} cards need manual entry:")
+            for line in manual_needed:
+                print(line)
         return None
 
     if cmd == "card":
