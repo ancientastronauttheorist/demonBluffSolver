@@ -584,6 +584,167 @@ class GameSession:
         DecisionLog.log_recommendation(action)
         return action
 
+    def auto_execute(self, pos: int, result) -> dict:
+        """Perform in-game execution click sequence, verify via memory_reader, record result.
+
+        Returns: {"success": bool, "was_evil": bool|None, "evil_role": str|None, "error": str|None}
+        """
+        import template_match as _tm
+        import mouse as _mouse
+        from game_utils import all_game_card_coords
+
+        # Bombardier hard guard
+        if pos in result.bombardier_positions:
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": f"Bombardier protection: refusing to execute #{pos}"}
+
+        coords = all_game_card_coords(self.n_cards)
+        if pos not in coords:
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": f"Position {pos} not valid for {self.n_cards}-card game"}
+
+        # Step 1: Dismiss mark menu
+        print(f"  [auto_exec] Dismissing mark menu...")
+        _mouse.click(1280, 690)
+        time.sleep(0.5)
+
+        # Step 2: Click execute button
+        print(f"  [auto_exec] Clicking execute button...")
+        try:
+            _tm.safe_click_at(2265, 1235, "btn_execute_sword")
+        except Exception as e:
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": f"Execute button click failed: {e}"}
+        time.sleep(0.5)
+
+        # Step 3: Click target card
+        x, y = coords[pos]
+        print(f"  [auto_exec] Clicking #{pos} at ({x}, {y})...")
+        _tm.safe_click_at(x, y, f"exec_card{pos}")
+        time.sleep(3)  # wait for execution animation
+
+        # Step 4: Verify via memory_reader
+        print(f"  [auto_exec] Verifying execution via memory reader...")
+        from memory_reader import MemoryReader
+        reader = MemoryReader()
+        if not reader.open():
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": "Cannot open game process for verification"}
+
+        # Poll for state change (up to 3 attempts)
+        target_card = None
+        for attempt in range(3):
+            cards = reader.read_board()
+            if cards:
+                target_card = next((c for c in cards if c['position'] == pos), None)
+                if target_card and target_card['state'] == 'Dead':
+                    break
+            if attempt < 2:
+                time.sleep(1)
+
+        reader.close()
+
+        if not target_card:
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": f"Position #{pos} not found in memory reader"}
+
+        if target_card['state'] != 'Dead':
+            # Could be Knight immunity
+            if target_card['state'] == 'Alive':
+                print(f"  [auto_exec] #{pos} still Alive — possible Knight immunity")
+                return {"success": True, "was_evil": False, "evil_role": None,
+                        "error": "Knight immunity — card not killed"}
+            return {"success": False, "was_evil": None, "evil_role": None,
+                    "error": f"Card state is {target_card['state']}, expected Dead"}
+
+        # Step 5: Determine result
+        was_evil = target_card['is_evil']
+        evil_role = target_card['true_role'] if was_evil else None
+
+        # Step 6: Record into session
+        was_corrupted = None
+        if not was_evil:
+            # Check if card was corrupted (for session tracking)
+            statuses = target_card.get('statuses', [])
+            was_corrupted = 'Corrupted' in statuses
+
+        self.mark_executed(pos, was_evil, evil_role, was_corrupted)
+
+        # Step 7: HP update
+        if not was_evil:
+            old_hp = self.hp
+            self.hp -= self.wrong_exec_cost
+            print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}")
+        else:
+            print(f"  [auto_exec] Correct execution. HP remains {self.hp}")
+
+        self.save()
+        DecisionLog.log_execution(pos, was_evil, evil_role)
+
+        return {"success": True, "was_evil": was_evil, "evil_role": evil_role, "error": None}
+
+    def auto_next(self):
+        """Solve + auto-execute if definite evil. Returns (action, result, exec_result)."""
+        state = self.to_game_state()
+        result = self._solve(state)
+
+        for line in result.reasoning:
+            print(f"  {line}")
+        DecisionLog.log_solver_output(result, state)
+        action = print_recommendation(state, result, self.used_abilities)
+        DecisionLog.log_recommendation(action)
+
+        # Safety checks for auto-execution
+        if action.action_type != "execute":
+            print(f"\n  [auto_next] Not an execute recommendation — manual action needed.")
+            return action, result, None
+
+        pos = action.position
+        if pos not in result.definite_evil:
+            print(f"\n  [auto_next] #{pos} is NOT definite evil — manual decision needed.")
+            return action, result, None
+
+        if pos in result.bombardier_positions:
+            print(f"\n  [auto_next] #{pos} is potential Bombardier — manual decision needed.")
+            return action, result, None
+
+        # Check HP budget — refuse if we can't afford a wrong exec
+        if self.hp <= self.wrong_exec_cost and result.n_surviving > 1:
+            print(f"\n  [auto_next] HP={self.hp} too low for auto-exec (cost={self.wrong_exec_cost}). Manual decision needed.")
+            return action, result, None
+
+        # Re-verify board state from memory before clicking
+        from memory_reader import MemoryReader
+        reader = MemoryReader()
+        board_ok = False
+        if reader.open():
+            cards = reader.read_board()
+            reader.close()
+            if cards:
+                target = next((c for c in cards if c['position'] == pos), None)
+                if target and target['state'] in ('Alive', 'Hidden'):
+                    board_ok = True
+                else:
+                    print(f"\n  [auto_next] #{pos} state is {target['state'] if target else 'missing'} — aborting auto-exec.")
+        if not board_ok:
+            print(f"\n  [auto_next] Board verification failed — manual execution needed.")
+            return action, result, None
+
+        # All checks passed — auto-execute!
+        print(f"\n  === AUTO-EXECUTING #{pos} (definite evil in all {result.n_surviving} scenarios) ===")
+        exec_result = self.auto_execute(pos, result)
+
+        if exec_result["success"]:
+            if exec_result["was_evil"]:
+                print(f"  AUTO-EXEC SUCCESS: #{pos} was {exec_result['evil_role']}")
+            else:
+                print(f"  AUTO-EXEC: #{pos} was GOOD (wrong execution)")
+        else:
+            print(f"  AUTO-EXEC FAILED: {exec_result['error']}")
+
+        print(f"  ({result.n_surviving} surviving scenarios)")
+        return action, result, exec_result
+
     # -- Status --
 
     def status(self):
@@ -1154,6 +1315,7 @@ def main():
         print("  confirm_evil <pos>                    Mark position as confirmed evil")
         print("  confirm_good <pos>                    Mark position as confirmed good")
         print("  next                                  Full strategy recommendation")
+        print("  auto_next                             Solve + auto-execute if definite evil")
         print("  ability_used <pos>                    Mark ability as activated")
         print("  slayer_result <pos> <target> kill/fail [evil_role]  Slayer ability result")
         print("  block <pos>                           Mark position as blocked (Witch)")
@@ -1650,6 +1812,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
     if cmd == "next":
         session.next_action()
+        return None
+
+    if cmd == "auto_next":
+        session.auto_next()
         return None
 
     if cmd == "ability_used":
