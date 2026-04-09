@@ -1910,6 +1910,13 @@
       "name": "asc45_v2",
       "notes": "6HP, Lilis game, auto_exec x2, time=219s",
       "date": "2026-04-09 16:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v3",
+      "notes": "10HP perfect, FT resolved, auto_exec Pooka",
+      "date": "2026-04-09 16:24"
     }
   ]
 }

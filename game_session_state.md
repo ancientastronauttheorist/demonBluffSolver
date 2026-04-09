@@ -16895,3 +16895,83 @@ Reason: Target #10 is 50% evil (adjusted 0.50)
 Final HP: 6
 Notes: 6HP, Lilis game, auto_exec x2, time=219s
 
+
+---
+
+# New Game — 2026-04-09 16:22:59
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Bishop, Bard, Fortune_Teller, Medium, Lover
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [16:23:06] Revealed #1 Lover
+Info: {'evil_adjacent': 0}
+
+### [16:23:06] Revealed #3 Bard
+Info: {'corruption_distance': -1}
+
+### [16:23:06] Revealed #4 Medium
+Info: {'good_position': 6, 'good_role': 'Fortune Teller'}
+
+### [16:23:06] Revealed #5 Bishop
+Info: {'targets': [5, 1, 2], 'types': ['Villager', 'Outcast', 'Demon']}
+
+#### [16:23:06] Solver Output
+Scenarios: 2/42
+Definite good: ['#1', '#3', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #4=50%
+
+#### [16:23:06] Recommendation
+Action: **REVEAL** #2
+Reason: #2: 50% evil, 1.100 bits (2 outcomes)
+
+### [16:23:17] Revealed #2 Fortune_Teller
+Info: {}
+
+### [16:23:17] Revealed #6 Fortune_Teller
+Info: {}
+
+### [16:23:18] Revealed #7 Judge
+Info: {}
+
+#### [16:23:18] Solver Output
+Scenarios: 2/42
+Definite good: ['#1', '#3', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #4=50%
+
+#### [16:23:18] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+#### [16:23:25] Solver Output
+Scenarios: 2/42
+Definite good: ['#1', '#3', '#5', '#6', '#7']
+Evil probabilities: #2=50%, #4=50%
+
+#### [16:23:25] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [16:23:53] Revealed #2 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': False}
+
+### [16:23:53] Ability used at #2
+
+#### [16:23:53] Solver Output
+Scenarios: 1/42
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [16:23:53] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:24:01] Executed #4 -> Pooka (EVIL)
+
+## [16:24:09] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, FT resolved, auto_exec Pooka
+
