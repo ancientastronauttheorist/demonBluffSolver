@@ -1889,6 +1889,13 @@
       "name": "asc44_v6",
       "notes": "10HP perfect, card1 reflip needed, Druid+Slayer abilities",
       "date": "2026-04-09 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v7",
+      "notes": "10HP PERFECT, FULLY AUTOMATED: auto_card 6/6 + auto_next one-shot, ascension 44 complete",
+      "date": "2026-04-09 16:01"
     }
   ]
 }

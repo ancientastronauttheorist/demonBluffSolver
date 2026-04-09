@@ -16682,3 +16682,48 @@ WARNING: Probabilistic execution -- 57% confident (budget: 2 wrong execs)
 Final HP: 10
 Notes: 10HP perfect, card1 reflip needed, Druid+Slayer abilities
 
+
+---
+
+# New Game — 2026-04-09 16:00:59
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Druid, Empress, Bard, Gemcrafter
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [16:01:12] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [16:01:12] Revealed #2 Wretch
+Info: {}
+
+### [16:01:12] Revealed #3 Druid
+Info: {}
+
+### [16:01:12] Revealed #4 Gemcrafter
+Info: {'good_position': 1}
+
+### [16:01:12] Revealed #5 Medium
+Info: {'good_position': 6, 'good_role': 'Empress'}
+
+### [16:01:12] Revealed #6 Empress
+Info: {'targets': [1, 3, 4]}
+
+#### [16:01:12] Solver Output
+Scenarios: 1/6
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+
+#### [16:01:12] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:01:20] Executed #6 -> Pooka (EVIL)
+
+## [16:01:28] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP PERFECT, FULLY AUTOMATED: auto_card 6/6 + auto_next one-shot, ascension 44 complete
+
