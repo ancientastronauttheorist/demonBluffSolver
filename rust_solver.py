@@ -1,17 +1,28 @@
 """Bridge to the Rust solver binary (crates/solver-cli).
 
-Calls the Rust solver via subprocess, reconstructs Python Scenario/SolverResult objects.
+Supports two modes:
+- **Daemon mode** (default): Persistent subprocess with --daemon flag.
+  Reuses a single process across calls via JSON-line protocol.
+- **One-shot mode** (fallback): Spawns a new process per call.
+
 Falls back gracefully if the binary is not found.
 """
 
+import atexit
 import json
 import os
 import subprocess
+import threading
 import time
 from typing import Optional
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 _RUST_BINARY: Optional[str] = None
+
+# Daemon state
+_daemon_proc: Optional[subprocess.Popen] = None
+_daemon_lock = threading.Lock()
+_DAEMON_TIMEOUT = 10  # seconds per solve
 
 
 def _find_binary() -> Optional[str]:
@@ -36,18 +47,174 @@ def _find_binary() -> Optional[str]:
     return None
 
 
-def rust_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
-    """Call the Rust solver and return the raw result dict.
+def _start_daemon() -> Optional[subprocess.Popen]:
+    """Start the daemon subprocess. Returns Popen or None."""
+    binary = _find_binary()
+    if binary is None:
+        return None
+    try:
+        proc = subprocess.Popen(
+            [binary, "--daemon"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",  # CRITICAL: Windows defaults to cp1252
+        )
+        return proc
+    except (FileNotFoundError, OSError) as e:
+        print(f"  [rust-solver] daemon start failed: {e}")
+        _reset_binary()
+        return None
 
-    Args:
-        state_dict: GameState as a dict (from state.to_dict())
-        summary_only: If True, omit surviving_scenarios from output
 
-    Returns:
-        Result dict with keys: definite_evil, definite_good, bombardier_positions,
-        n_scenarios, n_surviving, and optionally surviving_scenarios.
-        Returns None if the binary is not found or fails.
+def _ensure_daemon() -> Optional[subprocess.Popen]:
+    """Return a live daemon process, starting one if needed."""
+    global _daemon_proc
+    # Fast path: daemon already alive
+    if _daemon_proc is not None and _daemon_proc.poll() is None:
+        return _daemon_proc
+    # Need to (re)start
+    _daemon_proc = _start_daemon()
+    return _daemon_proc
+
+
+def _kill_daemon():
+    """Kill the daemon if running."""
+    global _daemon_proc
+    if _daemon_proc is not None:
+        try:
+            _daemon_proc.stdin.close()
+        except Exception:
+            pass
+        try:
+            _daemon_proc.kill()
+            _daemon_proc.wait(timeout=2)
+        except Exception:
+            pass
+        _daemon_proc = None
+
+
+def _drain_stderr(proc: subprocess.Popen):
+    """Non-blocking drain of stderr to prevent pipe buffer overflow."""
+    if proc.stderr is None:
+        return
+    try:
+        # On Windows, we can't do non-blocking reads easily.
+        # Read whatever is available with a tiny timeout via threading.
+        import selectors
+        sel = selectors.DefaultSelector()
+        sel.register(proc.stderr, selectors.EVENT_READ)
+        while sel.select(timeout=0):
+            data = proc.stderr.readline()
+            if not data:
+                break
+        sel.close()
+    except Exception:
+        pass
+
+
+def _read_line_with_timeout(proc: subprocess.Popen, timeout: float) -> Optional[str]:
+    """Read one line from the daemon's stdout with a timeout.
+
+    Returns the line string, or None on timeout/error.
     """
+    result = [None]
+    error = [None]
+
+    def _reader():
+        try:
+            line = proc.stdout.readline()
+            result[0] = line
+        except Exception as e:
+            error[0] = e
+
+    t = threading.Thread(target=_reader, daemon=True)
+    t.start()
+    t.join(timeout=timeout)
+
+    if t.is_alive():
+        # Timed out — daemon is stuck, kill it
+        return None
+
+    if error[0] is not None:
+        return None
+
+    return result[0]
+
+
+def shutdown_daemon():
+    """Shutdown the daemon process. Called at exit."""
+    with _daemon_lock:
+        _kill_daemon()
+
+
+# Register cleanup
+atexit.register(shutdown_daemon)
+
+
+def _daemon_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
+    """Send a solve request to the daemon. Returns result dict or None on failure."""
+    with _daemon_lock:
+        proc = _ensure_daemon()
+        if proc is None:
+            return None
+
+        # Build the request — inject __summary into the state dict if needed
+        request = dict(state_dict)
+        if summary_only:
+            request["__summary"] = True
+
+        request_line = json.dumps(request, separators=(",", ":")) + "\n"
+
+        t0 = time.perf_counter()
+        try:
+            proc.stdin.write(request_line)
+            proc.stdin.flush()
+        except (BrokenPipeError, OSError) as e:
+            print(f"  [rust-solver] daemon write error: {e}")
+            _kill_daemon()
+            return None
+
+        # Drain stderr to prevent buffer overflow
+        _drain_stderr(proc)
+
+        # Read response with timeout
+        response_line = _read_line_with_timeout(proc, _DAEMON_TIMEOUT)
+
+        elapsed_ms = (time.perf_counter() - t0) * 1000
+
+        if response_line is None:
+            print("  [rust-solver] daemon TIMEOUT or read error")
+            _kill_daemon()
+            return None
+
+        if response_line == "":
+            # EOF — daemon died
+            print("  [rust-solver] daemon EOF (process died)")
+            _kill_daemon()
+            return None
+
+        try:
+            data = json.loads(response_line)
+        except json.JSONDecodeError as e:
+            print(f"  [rust-solver] daemon JSON parse error: {e}")
+            print(f"  [rust-solver]   raw: {response_line[:200]}")
+            _kill_daemon()
+            return None
+
+        if "error" in data:
+            print(f"  [rust-solver] solver error: {data['error']}")
+            # Don't kill daemon for solver-level errors (bad input, etc.)
+            return None
+
+        data["_elapsed_ms"] = elapsed_ms
+        data["_daemon"] = True
+        return data
+
+
+def _oneshot_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
+    """Original one-shot mode: spawn a new process per call."""
     binary = _find_binary()
     if binary is None:
         return None
@@ -93,7 +260,31 @@ def rust_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
         return None
 
     data["_elapsed_ms"] = elapsed_ms
+    data["_daemon"] = False
     return data
+
+
+def rust_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
+    """Call the Rust solver and return the raw result dict.
+
+    Tries daemon mode first, falls back to one-shot if daemon fails.
+
+    Args:
+        state_dict: GameState as a dict (from state.to_dict())
+        summary_only: If True, omit surviving_scenarios from output
+
+    Returns:
+        Result dict with keys: definite_evil, definite_good, bombardier_positions,
+        n_scenarios, n_surviving, and optionally surviving_scenarios.
+        Returns None if the binary is not found or fails.
+    """
+    # Try daemon mode first
+    result = _daemon_solve(state_dict, summary_only=summary_only)
+    if result is not None:
+        return result
+
+    # Fall back to one-shot
+    return _oneshot_solve(state_dict, summary_only=summary_only)
 
 
 def rust_solve_to_objects(state, summary_only: bool = False):

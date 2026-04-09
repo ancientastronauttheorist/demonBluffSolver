@@ -305,6 +305,19 @@ def safe_click_at(x: int, y: int, label: str = "target") -> str:
     return verify_ss
 
 
+def fast_click_at(x: int, y: int, label: str = "target") -> None:
+    """Focus game → click coords immediately. No hover, no verify, no sleep.
+
+    For batch card flipping where speed matters. Caller controls timing.
+    """
+    import mouse as mouse_mod
+    import game_utils
+
+    game_utils.ensure_game_focused()
+    mouse_mod.click(x, y)
+    print(f"[fast_click] {label} at ({x}, {y})")
+
+
 def debug(name: str, screenshot_path: str = None) -> str:
     """Save annotated screenshot showing match location."""
     if screenshot_path is None:
@@ -410,6 +423,11 @@ def main():
         x, y = int(sys.argv[2]), int(sys.argv[3])
         label = sys.argv[4] if len(sys.argv) > 4 else "target"
         safe_click_at(x, y, label)
+
+    elif cmd == "fast_click_at":
+        x, y = int(sys.argv[2]), int(sys.argv[3])
+        label = sys.argv[4] if len(sys.argv) > 4 else "target"
+        fast_click_at(x, y, label)
 
     elif cmd == "list":
         list_templates()
