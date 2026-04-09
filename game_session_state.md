@@ -16784,3 +16784,114 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP, auto_exec failed on Oracle active ability, manual exec. Time: ~1775768834s
 
+
+---
+
+# New Game — 2026-04-09 16:09:09
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Baker, Judge, Medium, Bard, Oracle, Slayer
+- Outcasts: Plague_Doctor
+- Minions: Poisoner, Twin_Minion
+- Demons: Lilis
+
+### [16:09:37] Revealed #3 Oracle
+Info: {'targets': [2, 9], 'minion_role': 'Poisoner'}
+
+### [16:09:46] Revealed #1 Judge
+Info: {}
+
+### [16:09:46] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [16:09:46] Revealed #4 Plague_Doctor
+Info: {}
+
+### [16:10:05] Revealed #6 Bard
+Info: {'corruption_distance': 1}
+
+### [16:10:16] Revealed #5 Plague_Doctor
+Info: {}
+
+### [16:10:16] Revealed #7 Slayer
+Info: {}
+
+### [16:10:17] Revealed #9 Poet
+Info: {'targets': [3, 5, 6], 'types': ['Outcast', 'Villager', 'Minion'], 'copied_role': 'Bishop'}
+
+#### [16:10:17] Solver Output
+Scenarios: 134/5070
+Definite good: ['#8']
+Evil probabilities: #4=57%, #9=55%, #5=43%, #6=37%, #3=25%, #2=22%, #10=21%, #1=20%, #7=20%
+
+#### [16:10:17] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.750 (adjusted 2.750) | timing x1.00
+
+### [16:10:49] Ability used at #5
+
+#### [16:10:49] Solver Output
+Scenarios: 74/5070
+Definite good: ['#8']
+Evil probabilities: #4=65%, #9=46%, #6=42%, #5=35%, #1=23%, #3=23%, #10=23%, #2=22%, #7=22%
+
+#### [16:10:49] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#10']
+Reason: Entropy 2.156 (adjusted 2.156) | timing x1.00
+
+### [16:11:18] Ability used at #4
+
+#### [16:11:18] Solver Output
+Scenarios: 35/5070
+Definite evil: ['#4']
+Definite good: ['#5', '#8']
+Evil probabilities: #6=66%, #10=31%, #9=29%, #2=20%, #7=20%, #1=17%, #3=17%
+
+#### [16:11:18] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 35 scenarios (roles: {'Lilis', 'Twin_Minion', 'Poisoner'})
+
+### [16:11:26] Executed #4 -> Poisoner (EVIL)
+
+#### [16:11:35] Solver Output
+Scenarios: 15/352
+Definite evil: ['#4']
+Definite good: ['#2', '#5', '#8', '#9']
+Evil probabilities: #6=87%, #10=33%, #1=27%, #3=27%, #7=27%
+
+#### [16:11:35] Recommendation
+Action: **REVEAL** #10
+Reason: #10: 33% evil, 3.640 bits (13 outcomes)
+
+### [16:11:48] Revealed #10 Bard
+Info: {'corruption_distance': 3}
+
+#### [16:11:48] Solver Output
+Scenarios: 5/352
+Definite evil: ['#4', '#6']
+Definite good: ['#2', '#3', '#5', '#8', '#9']
+Evil probabilities: #10=60%, #1=20%, #7=20%
+
+#### [16:11:48] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Twin_Minion', 'Lilis'})
+
+### [16:11:56] Executed #6 -> Twin Minion (EVIL)
+
+#### [16:12:04] Solver Output
+Scenarios: 8/86
+Definite evil: ['#4', '#6']
+Definite good: ['#2', '#3', '#5', '#8', '#9']
+Evil probabilities: #10=50%, #1=25%, #7=25%
+
+#### [16:12:04] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#10']
+Reason: Target #10 is 50% evil (adjusted 0.50)
+
+### [16:12:30] Ability used at #7
+
+## [16:12:30] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, auto_exec x2, time=219s
+

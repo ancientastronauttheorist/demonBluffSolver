@@ -1903,6 +1903,13 @@
       "name": "asc45_v1",
       "notes": "10HP, auto_exec failed on Oracle active ability, manual exec. Time: ~1775768834s",
       "date": "2026-04-09 16:07"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc45_v2",
+      "notes": "6HP, Lilis game, auto_exec x2, time=219s",
+      "date": "2026-04-09 16:12"
     }
   ]
 }
