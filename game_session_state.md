@@ -16246,3 +16246,139 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: perfect 10HP, memory reader clue test game
 
+
+---
+
+# New Game — 2026-04-09 15:19:37
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Slayer, Hunter, Knitter, Enlightened, Oracle, Dreamer, Scout
+- Outcasts: Plague_Doctor
+- Minions: Poisoner, Minion
+- Demons: Lilis
+
+### [15:20:26] Revealed #1 Plague_Doctor
+Info: {}
+
+### [15:20:26] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:20:26] Revealed #4 Slayer
+Info: {}
+
+### [15:20:33] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+### [15:21:15] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [15:21:15] Revealed #8 Slayer
+Info: {}
+
+### [15:21:15] Revealed #9 Oracle
+Info: {'targets': [1, 5], 'minion_role': 'Poisoner'}
+
+### [15:21:21] Revealed #6 Medium
+Info: {'good_position': 9, 'good_role': 'Oracle'}
+
+#### [15:21:26] Solver Output
+Scenarios: 81/4548
+Definite good: ['#5']
+Evil probabilities: #4=59%, #8=56%, #9=49%, #6=32%, #3=31%, #10=25%, #2=22%, #7=20%, #1=6%
+
+#### [15:21:26] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.958 (adjusted 1.958) | timing x1.00
+
+### [15:22:21] Ability used at #1
+
+#### [15:22:21] Solver Output
+Scenarios: 25/4548
+Definite good: ['#2', '#5', '#6', '#9']
+Evil probabilities: #8=84%, #10=80%, #4=56%, #3=44%, #1=20%, #7=16%
+
+#### [15:22:21] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#10']
+Reason: Target #10 is 80% evil (adjusted 0.80)
+
+### [15:23:12] Ability used at #8
+
+#### [15:23:12] Solver Output
+Scenarios: 23/4548
+Definite good: ['#2', '#5', '#6', '#9']
+Evil probabilities: #8=91%, #10=78%, #4=52%, #3=48%, #1=22%, #7=9%
+
+#### [15:23:12] Recommendation
+Action: **REVEAL** #10
+Reason: #10: 78% evil, 2.062 bits (4 outcomes)
+
+### [15:23:32] Revealed #10 Knitter
+Info: {'evil_pairs': 2}
+
+#### [15:23:32] Solver Output
+Scenarios: 19/4602
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #10=95%, #3=58%, #4=42%, #1=5%
+
+#### [15:23:32] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 19 scenarios (roles: {'Minion', 'Lilis', 'Poisoner'})
+
+### [15:24:18] Executed #8 -> Minion (EVIL)
+
+#### [15:24:18] Solver Output
+Scenarios: 5/480
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #10=80%, #3=60%, #4=40%, #1=20%
+
+#### [15:24:18] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#10']
+Reason: Target #10 is 80% evil (adjusted 0.64)
+WARNING: Corruption risk: 20% -- Slayer ability disabled if corrupted
+
+### [15:24:55] Ability used at #4
+
+#### [15:24:55] Solver Output
+Scenarios: 4/480
+Definite evil: ['#8']
+Definite good: ['#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #10=75%, #3=50%, #4=50%, #1=25%
+
+#### [15:24:55] Recommendation
+Action: **EXECUTE** #10
+Reason: Execution lookahead: #10 guarantees a win across all reveal branches with current HP budget (50% evil Lilis, 25% good Knitter (corrupted), 25% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [15:25:30] Executed #10 -> Lilis (EVIL)
+
+#### [15:25:30] Solver Output
+Scenarios: 2/67
+Definite evil: ['#8', '#10']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [15:25:30] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Enlightened, 50% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:26:04] Executed #3 -> GOOD (WRONG!)
+
+#### [15:26:05] Solver Output
+Scenarios: 1/55
+Definite evil: ['#4', '#8', '#10']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#9']
+
+#### [15:26:05] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [15:26:38] Executed #4 -> Poisoner (EVIL)
+
+## [15:26:38] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP win, auto_card test, Lilis game, both Slayers were evil/corrupted
+

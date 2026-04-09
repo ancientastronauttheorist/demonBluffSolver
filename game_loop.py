@@ -744,11 +744,11 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         if rd.get('type') == 'cures':
             return card_alchemist(pos, rd['cures'] or 0)
 
-    # --- Knitter: "X evil pair(s)" or "Evils are not adjacent" ---
+    # --- Knitter: "X evil pair(s)" / "X pairs of Evil" / "Evils are not adjacent" ---
     if role_lower == 'knitter':
         if 'not adjacent' in clue.lower() or 'no evil' in clue.lower():
             return card_knitter(pos, 0)
-        m = re.search(r'(\d+)\s+evil\s+pair', clue, re.IGNORECASE)
+        m = re.search(r'(\d+)\s+(?:evil\s+)?pair', clue, re.IGNORECASE)
         if m:
             return card_knitter(pos, int(m.group(1)))
 

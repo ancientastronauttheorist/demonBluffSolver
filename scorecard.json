@@ -1854,6 +1854,13 @@
       "name": "asc44_v1",
       "notes": "perfect 10HP, memory reader clue test game",
       "date": "2026-04-09 15:02"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc44_v2",
+      "notes": "1HP win, auto_card test, Lilis game, both Slayers were evil/corrupted",
+      "date": "2026-04-09 15:26"
     }
   ]
 }
