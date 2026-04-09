@@ -16092,3 +16092,157 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete
 
+
+---
+
+# New Game — 2026-04-04 12:07:23
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Oracle, Slayer, Confessor, Enlightened, Bishop, Baker
+- Outcasts: Alchemist, Bombardier
+- Minions: Twin_Minion, Minion
+- Demons: Lilis
+
+## Deck
+- Villagers: Hunter, Oracle, Slayer, Confessor, Enlightened, Bishop, Baker, Alchemist
+- Outcasts: Bombardier
+- Minions: Twin_Minion, Minion
+- Demons: Lilis
+
+#### [12:08:14] Claude Reasoning
+
+
+### [12:11:23] Revealed #1 Enlightened
+Info: {'direction': 'cw'}
+
+### [12:11:30] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [12:11:35] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [12:12:00] Revealed #4 Slayer
+Info: {}
+
+#### [12:12:24] Solver Output
+Scenarios: 30/720
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#7', '#10']
+Evil probabilities: #4=20%, #5=20%, #6=20%, #8=20%, #9=20%
+  Generated 720 candidate scenarios
+  30 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Lilis', 'Minion'})
+    #3 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Lilis', 'Minion'})
+    #1 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [4, 5, 6, 8, 9]
+
+#### [12:12:24] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 30 scenarios (roles: {'Twin_Minion', 'Lilis', 'Minion'})
+
+### [12:19:27] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [12:19:32] Executed #4 -> GOOD (WRONG!)
+
+#### [12:19:47] Solver Output
+Scenarios: 18/504
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#7', '#8', '#10']
+Evil probabilities: #5=33%, #6=33%, #9=33%
+  Generated 504 candidate scenarios
+  18 scenarios survived validation
+    #2 is DEFINITELY EVIL (possible roles: {'Twin_Minion', 'Minion', 'Lilis'})
+    #3 is DEFINITELY EVIL (possible roles: {'Minion', 'Twin_Minion', 'Lilis'})
+    #1 is DEFINITELY GOOD
+    #4 is DEFINITELY GOOD
+    #7 is DEFINITELY GOOD
+    #8 is DEFINITELY GOOD
+    #10 is DEFINITELY GOOD
+    Uncertain: [5, 6, 9]
+
+#### [12:19:47] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 18 scenarios (roles: {'Twin_Minion', 'Minion', 'Lilis'})
+
+
+---
+
+# New Game — 2026-04-09 14:59:49
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Druid, Bishop, Bard, Poet, Judge, Fortune_Teller
+- Outcasts: Wretch
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [15:00:42] Revealed #1 Poet
+Info: {'corruption_distance': 1, 'copied_role': 'Bard'}
+
+### [15:00:43] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [15:00:43] Revealed #3 Wretch
+Info: {}
+
+### [15:00:43] Revealed #4 Fortune_Teller
+Info: {}
+
+### [15:00:43] Revealed #5 Bishop
+Info: {'targets': [1, 2, 4], 'types': ['Villager', 'Minion', 'Outcast']}
+
+### [15:00:43] Revealed #6 Druid
+Info: {}
+
+### [15:00:43] Revealed #7 Judge
+Info: {}
+
+### [15:00:43] Revealed #8 Bard
+Info: {'corruption_distance': -1}
+
+#### [15:00:48] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #7=50%, #8=50%
+
+#### [15:00:48] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
+
+### [15:01:25] Executed #5 -> Twin_Minion (EVIL)
+
+#### [15:01:29] Solver Output
+Scenarios: 2/7
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #7=50%, #8=50%
+
+#### [15:01:29] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 1.000) | follow-up bonus 0.500 | timing x1.00
+
+### [15:02:20] Revealed #4 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': True}
+
+### [15:02:21] Ability used at #4
+
+#### [15:02:21] Solver Output
+Scenarios: 1/7
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#8']
+
+#### [15:02:21] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:02:53] Executed #7 -> Pooka (EVIL)
+
+## [15:02:53] GAME OVER — WIN
+Final HP: 10
+Notes: perfect 10HP, memory reader clue test game
+

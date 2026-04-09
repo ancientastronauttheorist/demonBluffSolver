@@ -1847,6 +1847,13 @@
       "name": "asc43_v7",
       "notes": "5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete",
       "date": "2026-04-04 02:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v1",
+      "notes": "perfect 10HP, memory reader clue test game",
+      "date": "2026-04-09 15:02"
     }
   ]
 }
