@@ -16727,3 +16727,60 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP PERFECT, FULLY AUTOMATED: auto_card 6/6 + auto_next one-shot, ascension 44 complete
 
+
+---
+
+# New Game — 2026-04-09 16:05:03
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Empress, Poet, Druid, Knitter, Oracle
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [16:05:37] Revealed #1 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Minion'}
+
+### [16:05:37] Revealed #3 Medium
+Info: {'good_position': 7, 'good_role': 'Druid'}
+
+### [16:05:37] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [16:05:37] Revealed #6 Empress
+Info: {'targets': [2, 3, 7]}
+
+#### [16:05:37] Solver Output
+Scenarios: 1/24
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [16:05:37] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:06:30] Revealed #2 Plague_Doctor
+Info: {}
+
+### [16:06:30] Revealed #4 Poet
+Info: {}
+
+### [16:06:30] Revealed #7 Druid
+Info: {}
+
+#### [16:06:30] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [16:06:30] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:07:14] Executed #1 -> Pooka (EVIL)
+
+## [16:07:14] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP, auto_exec failed on Oracle active ability, manual exec. Time: ~1775768834s
+

@@ -1896,6 +1896,13 @@
       "name": "asc44_v7",
       "notes": "10HP PERFECT, FULLY AUTOMATED: auto_card 6/6 + auto_next one-shot, ascension 44 complete",
       "date": "2026-04-09 16:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v1",
+      "notes": "10HP, auto_exec failed on Oracle active ability, manual exec. Time: ~1775768834s",
+      "date": "2026-04-09 16:07"
     }
   ]
 }
