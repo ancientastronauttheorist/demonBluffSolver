@@ -16460,3 +16460,51 @@ Reason: All evil characters have been executed!
 Final HP: 6
 Notes: auto_next test, auto-executed #8 Shaman, solver WIN bug when 3rd evil at night-killed pos
 
+
+---
+
+# New Game — 2026-04-09 15:46:14
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Dreamer, Bard, Scout, Medium, Oracle
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [15:46:28] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [15:46:28] Revealed #2 Medium
+Info: {'good_position': 6, 'good_role': 'Dreamer'}
+
+### [15:46:28] Revealed #3 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:46:28] Revealed #5 Bombardier
+Info: {}
+
+### [15:46:28] Revealed #6 Dreamer
+Info: {}
+
+### [15:46:28] Revealed #7 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Twin_Minion'}
+
+### [15:46:50] Revealed #4 Scout
+Info: {}
+
+#### [15:46:50] Solver Output
+Scenarios: 1/7
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [15:46:50] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:46:58] Executed #7 -> Pooka (EVIL)
+
+## [15:47:19] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, auto_next one-shot win, 6/7 cards auto-entered
+
