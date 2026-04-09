@@ -848,6 +848,70 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             minion_role = m.group(1).strip()
             return card_oracle(pos, targets, minion_role)
 
+    # --- Scout: "<Role> is N cards away from closest Evil" ---
+    if role_lower == 'scout':
+        m = re.search(r'(\w[\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
+        if m:
+            evil_role = m.group(1).strip()
+            distance = int(m.group(2))
+            return card_scout(pos, evil_role, distance)
+
+    # --- Medium: "#N is a real <Role>" ---
+    if role_lower == 'medium' and targets:
+        m = re.search(r'is\s+a\s+real\s+(\w[\w\s]*)', clue, re.IGNORECASE)
+        if m:
+            good_role = m.group(1).strip()
+            return card_medium(pos, targets[0], good_role)
+
+    # --- Poet: copies a random villager ability. Try to detect which one. ---
+    if role_lower == 'poet' and clue:
+        cl = clue.lower()
+        # Bard pattern
+        if 'corrupted' in cl and ('card' in cl or 'no corrupted' in cl):
+            if 'no corrupted' in cl or 'are not corrupted' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"corruption_distance": -1, "copied_role": "Bard"})
+            m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
+            if m:
+                return CardInfo(pos, "Poet", info_parsed={"corruption_distance": int(m.group(1)), "copied_role": "Bard"})
+        # Knitter pattern
+        if 'pair' in cl or 'not adjacent' in cl:
+            if 'not adjacent' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"evil_pairs": 0, "copied_role": "Knitter"})
+            m = re.search(r'(\d+)\s+(?:evil\s+)?pair', clue, re.IGNORECASE)
+            if m:
+                return CardInfo(pos, "Poet", info_parsed={"evil_pairs": int(m.group(1)), "copied_role": "Knitter"})
+        # Lover pattern
+        if 'neighbor' in cl:
+            m = re.search(r'(\d+)', clue)
+            if m:
+                return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": int(m.group(1)), "copied_role": "Lover"})
+            return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": 0, "copied_role": "Lover"})
+        # Hunter pattern
+        if ('nearest evil' in cl or 'closest evil' in cl) and 'away' in cl:
+            m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
+            if m:
+                return CardInfo(pos, "Poet", info_parsed={"distance": int(m.group(1)), "copied_role": "Hunter"})
+        # Enlightened pattern
+        if 'clockwise' in cl or 'equidistant' in cl:
+            if 'counter' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"direction": "CCW", "copied_role": "Enlightened"})
+            elif 'equidistant' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"direction": "Equidistant", "copied_role": "Enlightened"})
+            else:
+                return CardInfo(pos, "Poet", info_parsed={"direction": "CW", "copied_role": "Enlightened"})
+        # Architect pattern
+        if cl.strip().startswith('left') or cl.strip().startswith('right') or cl.strip().startswith('equal'):
+            if 'left' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"side": "Left", "copied_role": "Architect"})
+            elif 'right' in cl:
+                return CardInfo(pos, "Poet", info_parsed={"side": "Right", "copied_role": "Architect"})
+            else:
+                return CardInfo(pos, "Poet", info_parsed={"side": "Equal", "copied_role": "Architect"})
+        # Confessor pattern
+        if 'dizzy' in cl or 'feeling good' in cl:
+            dizzy = 'dizzy' in cl
+            return CardInfo(pos, "Poet", info_parsed={"dizzy": dizzy, "copied_role": "Confessor"})
+
     # --- Wretch: no info ---
     if role_lower == 'wretch':
         return card_no_info(pos, 'Wretch')
@@ -1341,6 +1405,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
         from game_utils import all_game_card_coords
         import subprocess
+        import template_match as _tm
+        import mouse as _mouse
         coords = all_game_card_coords(session.n_cards)
 
         if single_pos:
@@ -1349,8 +1415,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 return None
             x, y = coords[single_pos]
             print(f"Flipping #{single_pos} at ({x},{y})")
-            subprocess.run(["python", "template_match.py", "safe_click_at",
-                            str(x), str(y), f"card{single_pos}"])
+            _tm.safe_click_at(x, y, f"card{single_pos}")
             print(f"Flipped #{single_pos}")
             return None
 
@@ -1366,9 +1431,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             for pos in batch:
                 x, y = coords[pos]
                 print(f"  #{pos} at ({x},{y})")
-                subprocess.run(["python", "template_match.py", "safe_click_at",
-                                str(x), str(y), f"card{pos}"])
-                time.sleep(0.3)
+                _tm.fast_click_at(x, y, f"card{pos}")
+                time.sleep(0.2)
             print(f"Batch complete: {['#'+str(p) for p in batch]}")
             remaining = positions[batch_size:]
             if remaining:
@@ -1382,14 +1446,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             for pos in positions:
                 x, y = coords[pos]
                 print(f"  #{pos} at ({x},{y})")
-                subprocess.run(["python", "template_match.py", "safe_click_at",
-                                str(x), str(y), f"card{pos}"])
-                time.sleep(0.3)
+                _tm.fast_click_at(x, y, f"card{pos}")
+                time.sleep(0.2)
             print(f"All {len(positions)} cards flipped in order #1->#{positions[-1]}")
 
         print("\n--- Parking mouse & reading memory ---")
         time.sleep(1.5)
-        subprocess.run(["python", "mouse.py", "move", "1280", "690"])
+        _mouse.move(1280, 690)
         time.sleep(0.5)
         print("\n--- Memory Reader (board state) ---")
         mr = subprocess.run(["python", "memory_reader.py"], capture_output=True, text=True)

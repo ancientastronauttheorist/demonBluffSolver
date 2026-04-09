@@ -45,7 +45,8 @@
    - **Night-killed cards (Lilis)**: Show skull overlay, skip them.
 7. **Verify ALL cards flipped** -- `flip` auto-runs memory_reader and checks for unflipped cards. **If flip verification fails (positions still Hidden), DO NOT proceed.** Re-run `python game_loop.py flip` to retry. Card #1 is especially prone to click-not-registering (game unfocused). **NEVER mark a position as blocked without Witch in the deck** -- `block` command now rejects this and suggests re-flipping instead. Lost asc37_v5 (40% win instead of 71%) because unflipped #1 was wrongly treated as blocked.
    - Screenshot and verify memory_reader output. **HONOR RULE: memory reader shows true evil roles -- DO NOT use for solving. Validation only.**
-8. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
+8. **`auto_card`** reads clues from memory and auto-enters parseable cards. Run after flipping. Shows which cards need manual entry.
+8b. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
    - **Poet "#X is Evil" format**: Use `card poet <pos> bounty_hunter <target>` (NOT medium). The bounty_hunter pseudo-role handles direct evil-call. Lost asc37_v3 wrong exec from using wrong format.
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
 
@@ -58,7 +59,7 @@
 
 ### End
 14. Screenshot end screen. Read true evils + check `<Corrupted>` tags. **Note: game auto-advances to next village after "Next" click — screenshot BEFORE clicking Next if you need end-screen details.** End-screen dialogs: "Next" at ~(1280, 865), "Continue" (score summary) at ~(1280, 950). Ascension-complete dialogs may need the same y range.
-15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist.
+15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided manually. Still accepts manual override.
 16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
 ## Memory Reader -- Continuous Validation
@@ -77,13 +78,17 @@ Every screenshot, memory reader reads state and compares against what the screen
 - Cargo workspace at repo root (`Cargo.toml`); Rust crates in `crates/`
 - `game_loop.py` (CLI/session), `solver.py` (Python solver), `strategy.py` (action selection), `knowledge_base.py` (roles), `screenshot.py`, `mouse.py`, `card_vision.py`
 - **Test directories**: `tests/cases_v2/` (new, card_vision pipeline), `tests/cases/` (legacy, manual entry). Solver work validates against v2 only.
+- **REPL mode**: `python game_loop.py repl` -- persistent process, no import overhead per command. Uses `REPL_READY`/`CMD_DONE` sentinels.
 
 ## Rust Solver (`crates/solver-core`)
+- **Rust solver is PRIMARY** -- `game_loop.py` calls `rust_solve_to_objects()` exclusively. Python `solve()` is no longer called.
+- **Persistent daemon**: `--daemon` mode keeps solver binary alive across calls. Falls back to one-shot if daemon fails.
+- **Fix solver bugs in Rust** (`crates/solver-core`), not Python (`solver.py`).
 - Rust port of `solver.py` — same constraint logic, reads the same `tests/cases_v2/` JSON files
 - Modules: types, knowledge_base, geometry, corruption, scenario, validators, solver
 - Build: `cargo build --release` | Test: `cargo test --release` (replays all 125 v2 test cases)
 - CLI binary: `crates/solver-cli/` → `target/release/demon-bluff-solver.exe` (reads GameState JSON from stdin, writes SolverResult JSON to stdout)
-- Python bridge: `rust_solver.py` wraps the CLI binary via subprocess. `game_loop.py` auto-cross-checks Python vs Rust on every `solve`/`next` call.
+- Python bridge: `rust_solver.py` wraps the CLI binary via subprocess.
 - Game loop, strategy, screenshots, memory reader, card vision remain Python.
 
 ## Game Overview
