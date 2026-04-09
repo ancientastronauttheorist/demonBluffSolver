@@ -8,3 +8,6 @@ game_session.json
 *.lock
 .env
 dump.cs
+target/
+solver_validation.json
+mismatch_state.json

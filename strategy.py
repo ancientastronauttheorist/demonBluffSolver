@@ -454,7 +454,7 @@ def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple
         # Learn an evil character
         evil_positions = [p for p in scenario.evil_positions if p not in state.executed]
         if evil_positions:
-            evil_pos = evil_positions[0]
+            evil_pos = min(evil_positions)  # deterministic regardless of dict ordering
     return (is_corrupted, evil_pos)
 
 

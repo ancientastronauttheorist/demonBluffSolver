@@ -8,7 +8,7 @@
 ## Core Rules
 1. **Always follow the solver.** No second-guessing, no manual overrides.
 2. **0 scenarios = STOP.** Fix the solver immediately. Do not guess.
-3. **Fix bugs before the next game.** Research the wiki (https://demonbluff.wiki.gg) first. Fix code, run replay tests (`python -m tests.test_replay --v2-only`), verify. Same urgency for solver and memory reader bugs. **Solver work validates against v2 tests only** (card_vision pipeline, high-accuracy data). Legacy tests (`tests/cases/`) are kept for broad regression but may have manual data entry errors.
+3. **Fix bugs before the next game.** Research the wiki (https://demonbluff.wiki.gg) first. Fix code, run replay tests (`python -m tests.test_replay --v2-only`; Rust: `cargo test --release --test replay`), verify. Same urgency for solver and memory reader bugs. **Solver work validates against v2 tests only** (card_vision pipeline, high-accuracy data). Legacy tests (`tests/cases/`) are kept for broad regression but may have manual data entry errors.
 4. **After every loss, analyze.** Spawn an agent to check critical decisions. Fix or confirm unavoidable before proceeding.
 5. **Commit and push after every game.** Do not batch.
 6. **Mouse only.** No keyboard shortcuts during live runs.
@@ -72,10 +72,19 @@ Every screenshot, memory reader reads state and compares against what the screen
 - Name mappings: Gambler->Gemcrafter, Imp->Chancellor, etc. (see DISPLAY_NAMES dict).
 
 ## Setup
-- Screen: 2560x1440, Python 3.13
-- Dependencies: `mss`, `pyautogui`, `Pillow`
-- `game_loop.py` (CLI/session), `solver.py` (constraints), `strategy.py` (action selection), `knowledge_base.py` (roles), `screenshot.py`, `mouse.py`, `card_vision.py`
+- Screen: 2560x1440, Python 3.13, Rust 2021 edition
+- Python dependencies: `mss`, `pyautogui`, `Pillow`
+- Cargo workspace at repo root (`Cargo.toml`); Rust crates in `crates/`
+- `game_loop.py` (CLI/session), `solver.py` (Python solver), `strategy.py` (action selection), `knowledge_base.py` (roles), `screenshot.py`, `mouse.py`, `card_vision.py`
 - **Test directories**: `tests/cases_v2/` (new, card_vision pipeline), `tests/cases/` (legacy, manual entry). Solver work validates against v2 only.
+
+## Rust Solver (`crates/solver-core`)
+- Rust port of `solver.py` — same constraint logic, reads the same `tests/cases_v2/` JSON files
+- Modules: types, knowledge_base, geometry, corruption, scenario, validators, solver
+- Build: `cargo build --release` | Test: `cargo test --release` (replays all 125 v2 test cases)
+- CLI binary: `crates/solver-cli/` → `target/release/demon-bluff-solver.exe` (reads GameState JSON from stdin, writes SolverResult JSON to stdout)
+- Python bridge: `rust_solver.py` wraps the CLI binary via subprocess. `game_loop.py` auto-cross-checks Python vs Rust on every `solve`/`next` call.
+- Game loop, strategy, screenshots, memory reader, card vision remain Python.
 
 ## Game Overview
 Puzzle/deduction game. Circle of face-down cards -- reveal for role info, deduce Evil, execute them. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.

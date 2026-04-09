@@ -1,0 +1,12 @@
+[package]
+name = "solver-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "demon-bluff-solver"
+path = "src/main.rs"
+
+[dependencies]
+solver-core = { path = "../solver-core" }
+serde_json = "1"
