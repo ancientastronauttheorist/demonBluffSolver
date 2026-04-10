@@ -2309,6 +2309,13 @@
       "name": "asc52_v7",
       "notes": "5HP, FINAL village! Witch at #9 blocked itself, executed directly per CLAUDE.md. Asc52 complete!",
       "date": "2026-04-10 16:59"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v1",
+      "notes": "10HP perfect, 2 Mediums on board (both evil disguises), corrupted Baker false claim required reset",
+      "date": "2026-04-10 17:33"
     }
   ]
 }

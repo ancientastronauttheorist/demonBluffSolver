@@ -22470,3 +22470,75 @@ WARNING: CAUTION: budget=1, confidence 44% < 85% threshold. Consider manual over
 Final HP: 5
 Notes: 5HP, FINAL village! Witch at #9 blocked itself, executed directly per CLAUDE.md. Asc52 complete!
 
+
+---
+
+# New Game — 2026-04-10 17:30:42
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Bard, Fortune_Teller, Druid, Medium, Baker
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [17:31:00] Revealed #1 Bombardier
+Info: {}
+
+### [17:31:00] Revealed #2 Medium
+Info: {'good_position': 6, 'good_role': 'Medium'}
+
+### [17:31:00] Revealed #3 Baker
+Info: {'original_role': 'Druid'}
+
+### [17:31:00] Revealed #6 Medium
+Info: {'good_position': 2, 'good_role': 'Medium'}
+
+### [17:31:00] Revealed #7 Bard
+Info: {'corruption_distance': 3}
+
+### [17:31:00] Revealed #8 Bishop
+Info: {'targets': [3, 1, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:31:15] Revealed #4 Fortune_Teller
+Info: {}
+
+### [17:31:15] Revealed #5 Plague_Doctor
+Info: {}
+
+#### [17:31:15] Solver Output
+Scenarios: 0/256
+
+#### [17:31:15] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [17:32:05] Revealed #3 Baker
+Info: {}
+
+#### [17:32:05] Solver Output
+Scenarios: 1/256
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [17:32:05] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [17:32:47] Executed #2 -> Chancellor (EVIL)
+
+#### [17:32:48] Solver Output
+Scenarios: 1/26
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [17:32:48] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:33:35] Executed #6 -> Pooka (EVIL)
+
+## [17:33:35] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 2 Mediums on board (both evil disguises), corrupted Baker false claim required reset
+
