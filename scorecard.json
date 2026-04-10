@@ -2281,6 +2281,13 @@
       "name": "asc52_v4",
       "notes": "6HP, Lilis game, heavy ability usage (2 Dreamers, 2 Jesters, FT), night killed PD(#8), all abilities used to narrow 336->21 scenarios",
       "date": "2026-04-10 16:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v5",
+      "notes": "10HP perfect, 8 abilities used (PD+Dreamer+2Jesters+FT+Judge+Alchemist), solved 90 scenarios down to 1",
+      "date": "2026-04-10 16:18"
     }
   ]
 }

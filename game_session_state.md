@@ -21785,3 +21785,157 @@ Reason: #3 is evil in ALL 7 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: 6HP, Lilis game, heavy ability usage (2 Dreamers, 2 Jesters, FT), night killed PD(#8), all abilities used to narrow 336->21 scenarios
 
+
+---
+
+# New Game — 2026-04-10 16:12:19
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Dreamer, Jester, Enlightened, Fortune_Teller, Judge, Architect, Alchemist
+- Outcasts: Plague_Doctor
+- Minions: Twin_Minion, Minion
+- Demons: Pooka
+
+### [16:12:33] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [16:12:33] Revealed #6 Architect
+Info: {'side': 'Left'}
+
+### [16:12:33] Revealed #7 Alchemist
+Info: {'cured_count': 2}
+
+### [16:12:33] Revealed #8 Bishop
+Info: {'targets': [2, 3, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:12:58] Revealed #1 Plague_Doctor
+Info: {}
+
+### [16:12:58] Revealed #2 Judge
+Info: {}
+
+### [16:12:59] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [16:12:59] Revealed #5 Jester
+Info: {}
+
+### [16:12:59] Revealed #9 Fortune_Teller
+Info: {}
+
+### [16:12:59] Revealed #10 Dreamer
+Info: {}
+
+#### [16:13:06] Solver Output
+Scenarios: 90/3240
+Definite good: ['#1']
+Evil probabilities: #7=78%, #4=67%, #5=38%, #8=36%, #9=36%, #10=22%, #3=13%, #2=7%, #6=4%
+
+#### [16:13:06] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.545 (adjusted 2.545) | timing x1.00
+
+### [16:13:47] Ability used at #1
+
+#### [16:13:47] Solver Output
+Scenarios: 32/3240
+Definite evil: ['#8']
+Definite good: ['#1', '#3', '#6']
+Evil probabilities: #4=75%, #7=50%, #5=31%, #9=31%, #2=6%, #10=6%
+
+#### [16:13:47] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 32 scenarios (roles: {'Minion', 'Twin_Minion', 'Pooka'})
+
+### [16:14:30] Executed #8 -> Pooka (EVIL)
+
+#### [16:14:30] Solver Output
+Scenarios: 22/352
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #4=91%, #7=45%, #9=36%, #5=18%, #10=9%
+
+#### [16:14:30] Recommendation
+Action: **USE_ABILITY** #10 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.278 (adjusted 2.071) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [16:15:07] Revealed #10 Dreamer
+Info: {'target': 7, 'evil_role': 'Minion'}
+
+### [16:15:07] Ability used at #10
+
+#### [16:15:07] Solver Output
+Scenarios: 17/352
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #4=94%, #9=47%, #7=29%, #5=18%, #10=12%
+
+#### [16:15:07] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#10']
+Reason: Expected posterior 7.5 scenarios (adjusted 8.1, info gain 1.062 bits) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [16:15:50] Revealed #5 Jester
+Info: {'targets': [1, 2, 10], 'evil_count': 2}
+
+### [16:15:50] Ability used at #5
+
+#### [16:15:50] Solver Output
+Scenarios: 6/352
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6', '#10']
+Evil probabilities: #4=83%, #5=50%, #7=33%, #9=33%
+
+#### [16:15:50] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#6']
+Reason: Expected posterior 3.3 scenarios (adjusted 3.3, info gain 0.848 bits) | timing x1.00
+
+### [16:16:33] Revealed #2 Judge
+Info: {'target': 6, 'is_lying': False}
+
+### [16:16:33] Ability used at #2
+
+#### [16:16:34] Solver Output
+Scenarios: 4/352
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6', '#10']
+Evil probabilities: #4=75%, #7=50%, #9=50%, #5=25%
+
+#### [16:16:34] Recommendation
+Action: **USE_ABILITY** #9 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [16:17:13] Revealed #9 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': True}
+
+### [16:17:13] Ability used at #9
+
+#### [16:17:13] Solver Output
+Scenarios: 2/352
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#10']
+
+#### [16:17:13] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Minion'})
+
+### [16:17:57] Executed #4 -> Minion (EVIL)
+
+#### [16:17:57] Solver Output
+Scenarios: 1/43
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#10']
+
+#### [16:17:57] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [16:18:40] Executed #9 -> Twin_Minion (EVIL)
+
+## [16:18:40] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 8 abilities used (PD+Dreamer+2Jesters+FT+Judge+Alchemist), solved 90 scenarios down to 1
+
