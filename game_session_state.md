@@ -20973,3 +20973,66 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, Jester ability on #1,#3,#6 found 1 evil, solved to 1 scenario, clean executions
 
+
+---
+
+# New Game — 2026-04-10 15:02:58
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Empress, Oracle, Gemcrafter, Druid, Confessor
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [15:03:31] Revealed #1 Gemcrafter
+Info: {'good_position': 5}
+
+### [15:03:31] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [15:03:31] Revealed #3 Empress
+Info: {'targets': [1, 4, 6]}
+
+### [15:03:31] Revealed #5 Wretch
+Info: {}
+
+### [15:03:31] Revealed #6 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Shaman'}
+
+### [15:03:58] Revealed #4 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 5}
+
+### [15:03:58] Revealed #7 Druid
+Info: {}
+
+#### [15:04:03] Solver Output
+Scenarios: 2/7
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+
+#### [15:04:03] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [15:05:04] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:05:04] Ability used at #7
+
+#### [15:05:09] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [15:05:09] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:05:48] Executed #2 -> Pooka (EVIL)
+
+## [15:05:48] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 1 evil only, Druid+Jester info solved to 1 scenario
+
