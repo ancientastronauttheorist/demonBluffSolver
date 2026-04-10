@@ -1,172 +1,411 @@
-# Automation Plan: Play Faster, Collect More Data, Fix Solver Faster
+# Autonomous Self-Improving Game Loop: Master Plan
 
 ## Goal
-Reduce game time from ~8 min to ~4-5 min by automating mechanical steps while keeping Claude for judgment calls.
+Run games as fast as possible to collect data and improve the solver. Replace Claude-as-orchestrator with a fully autonomous loop.
 
-## Phase 0: Foundation (8-10h)
+| Metric | Current | Target |
+|--------|---------|--------|
+| Time per game | 3-5 min | 30-60 sec |
+| Games per hour | 12-20 | 60-120 |
+| Human interventions | 5-10/game | 0-1/game |
+| Data pipeline | Manual analysis | Auto-detect solver weaknesses |
 
-### REPL Mode (~6-8h)
-Extract `dispatch(cmd, args, session)` from `main()` (28 command branches, 58 sys.argv refs).
-Add `python game_loop.py repl` — persistent process, session in memory, `REPL_READY`/`CMD_DONE` sentinels.
+---
 
-**Critical fixes required:**
-- Replace `sys.exit(1)` in `slayer_result` (line 1361) with raised exception
-- Wrap all `subprocess.run(check=True)` in try-except (flip, start commands)
-- Change session lock to per-command acquire/release (not held for REPL lifetime)
-- Add `sys.stdout.flush()` before every `CMD_DONE` sentinel
-- Isolate subprocess stdout from REPL sentinels (prefix/delimit)
-- Catch all exceptions in dispatch loop — print error, continue REPL
-- Use `shlex.split()` for argument parsing with error handling
-- Handle `new` command returning fresh session to REPL loop
+## Three Pillars
 
-**Files:** game_loop.py
+### Pillar 1: Autonomous Loop
+Single command (`python game_loop.py auto --games N`) plays N games start-to-finish with zero human intervention.
 
-### Fast Flip (~2h)
-Add `fast_click_at()` to template_match.py — direct function call (not subprocess), skip verification screenshot.
-Rewrite flip loop to use direct imports instead of subprocess spawning.
+### Pillar 2: Speed Optimization
+Eliminate sleep delays, subprocess overhead, and screenshot latency. Game animations become the only bottleneck.
 
-**Critical fixes required:**
-- MUST keep `ensure_game_focused()` per card — focus loss cascade is the #1 risk
-- Cannot lower `pyautogui.PAUSE` via subprocess (each subprocess resets it) — only works with direct calls
-- Start with 0.2s inter-card delay (not 0.15s) — test empirically, lower if reliable
-- Batch all clicks, verify once at end via memory_reader
-- Auto-retry failed flips at safe (normal) speed
-- Single-card flip (post-Witch) should NOT use fast_click — use safe_click_at
+### Pillar 3: Self-Improvement Pipeline
+After every game, auto-detect solver weaknesses, categorize failures, and prioritize fixes by impact.
 
-**Files:** template_match.py, game_loop.py, mouse.py
+---
 
-## Phase 1: Automation Core (8-10h)
+## Critical Issues (Must Fix Before Building)
 
-### Persistent Rust Subprocess (~3h)
-Add `--daemon` flag to `crates/solver-cli/src/main.rs`: read JSON lines via `BufReader::lines()` (NOT `read_to_string`), write compact JSON line responses, flush after each.
+11 issues found by adversarial review that would cause data corruption, stuck loops, or game losses:
 
-**Critical fixes required:**
-- Use `BufReader::lines()` NOT `read_to_string()` (blocks until EOF)
-- `catch_unwind` around each solve to prevent panics killing daemon
-- Always write exactly one response line per request (never pretty-print)
-- Explicit `stdout.flush()` after each response (Windows pipe buffering)
-- Handle stderr: don't let it accumulate in pipe buffer (redirect or drain)
-- Python side: `Popen` with pipe management, `_daemon_lock` for thread safety
-- Fallback to one-shot mode if daemon fails
-- `atexit.register(shutdown_daemon)` for cleanup (but document: won't run on crash/kill)
-- Per-request `"__summary": true` field (not CLI flag, which is process-lifetime)
+| # | Issue | Severity | Fix |
+|---|-------|----------|-----|
+| 1 | Session state leaks between games | CRITICAL | `full_reset()` clears ALL mutable state + explicit `new` call per game |
+| 2 | Rust daemon accumulates state across games | CRITICAL | Kill daemon between games via `_kill_daemon()` |
+| 3 | MemoryMonitor doesn't detect new game board | CRITICAL | Shutdown monitor between games, wait for `game_connected` event |
+| 4 | Stale deck read from previous village | CRITICAL | Wait for `game_connected` event before `read_deck()` |
+| 5 | Clicking revealed card triggers active ability | CRITICAL | Check `used_abilities` + `session.cards` before every target click |
+| 6 | `_verify_flips` prints warnings instead of returning status | CRITICAL | Return structured `{flipped: [], blocked: [], failed: []}` |
+| 7 | Night phase HP not auto-deducted (prints "run set_hp") | CRITICAL | `session.hp -= 2` in NIGHT_RESOLVE phase automatically |
+| 8 | Witch-blocked card killed by Lilis stays in blocked_positions | CRITICAL | Remove from `blocked_positions` in `night_kill` handler |
+| 9 | Bombardier guard blocks provably-safe forced execution | CRITICAL | Trust forced-exec when it explicitly confirms Bombardier safe |
+| 10 | No game version detection for memory offsets | CRITICAL | Add GameAssembly.dll version fingerprint before trusting memory |
+| 11 | Screenshot disk fills up over 100 games (~4MB/game) | CRITICAL | Auto-cleanup between games, keep only last 20 screenshots |
 
-**Files:** crates/solver-cli/src/main.rs, rust_solver.py
+---
 
-### Player.log Parser (~3h)
-New `log_parser.py` — parse Player.log events.
+## Per-Game Isolation Protocol
 
-**Known limitations (from investigation):**
-- INIT entries have NO position numbers — reverse-order mapping is assumed but unvalidated
-- ACT/OnExecuted events have NO position data — log is a *witness*, not *source of truth*
-- Only Confessor logs clue content (`NANI: DIZZY`) — most roles log nothing useful
-- File gets overwritten on game restart (old -> Player-prev.log)
-- File has mixed CRLF/CR encoding — use universal newline mode
+Between every game, the batch runner MUST execute:
 
-**Useful for:**
-- Ground truth verification of true roles (cross-check with memory_reader)
-- Event sequence confirmation (reveals, night kills, executions)
-- Game-over auto-detection (Player info reset = village boundary)
+```
+1. session.full_reset()      -- clear ALL mutable state (cards, executed, confirmed, abilities)
+2. _kill_daemon()            -- fresh Rust solver process
+3. _shutdown_monitor()       -- fresh memory reader connection
+4. cleanup_screenshots(20)   -- keep only last 20 files
+5. Wait for game_connected   -- confirms new village loaded in memory
+```
 
-**NOT useful for:** Auto card entry (no clue content for most roles), position tracking.
+This prevents state leakage (issues #1-4) and disk exhaustion (#11).
 
-**Files:** log_parser.py (new), game_loop.py (integration commands)
+---
 
-### Game-Over Streamlining (~2h)
-Auto-read true evils from memory_reader, auto-detect win/loss, skip redundant single replay.
+## State Machine Design
 
-**Critical fixes required:**
-- Do NOT detect win/loss from HP alone — Bombardier instant-loss has HP > 0. Check game state from memory.
-- Read memory BEFORE user clicks "Next" (game auto-advances, stale data after)
-- Add test name collision detection (check if file exists before save)
-- Implement test name generation from scorecard history (doesn't exist yet)
-- Add `timeout=120` to cargo test subprocess (prevent indefinite hang)
-- Keep manual override: `game_over win/loss <name> "<evils>" "[notes]"` still works
+Extends existing `state_machine.py` with new phases:
 
-**Files:** game_loop.py, memory_reader.py
+```
+MENU_NAV --> DECK_READ --> SESSION_INIT --> FLIPPING
+    ^                                         |
+    |                                         v
+    |                                  ENTERING_CLUES
+    |                                         |
+    |                                         v
+    |          WITCH_UNBLOCK --+          SOLVING
+    |               ^         |              |
+    |               |         v    +---------+---------+
+    |          SOLVING <------+    |         |         |
+    |               ^              v         v         v
+    |               |         EXECUTING   REVEAL   LILIS_NIGHT
+    |               |              |         |         |
+    |               |              v         v         v
+    |               +---------SOLVING    FLIPPING  NIGHT_RESOLVE
+    |                                   (single)       |
+    |                                      |           v
+    |                                      v        SOLVING
+    |                               ENTERING_CLUES
+    |                                  (single)
+    |
+    +--- POST_GAME <--- GAME_OVER
+```
 
-## Phase 2: Auto-Read Clues (14-18h) — HIGHEST RISK
+### Phase Details
 
-### Memory Reader Expansion (~10-12h)
-Read clue/ability data from Character objects in process memory.
+#### MENU_NAV (replaces `start` subprocess calls)
+- Click `menu_play_demo` -> `mode_standard` -> `btn_close_dialog`
+- Verify each click landed via template re-match or memory `game_connected`
+- Handle unexpected dialogs: ascension-complete, tutorial, "Continue?" prompt
+- Fallback: if template not found after 3 retries, NEEDS_HUMAN
 
-**Target fields (from dump.cs):**
-- Character+0x128: `actedInfos` (List<ActedInfo>) — each has `desc` (string, 0x10) + `characters` (List<Character>, 0x18)
-- Character+0x158: `savedAct` (string — cached clue text)
-- Character+0x68: `runtimeData` (polymorphic: EnlightenedRuntimeData.direction, AlchemistRuntimeData.cures, BakerRuntimeData.charName)
-- Character+0xBC: `uses` (int — ability use count)
-- Character+0x161: `act` (bool — ability activated)
+#### DECK_READ
+- `memory_reader.read_deck()` in-process (100% accurate for role names, confirmed Asc44+)
+- nv/no header counts: screenshot parse until memory offset found
+- Cross-check memory vs card_vision; mismatch = NEEDS_HUMAN
+- Guard: wait for `game_connected` before reading (prevents stale deck from previous village)
+- Guard: auto-detect Baa fake outcast and adjust count
 
-**Critical fixes required:**
-- MUST dispatch runtimeData reads by role name (polymorphic — can't read blindly)
-- Active ability cards (Jester, FT, Judge, Slayer, Dreamer) have EMPTY clues until activated — skip these
-- Baker and Poet require manual entry regardless (dynamic role changes, copied abilities)
-- Validate offsets against live game before trusting (read known field first, verify)
-- Add version fingerprinting (PE timestamp) to detect game updates
-- Localization breaks text parsing — English-only for now, detect and warn
-- Null pointer checks at every level of pointer chain traversal
-- Cap list reads at 20 elements to prevent runaway on corruption
+#### SESSION_INIT
+- Derive n_cards from `len(board)` via memory reader
+- Derive n_evil from deck composition
+- Create fresh `GameSession(n_cards, n_evil)`, set deck, set HP (10, cost=5 for high asc)
+- Close deck panel: `safe_click icon_deck_purple`
 
-**Roles that CAN be auto-read (passive, simple clues):**
-Enlightened (direction enum), Knitter (evil_pairs int), Confessor (dizzy bool), Lover (evil_adjacent int), Hunter (distance int), Architect (side enum), Bard (corruption_distance int), Empress (targets list), Witness (target), Alchemist (cures int)
+#### FLIPPING (extends existing)
+- Standard: iterate 1..N, `fast_click_at` each, 0.2s between
+- Lilis: batches of 4, then LILIS_NIGHT phase
+- Verification: `monitor.wait_for()` until all flipped positions show state != Hidden
+- Witch detection: if last card stays Hidden and Witch in deck, mark blocked
+- Card #1 guard: use `safe_click_at` for first card (focus-loss prone)
+- MUST return structured result from `_verify_flips`
 
-**Roles that CANNOT be auto-read (active abilities, complex formats):**
-Jester, Fortune Teller, Judge, Slayer, Dreamer, Druid, Poet, Baker, Medium, Oracle, Scout
+#### ENTERING_CLUES (extends existing)
+- Run `_parse_clue_from_memory()` for each flipped, un-entered card
+- ~90% of roles parse correctly from memory (confirmed Asc44: 6/6)
+- Unparseable cards: enter as `no_info` (solver works, loses one constraint)
+- Fallback: NEEDS_HUMAN with raw clue text displayed
+- Process in strict position order (preserves reveal_order for Baker)
 
-### Auto Card Entry (~4-6h)
-New `auto_card` command: reads memory → parses clues → generates card commands.
+#### SOLVING (extends existing)
+- `session._solve(state)` -> `recommend_action(state, result, used_abilities)`
+- Decision routing:
 
-**Design:**
-- Only auto-enter roles from the "CAN be auto-read" list above
-- Print proposed entries for user confirmation before committing
-- Skip positions with active abilities (uses=0, act=false)
-- Cross-validate against screenshot (CLAUDE.md rule: screenshot is ground truth)
-- Fall back to manual entry for any card where parsing fails
+| Action Type | Behavior |
+|-------------|----------|
+| `execute` + definite_evil + not Bombardier | Auto-execute |
+| `execute` + probabilistic + confidence >= threshold + HP budget allows | Auto-execute (--risk moderate) |
+| `execute` + probabilistic + below threshold | NEEDS_HUMAN |
+| `reveal` | Auto-reveal: click card, wait for flip, enter clue |
+| `use_ability` | Auto-use: click card, click targets, read result from memory |
+| `win` | Transition to GAME_OVER -> POST_GAME |
+| `error` (0 scenarios) | NEEDS_HUMAN -- solver bug |
 
-**Files:** memory_reader.py, game_loop.py
+#### REVEAL (new phase)
+- Strategy recommends which card to flip for max information gain
+- Click safety: verify position is NOT already flipped, does NOT have unused active ability
+- `fast_click_at` target position
+- `monitor.wait_for()` until state != Hidden
+- Parse clue from memory, add to session
+- Transition to SOLVING
 
-## Phase 3: Autonomous Execution (10-12h) — HIGH RISK
+#### ABILITY_USE (new phase)
+- Click ability card to activate
+- Click target(s) -- multi-step for Jester (3), Druid (3), FT (2)
+- Guard: if target has unused active ability, NEEDS_HUMAN (would trigger wrong ability)
+- `monitor.wait_for()` until `clue_text` or `uses_count` changes
+- Parse result from memory (`savedAct`, `actedInfos`, `runtimeData`)
+- Record with `session.add_card()` + `session.mark_ability_used()`
+- Special: Slayer kill -- check if target is Wretch (wrong exec penalty, NOT confirmed_evil)
+- Special: PD check -- two-step result (corrupted/clean, then evil reveal if corrupted)
 
-### Auto-Execute (~8h)
-New `auto_next` command: solve → if definite_evil → click sequence → verify → record.
+#### EXECUTING (extends existing)
+- Uses existing `auto_execute()`: dismiss mark menu, click execute button, click target, verify
+- Structured return: `{killed: bool, knight_immunity: bool, was_evil: bool, role: str}`
+- Knight immunity on definite-evil target = solver bug, flag explicitly
+- After Witch execution: check for blocked position to unblock (transition to WITCH_UNBLOCK)
+- After execution: re-solve
 
-**Critical fixes required:**
-- ONLY auto-execute `definite_evil` (100% across ALL scenarios, NOT bombardier, NOT Knight free-check)
-- Triple bombardier guard: strategy filters it, auto_next checks it, auto_execute asserts it
-- Re-read board via memory_reader IMMEDIATELY before clicking (race condition: night kills can change state)
-- Use FRESH screenshot for card coordinates (positions shift after deaths)
-- Dismiss mark menu → screenshot → verify menu gone → find execute button → click → click target → wait → verify
-- Poll memory_reader for state=Dead (don't use fixed 2.5s wait — retry with backoff)
-- Handle Wretch: memory shows alignment=Good, true_role=Wretch → mark as wrong execution, decrement HP
-- Handle Knight immunity: card stays Alive after execution → not a failure, it's immunity
-- Handle Doppelganger-as-Knight: use true_role from memory, not apparent role
-- Detect game-over: if HP <= 0 after wrong exec, stop immediately
-- Detect victory: if last evil killed, expect victory screen
-- Abort gates: HP <= wrong_exec_cost (no budget), Bombardier in play, multiple definite_evil (ambiguous)
+#### LILIS_NIGHT (extends existing)
+- Triggered after every 4th reveal when Lilis alive
+- `monitor.wait_for(killed_hidden, min_delay=2.0, timeout=8)`
+- Transition to NIGHT_RESOLVE
 
-### Full Loop Orchestration (~2-4h)
-Chain: flip → auto_card → next → auto_next if certain → repeat.
-Claude intervenes for: probabilistic decisions, ability activations, 0-scenario diagnosis.
+#### NIGHT_RESOLVE (new phase)
+- Auto-detect killed positions from `killed_hidden` flag in memory
+- Count evil kills using memory `is_evil` field (honor rule: validation only, not deduction)
+- Auto-deduct 2 HP (`session.hp -= 2`)
+- Remove killed positions from `blocked_positions` (Witch+Lilis interaction)
+- Handle 0-kill case: if Lilis is only unrevealed, auto-execute `night_no_kill`
+- Track Lilis batch index explicitly (don't derive from `len(reveal_order)`)
 
-**Files:** game_loop.py, strategy.py, template_match.py, memory_reader.py
+#### GAME_OVER
+- Detect: all evil Dead in memory, or HP <= 0
+- Read true evils from EXISTING monitor's cached board BEFORE clicking Next
+- Screenshot end screen for records
 
-## Realistic Targets
+#### POST_GAME (new phase)
+- Generate test name from ascension/village counters
+- `game_over` dispatch: save test case, record scorecard
+- Skip per-game `cargo test` compilation in batch mode (compile once at end)
+- Click "Next" at ~(1280, 865), "Continue" at ~(1280, 950)
+- Handle ascension-complete dialogs
+- Run per-game isolation protocol (reset session, kill daemon, shutdown monitor)
+- Transition to MENU_NAV for next game
 
-| Milestone | Time/Game | Games/Hour | Key Bottleneck |
-|-----------|-----------|------------|----------------|
-| Current | ~8 min | ~7-8 | Claude types everything manually |
-| Phase 0 | ~6-7 min | ~8-9 | Reduced sleep times + no subprocess overhead |
-| Phase 1 | ~5-6 min | ~10-11 | Faster solver + streamlined game_over |
-| Phase 2 | ~3-4 min | ~15-18 | Auto-read clues for simple roles |
-| Phase 3 | ~3 min | ~18-20 | Auto-execute definite evil |
+---
 
-**Floor:** ~3 min/game. Manual decisions, complex roles, ability activations create an irreducible minimum.
+## Click Safety Protocol
 
-## What Always Stays Manual
-- Speech bubble reading for complex roles (Poet, Baker, Oracle, Medium, Scout)
-- Ability activation + result reading (Jester, FT, Judge, Slayer, Dreamer, Druid)
-- Probabilistic execution decisions (< 100% confidence)
-- 0-scenario diagnosis and solver bug fixing
-- Loss analysis
-- Commit and push
-- Board count verification (V, O, M, D icons)
+Before ANY card click in the autonomous loop:
+
+```
+1. Is position already flipped? (check session.cards + reveal_order) --> skip
+2. Does position have unused active ability? (check knowledge_base + used_abilities) --> NEEDS_HUMAN
+3. Is game window focused? (ensure_game_focused()) --> refocus if not
+4. After click: verify expected state change via memory reader
+5. If state didn't change: retry once at safe speed, then NEEDS_HUMAN
+```
+
+---
+
+## Speed Optimizations
+
+### Safe (implement immediately)
+
+| Optimization | Time Saved | Notes |
+|---|---|---|
+| In-process calls instead of subprocess | 3-7s/game | Fix session lock to per-command acquire/release. Fix `pyautogui.PAUSE` import-time reset. |
+| Poll interval 0.5s -> 0.2s | 1-3s/game | CPU impact negligible (0.25% single core) |
+| Lilis `monitor.wait_for()` (remove fixed sleep fallback) | 2-3s/game | Already implemented, ensure fallback path uses it |
+| Post-click delay 0.3s -> 0.15s | 0.5s/game | Test with 5-10 games first |
+| Focus delay 0.2s -> 0.05s (when already focused) | 0.3s/game | Only when game is already in foreground |
+
+### Do NOT Reduce
+
+| Setting | Current | Why |
+|---|---|---|
+| `pyautogui.PAUSE` | 0.3s | Below 0.2s causes double-clicks, missed clicks, focus races |
+| Inter-card flip delay | 0.2s | Unknown if game queues or drops fast clicks. Empirical testing needed. |
+| Hover delay (safe_click) | 0.3s | Verification screenshot is debugging gold. Non-negotiable. |
+| Batch-end delay (Lilis) | 1.5s | Risks reading memory mid-animation. Use `monitor.wait_for()` instead. |
+
+---
+
+## Memory Reader: Current Status
+
+### Reliable (trust as-is)
+- True role, disguise, alignment, card state, flip detection
+- Multi-village (native name fix confirmed)
+- Thread safety (GIL-enforced, copy-on-write)
+- killed_hidden timing (flag set immediately, 2s min_delay covers animation)
+- Execution detection (uses card state, not Score.killedEvils)
+
+### Mostly Reliable (use with cross-checks)
+- Clue parsing: ~90% of roles parse correctly
+- Connection lifecycle: smooth between villages, handles crashes
+- Process attachment: first-match PID (fails silently with multiple instances)
+
+### Fragile (fix before trusting as primary)
+- **No version detection**: offsets hardcoded, game update silently breaks everything
+- **No offset validation**: garbage reads produce wrong data without errors
+- **No sanity checks**: positions could be negative, alignments could be garbage
+
+### Required Before Primary Use
+1. Add GameAssembly.dll version fingerprint (PE timestamp or build hash)
+2. Add sanity checks: if positions are garbage or all alignments None, error out
+3. Add multiple-instance guard: error if >1 Demon Bluff process found
+4. Keep screenshot cross-checks until version detection is proven
+
+### Missing Offsets (block full autonomy)
+- **HP value**: blocks damage tracking. Workaround: infer from Score.killedEvils delta.
+- **Game phase enum**: blocks game-over detection. Workaround: all evil Dead = win, HP <= 0 = loss.
+- **nv/no board counts**: blocks eliminating deck screenshot. Workaround: screenshot header parse.
+
+---
+
+## Self-Improvement Pipeline
+
+### Build Order (by feasibility and value)
+
+#### Phase 1: Post-Game Decision Analysis (READY, ~200 LOC)
+Replay each completed game with ground truth, annotate each decision:
+- Re-run solver at each step via existing `replay_game()` infrastructure
+- Compare solver recommendation against action actually taken
+- Classify each wrong decision: missing_constraint, bad_heuristic, probabilistic_loss, data_entry_error
+- Output: `decision_analysis/{case_name}.json`
+
+Data available: 169 v2 test cases, full replay in 72 seconds.
+
+#### Phase 2: Bug Fix Impact Measurement (READY, ~100 LOC)
+- Run full v2 test suite, record baseline (72 seconds)
+- Apply solver fix
+- Re-run test suite, measure delta
+- Track: which cases changed behavior, did win rate improve?
+- Output: `impact_{fix_name}.json`
+
+#### Phase 3: Cross-Game Failure Pattern Detection (READY, ~150 LOC)
+- Group decisions by {action_type, role_combo, hp_remaining}
+- Find recurring failure combos (e.g., "Poet+Lilis breaks validator X")
+- Flag after 2+ occurrences
+- Output: `failure_report` command showing top 20 patterns
+
+#### Phase 4: Confidence Calibration (NEEDS_WORK, ~250 LOC)
+- Track solver confidence vs actual outcomes across games
+- Build calibration curves: when solver says 80% confident, is it right 80% of the time?
+- Identify over/under-confident ranges for strategy threshold tuning
+- Minimum viable: ~1,700 data points from 169 cases x ~10 decisions each
+
+#### SKIP: Impact-Based Prioritization
+Requires causal inference (counterfactual game tree branching) that's impractical.
+Simpler alternative: rank by `frequency x HP_cost` from failure patterns.
+
+---
+
+## Error Handling & Recovery
+
+### Tier 1: Auto-recoverable (no pause)
+- Template not found: retry 3x with 0.5s delay, fresh screenshot each
+- Click didn't register (card still Hidden): re-click position
+- Memory reader returns None board: reconnect via MemoryMonitor
+- Solver cache miss: solve fresh
+
+### Tier 2: Degraded but continuing (log warning)
+- Single clue fails to parse: enter as `no_info`, solver loses one constraint
+- Template confidence < 0.8: log warning, proceed
+- Wrong execution on definite evil: log loudly, continue if HP permits
+
+### Tier 3: NEEDS_HUMAN (pause the loop)
+- 0 surviving scenarios: solver bug, must fix
+- HP depleted: game lost, transition to POST_GAME
+- All remaining positions are Bombardier candidates: too risky
+- Knight immunity on definite-evil target: solver bug
+- Game process not found: game crashed
+
+### Tier 4: Fatal (abort the run)
+- Memory reader can't open process after 5 retries
+- Rust solver binary not found
+- Regression test failures after game_over
+- 3 consecutive game failures (likely systemic issue)
+
+### Multi-Game Error Strategy
+- Each game wrapped in try/except
+- On unrecoverable error: save session state, log error, attempt next game
+- Track consecutive failures: abort after 3
+- Disk space check before each game: abort if < 100MB free
+
+---
+
+## Implementation Roadmap
+
+### Week 1: Safe Speed + Critical Fixes
+- [ ] Switch to in-process calls (fix session lock to per-command, fix pyautogui.PAUSE import)
+- [ ] Reduce safe delays (post-click 0.3->0.15, focus 0.2->0.05)
+- [ ] Poll interval 0.5->0.2
+- [ ] Fix all 11 critical issues listed above
+- [ ] Add `full_reset()` to GameSession
+- [ ] Make `_verify_flips` return structured result
+- [ ] Auto-deduct HP in night phase
+- [ ] Add GameAssembly.dll version fingerprint to memory reader
+
+### Week 2: State Machine Extensions
+- [ ] Add REVEAL phase (with click-safety protocol)
+- [ ] Add ABILITY_USE phase (with multi-step support for Jester/Druid/FT)
+- [ ] Add NIGHT_RESOLVE phase (auto-detect kills, auto-deduct HP)
+- [ ] Make all dispatch commands return structured results (not just print)
+- [ ] Handle Witch+Lilis interaction (remove killed from blocked_positions)
+- [ ] Track Lilis batch index explicitly
+
+### Week 3: Full Autonomous Loop
+- [ ] Add MENU_NAV, DECK_READ, SESSION_INIT, POST_GAME phases
+- [ ] Add `python game_loop.py auto [--games N] [--risk conservative|moderate|aggressive]`
+- [ ] BatchGameRunner with per-game isolation protocol
+- [ ] Screenshot cleanup, disk space checks
+- [ ] Error categorization (recoverable vs fatal)
+- [ ] Skip per-game cargo test in batch mode
+
+### Week 4: Self-Improvement Pipeline
+- [ ] Post-game decision analyzer (extend replay infrastructure)
+- [ ] Bug fix impact measurement (before/after test suite diffs)
+- [ ] Cross-game failure pattern detection
+- [ ] `decisions <game>`, `failure_report`, `work_items` commands
+
+### Ongoing: Memory Reader Gaps
+- [ ] Find HP offset (IL2CPP GameData or Gameplay class)
+- [ ] Find game phase enum offset
+- [ ] Find nv/no board count offsets (eliminate last deck screenshot)
+- [ ] Improve clue parsing success rate (target 95%+)
+
+---
+
+## Performance Estimates (Revised)
+
+| Phase | Time/Game | Games/Hour | Human Interventions | Bottleneck |
+|-------|-----------|------------|---------------------|------------|
+| Current | 3-5 min | 12-20 | 5-10/game | Claude thinking + typing |
+| After Week 1 | 2-3 min | 20-30 | 3-5/game | Sleep delays + subprocess |
+| After Week 2 | 1-2 min | 30-60 | 1-2/game | Unparseable clues + risk decisions |
+| After Week 3 | 30-60 sec | 60-120 | 0-1/game | Game animations only |
+| After Week 4 | 30-60 sec | 60-120 | 0/game (auto-diagnose) | Game animations only |
+
+The 5-10x speedup comes primarily from eliminating Claude-as-orchestrator (Week 3), not from reducing sleep delays (Week 1). Week 1 gets a safe 1.5-2x; Week 3 gets the full multiplier.
+
+---
+
+## Risk Tolerance Configuration
+
+```
+--risk conservative   Only auto-execute definite evil (default for data collection)
+--risk moderate       Auto-execute if confidence >= 65% AND HP >= 2x wrong_exec_cost
+--risk aggressive     Auto-execute if confidence >= 50% (maximum data collection speed)
+```
+
+Default to `conservative` for batch data collection. Switch to `moderate` when optimizing win rate.
+
+---
+
+## What Always Stays Manual (irreducible)
+- 0-scenario diagnosis and solver bug fixing (requires human judgment)
+- Loss analysis (understanding why we lost)
+- Solver code changes (fixing validators, adding constraints)
+- CLAUDE.md updates (documenting new learnings)
+- Commit and push decisions
