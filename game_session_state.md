@@ -19749,3 +19749,69 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect, Druid found Doppelganger, both Slayer abilities failed (both evil fakes), lookahead forced win
 
+
+---
+
+# New Game — 2026-04-10 11:56:24
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Medium, Knitter, Bard, Hunter, Empress
+- Outcasts: Doppelganger, Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [11:57:45] Revealed #1 Bombardier
+Info: {}
+
+### [11:57:45] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [11:57:45] Revealed #3 Bard
+Info: {'corruption_distance': 4}
+
+### [11:57:45] Revealed #4 Bard
+Info: {'corruption_distance': 3}
+
+### [11:57:45] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:57:45] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [11:57:45] Revealed #7 Medium
+Info: {'good_position': 5, 'good_role': 'Knitter'}
+
+### [11:57:45] Revealed #8 Empress
+Info: {'targets': [1, 3, 5]}
+
+### [11:57:45] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+#### [11:57:51] Solver Output
+Scenarios: 8/448
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#4', '#7', '#8', '#9']
+Evil probabilities: #5=62%, #3=38%
+
+#### [11:57:51] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Pooka', 'Twin_Minion'})
+
+### [11:58:33] Executed #6 -> Pooka (EVIL)
+
+#### [11:58:37] Solver Output
+Scenarios: 5/49
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+
+#### [11:58:37] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Twin_Minion'})
+
+### [11:59:16] Executed #5 -> Twin_Minion (EVIL)
+
+## [11:59:23] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, two 100% confident executions, no abilities needed, corrupted Medium
+
