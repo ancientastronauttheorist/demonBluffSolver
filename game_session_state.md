@@ -18882,3 +18882,105 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. Asc47 complete! Baker chain + duplicate original_role + Enlightened + Oracle narrowed to 1 scenario immediately. Both execs 100% confident.
 
+
+---
+
+# New Game — 2026-04-09 23:31:28
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Bishop, Scout, Architect, Poet, Bard
+- Outcasts: Plague_Doctor, Bombardier, Wretch
+- Minions: Chancellor, Minion
+- Demons: Pooka
+
+### [23:32:11] Revealed #2 Bishop
+Info: {'targets': [1, 4, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [23:32:11] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [23:32:11] Revealed #6 Wretch
+Info: {}
+
+### [23:32:11] Revealed #7 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [23:32:11] Revealed #8 Bard
+Info: {'corruption_distance': 2}
+
+### [23:35:10] Revealed #1 Plague_Doctor
+Info: {}
+
+### [23:35:10] Revealed #4 Bombardier
+Info: {}
+
+### [23:35:10] Revealed #5 Poet
+Info: {'good_position': 9, 'good_role': 'Bombardier', 'copied_role': 'Medium'}
+
+### [23:35:10] Revealed #9 Bombardier
+Info: {}
+
+#### [23:35:23] Solver Output
+Scenarios: 21/1710
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=90%, #6=62%, #9=62%, #8=48%, #5=33%, #7=5%
+
+#### [23:35:23] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 1.805 (adjusted 1.805) | timing x1.00
+
+### [23:36:20] Ability used at #1
+
+#### [23:36:20] Solver Output
+Scenarios: 10/1710
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=70%, #9=30%
+
+#### [23:36:20] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 10 scenarios (roles: {'Chancellor', 'Minion'})
+
+### [23:36:59] Executed #4 -> Minion (EVIL)
+
+#### [23:36:59] Solver Output
+Scenarios: 4/228
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=75%, #9=25%
+
+#### [23:36:59] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [23:37:37] Executed #8 -> Pooka (EVIL)
+
+#### [23:37:38] Solver Output
+Scenarios: 4/32
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#7']
+Evil probabilities: #6=75%, #9=25%
+
+#### [23:37:38] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (75% evil Chancellor, 25% good Wretch).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [23:38:44] Executed #6 -> GOOD (WRONG!)
+
+#### [23:38:44] Solver Output
+Scenarios: 1/22
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [23:38:44] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [23:39:28] Executed #9 -> Chancellor (EVIL)
+
+## [23:39:28] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Memory-reader-first approach! Only 1 verification screenshot. PD clean check + Bishop + Enlightened + Scout narrowed. Wrong exec on Wretch #6 but lookahead guaranteed win.
+

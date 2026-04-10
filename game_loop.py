@@ -963,11 +963,14 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     # --- Guard: active-ability-only roles with unused abilities ---
     # These roles have NO passive speech bubble. If ability hasn't been used,
     # any clue_text/acted_infos is stale from a previous village — ignore it.
+    # Use `uses` count (not `act` flag) because PD's game_start_ability sets
+    # act=True even before the active check ability is used.
     ACTIVE_ONLY_ROLES = {
         'dreamer', 'druid', 'fortune_teller', 'jester', 'judge',
         'slayer', 'plague_doctor',
     }
-    if role_lower in ACTIVE_ONLY_ROLES and not ability_used:
+    uses_count = card.get('uses', 0)
+    if role_lower in ACTIVE_ONLY_ROLES and uses_count == 0:
         return card_no_info(pos, role)
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
@@ -1181,6 +1184,11 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         if 'dizzy' in cl or 'feeling good' in cl:
             dizzy = 'dizzy' in cl
             return CardInfo(pos, "Poet", info_parsed={"dizzy": dizzy, "copied_role": "Confessor"})
+        # Medium pattern: "#N is a real <Role>"
+        m = re.search(r'is\s+a\s+real\s+(\w[\w\s]*)', clue, re.IGNORECASE)
+        if m and targets:
+            good_role = m.group(1).strip()
+            return CardInfo(pos, "Poet", info_parsed={"good_position": targets[0], "good_role": good_role, "copied_role": "Medium"})
         # Baker pattern
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
@@ -1189,11 +1197,13 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
                 claimed = 'original'
             return CardInfo(pos, "Poet", info_parsed={"original_role": claimed, "copied_role": "Baker"})
 
-    # --- Wretch: no info ---
-    if role_lower == 'wretch':
-        return card_no_info(pos, 'Wretch')
+    # --- No-info roles: these roles NEVER have passive speech bubbles ---
+    # Any clue_text is evil fabrication or stale data — ignore it.
+    NO_INFO_ROLES = {'wretch', 'bombardier', 'knight', 'doppelganger'}
+    if role_lower in NO_INFO_ROLES:
+        return card_no_info(pos, role)
 
-    # --- No-info roles (Knight, Bombardier, Slayer pre-ability, etc.) ---
+    # --- Fallback: no clue and no acted_infos = generic no_info ---
     if not clue and not infos:
         return card_no_info(pos, role)
 
