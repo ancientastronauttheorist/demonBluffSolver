@@ -2344,6 +2344,13 @@
       "name": "asc53_v5",
       "notes": "10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner",
       "date": "2026-04-10 17:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc53_v6",
+      "notes": "6HP, Lilis game, night killed Knitter #7, both evils found at 100% confidence",
+      "date": "2026-04-10 18:02"
     }
   ]
 }

@@ -1,0 +1,137 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4,
+        "good_role": "Bombardier"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    8,
+    9
+  ],
+  "confirmed_evil": [
+    8,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Lilis",
+    "9": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Medium",
+      "Alchemist",
+      "Knitter",
+      "Scout",
+      "Enlightened"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Bombardier",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 2,
+  "name": "asc53_v6",
+  "true_evil_positions": {
+    "8": "Lilis",
+    "9": "Chancellor"
+  },
+  "notes": "6HP, Lilis game, night killed Knitter #7, both evils found at 100% confidence"
+}

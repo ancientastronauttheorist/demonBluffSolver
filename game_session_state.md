@@ -22919,3 +22919,65 @@ WARNING: Execution lookahead override -- immediate hit chance is 56%, but all re
 Final HP: 10
 Notes: 10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner
 
+
+---
+
+# New Game — 2026-04-10 17:59:37
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Medium, Alchemist, Knitter, Scout, Enlightened
+- Outcasts: Wretch, Bombardier, Doppelganger
+- Minions: Chancellor
+- Demons: Lilis
+
+### [18:00:20] Revealed #1 Wretch
+Info: {}
+
+### [18:00:20] Revealed #2 Architect
+Info: {'side': 'Equal'}
+
+### [18:00:20] Revealed #3 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [18:00:20] Revealed #4 Bombardier
+Info: {}
+
+### [18:00:56] Revealed #5 Medium
+Info: {'good_position': 4, 'good_role': 'Bombardier'}
+
+### [18:00:56] Revealed #6 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [18:01:04] Revealed #8 Alchemist
+Info: {'cured_count': 1}
+
+### [18:01:04] Revealed #9 Enlightened
+Info: {'direction': 'cw'}
+
+#### [18:01:04] Solver Output
+Scenarios: 10/498
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [18:01:04] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 10 scenarios (roles: {'Chancellor', 'Lilis'})
+
+### [18:02:02] Executed #8 -> Lilis (EVIL)
+
+#### [18:02:03] Solver Output
+Scenarios: 5/54
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [18:02:03] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [18:02:54] Executed #9 -> Chancellor (EVIL)
+
+## [18:02:54] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, night killed Knitter #7, both evils found at 100% confidence
+
