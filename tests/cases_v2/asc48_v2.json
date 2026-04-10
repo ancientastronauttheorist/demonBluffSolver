@@ -1,0 +1,153 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 6
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 6
+      }
+    }
+  ],
+  "executed": [
+    5,
+    6,
+    1,
+    8
+  ],
+  "confirmed_evil": [
+    5,
+    6,
+    8
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Puppet",
+    "6": "Puppeteer",
+    "8": "Pooka"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 3,
+      "target_pos": 5,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    2,
+    4,
+    5,
+    7,
+    8,
+    1,
+    3,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Dreamer",
+      "Fortune_Teller",
+      "Hunter",
+      "Gemcrafter",
+      "Architect",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    1,
+    6,
+    3
+  ],
+  "name": "asc48_v2",
+  "true_evil_positions": {
+    "5": "Puppet",
+    "6": "Puppeteer",
+    "8": "Pooka"
+  },
+  "notes": "5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer"
+}

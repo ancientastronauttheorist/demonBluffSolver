@@ -2064,6 +2064,13 @@
       "name": "asc48_v1",
       "notes": "5HP. Memory-reader-first approach! Only 1 verification screenshot. PD clean check + Bishop + Enlightened + Scout narrowed. Wrong exec on Wretch #6 but lookahead guaranteed win.",
       "date": "2026-04-09 23:39"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc48_v2",
+      "notes": "5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer",
+      "date": "2026-04-10 00:16"
     }
   ]
 }

@@ -18984,3 +18984,155 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Chancellor'})
 Final HP: 5
 Notes: 5HP. Memory-reader-first approach! Only 1 verification screenshot. PD clean check + Bishop + Enlightened + Scout narrowed. Wrong exec on Wretch #6 but lookahead guaranteed win.
 
+
+---
+
+# New Game — 2026-04-09 23:56:00
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Knitter, Hunter, Enlightened, Architect
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+#### [23:58:33] Claude Reasoning
+
+
+#### [23:58:37] Solver Output
+Scenarios: 7/7
+Evil probabilities: #1=14%, #2=14%, #3=14%, #4=14%, #5=14%, #6=14%, #7=14%
+
+#### [23:58:37] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 14% evil, 2.807 bits (7 outcomes)
+
+
+---
+
+# New Game — 2026-04-10 00:05:51
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Dreamer, Fortune_Teller, Hunter, Gemcrafter, Architect, Slayer
+- Outcasts: Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+
+---
+
+# New Game — 2026-04-10 00:06:47
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Dreamer, Fortune_Teller, Hunter, Gemcrafter, Architect, Slayer
+- Outcasts: Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [00:09:34] Revealed #2 Hunter
+Info: {'distance': 2}
+
+### [00:09:34] Revealed #4 Gemcrafter
+Info: {'good_position': 6}
+
+### [00:09:34] Revealed #5 Architect
+Info: {'side': 'Left'}
+
+### [00:09:34] Revealed #7 Enlightened
+Info: {'direction': 'CCW'}
+
+### [00:09:34] Revealed #8 Gemcrafter
+Info: {'good_position': 6}
+
+### [00:10:12] Revealed #1 Dreamer
+Info: {}
+
+### [00:10:14] Revealed #3 Slayer
+Info: {}
+
+### [00:11:11] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [00:11:41] Solver Output
+Scenarios: 12/480
+Definite good: ['#2']
+Evil probabilities: #5=67%, #6=58%, #3=50%, #4=42%, #7=33%, #1=25%, #8=25%
+
+#### [00:11:41] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.689 (adjusted 2.353) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [00:12:42] Revealed #1 Dreamer
+Info: {'target': 5, 'evil_role': 'Puppeteer'}
+
+### [00:12:44] Ability used at #1
+
+#### [00:12:47] Solver Output
+Scenarios: 8/480
+Definite good: ['#2']
+Evil probabilities: #6=62%, #5=50%, #7=50%, #1=38%, #3=38%, #8=38%, #4=25%
+
+#### [00:12:47] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#2', '#5']
+Reason: Entropy 0.954 (adjusted 0.895) | follow-up bonus 0.750 | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [00:13:29] Revealed #6 Fortune Teller
+Info: {'targets': [2, 5], 'has_evil': False}
+
+### [00:13:33] Ability used at #6
+
+#### [00:13:33] Solver Output
+Scenarios: 5/480
+Definite good: ['#2']
+Evil probabilities: #5=60%, #6=60%, #8=60%, #1=40%, #7=40%, #3=20%, #4=20%
+
+#### [00:13:33] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#5']
+Reason: Target #5 is 60% evil (adjusted 0.60)
+
+### [00:14:33] Ability used at #3
+
+#### [00:14:33] Solver Output
+Scenarios: 2/60
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#3', '#4', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [00:14:33] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [00:15:16] Executed #6 -> Puppeteer (EVIL)
+
+#### [00:15:19] Solver Output
+Scenarios: 2/30
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#3', '#4', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [00:15:19] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Dreamer (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:16:00] Executed #1 -> GOOD (WRONG!)
+
+#### [00:16:09] Solver Output
+Scenarios: 1/25
+Definite evil: ['#5', '#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#7']
+
+#### [00:16:09] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [00:16:53] Executed #8 -> Pooka (EVIL)
+
+## [00:16:56] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer
+
