@@ -19953,3 +19953,106 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: 5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used
 
+
+---
+
+# New Game — 2026-04-10 12:12:26
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Slayer, Medium, Architect, Judge, Baker
+- Outcasts: Bombardier, Wretch
+- Minions: Shaman
+- Demons: Baa
+
+### [12:13:21] Revealed #1 Poet
+Info: {'distance': 2, 'copied_role': 'Hunter'}
+
+### [12:13:21] Revealed #2 Baker
+Info: {'original_role': 'Judge'}
+
+### [12:13:21] Revealed #3 Medium
+Info: {'good_position': 1, 'good_role': 'Poet'}
+
+### [12:13:21] Revealed #4 Wretch
+Info: {}
+
+### [12:13:21] Revealed #5 Slayer
+Info: {}
+
+### [12:13:21] Revealed #6 Judge
+Info: {}
+
+### [12:13:43] Revealed #7 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 1}
+
+### [12:14:14] Revealed #7 Poet
+Info: {}
+
+#### [12:14:20] Solver Output
+Scenarios: 4/42
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#7']
+Evil probabilities: #4=50%, #5=50%
+
+#### [12:14:20] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Shaman', 'Baa'})
+
+### [12:16:11] Revealed #1 Poet
+Info: {'evil_role': 'Baa', 'distance': 2, 'copied_role': 'Scout'}
+
+#### [12:16:16] Solver Output
+Scenarios: 7/42
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #2=71%, #4=57%, #6=57%, #5=14%
+
+#### [12:16:16] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#3']
+Reason: Expected posterior 3.6 scenarios (adjusted 3.6, info gain 0.971 bits) | timing x1.00
+
+### [12:16:54] Revealed #6 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [12:17:00] Ability used at #6
+
+#### [12:17:00] Solver Output
+Scenarios: 3/42
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#6', '#7']
+Evil probabilities: #4=67%, #5=33%
+
+#### [12:17:00] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 3 scenarios (roles: {'Shaman', 'Baa'})
+
+### [12:17:36] Executed #2 -> Baa (EVIL)
+
+#### [12:17:37] Solver Output
+Scenarios: 2/6
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%
+
+#### [12:17:37] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#4']
+Reason: Target #4 is 50% evil (adjusted 0.25)
+WARNING: Wretch kill risk: 50% -- costs 5 HP
+
+### [12:18:33] Ability used at #5
+
+#### [12:18:33] Solver Output
+Scenarios: 1/6
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7']
+
+#### [12:18:33] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [12:19:13] Executed #5 -> Shaman (EVIL)
+
+## [12:19:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, caught auto_card misparse (Poet Scout->Hunter), Judge confirmed Medium truthful, Slayer fail narrowed to Shaman
+

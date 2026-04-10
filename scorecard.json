@@ -2141,6 +2141,13 @@
       "name": "asc49_v5",
       "notes": "5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used",
       "date": "2026-04-10 12:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v6",
+      "notes": "10HP perfect, caught auto_card misparse (Poet Scout->Hunter), Judge confirmed Medium truthful, Slayer fail narrowed to Shaman",
+      "date": "2026-04-10 12:19"
     }
   ]
 }
