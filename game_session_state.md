@@ -22826,3 +22826,96 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP, Shaman+Minion+Pooka, PD revealed Minion at #3, wrong exec on Alchemist #7 (lookahead 25%), recovered
 
+
+---
+
+# New Game — 2026-04-10 17:53:59
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Bard, Judge, Knight, Enlightened
+- Outcasts: Drunk, Wretch, Doppelganger
+- Minions: Poisoner
+- Demons: Baa
+
+### [17:54:14] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [17:54:14] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [17:54:14] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+### [17:54:14] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [17:54:14] Revealed #7 Knight
+Info: {}
+
+### [17:54:14] Revealed #8 Wretch
+Info: {}
+
+### [17:54:24] Revealed #3 Judge
+Info: {}
+
+### [17:54:25] Revealed #4 Enlightened
+Info: {'direction': 'equidistant'}
+
+#### [17:54:25] Solver Output
+Scenarios: 79/2894
+Definite good: ['#2', '#6']
+Evil probabilities: #1=57%, #4=39%, #5=38%, #3=25%, #7=20%, #8=20%
+
+#### [17:54:25] Recommendation
+Action: **EXECUTE** #7
+Reason: Knight check: #7 is 20% evil, 18% corruption risk. Expected HP cost: 1.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 18% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [17:55:16] Execution Blocked
+#7 Knight immunity — confirmed good, no HP loss
+
+#### [17:55:16] Solver Output
+Scenarios: 63/2320
+Definite good: ['#2', '#6', '#7']
+Evil probabilities: #1=68%, #5=41%, #4=33%, #3=32%, #8=25%
+
+#### [17:55:16] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#7']
+Reason: Expected posterior 40.6 scenarios (adjusted 46.3, info gain 0.443 bits) | timing x1.00
+WARNING: Corruption risk: 29% -- corrupted Judge results are unreliable
+
+### [17:56:08] Revealed #3 Judge
+Info: {'target': 7, 'is_lying': True}
+
+### [17:56:08] Ability used at #3
+
+#### [17:56:08] Solver Output
+Scenarios: 42/2320
+Definite good: ['#2', '#6', '#7']
+Evil probabilities: #1=71%, #4=50%, #3=40%, #5=19%, #8=19%
+
+#### [17:56:08] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (64% evil Baa, 14% good Drunk (corrupted), 10% good Bard (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 71%, but all reveal branches still lead to a forced win.
+
+### [17:56:57] Executed #1 -> Baa (EVIL)
+
+#### [17:56:57] Solver Output
+Scenarios: 27/314
+Definite evil: ['#1']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #4=56%, #5=30%, #3=15%
+
+#### [17:56:57] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (56% evil Poisoner, 30% good Enlightened (corrupted), 15% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 56%, but all reveal branches still lead to a forced win.
+
+### [17:57:50] Executed #4 -> Poisoner (EVIL)
+
+## [17:57:50] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner
+

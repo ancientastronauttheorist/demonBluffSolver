@@ -1,0 +1,135 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 7,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "equidistant"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    1,
+    4
+  ],
+  "confirmed_evil": [
+    1,
+    4
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Baa",
+    "4": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Bard",
+      "Judge",
+      "Knight",
+      "Enlightened"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc53_v5",
+  "true_evil_positions": {
+    "1": "Baa",
+    "4": "Poisoner"
+  },
+  "notes": "10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner"
+}

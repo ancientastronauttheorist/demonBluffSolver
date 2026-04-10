@@ -2337,6 +2337,13 @@
       "name": "asc53_v4",
       "notes": "5HP, Shaman+Minion+Pooka, PD revealed Minion at #3, wrong exec on Alchemist #7 (lookahead 25%), recovered",
       "date": "2026-04-10 17:52"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v5",
+      "notes": "10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner",
+      "date": "2026-04-10 17:57"
     }
   ]
 }
