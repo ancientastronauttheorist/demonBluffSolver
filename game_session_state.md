@@ -23558,3 +23558,80 @@ Reason: #2 is evil in ALL 4 scenarios (roles: {'Chancellor'})
 Final HP: 10
 Notes: Asc54 v6 perfect 10HP, two apparent Bombardiers (#2 evil disguise, #3 real)
 
+
+---
+
+# New Game — 2026-04-10 18:50:35
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Jester, Poet, Baker, Empress, Confessor, Medium
+- Outcasts: Doppelganger, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:52:05] Revealed #2 Empress
+Info: {'targets': [1, 4, 6]}
+
+### [18:52:05] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [18:52:05] Revealed #4 Bombardier
+Info: {}
+
+### [18:52:05] Revealed #5 Medium
+Info: {'good_position': 6, 'good_role': 'Baker'}
+
+### [18:52:05] Revealed #6 Baker
+Info: {'original_role': 'Confessor'}
+
+### [18:52:05] Revealed #7 Scout
+Info: {'evil_role': 'Pooka', 'distance': 2}
+
+### [18:52:38] Revealed #1 Jester
+Info: {}
+
+### [18:52:38] Revealed #8 Jester
+Info: {}
+
+#### [18:52:43] Solver Output
+Scenarios: 28/454
+Definite good: ['#1', '#3']
+Evil probabilities: #7=79%, #4=36%, #6=36%, #2=29%, #5=14%, #8=7%
+
+#### [18:52:43] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#3', '#4', '#7']
+Reason: Expected posterior 10.0 scenarios (adjusted 10.0, info gain 1.485 bits) | timing x1.00
+
+### [18:53:12] Revealed #1 Jester
+Info: {'targets': [3, 4, 7], 'evil_count': 1}
+
+### [18:53:12] Ability used at #1
+
+#### [18:53:12] Solver Output
+Scenarios: 12/454
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#4', '#5', '#8']
+Evil probabilities: #2=67%, #6=33%
+
+#### [18:53:12] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 12 scenarios (roles: {'Pooka', 'Chancellor'})
+
+### [18:53:41] Executed #7 -> Chancellor (EVIL)
+
+#### [18:53:41] Solver Output
+Scenarios: 4/62
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [18:53:41] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [18:54:12] Executed #6 -> Pooka (EVIL)
+
+## [18:54:13] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v7 perfect 10HP, ASC54 COMPLETE 7/7, 16-win streak
+

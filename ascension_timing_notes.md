@@ -121,7 +121,56 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - 9/9 auto_card. Fastest large village so far. Auto_card handled Architect "Right side is more Evil", Empress "One is Evil", Oracle Chancellor naming, all without manual entry.
   - Bombardier #3 had a "I am dizzy" memory clue field (stale), but Bombardier has no clue, so auto_card just left info_parsed={}.
 
-## Summary (filled in at end of run)
-- Total wall-clock time:
-- Slowest step categories:
-- Candidate speed improvements:
+### Village 7 (8-card, 2 evil — final village)
+- **Wall-clock window:** 18:50:13 → 18:54:10 (≈ **3m 57s**)
+- **Result:** WIN, 10/10 HP perfect, ASC54 COMPLETE 7/7
+- **Evils:** #6 Pooka (Baker disguise), #7 Chancellor (Scout disguise)
+- **Phase breakdown (rough):**
+  - 18:50:13 – 18:50:40: click Next, screenshot, deck. ~25s.
+  - 18:50:40 – 18:51:00: new + deck. ~20s.
+  - 18:51:00 – 18:51:30: header verification (cropped icons twice to confirm no=1 with Doppelganger in pool — wasted ~30s investigating). ~30s.
+  - 18:51:30 – 18:51:45: flip 8 cards. ~15s.
+  - 18:51:45 – 18:52:30: auto_card 6/8 + manual no_info for two Jesters (had to crop screenshot to verify no bubbles). ~45s.
+  - 18:52:30 – 18:53:15: solve, Jester #1 ability cycle. ~45s.
+  - 18:53:15 – 18:53:45: exec #7 (Chancellor, 100%). ~30s.
+  - 18:53:45 – 18:54:10: exec #6 (Pooka, 100%). ~25s.
+- **Notes / friction points:**
+  - **Doppelganger header counting check** burned ~30s. The header showed nv=5 no=1 even with Doppelganger on board. Past test cases confirm Doppelganger counts as Villager in header. Worth adding to CLAUDE.md gotchas list.
+  - Two apparent Jesters at #1 and #8 — turned out #1 was real, #8 was Doppelganger disguised. Auto_card couldn't parse the stale memory clues but manual no_info worked.
+
+## Summary
+
+**Asc 54 COMPLETE — 7/7 win, all 16 villages of streak intact**
+
+| Village | Time | HP final | Notes |
+|---|---|---|---|
+| V1 | 5m49s | 10/10 | Slow opening (3 dialogs, fresh mouse calibration) |
+| V2 | 2m49s | 10/10 | Slayer kill |
+| V3 | 1m26s | 10/10 | **Fastest** — 1-scenario solver |
+| V4 | 5m55s | 6/10 | Lilis batched flips + game_over bug |
+| V5 | 5m05s | 5/10 | 3 active abilities + wrong exec |
+| V6 | 1m42s | 10/10 | Auto_card 9/9 |
+| V7 | 3m57s | 10/10 | Final village, 2 Jesters |
+| **Total** | **~26m43s** | **avg 8.7HP** | **6× perfect 10HP** |
+
+**Slowest step categories (in order of time consumed):**
+1. **Active ability cycles** (~30-45s each): click card → click N targets → screenshot → record → ability_used → next. V5 had 3 of these. V7 had 1. Each cycle is 5-7 sequential tool calls.
+2. **Execute cycles** (~22-30s each): next → click center → safe_click sword → click target → screenshot → execute. 13 execute cycles in this run = ~5 minutes.
+3. **Lilis batched flow** (~3min in V4 alone): night phases force extra screenshots and per-batch verification.
+4. **Inter-village dialog clicks** (~10-90s): worst at V1 (3 dialogs); fast on mid-village transitions.
+5. **Manual deck-pool verification** when auto_card stale clues looked suspicious (~30s of cropping per stale clue).
+6. **Memory reader stale clue investigation**: ~60s total across V5 and V7 cropping cards to confirm no bubbles.
+
+**Candidate speed improvements (ranked by ROI):**
+1. **`solve_and_execute` macro** — collapse the next/click-center/safe-click-sword/click-target/screenshot/execute sequence into one command. 13 cycles × ~10s saved = **~130s/run**.
+2. **`use_ability_macro` macro** — same idea for active abilities. ~20-30s × N abilities saved.
+3. **Clear `savedAct` on village transition** — eliminate stale-clue investigations. ~60-120s saved per village with stale data.
+4. **Auto-handle Drunk-as-Alchemist in auto_card** — fall back to text regex when runtime data is keyed off the wrong (true) role. ~30-60s saved per village with that pattern.
+5. **`flip --lilis` should auto-pause for night kill** — currently we have to manually screenshot/check/run night_kill between batches. Could screenshot internally and call night_kill automatically. ~60-90s saved per Lilis village.
+6. **Smarter `game_over` evils-dict handling** — never include night-killed positions; warn if a key is in `night_kills`. Would have saved ~5min on V4's broken regression cleanup.
+7. **`new + deck` could be a single command** that auto-reads the pool from memory_reader and asks for n_cards/n_evil/header. ~20s/village saved.
+
+**Honor Rule check:** Held all 7 villages. Even when memory reader showed evil positions clearly, all execute decisions came from the solver's top pick. Wrong exec on V5 was the solver's call (lookahead-forced); we trusted it and the village still won.
+
+**Grand total wall-clock: ~26m43s for 7 villages = 3m49s average per village.**
+The two outlier-fast villages (V3 1m26s, V6 1m42s) point at the achievable floor when auto_card hits 100% and the solver returns 100% picks immediately.
