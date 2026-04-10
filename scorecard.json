@@ -2267,6 +2267,13 @@
       "name": "asc52_v2",
       "notes": "10HP perfect, all 3 evils at 100% confidence, Slayer couldn't kill #9 (Pooka disguised as Slayer)",
       "date": "2026-04-10 15:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v3",
+      "notes": "10HP perfect, Slayer killed Baa, both PDs checked clean, solved to 1 scenario",
+      "date": "2026-04-10 16:01"
     }
   ]
 }

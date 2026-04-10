@@ -21551,3 +21551,100 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect, all 3 evils at 100% confidence, Slayer couldn't kill #9 (Pooka disguised as Slayer)
 
+
+---
+
+# New Game — 2026-04-10 15:57:54
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Empress, Bard, Slayer, Lover
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [15:58:06] Revealed #1 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:58:06] Revealed #3 Empress
+Info: {'targets': [4, 5, 7]}
+
+### [15:58:06] Revealed #6 Bard
+Info: {'corruption_distance': 3}
+
+### [15:58:23] Revealed #2 Plague_Doctor
+Info: {}
+
+### [15:58:23] Revealed #4 Slayer
+Info: {}
+
+### [15:58:23] Revealed #5 Plague_Doctor
+Info: {}
+
+### [15:58:23] Revealed #7 Witness
+Info: {'affected_position': 0}
+
+#### [15:58:31] Solver Output
+Scenarios: 8/182
+Definite good: ['#3', '#7']
+Evil probabilities: #5=75%, #6=50%, #1=25%, #2=25%, #4=25%
+
+#### [15:58:31] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.500 (adjusted 1.500) | timing x1.00
+
+### [15:59:23] Ability used at #2
+
+#### [15:59:23] Solver Output
+Scenarios: 6/182
+Definite good: ['#3', '#4', '#7']
+Evil probabilities: #5=67%, #6=67%, #1=33%, #2=33%
+
+#### [15:59:23] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [16:00:03] Ability used at #5
+
+#### [16:00:03] Solver Output
+Scenarios: 4/182
+Definite good: ['#3', '#4', '#7']
+Evil probabilities: #1=50%, #2=50%, #5=50%, #6=50%
+
+#### [16:00:03] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#1']
+Reason: Target #1 is 50% evil (adjusted 0.25)
+WARNING: Corruption risk: 50% -- Slayer ability disabled if corrupted
+
+### [16:00:39] Revealed #4 Slayer
+Info: {}
+
+### [16:00:39] Ability used at #4
+
+#### [16:00:40] Solver Output
+Scenarios: 4/182
+Definite good: ['#3', '#4', '#7']
+Evil probabilities: #1=50%, #2=50%, #5=50%, #6=50%
+
+#### [16:00:40] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Lover, 25% evil Baa, 25% evil Twin_Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:00:53] Executed #1 -> Baa (EVIL)
+
+#### [16:00:53] Solver Output
+Scenarios: 1/26
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+
+#### [16:00:53] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [16:01:34] Executed #2 -> Twin_Minion (EVIL)
+
+## [16:01:35] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Slayer killed Baa, both PDs checked clean, solved to 1 scenario
+
