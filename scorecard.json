@@ -1987,6 +1987,13 @@
       "name": "asc46_v4",
       "notes": "Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field.",
       "date": "2026-04-09 22:04"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v5",
+      "notes": "Perfect 10HP. Poet-Bishop + Scout + Lover + Gemcrafter narrowed to 2 scenarios, both had #1 evil.",
+      "date": "2026-04-09 22:08"
     }
   ]
 }

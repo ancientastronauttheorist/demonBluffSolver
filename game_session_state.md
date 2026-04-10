@@ -17915,3 +17915,65 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field.
 
+
+---
+
+# New Game — 2026-04-09 22:05:50
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Scout, Lover, Knight, Slayer, Poet
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Minion
+- Demons: Baa
+
+### [22:06:16] Revealed #3 Wretch
+Info: {}
+
+### [22:06:16] Revealed #4 Gemcrafter
+Info: {'good_position': 8}
+
+### [22:06:16] Revealed #5 Slayer
+Info: {}
+
+### [22:06:16] Revealed #6 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [22:06:16] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [22:06:45] Revealed #1 Poet
+Info: {'targets': [5, 7, 8], 'types': ['Villager', 'Outcast', 'Minion'], 'copied_role': 'Bishop'}
+
+### [22:06:45] Revealed #2 Slayer
+Info: {}
+
+### [22:06:45] Revealed #8 Knight
+Info: {}
+
+#### [22:06:52] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [22:06:52] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Baa', 'Minion'})
+
+### [22:07:30] Executed #1 -> Baa (EVIL)
+
+#### [22:07:31] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [22:07:31] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [22:08:15] Executed #2 -> Minion (EVIL)
+
+## [22:08:15] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Poet-Bishop + Scout + Lover + Gemcrafter narrowed to 2 scenarios, both had #1 evil.
+
