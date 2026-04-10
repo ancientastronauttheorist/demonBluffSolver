@@ -25,6 +25,54 @@ _daemon_lock = threading.Lock()
 _DAEMON_TIMEOUT = 10  # seconds per solve
 
 
+class SolverCache:
+    """Cache solver results keyed on full game state (minus HP/cost).
+
+    Uses state.to_dict() with HP and wrong_exec_cost removed as the cache key.
+    This automatically includes ALL solver-relevant fields. The full JSON string
+    is used as the key (zero collision risk).
+    """
+
+    def __init__(self):
+        self._cache: dict[str, object] = {}
+        self._hits = 0
+        self._misses = 0
+
+    def _key(self, state_dict: dict, summary_only: bool) -> str:
+        d = dict(state_dict)
+        d.pop('hp', None)
+        d.pop('wrong_exec_cost', None)
+        d['__summary_only'] = summary_only
+        return json.dumps(d, sort_keys=True)
+
+    def get(self, state_dict: dict, summary_only: bool):
+        key = self._key(state_dict, summary_only)
+        result = self._cache.get(key)
+        if result is not None:
+            self._hits += 1
+        else:
+            self._misses += 1
+        return result
+
+    def put(self, state_dict: dict, summary_only: bool, result):
+        key = self._key(state_dict, summary_only)
+        self._cache[key] = result
+
+    def clear(self):
+        self._cache.clear()
+        self._hits = 0
+        self._misses = 0
+
+    @property
+    def stats(self) -> str:
+        total = self._hits + self._misses
+        rate = f"{self._hits/total:.0%}" if total > 0 else "n/a"
+        return f"cache: {self._hits} hits / {self._misses} misses ({rate})"
+
+
+_solver_cache = SolverCache()
+
+
 def _find_binary() -> Optional[str]:
     global _RUST_BINARY
     if _RUST_BINARY is not None:
@@ -290,6 +338,8 @@ def rust_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
 def rust_solve_to_objects(state, summary_only: bool = False):
     """Call the Rust solver and return Python SolverResult + Scenario objects.
 
+    Uses SolverCache to avoid redundant solves when state hasn't changed.
+
     Args:
         state: A GameState object (has .to_dict())
         summary_only: If True, surviving_scenarios will be empty
@@ -299,7 +349,14 @@ def rust_solve_to_objects(state, summary_only: bool = False):
     """
     from solver import Scenario, SolverResult
 
-    data = rust_solve(state.to_dict(), summary_only=summary_only)
+    state_dict = state.to_dict()
+
+    # Check cache first
+    cached = _solver_cache.get(state_dict, summary_only)
+    if cached is not None:
+        return cached
+
+    data = rust_solve(state_dict, summary_only=summary_only)
     if data is None:
         return None
 
@@ -316,7 +373,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             chancellor_conversion=s.get("chancellor_conversion"),
         ))
 
-    return SolverResult(
+    result_obj = SolverResult(
         definite_evil=list(data.get("definite_evil", [])),
         definite_good=list(data.get("definite_good", [])),
         bombardier_positions=list(data.get("bombardier_positions", [])),
@@ -325,6 +382,21 @@ def rust_solve_to_objects(state, summary_only: bool = False):
         surviving_scenarios=scenarios,
         reasoning=data.get("reasoning", []),
     )
+
+    # Cache the result
+    _solver_cache.put(state_dict, summary_only, result_obj)
+
+    return result_obj
+
+
+def clear_solver_cache():
+    """Clear the solver cache (call on new game)."""
+    _solver_cache.clear()
+
+
+def solver_cache_stats() -> str:
+    """Get cache hit/miss stats."""
+    return _solver_cache.stats
 
 
 def _reset_binary():

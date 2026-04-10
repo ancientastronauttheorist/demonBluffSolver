@@ -8,10 +8,12 @@ Usage:
     python memory_reader.py --watch  # continuously watch for changes
 """
 
+import atexit
 import ctypes
 import struct
 import sys
 import os
+import threading
 import time
 import argparse
 from ctypes import wintypes
@@ -535,6 +537,254 @@ class MemoryReader:
             list_ptr = self._read_ptr(gameplay + offset)
             deck[faction] = self._read_character_data_list(list_ptr)
         return deck
+
+
+class MemoryMonitor(threading.Thread):
+    """Background thread that polls game memory and fires callbacks on state changes.
+
+    Design decisions:
+    - Owns a PRIVATE MemoryReader instance (never shared with main thread)
+    - Copy-on-write: builds board OUTSIDE lock, swaps reference UNDER lock
+    - Fires callbacks OUTSIDE lock to prevent deadlock
+    - Each callback wrapped in try/except to prevent thread death
+    - Error propagation: _error field checked by get_board()/wait_for()
+    - pyautogui must ONLY be called from the main thread, never from callbacks
+
+    Events:
+        card_flipped: (position, old_state, new_state) — Hidden->Alive
+        card_died: (position, old_state, new_state) — Alive->Dead or killed_hidden
+        status_changed: (position, old_statuses, new_statuses)
+        game_connected: (board) — read_board() returns non-None after None
+        game_disconnected: () — read_board() returns None after non-None
+    """
+
+    def __init__(self, poll_interval=0.5, pid=None):
+        super().__init__(daemon=True)
+        self._poll_interval = poll_interval
+        self._pid = pid
+        self._callbacks: dict[str, list] = {}
+        self._lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self._board: list[dict] | None = None
+        self._last_board: list[dict] | None = None
+        self._error: Exception | None = None
+        self._reader: MemoryReader | None = None
+        self._consecutive_failures = 0
+        self._MAX_FAILURES_BEFORE_RECONNECT = 3
+
+        # Guard against free-threaded Python
+        if hasattr(sys, '_is_gil_enabled') and not sys._is_gil_enabled():
+            raise RuntimeError(
+                "Free-threaded Python detected. MemoryMonitor requires GIL-enabled CPython."
+            )
+
+    def register(self, event: str, callback):
+        """Register a callback for an event. Thread-safe."""
+        if event not in self._callbacks:
+            self._callbacks[event] = []
+        self._callbacks[event].append(callback)
+
+    def unregister(self, event: str, callback):
+        """Remove a callback. Thread-safe."""
+        if event in self._callbacks:
+            self._callbacks[event] = [cb for cb in self._callbacks[event] if cb is not callback]
+
+    def get_board(self) -> list[dict] | None:
+        """Get the latest board snapshot. Thread-safe (microsecond lock)."""
+        if self._error:
+            raise RuntimeError(f"MemoryMonitor died: {self._error}") from self._error
+        with self._lock:
+            return self._board
+
+    def wait_for(self, predicate, timeout: float, min_delay: float = 0) -> bool:
+        """Block until predicate(board) is True, or timeout.
+
+        Args:
+            predicate: callable(list[dict] | None) -> bool
+            timeout: max seconds to wait
+            min_delay: minimum seconds before first check (for animation startup)
+
+        Returns True if predicate was satisfied, False on timeout/shutdown.
+        """
+        if self._error:
+            raise RuntimeError(f"MemoryMonitor died: {self._error}") from self._error
+
+        if min_delay > 0:
+            if self._stop_event.wait(min_delay):
+                return False  # shutdown requested
+
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            board = self.get_board()
+            try:
+                if predicate(board):
+                    return True
+            except Exception:
+                pass  # predicate may fail on None board
+            if self._stop_event.wait(0.1):
+                return False  # shutdown requested
+        return False
+
+    def is_healthy(self) -> bool:
+        """Check if the monitor thread is alive and error-free."""
+        return self.is_alive() and self._error is None
+
+    def stop(self):
+        """Signal the monitor to stop. Non-blocking."""
+        self._stop_event.set()
+        if self._reader:
+            try:
+                self._reader.close()
+            except Exception:
+                pass
+
+    def run(self):
+        """Main polling loop (runs in background thread)."""
+        try:
+            self._reader = MemoryReader()
+            if not self._reader.open(self._pid):
+                self._error = RuntimeError("Failed to open game process")
+                return
+
+            while not self._stop_event.is_set():
+                try:
+                    new_board = self._reader.read_board()
+                except Exception as e:
+                    new_board = None
+                    self._consecutive_failures += 1
+                    if self._consecutive_failures >= self._MAX_FAILURES_BEFORE_RECONNECT:
+                        self._reconnect()
+                    self._stop_event.wait(self._poll_interval)
+                    continue
+
+                if new_board is None:
+                    self._consecutive_failures += 1
+                    if self._consecutive_failures >= self._MAX_FAILURES_BEFORE_RECONNECT:
+                        self._reconnect()
+                else:
+                    self._consecutive_failures = 0
+
+                # Compute diffs BEFORE taking lock
+                events_to_fire = self._compute_diffs(self._last_board, new_board)
+
+                # Swap board reference under lock (microseconds)
+                with self._lock:
+                    self._board = new_board
+
+                self._last_board = new_board
+
+                # Fire callbacks OUTSIDE lock
+                for event_name, event_data in events_to_fire:
+                    self._fire_callbacks(event_name, event_data)
+
+                self._stop_event.wait(self._poll_interval)
+
+        except Exception as e:
+            self._error = e
+        finally:
+            if self._reader:
+                try:
+                    self._reader.close()
+                except Exception:
+                    pass
+
+    def _reconnect(self):
+        """Close and reopen the reader to recover from stale handles."""
+        self._consecutive_failures = 0
+        if self._reader:
+            try:
+                self._reader.close()
+            except Exception:
+                pass
+        self._reader = MemoryReader()
+        if not self._reader.open(self._pid):
+            # Can't reconnect — will retry next poll cycle
+            pass
+
+    def _compute_diffs(self, old_board, new_board):
+        """Compare old and new board states, return list of (event_name, event_data)."""
+        events = []
+
+        # game_connected / game_disconnected
+        if old_board is None and new_board is not None:
+            events.append(('game_connected', {'board': new_board}))
+            return events  # don't diff further on first connect
+        if old_board is not None and new_board is None:
+            events.append(('game_disconnected', {}))
+            return events
+        if old_board is None or new_board is None:
+            return events
+
+        old_by_pos = {c['position']: c for c in old_board}
+        new_by_pos = {c['position']: c for c in new_board}
+
+        for pos, new_card in new_by_pos.items():
+            old_card = old_by_pos.get(pos)
+            if old_card is None:
+                continue
+
+            old_state = old_card['state']
+            new_state = new_card['state']
+
+            # card_flipped: Hidden -> Alive
+            if old_state == 'Hidden' and new_state == 'Alive':
+                events.append(('card_flipped', {
+                    'position': pos, 'old_state': old_state, 'new_state': new_state
+                }))
+
+            # card_died: -> Dead, or killed_hidden changed
+            if old_state != 'Dead' and new_state == 'Dead':
+                events.append(('card_died', {
+                    'position': pos, 'old_state': old_state, 'new_state': new_state
+                }))
+            elif not old_card.get('killed_hidden') and new_card.get('killed_hidden'):
+                events.append(('card_died', {
+                    'position': pos, 'old_state': old_state, 'new_state': 'killed_hidden'
+                }))
+
+            # status_changed
+            old_statuses = frozenset(old_card.get('statuses', []))
+            new_statuses = frozenset(new_card.get('statuses', []))
+            if old_statuses != new_statuses:
+                events.append(('status_changed', {
+                    'position': pos,
+                    'old_statuses': list(old_statuses),
+                    'new_statuses': list(new_statuses),
+                }))
+
+        return events
+
+    def _fire_callbacks(self, event_name, event_data):
+        """Fire all registered callbacks for an event. Each wrapped in try/except."""
+        for cb in self._callbacks.get(event_name, []):
+            try:
+                cb(event_data)
+            except Exception as e:
+                print(f"  [MemoryMonitor] callback error on {event_name}: {e}")
+
+
+# Global monitor instance (started once per REPL session)
+_monitor: MemoryMonitor | None = None
+
+
+def get_monitor(poll_interval=0.5, pid=None) -> MemoryMonitor:
+    """Get or create the global MemoryMonitor singleton."""
+    global _monitor
+    if _monitor is not None and _monitor.is_healthy():
+        return _monitor
+    if _monitor is not None:
+        _monitor.stop()
+    _monitor = MemoryMonitor(poll_interval=poll_interval, pid=pid)
+    _monitor.start()
+    atexit.register(_shutdown_monitor)
+    return _monitor
+
+
+def _shutdown_monitor():
+    global _monitor
+    if _monitor is not None:
+        _monitor.stop()
+        _monitor = None
 
 
 def print_deck(deck):

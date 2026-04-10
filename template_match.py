@@ -305,6 +305,51 @@ def safe_click_at(x: int, y: int, label: str = "target") -> str:
     return verify_ss
 
 
+class ClickError(Exception):
+    """Raised when a click action fails verification."""
+    pass
+
+
+def verified_click(template_name: str, fallback_coords=None, post_predicate=None,
+                   monitor=None, threshold: float = 0.7) -> dict | None:
+    """Find template -> click -> optionally verify state change via monitor.
+
+    Args:
+        template_name: template to find and click
+        fallback_coords: (x, y) to click if template not found
+        post_predicate: callable(board) -> bool to verify after click
+        monitor: MemoryMonitor instance for post-click verification
+        threshold: match confidence threshold
+
+    Returns: match dict or None
+    Raises: ClickError if template not found (and no fallback) or verification fails
+    """
+    import mouse as mouse_mod
+    import game_utils
+
+    ss = screenshot.capture("_verified_find")
+    match = find(template_name, ss, threshold)
+
+    if match:
+        game_utils.ensure_game_focused()
+        import time
+        time.sleep(0.2)
+        mouse_mod.move(match["x"], match["y"])
+        time.sleep(0.3)
+        mouse_mod.click(match["x"], match["y"])
+        print(f"[verified_click] Clicked '{template_name}' at ({match['x']}, {match['y']})")
+    elif fallback_coords:
+        safe_click_at(fallback_coords[0], fallback_coords[1], template_name)
+    else:
+        raise ClickError(f"Template '{template_name}' not found (conf < {threshold}) and no fallback")
+
+    if post_predicate and monitor:
+        if not monitor.wait_for(post_predicate, timeout=3):
+            raise ClickError(f"Post-click verification failed for '{template_name}'")
+
+    return match
+
+
 def fast_click_at(x: int, y: int, label: str = "target") -> None:
     """Focus game → click coords immediately. No hover, no verify, no sleep.
 

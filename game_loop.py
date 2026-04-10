@@ -350,6 +350,13 @@ class GameSession:
         self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
 
+        # Clear solver cache on new game
+        try:
+            from rust_solver import clear_solver_cache
+            clear_solver_cache()
+        except ImportError:
+            pass
+
     # -- Deck --
 
     def has_role_in_deck(self, role_name: str) -> bool:
@@ -593,8 +600,11 @@ class GameSession:
         DecisionLog.log_recommendation(action)
         return action
 
-    def auto_execute(self, pos: int, result) -> dict:
+    def auto_execute(self, pos: int, result, monitor=None) -> dict:
         """Perform in-game execution click sequence, verify via memory_reader, record result.
+
+        Uses MemoryMonitor.wait_for() when available for faster, smarter waits.
+        Falls back to fixed sleeps if no monitor provided.
 
         Returns: {"success": bool, "was_evil": bool|None, "evil_role": str|None, "error": str|None}
         """
@@ -615,7 +625,7 @@ class GameSession:
         # Step 1: Dismiss mark menu
         print(f"  [auto_exec] Dismissing mark menu...")
         _mouse.click(1280, 690)
-        time.sleep(0.5)
+        time.sleep(0.3)
 
         # Step 2: Click execute button
         print(f"  [auto_exec] Clicking execute button...")
@@ -624,12 +634,11 @@ class GameSession:
         except Exception as e:
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Execute button click failed: {e}"}
-        time.sleep(0.5)
+        time.sleep(0.3)
 
         # Step 2.5: Check for active ability on target (clicking would activate it)
         if pos not in self.used_abilities:
             from knowledge_base import get_card
-            # Check if the displayed role has an active ability
             target_card_entry = next((c for c in self.cards if c.position == pos), None)
             if target_card_entry:
                 kb_card = get_card(target_card_entry.apparent_role)
@@ -641,39 +650,62 @@ class GameSession:
         x, y = coords[pos]
         print(f"  [auto_exec] Clicking #{pos} at ({x}, {y})...")
         _tm.safe_click_at(x, y, f"exec_card{pos}")
-        time.sleep(3)  # wait for execution animation
 
-        # Step 4: Verify via memory_reader
-        print(f"  [auto_exec] Verifying execution via memory reader...")
-        from memory_reader import MemoryReader
-        reader = MemoryReader()
-        if not reader.open():
-            return {"success": False, "was_evil": None, "evil_role": None,
-                    "error": "Cannot open game process for verification"}
-
-        # Poll for state change (up to 3 attempts)
+        # Step 4: Wait for execution animation + verify via memory reader
+        # Use monitor.wait_for() if available (smart wait), else fixed sleep + poll
+        print(f"  [auto_exec] Waiting for execution result...")
         target_card = None
-        for attempt in range(3):
-            cards = reader.read_board()
-            if cards:
-                target_card = next((c for c in cards if c['position'] == pos), None)
-                if target_card and target_card['state'] == 'Dead':
-                    break
-            if attempt < 2:
-                time.sleep(1)
 
-        reader.close()
+        if monitor and monitor.is_healthy():
+            # Smart wait: poll memory for state change with 1s minimum delay
+            # Predicate: card is Dead (executed) OR still Alive after delay (Knight immunity)
+            def _exec_resolved(board):
+                if not board:
+                    return False
+                card = next((c for c in board if c['position'] == pos), None)
+                return card and card['state'] in ('Dead', 'Revealed')
+
+            resolved = monitor.wait_for(_exec_resolved, timeout=5, min_delay=1.0)
+            if resolved:
+                board = monitor.get_board()
+                target_card = next((c for c in board if c['position'] == pos), None) if board else None
+            else:
+                # Timeout — check for Knight immunity or click failure
+                board = monitor.get_board()
+                if board:
+                    target_card = next((c for c in board if c['position'] == pos), None)
+        else:
+            # Fallback: fixed sleep + poll (original behavior)
+            time.sleep(3)
+            from memory_reader import MemoryReader
+            reader = MemoryReader()
+            if not reader.open():
+                return {"success": False, "was_evil": None, "evil_role": None,
+                        "error": "Cannot open game process for verification"}
+            for attempt in range(3):
+                cards = reader.read_board()
+                if cards:
+                    target_card = next((c for c in cards if c['position'] == pos), None)
+                    if target_card and target_card['state'] == 'Dead':
+                        break
+                if attempt < 2:
+                    time.sleep(1)
+            reader.close()
 
         if not target_card:
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Position #{pos} not found in memory reader"}
 
         if target_card['state'] != 'Dead':
-            # Could be Knight immunity
+            # Knight immunity: card stays Alive after execution attempt
             if target_card['state'] == 'Alive':
                 print(f"  [auto_exec] #{pos} still Alive — possible Knight immunity")
                 return {"success": True, "was_evil": False, "evil_role": None,
                         "error": "Knight immunity — card not killed"}
+            # Hidden = click likely missed (game unfocused?)
+            if target_card['state'] == 'Hidden':
+                return {"success": False, "was_evil": None, "evil_role": None,
+                        "error": f"Card still Hidden — click didn't register (game focused?)"}
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Card state is {target_card['state']}, expected Dead"}
 
@@ -684,7 +716,6 @@ class GameSession:
         # Step 6: Record into session
         was_corrupted = None
         if not was_evil:
-            # Check if card was corrupted (for session tracking)
             statuses = target_card.get('statuses', [])
             was_corrupted = 'Corrupted' in statuses
 
@@ -857,22 +888,31 @@ class GameSession:
 # Flip Verification
 # ============================================================
 
-def _verify_flips(mr_output: str, expected_positions: list[int], session):
-    """Check memory reader output to verify all targeted cards actually flipped.
+def _verify_flips(cards_or_output, expected_positions: list[int], session):
+    """Check that all targeted cards actually flipped.
 
-    Parses memory reader table for state=Hidden lines and cross-references
-    against positions we tried to flip. Flags unflipped cards loudly.
+    Accepts either:
+    - list[dict]: card dicts from memory_reader.read_board()
+    - str: legacy stdout output from subprocess (backward compat)
     """
     import re
     still_hidden = []
-    for line in mr_output.splitlines():
-        # Memory reader format: "# 1  RoleName   ... Hidden   NO  BLOCKED"
-        m = re.match(r'^\s*#\s*(\d+)', line)
-        if not m:
-            continue
-        pos = int(m.group(1))
-        if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
-            still_hidden.append(pos)
+
+    if isinstance(cards_or_output, list):
+        # New path: card dicts from read_board()
+        for card in cards_or_output:
+            pos = card.get('position')
+            if pos in expected_positions and card.get('state') == 'Hidden' and not card.get('killed_hidden'):
+                still_hidden.append(pos)
+    else:
+        # Legacy path: parse stdout text
+        for line in cards_or_output.splitlines():
+            m = re.match(r'^\s*#\s*(\d+)', line)
+            if not m:
+                continue
+            pos = int(m.group(1))
+            if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
+                still_hidden.append(pos)
 
     if still_hidden:
         print()
@@ -1639,8 +1679,21 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     print(f"  LILIS NIGHT PHASE TRIGGERED (reveal #{total_reveals})")
                     print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
                     print("!" * 60)
-                    print(f"\n  --- Waiting 5s for Lilis night animation ---")
-                    time.sleep(5)
+                    print(f"\n  --- Waiting for Lilis night animation ---")
+                    try:
+                        from memory_reader import get_monitor as _get_mon
+                        _mon = _get_mon()
+                        if _mon.is_healthy():
+                            def _night_resolved(board):
+                                if not board:
+                                    return False
+                                return any(c.get('killed_hidden') for c in board
+                                           if c['position'] not in already_done)
+                            _mon.wait_for(_night_resolved, timeout=8, min_delay=2.0)
+                        else:
+                            time.sleep(5)
+                    except Exception:
+                        time.sleep(5)
                     print(f"  Night phase complete.")
                     print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
                     print(f"  Then: set_hp {session.hp - 2}")
@@ -1670,9 +1723,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             # Lilis night triggers every 4 reveals, even on last batch
             total_reveals = len(session.reveal_order)
             if total_reveals % 4 == 0:
-                print(f"\n  --- Lilis night phase (wait 5s for kill animation) ---")
+                print(f"\n  --- Lilis night phase (waiting for kill animation) ---")
                 print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
-                time.sleep(5)
+                try:
+                    from memory_reader import get_monitor as _get_mon
+                    _mon = _get_mon()
+                    if _mon.is_healthy():
+                        _already = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
+                        def _night_kill_check(board):
+                            if not board:
+                                return False
+                            return any(c.get('killed_hidden') for c in board
+                                       if c['position'] not in _already)
+                        _mon.wait_for(_night_kill_check, timeout=8, min_delay=2.0)
+                    else:
+                        time.sleep(5)
+                except Exception:
+                    time.sleep(5)
                 print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
                 print(f"  Run: python screenshot.py night_check && python memory_reader.py")
                 if remaining:
@@ -1698,33 +1765,55 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
         session.save()
         print("\n--- Parking mouse & reading memory ---")
-        time.sleep(1.5)
         _mouse.move(1280, 690)
-        time.sleep(0.5)
+
+        # Smart wait: use monitor if available, else fixed sleep
+        from memory_reader import MemoryReader as _MR, print_board as _print_board
+        try:
+            from memory_reader import get_monitor as _get_monitor
+            _mon = _get_monitor()
+            if _mon.is_healthy():
+                def _flips_done(board):
+                    if not board:
+                        return False
+                    for p in positions:
+                        card = next((c for c in board if c['position'] == p), None)
+                        if card and card['state'] == 'Hidden' and not card.get('killed_hidden'):
+                            return False  # still waiting
+                    return True
+                time.sleep(0.5)
+                _mon.wait_for(_flips_done, timeout=3, min_delay=0.5)
+                cards = _mon.get_board()
+            else:
+                raise RuntimeError("monitor not healthy")
+        except Exception:
+            # Fallback: fixed sleep + manual read
+            time.sleep(1.5)
+            _reader = _MR()
+            cards = None
+            if _reader.open():
+                cards = _reader.read_board()
+                _reader.close()
+
         print("\n--- Memory Reader (board state) ---")
-        mr = subprocess.run(["python", "memory_reader.py"], capture_output=True, text=True)
-        if mr.returncode == 0:
-            print(mr.stdout.strip())
-            _verify_flips(mr.stdout, positions, session)
+        if cards:
+            _print_board(cards)
+            _verify_flips(cards, positions, session)
         else:
-            print(f"  WARNING: memory_reader failed: {mr.stderr[:200]}")
+            print("  WARNING: memory_reader returned no cards")
         print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
         return None
 
     if cmd == "auto_card":
-        import subprocess as _sp
-        mr = _sp.run(["python", "memory_reader.py"], capture_output=True, text=True, timeout=10)
-        if mr.returncode != 0:
-            print(f"ERROR: memory_reader failed: {mr.stderr[:200]}")
-            return None
-
-        from memory_reader import MemoryReader
-        reader = MemoryReader()
-        if not reader.open():
+        from memory_reader import MemoryReader as _MR, print_board as _print_board
+        _reader = _MR()
+        if not _reader.open():
             print("ERROR: Could not open game process")
             return None
-        cards = reader.read_board()
-        reader.close()
+        cards = _reader.read_board()
+        _reader.close()
+        if cards:
+            _print_board(cards)
         if not cards:
             print("ERROR: No board data from memory reader")
             return None
@@ -1924,6 +2013,27 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
     if cmd == "auto_next":
         session.auto_next()
+        return None
+
+    if cmd == "auto_loop":
+        from state_machine import GameStateMachine
+        from memory_reader import get_monitor
+        try:
+            monitor = get_monitor()
+        except Exception:
+            monitor = None
+        sm = GameStateMachine(session, monitor=monitor)
+        # Store on session for resume access
+        session._state_machine = sm
+        sm.start()
+        return None
+
+    if cmd == "resume":
+        sm = getattr(session, '_state_machine', None)
+        if sm is None:
+            print("No active auto_loop to resume. Run auto_loop first.")
+        else:
+            sm.resume()
         return None
 
     if cmd == "ability_used":

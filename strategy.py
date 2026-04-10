@@ -8,6 +8,7 @@ give the most information.
 
 from __future__ import annotations
 import math
+import time
 from dataclasses import dataclass, field
 from itertools import combinations
 from typing import Optional
@@ -34,6 +35,7 @@ class Action:
     ability_name: Optional[str] = None
     reasoning: str = ""
     warnings: list[str] = field(default_factory=list)
+    confidence: float = 0.0  # 0-1, how certain this is the right move
     _ability_recs: Optional[list] = field(default_factory=lambda: None, repr=False)  # cached for display
 
 
@@ -329,6 +331,185 @@ def _forced_execution_reasoning(
             f"with current HP budget ({summary}).")
 
 
+# ============================================================
+# E1 — Expected-value scoring
+# ============================================================
+
+# Lambda: weight for HP cost penalty in EV computation. Tunable.
+_EV_LAMBDA = 0.1
+
+
+def _compute_ev_ability(ability_score: float) -> float:
+    """EV for an ability action: info gain with zero HP cost."""
+    return ability_score
+
+
+def _compute_ev_reveal(binary_entropy: float) -> float:
+    """EV for a reveal action: binary entropy with zero HP cost."""
+    return binary_entropy
+
+
+def _compute_ev_execute(
+    p_evil: float,
+    wrong_exec_cost: int,
+    info_gain: float = 0.5,
+) -> float:
+    """EV for an execution: info gain minus expected HP cost.
+
+    EV = info_gain - lambda * wrong_exec_cost * (1 - p_evil)
+    Zero HP cost when target is evil; full penalty when good.
+    """
+    return info_gain - _EV_LAMBDA * wrong_exec_cost * (1.0 - p_evil)
+
+
+def _compute_ev_slayer(
+    slayer_score: float,
+    wrong_exec_cost: int,
+    wretch_probability: float,
+) -> float:
+    """EV for Slayer ability: score minus Wretch penalty.
+
+    Wretch kills cost wrong_exec_cost HP (wrong execution penalty).
+    """
+    return slayer_score - _EV_LAMBDA * wrong_exec_cost * wretch_probability
+
+
+# ============================================================
+# E2 — Shallow 2-turn lookahead
+# ============================================================
+
+_SHALLOW_LOOKAHEAD_MAX_SCENARIOS = 500
+_SHALLOW_LOOKAHEAD_TIMEOUT_MS = 100
+
+
+def _shallow_lookahead(
+    state: GameState,
+    result: SolverResult,
+    candidate_positions: list[int],
+) -> Optional[Action]:
+    """2-turn lookahead: reveal then force-execute.
+
+    For each unrevealed position, compute fingerprint partitions. For each
+    partition (what the player would observe), check if a forced execution
+    exists in that sub-problem. Return a 2-step plan if any reveal guarantees
+    a forced win on the next step.
+
+    Only runs when n_surviving <= _SHALLOW_LOOKAHEAD_MAX_SCENARIOS.
+    Bails out at _SHALLOW_LOOKAHEAD_TIMEOUT_MS wall-clock milliseconds.
+    """
+    if result.n_surviving > _SHALLOW_LOOKAHEAD_MAX_SCENARIOS:
+        return None
+    if result.n_surviving == 0 or not candidate_positions:
+        return None
+
+    unrevealed = _unrevealed_positions(state)
+    blocked = set(getattr(state, 'blocked_positions', []))
+    unrevealed = [p for p in unrevealed if p not in blocked]
+    if not unrevealed:
+        return None
+
+    scenarios = result.surviving_scenarios
+    start_time = time.perf_counter()
+    timeout_sec = _SHALLOW_LOOKAHEAD_TIMEOUT_MS / 1000.0
+
+    for reveal_pos in unrevealed:
+        # Check timeout
+        if time.perf_counter() - start_time > timeout_sec:
+            return None
+
+        # Partition scenarios by fingerprint (what player observes)
+        partitions: dict[tuple, list[int]] = {}
+        for idx, scenario in enumerate(scenarios):
+            fp = _compute_position_fingerprint(reveal_pos, scenario, state)
+            partitions.setdefault(fp, []).append(idx)
+
+        # For each partition, check if forced execution exists
+        all_partitions_have_forced = True
+        forced_exec_per_partition: dict[tuple, int] = {}
+
+        for fp_key, indices in partitions.items():
+            if time.perf_counter() - start_time > timeout_sec:
+                return None
+
+            # Build a sub-result with only this partition's scenarios
+            sub_scenarios = [scenarios[i] for i in indices]
+            sub_result = SolverResult(
+                definite_evil=[],
+                definite_good=[],
+                bombardier_positions=result.bombardier_positions,
+                n_scenarios=len(sub_scenarios),
+                n_surviving=len(sub_scenarios),
+                surviving_scenarios=sub_scenarios,
+                reasoning=[],
+            )
+
+            forced_pos = _find_forced_execution(state, sub_result, candidate_positions)
+            if forced_pos is not None:
+                forced_exec_per_partition[fp_key] = forced_pos
+            else:
+                all_partitions_have_forced = False
+                break
+
+        if all_partitions_have_forced:
+            # Found a 2-step plan: reveal reveal_pos, then execute based on outcome
+            exec_targets = set(forced_exec_per_partition.values())
+            exec_summary = ", ".join(f"#{p}" for p in sorted(exec_targets))
+            return Action(
+                "reveal",
+                position=reveal_pos,
+                reasoning=(
+                    f"2-turn lookahead: reveal #{reveal_pos}, then forced execution "
+                    f"guarantees win (targets: {exec_summary} depending on outcome, "
+                    f"{len(partitions)} branches all have forced wins)."
+                ),
+            )
+
+    return None
+
+
+# ============================================================
+# E4 — 50/50 tiebreaker framework
+# ============================================================
+
+def _tiebreak_score(
+    pos: int,
+    state: GameState,
+    result: SolverResult,
+) -> tuple[float, float, float]:
+    """Tiebreaker score for positions with similar p_evil.
+
+    Returns (corruption_risk_penalty, role_consistency, witch_boost).
+    Lower corruption = safer. Fewer distinct evil roles = more predictable.
+    Witch likelihood = bonus for unblocking reveals.
+
+    Used as secondary sort key when primary ranking_score is within 0.01 margin.
+    """
+    # 1. Corruption risk (lower = safer, so negate for "higher is better")
+    corr = _corruption_risk(pos, result)
+    corruption_penalty = -corr  # Higher = less corrupted = safer
+
+    # 2. Role consistency: count distinct evil roles this position could be
+    # Fewer distinct roles = more predictable outcome
+    evil_roles = set()
+    for s in result.surviving_scenarios:
+        if pos in s.evil_positions:
+            evil_roles.add(s.evil_positions[pos])
+        elif pos == s.puppet_position:
+            evil_roles.add("Puppet")
+    # Normalize: 1 role = best (1.0), many roles = worse (closer to 0.0)
+    if evil_roles:
+        role_consistency = 1.0 / len(evil_roles)
+    else:
+        role_consistency = 0.0  # Not evil in any scenario
+
+    # 3. Witch likelihood: boost if Witch is a possible evil role here
+    witch_count = sum(1 for s in result.surviving_scenarios
+                      if s.evil_positions.get(pos) == "Witch")
+    witch_boost = witch_count / max(1, result.n_surviving)
+
+    return (corruption_penalty, role_consistency, witch_boost)
+
+
 def _could_have_active_ability(pos: int, state: GameState, result: SolverResult) -> bool:
     """Check if an unrevealed position might have an active ability."""
     # Active ability roles from knowledge base
@@ -454,7 +635,7 @@ def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple
         # Learn an evil character
         evil_positions = [p for p in scenario.evil_positions if p not in state.executed]
         if evil_positions:
-            evil_pos = min(evil_positions)  # deterministic regardless of dict ordering
+            evil_pos = evil_positions[0]
     return (is_corrupted, evil_pos)
 
 
@@ -1077,10 +1258,13 @@ def recommend_action(
     1. Error -- 0 surviving scenarios
     2. Win -- all evil executed
     3. Execute -- definite evil found (skip Bombardier)
-    4. Use ability -- if high info gain
+    3.5. Knight free check
+    4. Use ability -- if EV > reveal EV (E1: expected-value scoring)
     5. Reveal -- most informative unrevealed position
-    6. Witch fallback -- can't reveal, execute best guess
-    7. Probability fallback -- all revealed, no certainty
+    5.5. Forced execution (E5) + 2-turn lookahead (E2)
+    6. Probabilistic execution -- HP-aware dynamic thresholds (E3),
+       tiebreaker framework (E4) for 50/50 resolution
+    7. Bombardier safety fallback
     """
     # Pre-compute evil probabilities (used in knight check, witch fallback, etc.)
     probs = evil_probabilities(state, result)
@@ -1159,27 +1343,36 @@ def recommend_action(
     # 5. Check reveal
     reveal_rec = recommend_reveal(state, result)
 
-    # Choose between ability and reveal based on scores
+    # E1: Choose between ability and reveal using expected-value scoring
     best_ability = ability_recs[0] if ability_recs else None
-    if best_ability and best_ability.ability_name == "Slayer" and best_ability.score > 0.8:
-        # Slayer with high confidence -- use it
-        return _with_ability_recs(Action(
-            "use_ability", position=best_ability.position,
-            targets=best_ability.targets,
-            ability_name="Slayer",
-            reasoning=best_ability.reasoning,
-            warnings=best_ability.warnings))
+
+    # Compute EV for Slayer separately (accounts for Wretch HP penalty)
+    if best_ability and best_ability.ability_name == "Slayer":
+        slayer_target = best_ability.targets[0] if best_ability.targets else None
+        wretch_prob = _wretch_kill_probability(slayer_target, state, result) if slayer_target else 0.0
+        slayer_ev = _compute_ev_slayer(best_ability.score, state.wrong_exec_cost, wretch_prob)
+        # High-confidence Slayer: use if EV clearly positive and score > 0.8
+        if best_ability.score > 0.8 and slayer_ev > 0:
+            return _with_ability_recs(Action(
+                "use_ability", position=best_ability.position,
+                targets=best_ability.targets,
+                ability_name="Slayer",
+                reasoning=f"{best_ability.reasoning} | EV={slayer_ev:.3f}",
+                warnings=best_ability.warnings))
+
+    # Compute EV for best ability (non-Slayer or lower-confidence Slayer)
+    best_ability_ev = _compute_ev_ability(best_ability.score) if best_ability else -float('inf')
+    # Compute EV for reveal
+    best_reveal_ev = _compute_ev_reveal(reveal_rec.binary_entropy) if reveal_rec else -float('inf')
 
     if best_ability and reveal_rec:
-        # Compare ability info gain vs reveal info gain
-        # Use binary_entropy (evil/good split) for comparison -- same 0-1 scale as ability scores.
-        # Fingerprint entropy (reveal_rec.entropy) is used for position ranking only.
-        if best_ability.score > reveal_rec.binary_entropy and best_ability.score > 0.3:
+        # E1: Compare using EV framework instead of threshold
+        if best_ability_ev > best_reveal_ev:
             return _with_ability_recs(Action(
                 "use_ability", position=best_ability.position,
                 targets=best_ability.targets,
                 ability_name=best_ability.ability_name,
-                reasoning=best_ability.reasoning,
+                reasoning=f"{best_ability.reasoning} | EV={best_ability_ev:.3f} > reveal EV={best_reveal_ev:.3f}",
                 warnings=best_ability.warnings))
 
     if reveal_rec:
@@ -1201,16 +1394,17 @@ def recommend_action(
             reasoning=best_ability.reasoning,
             warnings=best_ability.warnings))
 
-    # 6. Witch fallback -- can't reveal, execute by probability
-    # HP-aware gating with budget-based confidence thresholds
+    # 5.5 E5: Earlier forced execution detection — after abilities/reveals
+    # Check for forcing moves before falling through to probabilistic execution.
+    # This ensures abilities are considered first (steps 4-5), but forced wins
+    # are detected before uncertain probabilistic execution (step 6b).
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
 
-    # 6a. Forced execution lookahead — includes Bombardier/Wretch.
-    # The lookahead models Bombardier as instant game loss, so it naturally
-    # prefers executing non-Bombardier candidates first.
     all_uncertain = [p for p, prob in probs.items()
                      if prob > 0.0 and p not in state.executed]
+
     if all_uncertain:
+        # 5.5a: Direct forced execution (1-step lookahead)
         forced_pos = _find_forced_execution(state, result, all_uncertain)
         if forced_pos is not None:
             warnings = []
@@ -1230,6 +1424,15 @@ def recommend_action(
                 warnings=warnings,
             ))
 
+        # 5.5b: E2 — Shallow 2-turn lookahead (reveal + forced execution)
+        lookahead_action = _shallow_lookahead(state, result, all_uncertain)
+        if lookahead_action is not None:
+            lookahead_action._ability_recs = ability_recs
+            return lookahead_action
+
+    # 6. Witch fallback -- can't reveal, execute by probability
+    # HP-aware gating with budget-based confidence thresholds
+
     # 6b. Probabilistic execution
     # Bombardier candidates excluded from normal probability selection
     bombardier_candidates = {p: probs.get(p, 0) for p in result.bombardier_positions
@@ -1245,7 +1448,17 @@ def recommend_action(
                     and p not in result.bombardier_positions
                     and p not in wretch_positions}
     if active_probs:
-        best_pos = max(active_probs, key=active_probs.get)
+        # E4: Sort candidates by (p_evil, tiebreak_score) for stable 50/50 resolution
+        # Primary: p_evil (higher = better). Secondary: tiebreak when within 0.01 margin.
+        _tiebreak_margin = 0.01
+
+        def _exec_sort_key(p: int) -> tuple:
+            prob = active_probs.get(p, 0.0)
+            tb = _tiebreak_score(p, state, result)
+            return (prob, tb[0], tb[1], tb[2])
+
+        sorted_candidates = sorted(active_probs.keys(), key=_exec_sort_key, reverse=True)
+        best_pos = sorted_candidates[0]
         best_prob = active_probs[best_pos]
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
@@ -1274,19 +1487,26 @@ def recommend_action(
         if witch_blocked:
             warnings.append("Witch is blocking reveals -- killing Witch would unblock last card")
 
+        # E3: HP-aware dynamic confidence thresholds
+        _, max_remaining = _remaining_evil_bounds(state, result)
+        max_remaining_evil = max(1, max_remaining)  # Avoid division by zero
+
         if wrong_exec_budget == 0:
+            min_confidence = 0.95
             warnings.append(f"CRITICAL: HP={state.hp}, wrong exec costs {state.wrong_exec_cost} -- "
                             f"CANNOT afford a mistake! Only execute if certain.")
-            if best_prob < 1.0:
+            if best_prob < min_confidence:
                 return _with_ability_recs(Action(
                     "error", position=best_pos,
                     reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but HP too low to risk "
-                              f"(HP={state.hp}, cost={state.wrong_exec_cost}). Need more info.",
+                              f"(HP={state.hp}, cost={state.wrong_exec_cost}, "
+                              f"threshold={min_confidence:.0%}). Need more info.",
                     warnings=warnings))
         elif wrong_exec_budget == 1:
-            # One wrong guess = death. Require high confidence.
-            min_threshold = 0.80
-            if best_prob < min_threshold:
+            # E3: Dynamic threshold for budget=1
+            hp_ratio_b1 = state.hp / state.wrong_exec_cost if state.wrong_exec_cost > 0 else 1
+            min_confidence = max(0.75, 0.95 - 0.1 * (hp_ratio_b1))
+            if best_prob < min_confidence:
                 if bombardier_candidates:
                     # Bombardier safety: bypass threshold — wrong exec on non-Bombardier
                     # costs HP, wrong exec on Bombardier = instant game loss.
@@ -1295,15 +1515,19 @@ def recommend_action(
                         f"low confidence — Bombardier candidate(s) {sorted(bombardier_candidates.keys())} "
                         f"risk instant game loss if executed first.")
                 else:
-                    warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_threshold:.0%} threshold. "
+                    warnings.append(f"CAUTION: budget=1, confidence {best_prob:.0%} < {min_confidence:.0%} threshold. "
                                     f"Consider manual override if you have extra information.")
                     return _with_ability_recs(Action(
                         "error", position=best_pos,
                         reasoning=f"#{best_pos} is {best_prob:.0%} likely evil but budget=1 requires "
-                                  f">={min_threshold:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
+                                  f">={min_confidence:.0%} confidence (HP={state.hp}, cost={state.wrong_exec_cost}).",
                         warnings=warnings))
-        elif best_prob < 0.5:
-            warnings.append(f"Low confidence ({best_prob:.0%}) -- consider gathering more info")
+        elif wrong_exec_budget >= 2:
+            # E3: Dynamic threshold for budget >= 2
+            hp_ratio = state.hp / (state.wrong_exec_cost * max_remaining_evil) if state.wrong_exec_cost > 0 else 99
+            min_confidence = max(0.4, 0.6 - 0.1 * (hp_ratio - 1))
+            if best_prob < min_confidence:
+                warnings.append(f"Low confidence ({best_prob:.0%} < {min_confidence:.0%}) -- consider gathering more info")
 
         return _with_ability_recs(Action(
             "execute", position=best_pos,
@@ -1339,14 +1563,42 @@ def recommend_action(
     return _with_ability_recs(Action("error", reasoning="No valid action found"))
 
 
+def _compute_confidence(action: Action, state, result, probs: dict) -> float:
+    """Compute confidence score (0-1) for an action, based on action type."""
+    if action.action_type == "win":
+        return 1.0
+    elif action.action_type == "error":
+        return 0.0
+    elif action.action_type == "execute" and action.position is not None:
+        return probs.get(action.position, 0.0)
+    elif action.action_type == "reveal" and action.position is not None:
+        max_bits = _shannon_entropy([1] * max(result.n_surviving, 2))
+        reveal_recs = recommend_reveal(state, result)
+        if reveal_recs:
+            return min(1.0, reveal_recs.entropy / max(max_bits, 0.01))
+        return 0.5
+    elif action.action_type == "use_ability":
+        if action._ability_recs:
+            best = next((a for a in action._ability_recs
+                         if a.position == action.position and a.ability_name == action.ability_name), None)
+            if best:
+                return min(1.0, best.score)
+        return 0.5
+    return 0.0
+
+
 # ============================================================
 # Display
 # ============================================================
 
 def print_recommendation(state: GameState, result: SolverResult,
                          used_abilities: list[int]):
-    """Print a full strategy recommendation."""
+    """Print a full strategy recommendation with confidence score."""
+    probs = evil_probabilities(state, result)
     action = recommend_action(state, result, used_abilities)
+
+    # Compute and attach confidence
+    action.confidence = _compute_confidence(action, state, result, probs)
 
     print(f"\n=== STRATEGY RECOMMENDATION ===")
     print(f"  Action: {action.action_type.upper()}", end="")
@@ -1356,7 +1608,7 @@ def print_recommendation(state: GameState, result: SolverResult,
         print(f" ({action.ability_name})", end="")
     if action.targets:
         print(f" -> targets {['#'+str(t) for t in action.targets]}", end="")
-    print()
+    print(f"  (confidence: {action.confidence:.0%}, {result.n_surviving} scenarios)")
     print(f"  Reason: {action.reasoning}")
     for w in action.warnings:
         print(f"  WARNING: {w}")
