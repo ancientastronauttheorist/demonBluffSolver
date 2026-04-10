@@ -2232,6 +2232,13 @@
       "name": "asc51_v4",
       "notes": "10HP perfect, PD found #2 corrupted + #3 evil, clean executions both 100%",
       "date": "2026-04-10 15:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v5",
+      "notes": "10HP perfect, 3 evils found without any wrong executions, Puppeteer+Puppet+Baa game",
+      "date": "2026-04-10 15:16"
     }
   ]
 }

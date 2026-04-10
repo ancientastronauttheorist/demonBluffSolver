@@ -21107,3 +21107,81 @@ Reason: #6 is evil in ALL 8 scenarios (roles: {'Chancellor'})
 Final HP: 10
 Notes: 10HP perfect, PD found #2 corrupted + #3 evil, clean executions both 100%
 
+
+---
+
+# New Game — 2026-04-10 15:13:12
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Hunter, Knitter, Architect, Lover, Poet
+- Outcasts: Bombardier, Drunk
+- Minions: Puppeteer
+- Demons: Baa
+
+### [15:13:56] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [15:13:56] Revealed #2 Bombardier
+Info: {}
+
+### [15:13:56] Revealed #3 Bombardier
+Info: {}
+
+### [15:13:56] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:13:56] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [15:13:56] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [15:13:56] Revealed #7 Baker
+Info: {'original_role': 'Poet'}
+
+### [15:13:56] Revealed #8 Baker
+Info: {'original_role': 'Architect'}
+
+#### [15:14:15] Solver Output
+Scenarios: 7/322
+Definite evil: ['#3']
+Definite good: ['#2', '#5']
+Evil probabilities: #6=71%, #4=57%, #7=43%, #1=14%, #8=14%
+
+#### [15:14:15] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 7 scenarios (roles: {'Puppeteer', 'Baa'})
+
+### [15:14:57] Executed #3 -> Puppeteer (EVIL)
+
+#### [15:14:57] Solver Output
+Scenarios: 6/67
+Definite evil: ['#3']
+Definite good: ['#5', '#8']
+Evil probabilities: #4=67%, #6=67%, #2=33%, #1=17%, #7=17%
+
+#### [15:14:57] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (67% evil Puppet, 33% good Lover).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [15:15:35] Executed #4 -> Puppet (EVIL)
+
+#### [15:15:36] Solver Output
+Scenarios: 4/31
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#8']
+Evil probabilities: #6=75%, #7=25%
+
+#### [15:15:36] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (75% evil Baa, 25% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [15:16:16] Executed #6 -> Baa (EVIL)
+
+## [15:16:16] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 3 evils found without any wrong executions, Puppeteer+Puppet+Baa game
+
