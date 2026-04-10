@@ -20261,3 +20261,134 @@ Reason: #6 is evil in ALL 5 scenarios (roles: {'Puppeteer'})
 Final HP: 5
 Notes: 5HP, auto_loop stress test, forced_safe exec on Drunk, Knight check fix verified
 
+
+---
+
+# New Game — 2026-04-10 13:39:04
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Jester, Architect, Dreamer, Medium, Lover, Hunter, Bard
+- Outcasts: Drunk, Wretch, Plague_Doctor
+- Minions: Chancellor, Shaman
+- Demons: Baa
+
+### [13:40:00] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [13:40:00] Revealed #3 Baker
+Info: {'original_role': 'Bard'}
+
+### [13:40:00] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [13:40:00] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [13:40:00] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [13:40:00] Revealed #9 Bard
+Info: {'corruption_distance': -1}
+
+### [13:45:29] Revealed #2 Plague_Doctor
+Info: {}
+
+### [13:45:32] Revealed #4 Dreamer
+Info: {}
+
+### [13:45:36] Revealed #8 Jester
+Info: {}
+
+#### [13:45:43] Solver Output
+Scenarios: 702/17748
+Evil probabilities: #9=72%, #6=57%, #7=40%, #4=38%, #5=24%, #8=24%, #1=23%, #3=20%, #2=3%
+
+#### [13:45:43] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.957 (adjusted 2.721) | timing x1.00
+WARNING: Corruption risk: 16%
+
+### [13:46:59] Revealed #4 Dreamer
+Info: {'target': 9, 'evil_role': 'Baa'}
+
+### [13:47:02] Ability used at #4
+
+#### [13:47:06] Solver Output
+Scenarios: 472/17748
+Evil probabilities: #6=59%, #9=58%, #4=44%, #7=43%, #1=34%, #5=22%, #8=20%, #3=17%, #2=4%
+
+#### [13:47:06] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.261 (adjusted 2.261) | timing x1.00
+
+### [13:48:00] Ability used at #2
+
+#### [13:48:05] Solver Output
+Scenarios: 264/17748
+Definite good: ['#3', '#5']
+Evil probabilities: #6=100%, #7=54%, #9=53%, #1=38%, #4=35%, #8=20%, #2=0%
+
+#### [13:48:05] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#4', '#6', '#9']
+Reason: Expected posterior 118.4 scenarios (adjusted 129.7, info gain 1.026 bits) | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [13:49:09] Revealed #8 Jester
+Info: {'targets': [4, 6, 9], 'evil_count': 3}
+
+### [13:49:14] Ability used at #8
+
+#### [13:49:18] Solver Output
+Scenarios: 127/17748
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#5']
+Evil probabilities: #9=69%, #8=42%, #7=33%, #4=31%, #1=25%
+
+#### [13:49:18] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 127 scenarios (roles: {'Chancellor', 'Baa', 'Shaman'})
+
+### [13:50:04] Executed #6 -> Shaman (EVIL)
+
+#### [13:50:08] Solver Output
+Scenarios: 40/2098
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#5']
+Evil probabilities: #9=65%, #7=42%, #8=42%, #1=25%, #4=25%
+
+#### [13:50:08] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (40% evil Chancellor, 25% evil Baa, 18% good Bard (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 65%, but all reveal branches still lead to a forced win.
+
+### [13:50:53] Executed #9 -> Baa (EVIL)
+
+#### [13:50:59] Solver Output
+Scenarios: 10/266
+Definite evil: ['#6', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #7=50%, #8=50%
+
+#### [13:50:59] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 30% good Drunk (corrupted), 20% good Hunter (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [13:51:46] Executed #7 -> GOOD (WRONG!)
+
+#### [13:52:02] Solver Output
+Scenarios: 5/230
+Definite evil: ['#6', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [13:52:02] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [13:52:48] Executed #8 -> Chancellor (EVIL)
+
+## [13:53:00] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil
+

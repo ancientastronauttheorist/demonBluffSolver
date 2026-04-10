@@ -2162,6 +2162,13 @@
       "name": "asc50_v1",
       "notes": "5HP, auto_loop stress test, forced_safe exec on Drunk, Knight check fix verified",
       "date": "2026-04-10 13:33"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc50_v2",
+      "notes": "8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil",
+      "date": "2026-04-10 13:53"
     }
   ]
 }
