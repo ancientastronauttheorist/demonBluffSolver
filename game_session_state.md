@@ -22226,3 +22226,108 @@ WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual over
 Final HP: 0
 Notes: LOSS - data entry errors caused solver degraded state. Druid #3 said 'Doppelganger' (out of pool) - solver couldnt handle. Multiple wrong execs from bad info: #2 Bard (wrong), #6 Knight (immune), #7 Bishop (wrong). #8 Pooka was last evil per memory reader.
 
+
+---
+
+# New Game — 2026-04-10 16:46:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Alchemist, Jester, Druid, Bard, Dreamer
+- Outcasts: Wretch
+- Minions: Poisoner
+- Demons: Pooka
+
+### [16:47:09] Revealed #3 Bard
+Info: {'corruption_distance': 2}
+
+### [16:47:09] Revealed #7 Wretch
+Info: {}
+
+### [16:47:09] Revealed #8 Poet
+Info: {'distance': 4, 'copied_role': 'Hunter'}
+
+### [16:47:21] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [16:47:21] Revealed #2 Dreamer
+Info: {}
+
+### [16:47:21] Revealed #4 Druid
+Info: {}
+
+### [16:47:21] Revealed #5 Jester
+Info: {}
+
+### [16:47:21] Revealed #6 Alchemist
+Info: {'cured_count': 1}
+
+#### [16:47:27] Solver Output
+Scenarios: 3/80
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #8=67%, #1=33%
+
+#### [16:47:27] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 3 scenarios (roles: {'Poisoner', 'Pooka'})
+
+### [16:48:08] Executed #6 -> Pooka (EVIL)
+
+#### [16:48:08] Solver Output
+Scenarios: 2/10
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [16:48:08] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#1']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [16:48:49] Revealed #2 Dreamer
+Info: {'target': 1, 'evil_role': 'Poisoner'}
+
+### [16:48:49] Ability used at #2
+
+#### [16:48:49] Solver Output
+Scenarios: 2/10
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [16:48:49] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+#### [16:49:10] Solver Output
+Scenarios: 2/10
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [16:49:10] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [16:49:58] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [16:49:58] Ability used at #4
+
+#### [16:49:58] Solver Output
+Scenarios: 2/10
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+Evil probabilities: #1=50%, #8=50%
+
+#### [16:49:58] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 1.7 scenarios (adjusted 2.5, info gain 0.000 bits) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [16:50:53] Executed #1 -> Poisoner (EVIL)
+
+## [16:50:53] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP retry win after v6 loss, Dreamer pinpointed Poisoner, Pooka+Poisoner game with 2 Alchemist disguises
+

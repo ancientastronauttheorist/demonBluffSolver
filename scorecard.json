@@ -2295,6 +2295,13 @@
       "name": "asc52_v6",
       "notes": "LOSS - data entry errors caused solver degraded state. Druid #3 said 'Doppelganger' (out of pool) - solver couldnt handle. Multiple wrong execs from bad info: #2 Bard (wrong), #6 Knight (immune), #7 Bishop (wrong). #8 Pooka was last evil per memory reader.",
       "date": "2026-04-10 16:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v6_retry",
+      "notes": "10HP retry win after v6 loss, Dreamer pinpointed Poisoner, Pooka+Poisoner game with 2 Alchemist disguises",
+      "date": "2026-04-10 16:50"
     }
   ]
 }
