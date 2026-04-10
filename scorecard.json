@@ -1994,6 +1994,13 @@
       "name": "asc46_v5",
       "notes": "Perfect 10HP. Poet-Bishop + Scout + Lover + Gemcrafter narrowed to 2 scenarios, both had #1 evil.",
       "date": "2026-04-09 22:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v6",
+      "notes": "Perfect 10HP. Knight free check caught Poisoner, Slayer cleared #2, solver found Baa at #7.",
+      "date": "2026-04-09 22:13"
     }
   ]
 }

@@ -17977,3 +17977,89 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: Perfect 10HP. Poet-Bishop + Scout + Lover + Gemcrafter narrowed to 2 scenarios, both had #1 evil.
 
+
+---
+
+# New Game — 2026-04-09 22:09:34
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Enlightened, Scout, Knight, Oracle, Slayer, Bard
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Poisoner
+- Demons: Baa
+
+### [22:09:55] Revealed #2 Baker
+Info: {'original_role': 'Scout'}
+
+### [22:09:55] Revealed #3 Plague_Doctor
+Info: {}
+
+### [22:09:55] Revealed #5 Enlightened
+Info: {'direction': 'CW'}
+
+### [22:09:55] Revealed #6 Oracle
+Info: {'targets': [4, 5], 'minion_role': 'Poisoner'}
+
+### [22:09:55] Revealed #7 Bard
+Info: {'corruption_distance': 1}
+
+### [22:09:55] Revealed #8 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 3}
+
+### [22:10:20] Revealed #1 Slayer
+Info: {}
+
+### [22:10:20] Revealed #4 Knight
+Info: {}
+
+#### [22:10:20] Solver Output
+Scenarios: 10/396
+Definite good: ['#3']
+Evil probabilities: #6=60%, #2=40%, #1=30%, #8=30%, #4=20%, #5=10%, #7=10%
+
+#### [22:10:20] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight check: #4 is 20% evil, 10% corruption risk. Expected HP cost: 0.7 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 10% -- corrupted Knight loses immunity + 4 extra damage
+
+### [22:11:12] Ability used at #3
+
+#### [22:11:12] Solver Output
+Scenarios: 4/396
+Definite good: ['#3', '#5']
+Evil probabilities: #2=50%, #4=50%, #1=25%, #6=25%, #7=25%, #8=25%
+
+#### [22:11:12] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight free check: #4 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [22:11:52] Executed #4 -> Poisoner (EVIL)
+
+#### [22:11:52] Solver Output
+Scenarios: 2/37
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #7=50%
+
+#### [22:11:52] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#2']
+Reason: Target #2 is 50% evil (adjusted 0.50)
+
+### [22:12:31] Ability used at #1
+
+#### [22:12:31] Solver Output
+Scenarios: 1/37
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [22:12:31] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [22:13:15] Executed #7 -> Baa (EVIL)
+
+## [22:13:15] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Knight free check caught Poisoner, Slayer cleared #2, solver found Baa at #7.
+
