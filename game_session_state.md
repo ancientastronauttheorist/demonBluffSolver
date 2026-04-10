@@ -23070,3 +23070,100 @@ Reason: #9 is evil in ALL 2 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: 10HP perfect, FINAL village! All 4 evils at 100% confidence, Asc53 complete 7/7!
 
+
+---
+
+# New Game — 2026-04-10 18:20:47
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Architect, Empress, Confessor, Hunter, Knight
+- Outcasts: Drunk, Doppelganger
+- Minions: Poisoner, Puppeteer
+- Demons: Baa
+
+### [18:21:50] Revealed #1 Knight
+Info: {}
+
+### [18:21:50] Revealed #2 Architect
+Info: {'side': 'Equal'}
+
+### [18:21:50] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [18:21:50] Revealed #4 Empress
+Info: {'targets': [2, 3, 8]}
+
+### [18:21:50] Revealed #5 Empress
+Info: {'targets': [1, 2, 9]}
+
+### [18:21:50] Revealed #6 Hunter
+Info: {'distance': 3}
+
+### [18:21:50] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [18:21:50] Revealed #8 Witness
+Info: {'affected_position': 6}
+
+### [18:21:50] Revealed #9 Witness
+Info: {'affected_position': 6}
+
+#### [18:22:02] Solver Output
+Scenarios: 123/66618
+Definite evil: ['#7']
+Definite good: ['#8']
+Evil probabilities: #3=90%, #5=46%, #4=39%, #2=26%, #9=23%, #1=22%, #6=9%
+
+#### [18:22:02] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 123 scenarios (roles: {'Poisoner', 'Baa', 'Puppet', 'Puppeteer'})
+
+### [18:22:26] Executed #7 -> Baa (EVIL)
+
+#### [18:22:28] Solver Output
+Scenarios: 22/7402
+Definite evil: ['#7']
+Definite good: ['#6', '#8']
+Evil probabilities: #3=82%, #5=77%, #4=36%, #9=23%, #1=18%, #2=18%
+
+#### [18:22:28] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (82% evil Puppeteer, 18% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 82%, but all reveal branches still lead to a forced win.
+
+### [18:22:54] Executed #3 -> Puppeteer (EVIL)
+
+#### [18:22:54] Solver Output
+Scenarios: 18/912
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#6', '#8']
+Evil probabilities: #5=72%, #4=44%, #9=28%
+
+#### [18:22:54] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (72% evil Poisoner, 22% good Empress, 6% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 72%, but all reveal branches still lead to a forced win.
+
+### [18:23:16] Executed #5 -> Poisoner (EVIL)
+
+#### [18:23:16] Solver Output
+Scenarios: 13/175
+Definite evil: ['#3', '#5', '#7']
+Definite good: ['#1', '#2', '#6', '#8', '#9']
+Evil probabilities: #4=62%
+
+#### [18:23:16] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (62% evil Puppet, 31% good Empress, 8% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [18:23:39] Executed #4 -> Puppet (EVIL)
+
+## [18:23:44] GAME OVER — WIN
+Final HP: 10
+
+## [18:23:53] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v1 perfect 10HP, 4 evils, 9-card board with Baa+Poisoner+Puppeteer
+
