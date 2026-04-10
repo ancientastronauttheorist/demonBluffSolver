@@ -20757,3 +20757,66 @@ Reason: Target #7 is 60% evil (adjusted 0.60)
 Final HP: 10
 Notes: 10HP perfect, both evils killed by Slayers (#6 killed Pooka, Doppelganger-Slayer #8 killed Chancellor), no executions needed
 
+
+---
+
+# New Game — 2026-04-10 14:25:08
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Hunter, Druid, Poet, Scout, Jester
+- Outcasts: Doppelganger
+- Minions: Minion
+- Demons: Pooka
+
+### [14:25:26] Revealed #1 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [14:25:26] Revealed #3 Architect
+Info: {'side': 'Equal'}
+
+### [14:25:26] Revealed #4 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [14:25:26] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [14:25:35] Revealed #2 Jester
+Info: {}
+
+### [14:25:35] Revealed #5 Jester
+Info: {}
+
+### [14:25:35] Revealed #6 Druid
+Info: {}
+
+### [14:25:36] Revealed #8 Jester
+Info: {}
+
+#### [14:25:36] Solver Output
+Scenarios: 6/336
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7']
+Evil probabilities: #3=83%, #4=17%
+
+#### [14:25:36] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Minion', 'Pooka'})
+
+### [14:26:14] Executed #8 -> Minion (EVIL)
+
+#### [14:26:14] Solver Output
+Scenarios: 5/42
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [14:26:14] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 5 scenarios (roles: {'Pooka'})
+
+### [14:26:58] Executed #3 -> Pooka (EVIL)
+
+## [14:26:58] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Scout+Hunter+Knitter(Poet) constrained solver to 6 scenarios instantly, clean 100% executions on both evils
+

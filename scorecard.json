@@ -2197,6 +2197,13 @@
       "name": "asc50_v6",
       "notes": "10HP perfect, both evils killed by Slayers (#6 killed Pooka, Doppelganger-Slayer #8 killed Chancellor), no executions needed",
       "date": "2026-04-10 14:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v7",
+      "notes": "10HP perfect, Scout+Hunter+Knitter(Poet) constrained solver to 6 scenarios instantly, clean 100% executions on both evils",
+      "date": "2026-04-10 14:26"
     }
   ]
 }
