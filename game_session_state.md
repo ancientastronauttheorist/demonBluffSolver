@@ -18063,3 +18063,123 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. Knight free check caught Poisoner, Slayer cleared #2, solver found Baa at #7.
 
+
+---
+
+# New Game — 2026-04-09 22:14:39
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Dreamer, Fortune_Teller, Medium, Baker, Knight, Jester
+- Outcasts: Plague_Doctor
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [22:16:46] Revealed #1 Gemcrafter
+Info: {'good_position': 8}
+
+### [22:16:46] Revealed #2 Medium
+Info: {'good_position': 5, 'good_role': 'Dreamer'}
+
+### [22:16:46] Revealed #3 Baker
+Info: {'original_role': 'Fortune Teller'}
+
+### [22:16:46] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [22:16:58] Revealed #4 Plague_Doctor
+Info: {}
+
+### [22:16:58] Revealed #5 Dreamer
+Info: {}
+
+### [22:16:58] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [22:16:58] Solver Output
+Scenarios: 114/1848
+Definite good: ['#9']
+Evil probabilities: #3=79%, #6=42%, #7=42%, #5=37%, #8=37%, #1=26%, #2=26%, #4=11%
+
+#### [22:16:58] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.991 (adjusted 2.834) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [22:17:40] Revealed #5 Dreamer
+Info: {'target': 3, 'evil_role': 'Witch'}
+
+### [22:17:40] Ability used at #5
+
+#### [22:17:40] Solver Output
+Scenarios: 68/1848
+Definite good: ['#9']
+Evil probabilities: #3=65%, #5=47%, #6=41%, #7=41%, #2=35%, #8=35%, #1=29%, #4=6%
+
+#### [22:17:40] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.106 (adjusted 2.106) | timing x1.00
+
+### [22:18:16] Ability used at #4
+
+#### [22:18:16] Solver Output
+Scenarios: 40/1848
+Definite evil: ['#3']
+Definite good: ['#4', '#9']
+Evil probabilities: #5=50%, #6=35%, #7=35%, #2=30%, #8=30%, #1=20%
+
+#### [22:18:16] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 40 scenarios (roles: {'Minion', 'Witch', 'Lilis'})
+
+### [22:18:56] Executed #3 -> Witch (EVIL)
+
+### [22:19:33] Revealed #8 Knight
+Info: {}
+
+#### [22:19:33] Solver Output
+Scenarios: 8/62
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#9']
+Evil probabilities: #1=50%, #6=25%, #7=25%
+
+#### [22:19:33] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 8 scenarios (roles: {'Minion', 'Lilis'})
+
+### [22:20:19] Executed #8 -> Lilis (EVIL)
+
+#### [22:20:19] Solver Output
+Scenarios: 4/31
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#9']
+Evil probabilities: #1=50%, #6=25%, #7=25%
+
+#### [22:20:19] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 0.875) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [22:21:09] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [22:21:09] Ability used at #6
+
+#### [22:21:09] Solver Output
+Scenarios: 2/31
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#9']
+Evil probabilities: #1=50%, #7=50%
+
+#### [22:21:09] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 50% likely evil but HP too low to risk (HP=4, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [22:22:55] Executed #1 -> Minion (EVIL)
+
+## [22:22:56] GAME OVER — WIN
+Final HP: 4
+Notes: 4HP. Lilis+Witch+Minion. Dreamer found Witch, PD clean checks, night_no_kill confirmed Lilis. Solver 50/50 on last exec but Gemcrafter lie on #8 proved #1 evil.
+

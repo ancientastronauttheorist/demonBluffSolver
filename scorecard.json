@@ -2001,6 +2001,13 @@
       "name": "asc46_v6",
       "notes": "Perfect 10HP. Knight free check caught Poisoner, Slayer cleared #2, solver found Baa at #7.",
       "date": "2026-04-09 22:13"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc46_v7",
+      "notes": "4HP. Lilis+Witch+Minion. Dreamer found Witch, PD clean checks, night_no_kill confirmed Lilis. Solver 50/50 on last exec but Gemcrafter lie on #8 proved #1 evil.",
+      "date": "2026-04-09 22:22"
     }
   ]
 }
