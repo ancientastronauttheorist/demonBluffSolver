@@ -1,0 +1,127 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Knitter"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    }
+  ],
+  "executed": [
+    6,
+    1,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    1,
+    7,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Puppet",
+    "7": "Lilis",
+    "8": "Puppeteer"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Knitter",
+      "Confessor",
+      "Architect",
+      "Poet",
+      "Medium"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc47_v2",
+  "true_evil_positions": {
+    "1": "Puppet",
+    "7": "Lilis",
+    "8": "Puppeteer"
+  },
+  "notes": "8HP. Puppeteer+Puppet+Lilis. Duplicate Knitter + dizzy Confessor = Puppet/Puppeteer confirmed. Lilis night killed Poet."
+}

@@ -18285,3 +18285,74 @@ Reason: #7 is evil in ALL 6 scenarios (roles: {'Witch'})
 Final HP: 6
 Notes: 6HP. Lilis+Witch+Twin_Minion. 3 Judges (1 pool) = duplicates reveal. Judge truth checks narrowed Witch to #7.
 
+
+---
+
+# New Game — 2026-04-09 22:33:29
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Knitter, Confessor, Architect, Poet, Medium
+- Outcasts: Plague_Doctor
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [22:34:46] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [22:34:46] Revealed #2 Knitter
+Info: {'evil_pairs': 2}
+
+### [22:34:46] Revealed #3 Architect
+Info: {'side': 'Equal'}
+
+### [22:34:46] Revealed #7 Medium
+Info: {'good_position': 8, 'good_role': 'Knitter'}
+
+### [22:34:46] Revealed #8 Knitter
+Info: {'evil_pairs': 0}
+
+### [22:35:13] Revealed #4 Jester
+Info: {}
+
+### [22:35:13] Revealed #5 Plague_Doctor
+Info: {}
+
+#### [22:35:13] Solver Output
+Scenarios: 4/264
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #2=50%, #3=50%, #7=50%, #8=50%
+
+#### [22:35:13] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Puppeteer', 'Puppet', 'Lilis'})
+
+### [22:35:56] Executed #1 -> Puppet (EVIL)
+
+#### [22:35:57] Solver Output
+Scenarios: 2/42
+Definite evil: ['#1', '#7', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+
+#### [22:35:57] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Lilis'})
+
+### [22:36:40] Executed #7 -> Lilis (EVIL)
+
+#### [22:36:40] Solver Output
+Scenarios: 2/8
+Definite evil: ['#1', '#7', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+
+#### [22:36:40] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [22:37:25] Executed #8 -> Puppeteer (EVIL)
+
+## [22:37:25] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP. Puppeteer+Puppet+Lilis. Duplicate Knitter + dizzy Confessor = Puppet/Puppeteer confirmed. Lilis night killed Poet.
+

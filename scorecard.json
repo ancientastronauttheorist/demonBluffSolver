@@ -2015,6 +2015,13 @@
       "name": "asc47_v1",
       "notes": "6HP. Lilis+Witch+Twin_Minion. 3 Judges (1 pool) = duplicates reveal. Judge truth checks narrowed Witch to #7.",
       "date": "2026-04-09 22:31"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc47_v2",
+      "notes": "8HP. Puppeteer+Puppet+Lilis. Duplicate Knitter + dizzy Confessor = Puppet/Puppeteer confirmed. Lilis night killed Poet.",
+      "date": "2026-04-09 22:37"
     }
   ]
 }
