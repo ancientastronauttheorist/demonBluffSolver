@@ -18356,3 +18356,112 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
 Final HP: 8
 Notes: 8HP. Puppeteer+Puppet+Lilis. Duplicate Knitter + dizzy Confessor = Puppet/Puppeteer confirmed. Lilis night killed Poet.
 
+
+---
+
+# New Game — 2026-04-09 22:38:41
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Bard, Dreamer, Alchemist, Medium, Lover
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [22:39:08] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [22:39:08] Revealed #2 Bard
+Info: {'corruption_distance': -1}
+
+### [22:39:08] Revealed #3 Bard
+Info: {'corruption_distance': 1}
+
+### [22:39:08] Revealed #4 Oracle
+Info: {'targets': [4, 8], 'minion_role': 'Puppet'}
+
+### [22:39:08] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [22:39:08] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [22:39:08] Revealed #8 Medium
+Info: {'good_position': 6, 'good_role': 'Dreamer'}
+
+### [22:39:34] Revealed #7 Alchemist
+Info: {'cured_count': 2}
+
+### [22:39:34] Revealed #6 Dreamer
+Info: {}
+
+### [22:39:34] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [22:39:35] Solver Output
+Scenarios: 23/2268
+Definite good: ['#3', '#6', '#9']
+Evil probabilities: #7=78%, #8=78%, #1=57%, #2=43%, #4=22%, #5=22%
+
+#### [22:39:35] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.742 (adjusted 1.742) | timing x1.00
+
+### [22:40:15] Ability used at #9
+
+#### [22:40:15] Solver Output
+Scenarios: 10/2268
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#9']
+Evil probabilities: #7=70%, #8=70%, #4=30%, #5=30%
+
+#### [22:40:15] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 10 scenarios (roles: {'Pooka'})
+
+### [22:41:03] Executed #1 -> Pooka (EVIL)
+
+#### [22:41:03] Solver Output
+Scenarios: 10/306
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#9']
+Evil probabilities: #7=70%, #8=70%, #4=30%, #5=30%
+
+#### [22:41:03] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#4']
+Reason: Entropy 1.571 (adjusted 1.335) | timing x1.00
+WARNING: Corruption risk: 30%
+
+### [22:41:41] Revealed #6 Dreamer
+Info: {'target': 4, 'evil_role': 'Puppet'}
+
+### [22:41:41] Ability used at #6
+
+#### [22:41:42] Solver Output
+Scenarios: 6/306
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#9']
+Evil probabilities: #4=50%, #5=50%, #7=50%, #8=50%
+
+#### [22:41:42] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Puppet, 33% good Oracle, 17% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [22:42:25] Executed #4 -> Puppet (EVIL)
+
+#### [22:42:25] Solver Output
+Scenarios: 3/50
+Definite evil: ['#1', '#4', '#5']
+Definite good: ['#2', '#3', '#6', '#7', '#8', '#9']
+
+#### [22:42:25] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppeteer'})
+
+### [22:43:14] Executed #5 -> Puppeteer (EVIL)
+
+## [22:43:15] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD clean + Dreamer found Puppet. Duplicate Lover + Oracle Puppet detection. All 100% confident execs.
+
