@@ -2029,6 +2029,13 @@
       "name": "asc47_v3",
       "notes": "Perfect 10HP. PD clean + Dreamer found Puppet. Duplicate Lover + Oracle Puppet detection. All 100% confident execs.",
       "date": "2026-04-09 22:43"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc47_v4",
+      "notes": "1HP clutch! Shaman+Chancellor+Lilis. 10-card game. Wrong exec on #2 (85% gamble) but solver lookahead guaranteed win. Judge truth checks + Architect narrowed remaining evils to 100%.",
+      "date": "2026-04-09 22:51"
     }
   ]
 }

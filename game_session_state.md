@@ -18465,3 +18465,116 @@ Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppeteer'})
 Final HP: 10
 Notes: Perfect 10HP. PD clean + Dreamer found Puppet. Duplicate Lover + Oracle Puppet detection. All 100% confident execs.
 
+
+---
+
+# New Game — 2026-04-09 22:44:36
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Oracle, Gemcrafter, Alchemist, Scout, Architect, Judge
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor, Shaman
+- Demons: Lilis
+
+### [22:46:15] Revealed #1 Judge
+Info: {}
+
+### [22:46:15] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [22:46:15] Revealed #3 Wretch
+Info: {}
+
+### [22:46:15] Revealed #4 Judge
+Info: {}
+
+### [22:46:15] Revealed #5 Gemcrafter
+Info: {'good_position': 3}
+
+### [22:46:15] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+### [22:46:15] Revealed #8 Gemcrafter
+Info: {'good_position': 3}
+
+### [22:46:29] Revealed #6 Medium
+Info: {'good_position': 5, 'good_role': 'Drunk'}
+
+#### [22:46:29] Solver Output
+Scenarios: 43/5496
+Definite good: ['#9', '#10']
+Evil probabilities: #8=86%, #2=77%, #5=37%, #1=28%, #4=23%, #3=21%, #6=14%, #7=14%
+
+#### [22:46:29] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#6']
+Reason: Expected posterior 21.5 scenarios (adjusted 21.5, info gain 0.999 bits) | timing x1.00
+
+### [22:47:23] Revealed #1 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [22:47:23] Ability used at #1
+
+#### [22:47:23] Solver Output
+Scenarios: 22/5496
+Definite good: ['#7', '#9', '#10']
+Evil probabilities: #8=73%, #2=68%, #5=59%, #1=41%, #6=27%, #4=18%, #3=14%
+
+#### [22:47:23] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#1']
+Reason: Expected posterior 11.4 scenarios (adjusted 11.4, info gain 0.953 bits) | timing x1.00
+
+### [22:48:03] Revealed #4 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [22:48:04] Ability used at #4
+
+#### [22:48:04] Solver Output
+Scenarios: 13/5496
+Definite good: ['#3', '#7', '#9', '#10']
+Evil probabilities: #2=85%, #5=85%, #8=54%, #6=46%, #1=15%, #4=15%
+
+#### [22:48:04] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (38% evil Lilis, 23% evil Chancellor, 23% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 85%, but all reveal branches still lead to a forced win.
+
+### [22:49:01] Executed #2 -> GOOD (WRONG!)
+
+#### [22:49:01] Solver Output
+Scenarios: 2/3970
+Definite evil: ['#1', '#4', '#8']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:49:01] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Chancellor', 'Shaman'})
+
+### [22:49:56] Executed #1 -> Shaman (EVIL)
+
+#### [22:49:56] Solver Output
+Scenarios: 1/485
+Definite evil: ['#1', '#4', '#8']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:49:56] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [22:50:44] Executed #4 -> Chancellor (EVIL)
+
+#### [22:50:44] Solver Output
+Scenarios: 1/43
+Definite evil: ['#1', '#4', '#8']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:50:44] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [22:51:35] Executed #8 -> Lilis (EVIL)
+
+## [22:51:35] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP clutch! Shaman+Chancellor+Lilis. 10-card game. Wrong exec on #2 (85% gamble) but solver lookahead guaranteed win. Judge truth checks + Architect narrowed remaining evils to 100%.
+
