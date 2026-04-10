@@ -21365,3 +21365,93 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP, Judge found #7 lying, 50/50 on #6 was wrong exec (Judge good), lookahead guaranteed win, Asc51 complete 7/7
 
+
+---
+
+# New Game — 2026-04-10 15:42:37
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Oracle, Judge, Bishop, Dreamer, Baker, Lover, Slayer, Fortune_Teller
+- Outcasts: Doppelganger
+- Minions: Puppeteer, Shaman
+- Demons: Lilis
+
+### [15:44:03] Revealed #1 Bishop
+Info: {'targets': [6, 2, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:44:03] Revealed #2 Knight
+Info: {}
+
+### [15:44:03] Revealed #4 Lover
+Info: {'evil_adjacent': 2}
+
+### [15:44:21] Revealed #3 Fortune_Teller
+Info: {}
+
+### [15:45:33] Revealed #5 Oracle
+Info: {'targets': [6, 7], 'minion_role': 'Puppeteer'}
+
+### [15:45:33] Revealed #8 Knight
+Info: {}
+
+### [15:45:33] Revealed #9 Bishop
+Info: {'targets': [1, 2, 5], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:45:48] Revealed #6 Judge
+Info: {}
+
+#### [15:45:49] Solver Output
+Scenarios: 4/2016
+Definite evil: ['#5', '#6', '#10']
+Definite good: ['#1', '#2', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [15:45:49] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [15:46:32] Executed #5 -> Puppet (EVIL)
+
+#### [15:46:32] Solver Output
+Scenarios: 4/644
+Definite evil: ['#5', '#6', '#10']
+Definite good: ['#1', '#2', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [15:46:32] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Puppeteer'})
+
+### [15:47:11] Executed #6 -> Puppeteer (EVIL)
+
+#### [15:47:11] Solver Output
+Scenarios: 4/98
+Definite evil: ['#5', '#6', '#10']
+Definite good: ['#1', '#2', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [15:47:11] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:48:06] Revealed #3 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [15:48:06] Ability used at #3
+
+#### [15:48:06] Solver Output
+Scenarios: 2/98
+Definite evil: ['#4', '#5', '#6', '#10']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [15:48:06] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Shaman'})
+
+### [15:48:51] Executed #4 -> Lilis (EVIL)
+
+## [15:48:51] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, night killed Slayer(#7) and Shaman(#10), FT confirmed #1/#2 clean, all 4 evils found at 100%
+
