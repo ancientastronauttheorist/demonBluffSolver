@@ -49,6 +49,7 @@
 8b. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
    - **Poet "#X is Evil" format**: Use `card poet <pos> bounty_hunter <target>` (NOT medium). The bounty_hunter pseudo-role handles direct evil-call. Lost asc37_v3 wrong exec from using wrong format.
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
+   - **Shaman games (multiple Bakers)**: Shaman swaps villagers to Baker at game start. Swapped Bakers say "I was a [their original role]" (self-ID, NOT Baker ability revealing previous card). Original Baker says "I am the original Baker." **Enter Druid "Wretch" result as `card druid <pos> <targets> Wretch`** (not `none`) — evil Druid lying by claiming an outcast. **Use `pd_check` command (NOT `card pd_check`)** for PD ability results. Lost asc46_v1 to wrong data entry + Baker chain bug.
 
 ### Solve & Act
 10. `python game_loop.py next` -- **do what it says**. Warns if card entries missing or HP inconsistent.

@@ -1959,6 +1959,13 @@
       "name": "asc46_v1",
       "notes": "Solver bug: Shaman-swapped Bakers' 'I was a [role]' misinterpreted as Baker ability (previous card role reveal) instead of self-identification of original role. Solver wrongly concluded #7 was evil Minion with 100% confidence in 1 scenario.",
       "date": "2026-04-09 21:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v1b",
+      "notes": "Perfect 10HP. Two Knights = both evil. Bishop confirmed #5 Minion. Knight free check on #4.",
+      "date": "2026-04-09 21:41"
     }
   ]
 }

@@ -17521,3 +17521,67 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: Solver bug: Shaman-swapped Bakers' 'I was a [role]' misinterpreted as Baker ability (previous card role reveal) instead of self-identification of original role. Solver wrongly concluded #7 was evil Minion with 100% confidence in 1 scenario.
 
+
+---
+
+# New Game — 2026-04-09 21:38:08
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Confessor, Architect, Knight, Judge, Slayer
+- Outcasts: Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [21:39:06] Revealed #1 Slayer
+Info: {}
+
+### [21:39:06] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [21:39:06] Revealed #3 Bombardier
+Info: {}
+
+### [21:39:06] Revealed #4 Knight
+Info: {}
+
+### [21:39:06] Revealed #5 Knight
+Info: {}
+
+### [21:39:06] Revealed #6 Bishop
+Info: {'targets': [8, 3, 5], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [21:39:06] Revealed #7 Judge
+Info: {}
+
+### [21:39:06] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [21:39:26] Solver Output
+Scenarios: 8/56
+Definite good: ['#1', '#3', '#8']
+Evil probabilities: #5=75%, #4=50%, #6=38%, #2=25%, #7=12%
+
+#### [21:39:26] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight check: #5 is 75% evil, 25% corruption risk. Expected HP cost: 0.6 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 25% -- corrupted Knight loses immunity + 4 extra damage
+
+### [21:40:10] Executed #5 -> Twin_Minion (EVIL)
+
+#### [21:40:15] Solver Output
+Scenarios: 2/7
+Definite evil: ['#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8']
+Evil probabilities: #2=50%, #4=50%
+
+#### [21:40:15] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight free check: #4 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [21:41:06] Executed #4 -> Pooka (EVIL)
+
+## [21:41:15] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Two Knights = both evil. Bishop confirmed #5 Minion. Knight free check on #4.
+
