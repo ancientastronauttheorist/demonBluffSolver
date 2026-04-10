@@ -19325,3 +19325,110 @@ Reason: #4 is evil in ALL 4 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: 10HP perfect, no abilities needed, pure deduction from Scout+Oracle+Confessor+Bard clues
 
+
+---
+
+# New Game — 2026-04-10 00:38:29
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Scout, Bishop, Dreamer, Fortune_Teller, Knight
+- Outcasts: Bombardier, Wretch
+- Minions: Poisoner
+- Demons: Lilis
+
+### [00:39:50] Revealed #1 Bombardier
+Info: {}
+
+### [00:39:50] Revealed #3 Bard
+Info: {'corruption_distance': 3}
+
+### [00:39:50] Revealed #4 Bishop
+Info: {'targets': [3, 5, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [00:40:15] Revealed #2 Dreamer
+Info: {}
+
+### [00:42:05] Revealed #6 Bard
+Info: {'corruption_distance': 4}
+
+### [00:42:05] Revealed #8 Knight
+Info: {}
+
+### [00:42:05] Revealed #9 Wretch
+Info: {}
+
+### [00:42:14] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [00:42:18] Solver Output
+Scenarios: 10/98
+Definite good: ['#2', '#5']
+Evil probabilities: #3=90%, #6=40%, #1=20%, #4=20%, #7=10%, #8=10%, #9=10%
+
+#### [00:42:18] Recommendation
+Action: **EXECUTE** #8
+Reason: Knight free check: #8 is 10% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [00:43:07] Execution Blocked
+#8 Knight immunity — confirmed good, no HP loss
+
+#### [00:43:07] Solver Output
+Scenarios: 9/78
+Definite good: ['#2', '#5', '#8']
+Evil probabilities: #3=89%, #6=44%, #1=22%, #4=22%, #7=11%, #9=11%
+
+#### [00:43:07] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.059 (adjusted 1.487) | timing x1.00
+WARNING: Corruption risk: 56%
+
+### [00:43:44] Revealed #2 Dreamer
+Info: {'target': 3, 'evil_role': 'Lilis'}
+
+### [00:43:44] Ability used at #2
+
+#### [00:43:44] Solver Output
+Scenarios: 7/78
+Definite good: ['#2', '#5', '#8']
+Evil probabilities: #3=86%, #6=43%, #4=29%, #1=14%, #7=14%, #9=14%
+
+#### [00:43:44] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.985 (adjusted 0.915) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [00:44:28] Revealed #7 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [00:44:28] Ability used at #7
+
+#### [00:44:29] Solver Output
+Scenarios: 3/78
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#5', '#8', '#9']
+Evil probabilities: #1=33%, #6=33%, #7=33%
+
+#### [00:44:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Lilis', 'Poisoner'})
+
+### [00:45:08] Executed #3 -> Poisoner (EVIL)
+
+#### [00:45:08] Solver Output
+Scenarios: 2/12
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#5', '#6', '#8', '#9']
+Evil probabilities: #1=50%, #7=50%
+
+#### [00:45:08] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good Fortune Teller, 50% evil Lilis).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:45:48] Executed #7 -> Lilis (EVIL)
+
+## [00:45:55] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis night killed #5 Scout, Knight trick, Dreamer+FT abilities
+

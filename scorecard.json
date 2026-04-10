@@ -2085,6 +2085,13 @@
       "name": "asc48_v4",
       "notes": "10HP perfect, no abilities needed, pure deduction from Scout+Oracle+Confessor+Bard clues",
       "date": "2026-04-10 00:35"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc48_v5",
+      "notes": "6HP, Lilis night killed #5 Scout, Knight trick, Dreamer+FT abilities",
+      "date": "2026-04-10 00:45"
     }
   ]
 }
