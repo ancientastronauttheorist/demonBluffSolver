@@ -66,7 +66,7 @@
 
 ### End
 14. Screenshot end screen. Read true evils + check `<Corrupted>` tags. **Note: game auto-advances to next village after "Next" click — screenshot BEFORE clicking Next if you need end-screen details.** End-screen dialogs: "Next" at ~(1280, 865), "Continue" (score summary) at ~(1280, 950). Ascension-complete dialogs may need the same y range.
-15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided manually. Still accepts manual override.
+15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided manually. Still accepts manual override. **CRITICAL: only EVIL positions go in the dict. Do NOT include night-killed Good cards (e.g. Lilis-killed Bard) — game_over treats every key as an executed evil and pollutes `executed`/`true_evil_positions`. Lost asc54_v4 to a regression failure for this reason. If a Good card was night-killed, leave it out of the manual evils string entirely.**
 16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
 ## Village Timing (Asc 45+)

@@ -1,0 +1,145 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6
+        ],
+        "types": [
+          "Minion",
+          "Villager"
+        ],
+        "copied_role": "Bishop"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "ccw"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4,
+        "good_role": "Poet"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    7,
+    9
+  ],
+  "confirmed_evil": [
+    6,
+    7,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Poisoner",
+    "7": "Minion",
+    "9": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Judge",
+      "Gemcrafter",
+      "Medium",
+      "Bard",
+      "Poet"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Minion",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 2,
+  "name": "asc54_v4",
+  "true_evil_positions": {
+    "6": "Poisoner",
+    "7": "Minion",
+    "9": "Lilis"
+  },
+  "notes": "Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs"
+}

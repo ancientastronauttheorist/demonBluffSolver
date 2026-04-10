@@ -23292,3 +23292,83 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: Asc54 v3 perfect 10HP, both adjacent (Pooka+Poisoner), 1-scenario solver
 
+
+---
+
+# New Game — 2026-04-10 18:32:31
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Judge, Gemcrafter, Medium, Bard, Poet
+- Outcasts: Wretch
+- Minions: Minion, Poisoner
+- Demons: Lilis
+
+#### [18:33:54] Claude Reasoning
+
+
+### [18:34:23] Revealed #1 Gemcrafter
+Info: {'good_position': 4}
+
+### [18:34:23] Revealed #2 Wretch
+Info: {}
+
+### [18:35:30] Revealed #3 Judge
+Info: {}
+
+### [18:35:31] Revealed #4 Poet
+Info: {'targets': [5, 6], 'types': ['Minion', 'Villager'], 'copied_role': 'Bishop'}
+
+### [18:36:31] Revealed #7 Gemcrafter
+Info: {'good_position': 2}
+
+### [18:36:31] Revealed #8 Medium
+Info: {'good_position': 4, 'good_role': 'Poet'}
+
+### [18:36:42] Revealed #6 Enlightened
+Info: {'direction': 'ccw'}
+
+### [18:36:42] Revealed #9 Enlightened
+Info: {'direction': 'cw'}
+
+#### [18:36:46] Solver Output
+Scenarios: 2/694
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [18:36:46] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [18:37:12] Executed #6 -> Poisoner (EVIL)
+
+#### [18:37:12] Solver Output
+Scenarios: 2/76
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [18:37:12] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+### [18:37:38] Executed #7 -> Minion (EVIL)
+
+#### [18:37:38] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [18:37:38] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [18:38:08] Executed #9 -> Lilis (EVIL)
+
+## [18:38:08] GAME OVER — WIN
+Final HP: 6
+Notes: Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs
+
+## [18:39:12] GAME OVER — WIN
+Final HP: 6
+Notes: Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs
+

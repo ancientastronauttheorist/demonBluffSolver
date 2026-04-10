@@ -2393,6 +2393,20 @@
       "name": "asc54_v3",
       "notes": "Asc54 v3 perfect 10HP, both adjacent (Pooka+Poisoner), 1-scenario solver",
       "date": "2026-04-10 18:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc54_v4",
+      "notes": "Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs",
+      "date": "2026-04-10 18:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc54_v4",
+      "notes": "Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs",
+      "date": "2026-04-10 18:39"
     }
   ]
 }

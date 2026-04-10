@@ -64,6 +64,26 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - 8/8 auto_card success rate. The auto-pipeline is very strong on standard passive clues.
   - Each execute cycle is still ~22-25s, dominated by 5 sequential tool calls (next, click center, safe_click sword, click target, screenshot, execute). **A combined `solve_and_execute` macro would shave ~10s/cycle**, saving ~20s on a 2-execute village.
 
+### Village 4 (9-card, Lilis demon, 3 evil)
+- **Wall-clock window:** 18:32:09 → 18:38:04 (≈ **5m 55s**)
+- **Result:** WIN, 6/10 HP (lost 4 to two Lilis nights), 3 confident executions
+- **Evils:** #6 Poisoner, #7 Minion, #9 Lilis. #5 Bard night-killed (Good).
+- **Phase breakdown (rough):**
+  - 18:32:09 – 18:32:30: click Next from V3, screenshot, deck read. ~20s.
+  - 18:32:30 – 18:33:00: `new` + `deck` (Lilis warning). ~30s.
+  - 18:33:00 – 18:33:30: `flip --lilis` batch 1 (#1-#4) → night phase (HP 10→8, killed #5). ~30s.
+  - 18:33:30 – 18:35:00: deal with night kill, screenshot, `night_kill 5 0`, `auto_card`, manual #3 Judge no_info + #4 Poet bishop. ~90s.
+  - 18:35:00 – 18:35:30: `flip --lilis` batch 2 (#6-#9) → second night phase (HP 8→6, no kill). ~30s.
+  - 18:35:30 – 18:36:30: `night_no_kill`, `auto_card`, manual #6/#9 Enlightened directions. ~60s.
+  - 18:36:30 – 18:38:04: 3 execute cycles (#6 Poisoner, #7 Minion, #9 Lilis), each ~30s. ~95s.
+- **Notes / friction points:**
+  - **NEW BUG / lesson — game_over and night-killed cards.** I included `5=Bard` in the game_over evils dict, thinking it was the killed card's role. But game_over treats EVERY key in that dict as an "executed evil at this position". Result: #5 added to `executed[]`, Bard added to `true_evil_positions[]`, regression test FAILED. **Fix recorded in CLAUDE.md step 15.** Future rule: night-killed Good cards stay OUT of the evils dict entirely.
+  - **Manual JSON edit needed** because rerunning game_over without #5 still left the polluted session state in the test JSON. Had to remove `5` from `executed` array by hand. *Possible improvement*: game_over should rebuild executed from the evils-dict positions, not append.
+  - Lilis batched flow is **still slow** — ~3min just for the flipping/night/data-entry of 8 cards, vs ~30s for a non-Lilis village. Each night phase forces a screenshot+verify cycle.
+  - Memory reader's "BLOCKED" flag for #6/#7/#8 in batch 1 was misleading — they were just unflipped, not blocked. (Memory reader uses `state=Hidden` to set BLOCKED, but Lilis batches have plenty of legitimately-Hidden cards.)
+  - **Auto_card cannot parse Judge "I am dizzy"** — Judge has no dizzy info_parsed schema. Workaround: `card no_info <pos> Judge`. *Worth adding* a `card judge <pos> dizzy` shortcut.
+  - **Auto_card got Poet/Bishop right** when given the runtime data — nice. But the manual fallback `card poet 4 bishop 5,6 Minion,Villager` worked perfectly too.
+
 ## Summary (filled in at end of run)
 - Total wall-clock time:
 - Slowest step categories:
