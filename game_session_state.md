@@ -17801,3 +17801,117 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Perfect 10HP. Dreamer found Pooka at #2, FT cleared #1+#3, Jester confirmed 1 evil in group.
 
+
+---
+
+# New Game — 2026-04-09 21:57:44
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Hunter, Oracle, Bishop, Poet, Alchemist
+- Outcasts: Bombardier, Wretch, Plague_Doctor
+- Minions: Witch, Chancellor
+- Demons: Baa
+
+### [21:58:20] Revealed #2 Oracle
+Info: {'targets': [6, 9], 'minion_role': 'Witch'}
+
+### [21:58:20] Revealed #6 Oracle
+Info: {'targets': [2, 8], 'minion_role': 'Chancellor'}
+
+### [21:58:20] Revealed #7 Hunter
+Info: {'distance': 3}
+
+### [21:59:09] Revealed #1 Bombardier
+Info: {}
+
+### [21:59:09] Revealed #3 Bombardier
+Info: {}
+
+### [21:59:09] Revealed #4 Slayer
+Info: {}
+
+### [21:59:09] Revealed #5 Alchemist
+Info: {'cured_count': 2}
+
+### [21:59:10] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [21:59:15] Solver Output
+Scenarios: 22/2064
+Definite good: ['#8', '#9']
+Evil probabilities: #3=55%, #6=55%, #1=45%, #2=45%, #5=45%, #7=36%, #4=18%
+
+#### [21:59:15] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.154 (adjusted 2.154) | timing x1.00
+
+### [21:59:56] Ability used at #8
+
+#### [21:59:57] Solver Output
+Scenarios: 10/2064
+Definite evil: ['#5']
+Definite good: ['#4', '#7', '#8', '#9']
+Evil probabilities: #6=60%, #1=50%, #3=50%, #2=40%
+
+#### [21:59:57] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 10 scenarios (roles: {'Baa', 'Chancellor', 'Witch'})
+
+### [22:00:36] Executed #5 -> Baa (EVIL)
+
+#### [22:00:36] Solver Output
+Scenarios: 6/243
+Definite evil: ['#5']
+Definite good: ['#4', '#7', '#8', '#9']
+Evil probabilities: #6=67%, #1=50%, #3=50%, #2=33%
+
+#### [22:00:36] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#6']
+Reason: Target #6 is 67% evil (adjusted 0.67)
+
+### [22:01:17] Ability used at #4
+
+#### [22:01:18] Solver Output
+Scenarios: 2/243
+Definite evil: ['#2', '#5']
+Definite good: ['#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%
+
+#### [22:01:18] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [22:01:54] Executed #2 -> Chancellor (EVIL)
+
+#### [22:01:54] Solver Output
+Scenarios: 2/27
+Definite evil: ['#2', '#5']
+Definite good: ['#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%
+
+#### [22:01:54] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 0% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (0% < 50%) -- consider gathering more info
+
+### [22:03:55] Revealed #1 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 1}
+
+#### [22:03:55] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#2', '#5']
+Definite good: ['#3', '#4', '#6', '#7', '#8', '#9']
+
+#### [22:03:55] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [22:04:37] Executed #1 -> Witch (EVIL)
+
+## [22:04:37] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field.
+

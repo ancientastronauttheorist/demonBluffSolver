@@ -1980,6 +1980,13 @@
       "name": "asc46_v3",
       "notes": "Perfect 10HP. Dreamer found Pooka at #2, FT cleared #1+#3, Jester confirmed 1 evil in group.",
       "date": "2026-04-09 21:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v4",
+      "notes": "Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field.",
+      "date": "2026-04-09 22:04"
     }
   ]
 }
