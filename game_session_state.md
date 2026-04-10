@@ -20685,3 +20685,75 @@ Reason: #7 is evil in ALL 3 scenarios (roles: {'Shaman'})
 Final HP: 6
 Notes: 6HP, Lilis game, night killed #5 #10 (both good), Confessor dizzy, PD #8 clean check, evil PD #3 caught lying, no wrong execs
 
+
+---
+
+# New Game — 2026-04-10 14:20:58
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Architect, Slayer, Bishop, Confessor, Empress
+- Outcasts: Doppelganger, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [14:21:28] Revealed #1 Bombardier
+Info: {}
+
+### [14:21:28] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [14:21:28] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [14:21:28] Revealed #4 Baker
+Info: {'original_role': 'Architect'}
+
+### [14:21:28] Revealed #5 Bishop
+Info: {'targets': [5, 2, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:21:28] Revealed #7 Empress
+Info: {'targets': [1, 2, 5]}
+
+### [14:21:36] Revealed #6 Slayer
+Info: {}
+
+### [14:21:36] Revealed #8 Slayer
+Info: {}
+
+#### [14:21:37] Solver Output
+Scenarios: 14/454
+Definite good: ['#1', '#6', '#8']
+Evil probabilities: #4=71%, #7=43%, #2=36%, #3=29%, #5=21%
+
+#### [14:21:37] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#4']
+Reason: Target #4 is 71% evil (adjusted 0.71)
+
+### [14:22:17] Ability used at #6
+
+#### [14:22:18] Solver Output
+Scenarios: 14/454
+Definite good: ['#1', '#6', '#8']
+Evil probabilities: #4=71%, #7=43%, #2=36%, #3=29%, #5=21%
+
+#### [14:22:18] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#4']
+Reason: Target #4 is 71% evil (adjusted 0.71)
+
+#### [14:22:32] Solver Output
+Scenarios: 10/52
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#8']
+Evil probabilities: #7=60%, #2=30%, #5=10%
+
+#### [14:22:32] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#7']
+Reason: Target #7 is 60% evil (adjusted 0.60)
+
+### [14:23:17] Ability used at #8
+
+## [14:23:17] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, both evils killed by Slayers (#6 killed Pooka, Doppelganger-Slayer #8 killed Chancellor), no executions needed
+

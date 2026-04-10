@@ -2190,6 +2190,13 @@
       "name": "asc50_v5",
       "notes": "6HP, Lilis game, night killed #5 #10 (both good), Confessor dizzy, PD #8 clean check, evil PD #3 caught lying, no wrong execs",
       "date": "2026-04-10 14:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v6",
+      "notes": "10HP perfect, both evils killed by Slayers (#6 killed Pooka, Doppelganger-Slayer #8 killed Chancellor), no executions needed",
+      "date": "2026-04-10 14:23"
     }
   ]
 }
