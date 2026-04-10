@@ -22331,3 +22331,142 @@ WARNING: Corruption risk: 100%
 Final HP: 10
 Notes: 10HP retry win after v6 loss, Dreamer pinpointed Poisoner, Pooka+Poisoner game with 2 Alchemist disguises
 
+
+---
+
+# New Game — 2026-04-10 16:52:29
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Medium, Knitter, Dreamer, Jester, Witness
+- Outcasts: Doppelganger, Plague_Doctor, Wretch
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [16:52:51] Revealed #1 Witness
+Info: {'affected_position': 6}
+
+### [16:52:51] Revealed #3 Wretch
+Info: {}
+
+### [16:52:51] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [16:52:51] Revealed #6 Medium
+Info: {'good_position': 7, 'good_role': 'Dreamer'}
+
+### [16:53:32] Revealed #2 Witness
+Info: {'affected_position': 0}
+
+### [16:53:33] Revealed #5 Jester
+Info: {}
+
+### [16:53:33] Revealed #7 Dreamer
+Info: {}
+
+### [16:53:33] Revealed #8 Druid
+Info: {}
+
+#### [16:53:42] Solver Output
+Scenarios: 636/13902
+Definite good: ['#2']
+Evil probabilities: #1=83%, #4=61%, #8=46%, #3=42%, #6=25%, #7=21%, #5=17%, #9=5%
+
+#### [16:53:42] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.843 (adjusted 2.682) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [16:54:27] Revealed #7 Dreamer
+Info: {'target': 1, 'evil_role': 'Minion'}
+
+### [16:54:27] Ability used at #7
+
+#### [16:54:27] Solver Output
+Scenarios: 332/13902
+Definite good: ['#2']
+Evil probabilities: #1=67%, #4=60%, #8=46%, #3=37%, #6=36%, #7=33%, #5=18%, #9=3%
+
+#### [16:54:27] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#6', '#7']
+Reason: Expected posterior 128.4 scenarios (adjusted 133.0, info gain 1.320 bits) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [16:55:11] Revealed #5 Jester
+Info: {'targets': [1, 6, 7], 'evil_count': 1}
+
+### [16:55:11] Ability used at #5
+
+#### [16:55:11] Solver Output
+Scenarios: 160/13902
+Definite good: ['#2']
+Evil probabilities: #1=74%, #4=66%, #8=44%, #3=42%, #6=29%, #5=20%, #7=19%, #9=6%
+
+#### [16:55:11] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.000 (adjusted 0.962) | timing x1.00
+WARNING: Corruption risk: 8%
+
+### [16:56:01] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Doppelganger'}
+
+### [16:56:01] Ability used at #8
+
+#### [16:56:02] Solver Output
+Scenarios: 86/13902
+Definite good: ['#2']
+Evil probabilities: #1=79%, #8=67%, #4=65%, #3=30%, #6=21%, #5=14%, #7=14%, #9=9%
+
+#### [16:56:02] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 79% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 79% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [16:56:43] Executed #1 -> Minion (EVIL)
+
+#### [16:56:43] Solver Output
+Scenarios: 48/1670
+Definite evil: ['#1']
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #8=75%, #4=62%, #3=46%, #9=17%
+
+#### [16:56:43] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (38% evil Baa, 38% evil Witch, 17% good Druid (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [16:57:24] Executed #8 -> Baa (EVIL)
+
+#### [16:57:24] Solver Output
+Scenarios: 18/228
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #4=50%, #3=28%, #9=22%
+
+#### [16:57:24] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Witch, 22% good Knitter (corrupted), 17% good Knitter).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:58:15] Executed #4 -> GOOD (WRONG!)
+
+#### [16:58:15] Solver Output
+Scenarios: 9/192
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+Evil probabilities: #3=56%, #9=44%
+
+#### [16:58:15] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 44% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 44% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 44% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:59:05] Executed #9 -> Witch (EVIL)
+
+## [16:59:05] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, FINAL village! Witch at #9 blocked itself, executed directly per CLAUDE.md. Asc52 complete!
+
