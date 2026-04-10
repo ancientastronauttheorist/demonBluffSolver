@@ -2323,6 +2323,13 @@
       "name": "asc53_v2",
       "notes": "10HP perfect, Witch+Baa, solver found Witch at 100%, then Baa at 100% after #7 unblocked",
       "date": "2026-04-10 17:37"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc53_v3",
+      "notes": "1HP clutch, Lilis game, night killed Doppelganger #9, wrong exec on Alchemist #6 at 58% (followed solver per CLAUDE.md), recovered with 100% picks for Lilis and Poisoner",
+      "date": "2026-04-10 17:44"
     }
   ]
 }

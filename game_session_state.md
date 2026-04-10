@@ -22602,3 +22602,105 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, Witch+Baa, solver found Witch at 100%, then Baa at 100% after #7 unblocked
 
+
+---
+
+# New Game — 2026-04-10 17:39:26
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Enlightened, Alchemist, Bard, Scout, Fortune_Teller, Confessor
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Poisoner
+- Demons: Lilis
+
+### [17:39:54] Revealed #1 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+### [17:39:54] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+### [17:40:03] Revealed #2 Fortune_Teller
+Info: {}
+
+### [17:40:03] Revealed #4 Plague_Doctor
+Info: {}
+
+### [17:40:37] Revealed #5 Architect
+Info: {'side': 'Equal'}
+
+### [17:40:37] Revealed #6 Alchemist
+Info: {'cured_count': 1}
+
+### [17:40:37] Revealed #7 Bard
+Info: {'corruption_distance': 2}
+
+### [17:40:37] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+#### [17:40:48] Solver Output
+Scenarios: 135/3130
+Definite good: ['#4', '#8', '#9']
+Evil probabilities: #7=69%, #1=54%, #6=31%, #2=25%, #3=10%, #5=10%
+
+#### [17:40:48] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.413 (adjusted 1.413) | timing x1.00
+
+### [17:41:29] Ability used at #4
+
+#### [17:41:29] Solver Output
+Scenarios: 88/3130
+Definite good: ['#4', '#8', '#9']
+Evil probabilities: #1=58%, #7=52%, #6=48%, #2=27%, #3=10%, #5=5%
+
+#### [17:41:29] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#4', '#6']
+Reason: Entropy 1.000 (adjusted 0.835) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [17:42:20] Revealed #2 Fortune Teller
+Info: {'targets': [4, 6], 'has_evil': False}
+
+### [17:42:20] Ability used at #2
+
+#### [17:42:20] Solver Output
+Scenarios: 43/3130
+Definite good: ['#4', '#8', '#9']
+Evil probabilities: #1=58%, #6=58%, #7=42%, #2=23%, #3=9%, #5=9%
+
+#### [17:42:20] Recommendation
+Action: **ERROR** #6
+Reason: #6 is 58% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 58% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 58% < 83% threshold. Consider manual override if you have extra information.
+
+### [17:43:18] Executed #6 -> GOOD (WRONG!)
+
+#### [17:43:18] Solver Output
+Scenarios: 18/2031
+Definite evil: ['#7']
+Definite good: ['#2', '#4', '#6', '#8', '#9']
+Evil probabilities: #1=56%, #3=22%, #5=22%
+
+#### [17:43:18] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 18 scenarios (roles: {'Poisoner', 'Lilis'})
+
+### [17:44:01] Executed #7 -> Lilis (EVIL)
+
+#### [17:44:01] Solver Output
+Scenarios: 2/278
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8', '#9']
+
+#### [17:44:01] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [17:44:53] Executed #1 -> Poisoner (EVIL)
+
+## [17:44:53] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP clutch, Lilis game, night killed Doppelganger #9, wrong exec on Alchemist #6 at 58% (followed solver per CLAUDE.md), recovered with 100% picks for Lilis and Poisoner
+
