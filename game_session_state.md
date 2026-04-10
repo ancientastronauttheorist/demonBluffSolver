@@ -18817,3 +18817,68 @@ WARNING: Corruption risk: 100%
 Final HP: 10
 Notes: Perfect 10HP. Duplicate Gemcrafters + Oracle + Jester + PD corruption check + Judge truth. 50/50 final exec hit.
 
+
+---
+
+# New Game — 2026-04-09 23:08:13
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Knight, Enlightened, Scout, Oracle, Dreamer
+- Outcasts: Wretch, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [23:08:34] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [23:08:34] Revealed #3 Wretch
+Info: {}
+
+### [23:08:34] Revealed #4 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [23:08:34] Revealed #6 Enlightened
+Info: {'direction': 'CCW'}
+
+### [23:08:34] Revealed #7 Oracle
+Info: {'targets': [5, 6], 'minion_role': 'Chancellor'}
+
+### [23:08:34] Revealed #8 Baker
+Info: {'original_role': 'Dreamer'}
+
+### [23:09:07] Revealed #2 Bombardier
+Info: {}
+
+### [23:09:07] Revealed #5 Knight
+Info: {}
+
+### [23:09:07] Revealed #8 Baker
+Info: {'original_role': 'Enlightened'}
+
+#### [23:09:07] Solver Output
+Scenarios: 1/76
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [23:09:07] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [23:10:02] Executed #4 -> Chancellor (EVIL)
+
+#### [23:10:02] Solver Output
+Scenarios: 1/7
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [23:10:02] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [23:10:56] Executed #7 -> Pooka (EVIL)
+
+## [23:10:56] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Asc47 complete! Baker chain + duplicate original_role + Enlightened + Oracle narrowed to 1 scenario immediately. Both execs 100% confident.
+

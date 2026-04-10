@@ -2050,6 +2050,13 @@
       "name": "asc47_v6",
       "notes": "Perfect 10HP. Duplicate Gemcrafters + Oracle + Jester + PD corruption check + Judge truth. 50/50 final exec hit.",
       "date": "2026-04-09 23:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc47_v7",
+      "notes": "Perfect 10HP. Asc47 complete! Baker chain + duplicate original_role + Enlightened + Oracle narrowed to 1 scenario immediately. Both execs 100% confident.",
+      "date": "2026-04-09 23:10"
     }
   ]
 }
