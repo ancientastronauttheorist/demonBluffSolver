@@ -1544,6 +1544,7 @@ def main():
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
         print("  execute <pos> good blocked            Knight immunity (no HP loss, confirmed good)")
+        print("  execute <pos> good corrupted          Corrupted Knight (immunity lost, wrong exec)")
         print("  pd_target <pos>                       Set Plague Doctor corruption target")
         print("  pd_check <pd_pos> <target> corrupted <evil_pos>  PD found corruption + evil")
         print("  pd_check <pd_pos> <target> clean                 PD found no corruption")
@@ -2043,8 +2044,20 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     # Auto-detect Knight immunity from card entry
                     target_card = next((c for c in session.cards if c.position == pos), None)
                     if target_card and target_card.apparent_role in EXECUTION_IMMUNE_ROLES:
-                        knight_blocked = True
-                        print(f"  Auto-detected Knight immunity for #{pos} (apparent role: {target_card.apparent_role})")
+                        # Check if corruption sources exist in deck — corrupted Knight loses immunity
+                        corruption_sources = {"Pooka", "Poisoner", "Plague_Doctor"}
+                        deck_roles = set()
+                        if session.deck:
+                            for faction_roles in [session.deck.villagers, session.deck.outcasts,
+                                                  session.deck.minions, session.deck.demons]:
+                                deck_roles.update(faction_roles)
+                        has_corruption = bool(deck_roles & corruption_sources)
+                        if has_corruption:
+                            print(f"  #{pos} shows as {target_card.apparent_role} (execution immune) but corruption sources in deck!")
+                            print(f"  Corrupted Knight LOSES immunity. Specify: 'execute {pos} good blocked' or 'execute {pos} good corrupted'")
+                        else:
+                            knight_blocked = True
+                            print(f"  Auto-detected Knight immunity for #{pos} (apparent role: {target_card.apparent_role}, no corruption sources)")
                     else:
                         was_corrupted = None
                         print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
