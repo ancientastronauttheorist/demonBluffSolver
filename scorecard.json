@@ -2239,6 +2239,13 @@
       "name": "asc51_v5",
       "notes": "10HP perfect, 3 evils found without any wrong executions, Puppeteer+Puppet+Baa game",
       "date": "2026-04-10 15:16"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v6",
+      "notes": "10HP perfect, Witch blocked #7, FT confirmed evil in #1/#3, Druid disambiguated to 1 scenario",
+      "date": "2026-04-10 15:23"
     }
   ]
 }

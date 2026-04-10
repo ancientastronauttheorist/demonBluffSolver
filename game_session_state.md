@@ -21185,3 +21185,93 @@ WARNING: Execution lookahead override -- immediate hit chance is 75%, but all re
 Final HP: 10
 Notes: 10HP perfect, 3 evils found without any wrong executions, Puppeteer+Puppet+Baa game
 
+
+---
+
+# New Game — 2026-04-10 15:18:23
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Knitter, Confessor, Druid, Bishop, Fortune_Teller
+- Outcasts: Wretch, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [15:18:57] Revealed #1 Bishop
+Info: {'targets': [6, 5, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:18:57] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [15:18:57] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [15:18:57] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [15:20:21] Revealed #2 Fortune_Teller
+Info: {}
+
+### [15:20:21] Revealed #6 Druid
+Info: {}
+
+#### [15:20:26] Solver Output
+Scenarios: 9/252
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=67%, #2=56%, #3=56%, #7=22%
+
+#### [15:20:26] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 0.991 (adjusted 0.991) | timing x1.00
+
+### [15:21:12] Revealed #2 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': True}
+
+### [15:21:12] Ability used at #2
+
+#### [15:21:17] Solver Output
+Scenarios: 4/252
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #3=50%, #7=50%
+
+#### [15:21:17] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Baa', 'Witch'})
+
+### [15:21:58] Executed #1 -> Witch (EVIL)
+
+### [15:22:25] Revealed #7 Wretch
+Info: {}
+
+#### [15:22:26] Solver Output
+Scenarios: 4/31
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#6']
+Evil probabilities: #3=50%, #5=25%, #7=25%
+
+#### [15:22:26] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.811 (adjusted 0.710) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [15:23:10] Revealed #6 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [15:23:10] Ability used at #6
+
+#### [15:23:10] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [15:23:10] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [15:23:53] Executed #3 -> Baa (EVIL)
+
+## [15:23:53] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Witch blocked #7, FT confirmed evil in #1/#3, Druid disambiguated to 1 scenario
+
