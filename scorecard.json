@@ -2183,6 +2183,13 @@
       "name": "asc50_v4",
       "notes": "5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker",
       "date": "2026-04-10 14:07"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc50_v5",
+      "notes": "6HP, Lilis game, night killed #5 #10 (both good), Confessor dizzy, PD #8 clean check, evil PD #3 caught lying, no wrong execs",
+      "date": "2026-04-10 14:19"
     }
   ]
 }

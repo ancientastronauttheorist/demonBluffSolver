@@ -20576,3 +20576,112 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker
 
+
+---
+
+# New Game — 2026-04-10 14:09:59
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Empress, Bishop, Fortune_Teller, Architect, Enlightened, Poet
+- Outcasts: Plague_Doctor
+- Minions: Puppeteer, Shaman
+- Demons: Lilis
+
+### [14:14:08] Revealed #1 Empress
+Info: {'targets': [4, 6, 8]}
+
+### [14:14:08] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [14:14:08] Revealed #4 Bishop
+Info: {'targets': [8, 1, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:14:08] Revealed #6 Architect
+Info: {'side': 'Right'}
+
+### [14:14:53] Revealed #3 Plague_Doctor
+Info: {}
+
+### [14:14:53] Revealed #7 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [14:14:53] Revealed #8 Plague_Doctor
+Info: {}
+
+### [14:14:53] Revealed #9 Fortune_Teller
+Info: {}
+
+#### [14:15:00] Solver Output
+Scenarios: 33/4248
+Definite evil: ['#2']
+Definite good: ['#5', '#10']
+Evil probabilities: #7=58%, #3=55%, #6=52%, #8=45%, #4=36%, #9=36%, #1=18%
+
+#### [14:15:01] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 33 scenarios (roles: {'Lilis', 'Puppet', 'Puppeteer', 'Shaman'})
+
+### [14:15:51] Executed #2 -> Lilis (EVIL)
+
+#### [14:15:51] Solver Output
+Scenarios: 10/455
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#10']
+Evil probabilities: #7=70%, #8=60%, #9=50%, #3=40%, #4=40%, #6=40%
+
+#### [14:15:51] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.961 (adjusted 1.961) | timing x1.00
+
+### [14:16:21] Ability used at #8
+
+#### [14:16:21] Solver Output
+Scenarios: 8/455
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#10']
+Evil probabilities: #7=62%, #3=50%, #4=50%, #6=50%, #8=50%, #9=38%
+
+#### [14:16:21] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.406 (adjusted 1.406) | timing x1.00
+
+### [14:17:04] Ability used at #3
+
+#### [14:17:04] Solver Output
+Scenarios: 3/455
+Definite evil: ['#2', '#3', '#4', '#7']
+Definite good: ['#1', '#5', '#6', '#8', '#9', '#10']
+
+#### [14:17:04] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Puppeteer'})
+
+### [14:17:45] Executed #3 -> Puppeteer (EVIL)
+
+#### [14:17:45] Solver Output
+Scenarios: 3/31
+Definite evil: ['#2', '#3', '#4', '#7']
+Definite good: ['#1', '#5', '#6', '#8', '#9', '#10']
+
+#### [14:17:45] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Puppet'})
+
+### [14:18:22] Executed #4 -> Puppet (EVIL)
+
+#### [14:18:22] Solver Output
+Scenarios: 3/31
+Definite evil: ['#2', '#3', '#4', '#7']
+Definite good: ['#1', '#5', '#6', '#8', '#9', '#10']
+
+#### [14:18:22] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 3 scenarios (roles: {'Shaman'})
+
+### [14:19:09] Executed #7 -> Shaman (EVIL)
+
+## [14:19:09] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, night killed #5 #10 (both good), Confessor dizzy, PD #8 clean check, evil PD #3 caught lying, no wrong execs
+
