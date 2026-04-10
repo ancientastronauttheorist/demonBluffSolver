@@ -20056,3 +20056,65 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 10
 Notes: 10HP perfect, caught auto_card misparse (Poet Scout->Hunter), Judge confirmed Medium truthful, Slayer fail narrowed to Shaman
 
+
+---
+
+# New Game — 2026-04-10 12:20:49
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Knitter, Druid, Bishop, Bard, Scout, Architect
+- Outcasts: Drunk, Bombardier, Plague_Doctor
+- Minions: Chancellor
+- Demons: Baa
+
+### [12:21:28] Revealed #1 Bombardier
+Info: {}
+
+### [12:21:28] Revealed #4 Architect
+Info: {'side': 'Right'}
+
+### [12:21:28] Revealed #5 Bishop
+Info: {'targets': [2, 3, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [12:21:28] Revealed #6 Bard
+Info: {'corruption_distance': 3}
+
+### [12:21:28] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [12:21:28] Revealed #8 Knitter
+Info: {'evil_pairs': 1}
+
+### [12:21:50] Revealed #2 Druid
+Info: {}
+
+### [12:21:50] Revealed #3 Druid
+Info: {}
+
+#### [12:21:55] Solver Output
+Scenarios: 2/540
+Definite evil: ['#2', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [12:21:55] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [12:22:34] Executed #2 -> Chancellor (EVIL)
+
+#### [12:22:34] Solver Output
+Scenarios: 2/43
+Definite evil: ['#2', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [12:22:34] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [12:23:17] Executed #8 -> Baa (EVIL)
+
+## [12:23:25] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, two 100% confident executions, Drunk disguised as Druid, no abilities needed. Asc49 complete! 7/7 perfect run
+

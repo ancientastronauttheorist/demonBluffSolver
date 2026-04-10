@@ -2148,6 +2148,13 @@
       "name": "asc49_v6",
       "notes": "10HP perfect, caught auto_card misparse (Poet Scout->Hunter), Judge confirmed Medium truthful, Slayer fail narrowed to Shaman",
       "date": "2026-04-10 12:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v7",
+      "notes": "10HP perfect, two 100% confident executions, Drunk disguised as Druid, no abilities needed. Asc49 complete! 7/7 perfect run",
+      "date": "2026-04-10 12:23"
     }
   ]
 }
