@@ -23230,3 +23230,65 @@ Notes: Asc54 v2 perfect 10HP, Slayer kill on Chancellor
 Final HP: 10
 Notes: Asc54 v2 perfect 10HP, Slayer kill on Chancellor
 
+
+---
+
+# New Game — 2026-04-10 18:30:01
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Hunter, Knitter, Bishop, Gemcrafter, Confessor
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Pooka
+
+### [18:30:19] Revealed #1 Bishop
+Info: {'targets': [4, 2, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:30:19] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [18:30:19] Revealed #3 Knitter
+Info: {'evil_pairs': 0}
+
+### [18:30:19] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [18:30:19] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [18:30:19] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [18:30:19] Revealed #7 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 1}
+
+### [18:30:19] Revealed #8 Gemcrafter
+Info: {'good_position': 2}
+
+#### [18:30:23] Solver Output
+Scenarios: 1/560
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [18:30:23] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [18:30:46] Executed #3 -> Pooka (EVIL)
+
+#### [18:30:46] Solver Output
+Scenarios: 1/70
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [18:30:46] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [18:31:10] Executed #4 -> Poisoner (EVIL)
+
+## [18:31:10] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v3 perfect 10HP, both adjacent (Pooka+Poisoner), 1-scenario solver
+

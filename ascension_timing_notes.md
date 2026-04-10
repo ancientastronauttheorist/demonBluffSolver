@@ -48,6 +48,22 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - Memory reader's `clue` field for some positions is **stale** (e.g., #2 Bombardier showed "Right side is more Evil" — Bombardier has no passive clue). Auto_card correctly skipped these but the noise is confusing. Worth investigating later.
   - Stale clue source: probably `savedAct` from a previous village. Should clear on village transition.
 
+### Village 3 (8-card, 2 evil — adjacent Pooka+Poisoner)
+- **Wall-clock window:** 18:29:41 → 18:31:07 (≈ **1m 26s**)
+- **Result:** WIN, 10/10 HP perfect, 2 confident executions
+- **Evils:** #3 Pooka, #4 Poisoner (adjacent — solver collapsed to 1 scenario immediately!)
+- **Phase breakdown (rough):**
+  - 18:29:41: `safe_click btn_next` from V2 win → V3 starts. ~5s.
+  - 18:29:46 – 18:30:05: deck read + new + deck. ~20s.
+  - 18:30:05 – 18:30:20: flip 8 cards. ~15s.
+  - 18:30:20: `auto_card` 8/8 in one shot. ~0s manual.
+  - 18:30:20 – 18:30:45: `next` → exec #3. ~25s.
+  - 18:30:45 – 18:31:07: `next` → exec #4. ~22s.
+- **Notes / friction points:**
+  - **FASTEST village so far (1m26s).** Why: tight clue set → 1-scenario solver solution; no manual entries; no slayer/active abilities.
+  - 8/8 auto_card success rate. The auto-pipeline is very strong on standard passive clues.
+  - Each execute cycle is still ~22-25s, dominated by 5 sequential tool calls (next, click center, safe_click sword, click target, screenshot, execute). **A combined `solve_and_execute` macro would shave ~10s/cycle**, saving ~20s on a 2-execute village.
+
 ## Summary (filled in at end of run)
 - Total wall-clock time:
 - Slowest step categories:

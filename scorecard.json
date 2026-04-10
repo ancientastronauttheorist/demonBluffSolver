@@ -2386,6 +2386,13 @@
       "name": "asc54_v2",
       "notes": "Asc54 v2 perfect 10HP, Slayer kill on Chancellor",
       "date": "2026-04-10 18:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v3",
+      "notes": "Asc54 v3 perfect 10HP, both adjacent (Pooka+Poisoner), 1-scenario solver",
+      "date": "2026-04-10 18:31"
     }
   ]
 }
