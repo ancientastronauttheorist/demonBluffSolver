@@ -18578,3 +18578,102 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: 1HP clutch! Shaman+Chancellor+Lilis. 10-card game. Wrong exec on #2 (85% gamble) but solver lookahead guaranteed win. Judge truth checks + Architect narrowed remaining evils to 100%.
 
+
+---
+
+# New Game — 2026-04-09 22:53:12
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Hunter, Gemcrafter, Alchemist, Baker, Druid, Poet
+- Outcasts: Doppelganger, Drunk
+- Minions: Minion
+- Demons: Baa
+
+### [22:53:37] Revealed #2 Druid
+Info: {}
+
+### [22:53:37] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [22:53:37] Revealed #4 Baker
+Info: {'original_role': 'Gemcrafter'}
+
+### [22:53:37] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [22:53:37] Revealed #6 Medium
+Info: {'good_position': 5, 'good_role': 'Hunter'}
+
+### [22:53:37] Revealed #7 Baker
+Info: {'original_role': 'Alchemist'}
+
+### [22:53:57] Revealed #1 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 3}
+
+#### [22:53:58] Solver Output
+Scenarios: 74/1302
+Evil probabilities: #4=70%, #1=59%, #6=19%, #2=14%, #5=14%, #7=14%, #3=11%
+
+#### [22:53:58] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.842 (adjusted 0.785) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [22:54:48] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': None}
+
+### [22:54:48] Ability used at #2
+
+#### [22:54:49] Solver Output
+Scenarios: 42/1302
+Definite good: ['#7']
+Evil probabilities: #4=71%, #1=62%, #2=24%, #3=14%, #5=14%, #6=14%
+
+#### [22:54:49] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (36% evil Baa, 36% evil Minion, 29% good Baker).
+WARNING: Execution lookahead override -- immediate hit chance is 71%, but all reveal branches still lead to a forced win.
+
+### [22:55:39] Executed #4 -> GOOD (WRONG!)
+
+#### [22:55:39] Solver Output
+Scenarios: 12/930
+Definite good: ['#3', '#4', '#7']
+Evil probabilities: #1=83%, #5=50%, #6=50%, #2=17%
+
+#### [22:55:39] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (42% evil Baa, 42% evil Minion, 17% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [22:56:29] Executed #1 -> Baa (EVIL)
+
+#### [22:56:29] Solver Output
+Scenarios: 5/155
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#7']
+Evil probabilities: #5=60%, #6=40%
+
+#### [22:56:29] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (60% good Drunk (corrupted), 40% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 40%, but all reveal branches still lead to a forced win.
+
+### [22:57:25] Executed #6 -> GOOD (WRONG!)
+
+#### [22:57:25] Solver Output
+Scenarios: 3/124
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7']
+
+#### [22:57:25] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Minion'})
+
+### [22:58:17] Executed #5 -> Minion (EVIL)
+
+## [22:58:17] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP. Poet bounty_hunter + Baker chain + Druid narrowed. Two wrong execs (Baker, Drunk) but lookahead guaranteed win.
+

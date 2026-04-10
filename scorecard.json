@@ -2036,6 +2036,13 @@
       "name": "asc47_v4",
       "notes": "1HP clutch! Shaman+Chancellor+Lilis. 10-card game. Wrong exec on #2 (85% gamble) but solver lookahead guaranteed win. Judge truth checks + Architect narrowed remaining evils to 100%.",
       "date": "2026-04-09 22:51"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc47_v5",
+      "notes": "3HP. Poet bounty_hunter + Baker chain + Druid narrowed. Two wrong execs (Baker, Drunk) but lookahead guaranteed win.",
+      "date": "2026-04-09 22:58"
     }
   ]
 }
