@@ -1,0 +1,146 @@
+{
+  "name": "asc29_v2",
+  "n_cards": 10,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 7,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.286,
+        "3": 0.429,
+        "5": 0.286,
+        "7": 0.429,
+        "8": 0.571
+      },
+      "definite_evil": [
+        9
+      ],
+      "definite_good": [
+        2,
+        4,
+        6,
+        10
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Poet",
+        "Druid",
+        "Medium",
+        "Fortune_Teller",
+        "Scout",
+        "Judge",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 7,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.286,
+        "3": 0.429,
+        "5": 0.286,
+        "7": 0.429,
+        "8": 0.571
+      },
+      "definite_evil": [
+        9
+      ],
+      "definite_good": [
+        2,
+        4,
+        6,
+        10
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Poet",
+        "Druid",
+        "Medium",
+        "Fortune_Teller",
+        "Scout",
+        "Judge",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #10",
+      "recommended_position": 10,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.333,
+        "3": 0.333,
+        "5": 0.333,
+        "7": 0.333,
+        "8": 0.667
+      },
+      "definite_evil": [
+        9
+      ],
+      "definite_good": [
+        2,
+        4,
+        6,
+        10
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Poet",
+        "Druid",
+        "Medium",
+        "Fortune_Teller",
+        "Scout",
+        "Judge",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Chancellor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

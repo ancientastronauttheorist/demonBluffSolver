@@ -1,0 +1,168 @@
+{
+  "name": "asc26_v8",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.863120568566631,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.286,
+        "5": 0.714
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Slayer",
+        "Judge",
+        "Druid",
+        "Poet",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Plague Doctor",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.863120568566631,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "4": 0.286,
+        "5": 0.714
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Slayer",
+        "Judge",
+        "Druid",
+        "Poet",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Plague Doctor",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.863120568566631,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "4": 0.286,
+        "5": 0.714
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Slayer",
+        "Judge",
+        "Druid",
+        "Poet",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Plague Doctor",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 0,
+      "recommended_action": "error",
+      "recommended_position": null,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "zero_scenarios",
+      "evil_probs": {},
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Architect",
+        "Slayer",
+        "Judge",
+        "Druid",
+        "Poet",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Plague Doctor",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 1,
+    "wrong": 3,
+    "accuracy": 0.25,
+    "wrong_categories": {
+      "premature_wrong_exec": 1,
+      "premature_but_correct": 1,
+      "zero_scenarios": 1
+    }
+  }
+}

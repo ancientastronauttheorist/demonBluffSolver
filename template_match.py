@@ -264,8 +264,9 @@ def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (
         return None
 
     # Step 2: Ensure game is focused
+    already_focused = game_utils.is_game_focused()
     game_utils.ensure_game_focused()
-    time.sleep(0.2)
+    time.sleep(0.05 if already_focused else 0.2)
 
     # Step 3: Hover
     mouse_mod.move(match["x"], match["y"])
@@ -278,7 +279,7 @@ def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (
 
     # Step 5: Click
     mouse_mod.click(match["x"], match["y"])
-    time.sleep(0.3)
+    time.sleep(0.15)
     print(f"[safe_click] Clicked '{name}' at ({match['x']}, {match['y']})")
     return match
 
@@ -293,14 +294,15 @@ def safe_click_at(x: int, y: int, label: str = "target") -> str:
     import game_utils
     import time
 
+    already_focused = game_utils.is_game_focused()
     game_utils.ensure_game_focused()
-    time.sleep(0.2)
+    time.sleep(0.05 if already_focused else 0.2)
     mouse_mod.move(x, y)
     time.sleep(0.3)
     verify_ss = screenshot.capture("_safe_verify")
     print(f"[safe_click_at] Hovering '{label}' at ({x}, {y}) — verify: {verify_ss}")
     mouse_mod.click(x, y)
-    time.sleep(0.3)
+    time.sleep(0.15)
     print(f"[safe_click_at] Clicked '{label}' at ({x}, {y})")
     return verify_ss
 
@@ -331,9 +333,10 @@ def verified_click(template_name: str, fallback_coords=None, post_predicate=None
     match = find(template_name, ss, threshold)
 
     if match:
-        game_utils.ensure_game_focused()
         import time
-        time.sleep(0.2)
+        already_focused = game_utils.is_game_focused()
+        game_utils.ensure_game_focused()
+        time.sleep(0.05 if already_focused else 0.2)
         mouse_mod.move(match["x"], match["y"])
         time.sleep(0.3)
         mouse_mod.click(match["x"], match["y"])

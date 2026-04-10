@@ -1,0 +1,171 @@
+{
+  "name": "asc41_v1",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6,
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Hunter",
+        "Medium",
+        "Bombardier",
+        "Poisoner",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6,
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Hunter",
+        "Medium",
+        "Bombardier",
+        "Poisoner",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6,
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Hunter",
+        "Medium",
+        "Bombardier",
+        "Poisoner",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6,
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Hunter",
+        "Medium",
+        "Bombardier",
+        "Poisoner",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 4,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

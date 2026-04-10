@@ -1,0 +1,85 @@
+{
+  "name": "asc45_v3",
+  "n_cards": 7,
+  "n_evil": 1,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Bishop",
+        "Bard",
+        "Fortune_Teller",
+        "Medium",
+        "Lover",
+        "Doppelganger",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Bishop",
+        "Bard",
+        "Fortune_Teller",
+        "Medium",
+        "Lover",
+        "Doppelganger",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 2,
+    "correct": 2,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

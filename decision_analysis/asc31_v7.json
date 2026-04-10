@@ -1,0 +1,178 @@
+{
+  "name": "asc31_v7",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 9,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "5": 0.556,
+        "6": 0.556,
+        "7": 0.889,
+        "8": 0.111,
+        "9": 0.889
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Oracle",
+        "Knitter",
+        "Druid",
+        "Confessor",
+        "Gemcrafter",
+        "Lover",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 9,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "5": 0.556,
+        "6": 0.556,
+        "7": 0.889,
+        "8": 0.111,
+        "9": 0.889
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Oracle",
+        "Knitter",
+        "Druid",
+        "Confessor",
+        "Gemcrafter",
+        "Lover",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "5": 0.333,
+        "6": 0.667
+      },
+      "definite_evil": [
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Oracle",
+        "Knitter",
+        "Druid",
+        "Confessor",
+        "Gemcrafter",
+        "Lover",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6,
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Oracle",
+        "Knitter",
+        "Druid",
+        "Confessor",
+        "Gemcrafter",
+        "Lover",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

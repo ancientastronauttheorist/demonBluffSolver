@@ -1,0 +1,232 @@
+{
+  "name": "asc40_v2",
+  "n_cards": 10,
+  "n_evil": 4,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 7,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "5": 0.857,
+        "6": 0.286,
+        "8": 0.143,
+        "9": 0.714
+      },
+      "definite_evil": [
+        7,
+        10
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Lover",
+        "Confessor",
+        "Slayer",
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 7,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "5": 0.857,
+        "6": 0.286,
+        "8": 0.143,
+        "9": 0.714
+      },
+      "definite_evil": [
+        7,
+        10
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Lover",
+        "Confessor",
+        "Slayer",
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        5,
+        7,
+        10
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Lover",
+        "Confessor",
+        "Slayer",
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #10 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #10",
+      "recommended_position": 10,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #10",
+      "actual_position": 10,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        5,
+        7,
+        10
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Lover",
+        "Confessor",
+        "Slayer",
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        5,
+        7,
+        10
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Lover",
+        "Confessor",
+        "Slayer",
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Puppeteer",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 4,
+    "wrong": 1,
+    "accuracy": 0.8,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

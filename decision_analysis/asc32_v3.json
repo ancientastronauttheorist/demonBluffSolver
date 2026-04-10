@@ -1,0 +1,132 @@
+{
+  "name": "asc32_v3",
+  "n_cards": 7,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 6,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.667,
+        "5": 0.833,
+        "6": 0.167,
+        "7": 0.333
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        3
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Lover",
+        "Baker",
+        "Oracle",
+        "Fortune_Teller",
+        "Hunter",
+        "Bishop",
+        "Drunk",
+        "Bombardier",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 6,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "4": 0.667,
+        "5": 0.833,
+        "6": 0.167,
+        "7": 0.333
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        3
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Lover",
+        "Baker",
+        "Oracle",
+        "Fortune_Teller",
+        "Hunter",
+        "Bishop",
+        "Drunk",
+        "Bombardier",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 0.8112781244591328,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "4": 0.75,
+        "7": 0.25
+      },
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Lover",
+        "Baker",
+        "Oracle",
+        "Fortune_Teller",
+        "Hunter",
+        "Bishop",
+        "Drunk",
+        "Bombardier",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 2
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "name": "asc42_v5b",
+  "n_cards": 10,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Scout",
+        "Architect",
+        "Bard",
+        "Bishop",
+        "Medium",
+        "Poet",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Scout",
+        "Architect",
+        "Bard",
+        "Bishop",
+        "Medium",
+        "Poet",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Scout",
+        "Architect",
+        "Bard",
+        "Bishop",
+        "Medium",
+        "Poet",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Scout",
+        "Architect",
+        "Bard",
+        "Bishop",
+        "Medium",
+        "Poet",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 4,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

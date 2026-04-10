@@ -1,0 +1,193 @@
+{
+  "name": "asc30_v7",
+  "n_cards": 10,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 7,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.143,
+        "4": 0.286,
+        "5": 0.286,
+        "6": 0.429,
+        "8": 0.143,
+        "10": 0.714
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Bishop",
+        "Gemcrafter",
+        "Knight",
+        "Enlightened",
+        "Architect",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 7,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.143,
+        "4": 0.286,
+        "5": 0.286,
+        "6": 0.429,
+        "8": 0.143,
+        "10": 0.714
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Bishop",
+        "Gemcrafter",
+        "Knight",
+        "Enlightened",
+        "Architect",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #10 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #10",
+      "recommended_position": 10,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #10",
+      "actual_position": 10,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "5": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1,
+        10
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Bishop",
+        "Gemcrafter",
+        "Knight",
+        "Enlightened",
+        "Architect",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "5": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1,
+        10
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Bishop",
+        "Gemcrafter",
+        "Knight",
+        "Enlightened",
+        "Architect",
+        "Bombardier",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

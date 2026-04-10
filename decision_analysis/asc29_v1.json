@@ -1,0 +1,134 @@
+{
+  "name": "asc29_v1",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Witness",
+        "Enlightened",
+        "Bard",
+        "Lover",
+        "Poet",
+        "Wretch",
+        "Plague_Doctor",
+        "Bombardier",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Witness",
+        "Enlightened",
+        "Bard",
+        "Lover",
+        "Poet",
+        "Wretch",
+        "Plague_Doctor",
+        "Bombardier",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Witness",
+        "Enlightened",
+        "Bard",
+        "Lover",
+        "Poet",
+        "Wretch",
+        "Plague_Doctor",
+        "Bombardier",
+        "Poisoner",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "different_valid_target": 1
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "name": "asc44_v6",
+  "n_cards": 7,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 37,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 0.9067769861922454,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.216,
+        "2": 0.162,
+        "3": 0.486,
+        "4": 0.405,
+        "5": 0.162,
+        "6": 0.108,
+        "7": 0.459
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Lover",
+        "Slayer",
+        "Hunter",
+        "Poet",
+        "Druid",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 37,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 0.9067769861922454,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.216,
+        "2": 0.162,
+        "3": 0.486,
+        "4": 0.405,
+        "5": 0.162,
+        "6": 0.108,
+        "7": 0.459
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Lover",
+        "Slayer",
+        "Hunter",
+        "Poet",
+        "Druid",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 0.7741078211697691,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.286,
+        "2": 0.143,
+        "7": 0.571
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Lover",
+        "Slayer",
+        "Hunter",
+        "Poet",
+        "Druid",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 2
+    }
+  }
+}

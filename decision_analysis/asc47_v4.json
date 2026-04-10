@@ -1,0 +1,227 @@
+{
+  "name": "asc47_v4",
+  "n_cards": 10,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 13,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.4350951516200974,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.154,
+        "2": 0.846,
+        "4": 0.154,
+        "5": 0.846,
+        "6": 0.462,
+        "8": 0.538
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        7,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Oracle",
+        "Gemcrafter",
+        "Alchemist",
+        "Scout",
+        "Architect",
+        "Judge",
+        "Drunk",
+        "Wretch",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #2 (good)",
+      "n_surviving": 13,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.4350951516200974,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.154,
+        "2": 0.846,
+        "4": 0.154,
+        "5": 0.846,
+        "6": 0.462,
+        "8": 0.538
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        7,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Oracle",
+        "Gemcrafter",
+        "Alchemist",
+        "Scout",
+        "Architect",
+        "Judge",
+        "Drunk",
+        "Wretch",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        8
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Oracle",
+        "Gemcrafter",
+        "Alchemist",
+        "Scout",
+        "Architect",
+        "Judge",
+        "Drunk",
+        "Wretch",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        8
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Oracle",
+        "Gemcrafter",
+        "Alchemist",
+        "Scout",
+        "Architect",
+        "Judge",
+        "Drunk",
+        "Wretch",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        8
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Oracle",
+        "Gemcrafter",
+        "Alchemist",
+        "Scout",
+        "Architect",
+        "Judge",
+        "Drunk",
+        "Wretch",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 4,
+    "wrong": 1,
+    "accuracy": 0.8,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

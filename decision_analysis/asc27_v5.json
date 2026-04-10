@@ -1,0 +1,168 @@
+{
+  "name": "asc27_v5",
+  "n_cards": 8,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.4,
+        "4": 0.8,
+        "5": 0.4,
+        "6": 0.2,
+        "7": 0.6,
+        "8": 0.6
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Hunter",
+        "Dreamer",
+        "Knight",
+        "Lover",
+        "Fortune_Teller",
+        "Wretch",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "3": 0.4,
+        "4": 0.8,
+        "5": 0.4,
+        "6": 0.2,
+        "7": 0.6,
+        "8": 0.6
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Hunter",
+        "Dreamer",
+        "Knight",
+        "Lover",
+        "Fortune_Teller",
+        "Wretch",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "7": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        4,
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Hunter",
+        "Dreamer",
+        "Knight",
+        "Lover",
+        "Fortune_Teller",
+        "Wretch",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.5,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "bad_heuristic",
+      "evil_probs": {
+        "7": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        4,
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Hunter",
+        "Dreamer",
+        "Knight",
+        "Lover",
+        "Fortune_Teller",
+        "Wretch",
+        "Puppeteer",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 2,
+    "wrong": 2,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "bad_heuristic": 1
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "name": "asc36_v4",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.375,
+        "3": 0.625,
+        "4": 0.25,
+        "7": 0.125,
+        "8": 0.375,
+        "9": 0.25
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Bishop",
+        "Bard",
+        "Medium",
+        "Fortune_Teller",
+        "Alchemist",
+        "Wretch",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.375,
+        "3": 0.625,
+        "4": 0.25,
+        "7": 0.125,
+        "8": 0.375,
+        "9": 0.25
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Bishop",
+        "Bard",
+        "Medium",
+        "Fortune_Teller",
+        "Alchemist",
+        "Wretch",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.4,
+        "8": 0.6
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Bishop",
+        "Bard",
+        "Medium",
+        "Fortune_Teller",
+        "Alchemist",
+        "Wretch",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 2
+    }
+  }
+}

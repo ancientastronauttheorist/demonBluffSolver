@@ -1,0 +1,139 @@
+{
+  "name": "asc28_v1",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 33,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.061,
+        "3": 0.212,
+        "4": 0.606,
+        "5": 0.303,
+        "7": 0.182,
+        "9": 0.636
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Judge",
+        "Jester",
+        "Dreamer",
+        "Fortune_Teller",
+        "Bard",
+        "Drunk",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 33,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.061,
+        "3": 0.212,
+        "4": 0.606,
+        "5": 0.303,
+        "7": 0.182,
+        "9": 0.636
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Judge",
+        "Jester",
+        "Dreamer",
+        "Fortune_Teller",
+        "Bard",
+        "Drunk",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 17,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.118,
+        "3": 0.294,
+        "4": 0.235,
+        "5": 0.294,
+        "7": 0.059
+      },
+      "definite_evil": [
+        9
+      ],
+      "definite_good": [
+        2,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Judge",
+        "Jester",
+        "Dreamer",
+        "Fortune_Teller",
+        "Bard",
+        "Drunk",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

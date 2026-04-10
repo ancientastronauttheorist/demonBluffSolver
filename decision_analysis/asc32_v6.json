@@ -1,0 +1,196 @@
+{
+  "name": "asc32_v6",
+  "n_cards": 7,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 81,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 0.18518518518518517,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.321,
+        "2": 0.123,
+        "3": 0.185,
+        "4": 0.444,
+        "5": 0.185,
+        "6": 0.432,
+        "7": 0.309
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Hunter",
+        "Knight",
+        "Judge",
+        "Dreamer",
+        "Gemcrafter",
+        "Doppelganger",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 81,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 0.18518518518518517,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.321,
+        "2": 0.123,
+        "3": 0.185,
+        "4": 0.444,
+        "5": 0.185,
+        "6": 0.432,
+        "7": 0.309
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Hunter",
+        "Knight",
+        "Judge",
+        "Dreamer",
+        "Gemcrafter",
+        "Doppelganger",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (good)",
+      "n_surviving": 66,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.22727272727272727,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.318,
+        "2": 0.152,
+        "4": 0.394,
+        "5": 0.227,
+        "6": 0.53,
+        "7": 0.379
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Knight",
+        "Judge",
+        "Dreamer",
+        "Gemcrafter",
+        "Doppelganger",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 51,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.314,
+        "2": 0.196,
+        "4": 0.314,
+        "6": 0.686,
+        "7": 0.49
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        5
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Knight",
+        "Judge",
+        "Dreamer",
+        "Gemcrafter",
+        "Doppelganger",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 25,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.7219280948873623,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.2,
+        "7": 0.8
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Knight",
+        "Judge",
+        "Dreamer",
+        "Gemcrafter",
+        "Doppelganger",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 3,
+    "wrong": 2,
+    "accuracy": 0.6,
+    "wrong_categories": {
+      "premature_but_correct": 2
+    }
+  }
+}

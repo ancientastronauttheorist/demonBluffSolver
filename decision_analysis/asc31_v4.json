@@ -1,0 +1,85 @@
+{
+  "name": "asc31_v4",
+  "n_cards": 6,
+  "n_evil": 1,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.75,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.5,
+        "3": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Knitter",
+        "Fortune_Teller",
+        "Poet",
+        "Scout",
+        "Hunter",
+        "Bishop",
+        "Drunk",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.75,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.5,
+        "3": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Knitter",
+        "Fortune_Teller",
+        "Poet",
+        "Scout",
+        "Hunter",
+        "Bishop",
+        "Drunk",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 2,
+    "correct": 1,
+    "wrong": 1,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

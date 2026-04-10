@@ -36,6 +36,7 @@ class Action:
     reasoning: str = ""
     warnings: list[str] = field(default_factory=list)
     confidence: float = 0.0  # 0-1, how certain this is the right move
+    forced_safe: bool = False  # True when lookahead proves execution is safe (bypass Bombardier guard)
     _ability_recs: Optional[list] = field(default_factory=lambda: None, repr=False)  # cached for display
 
 
@@ -1298,6 +1299,16 @@ def recommend_action(
     # Real Knight (uncorrupted): execution blocked, confirms good, 0 HP cost
     # Evil disguised as Knight: evil dies
     # Corrupted Knight: execution succeeds, costs HP (risky)
+    #
+    # Gate: skip Knight check if a non-Knight candidate has >= 65% evil probability.
+    # A high-confidence probabilistic target is more valuable than a free Knight check
+    # (bug fix: asc27_v5 — Knight at 60% overrode 80% target).
+    _KNIGHT_CHECK_THRESHOLD = 0.65
+    non_knight_positions = {c.position for c in state.cards
+                           if c.apparent_role not in EXECUTION_IMMUNE_ROLES
+                           and c.position not in state.executed}
+    best_non_knight_prob = max((probs.get(p, 0) for p in non_knight_positions), default=0)
+
     knight_checks = []
     for card in state.cards:
         if (card.apparent_role in EXECUTION_IMMUNE_ROLES
@@ -1308,7 +1319,7 @@ def recommend_action(
             evil_prob = probs.get(card.position, 0)
             knight_checks.append((card.position, evil_prob, corr_risk))
 
-    if knight_checks:
+    if knight_checks and best_non_knight_prob < _KNIGHT_CHECK_THRESHOLD:
         knight_checks.sort(key=lambda x: -x[1])  # highest evil prob first
         kpos, evil_prob, corr_risk = knight_checks[0]
         if corr_risk == 0:
@@ -1422,6 +1433,7 @@ def recommend_action(
                 position=forced_pos,
                 reasoning=_forced_execution_reasoning(forced_pos, state, result),
                 warnings=warnings,
+                forced_safe=True,
             ))
 
         # 5.5b: E2 — Shallow 2-turn lookahead (reveal + forced execution)

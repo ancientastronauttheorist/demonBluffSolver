@@ -173,10 +173,34 @@ def clean_name(raw_name):
     return DISPLAY_NAMES.get(name, name)
 
 
+KNOWN_DLL_FINGERPRINT: dict | None = None
+
+
+def validate_dll_version(reader: 'MemoryReader'):
+    """Check GameAssembly.dll fingerprint for version changes.
+
+    First call records the fingerprint. Subsequent calls compare against it.
+    Prints a loud warning if the DLL has changed (offsets may be stale).
+    """
+    global KNOWN_DLL_FINGERPRINT
+    fp = reader.get_dll_fingerprint()
+    if fp is None:
+        print("WARNING: Could not read GameAssembly.dll fingerprint")
+        return
+    if KNOWN_DLL_FINGERPRINT is None:
+        KNOWN_DLL_FINGERPRINT = fp
+        print(f"GameAssembly.dll fingerprint recorded: size={fp['size']}, timestamp={fp['pe_timestamp']}")
+    elif fp['size'] != KNOWN_DLL_FINGERPRINT['size'] or fp['pe_timestamp'] != KNOWN_DLL_FINGERPRINT['pe_timestamp']:
+        print("!!! WARNING: GameAssembly.dll changed! Offsets may be stale. !!!")
+        print(f"  Old: size={KNOWN_DLL_FINGERPRINT['size']}, timestamp={KNOWN_DLL_FINGERPRINT['pe_timestamp']}")
+        print(f"  New: size={fp['size']}, timestamp={fp['pe_timestamp']}")
+
+
 class MemoryReader:
     def __init__(self):
         self.handle = None
         self.ga_base = None
+        self._ga_module_handle = None
 
     def open(self, pid=None):
         """Open the game process."""
@@ -197,6 +221,7 @@ class MemoryReader:
         if not self.ga_base:
             print("ERROR: GameAssembly.dll not found in process")
             return False
+        validate_dll_version(self)
         return True
 
     def close(self):
@@ -234,8 +259,37 @@ class MemoryReader:
                 self.handle, ctypes.c_void_p(mod), name_buf, 260
             )
             if 'GameAssembly' in name_buf.value:
+                self._ga_module_handle = ctypes.c_void_p(mod)
                 return mod
         return None
+
+    def get_dll_fingerprint(self) -> dict | None:
+        """Get GameAssembly.dll version fingerprint (path, file size, PE timestamp)."""
+        if not self.handle or not self._ga_module_handle:
+            return None
+        # Get DLL file path via GetModuleFileNameExW
+        path_buf = ctypes.create_unicode_buffer(512)
+        psapi.GetModuleFileNameExW(
+            self.handle, self._ga_module_handle, path_buf, 512
+        )
+        dll_path = path_buf.value
+        if not dll_path:
+            return None
+        # Get file size from disk
+        try:
+            file_size = os.path.getsize(dll_path)
+        except OSError:
+            file_size = -1
+        # Read PE timestamp from process memory
+        # IMAGE_DOS_HEADER.e_lfanew at offset 0x3C from DLL base
+        e_lfanew = self._read_i32(self.ga_base + 0x3C)
+        pe_timestamp = 0
+        if e_lfanew and e_lfanew > 0:
+            # TimeDateStamp is at e_lfanew + 8 (past PE signature 4 bytes + Machine 2 + NumberOfSections 2)
+            pe_timestamp = self._read_i32(self.ga_base + e_lfanew + 8)
+            if pe_timestamp is None:
+                pe_timestamp = 0
+        return {"path": dll_path, "size": file_size, "pe_timestamp": pe_timestamp}
 
     def _read_ptr(self, addr):
         buf = ctypes.create_string_buffer(8)
@@ -558,7 +612,7 @@ class MemoryMonitor(threading.Thread):
         game_disconnected: () — read_board() returns None after non-None
     """
 
-    def __init__(self, poll_interval=0.5, pid=None):
+    def __init__(self, poll_interval=0.2, pid=None):
         super().__init__(daemon=True)
         self._poll_interval = poll_interval
         self._pid = pid
@@ -767,7 +821,7 @@ class MemoryMonitor(threading.Thread):
 _monitor: MemoryMonitor | None = None
 
 
-def get_monitor(poll_interval=0.5, pid=None) -> MemoryMonitor:
+def get_monitor(poll_interval=0.2, pid=None) -> MemoryMonitor:
     """Get or create the global MemoryMonitor singleton."""
     global _monitor
     if _monitor is not None and _monitor.is_healthy():
@@ -785,6 +839,17 @@ def _shutdown_monitor():
     if _monitor is not None:
         _monitor.stop()
         _monitor = None
+
+
+def shutdown_monitor():
+    """Public alias for _shutdown_monitor. Stops the monitor and clears the global."""
+    _shutdown_monitor()
+
+
+def restart_monitor(poll_interval=0.2, pid=None) -> MemoryMonitor:
+    """Shut down the existing monitor and create a fresh one. Use between games for isolation."""
+    shutdown_monitor()
+    return get_monitor(poll_interval=poll_interval, pid=pid)
 
 
 def print_deck(deck):

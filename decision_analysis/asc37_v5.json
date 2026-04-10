@@ -1,0 +1,135 @@
+{
+  "name": "asc37_v5",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "win",
+      "recommended_position": null,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        6
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Bard",
+        "Slayer",
+        "Bombardier",
+        "Drunk",
+        "Wretch",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "win",
+      "recommended_position": null,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        6
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Bard",
+        "Slayer",
+        "Bombardier",
+        "Drunk",
+        "Wretch",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "win",
+      "recommended_position": null,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        6
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Bishop",
+        "Architect",
+        "Baker",
+        "Knitter",
+        "Bard",
+        "Slayer",
+        "Bombardier",
+        "Drunk",
+        "Wretch",
+        "Shaman",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

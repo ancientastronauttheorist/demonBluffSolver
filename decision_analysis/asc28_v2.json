@@ -1,0 +1,223 @@
+{
+  "name": "asc28_v2",
+  "n_cards": 10,
+  "n_evil": 4,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.2,
+        "4": 0.8,
+        "5": 0.8,
+        "6": 0.6,
+        "7": 0.8,
+        "8": 0.2,
+        "9": 0.2,
+        "10": 0.4
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Alchemist",
+        "Judge",
+        "Knight",
+        "Enlightened",
+        "Lover",
+        "Jester",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.2,
+        "4": 0.8,
+        "5": 0.8,
+        "6": 0.6,
+        "7": 0.8,
+        "8": 0.2,
+        "9": 0.2,
+        "10": 0.4
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Alchemist",
+        "Judge",
+        "Knight",
+        "Enlightened",
+        "Lover",
+        "Jester",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #10 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #10",
+      "actual_position": 10,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Alchemist",
+        "Judge",
+        "Knight",
+        "Enlightened",
+        "Lover",
+        "Jester",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Alchemist",
+        "Judge",
+        "Knight",
+        "Enlightened",
+        "Lover",
+        "Jester",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Alchemist",
+        "Judge",
+        "Knight",
+        "Enlightened",
+        "Lover",
+        "Jester",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 3,
+    "wrong": 2,
+    "accuracy": 0.6,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "different_valid_target": 1
+    }
+  }
+}

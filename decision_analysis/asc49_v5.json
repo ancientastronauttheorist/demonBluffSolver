@@ -1,0 +1,176 @@
+{
+  "name": "asc49_v5",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 6,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.667,
+        "3": 0.333
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Bishop",
+        "Witness",
+        "Scout",
+        "Hunter",
+        "Architect",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 6,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.667,
+        "3": 0.333
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Bishop",
+        "Witness",
+        "Scout",
+        "Hunter",
+        "Architect",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 6,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 0.3333333333333333,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "wrong_target_choice",
+      "evil_probs": {
+        "1": 0.667,
+        "3": 0.333
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Bishop",
+        "Witness",
+        "Scout",
+        "Hunter",
+        "Architect",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Bishop",
+        "Witness",
+        "Scout",
+        "Hunter",
+        "Architect",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "wrong_target_choice": 1
+    }
+  }
+}

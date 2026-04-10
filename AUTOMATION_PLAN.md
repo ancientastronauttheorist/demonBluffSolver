@@ -338,36 +338,36 @@ Simpler alternative: rank by `frequency x HP_cost` from failure patterns.
 ## Implementation Roadmap
 
 ### Week 1: Safe Speed + Critical Fixes
-- [ ] Switch to in-process calls (fix session lock to per-command, fix pyautogui.PAUSE import)
-- [ ] Reduce safe delays (post-click 0.3->0.15, focus 0.2->0.05)
-- [ ] Poll interval 0.5->0.2
-- [ ] Fix all 11 critical issues listed above
-- [ ] Add `full_reset()` to GameSession
-- [ ] Make `_verify_flips` return structured result
-- [ ] Auto-deduct HP in night phase
-- [ ] Add GameAssembly.dll version fingerprint to memory reader
+- [x] Switch to in-process calls (fix session lock to per-command, fix pyautogui.PAUSE import)
+- [x] Reduce safe delays (post-click 0.3->0.15, focus 0.2->0.05)
+- [x] Poll interval 0.5->0.2
+- [x] Fix all 11 critical issues listed above
+- [x] Add `full_reset()` to GameSession
+- [x] Make `_verify_flips` return structured result
+- [x] Auto-deduct HP in night phase
+- [x] Add GameAssembly.dll version fingerprint to memory reader
 
 ### Week 2: State Machine Extensions
-- [ ] Add REVEAL phase (with click-safety protocol)
-- [ ] Add ABILITY_USE phase (with multi-step support for Jester/Druid/FT)
-- [ ] Add NIGHT_RESOLVE phase (auto-detect kills, auto-deduct HP)
+- [x] Add REVEAL phase (with click-safety protocol)
+- [x] Add ABILITY_USE phase (with multi-step support for Jester/Druid/FT)
+- [x] Add NIGHT_RESOLVE phase (auto-detect kills, auto-deduct HP)
 - [ ] Make all dispatch commands return structured results (not just print)
-- [ ] Handle Witch+Lilis interaction (remove killed from blocked_positions)
-- [ ] Track Lilis batch index explicitly
+- [x] Handle Witch+Lilis interaction (remove killed from blocked_positions) — done in Week 1
+- [x] Track Lilis batch index explicitly
 
 ### Week 3: Full Autonomous Loop
-- [ ] Add MENU_NAV, DECK_READ, SESSION_INIT, POST_GAME phases
-- [ ] Add `python game_loop.py auto [--games N] [--risk conservative|moderate|aggressive]`
-- [ ] BatchGameRunner with per-game isolation protocol
-- [ ] Screenshot cleanup, disk space checks
-- [ ] Error categorization (recoverable vs fatal)
+- [x] Add MENU_NAV, DECK_READ, SESSION_INIT, POST_GAME phases
+- [x] Add `python game_loop.py auto [--games N] [--risk conservative|moderate|aggressive]`
+- [x] BatchGameRunner with per-game isolation protocol
+- [x] Screenshot cleanup, disk space checks — cleanup done in Week 1, disk check in BatchGameRunner
+- [x] Error categorization (recoverable vs fatal) — 3 consecutive failures = abort
 - [ ] Skip per-game cargo test in batch mode
 
 ### Week 4: Self-Improvement Pipeline
-- [ ] Post-game decision analyzer (extend replay infrastructure)
+- [x] Post-game decision analyzer (extend replay infrastructure)
 - [ ] Bug fix impact measurement (before/after test suite diffs)
-- [ ] Cross-game failure pattern detection
-- [ ] `decisions <game>`, `failure_report`, `work_items` commands
+- [x] Cross-game failure pattern detection
+- [x] `decisions <game>`, `failure_report` commands
 
 ### Ongoing: Memory Reader Gaps
 - [ ] Find HP offset (IL2CPP GameData or Gameplay class)

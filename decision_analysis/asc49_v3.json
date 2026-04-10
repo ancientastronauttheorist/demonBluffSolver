@@ -1,0 +1,134 @@
+{
+  "name": "asc49_v3",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.375,
+        "5": 0.625
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Medium",
+        "Knitter",
+        "Bard",
+        "Hunter",
+        "Empress",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.375,
+        "5": 0.625
+      },
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Medium",
+        "Knitter",
+        "Bard",
+        "Hunter",
+        "Empress",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        5,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Medium",
+        "Knitter",
+        "Bard",
+        "Hunter",
+        "Empress",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

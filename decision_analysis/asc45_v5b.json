@@ -1,0 +1,179 @@
+{
+  "name": "asc45_v5b",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 79,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.9738354819891415,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.165,
+        "2": 0.19,
+        "3": 0.089,
+        "4": 0.228,
+        "5": 0.646,
+        "7": 0.266,
+        "8": 0.38,
+        "9": 0.038
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Medium",
+        "Druid",
+        "Bishop",
+        "Fortune_Teller",
+        "Knight",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (good)",
+      "n_surviving": 79,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.9738354819891415,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.165,
+        "2": 0.19,
+        "3": 0.089,
+        "4": 0.228,
+        "5": 0.646,
+        "7": 0.266,
+        "8": 0.38,
+        "9": 0.038
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Medium",
+        "Druid",
+        "Bishop",
+        "Fortune_Teller",
+        "Knight",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 28,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.9402859586706311,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.464,
+        "2": 0.536,
+        "4": 0.643,
+        "7": 0.107,
+        "8": 0.143,
+        "9": 0.107
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Medium",
+        "Druid",
+        "Bishop",
+        "Fortune_Teller",
+        "Knight",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 18,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.6500224216483541,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.167,
+        "2": 0.833
+      },
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Medium",
+        "Druid",
+        "Bishop",
+        "Fortune_Teller",
+        "Knight",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Poisoner",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 1,
+    "wrong": 3,
+    "accuracy": 0.25,
+    "wrong_categories": {
+      "premature_wrong_exec": 1,
+      "premature_but_correct": 2
+    }
+  }
+}

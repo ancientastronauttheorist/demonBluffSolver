@@ -1,0 +1,135 @@
+{
+  "name": "asc49_v4",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 10,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Slayer",
+        "Hunter",
+        "Lover",
+        "Bishop",
+        "Oracle",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 10,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Slayer",
+        "Hunter",
+        "Lover",
+        "Bishop",
+        "Oracle",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        7,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Slayer",
+        "Hunter",
+        "Lover",
+        "Bishop",
+        "Oracle",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "name": "asc47_v1",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 36,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7,
+        8
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Oracle",
+        "Confessor",
+        "Empress",
+        "Baker",
+        "Judge",
+        "Doppelganger",
+        "Witch",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 36,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7,
+        8
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Oracle",
+        "Confessor",
+        "Empress",
+        "Baker",
+        "Judge",
+        "Doppelganger",
+        "Witch",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7,
+        8
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Oracle",
+        "Confessor",
+        "Empress",
+        "Baker",
+        "Judge",
+        "Doppelganger",
+        "Witch",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 6,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        7,
+        8
+      ],
+      "definite_good": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Oracle",
+        "Confessor",
+        "Empress",
+        "Baker",
+        "Judge",
+        "Doppelganger",
+        "Witch",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "different_valid_target": 1
+    }
+  }
+}

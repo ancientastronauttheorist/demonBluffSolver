@@ -146,6 +146,31 @@ def card_no_info(pos: int, role: str) -> CardInfo:
 
 
 SESSION_FILE = os.path.join(os.path.dirname(__file__), "game_session.json")
+SCREENSHOTS_DIR = os.path.join(os.path.dirname(__file__), "screenshots")
+
+
+def cleanup_screenshots(keep: int = 20):
+    """Delete old screenshots, keeping only the most recent `keep` files.
+
+    Issue #11: Prevents disk fill over 100+ games (~4MB/game).
+    """
+    if not os.path.isdir(SCREENSHOTS_DIR):
+        return 0
+    files = []
+    for f in os.listdir(SCREENSHOTS_DIR):
+        path = os.path.join(SCREENSHOTS_DIR, f)
+        if os.path.isfile(path) and f.lower().endswith(('.png', '.jpg', '.jpeg')):
+            files.append((os.path.getmtime(path), path))
+    files.sort(reverse=True)  # newest first
+    to_delete = files[keep:]
+    for _, path in to_delete:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+    if to_delete:
+        print(f"[cleanup] Deleted {len(to_delete)} old screenshots (kept {min(keep, len(files))})")
+    return len(to_delete)
 DECISION_LOG = os.path.join(os.path.dirname(__file__), "game_session_state.md")
 _SESSION_LOCK_HANDLE = None
 _SESSION_LOCK_PATH: Optional[str] = None
@@ -173,11 +198,11 @@ def _release_session_lock():
 
 
 def _acquire_session_lock(path: str = SESSION_FILE, timeout_s: float = 5.0):
-    """Acquire a process-wide lock for the session file.
+    """Acquire a per-command lock for the session file.
 
-    Each CLI invocation is a short-lived process. Holding the lock from load
-    until process exit serializes read-modify-write commands and prevents
-    `game_session.json` corruption under rapid repeated automation.
+    Returns the lock handle. Caller MUST call _release_session_lock() when done.
+    For in-process/REPL use, this is called per save()/load() and released
+    immediately after the IO completes, preventing deadlocks on reentrant calls.
     """
     global _SESSION_LOCK_HANDLE, _SESSION_LOCK_PATH
     if _SESSION_LOCK_HANDLE is not None:
@@ -349,6 +374,7 @@ class GameSession:
         self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
         self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
+        self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
 
         # Clear solver cache on new game
         try:
@@ -368,6 +394,47 @@ class GameSession:
                             self.minions, self.demons]
             for v in faction
         )
+
+    def full_reset(self):
+        """Clear ALL mutable state for between-game isolation.
+
+        Call this between games in batch mode to prevent state leaks.
+        Clears: cards, executed, confirmed, abilities, night kills, blocked,
+                reveal order, HP, deck, solver cache, Rust daemon.
+        """
+        self.cards.clear()
+        self.executed.clear()
+        self.confirmed_evil.clear()
+        self.confirmed_good.clear()
+        self.pd_corruption_target = None
+        self.used_abilities.clear()
+        self.executed_evil_roles.clear()
+        self.slayer_results.clear()
+        self.night_kills.clear()
+        self.night_kill_evil_count = 0
+        self.hp = 10
+        self.wrong_exec_cost = 5
+        self.pd_ability_results.clear()
+        self.blocked_positions.clear()
+        self.executed_good_corrupted.clear()
+        self.board_villager_count = None
+        self.board_outcast_count = None
+        self.reveal_order.clear()
+        self.lilis_batch_index = 0
+        self.villagers.clear()
+        self.outcasts.clear()
+        self.minions.clear()
+        self.demons.clear()
+
+        # Clear solver cache
+        try:
+            from rust_solver import clear_solver_cache, shutdown_daemon
+            clear_solver_cache()
+            shutdown_daemon()
+        except ImportError:
+            pass
+
+        print("[full_reset] All session state cleared, solver cache + daemon reset")
 
     def is_lilis_alive(self) -> bool:
         """Check if Lilis is in the deck and has not been executed."""
@@ -504,7 +571,8 @@ class GameSession:
 
     @classmethod
     def from_game_state(cls, state: GameState,
-                        used_abilities: Optional[list[int]] = None) -> "GameSession":
+                        used_abilities: Optional[list[int]] = None,
+                        lilis_batch_index: int = 0) -> "GameSession":
         session = cls(state.n_cards, state.n_evil)
         session.villagers = list(state.deck.villagers)
         session.outcasts = list(state.deck.outcasts)
@@ -528,6 +596,7 @@ class GameSession:
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.used_abilities = list(used_abilities or [])
+        session.lilis_batch_index = lilis_batch_index
         return session
 
     def _solve(self, state: GameState) -> SolverResult:
@@ -600,11 +669,14 @@ class GameSession:
         DecisionLog.log_recommendation(action)
         return action
 
-    def auto_execute(self, pos: int, result, monitor=None) -> dict:
+    def auto_execute(self, pos: int, result, monitor=None, forced_safe: bool = False) -> dict:
         """Perform in-game execution click sequence, verify via memory_reader, record result.
 
         Uses MemoryMonitor.wait_for() when available for faster, smarter waits.
         Falls back to fixed sleeps if no monitor provided.
+
+        Args:
+            forced_safe: If True, bypass Bombardier guard (lookahead proved safety).
 
         Returns: {"success": bool, "was_evil": bool|None, "evil_role": str|None, "error": str|None}
         """
@@ -612,8 +684,8 @@ class GameSession:
         import mouse as _mouse
         from game_utils import all_game_card_coords
 
-        # Bombardier hard guard
-        if pos in result.bombardier_positions:
+        # Bombardier hard guard (Issue #9: bypass when forced_safe is True)
+        if pos in result.bombardier_positions and not forced_safe:
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Bombardier protection: refusing to execute #{pos}"}
 
@@ -862,38 +934,57 @@ class GameSession:
 
     def save(self, path: str = SESSION_FILE):
         _acquire_session_lock(path)
-        data = self.to_game_state().to_dict()
-        data["used_abilities"] = list(self.used_abilities)
+        try:
+            data = self.to_game_state().to_dict()
+            data["used_abilities"] = list(self.used_abilities)
+            data["lilis_batch_index"] = self.lilis_batch_index
 
-        tmp_path = f"{path}.tmp.{os.getpid()}"
-        with open(tmp_path, "w") as f:
-            json.dump(data, f, indent=2)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp_path, path)
-        print(f"[save] Session saved to {path}")
+            tmp_path = f"{path}.tmp.{os.getpid()}"
+            with open(tmp_path, "w") as f:
+                json.dump(data, f, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_path, path)
+            print(f"[save] Session saved to {path}")
+        finally:
+            _release_session_lock()
 
     @classmethod
     def load(cls, path: str = SESSION_FILE) -> "GameSession":
         _acquire_session_lock(path)
-        with open(path) as f:
-            data = json.load(f)
-        state = GameState.from_dict(data)
-        session = cls.from_game_state(state, used_abilities=data.get("used_abilities", []))
-        print(f"[load] Session loaded from {path}")
-        return session
+        try:
+            with open(path) as f:
+                data = json.load(f)
+            state = GameState.from_dict(data)
+            session = cls.from_game_state(
+                state,
+                used_abilities=data.get("used_abilities", []),
+                lilis_batch_index=data.get("lilis_batch_index", 0),
+            )
+            print(f"[load] Session loaded from {path}")
+            return session
+        finally:
+            _release_session_lock()
 
 
 # ============================================================
 # Flip Verification
 # ============================================================
 
-def _verify_flips(cards_or_output, expected_positions: list[int], session):
+def _verify_flips(cards_or_output, expected_positions: list[int], session) -> dict:
     """Check that all targeted cards actually flipped.
 
     Accepts either:
     - list[dict]: card dicts from memory_reader.read_board()
     - str: legacy stdout output from subprocess (backward compat)
+
+    Returns:
+        {
+            "flipped": [positions that successfully flipped],
+            "blocked": [positions likely Witch-blocked (last card, Witch in deck)],
+            "failed": [positions that failed to flip (click didn't register)],
+            "success": bool (True if no failures),
+        }
     """
     import re
     still_hidden = []
@@ -914,21 +1005,40 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session):
             if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
                 still_hidden.append(pos)
 
+    flipped = [p for p in expected_positions if p not in still_hidden]
+    blocked = []
+    failed = []
+
     if still_hidden:
+        has_witch = session.has_role_in_deck("Witch")
+        # If Witch in deck and only the last expected position is hidden, likely Witch block
+        if has_witch and len(still_hidden) == 1 and still_hidden[0] == max(expected_positions):
+            blocked = still_hidden
+        else:
+            failed = still_hidden
+
         print()
         print("!" * 60)
         print("  FLIP VERIFICATION FAILED")
         print(f"  Positions still face-down: {still_hidden}")
         print(f"  Click likely didn't register (game unfocused?).")
-        # Check if Witch is in the deck -- if not, this is definitely a click failure
-        has_witch = session.has_role_in_deck("Witch")
         if not has_witch:
             print("  No Witch in deck -- this is NOT a Witch block.")
             print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
         else:
-            print("  Witch IS in deck -- could be Witch blocking last card.")
-            print("  If only last card is hidden, likely Witch. Otherwise re-flip.")
+            if blocked:
+                print(f"  Witch IS in deck -- #{blocked[0]} is likely Witch-blocked (last card).")
+            else:
+                print("  Witch IS in deck but multiple cards hidden. Likely click failures.")
+                print("  Re-run: python game_loop.py flip")
         print("!" * 60)
+
+    return {
+        "flipped": flipped,
+        "blocked": blocked,
+        "failed": failed,
+        "success": len(failed) == 0 and len(blocked) == 0,
+    }
 
 
 # ============================================================
@@ -1421,6 +1531,7 @@ def main():
         print("Usage: python game_loop.py <command> [args...]")
         print()
         print("Commands:")
+        print("  auto [--games=N] [--risk=conservative] Full autonomous play")
         print("  start                                 Start new game (menu nav + deck read)")
         print("  new <n_cards> <n_evil> [hp=N cost=N] Start new game session")
         print("  deck V=... O=... M=... D=...         Set deck composition")
@@ -1479,7 +1590,7 @@ def main():
         return
 
     # Commands that don't need an existing session
-    if cmd in ("start", "read_deck", "new"):
+    if cmd in ("start", "read_deck", "new", "auto"):
         session = dispatch(cmd, args)
         return
 
@@ -1546,7 +1657,7 @@ def repl_loop():
         args = parts[1:]
 
         try:
-            if cmd in ("start", "read_deck", "new"):
+            if cmd in ("start", "read_deck", "new", "auto"):
                 result = dispatch(cmd, args, session)
                 if result is not None:
                     session = result
@@ -1739,7 +1850,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         time.sleep(5)
                     print(f"  Night phase complete.")
                     print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
-                    print(f"  Then: set_hp {session.hp - 2}")
+                    print(f"  (HP auto-deducted by night_kill/night_no_kill commands)")
             session.save()
             return None
 
@@ -1762,10 +1873,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             for p in batch:
                 if p not in session.reveal_order:
                     session.reveal_order.append(p)
+            session.lilis_batch_index += 1
             remaining = positions[batch_size:]
-            # Lilis night triggers every 4 reveals, even on last batch
-            total_reveals = len(session.reveal_order)
-            if total_reveals % 4 == 0:
+            # Lilis night triggers every batch (batch_index tracks explicitly)
+            if len(batch) == batch_size:
                 print(f"\n  --- Lilis night phase (waiting for kill animation) ---")
                 print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
                 try:
@@ -1790,7 +1901,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 else:
                     print(f"  No more cards to flip. Check for night kill/damage.")
                 print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
-                print(f"  Then: set_hp {session.hp - 2}")
+                print(f"  (HP auto-deducted by night_kill/night_no_kill commands)")
             elif remaining:
                 print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
@@ -2058,6 +2169,21 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.auto_next()
         return None
 
+    if cmd == "auto":
+        from state_machine import BatchGameRunner
+        n_games = 1
+        risk = "conservative"
+        for arg in args:
+            if arg.startswith("--games="):
+                n_games = int(arg.split("=")[1])
+            elif arg.startswith("--risk="):
+                risk = arg.split("=")[1]
+            elif arg.isdigit():
+                n_games = int(arg)
+        runner = BatchGameRunner(n_games=n_games, risk=risk)
+        runner.run()
+        return None
+
     if cmd == "auto_loop":
         from state_machine import GameStateMachine
         from memory_reader import get_monitor
@@ -2112,15 +2238,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         for p in positions:
             if p not in session.executed:
                 session.executed.append(p)
+            # Issue #8: Remove killed positions from blocked_positions (Witch+Lilis interaction)
+            if p in session.blocked_positions:
+                session.blocked_positions.remove(p)
+                print(f"  (removed #{p} from blocked_positions — killed by Lilis)")
         if n_evil == len(positions) and n_evil > 0:
             for p in positions:
                 if p not in session.confirmed_evil:
                     session.confirmed_evil.append(p)
+        # Issue #7: Auto-deduct 2 HP for Lilis night
+        old_hp = session.hp
+        session.hp -= 2
         session.save()
         confirmed_msg = ""
         if n_evil == len(positions) and n_evil > 0:
             confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
         print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
+        print(f"  Lilis night HP: {old_hp} -> {session.hp}")
         return None
 
     if cmd == "night_no_kill":
@@ -2128,6 +2262,9 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         dead = set(session.executed)
         all_positions = set(range(1, session.n_cards + 1))
         unrevealed = all_positions - revealed - dead
+        # Issue #7: Auto-deduct 2 HP for Lilis night
+        old_hp = session.hp
+        session.hp -= 2
         if len(unrevealed) == 1:
             lilis_pos = unrevealed.pop()
             if lilis_pos not in session.confirmed_evil:
@@ -2135,12 +2272,17 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             session.save()
             print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos}")
             print(f"  => #{lilis_pos} confirmed as Lilis (can't kill herself)")
+            print(f"  HP: {old_hp} -> {session.hp}")
         elif len(unrevealed) == 0:
+            session.save()
             print("WARNING: No unrevealed positions. Night shouldn't have triggered.")
+            print(f"  HP: {old_hp} -> {session.hp}")
         else:
+            session.save()
             print(f"WARNING: {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
             print("  Cannot auto-deduce Lilis — multiple unrevealed cards exist.")
             print("  Check if a card was actually killed and use night_kill instead.")
+            print(f"  HP: {old_hp} -> {session.hp}")
         return None
 
     if cmd == "log":
@@ -2241,6 +2383,19 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "deck_view":
         path = session.deck_view()
         print(f"Deck view: {path}")
+        return None
+
+    if cmd == "decisions":
+        from decision_analysis import cmd_analyze, cmd_analyze_all
+        if args:
+            cmd_analyze(args[0])
+        else:
+            cmd_analyze_all()
+        return None
+
+    if cmd == "failure_report":
+        from decision_analysis import cmd_failure_report
+        cmd_failure_report()
         return None
 
     print(f"Unknown command: {cmd}")

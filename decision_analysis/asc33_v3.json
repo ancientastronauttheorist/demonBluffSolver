@@ -1,0 +1,104 @@
+{
+  "name": "asc33_v3",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 0,
+      "recommended_action": "error",
+      "recommended_position": null,
+      "recommended_confidence": 0.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Bard",
+        "Hunter",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Poet",
+        "Medium",
+        "Drunk",
+        "Plague_Doctor",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 0,
+      "recommended_action": "error",
+      "recommended_position": null,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "zero_scenarios",
+      "evil_probs": {},
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Bard",
+        "Hunter",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Poet",
+        "Medium",
+        "Drunk",
+        "Plague_Doctor",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 0,
+      "recommended_action": "error",
+      "recommended_position": null,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "zero_scenarios",
+      "evil_probs": {},
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Bard",
+        "Hunter",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Poet",
+        "Medium",
+        "Drunk",
+        "Plague_Doctor",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "zero_scenarios": 2
+    }
+  }
+}

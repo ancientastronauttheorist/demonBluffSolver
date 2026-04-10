@@ -1,0 +1,226 @@
+{
+  "name": "asc41_v6",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 15,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.4,
+        "2": 0.467,
+        "6": 0.133
+      },
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        3,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Knitter",
+        "Enlightened",
+        "Slayer",
+        "Confessor",
+        "Jester",
+        "Fortune_Teller",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 15,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.4,
+        "2": 0.467,
+        "6": 0.133
+      },
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        3,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Knitter",
+        "Enlightened",
+        "Slayer",
+        "Confessor",
+        "Jester",
+        "Fortune_Teller",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.375,
+        "2": 0.375,
+        "6": 0.25
+      },
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        3,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Knitter",
+        "Enlightened",
+        "Slayer",
+        "Confessor",
+        "Jester",
+        "Fortune_Teller",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.333,
+        "2": 0.333,
+        "6": 0.333
+      },
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        3,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Knitter",
+        "Enlightened",
+        "Slayer",
+        "Confessor",
+        "Jester",
+        "Fortune_Teller",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Knitter",
+        "Enlightened",
+        "Slayer",
+        "Confessor",
+        "Jester",
+        "Fortune_Teller",
+        "Wretch",
+        "Plague_Doctor",
+        "Chancellor",
+        "Poisoner",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 4,
+    "wrong": 1,
+    "accuracy": 0.8,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

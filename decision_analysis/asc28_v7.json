@@ -1,0 +1,173 @@
+{
+  "name": "asc28_v7",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 29,
+      "recommended_action": "error #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.207,
+        "2": 0.414,
+        "5": 0.172,
+        "6": 0.828,
+        "7": 0.379
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Hunter",
+        "Baker",
+        "Alchemist",
+        "Bishop",
+        "Empress",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Twin_Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (good)",
+      "n_surviving": 29,
+      "recommended_action": "error #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.207,
+        "2": 0.414,
+        "5": 0.172,
+        "6": 0.828,
+        "7": 0.379
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Hunter",
+        "Baker",
+        "Alchemist",
+        "Bishop",
+        "Empress",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Twin_Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        5,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Hunter",
+        "Baker",
+        "Alchemist",
+        "Bishop",
+        "Empress",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Twin_Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        5,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Architect",
+        "Hunter",
+        "Baker",
+        "Alchemist",
+        "Bishop",
+        "Empress",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Twin_Minion",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

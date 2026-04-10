@@ -1,0 +1,217 @@
+{
+  "name": "asc44_v5",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 0.5,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.25,
+        "2": 0.5,
+        "4": 0.25,
+        "6": 0.25
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Enlightened",
+        "Poet",
+        "Bard",
+        "Scout",
+        "Medium",
+        "Bombardier",
+        "Drunk",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 0.5,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.25,
+        "2": 0.5,
+        "4": 0.25,
+        "6": 0.25
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Enlightened",
+        "Poet",
+        "Bard",
+        "Scout",
+        "Medium",
+        "Bombardier",
+        "Drunk",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (good)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 0.5,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.25,
+        "2": 0.5,
+        "4": 0.25,
+        "5": 0.25,
+        "6": 0.25
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Enlightened",
+        "Poet",
+        "Bard",
+        "Scout",
+        "Medium",
+        "Bombardier",
+        "Drunk",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #5 (good)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 0.5,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "4": 0.5,
+        "5": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        2,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Enlightened",
+        "Poet",
+        "Bard",
+        "Scout",
+        "Medium",
+        "Bombardier",
+        "Drunk",
+        "Puppeteer",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Enlightened",
+        "Poet",
+        "Bard",
+        "Scout",
+        "Medium",
+        "Bombardier",
+        "Drunk",
+        "Puppeteer",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 2,
+    "wrong": 3,
+    "accuracy": 0.4,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "premature_wrong_exec": 2
+    }
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "name": "asc38_v3",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 28,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.571,
+        "7": 0.429
+      },
+      "definite_evil": [
+        4,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Confessor",
+        "Medium",
+        "Bishop",
+        "Fortune_Teller",
+        "Druid",
+        "Knight",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 28,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {
+        "3": 0.571,
+        "7": 0.429
+      },
+      "definite_evil": [
+        4,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Confessor",
+        "Medium",
+        "Bishop",
+        "Fortune_Teller",
+        "Druid",
+        "Knight",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 9,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.556,
+        "7": 0.444
+      },
+      "definite_evil": [
+        4,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Confessor",
+        "Medium",
+        "Bishop",
+        "Fortune_Teller",
+        "Druid",
+        "Knight",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.9709505944546686,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "3": 0.6,
+        "7": 0.4
+      },
+      "definite_evil": [
+        4,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Confessor",
+        "Medium",
+        "Bishop",
+        "Fortune_Teller",
+        "Druid",
+        "Knight",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        7,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Confessor",
+        "Medium",
+        "Bishop",
+        "Fortune_Teller",
+        "Druid",
+        "Knight",
+        "Plague_Doctor",
+        "Doppelganger",
+        "Chancellor",
+        "Shaman",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 3,
+    "wrong": 2,
+    "accuracy": 0.6,
+    "wrong_categories": {
+      "different_valid_target": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

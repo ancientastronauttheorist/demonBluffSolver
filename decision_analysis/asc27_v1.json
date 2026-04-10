@@ -1,0 +1,176 @@
+{
+  "name": "asc27_v1",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 25,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.48,
+        "5": 0.52,
+        "6": 0.16,
+        "7": 0.24,
+        "8": 0.6
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Medium",
+        "Enlightened",
+        "Confessor",
+        "Baker",
+        "Dreamer",
+        "Bombardier",
+        "Drunk",
+        "Doppelganger",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 25,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.48,
+        "5": 0.52,
+        "6": 0.16,
+        "7": 0.24,
+        "8": 0.6
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        4
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Medium",
+        "Enlightened",
+        "Confessor",
+        "Baker",
+        "Dreamer",
+        "Bombardier",
+        "Drunk",
+        "Doppelganger",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.25,
+        "6": 0.25,
+        "7": 0.5
+      },
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Medium",
+        "Enlightened",
+        "Confessor",
+        "Baker",
+        "Dreamer",
+        "Bombardier",
+        "Drunk",
+        "Doppelganger",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "6": 0.333,
+        "7": 0.667
+      },
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Medium",
+        "Enlightened",
+        "Confessor",
+        "Baker",
+        "Dreamer",
+        "Bombardier",
+        "Drunk",
+        "Doppelganger",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 1,
+    "wrong": 3,
+    "accuracy": 0.25,
+    "wrong_categories": {
+      "premature_but_correct": 2,
+      "premature_wrong_exec": 1
+    }
+  }
+}

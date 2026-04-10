@@ -1,0 +1,131 @@
+{
+  "name": "asc29_v6",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Jester",
+        "Knitter",
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Architect",
+        "Plague_Doctor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Jester",
+        "Knitter",
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Architect",
+        "Plague_Doctor",
+        "Shaman",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Jester",
+        "Knitter",
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Architect",
+        "Plague_Doctor",
+        "Shaman",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

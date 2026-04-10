@@ -1,0 +1,134 @@
+{
+  "name": "asc38_v6",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 12,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Alchemist",
+        "Jester",
+        "Enlightened",
+        "Confessor",
+        "Drunk",
+        "Doppelganger",
+        "Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Alchemist",
+        "Jester",
+        "Enlightened",
+        "Confessor",
+        "Drunk",
+        "Doppelganger",
+        "Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 6,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        6
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Alchemist",
+        "Jester",
+        "Enlightened",
+        "Confessor",
+        "Drunk",
+        "Doppelganger",
+        "Minion",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

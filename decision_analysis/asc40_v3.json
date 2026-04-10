@@ -1,0 +1,225 @@
+{
+  "name": "asc40_v3",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 78,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 0.6923076923076923,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.026,
+        "2": 0.718,
+        "3": 0.103,
+        "4": 0.462,
+        "5": 0.436,
+        "6": 0.359,
+        "7": 0.205,
+        "9": 0.692
+      },
+      "definite_evil": [],
+      "definite_good": [
+        8
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Medium",
+        "Oracle",
+        "Slayer",
+        "Gemcrafter",
+        "Alchemist",
+        "Knight",
+        "Architect",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #9 (good)",
+      "n_surviving": 78,
+      "recommended_action": "execute #9",
+      "recommended_position": 9,
+      "recommended_confidence": 0.6923076923076923,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.026,
+        "2": 0.718,
+        "3": 0.103,
+        "4": 0.462,
+        "5": 0.436,
+        "6": 0.359,
+        "7": 0.205,
+        "9": 0.692
+      },
+      "definite_evil": [],
+      "definite_good": [
+        8
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Medium",
+        "Oracle",
+        "Slayer",
+        "Gemcrafter",
+        "Alchemist",
+        "Knight",
+        "Architect",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 24,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.9166666666666666,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.083,
+        "2": 0.917,
+        "3": 0.167,
+        "4": 0.833,
+        "5": 0.833,
+        "7": 0.167
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Medium",
+        "Oracle",
+        "Slayer",
+        "Gemcrafter",
+        "Alchemist",
+        "Knight",
+        "Architect",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 10,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        5
+      ],
+      "definite_good": [
+        1,
+        3,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Medium",
+        "Oracle",
+        "Slayer",
+        "Gemcrafter",
+        "Alchemist",
+        "Knight",
+        "Architect",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 5,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        5
+      ],
+      "definite_good": [
+        1,
+        3,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Hunter",
+        "Medium",
+        "Oracle",
+        "Slayer",
+        "Gemcrafter",
+        "Alchemist",
+        "Knight",
+        "Architect",
+        "Drunk",
+        "Doppelganger",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 5,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}
