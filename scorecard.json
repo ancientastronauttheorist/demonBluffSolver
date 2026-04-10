@@ -2134,6 +2134,13 @@
       "name": "asc49_v4",
       "notes": "6HP, Lilis night killed Oracle, two 100% confident executions, PD corrupted Bishop",
       "date": "2026-04-10 12:05"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc49_v5",
+      "notes": "5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used",
+      "date": "2026-04-10 12:10"
     }
   ]
 }

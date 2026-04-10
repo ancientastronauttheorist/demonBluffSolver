@@ -19877,3 +19877,79 @@ Reason: #9 is evil in ALL 5 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: 6HP, Lilis night killed Oracle, two 100% confident executions, PD corrupted Bishop
 
+
+---
+
+# New Game — 2026-04-10 12:07:15
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Bishop, Witness, Scout, Hunter, Architect, Oracle
+- Outcasts: Doppelganger, Drunk
+- Minions: Minion
+- Demons: Baa
+
+### [12:07:51] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [12:07:51] Revealed #2 Bishop
+Info: {'targets': [1, 3, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [12:07:51] Revealed #3 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [12:07:51] Revealed #4 Architect
+Info: {'side': 'Equal'}
+
+### [12:07:51] Revealed #6 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Minion'}
+
+### [12:07:51] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [12:07:51] Revealed #8 Medium
+Info: {'good_position': 2, 'good_role': 'Bishop'}
+
+### [12:08:13] Revealed #5 Witness
+Info: {'affected_position': 0}
+
+#### [12:08:17] Solver Output
+Scenarios: 6/2408
+Definite evil: ['#6']
+Definite good: ['#2', '#4', '#5', '#7', '#8']
+Evil probabilities: #1=67%, #3=33%
+
+#### [12:08:17] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [12:09:06] Executed #6 -> Baa (EVIL)
+
+#### [12:09:06] Solver Output
+Scenarios: 6/301
+Definite evil: ['#6']
+Definite good: ['#2', '#4', '#5', '#7', '#8']
+Evil probabilities: #1=67%, #3=33%
+
+#### [12:09:06] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (67% evil Minion, 17% good Doppelganger, 17% good Hunter).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [12:09:52] Executed #1 -> GOOD (WRONG!)
+
+#### [12:09:56] Solver Output
+Scenarios: 2/258
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [12:09:56] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [12:10:31] Executed #3 -> Minion (EVIL)
+
+## [12:10:39] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used
+
