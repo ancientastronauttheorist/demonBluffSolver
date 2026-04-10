@@ -21275,3 +21275,93 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, Witch blocked #7, FT confirmed evil in #1/#3, Druid disambiguated to 1 scenario
 
+
+---
+
+# New Game — 2026-04-10 15:25:58
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Judge, Witness, Knitter, Enlightened, Hunter, Poet
+- Outcasts: Drunk, Bombardier
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [15:26:27] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [15:26:27] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [15:26:27] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [15:28:04] Revealed #1 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 4}
+
+### [15:28:04] Revealed #3 Poet
+Info: {'targets': [1, 4], 'minion_role': 'Twin_Minion', 'copied_role': 'Oracle'}
+
+### [15:28:04] Revealed #4 Witness
+Info: {'affected_position': 0}
+
+### [15:28:04] Revealed #6 Judge
+Info: {}
+
+### [15:28:04] Revealed #7 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [15:28:10] Solver Output
+Scenarios: 4/392
+Definite good: ['#2', '#4', '#8']
+Evil probabilities: #1=50%, #3=50%, #5=50%, #6=25%, #7=25%
+
+#### [15:28:10] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#7']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.0, info gain 1.000 bits) | timing x1.00
+
+### [15:28:54] Revealed #6 Judge
+Info: {'target': 7, 'is_lying': True}
+
+### [15:28:54] Ability used at #6
+
+#### [15:28:54] Solver Output
+Scenarios: 2/392
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #6=50%, #7=50%
+
+#### [15:28:54] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
+
+### [15:29:35] Executed #1 -> Twin_Minion (EVIL)
+
+#### [15:29:36] Solver Output
+Scenarios: 2/49
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #6=50%, #7=50%
+
+#### [15:29:36] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Judge).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:30:22] Executed #6 -> GOOD (WRONG!)
+
+#### [15:30:23] Solver Output
+Scenarios: 1/42
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8']
+
+#### [15:30:23] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [15:31:07] Executed #7 -> Baa (EVIL)
+
+## [15:31:07] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Judge found #7 lying, 50/50 on #6 was wrong exec (Judge good), lookahead guaranteed win, Asc51 complete 7/7
+
