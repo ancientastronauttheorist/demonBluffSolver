@@ -2316,6 +2316,13 @@
       "name": "asc53_v1",
       "notes": "10HP perfect, 2 Mediums on board (both evil disguises), corrupted Baker false claim required reset",
       "date": "2026-04-10 17:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v2",
+      "notes": "10HP perfect, Witch+Baa, solver found Witch at 100%, then Baa at 100% after #7 unblocked",
+      "date": "2026-04-10 17:37"
     }
   ]
 }

@@ -22542,3 +22542,63 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, 2 Mediums on board (both evil disguises), corrupted Baker false claim required reset
 
+
+---
+
+# New Game — 2026-04-10 17:35:14
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Hunter, Bard, Architect, Jester, Slayer
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [17:35:32] Revealed #1 Wretch
+Info: {}
+
+### [17:35:32] Revealed #2 Architect
+Info: {'side': 'Right'}
+
+### [17:35:32] Revealed #4 Bard
+Info: {'corruption_distance': 2}
+
+### [17:35:32] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [17:35:32] Revealed #6 Hunter
+Info: {'distance': 2}
+
+### [17:35:42] Revealed #3 Slayer
+Info: {}
+
+#### [17:35:42] Solver Output
+Scenarios: 6/162
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#6', '#7']
+Evil probabilities: #4=67%, #5=33%
+
+#### [17:35:42] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Witch', 'Baa'})
+
+### [17:36:23] Executed #3 -> Witch (EVIL)
+
+### [17:37:00] Revealed #7 Jester
+Info: {}
+
+#### [17:37:00] Solver Output
+Scenarios: 1/6
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7']
+
+#### [17:37:00] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [17:37:45] Executed #4 -> Baa (EVIL)
+
+## [17:37:45] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Witch+Baa, solver found Witch at 100%, then Baa at 100% after #7 unblocked
+
