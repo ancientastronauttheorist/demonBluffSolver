@@ -84,6 +84,27 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - **Auto_card cannot parse Judge "I am dizzy"** — Judge has no dizzy info_parsed schema. Workaround: `card no_info <pos> Judge`. *Worth adding* a `card judge <pos> dizzy` shortcut.
   - **Auto_card got Poet/Bishop right** when given the runtime data — nice. But the manual fallback `card poet 4 bishop 5,6 Minion,Villager` worked perfectly too.
 
+### Village 5 (8-card, 2 evil, lots of active abilities + wrong exec)
+- **Wall-clock window:** 18:40:56 → 18:46:01 (≈ **5m 5s**)
+- **Result:** WIN, 5/10 HP (one wrong exec on #1 Jester)
+- **Evils:** #4 Poisoner (executed), #7 Baa (executed). #1 wrongly executed (Jester, good).
+- **Phase breakdown (rough):**
+  - 18:40:56 – 18:41:30: click Next, screenshot, deck read. ~35s.
+  - 18:41:30 – 18:42:00: new + deck. ~30s.
+  - 18:42:00 – 18:42:30: flip 8 cards. ~30s.
+  - 18:42:30 – 18:43:30: auto_card (5/8) + manual entries for active abilities. Two stale-clue investigations (Jester #1, Fortune Teller #7) — cropped screenshots to verify there were NO bubbles. ~60s.
+  - 18:43:30 – 18:44:00: solve, Dreamer #2 → #3 ability use cycle. ~30s.
+  - 18:44:00 – 18:44:45: solve, Jester #1 ability cycle. ~45s.
+  - 18:44:45 – 18:45:15: solve, FT #7 ability cycle. ~30s.
+  - 18:45:15 – 18:45:45: EXECUTE #1 (wrong, lost 5HP), set_hp 5. ~30s.
+  - 18:45:45 – 18:46:01: EXECUTE #4 (Poisoner) + EXECUTE #7 (Baa). ~16s — fast back to back.
+- **Notes / friction points:**
+  - **Memory reader's clue field is INDEPENDENT of whether the card has a visible bubble.** It carries stale data even when the card is showing nothing on screen. This burned ~30s of "are these clues real?" investigation. The auto_card pipeline correctly skipped them, but I had to verify by cropping. **Possible fix**: memory_reader could clear `savedAct` when `actedInfos` is empty AND ability is active+unused.
+  - **Wrong exec on #1**: solver said 24% direct hit, lookahead-forced win. Per Honor Rule, I executed it. It was wrong, lost 5HP, but the lookahead correctly held — we won the village. Solver did its job.
+  - **Two Bakers on board** (#6 "I am the original Baker", #8 "I was a Poet") despite only 1 Baker in the deck pool. Solver/auto_card handled it without issue. New mechanic to investigate later — possibly a Baker chain that activates pre-game?
+  - **Lots of active abilities** (Jester, Dreamer, FT all in same village) means lots of click-cycles. Each one is ~30-45s of clicks + screenshot + record. **Combined "use ability + record + ability_used + next" macro** would help.
+  - Memory reader unavailable warning during execute: `unsupported operand type(s) for +: 'NoneType' and 'int'` — minor bug to investigate.
+
 ## Summary (filled in at end of run)
 - Total wall-clock time:
 - Slowest step categories:

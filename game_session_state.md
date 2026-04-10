@@ -23372,3 +23372,123 @@ Notes: Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs
 Final HP: 6
 Notes: Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs
 
+
+---
+
+# New Game — 2026-04-10 18:41:16
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Poet, Lover, Dreamer, Bishop, Fortune_Teller, Jester
+- Outcasts: Bombardier, Drunk
+- Minions: Poisoner
+- Demons: Baa
+
+### [18:42:10] Revealed #3 Bishop
+Info: {'targets': [6, 2, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:42:10] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:42:10] Revealed #5 Bombardier
+Info: {}
+
+### [18:42:10] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [18:42:10] Revealed #8 Baker
+Info: {'original_role': 'Poet'}
+
+### [18:43:03] Revealed #1 Jester
+Info: {}
+
+### [18:43:03] Revealed #2 Dreamer
+Info: {}
+
+### [18:43:04] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [18:43:07] Solver Output
+Scenarios: 86/540
+Evil probabilities: #3=52%, #4=35%, #1=24%, #8=24%, #2=22%, #5=21%, #7=17%, #6=3%
+
+#### [18:43:07] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.446 (adjusted 2.090) | timing x1.00
+WARNING: Corruption risk: 29%
+
+### [18:43:28] Revealed #2 Dreamer
+Info: {'target': 3, 'evil_role': 'Baa'}
+
+### [18:43:34] Ability used at #2
+
+#### [18:43:34] Solver Output
+Scenarios: 69/540
+Evil probabilities: #4=43%, #3=41%, #8=28%, #1=23%, #2=22%, #7=20%, #5=19%, #6=4%
+
+#### [18:43:34] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#3', '#5', '#8']
+Reason: Expected posterior 32.8 scenarios (adjusted 36.3, info gain 0.925 bits) | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [18:43:59] Revealed #1 Jester
+Info: {'targets': [3, 5, 8], 'evil_count': 0}
+
+### [18:43:59] Ability used at #1
+
+#### [18:43:59] Solver Output
+Scenarios: 34/540
+Evil probabilities: #4=44%, #3=41%, #2=26%, #1=24%, #7=24%, #8=24%, #5=15%, #6=3%
+
+#### [18:43:59] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#3', '#4']
+Reason: Entropy 1.000 (adjusted 0.912) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [18:44:25] Revealed #7 Fortune Teller
+Info: {'targets': [3, 4], 'has_evil': False}
+
+### [18:44:25] Ability used at #7
+
+#### [18:44:26] Solver Output
+Scenarios: 17/540
+Definite good: ['#6']
+Evil probabilities: #4=41%, #7=41%, #3=35%, #1=24%, #5=24%, #2=18%, #8=18%
+
+#### [18:44:26] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (41% good Jester, 24% good Drunk (corrupted), 18% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 24%, but all reveal branches still lead to a forced win.
+
+### [18:45:04] Executed #1 -> GOOD (WRONG!)
+
+#### [18:45:04] Solver Output
+Scenarios: 13/404
+Definite good: ['#1', '#6']
+Evil probabilities: #4=54%, #7=54%, #3=31%, #2=23%, #8=23%, #5=15%
+
+#### [18:45:04] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 54% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 54% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #4 (54%) despite low confidence — Bombardier candidate(s) [5] risk instant game loss if executed first.
+
+### [18:45:32] Executed #4 -> Poisoner (EVIL)
+
+#### [18:45:32] Solver Output
+Scenarios: 5/37
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#5', '#6', '#8']
+Evil probabilities: #7=80%, #2=20%
+
+#### [18:45:32] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (80% evil Baa, 20% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [18:46:05] Executed #7 -> Baa (EVIL)
+
+## [18:46:05] GAME OVER — WIN
+Final HP: 5
+Notes: Asc54 v5 5HP, wrong exec on Jester #1, Dreamer+Jester+FT abilities, two Bakers
+
