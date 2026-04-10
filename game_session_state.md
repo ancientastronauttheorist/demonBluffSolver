@@ -18677,3 +18677,143 @@ Reason: #5 is evil in ALL 3 scenarios (roles: {'Minion'})
 Final HP: 3
 Notes: 3HP. Poet bounty_hunter + Baker chain + Druid narrowed. Two wrong execs (Baker, Drunk) but lookahead guaranteed win.
 
+
+---
+
+# New Game — 2026-04-09 22:59:44
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Jester, Druid, Lover, Judge, Dreamer, Gemcrafter
+- Outcasts: Plague_Doctor
+- Minions: Minion, Twin_Minion
+- Demons: Pooka
+
+### [23:00:06] Revealed #1 Oracle
+Info: {'targets': [2, 9], 'minion_role': 'Minion'}
+
+### [23:00:06] Revealed #5 Gemcrafter
+Info: {'good_position': 1}
+
+### [23:00:06] Revealed #7 Gemcrafter
+Info: {'good_position': 1}
+
+### [23:00:06] Revealed #8 Lover
+Info: {'evil_adjacent': 1}
+
+### [23:00:40] Revealed #2 Druid
+Info: {}
+
+### [23:00:40] Revealed #3 Judge
+Info: {}
+
+### [23:00:40] Revealed #4 Plague_Doctor
+Info: {}
+
+### [23:00:41] Revealed #6 Jester
+Info: {}
+
+### [23:00:41] Revealed #9 Dreamer
+Info: {}
+
+#### [23:00:41] Solver Output
+Scenarios: 46/1848
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #5=70%, #7=65%, #8=30%, #6=26%, #3=9%
+
+#### [23:00:41] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 46 scenarios (roles: {'Minion', 'Twin_Minion', 'Pooka'})
+
+### [23:01:34] Executed #1 -> Pooka (EVIL)
+
+#### [23:01:34] Solver Output
+Scenarios: 14/224
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #7=86%, #5=71%, #3=14%, #6=14%, #8=14%
+
+#### [23:01:34] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.592 (adjusted 1.592) | timing x1.00
+
+### [23:02:21] Ability used at #4
+
+#### [23:02:22] Solver Output
+Scenarios: 14/224
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #7=86%, #5=71%, #3=14%, #6=14%, #8=14%
+
+#### [23:02:22] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#2', '#3', '#7']
+Reason: Expected posterior 5.6 scenarios (adjusted 6.0, info gain 1.213 bits) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [23:03:16] Revealed #6 Jester
+Info: {'targets': [2, 5, 7], 'evil_count': 2}
+
+### [23:03:16] Ability used at #6
+
+#### [23:03:16] Solver Output
+Scenarios: 8/224
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=75%, #6=25%
+
+#### [23:03:16] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 8 scenarios (roles: {'Twin_Minion', 'Minion'})
+
+### [23:04:04] Executed #7 -> Minion (EVIL)
+
+#### [23:04:04] Solver Output
+Scenarios: 4/31
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=75%, #6=25%
+
+#### [23:04:04] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#6']
+Reason: Expected posterior 2.6 scenarios (adjusted 2.9, info gain 0.452 bits) | timing x1.00
+WARNING: Corruption risk: 25% -- corrupted Judge results are unreliable
+
+### [23:04:50] Revealed #3 Judge
+Info: {'target': 6, 'is_lying': True}
+
+### [23:04:50] Ability used at #3
+
+#### [23:04:50] Solver Output
+Scenarios: 2/31
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [23:04:50] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#5']
+Reason: Entropy 1.000 (adjusted 0.500) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [23:05:41] Revealed #9 Dreamer
+Info: {'target': 5, 'evil_role': 'Pooka'}
+
+### [23:05:42] Ability used at #9
+
+#### [23:05:42] Solver Output
+Scenarios: 2/31
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [23:05:42] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#3', '#4', '#5']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [23:06:45] Executed #5 -> Twin_Minion (EVIL)
+
+## [23:06:45] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Duplicate Gemcrafters + Oracle + Jester + PD corruption check + Judge truth. 50/50 final exec hit.
+
