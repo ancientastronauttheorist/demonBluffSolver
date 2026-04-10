@@ -21648,3 +21648,140 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, Slayer killed Baa, both PDs checked clean, solved to 1 scenario
 
+
+---
+
+# New Game — 2026-04-10 16:03:10
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Gemcrafter, Alchemist, Jester, Dreamer, Fortune_Teller
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [16:04:25] Revealed #1 Jester
+Info: {}
+
+### [16:04:26] Revealed #2 Dreamer
+Info: {}
+
+### [16:04:26] Revealed #3 Fortune_Teller
+Info: {}
+
+### [16:04:26] Revealed #4 Dreamer
+Info: {}
+
+### [16:05:03] Revealed #5 Knight
+Info: {}
+
+### [16:05:03] Revealed #6 Gemcrafter
+Info: {'good_position': 5}
+
+### [16:05:03] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [16:05:14] Revealed #9 Jester
+Info: {}
+
+#### [16:05:14] Solver Output
+Scenarios: 336/2716
+Definite good: ['#5', '#6', '#7', '#8']
+Evil probabilities: #9=50%, #1=38%, #2=38%, #3=38%, #4=38%
+
+#### [16:05:14] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.406 (adjusted 2.105) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [16:06:03] Revealed #2 Dreamer
+Info: {'target': 9, 'evil_role': 'Lilis'}
+
+### [16:06:03] Ability used at #2
+
+#### [16:06:03] Solver Output
+Scenarios: 252/2716
+Definite good: ['#5', '#6', '#7', '#8']
+Evil probabilities: #1=42%, #2=42%, #3=42%, #4=42%, #9=33%
+
+#### [16:06:03] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.302 (adjusted 2.015) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [16:06:49] Revealed #4 Dreamer
+Info: {'target': 1, 'evil_role': 'Twin_Minion'}
+
+### [16:06:49] Ability used at #4
+
+#### [16:06:50] Solver Output
+Scenarios: 196/2716
+Definite good: ['#5', '#6', '#7', '#8']
+Evil probabilities: #2=46%, #3=46%, #4=46%, #9=36%, #1=25%
+
+#### [16:06:50] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#1', '#5', '#6']
+Reason: Expected posterior 86.6 scenarios (adjusted 86.6, info gain 1.178 bits) | timing x1.00
+
+### [16:07:36] Revealed #9 Jester
+Info: {'targets': [1, 5, 6], 'evil_count': 0}
+
+### [16:07:36] Ability used at #9
+
+#### [16:07:36] Solver Output
+Scenarios: 91/2716
+Definite good: ['#5', '#6', '#7', '#8']
+Evil probabilities: #2=62%, #3=62%, #4=62%, #1=8%, #9=8%
+
+#### [16:07:36] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.996 (adjusted 0.881) | timing x1.00
+WARNING: Corruption risk: 23%
+
+### [16:08:22] Revealed #3 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [16:08:22] Ability used at #3
+
+#### [16:08:23] Solver Output
+Scenarios: 49/2716
+Definite good: ['#5', '#6', '#7', '#8']
+Evil probabilities: #2=86%, #3=57%, #4=29%, #1=14%, #9=14%
+
+#### [16:08:23] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#9']
+Reason: Expected posterior 23.2 scenarios (adjusted 26.5, info gain 0.889 bits) | timing x1.00
+WARNING: Corruption risk: 29%
+
+### [16:09:11] Revealed #1 Jester
+Info: {'targets': [2, 3, 9], 'evil_count': 2}
+
+### [16:09:11] Ability used at #1
+
+#### [16:09:11] Solver Output
+Scenarios: 21/2716
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=67%, #3=67%, #1=33%, #9=33%
+
+#### [16:09:11] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (33% evil Lilis, 33% evil Twin_Minion, 29% good Dreamer).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [16:09:54] Executed #2 -> Twin_Minion (EVIL)
+
+#### [16:09:54] Solver Output
+Scenarios: 7/322
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8', '#9']
+
+#### [16:09:54] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 7 scenarios (roles: {'Lilis'})
+
+### [16:10:37] Executed #3 -> Lilis (EVIL)
+
+## [16:10:38] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, heavy ability usage (2 Dreamers, 2 Jesters, FT), night killed PD(#8), all abilities used to narrow 336->21 scenarios
+
