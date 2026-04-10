@@ -2071,6 +2071,13 @@
       "name": "asc48_v2",
       "notes": "5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer",
       "date": "2026-04-10 00:16"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc48_v3",
+      "notes": "8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge",
+      "date": "2026-04-10 00:29"
     }
   ]
 }

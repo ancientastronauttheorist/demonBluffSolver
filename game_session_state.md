@@ -19136,3 +19136,130 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer
 
+
+---
+
+# New Game — 2026-04-10 00:20:59
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Oracle, Judge, Fortune_Teller, Baker, Knight
+- Outcasts: Drunk, Plague_Doctor, Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+### [00:23:34] Revealed #2 Knight
+Info: {}
+
+### [00:23:34] Revealed #3 Oracle
+Info: {'targets': [6, 8], 'minion_role': 'Chancellor'}
+
+### [00:23:34] Revealed #5 Baker
+Info: {'original_role': 'Judge'}
+
+### [00:23:34] Revealed #7 Baker
+Info: {'original_role': 'Fortune Teller'}
+
+### [00:23:34] Revealed #8 Wretch
+Info: {}
+
+### [00:23:44] Revealed #1 Dreamer
+Info: {}
+
+### [00:23:44] Revealed #4 Plague_Doctor
+Info: {}
+
+### [00:23:44] Revealed #6 Judge
+Info: {}
+
+#### [00:23:50] Solver Output
+Scenarios: 1303/7858
+Evil probabilities: #5=52%, #7=49%, #8=25%, #2=25%, #1=17%, #6=16%, #3=14%, #4=2%
+
+#### [00:23:50] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight check: #2 is 25% evil, 17% corruption risk. Expected HP cost: 1.1 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 17% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [00:24:43] Execution Blocked
+#2 Knight immunity — confirmed good, no HP loss
+
+#### [00:24:46] Solver Output
+Scenarios: 977/5520
+Definite good: ['#2']
+Evil probabilities: #5=58%, #7=54%, #8=30%, #1=21%, #6=18%, #3=17%, #4=3%
+
+#### [00:24:46] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.526 (adjusted 2.283) | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [00:25:22] Revealed #1 Dreamer
+Info: {'target': 5, 'evil_role': 'Chancellor'}
+
+### [00:25:22] Ability used at #1
+
+#### [00:25:23] Solver Output
+Scenarios: 682/5520
+Definite good: ['#2']
+Evil probabilities: #7=61%, #5=39%, #8=30%, #1=25%, #6=22%, #3=19%, #4=3%
+
+#### [00:25:23] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.174 (adjusted 2.174) | timing x1.00
+
+### [00:26:04] Ability used at #4
+
+#### [00:26:04] Solver Output
+Scenarios: 279/5520
+Definite good: ['#2']
+Evil probabilities: #5=95%, #7=43%, #8=20%, #1=13%, #3=13%, #6=10%, #4=5%
+
+#### [00:26:04] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#1']
+Reason: Expected posterior 171.0 scenarios (adjusted 190.3, info gain 0.552 bits) | timing x1.00
+WARNING: Corruption risk: 23% -- corrupted Judge results are unreliable
+
+### [00:26:56] Revealed #6 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [00:26:56] Ability used at #6
+
+#### [00:26:56] Solver Output
+Scenarios: 172/5520
+Definite good: ['#2']
+Evil probabilities: #5=91%, #7=53%, #8=21%, #3=17%, #4=9%, #1=5%, #6=5%
+
+#### [00:26:56] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 91% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 91% confident (budget: 2 wrong execs)
+
+### [00:28:05] Executed #5 -> GOOD (WRONG!)
+
+#### [00:28:05] Solver Output
+Scenarios: 15/4060
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [00:28:05] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 15 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [00:28:44] Executed #4 -> Chancellor (EVIL)
+
+#### [00:28:44] Solver Output
+Scenarios: 10/303
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [00:28:44] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 10 scenarios (roles: {'Baa'})
+
+### [00:29:24] Executed #7 -> Baa (EVIL)
+
+## [00:29:32] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge
+
