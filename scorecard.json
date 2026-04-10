@@ -2225,6 +2225,13 @@
       "name": "asc51_v3",
       "notes": "10HP perfect, 1 evil only, Druid+Jester info solved to 1 scenario",
       "date": "2026-04-10 15:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v4",
+      "notes": "10HP perfect, PD found #2 corrupted + #3 evil, clean executions both 100%",
+      "date": "2026-04-10 15:11"
     }
   ]
 }

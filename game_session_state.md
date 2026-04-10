@@ -21036,3 +21036,74 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, 1 evil only, Druid+Jester info solved to 1 scenario
 
+
+---
+
+# New Game — 2026-04-10 15:07:39
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Medium, Hunter, Confessor, Gemcrafter
+- Outcasts: Plague_Doctor, Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+### [15:08:10] Revealed #2 Hunter
+Info: {'distance': 3}
+
+### [15:08:10] Revealed #3 Gemcrafter
+Info: {'good_position': 6}
+
+### [15:08:10] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [15:08:10] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [15:08:10] Revealed #6 Hunter
+Info: {'distance': 2}
+
+### [15:08:10] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [15:08:36] Revealed #1 Plague_Doctor
+Info: {}
+
+#### [15:08:41] Solver Output
+Scenarios: 44/1170
+Definite good: ['#4']
+Evil probabilities: #6=55%, #2=45%, #3=36%, #1=23%, #7=23%, #5=18%
+
+#### [15:08:41] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.544 (adjusted 1.544) | timing x1.00
+
+### [15:09:37] Ability used at #1
+
+#### [15:09:42] Solver Output
+Scenarios: 26/1170
+Definite good: ['#4', '#5', '#7']
+Evil probabilities: #3=62%, #6=62%, #1=38%, #2=38%
+
+#### [15:09:42] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (31% evil Baa, 31% evil Chancellor, 31% good Gemcrafter).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [15:10:30] Executed #3 -> Baa (EVIL)
+
+#### [15:10:31] Solver Output
+Scenarios: 8/187
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+
+#### [15:10:31] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Chancellor'})
+
+### [15:11:10] Executed #6 -> Chancellor (EVIL)
+
+## [15:11:10] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD found #2 corrupted + #3 evil, clean executions both 100%
+
