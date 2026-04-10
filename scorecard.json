@@ -1952,6 +1952,13 @@
       "name": "asc45_v7",
       "notes": "Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP",
       "date": "2026-04-09 18:31"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc46_v1",
+      "notes": "Solver bug: Shaman-swapped Bakers' 'I was a [role]' misinterpreted as Baker ability (previous card role reveal) instead of self-identification of original role. Solver wrongly concluded #7 was evil Minion with 100% confidence in 1 scenario.",
+      "date": "2026-04-09 21:17"
     }
   ]
 }

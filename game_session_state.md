@@ -17399,3 +17399,125 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP
 
+
+---
+
+# New Game — 2026-04-09 21:04:25
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Druid, Enlightened, Poet, Baker, Fortune_Teller, Confessor
+- Outcasts: Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+### [21:06:24] Revealed #1 Baker
+Info: {'original_role': 'Fortune Teller'}
+
+### [21:06:24] Revealed #3 Druid
+Info: {}
+
+### [21:06:24] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [21:06:24] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [21:06:24] Revealed #6 Plague_Doctor
+Info: {}
+
+### [21:06:24] Revealed #7 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [21:06:24] Revealed #8 Bishop
+Info: {'targets': [6, 3, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [21:06:24] Revealed #9 Baker
+Info: {'original_role': 'Confessor'}
+
+### [21:06:46] Revealed #2 Poet
+Info: {'targets': [3], 'has_evil': False, 'copied_role': 'Fortune Teller'}
+
+#### [21:06:51] Claude Reasoning
+
+
+### [21:08:35] Revealed #4 Baker
+Info: {'original_role': 'none'}
+
+#### [21:08:45] Solver Output
+Scenarios: 26/1848
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #5=92%, #9=77%, #7=62%, #8=38%, #1=15%, #4=15%
+
+#### [21:08:45] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.377 (adjusted 2.377) | timing x1.00
+
+### [21:09:35] Revealed #6 Pd Check
+Info: {}
+
+### [21:09:39] Ability used at #6
+
+#### [21:09:43] Solver Output
+Scenarios: 4/504
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #1=50%, #7=50%, #8=50%, #9=50%
+
+#### [21:09:43] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 4 scenarios (roles: {'Minion', 'Shaman'})
+
+### [21:10:25] Executed #5 -> Shaman (EVIL)
+
+#### [21:10:29] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #1=50%, #7=50%, #8=50%, #9=50%
+
+#### [21:10:29] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [21:13:37] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': 'Wretch'}
+
+### [21:13:41] Ability used at #3
+
+#### [21:13:46] Solver Output
+Scenarios: 0/56
+
+#### [21:13:46] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [21:13:57] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+#### [21:14:00] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #1=50%, #7=50%, #8=50%, #9=50%
+
+#### [21:14:00] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Baker (corrupted), 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:14:45] Executed #1 -> GOOD (WRONG!)
+
+#### [21:14:53] Solver Output
+Scenarios: 1/42
+Definite evil: ['#5', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#8']
+
+#### [21:14:53] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+## [21:17:31] GAME OVER — LOSS
+Final HP: 5
+Notes: Solver bug: Shaman-swapped Bakers' 'I was a [role]' misinterpreted as Baker ability (previous card role reveal) instead of self-identification of original role. Solver wrongly concluded #7 was evil Minion with 100% confidence in 1 scenario.
+

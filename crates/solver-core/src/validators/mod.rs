@@ -941,7 +941,11 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     }
 
     // Baker conversion chain ordering
-    if !state.reveal_order.is_empty() && !baker_claimed_counts.is_empty() {
+    // Skip when Shaman is in the deck — Shaman creates duplicate Bakers at game
+    // start (not via reveal-order-triggered conversion), so chain ordering doesn't apply.
+    let shaman_in_deck = state.deck.minions.iter()
+        .any(|m| normalize_role(m) == "shaman");
+    if !shaman_in_deck && !state.reveal_order.is_empty() && !baker_claimed_counts.is_empty() {
         let reveal_idx: HashMap<u8, usize> = state.reveal_order.iter().enumerate()
             .map(|(i, &p)| (p, i)).collect();
 

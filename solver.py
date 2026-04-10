@@ -2359,7 +2359,10 @@ def _validate_role_counts(scenario: Scenario, state: GameState) -> bool:
     # to have been revealed BEFORE it in reveal_order to start the chain.
     # If no good Baker claims "original", the original Baker is off-board and
     # no conversion chain can start — so no good converted Bakers are allowed.
-    if state.reveal_order and baker_claimed_counts:
+    # Skip when Shaman is in the deck — Shaman creates duplicate Bakers at game
+    # start (not via reveal-order-triggered conversion), so chain ordering doesn't apply.
+    shaman_in_deck = any(_normalize_role(m) == "shaman" for m in state.deck.minions)
+    if not shaman_in_deck and state.reveal_order and baker_claimed_counts:
         reveal_order_idx = {pos: idx for idx, pos in enumerate(state.reveal_order)}
         # Find earliest good Baker claiming "original" in reveal_order
         original_baker_reveal_idx = None
