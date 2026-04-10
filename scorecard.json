@@ -2330,6 +2330,13 @@
       "name": "asc53_v3",
       "notes": "1HP clutch, Lilis game, night killed Doppelganger #9, wrong exec on Alchemist #6 at 58% (followed solver per CLAUDE.md), recovered with 100% picks for Lilis and Poisoner",
       "date": "2026-04-10 17:44"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc53_v4",
+      "notes": "5HP, Shaman+Minion+Pooka, PD revealed Minion at #3, wrong exec on Alchemist #7 (lookahead 25%), recovered",
+      "date": "2026-04-10 17:52"
     }
   ]
 }
