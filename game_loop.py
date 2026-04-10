@@ -946,8 +946,9 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     """Parse memory reader card data into a CardInfo, or None if unparseable.
 
     Handles passive clues read from savedAct/actedInfos/runtimeData.
-    Active abilities (FT, Judge, Jester, Druid, Dreamer, Slayer) only work
-    if the ability has already been used (acted_infos populated).
+    Active abilities (FT, Judge, Jester, Druid, Dreamer, Slayer, PD) are
+    guarded by the ability_used flag — stale clue data from prior villages
+    is ignored unless the ability was actually used this game.
     """
     import re
     pos = card['position']
@@ -957,18 +958,50 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     rd = card.get('runtime_data')
     targets = infos[0]['targets'] if infos else []
     role_lower = role.lower().replace(' ', '_')
+    ability_used = card.get('ability_used', False)
 
-    # --- RuntimeData takes priority (structured, no text parsing needed) ---
-    if rd:
-        if rd.get('type') == 'direction':
-            return card_enlightened(pos, rd['direction'])
-        if rd.get('type') == 'cures':
-            return card_alchemist(pos, rd['cures'] or 0)
-        if rd.get('type') == 'baker':
-            original = rd.get('original_role')
-            if not original or original == '?' or original.lower() == 'baker':
-                return card_baker(pos, 'original')
-            return card_baker(pos, original)
+    # --- Guard: active-ability-only roles with unused abilities ---
+    # These roles have NO passive speech bubble. If ability hasn't been used,
+    # any clue_text/acted_infos is stale from a previous village — ignore it.
+    ACTIVE_ONLY_ROLES = {
+        'dreamer', 'druid', 'fortune_teller', 'jester', 'judge',
+        'slayer', 'plague_doctor',
+    }
+    if role_lower in ACTIVE_ONLY_ROLES and not ability_used:
+        return card_no_info(pos, role)
+
+    # --- RuntimeData: Enlightened direction (always reliable) ---
+    if rd and rd.get('type') == 'direction':
+        return card_enlightened(pos, rd['direction'])
+
+    # --- Alchemist: prefer clue_text over runtime_data ---
+    # Runtime cures field is the TRUE count, but the card DISPLAYS a possibly
+    # different number (corrupted Alchemist lies). Solver needs displayed value.
+    if rd and rd.get('type') == 'cures':
+        # Try clue text first ("I cured N Corruption(s)")
+        m = re.search(r'cured\s+(\d+)', clue, re.IGNORECASE)
+        if m:
+            return card_alchemist(pos, int(m.group(1)))
+        return card_alchemist(pos, rd['cures'] or 0)
+
+    # --- Baker: prefer clue_text over runtime_data ---
+    # Runtime original_role can mismatch displayed text (e.g., Shaman games,
+    # or when Baker chain text differs from internal tracking).
+    if rd and rd.get('type') == 'baker':
+        # Try clue text first ("I was a <Role>" or "I am the original Baker")
+        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
+        if m:
+            claimed = m.group(1).strip()
+            if claimed.lower() == 'baker':
+                claimed = 'original'
+            return card_baker(pos, claimed)
+        if 'original' in clue.lower():
+            return card_baker(pos, 'original')
+        # Fallback to runtime_data
+        original = rd.get('original_role')
+        if not original or original == '?' or original.lower() == 'baker':
+            return card_baker(pos, 'original')
+        return card_baker(pos, original)
 
     # --- Knitter: "X evil pair(s)" / "X pairs of Evil" / "Evils are not adjacent" ---
     if role_lower == 'knitter':
@@ -1060,8 +1093,8 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
 
     # --- Dreamer: target + evil role from clue ---
     if role_lower == 'dreamer' and targets:
-        # Try to extract role name after target info
-        m = re.search(r'is\s+(?:a\s+)?(\w[\w\s]*)', clue, re.IGNORECASE)
+        # Game shows "#N could be: <Role>" or "#N is <Role>"
+        m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
         if m:
             evil_role = m.group(1).strip()
             return card_dreamer(pos, targets[0], evil_role)
