@@ -2260,6 +2260,13 @@
       "name": "asc52_v1",
       "notes": "6HP, Lilis game, night killed Slayer(#7) and Shaman(#10), FT confirmed #1/#2 clean, all 4 evils found at 100%",
       "date": "2026-04-10 15:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v2",
+      "notes": "10HP perfect, all 3 evils at 100% confidence, Slayer couldn't kill #9 (Pooka disguised as Slayer)",
+      "date": "2026-04-10 15:56"
     }
   ]
 }

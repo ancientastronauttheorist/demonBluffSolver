@@ -21455,3 +21455,99 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Shaman'})
 Final HP: 6
 Notes: 6HP, Lilis game, night killed Slayer(#7) and Shaman(#10), FT confirmed #1/#2 clean, all 4 evils found at 100%
 
+
+---
+
+# New Game — 2026-04-10 15:52:34
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Gemcrafter, Slayer, Bishop, Empress, Oracle, Enlightened
+- Outcasts: Wretch, Bombardier
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [15:52:54] Revealed #1 Gemcrafter
+Info: {'good_position': 7}
+
+### [15:52:54] Revealed #2 Empress
+Info: {'targets': [5, 6, 7]}
+
+### [15:52:54] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+### [15:52:54] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [15:52:54] Revealed #5 Bombardier
+Info: {}
+
+### [15:52:54] Revealed #6 Bishop
+Info: {'targets': [4, 5, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:52:54] Revealed #7 Wretch
+Info: {}
+
+### [15:52:54] Revealed #9 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Puppeteer'}
+
+### [15:53:03] Revealed #8 Slayer
+Info: {}
+
+#### [15:53:03] Solver Output
+Scenarios: 3/112
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#5']
+Evil probabilities: #2=67%, #6=33%, #7=33%, #8=33%, #9=33%
+
+#### [15:53:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Pooka', 'Puppeteer'})
+
+### [15:53:48] Executed #1 -> Puppeteer (EVIL)
+
+#### [15:53:48] Solver Output
+Scenarios: 2/14
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+Evil probabilities: #8=50%, #9=50%
+
+#### [15:53:48] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [15:54:23] Executed #2 -> Puppet (EVIL)
+
+#### [15:54:23] Solver Output
+Scenarios: 2/7
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+Evil probabilities: #8=50%, #9=50%
+
+#### [15:54:23] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#9']
+Reason: Target #9 is 50% evil (adjusted 0.25)
+WARNING: Corruption risk: 50% -- Slayer ability disabled if corrupted
+
+### [15:55:23] Revealed #8 Slayer
+Info: {}
+
+### [15:55:23] Ability used at #8
+
+#### [15:55:23] Solver Output
+Scenarios: 2/7
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+Evil probabilities: #8=50%, #9=50%
+
+#### [15:55:23] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (50% evil Pooka, 50% good Slayer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:56:06] Executed #8 -> Pooka (EVIL)
+
+## [15:56:07] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, all 3 evils at 100% confidence, Slayer couldn't kill #9 (Pooka disguised as Slayer)
+
