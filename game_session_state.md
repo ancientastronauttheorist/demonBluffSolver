@@ -23167,3 +23167,66 @@ Final HP: 10
 Final HP: 10
 Notes: Asc54 v1 perfect 10HP, 4 evils, 9-card board with Baa+Poisoner+Puppeteer
 
+
+---
+
+# New Game — 2026-04-10 18:26:09
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Alchemist, Knitter, Bard, Hunter, Confessor
+- Outcasts: Bombardier, Plague_Doctor, Drunk
+- Minions: Chancellor
+- Demons: Baa
+
+### [18:26:46] Revealed #2 Bombardier
+Info: {}
+
+### [18:26:46] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [18:26:46] Revealed #4 Bard
+Info: {'corruption_distance': 3}
+
+### [18:26:46] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [18:26:46] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [18:27:16] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [18:27:16] Revealed #7 Slayer
+Info: {}
+
+#### [18:27:20] Solver Output
+Scenarios: 5/330
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#4', '#7']
+Evil probabilities: #3=60%, #5=40%
+
+#### [18:27:20] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [18:27:41] Executed #6 -> Baa (EVIL)
+
+#### [18:27:41] Solver Output
+Scenarios: 2/42
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#4', '#7']
+Evil probabilities: #3=50%, #5=50%
+
+#### [18:27:41] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#3']
+Reason: Target #3 is 50% evil (adjusted 0.50)
+
+## [18:28:05] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v2 perfect 10HP, Slayer kill on Chancellor
+
+## [18:28:25] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v2 perfect 10HP, Slayer kill on Chancellor
+

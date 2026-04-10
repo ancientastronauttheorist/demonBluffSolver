@@ -29,6 +29,25 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - `auto_card` is *amazing* — saved ~2 minutes of manual `card xxx` typing. 9/9 auto-entered.
   - Each execution cycle has ~5 separate tool calls (next → click center → safe_click sword → click target → screenshot → execute). A combined `execute_solver_pick` macro could collapse this to one call.
 
+### Village 2 (7-card, 2 evil, Slayer kill)
+- **Wall-clock window:** 18:25:14 → 18:28:03 (≈ **2m 49s**)
+- **Result:** WIN, 10/10 HP perfect, 1 execute + 1 Slayer kill
+- **Evils:** #3 Chancellor (slayer-killed), #6 Baa (executed)
+- **Phase breakdown (rough):**
+  - 18:25:14: clicked V1 victory `Next` → V2 launches directly (no intro dialog this time, no Continue, no Ascension-Complete). One single click between villages! ~10s.
+  - 18:25:30 – 18:26:00: deck read via memory_reader, `new` + `deck`. ~30s.
+  - 18:26:00 – 18:26:15: `flip` of all 7 cards in ~10s.
+  - 18:26:15 – 18:26:45: `auto_card` got 5/7. Two manual entries (Alchemist + Slayer no_info). ~30s.
+  - 18:26:45 – 18:27:30: `next` → execute #6 (Baa). One full execute cycle. ~45s.
+  - 18:27:30 – 18:28:00: `next` → Slayer kill #3 (Chancellor). Active ability click sequence. ~30s.
+- **Notes / friction points:**
+  - **Mid-ascension villages are fast.** No intro dialogs to dismiss → just one Next click between V1 and V2.
+  - **`auto_card` mis-handles Drunk-disguised-as-Alchemist** because the auto-parser keys off `runtime_data['type']=='cures'`, which is keyed by *true* role (Drunk, no cures). Manual `card alchemist 1 2` was needed. **Fixable**: parser should also fall back to text regex `cured\s+(\d+)` even without runtime data.
+  - **`slayer_result` requires the revealed evil_role as 4th arg.** I forgot it the first time and game_over saved an incorrect test case (asc54_v2.json without slayer info). Re-running game_over wrote v2b.json instead of overwriting. **Process tweak**: always run `slayer_result` BEFORE `game_over` for slayer kills.
+  - The `game_over` command does NOT auto-run the cargo replay regression. The "Full v2 regression (Rust)" header prints but no test runs. I had to invoke `cargo test --release --test replay` separately. **Possible bug** in game_over post-checklist.
+  - Memory reader's `clue` field for some positions is **stale** (e.g., #2 Bombardier showed "Right side is more Evil" — Bombardier has no passive clue). Auto_card correctly skipped these but the noise is confusing. Worth investigating later.
+  - Stale clue source: probably `savedAct` from a previous village. Should clear on village transition.
+
 ## Summary (filled in at end of run)
 - Total wall-clock time:
 - Slowest step categories:
