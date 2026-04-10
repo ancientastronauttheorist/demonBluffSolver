@@ -2113,6 +2113,13 @@
       "name": "asc49_v1",
       "notes": "6HP, Lilis killed Witch night2, two 100% confident executions, no abilities needed",
       "date": "2026-04-10 11:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v2",
+      "notes": "10HP perfect, Druid found Doppelganger, both Slayer abilities failed (both evil fakes), lookahead forced win",
+      "date": "2026-04-10 11:54"
     }
   ]
 }

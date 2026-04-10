@@ -19644,3 +19644,108 @@ Reason: #2 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
 Final HP: 6
 Notes: 6HP, Lilis killed Witch night2, two 100% confident executions, no abilities needed
 
+
+---
+
+# New Game — 2026-04-10 11:48:40
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Empress, Slayer, Lover, Bishop, Druid
+- Outcasts: Wretch, Doppelganger
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [11:50:21] Revealed #1 Druid
+Info: {}
+
+### [11:50:21] Revealed #2 Slayer
+Info: {}
+
+### [11:50:21] Revealed #3 Knight
+Info: {}
+
+### [11:50:21] Revealed #4 Empress
+Info: {'targets': [1, 2, 8]}
+
+### [11:50:21] Revealed #5 Wretch
+Info: {}
+
+### [11:50:21] Revealed #6 Slayer
+Info: {}
+
+### [11:50:21] Revealed #7 Bishop
+Info: {'targets': [9, 8, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:50:21] Revealed #8 Lover
+Info: {'evil_adjacent': 0}
+
+### [11:50:21] Revealed #9 Empress
+Info: {'targets': [6, 7, 8]}
+
+#### [11:50:27] Solver Output
+Scenarios: 25/448
+Definite good: ['#3', '#5', '#8', '#9']
+Evil probabilities: #6=60%, #2=40%, #4=40%, #7=40%, #1=20%
+
+#### [11:50:27] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.722 (adjusted 0.722) | timing x1.00
+
+### [11:51:32] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': 'Doppelganger'}
+
+### [11:51:35] Ability used at #1
+
+#### [11:51:38] Solver Output
+Scenarios: 10/448
+Definite good: ['#3', '#5', '#8', '#9']
+Evil probabilities: #6=60%, #2=40%, #4=40%, #7=40%, #1=20%
+
+#### [11:51:38] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#6']
+Reason: Target #6 is 60% evil (adjusted 0.60)
+
+### [11:52:30] Ability used at #2
+
+#### [11:52:34] Solver Output
+Scenarios: 6/448
+Definite good: ['#1', '#3', '#5', '#8', '#9']
+Evil probabilities: #2=67%, #7=67%, #4=33%, #6=33%
+
+#### [11:52:34] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#2']
+Reason: Target #2 is 67% evil (adjusted 0.22)
+WARNING: Corruption risk: 67% -- Slayer ability disabled if corrupted
+
+### [11:53:07] Ability used at #6
+
+#### [11:53:10] Solver Output
+Scenarios: 6/448
+Definite good: ['#1', '#3', '#5', '#8', '#9']
+Evil probabilities: #2=67%, #7=67%, #4=33%, #6=33%
+
+#### [11:53:10] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (67% evil Twin_Minion, 17% good Doppelganger, 17% good Slayer).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [11:53:48] Executed #2 -> Twin_Minion (EVIL)
+
+#### [11:53:52] Solver Output
+Scenarios: 4/49
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#8', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [11:53:52] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% evil Pooka, 50% good Slayer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [11:54:42] Executed #6 -> Pooka (EVIL)
+
+## [11:54:47] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Druid found Doppelganger, both Slayer abilities failed (both evil fakes), lookahead forced win
+
