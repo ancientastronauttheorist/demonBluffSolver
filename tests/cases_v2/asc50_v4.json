@@ -1,0 +1,187 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          5
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 7,
+        "evil_role": "Chancellor"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2,
+        "copied_role": "Hunter"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5,
+          9
+        ],
+        "types": [
+          "Villager",
+          "Minion",
+          "Outcast"
+        ],
+        "copied_role": "Bishop"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Poet"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    7,
+    9,
+    1
+  ],
+  "confirmed_evil": [
+    2,
+    7,
+    1
+  ],
+  "confirmed_good": [
+    9
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Minion",
+    "7": "Chancellor",
+    "1": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 4,
+      "is_corrupted": true,
+      "evil_revealed": 2
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Dreamer",
+      "Knitter",
+      "Lover",
+      "Baker",
+      "Poet",
+      "Druid"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Minion",
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3,
+    6,
+    1
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc50_v4",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "2": "Minion",
+    "7": "Chancellor"
+  },
+  "notes": "5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker"
+}

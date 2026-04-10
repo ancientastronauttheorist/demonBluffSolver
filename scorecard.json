@@ -2176,6 +2176,13 @@
       "name": "asc50_v3",
       "notes": "10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied",
       "date": "2026-04-10 13:57"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc50_v4",
+      "notes": "5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker",
+      "date": "2026-04-10 14:07"
     }
   ]
 }

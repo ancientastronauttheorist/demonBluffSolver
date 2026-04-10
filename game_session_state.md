@@ -20440,3 +20440,139 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied
 
+
+---
+
+# New Game — 2026-04-10 13:58:55
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Dreamer, Knitter, Lover, Baker, Poet, Druid
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Minion, Chancellor
+- Demons: Pooka
+
+### [14:00:10] Revealed #2 Lover
+Info: {'evil_adjacent': 2}
+
+### [14:00:10] Revealed #3 Dreamer
+Info: {}
+
+### [14:00:10] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [14:00:10] Revealed #5 Poet
+Info: {'distance': 2, 'copied_role': 'Hunter'}
+
+### [14:00:10] Revealed #6 Plague_Doctor
+Info: {}
+
+### [14:00:10] Revealed #8 Bard
+Info: {'corruption_distance': 2}
+
+### [14:00:10] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+### [14:00:10] Revealed #10 Baker
+Info: {'original_role': 'Poet'}
+
+### [14:01:34] Revealed #1 Druid
+Info: {}
+
+### [14:01:39] Revealed #7 Poet
+Info: {'targets': [4, 5, 9], 'types': ['Villager', 'Minion', 'Outcast'], 'copied_role': 'Bishop'}
+
+#### [14:01:46] Solver Output
+Scenarios: 176/27552
+Definite good: ['#6']
+Evil probabilities: #7=79%, #2=57%, #3=39%, #1=27%, #10=27%, #4=22%, #8=19%, #9=17%, #5=12%
+
+#### [14:01:46] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.859 (adjusted 2.729) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [14:02:34] Revealed #3 Dreamer
+Info: {'target': 7, 'evil_role': 'Chancellor'}
+
+### [14:02:34] Ability used at #3
+
+#### [14:02:39] Solver Output
+Scenarios: 94/27552
+Definite good: ['#6']
+Evil probabilities: #7=61%, #3=53%, #2=51%, #1=34%, #8=28%, #10=26%, #4=21%, #9=14%, #5=13%
+
+#### [14:02:39] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.676 (adjusted 2.676) | timing x1.00
+
+### [14:03:24] Ability used at #6
+
+#### [14:03:29] Solver Output
+Scenarios: 31/27552
+Definite evil: ['#2']
+Definite good: ['#4', '#6', '#10']
+Evil probabilities: #7=61%, #5=39%, #1=35%, #3=26%, #8=23%, #9=16%
+
+#### [14:03:29] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 31 scenarios (roles: {'Chancellor', 'Pooka', 'Minion'})
+
+### [14:04:13] Executed #2 -> Minion (EVIL)
+
+#### [14:04:13] Solver Output
+Scenarios: 17/2918
+Definite evil: ['#2']
+Definite good: ['#4', '#6', '#10']
+Evil probabilities: #7=65%, #1=53%, #5=35%, #9=29%, #8=12%, #3=6%
+
+#### [14:04:13] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#3', '#4', '#5']
+Reason: Entropy 0.998 (adjusted 0.998) | timing x1.00
+
+### [14:05:20] Revealed #1 Druid
+Info: {'targets': [3, 4, 5], 'found_outcast': 'Doppelganger'}
+
+### [14:05:21] Ability used at #1
+
+#### [14:05:21] Solver Output
+Scenarios: 8/2918
+Definite evil: ['#2']
+Definite good: ['#4', '#6', '#8', '#10']
+Evil probabilities: #7=75%, #1=50%, #9=38%, #5=25%, #3=12%
+
+#### [14:05:21] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (62% evil Chancellor, 12% good Doppelganger, 12% good Poet).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [14:06:06] Executed #7 -> Chancellor (EVIL)
+
+#### [14:06:06] Solver Output
+Scenarios: 5/259
+Definite evil: ['#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#10']
+Evil probabilities: #9=60%, #1=40%
+
+#### [14:06:06] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (60% evil Pooka, 20% good Baker, 20% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [14:06:53] Executed #9 -> GOOD (WRONG!)
+
+#### [14:06:53] Solver Output
+Scenarios: 2/223
+Definite evil: ['#1', '#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9', '#10']
+
+#### [14:06:53] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [14:07:38] Executed #1 -> Pooka (EVIL)
+
+## [14:07:38] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker
+
