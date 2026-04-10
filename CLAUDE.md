@@ -6,7 +6,7 @@
 **Track B — Memory reader (secondary).** Build `memory_reader.py` to replace the visual pipeline. Runs alongside every screenshot — any mismatch = stop and fix.
 
 ## Core Rules
-1. **Always follow the solver.** No second-guessing, no manual overrides.
+1. **Always follow the solver.** No second-guessing, no manual overrides. **Even for probabilistic executions: execute the solver's top pick.** A wrong answer from the solver is a bug to fix — overriding hides bugs. Lost asc50_v1 data because Claude overrode #8 (68% solver pick) to execute #5 instead.
 2. **0 scenarios = STOP.** Fix the solver immediately. Do not guess.
 3. **Fix bugs before the next game.** Research the wiki (https://demonbluff.wiki.gg) first. Fix code, run replay tests (`python -m tests.test_replay --v2-only`; Rust: `cargo test --release --test replay`), verify. Same urgency for solver and memory reader bugs. **Solver work validates against v2 tests only** (card_vision pipeline, high-accuracy data). Legacy tests (`tests/cases/`) are kept for broad regression but may have manual data entry errors.
 4. **After every loss, analyze.** Spawn an agent to check critical decisions. Fix or confirm unavoidable before proceeding.

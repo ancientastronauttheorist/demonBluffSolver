@@ -492,8 +492,12 @@ class GameStateMachine:
                     self.phase = GamePhase.GAME_OVER
                     print(f"\n  [auto] HP DEPLETED - GAME LOST!")
                     return
-                self._pause(f"Wrong exec on definite evil #{pos} — possible solver bug!")
-                return
+                if forced_safe:
+                    # Lookahead planned for this — wrong exec is expected, continue
+                    print(f"  [auto] Forced-safe execution: wrong exec was anticipated by lookahead, continuing")
+                else:
+                    self._pause(f"Wrong exec on definite evil #{pos} — possible solver bug!")
+                    return
         else:
             self._pause(f"Execution failed: {exec_result['error']}")
             return

@@ -2155,6 +2155,13 @@
       "name": "asc49_v7",
       "notes": "10HP perfect, two 100% confident executions, Drunk disguised as Druid, no abilities needed. Asc49 complete! 7/7 perfect run",
       "date": "2026-04-10 12:23"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc50_v1",
+      "notes": "5HP, auto_loop stress test, forced_safe exec on Drunk, Knight check fix verified",
+      "date": "2026-04-10 13:33"
     }
   ]
 }

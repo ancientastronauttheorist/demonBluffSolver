@@ -20118,3 +20118,146 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, two 100% confident executions, Drunk disguised as Druid, no abilities needed. Asc49 complete! 7/7 perfect run
 
+
+---
+
+# New Game — 2026-04-10 13:26:53
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Alchemist, Jester, Medium, Baker, Gemcrafter, Slayer, Druid
+- Outcasts: Drunk, Bombardier, Doppelganger
+- Minions: Puppeteer, Chancellor
+- Demons: Baa
+
+### [13:27:23] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [13:27:23] Revealed #3 Baker
+Info: {'original_role': 'Slayer'}
+
+### [13:27:23] Revealed #4 Bombardier
+Info: {}
+
+### [13:27:23] Revealed #5 Gemcrafter
+Info: {'good_position': 6}
+
+### [13:27:23] Revealed #7 Poet
+Info: {'distance': 2, 'copied_role': 'Hunter'}
+
+### [13:27:43] Revealed #1 Jester
+Info: {}
+
+### [13:27:43] Revealed #6 Druid
+Info: {}
+
+### [13:27:43] Revealed #8 Druid
+Info: {}
+
+### [13:27:43] Revealed #9 Slayer
+Info: {}
+
+#### [13:27:44] Solver Output
+Scenarios: 2708/46680
+Evil probabilities: #3=82%, #7=60%, #4=54%, #1=44%, #9=34%, #8=33%, #2=16%, #5=15%, #6=13%
+
+#### [13:27:45] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.928 (adjusted 1.808) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [13:28:50] Revealed #1 Jester
+Info: {'targets': [2, 3, 7], 'evil_count': 1}
+
+### [13:28:50] Ability used at #1
+
+#### [13:28:51] Solver Output
+Scenarios: 1380/46680
+Evil probabilities: #3=79%, #7=59%, #4=52%, #1=46%, #9=38%, #8=32%, #2=17%, #5=17%, #6=12%
+
+#### [13:28:51] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.949 (adjusted 1.823) | timing x1.00
+WARNING: Corruption risk: 13%
+
+### [13:29:27] Revealed #8 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': 'Bombardier'}
+
+### [13:29:27] Ability used at #8
+
+#### [13:29:27] Solver Output
+Scenarios: 584/46680
+Evil probabilities: #3=84%, #7=71%, #1=55%, #4=28%, #8=27%, #9=25%, #5=22%, #6=20%, #2=16%
+
+#### [13:29:27] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.537 (adjusted 1.408) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [13:30:02] Revealed #6 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+### [13:30:02] Ability used at #6
+
+#### [13:30:02] Solver Output
+Scenarios: 317/46680
+Evil probabilities: #3=78%, #7=55%, #4=52%, #1=38%, #8=37%, #9=26%, #5=25%, #6=17%, #2=11%
+
+#### [13:30:02] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#3']
+Reason: Target #3 is 78% evil (adjusted 0.78)
+
+#### [13:30:43] Solver Output
+Scenarios: 138/46680
+Evil probabilities: #4=74%, #9=55%, #7=51%, #3=49%, #8=41%, #5=28%, #6=17%, #1=14%, #2=9%
+
+#### [13:30:43] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (51% good Drunk (corrupted), 19% evil Baa, 14% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 49%, but all reveal branches still lead to a forced win.
+
+### [13:30:58] Executed #3 -> GOOD (WRONG!)
+
+### [13:31:37] Executed #7 -> Baa (EVIL)
+
+#### [13:31:46] Solver Output
+Scenarios: 31/3622
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=68%, #8=68%, #5=42%, #6=32%, #9=19%
+
+#### [13:31:46] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 68% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 68% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #8 (68%) despite low confidence — Bombardier candidate(s) [4] risk instant game loss if executed first.
+
+#### [13:32:07] Solver Output
+Scenarios: 31/3622
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=68%, #8=68%, #5=42%, #6=32%, #9=19%
+
+#### [13:32:07] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 68% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 68% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #8 (68%) despite low confidence — Bombardier candidate(s) [4] risk instant game loss if executed first.
+
+### [13:32:33] Executed #5 -> Chancellor (EVIL)
+
+#### [13:32:33] Solver Output
+Scenarios: 5/324
+Definite evil: ['#5', '#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#8', '#9']
+
+#### [13:32:33] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Puppeteer'})
+
+### [13:33:03] Executed #6 -> Puppeteer (EVIL)
+
+## [13:33:03] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, auto_loop stress test, forced_safe exec on Drunk, Knight check fix verified
+
