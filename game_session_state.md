@@ -19263,3 +19263,65 @@ Reason: #7 is evil in ALL 10 scenarios (roles: {'Baa'})
 Final HP: 8
 Notes: 8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge
 
+
+---
+
+# New Game — 2026-04-10 00:32:34
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Baker, Bard, Oracle, Slayer, Scout
+- Outcasts: Bombardier, Doppelganger, Wretch
+- Minions: Poisoner
+- Demons: Baa
+
+### [00:33:47] Revealed #1 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [00:33:47] Revealed #2 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Poisoner'}
+
+### [00:33:47] Revealed #4 Baker
+Info: {'original_role': 'Bard'}
+
+### [00:33:47] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [00:33:47] Revealed #6 Bard
+Info: {'corruption_distance': 1}
+
+### [00:33:47] Revealed #8 Wretch
+Info: {}
+
+### [00:33:56] Revealed #3 Slayer
+Info: {}
+
+### [00:33:56] Revealed #7 Slayer
+Info: {}
+
+#### [00:34:15] Solver Output
+Scenarios: 4/540
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [00:34:15] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [00:34:50] Executed #2 -> Baa (EVIL)
+
+#### [00:34:50] Solver Output
+Scenarios: 4/68
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [00:34:50] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Poisoner'})
+
+### [00:35:27] Executed #4 -> Poisoner (EVIL)
+
+## [00:35:32] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, no abilities needed, pure deduction from Scout+Oracle+Confessor+Bard clues
+

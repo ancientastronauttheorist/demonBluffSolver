@@ -2078,6 +2078,13 @@
       "name": "asc48_v3",
       "notes": "8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge",
       "date": "2026-04-10 00:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc48_v4",
+      "notes": "10HP perfect, no abilities needed, pure deduction from Scout+Oracle+Confessor+Bard clues",
+      "date": "2026-04-10 00:35"
     }
   ]
 }
