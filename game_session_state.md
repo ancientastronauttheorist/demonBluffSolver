@@ -21939,3 +21939,290 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, 8 abilities used (PD+Dreamer+2Jesters+FT+Judge+Alchemist), solved 90 scenarios down to 1
 
+
+---
+
+# New Game — 2026-04-10 16:20:17
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Bishop, Baker, Bard, Empress, Poet, Knight
+- Outcasts: Plague_Doctor
+- Minions: Puppeteer, Minion
+- Demons: Pooka
+
+### [16:20:32] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [16:20:32] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [16:20:32] Revealed #6 Knight
+Info: {}
+
+### [16:20:32] Revealed #7 Bishop
+Info: {'targets': [1, 10, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:20:32] Revealed #10 Empress
+Info: {'targets': [1, 7, 8]}
+
+### [16:20:49] Revealed #3 Druid
+Info: {}
+
+### [16:20:50] Revealed #4 Druid
+Info: {}
+
+### [16:20:50] Revealed #5 Druid
+Info: {}
+
+### [16:20:50] Revealed #8 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 9}
+
+### [16:20:50] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [16:20:57] Solver Output
+Scenarios: 97/3696
+Definite good: ['#9', '#10']
+Evil probabilities: #4=82%, #5=68%, #3=62%, #8=52%, #7=48%, #6=42%, #2=37%, #1=8%
+
+#### [16:20:57] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.268 (adjusted 2.268) | timing x1.00
+
+### [16:21:40] Ability used at #9
+
+#### [16:21:40] Solver Output
+Scenarios: 51/3696
+Definite good: ['#1', '#9', '#10']
+Evil probabilities: #4=84%, #2=71%, #5=61%, #3=55%, #8=51%, #7=49%, #6=29%
+
+#### [16:21:40] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.993 (adjusted 0.915) | timing x1.00
+WARNING: Corruption risk: 16%
+
+### [16:22:26] Revealed #5 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [16:22:27] Ability used at #5
+
+#### [16:22:27] Solver Output
+Scenarios: 23/3696
+Definite evil: ['#4']
+Definite good: ['#1', '#9', '#10']
+Evil probabilities: #2=70%, #3=52%, #8=52%, #5=48%, #7=48%, #6=30%
+
+#### [16:22:27] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 23 scenarios (roles: {'Puppet', 'Pooka', 'Minion', 'Puppeteer'})
+
+### [16:23:09] Executed #4 -> Puppeteer (EVIL)
+
+#### [16:23:09] Solver Output
+Scenarios: 11/448
+Definite evil: ['#4']
+Definite good: ['#1', '#9', '#10']
+Evil probabilities: #2=73%, #5=64%, #8=55%, #7=45%, #3=36%, #6=27%
+
+#### [16:23:09] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#5']
+Reason: Entropy 0.845 (adjusted 0.730) | timing x1.00
+WARNING: Corruption risk: 27%
+
+### [16:25:05] Revealed #3 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': 'Plague_Doctor'}
+
+### [16:25:05] Ability used at #3
+
+#### [16:25:05] Solver Output
+Scenarios: 3/448
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#9', '#10']
+Evil probabilities: #8=67%, #7=33%
+
+#### [16:25:05] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppet'})
+
+### [16:25:52] Executed #5 -> Puppet (EVIL)
+
+#### [16:25:52] Solver Output
+Scenarios: 3/224
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#9', '#10']
+Evil probabilities: #8=67%, #7=33%
+
+#### [16:25:52] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 3 scenarios (roles: {'Pooka', 'Minion'})
+
+#### [16:26:51] Execution Blocked
+#6 Knight immunity — confirmed good, no HP loss
+
+#### [16:26:51] Solver Output
+Scenarios: 0/162
+
+#### [16:26:51] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:27:10] Revealed #3 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': 'Doppelganger'}
+
+#### [16:27:10] Solver Output
+Scenarios: 0/162
+
+#### [16:27:10] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:27:50] Revealed #3 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': None}
+
+#### [16:27:51] Solver Output
+Scenarios: 4/162
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+
+#### [16:27:51] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Minion'})
+
+### [16:28:56] Revealed #3 Druid
+Info: {}
+
+#### [16:28:56] Solver Output
+Scenarios: 4/162
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+
+#### [16:28:56] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Minion'})
+
+### [16:30:03] Revealed #5 Druid
+Info: {}
+
+#### [16:30:03] Solver Output
+Scenarios: 4/162
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+
+#### [16:30:03] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Minion'})
+
+### [16:31:30] Executed #2 -> GOOD (WRONG!)
+
+#### [16:31:30] Solver Output
+Scenarios: 0/110
+
+#### [16:31:30] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:31:44] Revealed #7 Bishop
+Info: {}
+
+#### [16:31:44] Solver Output
+Scenarios: 0/110
+
+#### [16:31:44] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:32:45] Revealed #8 Poet
+Info: {}
+
+#### [16:32:45] Solver Output
+Scenarios: 0/110
+
+#### [16:32:45] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:32:51] Revealed #1 Baker
+Info: {}
+
+#### [16:32:51] Solver Output
+Scenarios: 6/110
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#9']
+Evil probabilities: #10=67%, #7=17%, #8=17%
+
+#### [16:32:51] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Minion'})
+
+### [16:33:32] Executed #3 -> Minion (EVIL)
+
+#### [16:33:32] Solver Output
+Scenarios: 6/21
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#9']
+Evil probabilities: #10=67%, #7=17%, #8=17%
+
+#### [16:33:32] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 67% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 67% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 67% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:33:57] Revealed #8 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 9}
+
+#### [16:33:57] Solver Output
+Scenarios: 3/21
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#9']
+Evil probabilities: #7=33%, #8=33%, #10=33%
+
+#### [16:33:57] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 33% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 33% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:34:13] Claude Reasoning
+
+
+### [16:35:30] Revealed #3 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': 'Plague_Doctor'}
+
+#### [16:35:31] Solver Output
+Scenarios: 3/21
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#9']
+Evil probabilities: #7=33%, #8=33%, #10=33%
+
+#### [16:35:31] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 33% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 33% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:36:10] Revealed #7 Bishop
+Info: {'targets': [1, 7, 10], 'types': ['Villager', 'Outcast', 'Minion']}
+
+#### [16:36:10] Solver Output
+Scenarios: 2/21
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#9', '#10']
+Evil probabilities: #7=50%, #8=50%
+
+#### [16:36:10] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 50% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:37:28] Executed #7 -> GOOD (WRONG!)
+
+## [16:37:28] GAME OVER — LOSS
+Final HP: 0
+Notes: LOSS - data entry errors caused solver degraded state. Druid #3 said 'Doppelganger' (out of pool) - solver couldnt handle. Multiple wrong execs from bad info: #2 Bard (wrong), #6 Knight (immune), #7 Bishop (wrong). #8 Pooka was last evil per memory reader.
+
