@@ -18183,3 +18183,105 @@ WARNING: CRITICAL: HP=4, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 4
 Notes: 4HP. Lilis+Witch+Minion. Dreamer found Witch, PD clean checks, night_no_kill confirmed Lilis. Solver 50/50 on last exec but Gemcrafter lie on #8 proved #1 evil.
 
+
+---
+
+# New Game — 2026-04-09 22:25:27
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Oracle, Confessor, Empress, Baker, Judge
+- Outcasts: Doppelganger
+- Minions: Witch, Twin_Minion
+- Demons: Lilis
+
+### [22:27:18] Revealed #2 Oracle
+Info: {'targets': [3, 9], 'minion_role': 'Twin_Minion'}
+
+### [22:27:18] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [22:27:18] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [22:27:18] Revealed #8 Confessor
+Info: {'dizzy': True}
+
+### [22:27:33] Revealed #1 Judge
+Info: {}
+
+### [22:27:33] Revealed #6 Judge
+Info: {}
+
+### [22:27:33] Revealed #7 Judge
+Info: {}
+
+#### [22:27:33] Solver Output
+Scenarios: 144/3024
+Definite evil: ['#8']
+Definite good: ['#4', '#5', '#9']
+Evil probabilities: #2=75%, #1=33%, #6=33%, #7=33%, #3=25%
+
+#### [22:27:33] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 144 scenarios (roles: {'Lilis', 'Witch', 'Twin_Minion'})
+
+### [22:28:18] Executed #8 -> Twin_Minion (EVIL)
+
+#### [22:28:18] Solver Output
+Scenarios: 36/336
+Definite evil: ['#2', '#8']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #1=33%, #6=33%, #7=33%
+
+#### [22:28:18] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 36 scenarios (roles: {'Witch', 'Lilis'})
+
+### [22:28:59] Executed #2 -> Lilis (EVIL)
+
+#### [22:29:00] Solver Output
+Scenarios: 18/42
+Definite evil: ['#2', '#8']
+Definite good: ['#3', '#4', '#5', '#9']
+Evil probabilities: #1=33%, #6=33%, #7=33%
+
+#### [22:29:00] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#3']
+Reason: Expected posterior 10.0 scenarios (adjusted 10.0, info gain 0.848 bits) | timing x1.00
+
+### [22:30:13] Revealed #1 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [22:30:13] Ability used at #1
+
+#### [22:30:13] Solver Output
+Scenarios: 12/42
+Definite evil: ['#2', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [22:30:13] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#1']
+Reason: Expected posterior 6.0 scenarios (adjusted 6.0, info gain 1.000 bits) | timing x1.00
+
+### [22:30:55] Revealed #6 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [22:30:55] Ability used at #6
+
+#### [22:30:55] Solver Output
+Scenarios: 6/42
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#9']
+
+#### [22:30:55] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Witch'})
+
+### [22:31:46] Executed #7 -> Witch (EVIL)
+
+## [22:31:46] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis+Witch+Twin_Minion. 3 Judges (1 pool) = duplicates reveal. Judge truth checks narrowed Witch to #7.
+

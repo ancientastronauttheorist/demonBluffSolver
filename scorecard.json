@@ -2008,6 +2008,13 @@
       "name": "asc46_v7",
       "notes": "4HP. Lilis+Witch+Minion. Dreamer found Witch, PD clean checks, night_no_kill confirmed Lilis. Solver 50/50 on last exec but Gemcrafter lie on #8 proved #1 evil.",
       "date": "2026-04-09 22:22"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc47_v1",
+      "notes": "6HP. Lilis+Witch+Twin_Minion. 3 Judges (1 pool) = duplicates reveal. Judge truth checks narrowed Witch to #7.",
+      "date": "2026-04-09 22:31"
     }
   ]
 }
