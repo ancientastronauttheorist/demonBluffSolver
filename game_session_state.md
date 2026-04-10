@@ -20897,3 +20897,79 @@ Reason: #6 is evil in ALL 3 scenarios (roles: {'Chancellor'})
 Final HP: 1
 Notes: 1HP win, corrupted Knight at #3 lost immunity (9HP cost from Pooka corruption), solver found both evils with 100% confidence after
 
+
+---
+
+# New Game — 2026-04-10 14:56:52
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Jester, Lover, Oracle, Architect, Slayer
+- Outcasts: Bombardier
+- Minions: Shaman
+- Demons: Pooka
+
+### [14:57:28] Revealed #1 Bombardier
+Info: {}
+
+### [14:57:28] Revealed #3 Architect
+Info: {'side': 'Equal'}
+
+### [14:57:28] Revealed #4 Bombardier
+Info: {}
+
+### [14:57:28] Revealed #5 Oracle
+Info: {'targets': [1, 2], 'minion_role': 'Shaman'}
+
+### [14:57:28] Revealed #6 Architect
+Info: {'side': 'Left'}
+
+### [14:57:28] Revealed #8 Lover
+Info: {'evil_adjacent': 0}
+
+### [14:58:25] Revealed #2 Jester
+Info: {}
+
+### [14:58:25] Revealed #7 Slayer
+Info: {}
+
+#### [14:58:30] Solver Output
+Scenarios: 2/56
+Definite good: ['#2', '#3', '#6', '#8']
+Evil probabilities: #1=50%, #4=50%, #5=50%, #7=50%
+
+#### [14:58:30] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#3', '#6']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [14:59:34] Revealed #2 Jester
+Info: {'targets': [1, 3, 6], 'evil_count': 1}
+
+### [14:59:38] Ability used at #2
+
+#### [14:59:42] Solver Output
+Scenarios: 1/56
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8']
+
+#### [14:59:42] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [15:00:25] Executed #1 -> Shaman (EVIL)
+
+#### [15:00:29] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#8']
+
+#### [15:00:29] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:01:00] Executed #7 -> Pooka (EVIL)
+
+## [15:01:08] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Jester ability on #1,#3,#6 found 1 evil, solved to 1 scenario, clean executions
+

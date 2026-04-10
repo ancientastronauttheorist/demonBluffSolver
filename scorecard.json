@@ -2211,6 +2211,13 @@
       "name": "asc51_v1",
       "notes": "1HP win, corrupted Knight at #3 lost immunity (9HP cost from Pooka corruption), solver found both evils with 100% confidence after",
       "date": "2026-04-10 14:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v2",
+      "notes": "10HP perfect, Jester ability on #1,#3,#6 found 1 evil, solved to 1 scenario, clean executions",
+      "date": "2026-04-10 15:01"
     }
   ]
 }
