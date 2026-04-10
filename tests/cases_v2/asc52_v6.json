@@ -147,7 +147,7 @@
   ],
   "executed_good_corrupted": {
     "2": false,
-    "7": false
+    "7": true
   },
   "deck": {
     "villagers": [

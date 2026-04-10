@@ -2059,8 +2059,26 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                             knight_blocked = True
                             print(f"  Auto-detected Knight immunity for #{pos} (apparent role: {target_card.apparent_role}, no corruption sources)")
                     else:
+                        # Try to auto-detect corruption status from memory reader
                         was_corrupted = None
-                        print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
+                        try:
+                            from memory_reader import MemoryReader
+                            reader = MemoryReader()
+                            cards = reader.read_board()
+                            if cards:
+                                target_char = next((c for c in cards if c.get('position') == pos), None)
+                                if target_char:
+                                    statuses = target_char.get('statuses', [])
+                                    if 'Corrupted' in statuses:
+                                        was_corrupted = True
+                                        print(f"  Auto-detected #{pos} CORRUPTED from memory reader")
+                                    else:
+                                        was_corrupted = False
+                                        print(f"  Auto-detected #{pos} NOT corrupted from memory reader")
+                        except Exception as e:
+                            print(f"  WARNING: Memory reader unavailable ({e})")
+                        if was_corrupted is None:
+                            print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
