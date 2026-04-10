@@ -1966,6 +1966,13 @@
       "name": "asc46_v1b",
       "notes": "Perfect 10HP. Two Knights = both evil. Bishop confirmed #5 Minion. Knight free check on #4.",
       "date": "2026-04-09 21:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v2",
+      "notes": "Perfect 10HP. PD confirmed #7 evil + #9 corrupted. Baker chain, no Shaman.",
+      "date": "2026-04-09 21:49"
     }
   ]
 }

@@ -17585,3 +17585,110 @@ Reason: Knight free check: #4 is 50% evil. If real Knight, execution blocked (co
 Final HP: 10
 Notes: Perfect 10HP. Two Knights = both evil. Bishop confirmed #5 Minion. Knight free check on #4.
 
+
+---
+
+# New Game — 2026-04-09 21:42:45
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Gemcrafter, Baker, Scout, Bard, Slayer, Oracle, Dreamer
+- Outcasts: Plague_Doctor
+- Minions: Minion, Twin_Minion
+- Demons: Pooka
+
+### [21:44:05] Revealed #1 Gemcrafter
+Info: {'good_position': 6}
+
+### [21:44:05] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [21:44:05] Revealed #5 Baker
+Info: {'original_role': 'Oracle'}
+
+### [21:44:05] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [21:44:05] Revealed #8 Bard
+Info: {'corruption_distance': 2}
+
+### [21:44:05] Revealed #9 Baker
+Info: {'original_role': 'Scout'}
+
+### [21:45:16] Revealed #3 Dreamer
+Info: {}
+
+### [21:45:16] Revealed #4 Plague_Doctor
+Info: {}
+
+### [21:45:16] Revealed #7 Slayer
+Info: {}
+
+#### [21:45:41] Solver Output
+Scenarios: 96/1848
+Definite good: ['#4']
+Evil probabilities: #6=73%, #5=48%, #7=46%, #9=46%, #8=40%, #1=25%, #3=17%, #2=6%
+
+#### [21:45:41] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.761 (adjusted 2.617) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [21:46:41] Revealed #3 Dreamer
+Info: {'target': 6, 'evil_role': 'Twin_Minion'}
+
+### [21:46:48] Ability used at #3
+
+#### [21:46:48] Solver Output
+Scenarios: 55/1848
+Definite good: ['#4']
+Evil probabilities: #5=55%, #8=55%, #6=53%, #7=45%, #9=40%, #3=25%, #1=16%, #2=11%
+
+#### [21:46:48] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.972 (adjusted 1.972) | timing x1.00
+
+### [21:47:27] Ability used at #4
+
+#### [21:47:34] Solver Output
+Scenarios: 12/1848
+Definite evil: ['#7']
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #8=92%, #5=50%, #3=33%, #6=17%, #1=8%
+
+#### [21:47:34] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 12 scenarios (roles: {'Pooka', 'Twin_Minion', 'Minion'})
+
+### [21:48:09] Executed #7 -> Pooka (EVIL)
+
+#### [21:48:09] Solver Output
+Scenarios: 5/224
+Definite evil: ['#7']
+Definite good: ['#2', '#4', '#9']
+Evil probabilities: #8=80%, #3=40%, #5=40%, #1=20%, #6=20%
+
+#### [21:48:09] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (40% evil Minion, 40% evil Twin_Minion, 20% good Bard (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [21:48:46] Executed #8 -> Twin_Minion (EVIL)
+
+#### [21:48:46] Solver Output
+Scenarios: 2/31
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#4', '#6', '#9']
+Evil probabilities: #3=50%, #5=50%
+
+#### [21:48:46] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Dreamer, 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [21:49:31] Executed #3 -> Minion (EVIL)
+
+## [21:49:31] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD confirmed #7 evil + #9 corrupted. Baker chain, no Shaman.
+
