@@ -20820,3 +20820,80 @@ Reason: #3 is evil in ALL 5 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, Scout+Hunter+Knitter(Poet) constrained solver to 6 scenarios instantly, clean 100% executions on both evils
 
+
+---
+
+# New Game — 2026-04-10 14:34:08
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Knight, Gemcrafter, Oracle, Jester, Bishop
+- Outcasts: Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Pooka
+
+### [14:35:17] Revealed #1 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [14:35:17] Revealed #2 Oracle
+Info: {'targets': [2, 5], 'minion_role': 'Chancellor'}
+
+### [14:35:17] Revealed #3 Knight
+Info: {}
+
+### [14:35:17] Revealed #5 Wretch
+Info: {}
+
+### [14:35:17] Revealed #6 Oracle
+Info: {'targets': [1, 3], 'minion_role': 'Chancellor'}
+
+### [14:35:17] Revealed #7 Knight
+Info: {}
+
+### [14:35:17] Revealed #8 Bishop
+Info: {'targets': [7, 5, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:38:08] Revealed #4 Jester
+Info: {}
+
+#### [14:38:16] Solver Output
+Scenarios: 46/454
+Definite good: ['#2']
+Evil probabilities: #3=52%, #1=35%, #6=28%, #7=28%, #8=28%, #4=24%, #5=4%
+
+#### [14:38:16] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight check: #3 is 52% evil, 7% corruption risk. Expected HP cost: 0.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 7% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [14:39:25] Execution Blocked
+#3 Knight immunity — confirmed good, no HP loss
+
+### [14:41:37] Executed #3 -> GOOD (WRONG!)
+
+#### [14:41:52] Solver Output
+Scenarios: 3/335
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+
+#### [14:41:52] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [14:42:37] Executed #4 -> Pooka (EVIL)
+
+#### [14:42:41] Solver Output
+Scenarios: 3/51
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8']
+
+#### [14:42:41] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 3 scenarios (roles: {'Chancellor'})
+
+### [14:43:22] Executed #6 -> Chancellor (EVIL)
+
+## [14:43:29] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP win, corrupted Knight at #3 lost immunity (9HP cost from Pooka corruption), solver found both evils with 100% confidence after
+

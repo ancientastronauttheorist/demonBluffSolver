@@ -2204,6 +2204,13 @@
       "name": "asc50_v7",
       "notes": "10HP perfect, Scout+Hunter+Knitter(Poet) constrained solver to 6 scenarios instantly, clean 100% executions on both evils",
       "date": "2026-04-10 14:26"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc51_v1",
+      "notes": "1HP win, corrupted Knight at #3 lost immunity (9HP cost from Pooka corruption), solver found both evils with 100% confidence after",
+      "date": "2026-04-10 14:43"
     }
   ]
 }
