@@ -17692,3 +17692,112 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Perfect 10HP. PD confirmed #7 evil + #9 corrupted. Baker chain, no Shaman.
 
+
+---
+
+# New Game — 2026-04-09 21:50:42
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Jester, Dreamer, Fortune_Teller, Lover, Scout
+- Outcasts: Wretch, Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [21:51:21] Revealed #2 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [21:51:21] Revealed #4 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 3}
+
+### [21:51:21] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [21:51:21] Revealed #8 Alchemist
+Info: {'cured_count': 1}
+
+### [21:51:21] Revealed #9 Wretch
+Info: {}
+
+### [21:51:58] Revealed #1 Jester
+Info: {}
+
+### [21:51:58] Revealed #3 Bombardier
+Info: {}
+
+### [21:51:59] Revealed #5 Fortune_Teller
+Info: {}
+
+### [21:51:59] Revealed #6 Dreamer
+Info: {}
+
+#### [21:52:05] Solver Output
+Scenarios: 6/72
+Definite good: ['#1', '#3', '#6', '#7', '#9']
+Evil probabilities: #2=67%, #4=50%, #5=50%, #8=33%
+
+#### [21:52:05] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [21:52:42] Revealed #6 Dreamer
+Info: {'target': 2, 'evil_role': 'Pooka'}
+
+### [21:52:43] Ability used at #6
+
+#### [21:52:43] Solver Output
+Scenarios: 4/72
+Definite good: ['#1', '#3', '#6', '#7', '#9']
+Evil probabilities: #4=75%, #2=50%, #5=50%, #8=25%
+
+#### [21:52:43] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#5']
+Reason: Expected posterior 1.5 scenarios (adjusted 1.5, info gain 1.415 bits) | timing x1.00
+
+### [21:53:27] Revealed #1 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 1}
+
+### [21:53:27] Ability used at #1
+
+#### [21:53:27] Solver Output
+Scenarios: 2/72
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [21:53:27] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
+
+### [21:54:05] Executed #4 -> Twin_Minion (EVIL)
+
+#### [21:54:05] Solver Output
+Scenarios: 2/8
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [21:54:05] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [21:55:35] Revealed #5 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': False}
+
+### [21:55:42] Ability used at #5
+
+#### [21:55:42] Solver Output
+Scenarios: 1/8
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [21:55:42] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [21:56:24] Executed #2 -> Pooka (EVIL)
+
+## [21:56:24] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Dreamer found Pooka at #2, FT cleared #1+#3, Jester confirmed 1 evil in group.
+
