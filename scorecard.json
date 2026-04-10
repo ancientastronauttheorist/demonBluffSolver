@@ -2127,6 +2127,13 @@
       "name": "asc49_v3",
       "notes": "10HP perfect, two 100% confident executions, no abilities needed, corrupted Medium",
       "date": "2026-04-10 11:59"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc49_v4",
+      "notes": "6HP, Lilis night killed Oracle, two 100% confident executions, PD corrupted Bishop",
+      "date": "2026-04-10 12:05"
     }
   ]
 }

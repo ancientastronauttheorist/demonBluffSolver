@@ -19815,3 +19815,65 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, two 100% confident executions, no abilities needed, corrupted Medium
 
+
+---
+
+# New Game — 2026-04-10 12:00:58
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Slayer, Hunter, Lover, Bishop, Oracle
+- Outcasts: Plague_Doctor, Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Lilis
+
+### [12:03:26] Revealed #1 Bishop
+Info: {'targets': [1, 3, 5], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [12:03:26] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [12:03:26] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [12:03:26] Revealed #6 Hunter
+Info: {'distance': 1}
+
+### [12:03:26] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:03:26] Revealed #8 Wretch
+Info: {}
+
+### [12:03:26] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [12:03:55] Revealed #4 Plague_Doctor
+Info: {}
+
+#### [12:04:00] Solver Output
+Scenarios: 10/1835
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#8']
+
+#### [12:04:00] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 10 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [12:04:37] Executed #7 -> Lilis (EVIL)
+
+#### [12:04:45] Solver Output
+Scenarios: 5/201
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#8']
+
+#### [12:04:45] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [12:05:29] Executed #9 -> Chancellor (EVIL)
+
+## [12:05:34] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis night killed Oracle, two 100% confident executions, PD corrupted Bishop
+
