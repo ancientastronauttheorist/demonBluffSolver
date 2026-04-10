@@ -2099,6 +2099,13 @@
       "name": "asc48_v6",
       "notes": "8HP, Lilis night killed Druid, no abilities needed, 2 scenarios from passive clues",
       "date": "2026-04-10 00:52"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc48_v7",
+      "notes": "5HP, Jester ability + 1 wrong exec, Asc48 complete 7/7!",
+      "date": "2026-04-10 00:59"
     }
   ]
 }

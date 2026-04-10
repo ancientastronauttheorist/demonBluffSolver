@@ -19491,3 +19491,94 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 8
 Notes: 8HP, Lilis night killed Druid, no abilities needed, 2 scenarios from passive clues
 
+
+---
+
+# New Game — 2026-04-10 00:55:04
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Hunter, Enlightened, Gemcrafter, Oracle
+- Outcasts: Doppelganger, Drunk, Wretch, Bombardier
+- Minions: Chancellor
+- Demons: Baa
+
+### [00:55:40] Revealed #1 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Chancellor'}
+
+### [00:55:40] Revealed #4 Gemcrafter
+Info: {'good_position': 7}
+
+### [00:55:40] Revealed #5 Bombardier
+Info: {}
+
+### [00:55:40] Revealed #6 Wretch
+Info: {}
+
+### [00:55:40] Revealed #7 Gemcrafter
+Info: {'good_position': 6}
+
+### [00:55:40] Revealed #8 Enlightened
+Info: {'direction': 'CCW'}
+
+### [00:55:51] Revealed #2 Enlightened
+Info: {'direction': 'cw'}
+
+### [00:55:51] Revealed #3 Jester
+Info: {}
+
+#### [00:55:57] Solver Output
+Scenarios: 98/1960
+Definite good: ['#1']
+Evil probabilities: #7=49%, #3=37%, #2=29%, #4=24%, #5=22%, #6=22%, #8=16%
+
+#### [00:55:57] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#4', '#5']
+Reason: Expected posterior 46.6 scenarios (adjusted 48.5, info gain 1.013 bits) | timing x1.00
+WARNING: Corruption risk: 8%
+
+### [00:57:03] Revealed #3 Jester
+Info: {'targets': [1, 4, 5], 'evil_count': 1}
+
+### [00:57:03] Ability used at #3
+
+#### [00:57:04] Solver Output
+Scenarios: 50/1960
+Definite good: ['#1', '#2', '#8']
+Evil probabilities: #7=56%, #3=48%, #6=44%, #4=32%, #5=20%
+
+#### [00:57:04] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (44% good Drunk (corrupted), 32% evil Baa, 24% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 56%, but all reveal branches still lead to a forced win.
+
+### [00:57:43] Executed #7 -> Baa (EVIL)
+
+#### [00:57:44] Solver Output
+Scenarios: 16/230
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8']
+Evil probabilities: #3=50%, #4=50%
+
+#### [00:57:44] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 38% good Jester, 12% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:58:27] Executed #3 -> GOOD (WRONG!)
+
+#### [00:58:27] Solver Output
+Scenarios: 8/188
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#8']
+
+#### [00:58:27] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 8 scenarios (roles: {'Chancellor'})
+
+### [00:59:04] Executed #4 -> Chancellor (EVIL)
+
+## [00:59:04] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Jester ability + 1 wrong exec, Asc48 complete 7/7!
+
