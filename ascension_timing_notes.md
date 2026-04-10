@@ -105,6 +105,22 @@ Detailed per-step timing for one full ascension run, to identify bottlenecks for
   - **Lots of active abilities** (Jester, Dreamer, FT all in same village) means lots of click-cycles. Each one is ~30-45s of clicks + screenshot + record. **Combined "use ability + record + ability_used + next" macro** would help.
   - Memory reader unavailable warning during execute: `unsupported operand type(s) for +: 'NoneType' and 'int'` — minor bug to investigate.
 
+### Village 6 (9-card, 2 evil, two apparent Bombardiers)
+- **Wall-clock window:** 18:47:24 → 18:49:06 (≈ **1m 42s**)
+- **Result:** WIN, 10/10 HP perfect, 2 confident executions
+- **Evils:** #2 Chancellor (disguised as Bombardier), #4 Pooka (disguised as Oracle)
+- **Phase breakdown (rough):**
+  - 18:47:24 – 18:47:50: click Next, screenshot, deck. ~25s.
+  - 18:47:50 – 18:48:10: new + deck. ~20s.
+  - 18:48:10 – 18:48:25: flip 9 cards. ~15s.
+  - 18:48:25 – 18:48:35: auto_card 9/9. ~10s.
+  - 18:48:35 – 18:49:00: exec #4 (Pooka, 80% lookahead). ~25s.
+  - 18:49:00 – 18:49:06: exec #2 (Chancellor, 100%). ~6s.
+- **Notes / friction points:**
+  - **Two apparent Bombardiers** (#2, #3). Solver correctly figured out #2 was Chancellor disguised, NOT real Bombardier. Used the Bombardier safety check to not accidentally execute #3.
+  - 9/9 auto_card. Fastest large village so far. Auto_card handled Architect "Right side is more Evil", Empress "One is Evil", Oracle Chancellor naming, all without manual entry.
+  - Bombardier #3 had a "I am dizzy" memory clue field (stale), but Bombardier has no clue, so auto_card just left info_parsed={}.
+
 ## Summary (filled in at end of run)
 - Total wall-clock time:
 - Slowest step categories:

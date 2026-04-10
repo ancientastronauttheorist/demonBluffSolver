@@ -2414,6 +2414,13 @@
       "name": "asc54_v5",
       "notes": "Asc54 v5 5HP, wrong exec on Jester #1, Dreamer+Jester+FT abilities, two Bakers",
       "date": "2026-04-10 18:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v6",
+      "notes": "Asc54 v6 perfect 10HP, two apparent Bombardiers (#2 evil disguise, #3 real)",
+      "date": "2026-04-10 18:49"
     }
   ]
 }

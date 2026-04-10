@@ -23492,3 +23492,69 @@ WARNING: Execution lookahead override -- immediate hit chance is 80%, but all re
 Final HP: 5
 Notes: Asc54 v5 5HP, wrong exec on Jester #1, Dreamer+Jester+FT abilities, two Bakers
 
+
+---
+
+# New Game — 2026-04-10 18:47:45
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Scout, Architect, Poet, Medium, Empress
+- Outcasts: Doppelganger, Bombardier, Drunk
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:48:06] Revealed #1 Empress
+Info: {'targets': [2, 3, 5]}
+
+### [18:48:06] Revealed #2 Bombardier
+Info: {}
+
+### [18:48:06] Revealed #3 Bombardier
+Info: {}
+
+### [18:48:06] Revealed #4 Oracle
+Info: {'targets': [3, 8], 'minion_role': 'Chancellor'}
+
+### [18:48:06] Revealed #5 Medium
+Info: {'good_position': 4, 'good_role': 'Oracle'}
+
+### [18:48:06] Revealed #6 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+### [18:48:06] Revealed #7 Empress
+Info: {'targets': [2, 8, 9]}
+
+### [18:48:06] Revealed #8 Architect
+Info: {'side': 'Right'}
+
+### [18:48:06] Revealed #9 Oracle
+Info: {'targets': [1, 7], 'minion_role': 'Chancellor'}
+
+#### [18:48:12] Solver Output
+Scenarios: 5/2464
+Definite good: ['#1', '#5', '#6', '#7', '#9']
+Evil probabilities: #2=80%, #4=80%, #3=20%, #8=20%
+
+#### [18:48:12] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (80% evil Pooka, 20% good Oracle).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [18:48:38] Executed #4 -> Pooka (EVIL)
+
+#### [18:48:38] Solver Output
+Scenarios: 4/260
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [18:48:38] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Chancellor'})
+
+### [18:49:09] Executed #2 -> Chancellor (EVIL)
+
+## [18:49:09] GAME OVER — WIN
+Final HP: 10
+Notes: Asc54 v6 perfect 10HP, two apparent Bombardiers (#2 evil disguise, #3 real)
+
