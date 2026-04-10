@@ -1,0 +1,115 @@
+{
+  "n_cards": 7,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3,
+        "copied_role": "Hunter"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Poet"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    }
+  ],
+  "executed": [
+    7
+  ],
+  "confirmed_evil": [
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Bard",
+      "Baker",
+      "Poet",
+      "Lover",
+      "Slayer",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc50_v3",
+  "true_evil_positions": {
+    "7": "Pooka"
+  },
+  "notes": "10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied"
+}

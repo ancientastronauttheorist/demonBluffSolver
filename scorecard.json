@@ -2169,6 +2169,13 @@
       "name": "asc50_v2",
       "notes": "8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil",
       "date": "2026-04-10 13:53"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v3",
+      "notes": "10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied",
+      "date": "2026-04-10 13:57"
     }
   ]
 }

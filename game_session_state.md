@@ -20392,3 +20392,51 @@ Reason: #8 is evil in ALL 5 scenarios (roles: {'Chancellor'})
 Final HP: 8
 Notes: 8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil
 
+
+---
+
+# New Game — 2026-04-10 13:54:50
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Baker, Poet, Lover, Slayer, Alchemist
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [13:55:45] Revealed #2 Bombardier
+Info: {}
+
+### [13:55:45] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [13:55:45] Revealed #4 Poet
+Info: {'distance': 3, 'copied_role': 'Hunter'}
+
+### [13:55:45] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [13:55:45] Revealed #6 Baker
+Info: {'original_role': 'Poet'}
+
+### [13:55:45] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+### [13:56:13] Revealed #1 Slayer
+Info: {}
+
+#### [13:56:18] Solver Output
+Scenarios: 1/7
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [13:56:18] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [13:56:59] Executed #7 -> Pooka (EVIL)
+
+## [13:57:06] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied
+
