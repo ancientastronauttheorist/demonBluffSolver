@@ -19432,3 +19432,62 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: 6HP, Lilis night killed #5 Scout, Knight trick, Dreamer+FT abilities
 
+
+---
+
+# New Game — 2026-04-10 00:48:43
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Enlightened, Druid, Jester, Bard, Architect
+- Outcasts: Wretch
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [00:49:57] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [00:49:57] Revealed #2 Wretch
+Info: {}
+
+### [00:49:57] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+### [00:49:57] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [00:50:37] Revealed #5 Bard
+Info: {'corruption_distance': 1}
+
+### [00:50:37] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [00:50:45] Revealed #6 Jester
+Info: {}
+
+#### [00:50:46] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [00:50:46] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [00:51:28] Executed #1 -> Lilis (EVIL)
+
+#### [00:51:28] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [00:51:28] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [00:52:13] Executed #5 -> Twin_Minion (EVIL)
+
+## [00:52:13] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Lilis night killed Druid, no abilities needed, 2 scenarios from passive clues
+

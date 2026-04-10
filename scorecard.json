@@ -2092,6 +2092,13 @@
       "name": "asc48_v5",
       "notes": "6HP, Lilis night killed #5 Scout, Knight trick, Dreamer+FT abilities",
       "date": "2026-04-10 00:45"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc48_v6",
+      "notes": "8HP, Lilis night killed Druid, no abilities needed, 2 scenarios from passive clues",
+      "date": "2026-04-10 00:52"
     }
   ]
 }
