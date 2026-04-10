@@ -1,0 +1,157 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4
+        ],
+        "minion_role": "Puppeteer",
+        "copied_role": "Oracle"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    8,
+    1,
+    9
+  ],
+  "confirmed_evil": [
+    6,
+    8,
+    1,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Minion",
+    "8": "Pooka",
+    "1": "Puppeteer",
+    "9": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Poet",
+      "Fortune_Teller",
+      "Lover",
+      "Alchemist",
+      "Oracle",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc53_v7",
+  "true_evil_positions": {
+    "1": "Puppeteer",
+    "6": "Minion",
+    "8": "Pooka",
+    "9": "Puppet"
+  },
+  "notes": "10HP perfect, FINAL village! All 4 evils at 100% confidence, Asc53 complete 7/7!"
+}

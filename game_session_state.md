@@ -22981,3 +22981,92 @@ Reason: #9 is evil in ALL 5 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: 6HP, Lilis game, night killed Knitter #7, both evils found at 100% confidence
 
+
+---
+
+# New Game — 2026-04-10 18:04:41
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Poet, Fortune_Teller, Lover, Alchemist, Oracle, Confessor
+- Outcasts: Plague_Doctor
+- Minions: Puppeteer, Minion
+- Demons: Pooka
+
+### [18:04:56] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [18:04:56] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [18:04:56] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [18:04:56] Revealed #8 Oracle
+Info: {'targets': [2, 7], 'minion_role': 'Puppeteer'}
+
+### [18:04:56] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+### [18:05:13] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [18:05:13] Revealed #3 Plague_Doctor
+Info: {}
+
+### [18:05:13] Revealed #4 Poet
+Info: {'targets': [1, 4], 'minion_role': 'Puppeteer', 'copied_role': 'Oracle'}
+
+### [18:05:14] Revealed #5 Fortune_Teller
+Info: {}
+
+#### [18:05:14] Solver Output
+Scenarios: 22/1932
+Definite evil: ['#6']
+Definite good: ['#2', '#3']
+Evil probabilities: #8=59%, #9=55%, #4=50%, #7=50%, #5=45%, #1=41%
+
+#### [18:05:14] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 22 scenarios (roles: {'Puppet', 'Pooka', 'Minion', 'Puppeteer'})
+
+### [18:06:02] Executed #6 -> Minion (EVIL)
+
+#### [18:06:03] Solver Output
+Scenarios: 5/222
+Definite evil: ['#6', '#8']
+Definite good: ['#2', '#3']
+Evil probabilities: #7=60%, #9=60%, #1=40%, #4=20%, #5=20%
+
+#### [18:06:03] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 5 scenarios (roles: {'Puppet', 'Pooka'})
+
+### [18:06:52] Executed #8 -> Pooka (EVIL)
+
+#### [18:06:52] Solver Output
+Scenarios: 2/26
+Definite evil: ['#1', '#6', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+
+#### [18:06:52] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [18:07:35] Executed #1 -> Puppeteer (EVIL)
+
+#### [18:07:36] Solver Output
+Scenarios: 2/8
+Definite evil: ['#1', '#6', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+
+#### [18:07:36] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [18:08:30] Executed #9 -> Puppet (EVIL)
+
+## [18:08:30] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, FINAL village! All 4 evils at 100% confidence, Asc53 complete 7/7!
+
