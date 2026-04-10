@@ -19582,3 +19582,65 @@ Reason: #4 is evil in ALL 8 scenarios (roles: {'Chancellor'})
 Final HP: 5
 Notes: 5HP, Jester ability + 1 wrong exec, Asc48 complete 7/7!
 
+
+---
+
+# New Game — 2026-04-10 11:40:23
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Druid, Oracle, Jester, Gemcrafter, Knitter, Fortune_Teller, Architect
+- Outcasts: Wretch
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [11:43:16] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [11:43:16] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:43:16] Revealed #3 Jester
+Info: {}
+
+### [11:43:16] Revealed #4 Wretch
+Info: {}
+
+### [11:43:16] Revealed #6 Fortune_Teller
+Info: {}
+
+### [11:43:16] Revealed #7 Bishop
+Info: {'targets': [5, 1], 'types': ['Villager', 'Minion']}
+
+### [11:43:16] Revealed #8 Druid
+Info: {}
+
+### [11:43:16] Revealed #9 Architect
+Info: {'side': 'Right'}
+
+#### [11:43:31] Solver Output
+Scenarios: 6/270
+Definite evil: ['#1', '#2', '#10']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8', '#9']
+
+#### [11:43:31] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'Lilis', 'Minion', 'Witch'})
+
+### [11:44:21] Executed #1 -> Minion (EVIL)
+
+#### [11:44:24] Solver Output
+Scenarios: 2/18
+Definite evil: ['#1', '#2', '#10']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8', '#9']
+
+#### [11:44:24] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
+
+### [11:45:15] Executed #2 -> Lilis (EVIL)
+
+## [11:45:21] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis killed Witch night2, two 100% confident executions, no abilities needed
+
