@@ -25448,3 +25448,80 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Asc57 v6 6-card 10HP perfect single demon, FT corrupted lying detected, Pooka definite exec
 
+
+---
+
+# New Game — 2026-04-11 15:26:13
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Alchemist, Knight, Fortune_Teller, Enlightened, Oracle, Hunter
+- Outcasts: Wretch
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [15:27:01] Revealed #1 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [15:27:01] Revealed #3 Oracle
+Info: {'targets': [4, 5], 'minion_role': 'Twin_Minion'}
+
+### [15:27:01] Revealed #4 Hunter
+Info: {'distance': 1}
+
+### [15:27:01] Revealed #5 Alchemist
+Info: {'cured_count': 1}
+
+### [15:27:01] Revealed #6 Knight
+Info: {}
+
+### [15:27:01] Revealed #7 Wretch
+Info: {}
+
+### [15:27:01] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+### [15:27:09] Revealed #2 Fortune_Teller
+Info: {}
+
+#### [15:27:09] Solver Output
+Scenarios: 3/56
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #3=67%, #6=67%, #2=33%, #4=33%
+
+#### [15:27:09] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 0.918 (adjusted 0.765) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [15:27:40] Revealed #2 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': True}
+
+### [15:27:40] Ability used at #2
+
+#### [15:27:41] Solver Output
+Scenarios: 2/56
+Definite good: ['#1', '#5', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%, #4=50%, #6=50%
+
+#### [15:27:41] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight free check: #6 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [15:28:17] Executed #6 -> Pooka (EVIL)
+
+#### [15:28:18] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [15:28:18] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [15:28:24] Executed #3 -> Twin Minion (EVIL)
+
+## [15:28:33] GAME OVER — WIN
+Final HP: 10
+Notes: Asc57 v7 final 8-card 10HP perfect, ASC57 COMPLETE 7/7, Knight check on Pooka #6 worked, Twin Minion #3 confident exec
+

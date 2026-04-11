@@ -2596,6 +2596,13 @@
       "name": "asc57_v6",
       "notes": "Asc57 v6 6-card 10HP perfect single demon, FT corrupted lying detected, Pooka definite exec",
       "date": "2026-04-11 15:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v7",
+      "notes": "Asc57 v7 final 8-card 10HP perfect, ASC57 COMPLETE 7/7, Knight check on Pooka #6 worked, Twin Minion #3 confident exec",
+      "date": "2026-04-11 15:28"
     }
   ]
 }
