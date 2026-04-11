@@ -2610,6 +2610,13 @@
       "name": "asc58_v1",
       "notes": "Asc58 v1 Lilis 9-card 6HP, night-killed Enlightened #8 + 4HP, #1 reflip needed, PD probe locked Lilis #6, all 3 evils sequential",
       "date": "2026-04-11 15:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v2",
+      "notes": "Asc58 v2 10-card 10HP perfect, Knight check on Minion #9 (no immunity), then PD probe found Pooka #3 + Shaman #4",
+      "date": "2026-04-11 15:38"
     }
   ]
 }

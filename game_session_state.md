@@ -25610,3 +25610,93 @@ Reason: #9 is evil in ALL 2 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: Asc58 v1 Lilis 9-card 6HP, night-killed Enlightened #8 + 4HP, #1 reflip needed, PD probe locked Lilis #6, all 3 evils sequential
 
+
+---
+
+# New Game — 2026-04-11 15:35:39
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Enlightened, Gemcrafter, Baker, Architect, Fortune_Teller, Knight, Scout
+- Outcasts: Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+### [15:36:53] Revealed #1 Plague_Doctor
+Info: {}
+
+### [15:36:53] Revealed #2 Baker
+Info: {'original_role': 'Empress'}
+
+### [15:36:53] Revealed #3 Scout
+Info: {'evil_role': 'Shaman', 'distance': 2}
+
+### [15:36:53] Revealed #5 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [15:36:53] Revealed #6 Gemcrafter
+Info: {'good_position': 2}
+
+### [15:36:53] Revealed #7 Empress
+Info: {'targets': [1, 4, 5]}
+
+### [15:36:53] Revealed #8 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:36:53] Revealed #9 Knight
+Info: {}
+
+### [15:36:53] Revealed #10 Architect
+Info: {'side': 'Right'}
+
+### [15:37:02] Revealed #4 Enlightened
+Info: {'direction': 'cw'}
+
+#### [15:37:02] Solver Output
+Scenarios: 44/3240
+Definite good: ['#1', '#6']
+Evil probabilities: #4=64%, #3=57%, #8=50%, #9=50%, #10=39%, #7=25%, #5=11%, #2=5%
+
+#### [15:37:02] Recommendation
+Action: **EXECUTE** #9
+Reason: Knight check: #9 is 50% evil, 23% corruption risk. Expected HP cost: 1.0 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 23% -- corrupted Knight loses immunity + 4 extra damage
+
+### [15:37:41] Executed #9 -> Minion (EVIL)
+
+#### [15:37:41] Solver Output
+Scenarios: 9/352
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#6', '#7', '#8']
+Evil probabilities: #4=89%, #10=56%, #3=44%, #5=11%
+
+#### [15:37:41] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 1.891 (adjusted 1.891) | timing x1.00
+
+#### [15:38:16] Solver Output
+Scenarios: 3/352
+Definite evil: ['#3', '#4', '#9']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8', '#10']
+
+#### [15:38:16] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Pooka', 'Shaman'})
+
+### [15:38:23] Executed #3 -> Pooka (EVIL)
+
+#### [15:38:33] Solver Output
+Scenarios: 1/43
+Definite evil: ['#3', '#4', '#9']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8', '#10']
+
+#### [15:38:33] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [15:38:40] Executed #4 -> Shaman (EVIL)
+
+## [15:38:51] GAME OVER — WIN
+Final HP: 10
+Notes: Asc58 v2 10-card 10HP perfect, Knight check on Minion #9 (no immunity), then PD probe found Pooka #3 + Shaman #4
+
