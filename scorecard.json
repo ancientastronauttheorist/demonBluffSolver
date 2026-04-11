@@ -2512,6 +2512,13 @@
       "name": "asc56_v2",
       "notes": "Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups",
       "date": "2026-04-11 14:35"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v3",
+      "notes": "Asc56 v3 8-card 10HP perfect, Doppelganger copied Empress, Poet copied Gemcrafter, FT lying (was Pooka), Jester corrupted lying",
+      "date": "2026-04-11 14:39"
     }
   ]
 }

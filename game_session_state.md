@@ -24380,3 +24380,95 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups
 
+
+---
+
+# New Game — 2026-04-11 14:36:22
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Empress, Fortune_Teller, Alchemist, Bishop, Jester, Poet
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Pooka
+
+### [14:37:11] Revealed #1 Alchemist
+Info: {'cured_count': 2}
+
+### [14:37:11] Revealed #2 Medium
+Info: {'good_position': 4, 'good_role': 'Fortune Teller'}
+
+### [14:37:11] Revealed #5 Bishop
+Info: {'targets': [6, 3, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:37:11] Revealed #6 Empress
+Info: {'targets': [4, 5, 8]}
+
+### [14:37:11] Revealed #8 Empress
+Info: {'targets': [3, 4, 6]}
+
+### [14:37:57] Revealed #3 Jester
+Info: {}
+
+### [14:37:57] Revealed #4 Fortune_Teller
+Info: {}
+
+### [14:37:57] Revealed #7 Poet
+Info: {'good_position': 1, 'copied_role': 'Gemcrafter'}
+
+#### [14:38:01] Solver Output
+Scenarios: 17/526
+Definite good: ['#3', '#7']
+Evil probabilities: #2=59%, #4=47%, #6=29%, #5=24%, #8=24%, #1=18%
+
+#### [14:38:01] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.998 (adjusted 0.909) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [14:38:30] Revealed #4 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [14:38:30] Ability used at #4
+
+#### [14:38:30] Solver Output
+Scenarios: 9/526
+Definite good: ['#1', '#3', '#6', '#7']
+Evil probabilities: #2=89%, #4=89%, #5=11%, #8=11%
+
+#### [14:38:30] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#2', '#5']
+Reason: Expected posterior 5.6 scenarios (adjusted 7.4, info gain 0.277 bits) | timing x1.00
+WARNING: Corruption risk: 67%
+
+### [14:38:56] Revealed #3 Jester
+Info: {'targets': [1, 2, 5], 'evil_count': 0}
+
+### [14:38:56] Ability used at #3
+
+#### [14:38:56] Solver Output
+Scenarios: 6/526
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [14:38:56] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Poisoner', 'Pooka'})
+
+### [14:39:03] Executed #2 -> Poisoner (EVIL)
+
+#### [14:39:09] Solver Output
+Scenarios: 3/66
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [14:39:09] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [14:39:15] Executed #4 -> Pooka (EVIL)
+
+## [14:39:23] GAME OVER — WIN
+Final HP: 10
+Notes: Asc56 v3 8-card 10HP perfect, Doppelganger copied Empress, Poet copied Gemcrafter, FT lying (was Pooka), Jester corrupted lying
+
