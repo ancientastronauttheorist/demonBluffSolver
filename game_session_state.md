@@ -23801,3 +23801,112 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7
 
+
+---
+
+# New Game — 2026-04-11 14:01:55
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Bishop, Dreamer, Fortune_Teller, Alchemist, Oracle, Confessor, Judge, Knight
+- Outcasts: Drunk, Bombardier
+- Minions: Poisoner, Shaman
+- Demons: Baa
+
+### [14:04:41] Revealed #1 Oracle
+Info: {'targets': [1, 2], 'minion_role': 'Poisoner'}
+
+### [14:04:41] Revealed #2 Empress
+Info: {'targets': [3, 7, 8]}
+
+### [14:04:41] Revealed #3 Alchemist
+Info: {'cured_count': 2}
+
+### [14:04:41] Revealed #4 Dreamer
+Info: {}
+
+### [14:04:41] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [14:04:41] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [14:04:41] Revealed #7 Fortune_Teller
+Info: {}
+
+### [14:04:41] Revealed #8 Bishop
+Info: {'targets': [3, 6, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:04:41] Revealed #9 Knight
+Info: {}
+
+#### [14:04:49] Solver Output
+Scenarios: 22/4564
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #9=64%, #4=55%, #8=55%, #3=45%, #7=45%, #2=36%
+
+#### [14:04:49] Recommendation
+Action: **EXECUTE** #9
+Reason: Knight check: #9 is 64% evil, 9% corruption risk. Expected HP cost: 0.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 9% -- corrupted Knight loses immunity + 4 extra damage
+
+### [14:05:32] Executed #9 -> Shaman (EVIL)
+
+#### [14:05:32] Solver Output
+Scenarios: 3/508
+Definite evil: ['#9']
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #4=67%, #2=33%, #3=33%, #7=33%, #8=33%
+
+#### [14:05:32] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [14:05:59] Revealed #4 Dreamer
+Info: {'target': 2, 'evil_role': 'Shaman'}
+
+### [14:06:03] Ability used at #4
+
+#### [14:06:03] Solver Output
+Scenarios: 3/508
+Definite evil: ['#9']
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #4=67%, #2=33%, #3=33%, #7=33%, #8=33%
+
+#### [14:06:03] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [14:06:24] Revealed #7 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [14:06:28] Ability used at #7
+
+#### [14:06:28] Solver Output
+Scenarios: 2/508
+Definite evil: ['#9']
+Definite good: ['#1', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #3=50%, #4=50%, #7=50%
+
+#### [14:06:28] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Empress (corrupted), 50% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:06:35] Executed #2 -> Poisoner (EVIL)
+
+#### [14:06:40] Solver Output
+Scenarios: 1/72
+Definite evil: ['#2', '#4', '#9']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [14:06:40] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [14:06:47] Executed #4 -> Baa (EVIL)
+
+## [14:07:26] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 9-card 3-evil, 10HP perfect, Knight check on Shaman, Drunk-as-Bishop, Dreamer was Baa lying about Shaman, FT confirmed evil in 1-2
+

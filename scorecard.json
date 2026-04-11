@@ -2449,6 +2449,13 @@
       "name": "asc55_v2",
       "notes": "Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7",
       "date": "2026-04-11 14:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v3",
+      "notes": "Asc55 9-card 3-evil, 10HP perfect, Knight check on Shaman, Drunk-as-Bishop, Dreamer was Baa lying about Shaman, FT confirmed evil in 1-2",
+      "date": "2026-04-11 14:07"
     }
   ]
 }
