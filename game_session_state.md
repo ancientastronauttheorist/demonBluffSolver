@@ -24627,3 +24627,107 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Asc56 v5 9-card 10HP perfect, 3-evil all sequential confident exec, Poet copied Scout
 
+
+---
+
+# New Game — 2026-04-11 14:46:40
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Medium, Jester, Enlightened, Architect, Judge
+- Outcasts: Bombardier
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [14:47:29] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [14:47:29] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Jester'}
+
+### [14:47:29] Revealed #4 Enlightened
+Info: {'direction': 'CCW'}
+
+### [14:47:29] Revealed #5 Bombardier
+Info: {}
+
+### [14:47:29] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [14:47:35] Revealed #2 Jester
+Info: {}
+
+### [14:47:35] Revealed #7 Judge
+Info: {}
+
+### [14:47:35] Revealed #8 Jester
+Info: {}
+
+#### [14:47:36] Solver Output
+Scenarios: 6/84
+Definite evil: ['#2']
+Definite good: ['#5', '#6']
+Evil probabilities: #8=67%, #3=50%, #1=33%, #7=33%, #4=17%
+
+#### [14:47:36] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Pooka', 'Puppet'})
+
+### [14:48:03] Executed #2 -> Pooka (EVIL)
+
+#### [14:48:03] Solver Output
+Scenarios: 4/10
+Definite evil: ['#2']
+Definite good: ['#5', '#6']
+Evil probabilities: #8=75%, #7=50%, #1=25%, #3=25%, #4=25%
+
+#### [14:48:03] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#3', '#4']
+Reason: Expected posterior 1.7 scenarios (adjusted 1.7, info gain 1.263 bits) | timing x1.00
+
+### [14:48:33] Revealed #8 Jester
+Info: {'targets': [1, 3, 4], 'evil_count': 2}
+
+### [14:48:33] Ability used at #8
+
+#### [14:48:33] Solver Output
+Scenarios: 2/10
+Definite evil: ['#2']
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #3=50%, #4=50%, #7=50%, #8=50%
+
+#### [14:48:33] Recommendation
+Action: **USE_ABILITY** #7 (Judge) -> targets ['#8']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [14:48:58] Revealed #7 Judge
+Info: {'target': 8, 'is_lying': True}
+
+### [14:48:59] Ability used at #7
+
+#### [14:48:59] Solver Output
+Scenarios: 1/10
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [14:48:59] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [14:49:06] Executed #7 -> Puppet (EVIL)
+
+#### [14:49:11] Solver Output
+Scenarios: 1/2
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [14:49:11] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [14:49:18] Executed #8 -> Puppeteer (EVIL)
+
+## [14:49:26] GAME OVER — WIN
+Final HP: 10
+Notes: Asc56 v6 8-card 10HP perfect, Puppeteer game (3 evils from 2-pool minion+demon), Pooka first then Jester+Judge ability sequence
+

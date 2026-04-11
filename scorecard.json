@@ -2533,6 +2533,13 @@
       "name": "asc56_v5",
       "notes": "Asc56 v5 9-card 10HP perfect, 3-evil all sequential confident exec, Poet copied Scout",
       "date": "2026-04-11 14:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v6",
+      "notes": "Asc56 v6 8-card 10HP perfect, Puppeteer game (3 evils from 2-pool minion+demon), Pooka first then Jester+Judge ability sequence",
+      "date": "2026-04-11 14:49"
     }
   ]
 }
