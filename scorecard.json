@@ -2428,6 +2428,20 @@
       "name": "asc54_v7",
       "notes": "Asc54 v7 perfect 10HP, ASC54 COMPLETE 7/7, 16-win streak",
       "date": "2026-04-10 18:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v1",
+      "notes": "Asc55 perfect 10HP, 2 confident exec from 1-scenario solve",
+      "date": "2026-04-11 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v1",
+      "notes": "Asc55 perfect 10HP, 2 confident exec from 1-scenario solve",
+      "date": "2026-04-11 13:54"
     }
   ]
 }

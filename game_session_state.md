@@ -23635,3 +23635,69 @@ Reason: #6 is evil in ALL 4 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Asc54 v7 perfect 10HP, ASC54 COMPLETE 7/7, 16-win streak
 
+
+---
+
+# New Game — 2026-04-11 13:52:24
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Poet, Jester, Oracle, Bard, Fortune_Teller
+- Outcasts: Bombardier
+- Minions: Poisoner
+- Demons: Pooka
+
+### [13:52:58] Revealed #1 Jester
+Info: {}
+
+### [13:52:58] Revealed #2 Oracle
+Info: {'targets': [1, 2], 'minion_role': 'Poisoner'}
+
+### [13:52:58] Revealed #3 Fortune_Teller
+Info: {}
+
+### [13:52:58] Revealed #4 Jester
+Info: {}
+
+### [13:52:58] Revealed #5 Bard
+Info: {'corruption_distance': -1}
+
+### [13:52:58] Revealed #6 Bombardier
+Info: {}
+
+### [13:52:58] Revealed #7 Enlightened
+Info: {'direction': 'CW'}
+
+### [13:53:02] Revealed #8 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 6}
+
+#### [13:53:09] Solver Output
+Scenarios: 1/86
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+
+#### [13:53:09] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [13:54:06] Executed #1 -> Poisoner (EVIL)
+
+#### [13:54:09] Solver Output
+Scenarios: 1/12
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+
+#### [13:54:09] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+## [13:54:43] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 perfect 10HP, 2 confident exec from 1-scenario solve
+
+### [13:54:46] Executed #4 -> Pooka (EVIL)
+
+## [13:54:48] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 perfect 10HP, 2 confident exec from 1-scenario solve
+
