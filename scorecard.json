@@ -2526,6 +2526,13 @@
       "name": "asc56_v4",
       "notes": "Asc56 v4 9-card 10HP perfect, Witch unblocked #9, Oracle (Shaman) lied about dead Witch, Bishop dup, all 3 confident exec",
       "date": "2026-04-11 14:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v5",
+      "notes": "Asc56 v5 9-card 10HP perfect, 3-evil all sequential confident exec, Poet copied Scout",
+      "date": "2026-04-11 14:45"
     }
   ]
 }

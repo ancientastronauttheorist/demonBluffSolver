@@ -24548,3 +24548,82 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 10
 Notes: Asc56 v4 9-card 10HP perfect, Witch unblocked #9, Oracle (Shaman) lied about dead Witch, Bishop dup, all 3 confident exec
 
+
+---
+
+# New Game — 2026-04-11 14:43:52
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Scout, Enlightened, Lover, Bard, Hunter, Empress
+- Outcasts: Wretch, Bombardier
+- Minions: Twin_Minion, Minion
+- Demons: Baa
+
+### [14:44:27] Revealed #1 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 3}
+
+### [14:44:27] Revealed #2 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [14:44:27] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [14:44:27] Revealed #4 Wretch
+Info: {}
+
+### [14:44:27] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [14:44:27] Revealed #7 Bard
+Info: {'corruption_distance': 1}
+
+### [14:44:27] Revealed #8 Empress
+Info: {'targets': [2, 5, 6]}
+
+### [14:44:27] Revealed #9 Poet
+Info: {'distance': 3, 'copied_role': 'Hunter'}
+
+### [14:44:45] Revealed #9 Poet
+Info: {'evil_role': 'Minion', 'distance': 3, 'copied_role': 'Scout'}
+
+### [14:44:46] Revealed #6 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [14:44:46] Solver Output
+Scenarios: 2/504
+Definite evil: ['#1', '#6', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [14:44:46] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [14:44:53] Executed #1 -> Minion (EVIL)
+
+#### [14:44:58] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#6', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [14:44:58] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Baa'})
+
+### [14:45:05] Executed #6 -> Twin Minion (EVIL)
+
+#### [14:45:10] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#6', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [14:45:10] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [14:45:17] Executed #7 -> Baa (EVIL)
+
+## [14:45:24] GAME OVER — WIN
+Final HP: 10
+Notes: Asc56 v5 9-card 10HP perfect, 3-evil all sequential confident exec, Poet copied Scout
+
