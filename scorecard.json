@@ -2631,6 +2631,20 @@
       "name": "asc58_v4",
       "notes": "Asc58 v4 Lilis 9-card 6HP, Slayer killed Witch #4, night_no_kill bug confirmed wrong evil (#9 instead of #5), recovered by manual JSON fix",
       "date": "2026-04-11 15:51"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 LOSS, solver Bombardier safety bug picked 0%-evil targets (#1, #3) leading to guaranteed wrong execs and HP 5->0. Witch was at #8 (Bombardier candidate) but solver refused to execute due to Bombardier risk. Real bug to fix.",
+      "date": "2026-04-11 15:59"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 LOSS HP 0. Solver Bombardier safety bug: with Witch at #8 (Bombardier disguise) and #2 also Bombardier candidate, solver picked 0% confident #1 then #3 (both Good), guaranteed wrong execs, HP 10->5->0. Streak broken. Bug: solver should execute #8 even at Bombardier risk if it's the ONLY winning move.",
+      "date": "2026-04-11 16:00"
     }
   ]
 }

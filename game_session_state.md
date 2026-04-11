@@ -25922,3 +25922,143 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: Asc58 v4 Lilis 9-card 6HP, Slayer killed Witch #4, night_no_kill bug confirmed wrong evil (#9 instead of #5), recovered by manual JSON fix
 
+
+---
+
+# New Game — 2026-04-11 15:54:26
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Knight, Enlightened, Witness, Scout, Hunter
+- Outcasts: Drunk, Bombardier
+- Minions: Witch, Twin_Minion
+- Demons: Baa
+
+### [15:54:59] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [15:54:59] Revealed #2 Bombardier
+Info: {}
+
+### [15:54:59] Revealed #3 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [15:54:59] Revealed #4 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [15:54:59] Revealed #5 Baker
+Info: {'original_role': 'Hunter'}
+
+### [15:54:59] Revealed #6 Witness
+Info: {'affected_position': 4}
+
+### [15:54:59] Revealed #7 Baker
+Info: {'original_role': 'Knight'}
+
+### [15:54:59] Revealed #8 Bombardier
+Info: {}
+
+#### [15:55:23] Solver Output
+Scenarios: 218/2352
+Definite good: ['#1']
+Evil probabilities: #2=66%, #6=63%, #8=48%, #3=36%, #4=29%, #9=24%, #7=18%, #5=16%
+
+#### [15:55:23] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 63% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 63% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (63% < 63%) -- consider gathering more info
+
+### [15:56:01] Executed #6 -> Baa (EVIL)
+
+#### [15:56:01] Solver Output
+Scenarios: 44/252
+Definite evil: ['#6']
+Definite good: ['#1']
+Evil probabilities: #2=64%, #8=55%, #4=27%, #3=18%, #9=18%, #5=9%, #7=9%
+
+#### [15:56:01] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 27% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 27% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (27% < 60%) -- consider gathering more info
+
+### [15:56:46] Executed #4 -> Twin_Minion (EVIL)
+
+#### [15:56:46] Solver Output
+Scenarios: 6/30
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [15:56:46] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 0% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (0% < 50%) -- consider gathering more info
+
+#### [15:56:58] Solver Output
+Scenarios: 6/30
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [15:56:58] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 0% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (0% < 50%) -- consider gathering more info
+
+#### [15:58:13] Solver Output
+Scenarios: 6/26
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [15:58:13] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 0% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #1 (0%) despite low confidence — Bombardier candidate(s) [2, 8] risk instant game loss if executed first.
+
+### [15:58:26] Executed #1 -> GOOD (WRONG!)
+
+#### [15:58:36] Solver Output
+Scenarios: 6/26
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [15:58:36] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 0% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #3 (0%) despite low confidence — Bombardier candidate(s) [2, 8] risk instant game loss if executed first.
+
+#### [15:59:10] Solver Output
+Scenarios: 6/26
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [15:59:10] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 0% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 0% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #3 (0%) despite low confidence — Bombardier candidate(s) [2, 8] risk instant game loss if executed first.
+
+## [15:59:59] GAME OVER — LOSS
+Final HP: 5
+Notes: Asc58 v5 LOSS, solver Bombardier safety bug picked 0%-evil targets (#1, #3) leading to guaranteed wrong execs and HP 5->0. Witch was at #8 (Bombardier candidate) but solver refused to execute due to Bombardier risk. Real bug to fix.
+
+## [16:00:11] GAME OVER — LOSS
+Final HP: 5
+Notes: Asc58 v5 LOSS HP 0. Solver Bombardier safety bug: with Witch at #8 (Bombardier disguise) and #2 also Bombardier candidate, solver picked 0% confident #1 then #3 (both Good), guaranteed wrong execs, HP 10->5->0. Streak broken. Bug: solver should execute #8 even at Bombardier risk if it's the ONLY winning move.
+
