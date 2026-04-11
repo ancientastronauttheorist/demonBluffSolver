@@ -2554,6 +2554,20 @@
       "name": "asc57_v1",
       "notes": "Asc57 v1 Lilis 9-card 6HP, night-killed Poet #7 + 4 HP from 2 night phases, both confident exec, #1 needed re-flip",
       "date": "2026-04-11 14:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v2",
+      "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec",
+      "date": "2026-04-11 15:04"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v2",
+      "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec",
+      "date": "2026-04-11 15:05"
     }
   ]
 }

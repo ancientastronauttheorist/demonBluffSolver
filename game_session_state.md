@@ -24900,3 +24900,137 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 6
 Notes: Asc57 v1 Lilis 9-card 6HP, night-killed Poet #7 + 4 HP from 2 night phases, both confident exec, #1 needed re-flip
 
+
+---
+
+# New Game — 2026-04-11 15:00:12
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Dreamer, Medium, Knight, Bard
+- Outcasts: Drunk, Doppelganger
+- Minions: Witch
+- Demons: Baa
+
+### [15:00:51] Revealed #1 Fortune_Teller
+Info: {}
+
+### [15:00:51] Revealed #2 Dreamer
+Info: {}
+
+### [15:00:51] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Dreamer'}
+
+### [15:00:51] Revealed #4 Knight
+Info: {}
+
+### [15:00:51] Revealed #5 Dreamer
+Info: {}
+
+### [15:00:51] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [15:00:57] Solver Output
+Scenarios: 532/1302
+Evil probabilities: #5=32%, #1=32%, #6=32%, #3=29%, #4=28%, #7=28%, #2=21%
+
+#### [15:00:57] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight check: #4 is 28% evil, 12% corruption risk. Expected HP cost: 0.8 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 12% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [15:01:43] Solver Output
+Scenarios: 384/930
+Definite good: ['#4']
+Evil probabilities: #3=35%, #5=35%, #1=35%, #6=35%, #7=33%, #2=26%
+
+#### [15:01:43] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.272 (adjusted 2.154) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [15:02:13] Revealed #5 Dreamer
+Info: {'target': 1, 'evil_role': 'Witch'}
+
+### [15:02:14] Ability used at #5
+
+#### [15:02:14] Solver Output
+Scenarios: 317/930
+Definite good: ['#4']
+Evil probabilities: #3=40%, #5=37%, #6=37%, #7=35%, #2=30%, #1=21%
+
+#### [15:02:14] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.189 (adjusted 2.075) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [15:02:40] Revealed #2 Dreamer
+Info: {'target': 6, 'evil_role': 'Baa'}
+
+### [15:02:40] Ability used at #2
+
+#### [15:02:41] Solver Output
+Scenarios: 263/930
+Definite good: ['#4']
+Evil probabilities: #3=44%, #5=38%, #7=36%, #2=34%, #1=24%, #6=24%
+
+#### [15:02:41] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#4', '#5']
+Reason: Entropy 1.000 (adjusted 0.941) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [15:03:09] Revealed #1 Fortune Teller
+Info: {'targets': [4, 5], 'has_evil': False}
+
+### [15:03:09] Ability used at #1
+
+#### [15:03:10] Solver Output
+Scenarios: 139/930
+Definite good: ['#4']
+Evil probabilities: #3=58%, #2=48%, #7=35%, #5=23%, #6=22%, #1=13%
+
+#### [15:03:10] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#4', '#7']
+Reason: Entropy 0.998 (adjusted 0.941) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [15:03:43] Revealed #6 Fortune Teller
+Info: {'targets': [4, 7], 'has_evil': False}
+
+### [15:03:44] Ability used at #6
+
+#### [15:03:44] Solver Output
+Scenarios: 71/930
+Definite good: ['#4']
+Evil probabilities: #3=62%, #2=56%, #5=23%, #7=21%, #1=20%, #6=18%
+
+#### [15:03:44] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 62% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 62% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [15:04:19] Executed #3 -> Baa (EVIL)
+
+#### [15:04:19] Solver Output
+Scenarios: 22/155
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#6']
+Evil probabilities: #2=91%, #5=5%, #7=5%
+
+#### [15:04:19] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 91% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 91% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+## [15:04:56] GAME OVER — WIN
+Final HP: 10
+Notes: Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec
+
+### [15:05:04] Executed #2 -> Witch (EVIL)
+
+## [15:05:04] GAME OVER — WIN
+Final HP: 10
+Notes: Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec
+
