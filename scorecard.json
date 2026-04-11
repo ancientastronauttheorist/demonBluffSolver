@@ -2568,6 +2568,13 @@
       "name": "asc57_v2",
       "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec",
       "date": "2026-04-11 15:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v3",
+      "notes": "Asc57 v3 9-card 10HP perfect, Druid Wretch lie locked Witch #1, then Baa #2 + Minion #4 sequential confident",
+      "date": "2026-04-11 15:09"
     }
   ]
 }

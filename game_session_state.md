@@ -25034,3 +25034,105 @@ Notes: Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 d
 Final HP: 10
 Notes: Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec
 
+
+---
+
+# New Game — 2026-04-11 15:06:25
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Witness, Bishop, Architect, Hunter, Druid, Knitter, Baker
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [15:07:05] Revealed #2 Bishop
+Info: {'targets': [6, 7, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:07:05] Revealed #3 Oracle
+Info: {'targets': [4, 7], 'minion_role': 'Minion'}
+
+### [15:07:05] Revealed #4 Hunter
+Info: {'distance': 3}
+
+### [15:07:05] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [15:07:05] Revealed #6 Knitter
+Info: {'evil_pairs': 1}
+
+### [15:07:05] Revealed #7 Witness
+Info: {'affected_position': 5}
+
+### [15:07:05] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [15:07:12] Revealed #1 Druid
+Info: {}
+
+#### [15:07:12] Solver Output
+Scenarios: 14/1848
+Definite good: ['#3', '#8', '#9']
+Evil probabilities: #4=86%, #2=71%, #7=71%, #1=29%, #5=29%, #6=14%
+
+#### [15:07:12] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.863 (adjusted 0.863) | timing x1.00
+
+### [15:07:50] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': 'Wretch'}
+
+### [15:07:50] Ability used at #1
+
+#### [15:07:51] Solver Output
+Scenarios: 4/1848
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#5', '#6', '#8', '#9']
+Evil probabilities: #4=50%, #7=50%
+
+#### [15:07:51] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Baa', 'Witch'})
+
+### [15:07:57] Executed #1 -> Witch (EVIL)
+
+### [15:08:27] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [15:08:27] Solver Output
+Scenarios: 2/224
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#5', '#6', '#8', '#9']
+Evil probabilities: #4=50%, #7=50%
+
+#### [15:08:27] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [15:08:34] Executed #2 -> Baa (EVIL)
+
+#### [15:08:41] Solver Output
+Scenarios: 2/31
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#5', '#6', '#8', '#9']
+Evil probabilities: #4=50%, #7=50%
+
+#### [15:08:41] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+#### [15:09:12] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#2', '#4']
+Definite good: ['#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [15:09:12] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [15:09:19] Executed #4 -> Minion (EVIL)
+
+## [15:09:27] GAME OVER — WIN
+Final HP: 10
+Notes: Asc57 v3 9-card 10HP perfect, Druid Wretch lie locked Witch #1, then Baa #2 + Minion #4 sequential confident
+
