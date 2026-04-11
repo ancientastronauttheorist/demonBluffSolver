@@ -24050,3 +24050,104 @@ Reason: #9 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: Asc55 9-card 10HP perfect, Baker chain (3 Bakers from 1), PD probe clean on Pooka, both evils confident exec
 
+
+---
+
+# New Game — 2026-04-11 14:16:26
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Dreamer, Knitter, Judge, Poet, Alchemist, Lover
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Minion, Poisoner
+- Demons: Lilis
+
+### [14:19:05] Revealed #1 Poet
+Info: {'good_position': 7, 'good_role': 'Judge', 'copied_role': 'Medium'}
+
+### [14:19:05] Revealed #2 Knitter
+Info: {'evil_pairs': 2}
+
+### [14:19:05] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [14:19:05] Revealed #5 Alchemist
+Info: {'cured_count': 2}
+
+### [14:19:05] Revealed #6 Scout
+Info: {'evil_role': 'Minion', 'distance': 2}
+
+### [14:19:05] Revealed #9 Bombardier
+Info: {}
+
+### [14:19:12] Revealed #4 Plague_Doctor
+Info: {}
+
+### [14:19:13] Revealed #8 Dreamer
+Info: {}
+
+#### [14:19:18] Solver Output
+Scenarios: 92/2076
+Definite good: ['#1', '#7']
+Evil probabilities: #5=77%, #3=63%, #2=59%, #6=45%, #9=30%, #8=16%, #4=10%
+
+#### [14:19:18] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.882 (adjusted 2.663) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [14:19:39] Revealed #8 Dreamer
+Info: {'target': 5, 'evil_role': 'Minion'}
+
+### [14:19:40] Ability used at #8
+
+#### [14:19:40] Solver Output
+Scenarios: 52/2076
+Definite good: ['#1', '#7']
+Evil probabilities: #3=67%, #2=62%, #5=60%, #6=54%, #9=31%, #8=19%, #4=8%
+
+#### [14:19:40] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.072 (adjusted 2.072) | timing x1.00
+
+#### [14:20:55] Solver Output
+Scenarios: 1/2076
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [14:20:55] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [14:21:02] Executed #4 -> Poisoner (EVIL)
+
+#### [14:21:08] Solver Output
+Scenarios: 1/86
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [14:21:08] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [14:21:15] Executed #5 -> Minion (EVIL)
+
+#### [14:21:19] Solver Output
+Scenarios: 1/7
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [14:21:19] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [14:21:26] Executed #6 -> Lilis (EVIL)
+
+## [14:21:36] GAME OVER — WIN
+Final HP: 6
+Notes: Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec
+
+## [14:21:42] GAME OVER — WIN
+Final HP: 6
+Notes: Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec
+

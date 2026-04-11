@@ -2477,6 +2477,20 @@
       "name": "asc55_v5",
       "notes": "Asc55 9-card 10HP perfect, Baker chain (3 Bakers from 1), PD probe clean on Pooka, both evils confident exec",
       "date": "2026-04-11 14:15"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc55_v6",
+      "notes": "Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec",
+      "date": "2026-04-11 14:21"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc55_v6",
+      "notes": "Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec",
+      "date": "2026-04-11 14:21"
     }
   ]
 }
