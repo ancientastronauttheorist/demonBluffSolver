@@ -24151,3 +24151,68 @@ Notes: Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption
 Final HP: 6
 Notes: Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec
 
+
+---
+
+# New Game — 2026-04-11 14:23:01
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Gemcrafter, Hunter, Alchemist, Knitter, Jester, Scout
+- Outcasts: Bombardier, Wretch
+- Minions: Shaman
+- Demons: Pooka
+
+### [14:24:21] Revealed #2 Bombardier
+Info: {}
+
+### [14:24:21] Revealed #3 Hunter
+Info: {'distance': 4}
+
+### [14:24:21] Revealed #4 Wretch
+Info: {}
+
+### [14:24:21] Revealed #5 Alchemist
+Info: {'cured_count': 1}
+
+### [14:24:21] Revealed #6 Scout
+Info: {'evil_role': 'Shaman', 'distance': 3}
+
+### [14:24:21] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:24:21] Revealed #8 Knight
+Info: {}
+
+### [14:24:21] Revealed #9 Alchemist
+Info: {'cured_count': 1}
+
+### [14:24:32] Revealed #1 Jester
+Info: {}
+
+#### [14:24:33] Solver Output
+Scenarios: 1/72
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [14:24:33] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:24:40] Executed #3 -> Shaman (EVIL)
+
+#### [14:24:46] Solver Output
+Scenarios: 1/8
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [14:24:46] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:24:53] Executed #6 -> Pooka (EVIL)
+
+## [14:25:13] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 final 7/7 perfect 10HP, ASC55 COMPLETE, 2 Alchemists on board (pool dup), Wretch survived
+
