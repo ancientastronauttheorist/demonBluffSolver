@@ -1,7 +1,13 @@
 /// Shared helper functions used by all validators.
 
-use crate::knowledge_base::get_card;
+use crate::knowledge_base::{get_card, normalize_role};
 use crate::types::{GameState, Scenario};
+
+/// Compare two role names ignoring case, spaces, and underscores.
+/// "Twin Minion" == "Twin_Minion" == "twinminion"
+pub fn roles_equal(a: &str, b: &str) -> bool {
+    normalize_role(a) == normalize_role(b)
+}
 
 /// Truth status of a card in a given scenario.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

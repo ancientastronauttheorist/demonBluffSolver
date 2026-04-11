@@ -226,7 +226,7 @@ fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     let truth = truth_status(pos, scenario, state);
 
     let target_pos = (1..=n).find(|&p| {
-        known_evil_role(p, scenario, state).map_or(false, |r| r == evil_role)
+        known_evil_role(p, scenario, state).map_or(false, |r| roles_equal(r, evil_role))
     });
     let target_pos = match target_pos { Some(p) => p, None => return true };
 
@@ -293,7 +293,7 @@ fn validate_oracle(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     let truth = truth_status(card.position, scenario, state);
 
     let target_matches_definite = |t: u8| -> bool {
-        known_evil_role(t, scenario, state).map_or(false, |r| r == minion_role)
+        known_evil_role(t, scenario, state).map_or(false, |r| roles_equal(r, minion_role))
     };
     let target_matches_possible = |t: u8| -> bool {
         if target_matches_definite(t) { return true; }
@@ -534,14 +534,14 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
         if target_is_wretch { return claimed_role.eq_ignore_ascii_case("cabbage"); }
         if target_is_evil {
             let actual = known_evil_role(target, scenario, state).unwrap_or("");
-            return claimed_role == actual;
+            return roles_equal(claimed_role, actual);
         }
-        evil_roles.contains(&claimed_role)
+        evil_roles.iter().any(|r| roles_equal(r, claimed_role))
     } else {
         if target_is_wretch { return !claimed_role.eq_ignore_ascii_case("cabbage"); }
         if target_is_evil {
             let actual = known_evil_role(target, scenario, state).unwrap_or("");
-            return claimed_role != actual;
+            return !roles_equal(claimed_role, actual);
         }
         true
     }

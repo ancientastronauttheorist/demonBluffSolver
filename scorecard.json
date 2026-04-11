@@ -2645,6 +2645,13 @@
       "name": "asc58_v5",
       "notes": "Asc58 v5 LOSS HP 0. Solver Bombardier safety bug: with Witch at #8 (Bombardier disguise) and #2 also Bombardier candidate, solver picked 0% confident #1 then #3 (both Good), guaranteed wrong execs, HP 10->5->0. Streak broken. Bug: solver should execute #8 even at Bombardier risk if it's the ONLY winning move.",
       "date": "2026-04-11 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v6",
+      "notes": "10HP perfect win, FT targets #1,#2 revealed evil presence -> solver solved to 1 scenario, clean sweep",
+      "date": "2026-04-11 16:31"
     }
   ]
 }

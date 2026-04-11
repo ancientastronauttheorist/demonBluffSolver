@@ -498,7 +498,7 @@ class GameSession:
         elif was_evil is False and pos not in self.confirmed_good:
             self.confirmed_good.append(pos)
         if evil_role:
-            self.executed_evil_roles[pos] = evil_role
+            self.executed_evil_roles[pos] = evil_role.replace(' ', '_')
         # Track corruption status for executed good cards
         if was_evil is False and was_corrupted is not None:
             self.executed_good_corrupted[pos] = was_corrupted
@@ -535,7 +535,7 @@ class GameSession:
             if target_pos not in self.confirmed_evil:
                 self.confirmed_evil.append(target_pos)
             if evil_role:
-                self.executed_evil_roles[target_pos] = evil_role
+                self.executed_evil_roles[target_pos] = evil_role.replace(' ', '_')
 
     # -- Solver --
 

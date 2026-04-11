@@ -26062,3 +26062,95 @@ Notes: Asc58 v5 LOSS, solver Bombardier safety bug picked 0%-evil targets (#1, #
 Final HP: 5
 Notes: Asc58 v5 LOSS HP 0. Solver Bombardier safety bug: with Witch at #8 (Bombardier disguise) and #2 also Bombardier candidate, solver picked 0% confident #1 then #3 (both Good), guaranteed wrong execs, HP 10->5->0. Streak broken. Bug: solver should execute #8 even at Bombardier risk if it's the ONLY winning move.
 
+#### [16:22:43] Claude Reasoning
+
+
+#### [16:22:45] Solver Output
+Scenarios: 6/26
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#3', '#5', '#7', '#9']
+Evil probabilities: #2=50%, #8=50%
+
+#### [16:22:45] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 50% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #2 (50%) despite low confidence — Bombardier candidate(s) [2, 8] risk instant game loss if executed first.
+
+
+---
+
+# New Game — 2026-04-11 16:28:55
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Knitter, Fortune_Teller, Oracle, Hunter, Medium, Scout
+- Outcasts: Doppelganger
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [16:29:56] Revealed #1 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 3}
+
+### [16:29:56] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [16:29:56] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [16:29:56] Revealed #4 Medium
+Info: {'good_position': 6, 'good_role': 'Oracle'}
+
+### [16:29:56] Revealed #5 Hunter
+Info: {'distance': 2}
+
+### [16:29:56] Revealed #6 Oracle
+Info: {'targets': [7, 8], 'minion_role': 'Twin_Minion'}
+
+### [16:29:56] Revealed #7 Medium
+Info: {'good_position': 6, 'good_role': 'Oracle'}
+
+### [16:30:11] Revealed #8 Fortune_Teller
+Info: {}
+
+#### [16:30:16] Solver Output
+Scenarios: 3/336
+Definite good: ['#1', '#2', '#5', '#6']
+Evil probabilities: #3=67%, #7=67%, #4=33%, #8=33%
+
+#### [16:30:16] Recommendation
+Action: **USE_ABILITY** #8 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [16:30:37] Revealed #8 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [16:30:42] Ability used at #8
+
+#### [16:30:42] Solver Output
+Scenarios: 1/336
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [16:30:42] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:30:49] Executed #3 -> Pooka (EVIL)
+
+#### [16:30:58] Solver Output
+Scenarios: 1/42
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [16:30:58] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [16:31:05] Executed #8 -> Twin Minion (EVIL)
+
+## [16:31:26] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect win, FT targets #1,#2 revealed evil presence -> solver solved to 1 scenario, clean sweep
+
