@@ -806,6 +806,134 @@ class GameSession:
 
         return {"success": True, "was_evil": was_evil, "evil_role": evil_role, "error": None}
 
+    def auto_use_ability(self, action, monitor=None) -> dict:
+        """Perform in-game active-ability activation + target clicks + auto-parse.
+
+        Template: auto_execute, but for active abilities like Jester/Dreamer/FT/Judge.
+        Slayer and Plague_Doctor use dedicated commands (slayer_result, pd_check)
+        and are explicitly rejected here.
+
+        Flow:
+          1. Click active card → game enters target-selection mode
+          2. Click each target in order
+          3. Wait for memory to show uses>0 or acted_infos populated
+          4. Call _parse_clue_from_memory to extract info_parsed
+          5. session.add_card() + session.mark_ability_used()
+
+        Returns: {"success": bool, "info_parsed": dict|None, "error": str|None}
+        """
+        import template_match as _tm
+        from game_utils import all_game_card_coords
+
+        if action.action_type != "use_ability":
+            return {"success": False, "info_parsed": None,
+                    "error": f"Expected use_ability action, got {action.action_type}"}
+
+        pos = action.position
+        targets = list(action.targets or [])
+        ability_name = (action.ability_name or "").lower().replace(" ", "_")
+
+        # v1: Slayer and Plague Doctor use different command paths
+        if ability_name in ("slayer", "plague_doctor"):
+            return {"success": False, "info_parsed": None,
+                    "error": f"{action.ability_name} uses slayer_result/pd_check commands — handle manually"}
+
+        if pos in self.used_abilities:
+            return {"success": False, "info_parsed": None,
+                    "error": f"#{pos} ability already marked used"}
+
+        coords = all_game_card_coords(self.n_cards)
+        if pos not in coords:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Position {pos} not valid for {self.n_cards}-card game"}
+        for t in targets:
+            if t not in coords:
+                return {"success": False, "info_parsed": None,
+                        "error": f"Target {t} not valid for {self.n_cards}-card game"}
+
+        # Step 1: Click active card to enter target-selection mode
+        x, y = coords[pos]
+        print(f"  [auto_ability] Activating {action.ability_name} at #{pos} ({x},{y})...")
+        try:
+            _tm.safe_click_at(x, y, f"activate_card{pos}")
+        except Exception as e:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Failed to click active card: {e}"}
+        time.sleep(0.4)  # Let target-selection mode engage
+
+        # Step 2: Click each target in order
+        for t in targets:
+            tx, ty = coords[t]
+            print(f"  [auto_ability] Target #{t} at ({tx},{ty})...")
+            try:
+                _tm.safe_click_at(tx, ty, f"ability_target{t}")
+            except Exception as e:
+                return {"success": False, "info_parsed": None,
+                        "error": f"Failed to click target #{t}: {e}"}
+            time.sleep(0.25)  # pause between target clicks
+
+        # Step 3: Wait for ability result in memory (uses > 0 or acted_infos populated)
+        print(f"  [auto_ability] Waiting for ability result...")
+        target_card_data = None
+
+        def _ability_resolved(board):
+            if not board:
+                return False
+            card = next((c for c in board if c['position'] == pos), None)
+            if not card:
+                return False
+            return card.get('uses', 0) > 0 or bool(card.get('acted_infos'))
+
+        if monitor and monitor.is_healthy():
+            resolved = monitor.wait_for(_ability_resolved, timeout=6, min_delay=0.8)
+            if resolved:
+                board = monitor.get_board()
+                target_card_data = next((c for c in board if c['position'] == pos), None) if board else None
+        else:
+            time.sleep(1.5)  # initial animation delay
+            from memory_reader import MemoryReader
+            reader = MemoryReader()
+            if not reader.open():
+                return {"success": False, "info_parsed": None,
+                        "error": "Cannot open memory reader for ability verification"}
+            try:
+                for attempt in range(5):
+                    cards = reader.read_board()
+                    if cards:
+                        target_card_data = next((c for c in cards if c['position'] == pos), None)
+                        if target_card_data and _ability_resolved(cards):
+                            break
+                    if attempt < 4:
+                        time.sleep(0.7)
+            finally:
+                reader.close()
+
+        if not target_card_data:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Position #{pos} not found in memory reader after activation"}
+        if target_card_data.get('uses', 0) == 0 and not target_card_data.get('acted_infos'):
+            return {"success": False, "info_parsed": None,
+                    "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
+
+        # Step 4: Parse the result via the existing auto_card pipeline
+        parsed = _parse_clue_from_memory(target_card_data)
+        if parsed is None:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Could not parse ability result from memory data"}
+        if not parsed.info_parsed:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Parser returned empty info_parsed for {action.ability_name}"}
+
+        # Step 5: Update session
+        self.add_card(parsed)
+        self.mark_ability_used(pos)
+        self.save()
+        DecisionLog.log_card(parsed)
+        DecisionLog.log_ability_used(pos)
+
+        print(f"  [auto_ability] {action.ability_name} #{pos} -> {targets}: {parsed.info_parsed}")
+        return {"success": True, "info_parsed": parsed.info_parsed, "error": None}
+
     def auto_next(self):
         """Solve + auto-execute for definite-evil OR lookahead-forced-safe picks.
 
@@ -824,6 +952,21 @@ class GameSession:
         DecisionLog.log_solver_output(result, state)
         action = print_recommendation(state, result, self.used_abilities)
         DecisionLog.log_recommendation(action)
+
+        # Route USE_ABILITY to auto_use_ability (v1: skips Slayer + Plague Doctor)
+        if action.action_type == "use_ability":
+            ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
+            if ability_name_lower in ("slayer", "plague_doctor"):
+                print(f"\n  [auto_next] {action.ability_name} uses slayer_result/pd_check — manual action needed.")
+                return action, result, None
+            print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
+            exec_result = self.auto_use_ability(action)
+            if exec_result["success"]:
+                print(f"  AUTO-ABILITY SUCCESS: {action.ability_name} #{action.position} result recorded")
+            else:
+                print(f"  AUTO-ABILITY FAILED: {exec_result['error']}")
+                print(f"  [RECOVERY] Re-run 'next --plan' to see state; enter manually via 'card {ability_name_lower} {action.position} ...' or `ability_used {action.position}`")
+            return action, result, exec_result
 
         # Safety checks for auto-execution
         if action.action_type != "execute":
@@ -1601,6 +1744,7 @@ def main():
         print("  auto [--games=N] [--risk=conservative] Full autonomous play")
         print("  start                                 Start new game (menu nav + deck read)")
         print("  new <n_cards> <n_evil> [hp=N cost=N] Start new game session")
+        print("  start_village <n_cards> <n_evil> nv=N no=N  Combined new+deck via memory_reader")
         print("  deck V=... O=... M=... D=...         Set deck composition")
         print("  read_deck <screenshot>                Read deck (card_vision + memory_reader)")
         print("  flip                                  Flip all cards #1->#N in order")
@@ -1815,6 +1959,91 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.save()
         DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
         print(f"New session: {n_cards} cards, {n_evil} evil, HP={session.hp}, cost={session.wrong_exec_cost}")
+        return session
+
+    if cmd == "start_village":
+        # Combined command: new + deck in one call. Reads pool roles from
+        # memory_reader.py --deck; caller still provides nv/no (header counts
+        # are not in memory).
+        #   start_village <n_cards> <n_evil> nv=N no=N [hp=10] [cost=5]
+        if len(args) < 2:
+            print("Usage: start_village <n_cards> <n_evil> nv=N no=N [hp=10] [cost=5]")
+            return None
+        n_cards = int(args[0])
+        n_evil = int(args[1])
+        nv = None
+        no = None
+        hp_arg = None
+        cost_arg = None
+        for a in args[2:]:
+            if a.lower().startswith("nv="):
+                nv = int(a[3:])
+            elif a.lower().startswith("no="):
+                no = int(a[3:])
+            elif a.startswith("hp="):
+                hp_arg = int(a[3:])
+            elif a.startswith("cost="):
+                cost_arg = int(a[5:])
+            else:
+                print(f"  ERROR: Unrecognized arg '{a}'")
+                print("  Required: nv=N no=N. Optional: hp=N cost=N")
+                return None
+        if nv is None or no is None:
+            print("  ERROR: nv=N and no=N are required (header counts from screenshot)")
+            return None
+
+        # Read pool from memory_reader.py --deck
+        import subprocess as _sp
+        mr_result = _sp.run(
+            ["python", "memory_reader.py", "--deck"],
+            capture_output=True, text=True
+        )
+        if mr_result.returncode != 0:
+            print(f"  ERROR: memory_reader --deck failed: {mr_result.stderr[:200]}")
+            return None
+        pool = {"villagers": [], "outcasts": [], "minions": [], "demons": []}
+        for line in mr_result.stdout.strip().split("\n"):
+            line = line.strip()
+            faction_key = None
+            if line.startswith("Villager"):
+                faction_key = "villagers"
+            elif line.startswith("Outcast"):
+                faction_key = "outcasts"
+            elif line.startswith("Minion"):
+                faction_key = "minions"
+            elif line.startswith("Demon"):
+                faction_key = "demons"
+            if faction_key:
+                colon_idx = line.find(":")
+                if colon_idx > 0:
+                    roles_str = line[colon_idx + 1:].strip()
+                    pool[faction_key] = [r.strip().replace(" ", "_") for r in roles_str.split(",") if r.strip()]
+        if not (pool["villagers"] or pool["minions"]):
+            print("  ERROR: memory_reader returned no roles. Is the game window active?")
+            return None
+
+        # Initialize session with pool + board counts
+        session = GameSession(n_cards, n_evil)
+        if hp_arg is not None:
+            session.hp = hp_arg
+        if cost_arg is not None:
+            session.wrong_exec_cost = cost_arg
+        session.set_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
+        session.board_villager_count = nv
+        session.board_outcast_count = no
+        session.save()
+        DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
+        DecisionLog.log_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
+        if any(d.lower() == "baa" for d in pool["demons"]):
+            print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
+                  "Subtract 1 from displayed outcast count for no= value.")
+        print(f"Village started: {n_cards} cards, {n_evil} evil, HP={session.hp}")
+        print(f"  V={pool['villagers']}")
+        print(f"  O={pool['outcasts']}")
+        print(f"  M={pool['minions']}")
+        print(f"  D={pool['demons']}")
+        print(f"  board: nv={nv} no={no}")
+        print("Next: python game_loop.py flip")
         return session
 
     if cmd == "set_hp":

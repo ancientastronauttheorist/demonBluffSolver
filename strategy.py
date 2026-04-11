@@ -24,6 +24,18 @@ from solver import (
 
 
 # ============================================================
+# Tuning knobs (off-by-default experimental flags)
+# ============================================================
+# When True, before returning a low-score ability recommendation, run
+# _find_forced_execution. If it finds a definite-evil position, prefer
+# executing that instead (guaranteed kill beats a weak info gather).
+# Default OFF so the v2 replay baseline is unaffected. Flip to True for
+# experimental tuning runs; compare replay-suite diffs before shipping.
+LOOKAHEAD_PREFER_FORCED_OVER_LOW_ABILITY = False
+LOW_ABILITY_SCORE_THRESHOLD = 0.30  # info bits
+
+
+# ============================================================
 # Data Structures
 # ============================================================
 
@@ -1398,6 +1410,26 @@ def recommend_action(
             warnings=warnings))
 
     if best_ability:
+        # Optional tuning: if the best ability is weak AND a definite-evil
+        # forced execution exists, prefer the guaranteed kill. Gated by
+        # LOOKAHEAD_PREFER_FORCED_OVER_LOW_ABILITY (default OFF).
+        if (LOOKAHEAD_PREFER_FORCED_OVER_LOW_ABILITY
+            and best_ability.score < LOW_ABILITY_SCORE_THRESHOLD
+            and result.definite_evil):
+            candidate_positions = [p for p in result.definite_evil
+                                   if p not in state.executed]
+            if candidate_positions:
+                # Run forced-exec lookahead to verify survivability
+                forced_pos = _find_forced_execution(state, result, candidate_positions)
+                if forced_pos is not None:
+                    return _with_ability_recs(Action(
+                        "execute", position=forced_pos,
+                        reasoning=(f"Tuning override: ability score={best_ability.score:.2f} "
+                                   f"below threshold={LOW_ABILITY_SCORE_THRESHOLD:.2f}; "
+                                   f"preferring definite-evil forced execution at #{forced_pos}"),
+                        warnings=["LOOKAHEAD_PREFER_FORCED_OVER_LOW_ABILITY tuning active"],
+                        forced_safe=True,
+                    ))
         return _with_ability_recs(Action(
             "use_ability", position=best_ability.position,
             targets=best_ability.targets,

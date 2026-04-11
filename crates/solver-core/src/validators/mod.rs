@@ -938,6 +938,14 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
         }
         let deck_count = deck_v_counts.get(norm_role).copied().unwrap_or(0);
         if non_baker_real + baker_count > deck_count + shaman_allowance { return false; }
+
+        // Chain-uniqueness tightening: without Shaman, at most one Baker chain
+        // conversion can produce a "I was <role>" claim per distinct role. Shaman
+        // creates game-start Baker duplicates so this check is skipped there.
+        // Safe for current v2 suite (no deck has duplicate villagers, so the
+        // existing deck_count check already enforces this implicitly). Adds
+        // stricter behavior for hypothetical duplicate-villager decks.
+        if shaman_allowance == 0 && baker_count > 1 { return false; }
     }
 
     // Baker conversion chain ordering
