@@ -2470,6 +2470,13 @@
       "name": "asc55_v4",
       "notes": "Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve",
       "date": "2026-04-11 14:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v5",
+      "notes": "Asc55 9-card 10HP perfect, Baker chain (3 Bakers from 1), PD probe clean on Pooka, both evils confident exec",
+      "date": "2026-04-11 14:15"
     }
   ]
 }

@@ -23976,3 +23976,77 @@ Notes: Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue b
 Final HP: 10
 Notes: Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve
 
+
+---
+
+# New Game — 2026-04-11 14:11:50
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Knight, Bard, Knitter, Medium, Bishop
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [14:13:33] Revealed #1 Knitter
+Info: {'evil_pairs': 0}
+
+### [14:13:33] Revealed #2 Knight
+Info: {}
+
+### [14:13:33] Revealed #3 Bard
+Info: {'corruption_distance': -1}
+
+### [14:13:33] Revealed #4 Bombardier
+Info: {}
+
+### [14:13:33] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [14:13:33] Revealed #7 Baker
+Info: {'original_role': 'Bishop'}
+
+### [14:13:33] Revealed #8 Baker
+Info: {'original_role': 'Bishop'}
+
+### [14:13:33] Revealed #9 Bombardier
+Info: {}
+
+### [14:13:49] Revealed #6 Plague_Doctor
+Info: {}
+
+#### [14:13:54] Solver Output
+Scenarios: 7/268
+Definite good: ['#2', '#5', '#6']
+Evil probabilities: #9=71%, #3=29%, #4=29%, #7=29%, #8=29%, #1=14%
+
+#### [14:13:54] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.236 (adjusted 2.236) | timing x1.00
+
+#### [14:14:24] Solver Output
+Scenarios: 2/268
+Definite evil: ['#3', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:14:24] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [14:14:31] Executed #3 -> Pooka (EVIL)
+
+#### [14:14:35] Solver Output
+Scenarios: 2/31
+Definite evil: ['#3', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:14:35] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
+
+### [14:14:42] Executed #9 -> Twin Minion (EVIL)
+
+## [14:15:04] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 9-card 10HP perfect, Baker chain (3 Bakers from 1), PD probe clean on Pooka, both evils confident exec
+
