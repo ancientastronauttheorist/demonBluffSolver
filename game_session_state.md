@@ -25810,3 +25810,115 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final
 
+
+---
+
+# New Game — 2026-04-11 15:45:27
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Slayer, Bishop, Baker, Enlightened, Poet, Druid
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor, Witch
+- Demons: Lilis
+
+### [15:47:06] Revealed #1 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:47:06] Revealed #2 Wretch
+Info: {}
+
+### [15:47:06] Revealed #3 Bishop
+Info: {'targets': [6, 7, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:47:06] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [15:47:06] Revealed #5 Poet
+Info: {'direction': 'CW', 'copied_role': 'Enlightened'}
+
+### [15:47:14] Revealed #6 Slayer
+Info: {}
+
+### [15:47:14] Revealed #8 Druid
+Info: {}
+
+#### [15:47:15] Solver Output
+Scenarios: 142/3412
+Definite good: ['#7']
+Evil probabilities: #5=56%, #4=51%, #8=50%, #2=42%, #6=37%, #3=31%, #1=16%, #9=16%
+
+#### [15:47:15] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.986 (adjusted 0.951) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [15:47:45] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:47:45] Ability used at #8
+
+#### [15:47:46] Solver Output
+Scenarios: 45/3412
+Definite good: ['#7']
+Evil probabilities: #4=62%, #3=58%, #5=58%, #2=53%, #6=42%, #8=13%, #1=7%, #9=7%
+
+#### [15:47:46] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#4']
+Reason: Target #4 is 62% evil (adjusted 0.57)
+WARNING: Corruption risk: 9% -- Slayer ability disabled if corrupted
+
+### [15:48:26] Ability used at #6
+
+### [15:49:23] Revealed #9 Baker
+Info: {'original_role': 'Poet'}
+
+#### [15:49:40] Solver Output
+Scenarios: 0/109
+
+#### [15:49:40] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [15:50:02] Solver Output
+Scenarios: 0/0
+
+#### [15:50:02] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [15:50:43] Solver Output
+Scenarios: 2/267
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#7', '#8', '#9']
+
+#### [15:50:43] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Chancellor', 'Lilis'})
+
+#### [15:50:50] Solver Output
+Scenarios: 2/267
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#7', '#8', '#9']
+
+#### [15:50:50] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [15:50:57] Executed #3 -> Chancellor (EVIL)
+
+#### [15:51:05] Solver Output
+Scenarios: 1/31
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#1', '#2', '#6', '#7', '#8', '#9']
+
+#### [15:51:05] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [15:51:12] Executed #5 -> Lilis (EVIL)
+
+## [15:51:24] GAME OVER — WIN
+Final HP: 6
+Notes: Asc58 v4 Lilis 9-card 6HP, Slayer killed Witch #4, night_no_kill bug confirmed wrong evil (#9 instead of #5), recovered by manual JSON fix
+

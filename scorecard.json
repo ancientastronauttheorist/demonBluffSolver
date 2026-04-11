@@ -2624,6 +2624,13 @@
       "name": "asc58_v3",
       "notes": "Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final",
       "date": "2026-04-11 15:44"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc58_v4",
+      "notes": "Asc58 v4 Lilis 9-card 6HP, Slayer killed Witch #4, night_no_kill bug confirmed wrong evil (#9 instead of #5), recovered by manual JSON fix",
+      "date": "2026-04-11 15:51"
     }
   ]
 }
