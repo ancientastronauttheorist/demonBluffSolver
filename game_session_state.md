@@ -24731,3 +24731,110 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
 Final HP: 10
 Notes: Asc56 v6 8-card 10HP perfect, Puppeteer game (3 evils from 2-pool minion+demon), Pooka first then Jester+Judge ability sequence
 
+
+---
+
+# New Game — 2026-04-11 14:50:48
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Confessor, Enlightened, Slayer, Medium, Poet, Judge
+- Outcasts: Wretch
+- Minions: Shaman, Poisoner
+- Demons: Lilis
+
+### [14:52:03] Revealed #2 Wretch
+Info: {}
+
+### [14:52:03] Revealed #3 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [14:52:03] Revealed #6 Medium
+Info: {'good_position': 8, 'good_role': 'Jester'}
+
+### [14:52:13] Revealed #1 Enlightened
+Info: {'direction': 'ccw'}
+
+### [14:52:13] Revealed #4 Judge
+Info: {}
+
+### [14:52:13] Revealed #5 Slayer
+Info: {}
+
+### [14:52:13] Revealed #7 Jester
+Info: {}
+
+### [14:52:14] Revealed #8 Jester
+Info: {}
+
+#### [14:52:19] Solver Output
+Scenarios: 66/704
+Definite good: ['#9']
+Evil probabilities: #1=94%, #3=39%, #2=33%, #4=33%, #5=33%, #7=33%, #8=18%, #6=15%
+
+#### [14:52:19] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#5', '#7']
+Reason: Expected posterior 27.4 scenarios (adjusted 29.1, info gain 1.182 bits) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [14:52:49] Revealed #8 Jester
+Info: {'targets': [1, 5, 7], 'evil_count': 2}
+
+### [14:52:49] Ability used at #8
+
+#### [14:52:49] Solver Output
+Scenarios: 34/704
+Definite evil: ['#1']
+Definite good: ['#9']
+Evil probabilities: #5=41%, #7=35%, #3=29%, #6=29%, #8=29%, #2=18%, #4=18%
+
+#### [14:52:49] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 34 scenarios (roles: {'Shaman', 'Poisoner', 'Lilis'})
+
+### [14:52:56] Executed #1 -> Lilis (EVIL)
+
+#### [14:53:02] Solver Output
+Scenarios: 11/80
+Definite evil: ['#1']
+Definite good: ['#9']
+Evil probabilities: #5=45%, #6=36%, #8=36%, #3=27%, #7=27%, #4=18%, #2=9%
+
+#### [14:53:02] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#2', '#3', '#4']
+Reason: Expected posterior 5.3 scenarios (adjusted 5.8, info gain 0.932 bits) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [14:53:34] Revealed #7 Jester
+Info: {'targets': [2, 3, 4], 'evil_count': 1}
+
+### [14:53:34] Ability used at #7
+
+#### [14:53:34] Solver Output
+Scenarios: 5/80
+Definite evil: ['#1']
+Definite good: ['#9']
+Evil probabilities: #6=40%, #7=40%, #8=40%, #2=20%, #3=20%, #4=20%, #5=20%
+
+#### [14:53:34] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#6']
+Reason: Target #6 is 40% evil (adjusted 0.24)
+WARNING: Corruption risk: 40% -- Slayer ability disabled if corrupted
+
+### [14:54:05] Ability used at #5
+
+#### [14:54:05] Solver Output
+Scenarios: 1/9
+Definite evil: ['#1', '#6', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#9']
+
+#### [14:54:05] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [14:54:12] Executed #8 -> Poisoner (EVIL)
+
+## [14:54:20] GAME OVER — WIN
+Final HP: 6
+Notes: Asc56 v7 final 6HP, ASC56 COMPLETE 7/7, Lilis night-killed Jester #9, Slayer killed Shaman #6, Wretch counted as evil in Jester ability
+
