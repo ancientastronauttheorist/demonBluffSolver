@@ -25388,3 +25388,63 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Asc57 v5 9-card 10HP perfect, Knight check on #2 worked, all 3 evils sequential after probes
 
+
+---
+
+# New Game — 2026-04-11 15:23:32
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Poet, Fortune_Teller, Druid, Bard
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [15:24:09] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [15:24:09] Revealed #2 Bombardier
+Info: {}
+
+### [15:24:09] Revealed #3 Poet
+Info: {'good_position': 5, 'good_role': 'Hunter', 'copied_role': 'Medium'}
+
+### [15:24:09] Revealed #4 Druid
+Info: {}
+
+### [15:24:09] Revealed #5 Hunter
+Info: {'distance': 2}
+
+### [15:24:09] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [15:24:10] Solver Output
+Scenarios: 2/6
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #1=50%, #6=50%
+
+#### [15:24:10] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [15:24:41] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [15:24:41] Ability used at #6
+
+#### [15:24:41] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+
+#### [15:24:41] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:24:48] Executed #1 -> Pooka (EVIL)
+
+## [15:24:57] GAME OVER — WIN
+Final HP: 10
+Notes: Asc57 v6 6-card 10HP perfect single demon, FT corrupted lying detected, Pooka definite exec
+
