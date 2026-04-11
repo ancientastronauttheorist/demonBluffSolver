@@ -2575,6 +2575,13 @@
       "name": "asc57_v3",
       "notes": "Asc57 v3 9-card 10HP perfect, Druid Wretch lie locked Witch #1, then Baa #2 + Minion #4 sequential confident",
       "date": "2026-04-11 15:09"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc57_v4",
+      "notes": "Asc57 v4 9-card 1HP survivor, corrupted Knight #5 wrecked us 10->1 (lookahead failed), but solver locked all 3 evils sequentially after PD probe",
+      "date": "2026-04-11 15:15"
     }
   ]
 }

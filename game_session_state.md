@@ -25136,3 +25136,98 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: Asc57 v3 9-card 10HP perfect, Druid Wretch lie locked Witch #1, then Baa #2 + Minion #4 sequential confident
 
+
+---
+
+# New Game — 2026-04-11 15:10:49
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Knitter, Empress, Knight, Poet, Bard
+- Outcasts: Plague_Doctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [15:11:35] Revealed #2 Bard
+Info: {'corruption_distance': 2}
+
+### [15:11:35] Revealed #5 Knight
+Info: {}
+
+### [15:11:35] Revealed #6 Knitter
+Info: {'evil_pairs': 2}
+
+### [15:11:35] Revealed #7 Empress
+Info: {'targets': [2, 4, 5]}
+
+### [15:11:48] Revealed #1 Poet
+Info: {'targets': [4, 7, 8], 'copied_role': 'Empress'}
+
+### [15:11:48] Revealed #3 Plague_Doctor
+Info: {}
+
+### [15:11:48] Revealed #4 Poet
+Info: {'targets': [2, 5, 8], 'types': ['Villager', 'Outcast', 'Minion'], 'copied_role': 'Bishop'}
+
+### [15:11:48] Revealed #8 Jester
+Info: {}
+
+#### [15:11:54] Solver Output
+Scenarios: 44/1848
+Evil probabilities: #1=59%, #6=55%, #5=50%, #4=45%, #2=32%, #9=27%, #7=14%, #3=9%, #8=9%
+
+#### [15:11:54] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight check: #5 is 50% evil, 27% corruption risk. Expected HP cost: 1.2 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 27% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [15:12:56] Solver Output
+Scenarios: 22/1176
+Definite good: ['#5']
+Evil probabilities: #4=82%, #6=64%, #2=55%, #1=27%, #7=27%, #8=18%, #9=18%, #3=9%
+
+#### [15:12:56] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.187 (adjusted 2.187) | timing x1.00
+
+#### [15:13:30] Solver Output
+Scenarios: 4/1176
+Definite evil: ['#6']
+Definite good: ['#2', '#5', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%, #4=50%, #9=50%
+
+#### [15:13:30] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Pooka', 'Witch', 'Minion'})
+
+### [15:14:04] Executed #6 -> Pooka (EVIL)
+
+#### [15:14:04] Solver Output
+Scenarios: 2/162
+Definite evil: ['#1', '#6', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+
+#### [15:14:04] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Minion', 'Witch'})
+
+### [15:14:37] Executed #1 -> Witch (EVIL)
+
+### [15:15:09] Revealed #9 Knitter
+Info: {'evil_pairs': 0}
+
+#### [15:15:09] Solver Output
+Scenarios: 1/26
+Definite evil: ['#1', '#6', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+
+#### [15:15:09] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [15:15:16] Executed #9 -> Minion (EVIL)
+
+## [15:15:28] GAME OVER — WIN
+Final HP: 1
+Notes: Asc57 v4 9-card 1HP survivor, corrupted Knight #5 wrecked us 10->1 (lookahead failed), but solver locked all 3 evils sequentially after PD probe
+
