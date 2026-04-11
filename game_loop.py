@@ -2602,15 +2602,19 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         dead = set(session.executed) | set(session.night_kills)
         all_positions = set(range(1, session.n_cards + 1))
         unrevealed = all_positions - revealed - dead
+        # Only auto-confirm Lilis when the lone unrevealed card is still
+        # blocked (e.g. Witch-blocked). If the user just flipped it and
+        # hasn't entered card data yet, the unrevealed=1 check is wrong.
+        blocked = set(session.blocked_positions)
         # Issue #7: Auto-deduct 2 HP for Lilis night
         old_hp = session.hp
         session.hp -= 2
-        if len(unrevealed) == 1:
-            lilis_pos = unrevealed.pop()
+        if len(unrevealed) == 1 and unrevealed.issubset(blocked):
+            lilis_pos = next(iter(unrevealed))
             if lilis_pos not in session.confirmed_evil:
                 session.confirmed_evil.append(lilis_pos)
             session.save()
-            print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos}")
+            print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos} (blocked)")
             print(f"  => #{lilis_pos} confirmed as Lilis (can't kill herself)")
             print(f"  HP: {old_hp} -> {session.hp}")
         elif len(unrevealed) == 0:
