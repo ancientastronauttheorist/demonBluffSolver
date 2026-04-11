@@ -26211,3 +26211,65 @@ Reason: #7 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect win, 7-card single demon, PD check on #6 directly revealed #7 as evil
 
+
+---
+
+# New Game — 2026-04-11 18:10:18
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Hunter, Dreamer, Baker, Gemcrafter, Jester
+- Outcasts: Doppelganger, Bombardier
+- Minions: Minion
+- Demons: Lilis
+
+### [18:11:40] Revealed #1 Hunter
+Info: {'distance': 3}
+
+### [18:11:40] Revealed #2 Bard
+Info: {'corruption_distance': -1}
+
+### [18:11:40] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [18:11:58] Revealed #4 Jester
+Info: {}
+
+### [18:13:50] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [18:13:50] Revealed #6 Bombardier
+Info: {}
+
+### [18:13:50] Revealed #9 Baker
+Info: {'original_role': 'Jester'}
+
+### [18:13:59] Revealed #8 Dreamer
+Info: {}
+
+#### [18:14:04] Solver Output
+Scenarios: 12/448
+Definite evil: ['#1', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [18:14:04] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 12 scenarios (roles: {'Minion', 'Lilis'})
+
+### [18:14:11] Executed #1 -> Minion (EVIL)
+
+#### [18:14:21] Solver Output
+Scenarios: 6/49
+Definite evil: ['#1', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [18:14:21] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Lilis'})
+
+### [18:14:28] Executed #9 -> Lilis (EVIL)
+
+## [18:14:50] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP ASC58 COMPLETE 7/7, Lilis + Bombardier + Doppelganger + Minion, 2 night kills 4HP, solver locked definite #1 Minion then #9 Lilis
+
