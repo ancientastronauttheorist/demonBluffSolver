@@ -23910,3 +23910,69 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Asc55 9-card 3-evil, 10HP perfect, Knight check on Shaman, Drunk-as-Bishop, Dreamer was Baa lying about Shaman, FT confirmed evil in 1-2
 
+
+---
+
+# New Game — 2026-04-11 14:08:41
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Confessor, Hunter, Gemcrafter, Oracle, Alchemist
+- Outcasts: Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [14:09:27] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [14:09:27] Revealed #2 Jester
+Info: {}
+
+### [14:09:28] Revealed #3 Bombardier
+Info: {}
+
+### [14:09:28] Revealed #4 Jester
+Info: {}
+
+### [14:09:28] Revealed #5 Gemcrafter
+Info: {'good_position': 4}
+
+### [14:09:28] Revealed #6 Hunter
+Info: {'distance': 2}
+
+### [14:09:28] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [14:09:28] Revealed #8 Oracle
+Info: {'targets': [2, 8], 'minion_role': 'Twin_Minion'}
+
+#### [14:09:33] Solver Output
+Scenarios: 1/56
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [14:09:33] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [14:09:58] Executed #2 -> Twin_Minion (EVIL)
+
+#### [14:09:58] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [14:09:58] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+## [14:10:26] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve
+
+### [14:10:29] Executed #4 -> Pooka (EVIL)
+
+## [14:10:29] GAME OVER — WIN
+Final HP: 10
+Notes: Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve
+

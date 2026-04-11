@@ -2456,6 +2456,20 @@
       "name": "asc55_v3",
       "notes": "Asc55 9-card 3-evil, 10HP perfect, Knight check on Shaman, Drunk-as-Bishop, Dreamer was Baa lying about Shaman, FT confirmed evil in 1-2",
       "date": "2026-04-11 14:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v4",
+      "notes": "Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve",
+      "date": "2026-04-11 14:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v4",
+      "notes": "Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve",
+      "date": "2026-04-11 14:10"
     }
   ]
 }
