@@ -2649,15 +2649,15 @@
     {
       "result": "win",
       "hp": 10,
-      "name": "asc58_v6",
-      "notes": "10HP perfect win, FT targets #1,#2 revealed evil presence -> solver solved to 1 scenario, clean sweep",
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 retry WIN 10HP perfect, FT targets #1,#2 revealed evil -> solver solved to 1 scenario, clean sweep after Bombardier bug loss",
       "date": "2026-04-11 16:31"
     },
     {
       "result": "win",
       "hp": 10,
-      "name": "asc58_v7",
-      "notes": "10HP perfect win, 7-card single demon, PD check on #6 directly revealed #7 as evil",
+      "name": "asc58_v6",
+      "notes": "Asc58 v6 10HP perfect win, 7-card single demon, PD check on #6 directly revealed #7 as evil",
       "date": "2026-04-11 18:01"
     }
   ]
