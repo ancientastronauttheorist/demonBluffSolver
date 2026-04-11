@@ -2505,6 +2505,13 @@
       "name": "asc56_v1",
       "notes": "Asc56 v1 8-card 10HP perfect, Slayer #3 killed Witch #5, Baa #2 confident exec, Witch-blocked #8 was Dreamer",
       "date": "2026-04-11 14:30"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc56_v2",
+      "notes": "Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups",
+      "date": "2026-04-11 14:35"
     }
   ]
 }

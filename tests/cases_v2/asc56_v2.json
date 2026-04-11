@@ -1,0 +1,174 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0,
+        "copied_role": "Lover"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          7
+        ],
+        "types": [
+          "Minion",
+          "Outcast",
+          "Villager"
+        ],
+        "copied_role": "Bishop"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Shaman"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Shaman",
+        "distance": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 9
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8
+      }
+    }
+  ],
+  "executed": [
+    6,
+    8,
+    9
+  ],
+  "confirmed_evil": [
+    8,
+    9
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Pooka",
+    "9": "Shaman"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 7,
+      "is_corrupted": true,
+      "evil_revealed": 9
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "6": false
+  },
+  "deck": {
+    "villagers": [
+      "Gemcrafter",
+      "Enlightened",
+      "Scout",
+      "Dreamer",
+      "Alchemist",
+      "Empress",
+      "Poet"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc56_v2",
+  "true_evil_positions": {
+    "8": "Pooka",
+    "9": "Shaman"
+  },
+  "notes": "Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups"
+}

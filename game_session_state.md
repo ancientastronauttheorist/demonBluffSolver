@@ -24279,3 +24279,104 @@ Reason: #2 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Asc56 v1 8-card 10HP perfect, Slayer #3 killed Witch #5, Baa #2 confident exec, Witch-blocked #8 was Dreamer
 
+
+---
+
+# New Game — 2026-04-11 14:31:42
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Enlightened, Scout, Dreamer, Alchemist, Empress, Poet
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [14:33:08] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [14:33:08] Revealed #2 Empress
+Info: {'targets': [3, 4, 6]}
+
+### [14:33:08] Revealed #7 Scout
+Info: {'evil_role': 'Shaman', 'distance': 2}
+
+### [14:33:08] Revealed #8 Gemcrafter
+Info: {'good_position': 9}
+
+### [14:33:08] Revealed #9 Gemcrafter
+Info: {'good_position': 8}
+
+### [14:33:22] Revealed #3 Poet
+Info: {'evil_adjacent': 0, 'copied_role': 'Lover'}
+
+### [14:33:22] Revealed #4 Poet
+Info: {'targets': [3, 5, 7], 'types': ['Minion', 'Outcast', 'Villager'], 'copied_role': 'Bishop'}
+
+### [14:33:22] Revealed #5 Dreamer
+Info: {}
+
+### [14:33:22] Revealed #6 Plague_Doctor
+Info: {}
+
+#### [14:33:27] Solver Output
+Scenarios: 10/2128
+Definite good: ['#1']
+Evil probabilities: #5=50%, #6=50%, #4=30%, #3=20%, #7=20%, #2=10%, #8=10%, #9=10%
+
+#### [14:33:27] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.722 (adjusted 2.722) | timing x1.00
+
+#### [14:33:55] Solver Output
+Scenarios: 3/2128
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #6=67%, #7=67%, #8=33%, #9=33%
+
+#### [14:33:55] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#1']
+Reason: Entropy 0.918 (adjusted 0.612) | timing x1.00
+WARNING: Corruption risk: 67%
+
+### [14:34:26] Revealed #5 Dreamer
+Info: {'target': 1, 'evil_role': 'Shaman'}
+
+### [14:34:26] Ability used at #5
+
+#### [14:34:27] Solver Output
+Scenarios: 3/2128
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #6=67%, #7=67%, #8=33%, #9=33%
+
+#### [14:34:27] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 33% good Plague_Doctor).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [14:34:33] Executed #6 -> GOOD (WRONG!)
+
+#### [14:34:41] Solver Output
+Scenarios: 1/2016
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [14:34:41] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:34:48] Executed #8 -> Pooka (EVIL)
+
+#### [14:34:52] Solver Output
+Scenarios: 1/252
+Definite evil: ['#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [14:34:52] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:34:59] Executed #9 -> Shaman (EVIL)
+
+## [14:35:07] GAME OVER — WIN
+Final HP: 5
+Notes: Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups
+
