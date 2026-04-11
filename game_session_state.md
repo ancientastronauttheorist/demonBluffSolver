@@ -23701,3 +23701,103 @@ Notes: Asc55 perfect 10HP, 2 confident exec from 1-scenario solve
 Final HP: 10
 Notes: Asc55 perfect 10HP, 2 confident exec from 1-scenario solve
 
+
+---
+
+# New Game — 2026-04-11 13:56:41
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Witness, Bard, Bishop, Baker, Oracle
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Shaman
+- Demons: Baa
+
+### [13:57:59] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [13:57:59] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [13:57:59] Revealed #3 Bishop
+Info: {'targets': [7, 6, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [13:57:59] Revealed #4 Oracle
+Info: {'targets': [1, 8], 'minion_role': 'Shaman'}
+
+### [13:57:59] Revealed #5 Bard
+Info: {'corruption_distance': 1}
+
+### [13:57:59] Revealed #6 Judge
+Info: {}
+
+### [13:57:59] Revealed #7 Baker
+Info: {'original_role': 'Witness'}
+
+### [13:58:20] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [13:58:24] Solver Output
+Scenarios: 10/266
+Definite good: ['#8']
+Evil probabilities: #3=90%, #1=20%, #2=20%, #4=20%, #6=20%, #7=20%, #5=10%
+
+#### [13:58:24] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.122 (adjusted 2.122) | timing x1.00
+
+#### [13:59:00] Solver Output
+Scenarios: 4/266
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=75%, #1=50%, #4=50%, #5=25%
+
+#### [13:59:00] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#1']
+Reason: Expected posterior 3.3 scenarios (adjusted 4.2, info gain 0.000 bits) | timing x1.00
+WARNING: Corruption risk: 50% -- corrupted Judge results are unreliable
+
+### [13:59:25] Revealed #6 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [13:59:29] Ability used at #6
+
+#### [13:59:30] Solver Output
+Scenarios: 4/266
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=75%, #1=50%, #4=50%, #5=25%
+
+#### [13:59:30] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 25% good Bishop (corrupted), 25% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [13:59:36] Executed #3 -> Baa (EVIL)
+
+#### [13:59:42] Solver Output
+Scenarios: 2/37
+Definite evil: ['#3']
+Definite good: ['#2', '#5', '#6', '#7', '#8']
+Evil probabilities: #1=50%, #4=50%
+
+#### [13:59:42] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Bard, 50% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [13:59:49] Executed #1 -> GOOD (WRONG!)
+
+#### [13:59:56] Solver Output
+Scenarios: 1/31
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [13:59:56] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:00:03] Executed #4 -> Shaman (EVIL)
+
+## [14:00:21] GAME OVER — WIN
+Final HP: 5
+Notes: Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7
+

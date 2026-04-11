@@ -2442,6 +2442,13 @@
       "name": "asc55_v1",
       "notes": "Asc55 perfect 10HP, 2 confident exec from 1-scenario solve",
       "date": "2026-04-11 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc55_v2",
+      "notes": "Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7",
+      "date": "2026-04-11 14:00"
     }
   ]
 }
