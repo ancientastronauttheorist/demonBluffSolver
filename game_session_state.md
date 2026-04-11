@@ -24838,3 +24838,65 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: Asc56 v7 final 6HP, ASC56 COMPLETE 7/7, Lilis night-killed Jester #9, Slayer killed Shaman #6, Wretch counted as evil in Jester ability
 
+
+---
+
+# New Game — 2026-04-11 14:56:15
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Architect, Bishop, Alchemist, Oracle, Poet
+- Outcasts: Bombardier, Wretch
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [14:58:20] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [14:58:20] Revealed #2 Oracle
+Info: {'targets': [1, 7], 'minion_role': 'Twin_Minion'}
+
+### [14:58:20] Revealed #3 Bombardier
+Info: {}
+
+### [14:58:20] Revealed #4 Wretch
+Info: {}
+
+### [14:58:20] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [14:58:20] Revealed #6 Bishop
+Info: {'targets': [4, 3, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:58:20] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [14:58:20] Revealed #9 Alchemist
+Info: {'cured_count': 1}
+
+#### [14:58:27] Solver Output
+Scenarios: 2/72
+Definite evil: ['#2', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:58:27] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [14:58:34] Executed #2 -> Lilis (EVIL)
+
+#### [14:58:40] Solver Output
+Scenarios: 1/8
+Definite evil: ['#2', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:58:40] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [14:58:47] Executed #9 -> Twin Minion (EVIL)
+
+## [14:58:57] GAME OVER — WIN
+Final HP: 6
+Notes: Asc57 v1 Lilis 9-card 6HP, night-killed Poet #7 + 4 HP from 2 night phases, both confident exec, #1 needed re-flip
+

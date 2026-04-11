@@ -2547,6 +2547,13 @@
       "name": "asc56_v7",
       "notes": "Asc56 v7 final 6HP, ASC56 COMPLETE 7/7, Lilis night-killed Jester #9, Slayer killed Shaman #6, Wretch counted as evil in Jester ability",
       "date": "2026-04-11 14:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc57_v1",
+      "notes": "Asc57 v1 Lilis 9-card 6HP, night-killed Poet #7 + 4 HP from 2 night phases, both confident exec, #1 needed re-flip",
+      "date": "2026-04-11 14:58"
     }
   ]
 }
