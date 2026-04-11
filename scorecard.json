@@ -2498,6 +2498,13 @@
       "name": "asc55_v7",
       "notes": "Asc55 final 7/7 perfect 10HP, ASC55 COMPLETE, 2 Alchemists on board (pool dup), Wretch survived",
       "date": "2026-04-11 14:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v1",
+      "notes": "Asc56 v1 8-card 10HP perfect, Slayer #3 killed Witch #5, Baa #2 confident exec, Witch-blocked #8 was Dreamer",
+      "date": "2026-04-11 14:30"
     }
   ]
 }

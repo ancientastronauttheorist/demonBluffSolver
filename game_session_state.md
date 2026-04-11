@@ -24216,3 +24216,66 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Asc55 final 7/7 perfect 10HP, ASC55 COMPLETE, 2 Alchemists on board (pool dup), Wretch survived
 
+
+---
+
+# New Game — 2026-04-11 14:28:00
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Dreamer, Bard, Medium, Slayer, Confessor
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Witch
+- Demons: Baa
+
+### [14:28:52] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Slayer'}
+
+### [14:28:52] Revealed #2 Bard
+Info: {'corruption_distance': 2}
+
+### [14:28:52] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [14:28:52] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [14:28:52] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [14:28:58] Revealed #3 Slayer
+Info: {}
+
+### [14:28:58] Revealed #5 Slayer
+Info: {}
+
+#### [14:28:59] Solver Output
+Scenarios: 46/1862
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #5=74%, #2=48%, #1=30%, #3=26%, #6=22%
+
+#### [14:28:59] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#5']
+Reason: Target #5 is 74% evil (adjusted 0.58)
+WARNING: Corruption risk: 22% -- Slayer ability disabled if corrupted
+
+### [14:29:33] Ability used at #3
+
+### [14:30:02] Revealed #8 Dreamer
+Info: {}
+
+#### [14:30:02] Solver Output
+Scenarios: 5/49
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+
+#### [14:30:02] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [14:30:09] Executed #2 -> Baa (EVIL)
+
+## [14:30:29] GAME OVER — WIN
+Final HP: 10
+Notes: Asc56 v1 8-card 10HP perfect, Slayer #3 killed Witch #5, Baa #2 confident exec, Witch-blocked #8 was Dreamer
+
