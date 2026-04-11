@@ -117,6 +117,18 @@ ALIGNMENT = {0: 'None', 10: 'Good', 20: 'Evil'}
 STATE = {0: 'None', 5: 'Hidden', 10: 'Alive', 20: 'Dead', 30: 'Revealed'}
 CHAR_TYPE = {0: 'None', 10: 'Villager', 20: 'Outcast', 30: 'Minion', 100: 'Demon'}
 
+# Displayed roles that NEVER show a passive speech bubble.
+# The game's savedAct field (offset 0x158) persists stale clue strings from a
+# previous village until overwritten. For display roles with no passive clue,
+# the string is always stale — null it out here so print_board and auto_card
+# see a clean input. Matches NO_INFO_ROLES + ACTIVE_ONLY_ROLES in
+# game_loop.py:1078,1312 (kept in sync by comment, not imported).
+NO_PASSIVE_CLUE_DISPLAY_ROLES = {
+    'wretch', 'bombardier', 'knight', 'doppelganger',
+    'dreamer', 'druid', 'fortune teller', 'jester', 'judge',
+    'slayer', 'plague doctor',
+}
+
 # Internal name → display name mapping
 DISPLAY_NAMES = {
     'Juggler': 'Jester',
@@ -539,6 +551,14 @@ class MemoryReader:
             acted_infos = self._read_acted_infos(char_ptr)
             ability_state = self._read_ability_state(char_ptr)
             runtime_data = self._read_runtime_data(char_ptr, true_role)
+
+            # Stale clue filter: for displayed roles with no passive speech bubble,
+            # savedAct is always stale (persists from previous village). Null it
+            # unless the active ability has been used (uses>0 or acted_infos non-empty).
+            display_role_lower = (disguise or true_role or '').lower().replace('_', ' ')
+            is_active_unused = ability_state['uses'] == 0 and not acted_infos
+            if display_role_lower in NO_PASSIVE_CLUE_DISPLAY_ROLES and is_active_unused:
+                saved_act = None
 
             cards.append({
                 'position': card_id,

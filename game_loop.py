@@ -807,7 +807,15 @@ class GameSession:
         return {"success": True, "was_evil": was_evil, "evil_role": evil_role, "error": None}
 
     def auto_next(self):
-        """Solve + auto-execute if definite evil. Returns (action, result, exec_result)."""
+        """Solve + auto-execute for definite-evil OR lookahead-forced-safe picks.
+
+        Gate: (pos in definite_evil) OR (action.forced_safe AND confidence >= 0.20).
+        The forced_safe flag is set by strategy._find_forced_execution when a DFS
+        over all surviving scenarios proves a winning line across all branches at
+        current HP. That IS the safety proof — confidence alone is misleading.
+
+        Returns (action, result, exec_result).
+        """
         state = self.to_game_state()
         result = self._solve(state)
 
@@ -823,18 +831,29 @@ class GameSession:
             return action, result, None
 
         pos = action.position
-        if pos not in result.definite_evil:
-            print(f"\n  [auto_next] #{pos} is NOT definite evil — manual decision needed.")
+        is_forced_safe = getattr(action, 'forced_safe', False)
+        is_definite = pos in result.definite_evil
+        # Belt-and-suspenders: even forced-safe picks need a minimum confidence
+        # floor in case a future strategy bug sets forced_safe=True incorrectly.
+        FORCED_SAFE_FLOOR = 0.20
+        allow_auto = is_definite or (is_forced_safe and action.confidence >= FORCED_SAFE_FLOOR)
+        if not allow_auto:
+            print(f"\n  [auto_next] #{pos} is not auto-executable "
+                  f"(confidence={action.confidence:.0%}, forced_safe={is_forced_safe}) — "
+                  f"manual decision needed.")
             return action, result, None
 
-        if pos in result.bombardier_positions:
-            print(f"\n  [auto_next] #{pos} is potential Bombardier — manual decision needed.")
+        if pos in result.bombardier_positions and not is_forced_safe:
+            print(f"\n  [auto_next] #{pos} is potential Bombardier (not forced-safe) — manual decision needed.")
             return action, result, None
 
-        # Check HP budget — refuse if we can't afford a wrong exec
-        if self.hp <= self.wrong_exec_cost and result.n_surviving > 1:
-            print(f"\n  [auto_next] HP={self.hp} too low for auto-exec (cost={self.wrong_exec_cost}). Manual decision needed.")
-            return action, result, None
+        # HP budget guard: skip for forced_safe picks since lookahead already
+        # budgeted HP across all branches during its DFS. Keep for non-forced
+        # definite_evil picks as defense in depth.
+        if not is_forced_safe:
+            if self.hp <= self.wrong_exec_cost and result.n_surviving > 1:
+                print(f"\n  [auto_next] HP={self.hp} too low for auto-exec (cost={self.wrong_exec_cost}). Manual decision needed.")
+                return action, result, None
 
         # Re-verify board state from memory before clicking
         from memory_reader import MemoryReader
@@ -854,8 +873,11 @@ class GameSession:
             return action, result, None
 
         # All checks passed — auto-execute!
-        print(f"\n  === AUTO-EXECUTING #{pos} (definite evil in all {result.n_surviving} scenarios) ===")
-        exec_result = self.auto_execute(pos, result)
+        if is_definite:
+            print(f"\n  === AUTO-EXECUTING #{pos} (definite evil in all {result.n_surviving} scenarios) ===")
+        else:
+            print(f"\n  === AUTO-EXECUTING #{pos} (FORCED-SAFE, confidence={action.confidence:.0%}, lookahead proved survival across {result.n_surviving} scenarios) ===")
+        exec_result = self.auto_execute(pos, result, forced_safe=is_forced_safe)
 
         if exec_result["success"]:
             if exec_result["was_evil"]:
@@ -864,6 +886,7 @@ class GameSession:
                 print(f"  AUTO-EXEC: #{pos} was GOOD (wrong execution)")
         else:
             print(f"  AUTO-EXEC FAILED: {exec_result['error']}")
+            print(f"  [RECOVERY] Re-run 'next --plan' to see state. Use 'execute {pos}' for manual bookkeeping if the click actually landed.")
 
         print(f"  ({result.n_surviving} surviving scenarios)")
         return action, result, exec_result
@@ -1087,15 +1110,17 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     if rd and rd.get('type') == 'direction':
         return card_enlightened(pos, rd['direction'])
 
-    # --- Alchemist: prefer clue_text over runtime_data ---
+    # --- Alchemist: prefer clue_text (works for Drunk-as-Alchemist too) ---
     # Runtime cures field is the TRUE count, but the card DISPLAYS a possibly
     # different number (corrupted Alchemist lies). Solver needs displayed value.
-    if rd and rd.get('type') == 'cures':
-        # Try clue text first ("I cured N Corruption(s)")
+    # Key off apparent role so Drunk-disguised-as-Alchemist still parses (Drunk
+    # has no 'cures' runtime_data since _read_runtime_data dispatches on TRUE role).
+    if role_lower == 'alchemist':
         m = re.search(r'cured\s+(\d+)', clue, re.IGNORECASE)
         if m:
             return card_alchemist(pos, int(m.group(1)))
-        return card_alchemist(pos, rd['cures'] or 0)
+        if rd and rd.get('type') == 'cures':
+            return card_alchemist(pos, rd['cures'] or 0)
 
     # --- Baker: prefer clue_text over runtime_data ---
     # Runtime original_role can mismatch displayed text (e.g., Shaman games,
@@ -1429,6 +1454,48 @@ def _parse_true_evils(raw: str) -> dict[int, str]:
     return result
 
 
+def _validate_true_evils_against_session(true_evils: dict, session) -> tuple:
+    """Validate that the evils-dict passed to game_over is consistent with session state.
+
+    Rules:
+      1. Every position must be dead (in executed OR night_kills).
+      2. If a position is night-killed, the claimed role must be one of the deck's
+         evil roles (minions + demons). Lilis CAN kill evils (asc33_v5.json proves
+         this), but a night-killed GOOD card (e.g. a lilis-killed Bard) should never
+         appear in the evils dict — that's the asc54_v4 bug.
+
+    Returns (cleaned_dict, errors). If errors is non-empty, caller must refuse save.
+    """
+    errors = []
+    dead = set(session.executed) | set(session.night_kills)
+    nk_set = set(session.night_kills)
+
+    def _normalize(r: str) -> str:
+        return r.lower().replace("_", " ").replace("-", " ").strip()
+
+    evil_roles_normalized = {
+        _normalize(r) for r in (list(session.minions) + list(session.demons))
+    }
+
+    for pos, role in true_evils.items():
+        if pos not in dead:
+            errors.append(
+                f"ERROR: #{pos} is not dead (not in executed or night_kills) — "
+                f"true_evil_positions must only contain dead positions"
+            )
+            continue
+        if pos in nk_set:
+            if _normalize(role) not in evil_roles_normalized:
+                errors.append(
+                    f"ERROR: #{pos} ({role}) is night-killed but '{role}' is not in this "
+                    f"deck's evil list {sorted(evil_roles_normalized)} — either the card "
+                    f"was good (omit from evils) or the role name is wrong"
+                )
+    if errors:
+        return ({}, errors)
+    return (true_evils, [])
+
+
 def _cmd_read_deck(screenshot_path: str):
     """Read deck using both card_vision and memory_reader, cross-check results."""
     import subprocess
@@ -1553,8 +1620,8 @@ def main():
         print("  status                                Print session state")
         print("  confirm_evil <pos>                    Mark position as confirmed evil")
         print("  confirm_good <pos>                    Mark position as confirmed good")
-        print("  next                                  Full strategy recommendation")
-        print("  auto_next                             Solve + auto-execute if definite evil")
+        print("  next [--plan]                         Solve + auto-execute if safe (definite OR forced-safe). --plan for print-only.")
+        print("  auto_next                             Alias for `next` (auto-execute path)")
         print("  ability_used <pos>                    Mark ability as activated")
         print("  slayer_result <pos> <target> kill/fail [evil_role]  Slayer ability result")
         print("  block <pos>                           Mark position as blocked (Witch)")
@@ -2064,19 +2131,25 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         try:
                             from memory_reader import MemoryReader
                             reader = MemoryReader()
-                            cards = reader.read_board()
-                            if cards:
-                                target_char = next((c for c in cards if c.get('position') == pos), None)
-                                if target_char:
-                                    statuses = target_char.get('statuses', [])
-                                    if 'Corrupted' in statuses:
-                                        was_corrupted = True
-                                        print(f"  Auto-detected #{pos} CORRUPTED from memory reader")
-                                    else:
-                                        was_corrupted = False
-                                        print(f"  Auto-detected #{pos} NOT corrupted from memory reader")
+                            if reader.open():
+                                try:
+                                    cards = reader.read_board()
+                                    if cards:
+                                        target_char = next((c for c in cards if c.get('position') == pos), None)
+                                        if target_char:
+                                            statuses = target_char.get('statuses', [])
+                                            if 'Corrupted' in statuses:
+                                                was_corrupted = True
+                                                print(f"  Auto-detected #{pos} CORRUPTED from memory reader")
+                                            else:
+                                                was_corrupted = False
+                                                print(f"  Auto-detected #{pos} NOT corrupted from memory reader")
+                                finally:
+                                    reader.close()
+                            else:
+                                print(f"  WARNING: Could not open memory reader for corruption check")
                         except Exception as e:
-                            print(f"  WARNING: Memory reader unavailable ({e})")
+                            print(f"  WARNING: Memory reader error ({e})")
                         if was_corrupted is None:
                             print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
             else:
@@ -2193,10 +2266,17 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         return None
 
     if cmd == "next":
-        session.next_action()
+        # Default: auto-execute where safe (definite evil OR forced-safe forced_safe).
+        # Use `next --plan` or `next --dry` for print-only inspection mode.
+        dry_run = "--plan" in args or "--dry" in args
+        if dry_run:
+            session.next_action()
+        else:
+            session.auto_next()
         return None
 
     if cmd == "auto_next":
+        # Explicit alias for `next` (preserved for muscle memory).
         session.auto_next()
         return None
 
@@ -2264,11 +2344,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "night_kill":
         positions = [int(x) for x in args[0].split(",")]
         n_evil = int(args[1])
+        # Night kills go in session.night_kills only; executed is for day executions.
+        # Readers (lines 645, 1858, 1887, 1977, 2293) union the two sets.
         session.night_kills.extend(positions)
         session.night_kill_evil_count += n_evil
         for p in positions:
-            if p not in session.executed:
-                session.executed.append(p)
             # Issue #8: Remove killed positions from blocked_positions (Witch+Lilis interaction)
             if p in session.blocked_positions:
                 session.blocked_positions.remove(p)
@@ -2290,7 +2370,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
     if cmd == "night_no_kill":
         revealed = {c.position for c in session.cards}
-        dead = set(session.executed)
+        dead = set(session.executed) | set(session.night_kills)
         all_positions = set(range(1, session.n_cards + 1))
         unrevealed = all_positions - revealed - dead
         # Issue #7: Auto-deduct 2 HP for Lilis night
@@ -2347,8 +2427,18 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                             if m:
                                 auto_evils[int(m.group(1))] = m.group(2)
                     if auto_evils:
-                        true_evils_str = ",".join(f"{p}={r}" for p, r in sorted(auto_evils.items()))
-                        print(f"[game_over] Auto-detected true evils from memory: {true_evils_str}")
+                        # Validate auto-detected evils against session state before accepting
+                        _auto_cleaned, _auto_errors = _validate_true_evils_against_session(
+                            auto_evils, session
+                        )
+                        if _auto_errors:
+                            print("[game_over] Auto-detected evils failed validation:")
+                            for err in _auto_errors:
+                                print(f"  {err}")
+                            print("[game_over] Falling back to manual evils entry.")
+                        else:
+                            true_evils_str = ",".join(f"{p}={r}" for p, r in sorted(auto_evils.items()))
+                            print(f"[game_over] Auto-detected true evils from memory: {true_evils_str}")
                     else:
                         print("[game_over] Could not auto-detect evils from memory reader")
             except Exception as e:
@@ -2362,7 +2452,19 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
         if test_name and true_evils_str:
             true_evils = _parse_true_evils(true_evils_str)
-            _save_and_run_test(test_name, true_evils, notes)
+            cleaned, errors = _validate_true_evils_against_session(true_evils, session)
+            if errors:
+                print("\n[game_over] Refusing to save test case — validation failed:")
+                for err in errors:
+                    print(f"  {err}")
+                print(f"\n  Re-run: game_over {result} {test_name} <corrected-evils-dict> [notes]")
+                print("  NOTE: scorecard and decision log already recorded; only the test")
+                print("  case save was aborted. Re-run game_over with corrected evils to")
+                print("  save the test case.")
+                print("\n=== POST-GAME CHECKLIST ===")
+                print("  [ ] Fix evils dict and re-run game_over")
+                return None
+            _save_and_run_test(test_name, cleaned, notes)
             print("\n--- Full v2 regression (Rust) ---")
             import subprocess as _sp
             try:
@@ -2373,6 +2475,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         print(f"  {line.strip()}")
                 if reg.returncode != 0:
                     print("  WARNING: Regression failures detected! Fix before next game.")
+                    # Surface the last ~20 stderr lines so failure details are
+                    # visible without rerunning cargo manually.
+                    stderr_tail = (reg.stderr or '').splitlines()[-20:]
+                    if stderr_tail:
+                        print("  --- cargo stderr tail ---")
+                        for line in stderr_tail:
+                            print(f"    {line}")
             except _sp.TimeoutExpired:
                 print("  WARNING: cargo test timed out (120s). Run manually.")
         elif not test_name:
@@ -2397,7 +2506,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 true_evils = {int(k): v for k, v in ast.literal_eval(raw).items()}
             else:
                 true_evils = _parse_true_evils(raw)
-        _save_and_run_test(name, true_evils)
+        cleaned, errors = _validate_true_evils_against_session(true_evils, session)
+        if errors:
+            print("\n[save_test] Refusing to save — validation failed:")
+            for err in errors:
+                print(f"  {err}")
+            return None
+        _save_and_run_test(name, cleaned)
         return None
 
     if cmd == "screenshot":

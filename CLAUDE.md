@@ -116,5 +116,11 @@ Every screenshot, memory reader reads state and compares against what the screen
 - Python bridge: `rust_solver.py` wraps the CLI binary via subprocess.
 - Game loop, strategy, screenshots, memory reader, card vision remain Python.
 
+## Gotchas (working correctly but surprising)
+- **Doppelganger counts in nv, not no (header)**: When Doppelganger is on the board, the top-right header shows it in the villager count, not the outcast count. Solver handles this correctly via `n_disguisers` allowance (`solver.py:828-832`, `crates/solver-core/src/validators/mod.rs:829-902`). Confirmed asc28_v7, asc29_v4, asc54_v7. Do NOT try to "correct" the header — enter `no=` as displayed.
+- **Two Bakers from a single-Baker pool** (no Shaman): Baker conversion chain can activate at game start, producing an "original Baker" + one or more "I was a <Role>" Bakers. Deck pool has 1 Baker; board shows 2. Solver's Baker validator (`crates/solver-core/src/validators/mod.rs:688-988`) handles this; chain ordering is enforced via reveal_order. Confirmed asc54_v5.
+- **Drunk counts as Villager in header**: `board_outcast_count` may undercount when Drunk is on board. Solver's `n_disguisers` allowance handles this too.
+- **next command auto-executes by default**: `next` now runs `auto_next` (auto-exec for definite-evil OR lookahead forced-safe picks with confidence ≥ 20%). Use `next --plan` or `next --dry` for print-only inspection. Honor Rule compliant: solver's top pick is always executed where safe.
+
 ## Game Overview
 Puzzle/deduction game. Circle of face-down cards -- reveal for role info, deduce Evil, execute them. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.
