@@ -24472,3 +24472,79 @@ Reason: #4 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: Asc56 v3 8-card 10HP perfect, Doppelganger copied Empress, Poet copied Gemcrafter, FT lying (was Pooka), Jester corrupted lying
 
+
+---
+
+# New Game — 2026-04-11 14:40:40
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Gemcrafter, Confessor, Jester, Architect, Lover, Oracle
+- Outcasts: Wretch, Bombardier
+- Minions: Shaman, Witch
+- Demons: Baa
+
+### [14:41:23] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [14:41:23] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [14:41:23] Revealed #3 Bombardier
+Info: {}
+
+### [14:41:23] Revealed #5 Bishop
+Info: {'targets': [7, 2, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:41:23] Revealed #6 Gemcrafter
+Info: {'good_position': 2}
+
+### [14:41:23] Revealed #7 Architect
+Info: {'side': 'Equal'}
+
+### [14:41:23] Revealed #8 Bishop
+Info: {'targets': [2, 4, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:41:32] Revealed #4 Jester
+Info: {}
+
+#### [14:41:33] Solver Output
+Scenarios: 4/504
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:41:33] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Witch', 'Shaman'})
+
+### [14:41:40] Executed #2 -> Witch (EVIL)
+
+### [14:42:12] Revealed #9 Oracle
+Info: {'targets': [3, 4], 'minion_role': 'Witch'}
+
+#### [14:42:13] Solver Output
+Scenarios: 2/56
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:42:13] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa', 'Shaman'})
+
+### [14:42:19] Executed #6 -> Baa (EVIL)
+
+#### [14:42:26] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:42:26] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:42:33] Executed #9 -> Shaman (EVIL)
+
+## [14:42:41] GAME OVER — WIN
+Final HP: 10
+Notes: Asc56 v4 9-card 10HP perfect, Witch unblocked #9, Oracle (Shaman) lied about dead Witch, Bishop dup, all 3 confident exec
+

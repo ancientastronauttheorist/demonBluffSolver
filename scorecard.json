@@ -2519,6 +2519,13 @@
       "name": "asc56_v3",
       "notes": "Asc56 v3 8-card 10HP perfect, Doppelganger copied Empress, Poet copied Gemcrafter, FT lying (was Pooka), Jester corrupted lying",
       "date": "2026-04-11 14:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v4",
+      "notes": "Asc56 v4 9-card 10HP perfect, Witch unblocked #9, Oracle (Shaman) lied about dead Witch, Bishop dup, all 3 confident exec",
+      "date": "2026-04-11 14:42"
     }
   ]
 }
