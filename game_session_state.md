@@ -26154,3 +26154,60 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect win, FT targets #1,#2 revealed evil presence -> solver solved to 1 scenario, clean sweep
 
+
+---
+
+# New Game — 2026-04-11 17:58:25
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Bard, Bishop, Medium, Druid, Judge
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [17:59:37] Revealed #1 Bard
+Info: {'corruption_distance': 1}
+
+### [17:59:37] Revealed #2 Bishop
+Info: {'targets': [7, 3, 6], 'types': ['Villager', 'Outcast', 'Demon']}
+
+### [17:59:37] Revealed #4 Judge
+Info: {}
+
+### [17:59:37] Revealed #5 Medium
+Info: {'good_position': 1, 'good_role': 'Bard'}
+
+### [17:59:37] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+### [17:59:46] Revealed #3 Plague_Doctor
+Info: {}
+
+### [17:59:46] Revealed #6 Druid
+Info: {}
+
+#### [17:59:50] Solver Output
+Scenarios: 6/31
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+Evil probabilities: #2=50%, #7=50%
+
+#### [17:59:50] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.459 (adjusted 1.459) | timing x1.00
+
+#### [18:01:09] Solver Output
+Scenarios: 3/31
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [18:01:09] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [18:01:16] Executed #7 -> Pooka (EVIL)
+
+## [18:01:42] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect win, 7-card single demon, PD check on #6 directly revealed #7 as evil
+
