@@ -2603,6 +2603,13 @@
       "name": "asc57_v7",
       "notes": "Asc57 v7 final 8-card 10HP perfect, ASC57 COMPLETE 7/7, Knight check on Pooka #6 worked, Twin Minion #3 confident exec",
       "date": "2026-04-11 15:28"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc58_v1",
+      "notes": "Asc58 v1 Lilis 9-card 6HP, night-killed Enlightened #8 + 4HP, #1 reflip needed, PD probe locked Lilis #6, all 3 evils sequential",
+      "date": "2026-04-11 15:34"
     }
   ]
 }

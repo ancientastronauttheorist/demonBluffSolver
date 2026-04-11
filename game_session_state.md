@@ -25525,3 +25525,88 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: Asc57 v7 final 8-card 10HP perfect, ASC57 COMPLETE 7/7, Knight check on Pooka #6 worked, Twin Minion #3 confident exec
 
+
+---
+
+# New Game — 2026-04-11 15:30:54
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Scout, Knight, Enlightened, Medium, Hunter, Bard
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Poisoner, Minion
+- Demons: Lilis
+
+### [15:32:47] Revealed #1 Knight
+Info: {}
+
+### [15:32:47] Revealed #2 Hunter
+Info: {'distance': 4}
+
+### [15:32:47] Revealed #3 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [15:32:47] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:32:47] Revealed #5 Bard
+Info: {'corruption_distance': 1}
+
+### [15:32:47] Revealed #6 Medium
+Info: {'good_position': 9, 'good_role': 'Bombardier'}
+
+### [15:32:47] Revealed #9 Bombardier
+Info: {}
+
+### [15:32:55] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [15:32:56] Solver Output
+Scenarios: 14/2586
+Definite good: ['#5', '#8']
+Evil probabilities: #2=86%, #9=86%, #6=50%, #3=36%, #1=21%, #7=14%, #4=7%
+
+#### [15:32:56] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.353 (adjusted 2.353) | timing x1.00
+
+#### [15:33:34] Solver Output
+Scenarios: 9/2586
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #2=89%, #6=78%, #9=78%, #3=22%, #7=22%, #1=11%
+
+#### [15:33:34] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (44% evil Minion, 22% evil Lilis, 22% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 89%, but all reveal branches still lead to a forced win.
+
+### [15:33:41] Executed #2 -> Minion (EVIL)
+
+#### [15:33:48] Solver Output
+Scenarios: 4/308
+Definite evil: ['#2']
+Definite good: ['#1', '#4', '#5', '#8']
+Evil probabilities: #6=75%, #9=75%, #3=25%, #7=25%
+
+#### [15:33:48] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% evil Lilis, 25% good Medium, 25% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [15:33:54] Executed #6 -> Lilis (EVIL)
+
+#### [15:34:01] Solver Output
+Scenarios: 2/43
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [15:34:01] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [15:34:08] Executed #9 -> Poisoner (EVIL)
+
+## [15:34:17] GAME OVER — WIN
+Final HP: 6
+Notes: Asc58 v1 Lilis 9-card 6HP, night-killed Enlightened #8 + 4HP, #1 reflip needed, PD probe locked Lilis #6, all 3 evils sequential
+
