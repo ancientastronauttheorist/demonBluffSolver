@@ -1505,6 +1505,19 @@ def recommend_action(
         best_pos = sorted_candidates[0]
         best_prob = active_probs[best_pos]
 
+        # Bombardier-disguise override: if every non-Bombardier candidate is 0%
+        # evil but a Bombardier candidate has a non-zero evil probability, the
+        # remaining evil MUST be a Bombardier disguise. Picking 0% non-Bombardier
+        # is a guaranteed wrong execution; picking the Bombardier candidate is
+        # the only winning move. (asc58_v5 lesson — solver picked 0%-evil #1
+        # then #3 instead of Witch-disguised-as-Bombardier #8, losing to HP=0.)
+        if best_prob == 0.0 and bombardier_candidates:
+            best_bomb_pos = max(bombardier_candidates, key=bombardier_candidates.get)
+            best_bomb_prob = bombardier_candidates[best_bomb_pos]
+            if best_bomb_prob > 0.0:
+                best_pos = best_bomb_pos
+                best_prob = best_bomb_prob
+
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
         witch_blocked = (not reveal_rec and _witch_might_be_alive(state, result)
