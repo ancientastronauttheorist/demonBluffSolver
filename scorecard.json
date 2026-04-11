@@ -2617,6 +2617,13 @@
       "name": "asc58_v2",
       "notes": "Asc58 v2 10-card 10HP perfect, Knight check on Minion #9 (no immunity), then PD probe found Pooka #3 + Shaman #4",
       "date": "2026-04-11 15:38"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v3",
+      "notes": "Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final",
+      "date": "2026-04-11 15:44"
     }
   ]
 }

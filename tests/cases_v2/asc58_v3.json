@@ -1,0 +1,153 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Medium"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7,
+        "good_role": "Druid"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    4
+  ],
+  "confirmed_evil": [
+    7,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Pooka",
+    "4": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Hunter",
+      "Architect",
+      "Druid",
+      "Fortune_Teller",
+      "Baker",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    4,
+    5,
+    7
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc58_v3",
+  "true_evil_positions": {
+    "4": "Minion",
+    "7": "Pooka"
+  },
+  "notes": "Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final"
+}

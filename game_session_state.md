@@ -25700,3 +25700,113 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 10
 Notes: Asc58 v2 10-card 10HP perfect, Knight check on Minion #9 (no immunity), then PD probe found Pooka #3 + Shaman #4
 
+
+---
+
+# New Game — 2026-04-11 15:40:29
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Hunter, Architect, Druid, Fortune_Teller, Baker, Confessor
+- Outcasts: Drunk
+- Minions: Minion
+- Demons: Pooka
+
+### [15:40:52] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [15:40:52] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [15:40:52] Revealed #3 Architect
+Info: {'side': 'Left'}
+
+### [15:40:52] Revealed #6 Baker
+Info: {'original_role': 'Medium'}
+
+### [15:40:52] Revealed #8 Medium
+Info: {'good_position': 7, 'good_role': 'Druid'}
+
+### [15:41:10] Revealed #4 Druid
+Info: {}
+
+### [15:41:10] Revealed #5 Fortune_Teller
+Info: {}
+
+### [15:41:10] Revealed #7 Druid
+Info: {}
+
+#### [15:41:11] Solver Output
+Scenarios: 30/336
+Definite good: ['#2']
+Evil probabilities: #7=57%, #6=37%, #5=33%, #3=30%, #4=23%, #1=10%, #8=10%
+
+#### [15:41:11] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.997 (adjusted 0.847) | timing x1.00
+WARNING: Corruption risk: 30%
+
+### [15:42:38] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+### [15:42:38] Ability used at #4
+
+#### [15:42:38] Solver Output
+Scenarios: 15/336
+Definite good: ['#2']
+Evil probabilities: #7=53%, #3=33%, #4=33%, #5=33%, #6=27%, #1=13%, #8=7%
+
+#### [15:42:38] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.997 (adjusted 0.831) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [15:43:01] Revealed #5 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [15:43:01] Ability used at #5
+
+#### [15:43:01] Solver Output
+Scenarios: 7/336
+Definite good: ['#2', '#5']
+Evil probabilities: #7=71%, #4=43%, #1=29%, #6=29%, #3=14%, #8=14%
+
+#### [15:43:01] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.592 (adjusted 0.549) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [15:43:35] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+### [15:43:35] Ability used at #7
+
+#### [15:43:35] Solver Output
+Scenarios: 4/336
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#8']
+Evil probabilities: #4=50%, #3=25%, #6=25%
+
+#### [15:43:35] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+### [15:43:42] Executed #7 -> Pooka (EVIL)
+
+#### [15:43:50] Solver Output
+Scenarios: 4/42
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#5', '#8']
+Evil probabilities: #4=50%, #3=25%, #6=25%
+
+#### [15:43:50] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:43:57] Executed #4 -> Minion (EVIL)
+
+## [15:44:07] GAME OVER — WIN
+Final HP: 10
+Notes: Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final
+
