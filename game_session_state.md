@@ -26273,3 +26273,99 @@ Reason: #9 is evil in ALL 6 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: 6HP ASC58 COMPLETE 7/7, Lilis + Bombardier + Doppelganger + Minion, 2 night kills 4HP, solver locked definite #1 Minion then #9 Lilis
 
+
+---
+
+# New Game — 2026-04-12 11:15:44
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Oracle, Knight, Fortune_Teller, Empress, Gemcrafter
+- Outcasts: Bombardier, Wretch, Plague_Doctor
+- Minions: Witch, Puppeteer
+- Demons: Baa
+
+### [11:17:06] Revealed #1 Empress
+Info: {'targets': [4, 7, 9]}
+
+### [11:17:06] Revealed #2 Oracle
+Info: {'targets': [1, 9], 'minion_role': 'Puppeteer'}
+
+### [11:17:06] Revealed #3 Wretch
+Info: {}
+
+### [11:17:06] Revealed #4 Fortune_Teller
+Info: {}
+
+### [11:17:06] Revealed #5 Plague_Doctor
+Info: {}
+
+### [11:17:06] Revealed #6 Gemcrafter
+Info: {'good_position': 1}
+
+### [11:17:06] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [11:17:06] Revealed #8 Fortune_Teller
+Info: {}
+
+#### [11:18:30] Solver Output
+Scenarios: 28/2032
+Definite good: ['#1']
+Evil probabilities: #2=86%, #3=86%, #7=86%, #8=86%, #4=29%, #5=14%, #6=7%, #9=7%
+
+#### [11:18:30] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.698 (adjusted 1.698) | timing x1.00
+
+### [11:19:31] Ability used at #5
+
+#### [11:19:34] Solver Output
+Scenarios: 6/2032
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#4', '#6']
+Evil probabilities: #2=67%, #5=67%, #3=33%, #9=33%
+
+#### [11:19:34] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Baa', 'Puppet', 'Puppeteer', 'Witch'})
+
+### [11:19:41] Executed #7 -> Puppet (EVIL)
+
+#### [11:19:47] Solver Output
+Scenarios: 2/284
+Definite evil: ['#2', '#5', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+
+#### [11:19:47] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Baa', 'Witch'})
+
+### [11:19:54] Executed #2 -> Baa (EVIL)
+
+#### [11:19:57] Solver Output
+Scenarios: 1/44
+Definite evil: ['#2', '#5', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+
+#### [11:19:57] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [11:20:04] Executed #5 -> Witch (EVIL)
+
+#### [11:20:09] Solver Output
+Scenarios: 1/2
+Definite evil: ['#2', '#5', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#6', '#9']
+
+#### [11:20:09] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [11:21:03] Executed #8 -> Puppeteer (EVIL)
+
+## [11:21:08] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD check on #1 revealed corruption, all 4 evils definite
+

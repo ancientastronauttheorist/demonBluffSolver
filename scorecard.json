@@ -2666,6 +2666,13 @@
       "name": "asc58_v7",
       "notes": "6HP ASC58 COMPLETE 7/7, Lilis + Bombardier + Doppelganger + Minion, 2 night kills 4HP, solver locked definite #1 Minion then #9 Lilis",
       "date": "2026-04-11 18:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v1",
+      "notes": "10HP perfect, PD check on #1 revealed corruption, all 4 evils definite",
+      "date": "2026-04-12 11:21"
     }
   ]
 }
