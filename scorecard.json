@@ -2673,6 +2673,13 @@
       "name": "asc59_v1",
       "notes": "10HP perfect, PD check on #1 revealed corruption, all 4 evils definite",
       "date": "2026-04-12 11:21"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc59_v2",
+      "notes": "6HP, Lilis game, all definite evils",
+      "date": "2026-04-12 11:28"
     }
   ]
 }

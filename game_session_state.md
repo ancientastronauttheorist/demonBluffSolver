@@ -26369,3 +26369,67 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
 Final HP: 10
 Notes: 10HP perfect, PD check on #1 revealed corruption, all 4 evils definite
 
+
+---
+
+# New Game — 2026-04-12 11:23:19
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Lover, Knight, Druid, Jester, Confessor
+- Outcasts: Wretch, Doppelganger
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [11:26:52] Revealed #1 Knight
+Info: {}
+
+### [11:26:52] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [11:26:52] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [11:26:52] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:26:52] Revealed #8 Bishop
+Info: {'targets': [4, 5, 9], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:26:52] Revealed #9 Wretch
+Info: {}
+
+### [11:27:15] Revealed #6 Druid
+Info: {}
+
+### [11:27:19] Revealed #7 Jester
+Info: {}
+
+#### [11:27:23] Solver Output
+Scenarios: 74/1036
+Definite evil: ['#2', '#3']
+Definite good: ['#5']
+Evil probabilities: #1=27%, #6=14%, #7=14%, #9=14%, #8=11%, #4=5%
+
+#### [11:27:23] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 74 scenarios (roles: {'Lilis', 'Puppet', 'Puppeteer'})
+
+### [11:27:30] Executed #2 -> Lilis (EVIL)
+
+#### [11:27:36] Solver Output
+Scenarios: 10/117
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #4=40%
+
+#### [11:27:36] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 10 scenarios (roles: {'Puppeteer'})
+
+### [11:27:42] Executed #3 -> Puppeteer (EVIL)
+
+## [11:28:02] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, all definite evils
+
