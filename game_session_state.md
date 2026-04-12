@@ -29785,3 +29785,165 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 5
 Notes: 5HP, Slayer+Dreamer+FT+Druid, all abilities used
 
+
+---
+
+# New Game — 2026-04-12 15:23:46
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Enlightened, Slayer, Druid, Lover, Confessor
+- Outcasts: Bombardier, Wretch, Drunk
+- Minions: Chancellor, Puppeteer
+- Demons: Baa
+
+### [15:24:02] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:24:02] Revealed #3 Wretch
+Info: {}
+
+### [15:24:02] Revealed #4 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [15:24:13] Revealed #2 Judge
+Info: {}
+
+### [15:24:13] Revealed #5 Slayer
+Info: {}
+
+### [15:24:13] Revealed #6 Judge
+Info: {}
+
+### [15:24:14] Revealed #7 Judge
+Info: {}
+
+### [15:24:14] Revealed #8 Judge
+Info: {}
+
+### [15:24:14] Revealed #9 Druid
+Info: {}
+
+#### [15:24:14] Solver Output
+Scenarios: 690/3880
+Evil probabilities: #7=65%, #6=56%, #8=55%, #5=49%, #2=44%, #1=39%, #4=37%, #9=29%, #3=27%
+
+#### [15:24:14] Recommendation
+Action: **USE_ABILITY** #9 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.966 (adjusted 0.883) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [15:24:56] Revealed #9 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:24:56] Ability used at #9
+
+#### [15:24:57] Solver Output
+Scenarios: 360/3880
+Evil probabilities: #7=60%, #2=60%, #8=53%, #6=52%, #1=42%, #5=42%, #4=38%, #3=29%, #9=24%
+
+#### [15:24:57] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#5']
+Reason: Expected posterior 201.1 scenarios (adjusted 212.9, info gain 0.758 bits) | timing x1.00
+WARNING: Corruption risk: 12% -- corrupted Judge results are unreliable
+
+### [15:25:47] Revealed #2 Judge
+Info: {'target': 5, 'is_lying': True}
+
+### [15:25:47] Ability used at #2
+
+#### [15:25:48] Solver Output
+Scenarios: 196/3880
+Evil probabilities: #7=61%, #2=57%, #6=53%, #8=52%, #5=43%, #1=39%, #4=35%, #9=34%, #3=26%
+
+#### [15:25:48] Recommendation
+Action: **USE_ABILITY** #7 (Judge) -> targets ['#9']
+Reason: Expected posterior 109.5 scenarios (adjusted 115.9, info gain 0.758 bits) | timing x1.00
+WARNING: Corruption risk: 12% -- corrupted Judge results are unreliable
+
+### [15:26:53] Revealed #7 Judge
+Info: {'target': 9, 'is_lying': True}
+
+### [15:26:54] Ability used at #7
+
+#### [15:26:54] Solver Output
+Scenarios: 110/3880
+Evil probabilities: #7=66%, #2=57%, #5=50%, #6=50%, #8=49%, #1=38%, #4=34%, #9=32%, #3=24%
+
+#### [15:26:54] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#3']
+Reason: Expected posterior 63.0 scenarios (adjusted 67.6, info gain 0.702 bits) | timing x1.00
+WARNING: Corruption risk: 15% -- corrupted Judge results are unreliable
+
+### [15:27:37] Revealed #6 Judge
+Info: {'target': 3, 'is_lying': True}
+
+### [15:27:37] Ability used at #6
+
+#### [15:27:37] Solver Output
+Scenarios: 64/3880
+Evil probabilities: #2=66%, #7=66%, #5=56%, #6=50%, #8=45%, #3=34%, #9=33%, #4=27%, #1=23%
+
+#### [15:27:37] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#7']
+Reason: Expected posterior 35.3 scenarios (adjusted 36.9, info gain 0.794 bits) | timing x1.00
+WARNING: Corruption risk: 9% -- corrupted Judge results are unreliable
+
+### [15:28:43] Revealed #8 Judge
+Info: {'target': 7, 'is_lying': False}
+
+### [15:28:43] Ability used at #8
+
+#### [15:28:43] Solver Output
+Scenarios: 32/3880
+Definite good: ['#1']
+Evil probabilities: #5=81%, #6=66%, #9=59%, #8=53%, #2=50%, #7=47%, #3=25%, #4=19%
+
+#### [15:28:43] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#6']
+Reason: Target #6 is 66% evil (adjusted 0.66)
+
+### [15:29:34] Ability used at #5
+
+#### [15:29:34] Solver Output
+Scenarios: 11/476
+Definite evil: ['#6']
+Definite good: ['#1', '#3']
+Evil probabilities: #2=73%, #5=73%, #9=55%, #7=45%, #4=27%, #8=27%
+
+#### [15:29:34] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (45% evil Baa, 27% evil Chancellor, 27% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 73%, but all reveal branches still lead to a forced win.
+
+### [15:29:41] Executed #2 -> Chancellor (EVIL)
+
+#### [15:29:50] Solver Output
+Scenarios: 3/50
+Definite evil: ['#2', '#5', '#6']
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #7=33%, #8=33%, #9=33%
+
+#### [15:29:50] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppet'})
+
+### [15:29:57] Executed #5 -> Puppet (EVIL)
+
+#### [15:30:05] Solver Output
+Scenarios: 3/25
+Definite evil: ['#2', '#5', '#6']
+Definite good: ['#1', '#3', '#4']
+Evil probabilities: #7=33%, #8=33%, #9=33%
+
+#### [15:30:05] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (33% evil Baa, 33% good Drunk (corrupted), 33% good Judge).
+WARNING: Execution lookahead override -- immediate hit chance is 33%, but all reveal branches still lead to a forced win.
+
+### [15:30:12] Executed #7 -> Baa (EVIL)
+
+## [15:30:25] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 4 Judges + Slayer + Druid, massive ability game
+
