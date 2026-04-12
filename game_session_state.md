@@ -28781,3 +28781,86 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, both definite
 
+
+---
+
+# New Game — 2026-04-12 14:38:33
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Judge, Lover, Hunter, Scout
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Shaman
+- Demons: Baa
+
+### [14:38:47] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [14:38:47] Revealed #2 Bombardier
+Info: {}
+
+### [14:38:47] Revealed #3 Knight
+Info: {}
+
+### [14:38:47] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [14:38:47] Revealed #5 Hunter
+Info: {'distance': 1}
+
+#### [14:38:47] Solver Output
+Scenarios: 22/194
+Evil probabilities: #6=55%, #1=36%, #2=36%, #5=27%, #7=27%, #3=9%, #4=9%
+
+#### [14:38:47] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight check: #3 is 9% evil, 18% corruption risk. Expected HP cost: 1.5 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 18% -- corrupted Knight loses immunity + 4 extra damage
+
+### [14:38:58] Revealed #6 Judge
+Info: {}
+
+### [14:38:58] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [14:38:58] Solver Output
+Scenarios: 6/142
+Definite evil: ['#6']
+Definite good: ['#1', '#3', '#4', '#5']
+Evil probabilities: #2=67%, #7=33%
+
+#### [14:38:58] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa', 'Shaman'})
+
+### [14:39:24] Ability used at #6
+
+### [14:39:40] Executed #6 -> Baa (EVIL)
+
+#### [14:39:40] Solver Output
+Scenarios: 3/22
+Definite evil: ['#6']
+Definite good: ['#1', '#3', '#4', '#5']
+Evil probabilities: #2=67%, #7=33%
+
+#### [14:39:40] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [14:40:23] Ability used at #7
+
+#### [14:40:23] Solver Output
+Scenarios: 1/22
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+
+#### [14:40:23] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:40:30] Executed #7 -> Shaman (EVIL)
+
+## [14:40:44] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD+Judge abilities, ASC62 COMPLETE 7/7
+
