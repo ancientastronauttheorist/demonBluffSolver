@@ -127,7 +127,8 @@
   "lilis_batch_index": 0,
   "name": "asc59_v5",
   "true_evil_positions": {
-    "4": "Shaman"
+    "4": "Shaman",
+    "6": "Baa"
   },
   "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found"
 }
