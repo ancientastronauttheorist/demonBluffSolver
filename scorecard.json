@@ -2687,6 +2687,13 @@
       "name": "asc59_v3",
       "notes": "3HP, Lilis game, wrong exec #1 but lookahead win",
       "date": "2026-04-12 11:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v4",
+      "notes": "10HP perfect, PD check + Judge + Slayer abilities",
+      "date": "2026-04-12 11:38"
     }
   ]
 }

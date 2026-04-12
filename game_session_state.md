@@ -26542,3 +26542,106 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 3
 Notes: 3HP, Lilis game, wrong exec #1 but lookahead win
 
+
+---
+
+# New Game — 2026-04-12 11:35:17
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Bishop, Slayer, Baker, Judge, Knight
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [11:35:55] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [11:35:55] Revealed #2 Medium
+Info: {'good_position': 4, 'good_role': 'Baker'}
+
+### [11:35:55] Revealed #3 Bombardier
+Info: {}
+
+### [11:35:55] Revealed #4 Baker
+Info: {'original_role': 'Knight'}
+
+### [11:35:55] Revealed #5 Baker
+Info: {'original_role': 'Judge'}
+
+### [11:35:55] Revealed #7 Bishop
+Info: {'targets': [5, 1, 4], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:35:55] Revealed #9 Judge
+Info: {}
+
+### [11:36:22] Revealed #6 Plague_Doctor
+Info: {}
+
+### [11:36:22] Revealed #8 Slayer
+Info: {}
+
+#### [11:36:27] Solver Output
+Scenarios: 51/646
+Evil probabilities: #5=59%, #8=49%, #7=47%, #9=33%, #4=24%, #1=14%, #2=12%, #3=10%, #6=10%
+
+#### [11:36:27] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.751 (adjusted 2.751) | timing x1.00
+
+### [11:37:01] Ability used at #6
+
+#### [11:37:01] Solver Output
+Scenarios: 25/646
+Definite good: ['#1']
+Evil probabilities: #7=88%, #8=48%, #5=44%, #9=36%, #4=16%, #6=12%, #2=4%, #3=4%
+
+#### [11:37:01] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#2']
+Reason: Expected posterior 15.0 scenarios (adjusted 16.5, info gain 0.599 bits) | timing x1.00
+WARNING: Corruption risk: 20% -- corrupted Judge results are unreliable
+
+### [11:37:31] Revealed #9 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [11:37:31] Ability used at #9
+
+#### [11:37:31] Solver Output
+Scenarios: 15/646
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #7=87%, #8=47%, #5=40%, #9=40%, #4=27%, #6=13%
+
+#### [11:37:31] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#7']
+Reason: Target #7 is 87% evil (adjusted 0.52)
+WARNING: Corruption risk: 40% -- Slayer ability disabled if corrupted
+
+### [11:38:00] Ability used at #8
+
+#### [11:38:00] Solver Output
+Scenarios: 9/646
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #7=78%, #5=44%, #9=44%, #8=33%, #4=22%, #6=22%
+
+#### [11:38:00] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 22% good Bishop (corrupted), 11% evil Puppeteer).
+WARNING: Execution lookahead override -- immediate hit chance is 78%, but all reveal branches still lead to a forced win.
+
+### [11:38:07] Executed #7 -> Puppeteer (EVIL)
+
+#### [11:38:11] Solver Output
+Scenarios: 1/70
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#9']
+
+#### [11:38:11] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:38:18] Executed #8 -> Pooka (EVIL)
+
+## [11:38:24] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD check + Judge + Slayer abilities
+
