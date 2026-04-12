@@ -27185,3 +27185,76 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect
 
+
+---
+
+# New Game — 2026-04-12 12:20:36
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Hunter, Bishop, Scout, Knight, Judge
+- Outcasts: Wretch
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [12:21:20] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [12:21:20] Revealed #2 Bishop
+Info: {'targets': [6, 1, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [12:21:20] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [12:21:20] Revealed #4 Knight
+Info: {}
+
+### [12:21:20] Revealed #5 Wretch
+Info: {}
+
+### [12:21:20] Revealed #6 Bishop
+Info: {'targets': [6, 5], 'types': ['Villager', 'Minion']}
+
+### [12:21:20] Revealed #7 Knight
+Info: {}
+
+#### [12:21:26] Solver Output
+Scenarios: 62/504
+Definite good: ['#1', '#8']
+Evil probabilities: #4=65%, #2=61%, #6=58%, #7=55%, #9=29%, #5=23%, #3=10%
+
+#### [12:21:26] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight free check: #4 is 65% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:22:18] Executed #4 -> Minion (EVIL)
+
+#### [12:22:19] Solver Output
+Scenarios: 13/56
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#8']
+Evil probabilities: #6=62%, #2=54%, #7=31%, #9=31%, #5=23%
+
+#### [12:22:19] Recommendation
+Action: **EXECUTE** #7
+Reason: Knight free check: #7 is 31% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:22:58] Executed #7 -> Lilis (EVIL)
+
+#### [12:22:58] Solver Output
+Scenarios: 2/7
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#3', '#5', '#8', '#9']
+Evil probabilities: #2=50%, #6=50%
+
+#### [12:22:58] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Bishop, 50% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [12:23:05] Executed #2 -> Witch (EVIL)
+
+## [12:23:13] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, 2 Knight free checks + forced-safe lookahead
+

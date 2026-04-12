@@ -2757,6 +2757,13 @@
       "name": "asc60_v2",
       "notes": "10HP perfect",
       "date": "2026-04-12 12:19"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc60_v3",
+      "notes": "8HP, 2 Knight free checks + forced-safe lookahead",
+      "date": "2026-04-12 12:23"
     }
   ]
 }
