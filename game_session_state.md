@@ -28529,3 +28529,76 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, PD+FT definite
 
+
+---
+
+# New Game — 2026-04-12 14:28:02
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Alchemist, Bishop, Bard, Lover, Gemcrafter, Knight
+- Outcasts: Drunk, Plague_Doctor
+- Minions: Shaman
+- Demons: Lilis
+
+### [14:28:45] Revealed #1 Gemcrafter
+Info: {'good_position': 9}
+
+### [14:28:45] Revealed #3 Bishop
+Info: {'targets': [7, 8, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:28:45] Revealed #6 Gemcrafter
+Info: {'good_position': 4}
+
+### [14:28:45] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [14:28:45] Revealed #8 Bishop
+Info: {'targets': [2, 8, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:28:45] Revealed #9 Bard
+Info: {'corruption_distance': 2}
+
+### [14:28:54] Revealed #2 Plague_Doctor
+Info: {}
+
+### [14:28:55] Revealed #4 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [14:28:55] Solver Output
+Scenarios: 6/3022
+Definite good: ['#2', '#5', '#7']
+Evil probabilities: #3=50%, #9=50%, #1=33%, #8=33%, #4=17%, #6=17%
+
+#### [14:28:55] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.459 (adjusted 1.459) | timing x1.00
+
+### [14:29:39] Ability used at #2
+
+#### [14:29:39] Solver Output
+Scenarios: 1/3022
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8', '#9']
+
+#### [14:29:39] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [14:29:46] Executed #4 -> Lilis (EVIL)
+
+#### [14:29:53] Solver Output
+Scenarios: 1/361
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8', '#9']
+
+#### [14:29:53] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:30:00] Executed #6 -> Shaman (EVIL)
+
+## [14:30:10] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, PD check nails both evils
+

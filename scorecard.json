@@ -2862,6 +2862,13 @@
       "name": "asc62_v3",
       "notes": "10HP perfect, PD+FT definite",
       "date": "2026-04-12 14:27"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc62_v4",
+      "notes": "6HP, Lilis game, PD check nails both evils",
+      "date": "2026-04-12 14:30"
     }
   ]
 }
