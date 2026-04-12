@@ -2736,6 +2736,13 @@
       "name": "asc59_v7",
       "notes": "Loss: 0 scenarios after exec #9 good. True evils: #1=Lilis, #3=Poisoner, #10=Twin_Minion. Solver wrongly had 93% on #9. Baker chain + Drunk + 3 Bakers.",
       "date": "2026-04-12 12:03"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc59_v7",
+      "notes": "3HP, Knight free check saved the day, 2 wrong execs (corrupted Baker + Drunk)",
+      "date": "2026-04-12 12:10"
     }
   ]
 }

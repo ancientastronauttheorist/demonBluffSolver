@@ -26952,3 +26952,111 @@ Notes: Loss: 0 scenarios after exec #9 good. Solver bug: 93% confidence on #9 bu
 Final HP: 1
 Notes: Loss: 0 scenarios after exec #9 good. True evils: #1=Lilis, #3=Poisoner, #10=Twin_Minion. Solver wrongly had 93% on #9. Baker chain + Drunk + 3 Bakers.
 
+
+---
+
+# New Game — 2026-04-12 12:07:46
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Dreamer, Bard, Medium, Baker, Knight, Enlightened
+- Outcasts: Drunk, Plague_Doctor, Bombardier
+- Minions: Poisoner, Chancellor
+- Demons: Baa
+
+### [12:08:12] Revealed #1 Bombardier
+Info: {}
+
+### [12:08:12] Revealed #2 Baker
+Info: {'original_role': 'Knight'}
+
+### [12:08:12] Revealed #3 Medium
+Info: {'good_position': 5, 'good_role': 'Knight'}
+
+### [12:08:12] Revealed #4 Medium
+Info: {'good_position': 1, 'good_role': 'Bombardier'}
+
+### [12:08:12] Revealed #5 Knight
+Info: {}
+
+### [12:08:12] Revealed #6 Enlightened
+Info: {'direction': 'CCW'}
+
+### [12:08:12] Revealed #7 Bard
+Info: {'corruption_distance': 1}
+
+### [12:08:12] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+### [12:08:12] Revealed #9 Baker
+Info: {'original_role': 'Bard'}
+
+#### [12:08:18] Solver Output
+Scenarios: 20/6486
+Definite good: ['#8']
+Evil probabilities: #9=75%, #2=60%, #6=40%, #1=30%, #4=30%, #5=30%, #7=20%, #3=15%
+
+#### [12:08:18] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (45% evil Baa, 30% evil Chancellor, 15% good Baker (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [12:08:25] Executed #9 -> Chancellor (EVIL)
+
+#### [12:08:30] Solver Output
+Scenarios: 6/505
+Definite evil: ['#9']
+Definite good: ['#8']
+Evil probabilities: #2=50%, #6=50%, #5=33%, #1=17%, #3=17%, #4=17%, #7=17%
+
+#### [12:08:30] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (33% evil Baa, 33% good Baker (corrupted), 17% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [12:08:37] Executed #2 -> GOOD (WRONG!)
+
+### [12:08:44] Executed #2 -> GOOD (WRONG!)
+
+#### [12:08:44] Solver Output
+Scenarios: 3/395
+Definite evil: ['#9']
+Definite good: ['#2', '#8']
+Evil probabilities: #1=33%, #3=33%, #4=33%, #5=33%, #6=33%, #7=33%
+
+#### [12:08:44] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (67% good Drunk (corrupted), 33% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 33%, but all reveal branches still lead to a forced win.
+
+### [12:08:51] Executed #7 -> GOOD (WRONG!)
+
+### [12:09:29] Executed #7 -> GOOD (WRONG!)
+
+#### [12:09:29] Solver Output
+Scenarios: 2/278
+Definite evil: ['#9']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%, #4=50%, #5=50%
+
+#### [12:09:29] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight free check: #5 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:10:08] Executed #5 -> Baa (EVIL)
+
+#### [12:10:08] Solver Output
+Scenarios: 1/37
+Definite evil: ['#3', '#5', '#9']
+Definite good: ['#1', '#2', '#4', '#6', '#7', '#8']
+
+#### [12:10:08] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [12:10:15] Executed #3 -> Poisoner (EVIL)
+
+## [12:10:23] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP, Knight free check saved the day, 2 wrong execs (corrupted Baker + Drunk)
+
