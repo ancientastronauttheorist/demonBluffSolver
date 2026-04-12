@@ -30309,3 +30309,140 @@ Reason: No surviving scenarios -- check input data
 Final HP: 5
 Notes: 5HP, solver 0-scenario bug on #4 (100% confident wrong). PD+Jester+Judge abilities.
 
+
+---
+
+# New Game — 2026-04-12 15:51:21
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Empress, Druid, Poet, Medium, Oracle, Scout
+- Outcasts: Plague_Doctor
+- Minions: Twin_Minion, Minion
+- Demons: Pooka
+
+### [15:51:42] Revealed #4 Empress
+Info: {'targets': [3, 5, 9]}
+
+### [15:51:42] Revealed #6 Medium
+Info: {'good_position': 5, 'good_role': 'Poet'}
+
+### [15:51:42] Revealed #7 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Minion'}
+
+### [15:51:42] Revealed #9 Scout
+Info: {'evil_role': 'Pooka', 'distance': 2}
+
+### [15:51:59] Revealed #1 Dreamer
+Info: {}
+
+### [15:51:59] Revealed #2 Plague_Doctor
+Info: {}
+
+### [15:51:59] Revealed #3 Druid
+Info: {}
+
+### [15:52:00] Revealed #5 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 7}
+
+### [15:52:00] Revealed #8 Druid
+Info: {}
+
+#### [15:52:00] Solver Output
+Scenarios: 36/1848
+Definite good: ['#2']
+Evil probabilities: #8=64%, #3=44%, #7=44%, #9=44%, #5=39%, #4=31%, #1=19%, #6=14%
+
+#### [15:52:00] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#8']
+Reason: Entropy 2.776 (adjusted 2.313) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [15:52:49] Revealed #1 Dreamer
+Info: {'target': 8, 'evil_role': 'Pooka'}
+
+### [15:52:49] Ability used at #1
+
+#### [15:52:49] Solver Output
+Scenarios: 24/1848
+Definite good: ['#2']
+Evil probabilities: #3=58%, #8=46%, #5=42%, #7=42%, #9=42%, #4=38%, #6=21%, #1=12%
+
+#### [15:52:49] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.668 (adjusted 1.668) | timing x1.00
+
+### [15:53:38] Ability used at #2
+
+#### [15:53:39] Solver Output
+Scenarios: 6/1848
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#6']
+Evil probabilities: #7=67%, #8=67%, #3=33%, #4=33%
+
+#### [15:53:39] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Pooka', 'Twin_Minion'})
+
+### [15:53:46] Executed #9 -> Pooka (EVIL)
+
+#### [15:53:54] Solver Output
+Scenarios: 5/224
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#6']
+Evil probabilities: #7=80%, #8=80%, #3=20%, #4=20%
+
+#### [15:53:54] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 0.971 (adjusted 0.777) | timing x1.00
+WARNING: Corruption risk: 40%
+
+### [15:54:39] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': None}
+
+### [15:54:39] Ability used at #3
+
+#### [15:54:39] Solver Output
+Scenarios: 3/224
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#6']
+Evil probabilities: #7=67%, #8=67%, #3=33%, #4=33%
+
+#### [15:54:39] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [15:55:19] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:55:19] Ability used at #8
+
+#### [15:55:19] Solver Output
+Scenarios: 3/224
+Definite evil: ['#9']
+Definite good: ['#1', '#2', '#5', '#6']
+Evil probabilities: #7=67%, #8=67%, #3=33%, #4=33%
+
+#### [15:55:19] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (33% evil Minion, 33% good Oracle, 33% evil Twin_Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [15:55:26] Executed #7 -> Minion (EVIL)
+
+#### [15:55:35] Solver Output
+Scenarios: 1/31
+Definite evil: ['#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [15:55:35] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [15:55:42] Executed #8 -> Twin Minion (EVIL)
+
+## [15:55:57] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD+Dreamer+2xDruid abilities, ASC64 COMPLETE 7/7
+

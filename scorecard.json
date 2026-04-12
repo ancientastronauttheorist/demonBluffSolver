@@ -2981,6 +2981,13 @@
       "name": "asc64_v6",
       "notes": "5HP, solver 0-scenario bug on #4 (100% confident wrong). PD+Jester+Judge abilities.",
       "date": "2026-04-12 15:47"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc64_v7",
+      "notes": "10HP perfect, PD+Dreamer+2xDruid abilities, ASC64 COMPLETE 7/7",
+      "date": "2026-04-12 15:55"
     }
   ]
 }
