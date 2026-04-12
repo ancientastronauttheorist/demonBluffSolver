@@ -28276,3 +28276,62 @@ Reason: Target #2 is 50% evil (adjusted 0.50)
 Final HP: 8
 Notes: 8HP, Slayer kills Witch! ASC61 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-12 14:15:07
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Alchemist, Slayer, Gemcrafter, Hunter, Bard
+- Outcasts: Plague_Doctor
+- Minions: Shaman
+- Demons: Lilis
+
+### [14:17:20] Revealed #2 Alchemist
+Info: {'cured_count': 1}
+
+### [14:17:20] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [14:17:20] Revealed #6 Gemcrafter
+Info: {'good_position': 8}
+
+### [14:17:20] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [14:17:20] Revealed #8 Hunter
+Info: {'distance': 4}
+
+### [14:17:28] Revealed #1 Plague_Doctor
+Info: {}
+
+### [14:17:28] Revealed #3 Slayer
+Info: {}
+
+#### [14:17:29] Solver Output
+Scenarios: 4/230
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [14:17:29] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [14:17:35] Executed #6 -> Shaman (EVIL)
+
+#### [14:17:43] Solver Output
+Scenarios: 2/31
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [14:17:43] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Lilis'})
+
+### [14:17:50] Executed #8 -> Lilis (EVIL)
+
+## [14:18:03] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Lilis game, both definite
+
