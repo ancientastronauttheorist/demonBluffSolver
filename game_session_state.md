@@ -30446,3 +30446,131 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, PD+Dreamer+2xDruid abilities, ASC64 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-12 15:57:19
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Bard, Dreamer, Enlightened, Slayer, Knight
+- Outcasts: Drunk
+- Minions: Twin_Minion, Minion
+- Demons: Lilis
+
+### [15:58:37] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [15:58:37] Revealed #3 Knight
+Info: {}
+
+### [15:58:37] Revealed #7 Knight
+Info: {}
+
+### [15:58:37] Revealed #9 Enlightened
+Info: {'direction': 'CCW'}
+
+### [15:58:47] Revealed #1 Druid
+Info: {}
+
+### [15:58:47] Revealed #4 Slayer
+Info: {}
+
+### [15:58:47] Revealed #5 Slayer
+Info: {}
+
+### [15:58:47] Revealed #8 Druid
+Info: {}
+
+#### [15:58:48] Solver Output
+Scenarios: 324/3024
+Definite good: ['#6']
+Evil probabilities: #8=52%, #4=43%, #5=43%, #7=43%, #3=41%, #2=39%, #1=20%, #9=20%
+
+#### [15:58:48] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.999 (adjusted 0.999) | timing x1.00
+
+### [15:59:30] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [15:59:30] Ability used at #8
+
+#### [15:59:30] Solver Output
+Scenarios: 138/3024
+Definite good: ['#6', '#9']
+Evil probabilities: #8=65%, #4=48%, #5=48%, #7=48%, #3=39%, #2=35%, #1=17%
+
+#### [15:59:30] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.988 (adjusted 0.859) | timing x1.00
+WARNING: Corruption risk: 26%
+
+### [16:00:15] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': 'Drunk'}
+
+### [16:00:15] Ability used at #1
+
+#### [16:00:16] Solver Output
+Scenarios: 114/3024
+Definite good: ['#6', '#9']
+Evil probabilities: #8=79%, #4=47%, #5=47%, #7=47%, #3=37%, #1=21%, #2=21%
+
+#### [16:00:16] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#8']
+Reason: Target #8 is 79% evil (adjusted 0.79)
+
+### [16:01:07] Ability used at #4
+
+#### [16:01:07] Solver Output
+Scenarios: 72/3024
+Definite good: ['#6', '#9']
+Evil probabilities: #4=75%, #8=67%, #1=33%, #2=33%, #5=33%, #7=33%, #3=25%
+
+#### [16:01:07] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#4']
+Reason: Target #4 is 75% evil (adjusted 0.75)
+
+### [16:01:55] Ability used at #5
+
+#### [16:01:55] Solver Output
+Scenarios: 12/336
+Definite evil: ['#4']
+Definite good: ['#5', '#6', '#9']
+Evil probabilities: #8=83%, #7=50%, #3=33%, #1=17%, #2=17%
+
+#### [16:01:55] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (42% evil Lilis, 42% evil Minion, 17% good Druid).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [16:02:02] Executed #8 -> Lilis (EVIL)
+
+#### [16:02:13] Solver Output
+Scenarios: 5/42
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#9']
+Evil probabilities: #7=60%, #3=40%
+
+#### [16:02:13] Recommendation
+Action: **EXECUTE** #7
+Reason: Knight free check: #7 is 60% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [16:03:07] Execution Blocked
+#7 Knight immunity — confirmed good, no HP loss
+
+#### [16:03:07] Solver Output
+Scenarios: 2/36
+Definite evil: ['#3', '#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9']
+
+#### [16:03:07] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [16:03:14] Executed #3 -> Minion (EVIL)
+
+## [16:03:29] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, 2xDruid+2xSlayer+Knight check
+
