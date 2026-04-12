@@ -2764,6 +2764,13 @@
       "name": "asc60_v3",
       "notes": "8HP, 2 Knight free checks + forced-safe lookahead",
       "date": "2026-04-12 12:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v4",
+      "notes": "10HP perfect, Knight immunity check + FT ability",
+      "date": "2026-04-12 12:27"
     }
   ]
 }

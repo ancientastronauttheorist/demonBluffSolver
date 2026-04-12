@@ -2346,10 +2346,9 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         # Check if corruption sources exist in deck — corrupted Knight loses immunity
                         corruption_sources = {"Pooka", "Poisoner", "Plague_Doctor"}
                         deck_roles = set()
-                        if session.deck:
-                            for faction_roles in [session.deck.villagers, session.deck.outcasts,
-                                                  session.deck.minions, session.deck.demons]:
-                                deck_roles.update(faction_roles)
+                        for faction_roles in [session.villagers, session.outcasts,
+                                              session.minions, session.demons]:
+                            deck_roles.update(faction_roles)
                         has_corruption = bool(deck_roles & corruption_sources)
                         if has_corruption:
                             print(f"  #{pos} shows as {target_card.apparent_role} (execution immune) but corruption sources in deck!")

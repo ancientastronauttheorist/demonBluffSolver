@@ -27258,3 +27258,121 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 8
 Notes: 8HP, 2 Knight free checks + forced-safe lookahead
 
+
+---
+
+# New Game — 2026-04-12 12:24:24
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Fortune_Teller, Dreamer, Empress, Architect, Scout, Poet
+- Outcasts: Doppelganger, Wretch
+- Minions: Twin_Minion, Puppeteer
+- Demons: Baa
+
+### [12:24:38] Revealed #1 Knight
+Info: {}
+
+### [12:24:38] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [12:24:38] Revealed #4 Scout
+Info: {'evil_role': 'Puppet', 'distance': 2}
+
+### [12:24:38] Revealed #5 Empress
+Info: {'targets': [1, 2, 3]}
+
+### [12:24:38] Revealed #6 Knight
+Info: {}
+
+### [12:24:38] Revealed #7 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 3}
+
+### [12:24:38] Revealed #8 Poet
+Info: {'direction': 'CCW', 'copied_role': 'Enlightened'}
+
+#### [12:24:38] Solver Output
+Scenarios: 66/4536
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#3', '#9']
+Evil probabilities: #5=67%, #6=55%, #2=48%, #8=30%
+
+#### [12:24:38] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 66 scenarios (roles: {'Puppeteer', 'Twin_Minion', 'Baa'})
+
+### [12:24:45] Executed #4 -> Baa (EVIL)
+
+### [12:24:57] Revealed #3 Fortune_Teller
+Info: {}
+
+### [12:24:57] Revealed #9 Dreamer
+Info: {}
+
+#### [12:24:57] Solver Output
+Scenarios: 28/504
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#3', '#9']
+Evil probabilities: #6=64%, #5=61%, #2=39%, #8=36%
+
+#### [12:24:57] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 28 scenarios (roles: {'Twin_Minion', 'Puppeteer'})
+
+### [12:25:04] Executed #7 -> Puppeteer (EVIL)
+
+#### [12:25:10] Solver Output
+Scenarios: 22/72
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#3', '#9']
+Evil probabilities: #6=55%, #2=50%, #5=50%, #8=45%
+
+#### [12:25:10] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight free check: #6 is 55% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [12:26:40] Execution Blocked
+#6 Knight immunity — confirmed good, no HP loss
+
+#### [12:26:46] Solver Output
+Scenarios: 10/30
+Definite evil: ['#4', '#7', '#8']
+Definite good: ['#1', '#3', '#6', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [12:26:46] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 10 scenarios (roles: {'Puppet'})
+
+### [12:26:53] Executed #8 -> Puppet (EVIL)
+
+#### [12:27:00] Solver Output
+Scenarios: 10/30
+Definite evil: ['#4', '#7', '#8']
+Definite good: ['#1', '#3', '#6', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [12:27:00] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [12:27:32] Revealed #3 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [12:27:32] Ability used at #3
+
+#### [12:27:32] Solver Output
+Scenarios: 5/30
+Definite evil: ['#2', '#4', '#7', '#8']
+Definite good: ['#1', '#3', '#5', '#6', '#9']
+
+#### [12:27:32] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Twin_Minion'})
+
+### [12:27:39] Executed #2 -> Twin Minion (EVIL)
+
+## [12:27:49] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Knight immunity check + FT ability
+
