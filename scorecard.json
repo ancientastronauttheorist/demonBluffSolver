@@ -2953,6 +2953,13 @@
       "name": "asc64_v2",
       "notes": "10HP perfect, 4 Judges + Slayer + Druid, massive ability game",
       "date": "2026-04-12 15:30"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc64_v3",
+      "notes": "6HP, Lilis game, FT ability + forced-safe",
+      "date": "2026-04-12 15:33"
     }
   ]
 }

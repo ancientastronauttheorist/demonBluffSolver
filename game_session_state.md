@@ -29947,3 +29947,95 @@ WARNING: Execution lookahead override -- immediate hit chance is 33%, but all re
 Final HP: 10
 Notes: 10HP perfect, 4 Judges + Slayer + Druid, massive ability game
 
+
+---
+
+# New Game — 2026-04-12 15:31:19
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Knight, Architect, Poet, Fortune_Teller, Knitter
+- Outcasts: Bombardier
+- Minions: Twin_Minion, Minion
+- Demons: Lilis
+
+### [15:32:03] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [15:32:03] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [15:32:03] Revealed #4 Baker
+Info: {'original_role': 'Knight'}
+
+### [15:32:03] Revealed #6 Bombardier
+Info: {}
+
+### [15:32:03] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [15:32:03] Revealed #9 Bombardier
+Info: {}
+
+### [15:32:12] Revealed #2 Fortune_Teller
+Info: {}
+
+### [15:32:12] Revealed #8 Poet
+Info: {}
+
+#### [15:32:12] Solver Output
+Scenarios: 36/504
+Definite good: ['#3', '#5']
+Evil probabilities: #6=67%, #9=67%, #1=50%, #8=50%, #7=33%, #2=17%, #4=17%
+
+#### [15:32:12] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#3', '#6']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:32:55] Revealed #2 Fortune Teller
+Info: {'targets': [3, 6], 'has_evil': True}
+
+### [15:32:55] Ability used at #2
+
+#### [15:32:55] Solver Output
+Scenarios: 18/504
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #8=67%, #9=67%, #1=33%, #7=33%
+
+#### [15:32:55] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 18 scenarios (roles: {'Minion', 'Lilis', 'Twin_Minion'})
+
+### [15:33:02] Executed #6 -> Minion (EVIL)
+
+#### [15:33:11] Solver Output
+Scenarios: 6/56
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #8=67%, #9=67%, #1=33%, #7=33%
+
+#### [15:33:11] Recommendation
+Action: **EXECUTE** #8
+Reason: Execution lookahead: #8 guarantees a win across all reveal branches with current HP budget (33% evil Lilis, 33% good Poet, 33% evil Twin_Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [15:33:18] Executed #8 -> Twin Minion (EVIL)
+
+#### [15:33:27] Solver Output
+Scenarios: 2/7
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #7=50%, #9=50%
+
+#### [15:33:27] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good Knitter, 50% evil Lilis).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:33:34] Executed #7 -> Lilis (EVIL)
+
+## [15:33:48] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, FT ability + forced-safe
+
