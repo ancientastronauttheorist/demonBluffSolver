@@ -1,0 +1,150 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "evil_role": "Chancellor"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          8
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Judge"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Fortune Teller"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    4,
+    7
+  ],
+  "confirmed_good": [
+    2,
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Chancellor",
+    "7": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 4,
+      "target": 5,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Dreamer",
+      "Oracle",
+      "Judge",
+      "Fortune_Teller",
+      "Baker",
+      "Knight"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Plague_Doctor",
+      "Doppelganger",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1,
+    4,
+    6
+  ],
+  "name": "asc48_v3",
+  "true_evil_positions": {
+    "4": "Chancellor",
+    "7": "Baa"
+  },
+  "notes": "8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge"
+}

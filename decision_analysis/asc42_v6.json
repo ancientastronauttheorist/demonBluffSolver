@@ -1,0 +1,182 @@
+{
+  "name": "asc42_v6",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 34,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.824,
+        "4": 0.118,
+        "5": 0.088,
+        "6": 0.176,
+        "7": 0.206,
+        "9": 0.588
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        8
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Dreamer",
+        "Architect",
+        "Scout",
+        "Knight",
+        "Alchemist",
+        "Baker",
+        "Plague_Doctor",
+        "Minion",
+        "Poisoner",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (good)",
+      "n_surviving": 34,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "wrong_target_choice",
+      "evil_probs": {
+        "2": 0.824,
+        "4": 0.118,
+        "5": 0.088,
+        "6": 0.176,
+        "7": 0.206,
+        "9": 0.588
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        8
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Dreamer",
+        "Architect",
+        "Scout",
+        "Knight",
+        "Alchemist",
+        "Baker",
+        "Plague_Doctor",
+        "Minion",
+        "Poisoner",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 30,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.8,
+        "5": 0.1,
+        "6": 0.2,
+        "7": 0.233,
+        "9": 0.667
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Dreamer",
+        "Architect",
+        "Scout",
+        "Knight",
+        "Alchemist",
+        "Baker",
+        "Plague_Doctor",
+        "Minion",
+        "Poisoner",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 11,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.818,
+        "5": 0.091,
+        "6": 0.182,
+        "7": 0.364,
+        "9": 0.545
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        4,
+        8
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Dreamer",
+        "Architect",
+        "Scout",
+        "Knight",
+        "Alchemist",
+        "Baker",
+        "Plague_Doctor",
+        "Minion",
+        "Poisoner",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 2,
+    "wrong": 2,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "wrong_target_choice": 1,
+      "premature_but_correct": 1
+    }
+  }
+}

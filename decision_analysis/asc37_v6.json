@@ -1,0 +1,140 @@
+{
+  "name": "asc37_v6",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.333
+      },
+      "definite_evil": [
+        2,
+        3
+      ],
+      "definite_good": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Confessor",
+        "Judge",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Architect",
+        "Plague_Doctor",
+        "Bombardier",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {
+        "4": 0.333
+      },
+      "definite_evil": [
+        2,
+        3
+      ],
+      "definite_good": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Confessor",
+        "Judge",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Architect",
+        "Plague_Doctor",
+        "Bombardier",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "4": 0.5
+      },
+      "definite_evil": [
+        2,
+        3
+      ],
+      "definite_good": [
+        1,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Oracle",
+        "Confessor",
+        "Judge",
+        "Bishop",
+        "Slayer",
+        "Alchemist",
+        "Architect",
+        "Plague_Doctor",
+        "Bombardier",
+        "Puppeteer",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "different_valid_target": 1
+    }
+  }
+}

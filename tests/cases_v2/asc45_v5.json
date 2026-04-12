@@ -1,0 +1,157 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          3
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6
+        ],
+        "minion_role": "Poisoner"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    6
+  ],
+  "confirmed_evil": [],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {},
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Medium",
+      "Druid",
+      "Bishop",
+      "Fortune_Teller",
+      "Knight",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    1,
+    2,
+    8,
+    3
+  ],
+  "name": "asc45_v5",
+  "true_evil_positions": {
+    "2": "Poisoner",
+    "4": "Lilis"
+  },
+  "notes": "GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen."
+}

@@ -1,0 +1,181 @@
+{
+  "name": "asc46_v4",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        5
+      ],
+      "definite_good": [
+        3,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Oracle",
+        "Bishop",
+        "Poet",
+        "Alchemist",
+        "Bombardier",
+        "Wretch",
+        "Plague_Doctor",
+        "Witch",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        5
+      ],
+      "definite_good": [
+        3,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Oracle",
+        "Bishop",
+        "Poet",
+        "Alchemist",
+        "Bombardier",
+        "Wretch",
+        "Plague_Doctor",
+        "Witch",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        5
+      ],
+      "definite_good": [
+        3,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Oracle",
+        "Bishop",
+        "Poet",
+        "Alchemist",
+        "Bombardier",
+        "Wretch",
+        "Plague_Doctor",
+        "Witch",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        5
+      ],
+      "definite_good": [
+        3,
+        4,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Hunter",
+        "Oracle",
+        "Bishop",
+        "Poet",
+        "Alchemist",
+        "Bombardier",
+        "Wretch",
+        "Plague_Doctor",
+        "Witch",
+        "Chancellor",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 2,
+    "wrong": 2,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "different_valid_target": 2
+    }
+  }
+}

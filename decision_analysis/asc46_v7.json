@@ -1,0 +1,181 @@
+{
+  "name": "asc46_v7",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.167,
+        "2": 0.333,
+        "5": 0.667,
+        "7": 0.5,
+        "8": 0.333
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        4,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Dreamer",
+        "Fortune_Teller",
+        "Medium",
+        "Baker",
+        "Knight",
+        "Jester",
+        "Plague_Doctor",
+        "Minion",
+        "Witch",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.167,
+        "2": 0.333,
+        "5": 0.667,
+        "7": 0.5,
+        "8": 0.333
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        4,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Dreamer",
+        "Fortune_Teller",
+        "Medium",
+        "Baker",
+        "Knight",
+        "Jester",
+        "Plague_Doctor",
+        "Minion",
+        "Witch",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        3,
+        8
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Dreamer",
+        "Fortune_Teller",
+        "Medium",
+        "Baker",
+        "Knight",
+        "Jester",
+        "Plague_Doctor",
+        "Minion",
+        "Witch",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        3,
+        8
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Gemcrafter",
+        "Dreamer",
+        "Fortune_Teller",
+        "Medium",
+        "Baker",
+        "Knight",
+        "Jester",
+        "Plague_Doctor",
+        "Minion",
+        "Witch",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

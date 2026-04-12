@@ -1,0 +1,55 @@
+{
+  "name": "asc45_v5",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 123,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.9999523196862128,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.252,
+        "2": 0.13,
+        "3": 0.203,
+        "4": 0.146,
+        "5": 0.618,
+        "7": 0.228,
+        "8": 0.268,
+        "9": 0.154
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Medium",
+        "Druid",
+        "Bishop",
+        "Fortune_Teller",
+        "Knight",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Poisoner",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 1,
+    "correct": 1,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

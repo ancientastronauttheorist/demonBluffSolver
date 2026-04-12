@@ -1,0 +1,122 @@
+{
+  "name": "asc39_v4",
+  "n_cards": 7,
+  "n_evil": 1,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 2,
+      "recommended_action": "error #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Baker",
+        "Knitter",
+        "Empress",
+        "Bard",
+        "Bishop",
+        "Doppelganger",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 2,
+      "recommended_action": "error #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Baker",
+        "Knitter",
+        "Empress",
+        "Bard",
+        "Bishop",
+        "Doppelganger",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Alchemist",
+        "Baker",
+        "Knitter",
+        "Empress",
+        "Bard",
+        "Bishop",
+        "Doppelganger",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

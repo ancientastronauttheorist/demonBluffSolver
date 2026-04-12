@@ -1,0 +1,212 @@
+{
+  "name": "asc35_v6",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.5,
+        "2": 0.5,
+        "3": 0.5,
+        "4": 0.5,
+        "5": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Gemcrafter",
+        "Bishop",
+        "Dreamer",
+        "Knitter",
+        "Medium",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 4,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.5,
+        "2": 0.5,
+        "3": 0.5,
+        "4": 0.5,
+        "5": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Gemcrafter",
+        "Bishop",
+        "Dreamer",
+        "Knitter",
+        "Medium",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Gemcrafter",
+        "Bishop",
+        "Dreamer",
+        "Knitter",
+        "Medium",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Gemcrafter",
+        "Bishop",
+        "Dreamer",
+        "Knitter",
+        "Medium",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        2,
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Gemcrafter",
+        "Bishop",
+        "Dreamer",
+        "Knitter",
+        "Medium",
+        "Plague_Doctor",
+        "Shaman",
+        "Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 4,
+    "wrong": 1,
+    "accuracy": 0.8,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

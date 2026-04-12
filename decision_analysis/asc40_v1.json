@@ -1,0 +1,144 @@
+{
+  "name": "asc40_v1",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 101,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.19801980198019803,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.168,
+        "2": 0.634,
+        "4": 0.465,
+        "5": 0.376,
+        "6": 0.198,
+        "7": 0.158
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Knight",
+        "Oracle",
+        "Medium",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Drunk",
+        "Shaman",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 101,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 0.19801980198019803,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "bad_heuristic",
+      "evil_probs": {
+        "1": 0.168,
+        "2": 0.634,
+        "4": 0.465,
+        "5": 0.376,
+        "6": 0.198,
+        "7": 0.158
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Knight",
+        "Oracle",
+        "Medium",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Drunk",
+        "Shaman",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 17,
+      "recommended_action": "use_ability #9",
+      "recommended_position": 9,
+      "recommended_confidence": 0.4117647058823529,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "4": 0.412,
+        "5": 0.353,
+        "6": 0.118,
+        "7": 0.118
+      },
+      "definite_evil": [
+        1,
+        3
+      ],
+      "definite_good": [
+        2,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Slayer",
+        "Baker",
+        "Lover",
+        "Knight",
+        "Oracle",
+        "Medium",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Drunk",
+        "Shaman",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "bad_heuristic": 1,
+      "premature_but_correct": 1
+    }
+  }
+}

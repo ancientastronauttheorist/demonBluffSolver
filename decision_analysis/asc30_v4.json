@@ -1,0 +1,173 @@
+{
+  "name": "asc30_v4",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 14,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.21428571428571427,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.143,
+        "3": 0.357,
+        "4": 0.429,
+        "5": 0.357,
+        "6": 0.143,
+        "7": 0.214,
+        "8": 0.357
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Poet",
+        "Knitter",
+        "Knight",
+        "Oracle",
+        "Dreamer",
+        "Druid",
+        "Wretch",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (good)",
+      "n_surviving": 14,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.21428571428571427,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.143,
+        "3": 0.357,
+        "4": 0.429,
+        "5": 0.357,
+        "6": 0.143,
+        "7": 0.214,
+        "8": 0.357
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Poet",
+        "Knitter",
+        "Knight",
+        "Oracle",
+        "Dreamer",
+        "Druid",
+        "Wretch",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 11,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.182,
+        "3": 0.364,
+        "4": 0.545,
+        "5": 0.364,
+        "6": 0.182,
+        "8": 0.364
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        7
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Poet",
+        "Knitter",
+        "Knight",
+        "Oracle",
+        "Dreamer",
+        "Druid",
+        "Wretch",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Poet",
+        "Knitter",
+        "Knight",
+        "Oracle",
+        "Dreamer",
+        "Druid",
+        "Wretch",
+        "Drunk",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 0.75,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

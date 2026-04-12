@@ -1,0 +1,131 @@
+{
+  "name": "asc32_v7",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Slayer",
+        "Druid",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Slayer",
+        "Druid",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        4
+      ],
+      "definite_good": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Judge",
+        "Gemcrafter",
+        "Slayer",
+        "Druid",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Plague_Doctor",
+        "Poisoner",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "different_valid_target": 1
+    }
+  }
+}

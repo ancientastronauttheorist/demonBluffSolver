@@ -1,0 +1,175 @@
+{
+  "name": "asc48_v7",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 50,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.48,
+        "4": 0.32,
+        "5": 0.2,
+        "6": 0.44,
+        "7": 0.56
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Hunter",
+        "Enlightened",
+        "Gemcrafter",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 50,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "3": 0.48,
+        "4": 0.32,
+        "5": 0.2,
+        "6": 0.44,
+        "7": 0.56
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Hunter",
+        "Enlightened",
+        "Gemcrafter",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 16,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.5
+      },
+      "definite_evil": [
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Hunter",
+        "Enlightened",
+        "Gemcrafter",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Hunter",
+        "Enlightened",
+        "Gemcrafter",
+        "Oracle",
+        "Doppelganger",
+        "Drunk",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 2,
+    "wrong": 2,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

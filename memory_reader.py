@@ -8,10 +8,12 @@ Usage:
     python memory_reader.py --watch  # continuously watch for changes
 """
 
+import atexit
 import ctypes
 import struct
 import sys
 import os
+import threading
 import time
 import argparse
 from ctypes import wintypes
@@ -87,6 +89,22 @@ CHAR_STATUS = {
     70: 'AlteredCharacter',
 }
 
+# Character clue/ability field offsets (Phase 2)
+CHAR_RUNTIME_DATA_OFFSET = 0x68  # RuntimeCharacterData (polymorphic per role)
+CHAR_ACTED_OFFSET = 0xA0         # Acted (speech bubble component)
+CHAR_LEFT_ACT_OFFSET = 0xA8      # bool (left ability activated)
+CHAR_USES_OFFSET = 0xBC          # int (ability use count)
+CHAR_ACTED_INFOS_OFFSET = 0x128  # List<ActedInfo>
+CHAR_SAVED_ACT_OFFSET = 0x158    # string (cached clue text)
+CHAR_ACT_OFFSET = 0x161          # bool (ability activated flag)
+
+# ActedInfo class field offsets
+ACTED_INFO_DESC_OFFSET = 0x10    # string (formatted clue text)
+ACTED_INFO_CHARS_OFFSET = 0x18   # List<Character> (referenced positions)
+
+# EnlightenedRuntimeData.direction enum
+EVIL_DIRECTION = {0: 'Equidistant', 10: 'CW', 20: 'CCW'}
+
 # CharacterData class field offsets
 CD_CHARACTER_ID_OFFSET = 0x18    # string (role name) -- STALE in multi-village!
 CD_CACHED_PTR_OFFSET = 0x10      # IntPtr m_CachedPtr (Unity native object)
@@ -98,6 +116,18 @@ CD_ALIGNMENT_OFFSET = 0xFC       # EAlignment (int32)
 ALIGNMENT = {0: 'None', 10: 'Good', 20: 'Evil'}
 STATE = {0: 'None', 5: 'Hidden', 10: 'Alive', 20: 'Dead', 30: 'Revealed'}
 CHAR_TYPE = {0: 'None', 10: 'Villager', 20: 'Outcast', 30: 'Minion', 100: 'Demon'}
+
+# Displayed roles that NEVER show a passive speech bubble.
+# The game's savedAct field (offset 0x158) persists stale clue strings from a
+# previous village until overwritten. For display roles with no passive clue,
+# the string is always stale — null it out here so print_board and auto_card
+# see a clean input. Matches NO_INFO_ROLES + ACTIVE_ONLY_ROLES in
+# game_loop.py:1078,1312 (kept in sync by comment, not imported).
+NO_PASSIVE_CLUE_DISPLAY_ROLES = {
+    'wretch', 'bombardier', 'knight', 'doppelganger',
+    'dreamer', 'druid', 'fortune teller', 'jester', 'judge',
+    'slayer', 'plague doctor',
+}
 
 # Internal name → display name mapping
 DISPLAY_NAMES = {
@@ -155,10 +185,34 @@ def clean_name(raw_name):
     return DISPLAY_NAMES.get(name, name)
 
 
+KNOWN_DLL_FINGERPRINT: dict | None = None
+
+
+def validate_dll_version(reader: 'MemoryReader'):
+    """Check GameAssembly.dll fingerprint for version changes.
+
+    First call records the fingerprint. Subsequent calls compare against it.
+    Prints a loud warning if the DLL has changed (offsets may be stale).
+    """
+    global KNOWN_DLL_FINGERPRINT
+    fp = reader.get_dll_fingerprint()
+    if fp is None:
+        print("WARNING: Could not read GameAssembly.dll fingerprint")
+        return
+    if KNOWN_DLL_FINGERPRINT is None:
+        KNOWN_DLL_FINGERPRINT = fp
+        print(f"GameAssembly.dll fingerprint recorded: size={fp['size']}, timestamp={fp['pe_timestamp']}")
+    elif fp['size'] != KNOWN_DLL_FINGERPRINT['size'] or fp['pe_timestamp'] != KNOWN_DLL_FINGERPRINT['pe_timestamp']:
+        print("!!! WARNING: GameAssembly.dll changed! Offsets may be stale. !!!")
+        print(f"  Old: size={KNOWN_DLL_FINGERPRINT['size']}, timestamp={KNOWN_DLL_FINGERPRINT['pe_timestamp']}")
+        print(f"  New: size={fp['size']}, timestamp={fp['pe_timestamp']}")
+
+
 class MemoryReader:
     def __init__(self):
         self.handle = None
         self.ga_base = None
+        self._ga_module_handle = None
 
     def open(self, pid=None):
         """Open the game process."""
@@ -179,6 +233,7 @@ class MemoryReader:
         if not self.ga_base:
             print("ERROR: GameAssembly.dll not found in process")
             return False
+        validate_dll_version(self)
         return True
 
     def close(self):
@@ -216,8 +271,37 @@ class MemoryReader:
                 self.handle, ctypes.c_void_p(mod), name_buf, 260
             )
             if 'GameAssembly' in name_buf.value:
+                self._ga_module_handle = ctypes.c_void_p(mod)
                 return mod
         return None
+
+    def get_dll_fingerprint(self) -> dict | None:
+        """Get GameAssembly.dll version fingerprint (path, file size, PE timestamp)."""
+        if not self.handle or not self._ga_module_handle:
+            return None
+        # Get DLL file path via GetModuleFileNameExW
+        path_buf = ctypes.create_unicode_buffer(512)
+        psapi.GetModuleFileNameExW(
+            self.handle, self._ga_module_handle, path_buf, 512
+        )
+        dll_path = path_buf.value
+        if not dll_path:
+            return None
+        # Get file size from disk
+        try:
+            file_size = os.path.getsize(dll_path)
+        except OSError:
+            file_size = -1
+        # Read PE timestamp from process memory
+        # IMAGE_DOS_HEADER.e_lfanew at offset 0x3C from DLL base
+        e_lfanew = self._read_i32(self.ga_base + 0x3C)
+        pe_timestamp = 0
+        if e_lfanew and e_lfanew > 0:
+            # TimeDateStamp is at e_lfanew + 8 (past PE signature 4 bytes + Machine 2 + NumberOfSections 2)
+            pe_timestamp = self._read_i32(self.ga_base + e_lfanew + 8)
+            if pe_timestamp is None:
+                pe_timestamp = 0
+        return {"path": dll_path, "size": file_size, "pe_timestamp": pe_timestamp}
 
     def _read_ptr(self, addr):
         buf = ctypes.create_string_buffer(8)
@@ -353,6 +437,70 @@ class MemoryReader:
                 result.append(CHAR_STATUS.get(val, f'?{val}'))
         return result
 
+    def _read_acted_infos(self, char_ptr):
+        """Read List<ActedInfo> — clue history for a character."""
+        list_ptr = self._read_ptr(char_ptr + CHAR_ACTED_INFOS_OFFSET)
+        if not list_ptr or list_ptr < 0x10000:
+            return []
+        items_array = self._read_ptr(list_ptr + LIST_ITEMS_OFFSET)
+        list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
+        if not items_array or not list_size or list_size <= 0:
+            return []
+        results = []
+        for i in range(min(list_size, 10)):  # cap to prevent runaway
+            info_ptr = self._read_ptr(items_array + ARRAY_FIRST_ELEMENT_OFFSET + i * 8)
+            if not info_ptr or info_ptr < 0x10000:
+                continue
+            # Read desc string
+            desc_ptr = self._read_ptr(info_ptr + ACTED_INFO_DESC_OFFSET)
+            desc = self._read_string(desc_ptr) if desc_ptr else None
+            # Read referenced character positions
+            char_list_ptr = self._read_ptr(info_ptr + ACTED_INFO_CHARS_OFFSET)
+            targets = []
+            if char_list_ptr and char_list_ptr > 0x10000:
+                ref_items = self._read_ptr(char_list_ptr + LIST_ITEMS_OFFSET)
+                ref_size = self._read_i32(char_list_ptr + LIST_SIZE_OFFSET)
+                if ref_items and ref_size and 0 < ref_size <= 20:
+                    for j in range(ref_size):
+                        ref_char = self._read_ptr(ref_items + ARRAY_FIRST_ELEMENT_OFFSET + j * 8)
+                        if ref_char:
+                            ref_id = self._read_i32(ref_char + CHAR_ID_OFFSET)
+                            if ref_id is not None:
+                                targets.append(ref_id)
+            results.append({'desc': desc, 'targets': targets})
+        return results
+
+    def _read_saved_act(self, char_ptr):
+        """Read the cached clue text string (savedAct at 0x158)."""
+        str_ptr = self._read_ptr(char_ptr + CHAR_SAVED_ACT_OFFSET)
+        if not str_ptr or str_ptr < 0x10000:
+            return None
+        return self._read_string(str_ptr)
+
+    def _read_runtime_data(self, char_ptr, role_name):
+        """Read RuntimeCharacterData — dispatches by role name since it's polymorphic."""
+        rd_ptr = self._read_ptr(char_ptr + CHAR_RUNTIME_DATA_OFFSET)
+        if not rd_ptr or rd_ptr < 0x10000:
+            return None
+        role_lower = (role_name or '').lower().replace(' ', '_')
+        if role_lower in ('enlightened', 'shugenja'):
+            val = self._read_i32(rd_ptr + 0x10)
+            return {'type': 'direction', 'direction': EVIL_DIRECTION.get(val, f'?{val}')}
+        elif role_lower == 'alchemist':
+            val = self._read_i32(rd_ptr + 0x10)
+            return {'type': 'cures', 'cures': val}
+        elif role_lower == 'baker':
+            name_ptr = self._read_ptr(rd_ptr + 0x10)
+            name = self._read_string(name_ptr) if name_ptr else None
+            return {'type': 'baker', 'original_role': clean_name(name) if name else None}
+        return None
+
+    def _read_ability_state(self, char_ptr):
+        """Read ability usage state: uses count and act flag."""
+        uses = self._read_i32(char_ptr + CHAR_USES_OFFSET)
+        act = self._read_bool(char_ptr + CHAR_ACT_OFFSET)
+        return {'uses': uses or 0, 'act': act or False}
+
     def read_board(self):
         """Read all cards on the current board."""
         gameplay = self._get_gameplay_instance()
@@ -398,6 +546,20 @@ class MemoryReader:
             # Read statuses
             statuses = self._read_statuses(char_ptr)
 
+            # Read clue/ability data
+            saved_act = self._read_saved_act(char_ptr)
+            acted_infos = self._read_acted_infos(char_ptr)
+            ability_state = self._read_ability_state(char_ptr)
+            runtime_data = self._read_runtime_data(char_ptr, true_role)
+
+            # Stale clue filter: for displayed roles with no passive speech bubble,
+            # savedAct is always stale (persists from previous village). Null it
+            # unless the active ability has been used (uses>0 or acted_infos non-empty).
+            display_role_lower = (disguise or true_role or '').lower().replace('_', ' ')
+            is_active_unused = ability_state['uses'] == 0 and not acted_infos
+            if display_role_lower in NO_PASSIVE_CLUE_DISPLAY_ROLES and is_active_unused:
+                saved_act = None
+
             cards.append({
                 'position': card_id,
                 'true_role': true_role,
@@ -408,6 +570,11 @@ class MemoryReader:
                 'killed_hidden': killed_hidden,
                 'revealed': revealed,
                 'statuses': statuses,
+                'clue_text': saved_act,
+                'acted_infos': acted_infos,
+                'ability_used': ability_state['act'],
+                'uses': ability_state['uses'],
+                'runtime_data': runtime_data,
             })
 
         cards.sort(key=lambda c: c['position'])
@@ -444,6 +611,265 @@ class MemoryReader:
             list_ptr = self._read_ptr(gameplay + offset)
             deck[faction] = self._read_character_data_list(list_ptr)
         return deck
+
+
+class MemoryMonitor(threading.Thread):
+    """Background thread that polls game memory and fires callbacks on state changes.
+
+    Design decisions:
+    - Owns a PRIVATE MemoryReader instance (never shared with main thread)
+    - Copy-on-write: builds board OUTSIDE lock, swaps reference UNDER lock
+    - Fires callbacks OUTSIDE lock to prevent deadlock
+    - Each callback wrapped in try/except to prevent thread death
+    - Error propagation: _error field checked by get_board()/wait_for()
+    - pyautogui must ONLY be called from the main thread, never from callbacks
+
+    Events:
+        card_flipped: (position, old_state, new_state) — Hidden->Alive
+        card_died: (position, old_state, new_state) — Alive->Dead or killed_hidden
+        status_changed: (position, old_statuses, new_statuses)
+        game_connected: (board) — read_board() returns non-None after None
+        game_disconnected: () — read_board() returns None after non-None
+    """
+
+    def __init__(self, poll_interval=0.2, pid=None):
+        super().__init__(daemon=True)
+        self._poll_interval = poll_interval
+        self._pid = pid
+        self._callbacks: dict[str, list] = {}
+        self._lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self._board: list[dict] | None = None
+        self._last_board: list[dict] | None = None
+        self._error: Exception | None = None
+        self._reader: MemoryReader | None = None
+        self._consecutive_failures = 0
+        self._MAX_FAILURES_BEFORE_RECONNECT = 3
+
+        # Guard against free-threaded Python
+        if hasattr(sys, '_is_gil_enabled') and not sys._is_gil_enabled():
+            raise RuntimeError(
+                "Free-threaded Python detected. MemoryMonitor requires GIL-enabled CPython."
+            )
+
+    def register(self, event: str, callback):
+        """Register a callback for an event. Thread-safe."""
+        if event not in self._callbacks:
+            self._callbacks[event] = []
+        self._callbacks[event].append(callback)
+
+    def unregister(self, event: str, callback):
+        """Remove a callback. Thread-safe."""
+        if event in self._callbacks:
+            self._callbacks[event] = [cb for cb in self._callbacks[event] if cb is not callback]
+
+    def get_board(self) -> list[dict] | None:
+        """Get the latest board snapshot. Thread-safe (microsecond lock)."""
+        if self._error:
+            raise RuntimeError(f"MemoryMonitor died: {self._error}") from self._error
+        with self._lock:
+            return self._board
+
+    def wait_for(self, predicate, timeout: float, min_delay: float = 0) -> bool:
+        """Block until predicate(board) is True, or timeout.
+
+        Args:
+            predicate: callable(list[dict] | None) -> bool
+            timeout: max seconds to wait
+            min_delay: minimum seconds before first check (for animation startup)
+
+        Returns True if predicate was satisfied, False on timeout/shutdown.
+        """
+        if self._error:
+            raise RuntimeError(f"MemoryMonitor died: {self._error}") from self._error
+
+        if min_delay > 0:
+            if self._stop_event.wait(min_delay):
+                return False  # shutdown requested
+
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            board = self.get_board()
+            try:
+                if predicate(board):
+                    return True
+            except Exception:
+                pass  # predicate may fail on None board
+            if self._stop_event.wait(0.1):
+                return False  # shutdown requested
+        return False
+
+    def is_healthy(self) -> bool:
+        """Check if the monitor thread is alive and error-free."""
+        return self.is_alive() and self._error is None
+
+    def stop(self):
+        """Signal the monitor to stop. Non-blocking."""
+        self._stop_event.set()
+        if self._reader:
+            try:
+                self._reader.close()
+            except Exception:
+                pass
+
+    def run(self):
+        """Main polling loop (runs in background thread)."""
+        try:
+            self._reader = MemoryReader()
+            if not self._reader.open(self._pid):
+                self._error = RuntimeError("Failed to open game process")
+                return
+
+            while not self._stop_event.is_set():
+                try:
+                    new_board = self._reader.read_board()
+                except Exception as e:
+                    new_board = None
+                    self._consecutive_failures += 1
+                    if self._consecutive_failures >= self._MAX_FAILURES_BEFORE_RECONNECT:
+                        self._reconnect()
+                    self._stop_event.wait(self._poll_interval)
+                    continue
+
+                if new_board is None:
+                    self._consecutive_failures += 1
+                    if self._consecutive_failures >= self._MAX_FAILURES_BEFORE_RECONNECT:
+                        self._reconnect()
+                else:
+                    self._consecutive_failures = 0
+
+                # Compute diffs BEFORE taking lock
+                events_to_fire = self._compute_diffs(self._last_board, new_board)
+
+                # Swap board reference under lock (microseconds)
+                with self._lock:
+                    self._board = new_board
+
+                self._last_board = new_board
+
+                # Fire callbacks OUTSIDE lock
+                for event_name, event_data in events_to_fire:
+                    self._fire_callbacks(event_name, event_data)
+
+                self._stop_event.wait(self._poll_interval)
+
+        except Exception as e:
+            self._error = e
+        finally:
+            if self._reader:
+                try:
+                    self._reader.close()
+                except Exception:
+                    pass
+
+    def _reconnect(self):
+        """Close and reopen the reader to recover from stale handles."""
+        self._consecutive_failures = 0
+        if self._reader:
+            try:
+                self._reader.close()
+            except Exception:
+                pass
+        self._reader = MemoryReader()
+        if not self._reader.open(self._pid):
+            # Can't reconnect — will retry next poll cycle
+            pass
+
+    def _compute_diffs(self, old_board, new_board):
+        """Compare old and new board states, return list of (event_name, event_data)."""
+        events = []
+
+        # game_connected / game_disconnected
+        if old_board is None and new_board is not None:
+            events.append(('game_connected', {'board': new_board}))
+            return events  # don't diff further on first connect
+        if old_board is not None and new_board is None:
+            events.append(('game_disconnected', {}))
+            return events
+        if old_board is None or new_board is None:
+            return events
+
+        old_by_pos = {c['position']: c for c in old_board}
+        new_by_pos = {c['position']: c for c in new_board}
+
+        for pos, new_card in new_by_pos.items():
+            old_card = old_by_pos.get(pos)
+            if old_card is None:
+                continue
+
+            old_state = old_card['state']
+            new_state = new_card['state']
+
+            # card_flipped: Hidden -> Alive
+            if old_state == 'Hidden' and new_state == 'Alive':
+                events.append(('card_flipped', {
+                    'position': pos, 'old_state': old_state, 'new_state': new_state
+                }))
+
+            # card_died: -> Dead, or killed_hidden changed
+            if old_state != 'Dead' and new_state == 'Dead':
+                events.append(('card_died', {
+                    'position': pos, 'old_state': old_state, 'new_state': new_state
+                }))
+            elif not old_card.get('killed_hidden') and new_card.get('killed_hidden'):
+                events.append(('card_died', {
+                    'position': pos, 'old_state': old_state, 'new_state': 'killed_hidden'
+                }))
+
+            # status_changed
+            old_statuses = frozenset(old_card.get('statuses', []))
+            new_statuses = frozenset(new_card.get('statuses', []))
+            if old_statuses != new_statuses:
+                events.append(('status_changed', {
+                    'position': pos,
+                    'old_statuses': list(old_statuses),
+                    'new_statuses': list(new_statuses),
+                }))
+
+        return events
+
+    def _fire_callbacks(self, event_name, event_data):
+        """Fire all registered callbacks for an event. Each wrapped in try/except."""
+        for cb in self._callbacks.get(event_name, []):
+            try:
+                cb(event_data)
+            except Exception as e:
+                print(f"  [MemoryMonitor] callback error on {event_name}: {e}")
+
+
+# Global monitor instance (started once per REPL session)
+_monitor: MemoryMonitor | None = None
+
+
+def get_monitor(poll_interval=0.2, pid=None) -> MemoryMonitor:
+    """Get or create the global MemoryMonitor singleton."""
+    global _monitor
+    if _monitor is not None and _monitor.is_healthy():
+        return _monitor
+    if _monitor is not None:
+        _monitor.stop()
+    _monitor = MemoryMonitor(poll_interval=poll_interval, pid=pid)
+    _monitor.start()
+    atexit.register(_shutdown_monitor)
+    return _monitor
+
+
+def _shutdown_monitor():
+    global _monitor
+    if _monitor is not None:
+        _monitor.stop()
+        _monitor = None
+
+
+def shutdown_monitor():
+    """Public alias for _shutdown_monitor. Stops the monitor and clears the global."""
+    _shutdown_monitor()
+
+
+def restart_monitor(poll_interval=0.2, pid=None) -> MemoryMonitor:
+    """Shut down the existing monitor and create a fresh one. Use between games for isolation."""
+    shutdown_monitor()
+    return get_monitor(poll_interval=poll_interval, pid=pid)
 
 
 def print_deck(deck):
@@ -494,6 +920,30 @@ def print_board(cards):
     for c in evils:
         disguise_info = f" (disguised as {c['disguise']})" if c['disguise'] else ""
         print(f"  #{c['position']} {c['true_role']}{disguise_info}")
+
+    # Show clue data for flipped cards
+    clue_cards = [c for c in cards if c.get('clue_text') or c.get('acted_infos') or c.get('runtime_data')]
+    if clue_cards:
+        print()
+        print("Clue data:")
+        for c in clue_cards:
+            parts = [f"  #{c['position']} {c['true_role']}:"]
+            if c.get('clue_text'):
+                parts.append(f"clue=\"{c['clue_text']}\"")
+            if c.get('runtime_data'):
+                rd = c['runtime_data']
+                if rd.get('type') == 'direction':
+                    parts.append(f"direction={rd['direction']}")
+                elif rd.get('type') == 'cures':
+                    parts.append(f"cures={rd['cures']}")
+                elif rd.get('type') == 'baker':
+                    parts.append(f"original={rd.get('original_role')}")
+            if c.get('acted_infos'):
+                for info in c['acted_infos']:
+                    targets = info.get('targets', [])
+                    if targets:
+                        parts.append(f"targets={targets}")
+            print(' '.join(parts))
 
 
 def print_score(score):

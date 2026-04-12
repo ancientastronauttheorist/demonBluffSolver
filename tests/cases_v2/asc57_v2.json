@@ -1,0 +1,133 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 6,
+        "evil_role": "Baa"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Dreamer"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Witch"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7
+        ],
+        "has_evil": false
+      }
+    }
+  ],
+  "executed": [
+    3,
+    2
+  ],
+  "confirmed_evil": [
+    3,
+    2
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Baa",
+    "2": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    7
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Dreamer",
+      "Medium",
+      "Knight",
+      "Bard"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    5,
+    2,
+    1,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc57_v2",
+  "true_evil_positions": {
+    "2": "Witch",
+    "3": "Baa"
+  },
+  "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec"
+}

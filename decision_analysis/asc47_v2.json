@@ -1,0 +1,165 @@
+{
+  "name": "asc47_v2",
+  "n_cards": 8,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.5,
+        "3": 0.5,
+        "7": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Confessor",
+        "Architect",
+        "Poet",
+        "Medium",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.5,
+        "3": 0.5,
+        "7": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Confessor",
+        "Architect",
+        "Poet",
+        "Medium",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        7,
+        8
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Confessor",
+        "Architect",
+        "Poet",
+        "Medium",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        7,
+        8
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Confessor",
+        "Architect",
+        "Poet",
+        "Medium",
+        "Plague_Doctor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 4,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

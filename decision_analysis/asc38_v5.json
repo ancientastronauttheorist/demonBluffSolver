@@ -1,0 +1,276 @@
+{
+  "name": "asc38_v5",
+  "n_cards": 10,
+  "n_evil": 4,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 56,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.7540483531718563,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.464,
+        "2": 0.607,
+        "3": 0.536,
+        "4": 0.375,
+        "6": 0.554,
+        "7": 0.554,
+        "8": 0.036,
+        "9": 0.875
+      },
+      "definite_evil": [],
+      "definite_good": [
+        5,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #9 (good)",
+      "n_surviving": 56,
+      "recommended_action": "use_ability #1",
+      "recommended_position": 1,
+      "recommended_confidence": 0.7540483531718563,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.464,
+        "2": 0.607,
+        "3": 0.536,
+        "4": 0.375,
+        "6": 0.554,
+        "7": 0.554,
+        "8": 0.036,
+        "9": 0.875
+      },
+      "definite_evil": [],
+      "definite_good": [
+        5,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 7,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.857,
+        "4": 0.857,
+        "6": 0.143,
+        "7": 0.143
+      },
+      "definite_evil": [
+        1,
+        2
+      ],
+      "definite_good": [
+        5,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        6,
+        7
+      ],
+      "definite_good": [
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        6,
+        7
+      ],
+      "definite_good": [
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 6,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        2,
+        6,
+        7
+      ],
+      "definite_good": [
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ],
+      "roles_in_deck": [
+        "Dreamer",
+        "Judge",
+        "Enlightened",
+        "Poet",
+        "Hunter",
+        "Scout",
+        "Knitter",
+        "Gemcrafter",
+        "Baker",
+        "Drunk",
+        "Poisoner",
+        "Puppeteer",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 6,
+    "correct": 5,
+    "wrong": 1,
+    "accuracy": 0.833,
+    "wrong_categories": {
+      "premature_wrong_exec": 1
+    }
+  }
+}

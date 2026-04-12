@@ -1,0 +1,185 @@
+{
+  "name": "asc31_v3",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        8,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Hunter",
+        "Gemcrafter",
+        "Medium",
+        "Bard",
+        "Druid",
+        "Knight",
+        "Bombardier",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        8,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Hunter",
+        "Gemcrafter",
+        "Medium",
+        "Bard",
+        "Druid",
+        "Knight",
+        "Bombardier",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        8,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Hunter",
+        "Gemcrafter",
+        "Medium",
+        "Bard",
+        "Druid",
+        "Knight",
+        "Bombardier",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        8,
+        9
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Hunter",
+        "Gemcrafter",
+        "Medium",
+        "Bard",
+        "Druid",
+        "Knight",
+        "Bombardier",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Poisoner",
+        "Shaman",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 4,
+    "correct": 2,
+    "wrong": 2,
+    "accuracy": 0.5,
+    "wrong_categories": {
+      "different_valid_target": 2
+    }
+  }
+}

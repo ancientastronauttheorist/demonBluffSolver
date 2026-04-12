@@ -462,6 +462,65 @@ def classify_image(
     return predictions
 
 
+def cross_validate_with_memory(predictions: list[CardPrediction],
+                               memory_board: list[dict],
+                               n_cards: int = 0) -> list[dict]:
+    """Cross-validate card vision predictions against memory reader board data.
+
+    Compares the vision-detected card name against the memory reader's disguise
+    field (what the card shows as). Trust memory reader on mismatch.
+
+    Args:
+        predictions: from classify_image()
+        memory_board: from memory_reader.read_board()
+        n_cards: total cards in game (for seat mapping)
+
+    Returns:
+        List of mismatch dicts: [{position, vision_name, memory_name, trust}]
+    """
+    if not predictions or not memory_board:
+        return []
+
+    mismatches = []
+    mem_by_pos = {c['position']: c for c in memory_board}
+
+    for pred in predictions:
+        if not pred.accepted or not pred.box:
+            continue
+        # Try to match prediction to a board position by proximity
+        # (predictions have box centers, memory has position IDs)
+        # Simple approach: use the prediction index as position guess
+        # More robust: use seat detection
+        for pos, mc in mem_by_pos.items():
+            expected = mc.get('disguise') or mc.get('true_role', '')
+            if not expected:
+                continue
+            # Normalize names for comparison
+            v_name = pred.name.lower().replace(' ', '_').replace('-', '_')
+            m_name = expected.lower().replace(' ', '_').replace('-', '_')
+            if v_name == m_name:
+                break  # matched
+        else:
+            continue
+
+        if pred.name.lower().replace(' ', '_') != expected.lower().replace(' ', '_'):
+            mismatches.append({
+                'position': pos,
+                'vision_name': pred.name,
+                'memory_name': expected,
+                'vision_score': pred.score,
+                'trust': 'memory',
+            })
+
+    if mismatches:
+        print(f"\n  [cross-validate] {len(mismatches)} mismatch(es):")
+        for m in mismatches:
+            print(f"    #{m['position']}: vision={m['vision_name']} "
+                  f"(score={m['vision_score']:.2f}) vs memory={m['memory_name']} "
+                  f"-> trusting {m['trust']}")
+    return mismatches
+
+
 def export_library_images(library: list[CardTemplate], output_dir: str | Path) -> list[str]:
     """Save normalized card templates for visual inspection."""
     out_dir = Path(output_dir)

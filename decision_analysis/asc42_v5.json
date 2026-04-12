@@ -1,0 +1,134 @@
+{
+  "name": "asc42_v5",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 20,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.33240218649317654,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.3,
+        "3": 0.7,
+        "4": 0.3,
+        "5": 0.3,
+        "6": 0.4
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Judge",
+        "Confessor",
+        "Empress",
+        "Bombardier",
+        "Doppelganger",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (good)",
+      "n_surviving": 20,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.33240218649317654,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "2": 0.3,
+        "3": 0.7,
+        "4": 0.3,
+        "5": 0.3,
+        "6": 0.4
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Judge",
+        "Confessor",
+        "Empress",
+        "Bombardier",
+        "Doppelganger",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #2 (good)",
+      "n_surviving": 12,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "2": 0.5,
+        "3": 0.5,
+        "4": 0.5,
+        "5": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Scout",
+        "Knitter",
+        "Baker",
+        "Judge",
+        "Confessor",
+        "Empress",
+        "Bombardier",
+        "Doppelganger",
+        "Poisoner",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_wrong_exec": 2
+    }
+  }
+}

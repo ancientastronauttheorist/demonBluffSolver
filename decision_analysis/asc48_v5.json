@@ -1,0 +1,137 @@
+{
+  "name": "asc48_v5",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 3,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.333,
+        "6": 0.333,
+        "7": 0.333
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Scout",
+        "Bishop",
+        "Dreamer",
+        "Fortune_Teller",
+        "Knight",
+        "Bombardier",
+        "Wretch",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.333,
+        "6": 0.333,
+        "7": 0.333
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Scout",
+        "Bishop",
+        "Dreamer",
+        "Fortune_Teller",
+        "Knight",
+        "Bombardier",
+        "Wretch",
+        "Poisoner",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        2,
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Bard",
+        "Scout",
+        "Bishop",
+        "Dreamer",
+        "Fortune_Teller",
+        "Knight",
+        "Bombardier",
+        "Wretch",
+        "Poisoner",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

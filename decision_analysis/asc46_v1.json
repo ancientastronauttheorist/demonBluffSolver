@@ -1,0 +1,139 @@
+{
+  "name": "asc46_v1",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 34,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.529,
+        "3": 0.588,
+        "4": 0.412,
+        "5": 0.588,
+        "6": 0.059,
+        "7": 0.176,
+        "8": 0.353,
+        "9": 0.294
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Druid",
+        "Enlightened",
+        "Poet",
+        "Baker",
+        "Fortune_Teller",
+        "Confessor",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 34,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "2": 0.529,
+        "3": 0.588,
+        "4": 0.412,
+        "5": 0.588,
+        "6": 0.059,
+        "7": 0.176,
+        "8": 0.353,
+        "9": 0.294
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Druid",
+        "Enlightened",
+        "Poet",
+        "Baker",
+        "Fortune_Teller",
+        "Confessor",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (good)",
+      "n_surviving": 9,
+      "recommended_action": "use_ability #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "2": 0.444,
+        "3": 0.556,
+        "4": 0.222,
+        "7": 0.111,
+        "8": 0.333,
+        "9": 0.333
+      },
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        1,
+        6
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Druid",
+        "Enlightened",
+        "Poet",
+        "Baker",
+        "Fortune_Teller",
+        "Confessor",
+        "Plague_Doctor",
+        "Minion",
+        "Shaman",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

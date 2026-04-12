@@ -1,0 +1,161 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Hunter"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          8,
+          9
+        ],
+        "types": [
+          "Villager",
+          "Minion",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Knight"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2,
+        "copied_role": "Bard"
+      }
+    }
+  ],
+  "executed": [
+    9,
+    4,
+    2,
+    1,
+    7
+  ],
+  "confirmed_evil": [
+    2,
+    1,
+    7
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Witch",
+    "1": "Lilis",
+    "7": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [
+    8
+  ],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Medium",
+      "Baker",
+      "Bishop",
+      "Poet",
+      "Scout",
+      "Knight"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "name": "asc45_v7",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "2": "Witch",
+    "7": "Minion"
+  },
+  "notes": "Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP"
+}

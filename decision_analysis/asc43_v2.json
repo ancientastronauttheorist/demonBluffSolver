@@ -1,0 +1,138 @@
+{
+  "name": "asc43_v2",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.8014690993833002,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.286,
+        "4": 0.429,
+        "6": 0.286,
+        "7": 0.571,
+        "8": 0.143,
+        "9": 0.286
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        5
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Confessor",
+        "Hunter",
+        "Druid",
+        "Jester",
+        "Bard",
+        "Fortune_Teller",
+        "Drunk",
+        "Bombardier",
+        "Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 14,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.8014690993833002,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "3": 0.286,
+        "4": 0.429,
+        "6": 0.286,
+        "7": 0.571,
+        "8": 0.143,
+        "9": 0.286
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        5
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Confessor",
+        "Hunter",
+        "Druid",
+        "Jester",
+        "Bard",
+        "Fortune_Teller",
+        "Drunk",
+        "Bombardier",
+        "Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 0.5,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.25,
+        "8": 0.25
+      },
+      "definite_evil": [
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        5,
+        6,
+        9
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Confessor",
+        "Hunter",
+        "Druid",
+        "Jester",
+        "Bard",
+        "Fortune_Teller",
+        "Drunk",
+        "Bombardier",
+        "Minion",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

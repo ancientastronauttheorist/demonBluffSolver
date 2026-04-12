@@ -1,0 +1,139 @@
+{
+  "name": "asc30_v5",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 7,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.286,
+        "3": 0.714,
+        "4": 0.286,
+        "5": 0.429,
+        "6": 0.286
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Enlightened",
+        "Medium",
+        "Confessor",
+        "Fortune_Teller",
+        "Slayer",
+        "Hunter",
+        "Plague_Doctor",
+        "Bombardier",
+        "Doppelganger",
+        "Chancellor",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 7,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.286,
+        "3": 0.714,
+        "4": 0.286,
+        "5": 0.429,
+        "6": 0.286
+      },
+      "definite_evil": [],
+      "definite_good": [
+        2,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Enlightened",
+        "Medium",
+        "Confessor",
+        "Fortune_Teller",
+        "Slayer",
+        "Hunter",
+        "Plague_Doctor",
+        "Bombardier",
+        "Doppelganger",
+        "Chancellor",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (good)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.9182958340544896,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "4": 0.333,
+        "5": 0.667
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Enlightened",
+        "Medium",
+        "Confessor",
+        "Fortune_Teller",
+        "Slayer",
+        "Hunter",
+        "Plague_Doctor",
+        "Bombardier",
+        "Doppelganger",
+        "Chancellor",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_but_correct": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

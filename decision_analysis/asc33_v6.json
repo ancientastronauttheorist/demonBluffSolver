@@ -1,0 +1,262 @@
+{
+  "name": "asc33_v6",
+  "n_cards": 9,
+  "n_evil": 4,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        1,
+        5
+      ],
+      "definite_good": [
+        2,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "different_valid_target",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        1,
+        5
+      ],
+      "definite_good": [
+        2,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        1,
+        5
+      ],
+      "definite_good": [
+        2,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #3 (good)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "3": 0.5,
+        "4": 0.5,
+        "6": 0.5,
+        "7": 0.5
+      },
+      "definite_evil": [
+        1,
+        5
+      ],
+      "definite_good": [
+        2,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        5,
+        6,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 6,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        5,
+        6,
+        7
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        8,
+        9
+      ],
+      "roles_in_deck": [
+        "Jester",
+        "Knitter",
+        "Alchemist",
+        "Judge",
+        "Empress",
+        "Bishop",
+        "Lover",
+        "Bombardier",
+        "Puppeteer",
+        "Twin_Minion",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 6,
+    "correct": 4,
+    "wrong": 2,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "different_valid_target": 1,
+      "premature_wrong_exec": 1
+    }
+  }
+}

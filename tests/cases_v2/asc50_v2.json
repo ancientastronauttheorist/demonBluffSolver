@@ -1,0 +1,169 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Bard"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "evil_role": "Baa"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6,
+          9
+        ],
+        "evil_count": 3
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    }
+  ],
+  "executed": [
+    6,
+    9,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    6,
+    9,
+    8
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Shaman",
+    "9": "Baa",
+    "8": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 6,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Jester",
+      "Architect",
+      "Dreamer",
+      "Medium",
+      "Lover",
+      "Hunter",
+      "Bard"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Chancellor",
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    4,
+    2,
+    8
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc50_v2",
+  "true_evil_positions": {
+    "6": "Shaman",
+    "8": "Chancellor",
+    "9": "Baa"
+  },
+  "notes": "8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil"
+}

@@ -1,0 +1,152 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          7
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Baa",
+        "distance": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 0
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Bishop"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    1,
+    3
+  ],
+  "confirmed_evil": [
+    6,
+    3
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Baa",
+    "3": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Bishop",
+      "Witness",
+      "Scout",
+      "Hunter",
+      "Architect",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "name": "asc49_v5",
+  "true_evil_positions": {
+    "3": "Minion",
+    "6": "Baa"
+  },
+  "notes": "5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used"
+}

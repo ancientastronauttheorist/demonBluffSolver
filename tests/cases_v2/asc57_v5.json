@@ -1,0 +1,174 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          8
+        ],
+        "evil_count": 3
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Pooka"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "good_role": "Bombardier"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    6,
+    1,
+    5
+  ],
+  "confirmed_evil": [
+    6,
+    1,
+    5
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Pooka",
+    "1": "Twin Minion",
+    "5": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 9,
+      "target": 2,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Knight",
+      "Gemcrafter",
+      "Medium",
+      "Dreamer",
+      "Druid",
+      "Jester"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Twin_Minion",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    9,
+    4,
+    8,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc57_v5",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "5": "Minion",
+    "6": "Pooka"
+  },
+  "notes": "Asc57 v5 9-card 10HP perfect, Knight check on #2 worked, all 3 evils sequential after probes"
+}

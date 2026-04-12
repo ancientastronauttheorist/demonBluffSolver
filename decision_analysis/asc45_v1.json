@@ -1,0 +1,85 @@
+{
+  "name": "asc45_v1",
+  "n_cards": 7,
+  "n_evil": 1,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Empress",
+        "Poet",
+        "Druid",
+        "Knitter",
+        "Oracle",
+        "Plague_Doctor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Empress",
+        "Poet",
+        "Druid",
+        "Knitter",
+        "Oracle",
+        "Plague_Doctor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 2,
+    "correct": 2,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

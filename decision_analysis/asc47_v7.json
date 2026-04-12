@@ -1,0 +1,129 @@
+{
+  "name": "asc47_v7",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Knight",
+        "Enlightened",
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Knight",
+        "Enlightened",
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #7 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #7",
+      "actual_position": 7,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        4,
+        7
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Knight",
+        "Enlightened",
+        "Scout",
+        "Oracle",
+        "Dreamer",
+        "Wretch",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

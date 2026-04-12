@@ -1,0 +1,132 @@
+{
+  "n_cards": 7,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "copied_role": "Bounty Hunter",
+        "evil_position": 5
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          7
+        ],
+        "minion_role": "Shaman"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    }
+  ],
+  "executed": [
+    2
+  ],
+  "confirmed_evil": [
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Empress",
+      "Oracle",
+      "Gemcrafter",
+      "Druid",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc51_v3",
+  "true_evil_positions": {
+    "2": "Pooka"
+  },
+  "notes": "10HP perfect, 1 evil only, Druid+Jester info solved to 1 scenario"
+}

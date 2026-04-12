@@ -264,8 +264,9 @@ def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (
         return None
 
     # Step 2: Ensure game is focused
+    already_focused = game_utils.is_game_focused()
     game_utils.ensure_game_focused()
-    time.sleep(0.2)
+    time.sleep(0.05 if already_focused else 0.2)
 
     # Step 3: Hover
     mouse_mod.move(match["x"], match["y"])
@@ -278,7 +279,7 @@ def safe_click(name: str, threshold: float = 0.7, focus_pos: tuple[int, int] = (
 
     # Step 5: Click
     mouse_mod.click(match["x"], match["y"])
-    time.sleep(0.3)
+    time.sleep(0.15)
     print(f"[safe_click] Clicked '{name}' at ({match['x']}, {match['y']})")
     return match
 
@@ -293,16 +294,76 @@ def safe_click_at(x: int, y: int, label: str = "target") -> str:
     import game_utils
     import time
 
+    already_focused = game_utils.is_game_focused()
     game_utils.ensure_game_focused()
-    time.sleep(0.2)
+    time.sleep(0.05 if already_focused else 0.2)
     mouse_mod.move(x, y)
     time.sleep(0.3)
     verify_ss = screenshot.capture("_safe_verify")
     print(f"[safe_click_at] Hovering '{label}' at ({x}, {y}) — verify: {verify_ss}")
     mouse_mod.click(x, y)
-    time.sleep(0.3)
+    time.sleep(0.15)
     print(f"[safe_click_at] Clicked '{label}' at ({x}, {y})")
     return verify_ss
+
+
+class ClickError(Exception):
+    """Raised when a click action fails verification."""
+    pass
+
+
+def verified_click(template_name: str, fallback_coords=None, post_predicate=None,
+                   monitor=None, threshold: float = 0.7) -> dict | None:
+    """Find template -> click -> optionally verify state change via monitor.
+
+    Args:
+        template_name: template to find and click
+        fallback_coords: (x, y) to click if template not found
+        post_predicate: callable(board) -> bool to verify after click
+        monitor: MemoryMonitor instance for post-click verification
+        threshold: match confidence threshold
+
+    Returns: match dict or None
+    Raises: ClickError if template not found (and no fallback) or verification fails
+    """
+    import mouse as mouse_mod
+    import game_utils
+
+    ss = screenshot.capture("_verified_find")
+    match = find(template_name, ss, threshold)
+
+    if match:
+        import time
+        already_focused = game_utils.is_game_focused()
+        game_utils.ensure_game_focused()
+        time.sleep(0.05 if already_focused else 0.2)
+        mouse_mod.move(match["x"], match["y"])
+        time.sleep(0.3)
+        mouse_mod.click(match["x"], match["y"])
+        print(f"[verified_click] Clicked '{template_name}' at ({match['x']}, {match['y']})")
+    elif fallback_coords:
+        safe_click_at(fallback_coords[0], fallback_coords[1], template_name)
+    else:
+        raise ClickError(f"Template '{template_name}' not found (conf < {threshold}) and no fallback")
+
+    if post_predicate and monitor:
+        if not monitor.wait_for(post_predicate, timeout=3):
+            raise ClickError(f"Post-click verification failed for '{template_name}'")
+
+    return match
+
+
+def fast_click_at(x: int, y: int, label: str = "target") -> None:
+    """Focus game → click coords immediately. No hover, no verify, no sleep.
+
+    For batch card flipping where speed matters. Caller controls timing.
+    """
+    import mouse as mouse_mod
+    import game_utils
+
+    game_utils.ensure_game_focused()
+    mouse_mod.click(x, y)
+    print(f"[fast_click] {label} at ({x}, {y})")
 
 
 def debug(name: str, screenshot_path: str = None) -> str:
@@ -410,6 +471,11 @@ def main():
         x, y = int(sys.argv[2]), int(sys.argv[3])
         label = sys.argv[4] if len(sys.argv) > 4 else "target"
         safe_click_at(x, y, label)
+
+    elif cmd == "fast_click_at":
+        x, y = int(sys.argv[2]), int(sys.argv[3])
+        label = sys.argv[4] if len(sys.argv) > 4 else "target"
+        fast_click_at(x, y, label)
 
     elif cmd == "list":
         list_templates()

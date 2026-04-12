@@ -1,0 +1,159 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 6
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          7
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7,
+        "good_role": "Dreamer"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    8,
+    4,
+    9
+  ],
+  "confirmed_evil": [
+    1,
+    8,
+    9
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Minion",
+    "8": "Baa",
+    "9": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Medium",
+      "Knitter",
+      "Dreamer",
+      "Jester",
+      "Witness"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague_Doctor",
+      "Wretch"
+    ],
+    "minions": [
+      "Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    7,
+    5,
+    8
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc52_v7",
+  "true_evil_positions": {
+    "1": "Minion",
+    "8": "Baa",
+    "9": "Witch"
+  },
+  "notes": "5HP, FINAL village! Witch at #9 blocked itself, executed directly per CLAUDE.md. Asc52 complete!"
+}

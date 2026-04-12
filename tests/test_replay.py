@@ -26,7 +26,8 @@ from dataclasses import dataclass, field
 # Add parent to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from solver import GameState, CardInfo, DeckComposition, solve
+from solver import GameState, CardInfo, DeckComposition
+from rust_solver import rust_solve_to_objects
 
 
 CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "cases")
@@ -219,7 +220,9 @@ def replay_game(case: dict, verbose: bool = False, strict: bool = False) -> Repl
         nonlocal passed, failure_reason
         state = make_state()
         try:
-            result = solve(state)
+            result = rust_solve_to_objects(state)
+            if result is None:
+                raise RuntimeError("Rust solver binary not found — run `cargo build --release`")
         except Exception as e:
             step = ReplayStep(step_type=step_type, description=description,
                               n_surviving=0, truth_in_set=False, error=str(e))

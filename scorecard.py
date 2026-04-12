@@ -30,15 +30,19 @@ def save(data: dict):
         json.dump(data, f, indent=2)
 
 
-def record(result: str, hp: int, name: str = "", notes: str = ""):
+def record(result: str, hp: int, name: str = "", notes: str = "",
+           loss_cause: str = None):
     data = load()
-    data["games"].append({
+    entry = {
         "result": result,
         "hp": hp,
         "name": name,
         "notes": notes,
         "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
-    })
+    }
+    if loss_cause is not None:
+        entry["loss_cause"] = loss_cause
+    data["games"].append(entry)
     save(data)
 
 
@@ -63,9 +67,33 @@ def show():
     avg_hp = sum(g["hp"] for g in wins) / win_count if wins else 0
     perfect = sum(1 for g in wins if g["hp"] == 10)
 
+    # Rolling win rate (last 20 games)
+    window = 20
+    if total >= window:
+        recent_window = games[-window:]
+        rolling_wins = sum(1 for g in recent_window if g["result"] == "win")
+        rolling_rate = rolling_wins / window * 100
+
+        # Detect declining trend: 3 consecutive windows
+        is_declining = False
+        if total >= window * 3:
+            rates = []
+            for i in range(3):
+                start = total - window * (3 - i)
+                end = total - window * (2 - i)
+                chunk = games[start:end]
+                chunk_wins = sum(1 for g in chunk if g["result"] == "win")
+                rates.append(chunk_wins / window * 100)
+            is_declining = rates[1] < rates[0] and rates[2] < rates[1]
+
+        trend = "DECLINING" if is_declining else "STABLE"
+        rolling_str = f" | {rolling_rate:.0f}% last-{window} [{trend}]"
+    else:
+        rolling_str = ""
+
     print(f"=== Demon Bluff Scorecard ===")
     print(f"Games:    {total}  ({win_count}W / {loss_count}L)")
-    print(f"Win rate: {win_rate:.0f}%")
+    print(f"Win rate: {win_rate:.0f}% all-time{rolling_str}")
     print(f"Streak:   {streak_len} {streak_type}{'s' if streak_len != 1 else ''}")
     print(f"Avg HP (wins): {avg_hp:.1f}  |  Perfect (10 HP): {perfect}")
     print()

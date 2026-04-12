@@ -1,0 +1,85 @@
+{
+  "name": "asc35_v3",
+  "n_cards": 7,
+  "n_evil": 1,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Enlightened",
+        "Confessor",
+        "Lover",
+        "Scout",
+        "Dreamer",
+        "Poet",
+        "Drunk",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        5
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Enlightened",
+        "Confessor",
+        "Lover",
+        "Scout",
+        "Dreamer",
+        "Poet",
+        "Drunk",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 2,
+    "correct": 2,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

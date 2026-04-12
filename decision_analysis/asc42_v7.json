@@ -1,0 +1,225 @@
+{
+  "name": "asc42_v7",
+  "n_cards": 9,
+  "n_evil": 4,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Druid",
+        "Poet",
+        "Knight",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Druid",
+        "Poet",
+        "Knight",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Druid",
+        "Poet",
+        "Knight",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Druid",
+        "Poet",
+        "Knight",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #8 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "definite_good": [
+        1,
+        2,
+        6,
+        7,
+        9
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Druid",
+        "Poet",
+        "Knight",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Fortune_Teller",
+        "Doppelganger",
+        "Wretch",
+        "Chancellor",
+        "Puppeteer",
+        "Lilis"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 5,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          5
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          9
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          8
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    2,
+    1
+  ],
+  "confirmed_evil": [
+    5,
+    2,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Baa",
+    "2": "Chancellor",
+    "1": "Witch"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 4,
+      "target_pos": 6,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 5,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Slayer",
+      "Hunter",
+      "Oracle",
+      "Bishop",
+      "Poet",
+      "Alchemist"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Witch",
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    8,
+    4
+  ],
+  "name": "asc46_v4",
+  "true_evil_positions": {
+    "1": "Witch",
+    "2": "Chancellor",
+    "5": "Baa"
+  },
+  "notes": "Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field."
+}

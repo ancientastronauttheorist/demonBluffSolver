@@ -145,6 +145,11 @@ def save_test_case(session_path: str, name: str, true_evil_positions: dict[int, 
     case["true_evil_positions"] = {str(k): v for k, v in true_evil_positions.items()}
     case["notes"] = notes
 
+    # Defensive: night-killed positions must NOT appear in executed.
+    # executed = day executions only; night_kills = night deaths. Disjoint sets.
+    nk_set = set(case.get("night_kills", []))
+    case["executed"] = [p for p in case.get("executed", []) if p not in nk_set]
+
     # Nest deck fields into "deck" key if stored flat (session format)
     if "deck" not in case and "villagers" in case:
         case["deck"] = {

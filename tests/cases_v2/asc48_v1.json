@@ -1,0 +1,164 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          7
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 9,
+        "good_role": "Bombardier",
+        "copied_role": "Medium"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Minion",
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 2
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    8,
+    6,
+    9
+  ],
+  "confirmed_evil": [
+    4,
+    8,
+    9
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Minion",
+    "8": "Pooka",
+    "9": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 1,
+      "target": 8,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Bishop",
+      "Scout",
+      "Architect",
+      "Poet",
+      "Bard"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    1
+  ],
+  "name": "asc48_v1",
+  "true_evil_positions": {
+    "4": "Minion",
+    "8": "Pooka",
+    "9": "Chancellor"
+  },
+  "notes": "5HP. Memory-reader-first approach! Only 1 verification screenshot. PD clean check + Bishop + Enlightened + Scout narrowed. Wrong exec on Wretch #6 but lookahead guaranteed win."
+}

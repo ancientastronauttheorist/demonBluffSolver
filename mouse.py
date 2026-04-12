@@ -17,8 +17,40 @@ except Exception:
     pass
 
 # Safety: don't move too fast, allow abort by moving mouse to corner
-pyautogui.PAUSE = 0.3
+# Below 0.2s causes double-clicks, missed clicks, focus races (see AUTOMATION_PLAN.md)
+DEFAULT_PAUSE = 0.3
+_MIN_PAUSE = 0.15
+
+# Only set PAUSE if it hasn't been explicitly configured by another module.
+# pyautogui's built-in default is 0.1; if it's still that, apply our safe default.
+if pyautogui.PAUSE == 0.1:
+    pyautogui.PAUSE = DEFAULT_PAUSE
+
 pyautogui.FAILSAFE = True
+
+
+def set_pause(value):
+    """Set the pyautogui inter-action pause duration.
+
+    Args:
+        value: Pause in seconds. Must be >= 0.15. Values < 0.2 trigger a warning
+               because they risk double-clicks, missed clicks, and focus races.
+    """
+    global DEFAULT_PAUSE
+    if value < _MIN_PAUSE:
+        raise ValueError(
+            f"PAUSE value {value}s is below minimum {_MIN_PAUSE}s — "
+            "risk of double-clicks and missed clicks"
+        )
+    if value < 0.2:
+        import warnings
+        warnings.warn(
+            f"PAUSE value {value}s is below 0.2s — may cause double-clicks, "
+            "missed clicks, or focus races",
+            stacklevel=2,
+        )
+    DEFAULT_PAUSE = value
+    pyautogui.PAUSE = value
 
 # Calibration state (lazy-loaded)
 _calibration = None

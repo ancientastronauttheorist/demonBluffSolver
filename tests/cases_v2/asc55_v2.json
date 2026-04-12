@@ -1,0 +1,161 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          7,
+          6,
+          1
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          8
+        ],
+        "minion_role": "Shaman"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Witness"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    1,
+    4
+  ],
+  "confirmed_evil": [
+    3,
+    4
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Baa",
+    "4": "Shaman"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "1": false
+  },
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Witness",
+      "Bard",
+      "Bishop",
+      "Baker",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    8,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc55_v2",
+  "true_evil_positions": {
+    "3": "Baa",
+    "4": "Shaman"
+  },
+  "notes": "Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7"
+}

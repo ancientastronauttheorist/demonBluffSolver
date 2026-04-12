@@ -1,0 +1,132 @@
+{
+  "name": "asc42_v4",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Medium",
+        "Lover",
+        "Scout",
+        "Hunter",
+        "Druid",
+        "Alchemist",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 8,
+      "recommended_action": "execute #3",
+      "recommended_position": 3,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Medium",
+        "Lover",
+        "Scout",
+        "Hunter",
+        "Druid",
+        "Alchemist",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        3,
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Medium",
+        "Lover",
+        "Scout",
+        "Hunter",
+        "Druid",
+        "Alchemist",
+        "Plague_Doctor",
+        "Bombardier",
+        "Minion",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 3,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

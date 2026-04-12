@@ -1,0 +1,224 @@
+{
+  "name": "asc37_v4",
+  "n_cards": 9,
+  "n_evil": 3,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 13,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.385,
+        "2": 0.385,
+        "3": 0.846,
+        "4": 0.231,
+        "5": 0.154,
+        "6": 0.077,
+        "7": 0.231,
+        "8": 0.154,
+        "9": 0.538
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Bishop",
+        "Gemcrafter",
+        "Slayer",
+        "Judge",
+        "Dreamer",
+        "Confessor",
+        "Knitter",
+        "Plague_Doctor",
+        "Drunk",
+        "Poisoner",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #3 (evil)",
+      "n_surviving": 13,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #3",
+      "actual_position": 3,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.385,
+        "2": 0.385,
+        "3": 0.846,
+        "4": 0.231,
+        "5": 0.154,
+        "6": 0.077,
+        "7": 0.231,
+        "8": 0.154,
+        "9": 0.538
+      },
+      "definite_evil": [],
+      "definite_good": [],
+      "roles_in_deck": [
+        "Bishop",
+        "Gemcrafter",
+        "Slayer",
+        "Judge",
+        "Dreamer",
+        "Confessor",
+        "Knitter",
+        "Plague_Doctor",
+        "Drunk",
+        "Poisoner",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #8 (good)",
+      "n_surviving": 8,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #8",
+      "actual_position": 8,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.375,
+        "2": 0.375,
+        "5": 0.25,
+        "6": 0.125,
+        "8": 0.25,
+        "9": 0.625
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        4,
+        7
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Gemcrafter",
+        "Slayer",
+        "Judge",
+        "Dreamer",
+        "Confessor",
+        "Knitter",
+        "Plague_Doctor",
+        "Drunk",
+        "Poisoner",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #9 (evil)",
+      "n_surviving": 6,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #9",
+      "actual_position": 9,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.5,
+        "2": 0.5,
+        "5": 0.167,
+        "9": 0.833
+      },
+      "definite_evil": [
+        3
+      ],
+      "definite_good": [
+        4,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Gemcrafter",
+        "Slayer",
+        "Judge",
+        "Dreamer",
+        "Confessor",
+        "Knitter",
+        "Plague_Doctor",
+        "Drunk",
+        "Poisoner",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #2 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #7",
+      "recommended_position": 7,
+      "recommended_confidence": 0.9182958340544896,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.333,
+        "2": 0.667
+      },
+      "definite_evil": [
+        3,
+        9
+      ],
+      "definite_good": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Bishop",
+        "Gemcrafter",
+        "Slayer",
+        "Judge",
+        "Dreamer",
+        "Confessor",
+        "Knitter",
+        "Plague_Doctor",
+        "Drunk",
+        "Poisoner",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 1,
+    "wrong": 4,
+    "accuracy": 0.2,
+    "wrong_categories": {
+      "premature_but_correct": 3,
+      "premature_wrong_exec": 1
+    }
+  }
+}

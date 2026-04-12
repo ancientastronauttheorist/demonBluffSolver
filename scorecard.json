@@ -1847,6 +1847,825 @@
       "name": "asc43_v7",
       "notes": "5HP, SOLVER BUG: Architect validator uses side-count not closest-distance, overrode solver with memory reader to execute #3 not #1, wrong exec on Baker#2, ascension 43 complete",
       "date": "2026-04-04 02:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v1",
+      "notes": "perfect 10HP, memory reader clue test game",
+      "date": "2026-04-09 15:02"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc44_v2",
+      "notes": "1HP win, auto_card test, Lilis game, both Slayers were evil/corrupted",
+      "date": "2026-04-09 15:26"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc44_v3",
+      "notes": "auto_next test, auto-executed #8 Shaman, solver WIN bug when 3rd evil at night-killed pos",
+      "date": "2026-04-09 15:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v4",
+      "notes": "10HP perfect, auto_next one-shot win, 6/7 cards auto-entered",
+      "date": "2026-04-09 15:47"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc44_v5",
+      "notes": "3HP, auto_next executed Puppeteer, Slayer killed Pooka, Drunk exec cost 2HP not 5",
+      "date": "2026-04-09 15:53"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v6",
+      "notes": "10HP perfect, card1 reflip needed, Druid+Slayer abilities",
+      "date": "2026-04-09 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc44_v7",
+      "notes": "10HP PERFECT, FULLY AUTOMATED: auto_card 6/6 + auto_next one-shot, ascension 44 complete",
+      "date": "2026-04-09 16:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v1",
+      "notes": "10HP, auto_exec failed on Oracle active ability, manual exec. Time: ~1775768834s",
+      "date": "2026-04-09 16:07"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc45_v2",
+      "notes": "6HP, Lilis game, auto_exec x2, time=219s",
+      "date": "2026-04-09 16:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v3",
+      "notes": "10HP perfect, FT resolved, auto_exec Pooka",
+      "date": "2026-04-09 16:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v4",
+      "notes": "10HP perfect, 2 auto-execs, PD resolved, time=111s",
+      "date": "2026-04-09 16:28"
+    },
+    {
+      "result": "loss",
+      "hp": 6,
+      "name": "asc45_v5",
+      "notes": "GAME STUCK: Lilis night animation loops forever when all cards revealed, no kill target. Game appears frozen.",
+      "date": "2026-04-09 16:45"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc45_v5",
+      "notes": "1HP clutch, wrong coords caused stuck state, judge resolved, 83pct gamble",
+      "date": "2026-04-09 18:03"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc45_v6",
+      "notes": "10HP perfect, 3 auto-execs, Puppeteer+Puppet+Baa, solver had only 4 scenarios from start",
+      "date": "2026-04-09 18:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc45_v7",
+      "notes": "Asc45 complete! Lilis+Witch+Minion, Knight free check, PD clean check, 50-50 hit on Minion, 6HP",
+      "date": "2026-04-09 18:31"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc46_v1",
+      "notes": "Solver bug: Shaman-swapped Bakers' 'I was a [role]' misinterpreted as Baker ability (previous card role reveal) instead of self-identification of original role. Solver wrongly concluded #7 was evil Minion with 100% confidence in 1 scenario.",
+      "date": "2026-04-09 21:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v1b",
+      "notes": "Perfect 10HP. Two Knights = both evil. Bishop confirmed #5 Minion. Knight free check on #4.",
+      "date": "2026-04-09 21:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v2",
+      "notes": "Perfect 10HP. PD confirmed #7 evil + #9 corrupted. Baker chain, no Shaman.",
+      "date": "2026-04-09 21:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v3",
+      "notes": "Perfect 10HP. Dreamer found Pooka at #2, FT cleared #1+#3, Jester confirmed 1 evil in group.",
+      "date": "2026-04-09 21:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v4",
+      "notes": "Perfect 10HP. Jester lie caught Witch among Bombardier twins. PD clean check + Oracle + Slayer narrowed field.",
+      "date": "2026-04-09 22:04"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v5",
+      "notes": "Perfect 10HP. Poet-Bishop + Scout + Lover + Gemcrafter narrowed to 2 scenarios, both had #1 evil.",
+      "date": "2026-04-09 22:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc46_v6",
+      "notes": "Perfect 10HP. Knight free check caught Poisoner, Slayer cleared #2, solver found Baa at #7.",
+      "date": "2026-04-09 22:13"
+    },
+    {
+      "result": "win",
+      "hp": 4,
+      "name": "asc46_v7",
+      "notes": "4HP. Lilis+Witch+Minion. Dreamer found Witch, PD clean checks, night_no_kill confirmed Lilis. Solver 50/50 on last exec but Gemcrafter lie on #8 proved #1 evil.",
+      "date": "2026-04-09 22:22"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc47_v1",
+      "notes": "6HP. Lilis+Witch+Twin_Minion. 3 Judges (1 pool) = duplicates reveal. Judge truth checks narrowed Witch to #7.",
+      "date": "2026-04-09 22:31"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc47_v2",
+      "notes": "8HP. Puppeteer+Puppet+Lilis. Duplicate Knitter + dizzy Confessor = Puppet/Puppeteer confirmed. Lilis night killed Poet.",
+      "date": "2026-04-09 22:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc47_v3",
+      "notes": "Perfect 10HP. PD clean + Dreamer found Puppet. Duplicate Lover + Oracle Puppet detection. All 100% confident execs.",
+      "date": "2026-04-09 22:43"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc47_v4",
+      "notes": "1HP clutch! Shaman+Chancellor+Lilis. 10-card game. Wrong exec on #2 (85% gamble) but solver lookahead guaranteed win. Judge truth checks + Architect narrowed remaining evils to 100%.",
+      "date": "2026-04-09 22:51"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc47_v5",
+      "notes": "3HP. Poet bounty_hunter + Baker chain + Druid narrowed. Two wrong execs (Baker, Drunk) but lookahead guaranteed win.",
+      "date": "2026-04-09 22:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc47_v6",
+      "notes": "Perfect 10HP. Duplicate Gemcrafters + Oracle + Jester + PD corruption check + Judge truth. 50/50 final exec hit.",
+      "date": "2026-04-09 23:06"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc47_v7",
+      "notes": "Perfect 10HP. Asc47 complete! Baker chain + duplicate original_role + Enlightened + Oracle narrowed to 1 scenario immediately. Both execs 100% confident.",
+      "date": "2026-04-09 23:10"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc48_v1",
+      "notes": "5HP. Memory-reader-first approach! Only 1 verification screenshot. PD clean check + Bishop + Enlightened + Scout narrowed. Wrong exec on Wretch #6 but lookahead guaranteed win.",
+      "date": "2026-04-09 23:39"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc48_v2",
+      "notes": "5HP, Dreamer+FT+Slayer abilities, 1 wrong exec on corrupted Dreamer",
+      "date": "2026-04-10 00:16"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc48_v3",
+      "notes": "8HP, 1 wrong exec Drunk (2HP), Knight trick, Dreamer+PD+Judge",
+      "date": "2026-04-10 00:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc48_v4",
+      "notes": "10HP perfect, no abilities needed, pure deduction from Scout+Oracle+Confessor+Bard clues",
+      "date": "2026-04-10 00:35"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc48_v5",
+      "notes": "6HP, Lilis night killed #5 Scout, Knight trick, Dreamer+FT abilities",
+      "date": "2026-04-10 00:45"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc48_v6",
+      "notes": "8HP, Lilis night killed Druid, no abilities needed, 2 scenarios from passive clues",
+      "date": "2026-04-10 00:52"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc48_v7",
+      "notes": "5HP, Jester ability + 1 wrong exec, Asc48 complete 7/7!",
+      "date": "2026-04-10 00:59"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc49_v1",
+      "notes": "6HP, Lilis killed Witch night2, two 100% confident executions, no abilities needed",
+      "date": "2026-04-10 11:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v2",
+      "notes": "10HP perfect, Druid found Doppelganger, both Slayer abilities failed (both evil fakes), lookahead forced win",
+      "date": "2026-04-10 11:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v3",
+      "notes": "10HP perfect, two 100% confident executions, no abilities needed, corrupted Medium",
+      "date": "2026-04-10 11:59"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc49_v4",
+      "notes": "6HP, Lilis night killed Oracle, two 100% confident executions, PD corrupted Bishop",
+      "date": "2026-04-10 12:05"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc49_v5",
+      "notes": "5HP, wrong exec on Doppelganger#1, lookahead forced win, no abilities used",
+      "date": "2026-04-10 12:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v6",
+      "notes": "10HP perfect, caught auto_card misparse (Poet Scout->Hunter), Judge confirmed Medium truthful, Slayer fail narrowed to Shaman",
+      "date": "2026-04-10 12:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc49_v7",
+      "notes": "10HP perfect, two 100% confident executions, Drunk disguised as Druid, no abilities needed. Asc49 complete! 7/7 perfect run",
+      "date": "2026-04-10 12:23"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc50_v1",
+      "notes": "5HP, auto_loop stress test, forced_safe exec on Drunk, Knight check fix verified",
+      "date": "2026-04-10 13:33"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc50_v2",
+      "notes": "8HP, Shaman+Chancellor+Baa, Drunk wrong exec cost only 2HP, Dreamer found Baa, PD checked #6 clean, Jester lied 3 evil",
+      "date": "2026-04-10 13:53"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v3",
+      "notes": "10HP perfect, 1 scenario solve, Poet copied Hunter, Alchemist cured 1 corruption, corrupted Baker lied",
+      "date": "2026-04-10 13:57"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc50_v4",
+      "notes": "5HP, Dreamer found Chancellor, PD found #4 corrupted + #2 evil, wrong exec on #9 Baker",
+      "date": "2026-04-10 14:07"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc50_v5",
+      "notes": "6HP, Lilis game, night killed #5 #10 (both good), Confessor dizzy, PD #8 clean check, evil PD #3 caught lying, no wrong execs",
+      "date": "2026-04-10 14:19"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v6",
+      "notes": "10HP perfect, both evils killed by Slayers (#6 killed Pooka, Doppelganger-Slayer #8 killed Chancellor), no executions needed",
+      "date": "2026-04-10 14:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc50_v7",
+      "notes": "10HP perfect, Scout+Hunter+Knitter(Poet) constrained solver to 6 scenarios instantly, clean 100% executions on both evils",
+      "date": "2026-04-10 14:26"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc51_v1",
+      "notes": "1HP win, corrupted Knight at #3 lost immunity (9HP cost from Pooka corruption), solver found both evils with 100% confidence after",
+      "date": "2026-04-10 14:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v2",
+      "notes": "10HP perfect, Jester ability on #1,#3,#6 found 1 evil, solved to 1 scenario, clean executions",
+      "date": "2026-04-10 15:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v3",
+      "notes": "10HP perfect, 1 evil only, Druid+Jester info solved to 1 scenario",
+      "date": "2026-04-10 15:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v4",
+      "notes": "10HP perfect, PD found #2 corrupted + #3 evil, clean executions both 100%",
+      "date": "2026-04-10 15:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v5",
+      "notes": "10HP perfect, 3 evils found without any wrong executions, Puppeteer+Puppet+Baa game",
+      "date": "2026-04-10 15:16"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc51_v6",
+      "notes": "10HP perfect, Witch blocked #7, FT confirmed evil in #1/#3, Druid disambiguated to 1 scenario",
+      "date": "2026-04-10 15:23"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc51_v7",
+      "notes": "5HP, Judge found #7 lying, 50/50 on #6 was wrong exec (Judge good), lookahead guaranteed win, Asc51 complete 7/7",
+      "date": "2026-04-10 15:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc52_v1",
+      "notes": "6HP, Lilis game, night killed Slayer(#7) and Shaman(#10), FT confirmed #1/#2 clean, all 4 evils found at 100%",
+      "date": "2026-04-10 15:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v2",
+      "notes": "10HP perfect, all 3 evils at 100% confidence, Slayer couldn't kill #9 (Pooka disguised as Slayer)",
+      "date": "2026-04-10 15:56"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v3",
+      "notes": "10HP perfect, Slayer killed Baa, both PDs checked clean, solved to 1 scenario",
+      "date": "2026-04-10 16:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc52_v4",
+      "notes": "6HP, Lilis game, heavy ability usage (2 Dreamers, 2 Jesters, FT), night killed PD(#8), all abilities used to narrow 336->21 scenarios",
+      "date": "2026-04-10 16:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v5",
+      "notes": "10HP perfect, 8 abilities used (PD+Dreamer+2Jesters+FT+Judge+Alchemist), solved 90 scenarios down to 1",
+      "date": "2026-04-10 16:18"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc52_v6",
+      "notes": "LOSS - data entry errors caused solver degraded state. Druid #3 said 'Doppelganger' (out of pool) - solver couldnt handle. Multiple wrong execs from bad info: #2 Bard (wrong), #6 Knight (immune), #7 Bishop (wrong). #8 Pooka was last evil per memory reader.",
+      "date": "2026-04-10 16:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc52_v6_retry",
+      "notes": "10HP retry win after v6 loss, Dreamer pinpointed Poisoner, Pooka+Poisoner game with 2 Alchemist disguises",
+      "date": "2026-04-10 16:50"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc52_v7",
+      "notes": "5HP, FINAL village! Witch at #9 blocked itself, executed directly per CLAUDE.md. Asc52 complete!",
+      "date": "2026-04-10 16:59"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v1",
+      "notes": "10HP perfect, 2 Mediums on board (both evil disguises), corrupted Baker false claim required reset",
+      "date": "2026-04-10 17:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v2",
+      "notes": "10HP perfect, Witch+Baa, solver found Witch at 100%, then Baa at 100% after #7 unblocked",
+      "date": "2026-04-10 17:37"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc53_v3",
+      "notes": "1HP clutch, Lilis game, night killed Doppelganger #9, wrong exec on Alchemist #6 at 58% (followed solver per CLAUDE.md), recovered with 100% picks for Lilis and Poisoner",
+      "date": "2026-04-10 17:44"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc53_v4",
+      "notes": "5HP, Shaman+Minion+Pooka, PD revealed Minion at #3, wrong exec on Alchemist #7 (lookahead 25%), recovered",
+      "date": "2026-04-10 17:52"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v5",
+      "notes": "10HP perfect, Knight check on #7 succeeded (immunity blocked), then lookahead picks for Baa and Poisoner",
+      "date": "2026-04-10 17:57"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc53_v6",
+      "notes": "6HP, Lilis game, night killed Knitter #7, both evils found at 100% confidence",
+      "date": "2026-04-10 18:02"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc53_v7",
+      "notes": "10HP perfect, FINAL village! All 4 evils at 100% confidence, Asc53 complete 7/7!",
+      "date": "2026-04-10 18:08"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v1",
+      "notes": "",
+      "date": "2026-04-10 18:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v1",
+      "notes": "Asc54 v1 perfect 10HP, 4 evils, 9-card board with Baa+Poisoner+Puppeteer",
+      "date": "2026-04-10 18:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v2",
+      "notes": "Asc54 v2 perfect 10HP, Slayer kill on Chancellor",
+      "date": "2026-04-10 18:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v2",
+      "notes": "Asc54 v2 perfect 10HP, Slayer kill on Chancellor",
+      "date": "2026-04-10 18:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v3",
+      "notes": "Asc54 v3 perfect 10HP, both adjacent (Pooka+Poisoner), 1-scenario solver",
+      "date": "2026-04-10 18:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc54_v4",
+      "notes": "Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs",
+      "date": "2026-04-10 18:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc54_v4",
+      "notes": "Asc54 v4 Lilis 6HP, Bard night-killed, batched flips, 3 confident execs",
+      "date": "2026-04-10 18:39"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc54_v5",
+      "notes": "Asc54 v5 5HP, wrong exec on Jester #1, Dreamer+Jester+FT abilities, two Bakers",
+      "date": "2026-04-10 18:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v6",
+      "notes": "Asc54 v6 perfect 10HP, two apparent Bombardiers (#2 evil disguise, #3 real)",
+      "date": "2026-04-10 18:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc54_v7",
+      "notes": "Asc54 v7 perfect 10HP, ASC54 COMPLETE 7/7, 16-win streak",
+      "date": "2026-04-10 18:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v1",
+      "notes": "Asc55 perfect 10HP, 2 confident exec from 1-scenario solve",
+      "date": "2026-04-11 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v1",
+      "notes": "Asc55 perfect 10HP, 2 confident exec from 1-scenario solve",
+      "date": "2026-04-11 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc55_v2",
+      "notes": "Asc55 Shaman+Baa, 5HP, 1 wrong exec on 50/50 lookahead-forced #1, PD probe + Judge corrupted, original Baker #2, Witness-swap Baker #7",
+      "date": "2026-04-11 14:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v3",
+      "notes": "Asc55 9-card 3-evil, 10HP perfect, Knight check on Shaman, Drunk-as-Bishop, Dreamer was Baa lying about Shaman, FT confirmed evil in 1-2",
+      "date": "2026-04-11 14:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v4",
+      "notes": "Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve",
+      "date": "2026-04-11 14:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v4",
+      "notes": "Asc55 8-card 10HP perfect, manual entry due to memory reader stale-clue bug, 1-scenario solve",
+      "date": "2026-04-11 14:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v5",
+      "notes": "Asc55 9-card 10HP perfect, Baker chain (3 Bakers from 1), PD probe clean on Pooka, both evils confident exec",
+      "date": "2026-04-11 14:15"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc55_v6",
+      "notes": "Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec",
+      "date": "2026-04-11 14:21"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc55_v6",
+      "notes": "Asc55 Lilis 9-card 6HP, night-killed Judge #7, evil PD #4 self-corruption claim, Dreamer ID'd Minion, all 3 evils sequential confident exec",
+      "date": "2026-04-11 14:21"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc55_v7",
+      "notes": "Asc55 final 7/7 perfect 10HP, ASC55 COMPLETE, 2 Alchemists on board (pool dup), Wretch survived",
+      "date": "2026-04-11 14:25"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v1",
+      "notes": "Asc56 v1 8-card 10HP perfect, Slayer #3 killed Witch #5, Baa #2 confident exec, Witch-blocked #8 was Dreamer",
+      "date": "2026-04-11 14:30"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc56_v2",
+      "notes": "Asc56 v2 9-card 5HP, 1 wrong exec on PD #6 (lookahead-forced 67/33), then 2 confident exec, 2 Poets + 2 Gemcrafters from pool dups",
+      "date": "2026-04-11 14:35"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v3",
+      "notes": "Asc56 v3 8-card 10HP perfect, Doppelganger copied Empress, Poet copied Gemcrafter, FT lying (was Pooka), Jester corrupted lying",
+      "date": "2026-04-11 14:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v4",
+      "notes": "Asc56 v4 9-card 10HP perfect, Witch unblocked #9, Oracle (Shaman) lied about dead Witch, Bishop dup, all 3 confident exec",
+      "date": "2026-04-11 14:42"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v5",
+      "notes": "Asc56 v5 9-card 10HP perfect, 3-evil all sequential confident exec, Poet copied Scout",
+      "date": "2026-04-11 14:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc56_v6",
+      "notes": "Asc56 v6 8-card 10HP perfect, Puppeteer game (3 evils from 2-pool minion+demon), Pooka first then Jester+Judge ability sequence",
+      "date": "2026-04-11 14:49"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc56_v7",
+      "notes": "Asc56 v7 final 6HP, ASC56 COMPLETE 7/7, Lilis night-killed Jester #9, Slayer killed Shaman #6, Wretch counted as evil in Jester ability",
+      "date": "2026-04-11 14:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc57_v1",
+      "notes": "Asc57 v1 Lilis 9-card 6HP, night-killed Poet #7 + 4 HP from 2 night phases, both confident exec, #1 needed re-flip",
+      "date": "2026-04-11 14:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v2",
+      "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec",
+      "date": "2026-04-11 15:04"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v2",
+      "notes": "Asc57 v2 7-card 10HP perfect, Knight check on #4 worked (free check), 2 dual-FT probes confirmed 4/5/7 good, then 62% Baa exec + 91% Witch exec",
+      "date": "2026-04-11 15:05"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v3",
+      "notes": "Asc57 v3 9-card 10HP perfect, Druid Wretch lie locked Witch #1, then Baa #2 + Minion #4 sequential confident",
+      "date": "2026-04-11 15:09"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc57_v4",
+      "notes": "Asc57 v4 9-card 1HP survivor, corrupted Knight #5 wrecked us 10->1 (lookahead failed), but solver locked all 3 evils sequentially after PD probe",
+      "date": "2026-04-11 15:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v5",
+      "notes": "Asc57 v5 9-card 10HP perfect, Knight check on #2 worked, all 3 evils sequential after probes",
+      "date": "2026-04-11 15:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v6",
+      "notes": "Asc57 v6 6-card 10HP perfect single demon, FT corrupted lying detected, Pooka definite exec",
+      "date": "2026-04-11 15:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc57_v7",
+      "notes": "Asc57 v7 final 8-card 10HP perfect, ASC57 COMPLETE 7/7, Knight check on Pooka #6 worked, Twin Minion #3 confident exec",
+      "date": "2026-04-11 15:28"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc58_v1",
+      "notes": "Asc58 v1 Lilis 9-card 6HP, night-killed Enlightened #8 + 4HP, #1 reflip needed, PD probe locked Lilis #6, all 3 evils sequential",
+      "date": "2026-04-11 15:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v2",
+      "notes": "Asc58 v2 10-card 10HP perfect, Knight check on Minion #9 (no immunity), then PD probe found Pooka #3 + Shaman #4",
+      "date": "2026-04-11 15:38"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v3",
+      "notes": "Asc58 v3 8-card 10HP perfect, 2 Druids both lying about Drunk in 1,2,3, FT confirmed 1,2 clean, lookahead-forced #4 final",
+      "date": "2026-04-11 15:44"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc58_v4",
+      "notes": "Asc58 v4 Lilis 9-card 6HP, Slayer killed Witch #4, night_no_kill bug confirmed wrong evil (#9 instead of #5), recovered by manual JSON fix",
+      "date": "2026-04-11 15:51"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 LOSS, solver Bombardier safety bug picked 0%-evil targets (#1, #3) leading to guaranteed wrong execs and HP 5->0. Witch was at #8 (Bombardier candidate) but solver refused to execute due to Bombardier risk. Real bug to fix.",
+      "date": "2026-04-11 15:59"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 LOSS HP 0. Solver Bombardier safety bug: with Witch at #8 (Bombardier disguise) and #2 also Bombardier candidate, solver picked 0% confident #1 then #3 (both Good), guaranteed wrong execs, HP 10->5->0. Streak broken. Bug: solver should execute #8 even at Bombardier risk if it's the ONLY winning move.",
+      "date": "2026-04-11 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v5",
+      "notes": "Asc58 v5 retry WIN 10HP perfect, FT targets #1,#2 revealed evil -> solver solved to 1 scenario, clean sweep after Bombardier bug loss",
+      "date": "2026-04-11 16:31"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc58_v6",
+      "notes": "Asc58 v6 10HP perfect win, 7-card single demon, PD check on #6 directly revealed #7 as evil",
+      "date": "2026-04-11 18:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc58_v7",
+      "notes": "6HP ASC58 COMPLETE 7/7, Lilis + Bombardier + Doppelganger + Minion, 2 night kills 4HP, solver locked definite #1 Minion then #9 Lilis",
+      "date": "2026-04-11 18:14"
     }
   ]
 }

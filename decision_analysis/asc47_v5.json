@@ -1,0 +1,209 @@
+{
+  "name": "asc47_v5",
+  "n_cards": 7,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 42,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.842570078838854,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "1": 0.619,
+        "2": 0.238,
+        "3": 0.143,
+        "4": 0.714,
+        "5": 0.143,
+        "6": 0.143
+      },
+      "definite_evil": [],
+      "definite_good": [
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Hunter",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Druid",
+        "Poet",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (good)",
+      "n_surviving": 42,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.842570078838854,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "1": 0.619,
+        "2": 0.238,
+        "3": 0.143,
+        "4": 0.714,
+        "5": 0.143,
+        "6": 0.143
+      },
+      "definite_evil": [],
+      "definite_good": [
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Hunter",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Druid",
+        "Poet",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 12,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.6500224216483541,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "1": 0.833,
+        "2": 0.167,
+        "5": 0.5,
+        "6": 0.5
+      },
+      "definite_evil": [],
+      "definite_good": [
+        3,
+        4,
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Hunter",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Druid",
+        "Poet",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 4,
+      "phase": "execute",
+      "description": "Execute #6 (good)",
+      "n_surviving": 5,
+      "recommended_action": "use_ability #2",
+      "recommended_position": 2,
+      "recommended_confidence": 0.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "5": 0.6,
+        "6": 0.4
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Hunter",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Druid",
+        "Poet",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    },
+    {
+      "step": 5,
+      "phase": "execute",
+      "description": "Execute #5 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "execute #5",
+      "recommended_position": 5,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        1,
+        5
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "roles_in_deck": [
+        "Medium",
+        "Hunter",
+        "Gemcrafter",
+        "Alchemist",
+        "Baker",
+        "Druid",
+        "Poet",
+        "Doppelganger",
+        "Drunk",
+        "Minion",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 5,
+    "correct": 2,
+    "wrong": 3,
+    "accuracy": 0.4,
+    "wrong_categories": {
+      "premature_wrong_exec": 2,
+      "premature_but_correct": 1
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "name": "asc30_v1",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Alchemist",
+        "Fortune_Teller",
+        "Medium",
+        "Slayer",
+        "Scout",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #4 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #4",
+      "recommended_position": 4,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #4",
+      "actual_position": 4,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Alchemist",
+        "Fortune_Teller",
+        "Medium",
+        "Slayer",
+        "Scout",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Witch",
+        "Baa"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 2,
+      "recommended_action": "use_ability #8",
+      "recommended_position": 8,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "6": 0.5,
+        "8": 0.5
+      },
+      "definite_evil": [
+        4
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Confessor",
+        "Alchemist",
+        "Fortune_Teller",
+        "Medium",
+        "Slayer",
+        "Scout",
+        "Doppelganger",
+        "Plague_Doctor",
+        "Witch",
+        "Baa"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}

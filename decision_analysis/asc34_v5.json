@@ -1,0 +1,134 @@
+{
+  "name": "asc34_v5",
+  "n_cards": 9,
+  "n_evil": 2,
+  "result": "loss",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 8,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.954434002924965,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.125,
+        "4": 0.125,
+        "5": 0.625,
+        "7": 0.125,
+        "8": 0.625,
+        "9": 0.375
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Lover",
+        "Fortune_Teller",
+        "Gemcrafter",
+        "Scout",
+        "Dreamer",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #2 (good)",
+      "n_surviving": 8,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.954434002924965,
+      "actual_action": "execute #2",
+      "actual_position": 2,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "2": 0.125,
+        "4": 0.125,
+        "5": 0.625,
+        "7": 0.125,
+        "8": 0.625,
+        "9": 0.375
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Lover",
+        "Fortune_Teller",
+        "Gemcrafter",
+        "Scout",
+        "Dreamer",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #5 (good)",
+      "n_surviving": 7,
+      "recommended_action": "use_ability #5",
+      "recommended_position": 5,
+      "recommended_confidence": 0.863120568566631,
+      "actual_action": "execute #5",
+      "actual_position": 5,
+      "correct": false,
+      "category": "premature_wrong_exec",
+      "evil_probs": {
+        "4": 0.143,
+        "5": 0.714,
+        "7": 0.143,
+        "8": 0.714,
+        "9": 0.286
+      },
+      "definite_evil": [],
+      "definite_good": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "roles_in_deck": [
+        "Baker",
+        "Lover",
+        "Fortune_Teller",
+        "Gemcrafter",
+        "Scout",
+        "Dreamer",
+        "Doppelganger",
+        "Bombardier",
+        "Twin_Minion",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 1,
+    "wrong": 2,
+    "accuracy": 0.333,
+    "wrong_categories": {
+      "premature_wrong_exec": 2
+    }
+  }
+}

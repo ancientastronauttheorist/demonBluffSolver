@@ -1,0 +1,85 @@
+{
+  "name": "asc34_v7",
+  "n_cards": 7,
+  "n_evil": 1,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 1,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Bishop",
+        "Jester",
+        "Poet",
+        "Scout",
+        "Judge",
+        "Plague_Doctor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 1,
+      "recommended_action": "execute #6",
+      "recommended_position": 6,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": true,
+      "category": "",
+      "evil_probs": {},
+      "definite_evil": [
+        6
+      ],
+      "definite_good": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ],
+      "roles_in_deck": [
+        "Empress",
+        "Bishop",
+        "Jester",
+        "Poet",
+        "Scout",
+        "Judge",
+        "Plague_Doctor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 2,
+    "correct": 2,
+    "wrong": 0,
+    "accuracy": 1.0,
+    "wrong_categories": {}
+  }
+}

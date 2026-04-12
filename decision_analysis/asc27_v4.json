@@ -1,0 +1,137 @@
+{
+  "name": "asc27_v4",
+  "n_cards": 8,
+  "n_evil": 2,
+  "result": "win",
+  "decisions": [
+    {
+      "step": 1,
+      "phase": "all_revealed",
+      "description": "All cards revealed + abilities applied",
+      "n_surviving": 4,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "solve",
+      "actual_position": null,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.25,
+        "5": 0.25,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        4,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Dreamer",
+        "Architect",
+        "Druid",
+        "Hunter",
+        "Confessor",
+        "Gemcrafter",
+        "Drunk",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 2,
+      "phase": "execute",
+      "description": "Execute #1 (evil)",
+      "n_surviving": 4,
+      "recommended_action": "execute #1",
+      "recommended_position": 1,
+      "recommended_confidence": 1.0,
+      "actual_action": "execute #1",
+      "actual_position": 1,
+      "correct": true,
+      "category": "",
+      "evil_probs": {
+        "2": 0.25,
+        "5": 0.25,
+        "6": 0.5
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        3,
+        4,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Dreamer",
+        "Architect",
+        "Druid",
+        "Hunter",
+        "Confessor",
+        "Gemcrafter",
+        "Drunk",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    },
+    {
+      "step": 3,
+      "phase": "execute",
+      "description": "Execute #6 (evil)",
+      "n_surviving": 3,
+      "recommended_action": "use_ability #4",
+      "recommended_position": 4,
+      "recommended_confidence": 0.7652465283787413,
+      "actual_action": "execute #6",
+      "actual_position": 6,
+      "correct": false,
+      "category": "premature_but_correct",
+      "evil_probs": {
+        "5": 0.333,
+        "6": 0.667
+      },
+      "definite_evil": [
+        1
+      ],
+      "definite_good": [
+        2,
+        3,
+        4,
+        7,
+        8
+      ],
+      "roles_in_deck": [
+        "Poet",
+        "Dreamer",
+        "Architect",
+        "Druid",
+        "Hunter",
+        "Confessor",
+        "Gemcrafter",
+        "Drunk",
+        "Bombardier",
+        "Chancellor",
+        "Pooka"
+      ]
+    }
+  ],
+  "summary": {
+    "total_decisions": 3,
+    "correct": 2,
+    "wrong": 1,
+    "accuracy": 0.667,
+    "wrong_categories": {
+      "premature_but_correct": 1
+    }
+  }
+}
