@@ -18,7 +18,8 @@ from dataclasses import dataclass, field
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from solver import GameState, CardInfo, DeckComposition, solve
+from solver import GameState, CardInfo, DeckComposition
+from rust_solver import rust_solve_to_objects
 from knowledge_base import get_card, Role
 
 CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "tests", "cases")
@@ -264,7 +265,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
         state = make_state(executed, confirmed_evil, confirmed_good,
                            exec_evil_roles, exec_good_corrupted)
         try:
-            result = solve(state)
+            result = rust_solve_to_objects(state)
         except Exception as e:
             steps.append(ExecStep(
                 step_num=step_num, position=0, prob_evil=0,
@@ -351,7 +352,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
         state_after = make_state(executed, confirmed_evil, confirmed_good,
                                  exec_evil_roles, exec_good_corrupted)
         try:
-            result_after = solve(state_after)
+            result_after = rust_solve_to_objects(state_after)
             scenarios_after = result_after.n_surviving
         except Exception:
             scenarios_after = -1

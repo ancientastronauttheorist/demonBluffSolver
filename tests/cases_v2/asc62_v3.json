@@ -1,0 +1,147 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Poet"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Alchemist"
+      }
+    }
+  ],
+  "executed": [
+    5,
+    1
+  ],
+  "confirmed_evil": [
+    5,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Baa",
+    "1": "Twin_Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 5,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Hunter",
+      "Bard",
+      "Confessor",
+      "Baker",
+      "Alchemist",
+      "Fortune_Teller"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc62_v3",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "5": "Baa"
+  },
+  "notes": "10HP perfect, PD+FT definite"
+}

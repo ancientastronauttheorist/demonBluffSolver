@@ -1,0 +1,158 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "copied_role": "Bounty Hunter",
+        "evil_position": 4
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Druid"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Slayer"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    3,
+    5
+  ],
+  "confirmed_evil": [
+    1,
+    3,
+    5
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Chancellor",
+    "3": "Minion",
+    "5": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Poet",
+      "Oracle",
+      "Alchemist",
+      "Druid",
+      "Architect",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor",
+      "Wretch"
+    ],
+    "minions": [
+      "Minion",
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    1
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc65_v7",
+  "true_evil_positions": {
+    "1": "Chancellor",
+    "3": "Minion",
+    "5": "Baa"
+  },
+  "notes": "Perfect 10HP. Triple Baker chain. All 3 evils 100% confident. Only 2 scenarios after reveals+Druid ability."
+}

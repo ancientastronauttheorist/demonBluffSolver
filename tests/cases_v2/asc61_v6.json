@@ -1,0 +1,167 @@
+{
+  "n_cards": 10,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "cw"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 4,
+        "evil_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          5,
+          6
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          10
+        ],
+        "minion_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Lover"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Judge"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    3,
+    5,
+    1
+  ],
+  "confirmed_evil": [
+    2,
+    3,
+    1
+  ],
+  "confirmed_good": [
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Puppet",
+    "3": "Puppeteer",
+    "1": "Lilis"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 3,
+      "target_pos": 5,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6,
+    10
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "5": false
+  },
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Enlightened",
+      "Dreamer",
+      "Oracle",
+      "Baker",
+      "Jester",
+      "Judge",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    2,
+    3,
+    4
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc61_v6",
+  "true_evil_positions": {
+    "1": "Lilis",
+    "2": "Puppet",
+    "3": "Puppeteer",
+    "10": "Twin_Minion"
+  },
+  "notes": "1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate."
+}

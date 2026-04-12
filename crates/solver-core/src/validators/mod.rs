@@ -695,6 +695,9 @@ fn validate_baker(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
 
     if claimed.eq_ignore_ascii_case("original") {
         if truth == TruthStatus::Lying {
+            // Original Baker is immune to corruption, and corrupted converted
+            // Bakers lie about their role but do NOT claim "I am the original Baker".
+            // So a corrupted good position claiming "original" is impossible.
             if !is_evil_in_board_state(pos, scenario, state) && scenario.corrupted.contains(&pos) {
                 return false;
             }

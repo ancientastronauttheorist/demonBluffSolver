@@ -2666,6 +2666,398 @@
       "name": "asc58_v7",
       "notes": "6HP ASC58 COMPLETE 7/7, Lilis + Bombardier + Doppelganger + Minion, 2 night kills 4HP, solver locked definite #1 Minion then #9 Lilis",
       "date": "2026-04-11 18:14"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v1",
+      "notes": "10HP perfect, PD check on #1 revealed corruption, all 4 evils definite",
+      "date": "2026-04-12 11:21"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc59_v2",
+      "notes": "6HP, Lilis game, all definite evils",
+      "date": "2026-04-12 11:28"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc59_v3",
+      "notes": "3HP, Lilis game, wrong exec #1 but lookahead win",
+      "date": "2026-04-12 11:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v4",
+      "notes": "10HP perfect, PD check + Judge + Slayer abilities",
+      "date": "2026-04-12 11:38"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc59_v5",
+      "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 was the target",
+      "date": "2026-04-12 11:43"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc59_v5",
+      "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found",
+      "date": "2026-04-12 11:43"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc59_v5",
+      "notes": "6HP, Lilis+Witch game, all definite evils",
+      "date": "2026-04-12 11:55"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v6",
+      "notes": "10HP perfect, all definite evils",
+      "date": "2026-04-12 11:58"
+    },
+    {
+      "result": "loss",
+      "hp": 1,
+      "name": "asc59_v7",
+      "notes": "Loss: 0 scenarios after exec #9 good. Solver bug: 93% confidence on #9 but was good Baker. Investigate Baker chain + 3 Bakers + Drunk.",
+      "date": "2026-04-12 12:03"
+    },
+    {
+      "result": "loss",
+      "hp": 1,
+      "name": "asc59_v7",
+      "notes": "Loss: 0 scenarios after exec #9 good. True evils: #1=Lilis, #3=Poisoner, #10=Twin_Minion. Solver wrongly had 93% on #9. Baker chain + Drunk + 3 Bakers.",
+      "date": "2026-04-12 12:03"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc59_v7",
+      "notes": "3HP, Knight free check saved the day, 2 wrong execs (corrupted Baker + Drunk)",
+      "date": "2026-04-12 12:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v1",
+      "notes": "10HP perfect, both evils definite/forced-safe",
+      "date": "2026-04-12 12:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v2",
+      "notes": "10HP perfect",
+      "date": "2026-04-12 12:19"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc60_v3",
+      "notes": "8HP, 2 Knight free checks + forced-safe lookahead",
+      "date": "2026-04-12 12:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v4",
+      "notes": "10HP perfect, Knight immunity check + FT ability",
+      "date": "2026-04-12 12:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v5",
+      "notes": "10HP perfect, FT ability confirmed evils",
+      "date": "2026-04-12 12:30"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc60_v6",
+      "notes": "6HP, Lilis game, PD+FT+Jester+Slayer abilities",
+      "date": "2026-04-12 12:36"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc60_v7",
+      "notes": "5HP, Dreamer ability + forced-safe lookahead, ASC60 COMPLETE 7/7",
+      "date": "2026-04-12 12:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v1",
+      "notes": "10HP perfect, both definite",
+      "date": "2026-04-12 13:45"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc61_v2",
+      "notes": "8HP, Lilis game, Judge + Poet-Bishop abilities",
+      "date": "2026-04-12 13:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v3",
+      "notes": "10HP perfect, Slayer killed Shaman",
+      "date": "2026-04-12 13:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v4",
+      "notes": "10HP perfect, PD+Judge+Slayer abilities, all definite",
+      "date": "2026-04-12 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc61_v5",
+      "notes": "6HP, Lilis game, Knight check + Druid ability",
+      "date": "2026-04-12 13:58"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc61_v6",
+      "notes": "1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate.",
+      "date": "2026-04-12 14:05"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc61_v7",
+      "notes": "8HP, Slayer kills Witch! ASC61 COMPLETE 7/7",
+      "date": "2026-04-12 14:07"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc62_v1",
+      "notes": "8HP, Lilis game, both definite",
+      "date": "2026-04-12 14:18"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc62_v2",
+      "notes": "1HP! Lilis game, close call but all definite at the end",
+      "date": "2026-04-12 14:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc62_v3",
+      "notes": "10HP perfect, PD+FT definite",
+      "date": "2026-04-12 14:27"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc62_v4",
+      "notes": "6HP, Lilis game, PD check nails both evils",
+      "date": "2026-04-12 14:30"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc62_v5",
+      "notes": "10HP perfect, all definite",
+      "date": "2026-04-12 14:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc62_v6",
+      "notes": "10HP perfect, both definite",
+      "date": "2026-04-12 14:37"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc62_v7",
+      "notes": "10HP perfect, PD+Judge abilities, ASC62 COMPLETE 7/7",
+      "date": "2026-04-12 14:40"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc63_v1",
+      "notes": "1HP! Lilis+Puppeteer, forced-safe lookahead",
+      "date": "2026-04-12 14:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v2",
+      "notes": "10HP perfect, Knight check + dual Slayer kills",
+      "date": "2026-04-12 14:49"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc63_v3",
+      "notes": "1HP! Lilis+Chancellor, forced-safe through 2 wrong execs",
+      "date": "2026-04-12 14:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v4",
+      "notes": "10HP perfect, both definite, evil PD lie detected",
+      "date": "2026-04-12 14:59"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v5",
+      "notes": "10HP perfect, 5 abilities used, Knight check + forced-safe",
+      "date": "2026-04-12 15:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc63_v6",
+      "notes": "5HP, Slayer kills Puppeteer, forced-safe wins",
+      "date": "2026-04-12 15:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v7",
+      "notes": "10HP perfect, PD+Dreamer+Slayer+Knight check, ASC63 COMPLETE 7/7",
+      "date": "2026-04-12 15:16"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc64_v1",
+      "notes": "5HP, Slayer+Dreamer+FT+Druid, all abilities used",
+      "date": "2026-04-12 15:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc64_v2",
+      "notes": "10HP perfect, 4 Judges + Slayer + Druid, massive ability game",
+      "date": "2026-04-12 15:30"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc64_v3",
+      "notes": "6HP, Lilis game, FT ability + forced-safe",
+      "date": "2026-04-12 15:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc64_v4",
+      "notes": "10HP perfect, FT ability nails both",
+      "date": "2026-04-12 15:37"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc64_v5",
+      "notes": "5HP, forced-safe through wrong exec",
+      "date": "2026-04-12 15:40"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc64_v6",
+      "notes": "5HP, solver 0-scenario bug on #4 (100% confident wrong). PD+Jester+Judge abilities.",
+      "date": "2026-04-12 15:47"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc64_v7",
+      "notes": "10HP perfect, PD+Dreamer+2xDruid abilities, ASC64 COMPLETE 7/7",
+      "date": "2026-04-12 15:55"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc65_v1",
+      "notes": "6HP, Lilis game, 2xDruid+2xSlayer+Knight check",
+      "date": "2026-04-12 16:03"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc65_v2",
+      "notes": "Loss: 49% pick on #8 wrong, then 79% on #7 wrong. Lilis+Witch+Poisoner, very hard game.",
+      "date": "2026-04-12 16:13"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc65_v2",
+      "notes": "Loss: Lilis+Witch+Poisoner. 49% pick wrong on #8, 79% wrong on #7. True evils: #1=Poisoner,#9=Witch,#10=Lilis",
+      "date": "2026-04-12 16:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc65_v3",
+      "notes": "Win with 5HP. Wrong exec on #5 Empress (33% pick). Slayer abilities both no-kill. Dreamer random info.",
+      "date": "2026-04-12 17:41"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc65_v4",
+      "notes": "SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). 0 scenarios after. Likely FT-as-Drunk not handled - FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.",
+      "date": "2026-04-12 17:49"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc65_v4",
+      "notes": "SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). True evils: #3=Chancellor, #8=Baa. FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.",
+      "date": "2026-04-12 17:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc65_v5",
+      "notes": "Perfect 10HP. PD revealed #7 evil + #2 corrupted. FT confirmed #1,#2 clean. Both evils 100% confident.",
+      "date": "2026-04-12 18:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc65_v6",
+      "notes": "Perfect 10HP. PD confirmed #1 clean. Both evils 100% confident. Witch blocked #8, executed Witch first to unblock.",
+      "date": "2026-04-12 18:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc65_v7",
+      "notes": "Perfect 10HP. Triple Baker chain. All 3 evils 100% confident. Only 2 scenarios after reveals+Druid ability.",
+      "date": "2026-04-12 18:15"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc65_v8",
+      "notes": "ASC65 COMPLETE! 6HP. Lilis+Witch game. Night killed #5 Lover and #10 PD. All 3 evils 100% confident with only 6 scenarios.",
+      "date": "2026-04-12 18:22"
     }
   ]
 }

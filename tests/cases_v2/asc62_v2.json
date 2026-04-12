@@ -1,0 +1,153 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Knitter"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Knitter"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 8,
+        "evil_role": "Shaman"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Architect"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          5
+        ]
+      }
+    }
+  ],
+  "executed": [
+    1,
+    8,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    8,
+    4,
+    6
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Lilis",
+    "4": "Shaman",
+    "6": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "1": false
+  },
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Knitter",
+      "Scout",
+      "Baker",
+      "Medium",
+      "Dreamer",
+      "Empress"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Drunk",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor",
+      "Shaman"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc62_v2",
+  "true_evil_positions": {
+    "4": "Shaman",
+    "6": "Chancellor",
+    "8": "Lilis"
+  },
+  "notes": "1HP! Lilis game, close call but all definite at the end"
+}

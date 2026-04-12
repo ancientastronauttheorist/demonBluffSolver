@@ -1,0 +1,176 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7,
+          8
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          4
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          7,
+          8
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "evil_role": "Pooka"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 7,
+        "evil_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          7,
+          2
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    }
+  ],
+  "executed": [
+    6,
+    5
+  ],
+  "confirmed_evil": [
+    6,
+    5
+  ],
+  "confirmed_good": [
+    8
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Pooka",
+    "5": "Twin_Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Hunter",
+      "Dreamer",
+      "Bishop",
+      "Knight",
+      "Alchemist",
+      "Jester"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5,
+    6,
+    4,
+    1,
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc63_v5",
+  "true_evil_positions": {
+    "5": "Twin_Minion",
+    "6": "Pooka"
+  },
+  "notes": "10HP perfect, 5 abilities used, Knight check + forced-safe"
+}

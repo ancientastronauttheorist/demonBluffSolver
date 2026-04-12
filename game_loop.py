@@ -1273,14 +1273,19 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" means converted FROM Baker (rare, but valid).
+            # Do NOT convert to 'original' -- that means "I am the original Baker".
             return card_baker(pos, claimed)
         if 'original' in clue.lower():
             return card_baker(pos, 'original')
         # Fallback to runtime_data
         original = rd.get('original_role')
-        if not original or original == '?' or original.lower() == 'baker':
+        if not original or original == '?':
+            return card_baker(pos, 'original')
+        if original.lower() == 'baker':
+            # runtime says original was Baker but clue didn't match "I was a" pattern.
+            # If clue says "I am the original Baker" we already returned above.
+            # Otherwise this is ambiguous -- treat as original.
             return card_baker(pos, 'original')
         return card_baker(pos, original)
 
@@ -1393,8 +1398,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
             return card_baker(pos, claimed)
         if 'original' in clue.lower() or not clue.strip():
             return card_baker(pos, 'original')
@@ -1471,8 +1475,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
             return CardInfo(pos, "Poet", info_parsed={"original_role": claimed, "copied_role": "Baker"})
 
     # --- No-info roles: these roles NEVER have passive speech bubbles ---
@@ -1720,7 +1723,7 @@ def _cmd_read_deck(screenshot_path: str):
 
 def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
     """Save a regression test case. Full regression runs via cargo test afterward."""
-    from tests.test_regression import save_test_case
+    from tests.test_utils import save_test_case
     # Check for collision
     test_path = os.path.join("tests", "cases_v2", f"{name}.json")
     if os.path.exists(test_path):
@@ -2343,10 +2346,9 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         # Check if corruption sources exist in deck — corrupted Knight loses immunity
                         corruption_sources = {"Pooka", "Poisoner", "Plague_Doctor"}
                         deck_roles = set()
-                        if session.deck:
-                            for faction_roles in [session.deck.villagers, session.deck.outcasts,
-                                                  session.deck.minions, session.deck.demons]:
-                                deck_roles.update(faction_roles)
+                        for faction_roles in [session.villagers, session.outcasts,
+                                              session.minions, session.demons]:
+                            deck_roles.update(faction_roles)
                         has_corruption = bool(deck_roles & corruption_sources)
                         if has_corruption:
                             print(f"  #{pos} shows as {target_card.apparent_role} (execution immune) but corruption sources in deck!")
@@ -2701,7 +2703,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("\n--- Full v2 regression (Rust) ---")
             import subprocess as _sp
             try:
-                reg = _sp.run(["cargo", "test", "--release", "--test", "replay"],
+                reg = _sp.run(["cargo", "test", "--release", "--test", "simulation"],
                               capture_output=True, text=True, timeout=120)
                 for line in reg.stderr.strip().split("\n"):
                     if "test result:" in line or "FAILED" in line:

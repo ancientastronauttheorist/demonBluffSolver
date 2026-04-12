@@ -1,0 +1,160 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Enlightened"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          9
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    }
+  ],
+  "executed": [
+    4,
+    5,
+    3,
+    7
+  ],
+  "confirmed_evil": [
+    4,
+    3,
+    7
+  ],
+  "confirmed_good": [
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Puppeteer",
+    "3": "Puppet",
+    "7": "Pooka"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 5,
+      "target_pos": 4,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "5": false
+  },
+  "deck": {
+    "villagers": [
+      "Confessor",
+      "Enlightened",
+      "Knight",
+      "Slayer",
+      "Medium",
+      "Lover",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc63_v6",
+  "true_evil_positions": {
+    "3": "Puppet",
+    "4": "Puppeteer",
+    "7": "Pooka"
+  },
+  "notes": "5HP, Slayer kills Puppeteer, forced-safe wins"
+}

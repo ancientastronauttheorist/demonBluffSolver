@@ -1,0 +1,149 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          9
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          9
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Bard"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    6,
+    7,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Twin_Minion",
+    "7": "Witch",
+    "8": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    8
+  ],
+  "night_kills": [
+    9
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Bard",
+      "Hunter",
+      "Fortune_Teller",
+      "Baker",
+      "Architect",
+      "Jester"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin_Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc59_v5b",
+  "true_evil_positions": {
+    "6": "Twin_Minion",
+    "7": "Witch",
+    "8": "Lilis"
+  },
+  "notes": "6HP, Lilis+Witch game, all definite evils"
+}
