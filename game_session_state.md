@@ -28011,3 +28011,93 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: 10HP perfect, PD+Judge+Slayer abilities, all definite
 
+
+---
+
+# New Game — 2026-04-12 13:55:15
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Bishop, Scout, Empress, Alchemist, Enlightened, Knight, Druid
+- Outcasts: Bombardier
+- Minions: Poisoner, Twin_Minion
+- Demons: Lilis
+
+### [13:56:04] Revealed #1 Empress
+Info: {'targets': [5, 6, 7]}
+
+### [13:56:04] Revealed #2 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+### [13:56:04] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [13:56:04] Revealed #4 Knight
+Info: {}
+
+### [13:56:04] Revealed #6 Bishop
+Info: {'targets': [4, 10, 9], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [13:56:04] Revealed #7 Knight
+Info: {}
+
+### [13:56:04] Revealed #9 Bombardier
+Info: {}
+
+### [13:56:12] Revealed #5 Druid
+Info: {}
+
+#### [13:56:12] Solver Output
+Scenarios: 49/1096
+Definite good: ['#8', '#10']
+Evil probabilities: #4=82%, #3=47%, #7=39%, #9=39%, #2=37%, #1=31%, #5=14%, #6=12%
+
+#### [13:56:12] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#9']
+Reason: Entropy 1.503 (adjusted 1.472) | timing x1.00
+WARNING: Corruption risk: 4%
+
+### [13:56:50] Revealed #5 Druid
+Info: {'targets': [1, 2, 9], 'found_outcast': 'Bombardier'}
+
+### [13:56:50] Ability used at #5
+
+#### [13:56:51] Solver Output
+Scenarios: 21/1096
+Definite good: ['#5', '#8', '#9', '#10']
+Evil probabilities: #4=90%, #2=62%, #3=57%, #1=43%, #7=38%, #6=10%
+
+#### [13:56:51] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight free check: #4 is 90% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [13:57:31] Executed #4 -> Poisoner (EVIL)
+
+#### [13:57:31] Solver Output
+Scenarios: 6/114
+Definite evil: ['#2', '#4']
+Definite good: ['#3', '#5', '#6', '#8', '#9', '#10']
+Evil probabilities: #1=67%, #7=33%
+
+#### [13:57:31] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [13:57:38] Executed #2 -> Twin Minion (EVIL)
+
+#### [13:57:44] Solver Output
+Scenarios: 4/14
+Definite evil: ['#2', '#4']
+Definite good: ['#3', '#5', '#6', '#8', '#9', '#10']
+Evil probabilities: #1=50%, #7=50%
+
+#### [13:57:44] Recommendation
+Action: **EXECUTE** #7
+Reason: Knight free check: #7 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [13:58:28] Executed #7 -> Lilis (EVIL)
+
+## [13:58:28] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, Knight check + Druid ability
+

@@ -1,0 +1,158 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          9
+        ],
+        "found_outcast": "Bombardier"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          10,
+          9
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    2,
+    7
+  ],
+  "confirmed_evil": [
+    4,
+    2,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Poisoner",
+    "2": "Twin_Minion",
+    "7": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8,
+    10
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Bishop",
+      "Scout",
+      "Empress",
+      "Alchemist",
+      "Enlightened",
+      "Knight",
+      "Druid"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Poisoner",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    5
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc61_v5",
+  "true_evil_positions": {
+    "2": "Twin_Minion",
+    "4": "Poisoner",
+    "7": "Lilis"
+  },
+  "notes": "6HP, Lilis game, Knight check + Druid ability"
+}
