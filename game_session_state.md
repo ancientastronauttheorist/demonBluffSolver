@@ -26889,3 +26889,66 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect, all definite evils
 
+
+---
+
+# New Game — 2026-04-12 12:00:12
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Medium, Judge, Empress, Oracle, Gemcrafter, Confessor
+- Outcasts: Drunk
+- Minions: Twin_Minion, Poisoner
+- Demons: Lilis
+
+### [12:01:40] Revealed #1 Medium
+Info: {'good_position': 3, 'good_role': 'Gemcrafter'}
+
+### [12:01:40] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [12:01:40] Revealed #3 Gemcrafter
+Info: {'good_position': 10}
+
+### [12:01:40] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [12:01:40] Revealed #5 Empress
+Info: {'targets': [1, 2, 9]}
+
+### [12:01:40] Revealed #6 Baker
+Info: {'original_role': 'Oracle'}
+
+### [12:01:40] Revealed #8 Medium
+Info: {'good_position': 1, 'good_role': 'Medium'}
+
+### [12:01:40] Revealed #9 Baker
+Info: {'original_role': 'Judge'}
+
+#### [12:01:46] Solver Output
+Scenarios: 28/7812
+Definite good: ['#1', '#3', '#7', '#8', '#10']
+Evil probabilities: #9=93%, #2=86%, #6=57%, #5=36%, #4=29%
+
+#### [12:01:46] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 93% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 93% confident (budget: 1 wrong execs)
+
+### [12:02:44] Executed #9 -> GOOD (WRONG!)
+
+#### [12:02:44] Solver Output
+Scenarios: 0/5484
+
+#### [12:02:44] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## [12:03:30] GAME OVER — LOSS
+Final HP: 1
+Notes: Loss: 0 scenarios after exec #9 good. Solver bug: 93% confidence on #9 but was good Baker. Investigate Baker chain + 3 Bakers + Drunk.
+
+## [12:03:46] GAME OVER — LOSS
+Final HP: 1
+Notes: Loss: 0 scenarios after exec #9 good. True evils: #1=Lilis, #3=Poisoner, #10=Twin_Minion. Solver wrongly had 93% on #9. Baker chain + Drunk + 3 Bakers.
+
