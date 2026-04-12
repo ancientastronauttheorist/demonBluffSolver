@@ -30114,3 +30114,81 @@ Reason: #3 is evil in ALL 6 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: 10HP perfect, FT ability nails both
 
+
+---
+
+# New Game — 2026-04-12 15:38:58
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Confessor, Enlightened, Poet, Druid, Bard, Oracle
+- Outcasts: Wretch, Doppelganger
+- Minions: Chancellor
+- Demons: Pooka
+
+### [15:39:29] Revealed #1 Oracle
+Info: {'targets': [6, 8], 'minion_role': 'Chancellor'}
+
+### [15:39:29] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [15:39:29] Revealed #4 Oracle
+Info: {'targets': [5, 8], 'minion_role': 'Chancellor'}
+
+### [15:39:29] Revealed #5 Bard
+Info: {'corruption_distance': 3}
+
+### [15:39:29] Revealed #6 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:39:29] Revealed #7 Empress
+Info: {'targets': [1, 2, 4]}
+
+### [15:39:29] Revealed #8 Wretch
+Info: {}
+
+### [15:39:48] Revealed #2 Poet
+Info: {'evil_adjacent': 0, 'copied_role': 'Lover'}
+
+#### [15:39:48] Solver Output
+Scenarios: 16/454
+Definite good: ['#2', '#5', '#8']
+Evil probabilities: #3=62%, #1=56%, #4=38%, #6=38%, #7=6%
+
+#### [15:39:48] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 38% good Confessor (corrupted), 12% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 62%, but all reveal branches still lead to a forced win.
+
+### [15:39:55] Executed #3 -> Pooka (EVIL)
+
+#### [15:40:07] Solver Output
+Scenarios: 2/52
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#5', '#6', '#8']
+Evil probabilities: #1=50%, #7=50%
+
+#### [15:40:07] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 50% good Oracle).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:40:14] Executed #1 -> GOOD (WRONG!)
+
+### [15:40:26] Executed #1 -> GOOD (WRONG!)
+
+#### [15:40:26] Solver Output
+Scenarios: 1/47
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+
+#### [15:40:26] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [15:40:33] Executed #7 -> Chancellor (EVIL)
+
+## [15:40:53] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, forced-safe through wrong exec
+

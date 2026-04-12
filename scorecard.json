@@ -2967,6 +2967,13 @@
       "name": "asc64_v4",
       "notes": "10HP perfect, FT ability nails both",
       "date": "2026-04-12 15:37"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc64_v5",
+      "notes": "5HP, forced-safe through wrong exec",
+      "date": "2026-04-12 15:40"
     }
   ]
 }
