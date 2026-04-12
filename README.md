@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**240 games played** — 92% win rate (222W / 18L), 104 perfect games (10 HP)
+**381 games played** — 93% win rate (356W / 25L), 185 perfect games (10 HP)
 
-Tested through **Ascension 40** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
+Tested through **Ascension 58** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
 
 ## How It Works
 
@@ -19,9 +19,9 @@ The full pipeline:
 1. **Screen capture** — `screenshot.py` grabs the game at 2560×1440
 2. **Card vision** — `card_vision.py` classifies card roles from screenshots using OpenCV template matching against a compendium library
 3. **Memory validation** — `memory_reader.py` reads live game state via IL2CPP (GameAssembly.dll) and cross-checks against what the screenshot shows
-4. **Data entry** — `game_loop.py` CLI feeds card info into the solver
-5. **Constraint solving** — `solver.py` filters evil placement scenarios against all observed info
-6. **Action selection** — `strategy.py` picks the highest-entropy action
+4. **Data entry** — `game_loop.py` CLI feeds card info into the solver; `auto_card` auto-enters parseable cards from memory
+5. **Constraint solving** — Rust solver (`crates/solver-core`) filters evil placement scenarios against all observed info; Python `solver.py` is kept as a cross-check reference
+6. **Action selection** — `strategy.py` picks the highest-entropy action; `next` auto-executes definite-evil and high-confidence lookahead picks
 7. **Execution** — `template_match.py` safe-clicks UI elements to carry out the action
 
 ## Key Components
@@ -30,9 +30,12 @@ The full pipeline:
 
 | File | Purpose |
 |------|---------|
-| `solver.py` | Constraint-satisfaction engine — generates and filters evil placement scenarios |
-| `strategy.py` | Shannon entropy-based action recommender with execution lookahead |
-| `game_loop.py` | CLI interface for game sessions, data entry, and solver interaction |
+| `crates/solver-core/` | **Primary solver** — Rust constraint-satisfaction engine (Rayon-parallelized, ~2.5× Python speed) |
+| `crates/solver-cli/` | Rust CLI binary (`demon-bluff-solver.exe`) — reads GameState JSON from stdin, writes SolverResult JSON to stdout |
+| `rust_solver.py` | Python bridge to the Rust solver via subprocess |
+| `solver.py` | Python solver — cross-check reference; no longer called in the game loop |
+| `strategy.py` | Shannon entropy-based action recommender with execution lookahead and auto-execute |
+| `game_loop.py` | CLI interface for game sessions, data entry, and solver interaction (REPL mode: `repl`) |
 | `knowledge_base.py` | Card role database — 30+ roles with abilities, types, factions |
 | `game_utils.py` | Board geometry, coordinate helpers |
 | `scorecard.py` | Win/loss tracking and stats |
@@ -57,8 +60,8 @@ The full pipeline:
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 102 test cases — card vision pipeline, high accuracy |
-| `tests/cases/` | 138 legacy test cases — manual data entry |
+| `tests/cases_v2/` | 233 test cases — card vision pipeline, high accuracy |
+| `tests/cases/` | 137 legacy test cases — manual data entry |
 | `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
 | `tests/test_regression.py` | Full regression suite |
 
@@ -90,19 +93,29 @@ The full pipeline:
 
 - Python 3.13+
 - `mss`, `pyautogui`, `Pillow`, `opencv-python`
+- Rust 2021 edition (`cargo build --release` to build the solver)
 
 ## Usage
 
 ```bash
+# Build the Rust solver
+cargo build --release
+
 # Start a new game session
 python game_loop.py start
 
+# REPL mode (persistent process, no import overhead)
+python game_loop.py repl
+
 # Core commands:
 #   new <n_cards> <n_evil>           — start a new puzzle
-#   deck V=... O=... M=... D=...    — set the role pool
-#   flip                             — flip all cards (with auto-verification)
+#   deck V=... O=... M=... D=...    — set the role pool (prefixes required)
+#   flip                             — flip all cards in order (with auto-verification)
+#   auto_card                        — auto-enter parseable cards from memory reader
 #   card <role> <pos> <info>         — enter a revealed card
-#   next                             — run solver + get recommended action
+#   pd_check <pd_pos> <target> ...   — enter Plague Doctor ability result
+#   next                             — run solver + auto-execute recommended action
+#   next --plan                      — print recommendation without executing
 #   execute <pos> <role|good>        — execute a character
 #   set_hp <hp> <wrong_exec_cost>    — update HP
 #   game_over win/loss ...           — record result + save test case
@@ -117,7 +130,8 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-python -m tests.test_replay --v2-only  # 102 v2 replay tests
+python -m tests.test_replay --v2-only  # 233 v2 replay tests
+cargo test --release --test replay     # Rust solver replay tests
 python -m tests.test_replay            # all test cases
 
 # View stats
