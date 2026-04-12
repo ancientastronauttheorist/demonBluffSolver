@@ -26645,3 +26645,87 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, PD check + Judge + Slayer abilities
 
+
+---
+
+# New Game — 2026-04-12 11:39:45
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Oracle, Enlightened, Baker, Lover, Dreamer
+- Outcasts: Doppelganger, Drunk
+- Minions: Shaman
+- Demons: Baa
+
+### [11:40:06] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [11:40:06] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [11:40:06] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+### [11:40:06] Revealed #4 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Shaman'}
+
+### [11:40:06] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [11:40:06] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:40:06] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [11:40:21] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+#### [11:40:34] Solver Output
+Scenarios: 82/1302
+Evil probabilities: #4=56%, #2=30%, #7=28%, #3=26%, #5=21%, #6=21%, #1=18%
+
+#### [11:40:34] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 56% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 56% confident (budget: 2 wrong execs)
+WARNING: Low confidence (56% < 60%) -- consider gathering more info
+
+### [11:41:21] Executed #4 -> Shaman (EVIL)
+
+#### [11:41:22] Solver Output
+Scenarios: 23/186
+Definite evil: ['#4']
+Definite good: ['#2', '#3']
+Evil probabilities: #5=26%, #6=26%, #7=26%, #1=22%
+
+#### [11:41:22] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 26% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 26% confident (budget: 2 wrong execs)
+WARNING: Low confidence (26% < 50%) -- consider gathering more info
+
+### [11:42:01] Executed #5 -> GOOD (WRONG!)
+
+#### [11:42:01] Solver Output
+Scenarios: 17/155
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#5']
+Evil probabilities: #6=35%, #7=35%, #1=29%
+
+#### [11:42:01] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 35% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 35% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 35% < 85% threshold. Consider manual override if you have extra information.
+
+### [11:42:51] Executed #7 -> GOOD (WRONG!)
+
+## [11:43:02] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 was the target
+
+## [11:43:13] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found
+

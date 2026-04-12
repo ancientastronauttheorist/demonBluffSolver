@@ -2694,6 +2694,20 @@
       "name": "asc59_v4",
       "notes": "10HP perfect, PD check + Judge + Slayer abilities",
       "date": "2026-04-12 11:38"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc59_v5",
+      "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 was the target",
+      "date": "2026-04-12 11:43"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc59_v5",
+      "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found",
+      "date": "2026-04-12 11:43"
     }
   ]
 }
