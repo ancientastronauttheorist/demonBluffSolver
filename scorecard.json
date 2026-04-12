@@ -2876,6 +2876,13 @@
       "name": "asc62_v5",
       "notes": "10HP perfect, all definite",
       "date": "2026-04-12 14:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc62_v6",
+      "notes": "10HP perfect, both definite",
+      "date": "2026-04-12 14:37"
     }
   ]
 }

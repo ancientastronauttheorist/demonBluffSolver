@@ -28708,3 +28708,76 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: 10HP perfect, all definite
 
+
+---
+
+# New Game — 2026-04-12 14:35:08
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Bishop, Confessor, Hunter, Fortune_Teller, Dreamer
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Minion
+- Demons: Baa
+
+### [14:35:23] Revealed #1 Bishop
+Info: {'targets': [3, 7], 'types': ['Villager', 'Minion']}
+
+### [14:35:23] Revealed #2 Bishop
+Info: {'targets': [1, 5, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:35:23] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [14:35:23] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:35:23] Revealed #7 Wretch
+Info: {}
+
+### [14:35:23] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+### [14:35:30] Revealed #3 Dreamer
+Info: {}
+
+### [14:35:31] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [14:35:31] Solver Output
+Scenarios: 2/56
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:35:31] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Baa', 'Minion'})
+
+### [14:35:38] Executed #2 -> Minion (EVIL)
+
+#### [14:35:46] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:35:46] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [14:35:56] Ability used at #6
+
+#### [14:35:57] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [14:35:57] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [14:37:42] Executed #6 -> Baa (EVIL)
+
+## [14:37:42] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, both definite
+
