@@ -31129,3 +31129,93 @@ Reason: #8 is evil in ALL 3 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. PD confirmed #1 clean. Both evils 100% confident. Witch blocked #8, executed Witch first to unblock.
 
+
+---
+
+# New Game — 2026-04-12 18:13:03
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Poet, Oracle, Alchemist, Druid, Architect, Slayer
+- Outcasts: Bombardier, Plague_Doctor, Wretch
+- Minions: Minion, Chancellor
+- Demons: Baa
+
+### [18:13:39] Revealed #2 Bombardier
+Info: {}
+
+### [18:13:39] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [18:13:39] Revealed #5 Architect
+Info: {'side': 'Left'}
+
+### [18:13:39] Revealed #6 Wretch
+Info: {}
+
+### [18:13:39] Revealed #7 Oracle
+Info: {'targets': [1, 4], 'minion_role': 'Chancellor'}
+
+### [18:13:39] Revealed #8 Baker
+Info: {'original_role': 'Druid'}
+
+### [18:13:39] Revealed #9 Baker
+Info: {'original_role': 'Slayer'}
+
+### [18:14:03] Revealed #1 Druid
+Info: {}
+
+### [18:14:03] Revealed #3 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 4}
+
+#### [18:14:08] Solver Output
+Scenarios: 12/636
+Definite good: ['#2', '#6']
+Evil probabilities: #8=83%, #3=67%, #7=50%, #4=33%, #9=33%, #1=17%, #5=17%
+
+#### [18:14:08] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.650 (adjusted 0.650) | timing x1.00
+
+### [18:14:55] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [18:14:55] Ability used at #1
+
+#### [18:15:00] Solver Output
+Scenarios: 2/636
+Definite evil: ['#1', '#3', '#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8', '#9']
+
+#### [18:15:00] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [18:15:07] Executed #1 -> Chancellor (EVIL)
+
+#### [18:15:13] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#3', '#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8', '#9']
+
+#### [18:15:13] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion', 'Baa'})
+
+### [18:15:20] Executed #3 -> Minion (EVIL)
+
+#### [18:15:24] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#3', '#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8', '#9']
+
+#### [18:15:24] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [18:15:31] Executed #5 -> Baa (EVIL)
+
+## [18:15:40] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Triple Baker chain. All 3 evils 100% confident. Only 2 scenarios after reveals+Druid ability.
+
