@@ -2974,6 +2974,13 @@
       "name": "asc64_v5",
       "notes": "5HP, forced-safe through wrong exec",
       "date": "2026-04-12 15:40"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc64_v6",
+      "notes": "5HP, solver 0-scenario bug on #4 (100% confident wrong). PD+Jester+Judge abilities.",
+      "date": "2026-04-12 15:47"
     }
   ]
 }

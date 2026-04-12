@@ -30192,3 +30192,120 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Chancellor'})
 Final HP: 5
 Notes: 5HP, forced-safe through wrong exec
 
+
+---
+
+# New Game — 2026-04-12 15:42:03
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Medium, Gemcrafter, Scout, Jester, Confessor
+- Outcasts: Plague_Doctor
+- Minions: Minion
+- Demons: Pooka
+
+### [15:42:19] Revealed #1 Gemcrafter
+Info: {'good_position': 8}
+
+### [15:42:19] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [15:42:19] Revealed #4 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [15:42:19] Revealed #7 Medium
+Info: {'good_position': 5, 'good_role': 'Jester'}
+
+### [15:42:34] Revealed #3 Plague_Doctor
+Info: {}
+
+### [15:42:34] Revealed #5 Jester
+Info: {}
+
+### [15:42:35] Revealed #6 Judge
+Info: {}
+
+### [15:42:35] Revealed #8 Jester
+Info: {}
+
+#### [15:42:35] Solver Output
+Scenarios: 12/224
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #5=92%, #7=33%, #8=33%, #4=25%, #6=17%
+
+#### [15:42:35] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.055 (adjusted 2.055) | timing x1.00
+
+### [15:43:33] Ability used at #3
+
+#### [15:43:33] Solver Output
+Scenarios: 7/224
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#7']
+Evil probabilities: #8=43%, #4=29%, #6=29%
+
+#### [15:43:33] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 7 scenarios (roles: {'Pooka', 'Minion'})
+
+### [15:44:23] Ability used at #5
+
+### [15:44:43] Executed #5 -> Minion (EVIL)
+
+#### [15:44:43] Solver Output
+Scenarios: 5/31
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#7']
+Evil probabilities: #8=60%, #4=20%, #6=20%
+
+#### [15:44:43] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 2.8 scenarios (adjusted 2.8, info gain 0.827 bits) | timing x1.00
+
+### [15:45:46] Revealed #8 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [15:45:46] Ability used at #8
+
+#### [15:45:46] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #4=50%, #6=50%
+
+#### [15:45:46] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#1']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [15:46:39] Revealed #6 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [15:46:40] Ability used at #6
+
+#### [15:46:40] Solver Output
+Scenarios: 1/31
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+
+#### [15:46:40] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:46:47] Executed #4 -> GOOD (WRONG!)
+
+### [15:47:04] Executed #4 -> GOOD (WRONG!)
+
+#### [15:47:04] Solver Output
+Scenarios: 0/26
+
+#### [15:47:04] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [15:47:46] Executed #8 -> Pooka (EVIL)
+
+## [15:47:47] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, solver 0-scenario bug on #4 (100% confident wrong). PD+Jester+Judge abilities.
+
