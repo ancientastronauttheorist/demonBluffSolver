@@ -3009,6 +3009,13 @@
       "name": "asc65_v2",
       "notes": "Loss: Lilis+Witch+Poisoner. 49% pick wrong on #8, 79% wrong on #7. True evils: #1=Poisoner,#9=Witch,#10=Lilis",
       "date": "2026-04-12 16:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc65_v3",
+      "notes": "Win with 5HP. Wrong exec on #5 Empress (33% pick). Slayer abilities both no-kill. Dreamer random info.",
+      "date": "2026-04-12 17:41"
     }
   ]
 }

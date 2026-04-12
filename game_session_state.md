@@ -30743,3 +30743,117 @@ Notes: Loss: 49% pick on #8 wrong, then 79% on #7 wrong. Lilis+Witch+Poisoner, v
 Final HP: 0
 Notes: Loss: Lilis+Witch+Poisoner. 49% pick wrong on #8, 79% wrong on #7. True evils: #1=Poisoner,#9=Witch,#10=Lilis
 
+
+---
+
+# New Game — 2026-04-12 17:30:48
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Knight, Empress, Hunter, Dreamer, Slayer, Scout
+- Outcasts: Doppelganger, Drunk, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [17:31:58] Revealed #1 Empress
+Info: {'targets': [3, 5, 8]}
+
+### [17:31:58] Revealed #2 Hunter
+Info: {'distance': 3}
+
+### [17:31:58] Revealed #3 Bombardier
+Info: {}
+
+### [17:31:58] Revealed #4 Scout
+Info: {'evil_role': 'Pooka', 'distance': 2}
+
+### [17:31:58] Revealed #5 Empress
+Info: {'targets': [3, 4, 8]}
+
+### [17:31:58] Revealed #6 Architect
+Info: {'side': 'Right'}
+
+### [17:34:58] Revealed #7 Slayer
+Info: {}
+
+### [17:35:01] Revealed #8 Slayer
+Info: {}
+
+### [17:37:06] Revealed #9 Dreamer
+Info: {}
+
+#### [17:37:09] Solver Output
+Scenarios: 243/3756
+Evil probabilities: #3=49%, #6=37%, #5=25%, #9=24%, #7=18%, #2=14%, #4=14%, #8=12%, #1=8%
+
+#### [17:37:09] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.103 (adjusted 1.839) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [17:37:40] Revealed #9 Dreamer
+Info: {'target': 3, 'evil_role': 'Chancellor'}
+
+### [17:37:43] Ability used at #9
+
+#### [17:37:47] Solver Output
+Scenarios: 178/3756
+Evil probabilities: #5=34%, #9=33%, #3=31%, #6=30%, #7=20%, #4=16%, #8=16%, #1=11%, #2=10%
+
+#### [17:37:47] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#5']
+Reason: Target #5 is 34% evil (adjusted 0.26)
+WARNING: Corruption risk: 24% -- Slayer ability disabled if corrupted
+
+#### [17:38:30] Solver Output
+Scenarios: 158/3756
+Evil probabilities: #3=35%, #9=33%, #5=25%, #6=25%, #7=23%, #4=18%, #8=18%, #1=12%, #2=11%
+
+#### [17:38:30] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#9']
+Reason: Target #9 is 33% evil (adjusted 0.24)
+WARNING: Corruption risk: 27% -- Slayer ability disabled if corrupted
+
+#### [17:39:10] Solver Output
+Scenarios: 120/3756
+Evil probabilities: #5=33%, #6=33%, #7=30%, #8=23%, #3=22%, #4=22%, #1=16%, #9=12%, #2=8%
+
+#### [17:39:10] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 33% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 33% confident (budget: 2 wrong execs)
+WARNING: Low confidence (33% < 60%) -- consider gathering more info
+
+### [17:39:57] Executed #5 -> GOOD (WRONG!)
+
+#### [17:40:05] Solver Output
+Scenarios: 72/2898
+Definite good: ['#5']
+Evil probabilities: #6=44%, #8=39%, #3=31%, #4=31%, #1=26%, #9=15%, #2=8%, #7=6%
+
+#### [17:40:05] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 44% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 44% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #6 (44%) despite low confidence — Bombardier candidate(s) [3] risk instant game loss if executed first.
+
+### [17:40:42] Executed #6 -> Chancellor (EVIL)
+
+#### [17:40:46] Solver Output
+Scenarios: 28/414
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#9']
+Evil probabilities: #8=71%, #3=29%
+
+#### [17:40:46] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 71% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 71% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #8 (71%) despite low confidence — Bombardier candidate(s) [3] risk instant game loss if executed first.
+
+### [17:41:30] Executed #8 -> Pooka (EVIL)
+
+## [17:41:36] GAME OVER — WIN
+Final HP: 5
+Notes: Win with 5HP. Wrong exec on #5 Empress (33% pick). Slayer abilities both no-kill. Dreamer random info.
+
