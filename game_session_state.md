@@ -29649,3 +29649,139 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect, PD+Dreamer+Slayer+Knight check, ASC63 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-12 15:17:38
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Dreamer, Druid, Slayer, Fortune_Teller, Lover
+- Outcasts: Plague_Doctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [15:18:39] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:18:39] Revealed #7 Medium
+Info: {'good_position': 4, 'good_role': 'Druid'}
+
+### [15:18:39] Revealed #8 Medium
+Info: {'good_position': 9, 'good_role': 'Dreamer'}
+
+### [15:18:54] Revealed #3 Slayer
+Info: {}
+
+### [15:18:54] Revealed #4 Druid
+Info: {}
+
+### [15:18:55] Revealed #5 Druid
+Info: {}
+
+### [15:18:55] Revealed #6 Fortune_Teller
+Info: {}
+
+### [15:18:55] Revealed #9 Dreamer
+Info: {}
+
+#### [15:18:55] Solver Output
+Scenarios: 76/1848
+Definite good: ['#1', '#2']
+Evil probabilities: #4=84%, #7=68%, #9=55%, #5=32%, #8=32%, #6=16%, #3=13%
+
+#### [15:18:55] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.728 (adjusted 2.548) | timing x1.00
+WARNING: Corruption risk: 13%
+
+### [15:19:40] Revealed #9 Dreamer
+Info: {'target': 4, 'evil_role': 'Witch'}
+
+### [15:19:40] Ability used at #9
+
+#### [15:19:41] Solver Output
+Scenarios: 43/1848
+Definite good: ['#1', '#2']
+Evil probabilities: #4=72%, #9=67%, #7=56%, #8=44%, #5=40%, #6=12%, #3=9%
+
+#### [15:19:41] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#5', '#8']
+Reason: Entropy 0.996 (adjusted 0.788) | follow-up bonus 0.373 | timing x1.00
+WARNING: Corruption risk: 42%
+
+### [15:20:27] Revealed #6 Fortune Teller
+Info: {'targets': [5, 8], 'has_evil': True}
+
+### [15:20:28] Ability used at #6
+
+#### [15:20:28] Solver Output
+Scenarios: 23/1848
+Definite good: ['#1', '#2']
+Evil probabilities: #4=83%, #9=65%, #7=57%, #8=43%, #5=26%, #6=22%, #3=4%
+
+#### [15:20:28] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.932 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 39%
+
+### [15:21:14] Revealed #5 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Plague_Doctor'}
+
+### [15:21:14] Ability used at #5
+
+#### [15:21:14] Solver Output
+Scenarios: 23/1848
+Definite good: ['#1', '#2']
+Evil probabilities: #4=83%, #9=65%, #7=57%, #8=43%, #5=26%, #6=22%, #3=4%
+
+#### [15:21:14] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#4']
+Reason: Target #4 is 83% evil (adjusted 0.43)
+WARNING: Corruption risk: 48% -- Slayer ability disabled if corrupted
+
+### [15:21:58] Ability used at #3
+
+#### [15:21:58] Solver Output
+Scenarios: 8/224
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5']
+Evil probabilities: #9=88%, #7=62%, #8=38%, #6=12%
+
+#### [15:21:58] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (62% evil Witch, 25% evil Pooka, 12% good Dreamer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 88%, but all reveal branches still lead to a forced win.
+
+### [15:22:05] Executed #9 -> Pooka (EVIL)
+
+#### [15:22:15] Solver Output
+Scenarios: 2/31
+Definite evil: ['#4', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6']
+Evil probabilities: #7=50%, #8=50%
+
+#### [15:22:15] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% good Medium (corrupted), 50% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:22:22] Executed #7 -> GOOD (WRONG!)
+
+### [15:22:30] Executed #7 -> GOOD (WRONG!)
+
+#### [15:22:30] Solver Output
+Scenarios: 1/26
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [15:22:30] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [15:22:37] Executed #8 -> Witch (EVIL)
+
+## [15:22:50] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Slayer+Dreamer+FT+Druid, all abilities used
+
