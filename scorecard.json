@@ -2778,6 +2778,13 @@
       "name": "asc60_v5",
       "notes": "10HP perfect, FT ability confirmed evils",
       "date": "2026-04-12 12:30"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc60_v6",
+      "notes": "6HP, Lilis game, PD+FT+Jester+Slayer abilities",
+      "date": "2026-04-12 12:36"
     }
   ]
 }

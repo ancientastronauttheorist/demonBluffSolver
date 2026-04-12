@@ -27462,3 +27462,146 @@ Reason: #1 is evil in ALL 5 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, FT ability confirmed evils
 
+
+---
+
+# New Game — 2026-04-12 12:31:14
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Medium, Enlightened, Druid, Jester, Fortune_Teller, Lover, Slayer
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Chancellor, Twin_Minion
+- Demons: Lilis
+
+### [12:32:07] Revealed #1 Enlightened
+Info: {'direction': 'CW'}
+
+### [12:32:07] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [12:32:07] Revealed #6 Bombardier
+Info: {}
+
+### [12:32:07] Revealed #7 Jester
+Info: {}
+
+### [12:32:17] Revealed #2 Fortune_Teller
+Info: {}
+
+### [12:32:17] Revealed #4 Jester
+Info: {}
+
+### [12:32:17] Revealed #5 Slayer
+Info: {}
+
+### [12:32:17] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [12:32:17] Solver Output
+Scenarios: 222/3400
+Definite good: ['#9', '#10']
+Evil probabilities: #7=77%, #5=44%, #4=43%, #2=42%, #6=37%, #3=36%, #8=11%, #1=10%
+
+#### [12:32:18] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.663 (adjusted 1.663) | timing x1.00
+
+### [12:32:58] Ability used at #8
+
+#### [12:32:58] Solver Output
+Scenarios: 154/3400
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #7=84%, #5=53%, #3=47%, #6=42%, #4=38%, #2=36%
+
+#### [12:32:58] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#4', '#5']
+Reason: Entropy 0.997 (adjusted 0.887) | follow-up bonus 0.341 | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [12:33:33] Revealed #2 Fortune Teller
+Info: {'targets': [4, 5], 'has_evil': True}
+
+### [12:33:33] Ability used at #2
+
+#### [12:33:33] Solver Output
+Scenarios: 72/3400
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #7=94%, #5=56%, #6=50%, #3=44%, #4=33%, #2=22%
+
+#### [12:33:33] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#2', '#6']
+Reason: Expected posterior 38.1 scenarios (adjusted 42.3, info gain 0.766 bits) | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [12:34:03] Revealed #4 Jester
+Info: {'targets': [1, 2, 6], 'evil_count': 1}
+
+### [12:34:03] Ability used at #4
+
+#### [12:34:04] Solver Output
+Scenarios: 36/3400
+Definite evil: ['#7']
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #5=56%, #3=44%, #6=44%, #4=33%, #2=22%
+
+#### [12:34:04] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 36 scenarios (roles: {'Chancellor', 'Twin_Minion', 'Lilis'})
+
+### [12:34:12] Ability used at #7
+
+#### [12:34:13] Solver Output
+Scenarios: 36/3400
+Definite evil: ['#7']
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #5=56%, #3=44%, #6=44%, #4=33%, #2=22%
+
+#### [12:34:13] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 36 scenarios (roles: {'Chancellor', 'Twin_Minion', 'Lilis'})
+
+### [12:35:51] Executed #7 -> Chancellor (EVIL)
+
+#### [12:35:51] Solver Output
+Scenarios: 10/286
+Definite evil: ['#7']
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #5=60%, #3=40%, #4=40%, #6=40%, #2=20%
+
+#### [12:35:51] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#3']
+Reason: Target #3 is 40% evil (adjusted 0.40)
+
+### [12:36:24] Ability used at #5
+
+#### [12:36:24] Solver Output
+Scenarios: 8/286
+Definite evil: ['#7']
+Definite good: ['#1', '#8', '#9', '#10']
+Evil probabilities: #5=75%, #4=50%, #2=25%, #3=25%, #6=25%
+
+#### [12:36:24] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (38% evil Lilis, 38% evil Twin_Minion, 25% good Slayer).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [12:36:31] Executed #5 -> Twin Minion (EVIL)
+
+#### [12:36:37] Solver Output
+Scenarios: 3/35
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#6', '#8', '#9', '#10']
+Evil probabilities: #4=67%, #3=33%
+
+#### [12:36:37] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (67% evil Lilis, 33% good Jester (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [12:36:44] Executed #4 -> Lilis (EVIL)
+
+## [12:36:55] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, PD+FT+Jester+Slayer abilities
+
