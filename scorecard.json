@@ -2799,6 +2799,13 @@
       "name": "asc61_v1",
       "notes": "10HP perfect, both definite",
       "date": "2026-04-12 13:45"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc61_v2",
+      "notes": "8HP, Lilis game, Judge + Poet-Bishop abilities",
+      "date": "2026-04-12 13:48"
     }
   ]
 }

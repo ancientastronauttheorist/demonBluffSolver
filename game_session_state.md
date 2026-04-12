@@ -27754,3 +27754,78 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: 10HP perfect, both definite
 
+
+---
+
+# New Game — 2026-04-12 13:45:58
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Judge, Slayer, Oracle, Confessor, Poet, Bard
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Lilis
+
+### [13:46:36] Revealed #2 Bard
+Info: {'corruption_distance': 2}
+
+### [13:46:36] Revealed #4 Oracle
+Info: {'targets': [2, 8], 'minion_role': 'Poisoner'}
+
+### [13:46:36] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [13:47:00] Revealed #1 Poet
+Info: {'targets': [1, 2, 3], 'types': ['Villager', 'Outcast', 'Minion'], 'copied_role': 'Bishop'}
+
+### [13:47:00] Revealed #3 Slayer
+Info: {}
+
+### [13:47:00] Revealed #5 Judge
+Info: {}
+
+### [13:47:00] Revealed #7 Slayer
+Info: {}
+
+#### [13:47:01] Solver Output
+Scenarios: 9/700
+Definite evil: ['#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8']
+Evil probabilities: #2=78%, #3=22%
+
+#### [13:47:01] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 9 scenarios (roles: {'Lilis'})
+
+### [13:47:07] Executed #6 -> Lilis (EVIL)
+
+#### [13:47:14] Solver Output
+Scenarios: 9/84
+Definite evil: ['#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8']
+Evil probabilities: #2=78%, #3=22%
+
+#### [13:47:14] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#3']
+Reason: Expected posterior 5.0 scenarios (adjusted 5.0, info gain 0.848 bits) | timing x1.00
+
+### [13:47:43] Revealed #5 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [13:47:43] Ability used at #5
+
+#### [13:47:43] Solver Output
+Scenarios: 6/84
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [13:47:43] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Poisoner'})
+
+### [13:47:50] Executed #2 -> Poisoner (EVIL)
+
+## [13:48:02] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Lilis game, Judge + Poet-Bishop abilities
+
