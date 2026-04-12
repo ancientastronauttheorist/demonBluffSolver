@@ -27122,3 +27122,66 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 10
 Notes: 10HP perfect, both evils definite/forced-safe
 
+
+---
+
+# New Game — 2026-04-12 12:18:27
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Gemcrafter, Confessor, Alchemist, Lover, Knight
+- Outcasts: Bombardier
+- Minions: Poisoner
+- Demons: Pooka
+
+### [12:18:40] Revealed #1 Gemcrafter
+Info: {'good_position': 3}
+
+### [12:18:40] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [12:18:40] Revealed #3 Knight
+Info: {}
+
+### [12:18:40] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [12:18:40] Revealed #5 Bombardier
+Info: {}
+
+### [12:18:40] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:18:40] Revealed #7 Knight
+Info: {}
+
+### [12:18:40] Revealed #8 Alchemist
+Info: {'cured_count': 2}
+
+#### [12:18:40] Solver Output
+Scenarios: 4/83
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #3=75%, #1=50%, #2=25%, #7=25%, #8=25%
+
+#### [12:18:40] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight check: #3 is 75% evil, 25% corruption risk. Expected HP cost: 0.6 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 25% -- corrupted Knight loses immunity + 4 extra damage
+
+### [12:19:19] Executed #3 -> Poisoner (EVIL)
+
+#### [12:19:20] Solver Output
+Scenarios: 1/11
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [12:19:20] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:19:26] Executed #1 -> Pooka (EVIL)
+
+## [12:19:34] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect
+

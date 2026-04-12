@@ -2750,6 +2750,13 @@
       "name": "asc60_v1",
       "notes": "10HP perfect, both evils definite/forced-safe",
       "date": "2026-04-12 12:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v2",
+      "notes": "10HP perfect",
+      "date": "2026-04-12 12:19"
     }
   ]
 }
