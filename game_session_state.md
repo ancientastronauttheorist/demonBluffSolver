@@ -29074,3 +29074,136 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: 10HP perfect, Knight check + dual Slayer kills
 
+
+---
+
+# New Game — 2026-04-12 14:50:53
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Baker, Jester, Slayer, Scout, Bishop, Enlightened
+- Outcasts: Drunk, Plague_Doctor, Wretch
+- Minions: Chancellor
+- Demons: Lilis
+
+### [14:51:41] Revealed #4 Baker
+Info: {'original_role': 'Jester'}
+
+### [14:51:41] Revealed #5 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [14:51:41] Revealed #9 Wretch
+Info: {}
+
+### [14:52:00] Revealed #1 Jester
+Info: {}
+
+### [14:52:01] Revealed #2 Plague_Doctor
+Info: {}
+
+### [14:52:01] Revealed #3 Jester
+Info: {}
+
+### [14:52:01] Revealed #6 Slayer
+Info: {}
+
+### [14:52:01] Revealed #7 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [14:52:01] Solver Output
+Scenarios: 169/1830
+Definite good: ['#8']
+Evil probabilities: #4=52%, #7=37%, #6=33%, #5=24%, #9=20%, #1=17%, #3=12%, #2=5%
+
+#### [14:52:01] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.367 (adjusted 2.367) | timing x1.00
+
+### [14:53:12] Ability used at #2
+
+#### [14:53:13] Solver Output
+Scenarios: 89/1830
+Definite good: ['#8']
+Evil probabilities: #4=94%, #7=35%, #6=29%, #5=18%, #1=7%, #9=7%, #2=6%, #3=4%
+
+#### [14:53:13] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#4', '#5', '#8']
+Reason: Expected posterior 39.5 scenarios (adjusted 46.2, info gain 0.946 bits) | timing x1.00
+WARNING: Corruption risk: 34%
+
+### [14:54:22] Revealed #3 Jester
+Info: {'targets': [4, 5, 8], 'evil_count': 1}
+
+### [14:54:22] Ability used at #3
+
+#### [14:54:22] Solver Output
+Scenarios: 42/1830
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #7=43%, #6=19%, #1=14%, #9=14%, #5=10%
+
+#### [14:54:22] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 42 scenarios (roles: {'Chancellor', 'Lilis'})
+
+### [14:54:29] Executed #4 -> Lilis (EVIL)
+
+#### [14:54:43] Solver Output
+Scenarios: 16/187
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #7=38%, #6=25%, #1=12%, #5=12%, #9=12%
+
+#### [14:54:43] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#7']
+Reason: Expected posterior 9.1 scenarios (adjusted 11.4, info gain 0.490 bits) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [14:55:23] Revealed #1 Jester
+Info: {'targets': [2, 3, 7], 'evil_count': 2}
+
+### [14:55:23] Ability used at #1
+
+#### [14:55:23] Solver Output
+Scenarios: 10/187
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#5', '#8', '#9']
+Evil probabilities: #6=40%, #7=40%, #1=20%
+
+#### [14:55:23] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#7']
+Reason: Target #7 is 40% evil (adjusted 0.32)
+WARNING: Corruption risk: 20% -- Slayer ability disabled if corrupted
+
+### [14:56:08] Ability used at #6
+
+#### [14:56:08] Solver Output
+Scenarios: 8/187
+Definite evil: ['#4']
+Definite good: ['#2', '#3', '#5', '#8', '#9']
+Evil probabilities: #6=50%, #1=25%, #7=25%
+
+#### [14:56:08] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 25% good Slayer, 12% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:56:15] Executed #6 -> GOOD (WRONG!)
+
+### [14:56:30] Executed #6 -> GOOD (WRONG!)
+
+#### [14:56:31] Solver Output
+Scenarios: 2/147
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [14:56:31] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [14:57:02] Executed #1 -> Chancellor (EVIL)
+
+## [14:57:02] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP! Lilis+Chancellor, forced-safe through 2 wrong execs
+

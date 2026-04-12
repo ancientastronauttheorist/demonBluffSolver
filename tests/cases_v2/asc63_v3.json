@@ -1,0 +1,166 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          7
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5,
+          8
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Jester"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "ccw"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    6,
+    1
+  ],
+  "confirmed_evil": [
+    4,
+    1
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Lilis",
+    "1": "Chancellor"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 6,
+      "target_pos": 7,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "executed_good_corrupted": {
+    "6": false
+  },
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Baker",
+      "Jester",
+      "Slayer",
+      "Scout",
+      "Bishop",
+      "Enlightened"
+    ],
+    "outcasts": [
+      "Drunk",
+      "Plague_Doctor",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    2,
+    3,
+    1,
+    6
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc63_v3",
+  "true_evil_positions": {
+    "1": "Chancellor",
+    "4": "Lilis"
+  },
+  "notes": "1HP! Lilis+Chancellor, forced-safe through 2 wrong execs"
+}

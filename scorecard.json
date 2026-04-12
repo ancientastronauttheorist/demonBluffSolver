@@ -2904,6 +2904,13 @@
       "name": "asc63_v2",
       "notes": "10HP perfect, Knight check + dual Slayer kills",
       "date": "2026-04-12 14:49"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc63_v3",
+      "notes": "1HP! Lilis+Chancellor, forced-safe through 2 wrong execs",
+      "date": "2026-04-12 14:57"
     }
   ]
 }
