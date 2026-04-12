@@ -26729,3 +26729,90 @@ Notes: Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 was the target
 Final HP: 0
 Notes: Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found
 
+
+---
+
+# New Game — 2026-04-12 11:52:38
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Bard, Hunter, Fortune_Teller, Baker, Architect, Jester
+- Outcasts: Doppelganger
+- Minions: Twin_Minion, Witch
+- Demons: Lilis
+
+### [11:54:27] Revealed #1 Empress
+Info: {'targets': [5, 6, 9]}
+
+### [11:54:27] Revealed #2 Bard
+Info: {'corruption_distance': -1}
+
+### [11:54:27] Revealed #3 Empress
+Info: {'targets': [1, 6, 9]}
+
+### [11:54:27] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [11:54:27] Revealed #6 Baker
+Info: {'original_role': 'Bard'}
+
+### [11:54:27] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+### [11:54:38] Revealed #4 Jester
+Info: {}
+
+#### [11:54:38] Solver Output
+Scenarios: 72/3024
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#9']
+Evil probabilities: #4=50%, #8=50%
+
+#### [11:54:38] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 72 scenarios (roles: {'Twin_Minion', 'Witch', 'Lilis'})
+
+### [11:54:45] Executed #6 -> Twin Minion (EVIL)
+
+#### [11:54:50] Solver Output
+Scenarios: 24/336
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#9']
+Evil probabilities: #4=50%, #8=50%
+
+#### [11:54:50] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 24 scenarios (roles: {'Lilis', 'Witch'})
+
+### [11:54:57] Executed #7 -> Witch (EVIL)
+
+#### [11:55:03] Solver Output
+Scenarios: 12/42
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#9']
+Evil probabilities: #4=50%, #8=50%
+
+#### [11:55:03] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 6.0 scenarios (adjusted 6.0, info gain 1.000 bits) | timing x1.00
+
+### [11:55:34] Revealed #4 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [11:55:34] Ability used at #4
+
+#### [11:55:34] Solver Output
+Scenarios: 6/42
+Definite evil: ['#6', '#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+
+#### [11:55:34] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Lilis'})
+
+### [11:55:41] Executed #8 -> Lilis (EVIL)
+
+## [11:55:48] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis+Witch game, all definite evils
+

@@ -2708,6 +2708,13 @@
       "name": "asc59_v5",
       "notes": "Loss: 35% probabilistic pick on #7 was wrong, Baa at #6 (Lover) never found",
       "date": "2026-04-12 11:43"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc59_v5",
+      "notes": "6HP, Lilis+Witch game, all definite evils",
+      "date": "2026-04-12 11:55"
     }
   ]
 }
