@@ -1273,14 +1273,19 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" means converted FROM Baker (rare, but valid).
+            # Do NOT convert to 'original' -- that means "I am the original Baker".
             return card_baker(pos, claimed)
         if 'original' in clue.lower():
             return card_baker(pos, 'original')
         # Fallback to runtime_data
         original = rd.get('original_role')
-        if not original or original == '?' or original.lower() == 'baker':
+        if not original or original == '?':
+            return card_baker(pos, 'original')
+        if original.lower() == 'baker':
+            # runtime says original was Baker but clue didn't match "I was a" pattern.
+            # If clue says "I am the original Baker" we already returned above.
+            # Otherwise this is ambiguous -- treat as original.
             return card_baker(pos, 'original')
         return card_baker(pos, original)
 
@@ -1393,8 +1398,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
             return card_baker(pos, claimed)
         if 'original' in clue.lower() or not clue.strip():
             return card_baker(pos, 'original')
@@ -1471,8 +1475,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
         if m:
             claimed = m.group(1).strip()
-            if claimed.lower() == 'baker':
-                claimed = 'original'
+            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
             return CardInfo(pos, "Poet", info_parsed={"original_role": claimed, "copied_role": "Baker"})
 
     # --- No-info roles: these roles NEVER have passive speech bubbles ---
