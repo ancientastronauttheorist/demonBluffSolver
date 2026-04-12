@@ -28101,3 +28101,120 @@ Reason: Knight free check: #7 is 50% evil. If real Knight, execution blocked (co
 Final HP: 6
 Notes: 6HP, Lilis game, Knight check + Druid ability
 
+
+---
+
+# New Game — 2026-04-12 14:00:23
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Enlightened, Dreamer, Oracle, Baker, Jester, Judge, Slayer
+- Outcasts: Doppelganger
+- Minions: Puppeteer, Twin_Minion
+- Demons: Lilis
+
+### [14:01:09] Revealed #5 Oracle
+Info: {'targets': [8, 10], 'minion_role': 'Twin_Minion'}
+
+### [14:01:09] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [14:01:09] Revealed #8 Baker
+Info: {'original_role': 'Lover'}
+
+### [14:01:09] Revealed #9 Baker
+Info: {'original_role': 'Judge'}
+
+### [14:01:24] Revealed #1 Enlightened
+Info: {'direction': 'cw'}
+
+### [14:01:24] Revealed #2 Dreamer
+Info: {}
+
+### [14:01:25] Revealed #3 Slayer
+Info: {}
+
+### [14:01:25] Revealed #4 Jester
+Info: {}
+
+#### [14:01:25] Solver Output
+Scenarios: 216/6720
+Definite good: ['#6', '#7', '#10']
+Evil probabilities: #2=89%, #5=75%, #3=67%, #4=67%, #9=36%, #1=33%, #8=33%
+
+#### [14:01:25] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#4']
+Reason: Entropy 3.033 (adjusted 3.033) | timing x1.00
+
+### [14:01:55] Revealed #2 Dreamer
+Info: {'target': 4, 'evil_role': 'Twin_Minion'}
+
+### [14:01:55] Ability used at #2
+
+#### [14:01:56] Solver Output
+Scenarios: 168/6720
+Definite evil: ['#2']
+Definite good: ['#6', '#7', '#10']
+Evil probabilities: #3=71%, #5=71%, #4=57%, #9=39%, #8=32%, #1=29%
+
+#### [14:01:56] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 168 scenarios (roles: {'Puppet', 'Puppeteer', 'Lilis', 'Twin_Minion'})
+
+### [14:02:03] Executed #2 -> Puppet (EVIL)
+
+#### [14:02:11] Solver Output
+Scenarios: 24/672
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#6', '#7', '#10']
+Evil probabilities: #5=75%, #9=75%, #4=25%, #8=25%
+
+#### [14:02:11] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 24 scenarios (roles: {'Puppeteer'})
+
+### [14:02:35] Ability used at #3
+
+### [14:03:09] Executed #3 -> Puppeteer (EVIL)
+
+#### [14:03:09] Solver Output
+Scenarios: 24/336
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#6', '#7', '#10']
+Evil probabilities: #5=75%, #9=75%, #4=25%, #8=25%
+
+#### [14:03:09] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#5', '#6']
+Reason: Expected posterior 10.0 scenarios (adjusted 10.0, info gain 1.263 bits) | timing x1.00
+
+### [14:03:47] Revealed #4 Jester
+Info: {'targets': [1, 5, 6], 'evil_count': 1}
+
+### [14:03:47] Ability used at #4
+
+#### [14:03:48] Solver Output
+Scenarios: 12/336
+Definite evil: ['#2', '#3', '#5', '#9']
+Definite good: ['#1', '#4', '#6', '#7', '#8', '#10']
+
+#### [14:03:48] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 12 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [14:03:55] Executed #5 -> GOOD (WRONG!)
+
+### [14:04:08] Executed #5 -> GOOD (WRONG!)
+
+#### [14:04:08] Solver Output
+Scenarios: 0/252
+
+#### [14:04:08] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [14:05:04] Executed #1 -> Lilis (EVIL)
+
+## [14:05:04] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate.
+

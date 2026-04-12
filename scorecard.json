@@ -2827,6 +2827,13 @@
       "name": "asc61_v5",
       "notes": "6HP, Lilis game, Knight check + Druid ability",
       "date": "2026-04-12 13:58"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc61_v6",
+      "notes": "1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate.",
+      "date": "2026-04-12 14:05"
     }
   ]
 }
