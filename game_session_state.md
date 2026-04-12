@@ -26433,3 +26433,112 @@ Reason: #3 is evil in ALL 10 scenarios (roles: {'Puppeteer'})
 Final HP: 6
 Notes: 6HP, Lilis game, all definite evils
 
+
+---
+
+# New Game — 2026-04-12 11:29:19
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Confessor, Baker, Medium, Hunter, Slayer
+- Outcasts: Bombardier
+- Minions: Shaman
+- Demons: Lilis
+
+### [11:30:32] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [11:30:32] Revealed #2 Jester
+Info: {}
+
+### [11:30:32] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [11:30:32] Revealed #4 Slayer
+Info: {}
+
+### [11:30:32] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [11:30:32] Revealed #6 Bombardier
+Info: {}
+
+### [11:30:32] Revealed #8 Slayer
+Info: {}
+
+#### [11:30:39] Solver Output
+Scenarios: 20/56
+Definite good: ['#5', '#7']
+Evil probabilities: #2=40%, #4=40%, #1=30%, #3=30%, #6=30%, #8=30%
+
+#### [11:30:39] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#4', '#5']
+Reason: Expected posterior 9.1 scenarios (adjusted 9.1, info gain 1.134 bits) | timing x1.00
+
+### [11:31:07] Revealed #2 Jester
+Info: {'targets': [1, 4, 5], 'evil_count': 1}
+
+### [11:31:07] Ability used at #2
+
+#### [11:31:11] Solver Output
+Scenarios: 10/56
+Definite good: ['#5', '#7']
+Evil probabilities: #2=40%, #4=40%, #6=40%, #8=40%, #1=20%, #3=20%
+
+#### [11:31:11] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#2']
+Reason: Target #2 is 40% evil (adjusted 0.40)
+
+### [11:31:59] Ability used at #4
+
+#### [11:32:03] Solver Output
+Scenarios: 6/56
+Definite good: ['#2', '#5', '#7']
+Evil probabilities: #4=67%, #1=33%, #3=33%, #6=33%, #8=33%
+
+#### [11:32:03] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#4']
+Reason: Target #4 is 67% evil (adjusted 0.67)
+
+### [11:32:33] Ability used at #8
+
+#### [11:32:38] Solver Output
+Scenarios: 4/56
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #3=50%, #4=50%, #8=50%
+
+#### [11:32:38] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Baker, 25% evil Lilis, 25% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [11:32:45] Executed #1 -> GOOD (WRONG!)
+
+### [11:32:52] Executed #1 -> GOOD (WRONG!)
+
+#### [11:32:52] Solver Output
+Scenarios: 2/42
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [11:32:52] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [11:33:33] Executed #4 -> Shaman (EVIL)
+
+#### [11:33:33] Solver Output
+Scenarios: 1/6
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [11:33:33] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [11:33:40] Executed #8 -> Lilis (EVIL)
+
+## [11:33:52] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP, Lilis game, wrong exec #1 but lookahead win
+

@@ -2680,6 +2680,13 @@
       "name": "asc59_v2",
       "notes": "6HP, Lilis game, all definite evils",
       "date": "2026-04-12 11:28"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc59_v3",
+      "notes": "3HP, Lilis game, wrong exec #1 but lookahead win",
+      "date": "2026-04-12 11:33"
     }
   ]
 }
