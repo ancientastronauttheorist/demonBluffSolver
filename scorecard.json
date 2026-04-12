@@ -2834,6 +2834,13 @@
       "name": "asc61_v6",
       "notes": "1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate.",
       "date": "2026-04-12 14:05"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc61_v7",
+      "notes": "8HP, Slayer kills Witch! ASC61 COMPLETE 7/7",
+      "date": "2026-04-12 14:07"
     }
   ]
 }

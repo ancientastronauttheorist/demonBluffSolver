@@ -28218,3 +28218,61 @@ Reason: No surviving scenarios -- check input data
 Final HP: 1
 Notes: 1HP! Solver 0-scenario bug on #5 (Doppelganger as Oracle wrongly marked evil). Investigate.
 
+
+---
+
+# New Game — 2026-04-12 14:06:01
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Baker, Medium, Lover, Enlightened, Slayer
+- Outcasts: Doppelganger
+- Minions: Witch
+- Demons: Lilis
+
+### [14:06:44] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [14:06:44] Revealed #4 Enlightened
+Info: {'direction': 'CCW'}
+
+### [14:06:44] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [14:06:44] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [14:06:52] Revealed #2 Enlightened
+Info: {'direction': 'equidistant'}
+
+### [14:06:52] Revealed #3 Slayer
+Info: {}
+
+#### [14:06:52] Solver Output
+Scenarios: 24/336
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%
+
+#### [14:06:52] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 24 scenarios (roles: {'Witch', 'Lilis'})
+
+### [14:06:59] Executed #1 -> Lilis (EVIL)
+
+#### [14:07:06] Solver Output
+Scenarios: 12/42
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%
+
+#### [14:07:06] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#2']
+Reason: Target #2 is 50% evil (adjusted 0.50)
+
+### [14:07:49] Ability used at #3
+
+## [14:07:49] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Slayer kills Witch! ASC61 COMPLETE 7/7
+
