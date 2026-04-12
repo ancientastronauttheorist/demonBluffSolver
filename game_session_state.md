@@ -30039,3 +30039,78 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: 6HP, Lilis game, FT ability + forced-safe
 
+
+---
+
+# New Game — 2026-04-12 15:34:44
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Lover, Gemcrafter, Empress, Fortune_Teller, Jester
+- Outcasts: Bombardier, Doppelganger
+- Minions: Witch
+- Demons: Baa
+
+### [15:35:06] Revealed #1 Empress
+Info: {'targets': [4, 6, 8]}
+
+### [15:35:06] Revealed #4 Gemcrafter
+Info: {'good_position': 8}
+
+### [15:35:06] Revealed #5 Medium
+Info: {'good_position': 2, 'good_role': 'Fortune Teller'}
+
+### [15:35:06] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [15:35:19] Revealed #2 Fortune_Teller
+Info: {}
+
+### [15:35:19] Revealed #3 Fortune_Teller
+Info: {}
+
+### [15:35:20] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [15:35:20] Solver Output
+Scenarios: 20/392
+Definite good: ['#2', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #3=50%, #6=50%, #7=50%
+
+#### [15:35:20] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [15:36:05] Revealed #2 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': True}
+
+### [15:36:05] Ability used at #2
+
+#### [15:36:06] Solver Output
+Scenarios: 12/392
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [15:36:06] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 12 scenarios (roles: {'Baa', 'Witch'})
+
+### [15:36:12] Executed #1 -> Baa (EVIL)
+
+#### [15:36:26] Solver Output
+Scenarios: 6/49
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [15:36:26] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Witch'})
+
+### [15:37:00] Ability used at #3
+
+### [15:37:27] Executed #3 -> Witch (EVIL)
+
+## [15:37:27] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, FT ability nails both
+

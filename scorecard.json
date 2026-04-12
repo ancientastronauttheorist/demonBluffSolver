@@ -2960,6 +2960,13 @@
       "name": "asc64_v3",
       "notes": "6HP, Lilis game, FT ability + forced-safe",
       "date": "2026-04-12 15:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc64_v4",
+      "notes": "10HP perfect, FT ability nails both",
+      "date": "2026-04-12 15:37"
     }
   ]
 }

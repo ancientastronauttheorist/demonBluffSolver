@@ -1,0 +1,135 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Fortune Teller"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    1,
+    3
+  ],
+  "confirmed_evil": [
+    1,
+    3
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Baa",
+    "3": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    8
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Lover",
+      "Gemcrafter",
+      "Empress",
+      "Fortune_Teller",
+      "Jester"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2,
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc64_v4",
+  "true_evil_positions": {
+    "1": "Baa",
+    "3": "Witch"
+  },
+  "notes": "10HP perfect, FT ability nails both"
+}
