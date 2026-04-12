@@ -2932,6 +2932,13 @@
       "name": "asc63_v6",
       "notes": "5HP, Slayer kills Puppeteer, forced-safe wins",
       "date": "2026-04-12 15:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v7",
+      "notes": "10HP perfect, PD+Dreamer+Slayer+Knight check, ASC63 COMPLETE 7/7",
+      "date": "2026-04-12 15:16"
     }
   ]
 }

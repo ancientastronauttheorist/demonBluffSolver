@@ -29524,3 +29524,128 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP, Slayer kills Puppeteer, forced-safe wins
 
+
+---
+
+# New Game — 2026-04-12 15:10:21
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Gemcrafter, Dreamer, Oracle, Knight
+- Outcasts: Wretch, Plague_Doctor, Bombardier
+- Minions: Puppeteer
+- Demons: Baa
+
+### [15:10:37] Revealed #1 Bombardier
+Info: {}
+
+### [15:10:37] Revealed #2 Gemcrafter
+Info: {'good_position': 3}
+
+### [15:10:37] Revealed #3 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Puppet'}
+
+### [15:10:37] Revealed #4 Knight
+Info: {}
+
+### [15:10:47] Revealed #5 Slayer
+Info: {}
+
+### [15:10:47] Revealed #6 Plague_Doctor
+Info: {}
+
+### [15:10:47] Revealed #7 Dreamer
+Info: {}
+
+#### [15:10:48] Solver Output
+Scenarios: 17/150
+Evil probabilities: #1=94%, #2=59%, #5=47%, #7=41%, #4=35%, #3=12%, #6=12%
+
+#### [15:10:48] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.419 (adjusted 2.206) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [15:11:26] Revealed #7 Dreamer
+Info: {'target': 5, 'evil_role': 'Puppeteer'}
+
+### [15:11:26] Ability used at #7
+
+#### [15:11:26] Solver Output
+Scenarios: 13/150
+Evil probabilities: #1=92%, #2=62%, #7=46%, #4=38%, #5=31%, #3=15%, #6=15%
+
+#### [15:11:26] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.352 (adjusted 1.352) | timing x1.00
+
+### [15:12:13] Ability used at #6
+
+#### [15:12:14] Solver Output
+Scenarios: 9/150
+Definite evil: ['#1']
+Definite good: ['#3', '#6']
+Evil probabilities: #2=78%, #4=44%, #7=44%, #5=33%
+
+#### [15:12:14] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 9 scenarios (roles: {'Puppet', 'Baa', 'Puppeteer'})
+
+### [15:12:20] Executed #1 -> Puppeteer (EVIL)
+
+#### [15:12:30] Solver Output
+Scenarios: 7/34
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#6']
+Evil probabilities: #4=43%, #7=43%, #5=14%
+
+#### [15:12:30] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 7 scenarios (roles: {'Puppet'})
+
+### [15:12:36] Executed #2 -> Puppet (EVIL)
+
+#### [15:12:52] Solver Output
+Scenarios: 7/17
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#6']
+Evil probabilities: #4=43%, #7=43%, #5=14%
+
+#### [15:12:52] Recommendation
+Action: **EXECUTE** #4
+Reason: Knight check: #4 is 43% evil, 14% corruption risk. Expected HP cost: 0.7 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 14% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [15:14:25] Execution Blocked
+#4 Knight immunity — confirmed good, no HP loss
+
+#### [15:14:25] Solver Output
+Scenarios: 4/13
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#6']
+Evil probabilities: #7=75%, #5=25%
+
+#### [15:14:25] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#7']
+Reason: Target #7 is 75% evil (adjusted 0.56)
+WARNING: Corruption risk: 25% -- Slayer ability disabled if corrupted
+
+### [15:15:36] Ability used at #5
+
+#### [15:15:36] Solver Output
+Scenarios: 2/13
+Definite evil: ['#1', '#2']
+Definite good: ['#3', '#4', '#6']
+Evil probabilities: #5=50%, #7=50%
+
+#### [15:15:36] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Slayer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:15:43] Executed #5 -> Baa (EVIL)
+
+## [15:16:09] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD+Dreamer+Slayer+Knight check, ASC63 COMPLETE 7/7
+
