@@ -30857,3 +30857,207 @@ WARNING: Bombardier safety: executing #8 (71%) despite low confidence — Bombardi
 Final HP: 5
 Notes: Win with 5HP. Wrong exec on #5 Empress (33% pick). Slayer abilities both no-kill. Dreamer random info.
 
+
+---
+
+# New Game — 2026-04-12 17:43:45
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Alchemist, Bishop, Fortune_Teller, Slayer, Poet
+- Outcasts: Bombardier, Doppelganger, Wretch, Plague_Doctor, Drunk
+- Minions: Chancellor
+- Demons: Baa
+
+### [17:44:39] Revealed #1 Bishop
+Info: {'targets': [5, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:44:39] Revealed #4 Bishop
+Info: {'targets': [7, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:44:39] Revealed #5 Bombardier
+Info: {}
+
+### [17:44:39] Revealed #8 Alchemist
+Info: {'cured_count': 2}
+
+### [17:46:04] Revealed #2 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [17:46:10] Revealed #3 Plague_Doctor
+Info: {}
+
+### [17:46:14] Revealed #6 Slayer
+Info: {}
+
+### [17:46:17] Revealed #7 Fortune_Teller
+Info: {}
+
+#### [17:46:22] Solver Output
+Scenarios: 215/8390
+Definite good: ['#6']
+Evil probabilities: #8=61%, #1=41%, #4=40%, #2=25%, #5=17%, #7=13%, #3=2%
+
+#### [17:46:22] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.144 (adjusted 2.144) | timing x1.00
+
+#### [17:47:21] Solver Output
+Scenarios: 5/8390
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#5', '#6', '#7']
+Evil probabilities: #4=60%, #8=40%
+
+#### [17:47:21] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [17:47:28] Executed #3 -> Chancellor (EVIL)
+
+#### [17:47:34] Solver Output
+Scenarios: 5/396
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#5', '#6', '#7']
+Evil probabilities: #4=60%, #8=40%
+
+#### [17:47:34] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.971 (adjusted 0.971) | follow-up bonus 0.320 | timing x1.00
+
+### [17:48:01] Revealed #7 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [17:48:05] Ability used at #7
+
+#### [17:48:09] Solver Output
+Scenarios: 3/396
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [17:48:09] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Baa'})
+
+### [17:48:16] Executed #4 -> GOOD (WRONG!)
+
+#### [17:48:30] Solver Output
+Scenarios: 0/365
+
+#### [17:48:30] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## [17:49:36] GAME OVER — LOSS
+Final HP: 5
+Notes: SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). 0 scenarios after. Likely FT-as-Drunk not handled - FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.
+
+## [17:49:52] GAME OVER — LOSS
+Final HP: 5
+Notes: SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). True evils: #3=Chancellor, #8=Baa. FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.
+
+### [18:01:53] Revealed #2 Poet
+Info: {'targets': [1, 3], 'copied_role': 'Empress'}
+
+#### [18:01:58] Solver Output
+Scenarios: 8/365
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [18:01:58] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 8 scenarios (roles: {'Baa'})
+
+#### [18:02:09] Solver Output
+Scenarios: 8/365
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [18:02:09] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 8 scenarios (roles: {'Baa'})
+
+
+---
+
+# New Game — 2026-04-12 18:03:46
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Judge, Medium, Fortune_Teller, Empress
+- Outcasts: Doppelganger, Plague_Doctor, Wretch, Bombardier
+- Minions: Shaman
+- Demons: Baa
+
+### [18:04:36] Revealed #1 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [18:04:36] Revealed #3 Bombardier
+Info: {}
+
+### [18:04:36] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:04:36] Revealed #7 Medium
+Info: {'good_position': 3, 'good_role': 'Bombardier'}
+
+### [18:04:36] Revealed #8 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:05:05] Revealed #2 Fortune_Teller
+Info: {}
+
+### [18:05:05] Revealed #5 Plague_Doctor
+Info: {}
+
+### [18:05:05] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [18:05:10] Solver Output
+Scenarios: 90/1268
+Definite good: ['#2', '#6']
+Evil probabilities: #1=56%, #3=44%, #4=44%, #7=33%, #5=11%, #8=11%
+
+#### [18:05:10] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.669 (adjusted 1.669) | timing x1.00
+
+#### [18:06:07] Solver Output
+Scenarios: 20/1268
+Definite good: ['#2', '#4', '#6', '#8']
+Evil probabilities: #1=50%, #3=50%, #5=50%, #7=50%
+
+#### [18:06:07] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:06:31] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [18:06:31] Ability used at #6
+
+#### [18:06:35] Solver Output
+Scenarios: 12/1268
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+
+#### [18:06:35] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 12 scenarios (roles: {'Baa', 'Shaman'})
+
+### [18:06:42] Executed #3 -> Shaman (EVIL)
+
+#### [18:06:48] Solver Output
+Scenarios: 6/223
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+
+#### [18:06:48] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [18:06:55] Executed #7 -> Baa (EVIL)
+
+## [18:07:02] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD revealed #7 evil + #2 corrupted. FT confirmed #1,#2 clean. Both evils 100% confident.
+

@@ -3016,6 +3016,27 @@
       "name": "asc65_v3",
       "notes": "Win with 5HP. Wrong exec on #5 Empress (33% pick). Slayer abilities both no-kill. Dreamer random info.",
       "date": "2026-04-12 17:41"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc65_v4",
+      "notes": "SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). 0 scenarios after. Likely FT-as-Drunk not handled - FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.",
+      "date": "2026-04-12 17:49"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc65_v4",
+      "notes": "SOLVER BUG: 100% confidence wrong exec on #4 (was Good Doppelganger, solver said Baa). True evils: #3=Chancellor, #8=Baa. FT #7 was Drunk, gave wrong result, solver trusted it. PD #3 was evil Chancellor, PD check result should be lies.",
+      "date": "2026-04-12 17:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc65_v5",
+      "notes": "Perfect 10HP. PD revealed #7 evil + #2 corrupted. FT confirmed #1,#2 clean. Both evils 100% confident.",
+      "date": "2026-04-12 18:07"
     }
   ]
 }
