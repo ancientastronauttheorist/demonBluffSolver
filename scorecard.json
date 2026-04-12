@@ -2890,6 +2890,13 @@
       "name": "asc62_v7",
       "notes": "10HP perfect, PD+Judge abilities, ASC62 COMPLETE 7/7",
       "date": "2026-04-12 14:40"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc63_v1",
+      "notes": "1HP! Lilis+Puppeteer, forced-safe lookahead",
+      "date": "2026-04-12 14:46"
     }
   ]
 }

@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 4,
+        "evil_role": "Puppet"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    }
+  ],
+  "executed": [
+    3,
+    4,
+    5,
+    6
+  ],
+  "confirmed_evil": [
+    4,
+    5,
+    6
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Puppet",
+    "5": "Puppeteer",
+    "6": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "executed_good_corrupted": {
+    "3": false
+  },
+  "deck": {
+    "villagers": [
+      "Dreamer",
+      "Lover",
+      "Hunter",
+      "Knitter",
+      "Fortune_Teller",
+      "Knight",
+      "Oracle",
+      "Architect"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    7,
+    1
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc63_v1",
+  "true_evil_positions": {
+    "4": "Puppet",
+    "5": "Puppeteer",
+    "6": "Lilis"
+  },
+  "notes": "1HP! Lilis+Puppeteer, forced-safe lookahead"
+}

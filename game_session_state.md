@@ -28864,3 +28864,121 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 10
 Notes: 10HP perfect, PD+Judge abilities, ASC62 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-12 14:42:11
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Lover, Hunter, Knitter, Fortune_Teller, Knight, Oracle, Architect
+- Outcasts: Wretch, Drunk
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [14:43:30] Revealed #2 Wretch
+Info: {}
+
+### [14:43:30] Revealed #3 Oracle
+Info: {'targets': [2, 7], 'minion_role': 'Puppeteer'}
+
+### [14:43:30] Revealed #4 Knight
+Info: {}
+
+### [14:43:30] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [14:43:30] Revealed #6 Knitter
+Info: {'evil_pairs': 1}
+
+### [14:43:30] Revealed #9 Lover
+Info: {'evil_adjacent': 0}
+
+### [14:43:38] Revealed #1 Fortune_Teller
+Info: {}
+
+### [14:43:38] Revealed #7 Dreamer
+Info: {}
+
+#### [14:43:39] Solver Output
+Scenarios: 42/588
+Definite good: ['#8']
+Evil probabilities: #6=55%, #4=52%, #2=40%, #5=40%, #3=33%, #7=31%, #1=26%, #9=21%
+
+#### [14:43:39] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.734 (adjusted 2.539) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [14:44:14] Revealed #7 Dreamer
+Info: {'target': 4, 'evil_role': 'Puppet'}
+
+### [14:44:14] Ability used at #7
+
+#### [14:44:14] Solver Output
+Scenarios: 17/588
+Definite good: ['#8']
+Evil probabilities: #6=59%, #4=53%, #7=47%, #2=41%, #3=41%, #5=29%, #1=18%, #9=12%
+
+#### [14:44:14] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#3', '#4']
+Reason: Entropy 0.998 (adjusted 0.909) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [14:44:51] Revealed #1 Fortune Teller
+Info: {'targets': [3, 4], 'has_evil': True}
+
+### [14:44:52] Ability used at #1
+
+#### [14:44:52] Solver Output
+Scenarios: 9/588
+Definite good: ['#1', '#8', '#9']
+Evil probabilities: #4=78%, #3=56%, #6=56%, #7=44%, #2=33%, #5=33%
+
+#### [14:44:52] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (44% evil Puppet, 33% good Oracle, 11% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 56%, but all reveal branches still lead to a forced win.
+
+### [14:44:59] Executed #3 -> GOOD (WRONG!)
+
+### [14:45:07] Executed #3 -> GOOD (WRONG!)
+
+#### [14:45:07] Solver Output
+Scenarios: 3/408
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#8', '#9']
+Evil probabilities: #5=67%, #6=67%, #2=33%, #7=33%
+
+#### [14:45:07] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Lilis', 'Puppeteer', 'Puppet'})
+
+### [14:45:33] Executed #4 -> Puppet (EVIL)
+
+#### [14:45:34] Solver Output
+Scenarios: 1/31
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [14:45:34] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [14:45:41] Executed #5 -> Puppeteer (EVIL)
+
+#### [14:45:47] Solver Output
+Scenarios: 1/31
+Definite evil: ['#4', '#5', '#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8', '#9']
+
+#### [14:45:47] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [14:45:54] Executed #6 -> Lilis (EVIL)
+
+## [14:46:05] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP! Lilis+Puppeteer, forced-safe lookahead
+
