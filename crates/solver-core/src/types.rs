@@ -208,6 +208,49 @@ fn default_wrong_exec_cost() -> i32 {
     2
 }
 
+impl Default for GameState {
+    fn default() -> Self {
+        Self {
+            n_cards: 0,
+            n_evil: 0,
+            deck: DeckComposition::default(),
+            cards: vec![],
+            executed: vec![],
+            confirmed_evil: vec![],
+            confirmed_good: vec![],
+            pd_corruption_target: None,
+            executed_evil_roles: HashMap::new(),
+            slayer_results: vec![],
+            pd_ability_results: vec![],
+            blocked_positions: vec![],
+            night_kills: vec![],
+            night_kill_evil_count: 0,
+            hp: default_hp(),
+            wrong_exec_cost: default_wrong_exec_cost(),
+            board_villager_count: None,
+            board_outcast_count: None,
+            board_minion_count: None,
+            board_demon_count: None,
+            reveal_order: vec![],
+            executed_good_corrupted: HashMap::new(),
+            used_abilities: vec![],
+            name: None,
+            notes: None,
+        }
+    }
+}
+
+impl Default for CardInfo {
+    fn default() -> Self {
+        Self {
+            position: 0,
+            apparent_role: String::new(),
+            info_text: String::new(),
+            info_parsed: serde_json::Map::new(),
+        }
+    }
+}
+
 /// Custom deserializer that handles both nested {"deck": {...}} and flat deck fields.
 fn deserialize_deck<'de, D: Deserializer<'de>>(
     _deserializer: D,

@@ -14,7 +14,8 @@ import contextlib
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from solver import GameState, CardInfo, DeckComposition, solve as solver_solve
+from solver import GameState, CardInfo, DeckComposition
+from rust_solver import rust_solve_to_objects
 
 OUTPUT_FILE = "scenario_analysis.txt"
 CASES_DIR = "tests/cases_v2"
@@ -22,7 +23,7 @@ CASES_DIR = "tests/cases_v2"
 
 def quiet_solve(state):
     with contextlib.redirect_stdout(io.StringIO()):
-        return solver_solve(state)
+        return rust_solve_to_objects(state)
 
 
 def replay_case(case):

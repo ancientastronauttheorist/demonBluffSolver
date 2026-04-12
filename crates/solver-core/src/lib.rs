@@ -5,3 +5,4 @@ pub mod corruption;
 pub mod scenario;
 pub mod validators;
 pub mod solver;
+pub mod strategy;

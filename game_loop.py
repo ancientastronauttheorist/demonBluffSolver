@@ -1723,7 +1723,7 @@ def _cmd_read_deck(screenshot_path: str):
 
 def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
     """Save a regression test case. Full regression runs via cargo test afterward."""
-    from tests.test_regression import save_test_case
+    from tests.test_utils import save_test_case
     # Check for collision
     test_path = os.path.join("tests", "cases_v2", f"{name}.json")
     if os.path.exists(test_path):
@@ -2703,7 +2703,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("\n--- Full v2 regression (Rust) ---")
             import subprocess as _sp
             try:
-                reg = _sp.run(["cargo", "test", "--release", "--test", "replay"],
+                reg = _sp.run(["cargo", "test", "--release", "--test", "simulation"],
                               capture_output=True, text=True, timeout=120)
                 for line in reg.stderr.strip().split("\n"):
                     if "test result:" in line or "FAILED" in line:
