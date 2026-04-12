@@ -28335,3 +28335,108 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: 8HP, Lilis game, both definite
 
+
+---
+
+# New Game — 2026-04-12 14:19:04
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Knitter, Scout, Baker, Medium, Dreamer, Empress
+- Outcasts: Bombardier, Drunk, Wretch
+- Minions: Chancellor, Shaman
+- Demons: Lilis
+
+### [14:20:12] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Knitter'}
+
+### [14:20:12] Revealed #2 Knitter
+Info: {'evil_pairs': 2}
+
+### [14:20:12] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Knitter'}
+
+### [14:20:12] Revealed #6 Bombardier
+Info: {}
+
+### [14:20:12] Revealed #7 Wretch
+Info: {}
+
+### [14:20:12] Revealed #8 Baker
+Info: {'original_role': 'Architect'}
+
+### [14:20:12] Revealed #9 Empress
+Info: {'targets': [2, 4, 5]}
+
+### [14:20:20] Revealed #4 Dreamer
+Info: {}
+
+#### [14:20:21] Solver Output
+Scenarios: 56/3494
+Definite good: ['#5']
+Evil probabilities: #7=50%, #8=50%, #1=39%, #3=39%, #4=36%, #9=36%, #6=29%, #2=21%
+
+#### [14:20:21] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#8']
+Reason: Entropy 2.688 (adjusted 2.592) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [14:20:57] Revealed #4 Dreamer
+Info: {'target': 8, 'evil_role': 'Shaman'}
+
+### [14:20:57] Ability used at #4
+
+#### [14:20:58] Solver Output
+Scenarios: 43/3494
+Definite good: ['#5']
+Evil probabilities: #1=51%, #3=51%, #7=44%, #4=37%, #8=35%, #9=33%, #2=28%, #6=21%
+
+#### [14:20:58] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 51% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 51% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #1 (51%) despite low confidence — Bombardier candidate(s) [6] risk instant game loss if executed first.
+
+### [14:21:49] Executed #1 -> GOOD (WRONG!)
+
+#### [14:21:50] Solver Output
+Scenarios: 15/2346
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#5']
+Evil probabilities: #6=60%, #4=53%, #7=47%, #9=40%
+
+#### [14:21:50] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 15 scenarios (roles: {'Chancellor', 'Lilis', 'Shaman'})
+
+### [14:22:14] Executed #8 -> Lilis (EVIL)
+
+#### [14:22:15] Solver Output
+Scenarios: 6/293
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#5']
+Evil probabilities: #4=67%, #6=67%, #7=33%, #9=33%
+
+#### [14:22:15] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 67% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 67% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [14:23:01] Executed #4 -> Shaman (EVIL)
+
+#### [14:23:01] Solver Output
+Scenarios: 2/37
+Definite evil: ['#4', '#6', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#9']
+
+#### [14:23:01] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [14:23:32] Executed #6 -> Chancellor (EVIL)
+
+## [14:23:33] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP! Lilis game, close call but all definite at the end
+

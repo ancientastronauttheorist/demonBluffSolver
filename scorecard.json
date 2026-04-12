@@ -2848,6 +2848,13 @@
       "name": "asc62_v1",
       "notes": "8HP, Lilis game, both definite",
       "date": "2026-04-12 14:18"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc62_v2",
+      "notes": "1HP! Lilis game, close call but all definite at the end",
+      "date": "2026-04-12 14:23"
     }
   ]
 }
