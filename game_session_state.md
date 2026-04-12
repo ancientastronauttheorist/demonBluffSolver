@@ -27893,3 +27893,121 @@ Reason: Target #6 is 50% evil (adjusted 0.50)
 Final HP: 10
 Notes: 10HP perfect, Slayer killed Shaman
 
+
+---
+
+# New Game — 2026-04-12 13:51:23
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Architect, Baker, Confessor, Judge, Empress
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [13:51:38] Revealed #1 Architect
+Info: {'side': 'Left'}
+
+### [13:51:38] Revealed #2 Wretch
+Info: {}
+
+### [13:51:38] Revealed #3 Empress
+Info: {'targets': [4, 6, 8]}
+
+### [13:51:38] Revealed #5 Baker
+Info: {'original_role': 'Architect'}
+
+### [13:51:38] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+### [13:51:38] Revealed #8 Baker
+Info: {'original_role': 'Slayer'}
+
+### [13:51:46] Revealed #4 Plague_Doctor
+Info: {}
+
+### [13:51:46] Revealed #6 Slayer
+Info: {}
+
+### [13:51:46] Revealed #9 Judge
+Info: {}
+
+#### [13:51:46] Solver Output
+Scenarios: 24/374
+Definite good: ['#2', '#3', '#4']
+Evil probabilities: #8=71%, #7=67%, #5=58%, #6=54%, #9=33%, #1=17%
+
+#### [13:51:46] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 1.749 (adjusted 1.749) | timing x1.00
+
+### [13:52:24] Ability used at #4
+
+#### [13:52:24] Solver Output
+Scenarios: 14/374
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #7=71%, #6=57%, #8=57%, #9=14%
+
+#### [13:52:24] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Pooka', 'Puppet', 'Puppeteer'})
+
+### [13:52:31] Executed #5 -> Pooka (EVIL)
+
+#### [13:52:37] Solver Output
+Scenarios: 8/49
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #7=75%, #8=75%, #6=25%, #9=25%
+
+#### [13:52:37] Recommendation
+Action: **USE_ABILITY** #9 (Judge) -> targets ['#6']
+Reason: Expected posterior 5.2 scenarios (adjusted 5.9, info gain 0.452 bits) | timing x1.00
+WARNING: Corruption risk: 25% -- corrupted Judge results are unreliable
+
+### [13:53:06] Revealed #9 Judge
+Info: {'target': 6, 'is_lying': False}
+
+### [13:53:06] Ability used at #9
+
+#### [13:53:07] Solver Output
+Scenarios: 4/49
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #7=75%, #8=75%, #6=25%, #9=25%
+
+#### [13:53:07] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#7']
+Reason: Target #7 is 75% evil (adjusted 0.19)
+WARNING: Corruption risk: 75% -- Slayer ability disabled if corrupted
+
+### [13:53:43] Ability used at #6
+
+#### [13:53:44] Solver Output
+Scenarios: 3/49
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+Evil probabilities: #7=67%, #9=33%
+
+#### [13:53:44] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 3 scenarios (roles: {'Puppeteer', 'Puppet'})
+
+### [13:53:50] Executed #8 -> Puppeteer (EVIL)
+
+#### [13:53:56] Solver Output
+Scenarios: 1/8
+Definite evil: ['#5', '#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#9']
+
+#### [13:53:56] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [13:54:03] Executed #7 -> Puppet (EVIL)
+
+## [13:54:16] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD+Judge+Slayer abilities, all definite
+

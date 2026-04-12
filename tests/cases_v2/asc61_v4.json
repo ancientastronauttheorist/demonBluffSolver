@@ -1,0 +1,163 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Architect"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Slayer"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 6,
+        "is_lying": false
+      }
+    }
+  ],
+  "executed": [
+    5,
+    8,
+    7
+  ],
+  "confirmed_evil": [
+    5,
+    8,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Pooka",
+    "8": "Puppeteer",
+    "7": "Puppet"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 6,
+      "target_pos": 7,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 4,
+      "target": 5,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Slayer",
+      "Architect",
+      "Baker",
+      "Confessor",
+      "Judge",
+      "Empress"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Wretch"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    4,
+    9,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc61_v4",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "7": "Puppet",
+    "8": "Puppeteer"
+  },
+  "notes": "10HP perfect, PD+Judge+Slayer abilities, all definite"
+}

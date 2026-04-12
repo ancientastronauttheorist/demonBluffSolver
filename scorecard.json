@@ -2813,6 +2813,13 @@
       "name": "asc61_v3",
       "notes": "10HP perfect, Slayer killed Shaman",
       "date": "2026-04-12 13:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v4",
+      "notes": "10HP perfect, PD+Judge+Slayer abilities, all definite",
+      "date": "2026-04-12 13:54"
     }
   ]
 }
