@@ -28440,3 +28440,92 @@ Reason: #6 is evil in ALL 2 scenarios (roles: {'Chancellor'})
 Final HP: 1
 Notes: 1HP! Lilis game, close call but all definite at the end
 
+
+---
+
+# New Game — 2026-04-12 14:24:21
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Hunter, Bard, Confessor, Baker, Alchemist, Fortune_Teller
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [14:24:36] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [14:24:36] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [14:24:36] Revealed #4 Baker
+Info: {'original_role': 'Poet'}
+
+### [14:24:36] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [14:24:36] Revealed #7 Bard
+Info: {'corruption_distance': -1}
+
+### [14:24:36] Revealed #8 Baker
+Info: {'original_role': 'Alchemist'}
+
+### [14:24:51] Revealed #2 Plague_Doctor
+Info: {}
+
+### [14:24:51] Revealed #6 Fortune_Teller
+Info: {}
+
+#### [14:24:51] Solver Output
+Scenarios: 14/266
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #5=71%, #1=43%, #7=43%, #8=43%
+
+#### [14:24:51] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 1.149 (adjusted 1.149) | timing x1.00
+
+### [14:25:49] Ability used at #2
+
+#### [14:25:49] Solver Output
+Scenarios: 10/266
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #1=40%, #8=40%, #7=20%
+
+#### [14:25:49] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 10 scenarios (roles: {'Twin_Minion', 'Baa'})
+
+### [14:25:56] Executed #5 -> Baa (EVIL)
+
+#### [14:26:06] Solver Output
+Scenarios: 5/37
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#6']
+Evil probabilities: #1=40%, #8=40%, #7=20%
+
+#### [14:26:06] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 0.971 (adjusted 0.971) | timing x1.00
+
+### [14:26:53] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [14:26:53] Ability used at #6
+
+#### [14:26:53] Solver Output
+Scenarios: 2/37
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [14:26:53] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Twin_Minion'})
+
+### [14:27:00] Executed #1 -> Twin Minion (EVIL)
+
+## [14:27:12] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, PD+FT definite
+
