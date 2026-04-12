@@ -29277,3 +29277,158 @@ Reason: #7 is evil in ALL 5 scenarios (roles: {'Chancellor'})
 Final HP: 10
 Notes: 10HP perfect, both definite, evil PD lie detected
 
+
+---
+
+# New Game — 2026-04-12 15:00:36
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Hunter, Dreamer, Bishop, Knight, Alchemist, Jester
+- Outcasts: Doppelganger, Drunk
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [15:00:51] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [15:00:51] Revealed #7 Bishop
+Info: {'targets': [8, 7, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:00:51] Revealed #8 Knight
+Info: {}
+
+### [15:00:51] Revealed #9 Hunter
+Info: {'distance': 4}
+
+### [15:01:06] Revealed #1 Jester
+Info: {}
+
+### [15:01:06] Revealed #3 Druid
+Info: {}
+
+### [15:01:07] Revealed #4 Jester
+Info: {}
+
+### [15:01:07] Revealed #5 Dreamer
+Info: {}
+
+### [15:01:07] Revealed #6 Dreamer
+Info: {}
+
+#### [15:01:07] Solver Output
+Scenarios: 223/3024
+Definite good: ['#2']
+Evil probabilities: #9=52%, #7=41%, #8=34%, #6=32%, #1=11%, #4=11%, #5=11%, #3=8%
+
+#### [15:01:07] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.237 (adjusted 1.946) | timing x1.00
+WARNING: Corruption risk: 26%
+
+### [15:02:01] Revealed #5 Dreamer
+Info: {'target': 9, 'evil_role': 'Pooka'}
+
+### [15:02:02] Ability used at #5
+
+#### [15:02:02] Solver Output
+Scenarios: 160/3024
+Definite good: ['#2']
+Evil probabilities: #6=42%, #7=38%, #9=34%, #8=31%, #4=15%, #5=15%, #1=14%, #3=11%
+
+#### [15:02:02] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.152 (adjusted 1.903) | timing x1.00
+WARNING: Corruption risk: 23%
+
+### [15:02:36] Revealed #6 Dreamer
+Info: {'target': 7, 'evil_role': 'Twin_Minion'}
+
+### [15:02:36] Ability used at #6
+
+#### [15:02:36] Solver Output
+Scenarios: 148/3024
+Definite good: ['#2']
+Evil probabilities: #6=43%, #9=35%, #7=33%, #8=33%, #4=16%, #1=15%, #5=15%, #3=11%
+
+#### [15:02:36] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#5', '#7', '#8']
+Reason: Expected posterior 55.3 scenarios (adjusted 56.3, info gain 1.395 bits) | timing x1.00
+WARNING: Corruption risk: 3%
+
+### [15:03:14] Revealed #4 Jester
+Info: {'targets': [5, 7, 8], 'evil_count': 1}
+
+### [15:03:14] Ability used at #4
+
+#### [15:03:14] Solver Output
+Scenarios: 68/3024
+Definite good: ['#2']
+Evil probabilities: #6=44%, #8=41%, #7=38%, #9=31%, #1=16%, #3=15%, #4=7%, #5=7%
+
+#### [15:03:14] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#3', '#7', '#8']
+Reason: Expected posterior 26.5 scenarios (adjusted 27.7, info gain 1.295 bits) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [15:03:53] Revealed #1 Jester
+Info: {'targets': [3, 7, 8], 'evil_count': 0}
+
+### [15:03:54] Ability used at #1
+
+#### [15:03:54] Solver Output
+Scenarios: 31/3024
+Definite good: ['#2', '#3']
+Evil probabilities: #6=45%, #1=35%, #9=32%, #7=29%, #8=26%, #4=16%, #5=16%
+
+#### [15:03:54] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [15:04:31] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': 'Doppelganger'}
+
+### [15:04:31] Ability used at #3
+
+#### [15:04:31] Solver Output
+Scenarios: 14/3024
+Definite good: ['#2', '#3']
+Evil probabilities: #6=50%, #1=36%, #8=29%, #9=29%, #5=21%, #7=21%, #4=14%
+
+#### [15:04:31] Recommendation
+Action: **EXECUTE** #8
+Reason: Knight check: #8 is 29% evil, 21% corruption risk. Expected HP cost: 1.4 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 21% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [15:05:22] Execution Blocked
+#8 Knight immunity — confirmed good, no HP loss
+
+#### [15:05:22] Solver Output
+Scenarios: 10/2352
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #6=70%, #5=30%, #7=30%, #9=30%, #1=20%, #4=20%
+
+#### [15:05:22] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (70% evil Pooka, 20% good Dreamer (corrupted), 10% good Dreamer).
+WARNING: Execution lookahead override -- immediate hit chance is 70%, but all reveal branches still lead to a forced win.
+
+### [15:05:29] Executed #6 -> Pooka (EVIL)
+
+#### [15:05:43] Solver Output
+Scenarios: 7/294
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #5=43%, #4=29%, #9=29%
+
+#### [15:05:43] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (57% good Dreamer (corrupted), 43% evil Twin_Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 43%, but all reveal branches still lead to a forced win.
+
+### [15:05:50] Executed #5 -> Twin Minion (EVIL)
+
+## [15:06:08] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 5 abilities used, Knight check + forced-safe
+

@@ -2918,6 +2918,13 @@
       "name": "asc63_v4",
       "notes": "10HP perfect, both definite, evil PD lie detected",
       "date": "2026-04-12 14:59"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v5",
+      "notes": "10HP perfect, 5 abilities used, Knight check + forced-safe",
+      "date": "2026-04-12 15:06"
     }
   ]
 }
