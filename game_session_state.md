@@ -30574,3 +30574,172 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Minion'})
 Final HP: 6
 Notes: 6HP, Lilis game, 2xDruid+2xSlayer+Knight check
 
+
+---
+
+# New Game — 2026-04-12 16:04:27
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Baker, Lover, Empress, Judge, Knitter, Slayer, Knight
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Poisoner, Witch
+- Demons: Lilis
+
+### [16:05:24] Revealed #1 Bombardier
+Info: {}
+
+### [16:05:24] Revealed #4 Knight
+Info: {}
+
+### [16:05:24] Revealed #7 Knitter
+Info: {'evil_pairs': 0}
+
+### [16:05:24] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [16:05:35] Revealed #2 Plague_Doctor
+Info: {}
+
+### [16:05:35] Revealed #3 Slayer
+Info: {}
+
+### [16:05:36] Revealed #6 Judge
+Info: {}
+
+### [16:05:36] Revealed #9 Fortune_Teller
+Info: {}
+
+#### [16:05:36] Solver Output
+Scenarios: 898/3428
+Definite good: ['#5']
+Evil probabilities: #8=57%, #6=44%, #7=39%, #4=37%, #10=35%, #3=30%, #9=27%, #1=24%, #2=8%
+
+#### [16:05:36] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 2.199 (adjusted 2.199) | timing x1.00
+
+### [16:06:51] Ability used at #2
+
+#### [16:06:51] Solver Output
+Scenarios: 562/3428
+Definite good: ['#5']
+Evil probabilities: #8=52%, #6=44%, #9=42%, #4=38%, #7=38%, #3=31%, #10=29%, #1=23%, #2=2%
+
+#### [16:06:52] Recommendation
+Action: **USE_ABILITY** #9 (Fortune Teller) -> targets ['#5', '#8']
+Reason: Entropy 0.996 (adjusted 0.984) | follow-up bonus 0.342 | timing x1.00
+WARNING: Corruption risk: 2%
+
+### [16:07:33] Revealed #9 Fortune Teller
+Info: {'targets': [5, 8], 'has_evil': True}
+
+### [16:07:33] Ability used at #9
+
+#### [16:07:33] Solver Output
+Scenarios: 302/3428
+Definite good: ['#5']
+Evil probabilities: #8=57%, #6=44%, #9=42%, #4=40%, #7=36%, #3=30%, #10=29%, #1=22%, #2=1%
+
+#### [16:07:33] Recommendation
+Action: **USE_ABILITY** #6 (Judge) -> targets ['#10']
+Reason: Expected posterior 188.1 scenarios (adjusted 211.1, info gain 0.516 bits) | timing x1.00
+WARNING: Corruption risk: 25% -- corrupted Judge results are unreliable
+
+### [16:08:17] Revealed #6 Judge
+Info: {'target': 10, 'is_lying': True}
+
+### [16:08:17] Ability used at #6
+
+#### [16:08:17] Solver Output
+Scenarios: 192/3428
+Definite good: ['#5']
+Evil probabilities: #8=62%, #7=41%, #4=39%, #9=36%, #10=35%, #6=34%, #3=27%, #1=24%, #2=1%
+
+#### [16:08:17] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#8']
+Reason: Target #8 is 62% evil (adjusted 0.44)
+WARNING: Corruption risk: 29% -- Slayer ability disabled if corrupted
+
+### [16:09:10] Ability used at #3
+
+#### [16:09:10] Solver Output
+Scenarios: 142/3428
+Definite good: ['#5']
+Evil probabilities: #8=49%, #9=49%, #4=38%, #3=37%, #6=37%, #10=35%, #7=34%, #1=20%, #2=1%
+
+#### [16:09:10] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 49% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 49% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #8 (49%) despite low confidence — Bombardier candidate(s) [1] risk instant game loss if executed first.
+
+### [16:10:05] Executed #8 -> GOOD (WRONG!)
+
+#### [16:10:06] Solver Output
+Scenarios: 72/2282
+Definite good: ['#5', '#8']
+Evil probabilities: #9=97%, #10=44%, #6=42%, #4=36%, #7=31%, #3=25%, #1=22%, #2=3%
+
+#### [16:10:06] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 97% likely evil (HP=1, budget=0 wrong execs)
+WARNING: Probabilistic execution -- 97% confident (budget: 0 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [16:10:38] Executed #9 -> Witch (EVIL)
+
+#### [16:10:38] Solver Output
+Scenarios: 34/292
+Definite evil: ['#9']
+Definite good: ['#2', '#5', '#8']
+Evil probabilities: #6=44%, #10=44%, #4=32%, #7=32%, #1=24%, #3=24%
+
+#### [16:10:38] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 44% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 44% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [16:11:20] Revealed #10 Empress
+Info: {'targets': [3, 6, 8]}
+
+#### [16:11:30] Solver Output
+Scenarios: 27/304
+Definite evil: ['#9']
+Definite good: ['#2', '#5', '#8']
+Evil probabilities: #4=48%, #10=48%, #7=41%, #6=33%, #1=26%, #3=4%
+
+#### [16:11:30] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 48% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 48% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+#### [16:12:15] Execution Blocked
+#4 Knight immunity — confirmed good, no HP loss
+
+#### [16:12:15] Solver Output
+Scenarios: 14/217
+Definite evil: ['#9']
+Definite good: ['#2', '#4', '#5', '#8']
+Evil probabilities: #7=79%, #10=71%, #1=21%, #6=21%, #3=7%
+
+#### [16:12:15] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 79% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 79% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [16:13:34] Executed #7 -> GOOD (WRONG!)
+
+## [16:13:35] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss: 49% pick on #8 wrong, then 79% on #7 wrong. Lilis+Witch+Poisoner, very hard game.
+
+## [16:13:47] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss: Lilis+Witch+Poisoner. 49% pick wrong on #8, 79% wrong on #7. True evils: #1=Poisoner,#9=Witch,#10=Lilis
+

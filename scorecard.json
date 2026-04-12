@@ -2995,6 +2995,20 @@
       "name": "asc65_v1",
       "notes": "6HP, Lilis game, 2xDruid+2xSlayer+Knight check",
       "date": "2026-04-12 16:03"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc65_v2",
+      "notes": "Loss: 49% pick on #8 wrong, then 79% on #7 wrong. Lilis+Witch+Poisoner, very hard game.",
+      "date": "2026-04-12 16:13"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc65_v2",
+      "notes": "Loss: Lilis+Witch+Poisoner. 49% pick wrong on #8, 79% wrong on #7. True evils: #1=Poisoner,#9=Witch,#10=Lilis",
+      "date": "2026-04-12 16:13"
     }
   ]
 }
