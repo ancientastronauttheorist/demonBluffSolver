@@ -31219,3 +31219,76 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. Triple Baker chain. All 3 evils 100% confident. Only 2 scenarios after reveals+Druid ability.
 
+
+---
+
+# New Game — 2026-04-12 18:17:45
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Confessor, Lover, Architect, Alchemist, Poet, Gemcrafter
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Minion, Witch
+- Demons: Lilis
+
+### [18:20:06] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [18:20:06] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [18:20:06] Revealed #6 Gemcrafter
+Info: {'good_position': 1}
+
+### [18:20:06] Revealed #7 Bombardier
+Info: {}
+
+### [18:20:06] Revealed #8 Architect
+Info: {'side': 'Left'}
+
+### [18:20:06] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [18:21:02] Revealed #2 Jester
+Info: {}
+
+### [18:21:03] Revealed #4 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+#### [18:21:14] Solver Output
+Scenarios: 6/5382
+Definite evil: ['#2', '#7', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8', '#10']
+
+#### [18:21:14] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 6 scenarios (roles: {'Lilis', 'Witch', 'Minion'})
+
+### [18:21:54] Executed #2 -> Lilis (EVIL)
+
+#### [18:21:59] Solver Output
+Scenarios: 2/540
+Definite evil: ['#2', '#7', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8', '#10']
+
+#### [18:21:59] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Minion', 'Witch'})
+
+### [18:22:06] Executed #7 -> Witch (EVIL)
+
+#### [18:22:11] Solver Output
+Scenarios: 1/55
+Definite evil: ['#2', '#7', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8', '#10']
+
+#### [18:22:11] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [18:22:18] Executed #9 -> Minion (EVIL)
+
+## [18:22:26] GAME OVER — WIN
+Final HP: 6
+Notes: ASC65 COMPLETE! 6HP. Lilis+Witch game. Night killed #5 Lover and #10 PD. All 3 evils 100% confident with only 6 scenarios.
+
