@@ -29207,3 +29207,73 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Chancellor'})
 Final HP: 1
 Notes: 1HP! Lilis+Chancellor, forced-safe through 2 wrong execs
 
+
+---
+
+# New Game — 2026-04-12 14:57:56
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Bard, Bishop, Enlightened, Architect
+- Outcasts: Plague_Doctor, Bombardier, Doppelganger
+- Minions: Chancellor
+- Demons: Baa
+
+### [14:58:11] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [14:58:11] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [14:58:11] Revealed #3 Bishop
+Info: {'targets': [5, 7, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:58:11] Revealed #4 Bombardier
+Info: {}
+
+### [14:58:11] Revealed #5 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [14:58:11] Revealed #6 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [14:58:19] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [14:58:19] Solver Output
+Scenarios: 11/796
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=55%, #3=55%, #2=45%, #7=45%
+
+#### [14:58:19] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 0.994 (adjusted 0.994) | timing x1.00
+
+### [14:59:06] Ability used at #7
+
+#### [14:59:07] Solver Output
+Scenarios: 5/796
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [14:59:07] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [14:59:13] Executed #2 -> Baa (EVIL)
+
+#### [14:59:23] Solver Output
+Scenarios: 5/124
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [14:59:23] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 5 scenarios (roles: {'Chancellor'})
+
+### [14:59:30] Executed #7 -> Chancellor (EVIL)
+
+## [14:59:43] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, both definite, evil PD lie detected
+

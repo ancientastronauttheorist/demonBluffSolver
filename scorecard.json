@@ -2911,6 +2911,13 @@
       "name": "asc63_v3",
       "notes": "1HP! Lilis+Chancellor, forced-safe through 2 wrong execs",
       "date": "2026-04-12 14:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v4",
+      "notes": "10HP perfect, both definite, evil PD lie detected",
+      "date": "2026-04-12 14:59"
     }
   ]
 }
