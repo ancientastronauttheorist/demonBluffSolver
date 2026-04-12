@@ -28602,3 +28602,109 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 6
 Notes: 6HP, Lilis game, PD check nails both evils
 
+
+---
+
+# New Game — 2026-04-12 14:30:59
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Slayer, Knight, Alchemist, Gemcrafter, Scout, Hunter, Fortune_Teller
+- Outcasts: Plague_Doctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [14:31:18] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [14:31:18] Revealed #2 Scout
+Info: {'evil_role': 'Witch', 'distance': 1}
+
+### [14:31:18] Revealed #3 Oracle
+Info: {'targets': [7, 8], 'minion_role': 'Minion'}
+
+### [14:31:18] Revealed #4 Gemcrafter
+Info: {'good_position': 3}
+
+### [14:31:18] Revealed #6 Knight
+Info: {}
+
+### [14:31:18] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [14:31:18] Revealed #9 Alchemist
+Info: {'cured_count': 0}
+
+### [14:31:26] Revealed #5 Fortune_Teller
+Info: {}
+
+### [14:31:27] Revealed #8 Slayer
+Info: {}
+
+#### [14:31:27] Solver Output
+Scenarios: 8/3240
+Definite evil: ['#3', '#6']
+Definite good: ['#4', '#5', '#7', '#8', '#9', '#10']
+Evil probabilities: #1=75%, #2=25%
+
+#### [14:31:27] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 8 scenarios (roles: {'Pooka'})
+
+### [14:31:34] Executed #3 -> Pooka (EVIL)
+
+#### [14:31:41] Solver Output
+Scenarios: 8/352
+Definite evil: ['#3', '#6']
+Definite good: ['#4', '#5', '#7', '#8', '#9', '#10']
+Evil probabilities: #1=75%, #2=25%
+
+#### [14:31:41] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Witch', 'Minion'})
+
+### [14:31:48] Executed #6 -> Witch (EVIL)
+
+#### [14:31:58] Solver Output
+Scenarios: 5/43
+Definite evil: ['#3', '#6']
+Definite good: ['#4', '#5', '#7', '#8', '#9', '#10']
+Evil probabilities: #1=60%, #2=40%
+
+#### [14:31:58] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 0.971 (adjusted 0.777) | follow-up bonus 0.800 | timing x1.00
+WARNING: Corruption risk: 40%
+
+### [14:32:49] Revealed #5 Fortune Teller
+Info: {'targets': [1, 4], 'has_evil': True}
+
+### [14:32:49] Ability used at #5
+
+#### [14:32:49] Solver Output
+Scenarios: 3/43
+Definite evil: ['#3', '#6']
+Definite good: ['#4', '#5', '#7', '#8', '#9', '#10']
+Evil probabilities: #1=67%, #2=33%
+
+#### [14:32:49] Recommendation
+Action: **USE_ABILITY** #8 (Slayer) -> targets ['#1']
+Reason: Target #1 is 67% evil (adjusted 0.67)
+
+### [14:33:59] Ability used at #8
+
+#### [14:33:59] Solver Output
+Scenarios: 1/43
+Definite evil: ['#2', '#3', '#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8', '#9', '#10']
+
+#### [14:33:59] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [14:34:06] Executed #2 -> Minion (EVIL)
+
+## [14:34:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, all definite
+
