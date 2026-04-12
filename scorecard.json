@@ -2785,6 +2785,13 @@
       "name": "asc60_v6",
       "notes": "6HP, Lilis game, PD+FT+Jester+Slayer abilities",
       "date": "2026-04-12 12:36"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc60_v7",
+      "notes": "5HP, Dreamer ability + forced-safe lookahead, ASC60 COMPLETE 7/7",
+      "date": "2026-04-12 12:39"
     }
   ]
 }

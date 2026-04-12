@@ -27605,3 +27605,96 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 6
 Notes: 6HP, Lilis game, PD+FT+Jester+Slayer abilities
 
+
+---
+
+# New Game — 2026-04-12 12:37:49
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Lover, Dreamer, Medium, Bard, Oracle
+- Outcasts: Wretch, Bombardier
+- Minions: Shaman
+- Demons: Pooka
+
+### [12:38:02] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [12:38:02] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:38:02] Revealed #3 Bombardier
+Info: {}
+
+### [12:38:02] Revealed #4 Knight
+Info: {}
+
+### [12:38:02] Revealed #5 Wretch
+Info: {}
+
+### [12:38:02] Revealed #7 Oracle
+Info: {'targets': [1, 3], 'minion_role': 'Shaman'}
+
+### [12:38:02] Revealed #8 Knight
+Info: {}
+
+### [12:38:02] Revealed #9 Medium
+Info: {'good_position': 2, 'good_role': 'Lover'}
+
+### [12:38:11] Revealed #6 Dreamer
+Info: {}
+
+#### [12:38:11] Solver Output
+Scenarios: 2/72
+Definite good: ['#2', '#4', '#5', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%, #6=50%, #7=50%
+
+#### [12:38:11] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#1']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [12:38:43] Revealed #6 Dreamer
+Info: {'target': 1, 'evil_role': 'Shaman'}
+
+### [12:38:44] Ability used at #6
+
+#### [12:38:44] Solver Output
+Scenarios: 2/72
+Definite good: ['#2', '#4', '#5', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%, #6=50%, #7=50%
+
+#### [12:38:44] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Bard, 50% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [12:38:51] Executed #1 -> GOOD (WRONG!)
+
+### [12:39:00] Executed #1 -> GOOD (WRONG!)
+
+#### [12:39:00] Solver Output
+Scenarios: 1/56
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [12:39:00] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:39:07] Executed #6 -> Pooka (EVIL)
+
+#### [12:39:13] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [12:39:13] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [12:39:20] Executed #7 -> Shaman (EVIL)
+
+## [12:39:32] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Dreamer ability + forced-safe lookahead, ASC60 COMPLETE 7/7
+
