@@ -27376,3 +27376,89 @@ Reason: #2 is evil in ALL 5 scenarios (roles: {'Twin_Minion'})
 Final HP: 10
 Notes: 10HP perfect, Knight immunity check + FT ability
 
+
+---
+
+# New Game — 2026-04-12 12:28:46
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Empress, Fortune_Teller, Slayer, Knight, Confessor, Poet
+- Outcasts: Doppelganger
+- Minions: Minion
+- Demons: Pooka
+
+### [12:29:00] Revealed #2 Confessor
+Info: {'dizzy': True}
+
+### [12:29:00] Revealed #5 Knight
+Info: {}
+
+### [12:29:00] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [12:29:00] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [12:29:00] Revealed #8 Empress
+Info: {'targets': [4, 5, 6]}
+
+#### [12:29:00] Solver Output
+Scenarios: 25/336
+Definite good: ['#5', '#6']
+Evil probabilities: #1=56%, #2=44%, #8=40%, #3=20%, #4=20%, #7=20%
+
+#### [12:29:00] Recommendation
+Action: **REVEAL** #1
+Reason: #1: 56% evil, 2.711 bits (7 outcomes)
+
+### [12:29:17] Revealed #1 Poet
+Info: {'good_position': 8, 'copied_role': 'Gemcrafter'}
+
+### [12:29:18] Revealed #3 Fortune_Teller
+Info: {}
+
+### [12:29:18] Revealed #4 Slayer
+Info: {}
+
+#### [12:29:18] Solver Output
+Scenarios: 15/336
+Definite good: ['#5', '#6']
+Evil probabilities: #8=60%, #1=33%, #2=33%, #3=33%, #4=33%, #7=7%
+
+#### [12:29:18] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#4', '#8']
+Reason: Entropy 0.971 (adjusted 0.971) | follow-up bonus 0.178 | timing x1.00
+
+### [12:29:47] Revealed #3 Fortune Teller
+Info: {'targets': [4, 8], 'has_evil': True}
+
+### [12:29:47] Ability used at #3
+
+#### [12:29:47] Solver Output
+Scenarios: 9/336
+Definite evil: ['#8']
+Definite good: ['#3', '#4', '#5', '#6', '#7']
+Evil probabilities: #1=56%, #2=44%
+
+#### [12:29:47] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 9 scenarios (roles: {'Pooka', 'Minion'})
+
+### [12:29:54] Executed #8 -> Minion (EVIL)
+
+#### [12:30:01] Solver Output
+Scenarios: 5/42
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [12:30:01] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 5 scenarios (roles: {'Pooka'})
+
+### [12:30:08] Executed #1 -> Pooka (EVIL)
+
+## [12:30:18] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, FT ability confirmed evils
+

@@ -2771,6 +2771,13 @@
       "name": "asc60_v4",
       "notes": "10HP perfect, Knight immunity check + FT ability",
       "date": "2026-04-12 12:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v5",
+      "notes": "10HP perfect, FT ability confirmed evils",
+      "date": "2026-04-12 12:30"
     }
   ]
 }
