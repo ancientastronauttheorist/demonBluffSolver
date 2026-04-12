@@ -2897,6 +2897,13 @@
       "name": "asc63_v1",
       "notes": "1HP! Lilis+Puppeteer, forced-safe lookahead",
       "date": "2026-04-12 14:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc63_v2",
+      "notes": "10HP perfect, Knight check + dual Slayer kills",
+      "date": "2026-04-12 14:49"
     }
   ]
 }

@@ -28982,3 +28982,95 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: 1HP! Lilis+Puppeteer, forced-safe lookahead
 
+
+---
+
+# New Game — 2026-04-12 14:46:54
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Judge, Empress, Gemcrafter, Witness, Baker, Slayer
+- Outcasts: Drunk, Bombardier
+- Minions: Poisoner, Shaman
+- Demons: Baa
+
+### [14:47:08] Revealed #1 Knight
+Info: {}
+
+### [14:47:08] Revealed #2 Witness
+Info: {'affected_position': 9}
+
+### [14:47:08] Revealed #4 Empress
+Info: {'targets': [2, 6, 9]}
+
+### [14:47:08] Revealed #6 Gemcrafter
+Info: {'good_position': 9}
+
+### [14:47:08] Revealed #7 Bombardier
+Info: {}
+
+### [14:47:08] Revealed #8 Baker
+Info: {'original_role': 'Knight'}
+
+### [14:47:08] Revealed #9 Empress
+Info: {'targets': [3, 5, 6]}
+
+### [14:47:18] Revealed #3 Slayer
+Info: {}
+
+### [14:47:19] Revealed #5 Slayer
+Info: {}
+
+#### [14:47:19] Solver Output
+Scenarios: 178/4542
+Definite good: ['#6']
+Evil probabilities: #2=58%, #7=55%, #1=45%, #8=44%, #5=33%, #3=28%, #4=25%, #9=12%
+
+#### [14:47:19] Recommendation
+Action: **EXECUTE** #1
+Reason: Knight check: #1 is 45% evil, 26% corruption risk. Expected HP cost: 1.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 26% -- corrupted Knight loses immunity + 4 extra damage
+
+### [14:48:06] Executed #1 -> Baa (EVIL)
+
+#### [14:48:06] Solver Output
+Scenarios: 21/478
+Definite evil: ['#1']
+Definite good: ['#6']
+Evil probabilities: #2=48%, #8=43%, #3=33%, #7=33%, #5=24%, #4=14%, #9=5%
+
+#### [14:48:06] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#2']
+Reason: Target #2 is 48% evil (adjusted 0.43)
+WARNING: Corruption risk: 10% -- Slayer ability disabled if corrupted
+
+### [14:48:53] Ability used at #5
+
+#### [14:48:53] Solver Output
+Scenarios: 15/478
+Definite evil: ['#1']
+Definite good: ['#6']
+Evil probabilities: #8=47%, #3=33%, #5=33%, #7=33%, #2=27%, #4=20%, #9=7%
+
+#### [14:48:53] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#8']
+Reason: Target #8 is 47% evil (adjusted 0.34)
+WARNING: Corruption risk: 27% -- Slayer ability disabled if corrupted
+
+### [14:49:37] Ability used at #3
+
+#### [14:49:37] Solver Output
+Scenarios: 1/61
+Definite evil: ['#1', '#5', '#8']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#9']
+
+#### [14:49:37] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [14:49:44] Executed #5 -> Poisoner (EVIL)
+
+## [14:49:58] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Knight check + dual Slayer kills
+
