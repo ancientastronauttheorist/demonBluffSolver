@@ -29432,3 +29432,95 @@ WARNING: Execution lookahead override -- immediate hit chance is 43%, but all re
 Final HP: 10
 Notes: 10HP perfect, 5 abilities used, Knight check + forced-safe
 
+
+---
+
+# New Game — 2026-04-12 15:07:20
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Enlightened, Knight, Slayer, Medium, Lover, Oracle
+- Outcasts: Bombardier, Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [15:07:39] Revealed #1 Medium
+Info: {'good_position': 2, 'good_role': 'Enlightened'}
+
+### [15:07:39] Revealed #2 Enlightened
+Info: {'direction': 'CW'}
+
+### [15:07:39] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [15:07:39] Revealed #4 Confessor
+Info: {'dizzy': True}
+
+### [15:07:39] Revealed #6 Knight
+Info: {}
+
+### [15:07:39] Revealed #7 Oracle
+Info: {'targets': [8, 9], 'minion_role': 'Puppeteer'}
+
+### [15:07:39] Revealed #8 Bombardier
+Info: {}
+
+### [15:07:39] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [15:07:51] Revealed #5 Slayer
+Info: {}
+
+#### [15:07:51] Solver Output
+Scenarios: 9/588
+Definite good: ['#2', '#8']
+Evil probabilities: #4=67%, #3=56%, #5=44%, #1=33%, #6=33%, #7=33%, #9=33%
+
+#### [15:07:51] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#4']
+Reason: Target #4 is 67% evil (adjusted 0.52)
+WARNING: Corruption risk: 22% -- Slayer ability disabled if corrupted
+
+### [15:08:38] Ability used at #5
+
+#### [15:08:39] Solver Output
+Scenarios: 3/72
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#8', '#9']
+Evil probabilities: #5=67%, #7=67%, #3=33%, #6=33%
+
+#### [15:08:39] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (67% evil Puppet, 33% good Slayer).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [15:08:45] Executed #5 -> GOOD (WRONG!)
+
+### [15:08:55] Executed #5 -> GOOD (WRONG!)
+
+#### [15:08:55] Solver Output
+Scenarios: 1/31
+Definite evil: ['#3', '#4', '#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8', '#9']
+
+#### [15:08:55] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [15:09:02] Executed #3 -> Puppet (EVIL)
+
+#### [15:09:09] Solver Output
+Scenarios: 1/31
+Definite evil: ['#3', '#4', '#7']
+Definite good: ['#1', '#2', '#5', '#6', '#8', '#9']
+
+#### [15:09:09] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [15:09:16] Executed #7 -> Pooka (EVIL)
+
+## [15:09:30] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Slayer kills Puppeteer, forced-safe wins
+

@@ -2925,6 +2925,13 @@
       "name": "asc63_v5",
       "notes": "10HP perfect, 5 abilities used, Knight check + forced-safe",
       "date": "2026-04-12 15:06"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc63_v6",
+      "notes": "5HP, Slayer kills Puppeteer, forced-safe wins",
+      "date": "2026-04-12 15:09"
     }
   ]
 }
