@@ -3037,6 +3037,13 @@
       "name": "asc65_v5",
       "notes": "Perfect 10HP. PD revealed #7 evil + #2 corrupted. FT confirmed #1,#2 clean. Both evils 100% confident.",
       "date": "2026-04-12 18:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc65_v6",
+      "notes": "Perfect 10HP. PD confirmed #1 clean. Both evils 100% confident. Witch blocked #8, executed Witch first to unblock.",
+      "date": "2026-04-12 18:11"
     }
   ]
 }

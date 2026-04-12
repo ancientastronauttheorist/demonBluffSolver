@@ -31061,3 +31061,71 @@ Reason: #7 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: Perfect 10HP. PD revealed #7 evil + #2 corrupted. FT confirmed #1,#2 clean. Both evils 100% confident.
 
+
+---
+
+# New Game — 2026-04-12 18:09:02
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Empress, Hunter, Bishop, Lover, Scout, Druid
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [18:09:31] Revealed #1 Scout
+Info: {'evil_role': 'Witch', 'distance': 1}
+
+### [18:09:31] Revealed #2 Bishop
+Info: {'targets': [4, 7, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:09:31] Revealed #3 Empress
+Info: {'targets': [5, 6, 8]}
+
+### [18:09:31] Revealed #5 Hunter
+Info: {'distance': 4}
+
+### [18:09:31] Revealed #6 Medium
+Info: {'good_position': 3, 'good_role': 'Empress'}
+
+### [18:09:31] Revealed #7 Lover
+Info: {'evil_adjacent': 2}
+
+### [18:09:39] Revealed #4 Plague_Doctor
+Info: {}
+
+#### [18:09:44] Solver Output
+Scenarios: 15/1610
+Definite good: ['#1', '#3', '#6']
+Evil probabilities: #5=67%, #7=67%, #8=33%, #2=27%, #4=7%
+
+#### [18:09:44] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.092 (adjusted 2.092) | timing x1.00
+
+#### [18:10:31] Solver Output
+Scenarios: 5/1610
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [18:10:31] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 5 scenarios (roles: {'Witch', 'Baa'})
+
+### [18:10:38] Executed #7 -> Witch (EVIL)
+
+#### [18:10:43] Solver Output
+Scenarios: 3/223
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [18:10:43] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 3 scenarios (roles: {'Baa'})
+
+### [18:10:50] Executed #8 -> Baa (EVIL)
+
+## [18:11:00] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. PD confirmed #1 clean. Both evils 100% confident. Witch blocked #8, executed Witch first to unblock.
+
