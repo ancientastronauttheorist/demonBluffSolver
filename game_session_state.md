@@ -27829,3 +27829,67 @@ Reason: #2 is evil in ALL 6 scenarios (roles: {'Poisoner'})
 Final HP: 8
 Notes: 8HP, Lilis game, Judge + Poet-Bishop abilities
 
+
+---
+
+# New Game — 2026-04-12 13:49:00
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Alchemist, Knight, Hunter, Scout, Slayer, Bard
+- Outcasts: Wretch
+- Minions: Shaman
+- Demons: Pooka
+
+### [13:49:13] Revealed #1 Scout
+Info: {'evil_role': 'Shaman', 'distance': 1}
+
+### [13:49:13] Revealed #2 Poet
+Info: {'distance': 2, 'copied_role': 'Hunter'}
+
+### [13:49:13] Revealed #4 Wretch
+Info: {}
+
+### [13:49:13] Revealed #5 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [13:49:13] Revealed #6 Bard
+Info: {'corruption_distance': 3}
+
+### [13:49:13] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [13:49:13] Revealed #8 Alchemist
+Info: {'cured_count': 2}
+
+### [13:49:20] Revealed #3 Slayer
+Info: {}
+
+#### [13:49:20] Solver Output
+Scenarios: 2/56
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #6=50%, #8=50%
+
+#### [13:49:20] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [13:49:27] Executed #7 -> Pooka (EVIL)
+
+#### [13:49:34] Solver Output
+Scenarios: 2/7
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+Evil probabilities: #6=50%, #8=50%
+
+#### [13:49:34] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#6']
+Reason: Target #6 is 50% evil (adjusted 0.50)
+
+### [13:50:21] Ability used at #3
+
+## [13:50:21] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, Slayer killed Shaman
+

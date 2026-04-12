@@ -2806,6 +2806,13 @@
       "name": "asc61_v2",
       "notes": "8HP, Lilis game, Judge + Poet-Bishop abilities",
       "date": "2026-04-12 13:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v3",
+      "notes": "10HP perfect, Slayer killed Shaman",
+      "date": "2026-04-12 13:50"
     }
   ]
 }
