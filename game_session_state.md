@@ -27698,3 +27698,59 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: 5HP, Dreamer ability + forced-safe lookahead, ASC60 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-12 13:43:25
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Confessor, Empress, Scout, Hunter
+- Outcasts: Doppelganger, Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [13:44:30] Revealed #2 Wretch
+Info: {}
+
+### [13:44:30] Revealed #3 Hunter
+Info: {'distance': 3}
+
+### [13:44:30] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [13:44:30] Revealed #5 Bard
+Info: {'corruption_distance': 1}
+
+### [13:44:30] Revealed #6 Empress
+Info: {'targets': [3, 4, 7]}
+
+### [13:44:30] Revealed #7 Bard
+Info: {'corruption_distance': -1}
+
+#### [13:44:30] Solver Output
+Scenarios: 10/222
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7']
+
+#### [13:44:30] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 10 scenarios (roles: {'Baa', 'Witch'})
+
+### [13:44:37] Executed #3 -> Baa (EVIL)
+
+#### [13:44:47] Solver Output
+Scenarios: 5/31
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7']
+
+#### [13:44:47] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Witch'})
+
+### [13:44:54] Executed #5 -> Witch (EVIL)
+
+## [13:45:04] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, both definite
+

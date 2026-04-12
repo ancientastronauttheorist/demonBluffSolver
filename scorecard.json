@@ -2792,6 +2792,13 @@
       "name": "asc60_v7",
       "notes": "5HP, Dreamer ability + forced-safe lookahead, ASC60 COMPLETE 7/7",
       "date": "2026-04-12 12:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc61_v1",
+      "notes": "10HP perfect, both definite",
+      "date": "2026-04-12 13:45"
     }
   ]
 }
