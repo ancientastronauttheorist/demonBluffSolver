@@ -26816,3 +26816,76 @@ Reason: #8 is evil in ALL 6 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: 6HP, Lilis+Witch game, all definite evils
 
+
+---
+
+# New Game — 2026-04-12 11:57:09
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Witness, Dreamer, Poet, Baker, Lover, Knight
+- Outcasts: Doppelganger, Wretch
+- Minions: Puppeteer
+- Demons: Baa
+
+### [11:57:31] Revealed #1 Knight
+Info: {}
+
+### [11:57:31] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [11:57:31] Revealed #3 Poet
+Info: {'direction': 'Equidistant', 'copied_role': 'Enlightened'}
+
+### [11:57:31] Revealed #4 Wretch
+Info: {}
+
+### [11:57:31] Revealed #6 Dreamer
+Info: {}
+
+### [11:57:31] Revealed #7 Witness
+Info: {'affected_position': 3}
+
+### [11:57:31] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [11:57:38] Revealed #5 Enlightened
+Info: {'direction': 'cw'}
+
+#### [11:57:38] Solver Output
+Scenarios: 5/444
+Definite evil: ['#2', '#3', '#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+
+#### [11:57:38] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Puppeteer'})
+
+### [11:57:46] Executed #2 -> Puppeteer (EVIL)
+
+#### [11:57:51] Solver Output
+Scenarios: 5/62
+Definite evil: ['#2', '#3', '#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+
+#### [11:57:51] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 5 scenarios (roles: {'Puppet'})
+
+### [11:57:58] Executed #3 -> Puppet (EVIL)
+
+#### [11:58:04] Solver Output
+Scenarios: 5/31
+Definite evil: ['#2', '#3', '#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+
+#### [11:58:04] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [11:58:11] Executed #5 -> Baa (EVIL)
+
+## [11:58:18] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, all definite evils
+

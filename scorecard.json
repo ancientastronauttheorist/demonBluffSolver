@@ -2715,6 +2715,13 @@
       "name": "asc59_v5",
       "notes": "6HP, Lilis+Witch game, all definite evils",
       "date": "2026-04-12 11:55"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc59_v6",
+      "notes": "10HP perfect, all definite evils",
+      "date": "2026-04-12 11:58"
     }
   ]
 }
