@@ -27060,3 +27060,65 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 3
 Notes: 3HP, Knight free check saved the day, 2 wrong execs (corrupted Baker + Drunk)
 
+
+---
+
+# New Game — 2026-04-12 12:16:19
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Scout, Architect, Knight, Medium
+- Outcasts: Drunk, Bombardier
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [12:16:49] Revealed #1 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [12:16:49] Revealed #2 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 2}
+
+### [12:16:49] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Scout'}
+
+### [12:16:49] Revealed #4 Architect
+Info: {'side': 'Right'}
+
+### [12:16:49] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [12:16:49] Revealed #6 Knight
+Info: {}
+
+### [12:16:49] Revealed #7 Bombardier
+Info: {}
+
+#### [12:16:54] Solver Output
+Scenarios: 6/222
+Definite evil: ['#3']
+Definite good: ['#1', '#5', '#6', '#7']
+Evil probabilities: #2=67%, #4=33%
+
+#### [12:16:54] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Baa', 'Twin_Minion'})
+
+### [12:17:01] Executed #3 -> Baa (EVIL)
+
+#### [12:17:07] Solver Output
+Scenarios: 3/31
+Definite evil: ['#3']
+Definite good: ['#1', '#5', '#6', '#7']
+Evil probabilities: #2=67%, #4=33%
+
+#### [12:17:07] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (67% evil Twin_Minion, 33% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [12:17:13] Executed #2 -> Twin Minion (EVIL)
+
+## [12:17:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, both evils definite/forced-safe
+

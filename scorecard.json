@@ -2743,6 +2743,13 @@
       "name": "asc59_v7",
       "notes": "3HP, Knight free check saved the day, 2 wrong execs (corrupted Baker + Drunk)",
       "date": "2026-04-12 12:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc60_v1",
+      "notes": "10HP perfect, both evils definite/forced-safe",
+      "date": "2026-04-12 12:17"
     }
   ]
 }
