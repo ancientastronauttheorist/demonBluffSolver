@@ -3142,6 +3142,13 @@
       "name": "asc67_v5",
       "notes": "6HP, Lilis game, Judge ability on #1, 3 definite execs, Doppelganger as Lover",
       "date": "2026-04-13 17:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v6",
+      "notes": "10HP perfect, 1 scenario definite, Pooka corrupted #2 and #6",
+      "date": "2026-04-13 17:41"
     }
   ]
 }

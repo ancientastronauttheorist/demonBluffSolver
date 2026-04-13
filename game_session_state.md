@@ -32406,3 +32406,48 @@ Reason: #9 is evil in ALL 6 scenarios (roles: {'Shaman'})
 Final HP: 6
 Notes: 6HP, Lilis game, Judge ability on #1, 3 definite execs, Doppelganger as Lover
 
+
+---
+
+# New Game — 2026-04-13 17:38:54
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Druid, Lover, Oracle, Knitter
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [17:40:38] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [17:40:38] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:40:38] Revealed #4 Bard
+Info: {'corruption_distance': 2}
+
+### [17:40:38] Revealed #5 Bombardier
+Info: {}
+
+### [17:40:38] Revealed #6 Druid
+Info: {}
+
+### [17:40:55] Revealed #3 Oracle
+Info: {}
+
+#### [17:41:00] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#6']
+
+#### [17:41:00] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:41:07] Executed #1 -> Pooka (EVIL)
+
+## [17:41:24] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, 1 scenario definite, Pooka corrupted #2 and #6
+
