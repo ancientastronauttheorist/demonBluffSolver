@@ -31993,3 +31993,77 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect; 1 scenario from passives alone; triple Baker chain; ASC66 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-13 17:06:13
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Empress, Enlightened, Fortune_Teller, Confessor, Oracle, Judge, Jester
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [17:07:12] Revealed #1 Oracle
+Info: {'targets': [7, 8], 'minion_role': 'Twin_Minion'}
+
+### [17:07:13] Revealed #2 Fortune_Teller
+Info: {}
+
+### [17:07:13] Revealed #3 Medium
+Info: {'good_position': 9, 'good_role': 'Drunk'}
+
+### [17:07:13] Revealed #4 Jester
+Info: {}
+
+### [17:07:13] Revealed #5 Plague_Doctor
+Info: {}
+
+### [17:07:13] Revealed #6 Enlightened
+Info: {'direction': 'CW'}
+
+### [17:07:13] Revealed #7 Judge
+Info: {}
+
+### [17:07:14] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+### [17:07:14] Revealed #9 Empress
+Info: {'targets': [1, 2, 7]}
+
+#### [17:07:20] Solver Output
+Scenarios: 6/2128
+Definite good: ['#5', '#7', '#8']
+Evil probabilities: #9=67%, #4=50%, #3=33%, #1=17%, #2=17%, #6=17%
+
+#### [17:07:20] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.918 (adjusted 1.918) | timing x1.00
+
+#### [17:08:06] Solver Output
+Scenarios: 1/2128
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8', '#9']
+
+#### [17:08:06] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [17:08:49] Executed #4 -> Twin_Minion (EVIL)
+
+#### [17:08:56] Solver Output
+Scenarios: 1/259
+Definite evil: ['#4', '#6']
+Definite good: ['#1', '#2', '#3', '#5', '#7', '#8', '#9']
+
+#### [17:08:56] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:09:03] Executed #6 -> Pooka (EVIL)
+
+## [17:09:18] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD
+

@@ -3107,6 +3107,13 @@
       "name": "asc66_v7",
       "notes": "10HP perfect; 1 scenario from passives alone; triple Baker chain; ASC66 COMPLETE 7/7",
       "date": "2026-04-13 16:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v1",
+      "notes": "10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD",
+      "date": "2026-04-13 17:09"
     }
   ]
 }

@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          7,
+          8
+        ],
+        "minion_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 9,
+        "good_role": "Drunk"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          7
+        ]
+      }
+    }
+  ],
+  "executed": [
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    4,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Twin_Minion",
+    "6": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 5,
+      "target": 6,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Empress",
+      "Enlightened",
+      "Fortune_Teller",
+      "Confessor",
+      "Oracle",
+      "Judge",
+      "Jester"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc67_v1",
+  "true_evil_positions": {
+    "4": "Twin_Minion",
+    "6": "Pooka"
+  },
+  "notes": "10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD"
+}
