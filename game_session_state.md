@@ -31390,3 +31390,110 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived
 
+
+---
+
+# New Game — 2026-04-13 16:16:04
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Lover, Druid, Confessor, Witness, Architect
+- Outcasts: Doppelganger, Wretch
+- Minions: Minion
+- Demons: Baa
+
+### [16:16:51] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [16:16:51] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [16:16:51] Revealed #4 Wretch
+Info: {}
+
+### [16:16:51] Revealed #5 Druid
+Info: {}
+
+### [16:16:51] Revealed #6 Baker
+Info: {'original_role': 'Lover'}
+
+### [16:16:51] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+### [16:17:38] Revealed #2 Witness
+Info: {'affected_position': 0}
+
+#### [16:17:42] Solver Output
+Scenarios: 30/222
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=33%, #5=33%, #6=33%
+
+#### [16:17:42] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 30 scenarios (roles: {'Minion', 'Baa'})
+
+### [16:17:48] Executed #7 -> Minion (EVIL)
+
+#### [16:17:54] Solver Output
+Scenarios: 15/31
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=33%, #5=33%, #6=33%
+
+#### [16:17:54] Recommendation
+Action: **USE_ABILITY** #5 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [16:18:26] Revealed #5 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Doppelganger'}
+
+### [16:18:30] Ability used at #5
+
+#### [16:18:33] Solver Output
+Scenarios: 8/31
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=38%, #6=38%, #5=25%
+
+#### [16:18:33] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 38% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 38% confident (budget: 2 wrong execs)
+WARNING: Low confidence (38% < 50%) -- consider gathering more info
+
+### [16:19:24] Executed #6 -> GOOD (WRONG!)
+
+#### [16:19:32] Solver Output
+Scenarios: 5/26
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #4=60%, #5=40%
+
+#### [16:19:32] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 40% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 40% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 40% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:19:47] Solver Output
+Scenarios: 5/26
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#6']
+Evil probabilities: #4=60%, #5=40%
+
+#### [16:19:47] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 40% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 40% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 40% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:19:59] Claude Reasoning
+
+
+### [16:20:52] Executed #5 -> Baa (EVIL)
+
+## [16:20:57] GAME OVER — WIN
+Final HP: 5
+Notes: Baker chain (3 orig, 6 from Lover); Druid claimed Doppelganger in 1,2,3 (lying); 40% gamble on #5 paid off
+

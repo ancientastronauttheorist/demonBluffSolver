@@ -3065,6 +3065,13 @@
       "name": "asc66_v1",
       "notes": "FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived",
       "date": "2026-04-13 16:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc66_v2",
+      "notes": "Baker chain (3 orig, 6 from Lover); Druid claimed Doppelganger in 1,2,3 (lying); 40% gamble on #5 paid off",
+      "date": "2026-04-13 16:20"
     }
   ]
 }
