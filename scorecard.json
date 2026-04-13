@@ -3072,6 +3072,13 @@
       "name": "asc66_v2",
       "notes": "Baker chain (3 orig, 6 from Lover); Druid claimed Doppelganger in 1,2,3 (lying); 40% gamble on #5 paid off",
       "date": "2026-04-13 16:20"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc66_v3",
+      "notes": "Lilis game; 2 nights: #6 Med killed, #10 Shaman killed; Puppet at #8 (from Puppeteer); strategy bug: keeps recommending dead #10",
+      "date": "2026-04-13 16:31"
     }
   ]
 }

@@ -31497,3 +31497,103 @@ WARNING: CAUTION: budget=1, confidence 40% < 85% threshold. Consider manual over
 Final HP: 5
 Notes: Baker chain (3 orig, 6 from Lover); Druid claimed Doppelganger in 1,2,3 (lying); 40% gamble on #5 paid off
 
+
+---
+
+# New Game — 2026-04-13 16:23:31
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Druid, Gemcrafter, Bishop, Judge, Scout, Architect, Medium
+- Outcasts: Bombardier, Drunk
+- Minions: Puppeteer, Shaman
+- Demons: Lilis
+
+### [16:25:18] Revealed #1 Druid
+Info: {}
+
+### [16:25:18] Revealed #2 Gemcrafter
+Info: {'good_position': 9}
+
+### [16:25:18] Revealed #3 Bishop
+Info: {'targets': [7, 8, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:25:18] Revealed #4 Bishop
+Info: {'targets': [10, 7, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:26:48] Revealed #5 Scout
+Info: {'evil_role': 'Shaman', 'distance': 1}
+
+### [16:26:48] Revealed #7 Architect
+Info: {'side': 'Left'}
+
+### [16:26:48] Revealed #9 Bombardier
+Info: {}
+
+### [16:26:55] Revealed #8 Enlightened
+Info: {'direction': 'CW'}
+
+#### [16:26:59] Solver Output
+Scenarios: 10/2394
+Definite evil: ['#10']
+Definite good: ['#6', '#7']
+Evil probabilities: #3=80%, #1=70%, #5=70%, #4=50%, #2=10%, #8=10%, #9=10%
+
+#### [16:26:59] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 10 scenarios (roles: {'Puppeteer', 'Lilis', 'Shaman', 'Puppet'})
+
+#### [16:27:23] Solver Output
+Scenarios: 10/2394
+Definite evil: ['#10']
+Definite good: ['#6', '#7']
+Evil probabilities: #3=80%, #1=70%, #5=70%, #4=50%, #2=10%, #8=10%, #9=10%
+
+#### [16:27:23] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 10 scenarios (roles: {'Puppeteer', 'Lilis', 'Puppet', 'Shaman'})
+
+### [16:28:31] Revealed #1 Druid
+Info: {'targets': [2, 3, 9], 'found_outcast': None}
+
+### [16:28:35] Ability used at #1
+
+#### [16:28:39] Solver Output
+Scenarios: 5/2394
+Definite evil: ['#1', '#10']
+Definite good: ['#6', '#7']
+Evil probabilities: #3=60%, #4=40%, #5=40%, #2=20%, #8=20%, #9=20%
+
+#### [16:28:39] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 5 scenarios (roles: {'Lilis', 'Puppeteer'})
+
+### [16:28:46] Executed #1 -> Lilis (EVIL)
+
+#### [16:28:53] Solver Output
+Scenarios: 2/177
+Definite evil: ['#1', '#10']
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #3=50%, #4=50%, #8=50%, #9=50%
+
+#### [16:28:53] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 2 scenarios (roles: {'Shaman'})
+
+### [16:30:59] Executed #8 -> Puppet (EVIL)
+
+#### [16:31:04] Solver Output
+Scenarios: 1/13
+Definite evil: ['#1', '#8', '#9', '#10']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [16:31:04] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [16:31:11] Executed #9 -> Puppeteer (EVIL)
+
+## [16:31:39] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis game; 2 nights: #6 Med killed, #10 Shaman killed; Puppet at #8 (from Puppeteer); strategy bug: keeps recommending dead #10
+
