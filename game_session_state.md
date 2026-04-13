@@ -32319,3 +32319,90 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 10
 Notes: 10HP perfect; Slayer killed Baa; Dreamer+dual Jester+Slayer; forced-safe on Witch
 
+
+---
+
+# New Game — 2026-04-13 17:31:18
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Alchemist, Architect, Slayer, Gemcrafter, Lover
+- Outcasts: Doppelganger
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [17:35:04] Revealed #1 Lover
+Info: {'evil_adjacent': 1}
+
+### [17:35:04] Revealed #2 Gemcrafter
+Info: {'good_position': 4}
+
+### [17:35:04] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [17:35:04] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:35:04] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:35:04] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:35:04] Revealed #9 Architect
+Info: {'side': 'Right'}
+
+### [17:35:20] Revealed #8 Judge
+Info: {}
+
+#### [17:35:26] Solver Output
+Scenarios: 72/3024
+Definite good: ['#1', '#3', '#6']
+Evil probabilities: #2=50%, #4=50%, #5=50%, #7=50%, #8=50%, #9=50%
+
+#### [17:35:26] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#1']
+Reason: Expected posterior 36.0 scenarios (adjusted 36.0, info gain 1.000 bits) | timing x1.00
+
+### [17:35:53] Revealed #8 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [17:35:57] Ability used at #8
+
+#### [17:36:00] Solver Output
+Scenarios: 36/3024
+Definite evil: ['#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [17:36:00] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 36 scenarios (roles: {'Minion', 'Lilis', 'Shaman'})
+
+### [17:36:07] Executed #7 -> Minion (EVIL)
+
+#### [17:36:11] Solver Output
+Scenarios: 12/336
+Definite evil: ['#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [17:36:11] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 12 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [17:36:18] Executed #8 -> Lilis (EVIL)
+
+#### [17:36:22] Solver Output
+Scenarios: 6/42
+Definite evil: ['#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [17:36:22] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Shaman'})
+
+### [17:36:29] Executed #9 -> Shaman (EVIL)
+
+## [17:36:51] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis game, Judge ability on #1, 3 definite execs, Doppelganger as Lover
+
