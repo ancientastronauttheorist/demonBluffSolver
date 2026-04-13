@@ -32451,3 +32451,76 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect, 1 scenario definite, Pooka corrupted #2 and #6
 
+
+---
+
+# New Game — 2026-04-13 17:43:21
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Gemcrafter, Lover, Judge, Empress
+- Outcasts: Doppelganger, Bombardier
+- Minions: Poisoner
+- Demons: Baa
+
+### [17:44:26] Revealed #1 Oracle
+Info: {'targets': [1, 2], 'minion_role': 'Poisoner'}
+
+### [17:44:26] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:44:26] Revealed #3 Bombardier
+Info: {}
+
+### [17:44:26] Revealed #4 Empress
+Info: {'targets': [2, 5, 6]}
+
+### [17:44:26] Revealed #6 Gemcrafter
+Info: {'good_position': 7}
+
+### [17:44:26] Revealed #7 Gemcrafter
+Info: {'good_position': 6}
+
+### [17:44:33] Revealed #5 Judge
+Info: {}
+
+#### [17:44:38] Solver Output
+Scenarios: 5/330
+Definite good: ['#1', '#4', '#5']
+Evil probabilities: #6=80%, #7=80%, #2=20%, #3=20%
+
+#### [17:44:38] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#1']
+Reason: Expected posterior 3.4 scenarios (adjusted 3.4, info gain 0.556 bits) | timing x1.00
+
+### [17:45:01] Revealed #5 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [17:45:05] Ability used at #5
+
+#### [17:45:08] Solver Output
+Scenarios: 4/330
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+
+#### [17:45:08] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [17:45:15] Executed #6 -> Baa (EVIL)
+
+#### [17:45:20] Solver Output
+Scenarios: 4/42
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+
+#### [17:45:20] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Poisoner'})
+
+### [17:45:26] Executed #7 -> Poisoner (EVIL)
+
+## [17:45:47] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect, dual Gemcrafter disguise, Judge confirms Oracle lying (corrupted), 2 definite execs, ASC67 COMPLETE 7/7
+
