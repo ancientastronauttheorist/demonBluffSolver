@@ -3086,6 +3086,13 @@
       "name": "asc66_v4",
       "notes": "Lilis game; Slayer killed night 1; dual Dreamer check on #5 + PD clean; forced-safe 50/50 on Chancellor",
       "date": "2026-04-13 16:39"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc66_v5",
+      "notes": "Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival",
+      "date": "2026-04-13 16:48"
     }
   ]
 }

@@ -1,0 +1,165 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          8
+        ],
+        "found_outcast": "Wretch"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    }
+  ],
+  "executed": [
+    1,
+    8,
+    6,
+    7,
+    9
+  ],
+  "confirmed_evil": [
+    1,
+    8,
+    6,
+    9
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Twin_Minion",
+    "8": "Puppeteer",
+    "6": "Lilis",
+    "9": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 5,
+      "is_corrupted": true,
+      "evil_revealed": 2
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    5
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "7": false
+  },
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Druid",
+      "Empress",
+      "Enlightened",
+      "Knight",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    8,
+    1,
+    9
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc66_v5",
+  "true_evil_positions": {
+    "1": "Twin_Minion",
+    "6": "Lilis",
+    "8": "Puppeteer",
+    "9": "Puppet"
+  },
+  "notes": "Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival"
+}

@@ -31713,3 +31713,144 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: Lilis game; Slayer killed night 1; dual Dreamer check on #5 + PD clean; forced-safe 50/50 on Chancellor
 
+
+---
+
+# New Game — 2026-04-13 16:41:43
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Druid, Empress, Enlightened, Knight, Confessor
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Puppeteer, Twin_Minion
+- Demons: Lilis
+
+### [16:42:49] Revealed #1 Druid
+Info: {}
+
+### [16:42:50] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [16:42:50] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [16:42:50] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [16:43:41] Revealed #6 Knight
+Info: {}
+
+### [16:43:41] Revealed #7 Wretch
+Info: {}
+
+### [16:43:41] Revealed #8 Plague_Doctor
+Info: {}
+
+### [16:43:41] Revealed #9 Druid
+Info: {}
+
+#### [16:43:48] Solver Output
+Scenarios: 100/2070
+Definite good: ['#4', '#5']
+Evil probabilities: #7=82%, #1=78%, #9=62%, #2=50%, #6=48%, #3=44%, #8=36%
+
+#### [16:43:48] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 1.903 (adjusted 1.903) | timing x1.00
+
+#### [16:45:25] Solver Output
+Scenarios: 32/2070
+Definite good: ['#4', '#5']
+Evil probabilities: #7=81%, #1=75%, #8=69%, #9=69%, #6=56%, #2=31%, #3=19%
+
+#### [16:45:25] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#8']
+Reason: Entropy 1.883 (adjusted 1.883) | timing x1.00
+
+### [16:45:59] Revealed #1 Druid
+Info: {'targets': [2, 3, 8], 'found_outcast': 'Wretch'}
+
+### [16:45:59] Ability used at #1
+
+#### [16:46:03] Solver Output
+Scenarios: 12/2070
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #6=67%, #7=67%, #9=67%
+
+#### [16:46:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 12 scenarios (roles: {'Puppeteer', 'Twin_Minion', 'Lilis'})
+
+### [16:46:10] Executed #1 -> Twin Minion (EVIL)
+
+#### [16:46:16] Solver Output
+Scenarios: 6/240
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #6=67%, #7=67%, #9=67%
+
+#### [16:46:16] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Puppet', 'Puppeteer', 'Lilis'})
+
+### [16:46:22] Executed #8 -> Puppeteer (EVIL)
+
+#### [16:46:28] Solver Output
+Scenarios: 4/12
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #7=75%, #9=75%, #6=50%
+
+#### [16:46:28] Recommendation
+Action: **USE_ABILITY** #9 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.811 (adjusted 0.811) | timing x1.00
+
+### [16:46:54] Revealed #9 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [16:46:55] Ability used at #9
+
+#### [16:47:00] Solver Output
+Scenarios: 3/12
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #6=67%, #7=67%, #9=67%
+
+#### [16:47:00] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (67% evil Lilis, 33% good Knight (immune, 0 HP)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [16:47:07] Executed #6 -> Lilis (EVIL)
+
+#### [16:47:12] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#6', '#8']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #7=50%, #9=50%
+
+#### [16:47:12] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Puppet, 50% good Wretch).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:47:19] Executed #7 -> GOOD (WRONG!)
+
+### [16:47:34] Executed #7 -> GOOD (WRONG!)
+
+#### [16:47:39] Solver Output
+Scenarios: 1/1
+Definite evil: ['#1', '#6', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7']
+
+#### [16:47:39] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [16:47:45] Executed #9 -> Puppet (EVIL)
+
+## [16:48:06] GAME OVER — WIN
+Final HP: 1
+Notes: Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival
+
