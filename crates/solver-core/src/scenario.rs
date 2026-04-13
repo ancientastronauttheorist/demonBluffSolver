@@ -153,8 +153,16 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                 let mut seen: HashSet<(Vec<u8>, Option<u8>, Option<u8>, Option<u8>)> = HashSet::new();
 
                 for &dopp_pos_opt in &dopp_candidates {
+                    // Doppelganger is an Outcast — PD only corrupts Villagers
+                    if pd_t.is_some() && pd_t == dopp_pos_opt {
+                        continue;
+                    }
                     for &drunk_pos_opt in &drunk_candidates {
                         if drunk_pos_opt.is_some() && drunk_pos_opt == dopp_pos_opt {
+                            continue;
+                        }
+                        // Drunk is an Outcast — PD only corrupts Villagers
+                        if pd_t.is_some() && pd_t == drunk_pos_opt {
                             continue;
                         }
 
