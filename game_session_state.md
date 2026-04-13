@@ -31945,3 +31945,51 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'
 
+
+---
+
+# New Game — 2026-04-13 16:56:22
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Confessor, Architect, Judge, Knitter, Knight
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [16:57:11] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [16:57:11] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [16:57:11] Revealed #3 Wretch
+Info: {}
+
+### [16:57:12] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [16:57:12] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [16:57:12] Revealed #6 Baker
+Info: {'original_role': 'Knight'}
+
+### [16:57:12] Revealed #7 Baker
+Info: {'original_role': 'Architect'}
+
+#### [16:57:17] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [16:57:17] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:57:23] Executed #1 -> Pooka (EVIL)
+
+## [16:57:40] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; 1 scenario from passives alone; triple Baker chain; ASC66 COMPLETE 7/7
+

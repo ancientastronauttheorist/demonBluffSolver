@@ -3100,6 +3100,13 @@
       "name": "asc66_v6",
       "notes": "10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'",
       "date": "2026-04-13 16:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc66_v7",
+      "notes": "10HP perfect; 1 scenario from passives alone; triple Baker chain; ASC66 COMPLETE 7/7",
+      "date": "2026-04-13 16:57"
     }
   ]
 }
