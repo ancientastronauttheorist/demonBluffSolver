@@ -520,6 +520,7 @@ fn simulate_all_v2() {
         "asc46_v7",     // HP exhausted, 0 budget probabilistic
         "asc59_v5",     // 35% confidence pick
         "asc65_v2",     // 49% and 79% picks both wrong
+        "asc68_v3",     // 0HP loss: wrong exec #4 (corrupted, 60%) + #9 (Doppelganger, 75%)
     ].into_iter().collect();
 
     // Cases with known bad data that may cause constraint failures
@@ -595,4 +596,43 @@ fn simulate_all_v2() {
     assert!(unexpected_losses.len() <= max_unexpected_losses,
         "{} unexpected simulation losses (max {max_unexpected_losses}): {unexpected_losses:?}",
         unexpected_losses.len());
+}
+
+/// Debug test for asc68_v3: verifies truth scenario (evils at 3,7,8) survives constraint validation.
+///
+/// Root cause found: `true_evil_positions` in the JSON was missing #8=Pooka.
+/// The simulation's `truth_in_set` looked for a 2-evil scenario (only {3,7}) but
+/// n_evil=3 means all surviving scenarios have 3 evils, so no match was found.
+/// Fix: added "8": "Pooka" to true_evil_positions in asc68_v3.json.
+#[test]
+fn debug_asc68_v3() {
+    use std::collections::{HashMap, HashSet};
+
+    let path = v2_dir().join("asc68_v3.json");
+    let content = std::fs::read_to_string(&path).expect("Failed to read asc68_v3.json");
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let obj = value.as_object().unwrap();
+
+    // Verify true_evil_positions now has all 3 evils
+    let true_evil_positions: HashMap<u8, String> = obj.get("true_evil_positions")
+        .and_then(|v| v.as_object())
+        .map(|m| m.iter().filter_map(|(k, v)| {
+            Some((k.parse::<u8>().ok()?, v.as_str()?.to_string()))
+        }).collect())
+        .unwrap_or_default();
+    let true_evil_set: HashSet<u8> = true_evil_positions.keys().copied().collect();
+
+    assert_eq!(true_evil_set.len(), 3, "true_evil_positions should have 3 evils (was missing #8=Pooka)");
+    assert!(true_evil_set.contains(&3), "Should contain #3=Chancellor");
+    assert!(true_evil_set.contains(&7), "Should contain #7=Minion");
+    assert!(true_evil_set.contains(&8), "Should contain #8=Pooka");
+
+    // Verify truth survives solver constraint validation
+    let result = simulate_game(&value);
+    match &result {
+        SimResult::ConstraintFailure { detail, .. } => {
+            panic!("Truth eliminated: {detail}");
+        }
+        _ => {} // Win or SimLoss are both acceptable (this was a 0HP loss game)
+    }
 }

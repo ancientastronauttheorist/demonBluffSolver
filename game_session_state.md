@@ -32713,3 +32713,141 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
 Final HP: 8
 Notes: 8HP, Lilis+Witch+Twin_Minion, Druid finds Wretch lie, Dreamer confirms #9, 3 definite execs
 
+
+---
+
+# New Game — 2026-04-13 18:08:22
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Enlightened, Baker, Knitter, Poet, Jester
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Chancellor, Minion
+- Demons: Pooka
+
+### [18:09:12] Revealed #1 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [18:09:12] Revealed #3 Baker
+Info: {'original_role': 'Druid'}
+
+### [18:09:12] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [18:09:12] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [18:09:12] Revealed #7 Poet
+Info: {'direction': 'Equidistant', 'copied_role': 'Enlightened'}
+
+### [18:09:12] Revealed #9 Knitter
+Info: {'evil_pairs': 1}
+
+### [18:09:22] Revealed #2 Plague_Doctor
+Info: {}
+
+### [18:09:22] Revealed #5 Jester
+Info: {}
+
+### [18:09:22] Revealed #8 Druid
+Info: {}
+
+#### [18:09:30] Solver Output
+Scenarios: 437/12612
+Evil probabilities: #4=66%, #3=59%, #7=56%, #1=26%, #8=25%, #9=23%, #6=21%, #5=18%, #2=6%
+
+#### [18:09:30] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.150 (adjusted 2.150) | timing x1.00
+
+### [18:10:15] Ability used at #2
+
+#### [18:10:20] Solver Output
+Scenarios: 284/12612
+Evil probabilities: #3=91%, #4=50%, #7=40%, #1=33%, #8=30%, #9=21%, #5=14%, #6=12%, #2=9%
+
+#### [18:10:20] Recommendation
+Action: **USE_ABILITY** #8 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.341 (adjusted 1.242) | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [18:10:50] Revealed #8 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [18:10:54] Ability used at #8
+
+#### [18:11:00] Solver Output
+Scenarios: 151/12612
+Evil probabilities: #3=83%, #8=56%, #4=55%, #1=31%, #7=22%, #2=17%, #6=13%, #5=12%, #9=12%
+
+#### [18:11:00] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#4']
+Reason: Expected posterior 66.0 scenarios (adjusted 74.3, info gain 1.024 bits) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [18:11:28] Revealed #5 Jester
+Info: {'targets': [1, 2, 4], 'evil_count': 0}
+
+### [18:11:32] Ability used at #5
+
+#### [18:11:37] Solver Output
+Scenarios: 72/12612
+Definite good: ['#5']
+Evil probabilities: #3=89%, #8=65%, #4=42%, #7=32%, #6=26%, #1=22%, #9=12%, #2=11%
+
+#### [18:11:37] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 89% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 89% confident (budget: 2 wrong execs)
+
+### [18:12:13] Executed #3 -> Chancellor (EVIL)
+
+#### [18:12:18] Solver Output
+Scenarios: 15/1134
+Definite evil: ['#3']
+Definite good: ['#2', '#5']
+Evil probabilities: #4=60%, #8=53%, #7=33%, #1=27%, #9=20%, #6=7%
+
+#### [18:12:18] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 60% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 60% confident (budget: 2 wrong execs)
+
+### [18:12:55] Executed #4 -> GOOD (WRONG!)
+
+#### [18:13:05] Solver Output
+Scenarios: 6/822
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5']
+Evil probabilities: #7=83%, #8=50%, #9=50%, #6=17%
+
+#### [18:13:05] Recommendation
+Action: **ERROR** #7
+Reason: #7 is 83% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 83% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 83% < 85% threshold. Consider manual override if you have extra information.
+
+### [18:13:52] Executed #7 -> Minion (EVIL)
+
+#### [18:13:57] Solver Output
+Scenarios: 4/131
+Definite evil: ['#3', '#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6']
+Evil probabilities: #9=75%, #8=25%
+
+#### [18:13:57] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 75% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 75% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 75% < 85% threshold. Consider manual override if you have extra information.
+
+### [18:14:56] Executed #9 -> GOOD (WRONG!)
+
+## [18:15:09] GAME OVER — LOSS
+Final HP: 0
+Notes: 0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), Pooka at #8 was Druid disguise, Druid said no outcasts among #1#2#3 but PD at #2 IS outcast = should've been caught
+
+## [18:15:17] GAME OVER — LOSS
+Final HP: 0
+Notes: 0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), true Pooka at #8 disguised as Druid, Druid lied about outcasts but solver didn't catch it
+

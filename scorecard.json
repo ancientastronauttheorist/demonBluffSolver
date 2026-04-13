@@ -3170,6 +3170,20 @@
       "name": "asc68_v2",
       "notes": "8HP, Lilis+Witch+Twin_Minion, Druid finds Wretch lie, Dreamer confirms #9, 3 definite execs",
       "date": "2026-04-13 18:06"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc68_v3",
+      "notes": "0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), Pooka at #8 was Druid disguise, Druid said no outcasts among #1#2#3 but PD at #2 IS outcast = should've been caught",
+      "date": "2026-04-13 18:15"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc68_v3",
+      "notes": "0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), true Pooka at #8 disguised as Druid, Druid lied about outcasts but solver didn't catch it",
+      "date": "2026-04-13 18:15"
     }
   ]
 }
