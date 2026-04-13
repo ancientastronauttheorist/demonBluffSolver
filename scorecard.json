@@ -3093,6 +3093,13 @@
       "name": "asc66_v5",
       "notes": "Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival",
       "date": "2026-04-13 16:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc66_v6",
+      "notes": "10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'",
+      "date": "2026-04-13 16:54"
     }
   ]
 }

@@ -31854,3 +31854,94 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 1
 Notes: Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival
 
+
+---
+
+# New Game — 2026-04-13 16:50:27
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Enlightened, Druid, Medium, Fortune_Teller, Poet
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [16:51:30] Revealed #1 Fortune_Teller
+Info: {}
+
+### [16:51:30] Revealed #2 Enlightened
+Info: {'direction': 'CW'}
+
+### [16:51:30] Revealed #4 Druid
+Info: {}
+
+### [16:51:30] Revealed #5 Jester
+Info: {}
+
+### [16:51:42] Revealed #3 Medium
+Info: {'good_position': 4, 'good_role': 'Druid'}
+
+### [16:51:42] Revealed #7 Enlightened
+Info: {'direction': 'CCW'}
+
+### [16:52:18] Revealed #6 Poet
+Info: {}
+
+#### [16:52:22] Solver Output
+Scenarios: 13/42
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #4=38%, #5=38%, #1=23%
+
+#### [16:52:22] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.961 (adjusted 0.961) | timing x1.00
+
+### [16:52:49] Revealed #1 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [16:52:49] Ability used at #1
+
+#### [16:52:53] Solver Output
+Scenarios: 8/42
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+Evil probabilities: #4=62%, #1=38%
+
+#### [16:52:53] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.954 (adjusted 0.954) | timing x1.00
+
+### [16:53:21] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+### [16:53:21] Ability used at #4
+
+#### [16:53:26] Solver Output
+Scenarios: 4/42
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #4=50%
+
+#### [16:53:26] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#1', '#2', '#4']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.5, info gain 0.678 bits) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [16:53:54] Revealed #5 Jester
+Info: {'targets': [1, 2, 4], 'evil_count': 0}
+
+### [16:53:54] Ability used at #5
+
+#### [16:53:59] Solver Output
+Scenarios: 2/42
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7']
+
+#### [16:53:59] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [16:54:06] Executed #4 -> Pooka (EVIL)
+
+## [16:54:19] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'
+
