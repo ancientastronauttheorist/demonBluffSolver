@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          1
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Minion"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          7,
+          8
+        ]
+      }
+    }
+  ],
+  "executed": [
+    6,
+    2,
+    5
+  ],
+  "confirmed_evil": [
+    6,
+    5
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Minion",
+    "5": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Hunter",
+      "Dreamer",
+      "Alchemist",
+      "Fortune_Teller",
+      "Architect",
+      "Knight",
+      "Empress"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc66_v1",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "6": "Minion"
+  },
+  "notes": "FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived"
+}

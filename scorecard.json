@@ -3058,6 +3058,13 @@
       "name": "asc65_v8",
       "notes": "ASC65 COMPLETE! 6HP. Lilis+Witch game. Night killed #5 Lover and #10 PD. All 3 evils 100% confident with only 6 scenarios.",
       "date": "2026-04-12 18:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc66_v1",
+      "notes": "FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived",
+      "date": "2026-04-13 16:13"
     }
   ]
 }

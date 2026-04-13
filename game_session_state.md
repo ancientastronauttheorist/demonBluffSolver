@@ -31292,3 +31292,101 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 6
 Notes: ASC65 COMPLETE! 6HP. Lilis+Witch game. Night killed #5 Lover and #10 PD. All 3 evils 100% confident with only 6 scenarios.
 
+
+---
+
+# New Game — 2026-04-13 16:05:57
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Dreamer, Alchemist, Fortune_Teller, Architect, Knight, Empress
+- Outcasts: Wretch, Bombardier
+- Minions: Minion
+- Demons: Pooka
+
+### [16:06:56] Revealed #1 Hunter
+Info: {'distance': 3}
+
+### [16:06:56] Revealed #2 Alchemist
+Info: {'cured_count': 1}
+
+### [16:06:56] Revealed #3 Fortune_Teller
+Info: {}
+
+### [16:06:56] Revealed #4 Knight
+Info: {}
+
+### [16:06:56] Revealed #5 Dreamer
+Info: {}
+
+### [16:06:56] Revealed #6 Architect
+Info: {'side': 'Equal'}
+
+### [16:06:56] Revealed #7 Wretch
+Info: {}
+
+### [16:06:56] Revealed #8 Bombardier
+Info: {}
+
+### [16:06:56] Revealed #9 Empress
+Info: {'targets': [1, 7, 8]}
+
+### [16:11:41] Revealed #3 Fortune Teller
+Info: {'targets': [5, 1], 'has_evil': True}
+
+### [16:11:46] Ability used at #3
+
+#### [16:11:54] Solver Output
+Scenarios: 3/72
+Definite good: ['#3', '#4', '#7', '#8']
+Evil probabilities: #6=67%, #1=33%, #2=33%, #5=33%, #9=33%
+
+#### [16:11:54] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#1']
+Reason: Entropy 1.585 (adjusted 1.585) | timing x1.00
+
+### [16:12:28] Revealed #5 Dreamer
+Info: {'target': 1, 'evil_role': 'Minion'}
+
+### [16:12:31] Ability used at #5
+
+#### [16:12:35] Solver Output
+Scenarios: 2/72
+Definite evil: ['#6']
+Definite good: ['#1', '#3', '#4', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [16:12:35] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [16:12:42] Executed #6 -> Minion (EVIL)
+
+#### [16:12:48] Solver Output
+Scenarios: 2/8
+Definite evil: ['#6']
+Definite good: ['#1', '#3', '#4', '#7', '#8', '#9']
+Evil probabilities: #2=50%, #5=50%
+
+#### [16:12:48] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Alchemist, 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:12:55] Executed #2 -> GOOD (WRONG!)
+
+#### [16:13:02] Solver Output
+Scenarios: 1/7
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+
+#### [16:13:02] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:13:09] Executed #5 -> Pooka (EVIL)
+
+## [16:13:35] GAME OVER — WIN
+Final HP: 5
+Notes: FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived
+
