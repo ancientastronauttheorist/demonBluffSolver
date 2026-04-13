@@ -32524,3 +32524,88 @@ Reason: #7 is evil in ALL 4 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: 10HP perfect, dual Gemcrafter disguise, Judge confirms Oracle lying (corrupted), 2 definite execs, ASC67 COMPLETE 7/7
 
+
+---
+
+# New Game — 2026-04-13 17:50:12
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Empress, Enlightened, Gemcrafter, Knight, Baker
+- Outcasts: Plague_Doctor, Wretch
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [17:52:36] Revealed #1 Wretch
+Info: {}
+
+### [17:52:36] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [17:52:36] Revealed #3 Empress
+Info: {'targets': [2, 4, 8]}
+
+### [17:52:36] Revealed #4 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [17:52:36] Revealed #5 Knight
+Info: {}
+
+### [17:52:36] Revealed #6 Knight
+Info: {}
+
+### [17:52:45] Revealed #7 Fortune_Teller
+Info: {}
+
+### [17:52:46] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [17:52:52] Solver Output
+Scenarios: 26/359
+Definite good: ['#8', '#9']
+Evil probabilities: #4=85%, #5=73%, #6=58%, #7=31%, #1=23%, #2=15%, #3=15%
+
+#### [17:52:52] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.323 (adjusted 1.323) | timing x1.00
+
+### [17:53:54] Ability used at #8
+
+#### [17:53:57] Solver Output
+Scenarios: 4/359
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#3', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [17:53:57] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Puppeteer', 'Puppet', 'Lilis'})
+
+### [17:54:04] Executed #4 -> Lilis (EVIL)
+
+#### [17:54:08] Solver Output
+Scenarios: 2/41
+Definite evil: ['#4', '#6', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#8', '#9']
+
+#### [17:54:08] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Puppet', 'Puppeteer'})
+
+### [17:54:15] Executed #6 -> Puppeteer (EVIL)
+
+#### [17:54:19] Solver Output
+Scenarios: 1/8
+Definite evil: ['#4', '#6', '#7']
+Definite good: ['#1', '#2', '#3', '#5', '#8', '#9']
+
+#### [17:54:19] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [17:54:46] Executed #7 -> Puppet (EVIL)
+
+## [17:54:53] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis+Puppeteer+Puppet, PD check reveals #7 evil, Knight survived night, 3 definite execs
+

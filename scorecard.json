@@ -3156,6 +3156,13 @@
       "name": "asc67_v7",
       "notes": "10HP perfect, dual Gemcrafter disguise, Judge confirms Oracle lying (corrupted), 2 definite execs, ASC67 COMPLETE 7/7",
       "date": "2026-04-13 17:45"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v1",
+      "notes": "6HP, Lilis+Puppeteer+Puppet, PD check reveals #7 evil, Knight survived night, 3 definite execs",
+      "date": "2026-04-13 17:54"
     }
   ]
 }
