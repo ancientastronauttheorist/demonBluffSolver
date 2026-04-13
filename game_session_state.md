@@ -32217,3 +32217,105 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
 Final HP: 5
 Notes: 5HP; FT false on 2,4; forced-safe 67% on #1 (Drunk corrupted); 1 scenario after wrong exec
 
+
+---
+
+# New Game — 2026-04-13 17:20:26
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Jester, Slayer, Medium, Architect, Empress
+- Outcasts: Wretch, Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [17:21:20] Revealed #1 Slayer
+Info: {}
+
+### [17:21:20] Revealed #2 Empress
+Info: {'targets': [4, 5, 8]}
+
+### [17:21:20] Revealed #3 Jester
+Info: {}
+
+### [17:21:21] Revealed #4 Wretch
+Info: {}
+
+### [17:21:21] Revealed #5 Architect
+Info: {'side': 'Equal'}
+
+### [17:21:21] Revealed #6 Dreamer
+Info: {}
+
+### [17:21:21] Revealed #7 Jester
+Info: {}
+
+#### [17:21:27] Solver Output
+Scenarios: 54/350
+Evil probabilities: #7=41%, #3=37%, #6=37%, #1=33%, #4=22%, #5=15%, #8=11%, #2=4%
+
+#### [17:21:27] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.313 (adjusted 2.227) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [17:21:53] Revealed #6 Dreamer
+Info: {'target': 7, 'evil_role': 'Witch'}
+
+### [17:21:54] Ability used at #6
+
+#### [17:21:54] Solver Output
+Scenarios: 43/350
+Evil probabilities: #6=44%, #3=37%, #1=33%, #4=26%, #7=26%, #5=16%, #8=14%, #2=5%
+
+#### [17:21:54] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#2', '#5', '#8']
+Reason: Expected posterior 18.5 scenarios (adjusted 19.3, info gain 1.155 bits) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [17:22:27] Revealed #7 Jester
+Info: {'targets': [2, 5, 8], 'evil_count': 2}
+
+### [17:22:27] Ability used at #7
+
+#### [17:22:27] Solver Output
+Scenarios: 19/350
+Evil probabilities: #7=58%, #1=32%, #3=32%, #6=26%, #8=21%, #5=16%, #2=11%, #4=5%
+
+#### [17:22:27] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#4', '#6']
+Reason: Expected posterior 8.3 scenarios (adjusted 8.6, info gain 1.152 bits) | timing x1.00
+WARNING: Corruption risk: 5%
+
+### [17:22:59] Revealed #3 Jester
+Info: {'targets': [1, 4, 6], 'evil_count': 3}
+
+### [17:22:59] Ability used at #3
+
+#### [17:22:59] Solver Output
+Scenarios: 9/350
+Definite good: ['#2', '#4', '#5', '#8']
+Evil probabilities: #3=67%, #7=56%, #6=44%, #1=33%
+
+#### [17:22:59] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#3']
+Reason: Target #3 is 67% evil (adjusted 0.59)
+WARNING: Corruption risk: 11% -- Slayer ability disabled if corrupted
+
+#### [17:23:50] Solver Output
+Scenarios: 3/43
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#8']
+Evil probabilities: #7=67%, #6=33%
+
+#### [17:23:50] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (67% evil Witch, 33% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [17:23:57] Executed #7 -> Witch (EVIL)
+
+## [17:24:13] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; Slayer killed Baa; Dreamer+dual Jester+Slayer; forced-safe on Witch
+
