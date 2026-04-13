@@ -31597,3 +31597,119 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
 Final HP: 6
 Notes: Lilis game; 2 nights: #6 Med killed, #10 Shaman killed; Puppet at #8 (from Puppeteer); strategy bug: keeps recommending dead #10
 
+
+---
+
+# New Game — 2026-04-13 16:33:43
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Confessor, Bard, Dreamer, Knitter, Hunter, Scout
+- Outcasts: Wretch, Plague_Doctor
+- Minions: Minion, Chancellor
+- Demons: Lilis
+
+### [16:35:11] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [16:35:15] Revealed #2 Wretch
+Info: {}
+
+### [16:35:19] Revealed #3 Plague_Doctor
+Info: {}
+
+### [16:35:24] Revealed #4 Bard
+Info: {'corruption_distance': 1}
+
+### [16:36:41] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [16:36:47] Revealed #6 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [16:36:51] Revealed #8 Dreamer
+Info: {}
+
+### [16:36:51] Revealed #9 Dreamer
+Info: {}
+
+#### [16:36:56] Solver Output
+Scenarios: 58/1872
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #5=66%, #9=62%, #8=59%, #4=48%, #6=34%, #2=31%
+
+#### [16:36:56] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.844 (adjusted 2.697) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [16:37:19] Revealed #8 Dreamer
+Info: {'target': 5, 'evil_role': 'Lilis'}
+
+### [16:37:19] Ability used at #8
+
+#### [16:37:23] Solver Output
+Scenarios: 42/1872
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #8=62%, #9=62%, #5=52%, #2=43%, #6=43%, #4=38%
+
+#### [16:37:23] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#5']
+Reason: Entropy 2.598 (adjusted 2.475) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [16:37:46] Revealed #9 Dreamer
+Info: {'target': 5, 'evil_role': 'Minion'}
+
+### [16:37:46] Ability used at #9
+
+#### [16:37:50] Solver Output
+Scenarios: 33/1872
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #9=70%, #8=61%, #2=55%, #6=52%, #5=39%, #4=24%
+
+#### [16:37:50] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.023 (adjusted 2.023) | timing x1.00
+
+#### [16:38:39] Solver Output
+Scenarios: 13/1872
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#7']
+Evil probabilities: #9=69%, #4=62%, #8=62%, #6=8%
+
+#### [16:38:39] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 13 scenarios (roles: {'Minion', 'Lilis', 'Chancellor'})
+
+### [16:38:46] Executed #5 -> Lilis (EVIL)
+
+#### [16:38:51] Solver Output
+Scenarios: 4/231
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #4=75%, #6=25%
+
+#### [16:38:51] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 4 scenarios (roles: {'Chancellor', 'Minion'})
+
+### [16:38:58] Executed #9 -> Minion (EVIL)
+
+#### [16:39:03] Solver Output
+Scenarios: 2/29
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #4=50%, #6=50%
+
+#### [16:39:03] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% good Bard (corrupted), 50% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [16:39:09] Executed #4 -> Chancellor (EVIL)
+
+## [16:39:30] GAME OVER — WIN
+Final HP: 6
+Notes: Lilis game; Slayer killed night 1; dual Dreamer check on #5 + PD clean; forced-safe 50/50 on Chancellor
+
