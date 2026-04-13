@@ -3163,6 +3163,13 @@
       "name": "asc68_v1",
       "notes": "6HP, Lilis+Puppeteer+Puppet, PD check reveals #7 evil, Knight survived night, 3 definite execs",
       "date": "2026-04-13 17:54"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc68_v2",
+      "notes": "8HP, Lilis+Witch+Twin_Minion, Druid finds Wretch lie, Dreamer confirms #9, 3 definite execs",
+      "date": "2026-04-13 18:06"
     }
   ]
 }

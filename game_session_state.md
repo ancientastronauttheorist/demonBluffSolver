@@ -32609,3 +32609,107 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 6
 Notes: 6HP, Lilis+Puppeteer+Puppet, PD check reveals #7 evil, Knight survived night, 3 definite execs
 
+
+---
+
+# New Game — 2026-04-13 17:58:53
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Alchemist, Scout, Bishop, Bard, Slayer, Druid
+- Outcasts: Wretch
+- Minions: Twin_Minion, Witch
+- Demons: Lilis
+
+### [18:01:11] Revealed #1 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 2}
+
+### [18:01:11] Revealed #4 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [18:01:21] Revealed #2 Druid
+Info: {}
+
+### [18:01:21] Revealed #3 Slayer
+Info: {}
+
+### [18:03:03] Revealed #5 Bishop
+Info: {'targets': [1, 8], 'types': ['Minion', 'Villager']}
+
+### [18:03:16] Revealed #6 Alchemist
+Info: {'cured_count': 0}
+
+### [18:03:16] Revealed #7 Wretch
+Info: {}
+
+#### [18:03:23] Solver Output
+Scenarios: 48/504
+Definite good: ['#6', '#8']
+Evil probabilities: #1=88%, #2=46%, #9=46%, #4=33%, #5=33%, #7=33%, #3=21%
+
+#### [18:03:23] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.995 (adjusted 0.995) | timing x1.00
+
+### [18:04:00] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': 'Wretch'}
+
+### [18:04:04] Ability used at #2
+
+#### [18:04:08] Solver Output
+Scenarios: 22/504
+Definite evil: ['#2']
+Definite good: ['#6', '#8']
+Evil probabilities: #1=91%, #3=27%, #5=27%, #9=27%, #7=18%, #4=9%
+
+#### [18:04:08] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 22 scenarios (roles: {'Witch', 'Lilis', 'Twin_Minion'})
+
+### [18:04:15] Executed #2 -> Lilis (EVIL)
+
+#### [18:04:20] Solver Output
+Scenarios: 6/56
+Definite evil: ['#1', '#2']
+Definite good: ['#4', '#6', '#8']
+Evil probabilities: #3=33%, #9=33%, #5=17%, #7=17%
+
+#### [18:04:20] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'Twin_Minion', 'Witch'})
+
+### [18:04:27] Executed #1 -> Witch (EVIL)
+
+### [18:04:56] Revealed #9 Dreamer
+Info: {}
+
+#### [18:05:00] Solver Output
+Scenarios: 2/7
+Definite evil: ['#1', '#2']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #9=50%
+
+#### [18:05:00] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:05:27] Revealed #9 Dreamer
+Info: {'target': 3, 'evil_role': 'Lilis'}
+
+### [18:05:31] Ability used at #9
+
+#### [18:05:35] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#2', '#9']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [18:05:35] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [18:05:42] Executed #9 -> Twin Minion (EVIL)
+
+## [18:06:02] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP, Lilis+Witch+Twin_Minion, Druid finds Wretch lie, Dreamer confirms #9, 3 definite execs
+
