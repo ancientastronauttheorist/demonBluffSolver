@@ -32115,3 +32115,105 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect; 1 scenario from passives; Baker chain #4 orig + #5 from Medium; Bombardier safe
 
+
+---
+
+# New Game — 2026-04-13 17:15:09
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Lover, Architect, Fortune_Teller, Bishop, Baker, Hunter
+- Outcasts: Drunk
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [17:16:14] Revealed #1 Bishop
+Info: {'targets': [2, 3, 6], 'types': ['Minion', 'Villager', 'Outcast']}
+
+### [17:16:14] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [17:16:14] Revealed #3 Fortune_Teller
+Info: {}
+
+### [17:16:14] Revealed #4 Hunter
+Info: {'distance': 4}
+
+### [17:16:14] Revealed #5 Lover
+Info: {'evil_adjacent': 2}
+
+### [17:16:14] Revealed #6 Gemcrafter
+Info: {'good_position': 7}
+
+### [17:16:15] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [17:16:15] Revealed #8 Gemcrafter
+Info: {'good_position': 5}
+
+#### [17:16:33] Solver Output
+Scenarios: 6/480
+Definite good: ['#6']
+Evil probabilities: #4=67%, #1=50%, #2=50%, #3=50%, #8=50%, #5=17%, #7=17%
+
+#### [17:16:33] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 1.000 (adjusted 0.833) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [17:17:02] Revealed #3 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': False}
+
+### [17:17:02] Ability used at #3
+
+#### [17:17:07] Solver Output
+Scenarios: 3/480
+Definite good: ['#3', '#6']
+Evil probabilities: #1=67%, #4=67%, #8=67%, #2=33%, #5=33%, #7=33%
+
+#### [17:17:07] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (33% good Drunk (corrupted), 33% evil Puppet, 33% evil Puppeteer).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [17:17:14] Executed #1 -> GOOD (WRONG!)
+
+### [17:17:21] Executed #1 -> GOOD (WRONG!)
+
+#### [17:17:27] Solver Output
+Scenarios: 1/300
+Definite evil: ['#5', '#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+
+#### [17:17:27] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:17:34] Executed #5 -> Pooka (EVIL)
+
+#### [17:17:41] Solver Output
+Scenarios: 1/40
+Definite evil: ['#5', '#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+
+#### [17:17:41] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [17:17:48] Executed #7 -> Puppet (EVIL)
+
+#### [17:17:54] Solver Output
+Scenarios: 1/10
+Definite evil: ['#5', '#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+
+#### [17:17:54] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [17:18:01] Executed #8 -> Puppeteer (EVIL)
+
+## [17:18:17] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP; FT false on 2,4; forced-safe 67% on #1 (Drunk corrupted); 1 scenario after wrong exec
+

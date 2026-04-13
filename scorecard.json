@@ -3121,6 +3121,13 @@
       "name": "asc67_v2",
       "notes": "10HP perfect; 1 scenario from passives; Baker chain #4 orig + #5 from Medium; Bombardier safe",
       "date": "2026-04-13 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc67_v3",
+      "notes": "5HP; FT false on 2,4; forced-safe 67% on #1 (Drunk corrupted); 1 scenario after wrong exec",
+      "date": "2026-04-13 17:18"
     }
   ]
 }
