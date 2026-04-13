@@ -32067,3 +32067,51 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD
 
+
+---
+
+# New Game — 2026-04-13 17:11:27
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Medium, Gemcrafter, Enlightened, Baker, Judge
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [17:12:11] Revealed #1 Gemcrafter
+Info: {'good_position': 5}
+
+### [17:12:11] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [17:12:11] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Enlightened'}
+
+### [17:12:11] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [17:12:11] Revealed #5 Baker
+Info: {'original_role': 'Medium'}
+
+### [17:12:12] Revealed #6 Jester
+Info: {}
+
+### [17:12:12] Revealed #7 Bombardier
+Info: {}
+
+#### [17:12:18] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [17:12:18] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:12:50] Executed #6 -> Pooka (EVIL)
+
+## [17:12:57] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; 1 scenario from passives; Baker chain #4 orig + #5 from Medium; Bombardier safe
+

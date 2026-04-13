@@ -3114,6 +3114,13 @@
       "name": "asc67_v1",
       "notes": "10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD",
       "date": "2026-04-13 17:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v2",
+      "notes": "10HP perfect; 1 scenario from passives; Baker chain #4 orig + #5 from Medium; Bombardier safe",
+      "date": "2026-04-13 17:12"
     }
   ]
 }
