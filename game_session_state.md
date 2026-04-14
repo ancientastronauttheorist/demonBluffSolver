@@ -33068,3 +33068,59 @@ Notes: 6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 
 Final HP: 6
 Notes: 6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit.
 
+
+---
+
+# New Game — 2026-04-13 19:27:51
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Alchemist, Baker, Knitter, Poet
+- Outcasts: Wretch, Doppelganger
+- Minions: Witch
+- Demons: Baa
+
+### [19:28:55] Revealed #1 Knight
+Info: {}
+
+### [19:28:55] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [19:28:55] Revealed #3 Wretch
+Info: {}
+
+### [19:28:55] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [19:28:55] Revealed #5 Alchemist
+Info: {'cured_count': 2}
+
+### [19:28:55] Revealed #6 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+#### [19:29:03] Solver Output
+Scenarios: 10/222
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7']
+
+#### [19:29:03] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 10 scenarios (roles: {'Baa', 'Witch'})
+
+### [19:29:10] Executed #2 -> Witch (EVIL)
+
+#### [19:29:14] Solver Output
+Scenarios: 5/31
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7']
+
+#### [19:29:14] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [19:29:21] Executed #5 -> Baa (EVIL)
+
+## [19:29:56] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec.
+

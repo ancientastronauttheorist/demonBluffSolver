@@ -3205,6 +3205,13 @@
       "name": "asc68_v5",
       "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit.",
       "date": "2026-04-13 19:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc68_v6",
+      "notes": "10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec.",
+      "date": "2026-04-13 19:29"
     }
   ]
 }
