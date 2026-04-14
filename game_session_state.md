@@ -34263,3 +34263,121 @@ WARNING: CAUTION: budget=1, confidence 47% < 85% threshold. Consider manual over
 Final HP: 5
 Notes: 5HP win (-5 wrong #7 Scout corrupt). PD #8 clean on #4, but #4 still 100% evil via constraints. Lookahead picked #7 forced-win but Scout corrupted cost 5HP. Solver refused next pick at 47% (<85% threshold) but 47% pick #5 Baa was correct.
 
+
+---
+
+# New Game — 2026-04-14 17:34:14
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Medium, Dreamer, Hunter, Architect, Baker
+- Outcasts: Drunk, Wretch
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [17:34:52] Revealed #1 Hunter
+Info: {'distance': 1}
+
+### [17:34:52] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [17:34:52] Revealed #4 Empress
+Info: {'targets': [5, 7, 9]}
+
+### [17:34:52] Revealed #5 Architect
+Info: {'side': 'Left'}
+
+### [17:34:52] Revealed #7 Baker
+Info: {'original_role': 'Dreamer'}
+
+### [17:34:52] Revealed #8 Wretch
+Info: {}
+
+### [17:34:59] Revealed #3 Dreamer
+Info: {}
+
+### [17:34:59] Revealed #6 Dreamer
+Info: {}
+
+#### [17:34:59] Solver Output
+Scenarios: 186/3192
+Evil probabilities: #7=74%, #6=45%, #8=35%, #9=35%, #2=32%, #3=32%, #1=29%, #5=10%, #4=6%
+
+#### [17:34:59] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.950 (adjusted 2.760) | timing x1.00
+WARNING: Corruption risk: 13%
+
+### [17:36:00] Revealed #6 Dreamer
+Info: {'target': 7, 'evil_role': 'Minion'}
+
+### [17:36:00] Ability used at #6
+
+#### [17:36:00] Solver Output
+Scenarios: 118/3192
+Evil probabilities: #7=59%, #6=56%, #9=39%, #3=36%, #2=31%, #8=31%, #1=29%, #5=15%, #4=5%
+
+#### [17:36:00] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.841 (adjusted 2.600) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [17:36:44] Revealed #3 Dreamer
+Info: {'target': 6, 'evil_role': 'Witch'}
+
+### [17:36:44] Ability used at #3
+
+#### [17:36:44] Solver Output
+Scenarios: 83/3192
+Evil probabilities: #7=59%, #3=45%, #6=37%, #9=35%, #1=33%, #8=33%, #2=30%, #5=22%, #4=7%
+
+#### [17:36:44] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 59% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 59% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (59% < 63%) -- consider gathering more info
+
+### [17:37:22] Executed #7 -> GOOD (WRONG!)
+
+#### [17:37:23] Solver Output
+Scenarios: 14/2142
+Definite good: ['#2', '#4', '#7']
+Evil probabilities: #3=71%, #6=57%, #9=57%, #1=43%, #5=43%, #8=29%
+
+#### [17:37:23] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (29% good Drunk (corrupted), 29% evil Witch, 21% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 71%, but all reveal branches still lead to a forced win.
+
+### [17:38:00] Executed #3 -> Witch (EVIL)
+
+### [17:38:26] Revealed #9 Medium
+Info: {'good_position': 3, 'good_role': 'Dreamer'}
+
+#### [17:38:26] Solver Output
+Scenarios: 2/264
+Definite evil: ['#3', '#6', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [17:38:26] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Minion', 'Baa'})
+
+### [17:39:01] Executed #6 -> Minion (EVIL)
+
+#### [17:39:02] Solver Output
+Scenarios: 1/37
+Definite evil: ['#3', '#6', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [17:39:02] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [17:39:40] Executed #9 -> Baa (EVIL)
+
+## [17:39:40] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win (-5 wrong #7 Baker via 59% solver pick). Dreamer #6 and #3 both lied (evil). Lookahead #3 71% correct (Witch). After Witch death, unblock #9 -> Baa lied. Exec all 3 evils.
+
