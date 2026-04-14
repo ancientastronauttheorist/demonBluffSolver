@@ -34149,3 +34149,117 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect Asc70 v1. PD #3 clean on #4, Jester #8 (Puppet) truthful '1 Evil in [1,2,3]', Slayer #4 killed #8 Puppet free. Then #5 Minion 100%, #1 Pooka via lookahead 50%.
 
+
+---
+
+# New Game — 2026-04-14 17:26:10
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Gemcrafter, Scout, Empress, Enlightened
+- Outcasts: Plague_Doctor, Wretch, Drunk, Doppelganger
+- Minions: Chancellor
+- Demons: Baa
+
+### [17:27:07] Revealed #1 Gemcrafter
+Info: {'good_position': 8}
+
+### [17:27:07] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [17:27:07] Revealed #3 Wretch
+Info: {}
+
+### [17:27:07] Revealed #5 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [17:27:07] Revealed #6 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [17:27:07] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [17:27:07] Revealed #8 Plague_Doctor
+Info: {}
+
+### [17:27:17] Revealed #4 Enlightened
+Info: {'direction': 'CW'}
+
+#### [17:27:17] Solver Output
+Scenarios: 92/5806
+Definite good: ['#1', '#2', '#8']
+Evil probabilities: #3=65%, #4=52%, #5=33%, #7=27%, #6=23%
+
+#### [17:27:17] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.925 (adjusted 1.925) | timing x1.00
+
+### [17:27:50] Ability used at #8
+
+#### [17:27:50] Solver Output
+Scenarios: 48/5806
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#8']
+Evil probabilities: #3=33%, #5=29%, #7=27%, #6=10%
+
+#### [17:27:50] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 48 scenarios (roles: {'Baa', 'Chancellor'})
+
+### [17:28:25] Executed #4 -> Chancellor (EVIL)
+
+#### [17:28:25] Solver Output
+Scenarios: 28/532
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#8']
+Evil probabilities: #3=29%, #7=29%, #5=25%, #6=18%
+
+#### [17:28:25] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (29% evil Baa, 29% good Drunk (corrupted), 25% good Scout (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 29%, but all reveal branches still lead to a forced win.
+
+### [17:29:00] Executed #7 -> GOOD (WRONG!)
+
+#### [17:29:01] Solver Output
+Scenarios: 15/459
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#6', '#7', '#8']
+Evil probabilities: #3=53%, #5=47%
+
+#### [17:29:01] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 47% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 47% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 47% < 85% threshold. Consider manual override if you have extra information.
+
+#### [17:29:14] Solver Output
+Scenarios: 15/459
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#6', '#7', '#8']
+Evil probabilities: #3=53%, #5=47%
+
+#### [17:29:14] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 47% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 47% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 47% < 85% threshold. Consider manual override if you have extra information.
+
+#### [17:30:43] Solver Output
+Scenarios: 15/459
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#6', '#7', '#8']
+Evil probabilities: #3=53%, #5=47%
+
+#### [17:30:43] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 47% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 47% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 47% < 85% threshold. Consider manual override if you have extra information.
+
+### [17:31:42] Executed #5 -> Baa (EVIL)
+
+## [17:31:42] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win (-5 wrong #7 Scout corrupt). PD #8 clean on #4, but #4 still 100% evil via constraints. Lookahead picked #7 forced-win but Scout corrupted cost 5HP. Solver refused next pick at 47% (<85% threshold) but 47% pick #5 Baa was correct.
+

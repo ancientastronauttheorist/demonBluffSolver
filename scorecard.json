@@ -3289,6 +3289,13 @@
       "name": "asc70_v1",
       "notes": "10HP perfect Asc70 v1. PD #3 clean on #4, Jester #8 (Puppet) truthful '1 Evil in [1,2,3]', Slayer #4 killed #8 Puppet free. Then #5 Minion 100%, #1 Pooka via lookahead 50%.",
       "date": "2026-04-14 17:23"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc70_v2",
+      "notes": "5HP win (-5 wrong #7 Scout corrupt). PD #8 clean on #4, but #4 still 100% evil via constraints. Lookahead picked #7 forced-win but Scout corrupted cost 5HP. Solver refused next pick at 47% (<85% threshold) but 47% pick #5 Baa was correct.",
+      "date": "2026-04-14 17:31"
     }
   ]
 }
