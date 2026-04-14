@@ -3352,6 +3352,13 @@
       "name": "asc71_v3",
       "notes": "10HP perfect. Druid #2 found Drunk in [1,3,4], solver narrowed to 5 scenarios. Exec #5 Twin_Minion 80% lookahead, #1 Baa 50% lookahead correct.",
       "date": "2026-04-14 18:27"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc71_v4",
+      "notes": "6HP (-2 Lilis night, -2 Lilis trigger). Alchemist duplicate cracked #7 Witch 100%. #9 Lilis 100% after Witch death. Knight #1 + Doppelganger-Knight #5 both immune. FT+Dreamer+Alchemist chain.",
+      "date": "2026-04-14 18:37"
     }
   ]
 }

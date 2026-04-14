@@ -35117,3 +35117,134 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect. Druid #2 found Drunk in [1,3,4], solver narrowed to 5 scenarios. Exec #5 Twin_Minion 80% lookahead, #1 Baa 50% lookahead correct.
 
+
+---
+
+# New Game — 2026-04-14 18:30:24
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune_Teller, Alchemist, Knight, Lover, Dreamer, Baker
+- Outcasts: Bombardier, Doppelganger
+- Minions: Twin_Minion, Witch
+- Demons: Lilis
+
+### [18:31:12] Revealed #1 Knight
+Info: {}
+
+### [18:31:12] Revealed #2 Fortune_Teller
+Info: {}
+
+### [18:31:13] Revealed #3 Alchemist
+Info: {'cured_count': 0}
+
+### [18:31:13] Revealed #4 Dreamer
+Info: {}
+
+### [18:32:08] Revealed #5 Knight
+Info: {}
+
+### [18:32:08] Revealed #7 Alchemist
+Info: {'cured_count': 2}
+
+### [18:32:08] Revealed #8 Bombardier
+Info: {}
+
+#### [18:32:09] Solver Output
+Scenarios: 534/3192
+Definite evil: ['#7']
+Definite good: ['#3', '#6']
+Evil probabilities: #8=36%, #1=35%, #5=35%, #2=31%, #4=31%, #9=31%
+
+#### [18:32:09] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 534 scenarios (roles: {'Witch', 'Lilis', 'Twin_Minion'})
+
+### [18:32:48] Executed #7 -> Witch (EVIL)
+
+### [18:33:23] Revealed #9 Baker
+Info: {'original_role': 'Alchemist'}
+
+#### [18:33:23] Solver Output
+Scenarios: 56/350
+Definite evil: ['#7', '#9']
+Definite good: ['#3', '#6']
+Evil probabilities: #1=21%, #5=21%, #8=21%, #2=18%, #4=18%
+
+#### [18:33:23] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 56 scenarios (roles: {'Lilis', 'Twin_Minion'})
+
+### [18:34:01] Executed #9 -> Lilis (EVIL)
+
+#### [18:34:01] Solver Output
+Scenarios: 28/43
+Definite evil: ['#7', '#9']
+Definite good: ['#3', '#6']
+Evil probabilities: #1=21%, #5=21%, #8=21%, #2=18%, #4=18%
+
+#### [18:34:01] Recommendation
+Action: **EXECUTE** #1
+Reason: Knight free check: #1 is 21% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [18:34:37] Execution Blocked
+#1 Knight immunity — confirmed good, no HP loss
+
+#### [18:34:37] Solver Output
+Scenarios: 22/37
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#3', '#6']
+Evil probabilities: #5=27%, #8=27%, #2=23%, #4=23%
+
+#### [18:34:37] Recommendation
+Action: **EXECUTE** #5
+Reason: Knight free check: #5 is 27% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [18:35:21] Execution Blocked
+#5 Knight immunity — confirmed good, no HP loss
+
+#### [18:35:22] Solver Output
+Scenarios: 16/31
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#3', '#5', '#6']
+Evil probabilities: #8=38%, #2=31%, #4=31%
+
+#### [18:35:22] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.579 (adjusted 1.579) | timing x1.00
+
+### [18:35:59] Revealed #4 Dreamer
+Info: {'target': 2, 'evil_role': 'Witch'}
+
+### [18:35:59] Ability used at #4
+
+#### [18:36:00] Solver Output
+Scenarios: 11/31
+Definite evil: ['#7', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6']
+Evil probabilities: #8=55%, #4=45%
+
+#### [18:36:00] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 0.994 (adjusted 0.994) | timing x1.00
+
+### [18:36:39] Revealed #2 Fortune Teller
+Info: {'targets': [1, 4], 'has_evil': False}
+
+### [18:36:39] Ability used at #2
+
+#### [18:36:40] Solver Output
+Scenarios: 6/31
+Definite evil: ['#7', '#8', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [18:36:40] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 6 scenarios (roles: {'Twin_Minion'})
+
+### [18:37:23] Executed #8 -> Twin_Minion (EVIL)
+
+## [18:37:23] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP (-2 Lilis night, -2 Lilis trigger). Alchemist duplicate cracked #7 Witch 100%. #9 Lilis 100% after Witch death. Knight #1 + Doppelganger-Knight #5 both immune. FT+Dreamer+Alchemist chain.
+

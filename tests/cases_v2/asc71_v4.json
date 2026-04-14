@@ -1,0 +1,146 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "evil_role": "Witch"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Alchemist"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    9,
+    8
+  ],
+  "confirmed_evil": [
+    7,
+    9,
+    8
+  ],
+  "confirmed_good": [
+    1,
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Witch",
+    "9": "Lilis",
+    "8": "Twin_Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Fortune_Teller",
+      "Alchemist",
+      "Knight",
+      "Lover",
+      "Dreamer",
+      "Baker"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin_Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4,
+    2
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc71_v4",
+  "true_evil_positions": {
+    "7": "Witch",
+    "8": "Twin_Minion",
+    "9": "Lilis"
+  },
+  "notes": "6HP (-2 Lilis night, -2 Lilis trigger). Alchemist duplicate cracked #7 Witch 100%. #9 Lilis 100% after Witch death. Knight #1 + Doppelganger-Knight #5 both immune. FT+Dreamer+Alchemist chain."
+}
