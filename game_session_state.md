@@ -34564,3 +34564,95 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect. Evil PD #2 gave real info 'target corrupted+#4 evil' (but #4 bombardier actually good - lied). Solver cracked 3 evils via Jester Puppet-truthful + lookahead. All execs correct.
 
+
+---
+
+# New Game — 2026-04-14 17:53:55
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Jester, Medium, Scout, Enlightened, Slayer, Architect
+- Outcasts: Doppelganger, Wretch, Bombardier
+- Minions: Minion, Chancellor
+- Demons: Baa
+
+### [17:54:29] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 2}
+
+### [17:54:29] Revealed #3 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 2}
+
+### [17:54:29] Revealed #5 Architect
+Info: {'side': 'Equal'}
+
+### [17:54:29] Revealed #7 Bombardier
+Info: {}
+
+### [17:54:29] Revealed #8 Gemcrafter
+Info: {'good_position': 4}
+
+### [17:54:29] Revealed #9 Medium
+Info: {'good_position': 3, 'good_role': 'Scout'}
+
+### [17:54:37] Revealed #2 Enlightened
+Info: {'direction': 'CW'}
+
+### [17:54:37] Revealed #4 Slayer
+Info: {}
+
+### [17:54:37] Revealed #6 Jester
+Info: {}
+
+#### [17:54:38] Solver Output
+Scenarios: 40/4428
+Definite evil: ['#9']
+Definite good: ['#1', '#4', '#5', '#8']
+Evil probabilities: #7=90%, #3=60%, #2=40%, #6=10%
+
+#### [17:54:38] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 40 scenarios (roles: {'Chancellor', 'Baa', 'Minion'})
+
+### [17:55:11] Executed #9 -> Minion (EVIL)
+
+#### [17:55:11] Solver Output
+Scenarios: 18/509
+Definite evil: ['#9']
+Definite good: ['#1', '#4', '#5', '#8']
+Evil probabilities: #7=89%, #3=67%, #2=33%, #6=11%
+
+#### [17:55:11] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#1', '#2', '#7']
+Reason: Expected posterior 8.5 scenarios (adjusted 8.5, info gain 1.075 bits) | timing x1.00
+
+### [17:55:57] Revealed #6 Jester
+Info: {'targets': [1, 2, 7], 'evil_count': 0}
+
+### [17:55:57] Ability used at #6
+
+#### [17:55:57] Solver Output
+Scenarios: 2/509
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [17:55:57] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [17:56:30] Executed #2 -> Chancellor (EVIL)
+
+#### [17:56:31] Solver Output
+Scenarios: 2/74
+Definite evil: ['#2', '#6', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+
+#### [17:56:31] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [17:57:08] Executed #6 -> Baa (EVIL)
+
+## [17:57:08] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Solver cracked 3 evils from Enlightened+Scouts+Medium+Gemcrafter. #9 Minion 100% first, Jester #6 Baa lied '0 evils in [1,2,7]' exposing #2 as evil Chancellor. Clean sweep.
+

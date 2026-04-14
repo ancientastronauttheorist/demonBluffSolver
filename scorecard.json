@@ -3317,6 +3317,13 @@
       "name": "asc70_v5",
       "notes": "10HP perfect. Evil PD #2 gave real info 'target corrupted+#4 evil' (but #4 bombardier actually good - lied). Solver cracked 3 evils via Jester Puppet-truthful + lookahead. All execs correct.",
       "date": "2026-04-14 17:51"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc70_v6",
+      "notes": "10HP perfect. Solver cracked 3 evils from Enlightened+Scouts+Medium+Gemcrafter. #9 Minion 100% first, Jester #6 Baa lied '0 evils in [1,2,7]' exposing #2 as evil Chancellor. Clean sweep.",
+      "date": "2026-04-14 17:57"
     }
   ]
 }
