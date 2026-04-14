@@ -33124,3 +33124,139 @@ Reason: #5 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec.
 
+
+---
+
+# New Game — 2026-04-13 19:32:11
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Druid, Hunter, Architect, Fortune_Teller, Medium, Scout, Slayer
+- Outcasts: Bombardier
+- Minions: Shaman, Poisoner
+- Demons: Lilis
+
+### [19:33:37] Revealed #3 Architect
+Info: {'side': 'Equal'}
+
+### [19:33:37] Revealed #4 Medium
+Info: {'good_position': 3, 'good_role': 'Architect'}
+
+### [19:34:42] Revealed #1 Fortune_Teller
+Info: {}
+
+### [19:34:42] Revealed #2 Dreamer
+Info: {}
+
+### [19:36:05] Revealed #9 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [19:36:36] Revealed #5 Slayer
+Info: {}
+
+### [19:36:37] Revealed #6 Fortune_Teller
+Info: {}
+
+### [19:36:37] Revealed #7 Druid
+Info: {}
+
+#### [19:36:42] Solver Output
+Scenarios: 53/714
+Definite good: ['#8']
+Evil probabilities: #9=83%, #1=53%, #2=43%, #7=30%, #3=28%, #6=26%, #5=21%, #4=15%
+
+#### [19:36:42] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.886 (adjusted 2.695) | timing x1.00
+WARNING: Corruption risk: 13%
+
+### [19:37:26] Revealed #2 Dreamer
+Info: {'target': 9, 'evil_role': 'Lilis'}
+
+### [19:37:31] Ability used at #2
+
+#### [19:37:31] Solver Output
+Scenarios: 28/714
+Definite good: ['#8']
+Evil probabilities: #9=68%, #1=50%, #2=50%, #3=36%, #7=36%, #6=25%, #4=18%, #5=18%
+
+#### [19:37:31] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.985 (adjusted 0.950) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [19:38:10] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Doppelganger'}
+
+### [19:38:10] Ability used at #7
+
+#### [19:38:14] Solver Output
+Scenarios: 12/714
+Definite good: ['#5', '#8']
+Evil probabilities: #7=83%, #9=67%, #2=50%, #1=42%, #3=25%, #4=17%, #6=17%
+
+#### [19:38:14] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 0.917) | follow-up bonus 0.389 | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [19:39:06] Revealed #6 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': True}
+
+### [19:39:11] Ability used at #6
+
+#### [19:39:11] Solver Output
+Scenarios: 6/714
+Definite evil: ['#7']
+Definite good: ['#4', '#5', '#6', '#8']
+Evil probabilities: #2=67%, #9=67%, #1=50%, #3=17%
+
+#### [19:39:11] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Lilis', 'Shaman'})
+
+### [19:39:18] Executed #7 -> Lilis (EVIL)
+
+#### [19:39:22] Solver Output
+Scenarios: 5/81
+Definite evil: ['#7']
+Definite good: ['#4', '#5', '#6', '#8']
+Evil probabilities: #1=60%, #2=60%, #9=60%, #3=20%
+
+#### [19:39:22] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.971 (adjusted 0.777) | follow-up bonus 0.160 | timing x1.00
+WARNING: Corruption risk: 40%
+
+### [19:39:57] Revealed #1 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': False}
+
+### [19:39:57] Ability used at #1
+
+#### [19:39:57] Solver Output
+Scenarios: 3/81
+Definite evil: ['#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8']
+Evil probabilities: #9=67%, #1=33%
+
+#### [19:39:57] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 3 scenarios (roles: {'Poisoner', 'Shaman'})
+
+### [19:40:04] Executed #2 -> Shaman (EVIL)
+
+#### [19:40:10] Solver Output
+Scenarios: 1/9
+Definite evil: ['#2', '#7', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [19:40:10] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [19:40:17] Executed #9 -> Poisoner (EVIL)
+
+## [19:40:40] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis killed Bombardier#8 night1, Dreamer+FT+FT abilities, all 3 evils 100% auto-exec
+

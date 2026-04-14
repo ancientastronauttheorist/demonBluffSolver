@@ -3212,6 +3212,13 @@
       "name": "asc68_v6",
       "notes": "10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec.",
       "date": "2026-04-13 19:29"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v7",
+      "notes": "6HP, Lilis killed Bombardier#8 night1, Dreamer+FT+FT abilities, all 3 evils 100% auto-exec",
+      "date": "2026-04-13 19:40"
     }
   ]
 }
