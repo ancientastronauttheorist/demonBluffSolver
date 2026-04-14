@@ -3338,6 +3338,13 @@
       "name": "asc71_v1",
       "notes": "5HP first Asc71 village. Knight #1 immunity free check, Dreamer #10 evil lied '#3 Chancellor' (Pooka), PD #2 clean #7, Slayer #5 fail. Exec #4 Arch corrupted wrong (-5 HP), then 3 evils all found.",
       "date": "2026-04-14 18:14"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc71_v2",
+      "notes": "8HP win (-2 Drunk exec). PD evil #7 lied 'corrupted #8+#6 evil' \u2014 solver used. #6 Baa 100%, #1 Drunk via lookahead 50%, #3 Puppet 100%, #4 Puppeteer 100%.",
+      "date": "2026-04-14 18:22"
     }
   ]
 }

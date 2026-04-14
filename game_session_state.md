@@ -34913,3 +34913,128 @@ Reason: #10 is evil in ALL 3 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: 5HP first Asc71 village. Knight #1 immunity free check, Dreamer #10 evil lied '#3 Chancellor' (Pooka), PD #2 clean #7, Slayer #5 fail. Exec #4 Arch corrupted wrong (-5 HP), then 3 evils all found.
 
+
+---
+
+# New Game — 2026-04-14 18:17:18
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Fortune_Teller, Jester, Architect, Oracle
+- Outcasts: Wretch, Plague_Doctor, Drunk, Bombardier
+- Minions: Puppeteer
+- Demons: Baa
+
+### [18:17:58] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:17:58] Revealed #4 Bombardier
+Info: {}
+
+### [18:17:58] Revealed #5 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Puppeteer'}
+
+### [18:17:58] Revealed #8 Architect
+Info: {'side': 'Left'}
+
+### [18:18:08] Revealed #1 Jester
+Info: {}
+
+### [18:18:08] Revealed #2 Fortune_Teller
+Info: {}
+
+### [18:18:08] Revealed #6 Jester
+Info: {}
+
+### [18:18:08] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [18:18:08] Solver Output
+Scenarios: 90/908
+Evil probabilities: #3=54%, #1=47%, #4=47%, #5=42%, #6=39%, #8=34%, #2=26%, #7=11%
+
+#### [18:18:09] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.119 (adjusted 2.119) | timing x1.00
+
+### [18:18:45] Ability used at #7
+
+#### [18:18:45] Solver Output
+Scenarios: 16/908
+Evil probabilities: #6=75%, #3=62%, #4=56%, #2=38%, #5=25%, #7=25%, #1=12%, #8=6%
+
+#### [18:18:45] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#4', '#5', '#7']
+Reason: Expected posterior 6.5 scenarios (adjusted 7.6, info gain 1.082 bits) | timing x1.00
+WARNING: Corruption risk: 31%
+
+### [18:19:30] Revealed #1 Jester
+Info: {'targets': [4, 5, 7], 'evil_count': 0}
+
+### [18:19:30] Ability used at #1
+
+#### [18:19:31] Solver Output
+Scenarios: 7/908
+Definite good: ['#8']
+Evil probabilities: #6=86%, #2=57%, #3=57%, #4=43%, #1=29%, #5=14%, #7=14%
+
+#### [18:19:31] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#5']
+Reason: Entropy 0.985 (adjusted 0.985) | timing x1.00
+
+### [18:20:09] Revealed #2 Fortune Teller
+Info: {'targets': [1, 5], 'has_evil': False}
+
+### [18:20:09] Ability used at #2
+
+#### [18:20:10] Solver Output
+Scenarios: 4/908
+Definite evil: ['#6']
+Definite good: ['#5', '#7', '#8']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #4=50%
+
+#### [18:20:10] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [18:20:44] Executed #6 -> Baa (EVIL)
+
+#### [18:20:45] Solver Output
+Scenarios: 4/146
+Definite evil: ['#6']
+Definite good: ['#5', '#7', '#8']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #4=50%
+
+#### [18:20:45] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Puppet, 25% good Drunk (corrupted), 25% good Jester (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [18:21:27] Executed #1 -> GOOD (WRONG!)
+
+#### [18:21:27] Solver Output
+Scenarios: 2/99
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#2', '#5', '#7', '#8']
+
+#### [18:21:27] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [18:22:03] Executed #3 -> Puppet (EVIL)
+
+#### [18:22:03] Solver Output
+Scenarios: 2/34
+Definite evil: ['#3', '#4', '#6']
+Definite good: ['#1', '#2', '#5', '#7', '#8']
+
+#### [18:22:03] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [18:22:40] Executed #4 -> Puppeteer (EVIL)
+
+## [18:22:41] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP win (-2 Drunk exec). PD evil #7 lied 'corrupted #8+#6 evil' — solver used. #6 Baa 100%, #1 Drunk via lookahead 50%, #3 Puppet 100%, #4 Puppeteer 100%.
+

@@ -1,0 +1,162 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          5,
+          7
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          5
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    1,
+    3,
+    4
+  ],
+  "confirmed_evil": [
+    6,
+    3,
+    4
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Baa",
+    "3": "Puppet",
+    "4": "Puppeteer"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 7,
+      "target": 8,
+      "is_corrupted": true,
+      "evil_revealed": 6
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "1": true
+  },
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Fortune_Teller",
+      "Jester",
+      "Architect",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Plague_Doctor",
+      "Drunk",
+      "Bombardier"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    7,
+    1,
+    2
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc71_v2",
+  "true_evil_positions": {
+    "3": "Puppet",
+    "4": "Puppeteer",
+    "6": "Baa"
+  },
+  "notes": "8HP win (-2 Drunk exec). PD evil #7 lied 'corrupted #8+#6 evil' \u2014 solver used. #6 Baa 100%, #1 Drunk via lookahead 50%, #3 Puppet 100%, #4 Puppeteer 100%."
+}
