@@ -3247,6 +3247,13 @@
       "name": "asc69_v2",
       "notes": "8HP win (-2 from Lilis night kill of #8 which was good Oracle). Dreamer+Dreamer+Jester info, Knight free-check on #2 found Lilis, every exec 100% confirmed.",
       "date": "2026-04-14 16:40"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc69_v3",
+      "notes": "10HP perfect. PD clean #4->#7, FT corrupt lied (False on #1/#2 but #2 was Poisoner), solver narrowed to 2 scenarios, exec lookahead picked #5 TwinMinion correctly at 50%",
+      "date": "2026-04-14 16:49"
     }
   ]
 }
