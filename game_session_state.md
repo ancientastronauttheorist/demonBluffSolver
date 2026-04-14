@@ -33338,3 +33338,121 @@ Reason: #9 is evil in ALL 3 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect. PD check #2 clean. Both evils 100% auto-exec. ASC68 COMPLETE 7/7 (6W 2L).
 
+
+---
+
+# New Game — 2026-04-14 16:22:10
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Empress, Judge, Alchemist, Poet, Slayer, Architect
+- Outcasts: Plague_Doctor
+- Minions: Minion, Poisoner
+- Demons: Pooka
+
+### [16:23:10] Revealed #1 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [16:23:10] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [16:23:10] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [16:23:10] Revealed #5 Slayer
+Info: {}
+
+### [16:23:10] Revealed #6 Alchemist
+Info: {'cured_count': 2}
+
+### [16:23:10] Revealed #7 Empress
+Info: {'targets': [2, 5, 9]}
+
+### [16:23:10] Revealed #8 Judge
+Info: {}
+
+### [16:23:10] Revealed #9 Plague_Doctor
+Info: {}
+
+### [16:25:17] Revealed #3 Poet
+Info: {'targets': [5, 8], 'minion_role': 'Poisoner', 'copied_role': 'Oracle'}
+
+#### [16:25:27] Solver Output
+Scenarios: 107/2390
+Definite good: ['#9']
+Evil probabilities: #4=68%, #6=61%, #2=50%, #3=40%, #1=34%, #8=23%, #7=17%, #5=7%
+
+#### [16:25:27] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.310 (adjusted 2.310) | timing x1.00
+
+### [16:26:02] Ability used at #9
+
+#### [16:26:06] Solver Output
+Scenarios: 46/2390
+Definite good: ['#9']
+Evil probabilities: #1=78%, #4=63%, #6=46%, #2=35%, #3=30%, #8=24%, #7=17%, #5=7%
+
+#### [16:26:06] Recommendation
+Action: **USE_ABILITY** #8 (Judge) -> targets ['#5']
+Reason: Expected posterior 26.0 scenarios (adjusted 27.7, info gain 0.732 bits) | timing x1.00
+WARNING: Corruption risk: 13% -- corrupted Judge results are unreliable
+
+### [16:26:39] Revealed #8 Judge
+Info: {'target': 5, 'is_lying': True}
+
+### [16:26:43] Ability used at #8
+
+#### [16:26:43] Solver Output
+Scenarios: 26/2390
+Definite good: ['#9']
+Evil probabilities: #1=73%, #4=69%, #6=46%, #3=31%, #8=27%, #2=23%, #7=19%, #5=12%
+
+#### [16:26:43] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#1']
+Reason: Target #1 is 73% evil (adjusted 0.39)
+WARNING: Corruption risk: 46% -- Slayer ability disabled if corrupted
+
+#### [16:27:19] Solver Output
+Scenarios: 20/2390
+Definite good: ['#9']
+Evil probabilities: #4=85%, #1=65%, #3=35%, #6=35%, #2=30%, #7=25%, #5=15%, #8=10%
+
+#### [16:27:19] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 85% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 85% confident (budget: 2 wrong execs)
+
+### [16:27:55] Executed #4 -> Poisoner (EVIL)
+
+#### [16:27:58] Solver Output
+Scenarios: 5/310
+Definite evil: ['#4']
+Definite good: ['#9']
+Evil probabilities: #1=60%, #2=40%, #3=20%, #5=20%, #6=20%, #7=20%, #8=20%
+
+#### [16:27:58] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 60% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 60% confident (budget: 2 wrong execs)
+
+### [16:28:32] Executed #1 -> Minion (EVIL)
+
+#### [16:28:35] Solver Output
+Scenarios: 3/46
+Definite evil: ['#1', '#4']
+Definite good: ['#3', '#7', '#8', '#9']
+Evil probabilities: #2=33%, #5=33%, #6=33%
+
+#### [16:28:35] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 33% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 33% confident (budget: 2 wrong execs)
+WARNING: Low confidence (33% < 50%) -- consider gathering more info
+
+### [16:29:21] Executed #2 -> Pooka (EVIL)
+
+## [16:29:27] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD clean #1, Judge #5 lying, Slayer failed (corrupted), then EXECs #4 Poisoner (85%), #1 Minion (60%), #2 Pooka (33%). 3 probabilistic in a row all correct.
+

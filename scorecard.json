@@ -3226,6 +3226,13 @@
       "name": "asc68_v8",
       "notes": "10HP perfect. PD check #2 clean. Both evils 100% auto-exec. ASC68 COMPLETE 7/7 (6W 2L).",
       "date": "2026-04-13 19:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc69_v1",
+      "notes": "10HP perfect. PD clean #1, Judge #5 lying, Slayer failed (corrupted), then EXECs #4 Poisoner (85%), #1 Minion (60%), #2 Pooka (33%). 3 probabilistic in a row all correct.",
+      "date": "2026-04-14 16:29"
     }
   ]
 }
