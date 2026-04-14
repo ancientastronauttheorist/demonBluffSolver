@@ -3282,6 +3282,13 @@
       "name": "asc69_v7",
       "notes": "10HP perfect FINAL village of Asc69. Witch blocked #8. PD #5 (Witch) lied clean, Druid #2 corrupted said 'Doppelganger' (not in pool), solver correctly marked Druid corrupted and narrowed to 1 scenario. Asc69 COMPLETE.",
       "date": "2026-04-14 17:13"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc70_v1",
+      "notes": "10HP perfect Asc70 v1. PD #3 clean on #4, Jester #8 (Puppet) truthful '1 Evil in [1,2,3]', Slayer #4 killed #8 Puppet free. Then #5 Minion 100%, #1 Pooka via lookahead 50%.",
+      "date": "2026-04-14 17:23"
     }
   ]
 }

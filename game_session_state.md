@@ -34031,3 +34031,121 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: 10HP perfect FINAL village of Asc69. Witch blocked #8. PD #5 (Witch) lied clean, Druid #2 corrupted said 'Doppelganger' (not in pool), solver correctly marked Druid corrupted and narrowed to 1 scenario. Asc69 COMPLETE.
 
+
+---
+
+# New Game — 2026-04-14 17:19:12
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Slayer, Empress, Bishop, Oracle, Jester
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Puppeteer, Minion
+- Demons: Pooka
+
+### [17:19:55] Revealed #1 Empress
+Info: {'targets': [3, 4, 7]}
+
+### [17:19:55] Revealed #2 Bishop
+Info: {'targets': [4, 2, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:19:55] Revealed #5 Bombardier
+Info: {}
+
+### [17:19:55] Revealed #6 Medium
+Info: {'good_position': 8, 'good_role': 'Jester'}
+
+### [17:19:55] Revealed #7 Oracle
+Info: {'targets': [2, 9], 'minion_role': 'Puppeteer'}
+
+### [17:19:55] Revealed #9 Bombardier
+Info: {}
+
+### [17:20:08] Revealed #3 Plague_Doctor
+Info: {}
+
+### [17:20:08] Revealed #4 Slayer
+Info: {}
+
+### [17:20:08] Revealed #8 Jester
+Info: {}
+
+#### [17:20:08] Solver Output
+Scenarios: 13/1568
+Definite good: ['#7']
+Evil probabilities: #9=92%, #1=69%, #5=62%, #2=54%, #3=54%, #8=46%, #4=15%, #6=8%
+
+#### [17:20:08] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.777 (adjusted 2.777) | timing x1.00
+
+### [17:20:40] Ability used at #3
+
+#### [17:20:41] Solver Output
+Scenarios: 9/1568
+Definite good: ['#7']
+Evil probabilities: #9=89%, #1=67%, #5=67%, #3=56%, #2=44%, #8=44%, #4=22%, #6=11%
+
+#### [17:20:41] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 3.0 scenarios (adjusted 3.0, info gain 1.585 bits) | timing x1.00
+
+### [17:21:21] Revealed #8 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 1}
+
+### [17:21:21] Ability used at #8
+
+#### [17:21:22] Solver Output
+Scenarios: 4/1568
+Definite evil: ['#9']
+Definite good: ['#7']
+Evil probabilities: #5=75%, #8=75%, #1=50%, #2=25%, #3=25%, #4=25%, #6=25%
+
+#### [17:21:22] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 4 scenarios (roles: {'Puppeteer'})
+
+### [17:21:54] Executed #9 -> Puppeteer (EVIL)
+
+#### [17:21:54] Solver Output
+Scenarios: 4/284
+Definite evil: ['#9']
+Definite good: ['#7']
+Evil probabilities: #5=75%, #8=75%, #1=50%, #2=25%, #3=25%, #4=25%, #6=25%
+
+#### [17:21:54] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#8']
+Reason: Target #8 is 75% evil (adjusted 0.56)
+WARNING: Corruption risk: 25% -- Slayer ability disabled if corrupted
+
+### [17:22:28] Ability used at #4
+
+#### [17:22:28] Solver Output
+Scenarios: 2/142
+Definite evil: ['#5', '#8', '#9']
+Definite good: ['#3', '#4', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+
+#### [17:22:28] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Minion'})
+
+### [17:23:00] Executed #5 -> Minion (EVIL)
+
+#### [17:23:00] Solver Output
+Scenarios: 2/26
+Definite evil: ['#5', '#8', '#9']
+Definite good: ['#3', '#4', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+
+#### [17:23:00] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Empress (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [17:23:36] Executed #1 -> Pooka (EVIL)
+
+## [17:23:36] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect Asc70 v1. PD #3 clean on #4, Jester #8 (Puppet) truthful '1 Evil in [1,2,3]', Slayer #4 killed #8 Puppet free. Then #5 Minion 100%, #1 Pooka via lookahead 50%.
+

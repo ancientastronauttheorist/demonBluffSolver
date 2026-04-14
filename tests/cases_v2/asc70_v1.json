@@ -1,0 +1,184 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          7
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          2,
+          6
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Jester"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          9
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    9,
+    8,
+    5,
+    1
+  ],
+  "confirmed_evil": [
+    9,
+    8,
+    5,
+    1
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "9": "Puppeteer",
+    "8": "Puppet",
+    "5": "Minion",
+    "1": "Pooka"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 4,
+      "target_pos": 8,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Slayer",
+      "Empress",
+      "Bishop",
+      "Oracle",
+      "Jester"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3,
+    8,
+    4
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc70_v1",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "5": "Minion",
+    "8": "Puppet",
+    "9": "Puppeteer"
+  },
+  "notes": "10HP perfect Asc70 v1. PD #3 clean on #4, Jester #8 (Puppet) truthful '1 Evil in [1,2,3]', Slayer #4 killed #8 Puppet free. Then #5 Minion 100%, #1 Pooka via lookahead 50%."
+}
