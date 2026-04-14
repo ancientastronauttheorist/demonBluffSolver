@@ -3310,6 +3310,13 @@
       "name": "asc70_v4",
       "notes": "10HP perfect. PD #6 clean #4. #4 Baa 100%, #1 Chancellor via lookahead 50% correct.",
       "date": "2026-04-14 17:44"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc70_v5",
+      "notes": "10HP perfect. Evil PD #2 gave real info 'target corrupted+#4 evil' (but #4 bombardier actually good - lied). Solver cracked 3 evils via Jester Puppet-truthful + lookahead. All execs correct.",
+      "date": "2026-04-14 17:51"
     }
   ]
 }

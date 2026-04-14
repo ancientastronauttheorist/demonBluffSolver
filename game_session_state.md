@@ -34454,3 +34454,113 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect. PD #6 clean #4. #4 Baa 100%, #1 Chancellor via lookahead 50% correct.
 
+
+---
+
+# New Game — 2026-04-14 17:47:11
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Slayer, Scout, Confessor, Jester
+- Outcasts: Drunk, Bombardier, Plague_Doctor
+- Minions: Puppeteer
+- Demons: Baa
+
+### [17:47:48] Revealed #2 Plague_Doctor
+Info: {}
+
+### [17:47:48] Revealed #3 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [17:47:48] Revealed #4 Bombardier
+Info: {}
+
+### [17:47:48] Revealed #5 Bard
+Info: {'corruption_distance': 1}
+
+### [17:47:48] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [17:47:53] Revealed #1 Jester
+Info: {}
+
+### [17:47:54] Revealed #6 Slayer
+Info: {}
+
+#### [17:47:54] Solver Output
+Scenarios: 34/462
+Definite good: ['#7']
+Evil probabilities: #4=74%, #3=65%, #2=47%, #1=41%, #5=41%, #6=32%
+
+#### [17:47:54] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.464 (adjusted 2.464) | timing x1.00
+
+### [17:48:33] Ability used at #2
+
+#### [17:48:33] Solver Output
+Scenarios: 14/462
+Definite good: ['#7']
+Evil probabilities: #3=79%, #4=57%, #1=43%, #2=43%, #6=43%, #5=36%
+
+#### [17:48:33] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#3']
+Reason: Target #3 is 79% evil (adjusted 0.62)
+WARNING: Corruption risk: 21% -- Slayer ability disabled if corrupted
+
+### [17:49:07] Ability used at #6
+
+#### [17:49:07] Solver Output
+Scenarios: 10/462
+Definite good: ['#7']
+Evil probabilities: #3=70%, #4=60%, #6=60%, #1=40%, #2=40%, #5=30%
+
+#### [17:49:07] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#6']
+Reason: Expected posterior 5.5 scenarios (adjusted 6.4, info gain 0.649 bits) | timing x1.00
+WARNING: Corruption risk: 30%
+
+### [17:49:50] Revealed #1 Jester
+Info: {'targets': [2, 3, 6], 'evil_count': 1}
+
+### [17:49:50] Ability used at #1
+
+#### [17:49:50] Solver Output
+Scenarios: 5/462
+Definite good: ['#7']
+Evil probabilities: #2=60%, #3=60%, #6=60%, #1=40%, #4=40%, #5=40%
+
+#### [17:49:50] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (40% good Plague_Doctor, 40% evil Puppeteer, 20% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [17:50:26] Executed #2 -> Puppeteer (EVIL)
+
+#### [17:50:26] Solver Output
+Scenarios: 2/42
+Definite evil: ['#1', '#2']
+Definite good: ['#4', '#6', '#7']
+Evil probabilities: #3=50%, #5=50%
+
+#### [17:50:26] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Puppet', 'Baa'})
+
+### [17:50:56] Executed #1 -> Puppet (EVIL)
+
+#### [17:50:56] Solver Output
+Scenarios: 1/21
+Definite evil: ['#1', '#2', '#5']
+Definite good: ['#3', '#4', '#6', '#7']
+
+#### [17:50:56] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [17:51:28] Executed #5 -> Baa (EVIL)
+
+## [17:51:28] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Evil PD #2 gave real info 'target corrupted+#4 evil' (but #4 bombardier actually good - lied). Solver cracked 3 evils via Jester Puppet-truthful + lookahead. All execs correct.
+
