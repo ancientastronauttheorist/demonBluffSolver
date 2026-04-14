@@ -3261,6 +3261,13 @@
       "name": "asc69_v4",
       "notes": "5HP win (-5 wrong exec #5 Baker via lookahead 67%). Exec #8 Puppeteer 50% correct, then 50% wrong on #5 Baker, then #7 Pooka 100%.",
       "date": "2026-04-14 16:54"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc69_v5",
+      "notes": "5HP win. Both Slayers corrupted+failed. Lookahead #2 wrong (Baker corrupt, -5 HP) then #3 Poisoner 100%, #6 Pooka 100%.",
+      "date": "2026-04-14 17:01"
     }
   ]
 }

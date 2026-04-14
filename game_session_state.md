@@ -33761,3 +33761,101 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP win (-5 wrong exec #5 Baker via lookahead 67%). Exec #8 Puppeteer 50% correct, then 50% wrong on #5 Baker, then #7 Pooka 100%.
 
+
+---
+
+# New Game — 2026-04-14 16:57:06
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Bard, Architect, Slayer, Lover, Knight
+- Outcasts: Bombardier
+- Minions: Poisoner
+- Demons: Pooka
+
+### [16:58:32] Revealed #1 Lover
+Info: {'evil_adjacent': 0}
+
+### [16:58:32] Revealed #2 Baker
+Info: {'original_role': 'Knight'}
+
+### [16:58:32] Revealed #4 Architect
+Info: {'side': 'Equal'}
+
+### [16:58:32] Revealed #6 Bard
+Info: {'corruption_distance': -1}
+
+### [16:58:32] Revealed #7 Knight
+Info: {}
+
+### [16:58:32] Revealed #8 Bombardier
+Info: {}
+
+### [16:58:37] Revealed #3 Slayer
+Info: {}
+
+### [16:58:37] Revealed #5 Slayer
+Info: {}
+
+#### [16:58:38] Solver Output
+Scenarios: 3/86
+Definite good: ['#1', '#4', '#8']
+Evil probabilities: #3=67%, #2=33%, #5=33%, #6=33%, #7=33%
+
+#### [16:58:38] Recommendation
+Action: **USE_ABILITY** #5 (Slayer) -> targets ['#3']
+Reason: Target #3 is 67% evil (adjusted 0.44)
+WARNING: Corruption risk: 33% -- Slayer ability disabled if corrupted
+
+### [16:59:18] Ability used at #5
+
+#### [16:59:18] Solver Output
+Scenarios: 2/86
+Definite good: ['#1', '#4', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%, #5=50%, #6=50%
+
+#### [16:59:18] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#2']
+Reason: Target #2 is 50% evil (adjusted 0.25)
+WARNING: Corruption risk: 50% -- Slayer ability disabled if corrupted
+
+### [16:59:50] Ability used at #3
+
+#### [16:59:50] Solver Output
+Scenarios: 2/86
+Definite good: ['#1', '#4', '#7', '#8']
+Evil probabilities: #2=50%, #3=50%, #5=50%, #6=50%
+
+#### [16:59:50] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% good Baker (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [17:00:24] Executed #2 -> GOOD (WRONG!)
+
+#### [17:00:25] Solver Output
+Scenarios: 1/63
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [17:00:25] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [17:00:57] Executed #3 -> Poisoner (EVIL)
+
+#### [17:00:57] Solver Output
+Scenarios: 1/11
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [17:00:57] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:01:28] Executed #6 -> Pooka (EVIL)
+
+## [17:01:28] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win. Both Slayers corrupted+failed. Lookahead #2 wrong (Baker corrupt, -5 HP) then #3 Poisoner 100%, #6 Pooka 100%.
+
