@@ -3184,6 +3184,13 @@
       "name": "asc68_v3",
       "notes": "0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), true Pooka at #8 disguised as Druid, Druid lied about outcasts but solver didn't catch it",
       "date": "2026-04-13 18:15"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc68_v4",
+      "notes": "5HP, Village 3 retry. Slayer(Puppet) killed Minion. Wrong exec #9 Scout. n_evil bug: used 3 instead of 4 with Puppeteer+2minions, solver prematurely declared WIN",
+      "date": "2026-04-13 19:04"
     }
   ]
 }

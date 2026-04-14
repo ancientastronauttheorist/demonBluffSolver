@@ -32851,3 +32851,116 @@ Notes: 0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75
 Final HP: 0
 Notes: 0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), true Pooka at #8 disguised as Druid, Druid lied about outcasts but solver didn't catch it
 
+
+---
+
+# New Game — 2026-04-13 18:50:48
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Enlightened, Slayer, Scout, Alchemist, Poet, Oracle
+- Outcasts: Drunk, Bombardier
+- Minions: Minion, Puppeteer
+- Demons: Baa
+
+### [18:52:53] Revealed #1 Oracle
+Info: {'targets': [6, 8], 'minion_role': 'Puppeteer'}
+
+### [18:52:53] Revealed #2 Bombardier
+Info: {}
+
+### [18:52:53] Revealed #3 Knight
+Info: {}
+
+### [18:52:53] Revealed #6 Oracle
+Info: {'targets': [1, 2], 'minion_role': 'Minion'}
+
+### [18:52:53] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [18:52:53] Revealed #9 Scout
+Info: {'evil_role': 'Baa', 'distance': 3}
+
+### [18:55:36] Revealed #4 Slayer
+Info: {}
+
+### [18:55:40] Revealed #5 Poet
+Info: {'targets': [2, 4, 8], 'copied_role': 'Empress'}
+
+### [18:55:43] Revealed #7 Enlightened
+Info: {'direction': 'cw'}
+
+#### [18:55:51] Solver Output
+Scenarios: 46/6804
+Definite good: ['#8']
+Evil probabilities: #1=70%, #9=57%, #4=39%, #7=39%, #2=35%, #3=33%, #5=26%, #6=26%
+
+#### [18:55:51] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#1']
+Reason: Target #1 is 70% evil (adjusted 0.62)
+WARNING: Corruption risk: 11% -- Slayer ability disabled if corrupted
+
+### [18:57:28] Ability used at #4
+
+#### [18:57:32] Solver Output
+Scenarios: 13/758
+Definite evil: ['#1']
+Definite good: ['#6', '#8']
+Evil probabilities: #9=62%, #3=54%, #2=38%, #5=31%, #7=23%, #4=15%
+
+#### [18:57:32] Recommendation
+Action: **EXECUTE** #3
+Reason: Knight check: #3 is 54% evil, 15% corruption risk. Expected HP cost: 0.6 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 15% -- corrupted Knight loses immunity + 4 extra damage
+
+### [18:58:21] Executed #3 -> Puppeteer (EVIL)
+
+#### [18:58:25] Solver Output
+Scenarios: 5/110
+Definite evil: ['#1', '#3']
+Definite good: ['#5', '#6', '#8']
+Evil probabilities: #9=60%, #2=40%, #4=40%, #7=20%
+
+#### [18:58:25] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 60% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 60% confident (budget: 2 wrong execs)
+WARNING: Low confidence (60% < 63%) -- consider gathering more info
+
+### [18:59:10] Executed #9 -> GOOD (WRONG!)
+
+#### [18:59:16] Solver Output
+Scenarios: 1/93
+Definite evil: ['#1', '#3', '#4', '#7']
+Definite good: ['#2', '#5', '#6', '#8', '#9']
+
+#### [18:59:16] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [18:59:23] Executed #4 -> Puppet (EVIL)
+
+#### [18:59:30] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#3', '#4']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+
+#### [18:59:30] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+#### [19:02:45] Solver Output
+Scenarios: 1/26
+Definite evil: ['#1', '#3', '#4', '#7']
+Definite good: ['#2', '#5', '#6', '#8', '#9']
+
+#### [19:02:45] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [19:02:52] Executed #7 -> Baa (EVIL)
+
+## [19:04:02] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP, Village 3 retry. Slayer(Puppet) killed Minion. Wrong exec #9 Scout. n_evil bug: used 3 instead of 4 with Puppeteer+2minions, solver prematurely declared WIN
+
