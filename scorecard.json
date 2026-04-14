@@ -3268,6 +3268,13 @@
       "name": "asc69_v5",
       "notes": "5HP win. Both Slayers corrupted+failed. Lookahead #2 wrong (Baker corrupt, -5 HP) then #3 Poisoner 100%, #6 Pooka 100%.",
       "date": "2026-04-14 17:01"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc69_v6",
+      "notes": "10HP perfect. PD #3 clean on #6, evil PD #8 lied '#4 is Evil' (revealed itself as evil). Both execs 100%.",
+      "date": "2026-04-14 17:07"
     }
   ]
 }

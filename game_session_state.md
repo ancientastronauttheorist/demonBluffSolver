@@ -33859,3 +33859,90 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP win. Both Slayers corrupted+failed. Lookahead #2 wrong (Baker corrupt, -5 HP) then #3 Poisoner 100%, #6 Pooka 100%.
 
+
+---
+
+# New Game — 2026-04-14 17:03:46
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Poet, Knight, Druid, Hunter, Architect
+- Outcasts: Drunk, Plague_Doctor, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [17:04:43] Revealed #1 Gemcrafter
+Info: {'good_position': 8}
+
+### [17:04:43] Revealed #2 Bombardier
+Info: {}
+
+### [17:04:43] Revealed #4 Knight
+Info: {}
+
+### [17:04:43] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [17:04:43] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [17:04:57] Revealed #3 Plague_Doctor
+Info: {}
+
+### [17:04:58] Revealed #5 Poet
+Info: {'evil_adjacent': 2, 'copied_role': 'Lover'}
+
+### [17:04:58] Revealed #8 Plague_Doctor
+Info: {}
+
+### [17:04:58] Revealed #9 Druid
+Info: {}
+
+#### [17:05:02] Solver Output
+Scenarios: 74/1520
+Definite good: ['#2']
+Evil probabilities: #3=57%, #6=49%, #8=43%, #5=30%, #7=14%, #1=3%, #4=3%, #9=3%
+
+#### [17:05:02] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.616 (adjusted 2.616) | timing x1.00
+
+### [17:05:34] Ability used at #3
+
+#### [17:05:34] Solver Output
+Scenarios: 46/1520
+Definite good: ['#1', '#2']
+Evil probabilities: #3=57%, #6=43%, #8=43%, #5=30%, #7=17%, #4=4%, #9=4%
+
+#### [17:05:34] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.545 (adjusted 2.545) | timing x1.00
+
+### [17:06:17] Ability used at #8
+
+#### [17:06:17] Solver Output
+Scenarios: 16/1520
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7', '#9']
+
+#### [17:06:17] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 16 scenarios (roles: {'Pooka', 'Chancellor'})
+
+### [17:06:48] Executed #6 -> Pooka (EVIL)
+
+#### [17:06:48] Solver Output
+Scenarios: 12/140
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7', '#9']
+
+#### [17:06:48] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 12 scenarios (roles: {'Chancellor'})
+
+### [17:07:21] Executed #8 -> Chancellor (EVIL)
+
+## [17:07:21] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD #3 clean on #6, evil PD #8 lied '#4 is Evil' (revealed itself as evil). Both execs 100%.
+
