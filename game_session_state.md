@@ -35038,3 +35038,82 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
 Final HP: 8
 Notes: 8HP win (-2 Drunk exec). PD evil #7 lied 'corrupted #8+#6 evil' — solver used. #6 Baa 100%, #1 Drunk via lookahead 50%, #3 Puppet 100%, #4 Puppeteer 100%.
 
+
+---
+
+# New Game — 2026-04-14 18:25:16
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Bard, Druid, Knight, Alchemist, Empress, Oracle
+- Outcasts: Drunk, Wretch
+- Minions: Twin_Minion
+- Demons: Baa
+
+### [18:25:56] Revealed #1 Empress
+Info: {'targets': [3, 4, 6]}
+
+### [18:25:56] Revealed #3 Gemcrafter
+Info: {'good_position': 6}
+
+### [18:25:56] Revealed #4 Knight
+Info: {}
+
+### [18:25:56] Revealed #5 Oracle
+Info: {'targets': [4, 7], 'minion_role': 'Twin_Minion'}
+
+### [18:25:56] Revealed #6 Bard
+Info: {'corruption_distance': 2}
+
+### [18:25:56] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [18:25:56] Revealed #2 Druid
+Info: {}
+
+### [18:25:56] Revealed #4 Knight
+Info: {}
+
+#### [18:25:57] Solver Output
+Scenarios: 9/252
+Definite good: ['#3', '#7']
+Evil probabilities: #5=89%, #1=44%, #2=33%, #6=22%, #4=11%
+
+#### [18:25:57] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [18:26:42] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': 'Drunk'}
+
+### [18:26:42] Ability used at #2
+
+#### [18:26:42] Solver Output
+Scenarios: 5/252
+Definite good: ['#3', '#7']
+Evil probabilities: #5=80%, #1=40%, #6=40%, #2=20%, #4=20%
+
+#### [18:26:42] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (40% evil Baa, 40% evil Twin_Minion, 20% good Oracle).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [18:27:19] Executed #5 -> Twin_Minion (EVIL)
+
+#### [18:27:19] Solver Output
+Scenarios: 2/36
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#4', '#7']
+Evil probabilities: #1=50%, #6=50%
+
+#### [18:27:19] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Empress).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [18:27:55] Executed #1 -> Baa (EVIL)
+
+## [18:27:56] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Druid #2 found Drunk in [1,3,4], solver narrowed to 5 scenarios. Exec #5 Twin_Minion 80% lookahead, #1 Baa 50% lookahead correct.
+

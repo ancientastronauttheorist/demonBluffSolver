@@ -3345,6 +3345,13 @@
       "name": "asc71_v2",
       "notes": "8HP win (-2 Drunk exec). PD evil #7 lied 'corrupted #8+#6 evil' \u2014 solver used. #6 Baa 100%, #1 Drunk via lookahead 50%, #3 Puppet 100%, #4 Puppeteer 100%.",
       "date": "2026-04-14 18:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc71_v3",
+      "notes": "10HP perfect. Druid #2 found Drunk in [1,3,4], solver narrowed to 5 scenarios. Exec #5 Twin_Minion 80% lookahead, #1 Baa 50% lookahead correct.",
+      "date": "2026-04-14 18:27"
     }
   ]
 }
