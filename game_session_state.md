@@ -34656,3 +34656,113 @@ Reason: #6 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect. Solver cracked 3 evils from Enlightened+Scouts+Medium+Gemcrafter. #9 Minion 100% first, Jester #6 Baa lied '0 evils in [1,2,7]' exposing #2 as evil Chancellor. Clean sweep.
 
+
+---
+
+# New Game — 2026-04-14 17:59:49
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Knight, Hunter, Empress, Scout, Gemcrafter, Confessor
+- Outcasts: Bombardier, Drunk
+- Minions: Witch
+- Demons: Lilis
+
+### [18:00:56] Revealed #1 Bombardier
+Info: {}
+
+### [18:00:56] Revealed #2 Empress
+Info: {'targets': [5, 8, 9]}
+
+### [18:00:56] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [18:01:07] Revealed #4 Judge
+Info: {}
+
+#### [18:01:58] Solver Output
+Scenarios: 102/448
+Definite good: ['#8']
+Evil probabilities: #2=41%, #4=31%, #3=25%, #5=24%, #9=24%, #1=20%, #6=18%, #7=18%
+
+#### [18:01:58] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 24% evil, 5.462 bits (51 outcomes)
+
+### [18:02:09] Revealed #5 Knight
+Info: {}
+
+### [18:02:09] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [18:02:09] Revealed #7 Gemcrafter
+Info: {'good_position': 1}
+
+#### [18:02:09] Solver Output
+Scenarios: 28/448
+Definite good: ['#6', '#7', '#8']
+Evil probabilities: #4=50%, #3=43%, #5=36%, #9=36%, #2=29%, #1=7%
+
+#### [18:02:09] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#5']
+Reason: Expected posterior 16.0 scenarios (adjusted 17.1, info gain 0.708 bits) | timing x1.00
+WARNING: Corruption risk: 14% -- corrupted Judge results are unreliable
+
+### [18:02:52] Revealed #4 Judge
+Info: {'target': 5, 'is_lying': True}
+
+### [18:02:52] Ability used at #4
+
+#### [18:02:52] Solver Output
+Scenarios: 16/448
+Definite good: ['#1', '#6', '#7', '#8']
+Evil probabilities: #3=62%, #4=38%, #5=38%, #9=38%, #2=25%
+
+#### [18:02:52] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (50% good Knight (immune, 0 HP), 19% evil Lilis, 19% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 38%, but all reveal branches still lead to a forced win.
+
+#### [18:03:27] Execution Blocked
+#5 Knight immunity — confirmed good, no HP loss
+
+#### [18:03:27] Solver Output
+Scenarios: 10/350
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #4=60%, #9=60%, #2=40%, #3=40%
+
+#### [18:03:27] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (30% evil Lilis, 30% evil Witch, 20% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [18:04:05] Executed #4 -> Lilis (EVIL)
+
+#### [18:04:05] Solver Output
+Scenarios: 3/43
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=67%, #9=33%
+
+#### [18:04:05] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (67% evil Witch, 33% good Empress).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [18:04:43] Executed #2 -> GOOD (WRONG!)
+
+#### [18:04:43] Solver Output
+Scenarios: 1/37
+Definite evil: ['#4', '#9']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#8']
+
+#### [18:04:43] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [18:05:23] Executed #9 -> Witch (EVIL)
+
+## [18:05:23] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP FINAL village Asc70 COMPLETE. Lilis+Witch game, Lilis killed #8 Drunk night 1 (2HP), night 2 no kill (2HP). Judge #4 (Lilis) lied #5 lying. Knight #5 immunity free-check. Exec #4 Lilis 60%, #2 Empress wrong (-5 HP), #9 Witch 100%.
+
