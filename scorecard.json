@@ -3254,6 +3254,13 @@
       "name": "asc69_v3",
       "notes": "10HP perfect. PD clean #4->#7, FT corrupt lied (False on #1/#2 but #2 was Poisoner), solver narrowed to 2 scenarios, exec lookahead picked #5 TwinMinion correctly at 50%",
       "date": "2026-04-14 16:49"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc69_v4",
+      "notes": "5HP win (-5 wrong exec #5 Baker via lookahead 67%). Exec #8 Puppeteer 50% correct, then 50% wrong on #5 Baker, then #7 Pooka 100%.",
+      "date": "2026-04-14 16:54"
     }
   ]
 }

@@ -33682,3 +33682,82 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP perfect. PD clean #4->#7, FT corrupt lied (False on #1/#2 but #2 was Poisoner), solver narrowed to 2 scenarios, exec lookahead picked #5 TwinMinion correctly at 50%
 
+
+---
+
+# New Game — 2026-04-14 16:52:29
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Oracle, Baker, Scout, Knitter, Gemcrafter, Hunter
+- Outcasts: Drunk, Wretch
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [16:53:08] Revealed #1 Gemcrafter
+Info: {'good_position': 4}
+
+### [16:53:08] Revealed #2 Oracle
+Info: {'targets': [6, 9], 'minion_role': 'Puppeteer'}
+
+### [16:53:08] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [16:53:08] Revealed #4 Baker
+Info: {'original_role': 'Architect'}
+
+### [16:53:08] Revealed #5 Baker
+Info: {'original_role': 'Hunter'}
+
+### [16:53:08] Revealed #6 Wretch
+Info: {}
+
+### [16:53:08] Revealed #7 Knitter
+Info: {'evil_pairs': 1}
+
+### [16:53:08] Revealed #8 Knitter
+Info: {'evil_pairs': 0}
+
+### [16:53:08] Revealed #9 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 2}
+
+#### [16:53:13] Solver Output
+Scenarios: 24/1036
+Evil probabilities: #8=50%, #7=46%, #9=46%, #5=42%, #1=29%, #4=25%, #3=12%, #2=4%, #6=4%
+
+#### [16:53:13] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+WARNING: Low confidence (50% < 65%) -- consider gathering more info
+
+### [16:53:49] Executed #8 -> Puppeteer (EVIL)
+
+#### [16:53:49] Solver Output
+Scenarios: 3/121
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#9']
+Evil probabilities: #5=67%, #7=33%
+
+#### [16:53:49] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 33% good Baker).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [16:54:23] Executed #5 -> GOOD (WRONG!)
+
+#### [16:54:24] Solver Output
+Scenarios: 1/105
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#9']
+
+#### [16:54:24] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [16:54:53] Executed #7 -> Pooka (EVIL)
+
+## [16:54:53] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win (-5 wrong exec #5 Baker via lookahead 67%). Exec #8 Puppeteer 50% correct, then 50% wrong on #5 Baker, then #7 Pooka 100%.
+
