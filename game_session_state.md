@@ -33456,3 +33456,122 @@ WARNING: Low confidence (33% < 50%) -- consider gathering more info
 Final HP: 10
 Notes: 10HP perfect. PD clean #1, Judge #5 lying, Slayer failed (corrupted), then EXECs #4 Poisoner (85%), #1 Minion (60%), #2 Pooka (33%). 3 probabilistic in a row all correct.
 
+
+---
+
+# New Game — 2026-04-14 16:32:25
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Oracle, Medium, Dreamer, Jester, Confessor
+- Outcasts: Wretch
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [16:34:45] Revealed #1 Jester
+Info: {}
+
+### [16:34:45] Revealed #2 Knight
+Info: {}
+
+### [16:34:45] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [16:34:45] Revealed #4 Dreamer
+Info: {}
+
+### [16:36:02] Revealed #5 Dreamer
+Info: {}
+
+### [16:36:02] Revealed #6 Medium
+Info: {'good_position': 8, 'good_role': 'Oracle'}
+
+### [16:36:02] Revealed #7 Wretch
+Info: {}
+
+#### [16:36:21] Solver Output
+Scenarios: 16/84
+Definite good: ['#3', '#8']
+Evil probabilities: #5=81%, #4=62%, #1=44%, #2=44%, #6=38%, #7=31%
+
+#### [16:36:21] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.649 (adjusted 2.649) | timing x1.00
+
+### [16:36:54] Revealed #4 Dreamer
+Info: {'target': 1, 'evil_role': 'Lilis'}
+
+### [16:36:55] Ability used at #4
+
+#### [16:36:58] Solver Output
+Scenarios: 13/84
+Definite good: ['#3', '#8']
+Evil probabilities: #5=77%, #4=69%, #6=46%, #2=38%, #7=38%, #1=31%
+
+#### [16:36:58] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.288 (adjusted 2.288) | timing x1.00
+
+### [16:37:22] Revealed #5 Dreamer
+Info: {'target': 7, 'evil_role': 'Lilis'}
+
+### [16:37:23] Ability used at #5
+
+#### [16:37:26] Solver Output
+Scenarios: 8/84
+Definite evil: ['#5']
+Definite good: ['#3', '#8']
+Evil probabilities: #6=62%, #4=50%, #7=38%, #1=25%, #2=25%
+
+#### [16:37:26] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 8 scenarios (roles: {'Puppeteer', 'Lilis'})
+
+### [16:37:56] Executed #5 -> Puppeteer (EVIL)
+
+#### [16:38:00] Solver Output
+Scenarios: 7/12
+Definite evil: ['#5']
+Definite good: ['#3', '#8']
+Evil probabilities: #4=57%, #6=57%, #1=29%, #2=29%, #7=29%
+
+#### [16:38:00] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight free check: #2 is 29% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [16:38:41] Executed #2 -> Lilis (EVIL)
+
+#### [16:38:44] Solver Output
+Scenarios: 2/2
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#7', '#8']
+Evil probabilities: #4=50%, #6=50%
+
+#### [16:38:44] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#3', '#4', '#7']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [16:39:25] Revealed #1 Jester
+Info: {'targets': [3, 4, 7], 'evil_count': 1}
+
+### [16:39:26] Ability used at #1
+
+#### [16:39:30] Solver Output
+Scenarios: 1/2
+Definite evil: ['#2', '#5', '#6']
+Definite good: ['#1', '#3', '#4', '#7', '#8']
+
+#### [16:39:30] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [16:40:09] Executed #6 -> Puppet (EVIL)
+
+## [16:40:09] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP win (-2 from Lilis night kill #8 Oracle). Dreamer+Dreamer+Jester info narrowed to 1 scenario. Knight free-check #2 found Lilis. Every exec 100% confirmed.
+
+## [16:40:18] GAME OVER — WIN
+Final HP: 8
+Notes: 8HP win (-2 from Lilis night kill of #8 which was good Oracle). Dreamer+Dreamer+Jester info, Knight free-check on #2 found Lilis, every exec 100% confirmed.
+

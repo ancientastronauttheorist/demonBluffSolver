@@ -1,0 +1,144 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          4,
+          7
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "evil_role": "Lilis"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 7,
+        "evil_role": "Lilis"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Oracle"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    5,
+    2,
+    6
+  ],
+  "confirmed_evil": [
+    5,
+    2,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Puppeteer",
+    "2": "Lilis",
+    "6": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Oracle",
+      "Medium",
+      "Dreamer",
+      "Jester",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4,
+    5,
+    1
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc69_v2",
+  "true_evil_positions": {
+    "2": "Lilis",
+    "5": "Puppeteer",
+    "6": "Puppet"
+  },
+  "notes": "8HP win (-2 from Lilis night kill of #8 which was good Oracle). Dreamer+Dreamer+Jester info, Knight free-check on #2 found Lilis, every exec 100% confirmed."
+}
