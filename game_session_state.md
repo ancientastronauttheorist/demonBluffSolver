@@ -34381,3 +34381,76 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP win (-5 wrong #7 Baker via 59% solver pick). Dreamer #6 and #3 both lied (evil). Lookahead #3 71% correct (Witch). After Witch death, unblock #9 -> Baa lied. Exec all 3 evils.
 
+
+---
+
+# New Game — 2026-04-14 17:42:19
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Gemcrafter, Lover, Hunter, Baker
+- Outcasts: Doppelganger, Bombardier, Plague_Doctor
+- Minions: Chancellor
+- Demons: Baa
+
+### [17:42:53] Revealed #1 Gemcrafter
+Info: {'good_position': 4}
+
+### [17:42:53] Revealed #2 Bombardier
+Info: {}
+
+### [17:42:53] Revealed #3 Gemcrafter
+Info: {'good_position': 4}
+
+### [17:42:53] Revealed #4 Lover
+Info: {'evil_adjacent': 2}
+
+### [17:42:53] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [17:42:53] Revealed #6 Plague_Doctor
+Info: {}
+
+### [17:42:53] Revealed #7 Baker
+Info: {'original_role': 'Architect'}
+
+#### [17:42:59] Solver Output
+Scenarios: 28/674
+Definite good: ['#6']
+Evil probabilities: #4=54%, #7=46%, #1=32%, #2=32%, #3=21%, #5=14%
+
+#### [17:42:59] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.616 (adjusted 1.616) | timing x1.00
+
+### [17:43:34] Ability used at #6
+
+#### [17:43:34] Solver Output
+Scenarios: 15/674
+Definite evil: ['#4']
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #1=60%, #3=40%
+
+#### [17:43:34] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 15 scenarios (roles: {'Baa', 'Chancellor'})
+
+### [17:44:12] Executed #4 -> Baa (EVIL)
+
+#### [17:44:12] Solver Output
+Scenarios: 6/104
+Definite evil: ['#4']
+Definite good: ['#2', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #3=50%
+
+#### [17:44:12] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 50% good Gemcrafter (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [17:44:49] Executed #1 -> Chancellor (EVIL)
+
+## [17:44:49] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD #6 clean #4. #4 Baa 100%, #1 Chancellor via lookahead 50% correct.
+
