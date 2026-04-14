@@ -3191,6 +3191,20 @@
       "name": "asc68_v4",
       "notes": "5HP, Village 3 retry. Slayer(Puppet) killed Minion. Wrong exec #9 Scout. n_evil bug: used 3 instead of 4 with Puppeteer+2minions, solver prematurely declared WIN",
       "date": "2026-04-13 19:04"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v5",
+      "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit. PD corrupted #2 Knight.",
+      "date": "2026-04-13 19:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v5",
+      "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit.",
+      "date": "2026-04-13 19:24"
     }
   ]
 }

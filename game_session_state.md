@@ -32964,3 +32964,107 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP, Village 3 retry. Slayer(Puppet) killed Minion. Wrong exec #9 Scout. n_evil bug: used 3 instead of 4 with Puppeteer+2minions, solver prematurely declared WIN
 
+
+---
+
+# New Game — 2026-04-13 19:07:44
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Oracle, Scout, Gemcrafter, Knight, Knitter, Medium
+- Outcasts: Plague_Doctor, Doppelganger
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [19:09:20] Revealed #1 Knight
+Info: {}
+
+### [19:09:20] Revealed #2 Knight
+Info: {}
+
+### [19:09:20] Revealed #3 Medium
+Info: {'good_position': 8, 'good_role': 'Scout'}
+
+### [19:09:20] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [19:11:06] Revealed #5 Gemcrafter
+Info: {'good_position': 8}
+
+### [19:11:06] Revealed #6 Baker
+Info: {'original_role': 'Medium'}
+
+### [19:11:06] Revealed #8 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [19:11:06] Revealed #9 Oracle
+Info: {'targets': [4, 7], 'minion_role': 'Puppeteer'}
+
+#### [19:11:18] Solver Output
+Scenarios: 0/2772
+
+#### [19:11:18] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [19:21:29] Solver Output
+Scenarios: 56/2352
+Definite good: ['#7', '#8']
+Evil probabilities: #6=80%, #5=50%, #2=46%, #9=36%, #1=32%, #3=30%, #4=25%
+
+#### [19:21:29] Recommendation
+Action: **ERROR** #6
+Reason: #6 is 80% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 80% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 80% < 83% threshold. Consider manual override if you have extra information.
+
+### [19:22:22] Executed #6 -> Puppeteer (EVIL)
+
+#### [19:22:26] Solver Output
+Scenarios: 18/198
+Definite evil: ['#5', '#6']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #9=50%, #1=22%, #2=22%, #3=6%
+
+#### [19:22:26] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 18 scenarios (roles: {'Puppet'})
+
+### [19:22:33] Executed #5 -> Puppet (EVIL)
+
+#### [19:22:38] Solver Output
+Scenarios: 18/156
+Definite evil: ['#5', '#6']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #9=50%, #1=22%, #2=22%, #3=6%
+
+#### [19:22:38] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 50% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 83% threshold. Consider manual override if you have extra information.
+
+#### [19:23:01] Solver Output
+Scenarios: 18/156
+Definite evil: ['#5', '#6']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #9=50%, #1=22%, #2=22%, #3=6%
+
+#### [19:23:01] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 50% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 83% threshold. Consider manual override if you have extra information.
+
+## [19:24:20] GAME OVER — WIN
+Final HP: 6
+## [19:24:24] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit. PD corrupted #2 Knight.
+
+### [19:24:29] Executed #9 -> Lilis (EVIL)
+
+## [19:24:37] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit.
+

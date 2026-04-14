@@ -1,0 +1,143 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Scout"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Medium"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppeteer",
+        "distance": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7
+        ],
+        "minion_role": "Puppeteer"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    5,
+    9
+  ],
+  "confirmed_evil": [
+    6,
+    5,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Puppeteer",
+    "5": "Puppet",
+    "9": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Oracle",
+      "Scout",
+      "Gemcrafter",
+      "Knight",
+      "Knitter",
+      "Medium"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 2,
+  "name": "asc68_v5",
+  "true_evil_positions": {
+    "5": "Puppet",
+    "6": "Puppeteer",
+    "9": "Lilis"
+  },
+  "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit."
+}
