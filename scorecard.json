@@ -3366,6 +3366,13 @@
       "name": "asc71_v5",
       "notes": "5HP. FT #4 (Puppeteer) lied False -> #1 Pooka 100%, #4 Puppeteer 100%. Druid none [2,3,5] (Wretch not counted), #3 Poet wrong (-5 HP), #5 Puppet 100%.",
       "date": "2026-04-14 18:45"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc71_v6",
+      "notes": "5HP win despite solver 0-scenario bug. Solver said #6 Baa 100% but was Chancellor. After exec, solver 0 scenarios. Rescued by independent Scout+Confessor reasoning to exec #1. SOLVER BUG: Chancellor Game-Start ability constraints. Investigate.",
+      "date": "2026-04-14 18:55"
     }
   ]
 }

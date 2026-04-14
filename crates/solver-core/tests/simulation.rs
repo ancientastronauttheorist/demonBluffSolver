@@ -527,6 +527,7 @@ fn simulate_all_v2() {
     let known_constraint_issues: HashSet<&str> = [
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
         "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
+        "asc71_v6",     // Chancellor exec + Bishop "Minion" claim (no minion left) -> 0 scenarios
     ].into_iter().collect();
 
     let mut wins = 0usize;

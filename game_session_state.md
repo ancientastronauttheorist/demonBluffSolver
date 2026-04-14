@@ -35365,3 +35365,76 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 5
 Notes: 5HP. FT #4 (Puppeteer) lied False -> #1 Pooka 100%, #4 Puppeteer 100%. Druid none [2,3,5] (Wretch not counted), #3 Poet wrong (-5 HP), #5 Puppet 100%.
 
+
+---
+
+# New Game — 2026-04-14 18:48:23
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Confessor, Scout, Knight, Bishop, Empress
+- Outcasts: Wretch, Drunk, Bombardier, Doppelganger
+- Minions: Chancellor
+- Demons: Baa
+
+### [18:49:04] Revealed #1 Scout
+Info: {'evil_role': 'Baa', 'distance': 3}
+
+### [18:49:04] Revealed #2 Bishop
+Info: {'targets': [8, 7, 5], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:49:04] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [18:49:04] Revealed #4 Empress
+Info: {'targets': [1, 3, 5]}
+
+### [18:49:04] Revealed #5 Bombardier
+Info: {}
+
+### [18:49:04] Revealed #6 Lover
+Info: {'evil_adjacent': 2}
+
+### [18:49:04] Revealed #7 Empress
+Info: {'targets': [1, 4, 5]}
+
+### [18:49:04] Revealed #8 Wretch
+Info: {}
+
+#### [18:49:05] Solver Output
+Scenarios: 23/2044
+Definite good: ['#3', '#7', '#8']
+Evil probabilities: #2=52%, #6=48%, #1=43%, #5=43%, #4=13%
+
+#### [18:49:05] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (48% evil Chancellor, 22% good Drunk (corrupted), 17% good Bishop).
+WARNING: Execution lookahead override -- immediate hit chance is 52%, but all reveal branches still lead to a forced win.
+
+### [18:49:46] Executed #2 -> GOOD (WRONG!)
+
+#### [18:49:46] Solver Output
+Scenarios: 6/1523
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#5', '#7', '#8']
+Evil probabilities: #1=50%, #4=50%
+
+#### [18:49:46] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [18:50:27] Executed #6 -> Chancellor (EVIL)
+
+#### [18:50:27] Solver Output
+Scenarios: 0/146
+
+#### [18:50:27] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [18:55:06] Executed #1 -> Baa (EVIL)
+
+## [18:55:06] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win despite solver 0-scenario bug. Solver said #6 Baa 100% but was Chancellor. After exec, solver 0 scenarios. Rescued by independent Scout+Confessor reasoning to exec #1. SOLVER BUG: Chancellor Game-Start ability constraints. Investigate.
+
