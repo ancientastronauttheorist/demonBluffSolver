@@ -3359,6 +3359,13 @@
       "name": "asc71_v4",
       "notes": "6HP (-2 Lilis night, -2 Lilis trigger). Alchemist duplicate cracked #7 Witch 100%. #9 Lilis 100% after Witch death. Knight #1 + Doppelganger-Knight #5 both immune. FT+Dreamer+Alchemist chain.",
       "date": "2026-04-14 18:37"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc71_v5",
+      "notes": "5HP. FT #4 (Puppeteer) lied False -> #1 Pooka 100%, #4 Puppeteer 100%. Druid none [2,3,5] (Wretch not counted), #3 Poet wrong (-5 HP), #5 Puppet 100%.",
+      "date": "2026-04-14 18:45"
     }
   ]
 }

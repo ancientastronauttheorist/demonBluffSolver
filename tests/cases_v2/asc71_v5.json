@@ -1,0 +1,152 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3,
+        "copied_role": "Bard"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          5
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 3
+      }
+    }
+  ],
+  "executed": [
+    1,
+    4,
+    3,
+    5
+  ],
+  "confirmed_evil": [
+    1,
+    4,
+    5
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Pooka",
+    "4": "Puppeteer",
+    "5": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "3": false
+  },
+  "deck": {
+    "villagers": [
+      "Poet",
+      "Lover",
+      "Fortune_Teller",
+      "Hunter",
+      "Druid",
+      "Scout"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    4,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc71_v5",
+  "true_evil_positions": {
+    "1": "Pooka",
+    "4": "Puppeteer",
+    "5": "Puppet"
+  },
+  "notes": "5HP. FT #4 (Puppeteer) lied False -> #1 Pooka 100%, #4 Puppeteer 100%. Druid none [2,3,5] (Wretch not counted), #3 Poet wrong (-5 HP), #5 Puppet 100%."
+}

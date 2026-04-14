@@ -35248,3 +35248,120 @@ Reason: #8 is evil in ALL 6 scenarios (roles: {'Twin_Minion'})
 Final HP: 6
 Notes: 6HP (-2 Lilis night, -2 Lilis trigger). Alchemist duplicate cracked #7 Witch 100%. #9 Lilis 100% after Witch death. Knight #1 + Doppelganger-Knight #5 both immune. FT+Dreamer+Alchemist chain.
 
+
+---
+
+# New Game — 2026-04-14 18:40:06
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Lover, Fortune_Teller, Hunter, Druid, Scout
+- Outcasts: Wretch
+- Minions: Puppeteer
+- Demons: Pooka
+
+### [18:40:50] Revealed #2 Wretch
+Info: {}
+
+### [18:40:50] Revealed #3 Poet
+Info: {'corruption_distance': 3, 'copied_role': 'Bard'}
+
+### [18:40:50] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [18:40:50] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [18:40:50] Revealed #8 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [18:40:57] Revealed #1 Fortune_Teller
+Info: {}
+
+### [18:40:58] Revealed #4 Fortune_Teller
+Info: {}
+
+### [18:40:58] Revealed #6 Druid
+Info: {}
+
+#### [18:40:58] Solver Output
+Scenarios: 4/84
+Definite good: ['#2']
+Evil probabilities: #1=75%, #4=75%, #3=50%, #5=25%, #6=25%, #7=25%, #8=25%
+
+#### [18:40:58] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#1', '#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:41:38] Revealed #4 Fortune Teller
+Info: {'targets': [1, 2], 'has_evil': False}
+
+### [18:41:39] Ability used at #4
+
+#### [18:41:39] Solver Output
+Scenarios: 2/84
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #5=50%
+
+#### [18:41:39] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [18:42:18] Executed #1 -> Pooka (EVIL)
+
+#### [18:42:18] Solver Output
+Scenarios: 2/11
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #5=50%
+
+#### [18:42:18] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [18:42:56] Executed #4 -> Puppeteer (EVIL)
+
+#### [18:42:57] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #5=50%
+
+#### [18:42:57] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#2', '#3', '#5']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [18:44:13] Revealed #6 Druid
+Info: {'targets': [2, 3, 5], 'found_outcast': None}
+
+### [18:44:13] Ability used at #6
+
+#### [18:44:14] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #5=50%
+
+#### [18:44:14] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Poet, 50% evil Puppet).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [18:44:56] Executed #3 -> GOOD (WRONG!)
+
+#### [18:44:57] Solver Output
+Scenarios: 1/1
+Definite evil: ['#1', '#4', '#5']
+Definite good: ['#2', '#3', '#6', '#7', '#8']
+
+#### [18:44:57] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [18:45:38] Executed #5 -> Puppet (EVIL)
+
+## [18:45:38] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. FT #4 (Puppeteer) lied False -> #1 Pooka 100%, #4 Puppeteer 100%. Druid none [2,3,5] (Wretch not counted), #3 Poet wrong (-5 HP), #5 Puppet 100%.
+
