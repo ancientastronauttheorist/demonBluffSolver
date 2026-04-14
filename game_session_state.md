@@ -33946,3 +33946,88 @@ Reason: #8 is evil in ALL 12 scenarios (roles: {'Chancellor'})
 Final HP: 10
 Notes: 10HP perfect. PD #3 clean on #6, evil PD #8 lied '#4 is Evil' (revealed itself as evil). Both execs 100%.
 
+
+---
+
+# New Game — 2026-04-14 17:09:39
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Alchemist, Bard, Druid, Oracle, Judge
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Witch
+- Demons: Pooka
+
+### [17:10:29] Revealed #4 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Witch'}
+
+### [17:10:29] Revealed #6 Bard
+Info: {'corruption_distance': 2}
+
+### [17:10:29] Revealed #7 Bombardier
+Info: {}
+
+### [17:10:36] Revealed #1 Judge
+Info: {}
+
+### [17:10:36] Revealed #2 Druid
+Info: {}
+
+### [17:10:36] Revealed #3 Poet
+Info: {'targets': [2, 5, 7], 'copied_role': 'Empress'}
+
+### [17:10:37] Revealed #5 Plague_Doctor
+Info: {}
+
+#### [17:10:41] Solver Output
+Scenarios: 12/236
+Definite good: ['#3']
+Evil probabilities: #7=83%, #4=42%, #1=25%, #5=17%, #8=17%, #2=8%, #6=8%
+
+#### [17:10:41] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.055 (adjusted 2.055) | timing x1.00
+
+### [17:11:12] Ability used at #5
+
+#### [17:11:13] Solver Output
+Scenarios: 4/236
+Definite good: ['#3', '#4', '#6']
+Evil probabilities: #7=75%, #8=50%, #1=25%, #2=25%, #5=25%
+
+#### [17:11:13] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#5']
+Reason: Entropy 1.500 (adjusted 1.312) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [17:12:20] Revealed #2 Druid
+Info: {'targets': [1, 3, 5], 'found_outcast': 'Doppelganger'}
+
+### [17:12:21] Ability used at #2
+
+#### [17:12:21] Solver Output
+Scenarios: 1/236
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [17:12:21] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [17:12:50] Executed #1 -> Pooka (EVIL)
+
+#### [17:12:50] Solver Output
+Scenarios: 1/32
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [17:12:50] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [17:13:27] Executed #5 -> Witch (EVIL)
+
+## [17:13:27] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect FINAL village of Asc69. Witch blocked #8. PD #5 (Witch) lied clean, Druid #2 corrupted said 'Doppelganger' (not in pool), solver correctly marked Druid corrupted and narrowed to 1 scenario. Asc69 COMPLETE.
+

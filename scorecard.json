@@ -3275,6 +3275,13 @@
       "name": "asc69_v6",
       "notes": "10HP perfect. PD #3 clean on #6, evil PD #8 lied '#4 is Evil' (revealed itself as evil). Both execs 100%.",
       "date": "2026-04-14 17:07"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc69_v7",
+      "notes": "10HP perfect FINAL village of Asc69. Witch blocked #8. PD #5 (Witch) lied clean, Druid #2 corrupted said 'Doppelganger' (not in pool), solver correctly marked Druid corrupted and narrowed to 1 scenario. Asc69 COMPLETE.",
+      "date": "2026-04-14 17:13"
     }
   ]
 }
