@@ -3058,6 +3058,174 @@
       "name": "asc65_v8",
       "notes": "ASC65 COMPLETE! 6HP. Lilis+Witch game. Night killed #5 Lover and #10 PD. All 3 evils 100% confident with only 6 scenarios.",
       "date": "2026-04-12 18:22"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc66_v1",
+      "notes": "FT used on 5,1 True; Dreamer 5 said #1 Minion (lying); 50-50 on #2 lost but lookahead survived",
+      "date": "2026-04-13 16:13"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc66_v2",
+      "notes": "Baker chain (3 orig, 6 from Lover); Druid claimed Doppelganger in 1,2,3 (lying); 40% gamble on #5 paid off",
+      "date": "2026-04-13 16:20"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc66_v3",
+      "notes": "Lilis game; 2 nights: #6 Med killed, #10 Shaman killed; Puppet at #8 (from Puppeteer); strategy bug: keeps recommending dead #10",
+      "date": "2026-04-13 16:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc66_v4",
+      "notes": "Lilis game; Slayer killed night 1; dual Dreamer check on #5 + PD clean; forced-safe 50/50 on Chancellor",
+      "date": "2026-04-13 16:39"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc66_v5",
+      "notes": "Lilis; #5 Baker night-killed; PD on dead #5 worked; dual Druid; 1HP survival",
+      "date": "2026-04-13 16:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc66_v6",
+      "notes": "10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'",
+      "date": "2026-04-13 16:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc66_v7",
+      "notes": "10HP perfect; 1 scenario from passives alone; triple Baker chain; ASC66 COMPLETE 7/7",
+      "date": "2026-04-13 16:57"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v1",
+      "notes": "10HP perfect; 1 scenario from PD clean check + passives; no abilities needed beyond PD",
+      "date": "2026-04-13 17:09"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v2",
+      "notes": "10HP perfect; 1 scenario from passives; Baker chain #4 orig + #5 from Medium; Bombardier safe",
+      "date": "2026-04-13 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc67_v3",
+      "notes": "5HP; FT false on 2,4; forced-safe 67% on #1 (Drunk corrupted); 1 scenario after wrong exec",
+      "date": "2026-04-13 17:18"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v4",
+      "notes": "10HP perfect; Slayer killed Baa; Dreamer+dual Jester+Slayer; forced-safe on Witch",
+      "date": "2026-04-13 17:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc67_v5",
+      "notes": "6HP, Lilis game, Judge ability on #1, 3 definite execs, Doppelganger as Lover",
+      "date": "2026-04-13 17:36"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v6",
+      "notes": "10HP perfect, 1 scenario definite, Pooka corrupted #2 and #6",
+      "date": "2026-04-13 17:41"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc67_v7",
+      "notes": "10HP perfect, dual Gemcrafter disguise, Judge confirms Oracle lying (corrupted), 2 definite execs, ASC67 COMPLETE 7/7",
+      "date": "2026-04-13 17:45"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v1",
+      "notes": "6HP, Lilis+Puppeteer+Puppet, PD check reveals #7 evil, Knight survived night, 3 definite execs",
+      "date": "2026-04-13 17:54"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc68_v2",
+      "notes": "8HP, Lilis+Witch+Twin_Minion, Druid finds Wretch lie, Dreamer confirms #9, 3 definite execs",
+      "date": "2026-04-13 18:06"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc68_v3",
+      "notes": "0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), Pooka at #8 was Druid disguise, Druid said no outcasts among #1#2#3 but PD at #2 IS outcast = should've been caught",
+      "date": "2026-04-13 18:15"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc68_v3",
+      "notes": "0HP LOSS, wrong exec #4 Knitter (corrupted, 60%) then #9 Doppelganger (75%), true Pooka at #8 disguised as Druid, Druid lied about outcasts but solver didn't catch it",
+      "date": "2026-04-13 18:15"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc68_v4",
+      "notes": "5HP, Village 3 retry. Slayer(Puppet) killed Minion. Wrong exec #9 Scout. n_evil bug: used 3 instead of 4 with Puppeteer+2minions, solver prematurely declared WIN",
+      "date": "2026-04-13 19:04"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v5",
+      "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit. PD corrupted #2 Knight.",
+      "date": "2026-04-13 19:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v5",
+      "notes": "6HP, Lilis killed PD#7 night1. night_kill_evil_count bug fixed mid-game. 50-50 on #9 Lilis hit.",
+      "date": "2026-04-13 19:24"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc68_v6",
+      "notes": "10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec.",
+      "date": "2026-04-13 19:29"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc68_v7",
+      "notes": "6HP, Lilis killed Bombardier#8 night1, Dreamer+FT+FT abilities, all 3 evils 100% auto-exec",
+      "date": "2026-04-13 19:40"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc68_v8",
+      "notes": "10HP perfect. PD check #2 clean. Both evils 100% auto-exec. ASC68 COMPLETE 7/7 (6W 2L).",
+      "date": "2026-04-13 19:48"
     }
   ]
 }

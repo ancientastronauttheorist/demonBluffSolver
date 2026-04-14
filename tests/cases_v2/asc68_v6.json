@@ -1,0 +1,114 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1,
+        "copied_role": "Knitter"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    5
+  ],
+  "confirmed_evil": [
+    2,
+    5
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Witch",
+    "5": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    7
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Alchemist",
+      "Baker",
+      "Knitter",
+      "Poet"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc68_v6",
+  "true_evil_positions": {
+    "2": "Witch",
+    "5": "Baa"
+  },
+  "notes": "10HP perfect. Witch blocked #7. Both evils 100% confidence auto-exec."
+}

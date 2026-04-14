@@ -1,0 +1,158 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          6
+        ],
+        "types": [
+          "Minion",
+          "Villager",
+          "Outcast"
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 7
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5
+      }
+    }
+  ],
+  "executed": [
+    1,
+    5,
+    7,
+    8
+  ],
+  "confirmed_evil": [
+    5,
+    7,
+    8
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Pooka",
+    "7": "Puppet",
+    "8": "Puppeteer"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "1": true
+  },
+  "deck": {
+    "villagers": [
+      "Gemcrafter",
+      "Lover",
+      "Architect",
+      "Fortune_Teller",
+      "Bishop",
+      "Baker",
+      "Hunter"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc67_v3",
+  "true_evil_positions": {
+    "5": "Pooka",
+    "7": "Puppet",
+    "8": "Puppeteer"
+  },
+  "notes": "5HP; FT false on 2,4; forced-safe 67% on #1 (Drunk corrupted); 1 scenario after wrong exec"
+}

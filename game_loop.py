@@ -2574,11 +2574,19 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
     if cmd == "night_kill":
         positions = [int(x) for x in args[0].split(",")]
-        n_evil = int(args[1])
+        # Second arg = how many of the killed cards were evil (usually 0).
+        # NOT the total evil count in the game! Lost asc68_v5 0-scenario bug from this confusion.
+        n_evil_among_killed = int(args[1]) if len(args) > 1 else 0
+        if n_evil_among_killed > len(positions):
+            print(f"  ERROR: n_evil_among_killed ({n_evil_among_killed}) > killed positions ({len(positions)}).")
+            print(f"  This arg is 'how many killed cards were evil', NOT total game evil count.")
+            print(f"  Usually 0 (Lilis kills random Good). Use 0 or 1.")
+            return
         # Night kills go in session.night_kills only; executed is for day executions.
         # Readers (lines 645, 1858, 1887, 1977, 2293) union the two sets.
         session.night_kills.extend(positions)
-        session.night_kill_evil_count += n_evil
+        session.night_kill_evil_count += n_evil_among_killed
+        n_evil = n_evil_among_killed  # alias for existing code below
         for p in positions:
             # Issue #8: Remove killed positions from blocked_positions (Witch+Lilis interaction)
             if p in session.blocked_positions:

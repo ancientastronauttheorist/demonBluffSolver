@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**381 games played** — 93% win rate (356W / 25L), 185 perfect games (10 HP)
+**461 games played** — 92% win rate (426W / 35L), 218 perfect games (10 HP)
 
-Tested through **Ascension 58** with 10-card boards, 4 evils, corruption, extra role pools, Lilis night kills, and Witch card-blocking.
+Tested through **Ascension 68** with 9-card boards, up to 4 evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, and Shaman Baker-conversion chains.
 
 ## How It Works
 
@@ -33,7 +33,7 @@ The full pipeline:
 | `crates/solver-core/` | **Primary solver** — Rust constraint-satisfaction engine (Rayon-parallelized, ~2.5× Python speed) |
 | `crates/solver-cli/` | Rust CLI binary (`demon-bluff-solver.exe`) — reads GameState JSON from stdin, writes SolverResult JSON to stdout |
 | `rust_solver.py` | Python bridge to the Rust solver via subprocess |
-| `solver.py` | Python solver — cross-check reference; no longer called in the game loop |
+| `solver.py` | Python solver — stripped to types/helpers only (~300 lines); all solve logic in Rust |
 | `strategy.py` | Shannon entropy-based action recommender with execution lookahead and auto-execute |
 | `game_loop.py` | CLI interface for game sessions, data entry, and solver interaction (REPL mode: `repl`) |
 | `knowledge_base.py` | Card role database — 30+ roles with abilities, types, factions |
@@ -60,10 +60,10 @@ The full pipeline:
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 233 test cases — card vision pipeline, high accuracy |
+| `tests/cases_v2/` | 307 test cases — card vision pipeline, high accuracy |
 | `tests/cases/` | 137 legacy test cases — manual data entry |
+| `tests/simulation.rs` | Rust simulation test — constraint validation + strategy-driven execution on all v2 cases |
 | `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
-| `tests/test_regression.py` | Full regression suite |
 
 ## Solver Features
 
@@ -77,7 +77,9 @@ The full pipeline:
 - Drunk execution cost modeling (2 HP vs 5 HP)
 - Baker conversion chain validation with reveal-order tracking
 - Shaman role duplication handling
+- Puppeteer/Puppet mechanics — Puppet is evil but truthful, auto-generated from adjacent Villager
 - Flip verification via memory reader — detects click failures before they become misdiagnosed blocks
+- Persistent daemon mode for the Rust solver — keeps binary alive across calls for faster response
 
 ## Game Mechanics
 
@@ -130,8 +132,8 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-python -m tests.test_replay --v2-only  # 233 v2 replay tests
-cargo test --release --test replay     # Rust solver replay tests
+cargo test --release --test simulation  # Rust simulation tests (307 v2 cases)
+python -m tests.test_replay --v2-only  # Python v2 replay tests
 python -m tests.test_replay            # all test cases
 
 # View stats

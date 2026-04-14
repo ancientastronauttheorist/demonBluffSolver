@@ -1,0 +1,135 @@
+{
+  "n_cards": 7,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4,
+        "good_role": "Druid"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          4
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    }
+  ],
+  "executed": [
+    4
+  ],
+  "confirmed_evil": [
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Enlightened",
+      "Druid",
+      "Medium",
+      "Fortune_Teller",
+      "Poet"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    1,
+    4,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc66_v6",
+  "true_evil_positions": {
+    "4": "Pooka"
+  },
+  "notes": "10HP perfect; FT+Druid+Jester on 1-evil board; Poet gave Scout-style 'only 1 evil'"
+}
