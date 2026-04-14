@@ -33260,3 +33260,81 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 6
 Notes: 6HP, Lilis killed Bombardier#8 night1, Dreamer+FT+FT abilities, all 3 evils 100% auto-exec
 
+
+---
+
+# New Game — 2026-04-13 19:45:37
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Medium, Knight, Oracle, Lover, Scout, Knitter
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Poisoner
+- Demons: Pooka
+
+### [19:46:55] Revealed #1 Scout
+Info: {'evil_role': 'Poisoner', 'distance': 2}
+
+### [19:46:55] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [19:46:55] Revealed #3 Knight
+Info: {}
+
+### [19:46:55] Revealed #4 Bombardier
+Info: {}
+
+### [19:46:55] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [19:46:55] Revealed #6 Oracle
+Info: {'targets': [6, 8], 'minion_role': 'Poisoner'}
+
+### [19:46:55] Revealed #7 Medium
+Info: {'good_position': 8, 'good_role': 'Plague Doctor'}
+
+### [19:46:55] Revealed #9 Knitter
+Info: {'evil_pairs': 1}
+
+### [19:47:05] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [19:47:05] Solver Output
+Scenarios: 14/422
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #1=43%, #9=43%, #3=14%
+
+#### [19:47:05] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Pooka', 'Poisoner'})
+
+### [19:47:12] Executed #5 -> Poisoner (EVIL)
+
+#### [19:47:18] Solver Output
+Scenarios: 8/37
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #1=50%, #9=38%, #3=12%
+
+#### [19:47:18] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.406 (adjusted 1.406) | timing x1.00
+
+### [19:47:58] Ability used at #8
+
+#### [19:47:58] Solver Output
+Scenarios: 3/37
+Definite evil: ['#5', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [19:47:58] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [19:48:05] Executed #9 -> Pooka (EVIL)
+
+## [19:48:27] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD check #2 clean. Both evils 100% auto-exec. ASC68 COMPLETE 7/7 (6W 2L).
+
