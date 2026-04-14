@@ -3331,6 +3331,13 @@
       "name": "asc70_v7",
       "notes": "3HP FINAL village Asc70 COMPLETE. Lilis+Witch game, Lilis killed #8 Drunk night 1 (2HP), night 2 no kill (2HP). Judge #4 (Lilis) lied #5 lying. Knight #5 immunity free-check. Exec #4 Lilis 60%, #2 Empress wrong (-5 HP), #9 Witch 100%.",
       "date": "2026-04-14 18:05"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc71_v1",
+      "notes": "5HP first Asc71 village. Knight #1 immunity free check, Dreamer #10 evil lied '#3 Chancellor' (Pooka), PD #2 clean #7, Slayer #5 fail. Exec #4 Arch corrupted wrong (-5 HP), then 3 evils all found.",
+      "date": "2026-04-14 18:14"
     }
   ]
 }
