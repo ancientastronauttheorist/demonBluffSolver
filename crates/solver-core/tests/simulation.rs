@@ -528,6 +528,7 @@ fn simulate_all_v2() {
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
         "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
         "asc71_v6",     // Chancellor exec + Bishop "Minion" claim (no minion left) -> 0 scenarios
+        "asc71_v7",     // Twin_Minion-as-Bombardier: truth eliminated from 32 surviving scenarios
     ].into_iter().collect();
 
     let mut wins = 0usize;

@@ -35438,3 +35438,124 @@ Reason: No surviving scenarios -- check input data
 Final HP: 5
 Notes: 5HP win despite solver 0-scenario bug. Solver said #6 Baa 100% but was Chancellor. After exec, solver 0 scenarios. Rescued by independent Scout+Confessor reasoning to exec #1. SOLVER BUG: Chancellor Game-Start ability constraints. Investigate.
 
+
+---
+
+# New Game — 2026-04-14 18:59:52
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Knitter, Enlightened, Knight, Jester, Alchemist
+- Outcasts: Plague_Doctor, Doppelganger, Bombardier
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [19:00:35] Revealed #1 Knight
+Info: {}
+
+### [19:00:35] Revealed #2 Bombardier
+Info: {}
+
+### [19:00:35] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [19:00:35] Revealed #4 Enlightened
+Info: {'direction': 'CW'}
+
+### [19:00:35] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [19:00:35] Revealed #9 Alchemist
+Info: {'cured_count': 1}
+
+### [19:00:35] Revealed #7 Plague_Doctor
+Info: {}
+
+### [19:00:36] Revealed #8 Jester
+Info: {}
+
+#### [19:00:36] Solver Output
+Scenarios: 177/1946
+Definite good: ['#6', '#7']
+Evil probabilities: #4=46%, #3=37%, #9=36%, #2=29%, #1=21%, #5=18%, #8=12%
+
+#### [19:00:36] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.959 (adjusted 1.959) | timing x1.00 | EV=1.959 > reveal EV=0.669
+
+### [19:00:45] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [19:00:45] Solver Output
+Scenarios: 102/2018
+Definite good: ['#6', '#7']
+Evil probabilities: #4=50%, #9=44%, #3=35%, #2=25%, #1=24%, #8=13%, #5=9%
+
+#### [19:00:45] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.587 (adjusted 1.587) | timing x1.00
+
+### [19:01:24] Ability used at #7
+
+#### [19:01:24] Solver Output
+Scenarios: 67/2018
+Definite good: ['#6', '#7']
+Evil probabilities: #9=67%, #4=48%, #3=36%, #2=31%, #5=7%, #1=6%, #8=4%
+
+#### [19:01:24] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#3', '#5']
+Reason: Expected posterior 32.3 scenarios (adjusted 39.0, info gain 0.779 bits) | timing x1.00
+WARNING: Corruption risk: 42%
+
+### [19:02:11] Revealed #8 Jester
+Info: {'targets': [1, 3, 5], 'evil_count': 1}
+
+### [19:02:11] Ability used at #8
+
+#### [19:02:11] Solver Output
+Scenarios: 32/2018
+Definite good: ['#6', '#7', '#8']
+Evil probabilities: #9=97%, #4=47%, #3=38%, #2=12%, #1=3%, #5=3%
+
+#### [19:02:11] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 97% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 97% confident (budget: 2 wrong execs)
+
+### [19:02:49] Executed #9 -> Pooka (EVIL)
+
+#### [19:02:49] Solver Output
+Scenarios: 20/236
+Definite evil: ['#9']
+Definite good: ['#1', '#6', '#7', '#8']
+Evil probabilities: #4=70%, #2=20%, #3=5%, #5=5%
+
+#### [19:02:49] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 70% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 70% confident (budget: 2 wrong execs)
+
+### [19:03:28] Executed #4 -> GOOD (WRONG!)
+
+#### [19:03:29] Solver Output
+Scenarios: 5/205
+Definite evil: ['#9']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=80%, #3=20%
+
+#### [19:03:29] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 20% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 20% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #3 (20%) despite low confidence — Bombardier candidate(s) [2] risk instant game loss if executed first.
+
+### [19:04:23] Executed #3 -> GOOD (WRONG!)
+
+## [19:04:24] GAME OVER — LOSS
+Final HP: 0
+Notes: LOST at 0HP. 9 cards, Pooka+TwinMinion. PD #7 clean #9 -> exec #9 Pooka 97% OK. Then #4 Enlightened Corrupted wrong (-5 HP). Then #3 Lover wrong at 20% (solver's Bombardier-safety pick). True evil was #2 Twin_Minion disguised as Bombardier. Solver's Bombardier safety avoided #2 but Twin_Minion was actually there.
+
+## [19:04:37] GAME OVER — LOSS
+Final HP: 0
+Notes: LOST at 0HP. 9 cards, Pooka+TwinMinion. Exec #9 Pooka OK, then #4 Enlightened Corrupt wrong (-5), then #3 Lover wrong at 20% (solver Bombardier-safety avoided #2). True 2nd evil was #2 Twin_Minion-as-Bombardier. #2 not executed.
+

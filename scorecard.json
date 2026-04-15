@@ -3373,6 +3373,20 @@
       "name": "asc71_v6",
       "notes": "5HP win despite solver 0-scenario bug. Solver said #6 Baa 100% but was Chancellor. After exec, solver 0 scenarios. Rescued by independent Scout+Confessor reasoning to exec #1. SOLVER BUG: Chancellor Game-Start ability constraints. Investigate.",
       "date": "2026-04-14 18:55"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc71_v7",
+      "notes": "LOST at 0HP. 9 cards, Pooka+TwinMinion. PD #7 clean #9 -> exec #9 Pooka 97% OK. Then #4 Enlightened Corrupted wrong (-5 HP). Then #3 Lover wrong at 20% (solver's Bombardier-safety pick). True evil was #2 Twin_Minion disguised as Bombardier. Solver's Bombardier safety avoided #2 but Twin_Minion was actually there.",
+      "date": "2026-04-14 19:04"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc71_v7",
+      "notes": "LOST at 0HP. 9 cards, Pooka+TwinMinion. Exec #9 Pooka OK, then #4 Enlightened Corrupt wrong (-5), then #3 Lover wrong at 20% (solver Bombardier-safety avoided #2). True 2nd evil was #2 Twin_Minion-as-Bombardier. #2 not executed.",
+      "date": "2026-04-14 19:04"
     }
   ]
 }
