@@ -521,13 +521,13 @@ fn simulate_all_v2() {
         "asc59_v5",     // 35% confidence pick
         "asc65_v2",     // 49% and 79% picks both wrong
         "asc68_v3",     // 0HP loss: wrong exec #4 (corrupted, 60%) + #9 (Doppelganger, 75%)
+        "asc71_v7",     // 0HP loss: Bombardier-safety skipped true TM-as-Bombardier #2
     ].into_iter().collect();
 
     // Cases with known bad data that may cause constraint failures
     let known_constraint_issues: HashSet<&str> = [
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
         "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
-        "asc71_v7",     // Twin_Minion-as-Bombardier: truth eliminated from 32 surviving scenarios
     ].into_iter().collect();
 
     let mut wins = 0usize;

@@ -151,6 +151,7 @@
   "lilis_batch_index": 0,
   "name": "asc71_v7",
   "true_evil_positions": {
+    "2": "Twin_Minion",
     "9": "Pooka"
   },
   "notes": "LOST at 0HP. 9 cards, Pooka+TwinMinion. Exec #9 Pooka OK, then #4 Enlightened Corrupt wrong (-5), then #3 Lover wrong at 20% (solver Bombardier-safety avoided #2). True 2nd evil was #2 Twin_Minion-as-Bombardier. #2 not executed."
