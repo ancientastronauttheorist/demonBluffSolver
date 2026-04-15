@@ -3387,6 +3387,13 @@
       "name": "asc71_v7",
       "notes": "LOST at 0HP. 9 cards, Pooka+TwinMinion. Exec #9 Pooka OK, then #4 Enlightened Corrupt wrong (-5), then #3 Lover wrong at 20% (solver Bombardier-safety avoided #2). True 2nd evil was #2 Twin_Minion-as-Bombardier. #2 not executed.",
       "date": "2026-04-14 19:04"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc71_v8",
+      "notes": "5HP win. Chancellor@4 + Pooka@5. Exec #4 Chancellor (75% forced-safe), #6 wrong Bard corrupted (-5 HP), #5 Pooka (100%).",
+      "date": "2026-04-14 20:38"
     }
   ]
 }

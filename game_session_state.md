@@ -35559,3 +35559,79 @@ Notes: LOST at 0HP. 9 cards, Pooka+TwinMinion. PD #7 clean #9 -> exec #9 Pooka 9
 Final HP: 0
 Notes: LOST at 0HP. 9 cards, Pooka+TwinMinion. Exec #9 Pooka OK, then #4 Enlightened Corrupt wrong (-5), then #3 Lover wrong at 20% (solver Bombardier-safety avoided #2). True 2nd evil was #2 Twin_Minion-as-Bombardier. #2 not executed.
 
+
+---
+
+# New Game — 2026-04-14 20:36:23
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Scout, Bishop, Bard, Jester, Oracle
+- Outcasts: Doppelganger, Wretch
+- Minions: Chancellor
+- Demons: Pooka
+
+### [20:37:03] Revealed #1 Oracle
+Info: {'targets': [4, 8], 'minion_role': 'Chancellor'}
+
+### [20:37:03] Revealed #2 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 1}
+
+### [20:37:03] Revealed #3 Wretch
+Info: {}
+
+### [20:37:03] Revealed #4 Bishop
+Info: {'targets': [8, 2, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [20:37:03] Revealed #5 Empress
+Info: {'targets': [1, 2, 8]}
+
+### [20:37:03] Revealed #6 Bard
+Info: {'corruption_distance': 3}
+
+### [20:37:03] Revealed #7 Bishop
+Info: {'targets': [4, 7, 2], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [20:37:03] Revealed #8 Bishop
+Info: {'targets': [3, 7, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+#### [20:37:07] Solver Output
+Scenarios: 4/454
+Definite good: ['#1', '#2', '#3']
+Evil probabilities: #4=75%, #6=50%, #5=25%, #7=25%, #8=25%
+
+#### [20:37:07] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (75% evil Chancellor, 25% good Bishop).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [20:37:14] Executed #4 -> Chancellor (EVIL)
+
+#### [20:37:27] Solver Output
+Scenarios: 3/36
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#7', '#8']
+Evil probabilities: #6=67%, #5=33%
+
+#### [20:37:27] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 33% good Bard (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [20:37:34] Executed #6 -> GOOD (WRONG!)
+
+#### [20:37:40] Solver Output
+Scenarios: 1/31
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+
+#### [20:37:40] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [20:37:47] Executed #5 -> Pooka (EVIL)
+
+## [20:38:04] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win. Chancellor@4 + Pooka@5. Exec #4 Chancellor (75% forced-safe), #6 wrong Bard corrupted (-5 HP), #5 Pooka (100%).
+

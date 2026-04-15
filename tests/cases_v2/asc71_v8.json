@@ -1,0 +1,173 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          8
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Chancellor",
+        "distance": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          2,
+          6
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          8
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7,
+          2
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7,
+          8
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    }
+  ],
+  "executed": [
+    4,
+    6,
+    5
+  ],
+  "confirmed_evil": [
+    4,
+    5
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Chancellor",
+    "5": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "6": true
+  },
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Scout",
+      "Bishop",
+      "Bard",
+      "Jester",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc71_v8",
+  "true_evil_positions": {
+    "4": "Chancellor",
+    "5": "Pooka"
+  },
+  "notes": "5HP win. Chancellor@4 + Pooka@5. Exec #4 Chancellor (75% forced-safe), #6 wrong Bard corrupted (-5 HP), #5 Pooka (100%)."
+}
