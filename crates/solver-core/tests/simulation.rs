@@ -527,7 +527,6 @@ fn simulate_all_v2() {
     let known_constraint_issues: HashSet<&str> = [
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
         "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
-        "asc71_v6",     // Chancellor exec + Bishop "Minion" claim (no minion left) -> 0 scenarios
         "asc71_v7",     // Twin_Minion-as-Bombardier: truth eliminated from 32 surviving scenarios
     ].into_iter().collect();
 
@@ -636,5 +635,23 @@ fn debug_asc68_v3() {
             panic!("Truth eliminated: {detail}");
         }
         _ => {} // Win or SimLoss are both acceptable (this was a 0HP loss game)
+    }
+}
+
+/// Regression: asc71_v6 Bishop's [V,O,M] claim stays valid even when Chancellor@6
+/// converts the Villager adjacent (#7 Empress). Root cause: Bishop's clue captures
+/// types at game-start independent of Chancellor's conversion — we accept both
+/// pre- and post-conversion views.
+#[test]
+fn regression_asc71_v6_bishop_vs_chancellor() {
+    let path = v2_dir().join("asc71_v6.json");
+    let content = std::fs::read_to_string(&path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let result = simulate_game(&value);
+    match &result {
+        SimResult::ConstraintFailure { detail, .. } => {
+            panic!("Truth eliminated: {detail}");
+        }
+        _ => {}
     }
 }

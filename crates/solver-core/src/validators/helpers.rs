@@ -113,7 +113,20 @@ pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) 
 
 /// Get the type category of a position for Bishop validator.
 /// Returns "Villager", "Outcast", "Minion", "Demon", or None if unknown.
+///
+/// When `include_chancellor_conv` is true (default), Chancellor's conversion
+/// target is reported as Outcast. When false, the conversion is ignored — used
+/// to model the "pre-conversion view" for Bishop's if-possible semantics.
 pub fn get_position_type(pos: u8, scenario: &Scenario, state: &GameState) -> Option<&'static str> {
+    get_position_type_ex(pos, scenario, state, true)
+}
+
+pub fn get_position_type_ex(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+    include_chancellor_conv: bool,
+) -> Option<&'static str> {
     // Check evil role
     if let Some(role) = known_evil_role(pos, scenario, state) {
         if role == "Unknown" {
@@ -129,8 +142,8 @@ pub fn get_position_type(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
     if scenario.doppelganger_position == Some(pos) || scenario.drunk_position == Some(pos) {
         return Some("Outcast");
     }
-    // Chancellor conversion target becomes Outcast
-    if scenario.chancellor_conversion == Some(pos) {
+    // Chancellor conversion target becomes Outcast (only if caller wants it)
+    if include_chancellor_conv && scenario.chancellor_conversion == Some(pos) {
         return Some("Outcast");
     }
     // Revealed card

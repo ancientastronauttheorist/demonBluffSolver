@@ -648,23 +648,31 @@ fn validate_bishop(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     let truth = truth_status(card.position, scenario, state);
 
     if let Some(ref ct) = claimed_types {
-        let mut actual_types: Vec<String> = Vec::new();
-        let mut incomplete = false;
-        for &t in &targets {
-            if let Some(tp) = get_position_type(t, scenario, state) {
-                actual_types.push(tp.to_string());
-            } else {
-                incomplete = true;
-                break;
+        // Bishop's clue reflects a snapshot of its 3 targets at game start.
+        // Chancellor's conversion is an independent random game-start event:
+        // in observed games (asc71_v6), Bishop's claim stays consistent with
+        // a PRE-conversion view of its targets. In other games (asc51_v1),
+        // the claim matches the POST-conversion view. We accept either.
+        let mut sorted_claimed = ct.clone();
+        sorted_claimed.sort();
+
+        let try_view = |include_conv: bool| -> Option<bool> {
+            let mut actual: Vec<String> = Vec::new();
+            for &t in &targets {
+                match get_position_type_ex(t, scenario, state, include_conv) {
+                    Some(tp) => actual.push(tp.to_string()),
+                    None => return None, // Unrevealed target — skip this view
+                }
             }
-        }
-        if !incomplete {
-            let mut sorted_actual = actual_types.clone();
-            sorted_actual.sort();
-            let mut sorted_claimed = ct.clone();
-            sorted_claimed.sort();
-            let types_match = sorted_actual == sorted_claimed;
-            return if truth == TruthStatus::Truthful { types_match } else { !types_match };
+            actual.sort();
+            Some(actual == sorted_claimed)
+        };
+
+        let post = try_view(true);
+        let pre = try_view(false);
+        if post.is_some() || pre.is_some() {
+            let any_match = post.unwrap_or(false) || pre.unwrap_or(false);
+            return if truth == TruthStatus::Truthful { any_match } else { !any_match };
         }
     }
 
