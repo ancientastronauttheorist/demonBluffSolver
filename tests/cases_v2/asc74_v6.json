@@ -1,0 +1,138 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": true,
+        "silenced_by": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    }
+  ],
+  "executed": [
+    7,
+    3,
+    6
+  ],
+  "confirmed_evil": [
+    3,
+    6
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Baa",
+    "6": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {
+    "7": true
+  },
+  "deck": {
+    "villagers": [
+      "Architect",
+      "Rambler",
+      "Jester",
+      "Confessor",
+      "Fortune Teller"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    3,
+    2,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v6",
+  "true_evil_positions": {
+    "3": "Baa",
+    "6": "Poisoner"
+  },
+  "notes": "5HP. Baa-as-Jester#3 silenced Rambler#1 via ability. Poisoner-as-FT#6 corrupted #7 Architect. FT#2 confirmed evil in {3,7} tripping Baa. Wrong exec #7 (corrupted Arch, 69% forced-safe lookahead). Clean #3 Baa, #6 Poisoner."
+}

@@ -3548,6 +3548,13 @@
       "name": "asc74_v5",
       "notes": "5HP win. Puppeteer game + Baa. Slayer#3 (Puppet disguise) killed #5 Chancellor. Exec #4 Puppeteer, #3 Puppet, wrong exec #1 Alchemist (forced lookahead), then #9 Baa.",
       "date": "2026-04-16 16:34"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc74_v6",
+      "notes": "5HP. Baa-as-Jester#3 silenced Rambler#1 via ability. Poisoner-as-FT#6 corrupted #7 Architect. FT#2 confirmed evil in {3,7} tripping Baa. Wrong exec #7 (corrupted Arch, 69% forced-safe lookahead). Clean #3 Baa, #6 Poisoner.",
+      "date": "2026-04-16 16:37"
     }
   ]
 }

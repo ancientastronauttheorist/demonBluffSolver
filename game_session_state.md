@@ -37886,3 +37886,119 @@ Reason: #9 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP win. Puppeteer game + Baa. Slayer#3 (Puppet disguise) killed #5 Chancellor. Exec #4 Puppeteer, #3 Puppet, wrong exec #1 Alchemist (forced lookahead), then #9 Baa.
 
+
+---
+
+# New Game — 2026-04-16 16:35:28
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Rambler, Jester, Confessor, Fortune Teller
+- Outcasts: Wretch, Doppelganger
+- Minions: Poisoner
+- Demons: Baa
+
+### [16:35:42] Revealed #1 Rambler
+Info: {'silenced': False}
+
+### [16:35:42] Revealed #2 Fortune_Teller
+Info: {}
+
+### [16:35:42] Revealed #3 Jester
+Info: {}
+
+### [16:35:42] Revealed #4 Wretch
+Info: {}
+
+### [16:35:42] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [16:35:42] Revealed #6 Fortune_Teller
+Info: {}
+
+### [16:35:42] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+#### [16:35:42] Solver Output
+Scenarios: 111/330
+Definite good: ['#5']
+Evil probabilities: #7=56%, #2=36%, #1=32%, #3=32%, #6=23%, #4=22%
+
+#### [16:35:42] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#4', '#5']
+Reason: Expected posterior 51.6 scenarios (adjusted 54.4, info gain 1.029 bits) | timing x1.00
+WARNING: Corruption risk: 11%
+
+### [16:36:09] Ability used at #3
+
+### [16:36:09] Revealed #1 Rambler
+Info: {'silenced': True, 'silenced_by': 3}
+
+#### [16:36:09] Solver Output
+Scenarios: 57/330
+Definite good: ['#5']
+Evil probabilities: #7=54%, #1=35%, #2=35%, #3=33%, #6=26%, #4=16%
+
+#### [16:36:09] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#3', '#7']
+Reason: Entropy 1.000 (adjusted 0.956) | timing x1.00
+WARNING: Corruption risk: 9%
+
+### [16:36:16] Revealed #2 Fortune Teller
+Info: {'targets': [3, 7], 'has_evil': True}
+
+### [16:36:16] Ability used at #2
+
+#### [16:36:21] Solver Output
+Scenarios: 30/330
+Definite good: ['#5']
+Evil probabilities: #7=67%, #3=37%, #1=33%, #6=27%, #2=20%, #4=17%
+
+#### [16:36:21] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 0.867) | timing x1.00
+WARNING: Corruption risk: 27%
+
+### [16:36:27] Revealed #6 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': False}
+
+### [16:36:27] Ability used at #6
+
+#### [16:36:39] Solver Output
+Scenarios: 13/330
+Definite good: ['#2', '#5']
+Evil probabilities: #7=69%, #3=54%, #4=31%, #6=31%, #1=15%
+
+#### [16:36:39] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (62% evil Poisoner, 31% good Architect (corrupted), 8% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 69%, but all reveal branches still lead to a forced win.
+
+### [16:36:45] Executed #7 -> GOOD (WRONG!)
+
+#### [16:36:52] Solver Output
+Scenarios: 4/236
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+
+#### [16:36:52] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [16:37:23] Executed #3 -> Baa (EVIL)
+
+#### [16:37:23] Solver Output
+Scenarios: 4/36
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+
+#### [16:37:23] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Poisoner'})
+
+### [16:37:55] Executed #6 -> Poisoner (EVIL)
+
+## [16:37:57] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Baa-as-Jester#3 silenced Rambler#1 via ability. Poisoner-as-FT#6 corrupted #7 Architect. FT#2 confirmed evil in {3,7} tripping Baa. Wrong exec #7 (corrupted Arch, 69% forced-safe lookahead). Clean #3 Baa, #6 Poisoner.
+
