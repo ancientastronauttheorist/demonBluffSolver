@@ -1464,6 +1464,17 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             if m:
                 return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": int(m.group(1)), "copied_role": "Lover"})
             return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": 0, "copied_role": "Lover"})
+        # Scout pattern: "<EvilRole> is N cards away from closest Evil"
+        # Must come before Hunter ("I am N cards away..."): both contain "closest evil".
+        m_scout = re.search(r'^\s*([A-Z][\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
+        if m_scout and 'away' in cl and ('nearest evil' in cl or 'closest evil' in cl):
+            candidate = m_scout.group(1).strip()
+            if candidate.lower() not in ('i', 'i am'):
+                return CardInfo(pos, "Poet", info_parsed={
+                    "evil_role": candidate,
+                    "distance": int(m_scout.group(2)),
+                    "copied_role": "Scout",
+                })
         # Hunter pattern
         if ('nearest evil' in cl or 'closest evil' in cl) and 'away' in cl:
             m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)

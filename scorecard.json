@@ -3457,6 +3457,13 @@
       "name": "asc72_v7",
       "notes": "1HP. Lilis night-killed #10 Witch (evil). Wrong exec #2 Hunter (solver bug: top pick #10 already dead, executed next-live #2 at 83%, wrong). Then #1 Poisoner and #4 Lilis definite. ASC72 COMPLETE 7/7!",
       "date": "2026-04-16 13:28"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc73_v1",
+      "notes": "6HP. Lilis night killed #6 Architect. Medium/Empress/Poet(Scout-format) pinpointed Lilis and TM. Poet parser bug workaround: manual scout entry.",
+      "date": "2026-04-16 13:54"
     }
   ]
 }

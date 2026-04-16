@@ -36408,3 +36408,60 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Witch', 'Lilis'})
 Final HP: 1
 Notes: 1HP. Lilis night-killed #10 Witch (evil). Wrong exec #2 Hunter (solver bug: top pick #10 already dead, executed next-live #2 at 83%, wrong). Then #1 Poisoner and #4 Lilis definite. ASC72 COMPLETE 7/7!
 
+
+---
+
+# New Game — 2026-04-16 13:49:02
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Lover, Poet, Witness, Medium, Bard, Architect
+- Outcasts: Drunk, Wretch
+- Minions: Twin Minion
+- Demons: Lilis
+
+### [13:50:23] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [13:50:23] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [13:50:23] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [13:50:23] Revealed #5 Empress
+Info: {'targets': [2, 4, 8]}
+
+### [13:50:23] Revealed #7 Wretch
+Info: {}
+
+### [13:50:23] Revealed #8 Witness
+Info: {'affected_position': 6}
+
+### [13:50:23] Revealed #9 Poet
+Info: {'distance': 3, 'copied_role': 'Hunter'}
+
+### [13:50:32] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Drunk'}
+
+### [13:52:25] Revealed #9 Poet
+Info: {'evil_role': 'Twin_Minion', 'distance': 3, 'copied_role': 'Scout'}
+
+#### [13:52:37] Solver Output
+Scenarios: 3/448
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #4=67%, #5=33%
+
+#### [13:52:37] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Twin Minion', 'Lilis'})
+
+### [13:53:28] Executed #1 -> Lilis (EVIL)
+
+### [13:54:15] Executed #4 -> Twin_Minion (EVIL)
+
+## [13:54:17] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis night killed #6 Architect. Medium/Empress/Poet(Scout-format) pinpointed Lilis and TM. Poet parser bug workaround: manual scout entry.
+
