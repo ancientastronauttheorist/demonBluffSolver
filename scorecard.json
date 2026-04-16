@@ -3429,6 +3429,13 @@
       "name": "asc72_v3",
       "notes": "10HP perfect. 4 definite evils from Empress+Oracle+Poet+Witness+Lover clues. Puppeteer+Puppet both deduced, Twin_Minion disguised as Empress.",
       "date": "2026-04-16 13:04"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc72_v4",
+      "notes": "5HP. Wrong exec #2 Knitter (69% tie, good). After wrong exec, solver narrowed to #4=100% evil. Then #5 Pooka, #7 Minion definite.",
+      "date": "2026-04-16 13:10"
     }
   ]
 }

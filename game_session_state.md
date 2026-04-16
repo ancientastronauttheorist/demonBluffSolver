@@ -36028,3 +36028,106 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: 10HP perfect. 4 definite evils from Empress+Oracle+Poet+Witness+Lover clues. Puppeteer+Puppet both deduced, Twin_Minion disguised as Empress.
 
+
+---
+
+# New Game — 2026-04-16 13:05:32
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Gemcrafter, Knight, Rambler, Knitter, Hunter, Lover
+- Outcasts: Plague Doctor, Bombardier
+- Minions: Twin Minion, Minion
+- Demons: Pooka
+
+### [13:06:21] Revealed #1 Empress
+Info: {'targets': [3, 9, 10]}
+
+### [13:06:21] Revealed #2 Knitter
+Info: {'evil_pairs': 1}
+
+### [13:06:21] Revealed #4 Bombardier
+Info: {}
+
+### [13:06:21] Revealed #5 Lover
+Info: {'evil_adjacent': 2}
+
+### [13:06:21] Revealed #6 Plague_Doctor
+Info: {}
+
+### [13:06:21] Revealed #7 Knitter
+Info: {'evil_pairs': 2}
+
+### [13:06:21] Revealed #8 Hunter
+Info: {'distance': 1}
+
+### [13:06:21] Revealed #9 Knight
+Info: {}
+
+### [13:06:21] Revealed #10 Gemcrafter
+Info: {'good_position': 1}
+
+### [13:06:27] Revealed #3 Rambler
+Info: {}
+
+#### [13:06:34] Solver Output
+Scenarios: 60/3072
+Definite good: ['#10']
+Evil probabilities: #7=80%, #5=60%, #2=40%, #4=37%, #3=30%, #9=20%, #1=17%, #6=10%, #8=7%
+
+#### [13:06:34] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.221 (adjusted 2.221) | timing x1.00
+
+### [13:07:17] Ability used at #6
+
+#### [13:07:31] Solver Output
+Scenarios: 32/3072
+Definite good: ['#1', '#6', '#10']
+Evil probabilities: #2=69%, #7=69%, #4=56%, #5=56%, #3=25%, #8=12%, #9=12%
+
+#### [13:07:31] Recommendation
+Action: **EXECUTE** #2
+Reason: No reveals available. #2 is 69% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 69% confident (budget: 2 wrong execs)
+
+### [13:08:21] Executed #2 -> GOOD (WRONG!)
+
+#### [13:08:22] Solver Output
+Scenarios: 10/2100
+Definite evil: ['#4', '#7']
+Definite good: ['#1', '#2', '#6', '#8', '#9', '#10']
+Evil probabilities: #3=60%, #5=40%
+
+#### [13:08:22] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 10 scenarios (roles: {'Minion', 'Twin Minion', 'Pooka'})
+
+### [13:08:57] Executed #4 -> Twin_Minion (EVIL)
+
+#### [13:08:57] Solver Output
+Scenarios: 1/278
+Definite evil: ['#4', '#5', '#7']
+Definite good: ['#1', '#2', '#3', '#6', '#8', '#9', '#10']
+
+#### [13:08:57] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [13:09:17] Executed #5 -> Pooka (EVIL)
+
+#### [13:09:17] Solver Output
+Scenarios: 1/38
+Definite evil: ['#4', '#5', '#7']
+Definite good: ['#1', '#2', '#3', '#6', '#8', '#9', '#10']
+
+#### [13:09:17] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [13:09:53] Executed #7 -> Minion (EVIL)
+
+## [13:10:05] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Wrong exec #2 Knitter (69% tie, good). After wrong exec, solver narrowed to #4=100% evil. Then #5 Pooka, #7 Minion definite.
+
