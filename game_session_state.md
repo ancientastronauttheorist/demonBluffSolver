@@ -38002,3 +38002,192 @@ Reason: #6 is evil in ALL 4 scenarios (roles: {'Poisoner'})
 Final HP: 5
 Notes: 5HP. Baa-as-Jester#3 silenced Rambler#1 via ability. Poisoner-as-FT#6 corrupted #7 Architect. FT#2 confirmed evil in {3,7} tripping Baa. Wrong exec #7 (corrupted Arch, 69% forced-safe lookahead). Clean #3 Baa, #6 Poisoner.
 
+
+---
+
+# New Game — 2026-04-16 16:39:25
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Rambler, Poet, Knitter, Dreamer, Scout, Witness, Judge, Knight
+- Outcasts: Doppelganger, Drunk, Wretch
+- Minions: Witch, Chancellor
+- Demons: Pooka
+
+### [16:39:47] Revealed #1 Judge
+Info: {}
+
+### [16:39:47] Revealed #2 Wretch
+Info: {}
+
+### [16:39:47] Revealed #3 Judge
+Info: {}
+
+### [16:39:47] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [16:39:47] Revealed #5 Knight
+Info: {}
+
+### [16:39:47] Revealed #6 Witness
+Info: {'affected_position': 3}
+
+### [16:39:47] Revealed #7 Dreamer
+Info: {}
+
+### [16:39:47] Revealed #9 Rambler
+Info: {'silenced': False}
+
+#### [16:39:48] Solver Output
+Scenarios: 12470/45304
+Evil probabilities: #4=48%, #6=42%, #5=33%, #2=33%, #7=29%, #8=27%, #10=26%, #1=24%, #9=19%, #3=18%
+
+#### [16:39:49] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.748 (adjusted 2.482) | timing x1.00
+WARNING: Corruption risk: 19%
+
+#### [16:41:42] Solver Output
+Scenarios: 12470/45304
+Evil probabilities: #4=48%, #6=42%, #5=33%, #2=33%, #7=29%, #8=27%, #10=26%, #1=24%, #9=19%, #3=18%
+
+#### [16:41:42] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.748 (adjusted 2.482) | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [16:42:50] Ability used at #7
+
+#### [16:42:52] Solver Output
+Scenarios: 12470/45304
+Evil probabilities: #4=48%, #6=42%, #5=33%, #2=33%, #7=29%, #8=27%, #10=26%, #1=24%, #9=19%, #3=18%
+
+#### [16:42:52] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#3']
+Reason: Expected posterior 7269.6 scenarios (adjusted 7872.6, info gain 0.664 bits) | timing x1.00
+WARNING: Corruption risk: 17% -- corrupted Judge results are unreliable
+
+### [16:42:57] Revealed #1 Judge
+Info: {'target': 3, 'is_lying': True}
+
+### [16:42:57] Ability used at #1
+
+#### [16:43:05] Solver Output
+Scenarios: 7249/45304
+Evil probabilities: #4=48%, #6=40%, #2=33%, #5=31%, #10=29%, #7=27%, #8=26%, #1=25%, #3=25%, #9=17%
+
+#### [16:43:05] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#9']
+Reason: Expected posterior 4980.1 scenarios (adjusted 5911.3, info gain 0.294 bits) | timing x1.00
+WARNING: Corruption risk: 37% -- corrupted Judge results are unreliable
+
+### [16:43:10] Revealed #3 Judge
+Info: {'target': 9, 'is_lying': False}
+
+### [16:43:10] Ability used at #3
+
+#### [16:43:17] Solver Output
+Scenarios: 4997/45304
+Evil probabilities: #4=60%, #2=40%, #6=34%, #5=30%, #7=29%, #10=27%, #8=26%, #1=25%, #9=18%, #3=10%
+
+#### [16:43:17] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 60% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 60% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (60% < 63%) -- consider gathering more info
+
+### [16:43:47] Executed #4 -> GOOD (WRONG!)
+
+#### [16:43:48] Solver Output
+Scenarios: 1196/31340
+Definite good: ['#4']
+Evil probabilities: #5=61%, #2=42%, #6=37%, #3=32%, #8=31%, #9=30%, #1=24%, #10=23%, #7=20%
+
+#### [16:43:48] Recommendation
+Action: **ERROR** #5
+Reason: #5 is 61% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 61% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 61% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:44:28] Executed #5 -> Pooka (EVIL)
+
+#### [16:44:28] Solver Output
+Scenarios: 612/3347
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #2=39%, #8=34%, #1=30%, #10=24%, #7=22%, #9=18%, #6=17%, #3=17%
+
+#### [16:44:28] Recommendation
+Action: **ERROR** #8
+Reason: #8 is 34% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 34% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 34% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:44:39] Solver Output
+Scenarios: 612/3347
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #2=39%, #8=34%, #1=30%, #10=24%, #7=22%, #9=18%, #6=17%, #3=17%
+
+#### [16:44:39] Recommendation
+Action: **ERROR** #8
+Reason: #8 is 34% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 34% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 34% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:45:43] Revealed #8 Poet
+Info: {'good_position': 1, 'copied_role': 'Gemcrafter'}
+
+#### [16:45:44] Solver Output
+Scenarios: 402/3576
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #2=38%, #10=30%, #7=27%, #9=25%, #1=23%, #3=22%, #6=19%, #8=17%
+
+#### [16:45:44] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 30% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 30% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 30% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:46:07] Solver Output
+Scenarios: 402/3576
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #2=38%, #10=30%, #7=27%, #9=25%, #1=23%, #3=22%, #6=19%, #8=17%
+
+#### [16:46:07] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 30% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 30% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 30% < 85% threshold. Consider manual override if you have extra information.
+
+#### [16:46:50] Solver Output
+Scenarios: 402/3576
+Definite evil: ['#5']
+Definite good: ['#4']
+Evil probabilities: #2=38%, #10=30%, #7=27%, #9=25%, #1=23%, #3=22%, #6=19%, #8=17%
+
+#### [16:46:50] Recommendation
+Action: **ERROR** #10
+Reason: #10 is 30% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 30% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: CAUTION: budget=1, confidence 30% < 85% threshold. Consider manual override if you have extra information.
+
+### [16:47:39] Executed #10 -> GOOD (WRONG!)
+
+## [16:47:39] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss. Wrong exec #4 Knitter (60%), #10 Rambler (30% manual per rule 1). Witch#9 kept blocking. Solver couldn't reach 85% on any position with 1 budget at HP5. All abilities used, no reveals, had to manual-override #10 which failed.
+
+## [16:47:47] GAME OVER — LOSS
+Final HP: 0
+Notes: Loss at v7 final. Wrong exec #4 Knitter (60% solver pick, was corrupted good), wrong exec #10 Rambler (30% manual per rule 1). Witch#9 blocked #10 throughout. Solver stuck at budget=1 HP=5 with no position reaching 85% threshold. True evils: 3=Chancellor, 5=Pooka (killed), 9=Witch.
+

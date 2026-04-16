@@ -3555,6 +3555,20 @@
       "name": "asc74_v6",
       "notes": "5HP. Baa-as-Jester#3 silenced Rambler#1 via ability. Poisoner-as-FT#6 corrupted #7 Architect. FT#2 confirmed evil in {3,7} tripping Baa. Wrong exec #7 (corrupted Arch, 69% forced-safe lookahead). Clean #3 Baa, #6 Poisoner.",
       "date": "2026-04-16 16:37"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc74_v7",
+      "notes": "Loss. Wrong exec #4 Knitter (60%), #10 Rambler (30% manual per rule 1). Witch#9 kept blocking. Solver couldn't reach 85% on any position with 1 budget at HP5. All abilities used, no reveals, had to manual-override #10 which failed.",
+      "date": "2026-04-16 16:47"
+    },
+    {
+      "result": "loss",
+      "hp": 0,
+      "name": "asc74_v7",
+      "notes": "Loss at v7 final. Wrong exec #4 Knitter (60% solver pick, was corrupted good), wrong exec #10 Rambler (30% manual per rule 1). Witch#9 blocked #10 throughout. Solver stuck at budget=1 HP=5 with no position reaching 85% threshold. True evils: 3=Chancellor, 5=Pooka (killed), 9=Witch.",
+      "date": "2026-04-16 16:47"
     }
   ]
 }
