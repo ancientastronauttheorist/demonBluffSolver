@@ -37526,3 +37526,134 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 1
 Notes: Survived 1HP. Dreamer UI activation conflict with Knitter. Corrupted Dreamer output 'Lilis or Knitter' not parseable - marked ability_used only. Wrong exec #9 Dreamer (33% solver pick).
 
+
+---
+
+# New Game — 2026-04-16 16:19:28
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Bishop, Jester, Oracle, Fortune Teller, Rambler
+- Outcasts: Doppelganger, Plague Doctor
+- Minions: Chancellor
+- Demons: Pooka
+
+### [16:19:59] Revealed #1 Judge
+Info: {}
+
+### [16:19:59] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [16:19:59] Revealed #3 Jester
+Info: {}
+
+### [16:19:59] Revealed #4 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Chancellor'}
+
+### [16:19:59] Revealed #5 Fortune_Teller
+Info: {}
+
+### [16:19:59] Revealed #6 Fortune_Teller
+Info: {}
+
+### [16:19:59] Revealed #7 Bishop
+Info: {'targets': [3, 5, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:19:59] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [16:19:59] Solver Output
+Scenarios: 337/1694
+Evil probabilities: #4=50%, #7=45%, #6=27%, #3=21%, #5=20%, #2=18%, #1=13%, #8=7%
+
+#### [16:19:59] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.197 (adjusted 2.197) | timing x1.00
+
+#### [16:20:23] Solver Output
+Scenarios: 203/1694
+Evil probabilities: #7=75%, #4=46%, #5=22%, #3=19%, #2=16%, #8=11%, #1=8%, #6=4%
+
+#### [16:20:23] Recommendation
+Action: **USE_ABILITY** #3 (Jester) -> targets ['#1', '#2', '#7']
+Reason: Expected posterior 94.0 scenarios (adjusted 105.1, info gain 0.950 bits) | timing x1.00
+WARNING: Corruption risk: 24%
+
+### [16:21:00] Ability used at #3
+
+### [16:21:00] Revealed #2 Rambler
+Info: {'silenced': True, 'silenced_by': 3}
+
+#### [16:21:00] Solver Output
+Scenarios: 79/1694
+Evil probabilities: #7=76%, #3=35%, #4=34%, #2=20%, #5=13%, #8=10%, #1=9%, #6=3%
+
+#### [16:21:00] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#3', '#6']
+Reason: Entropy 0.991 (adjusted 0.878) | follow-up bonus 0.350 | timing x1.00
+WARNING: Corruption risk: 23%
+
+### [16:21:06] Revealed #5 Fortune Teller
+Info: {'targets': [3, 6], 'has_evil': False}
+
+### [16:21:06] Ability used at #5
+
+#### [16:21:29] Solver Output
+Scenarios: 35/1694
+Definite good: ['#5']
+Evil probabilities: #7=89%, #4=46%, #2=29%, #3=17%, #1=11%, #8=6%, #6=3%
+
+#### [16:21:29] Recommendation
+Action: **USE_ABILITY** #6 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.999 (adjusted 0.742) | follow-up bonus 0.373 | timing x1.00
+WARNING: Corruption risk: 51%
+
+### [16:21:35] Revealed #6 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [16:21:35] Ability used at #6
+
+#### [16:21:40] Solver Output
+Scenarios: 17/1694
+Definite good: ['#5']
+Evil probabilities: #7=76%, #2=35%, #4=35%, #3=24%, #1=12%, #8=12%, #6=6%
+
+#### [16:21:40] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#2']
+Reason: Expected posterior 10.5 scenarios (adjusted 11.8, info gain 0.531 bits) | timing x1.00
+WARNING: Corruption risk: 24% -- corrupted Judge results are unreliable
+
+### [16:21:45] Revealed #1 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [16:21:45] Ability used at #1
+
+#### [16:21:51] Solver Output
+Scenarios: 11/1694
+Definite good: ['#5']
+Evil probabilities: #7=64%, #3=36%, #2=27%, #4=27%, #1=18%, #8=18%, #6=9%
+
+#### [16:21:51] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 64% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 64% confident (budget: 2 wrong execs)
+
+### [16:22:19] Executed #7 -> Chancellor (EVIL)
+
+#### [16:22:19] Solver Output
+Scenarios: 3/156
+Definite evil: ['#7']
+Definite good: ['#1', '#3', '#4', '#5', '#8']
+Evil probabilities: #2=67%, #6=33%
+
+#### [16:22:19] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (67% evil Pooka, 33% good Rambler).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [16:22:26] Executed #2 -> Pooka (EVIL)
+
+## [16:22:48] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. Doppelganger on board copying FT. Jester corrupted ability silenced Rambler #2. Solver nailed it.
+

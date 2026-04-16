@@ -3527,6 +3527,13 @@
       "name": "asc74_v2",
       "notes": "Survived 1HP. Dreamer UI activation conflict with Knitter. Corrupted Dreamer output 'Lilis or Knitter' not parseable - marked ability_used only. Wrong exec #9 Dreamer (33% solver pick).",
       "date": "2026-04-16 16:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc74_v3",
+      "notes": "Perfect 10HP. Doppelganger on board copying FT. Jester corrupted ability silenced Rambler #2. Solver nailed it.",
+      "date": "2026-04-16 16:22"
     }
   ]
 }
