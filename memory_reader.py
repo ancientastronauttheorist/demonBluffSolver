@@ -29,10 +29,9 @@ psapi = ctypes.WinDLL('psapi', use_last_error=True)
 PROCESS_VM_READ = 0x0010
 PROCESS_QUERY_INFORMATION = 0x0400
 
-# IL2CPP offsets (from dump.cs analysis)
+# IL2CPP offsets (from dump.cs / Il2CppDumper script.json analysis)
 # Gameplay class
-GAMEPLAY_AWAKE_RVA = 0x34DBF0
-GAMEPLAY_STATIC_CLASS_PTR_DISP = 0x0222A57C  # RIP-relative displacement from Awake+37
+GAMEPLAY_TYPEINFO_RVA = 0x26D5CA0  # Il2CppClass* pointer address (RVA from GA base)
 IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
 GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x8
 GAMEPLAY_CHARACTERS_OFFSET = 0x60
@@ -71,12 +70,12 @@ ARRAY_FIRST_ELEMENT_OFFSET = 0x20
 CHAR_DATAREF_OFFSET = 0x50       # CharacterData* (true role)
 CHAR_BLUFF_OFFSET = 0x58         # CharacterData* (disguise)
 CHAR_REGISTERAS_OFFSET = 0x60    # CharacterData* (registers as)
-CHAR_STATE_OFFSET = 0xC4         # ECharacterState (int32)
-CHAR_ALIGNMENT_OFFSET = 0xD8     # EAlignment (int32)
-CHAR_ID_OFFSET = 0xF8            # int32 (position)
-CHAR_KILLED_HIDDEN_OFFSET = 0xCC # bool (killed by Lilis)
-CHAR_REVEALED_OFFSET = 0xB8      # bool (card has been flipped)
-CHAR_STATUSES_OFFSET = 0xD0      # CharacterStatuses object
+CHAR_STATE_OFFSET = 0xE4         # ECharacterState (int32)
+CHAR_ALIGNMENT_OFFSET = 0xF8     # EAlignment (int32)
+CHAR_ID_OFFSET = 0x118           # int32 (position)
+CHAR_KILLED_HIDDEN_OFFSET = 0xEC # bool (killed by Lilis)
+CHAR_REVEALED_OFFSET = 0xD8      # bool (card has been flipped)
+CHAR_STATUSES_OFFSET = 0xF0      # CharacterStatuses object
 
 # CharacterStatuses field offsets
 CSTATUS_LIST_OFFSET = 0x10       # List<ECharacterStatus>
@@ -90,12 +89,12 @@ CHAR_STATUS = {
 }
 
 # Character clue/ability field offsets (Phase 2)
-CHAR_RUNTIME_DATA_OFFSET = 0x68  # RuntimeCharacterData (polymorphic per role)
+CHAR_RUNTIME_DATA_OFFSET = 0x70  # RuntimeCharacterData (polymorphic per role)
 CHAR_ACTED_OFFSET = 0xA0         # Acted (speech bubble component)
 CHAR_LEFT_ACT_OFFSET = 0xA8      # bool (left ability activated)
 CHAR_USES_OFFSET = 0xBC          # int (ability use count)
-CHAR_ACTED_INFOS_OFFSET = 0x128  # List<ActedInfo>
-CHAR_SAVED_ACT_OFFSET = 0x158    # string (cached clue text)
+CHAR_ACTED_INFOS_OFFSET = 0x148  # List<ActedInfo>
+CHAR_SAVED_ACT_OFFSET = 0x198    # string (cached clue text)
 CHAR_ACT_OFFSET = 0x161          # bool (ability activated flag)
 
 # ActedInfo class field offsets
@@ -185,27 +184,26 @@ def clean_name(raw_name):
     return DISPLAY_NAMES.get(name, name)
 
 
-KNOWN_DLL_FINGERPRINT: dict | None = None
+# Validated against GameAssembly.dll with this fingerprint. Offsets in this file
+# were derived from Il2CppDumper output of a matching DLL; any mismatch means
+# the game updated and offsets are likely stale.
+KNOWN_DLL_FINGERPRINT: dict = {"size": 44685312, "pe_timestamp": 1776354967}
 
 
 def validate_dll_version(reader: 'MemoryReader'):
-    """Check GameAssembly.dll fingerprint for version changes.
+    """Check GameAssembly.dll fingerprint against the version these offsets target.
 
-    First call records the fingerprint. Subsequent calls compare against it.
-    Prints a loud warning if the DLL has changed (offsets may be stale).
+    Prints a loud warning if the DLL has changed (offsets almost certainly stale).
     """
-    global KNOWN_DLL_FINGERPRINT
     fp = reader.get_dll_fingerprint()
     if fp is None:
         print("WARNING: Could not read GameAssembly.dll fingerprint")
         return
-    if KNOWN_DLL_FINGERPRINT is None:
-        KNOWN_DLL_FINGERPRINT = fp
-        print(f"GameAssembly.dll fingerprint recorded: size={fp['size']}, timestamp={fp['pe_timestamp']}")
-    elif fp['size'] != KNOWN_DLL_FINGERPRINT['size'] or fp['pe_timestamp'] != KNOWN_DLL_FINGERPRINT['pe_timestamp']:
-        print("!!! WARNING: GameAssembly.dll changed! Offsets may be stale. !!!")
-        print(f"  Old: size={KNOWN_DLL_FINGERPRINT['size']}, timestamp={KNOWN_DLL_FINGERPRINT['pe_timestamp']}")
-        print(f"  New: size={fp['size']}, timestamp={fp['pe_timestamp']}")
+    if fp['size'] != KNOWN_DLL_FINGERPRINT['size'] or fp['pe_timestamp'] != KNOWN_DLL_FINGERPRINT['pe_timestamp']:
+        print("!!! WARNING: GameAssembly.dll changed from validated version! Offsets may be stale. !!!")
+        print(f"  Validated: size={KNOWN_DLL_FINGERPRINT['size']}, timestamp={KNOWN_DLL_FINGERPRINT['pe_timestamp']}")
+        print(f"  Current:   size={fp['size']}, timestamp={fp['pe_timestamp']}")
+        print("  Re-run Il2CppDumper on GameAssembly.dll and update offsets (Gameplay_TypeInfo + Character fields).")
 
 
 class MemoryReader:
@@ -382,9 +380,7 @@ class MemoryReader:
 
     def _get_static_fields(self):
         """Get the Gameplay class static fields pointer."""
-        awake_addr = self.ga_base + GAMEPLAY_AWAKE_RVA
-        class_ptr_addr = awake_addr + 44 + GAMEPLAY_STATIC_CLASS_PTR_DISP
-        il2cpp_class = self._read_ptr(class_ptr_addr)
+        il2cpp_class = self._read_ptr(self.ga_base + GAMEPLAY_TYPEINFO_RVA)
         if not il2cpp_class:
             return None
         return self._read_ptr(il2cpp_class + IL2CPP_CLASS_STATIC_FIELDS_OFFSET)

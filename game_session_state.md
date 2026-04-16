@@ -35635,3 +35635,154 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP win. Chancellor@4 + Pooka@5. Exec #4 Chancellor (75% forced-safe), #6 wrong Bard corrupted (-5 HP), #5 Pooka (100%).
 
+
+---
+
+# New Game — 2026-04-16 11:53:31
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: medium, fortune_teller, hunter, alchemist, bishop, jester, architect
+- Outcasts: drunk
+- Minions: poisoner, minion
+- Demons: lilis
+
+### [11:55:58] Revealed #1 Jester
+Info: {}
+
+### [11:55:58] Revealed #2 Jester
+Info: {}
+
+### [11:55:58] Revealed #3 Medium
+Info: {'good_position': 8, 'good_role': 'Drunk'}
+
+### [11:55:58] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [11:58:49] Revealed #5 Fortune_Teller
+Info: {}
+
+### [11:58:49] Revealed #6 Architect
+Info: {'side': 'Right'}
+
+### [11:58:49] Revealed #8 Architect
+Info: {'side': 'Left'}
+
+### [11:58:49] Revealed #9 Bishop
+Info: {'targets': [3, 5, 7], 'types': ['Outcast', 'Villager', 'Minion']}
+
+## Deck
+- Villagers: Medium, Fortune_Teller, Hunter, Alchemist, Bishop, Jester, Architect
+- Outcasts: Drunk
+- Minions: Poisoner, Minion
+- Demons: Lilis
+
+#### [12:09:47] Solver Output
+Scenarios: 156/5224
+Definite good: ['#7']
+Evil probabilities: #8=69%, #3=59%, #4=49%, #1=44%, #2=31%, #9=26%, #6=14%, #5=9%
+
+#### [12:09:47] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#1', '#7']
+Reason: Entropy 1.000 (adjusted 0.913) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [12:10:36] Revealed #5 Fortune Teller
+Info: {'targets': [1, 7], 'has_evil': True}
+
+### [12:10:37] Ability used at #5
+
+#### [12:10:41] Solver Output
+Scenarios: 77/5224
+Definite good: ['#7']
+Evil probabilities: #8=69%, #1=68%, #3=53%, #4=43%, #9=26%, #2=23%, #6=13%, #5=5%
+
+#### [12:10:41] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#6', '#7']
+Reason: Expected posterior 35.4 scenarios (adjusted 38.6, info gain 0.996 bits) | timing x1.00
+WARNING: Corruption risk: 18%
+
+### [12:11:23] Revealed #2 Jester
+Info: {'targets': [1, 6, 7], 'evil_count': 3}
+
+### [12:11:23] Ability used at #2
+
+#### [12:11:27] Solver Output
+Scenarios: 32/5224
+Definite good: ['#7']
+Evil probabilities: #1=62%, #2=56%, #8=56%, #3=38%, #4=31%, #9=31%, #5=12%, #6=12%
+
+#### [12:11:27] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#5', '#8']
+Reason: Expected posterior 19.2 scenarios (adjusted 19.8, info gain 0.696 bits) | timing x1.00
+WARNING: Corruption risk: 6%
+
+### [12:12:19] Revealed #1 Jester
+Info: {'targets': [2, 5, 8], 'evil_count': 3}
+
+### [12:12:20] Ability used at #1
+
+#### [12:12:25] Solver Output
+Scenarios: 22/5224
+Definite good: ['#7']
+Evil probabilities: #1=91%, #2=55%, #8=55%, #9=36%, #3=27%, #4=18%, #5=9%, #6=9%
+
+#### [12:12:25] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 91% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 91% confident (budget: 1 wrong execs)
+
+### [12:13:06] Executed #1 -> Poisoner (EVIL)
+
+#### [12:13:10] Solver Output
+Scenarios: 10/616
+Definite evil: ['#1']
+Definite good: ['#5', '#7']
+Evil probabilities: #9=60%, #2=40%, #8=40%, #3=20%, #4=20%, #6=20%
+
+#### [12:13:10] Recommendation
+Action: **ERROR** #9
+Reason: #9 is 60% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 60% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 60% < 83% threshold. Consider manual override if you have extra information.
+
+### [12:25:35] Executed #9 -> Lilis (EVIL)
+
+#### [12:25:39] Solver Output
+Scenarios: 3/42
+Definite evil: ['#1', '#9']
+Definite good: ['#3', '#5', '#7', '#8']
+Evil probabilities: #2=33%, #4=33%, #6=33%
+
+#### [12:25:39] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 33% likely evil but budget=1 requires >=83% confidence (HP=6, cost=5).
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 33% < 83% threshold. Consider manual override if you have extra information.
+
+### [12:27:49] Executed #4 -> GOOD (WRONG!)
+
+#### [12:27:52] Solver Output
+Scenarios: 2/36
+Definite evil: ['#1', '#9']
+Definite good: ['#3', '#4', '#5', '#7', '#8']
+Evil probabilities: #2=50%, #6=50%
+
+#### [12:27:52] Recommendation
+Action: **ERROR** #6
+Reason: #6 is 50% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [12:29:07] Executed #6 -> Minion (EVIL)
+
+## [12:29:19] GAME OVER — WIN
+Final HP: 1
+Notes: Memory reader fix + deck case bug. HP=1, wrong exec #4 when 33% tie. Asc72 village 1/7
+
+## Deck
+- Villagers: Medium
+- Outcasts: Drunk
+- Minions: Poisoner
+- Demons: Lilis
+

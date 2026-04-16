@@ -1212,10 +1212,25 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session) -> di
 # ============================================================
 
 def _parse_role_list(spec: str) -> list[str]:
-    """Parse 'Knitter,Scout,Enlightened' into list."""
+    """Parse 'knitter,scout,enlightened' into list of canonical role names.
+
+    Case-insensitive and accepts underscores or spaces. Unknown tokens
+    pass through as Title Case so downstream warnings still fire.
+    """
     if not spec or spec.lower() == "none":
         return []
-    return [r.strip() for r in spec.split(",") if r.strip()]
+    from knowledge_base import CARDS_BY_NAME
+    canonical_by_key = {
+        name.lower().replace(" ", "_"): name for name in CARDS_BY_NAME
+    }
+    out = []
+    for raw in spec.split(","):
+        token = raw.strip()
+        if not token:
+            continue
+        key = token.lower().replace(" ", "_")
+        out.append(canonical_by_key.get(key, token.replace("_", " ").title()))
+    return out
 
 
 def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:

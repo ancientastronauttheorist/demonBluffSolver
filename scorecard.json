@@ -3394,6 +3394,13 @@
       "name": "asc71_v8",
       "notes": "5HP win. Chancellor@4 + Pooka@5. Exec #4 Chancellor (75% forced-safe), #6 wrong Bard corrupted (-5 HP), #5 Pooka (100%).",
       "date": "2026-04-14 20:38"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc72_v1",
+      "notes": "Memory reader fix + deck case bug. HP=1, wrong exec #4 when 33% tie. Asc72 village 1/7",
+      "date": "2026-04-16 12:29"
     }
   ]
 }

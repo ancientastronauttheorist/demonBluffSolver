@@ -1,0 +1,174 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5,
+          8
+        ],
+        "evil_count": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          7
+        ],
+        "evil_count": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Drunk"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          7
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          7
+        ],
+        "types": [
+          "Outcast",
+          "Villager",
+          "Minion"
+        ]
+      }
+    }
+  ],
+  "executed": [
+    1,
+    9,
+    4,
+    6
+  ],
+  "confirmed_evil": [
+    1,
+    9,
+    6
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Poisoner",
+    "9": "Lilis",
+    "6": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "4": false
+  },
+  "deck": {
+    "villagers": [
+      "Medium",
+      "Fortune_Teller",
+      "Hunter",
+      "Alchemist",
+      "Bishop",
+      "Jester",
+      "Architect"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    5,
+    2,
+    1
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc72_v1",
+  "true_evil_positions": {
+    "1": "Poisoner",
+    "6": "Minion",
+    "9": "Lilis"
+  },
+  "notes": "Memory reader fix + deck case bug. HP=1, wrong exec #4 when 33% tie. Asc72 village 1/7"
+}
