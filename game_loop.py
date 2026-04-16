@@ -71,6 +71,9 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
+def card_rambler(pos: int, silenced: bool) -> CardInfo:
+    return CardInfo(pos, "Rambler", info_parsed={"silenced": silenced})
+
 def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
     return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
 
@@ -1319,6 +1322,11 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         if 'good' in clue.lower() or 'clean' in clue.lower():
             return card_confessor(pos, False)
 
+    # --- Rambler: silenced <=> no quote text ---
+    if role_lower == 'rambler':
+        silenced = not clue.strip()
+        return card_rambler(pos, silenced)
+
     # --- Bard: "no Corrupted" or "X card(s) away from Corrupted" ---
     if role_lower == 'bard':
         if 'no corrupted' in clue.lower() or 'are not corrupted' in clue.lower():
@@ -1565,6 +1573,11 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "jester":
         targets = [int(x) for x in args[2].split(",")]
         return card_jester(pos, targets, int(args[3]))
+    elif role == "rambler":
+        # "silenced" / "quiet" means no quote; "talking" / "quote" means a quote showed.
+        token = args[2].lower() if len(args) > 2 else ""
+        silenced = token in ("silenced", "quiet", "silent", "true", "yes", "1")
+        return card_rambler(pos, silenced)
     elif role == "dreamer":
         return card_dreamer(pos, int(args[2]), args[3])
     elif role == "judge":

@@ -46,7 +46,11 @@ pub fn pick_execution_target(
     }
 
     let probs = evil_probabilities(state, result);
-    let executed: HashSet<u8> = state.executed.iter().copied().collect();
+    // Dead positions (already-executed + night-killed by Lilis) cannot be the target
+    // of a future execute action. Treat them uniformly as "executed" for selection.
+    let executed: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter())
+        .copied().collect();
     let bomb_set: HashSet<u8> = result.bombardier_positions.iter().copied().collect();
 
     // 3. Execute definite evil (skip Bombardier)

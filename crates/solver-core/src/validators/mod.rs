@@ -35,6 +35,7 @@ pub fn validate_card(card: &CardInfo, scenario: &Scenario, state: &GameState) ->
         "bountyhunter" => validate_bounty_hunter(card, scenario, state),
         "baker" => validate_baker(card, scenario, state),
         "poet" => validate_poet(card, scenario, state),
+        "rambler" => validate_rambler(card, scenario, state),
         _ => true,
     }
 }
@@ -758,6 +759,99 @@ fn validate_poet(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
         "bountyhunter" | "bounty hunter" | "bounty_hunter" => validate_bounty_hunter(card, scenario, state),
         "baker" => validate_baker(card, scenario, state),
         _ => true,
+    }
+}
+
+/// Rambler: passively displays a quote when flipped. If the FIRST active-ability
+/// picker of Rambler (post-flip) is "Disguised" (evil or an outcast that disguises
+/// as a villager — Doppelganger/Drunk), Rambler is Silenced. If Rambler itself
+/// lies (evil-as-Rambler or corrupted), the condition inverts.
+///
+/// Data entry: `info_parsed = {"silenced": true|false}`. If absent, validator is a no-op.
+fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    let claimed_silenced = match info_bool(&card.info_parsed, "silenced") {
+        Some(v) => v,
+        None => return true,
+    };
+    let rambler_pos = card.position;
+
+    // Reveal order indices. If Rambler never flipped, no info to discriminate.
+    let reveal_idx: HashMap<u8, usize> = state.reveal_order.iter()
+        .enumerate().map(|(i, &p)| (p, i)).collect();
+    let rambler_flip = match reveal_idx.get(&rambler_pos) {
+        Some(&i) => i,
+        None => return true,
+    };
+
+    // Collect active-ability picks of Rambler with their reveal indices.
+    // "Active" = roles whose ability requires the player to choose targets.
+    // Passive info (Hunter, Oracle, Bishop, Empress, Medium, etc.) does not
+    // count as "picking" per Rambler's wording.
+    let mut candidates: Vec<(usize, u8)> = Vec::new();
+
+    for &ability_pos in &state.used_abilities {
+        let ability_flip = match reveal_idx.get(&ability_pos) {
+            Some(&i) => i,
+            None => continue,
+        };
+        if ability_flip <= rambler_flip { continue; }
+        let acard = match state.card_at(ability_pos) {
+            Some(c) => c,
+            None => continue,
+        };
+        let role = normalize_role(&acard.apparent_role);
+        let targets: Vec<u8> = match role.as_str() {
+            "jester" | "druid" | "fortuneteller" => {
+                info_targets(&acard.info_parsed, "targets").unwrap_or_default()
+            }
+            "dreamer" | "judge" => {
+                info_pos(&acard.info_parsed, "target")
+                    .map(|p| vec![p]).unwrap_or_default()
+            }
+            _ => vec![],
+        };
+        if targets.contains(&rambler_pos) {
+            candidates.push((ability_flip, ability_pos));
+        }
+    }
+    // PD and Slayer results live in dedicated lists.
+    for pd_res in &state.pd_ability_results {
+        if pd_res.target == rambler_pos {
+            if let Some(&idx) = reveal_idx.get(&pd_res.pd_pos) {
+                if idx > rambler_flip {
+                    candidates.push((idx, pd_res.pd_pos));
+                }
+            }
+        }
+    }
+    for sl_res in &state.slayer_results {
+        if sl_res.target_pos == rambler_pos {
+            if let Some(&idx) = reveal_idx.get(&sl_res.slayer_pos) {
+                if idx > rambler_flip {
+                    candidates.push((idx, sl_res.slayer_pos));
+                }
+            }
+        }
+    }
+
+    // Earliest picker wins ("If Picked (once)").
+    candidates.sort_by_key(|(idx, _)| *idx);
+    let picker_pos = match candidates.first() {
+        Some(&(_, p)) => p,
+        None => return true, // Never picked → no info to discriminate.
+    };
+
+    // "Disguised" = evil-disguising-as-villager OR Doppelganger/Drunk
+    // (both are outcasts whose apparent role differs from truth).
+    let picker_disguised = is_evil_in_board_state(picker_pos, scenario, state)
+        || scenario.doppelganger_position == Some(picker_pos)
+        || scenario.drunk_position == Some(picker_pos);
+
+    let truth = truth_status(rambler_pos, scenario, state);
+    if truth == TruthStatus::Truthful {
+        claimed_silenced == picker_disguised
+    } else {
+        claimed_silenced != picker_disguised
     }
 }
 
