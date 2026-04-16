@@ -3422,6 +3422,13 @@
       "name": "asc72_v2_retry",
       "notes": "After v2 loss, retry win: 10HP perfect. Oracle+Lover+Hunter+Confessor clues gave definite evils. Baa claimed Confessor dizzy = evil.",
       "date": "2026-04-16 12:58"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc72_v3",
+      "notes": "10HP perfect. 4 definite evils from Empress+Oracle+Poet+Witness+Lover clues. Puppeteer+Puppet both deduced, Twin_Minion disguised as Empress.",
+      "date": "2026-04-16 13:04"
     }
   ]
 }

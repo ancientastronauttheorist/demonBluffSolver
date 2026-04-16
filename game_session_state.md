@@ -35950,3 +35950,81 @@ Reason: #6 is evil in ALL 5 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: After v2 loss, retry win: 10HP perfect. Oracle+Lover+Hunter+Confessor clues gave definite evils. Baa claimed Confessor dizzy = evil.
 
+
+---
+
+# New Game — 2026-04-16 13:00:12
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune Teller, Empress, Oracle, Witness, Lover, Poet
+- Outcasts: Wretch
+- Minions: Twin Minion, Puppeteer
+- Demons: Baa
+
+### [13:01:20] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [13:01:20] Revealed #2 Poet
+Info: {'distance': 3, 'copied_role': 'Hunter'}
+
+### [13:01:20] Revealed #3 Witness
+Info: {'affected_position': 3}
+
+### [13:01:20] Revealed #4 Oracle
+Info: {'targets': [3, 5], 'minion_role': 'Puppet'}
+
+### [13:01:20] Revealed #6 Empress
+Info: {'targets': [1, 4, 5]}
+
+### [13:01:20] Revealed #7 Wretch
+Info: {}
+
+### [13:01:20] Revealed #8 Empress
+Info: {'targets': [5, 6, 9]}
+
+### [13:01:20] Revealed #9 Fortune_Teller
+Info: {}
+
+### [13:01:34] Revealed #5 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 3}
+
+#### [13:01:46] Solver Output
+Scenarios: 2/672
+Definite evil: ['#1', '#2', '#3', '#8']
+Definite good: ['#4', '#5', '#6', '#7', '#9']
+
+#### [13:01:46] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Twin Minion', 'Baa'})
+
+### [13:02:21] Executed #1 -> Baa (EVIL)
+
+#### [13:02:21] Solver Output
+Scenarios: 1/72
+Definite evil: ['#1', '#2', '#3', '#8']
+Definite good: ['#4', '#5', '#6', '#7', '#9']
+
+#### [13:02:21] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [13:02:41] Executed #2 -> Puppeteer (EVIL)
+
+#### [13:02:56] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#2', '#3', '#8']
+Definite good: ['#4', '#5', '#6', '#7', '#9']
+
+#### [13:02:56] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [13:03:15] Executed #3 -> Puppet (EVIL)
+
+### [13:03:55] Executed #8 -> Twin_Minion (EVIL)
+
+## [13:04:06] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. 4 definite evils from Empress+Oracle+Poet+Witness+Lover clues. Puppeteer+Puppet both deduced, Twin_Minion disguised as Empress.
+
