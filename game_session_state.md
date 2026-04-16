@@ -37777,3 +37777,112 @@ Reason: #4 is evil in ALL 3 scenarios (roles: {'Poisoner'})
 Final HP: 10
 Notes: Perfect 10HP. 2M+1D setup. PD#5 cleared #3. Druid#6 found no outcasts in {1,2,3}. Druid#4 (evil Poisoner) lied Doppelganger claim (not in deck=evil). Exec chain cleaned all 3.
 
+
+---
+
+# New Game — 2026-04-16 16:31:08
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Slayer, Rambler, Bard, Alchemist, Druid
+- Outcasts: Wretch, Bombardier, Plague Doctor
+- Minions: Puppeteer, Chancellor
+- Demons: Baa
+
+### [16:31:51] Revealed #1 Alchemist
+Info: {'cured_count': 1}
+
+### [16:31:51] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [16:31:51] Revealed #3 Slayer
+Info: {}
+
+### [16:31:51] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [16:31:51] Revealed #5 Slayer
+Info: {}
+
+### [16:31:51] Revealed #6 Plague_Doctor
+Info: {}
+
+### [16:31:51] Revealed #7 Bombardier
+Info: {}
+
+### [16:31:51] Revealed #8 Bard
+Info: {'corruption_distance': -1}
+
+### [16:31:51] Revealed #9 Lover
+Info: {'evil_adjacent': 1}
+
+#### [16:31:51] Solver Output
+Scenarios: 142/2236
+Definite evil: ['#4']
+Evil probabilities: #3=60%, #5=60%, #1=47%, #9=39%, #2=32%, #7=29%, #8=26%, #6=6%
+
+#### [16:31:51] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 142 scenarios (roles: {'Puppeteer', 'Chancellor', 'Baa'})
+
+### [16:31:58] Executed #4 -> Puppeteer (EVIL)
+
+#### [16:32:03] Solver Output
+Scenarios: 93/349
+Definite evil: ['#4']
+Evil probabilities: #5=71%, #3=59%, #1=45%, #9=41%, #7=33%, #2=24%, #8=20%, #6=6%
+
+#### [16:32:03] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 1.283 (adjusted 1.283) | timing x1.00
+
+#### [16:32:34] Solver Output
+Scenarios: 72/349
+Definite evil: ['#4']
+Definite good: ['#6']
+Evil probabilities: #5=72%, #3=58%, #9=53%, #7=35%, #1=29%, #2=26%, #8=26%
+
+#### [16:32:34] Recommendation
+Action: **USE_ABILITY** #3 (Slayer) -> targets ['#5']
+Reason: Target #5 is 72% evil (adjusted 0.72)
+
+#### [16:33:05] Solver Output
+Scenarios: 4/22
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7']
+Evil probabilities: #9=50%, #1=25%, #8=25%
+
+#### [16:33:05] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [16:33:12] Executed #3 -> Puppet (EVIL)
+
+#### [16:33:18] Solver Output
+Scenarios: 4/22
+Definite evil: ['#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7']
+Evil probabilities: #9=50%, #1=25%, #8=25%
+
+#### [16:33:18] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Alchemist, 25% good Alchemist (corrupted), 25% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 25%, but all reveal branches still lead to a forced win.
+
+### [16:33:25] Executed #1 -> GOOD (WRONG!)
+
+#### [16:33:32] Solver Output
+Scenarios: 2/18
+Definite evil: ['#3', '#4', '#5', '#9']
+Definite good: ['#1', '#2', '#6', '#7', '#8']
+
+#### [16:33:32] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [16:34:03] Executed #9 -> Baa (EVIL)
+
+## [16:34:05] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win. Puppeteer game + Baa. Slayer#3 (Puppet disguise) killed #5 Chancellor. Exec #4 Puppeteer, #3 Puppet, wrong exec #1 Alchemist (forced lookahead), then #9 Baa.
+

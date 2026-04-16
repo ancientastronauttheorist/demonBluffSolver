@@ -1,0 +1,166 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 0
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    }
+  ],
+  "executed": [
+    4,
+    5,
+    3,
+    1,
+    9
+  ],
+  "confirmed_evil": [
+    4,
+    5,
+    3,
+    9
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Puppeteer",
+    "5": "Chancellor",
+    "3": "Puppet",
+    "9": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 3,
+      "target_pos": 5,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 8,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "1": false
+  },
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Slayer",
+      "Rambler",
+      "Bard",
+      "Alchemist",
+      "Druid"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Bombardier",
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    6,
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v5",
+  "true_evil_positions": {
+    "3": "Puppet",
+    "4": "Puppeteer",
+    "5": "Chancellor",
+    "9": "Baa"
+  },
+  "notes": "5HP win. Puppeteer game + Baa. Slayer#3 (Puppet disguise) killed #5 Chancellor. Exec #4 Puppeteer, #3 Puppet, wrong exec #1 Alchemist (forced lookahead), then #9 Baa."
+}
