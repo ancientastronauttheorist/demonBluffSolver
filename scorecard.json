@@ -3464,6 +3464,13 @@
       "name": "asc73_v1",
       "notes": "6HP. Lilis night killed #6 Architect. Medium/Empress/Poet(Scout-format) pinpointed Lilis and TM. Poet parser bug workaround: manual scout entry.",
       "date": "2026-04-16 13:54"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc73_v2",
+      "notes": "3HP. Wrong exec #7 Jester corrupted (80%, lookahead forced-win). Wrong exec #6 Drunk (2HP). Poisoner at #8 100% definite.",
+      "date": "2026-04-16 14:02"
     }
   ]
 }

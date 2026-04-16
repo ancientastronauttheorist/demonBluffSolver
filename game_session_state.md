@@ -36465,3 +36465,132 @@ Reason: #1 is evil in ALL 3 scenarios (roles: {'Twin Minion', 'Lilis'})
 Final HP: 6
 Notes: 6HP. Lilis night killed #6 Architect. Medium/Empress/Poet(Scout-format) pinpointed Lilis and TM. Poet parser bug workaround: manual scout entry.
 
+
+---
+
+# New Game — 2026-04-16 13:56:01
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Knight, Empress, Judge, Bard, Poet
+- Outcasts: Plague Doctor, Drunk
+- Minions: Poisoner
+- Demons: Baa
+
+### [13:56:32] Revealed #1 Judge
+Info: {}
+
+### [13:56:32] Revealed #2 Bard
+Info: {'corruption_distance': 1}
+
+### [13:56:32] Revealed #3 Empress
+Info: {'targets': [1, 4, 7]}
+
+### [13:56:32] Revealed #4 Plague_Doctor
+Info: {}
+
+### [13:56:32] Revealed #5 Knight
+Info: {}
+
+### [13:56:32] Revealed #6 Poet
+Info: {'evil_role': 'Poisoner', 'distance': 2, 'copied_role': 'Scout'}
+
+### [13:56:32] Revealed #7 Jester
+Info: {}
+
+### [13:56:32] Revealed #8 Poet
+Info: {'good_position': 6, 'good_role': 'Poet', 'copied_role': 'Medium'}
+
+#### [13:56:42] Solver Output
+Scenarios: 113/1654
+Definite good: ['#4']
+Evil probabilities: #6=47%, #3=36%, #1=34%, #7=28%, #8=23%, #5=21%, #2=11%
+
+#### [13:56:42] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.407 (adjusted 2.407) | timing x1.00
+
+### [13:57:36] Ability used at #4
+
+#### [13:57:46] Solver Output
+Scenarios: 39/1654
+Definite good: ['#4']
+Evil probabilities: #7=41%, #6=38%, #2=31%, #3=31%, #8=31%, #5=18%, #1=10%
+
+#### [13:57:46] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#1', '#4', '#6']
+Reason: Expected posterior 22.6 scenarios (adjusted 25.2, info gain 0.630 bits) | timing x1.00
+WARNING: Corruption risk: 23%
+
+### [13:58:35] Revealed #7 Jester
+Info: {'targets': [1, 4, 6], 'evil_count': 2}
+
+### [13:58:35] Ability used at #7
+
+#### [13:58:43] Solver Output
+Scenarios: 25/1654
+Definite good: ['#4']
+Evil probabilities: #7=64%, #6=44%, #2=28%, #8=28%, #3=20%, #5=12%, #1=4%
+
+#### [13:58:43] Recommendation
+Action: **USE_ABILITY** #1 (Judge) -> targets ['#3']
+Reason: Expected posterior 20.0 scenarios (adjusted 26.0, info gain 0.000 bits) | timing x1.00
+WARNING: Corruption risk: 60% -- corrupted Judge results are unreliable
+
+### [13:59:23] Revealed #1 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [13:59:23] Ability used at #1
+
+#### [13:59:30] Solver Output
+Scenarios: 20/1654
+Definite good: ['#1', '#4', '#5']
+Evil probabilities: #7=80%, #6=45%, #8=30%, #2=25%, #3=20%
+
+#### [13:59:30] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (55% evil Poisoner, 25% evil Baa, 20% good Jester (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 80%, but all reveal branches still lead to a forced win.
+
+### [14:00:12] Executed #7 -> GOOD (WRONG!)
+
+#### [14:00:12] Solver Output
+Scenarios: 4/1192
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+Evil probabilities: #6=50%, #8=50%
+
+#### [14:00:12] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [14:00:34] Executed #3 -> Baa (EVIL)
+
+#### [14:00:34] Solver Output
+Scenarios: 4/200
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#7']
+Evil probabilities: #6=50%, #8=50%
+
+#### [14:00:34] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:01:27] Executed #6 -> GOOD (WRONG!)
+
+#### [14:01:28] Solver Output
+Scenarios: 2/152
+Definite evil: ['#3', '#8']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [14:01:28] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [14:02:09] Executed #8 -> Poisoner (EVIL)
+
+## [14:02:11] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP. Wrong exec #7 Jester corrupted (80%, lookahead forced-win). Wrong exec #6 Drunk (2HP). Poisoner at #8 100% definite.
+
