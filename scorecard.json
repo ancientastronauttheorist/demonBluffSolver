@@ -3513,20 +3513,6 @@
       "name": "asc73_v7",
       "notes": "10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly.",
       "date": "2026-04-16 14:53"
-    },
-    {
-      "result": "loss",
-      "hp": 5,
-      "name": "asc74_v1",
-      "notes": "Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly.",
-      "date": "2026-04-16 15:12"
-    },
-    {
-      "result": "loss",
-      "hp": 5,
-      "name": "asc74_v1",
-      "notes": "Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly. Game abandoned in-app. True board: 1=Baa(Rambler), 2=Doppelganger(FT), 3=Chancellor(Oracle)",
-      "date": "2026-04-16 15:12"
     }
   ]
 }
