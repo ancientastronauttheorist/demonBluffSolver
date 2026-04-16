@@ -37657,3 +37657,123 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 10
 Notes: Perfect 10HP. Doppelganger on board copying FT. Jester corrupted ability silenced Rambler #2. Solver nailed it.
 
+
+---
+
+# New Game — 2026-04-16 16:24:00
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Baker, Druid, Knitter, Witness, Rambler
+- Outcasts: Bombardier, Plague Doctor
+- Minions: Minion, Poisoner
+- Demons: Pooka
+
+### [16:24:36] Revealed #1 Rambler
+Info: {'silenced': False}
+
+### [16:24:36] Revealed #2 Bombardier
+Info: {}
+
+### [16:24:36] Revealed #3 Knitter
+Info: {'evil_pairs': 0}
+
+### [16:24:36] Revealed #4 Druid
+Info: {}
+
+### [16:24:36] Revealed #5 Plague_Doctor
+Info: {}
+
+### [16:24:36] Revealed #6 Druid
+Info: {}
+
+### [16:24:36] Revealed #7 Architect
+Info: {'side': 'Right'}
+
+### [16:24:36] Revealed #9 Baker
+Info: {'original_role': 'Baker'}
+
+#### [16:24:36] Solver Output
+Scenarios: 472/2456
+Evil probabilities: #4=61%, #6=51%, #2=35%, #3=34%, #7=30%, #9=28%, #8=28%, #1=27%, #5=7%
+
+#### [16:24:36] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.399 (adjusted 2.399) | timing x1.00 | EV=2.399 > reveal EV=0.952
+
+### [16:24:59] Revealed #8 Witness
+Info: {'affected_position': 0}
+
+#### [16:25:24] Solver Output
+Scenarios: 195/2460
+Evil probabilities: #6=57%, #4=56%, #3=46%, #8=35%, #9=33%, #2=30%, #1=22%, #7=19%, #5=2%
+
+#### [16:25:24] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.756 (adjusted 1.639) | timing x1.00
+WARNING: Corruption risk: 13%
+
+### [16:25:49] Revealed #6 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+#### [16:25:49] Solver Output
+Scenarios: 113/2460
+Evil probabilities: #6=65%, #4=58%, #3=46%, #8=35%, #7=30%, #1=26%, #9=26%, #2=15%, #5=1%
+
+#### [16:25:50] Recommendation
+Action: **USE_ABILITY** #4 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.314 (adjusted 1.180) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [16:26:28] Revealed #4 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Doppelganger'}
+
+#### [16:26:28] Solver Output
+Scenarios: 17/2460
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #3=82%, #9=18%
+
+#### [16:26:28] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 17 scenarios (roles: {'Poisoner', 'Pooka', 'Minion'})
+
+### [16:26:35] Executed #2 -> Minion (EVIL)
+
+#### [16:26:40] Solver Output
+Scenarios: 6/342
+Definite evil: ['#2', '#3', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+
+#### [16:26:40] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 6 scenarios (roles: {'Poisoner', 'Pooka'})
+
+### [16:26:47] Executed #3 -> Pooka (EVIL)
+
+#### [16:26:51] Solver Output
+Scenarios: 3/56
+Definite evil: ['#2', '#3', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+
+#### [16:26:51] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Poisoner'})
+
+### [16:27:00] Ability used at #4
+
+#### [16:27:00] Solver Output
+Scenarios: 3/56
+Definite evil: ['#2', '#3', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+
+#### [16:27:00] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Poisoner'})
+
+### [16:29:30] Executed #4 -> Poisoner (EVIL)
+
+## [16:29:46] GAME OVER — WIN
+Final HP: 10
+Notes: Perfect 10HP. 2M+1D setup. PD#5 cleared #3. Druid#6 found no outcasts in {1,2,3}. Druid#4 (evil Poisoner) lied Doppelganger claim (not in deck=evil). Exec chain cleaned all 3.
+

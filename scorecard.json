@@ -3534,6 +3534,13 @@
       "name": "asc74_v3",
       "notes": "Perfect 10HP. Doppelganger on board copying FT. Jester corrupted ability silenced Rambler #2. Solver nailed it.",
       "date": "2026-04-16 16:22"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc74_v4",
+      "notes": "Perfect 10HP. 2M+1D setup. PD#5 cleared #3. Druid#6 found no outcasts in {1,2,3}. Druid#4 (evil Poisoner) lied Doppelganger claim (not in deck=evil). Exec chain cleaned all 3.",
+      "date": "2026-04-16 16:29"
     }
   ]
 }
