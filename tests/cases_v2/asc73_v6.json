@@ -1,0 +1,137 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 2,
+        "good_role": "Rambler"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          3,
+          6
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Doppelganger"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    }
+  ],
+  "executed": [
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    7
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {
+    "4": false
+  },
+  "deck": {
+    "villagers": [
+      "Enlightened",
+      "Rambler",
+      "Medium",
+      "Bishop",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Plague Doctor",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Twin Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc73_v6",
+  "true_evil_positions": {
+    "6": "Twin_Minion",
+    "7": "Baa"
+  },
+  "notes": "True evils: #6 Twin_Minion (survived), #7 Baa (executed). Wrong exec #4 Bishop (75% solver, good), wrong exec #3 Doppelganger (50/50 tie). Rambler silenced by PD #6 \u2014 my validator can't detect PD pick without pd_ability_results. Need to track ability pick targets separately."
+}

@@ -36862,3 +36862,90 @@ Reason: No surviving scenarios -- check input data
 Final HP: 5
 Notes: 5HP. Wrong exec #2 (corrupted Judge, 100% solver scenario due to missing Rambler in Rust KB — Pooka didn't corrupt adjacent #4 Rambler, so scenario placed evils at #2/#7). Fixed Rambler in knowledge_base.rs mid-game, solver resolved to correct evils.
 
+
+---
+
+# New Game — 2026-04-16 14:27:34
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Enlightened, Rambler, Medium, Bishop, Confessor
+- Outcasts: Plague Doctor, Doppelganger
+- Minions: Twin Minion
+- Demons: Baa
+
+### [14:27:58] Revealed #1 Enlightened
+Info: {'direction': 'CCW'}
+
+### [14:27:58] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [14:27:58] Revealed #3 Medium
+Info: {'good_position': 2, 'good_role': 'Rambler'}
+
+### [14:27:58] Revealed #4 Bishop
+Info: {'targets': [4, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:27:58] Revealed #5 Medium
+Info: {'good_position': 3, 'good_role': 'Doppelganger'}
+
+### [14:27:58] Revealed #6 Plague_Doctor
+Info: {}
+
+### [14:27:58] Revealed #7 Confessor
+Info: {'dizzy': True}
+
+#### [14:28:07] Solver Output
+Scenarios: 8/702
+Definite good: ['#2', '#5']
+Evil probabilities: #4=75%, #7=75%, #1=25%, #3=12%, #6=12%
+
+#### [14:28:07] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.299 (adjusted 1.299) | timing x1.00
+
+### [14:29:12] Revealed #2 Rambler
+Info: {'silenced': True}
+
+### [14:29:12] Ability used at #6
+
+#### [14:30:07] Solver Output
+Scenarios: 8/702
+Definite good: ['#2', '#5']
+Evil probabilities: #4=75%, #7=75%, #1=25%, #3=12%, #6=12%
+
+#### [14:30:07] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 75% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 75% confident (budget: 2 wrong execs)
+
+### [14:31:01] Executed #4 -> GOOD (WRONG!)
+
+#### [14:31:01] Solver Output
+Scenarios: 2/480
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#4', '#5']
+Evil probabilities: #3=50%, #6=50%
+
+#### [14:31:01] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [14:31:24] Executed #7 -> Baa (EVIL)
+
+#### [14:31:25] Solver Output
+Scenarios: 2/90
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#4', '#5']
+Evil probabilities: #3=50%, #6=50%
+
+#### [14:31:25] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual override if you have extra information.
+
+## [14:34:19] GAME OVER — LOSS
+Final HP: 5
+Notes: True evils: #6 Twin_Minion (survived), #7 Baa (executed). Wrong exec #4 Bishop (75% solver, good), wrong exec #3 Doppelganger (50/50 tie). Rambler silenced by PD #6 — my validator can't detect PD pick without pd_ability_results. Need to track ability pick targets separately.
+
