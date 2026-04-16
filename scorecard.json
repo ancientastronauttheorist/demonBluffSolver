@@ -3499,6 +3499,13 @@
       "name": "asc73_v6",
       "notes": "True evils: #6 Twin_Minion (survived), #7 Baa (executed). Wrong exec #4 Bishop (75% solver, good), wrong exec #3 Doppelganger (50/50 tie). Rambler silenced by PD #6 \u2014 my validator can't detect PD pick without pd_ability_results. Need to track ability pick targets separately.",
       "date": "2026-04-16 14:34"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc73_v6_retry",
+      "notes": "5HP. PD revealed #2 clean. Lookahead forced-win chain (Poisoner, Pooka, and wrong-exec Empress #9 corrupted, then Minion #10 definite).",
+      "date": "2026-04-16 14:45"
     }
   ]
 }

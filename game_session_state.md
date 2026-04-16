@@ -36949,3 +36949,120 @@ WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual over
 Final HP: 5
 Notes: True evils: #6 Twin_Minion (survived), #7 Baa (executed). Wrong exec #4 Bishop (75% solver, good), wrong exec #3 Doppelganger (50/50 tie). Rambler silenced by PD #6 — my validator can't detect PD pick without pd_ability_results. Need to track ability pick targets separately.
 
+
+---
+
+# New Game — 2026-04-16 14:40:34
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Architect, Baker, Lover, Bishop, Gemcrafter, Jester, Witness
+- Outcasts: Plague Doctor
+- Minions: Poisoner, Minion
+- Demons: Pooka
+
+### [14:40:54] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [14:40:54] Revealed #2 Witness
+Info: {'affected_position': 7}
+
+### [14:40:54] Revealed #3 Baker
+Info: {'original_role': 'Architect'}
+
+### [14:40:54] Revealed #4 Bishop
+Info: {'targets': [7, 10, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:40:54] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [14:40:54] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [14:40:54] Revealed #7 Plague_Doctor
+Info: {}
+
+### [14:40:54] Revealed #8 Gemcrafter
+Info: {'good_position': 5}
+
+### [14:40:54] Revealed #9 Empress
+Info: {'targets': [3, 7, 8]}
+
+### [14:40:54] Revealed #10 Baker
+Info: {'original_role': 'Baker'}
+
+#### [14:41:07] Solver Output
+Scenarios: 52/5280
+Definite good: ['#7']
+Evil probabilities: #3=65%, #6=44%, #1=42%, #5=37%, #2=27%, #9=25%, #8=21%, #10=21%, #4=17%
+
+#### [14:41:07] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.807 (adjusted 2.807) | timing x1.00
+
+### [14:42:06] Ability used at #7
+
+#### [14:42:06] Solver Output
+Scenarios: 14/5280
+Definite evil: ['#2']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #9=50%, #5=43%, #1=36%, #3=29%, #6=21%, #10=21%
+
+#### [14:42:06] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 14 scenarios (roles: {'Minion', 'Poisoner', 'Pooka'})
+
+### [14:42:52] Executed #2 -> Poisoner (EVIL)
+
+#### [14:42:52] Solver Output
+Scenarios: 5/620
+Definite evil: ['#2']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #1=40%, #3=40%, #6=40%, #9=40%, #5=20%, #10=20%
+
+#### [14:42:52] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (40% good Lover (corrupted), 40% evil Pooka, 20% good Lover).
+WARNING: Execution lookahead override -- immediate hit chance is 40%, but all reveal branches still lead to a forced win.
+
+#### [14:43:18] Solver Output
+Scenarios: 5/620
+Definite evil: ['#2']
+Definite good: ['#4', '#7', '#8']
+Evil probabilities: #1=40%, #3=40%, #6=40%, #9=40%, #5=20%, #10=20%
+
+#### [14:43:18] Recommendation
+Action: **EXECUTE** #6
+Reason: Execution lookahead: #6 guarantees a win across all reveal branches with current HP budget (40% good Lover (corrupted), 40% evil Pooka, 20% good Lover).
+WARNING: Execution lookahead override -- immediate hit chance is 40%, but all reveal branches still lead to a forced win.
+
+### [14:43:37] Executed #6 -> Pooka (EVIL)
+
+#### [14:43:37] Solver Output
+Scenarios: 2/86
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8']
+Evil probabilities: #9=50%, #10=50%
+
+#### [14:43:37] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (50% good Empress (corrupted), 50% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:44:29] Executed #9 -> GOOD (WRONG!)
+
+#### [14:44:30] Solver Output
+Scenarios: 1/72
+Definite evil: ['#2', '#6', '#10']
+Definite good: ['#1', '#3', '#4', '#5', '#7', '#8', '#9']
+
+#### [14:44:30] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [14:45:28] Executed #10 -> Minion (EVIL)
+
+## [14:45:30] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. PD revealed #2 clean. Lookahead forced-win chain (Poisoner, Pooka, and wrong-exec Empress #9 corrupted, then Minion #10 definite).
+
