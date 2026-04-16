@@ -37317,3 +37317,75 @@ Notes: Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outc
 Final HP: 5
 Notes: Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly. Game abandoned in-app. True board: 1=Baa(Rambler), 2=Doppelganger(FT), 3=Chancellor(Oracle)
 
+
+---
+
+# New Game — 2026-04-16 15:56:55
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Judge, Empress, Confessor, Poet, Rambler
+- Outcasts: Wretch, Plague Doctor, Bombardier
+- Minions: Chancellor
+- Demons: Lilis
+
+### [15:58:14] Revealed #1 Poet
+Info: {'evil_role': 'Lilis', 'distance': 1, 'copied_role': 'Scout'}
+
+### [15:58:14] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [15:58:14] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [15:58:14] Revealed #4 Empress
+Info: {'targets': [3, 6, 7]}
+
+### [15:58:44] Revealed #5 Bishop
+Info: {'targets': [2, 7, 3], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [15:58:44] Revealed #6 Bombardier
+Info: {}
+
+### [15:58:44] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [15:58:48] Solver Output
+Scenarios: 24/289
+Definite good: ['#3', '#7', '#8']
+Evil probabilities: #4=54%, #5=50%, #6=38%, #1=29%, #2=29%
+
+#### [15:58:48] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.158 (adjusted 1.158) | timing x1.00
+
+#### [15:59:15] Solver Output
+Scenarios: 17/289
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #5=71%, #4=53%, #1=41%, #6=35%
+
+#### [15:59:15] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 71% likely evil (HP=8, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 71% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #5 (71%) despite low confidence — Bombardier candidate(s) [6] risk instant game loss if executed first.
+
+### [15:59:45] Executed #5 -> Chancellor (EVIL)
+
+#### [15:59:48] Solver Output
+Scenarios: 6/31
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #4=50%, #6=33%, #1=17%
+
+#### [15:59:48] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Lilis, 33% good Empress, 17% good Empress (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [15:59:55] Executed #4 -> Lilis (EVIL)
+
+## [16:00:21] GAME OVER — WIN
+Final HP: 8
+Notes: Clean win: PD#8 cleared #1, then exec#5 Chancellor (71%), lookahead-forced #4 Lilis. 8HP. Lilis night killed Bishop#7.
+

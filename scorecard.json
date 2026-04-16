@@ -3513,6 +3513,13 @@
       "name": "asc73_v7",
       "notes": "10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly.",
       "date": "2026-04-16 14:53"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc74_v1",
+      "notes": "Clean win: PD#8 cleared #1, then exec#5 Chancellor (71%), lookahead-forced #4 Lilis. 8HP. Lilis night killed Bishop#7.",
+      "date": "2026-04-16 16:00"
     }
   ]
 }
