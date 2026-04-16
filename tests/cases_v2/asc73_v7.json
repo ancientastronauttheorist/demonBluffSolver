@@ -1,0 +1,170 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": true,
+        "silenced_by": 8
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 7
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": true,
+        "silenced_by": 8
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 10,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 1
+      }
+    }
+  ],
+  "executed": [
+    10,
+    8,
+    3
+  ],
+  "confirmed_evil": [
+    10,
+    8,
+    3
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "10": "Shaman",
+    "8": "Pooka",
+    "3": "Twin_Minion"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 9,
+      "target_pos": 5,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Slayer",
+      "Jester",
+      "Rambler",
+      "Architect",
+      "Hunter",
+      "Fortune Teller",
+      "Witness"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman",
+      "Twin Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    8,
+    1,
+    9
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc73_v7",
+  "true_evil_positions": {
+    "3": "Twin_Minion",
+    "8": "Pooka",
+    "10": "Shaman"
+  },
+  "notes": "10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly."
+}

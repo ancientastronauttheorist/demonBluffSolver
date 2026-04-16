@@ -3506,6 +3506,13 @@
       "name": "asc73_v6_retry",
       "notes": "5HP. PD revealed #2 clean. Lookahead forced-win chain (Poisoner, Pooka, and wrong-exec Empress #9 corrupted, then Minion #10 definite).",
       "date": "2026-04-16 14:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc73_v7",
+      "notes": "10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly.",
+      "date": "2026-04-16 14:53"
     }
   ]
 }

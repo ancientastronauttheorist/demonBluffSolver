@@ -37066,3 +37066,130 @@ Reason: #10 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: 5HP. PD revealed #2 clean. Lookahead forced-win chain (Poisoner, Pooka, and wrong-exec Empress #9 corrupted, then Minion #10 definite).
 
+
+---
+
+# New Game — 2026-04-16 14:46:55
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Jester, Rambler, Architect, Hunter, Fortune Teller, Witness
+- Outcasts: Doppelganger, Drunk
+- Minions: Shaman, Twin Minion
+- Demons: Pooka
+
+### [14:47:16] Revealed #1 Fortune_Teller
+Info: {}
+
+### [14:47:16] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [14:47:16] Revealed #3 Architect
+Info: {'side': 'Right'}
+
+### [14:47:16] Revealed #4 Rambler
+Info: {'silenced': False}
+
+### [14:47:16] Revealed #5 Witness
+Info: {'affected_position': 7}
+
+### [14:47:16] Revealed #6 Rambler
+Info: {'silenced': False}
+
+### [14:47:16] Revealed #7 Hunter
+Info: {'distance': 2}
+
+### [14:47:16] Revealed #8 Jester
+Info: {}
+
+### [14:47:16] Revealed #9 Slayer
+Info: {}
+
+### [14:47:16] Revealed #10 Witness
+Info: {'affected_position': 1}
+
+#### [14:47:29] Solver Output
+Scenarios: 1568/41040
+Evil probabilities: #5=60%, #10=59%, #1=37%, #4=34%, #9=29%, #2=26%, #3=20%, #8=15%, #7=14%, #6=7%
+
+#### [14:47:29] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#4', '#6', '#7']
+Reason: Expected posterior 668.0 scenarios (adjusted 732.3, info gain 1.098 bits) | timing x1.00
+WARNING: Corruption risk: 19%
+
+### [14:48:44] Revealed #4 Rambler
+Info: {'silenced': True, 'silenced_by': 8}
+
+### [14:48:45] Revealed #6 Rambler
+Info: {'silenced': True, 'silenced_by': 8}
+
+### [14:48:45] Ability used at #8
+
+#### [14:49:07] Solver Output
+Scenarios: 460/41040
+Evil probabilities: #5=67%, #10=67%, #1=36%, #2=31%, #8=27%, #4=23%, #9=20%, #3=20%, #7=6%, #6=3%
+
+#### [14:49:07] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#6']
+Reason: Entropy 0.995 (adjusted 0.921) | follow-up bonus 0.293 | timing x1.00
+WARNING: Corruption risk: 15%
+
+### [14:50:02] Revealed #1 Fortune Teller
+Info: {'targets': [2, 6], 'has_evil': False}
+
+### [14:50:02] Ability used at #1
+
+#### [14:50:13] Solver Output
+Scenarios: 250/41040
+Evil probabilities: #5=58%, #10=54%, #8=36%, #2=35%, #9=34%, #3=30%, #4=26%, #1=18%, #7=8%, #6=1%
+
+#### [14:50:13] Recommendation
+Action: **USE_ABILITY** #9 (Slayer) -> targets ['#5']
+Reason: Target #5 is 58% evil (adjusted 0.44)
+WARNING: Corruption risk: 23% -- Slayer ability disabled if corrupted
+
+### [14:51:06] Ability used at #9
+
+#### [14:51:07] Solver Output
+Scenarios: 172/41040
+Evil probabilities: #10=52%, #9=50%, #8=47%, #3=43%, #5=38%, #2=27%, #4=17%, #1=13%, #7=12%, #6=1%
+
+#### [14:51:07] Recommendation
+Action: **EXECUTE** #10
+Reason: No reveals available. #10 is 52% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 52% confident (budget: 2 wrong execs)
+WARNING: Low confidence (52% < 63%) -- consider gathering more info
+
+### [14:52:00] Executed #10 -> Shaman (EVIL)
+
+#### [14:52:00] Solver Output
+Scenarios: 43/4104
+Definite evil: ['#10']
+Definite good: ['#1', '#2', '#6']
+Evil probabilities: #8=56%, #3=44%, #9=37%, #4=30%, #5=23%, #7=9%
+
+#### [14:52:00] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 56% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 56% confident (budget: 2 wrong execs)
+WARNING: Low confidence (56% < 60%) -- consider gathering more info
+
+### [14:52:46] Executed #8 -> Pooka (EVIL)
+
+#### [14:52:46] Solver Output
+Scenarios: 24/456
+Definite evil: ['#8', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+Evil probabilities: #3=75%, #9=25%
+
+#### [14:52:46] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (75% evil Twin Minion, 25% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [14:53:38] Executed #3 -> Twin_Minion (EVIL)
+
+## [14:53:40] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly.
+
