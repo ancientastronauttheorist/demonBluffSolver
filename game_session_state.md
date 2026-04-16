@@ -36131,3 +36131,91 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 5
 Notes: 5HP. Wrong exec #2 Knitter (69% tie, good). After wrong exec, solver narrowed to #4=100% evil. Then #5 Pooka, #7 Minion definite.
 
+
+---
+
+# New Game — 2026-04-16 13:11:34
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Architect, Scout, Fortune Teller, Alchemist, Druid, Jester
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [13:12:12] Revealed #1 Fortune_Teller
+Info: {}
+
+### [13:12:12] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [13:12:12] Revealed #3 Alchemist
+Info: {'cured_count': 1}
+
+### [13:12:12] Revealed #4 Druid
+Info: {}
+
+### [13:12:12] Revealed #5 Dreamer
+Info: {}
+
+### [13:12:12] Revealed #6 Wretch
+Info: {}
+
+### [13:12:12] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+#### [13:12:25] Solver Output
+Scenarios: 4/56
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#6', '#8']
+Evil probabilities: #2=50%, #5=25%, #7=25%
+
+#### [13:12:25] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Witch', 'Baa'})
+
+#### [13:12:31] Solver Output
+Scenarios: 4/56
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#6', '#8']
+Evil probabilities: #2=50%, #5=25%, #7=25%
+
+#### [13:12:31] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Baa', 'Witch'})
+
+### [13:13:17] Executed #3 -> Baa (EVIL)
+
+#### [13:13:17] Solver Output
+Scenarios: 2/7
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #7=50%
+
+#### [13:13:17] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+#### [13:13:23] Solver Output
+Scenarios: 2/7
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #7=50%
+
+#### [13:13:23] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [13:14:02] Revealed #1 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [13:14:02] Ability used at #1
+
+### [13:14:36] Executed #2 -> Witch (EVIL)
+
+## [13:14:47] GAME OVER — WIN
+Final HP: 10
+## [13:14:54] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Scout Baa dist 1 and Alchemist cured claim made #3 definite Baa. FT on 2,4 isolated Witch at 2. Witch blocked #8.
+

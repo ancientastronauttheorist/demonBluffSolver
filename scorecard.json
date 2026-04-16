@@ -3436,6 +3436,13 @@
       "name": "asc72_v4",
       "notes": "5HP. Wrong exec #2 Knitter (69% tie, good). After wrong exec, solver narrowed to #4=100% evil. Then #5 Pooka, #7 Minion definite.",
       "date": "2026-04-16 13:10"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc72_v5",
+      "notes": "10HP perfect. Scout Baa dist 1 and Alchemist cured claim made #3 definite Baa. FT on 2,4 isolated Witch at 2. Witch blocked #8.",
+      "date": "2026-04-16 13:14"
     }
   ]
 }
