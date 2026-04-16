@@ -36324,3 +36324,87 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Twin Minion'})
 Final HP: 10
 Notes: 10HP perfect. PD revealed #4 Evil + #8 corrupted. FT narrowed #1 or #5 evil. Druid NO Outcasts finalized #1 Witch evil lie. Witch blocked #9 Poet.
 
+
+---
+
+# New Game — 2026-04-16 13:22:41
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Hunter, Knitter, Medium, Witness, Baker, Rambler, Bishop, Gemcrafter
+- Outcasts: Wretch
+- Minions: Witch, Poisoner
+- Demons: Lilis
+
+### [13:24:52] Revealed #2 Hunter
+Info: {'distance': 3}
+
+### [13:24:52] Revealed #3 Witness
+Info: {'affected_position': 2}
+
+### [13:24:52] Revealed #4 Gemcrafter
+Info: {'good_position': 1}
+
+### [13:24:52] Revealed #5 Wretch
+Info: {}
+
+### [13:24:52] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+### [13:24:52] Revealed #8 Baker
+Info: {'original_role': 'Medium'}
+
+### [13:24:52] Revealed #9 Baker
+Info: {'original_role': 'Bishop'}
+
+### [13:24:59] Revealed #1 Rambler
+Info: {}
+
+#### [13:24:59] Solver Output
+Scenarios: 12/250
+Definite evil: ['#10']
+Definite good: ['#6', '#7']
+Evil probabilities: #2=83%, #3=33%, #1=17%, #4=17%, #5=17%, #8=17%, #9=17%
+
+#### [13:24:59] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 12 scenarios (roles: {'Poisoner', 'Witch', 'Lilis'})
+
+#### [13:25:47] Solver Output
+Scenarios: 12/250
+Definite evil: ['#10']
+Definite good: ['#6', '#7']
+Evil probabilities: #2=83%, #3=33%, #1=17%, #4=17%, #5=17%, #8=17%, #9=17%
+
+#### [13:25:47] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 12 scenarios (roles: {'Lilis', 'Poisoner', 'Witch'})
+
+### [13:27:07] Executed #2 -> GOOD (WRONG!)
+
+#### [13:27:07] Solver Output
+Scenarios: 2/198
+Definite evil: ['#1', '#4', '#10']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [13:27:07] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [13:27:47] Executed #1 -> Poisoner (EVIL)
+
+#### [13:27:47] Solver Output
+Scenarios: 2/14
+Definite evil: ['#1', '#4', '#10']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8', '#9']
+
+#### [13:27:47] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Witch', 'Lilis'})
+
+### [13:28:24] Executed #4 -> Lilis (EVIL)
+
+## [13:28:38] GAME OVER — WIN
+Final HP: 1
+Notes: 1HP. Lilis night-killed #10 Witch (evil). Wrong exec #2 Hunter (solver bug: top pick #10 already dead, executed next-live #2 at 83%, wrong). Then #1 Poisoner and #4 Lilis definite. ASC72 COMPLETE 7/7!
+

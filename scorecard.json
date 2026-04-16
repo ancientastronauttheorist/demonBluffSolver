@@ -3450,6 +3450,13 @@
       "name": "asc72_v6",
       "notes": "10HP perfect. PD revealed #4 Evil + #8 corrupted. FT narrowed #1 or #5 evil. Druid NO Outcasts finalized #1 Witch evil lie. Witch blocked #9 Poet.",
       "date": "2026-04-16 13:21"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc72_v7",
+      "notes": "1HP. Lilis night-killed #10 Witch (evil). Wrong exec #2 Hunter (solver bug: top pick #10 already dead, executed next-live #2 at 83%, wrong). Then #1 Poisoner and #4 Lilis definite. ASC72 COMPLETE 7/7!",
+      "date": "2026-04-16 13:28"
     }
   ]
 }
