@@ -82,8 +82,10 @@ CSTATUS_LIST_OFFSET = 0x10       # List<ECharacterStatus>
 
 # ECharacterStatus enum
 CHAR_STATUS = {
-    0: 'None', 10: 'Corrupted', 20: 'Mad', 30: 'HealthyBluff',
-    35: 'BrokenAbility', 40: 'NoDamage', 45: 'CorruptionResistant',
+    0: 'None', 10: 'Corrupted', 15: 'Lying', 20: 'Mad',
+    25: 'AppearTruthful', 26: 'AppearLying', 27: 'AppearDisguised',
+    30: 'HealthyBluff', 35: 'BrokenAbility', 38: 'WorkingAbility',
+    40: 'NoDamage', 45: 'CorruptionResistant',
     50: 'MessedUpByEvil', 55: 'KilledByEvil', 60: 'UnkillableByDemon',
     70: 'AlteredCharacter',
 }

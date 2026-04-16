@@ -1,0 +1,130 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "minion_role": "Shaman"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "minion_role": "Shaman"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    6
+  ],
+  "confirmed_evil": [
+    2,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Shaman",
+    "6": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Oracle",
+      "Confessor",
+      "Medium",
+      "Hunter",
+      "Dreamer",
+      "Lover"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc72_v2_retry",
+  "true_evil_positions": {
+    "2": "Shaman",
+    "6": "Baa"
+  },
+  "notes": "After v2 loss, retry win: 10HP perfect. Oracle+Lover+Hunter+Confessor clues gave definite evils. Baa claimed Confessor dizzy = evil."
+}

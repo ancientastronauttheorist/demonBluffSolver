@@ -106,6 +106,10 @@ VILLAGERS = [
     Card("Witness", Role.VILLAGER, Alignment.GOOD,
          "Learn a character that was affected by an Evil ability.",
          lies=False, disguises=False),
+    Card("Rambler", Role.VILLAGER, Alignment.GOOD,
+         "I tell you something really interesting. If Picked (once): I am Silenced if the character "
+         "who Picked me is Disguised. If Lies: I get Silenced if picked by a NON-Disguised character.",
+         lies=False, disguises=False),
 ]
 
 # ============================================================

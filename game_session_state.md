@@ -35786,3 +35786,167 @@ Notes: Memory reader fix + deck case bug. HP=1, wrong exec #4 when 33% tie. Asc7
 - Minions: Poisoner
 - Demons: Lilis
 
+
+---
+
+# New Game — 2026-04-16 12:39:07
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Rambler, Witness, Alchemist, Hunter, Gemcrafter, Medium, Knight
+- Outcasts: Doppelganger, Bombardier, Plague Doctor
+- Minions: Chancellor, Minion
+- Demons: Pooka
+
+### [12:40:32] Revealed #1 Witness
+Info: {'affected_position': 2}
+
+### [12:40:32] Revealed #2 Knight
+Info: {}
+
+### [12:40:32] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [12:40:32] Revealed #5 Hunter
+Info: {'distance': 3}
+
+### [12:40:32] Revealed #6 Alchemist
+Info: {'cured_count': 2}
+
+### [12:40:32] Revealed #7 Gemcrafter
+Info: {'good_position': 8}
+
+### [12:40:32] Revealed #8 Bombardier
+Info: {}
+
+### [12:40:32] Revealed #9 Plague_Doctor
+Info: {}
+
+### [12:40:41] Revealed #4 Rambler
+Info: {}
+
+#### [12:40:57] Solver Output
+Scenarios: 214/8580
+Evil probabilities: #6=71%, #5=52%, #1=51%, #4=40%, #3=24%, #8=24%, #2=22%, #9=8%, #7=7%
+
+#### [12:40:57] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#5']
+Reason: Entropy 2.591 (adjusted 2.591) | timing x1.00
+
+### [12:41:37] Ability used at #9
+
+#### [12:41:47] Solver Output
+Scenarios: 69/8580
+Evil probabilities: #1=88%, #6=83%, #4=46%, #8=35%, #5=12%, #9=12%, #2=10%, #3=9%, #7=6%
+
+#### [12:41:47] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 88% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 88% confident (budget: 2 wrong execs)
+
+### [12:42:21] Executed #1 -> Minion (EVIL)
+
+#### [12:42:21] Solver Output
+Scenarios: 36/989
+Definite evil: ['#1']
+Definite good: ['#5', '#9']
+Evil probabilities: #6=83%, #4=56%, #8=36%, #2=11%, #3=8%, #7=6%
+
+#### [12:42:21] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 83% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 83% confident (budget: 2 wrong execs)
+
+### [12:43:22] Executed #6 -> GOOD (WRONG!)
+
+#### [12:43:22] Solver Output
+Scenarios: 6/697
+Definite evil: ['#1']
+Definite good: ['#5', '#6', '#9']
+Evil probabilities: #4=67%, #3=50%, #7=33%, #8=33%, #2=17%
+
+#### [12:43:22] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 67% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 67% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #4 (67%) despite low confidence — Bombardier candidate(s) [8] risk instant game loss if executed first.
+
+## [12:47:02] GAME OVER — LOSS
+Final HP: 5
+Notes: Wrong exec #6 Alchemist (good+corrupted, 83% solver), wrong exec #4 Rambler (good, 67% solver). Rambler role not modeled. HP 10->5->0. Asc72 v2/7.
+
+## [12:47:39] GAME OVER — LOSS
+Final HP: 5
+Notes: True evils: #1 Minion (exec'd), #7 Pooka, #8 Chancellor (survived). Wrong exec #6 Alchemist (good+corrupted, solver said 83%), wrong exec #4 Rambler (good, solver said 67%). Rambler role not modeled - solver over-weighted its evil probability. HP 10->5->0. Asc72 v2/7.
+
+
+---
+
+# New Game — 2026-04-16 12:54:24
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Confessor, Medium, Hunter, Dreamer, Lover
+- Outcasts: Doppelganger
+- Minions: Shaman
+- Demons: Baa
+
+## Deck
+- Villagers: Oracle, Confessor, Medium, Hunter, Dreamer, Lover
+- Outcasts: Doppelganger
+- Minions: Shaman
+- Demons: Baa
+
+## Deck
+- Villagers: Oracle, Confessor, Medium, Hunter, Dreamer, Lover
+- Outcasts: Doppelganger
+- Minions: Shaman
+- Demons: Baa
+
+### [12:56:24] Revealed #1 Dreamer
+Info: {}
+
+### [12:56:24] Revealed #2 Lover
+Info: {'evil_adjacent': 1}
+
+### [12:56:24] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [12:56:24] Revealed #4 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Shaman'}
+
+### [12:56:24] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [12:56:24] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [12:56:24] Revealed #7 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Shaman'}
+
+#### [12:56:39] Solver Output
+Scenarios: 5/210
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7']
+
+#### [12:56:39] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 5 scenarios (roles: {'Shaman'})
+
+### [12:57:23] Executed #2 -> Shaman (EVIL)
+
+#### [12:57:23] Solver Output
+Scenarios: 5/30
+Definite evil: ['#2', '#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7']
+
+#### [12:57:23] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Baa'})
+
+### [12:58:00] Executed #6 -> Baa (EVIL)
+
+## [12:58:09] GAME OVER — WIN
+Final HP: 10
+Notes: After v2 loss, retry win: 10HP perfect. Oracle+Lover+Hunter+Confessor clues gave definite evils. Baa claimed Confessor dizzy = evil.
+

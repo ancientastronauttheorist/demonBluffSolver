@@ -3401,6 +3401,27 @@
       "name": "asc72_v1",
       "notes": "Memory reader fix + deck case bug. HP=1, wrong exec #4 when 33% tie. Asc72 village 1/7",
       "date": "2026-04-16 12:29"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc72_v2",
+      "notes": "Wrong exec #6 Alchemist (good+corrupted, 83% solver), wrong exec #4 Rambler (good, 67% solver). Rambler role not modeled. HP 10->5->0. Asc72 v2/7.",
+      "date": "2026-04-16 12:47"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc72_v2",
+      "notes": "True evils: #1 Minion (exec'd), #7 Pooka, #8 Chancellor (survived). Wrong exec #6 Alchemist (good+corrupted, solver said 83%), wrong exec #4 Rambler (good, solver said 67%). Rambler role not modeled - solver over-weighted its evil probability. HP 10->5->0. Asc72 v2/7.",
+      "date": "2026-04-16 12:47"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc72_v2_retry",
+      "notes": "After v2 loss, retry win: 10HP perfect. Oracle+Lover+Hunter+Confessor clues gave definite evils. Baa claimed Confessor dizzy = evil.",
+      "date": "2026-04-16 12:58"
     }
   ]
 }

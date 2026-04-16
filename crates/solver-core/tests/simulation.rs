@@ -522,6 +522,7 @@ fn simulate_all_v2() {
         "asc65_v2",     // 49% and 79% picks both wrong
         "asc68_v3",     // 0HP loss: wrong exec #4 (corrupted, 60%) + #9 (Doppelganger, 75%)
         "asc71_v7",     // 0HP loss: Bombardier-safety skipped true TM-as-Bombardier #2
+        "asc72_v2",     // 0HP loss: corrupted Alchemist cured-count + no Rambler validator
     ].into_iter().collect();
 
     // Cases with known bad data that may cause constraint failures
