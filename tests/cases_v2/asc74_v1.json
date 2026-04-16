@@ -1,0 +1,140 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          7
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    2
+  ],
+  "confirmed_evil": [
+    3
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Gemcrafter",
+      "Rambler",
+      "Slayer",
+      "Fortune Teller",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Wretch",
+      "Doppelganger"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2,
+    4
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v1",
+  "true_evil_positions": {
+    "3": "Chancellor"
+  },
+  "notes": "Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly. Game abandoned in-app. True board: 1=Baa(Rambler), 2=Doppelganger(FT), 3=Chancellor(Oracle)"
+}

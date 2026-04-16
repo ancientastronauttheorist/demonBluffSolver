@@ -37193,3 +37193,127 @@ WARNING: Execution lookahead override -- immediate hit chance is 75%, but all re
 Final HP: 10
 Notes: 10HP perfect! ASC73 COMPLETE. Triple Rambler game with 2 silenced by Jester-Pooka #8, revealing Jester evil. FT+Slayer narrowed. All 3 evils executed cleanly.
 
+
+---
+
+# New Game — 2026-04-16 15:06:16
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Rambler, Slayer, Fortune Teller, Oracle
+- Outcasts: Wretch, Doppelganger
+- Minions: Chancellor
+- Demons: Baa
+
+### [15:06:51] Revealed #1 Rambler
+Info: {'silenced': False}
+
+### [15:06:51] Revealed #2 Fortune_Teller
+Info: {}
+
+### [15:06:51] Revealed #3 Oracle
+Info: {'targets': [4, 7], 'minion_role': 'Chancellor'}
+
+### [15:06:51] Revealed #4 Fortune_Teller
+Info: {}
+
+### [15:06:51] Revealed #5 Wretch
+Info: {}
+
+### [15:06:51] Revealed #6 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Chancellor'}
+
+### [15:06:51] Revealed #7 Slayer
+Info: {}
+
+#### [15:06:54] Solver Output
+Scenarios: 22/268
+Definite evil: ['#3']
+Definite good: ['#4', '#6', '#7']
+Evil probabilities: #5=45%, #1=36%, #2=18%
+
+#### [15:06:54] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 22 scenarios (roles: {'Chancellor'})
+
+### [15:07:01] Executed #3 -> Chancellor (EVIL)
+
+#### [15:07:15] Solver Output
+Scenarios: 22/42
+Definite evil: ['#3']
+Definite good: ['#4', '#6', '#7']
+Evil probabilities: #5=45%, #1=36%, #2=18%
+
+#### [15:07:15] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 0.994 (adjusted 0.994) | timing x1.00
+
+### [15:07:21] Revealed #2 Fortune Teller
+Info: {'targets': [1, 4], 'has_evil': True}
+
+### [15:07:21] Ability used at #2
+
+#### [15:07:25] Solver Output
+Scenarios: 12/42
+Definite evil: ['#3']
+Definite good: ['#4', '#5', '#6', '#7']
+Evil probabilities: #1=67%, #2=33%
+
+#### [15:07:25] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#1', '#6']
+Reason: Entropy 0.918 (adjusted 0.918) | timing x1.00
+
+### [15:07:32] Revealed #4 Fortune Teller
+Info: {'targets': [1, 6], 'has_evil': False}
+
+### [15:07:32] Ability used at #4
+
+#### [15:07:42] Solver Output
+Scenarios: 4/42
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7']
+
+#### [15:07:42] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [15:07:49] Executed #2 -> GOOD (WRONG!)
+
+### [15:08:41] Revealed #1 Rambler
+Info: {'silenced': True, 'silenced_by': 4}
+
+#### [15:08:53] Solver Output
+Scenarios: 0/38
+
+#### [15:08:53] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [15:09:08] Revealed #1 Rambler
+Info: {'silenced': True}
+
+#### [15:09:11] Solver Output
+Scenarios: 0/38
+
+#### [15:09:11] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [15:09:56] Revealed #1 Rambler
+Info: {'silenced': False}
+
+#### [15:09:58] Solver Output
+Scenarios: 0/38
+
+#### [15:09:58] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## [15:12:22] GAME OVER — LOSS
+Final HP: 5
+Notes: Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly.
+
+## [15:12:30] GAME OVER — LOSS
+Final HP: 5
+Notes: Solver bug: 100% confident #2 was Baa, but #2 was Doppelganger (good outcast disguised as FT). Wrong exec HP 10->5. After #2 confirmed good, 0 scenarios. Doppelganger copying FT not modeled correctly. Game abandoned in-app. True board: 1=Baa(Rambler), 2=Doppelganger(FT), 3=Chancellor(Oracle)
+
