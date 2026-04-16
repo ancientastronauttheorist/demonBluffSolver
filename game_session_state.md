@@ -36809,3 +36809,56 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: 10HP perfect. PD revealed #8 evil + #2 corrupted. Lookahead forced-win chain on Baker #1 (Minion) and Lover #3 (Pooka). Witch blocked #9.
 
+
+---
+
+# New Game — 2026-04-16 14:18:31
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Witness, Architect, Oracle, Rambler, Empress
+- Outcasts: Wretch, Bombardier
+- Minions: Twin Minion
+- Demons: Pooka
+
+### [14:18:54] Revealed #1 Witness
+Info: {'affected_position': 5}
+
+### [14:18:54] Revealed #2 Judge
+Info: {}
+
+### [14:18:54] Revealed #3 Architect
+Info: {'side': 'Left'}
+
+### [14:18:54] Revealed #4 Rambler
+Info: {'silenced': False}
+
+### [14:18:54] Revealed #5 Oracle
+Info: {'targets': [1, 7], 'minion_role': 'Twin_Minion'}
+
+### [14:18:54] Revealed #6 Empress
+Info: {'targets': [2, 3, 5]}
+
+### [14:18:54] Revealed #7 Witness
+Info: {'affected_position': 4}
+
+### [14:18:54] Revealed #8 Wretch
+Info: {}
+
+### [14:20:36] Executed #2 -> GOOD (WRONG!)
+
+#### [14:20:37] Solver Output
+Scenarios: 0/42
+
+#### [14:20:37] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [14:24:25] Executed #1 -> Twin_Minion (EVIL)
+
+### [14:25:03] Executed #3 -> Pooka (EVIL)
+
+## [14:25:05] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP. Wrong exec #2 (corrupted Judge, 100% solver scenario due to missing Rambler in Rust KB — Pooka didn't corrupt adjacent #4 Rambler, so scenario placed evils at #2/#7). Fixed Rambler in knowledge_base.rs mid-game, solver resolved to correct evils.
+

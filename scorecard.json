@@ -3485,6 +3485,13 @@
       "name": "asc73_v4",
       "notes": "10HP perfect. PD revealed #8 evil + #2 corrupted. Lookahead forced-win chain on Baker #1 (Minion) and Lover #3 (Pooka). Witch blocked #9.",
       "date": "2026-04-16 14:17"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc73_v5",
+      "notes": "5HP. Wrong exec #2 (corrupted Judge, 100% solver scenario due to missing Rambler in Rust KB \u2014 Pooka didn't corrupt adjacent #4 Rambler, so scenario placed evils at #2/#7). Fixed Rambler in knowledge_base.rs mid-game, solver resolved to correct evils.",
+      "date": "2026-04-16 14:25"
     }
   ]
 }
