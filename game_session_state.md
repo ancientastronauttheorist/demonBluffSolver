@@ -36219,3 +36219,108 @@ Final HP: 10
 Final HP: 10
 Notes: 10HP perfect. Scout Baa dist 1 and Alchemist cured claim made #3 definite Baa. FT on 2,4 isolated Witch at 2. Witch blocked #8.
 
+
+---
+
+# New Game — 2026-04-16 13:16:22
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Oracle, Slayer, Poet, Druid, Fortune Teller, Witness
+- Outcasts: Plague Doctor
+- Minions: Witch, Twin Minion
+- Demons: Baa
+
+### [13:17:11] Revealed #1 Druid
+Info: {}
+
+### [13:17:11] Revealed #2 Empress
+Info: {'targets': [1, 5, 6]}
+
+### [13:17:11] Revealed #3 Empress
+Info: {'targets': [7, 8, 9]}
+
+### [13:17:11] Revealed #4 Slayer
+Info: {}
+
+### [13:17:11] Revealed #5 Plague_Doctor
+Info: {}
+
+### [13:17:11] Revealed #6 Oracle
+Info: {'targets': [1, 7], 'minion_role': 'Witch'}
+
+### [13:17:11] Revealed #7 Fortune_Teller
+Info: {}
+
+### [13:17:11] Revealed #8 Witness
+Info: {'affected_position': 6}
+
+#### [13:17:20] Solver Output
+Scenarios: 20/2184
+Definite good: ['#5', '#9']
+Evil probabilities: #4=80%, #2=50%, #3=50%, #8=50%, #6=30%, #7=30%, #1=10%
+
+#### [13:17:20] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.123 (adjusted 2.123) | timing x1.00
+
+### [13:18:05] Ability used at #5
+
+### [13:18:38] Executed #4 -> Baa (EVIL)
+
+#### [13:18:38] Solver Output
+Scenarios: 4/266
+Definite evil: ['#4']
+Definite good: ['#5', '#8', '#9']
+Evil probabilities: #3=75%, #6=50%, #1=25%, #2=25%, #7=25%
+
+#### [13:18:38] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#5']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [13:19:16] Revealed #7 Fortune Teller
+Info: {'targets': [1, 5], 'has_evil': True}
+
+### [13:19:16] Ability used at #7
+
+#### [13:19:23] Solver Output
+Scenarios: 2/266
+Definite evil: ['#4']
+Definite good: ['#5', '#6', '#8', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #7=50%
+
+#### [13:19:23] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#5']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [13:20:01] Revealed #1 Druid
+Info: {'targets': [2, 3, 5], 'found_outcast': None}
+
+### [13:20:01] Ability used at #1
+
+#### [13:20:12] Solver Output
+Scenarios: 1/266
+Definite evil: ['#1', '#3', '#4']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+
+#### [13:20:12] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [13:20:33] Executed #1 -> Witch (EVIL)
+
+#### [13:20:34] Solver Output
+Scenarios: 1/37
+Definite evil: ['#1', '#3', '#4']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+
+#### [13:20:34] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Twin Minion'})
+
+### [13:21:12] Executed #3 -> Twin_Minion (EVIL)
+
+## [13:21:14] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD revealed #4 Evil + #8 corrupted. FT narrowed #1 or #5 evil. Druid NO Outcasts finalized #1 Witch evil lie. Witch blocked #9 Poet.
+
