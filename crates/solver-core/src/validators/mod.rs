@@ -775,6 +775,20 @@ fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     };
     let rambler_pos = card.position;
 
+    // Explicit picker override from info_parsed["silenced_by"]: use as the first picker
+    // (handles cases like PD silencing where no pd_ability_result is registered).
+    if let Some(explicit_picker) = info_pos(&card.info_parsed, "silenced_by") {
+        let picker_disguised = is_evil_in_board_state(explicit_picker, scenario, state)
+            || scenario.doppelganger_position == Some(explicit_picker)
+            || scenario.drunk_position == Some(explicit_picker);
+        let truth = truth_status(rambler_pos, scenario, state);
+        return if truth == TruthStatus::Truthful {
+            claimed_silenced == picker_disguised
+        } else {
+            claimed_silenced != picker_disguised
+        };
+    }
+
     // Reveal order indices. If Rambler never flipped, no info to discriminate.
     let reveal_idx: HashMap<u8, usize> = state.reveal_order.iter()
         .enumerate().map(|(i, &p)| (p, i)).collect();
