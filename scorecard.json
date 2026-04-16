@@ -3520,6 +3520,13 @@
       "name": "asc74_v1",
       "notes": "Clean win: PD#8 cleared #1, then exec#5 Chancellor (71%), lookahead-forced #4 Lilis. 8HP. Lilis night killed Bishop#7.",
       "date": "2026-04-16 16:00"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc74_v2",
+      "notes": "Survived 1HP. Dreamer UI activation conflict with Knitter. Corrupted Dreamer output 'Lilis or Knitter' not parseable - marked ability_used only. Wrong exec #9 Dreamer (33% solver pick).",
+      "date": "2026-04-16 16:17"
     }
   ]
 }

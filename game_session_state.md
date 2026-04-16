@@ -37389,3 +37389,140 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 8
 Notes: Clean win: PD#8 cleared #1, then exec#5 Chancellor (71%), lookahead-forced #4 Lilis. 8HP. Lilis night killed Bishop#7.
 
+
+---
+
+# New Game — 2026-04-16 16:05:18
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Lover, Knitter, Jester, Bard, Enlightened, Hunter, Baker
+- Outcasts: Bombardier, Plague Doctor
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [16:06:05] Revealed #1 Plague_Doctor
+Info: {}
+
+### [16:06:05] Revealed #2 Bombardier
+Info: {}
+
+### [16:06:05] Revealed #3 Bard
+Info: {'corruption_distance': 4}
+
+### [16:06:05] Revealed #4 Jester
+Info: {}
+
+### [16:06:41] Revealed #5 Enlightened
+Info: {'direction': 'CCW'}
+
+### [16:06:41] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [16:06:41] Revealed #8 Knitter
+Info: {'evil_pairs': 2}
+
+### [16:06:41] Revealed #9 Dreamer
+Info: {}
+
+#### [16:06:47] Solver Output
+Scenarios: 156/3408
+Definite good: ['#7', '#10']
+Evil probabilities: #8=65%, #3=58%, #4=50%, #2=38%, #5=27%, #6=27%, #9=27%, #1=8%
+
+#### [16:06:47] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#8']
+Reason: Entropy 2.924 (adjusted 2.755) | timing x1.00
+WARNING: Corruption risk: 12%
+
+#### [16:09:39] Solver Output
+Scenarios: 156/3408
+Definite good: ['#7', '#10']
+Evil probabilities: #8=65%, #3=58%, #4=50%, #2=38%, #5=27%, #6=27%, #9=27%, #1=8%
+
+#### [16:09:39] Recommendation
+Action: **USE_ABILITY** #9 (Dreamer) -> targets ['#8']
+Reason: Entropy 2.924 (adjusted 2.755) | timing x1.00
+WARNING: Corruption risk: 12%
+
+### [16:14:50] Ability used at #9
+
+#### [16:14:54] Solver Output
+Scenarios: 156/3408
+Definite good: ['#7', '#10']
+Evil probabilities: #8=65%, #3=58%, #4=50%, #2=38%, #5=27%, #6=27%, #9=27%, #1=8%
+
+#### [16:14:54] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#10']
+Reason: Entropy 1.329 (adjusted 1.329) | timing x1.00
+
+#### [16:15:31] Solver Output
+Scenarios: 120/3408
+Definite good: ['#1', '#7', '#10']
+Evil probabilities: #8=65%, #4=55%, #3=45%, #2=35%, #5=35%, #6=35%, #9=30%
+
+#### [16:15:31] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#3', '#8']
+Reason: Expected posterior 69.7 scenarios (adjusted 73.1, info gain 0.714 bits) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [16:15:39] Revealed #4 Jester
+Info: {'targets': [1, 3, 8], 'evil_count': 3}
+
+### [16:15:39] Ability used at #4
+
+#### [16:16:05] Solver Output
+Scenarios: 78/3408
+Definite good: ['#1', '#7', '#10']
+Evil probabilities: #4=85%, #8=62%, #2=38%, #3=38%, #9=31%, #5=23%, #6=23%
+
+#### [16:16:05] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 85% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 85% confident (budget: 1 wrong execs)
+
+### [16:16:31] Executed #4 -> Lilis (EVIL)
+
+#### [16:16:32] Solver Output
+Scenarios: 22/366
+Definite evil: ['#4']
+Definite good: ['#1', '#7', '#10']
+Evil probabilities: #8=55%, #2=36%, #3=27%, #5=27%, #6=27%, #9=27%
+
+#### [16:16:32] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 55% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 55% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #8 (55%) despite low confidence — Bombardier candidate(s) [2] risk instant game loss if executed first.
+
+### [16:16:56] Executed #8 -> Shaman (EVIL)
+
+#### [16:16:56] Solver Output
+Scenarios: 6/44
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#5', '#6', '#7', '#10']
+Evil probabilities: #2=50%, #9=33%, #3=17%
+
+#### [16:16:56] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 33% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 33% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #9 (33%) despite low confidence — Bombardier candidate(s) [2] risk instant game loss if executed first.
+
+### [16:17:25] Executed #9 -> GOOD (WRONG!)
+
+#### [16:17:25] Solver Output
+Scenarios: 1/38
+Definite evil: ['#2', '#4', '#8']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#9', '#10']
+
+#### [16:17:25] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [16:17:32] Executed #2 -> Minion (EVIL)
+
+## [16:17:55] GAME OVER — WIN
+Final HP: 1
+Notes: Survived 1HP. Dreamer UI activation conflict with Knitter. Corrupted Dreamer output 'Lilis or Knitter' not parseable - marked ability_used only. Wrong exec #9 Dreamer (33% solver pick).
+
