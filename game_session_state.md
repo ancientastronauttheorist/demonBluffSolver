@@ -36594,3 +36594,105 @@ Reason: #8 is evil in ALL 2 scenarios (roles: {'Poisoner'})
 Final HP: 3
 Notes: 3HP. Wrong exec #7 Jester corrupted (80%, lookahead forced-win). Wrong exec #6 Drunk (2HP). Poisoner at #8 100% definite.
 
+
+---
+
+# New Game — 2026-04-16 14:03:42
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Rambler, Alchemist, Lover, Fortune Teller, Empress
+- Outcasts: Doppelganger, Plague Doctor
+- Minions: Poisoner
+- Demons: Lilis
+
+### [14:04:53] Revealed #1 Fortune_Teller
+Info: {}
+
+### [14:04:53] Revealed #2 Alchemist
+Info: {'cured_count': 2}
+
+### [14:04:53] Revealed #3 Rambler
+Info: {'silenced': False}
+
+### [14:04:53] Revealed #4 Judge
+Info: {}
+
+### [14:04:53] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [14:04:53] Revealed #6 Empress
+Info: {'targets': [3, 4, 5]}
+
+#### [14:05:03] Solver Output
+Scenarios: 61/325
+Definite good: ['#3', '#7']
+Evil probabilities: #2=80%, #5=36%, #6=34%, #4=30%, #1=20%
+
+#### [14:05:03] Recommendation
+Action: **USE_ABILITY** #1 (Fortune Teller) -> targets ['#4', '#5']
+Reason: Entropy 0.998 (adjusted 0.900) | follow-up bonus 0.183 | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [14:05:55] Revealed #1 Fortune Teller
+Info: {'targets': [4, 5], 'has_evil': False}
+
+### [14:05:56] Ability used at #1
+
+#### [14:06:04] Solver Output
+Scenarios: 29/325
+Definite good: ['#3', '#7']
+Evil probabilities: #2=72%, #6=45%, #1=28%, #4=28%, #5=28%
+
+#### [14:06:04] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#5']
+Reason: Expected posterior 14.7 scenarios (adjusted 14.7, info gain 0.985 bits) | timing x1.00
+
+### [14:06:49] Revealed #4 Judge
+Info: {'target': 5, 'is_lying': True}
+
+### [14:06:49] Ability used at #4
+
+#### [14:06:57] Solver Output
+Scenarios: 16/325
+Definite good: ['#3', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%, #4=50%, #5=50%
+
+#### [14:06:57] Recommendation
+Action: **ERROR** #4
+Reason: #4 is 50% likely evil but budget=1 requires >=79% confidence (HP=8, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 79% threshold. Consider manual override if you have extra information.
+
+### [14:07:48] Executed #4 -> GOOD (WRONG!)
+
+#### [14:07:48] Solver Output
+Scenarios: 8/247
+Definite evil: ['#5']
+Definite good: ['#3', '#4', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+
+#### [14:07:48] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 8 scenarios (roles: {'Lilis'})
+
+### [14:08:14] Executed #5 -> Lilis (EVIL)
+
+#### [14:08:14] Solver Output
+Scenarios: 8/41
+Definite evil: ['#5']
+Definite good: ['#3', '#4', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%
+
+#### [14:08:14] Recommendation
+Action: **ERROR** #1
+Reason: #1 is 50% likely evil but HP too low to risk (HP=3, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [14:09:19] Executed #1 -> Poisoner (EVIL)
+
+## [14:09:20] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP. Lilis night killed #7 Doppelganger. FT/Judge narrowed, wrong exec #4 (50% tie, Judge good). Then #5 Lilis 100%, and 50/50 between #1/#2 for Poisoner — executed #1 correct.
+

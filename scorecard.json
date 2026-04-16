@@ -3471,6 +3471,13 @@
       "name": "asc73_v2",
       "notes": "3HP. Wrong exec #7 Jester corrupted (80%, lookahead forced-win). Wrong exec #6 Drunk (2HP). Poisoner at #8 100% definite.",
       "date": "2026-04-16 14:02"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc73_v3",
+      "notes": "3HP. Lilis night killed #7 Doppelganger. FT/Judge narrowed, wrong exec #4 (50% tie, Judge good). Then #5 Lilis 100%, and 50/50 between #1/#2 for Poisoner \u2014 executed #1 correct.",
+      "date": "2026-04-16 14:09"
     }
   ]
 }
