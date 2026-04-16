@@ -36696,3 +36696,116 @@ WARNING: CRITICAL: HP=3, wrong exec costs 5 -- CANNOT afford a mistake! Only exe
 Final HP: 3
 Notes: 3HP. Lilis night killed #7 Doppelganger. FT/Judge narrowed, wrong exec #4 (50% tie, Judge good). Then #5 Lilis 100%, and 50/50 between #1/#2 for Poisoner — executed #1 correct.
 
+
+---
+
+# New Game — 2026-04-16 14:10:47
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Jester, Empress, Slayer, Oracle, Medium, Lover
+- Outcasts: Plague Doctor, Bombardier
+- Minions: Minion, Witch
+- Demons: Pooka
+
+### [14:11:24] Revealed #1 Baker
+Info: {'original_role': 'Slayer'}
+
+### [14:11:24] Revealed #2 Medium
+Info: {'good_position': 3, 'good_role': 'Lover'}
+
+### [14:11:24] Revealed #3 Lover
+Info: {'evil_adjacent': 2}
+
+### [14:11:24] Revealed #4 Jester
+Info: {}
+
+### [14:11:24] Revealed #5 Oracle
+Info: {'targets': [7, 8], 'minion_role': 'Witch'}
+
+### [14:11:24] Revealed #6 Plague_Doctor
+Info: {}
+
+### [14:11:24] Revealed #7 Slayer
+Info: {}
+
+### [14:11:24] Revealed #8 Bombardier
+Info: {}
+
+#### [14:11:39] Solver Output
+Scenarios: 135/1974
+Evil probabilities: #3=73%, #1=62%, #5=44%, #9=28%, #4=27%, #2=26%, #8=20%, #7=18%, #6=1%
+
+#### [14:11:39] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 2.127 (adjusted 2.127) | timing x1.00
+
+### [14:12:42] Ability used at #6
+
+#### [14:12:56] Solver Output
+Scenarios: 17/1974
+Definite good: ['#2', '#5']
+Evil probabilities: #3=88%, #8=88%, #1=71%, #4=18%, #6=12%, #7=12%, #9=12%
+
+#### [14:12:56] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#3']
+Reason: Target #3 is 88% evil (adjusted 0.78)
+WARNING: Corruption risk: 12% -- Slayer ability disabled if corrupted
+
+### [14:13:40] Ability used at #7
+
+#### [14:13:51] Solver Output
+Scenarios: 6/1974
+Definite good: ['#2', '#5', '#9']
+Evil probabilities: #1=67%, #3=67%, #8=67%, #4=33%, #6=33%, #7=33%
+
+#### [14:13:51] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#2', '#5']
+Reason: Expected posterior 4.2 scenarios (adjusted 5.3, info gain 0.176 bits) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [14:14:45] Revealed #4 Jester
+Info: {'targets': [1, 2, 5], 'evil_count': 2}
+
+### [14:14:46] Ability used at #4
+
+#### [14:14:56] Solver Output
+Scenarios: 5/1974
+Definite good: ['#2', '#5', '#9']
+Evil probabilities: #1=60%, #3=60%, #8=60%, #4=40%, #6=40%, #7=40%
+
+#### [14:14:56] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (40% good Baker (corrupted), 40% evil Minion, 20% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [14:15:38] Executed #1 -> Minion (EVIL)
+
+#### [14:15:38] Solver Output
+Scenarios: 2/236
+Definite evil: ['#1']
+Definite good: ['#2', '#5', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%, #6=50%, #8=50%
+
+#### [14:15:38] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Lover (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:16:25] Executed #3 -> Pooka (EVIL)
+
+#### [14:16:26] Solver Output
+Scenarios: 1/32
+Definite evil: ['#1', '#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#9']
+
+#### [14:16:26] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [14:17:12] Executed #8 -> Witch (EVIL)
+
+## [14:17:14] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. PD revealed #8 evil + #2 corrupted. Lookahead forced-win chain on Baker #1 (Minion) and Lover #3 (Pooka). Witch blocked #9.
+

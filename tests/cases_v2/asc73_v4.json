@@ -1,0 +1,163 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Slayer"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Lover"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          5
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          7,
+          8
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    1,
+    3,
+    8
+  ],
+  "confirmed_evil": [
+    1,
+    3,
+    8
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Minion",
+    "3": "Pooka",
+    "8": "Witch"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 7,
+      "target_pos": 3,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 2,
+      "is_corrupted": true,
+      "evil_revealed": 8
+    }
+  ],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Jester",
+      "Empress",
+      "Slayer",
+      "Oracle",
+      "Medium",
+      "Lover"
+    ],
+    "outcasts": [
+      "Plague Doctor",
+      "Bombardier"
+    ],
+    "minions": [
+      "Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    7,
+    4
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc73_v4",
+  "true_evil_positions": {
+    "1": "Minion",
+    "3": "Pooka",
+    "8": "Witch"
+  },
+  "notes": "10HP perfect. PD revealed #8 evil + #2 corrupted. Lookahead forced-win chain on Baker #1 (Minion) and Lover #3 (Pooka). Witch blocked #9."
+}
