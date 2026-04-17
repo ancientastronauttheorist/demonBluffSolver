@@ -3562,6 +3562,13 @@
       "name": "asc74_v7",
       "notes": "Loss at v7 final. Wrong exec #4 Knitter (60% solver pick, was corrupted good), wrong exec #10 Rambler (30% manual per rule 1). Witch#9 blocked #10 throughout. Solver stuck at budget=1 HP=5 with no position reaching 85% threshold. True evils: 3=Chancellor, 5=Pooka (killed), 9=Witch.",
       "date": "2026-04-16 16:47"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc74_v7_retry",
+      "notes": "10HP PERFECT retry after v7 loss. Puppeteer+Puppet at #1/#2, Twin Minion disguised as Oracle at #4, Baa at #7. Clean solver chain: exec #2 Puppet (100%), exec #1 Puppeteer (100%), Dreamer-Baa ambig (ability_used only), FT#8 cleared {3,5}, exec #4 Twin Minion (100%), lookahead-forced #7 Baa (50%). ASC74 COMPLETED.",
+      "date": "2026-04-16 19:39"
     }
   ]
 }

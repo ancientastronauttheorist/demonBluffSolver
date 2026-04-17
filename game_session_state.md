@@ -38191,3 +38191,121 @@ Notes: Loss. Wrong exec #4 Knitter (60%), #10 Rambler (30% manual per rule 1). W
 Final HP: 0
 Notes: Loss at v7 final. Wrong exec #4 Knitter (60% solver pick, was corrupted good), wrong exec #10 Rambler (30% manual per rule 1). Witch#9 blocked #10 throughout. Solver stuck at budget=1 HP=5 with no position reaching 85% threshold. True evils: 3=Chancellor, 5=Pooka (killed), 9=Witch.
 
+
+---
+
+# New Game — 2026-04-16 19:36:20
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Witness, Dreamer, Lover, Bard, Fortune Teller
+- Outcasts: Wretch
+- Minions: Puppeteer, Twin Minion
+- Demons: Baa
+
+### [19:36:46] Revealed #1 Witness
+Info: {'affected_position': 6}
+
+### [19:36:46] Revealed #2 Witness
+Info: {'affected_position': 2}
+
+### [19:36:46] Revealed #3 Oracle
+Info: {'targets': [8, 9], 'minion_role': 'Puppeteer'}
+
+### [19:36:46] Revealed #4 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Twin_Minion'}
+
+### [19:36:46] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [19:36:46] Revealed #6 Bard
+Info: {'corruption_distance': -1}
+
+### [19:36:46] Revealed #7 Dreamer
+Info: {}
+
+### [19:36:46] Revealed #8 Fortune_Teller
+Info: {}
+
+### [19:36:46] Revealed #9 Wretch
+Info: {}
+
+#### [19:36:46] Solver Output
+Scenarios: 10/672
+Definite evil: ['#2']
+Evil probabilities: #1=90%, #4=80%, #5=30%, #7=30%, #3=20%, #8=20%, #9=20%, #6=10%
+
+#### [19:36:46] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 10 scenarios (roles: {'Puppet', 'Baa', 'Twin Minion'})
+
+### [19:36:53] Executed #2 -> Puppet (EVIL)
+
+#### [19:36:59] Solver Output
+Scenarios: 7/84
+Definite evil: ['#1', '#2']
+Definite good: ['#6']
+Evil probabilities: #4=86%, #7=29%, #8=29%, #9=29%, #3=14%, #5=14%
+
+#### [19:36:59] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 7 scenarios (roles: {'Puppeteer'})
+
+### [19:37:06] Executed #1 -> Puppeteer (EVIL)
+
+#### [19:37:12] Solver Output
+Scenarios: 7/42
+Definite evil: ['#1', '#2']
+Definite good: ['#6']
+Evil probabilities: #4=86%, #7=29%, #8=29%, #9=29%, #3=14%, #5=14%
+
+#### [19:37:12] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.236 (adjusted 2.236) | timing x1.00
+
+### [19:37:57] Ability used at #7
+
+#### [19:37:57] Solver Output
+Scenarios: 7/42
+Definite evil: ['#1', '#2']
+Definite good: ['#6']
+Evil probabilities: #4=86%, #7=29%, #8=29%, #9=29%, #3=14%, #5=14%
+
+#### [19:37:57] Recommendation
+Action: **USE_ABILITY** #8 (Fortune Teller) -> targets ['#3', '#5']
+Reason: Entropy 0.985 (adjusted 0.985) | timing x1.00
+
+### [19:38:03] Revealed #8 Fortune Teller
+Info: {'targets': [3, 5], 'has_evil': False}
+
+### [19:38:03] Ability used at #8
+
+#### [19:38:10] Solver Output
+Scenarios: 4/42
+Definite evil: ['#1', '#2', '#4']
+Definite good: ['#3', '#5', '#6', '#8']
+Evil probabilities: #7=50%, #9=50%
+
+#### [19:38:10] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Twin Minion', 'Baa'})
+
+### [19:38:17] Executed #4 -> Twin Minion (EVIL)
+
+#### [19:38:24] Solver Output
+Scenarios: 2/6
+Definite evil: ['#1', '#2', '#4']
+Definite good: ['#3', '#5', '#6', '#8']
+Evil probabilities: #7=50%, #9=50%
+
+#### [19:38:24] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Dreamer).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [19:38:31] Executed #7 -> Baa (EVIL)
+
+## [19:39:03] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP PERFECT retry after v7 loss. Puppeteer+Puppet at #1/#2, Twin Minion disguised as Oracle at #4, Baa at #7. Clean solver chain: exec #2 Puppet (100%), exec #1 Puppeteer (100%), Dreamer-Baa ambig (ability_used only), FT#8 cleared {3,5}, exec #4 Twin Minion (100%), lookahead-forced #7 Baa (50%). ASC74 COMPLETED.
+
