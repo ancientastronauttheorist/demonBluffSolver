@@ -3597,6 +3597,13 @@
       "name": "asc75_v4",
       "notes": "5HP (wrong exec #4 Bishop); Slayer killed #2 Chancellor; PD clean on #4 before, Jester 2 evils in [1,4,7]",
       "date": "2026-04-17 22:52"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc75_v5",
+      "notes": "10HP perfect; Druid found no outcasts in [1,3,4]",
+      "date": "2026-04-17 22:54"
     }
   ]
 }

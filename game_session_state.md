@@ -38743,3 +38743,86 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP (wrong exec #4 Bishop); Slayer killed #2 Chancellor; PD clean on #4 before, Jester 2 evils in [1,4,7]
 
+
+---
+
+# New Game — 2026-04-17 22:53:23
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Knitter, Bard, Enlightened, Druid, Gemcrafter, Witness
+- Outcasts: Drunk
+- Minions: Witch
+- Demons: Baa
+
+### [22:53:40] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [22:53:40] Revealed #2 Druid
+Info: {}
+
+### [22:53:40] Revealed #3 Gemcrafter
+Info: {'good_position': 7}
+
+### [22:53:40] Revealed #4 Gemcrafter
+Info: {'good_position': 5}
+
+### [22:53:40] Revealed #6 Bard
+Info: {'corruption_distance': 2}
+
+### [22:53:44] Revealed #5 Enlightened
+Info: {'direction': 'Equidistant'}
+
+### [22:54:02] Revealed #7 Witness
+Info: {'affected_position': 0}
+
+#### [22:54:02] Solver Output
+Scenarios: 6/336
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #4=67%, #5=67%, #1=33%, #6=33%
+
+#### [22:54:02] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+#### [22:54:09] Solver Output
+Scenarios: 6/336
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #4=67%, #5=67%, #1=33%, #6=33%
+
+#### [22:54:09] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [22:54:31] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': None}
+
+### [22:54:31] Ability used at #2
+
+#### [22:54:31] Solver Output
+Scenarios: 6/336
+Definite good: ['#2', '#3', '#7', '#8']
+Evil probabilities: #4=67%, #5=67%, #1=33%, #6=33%
+
+#### [22:54:31] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (33% evil Baa, 33% good Gemcrafter, 33% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [22:54:38] Executed #4 -> Witch (EVIL)
+
+#### [22:54:42] Solver Output
+Scenarios: 2/42
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+
+#### [22:54:42] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Baa'})
+
+### [22:54:49] Executed #5 -> Baa (EVIL)
+
+## [22:54:57] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; Druid found no outcasts in [1,3,4]
+
