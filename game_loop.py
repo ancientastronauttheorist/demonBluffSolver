@@ -840,9 +840,11 @@ class GameSession:
         ability_name = (action.ability_name or "").lower().replace(" ", "_")
 
         # v1: Slayer and Plague Doctor use different command paths
-        if ability_name in ("slayer", "plague_doctor"):
+        # Dreamer: game patch added 2-character pick (Dreamer2 class, ConjourInfo(Character,Character,string)).
+        # Solver still models old 1-target Dreamer; UI auto-click breaks. Manual for now.
+        if ability_name in ("slayer", "plague_doctor", "dreamer"):
             return {"success": False, "info_parsed": None,
-                    "error": f"{action.ability_name} uses slayer_result/pd_check commands — handle manually"}
+                    "error": f"{action.ability_name} requires manual handling (see CLAUDE.md; Dreamer patch awaiting new-semantics support)"}
 
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
@@ -962,8 +964,8 @@ class GameSession:
         # Route USE_ABILITY to auto_use_ability (v1: skips Slayer + Plague Doctor)
         if action.action_type == "use_ability":
             ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
-            if ability_name_lower in ("slayer", "plague_doctor"):
-                print(f"\n  [auto_next] {action.ability_name} uses slayer_result/pd_check — manual action needed.")
+            if ability_name_lower in ("slayer", "plague_doctor", "dreamer"):
+                print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with card/slayer_result/pd_check.")
                 return action, result, None
             print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
             exec_result = self.auto_use_ability(action)

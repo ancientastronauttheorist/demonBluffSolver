@@ -136,6 +136,8 @@ See `memory/project_open_solver_issues.md` for the full list. Highlights:
 - **Two Bakers from a single-Baker pool** (no Shaman) is valid — Baker conversion chain activates at game start.
 - **Drunk counts as Villager in header** — `board_outcast_count` may undercount. Handled.
 - **`next` auto-executes by default** (≥20% confidence). Use `next --plan` or `--dry` for print-only.
+- **Baa warning applies to deck-VIEW outcast count, not HUD.** Top-right HUD counts Baa as Demon (1D). Deck POOL screen counts Baa as +1 fake Outcast. If reading `no=` from HUD, do NOT subtract 1 (asc75_v3).
+- **Dreamer ability patched (asc75_v6):** new `Dreamer2` class picks 2 characters + 1 role (old was 1 target + 1 role). auto_ability now defers Dreamer to manual handling. Use `ability_used <pos>` to skip; new semantics still undocumented in solver. Do not click the card during target-selection — it activates the ability and costs HP on cancel (observed 2HP mystery loss).
 
 ## Game Overview
 Puzzle/deduction game. Circle of face-down cards — reveal for role info, deduce Evil, execute. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.
