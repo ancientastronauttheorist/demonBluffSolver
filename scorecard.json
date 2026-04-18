@@ -3569,6 +3569,13 @@
       "name": "asc74_v7_retry",
       "notes": "10HP PERFECT retry after v7 loss. Puppeteer+Puppet at #1/#2, Twin Minion disguised as Oracle at #4, Baa at #7. Clean solver chain: exec #2 Puppet (100%), exec #1 Puppeteer (100%), Dreamer-Baa ambig (ability_used only), FT#8 cleared {3,5}, exec #4 Twin Minion (100%), lookahead-forced #7 Baa (50%). ASC74 COMPLETED.",
       "date": "2026-04-16 19:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc75_v1",
+      "notes": "10HP perfect; memory reader DLL offsets updated (0x26D5CA0 -> 0x26D6C98) after patch",
+      "date": "2026-04-17 22:38"
     }
   ]
 }

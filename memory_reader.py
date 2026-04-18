@@ -31,7 +31,7 @@ PROCESS_QUERY_INFORMATION = 0x0400
 
 # IL2CPP offsets (from dump.cs / Il2CppDumper script.json analysis)
 # Gameplay class
-GAMEPLAY_TYPEINFO_RVA = 0x26D5CA0  # Il2CppClass* pointer address (RVA from GA base)
+GAMEPLAY_TYPEINFO_RVA = 0x26D6C98  # Il2CppClass* pointer address (RVA from GA base)
 IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
 GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x8
 GAMEPLAY_CHARACTERS_OFFSET = 0x60
@@ -189,7 +189,7 @@ def clean_name(raw_name):
 # Validated against GameAssembly.dll with this fingerprint. Offsets in this file
 # were derived from Il2CppDumper output of a matching DLL; any mismatch means
 # the game updated and offsets are likely stale.
-KNOWN_DLL_FINGERPRINT: dict = {"size": 44685312, "pe_timestamp": 1776354967}
+KNOWN_DLL_FINGERPRINT: dict = {"size": 44688896, "pe_timestamp": 1776463886}
 
 
 def validate_dll_version(reader: 'MemoryReader'):

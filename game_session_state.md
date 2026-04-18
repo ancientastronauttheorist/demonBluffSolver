@@ -38309,3 +38309,91 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: 10HP PERFECT retry after v7 loss. Puppeteer+Puppet at #1/#2, Twin Minion disguised as Oracle at #4, Baa at #7. Clean solver chain: exec #2 Puppet (100%), exec #1 Puppeteer (100%), Dreamer-Baa ambig (ability_used only), FT#8 cleared {3,5}, exec #4 Twin Minion (100%), lookahead-forced #7 Baa (50%). ASC74 COMPLETED.
 
+
+---
+
+# New Game — 2026-04-17 22:36:47
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Architect, Witness, Judge, Bard, Oracle, Alchemist, Gemcrafter
+- Outcasts: Plague Doctor
+- Minions: Minion, Twin Minion
+- Demons: Pooka
+
+### [22:37:38] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [22:37:38] Revealed #2 Judge
+Info: {}
+
+### [22:37:38] Revealed #3 Gemcrafter
+Info: {'good_position': 4}
+
+### [22:37:38] Revealed #4 Witness
+Info: {'affected_position': 8}
+
+### [22:37:38] Revealed #5 Plague_Doctor
+Info: {}
+
+### [22:37:38] Revealed #6 Bard
+Info: {'corruption_distance': 4}
+
+### [22:37:38] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [22:37:38] Revealed #8 Oracle
+Info: {'targets': [6, 9], 'minion_role': 'Twin_Minion'}
+
+### [22:37:38] Revealed #9 Architect
+Info: {'side': 'Right'}
+
+### [22:37:38] Revealed #10 Oracle
+Info: {'targets': [5, 10], 'minion_role': 'Minion'}
+
+#### [22:37:42] Solver Output
+Scenarios: 4/3744
+Definite evil: ['#3', '#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:37:42] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Twin Minion', 'Minion', 'Pooka'})
+
+#### [22:37:56] Solver Output
+Scenarios: 4/3744
+Definite evil: ['#3', '#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:37:56] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 4 scenarios (roles: {'Pooka', 'Minion', 'Twin Minion'})
+
+### [22:38:02] Executed #3 -> Pooka (EVIL)
+
+#### [22:38:07] Solver Output
+Scenarios: 2/408
+Definite evil: ['#3', '#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:38:07] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Twin Minion', 'Minion'})
+
+### [22:38:14] Executed #4 -> Twin Minion (EVIL)
+
+#### [22:38:17] Solver Output
+Scenarios: 1/50
+Definite evil: ['#3', '#4', '#8']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#9', '#10']
+
+#### [22:38:17] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [22:38:24] Executed #8 -> Minion (EVIL)
+
+## [22:38:55] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; memory reader DLL offsets updated (0x26D5CA0 -> 0x26D6C98) after patch
+
