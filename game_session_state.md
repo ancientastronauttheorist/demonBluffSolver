@@ -38397,3 +38397,111 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: 10HP perfect; memory reader DLL offsets updated (0x26D5CA0 -> 0x26D6C98) after patch
 
+
+---
+
+# New Game — 2026-04-17 22:42:48
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Oracle, Poet, Confessor, Fortune_Teller, Scout, Enlightened, Lover, Gemcrafter
+- Outcasts: Plague_Doctor
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+### [22:43:09] Revealed #1 Poet
+Info: {'evil_role': 'Minion', 'distance': 1, 'copied_role': 'Scout'}
+
+### [22:43:09] Revealed #2 Scout
+Info: {'evil_role': 'Shaman', 'distance': 3}
+
+### [22:43:09] Revealed #3 Oracle
+Info: {'targets': [7, 9], 'minion_role': 'Shaman'}
+
+### [22:43:09] Revealed #4 Gemcrafter
+Info: {'good_position': 7}
+
+### [22:43:09] Revealed #5 Plague_Doctor
+Info: {}
+
+### [22:43:09] Revealed #6 Bard
+Info: {'corruption_distance': 1}
+
+### [22:43:09] Revealed #7 Fortune_Teller
+Info: {}
+
+### [22:43:09] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [22:43:09] Revealed #10 Gemcrafter
+Info: {'good_position': 3}
+
+### [22:43:14] Revealed #8 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [22:43:19] Solver Output
+Scenarios: 6/3240
+Definite good: ['#4', '#5', '#7', '#10']
+Evil probabilities: #2=67%, #8=67%, #1=50%, #3=50%, #6=33%, #9=33%
+
+#### [22:43:19] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.918 (adjusted 1.918) | timing x1.00
+
+### [22:44:06] Ability used at #5
+
+#### [22:44:09] Solver Output
+Scenarios: 2/3240
+Definite evil: ['#8', '#9']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=50%, #2=50%
+
+#### [22:44:09] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 2 scenarios (roles: {'Pooka'})
+
+### [22:44:16] Executed #8 -> Pooka (EVIL)
+
+#### [22:44:20] Solver Output
+Scenarios: 2/352
+Definite evil: ['#8', '#9']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=50%, #2=50%
+
+#### [22:44:20] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Shaman'})
+
+### [22:44:27] Executed #9 -> Shaman (EVIL)
+
+#### [22:44:30] Solver Output
+Scenarios: 2/43
+Definite evil: ['#8', '#9']
+Definite good: ['#3', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=50%, #2=50%
+
+#### [22:44:30] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 1.000 (adjusted 0.500) | timing x1.00
+WARNING: Corruption risk: 100%
+
+### [22:44:36] Revealed #7 Fortune Teller
+Info: {'targets': [1, 3], 'has_evil': False}
+
+### [22:44:36] Ability used at #7
+
+#### [22:44:42] Solver Output
+Scenarios: 1/43
+Definite evil: ['#1', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7', '#10']
+
+#### [22:44:42] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [22:44:49] Executed #1 -> Minion (EVIL)
+
+## [22:45:02] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; PD clean on #9, FT7 corrupted result
+

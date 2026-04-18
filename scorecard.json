@@ -3576,6 +3576,13 @@
       "name": "asc75_v1",
       "notes": "10HP perfect; memory reader DLL offsets updated (0x26D5CA0 -> 0x26D6C98) after patch",
       "date": "2026-04-17 22:38"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc75_v2",
+      "notes": "10HP perfect; PD clean on #9, FT7 corrupted result",
+      "date": "2026-04-17 22:45"
     }
   ]
 }
