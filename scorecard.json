@@ -3611,6 +3611,27 @@
       "name": "asc75_v6",
       "notes": "6HP; Lilis village. Night kill #6 Oracle (-2). Dreamer ability updated to 2-pick (solver doesn't handle new version) \u2014 skipped. HP sync issue 8->6 after accidental Dreamer activation click. Lookahead forced exec #5, then clean #7 Lilis, #3 Shaman.",
       "date": "2026-04-17 23:02"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc75_v7",
+      "notes": "6HP; ASCENSION 75 COMPLETE. Lilis+Puppeteer combo. Night kills #7 Scout, #10 Jester (-4HP total). Exec #5 Lilis first (guaranteed demon kill), #1 Minion, fake-Slayer #3 burn (ability_used workaround), exec #3 Puppeteer -> auto-killed #4 Puppet. Also burned fake FT at #4 ability in-game (harmless).",
+      "date": "2026-04-17 23:08"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc75_v7",
+      "notes": "6HP; ASCENSION 75 COMPLETE",
+      "date": "2026-04-17 23:08"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc75_v7",
+      "notes": "6HP; ASCENSION 75 COMPLETE. #4 Puppet auto-died with Puppeteer, omitted from dict (session didn't record)",
+      "date": "2026-04-17 23:08"
     }
   ]
 }

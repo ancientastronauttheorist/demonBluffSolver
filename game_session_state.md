@@ -38924,3 +38924,133 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 6
 Notes: 6HP; Lilis village. Night kill #6 Oracle (-2). Dreamer ability updated to 2-pick (solver doesn't handle new version) — skipped. HP sync issue 8->6 after accidental Dreamer activation click. Lookahead forced exec #5, then clean #7 Lilis, #3 Shaman.
 
+
+---
+
+# New Game — 2026-04-17 23:03:51
+Cards: 10, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Lover, Hunter, Enlightened, Slayer, Witness, Jester, Fortune_Teller
+- Outcasts: Rambler
+- Minions: Puppeteer, Minion
+- Demons: Lilis
+
+### [23:04:49] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [23:04:49] Revealed #3 Slayer
+Info: {}
+
+### [23:04:49] Revealed #4 Fortune_Teller
+Info: {}
+
+### [23:04:49] Revealed #5 Hunter
+Info: {'distance': 5}
+
+### [23:04:49] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [23:04:49] Revealed #8 Witness
+Info: {'affected_position': 4}
+
+### [23:04:49] Revealed #9 Enlightened
+Info: {'direction': 'CW'}
+
+### [23:04:53] Revealed #1 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [23:04:53] Solver Output
+Scenarios: 8/1064
+Definite evil: ['#5']
+Definite good: ['#7', '#10']
+Evil probabilities: #1=75%, #4=75%, #3=50%, #2=25%, #6=25%, #8=25%, #9=25%
+
+#### [23:04:53] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 8 scenarios (roles: {'Puppeteer', 'Lilis', 'Minion'})
+
+#### [23:05:01] Solver Output
+Scenarios: 8/1064
+Definite evil: ['#5']
+Definite good: ['#7', '#10']
+Evil probabilities: #1=75%, #4=75%, #3=50%, #2=25%, #6=25%, #8=25%, #9=25%
+
+#### [23:05:01] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 8 scenarios (roles: {'Lilis', 'Puppeteer', 'Minion'})
+
+### [23:05:08] Executed #5 -> Lilis (EVIL)
+
+#### [23:05:14] Solver Output
+Scenarios: 1/105
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:05:14] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [23:05:21] Executed #1 -> Minion (EVIL)
+
+#### [23:05:25] Solver Output
+Scenarios: 1/11
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:05:25] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [23:05:34] Ability used at #3
+
+#### [23:05:35] Solver Output
+Scenarios: 1/11
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:05:35] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+#### [23:06:26] Solver Output
+Scenarios: 1/11
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:06:26] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+#### [23:07:03] Solver Output
+Scenarios: 1/11
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:07:03] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [23:07:10] Executed #3 -> Puppeteer (EVIL)
+
+#### [23:07:14] Solver Output
+Scenarios: 1/2
+Definite evil: ['#1', '#3', '#4', '#5']
+Definite good: ['#2', '#6', '#7', '#8', '#9', '#10']
+
+#### [23:07:14] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+## [23:08:00] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP; ASCENSION 75 COMPLETE. Lilis+Puppeteer combo. Night kills #7 Scout, #10 Jester (-4HP total). Exec #5 Lilis first (guaranteed demon kill), #1 Minion, fake-Slayer #3 burn (ability_used workaround), exec #3 Puppeteer -> auto-killed #4 Puppet. Also burned fake FT at #4 ability in-game (harmless).
+
+## [23:08:04] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP; ASCENSION 75 COMPLETE
+
+## [23:08:10] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP; ASCENSION 75 COMPLETE. #4 Puppet auto-died with Puppeteer, omitted from dict (session didn't record)
+
