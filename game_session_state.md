@@ -38505,3 +38505,124 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: 10HP perfect; PD clean on #9, FT7 corrupted result
 
+
+---
+
+# New Game — 2026-04-17 22:46:15
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Jester, Druid, Medium, Dreamer, Baker, Confessor
+- Outcasts: Rambler
+- Minions: Witch
+- Demons: Baa
+
+## Deck
+- Villagers: Gemcrafter, Jester, Druid, Medium, Dreamer, Baker, Confessor
+- Outcasts: Rambler
+- Minions: Witch
+- Demons: Baa
+
+### [22:47:04] Revealed #1 Medium
+Info: {'good_position': 7, 'good_role': 'Dreamer'}
+
+### [22:47:04] Revealed #2 Jester
+Info: {}
+
+### [22:47:04] Revealed #3 Druid
+Info: {}
+
+### [22:47:04] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [22:47:04] Revealed #5 Rambler
+Info: {'silenced': False}
+
+### [22:47:04] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [22:47:04] Revealed #7 Baker
+Info: {'original_role': 'Dreamer'}
+
+#### [22:47:12] Solver Output
+Scenarios: 2/56
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8']
+
+#### [22:47:12] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Witch', 'Baa'})
+
+## Deck
+- Villagers: Gemcrafter, Jester, Druid, Medium, Dreamer, Baker, Confessor
+- Outcasts: Rambler
+- Minions: Witch
+- Demons: Baa
+
+#### [22:47:44] Solver Output
+Scenarios: 8/56
+Definite evil: ['#6']
+Definite good: ['#1', '#4', '#7']
+Evil probabilities: #2=25%, #3=25%, #5=25%, #8=25%
+
+#### [22:47:44] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Baa', 'Witch'})
+
+#### [22:47:49] Solver Output
+Scenarios: 8/56
+Definite evil: ['#6']
+Definite good: ['#1', '#4', '#7']
+Evil probabilities: #2=25%, #3=25%, #5=25%, #8=25%
+
+#### [22:47:49] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 8 scenarios (roles: {'Baa', 'Witch'})
+
+### [22:47:56] Executed #6 -> Baa (EVIL)
+
+#### [22:48:00] Solver Output
+Scenarios: 4/7
+Definite evil: ['#6']
+Definite good: ['#1', '#4', '#7']
+Evil probabilities: #2=25%, #3=25%, #5=25%, #8=25%
+
+#### [22:48:00] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#5']
+Reason: Entropy 1.500 (adjusted 1.500) | timing x1.00
+
+### [22:48:22] Revealed #3 Druid
+Info: {'targets': [1, 2, 5], 'found_outcast': 'Rambler'}
+
+### [22:48:22] Ability used at #3
+
+#### [22:48:25] Solver Output
+Scenarios: 2/7
+Definite evil: ['#6']
+Definite good: ['#1', '#3', '#4', '#5', '#7']
+Evil probabilities: #2=50%, #8=50%
+
+#### [22:48:25] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#3', '#4']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [22:48:33] Revealed #2 Jester
+Info: {'targets': [1, 3, 4], 'evil_count': 0}
+
+### [22:48:33] Ability used at #2
+
+#### [22:48:36] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [22:48:36] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [22:48:43] Executed #8 -> Witch (EVIL)
+
+## [22:48:48] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; Druid confirmed Rambler in [1,2,5], Jester 0 evils in [1,3,4]
+

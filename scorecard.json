@@ -3583,6 +3583,13 @@
       "name": "asc75_v2",
       "notes": "10HP perfect; PD clean on #9, FT7 corrupted result",
       "date": "2026-04-17 22:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc75_v3",
+      "notes": "10HP perfect; Druid confirmed Rambler in [1,2,5], Jester 0 evils in [1,3,4]",
+      "date": "2026-04-17 22:48"
     }
   ]
 }
