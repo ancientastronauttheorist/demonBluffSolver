@@ -38826,3 +38826,101 @@ Reason: #5 is evil in ALL 2 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect; Druid found no outcasts in [1,3,4]
 
+
+---
+
+# New Game — 2026-04-17 22:56:03
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Confessor, Medium, Bishop, Jester, Dreamer, Architect
+- Outcasts: Drunk, Wretch
+- Minions: Shaman, Chancellor
+- Demons: Lilis
+
+### [22:57:12] Revealed #1 Oracle
+Info: {'targets': [4, 8], 'minion_role': 'Chancellor'}
+
+### [22:57:12] Revealed #2 Dreamer
+Info: {}
+
+### [22:57:12] Revealed #3 Architect
+Info: {'side': 'Right'}
+
+### [22:57:12] Revealed #4 Medium
+Info: {'good_position': 7, 'good_role': 'Medium'}
+
+### [22:57:12] Revealed #5 Confessor
+Info: {'dizzy': True}
+
+### [22:57:12] Revealed #7 Medium
+Info: {'good_position': 3, 'good_role': 'Architect'}
+
+### [22:57:12] Revealed #8 Wretch
+Info: {}
+
+### [22:57:12] Revealed #9 Architect
+Info: {'side': 'Left'}
+
+#### [22:57:16] Solver Output
+Scenarios: 18/3572
+Definite good: ['#6', '#8']
+Evil probabilities: #5=78%, #7=78%, #3=44%, #4=33%, #1=22%, #2=22%, #9=22%
+
+#### [22:57:16] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#3']
+Reason: Entropy 2.197 (adjusted 2.197) | timing x1.00
+
+### [23:01:50] Ability used at #2
+
+#### [23:01:50] Solver Output
+Scenarios: 18/3572
+Definite good: ['#6', '#8']
+Evil probabilities: #5=78%, #7=78%, #3=44%, #4=33%, #1=22%, #2=22%, #9=22%
+
+#### [23:01:50] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (28% evil Lilis, 28% evil Shaman, 22% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 78%, but all reveal branches still lead to a forced win.
+
+#### [23:01:56] Solver Output
+Scenarios: 18/3572
+Definite good: ['#6', '#8']
+Evil probabilities: #5=78%, #7=78%, #3=44%, #4=33%, #1=22%, #2=22%, #9=22%
+
+#### [23:01:56] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (28% evil Lilis, 28% evil Shaman, 22% evil Chancellor).
+WARNING: Execution lookahead override -- immediate hit chance is 78%, but all reveal branches still lead to a forced win.
+
+### [23:02:03] Executed #5 -> Chancellor (EVIL)
+
+#### [23:02:07] Solver Output
+Scenarios: 4/294
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#6', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [23:02:07] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [23:02:14] Executed #7 -> Lilis (EVIL)
+
+#### [23:02:18] Solver Output
+Scenarios: 2/36
+Definite evil: ['#5', '#7']
+Definite good: ['#1', '#2', '#6', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [23:02:18] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Drunk (corrupted), 50% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [23:02:25] Executed #3 -> Shaman (EVIL)
+
+## [23:02:41] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP; Lilis village. Night kill #6 Oracle (-2). Dreamer ability updated to 2-pick (solver doesn't handle new version) — skipped. HP sync issue 8->6 after accidental Dreamer activation click. Lookahead forced exec #5, then clean #7 Lilis, #3 Shaman.
+

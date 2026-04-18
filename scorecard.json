@@ -3604,6 +3604,13 @@
       "name": "asc75_v5",
       "notes": "10HP perfect; Druid found no outcasts in [1,3,4]",
       "date": "2026-04-17 22:54"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc75_v6",
+      "notes": "6HP; Lilis village. Night kill #6 Oracle (-2). Dreamer ability updated to 2-pick (solver doesn't handle new version) \u2014 skipped. HP sync issue 8->6 after accidental Dreamer activation click. Lookahead forced exec #5, then clean #7 Lilis, #3 Shaman.",
+      "date": "2026-04-17 23:02"
     }
   ]
 }
