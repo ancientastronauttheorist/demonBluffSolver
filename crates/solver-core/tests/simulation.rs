@@ -530,6 +530,12 @@ fn simulate_all_v2() {
     let known_constraint_issues: HashSet<&str> = [
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
         "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
+        // Recorded under old Rambler rule (silenced ⟺ Disguised picker). New rule
+        // is "silenced ⟺ Liar picker" — Doppelganger picker no longer silences,
+        // so historical clue values no longer satisfy the validator.
+        "asc73_v5",
+        "asc73_v7",
+        "asc74_v4",
     ].into_iter().collect();
 
     let mut wins = 0usize;

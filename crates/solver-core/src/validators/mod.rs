@@ -763,9 +763,9 @@ fn validate_poet(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
 }
 
 /// Rambler: passively displays a quote when flipped. If the FIRST active-ability
-/// picker of Rambler (post-flip) is "Disguised" (evil or an outcast that disguises
-/// as a villager — Doppelganger/Drunk), Rambler is Silenced. If Rambler itself
-/// lies (evil-as-Rambler or corrupted), the condition inverts.
+/// picker of Rambler (post-flip) is a "Liar" (currently lying — evil-not-Puppet,
+/// or corrupted, including Drunk), Rambler is Silenced. If Rambler itself lies
+/// (corrupted, since Rambler is Outcast and never evil), the condition inverts.
 ///
 /// Data entry: `info_parsed = {"silenced": true|false}`. If absent, validator is a no-op.
 fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -778,14 +778,12 @@ fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     // Explicit picker override from info_parsed["silenced_by"]: use as the first picker
     // (handles cases like PD silencing where no pd_ability_result is registered).
     if let Some(explicit_picker) = info_pos(&card.info_parsed, "silenced_by") {
-        let picker_disguised = is_evil_in_board_state(explicit_picker, scenario, state)
-            || scenario.doppelganger_position == Some(explicit_picker)
-            || scenario.drunk_position == Some(explicit_picker);
+        let picker_liar = truth_status(explicit_picker, scenario, state) == TruthStatus::Lying;
         let truth = truth_status(rambler_pos, scenario, state);
         return if truth == TruthStatus::Truthful {
-            claimed_silenced == picker_disguised
+            claimed_silenced == picker_liar
         } else {
-            claimed_silenced != picker_disguised
+            claimed_silenced != picker_liar
         };
     }
 
@@ -855,17 +853,15 @@ fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
         None => return true, // Never picked → no info to discriminate.
     };
 
-    // "Disguised" = evil-disguising-as-villager OR Doppelganger/Drunk
-    // (both are outcasts whose apparent role differs from truth).
-    let picker_disguised = is_evil_in_board_state(picker_pos, scenario, state)
-        || scenario.doppelganger_position == Some(picker_pos)
-        || scenario.drunk_position == Some(picker_pos);
+    // "Liar" = currently lying (evil-not-Puppet OR corrupted, which includes Drunk).
+    // Doppelganger no longer triggers silencing since it doesn't lie.
+    let picker_liar = truth_status(picker_pos, scenario, state) == TruthStatus::Lying;
 
     let truth = truth_status(rambler_pos, scenario, state);
     if truth == TruthStatus::Truthful {
-        claimed_silenced == picker_disguised
+        claimed_silenced == picker_liar
     } else {
-        claimed_silenced != picker_disguised
+        claimed_silenced != picker_liar
     }
 }
 
