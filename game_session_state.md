@@ -39884,3 +39884,120 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Chancellor'})
 Final HP: 8
 Notes: asc77 v6 WIN 8HP, Lilis game, Bard-pool with 2 fake-Bard evils. Clean solve.
 
+
+---
+
+# New Game — 2026-04-19 17:14:50
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Gemcrafter, Judge, Witness, Scout, Jester
+- Outcasts: Wretch
+- Minions: Puppeteer, Witch
+- Demons: Baa
+
+### [17:15:13] Revealed #1 Oracle
+Info: {'targets': [5, 7], 'minion_role': 'Witch'}
+
+### [17:15:13] Revealed #2 Wretch
+Info: {}
+
+### [17:15:13] Revealed #3 Scout
+Info: {'evil_role': 'Witch', 'distance': 1}
+
+### [17:15:13] Revealed #4 Oracle
+Info: {'targets': [3, 6], 'minion_role': 'Witch'}
+
+### [17:15:13] Revealed #5 Judge
+Info: {}
+
+### [17:15:13] Revealed #6 Witness
+Info: {'affected_position': 8}
+
+### [17:15:13] Revealed #7 Jester
+Info: {}
+
+### [17:15:13] Revealed #8 Gemcrafter
+Info: {'good_position': 3}
+
+#### [17:15:14] Solver Output
+Scenarios: 4/714
+Definite evil: ['#4', '#8']
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #9=75%, #5=50%, #7=50%, #1=25%
+
+#### [17:15:14] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 4 scenarios (roles: {'Baa'})
+
+### [17:15:21] Executed #4 -> Baa (EVIL)
+
+#### [17:15:28] Solver Output
+Scenarios: 4/84
+Definite evil: ['#4', '#8']
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #9=75%, #5=50%, #7=50%, #1=25%
+
+#### [17:15:28] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 4 scenarios (roles: {'Puppet'})
+
+### [17:15:35] Executed #8 -> Puppet (EVIL)
+
+#### [17:15:40] Solver Output
+Scenarios: 4/12
+Definite evil: ['#4', '#8']
+Definite good: ['#2', '#3', '#6']
+Evil probabilities: #9=75%, #5=50%, #7=50%, #1=25%
+
+#### [17:15:40] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#2']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.0, info gain 1.000 bits) | timing x1.00
+
+### [17:15:45] Revealed #5 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [17:15:45] Ability used at #5
+
+#### [17:15:52] Solver Output
+Scenarios: 2/12
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#2', '#3', '#5', '#6']
+Evil probabilities: #1=50%, #7=50%
+
+#### [17:15:52] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [17:15:59] Executed #9 -> Puppeteer (EVIL)
+
+#### [17:16:05] Solver Output
+Scenarios: 2/6
+Definite evil: ['#4', '#8', '#9']
+Definite good: ['#2', '#3', '#5', '#6']
+Evil probabilities: #1=50%, #7=50%
+
+#### [17:16:05] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#2', '#3', '#5']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [17:16:13] Revealed #7 Jester
+Info: {'targets': [2, 3, 5], 'evil_count': 1}
+
+### [17:16:13] Ability used at #7
+
+#### [17:16:18] Solver Output
+Scenarios: 1/6
+Definite evil: ['#1', '#4', '#8', '#9']
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+
+#### [17:16:18] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [17:16:25] Executed #1 -> Witch (EVIL)
+
+## [17:16:33] GAME OVER — WIN
+Final HP: 10
+Notes: asc77 v7 WIN 10HP PERFECT. ASCENSION 77 COMPLETE! Puppeteer spawned Puppet, Baa demon, Witch blocked #9. Clean solve with Judge+Jester abilities.
+

@@ -3709,6 +3709,13 @@
       "name": "asc77_v6",
       "notes": "asc77 v6 WIN 8HP, Lilis game, Bard-pool with 2 fake-Bard evils. Clean solve.",
       "date": "2026-04-19 17:12"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc77_v7",
+      "notes": "asc77 v7 WIN 10HP PERFECT. ASCENSION 77 COMPLETE! Puppeteer spawned Puppet, Baa demon, Witch blocked #9. Clean solve with Judge+Jester abilities.",
+      "date": "2026-04-19 17:16"
     }
   ]
 }
