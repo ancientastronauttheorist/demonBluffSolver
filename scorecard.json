@@ -3744,6 +3744,13 @@
       "name": "asc77_v3",
       "notes": "asc77 v3 WIN 5HP. 5 corrupted chars. Wrong #6 Slayer (50% gamble), won on #3 Pooka and #1 Chancellor both 50%.",
       "date": "2026-04-19 18:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc77_v4",
+      "notes": "asc77 v4 WIN 10HP perfect. Baa as fake-Baker, Witch blocked #7. Clean Baa exec, lookahead #4 Witch.",
+      "date": "2026-04-19 18:29"
     }
   ]
 }

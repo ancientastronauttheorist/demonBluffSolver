@@ -40303,3 +40303,74 @@ Notes: asc77 v3 WIN 5HP. Tough corruption board (5 corrupted chars). Wrong exec 
 Final HP: 5
 Notes: asc77 v3 WIN 5HP. 5 corrupted chars. Wrong #6 Slayer (50% gamble), won on #3 Pooka and #1 Chancellor both 50%.
 
+
+---
+
+# New Game — 2026-04-19 18:28:54
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Jester, Baker, Lover, Dreamer, Confessor
+- Outcasts: Rambler
+- Minions: Witch
+- Demons: Baa
+
+### [18:29:19] Revealed #1 Baker
+Info: {'original_role': 'Confessor'}
+
+### [18:29:19] Revealed #2 Dreamer
+Info: {}
+
+### [18:29:19] Revealed #3 Rambler
+Info: {'silenced': False}
+
+### [18:29:19] Revealed #4 Oracle
+Info: {'targets': [2, 5], 'minion_role': 'Witch'}
+
+### [18:29:19] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:29:19] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+#### [18:29:20] Solver Output
+Scenarios: 3/42
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #4=67%, #5=33%
+
+#### [18:29:20] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Witch', 'Baa'})
+
+### [18:29:27] Executed #1 -> Baa (EVIL)
+
+#### [18:29:33] Solver Output
+Scenarios: 2/6
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%
+
+#### [18:29:33] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:29:38] Ability used at #2
+
+#### [18:29:39] Solver Output
+Scenarios: 2/6
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #4=50%, #5=50%
+
+#### [18:29:39] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% good Oracle, 50% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [18:29:46] Executed #4 -> Witch (EVIL)
+
+## [18:29:53] GAME OVER — WIN
+Final HP: 10
+Notes: asc77 v4 WIN 10HP perfect. Baa as fake-Baker, Witch blocked #7. Clean Baa exec, lookahead #4 Witch.
+

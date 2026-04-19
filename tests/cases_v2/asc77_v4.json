@@ -1,0 +1,121 @@
+{
+  "n_cards": 7,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Confessor"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    }
+  ],
+  "executed": [
+    1,
+    4
+  ],
+  "confirmed_evil": [
+    1,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Baa",
+    "4": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    7
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Oracle",
+      "Jester",
+      "Baker",
+      "Lover",
+      "Dreamer",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Rambler"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc77_v4",
+  "true_evil_positions": {
+    "1": "Baa",
+    "4": "Witch"
+  },
+  "notes": "asc77 v4 WIN 10HP perfect. Baa as fake-Baker, Witch blocked #7. Clean Baa exec, lookahead #4 Witch."
+}
