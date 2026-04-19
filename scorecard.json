@@ -3723,6 +3723,13 @@
       "name": "asc77_v1",
       "notes": "REAL asc77 v1 WIN 8HP. Lilis game. Witch blocked #7 Baker; executed Witch first to unblock, then Judge found Lilis #2 lying, executed Lilis.",
       "date": "2026-04-19 18:18"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc77_v2",
+      "notes": "asc77 v2 WIN 1HP. Knight check #6 was corrupted (-9 HP), then PD pointed to #2, clean exec #2 Chancellor and #7 Pooka.",
+      "date": "2026-04-19 18:21"
     }
   ]
 }

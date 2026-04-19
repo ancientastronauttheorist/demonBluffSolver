@@ -40086,3 +40086,94 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: REAL asc77 v1 WIN 8HP. Lilis game. Witch blocked #7 Baker; executed Witch first to unblock, then Judge found Lilis #2 lying, executed Lilis.
 
+
+---
+
+# New Game — 2026-04-19 18:19:45
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Slayer, Knitter, Lover, Scout, Bard
+- Outcasts: Bombardier, Plague Doctor, Rambler
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:20:05] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [18:20:05] Revealed #2 Bombardier
+Info: {}
+
+### [18:20:05] Revealed #3 Plague_Doctor
+Info: {}
+
+### [18:20:05] Revealed #4 Rambler
+Info: {'silenced': False}
+
+### [18:20:05] Revealed #5 Slayer
+Info: {}
+
+### [18:20:05] Revealed #6 Knight
+Info: {}
+
+### [18:20:05] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+### [18:20:05] Revealed #8 Knitter
+Info: {'evil_pairs': 1}
+
+#### [18:20:06] Solver Output
+Scenarios: 54/263
+Evil probabilities: #8=44%, #1=39%, #6=37%, #7=31%, #2=26%, #5=11%, #4=7%, #3=4%
+
+#### [18:20:06] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight check: #6 is 37% evil, 24% corruption risk. Expected HP cost: 1.4 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 24% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [18:20:20] Solver Output
+Scenarios: 54/263
+Evil probabilities: #8=44%, #1=39%, #6=37%, #7=31%, #2=26%, #5=11%, #4=7%, #3=4%
+
+#### [18:20:20] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight check: #6 is 37% evil, 24% corruption risk. Expected HP cost: 1.4 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 24% -- corrupted Knight loses immunity + 4 extra damage
+
+### [18:20:55] Executed #6 -> GOOD (WRONG!)
+
+#### [18:20:56] Solver Output
+Scenarios: 13/186
+Definite good: ['#3', '#6']
+Evil probabilities: #7=69%, #1=46%, #8=31%, #2=23%, #5=23%, #4=8%
+
+#### [18:20:56] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#8']
+Reason: Entropy 2.104 (adjusted 2.104) | timing x1.00
+
+#### [18:21:23] Solver Output
+Scenarios: 1/186
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [18:21:23] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [18:21:30] Executed #2 -> Chancellor (EVIL)
+
+#### [18:21:36] Solver Output
+Scenarios: 1/27
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [18:21:36] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [18:21:43] Executed #7 -> Pooka (EVIL)
+
+## [18:21:50] GAME OVER — WIN
+Final HP: 1
+Notes: asc77 v2 WIN 1HP. Knight check #6 was corrupted (-9 HP), then PD pointed to #2, clean exec #2 Chancellor and #7 Pooka.
+
