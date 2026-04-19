@@ -3646,6 +3646,20 @@
       "name": "asc77_v2",
       "notes": "asc77 v2 WIN perfect 10HP, PD found #4 evil #3 corrupted (PD was fake Twin), lookahead executed #2 Twin, #7 Baa, #5 Minion.",
       "date": "2026-04-19 16:40"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc77_v3",
+      "notes": "asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.",
+      "date": "2026-04-19 16:45"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc77_v3",
+      "notes": "asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.",
+      "date": "2026-04-19 16:45"
     }
   ]
 }

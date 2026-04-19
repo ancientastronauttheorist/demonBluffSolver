@@ -39300,3 +39300,113 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: asc77 v2 WIN perfect 10HP, PD found #4 evil #3 corrupted (PD was fake Twin), lookahead executed #2 Twin, #7 Baa, #5 Minion.
 
+
+---
+
+# New Game — 2026-04-19 16:42:17
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Scout, Jester, Oracle, Architect, Judge, Enlightened
+- Outcasts: Drunk, Plague Doctor, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [16:42:46] Revealed #2 Bombardier
+Info: {}
+
+### [16:42:46] Revealed #3 Judge
+Info: {}
+
+### [16:42:46] Revealed #4 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 3}
+
+### [16:42:46] Revealed #5 Oracle
+Info: {'targets': [1, 3], 'minion_role': 'Chancellor'}
+
+### [16:42:46] Revealed #6 Architect
+Info: {'side': 'Right'}
+
+### [16:42:46] Revealed #7 Knight
+Info: {}
+
+### [16:42:46] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [16:42:46] Solver Output
+Scenarios: 298/1323
+Evil probabilities: #4=49%, #6=46%, #5=37%, #2=26%, #7=23%, #3=8%, #1=8%, #8=3%
+
+#### [16:42:46] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.337 (adjusted 2.337) | timing x1.00 | EV=2.337 > reveal EV=0.504
+
+### [16:42:57] Revealed #1 Enlightened
+Info: {'direction': 'ccw'}
+
+#### [16:43:00] Solver Output
+Scenarios: 185/1550
+Evil probabilities: #4=41%, #2=40%, #5=38%, #6=37%, #7=22%, #3=10%, #1=9%, #8=2%
+
+#### [16:43:00] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.262 (adjusted 2.262) | timing x1.00
+
+#### [16:43:24] Solver Output
+Scenarios: 98/1550
+Definite good: ['#1', '#3']
+Evil probabilities: #4=76%, #2=55%, #6=35%, #5=27%, #7=6%, #8=2%
+
+#### [16:43:24] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#2']
+Reason: Expected posterior 86.7 scenarios (adjusted 119.5, info gain 0.000 bits) | timing x1.00
+WARNING: Corruption risk: 76% -- corrupted Judge results are unreliable
+
+### [16:43:29] Revealed #3 Judge
+Info: {'target': 2, 'is_lying': True}
+
+### [16:43:29] Ability used at #3
+
+#### [16:43:32] Solver Output
+Scenarios: 78/1550
+Definite good: ['#1', '#3', '#8']
+Evil probabilities: #4=72%, #2=69%, #5=26%, #6=26%, #7=8%
+
+#### [16:43:32] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 72% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 72% confident (budget: 2 wrong execs)
+
+### [16:44:18] Executed #4 -> GOOD (WRONG!)
+
+#### [16:44:18] Solver Output
+Scenarios: 22/1108
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#6', '#8']
+Evil probabilities: #5=73%, #7=27%
+
+#### [16:44:18] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 22 scenarios (roles: {'Chancellor', 'Pooka'})
+
+### [16:44:25] Executed #2 -> Chancellor (EVIL)
+
+#### [16:44:32] Solver Output
+Scenarios: 4/262
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [16:44:32] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Pooka'})
+
+## [16:45:00] GAME OVER — WIN
+Final HP: 5
+Notes: asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.
+
+### [16:45:05] Executed #7 -> Pooka (EVIL)
+
+## [16:45:05] GAME OVER — WIN
+Final HP: 5
+Notes: asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.
+
