@@ -39766,3 +39766,62 @@ Reason: #3 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
 Final HP: 6
 Notes: asc77 v4 retry2 WIN 6HP. Lilis game, Witch at #10 died on 2nd night (weird). Druid #3 lie (claimed 'Drunk' not in pool) confirmed #3 evil = Lilis.
 
+
+---
+
+# New Game — 2026-04-19 17:08:48
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Judge, Hunter, Medium, Scout, Poet
+- Outcasts: Rambler, Wretch
+- Minions: Chancellor
+- Demons: Lilis
+
+### [17:09:33] Revealed #1 Rambler
+Info: {'silenced': False}
+
+### [17:09:33] Revealed #2 Jester
+Info: {}
+
+### [17:09:33] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [17:09:33] Revealed #4 Medium
+Info: {'good_position': 1, 'good_role': 'Rambler'}
+
+### [17:09:33] Revealed #5 Wretch
+Info: {}
+
+### [17:09:33] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [17:09:33] Revealed #7 Poet
+Info: {'direction': 'CW', 'copied_role': 'Enlightened'}
+
+#### [17:09:34] Solver Output
+Scenarios: 2/69
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [17:09:34] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [17:09:41] Executed #6 -> Chancellor (EVIL)
+
+#### [17:09:47] Solver Output
+Scenarios: 1/7
+Definite evil: ['#6', '#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#8']
+
+#### [17:09:47] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [17:09:54] Executed #7 -> Lilis (EVIL)
+
+## [17:10:01] GAME OVER — WIN
+Final HP: 8
+Notes: asc77 v5 WIN 8HP, Lilis game, clean Chancellor+Lilis execution from full-reveal solver.
+
