@@ -3688,6 +3688,13 @@
       "name": "asc77_v4b",
       "notes": "asc77 v4 retry LOSS (no evils killed). Solver pick #8 (57%) wrong, #9 (58%) wrong. True evils #2 Witch, #3 Pooka, #4 Minion. All abilities exhausted before forced probabilistic exec.",
       "date": "2026-04-19 17:01"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc77_v4c",
+      "notes": "asc77 v4 retry2 WIN 6HP. Lilis game, Witch at #10 died on 2nd night (weird). Druid #3 lie (claimed 'Drunk' not in pool) confirmed #3 evil = Lilis.",
+      "date": "2026-04-19 17:07"
     }
   ]
 }

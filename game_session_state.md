@@ -39666,3 +39666,103 @@ Notes: asc77 v4 retry LOSS. Solver pick #8 (57%) wrong (was Baker), then #9 (58%
 Final HP: 5
 Notes: asc77 v4 retry LOSS (no evils killed). Solver pick #8 (57%) wrong, #9 (58%) wrong. True evils #2 Witch, #3 Pooka, #4 Minion. All abilities exhausted before forced probabilistic exec.
 
+
+---
+
+# New Game — 2026-04-19 17:02:28
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Druid, Bishop, Gemcrafter, Knitter, Lover, Dreamer
+- Outcasts: Bombardier
+- Minions: Witch, Twin Minion
+- Demons: Lilis
+
+### [17:04:02] Revealed #1 Bombardier
+Info: {}
+
+### [17:04:02] Revealed #2 Gemcrafter
+Info: {'good_position': 8}
+
+### [17:04:02] Revealed #3 Druid
+Info: {}
+
+### [17:04:02] Revealed #4 Lover
+Info: {'evil_adjacent': 1}
+
+### [17:04:02] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [17:04:02] Revealed #7 Bombardier
+Info: {}
+
+### [17:04:02] Revealed #8 Bishop
+Info: {'targets': [7, 5, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [17:04:02] Revealed #9 Dreamer
+Info: {}
+
+#### [17:04:02] Solver Output
+Scenarios: 8/216
+Definite evil: ['#1', '#10']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [17:04:02] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 8 scenarios (roles: {'Twin Minion', 'Witch'})
+
+### [17:04:10] Executed #1 -> Twin Minion (EVIL)
+
+#### [17:04:16] Solver Output
+Scenarios: 4/16
+Definite evil: ['#1', '#10']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [17:04:16] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 4 scenarios (roles: {'Lilis', 'Witch'})
+
+#### [17:04:24] Solver Output
+Scenarios: 4/16
+Definite evil: ['#1', '#10']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [17:04:24] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 4 scenarios (roles: {'Lilis', 'Witch'})
+
+### [17:04:56] Ability used at #9
+
+#### [17:04:56] Solver Output
+Scenarios: 4/16
+Definite evil: ['#1', '#10']
+Definite good: ['#2', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [17:04:56] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 4 scenarios (roles: {'Lilis', 'Witch'})
+
+### [17:05:55] Revealed #3 Druid
+Info: {'targets': [2, 4, 5], 'found_outcast': 'Drunk'}
+
+#### [17:05:56] Solver Output
+Scenarios: 2/16
+Definite evil: ['#1', '#3', '#10']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8', '#9']
+
+#### [17:05:56] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Lilis', 'Witch'})
+
+### [17:06:08] Ability used at #3
+
+### [17:07:05] Executed #3 -> Lilis (EVIL)
+
+## [17:07:06] GAME OVER — WIN
+Final HP: 6
+Notes: asc77 v4 retry2 WIN 6HP. Lilis game, Witch at #10 died on 2nd night (weird). Druid #3 lie (claimed 'Drunk' not in pool) confirmed #3 evil = Lilis.
+
