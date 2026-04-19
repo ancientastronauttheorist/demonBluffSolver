@@ -39410,3 +39410,163 @@ Notes: asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka
 Final HP: 5
 Notes: asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.
 
+
+---
+
+# New Game — 2026-04-19 16:46:54
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Dreamer, Fortune Teller, Enlightened, Confessor, Druid
+- Outcasts: Plague Doctor, Rambler
+- Minions: Witch, Minion
+- Demons: Lilis
+
+### [16:48:11] Revealed #1 Enlightened
+Info: {'direction': 'CW'}
+
+### [16:48:11] Revealed #2 Confessor
+Info: {'dizzy': False}
+
+### [16:48:11] Revealed #3 Fortune_Teller
+Info: {}
+
+### [16:48:11] Revealed #4 Dreamer
+Info: {}
+
+### [16:48:11] Revealed #5 Rambler
+Info: {'silenced': False}
+
+### [16:48:11] Revealed #7 Judge
+Info: {}
+
+### [16:48:11] Revealed #8 Dreamer
+Info: {}
+
+#### [16:48:11] Solver Output
+Scenarios: 54/504
+Definite good: ['#2', '#6']
+Evil probabilities: #1=78%, #4=56%, #8=56%, #3=33%, #7=33%, #5=22%, #9=22%
+
+#### [16:48:11] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.763 (adjusted 2.763) | timing x1.00
+
+### [16:48:20] Ability used at #4
+
+### [16:48:20] Ability used at #8
+
+#### [16:48:20] Solver Output
+Scenarios: 54/504
+Definite good: ['#2', '#6']
+Evil probabilities: #1=78%, #4=56%, #8=56%, #3=33%, #7=33%, #5=22%, #9=22%
+
+#### [16:48:20] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#4', '#7']
+Reason: Entropy 0.991 (adjusted 0.991) | follow-up bonus 0.198 | timing x1.00
+
+### [16:48:27] Revealed #3 Fortune Teller
+Info: {'targets': [4, 7], 'has_evil': True}
+
+### [16:48:27] Ability used at #3
+
+#### [16:48:33] Solver Output
+Scenarios: 30/504
+Definite evil: ['#1']
+Definite good: ['#2', '#5', '#6']
+Evil probabilities: #4=60%, #8=60%, #7=40%, #3=20%, #9=20%
+
+#### [16:48:33] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 30 scenarios (roles: {'Minion', 'Lilis', 'Witch'})
+
+### [16:48:40] Executed #1 -> GOOD (WRONG!)
+
+#### [16:49:14] Solver Output
+Scenarios: 0/336
+
+#### [16:49:14] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:50:09] Revealed #7 Judge
+Info: {'target': 8, 'is_lying': True}
+
+#### [16:50:13] Solver Output
+Scenarios: 0/336
+
+#### [16:50:13] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [16:51:51] Executed #8 -> Witch (EVIL)
+
+### [16:52:20] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [16:52:20] Solver Output
+Scenarios: 4/172
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [16:52:20] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 4 scenarios (roles: {'Lilis', 'Minion'})
+
+### [16:52:49] Executed #5 -> Minion (EVIL)
+
+#### [16:52:49] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [16:52:49] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+#### [16:52:55] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [16:52:55] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+#### [16:53:43] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [16:53:43] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+#### [16:53:52] Solver Output
+Scenarios: 2/31
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#6', '#7', '#9']
+Evil probabilities: #3=50%, #4=50%
+
+#### [16:53:52] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but HP too low to risk (HP=1, cost=5, threshold=95%). Need more info.
+WARNING: Probabilistic execution -- 50% confident (budget: 0 wrong execs)
+WARNING: CRITICAL: HP=1, wrong exec costs 5 -- CANNOT afford a mistake! Only execute if certain.
+
+### [16:55:03] Executed #3 -> GOOD (WRONG!)
+
+## [16:55:04] GAME OVER — LOSS
+Final HP: 1
+Notes: asc77 v4 LOSS at village 4/7. Ascension failed. Solver bug: 100% confidence on #1 Enlightened CW claim as evil; was corrupted Good. After wrong exec, 0 scenarios. Judge found #8 Witch, PD+Minion cleared. Final exec #3 FT wrong (Lilis was #4). SOLVER BUG: corrupted-Good-Enlightened scenarios ruled out incorrectly when #9 could be evil minion/demon.
+
+## [16:55:13] GAME OVER — LOSS
+Final HP: 1
+Notes: asc77 v4 LOSS village 4/7 — ASCENSION FAILED. Lilis at #4 uncaught. Solver bug: 100% confidence on #1 Enlightened as evil (CW claim conflicted with CCW reality); #1 was Good Corrupted. After wrong exec #1 = 0 scenarios. Recovered via Judge #8 and narrowed to 2 scenarios but 50% on #3 at HP=1 led to death. ROOT: solver eliminated corrupted-Good-Enlightened scenarios where #9 (blocked) could be evil.
+

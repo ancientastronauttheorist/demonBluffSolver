@@ -3660,6 +3660,20 @@
       "name": "asc77_v3",
       "notes": "asc77 v3 WIN 5HP, wrong exec #4 Scout (72% gamble), then Chancellor+Pooka exec. Corrupted: #1 Drunk-as-Enlightened, #5 Oracle, #6 Architect.",
       "date": "2026-04-19 16:45"
+    },
+    {
+      "result": "loss",
+      "hp": 1,
+      "name": "asc77_v4",
+      "notes": "asc77 v4 LOSS at village 4/7. Ascension failed. Solver bug: 100% confidence on #1 Enlightened CW claim as evil; was corrupted Good. After wrong exec, 0 scenarios. Judge found #8 Witch, PD+Minion cleared. Final exec #3 FT wrong (Lilis was #4). SOLVER BUG: corrupted-Good-Enlightened scenarios ruled out incorrectly when #9 could be evil minion/demon.",
+      "date": "2026-04-19 16:55"
+    },
+    {
+      "result": "loss",
+      "hp": 1,
+      "name": "asc77_v4",
+      "notes": "asc77 v4 LOSS village 4/7 \u2014 ASCENSION FAILED. Lilis at #4 uncaught. Solver bug: 100% confidence on #1 Enlightened as evil (CW claim conflicted with CCW reality); #1 was Good Corrupted. After wrong exec #1 = 0 scenarios. Recovered via Judge #8 and narrowed to 2 scenarios but 50% on #3 at HP=1 led to death. ROOT: solver eliminated corrupted-Good-Enlightened scenarios where #9 (blocked) could be evil.",
+      "date": "2026-04-19 16:55"
     }
   ]
 }
