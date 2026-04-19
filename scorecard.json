@@ -3751,6 +3751,13 @@
       "name": "asc77_v4",
       "notes": "asc77 v4 WIN 10HP perfect. Baa as fake-Baker, Witch blocked #7. Clean Baa exec, lookahead #4 Witch.",
       "date": "2026-04-19 18:29"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc77_v5",
+      "notes": "asc77 v5 WIN 6HP, Lilis+Puppeteer+Puppet. Druid lied (claimed Doppelganger not in picks), slayer misfire #1 on #2 still narrowed #1=evil.",
+      "date": "2026-04-19 18:34"
     }
   ]
 }

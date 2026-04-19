@@ -1,0 +1,155 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          4
+        ],
+        "found_outcast": "Doppelganger"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          9
+        ],
+        "minion_role": "Puppet"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 2
+      }
+    }
+  ],
+  "executed": [
+    1,
+    3,
+    9
+  ],
+  "confirmed_evil": [
+    1,
+    3,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Puppeteer",
+    "3": "Lilis",
+    "9": "Puppet"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 1,
+      "target_pos": 2,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Alchemist",
+      "Oracle",
+      "Druid",
+      "Slayer",
+      "Architect",
+      "Scout"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Rambler"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    1
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc77_v5",
+  "true_evil_positions": {
+    "1": "Puppeteer",
+    "3": "Lilis",
+    "9": "Puppet"
+  },
+  "notes": "asc77 v5 WIN 6HP, Lilis+Puppeteer+Puppet. Druid lied (claimed Doppelganger not in picks), slayer misfire #1 on #2 still narrowed #1=evil."
+}

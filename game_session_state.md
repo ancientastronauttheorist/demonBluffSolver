@@ -40374,3 +40374,111 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: asc77 v4 WIN 10HP perfect. Baa as fake-Baker, Witch blocked #7. Clean Baa exec, lookahead #4 Witch.
 
+
+---
+
+# New Game — 2026-04-19 18:31:43
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Oracle, Druid, Slayer, Architect, Scout
+- Outcasts: Doppelganger, Rambler
+- Minions: Puppeteer
+- Demons: Lilis
+
+### [18:32:38] Revealed #1 Slayer
+Info: {}
+
+### [18:32:38] Revealed #2 Architect
+Info: {'side': 'Right'}
+
+### [18:32:38] Revealed #3 Druid
+Info: {}
+
+### [18:32:38] Revealed #4 Oracle
+Info: {'targets': [5, 9], 'minion_role': 'Puppet'}
+
+### [18:32:38] Revealed #5 Alchemist
+Info: {'cured_count': 0}
+
+### [18:32:38] Revealed #7 Rambler
+Info: {'silenced': False}
+
+### [18:32:38] Revealed #8 Slayer
+Info: {}
+
+### [18:32:38] Revealed #9 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+#### [18:32:38] Solver Output
+Scenarios: 20/588
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #1=75%, #2=50%, #3=50%, #4=50%, #9=50%, #8=25%
+
+#### [18:32:38] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 0.811 (adjusted 0.811) | timing x1.00
+
+### [18:33:06] Revealed #3 Druid
+Info: {'targets': [1, 2, 4], 'found_outcast': 'Doppelganger'}
+
+#### [18:33:06] Solver Output
+Scenarios: 6/588
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #9=83%, #1=67%, #3=67%, #2=33%, #8=33%, #4=17%
+
+#### [18:33:06] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#1', '#2', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [18:33:22] Ability used at #3
+
+#### [18:33:22] Solver Output
+Scenarios: 6/588
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #9=83%, #1=67%, #3=67%, #2=33%, #8=33%, #4=17%
+
+#### [18:33:22] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#9']
+Reason: Target #9 is 83% evil (adjusted 0.83) | EV=0.833
+
+#### [18:34:07] Solver Output
+Scenarios: 4/588
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#5', '#6', '#7', '#8']
+Evil probabilities: #9=75%, #4=25%
+
+#### [18:34:07] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Lilis', 'Puppeteer'})
+
+### [18:34:15] Executed #1 -> Puppeteer (EVIL)
+
+#### [18:34:21] Solver Output
+Scenarios: 3/72
+Definite evil: ['#1', '#3', '#9']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [18:34:21] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 3 scenarios (roles: {'Lilis'})
+
+### [18:34:28] Executed #3 -> Lilis (EVIL)
+
+#### [18:34:33] Solver Output
+Scenarios: 3/10
+Definite evil: ['#1', '#3', '#9']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#8']
+
+#### [18:34:33] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 3 scenarios (roles: {'Puppet'})
+
+### [18:34:40] Executed #9 -> Puppet (EVIL)
+
+## [18:34:49] GAME OVER — WIN
+Final HP: 6
+## [18:34:57] GAME OVER — WIN
+Final HP: 6
+Notes: asc77 v5 WIN 6HP, Lilis+Puppeteer+Puppet. Druid lied (claimed Doppelganger not in picks), slayer misfire #1 on #2 still narrowed #1=evil.
+
