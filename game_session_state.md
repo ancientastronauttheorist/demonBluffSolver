@@ -39198,3 +39198,105 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 1
 Notes: asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP.
 
+
+---
+
+# New Game — 2026-04-19 16:38:50
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Oracle, Druid, Judge, Confessor, Bishop, Hunter, Enlightened
+- Outcasts: Wretch, Plague Doctor
+- Minions: Minion, Twin Minion
+- Demons: Baa
+
+### [16:39:25] Revealed #1 Oracle
+Info: {'targets': [8, 9], 'minion_role': 'Minion'}
+
+### [16:39:25] Revealed #2 Plague_Doctor
+Info: {}
+
+### [16:39:25] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [16:39:25] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [16:39:25] Revealed #5 Judge
+Info: {}
+
+### [16:39:25] Revealed #6 Druid
+Info: {}
+
+### [16:39:25] Revealed #7 Bishop
+Info: {'targets': [9, 3, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:39:25] Revealed #8 Wretch
+Info: {}
+
+### [16:39:25] Revealed #9 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [16:39:28] Solver Output
+Scenarios: 108/1974
+Definite good: ['#4', '#9']
+Evil probabilities: #7=83%, #3=72%, #5=44%, #6=44%, #8=39%, #2=11%, #1=6%
+
+#### [16:39:28] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 1.448 (adjusted 1.448) | timing x1.00
+
+#### [16:39:53] Solver Output
+Scenarios: 12/1974
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [16:39:53] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 12 scenarios (roles: {'Baa', 'Minion', 'Twin Minion'})
+
+### [16:40:00] Executed #2 -> Twin Minion (EVIL)
+
+#### [16:40:05] Solver Output
+Scenarios: 4/56
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [16:40:05] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 4 scenarios (roles: {'Minion', 'Baa'})
+
+### [16:40:12] Executed #7 -> Baa (EVIL)
+
+#### [16:40:16] Solver Output
+Scenarios: 2/7
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#8', '#9']
+Evil probabilities: #5=50%, #6=50%
+
+#### [16:40:16] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#1']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [16:40:21] Revealed #5 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [16:40:21] Ability used at #5
+
+#### [16:40:27] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#5', '#7']
+Definite good: ['#1', '#3', '#4', '#6', '#8', '#9']
+
+#### [16:40:27] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [16:40:34] Executed #5 -> Minion (EVIL)
+
+## [16:40:41] GAME OVER — WIN
+Final HP: 10
+Notes: asc77 v2 WIN perfect 10HP, PD found #4 evil #3 corrupted (PD was fake Twin), lookahead executed #2 Twin, #7 Baa, #5 Minion.
+

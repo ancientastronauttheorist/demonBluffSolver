@@ -3639,6 +3639,13 @@
       "name": "asc77_v1",
       "notes": "asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP.",
       "date": "2026-04-19 16:35"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc77_v2",
+      "notes": "asc77 v2 WIN perfect 10HP, PD found #4 evil #3 corrupted (PD was fake Twin), lookahead executed #2 Twin, #7 Baa, #5 Minion.",
+      "date": "2026-04-19 16:40"
     }
   ]
 }
