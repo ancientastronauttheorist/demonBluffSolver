@@ -40177,3 +40177,129 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 1
 Notes: asc77 v2 WIN 1HP. Knight check #6 was corrupted (-9 HP), then PD pointed to #2, clean exec #2 Chancellor and #7 Pooka.
 
+
+---
+
+# New Game — 2026-04-19 18:23:34
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Fortune Teller, Slayer, Lover, Architect, Enlightened
+- Outcasts: Plague Doctor, Wretch, Bombardier
+- Minions: Chancellor
+- Demons: Pooka
+
+### [18:24:11] Revealed #1 Bombardier
+Info: {}
+
+### [18:24:11] Revealed #2 Architect
+Info: {'side': 'Left'}
+
+### [18:24:11] Revealed #4 Dreamer
+Info: {}
+
+### [18:24:11] Revealed #5 Fortune_Teller
+Info: {}
+
+### [18:24:11] Revealed #6 Slayer
+Info: {}
+
+### [18:24:11] Revealed #7 Wretch
+Info: {}
+
+### [18:24:11] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [18:24:11] Solver Output
+Scenarios: 171/261
+Evil probabilities: #4=34%, #7=33%, #1=30%, #3=28%, #2=25%, #5=22%, #6=20%, #8=8%
+
+#### [18:24:11] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.180 (adjusted 2.180) | timing x1.00 | EV=2.180 > reveal EV=0.956
+
+### [18:24:18] Revealed #3 Enlightened
+Info: {'direction': 'cw'}
+
+#### [18:24:44] Solver Output
+Scenarios: 63/263
+Evil probabilities: #1=40%, #2=38%, #3=35%, #4=30%, #6=24%, #7=24%, #5=8%, #8=2%
+
+#### [18:24:44] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.240 (adjusted 1.849) | timing x1.00
+WARNING: Corruption risk: 35%
+
+### [18:24:49] Ability used at #4
+
+#### [18:24:49] Solver Output
+Scenarios: 63/263
+Evil probabilities: #1=40%, #2=38%, #3=35%, #4=30%, #6=24%, #7=24%, #5=8%, #8=2%
+
+#### [18:24:49] Recommendation
+Action: **USE_ABILITY** #5 (Fortune Teller) -> targets ['#2', '#4']
+Reason: Entropy 0.998 (adjusted 0.808) | follow-up bonus 0.346 | timing x1.00
+WARNING: Corruption risk: 38%
+
+### [18:24:56] Revealed #5 Fortune Teller
+Info: {'targets': [2, 4], 'has_evil': True}
+
+### [18:24:56] Ability used at #5
+
+#### [18:25:01] Solver Output
+Scenarios: 33/263
+Evil probabilities: #2=45%, #1=36%, #6=27%, #3=24%, #4=24%, #7=24%, #5=15%, #8=3%
+
+#### [18:25:01] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#2']
+Reason: Target #2 is 45% evil (adjusted 0.44)
+WARNING: Corruption risk: 3% -- Slayer ability disabled if corrupted
+
+#### [18:25:28] Solver Output
+Scenarios: 18/263
+Definite good: ['#2']
+Evil probabilities: #6=50%, #1=44%, #5=28%, #7=28%, #3=22%, #4=22%, #8=6%
+
+#### [18:25:28] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+WARNING: Low confidence (50% < 60%) -- consider gathering more info
+
+### [18:26:00] Executed #6 -> GOOD (WRONG!)
+
+#### [18:26:01] Solver Output
+Scenarios: 8/201
+Definite good: ['#2', '#5', '#6', '#8']
+Evil probabilities: #1=88%, #3=50%, #4=50%, #7=12%
+
+#### [18:26:01] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 50% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #3 (50%) despite low confidence — Bombardier candidate(s) [1] risk instant game loss if executed first.
+
+### [18:26:30] Executed #3 -> Pooka (EVIL)
+
+#### [18:26:30] Solver Output
+Scenarios: 2/27
+Definite evil: ['#3']
+Definite good: ['#2', '#4', '#5', '#6', '#8']
+Evil probabilities: #1=50%, #7=50%
+
+#### [18:26:30] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #1 (50%) despite low confidence — Bombardier candidate(s) [1] risk instant game loss if executed first.
+
+## [18:27:07] GAME OVER — WIN
+Final HP: 5
+Notes: asc77 v3 WIN 5HP. Tough corruption board (5 corrupted chars). Wrong exec #6 Slayer (50% coin flip), then luckily exec #3 Pooka and #1 Chancellor at 50%.
+
+### [18:27:13] Executed #1 -> Chancellor (EVIL)
+
+## [18:27:13] GAME OVER — WIN
+Final HP: 5
+Notes: asc77 v3 WIN 5HP. 5 corrupted chars. Wrong #6 Slayer (50% gamble), won on #3 Pooka and #1 Chancellor both 50%.
+

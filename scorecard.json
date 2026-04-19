@@ -3730,6 +3730,20 @@
       "name": "asc77_v2",
       "notes": "asc77 v2 WIN 1HP. Knight check #6 was corrupted (-9 HP), then PD pointed to #2, clean exec #2 Chancellor and #7 Pooka.",
       "date": "2026-04-19 18:21"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc77_v3",
+      "notes": "asc77 v3 WIN 5HP. Tough corruption board (5 corrupted chars). Wrong exec #6 Slayer (50% coin flip), then luckily exec #3 Pooka and #1 Chancellor at 50%.",
+      "date": "2026-04-19 18:27"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc77_v3",
+      "notes": "asc77 v3 WIN 5HP. 5 corrupted chars. Wrong #6 Slayer (50% gamble), won on #3 Pooka and #1 Chancellor both 50%.",
+      "date": "2026-04-19 18:27"
     }
   ]
 }
