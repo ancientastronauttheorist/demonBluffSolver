@@ -40583,3 +40583,104 @@ Reason: No surviving scenarios -- check input data
 Final HP: 5
 Notes: asc77 v6 WIN 5HP. Baker chain game. Solver bug: 100% confidence on #1 being evil (wrong, #1 was Baker-from-Judge). After wrong exec, 0 scenarios. Manual deduction from 2 fake-Slayer signal + Baker chain logic: #3, #4, #10 all evil. Pushed through without solver.
 
+
+---
+
+# New Game — 2026-04-19 18:44:09
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Dreamer, Slayer, Knitter, Poet, Knight
+- Outcasts: Doppelganger, Bombardier
+- Minions: Minion
+- Demons: Lilis
+
+### [18:45:37] Revealed #1 Bombardier
+Info: {}
+
+### [18:45:37] Revealed #2 Slayer
+Info: {}
+
+### [18:45:37] Revealed #3 Bombardier
+Info: {}
+
+### [18:45:37] Revealed #4 Dreamer
+Info: {}
+
+### [18:45:37] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [18:45:37] Revealed #6 Poet
+Info: {'good_position': 4, 'good_role': 'Dreamer', 'copied_role': 'Medium'}
+
+### [18:45:37] Revealed #7 Knight
+Info: {}
+
+### [18:45:37] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [18:45:37] Revealed #9 Knight
+Info: {}
+
+#### [18:45:38] Solver Output
+Scenarios: 50/392
+Definite good: ['#4', '#6', '#7', '#8']
+Evil probabilities: #1=60%, #2=40%, #3=40%, #5=40%, #9=20%
+
+#### [18:45:38] Recommendation
+Action: **EXECUTE** #9
+Reason: Knight free check: #9 is 20% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [18:46:10] Execution Blocked
+#9 Knight immunity — confirmed good, no HP loss
+
+#### [18:46:10] Solver Output
+Scenarios: 40/308
+Definite good: ['#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #5=50%
+
+#### [18:46:10] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 1.500 (adjusted 1.500) | timing x1.00
+
+### [18:46:17] Ability used at #4
+
+#### [18:46:17] Solver Output
+Scenarios: 40/308
+Definite good: ['#4', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #5=50%
+
+#### [18:46:17] Recommendation
+Action: **USE_ABILITY** #2 (Slayer) -> targets ['#5']
+Reason: Target #5 is 50% evil (adjusted 0.50)
+
+#### [18:46:45] Solver Output
+Scenarios: 20/308
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%
+
+#### [18:46:45] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 20 scenarios (roles: {'Minion', 'Lilis'})
+
+### [18:46:52] Executed #2 -> Lilis (EVIL)
+
+#### [18:46:59] Solver Output
+Scenarios: 10/37
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #3=50%
+
+#### [18:46:59] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=6, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: Bombardier safety: executing #1 (50%) despite low confidence — Bombardier candidate(s) [1, 3] risk instant game loss if executed first.
+
+### [18:48:03] Executed #1 -> GOOD (WRONG!)
+
+## [18:48:03] GAME OVER — LOSS
+Final HP: 6
+Notes: asc77 v7 LOSS. Two Bombardier appearances (#1 real, #3 Minion fake). 50/50 gamble on Bombardier risk lost - exec'd real Bombardier at #1 = instant game over. Remaining Minion was at #3.
+

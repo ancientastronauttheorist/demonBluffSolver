@@ -3765,6 +3765,13 @@
       "name": "asc77_v6",
       "notes": "asc77 v6 WIN 5HP. Baker chain game. Solver bug: 100% confidence on #1 being evil (wrong, #1 was Baker-from-Judge). After wrong exec, 0 scenarios. Manual deduction from 2 fake-Slayer signal + Baker chain logic: #3, #4, #10 all evil. Pushed through without solver.",
       "date": "2026-04-19 18:42"
+    },
+    {
+      "result": "loss",
+      "hp": 6,
+      "name": "asc77_v7",
+      "notes": "asc77 v7 LOSS. Two Bombardier appearances (#1 real, #3 Minion fake). 50/50 gamble on Bombardier risk lost - exec'd real Bombardier at #1 = instant game over. Remaining Minion was at #3.",
+      "date": "2026-04-19 18:48"
     }
   ]
 }
