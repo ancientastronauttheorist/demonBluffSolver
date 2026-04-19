@@ -39825,3 +39825,62 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 8
 Notes: asc77 v5 WIN 8HP, Lilis game, clean Chancellor+Lilis execution from full-reveal solver.
 
+
+---
+
+# New Game — 2026-04-19 17:11:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Jester, Judge, Lover, Bard, Slayer
+- Outcasts: Rambler, Wretch
+- Minions: Chancellor
+- Demons: Lilis
+
+### [17:12:31] Revealed #1 Wretch
+Info: {}
+
+### [17:12:31] Revealed #2 Rambler
+Info: {'silenced': False}
+
+### [17:12:31] Revealed #3 Lover
+Info: {'evil_adjacent': 0}
+
+### [17:12:31] Revealed #4 Jester
+Info: {}
+
+### [17:12:31] Revealed #5 Bard
+Info: {'corruption_distance': 3}
+
+### [17:12:31] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [17:12:31] Revealed #8 Bard
+Info: {'corruption_distance': 3}
+
+#### [17:12:32] Solver Output
+Scenarios: 3/72
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+
+#### [17:12:32] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Lilis', 'Chancellor'})
+
+### [17:12:39] Executed #5 -> Lilis (EVIL)
+
+#### [17:12:43] Solver Output
+Scenarios: 1/8
+Definite evil: ['#5', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#6', '#7']
+
+#### [17:12:43] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [17:12:51] Executed #8 -> Chancellor (EVIL)
+
+## [17:12:58] GAME OVER — WIN
+Final HP: 8
+Notes: asc77 v6 WIN 8HP, Lilis game, Bard-pool with 2 fake-Bard evils. Clean solve.
+

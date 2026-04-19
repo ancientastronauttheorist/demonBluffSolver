@@ -3702,6 +3702,13 @@
       "name": "asc77_v5",
       "notes": "asc77 v5 WIN 8HP, Lilis game, clean Chancellor+Lilis execution from full-reveal solver.",
       "date": "2026-04-19 17:10"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc77_v6",
+      "notes": "asc77 v6 WIN 8HP, Lilis game, Bard-pool with 2 fake-Bard evils. Clean solve.",
+      "date": "2026-04-19 17:12"
     }
   ]
 }
