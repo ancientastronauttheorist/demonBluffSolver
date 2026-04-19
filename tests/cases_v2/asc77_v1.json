@@ -1,121 +1,101 @@
 {
-  "n_cards": 9,
-  "n_evil": 3,
+  "n_cards": 8,
+  "n_evil": 2,
   "cards": [
     {
       "position": 1,
-      "apparent_role": "Oracle",
+      "apparent_role": "Empress",
       "info_text": "",
       "info_parsed": {
         "targets": [
-          3,
-          8
-        ],
-        "minion_role": "Minion"
+          2,
+          5,
+          7
+        ]
       }
     },
     {
       "position": 2,
-      "apparent_role": "Empress",
+      "apparent_role": "Judge",
       "info_text": "",
       "info_parsed": {
-        "targets": [
-          6,
-          7,
-          8
-        ]
+        "target": 1,
+        "is_lying": true
       }
     },
     {
       "position": 3,
-      "apparent_role": "Hunter",
-      "info_text": "",
-      "info_parsed": {
-        "distance": 3
-      }
-    },
-    {
-      "position": 4,
-      "apparent_role": "Empress",
+      "apparent_role": "Bishop",
       "info_text": "",
       "info_parsed": {
         "targets": [
-          3,
-          8,
-          9
+          6,
+          1,
+          4
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
         ]
       }
     },
     {
-      "position": 5,
-      "apparent_role": "Jester",
+      "position": 4,
+      "apparent_role": "Alchemist",
       "info_text": "",
       "info_parsed": {
-        "targets": [
-          3,
-          6,
-          7
-        ],
-        "evil_count": 1
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1,
+        "copied_role": "Lover"
       }
     },
     {
       "position": 6,
-      "apparent_role": "Medium",
+      "apparent_role": "Rambler",
       "info_text": "",
       "info_parsed": {
-        "good_position": 8,
-        "good_role": "Dreamer"
+        "silenced": false
       }
     },
     {
-      "position": 8,
-      "apparent_role": "Dreamer",
+      "position": 7,
+      "apparent_role": "Baker",
       "info_text": "",
-      "info_parsed": {}
-    },
-    {
-      "position": 9,
-      "apparent_role": "Plague_Doctor",
-      "info_text": "",
-      "info_parsed": {}
+      "info_parsed": {
+        "original_role": "original"
+      }
     }
   ],
   "executed": [
     4,
-    1,
-    2,
-    5
+    2
   ],
   "confirmed_evil": [
     4,
-    2,
-    5
+    2
   ],
-  "confirmed_good": [
-    1
-  ],
+  "confirmed_good": [],
   "pd_corruption_target": null,
   "executed_evil_roles": {
-    "4": "Poisoner",
-    "2": "Minion",
-    "5": "Lilis"
+    "4": "Witch",
+    "2": "Lilis"
   },
   "slayer_results": [],
-  "pd_ability_results": [
-    {
-      "pd_pos": 9,
-      "target": 3,
-      "is_corrupted": true,
-      "evil_revealed": 4
-    }
-  ],
+  "pd_ability_results": [],
   "blocked_positions": [],
   "night_kills": [
-    7
+    8
   ],
   "night_kill_evil_count": 0,
-  "hp": 1,
+  "hp": 8,
   "wrong_exec_cost": 5,
   "board_villager_count": 5,
   "board_outcast_count": 1,
@@ -128,44 +108,37 @@
     4,
     5,
     6,
-    8,
-    9
+    7
   ],
-  "executed_good_corrupted": {
-    "1": true
-  },
+  "executed_good_corrupted": {},
   "deck": {
     "villagers": [
       "Empress",
-      "Oracle",
-      "Jester",
-      "Hunter",
-      "Dreamer",
-      "Slayer",
-      "Medium"
+      "Bishop",
+      "Witness",
+      "Poet",
+      "Alchemist",
+      "Judge",
+      "Baker"
     ],
     "outcasts": [
-      "Plague Doctor"
+      "Rambler"
     ],
     "minions": [
-      "Poisoner",
-      "Minion"
+      "Witch"
     ],
     "demons": [
       "Lilis"
     ]
   },
   "used_abilities": [
-    8,
-    9,
-    5
+    2
   ],
   "lilis_batch_index": 2,
   "name": "asc77_v1",
   "true_evil_positions": {
-    "2": "Minion",
-    "4": "Poisoner",
-    "5": "Lilis"
+    "2": "Lilis",
+    "4": "Witch"
   },
-  "notes": "asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP."
+  "notes": "REAL asc77 v1 WIN 8HP. Lilis game. Witch blocked #7 Baker; executed Witch first to unblock, then Judge found Lilis #2 lying, executed Lilis."
 }

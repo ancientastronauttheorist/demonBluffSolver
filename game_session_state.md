@@ -40001,3 +40001,88 @@ Reason: #1 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: asc77 v7 WIN 10HP PERFECT. ASCENSION 77 COMPLETE! Puppeteer spawned Puppet, Baa demon, Witch blocked #9. Clean solve with Judge+Jester abilities.
 
+
+---
+
+# New Game — 2026-04-19 18:14:46
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Bishop, Witness, Poet, Alchemist, Judge, Baker
+- Outcasts: Rambler
+- Minions: Witch
+- Demons: Lilis
+
+### [18:15:30] Revealed #1 Empress
+Info: {'targets': [2, 5, 7]}
+
+### [18:15:30] Revealed #2 Judge
+Info: {}
+
+### [18:15:30] Revealed #3 Bishop
+Info: {'targets': [6, 1, 4], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [18:15:30] Revealed #4 Alchemist
+Info: {'cured_count': 2}
+
+### [18:15:30] Revealed #6 Rambler
+Info: {'silenced': False}
+
+#### [18:15:30] Solver Output
+Scenarios: 3/56
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#8']
+Evil probabilities: #2=33%, #5=33%, #7=33%
+
+#### [18:15:30] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 3 scenarios (roles: {'Witch'})
+
+### [18:15:38] Executed #4 -> Witch (EVIL)
+
+### [18:16:45] Revealed #7 Baker
+Info: {'original_role': 'original'}
+
+#### [18:16:46] Solver Output
+Scenarios: 3/7
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#8']
+Evil probabilities: #2=33%, #5=33%, #7=33%
+
+#### [18:16:46] Recommendation
+Action: **REVEAL** #5
+Reason: #5: 33% evil, 1.585 bits (3 outcomes)
+
+### [18:17:10] Revealed #5 Poet
+Info: {'evil_adjacent': 1, 'copied_role': 'Lover'}
+
+#### [18:17:15] Solver Output
+Scenarios: 2/7
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#5', '#6', '#8']
+Evil probabilities: #2=50%, #7=50%
+
+#### [18:17:15] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 1.0 scenarios (adjusted 1.0, info gain 1.000 bits) | timing x1.00
+
+### [18:17:20] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [18:17:20] Ability used at #2
+
+#### [18:17:25] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [18:17:25] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [18:17:32] Executed #2 -> Lilis (EVIL)
+
+## [18:18:00] GAME OVER — WIN
+Final HP: 8
+Notes: REAL asc77 v1 WIN 8HP. Lilis game. Witch blocked #7 Baker; executed Witch first to unblock, then Judge found Lilis #2 lying, executed Lilis.
+
