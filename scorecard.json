@@ -3758,6 +3758,13 @@
       "name": "asc77_v5",
       "notes": "asc77 v5 WIN 6HP, Lilis+Puppeteer+Puppet. Druid lied (claimed Doppelganger not in picks), slayer misfire #1 on #2 still narrowed #1=evil.",
       "date": "2026-04-19 18:34"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc77_v6",
+      "notes": "asc77 v6 WIN 5HP. Baker chain game. Solver bug: 100% confidence on #1 being evil (wrong, #1 was Baker-from-Judge). After wrong exec, 0 scenarios. Manual deduction from 2 fake-Slayer signal + Baker chain logic: #3, #4, #10 all evil. Pushed through without solver.",
+      "date": "2026-04-19 18:42"
     }
   ]
 }

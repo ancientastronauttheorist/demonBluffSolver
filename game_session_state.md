@@ -40482,3 +40482,104 @@ Final HP: 6
 Final HP: 6
 Notes: asc77 v5 WIN 6HP, Lilis+Puppeteer+Puppet. Druid lied (claimed Doppelganger not in picks), slayer misfire #1 on #2 still narrowed #1=evil.
 
+
+---
+
+# New Game — 2026-04-19 18:36:57
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Hunter, Empress, Slayer, Judge, Gemcrafter, Architect
+- Outcasts: Plague Doctor
+- Minions: Minion, Twin Minion
+- Demons: Pooka
+
+### [18:37:33] Revealed #1 Baker
+Info: {'original_role': 'Judge'}
+
+### [18:37:33] Revealed #2 Gemcrafter
+Info: {'good_position': 3}
+
+### [18:37:33] Revealed #3 Slayer
+Info: {}
+
+### [18:37:33] Revealed #4 Empress
+Info: {'targets': [1, 5, 6]}
+
+### [18:37:33] Revealed #5 Architect
+Info: {'side': 'Right'}
+
+### [18:37:33] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [18:37:33] Revealed #7 Hunter
+Info: {'distance': 1}
+
+### [18:37:33] Revealed #8 Plague_Doctor
+Info: {}
+
+### [18:37:33] Revealed #9 Baker
+Info: {'original_role': 'Empress'}
+
+### [18:37:33] Revealed #10 Slayer
+Info: {}
+
+#### [18:37:34] Solver Output
+Scenarios: 32/3744
+Definite good: ['#8']
+Evil probabilities: #10=62%, #7=56%, #3=38%, #5=38%, #1=25%, #4=25%, #6=25%, #9=19%, #2=12%
+
+#### [18:37:34] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.602 (adjusted 2.602) | timing x1.00
+
+#### [18:38:03] Solver Output
+Scenarios: 8/3744
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#5', '#8']
+Evil probabilities: #3=75%, #7=50%, #6=25%, #9=25%, #10=25%
+
+#### [18:38:03] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 8 scenarios (roles: {'Twin Minion', 'Minion', 'Pooka'})
+
+### [18:38:11] Executed #1 -> GOOD (WRONG!)
+
+#### [18:38:24] Solver Output
+Scenarios: 0/2520
+
+#### [18:38:24] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [18:39:21] Solver Output
+Scenarios: 0/2520
+
+#### [18:39:21] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [18:40:05] Solver Output
+Scenarios: 0/2520
+
+#### [18:40:05] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [18:40:53] Executed #4 -> Minion (EVIL)
+
+#### [18:40:53] Solver Output
+Scenarios: 0/308
+
+#### [18:40:53] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+### [18:41:50] Executed #3 -> Pooka (EVIL)
+
+### [18:42:15] Executed #10 -> Twin_Minion (EVIL)
+
+## [18:42:16] GAME OVER — WIN
+Final HP: 5
+Notes: asc77 v6 WIN 5HP. Baker chain game. Solver bug: 100% confidence on #1 being evil (wrong, #1 was Baker-from-Judge). After wrong exec, 0 scenarios. Manual deduction from 2 fake-Slayer signal + Baker chain logic: #3, #4, #10 all evil. Pushed through without solver.
+
