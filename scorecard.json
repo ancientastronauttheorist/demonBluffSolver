@@ -3772,6 +3772,13 @@
       "name": "asc77_v7",
       "notes": "asc77 v7 LOSS. Two Bombardier appearances (#1 real, #3 Minion fake). 50/50 gamble on Bombardier risk lost - exec'd real Bombardier at #1 = instant game over. Remaining Minion was at #3.",
       "date": "2026-04-19 18:48"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc77_v7b",
+      "notes": "asc77 v7 retry WIN 10HP perfect. ASCENSION 77 COMPLETE! Full reveal, clean exec #8 Baa, Jester cleared #2,3,4 good, #5 Puppeteer, #6 Puppet.",
+      "date": "2026-04-19 18:53"
     }
   ]
 }

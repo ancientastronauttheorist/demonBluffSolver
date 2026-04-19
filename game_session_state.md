@@ -40684,3 +40684,108 @@ WARNING: Bombardier safety: executing #1 (50%) despite low confidence — Bombardi
 Final HP: 6
 Notes: asc77 v7 LOSS. Two Bombardier appearances (#1 real, #3 Minion fake). 50/50 gamble on Bombardier risk lost - exec'd real Bombardier at #1 = instant game over. Remaining Minion was at #3.
 
+
+---
+
+# New Game — 2026-04-19 18:50:27
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Jester, Slayer, Alchemist, Dreamer, Poet, Scout
+- Outcasts: Doppelganger
+- Minions: Puppeteer
+- Demons: Baa
+
+### [18:50:51] Revealed #1 Jester
+Info: {}
+
+### [18:50:51] Revealed #2 Alchemist
+Info: {'cured_count': 0}
+
+### [18:50:51] Revealed #3 Jester
+Info: {}
+
+### [18:50:51] Revealed #4 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [18:50:51] Revealed #5 Dreamer
+Info: {}
+
+### [18:50:51] Revealed #6 Druid
+Info: {}
+
+### [18:50:51] Revealed #7 Slayer
+Info: {}
+
+### [18:50:51] Revealed #8 Scout
+Info: {'evil_role': 'Puppet', 'distance': 3}
+
+#### [18:50:52] Solver Output
+Scenarios: 50/480
+Definite evil: ['#8']
+Evil probabilities: #5=50%, #3=40%, #1=30%, #6=30%, #4=20%, #7=20%, #2=10%
+
+#### [18:50:52] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 50 scenarios (roles: {'Puppeteer', 'Baa'})
+
+### [18:50:59] Executed #8 -> Baa (EVIL)
+
+#### [18:51:06] Solver Output
+Scenarios: 25/60
+Definite evil: ['#8']
+Definite good: ['#1', '#7']
+Evil probabilities: #5=60%, #3=40%, #4=40%, #6=40%, #2=20%
+
+#### [18:51:06] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#4']
+Reason: Entropy 1.922 (adjusted 1.922) | timing x1.00
+
+### [18:51:12] Ability used at #5
+
+#### [18:51:12] Solver Output
+Scenarios: 25/60
+Definite evil: ['#8']
+Definite good: ['#1', '#7']
+Evil probabilities: #5=60%, #3=40%, #4=40%, #6=40%, #2=20%
+
+#### [18:51:12] Recommendation
+Action: **USE_ABILITY** #1 (Jester) -> targets ['#2', '#3', '#4']
+Reason: Expected posterior 9.0 scenarios (adjusted 9.0, info gain 1.474 bits) | timing x1.00
+
+### [18:51:20] Revealed #1 Jester
+Info: {'targets': [2, 3, 4], 'evil_count': 0}
+
+### [18:51:20] Ability used at #1
+
+#### [18:51:26] Solver Output
+Scenarios: 10/60
+Definite evil: ['#5', '#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#7']
+
+#### [18:51:26] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 10 scenarios (roles: {'Puppeteer', 'Puppet'})
+
+### [18:51:33] Executed #5 -> Puppeteer (EVIL)
+
+#### [18:51:39] Solver Output
+Scenarios: 5/10
+Definite evil: ['#5', '#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#7']
+
+#### [18:51:39] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 5 scenarios (roles: {'Puppet'})
+
+### [18:51:51] Ability used at #6
+
+### [18:53:27] Revealed #6 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [18:53:51] Executed #6 -> Puppet (EVIL)
+
+## [18:53:52] GAME OVER — WIN
+Final HP: 10
+Notes: asc77 v7 retry WIN 10HP perfect. ASCENSION 77 COMPLETE! Full reveal, clean exec #8 Baa, Jester cleared #2,3,4 good, #5 Puppeteer, #6 Puppet.
+
