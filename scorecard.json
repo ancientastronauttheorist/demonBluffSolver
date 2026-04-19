@@ -3632,6 +3632,13 @@
       "name": "asc75_v7",
       "notes": "6HP; ASCENSION 75 COMPLETE. #4 Puppet auto-died with Puppeteer, omitted from dict (session didn't record)",
       "date": "2026-04-17 23:08"
+    },
+    {
+      "result": "win",
+      "hp": 1,
+      "name": "asc77_v1",
+      "notes": "asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP.",
+      "date": "2026-04-19 16:35"
     }
   ]
 }

@@ -39054,3 +39054,147 @@ Notes: 6HP; ASCENSION 75 COMPLETE
 Final HP: 6
 Notes: 6HP; ASCENSION 75 COMPLETE. #4 Puppet auto-died with Puppeteer, omitted from dict (session didn't record)
 
+
+---
+
+# New Game — 2026-04-19 16:30:31
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: 5
+- Outcasts: 1
+- Minions: 2
+- Demons: 1
+
+### [16:32:13] Revealed #1 Oracle
+Info: {'targets': [3, 8], 'minion_role': 'Minion'}
+
+### [16:32:13] Revealed #2 Empress
+Info: {'targets': [6, 7, 8]}
+
+### [16:32:13] Revealed #3 Hunter
+Info: {'distance': 3}
+
+### [16:32:13] Revealed #4 Empress
+Info: {'targets': [3, 8, 9]}
+
+### [16:32:13] Revealed #5 Jester
+Info: {}
+
+### [16:32:13] Revealed #6 Medium
+Info: {'good_position': 8, 'good_role': 'Dreamer'}
+
+### [16:32:13] Revealed #8 Dreamer
+Info: {}
+
+### [16:32:13] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [16:32:18] Solver Output
+Scenarios: 0/0
+
+#### [16:32:18] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [16:32:44] Solver Output
+Scenarios: 0/0
+
+#### [16:32:44] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## Deck
+- Villagers: Empress, Oracle, Jester, Hunter, Dreamer, Slayer, Medium
+- Outcasts: Plague Doctor
+- Minions: Poisoner, Minion
+- Demons: Lilis
+
+#### [16:33:08] Solver Output
+Scenarios: 49/2984
+Definite good: ['#7']
+Evil probabilities: #2=86%, #4=76%, #1=69%, #5=29%, #8=18%, #6=12%, #3=6%, #9=4%
+
+#### [16:33:08] Recommendation
+Action: **USE_ABILITY** #8 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.710 (adjusted 2.600) | timing x1.00
+WARNING: Corruption risk: 8%
+
+### [16:33:24] Ability used at #8
+
+#### [16:33:24] Solver Output
+Scenarios: 49/2984
+Definite good: ['#7']
+Evil probabilities: #2=86%, #4=76%, #1=69%, #5=29%, #8=18%, #6=12%, #3=6%, #9=4%
+
+#### [16:33:25] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.732 (adjusted 2.732) | timing x1.00
+
+#### [16:33:56] Solver Output
+Scenarios: 34/2984
+Definite evil: ['#4']
+Definite good: ['#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #2=88%, #1=82%, #5=29%
+
+#### [16:33:56] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 34 scenarios (roles: {'Lilis', 'Poisoner', 'Minion'})
+
+### [16:34:03] Executed #4 -> Poisoner (EVIL)
+
+#### [16:34:08] Solver Output
+Scenarios: 16/396
+Definite evil: ['#4']
+Definite good: ['#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=88%, #2=88%, #5=25%
+
+#### [16:34:08] Recommendation
+Action: **USE_ABILITY** #5 (Jester) -> targets ['#3', '#6', '#7']
+Reason: Expected posterior 8.0 scenarios (adjusted 9.0, info gain 0.830 bits) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [16:34:16] Revealed #5 Jester
+Info: {'targets': [3, 6, 7], 'evil_count': 1}
+
+### [16:34:16] Ability used at #5
+
+#### [16:34:25] Solver Output
+Scenarios: 8/396
+Definite evil: ['#4']
+Definite good: ['#3', '#6', '#7', '#8', '#9']
+Evil probabilities: #1=75%, #2=75%, #5=50%
+
+#### [16:34:25] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (38% evil Lilis, 38% evil Minion, 25% good Oracle (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [16:34:32] Executed #1 -> GOOD (WRONG!)
+
+#### [16:34:37] Solver Output
+Scenarios: 2/272
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+
+#### [16:34:37] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+### [16:35:03] Executed #2 -> Minion (EVIL)
+
+#### [16:35:04] Solver Output
+Scenarios: 1/50
+Definite evil: ['#2', '#4', '#5']
+Definite good: ['#1', '#3', '#6', '#7', '#8', '#9']
+
+#### [16:35:04] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [16:35:11] Executed #5 -> Lilis (EVIL)
+
+## [16:35:31] GAME OVER — WIN
+Final HP: 1
+Notes: asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP.
+

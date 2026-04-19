@@ -1,0 +1,171 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          8
+        ],
+        "minion_role": "Minion"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6,
+          7
+        ],
+        "evil_count": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Dreamer"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 9,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    1,
+    2,
+    5
+  ],
+  "confirmed_evil": [
+    4,
+    2,
+    5
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Poisoner",
+    "2": "Minion",
+    "5": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 9,
+      "target": 3,
+      "is_corrupted": true,
+      "evil_revealed": 4
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "1": true
+  },
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Oracle",
+      "Jester",
+      "Hunter",
+      "Dreamer",
+      "Slayer",
+      "Medium"
+    ],
+    "outcasts": [
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Poisoner",
+      "Minion"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    8,
+    9,
+    5
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc77_v1",
+  "true_evil_positions": {
+    "2": "Minion",
+    "4": "Poisoner",
+    "5": "Lilis"
+  },
+  "notes": "asc77 v1 WIN 1HP, PD cleared #4, Jester narrowed to Medium good, lookahead forced #1 (wrong, Oracle corrupted), then #2 Minion, #5 Lilis. 10HP->1HP."
+}
