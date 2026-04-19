@@ -39570,3 +39570,99 @@ Notes: asc77 v4 LOSS at village 4/7. Ascension failed. Solver bug: 100% confiden
 Final HP: 1
 Notes: asc77 v4 LOSS village 4/7 — ASCENSION FAILED. Lilis at #4 uncaught. Solver bug: 100% confidence on #1 Enlightened as evil (CW claim conflicted with CCW reality); #1 was Good Corrupted. After wrong exec #1 = 0 scenarios. Recovered via Judge #8 and narrowed to 2 scenarios but 50% on #3 at HP=1 led to death. ROOT: solver eliminated corrupted-Good-Enlightened scenarios where #9 (blocked) could be evil.
 
+
+---
+
+# New Game — 2026-04-19 16:57:47
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Confessor, Empress, Fortune Teller, Baker, Oracle, Scout, Bishop
+- Outcasts: Bombardier, Plague Doctor
+- Minions: Witch, Minion
+- Demons: Pooka
+
+### [16:58:38] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [16:58:38] Revealed #2 Bombardier
+Info: {}
+
+### [16:58:38] Revealed #3 Fortune_Teller
+Info: {}
+
+### [16:58:38] Revealed #4 Empress
+Info: {'targets': [1, 6, 7]}
+
+### [16:58:38] Revealed #5 Plague_Doctor
+Info: {}
+
+### [16:58:38] Revealed #6 Bishop
+Info: {'targets': [6, 1, 9], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [16:58:38] Revealed #7 Confessor
+Info: {'dizzy': False}
+
+### [16:58:38] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+#### [16:58:43] Solver Output
+Scenarios: 95/1974
+Definite good: ['#7']
+Evil probabilities: #1=49%, #6=48%, #2=44%, #8=44%, #3=38%, #4=34%, #9=25%, #5=17%
+
+#### [16:58:43] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 2.388 (adjusted 2.388) | timing x1.00
+
+#### [16:59:21] Solver Output
+Scenarios: 55/1974
+Definite good: ['#7']
+Evil probabilities: #2=53%, #6=49%, #8=44%, #3=38%, #9=38%, #1=35%, #4=35%, #5=9%
+
+#### [16:59:21] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#5', '#6']
+Reason: Entropy 1.000 (adjusted 0.754) | timing x1.00
+WARNING: Corruption risk: 49%
+
+### [16:59:28] Revealed #3 Fortune Teller
+Info: {'targets': [5, 6], 'has_evil': True}
+
+### [16:59:28] Ability used at #3
+
+#### [16:59:34] Solver Output
+Scenarios: 28/1974
+Definite good: ['#7']
+Evil probabilities: #8=57%, #2=50%, #4=50%, #3=46%, #9=46%, #1=29%, #5=11%, #6=11%
+
+#### [16:59:34] Recommendation
+Action: **EXECUTE** #8
+Reason: No reveals available. #8 is 57% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 57% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (57% < 63%) -- consider gathering more info
+
+### [17:00:21] Executed #8 -> GOOD (WRONG!)
+
+#### [17:00:21] Solver Output
+Scenarios: 12/1266
+Definite good: ['#7', '#8']
+Evil probabilities: #2=67%, #3=67%, #4=67%, #9=58%, #1=25%, #5=8%, #6=8%
+
+#### [17:00:21] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 58% likely evil (HP=5, budget=1 wrong execs)
+WARNING: Probabilistic execution -- 58% confident (budget: 1 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Bombardier safety: executing #9 (58%) despite low confidence — Bombardier candidate(s) [2] risk instant game loss if executed first.
+
+### [17:01:21] Executed #9 -> GOOD (WRONG!)
+
+## [17:01:21] GAME OVER — LOSS
+Final HP: 5
+Notes: asc77 v4 retry LOSS. Solver pick #8 (57%) wrong (was Baker), then #9 (58%) wrong (was Oracle-chained Baker). True evils #2 Witch, #3 Pooka, #4 Minion all face-up but low confidence. All abilities used before forced to execute.
+
+## [17:01:27] GAME OVER — LOSS
+Final HP: 5
+Notes: asc77 v4 retry LOSS (no evils killed). Solver pick #8 (57%) wrong, #9 (58%) wrong. True evils #2 Witch, #3 Pooka, #4 Minion. All abilities exhausted before forced probabilistic exec.
+

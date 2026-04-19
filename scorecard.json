@@ -3674,6 +3674,20 @@
       "name": "asc77_v4",
       "notes": "asc77 v4 LOSS village 4/7 \u2014 ASCENSION FAILED. Lilis at #4 uncaught. Solver bug: 100% confidence on #1 Enlightened as evil (CW claim conflicted with CCW reality); #1 was Good Corrupted. After wrong exec #1 = 0 scenarios. Recovered via Judge #8 and narrowed to 2 scenarios but 50% on #3 at HP=1 led to death. ROOT: solver eliminated corrupted-Good-Enlightened scenarios where #9 (blocked) could be evil.",
       "date": "2026-04-19 16:55"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc77_v4b",
+      "notes": "asc77 v4 retry LOSS. Solver pick #8 (57%) wrong (was Baker), then #9 (58%) wrong (was Oracle-chained Baker). True evils #2 Witch, #3 Pooka, #4 Minion all face-up but low confidence. All abilities used before forced to execute.",
+      "date": "2026-04-19 17:01"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc77_v4b",
+      "notes": "asc77 v4 retry LOSS (no evils killed). Solver pick #8 (57%) wrong, #9 (58%) wrong. True evils #2 Witch, #3 Pooka, #4 Minion. All abilities exhausted before forced probabilistic exec.",
+      "date": "2026-04-19 17:01"
     }
   ]
 }
