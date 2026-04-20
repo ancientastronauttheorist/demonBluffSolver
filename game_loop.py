@@ -965,7 +965,19 @@ class GameSession:
         if action.action_type == "use_ability":
             ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
             if ability_name_lower in ("slayer", "plague_doctor", "dreamer"):
-                print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with card/slayer_result/pd_check.")
+                if ability_name_lower == "dreamer":
+                    # Dreamer2 patch: new 2-char+1-role UI. Solver now validates
+                    # the ambiguous output shape ({targets, evil_role_options}).
+                    # Manual fire is PREFERRED when solver recommends — it's
+                    # often decisive (e.g. asc77 v7 Bombardier 50/50).
+                    print(f"\n  [auto_next] Dreamer is the recommended info-gathering move — FIRE MANUALLY:")
+                    print(f"    1. Click #{action.position} (Dreamer card)")
+                    print(f"    2. Pick 2 characters (Dreamer2 requires 2)")
+                    print(f"    3. Pick 1 role from the menu")
+                    print(f"    4. The result auto-parses via memory_reader.")
+                    print(f"    Only use `ability_used {action.position}` if you've confirmed Dreamer truly can't help (e.g. all suspects already narrowed).")
+                else:
+                    print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with card/slayer_result/pd_check.")
                 return action, result, None
             print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
             exec_result = self.auto_use_ability(action)

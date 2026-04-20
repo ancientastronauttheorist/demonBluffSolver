@@ -186,3 +186,12 @@ pub fn info_targets(info: &serde_json::Map<String, serde_json::Value>, key: &str
     let arr = info.get(key)?.as_array()?;
     Some(arr.iter().filter_map(|v| v.as_i64().map(|x| x as u8)).collect())
 }
+
+/// Helper to read a list of strings from info_parsed (e.g. Dreamer2 evil_role_options).
+pub fn info_str_array<'a>(
+    info: &'a serde_json::Map<String, serde_json::Value>,
+    key: &str,
+) -> Option<Vec<&'a str>> {
+    let arr = info.get(key)?.as_array()?;
+    Some(arr.iter().filter_map(|v| v.as_str()).collect())
+}
