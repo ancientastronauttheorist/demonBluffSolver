@@ -1,0 +1,141 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1
+      }
+    }
+  ],
+  "executed": [
+    6,
+    2,
+    7
+  ],
+  "confirmed_evil": [
+    2,
+    7
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Chancellor",
+    "7": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 8,
+      "is_corrupted": true,
+      "evil_revealed": 2
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "6": true
+  },
+  "deck": {
+    "villagers": [
+      "Knight",
+      "Slayer",
+      "Knitter",
+      "Lover",
+      "Scout",
+      "Bard"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague Doctor",
+      "Rambler"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc77_v2",
+  "true_evil_positions": {
+    "2": "Chancellor",
+    "7": "Pooka"
+  },
+  "notes": "asc77 v2 WIN 1HP. Knight check #6 was corrupted (-9 HP), then PD pointed to #2, clean exec #2 Chancellor and #7 Pooka."
+}

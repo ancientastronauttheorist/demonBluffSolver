@@ -1,0 +1,186 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          9,
+          6,
+          8
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          7
+        ],
+        "evil_count": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          5,
+          9
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Baker"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    8,
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    2,
+    8,
+    7
+  ],
+  "confirmed_good": [
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Chancellor",
+    "8": "Minion",
+    "7": "Baa"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 6,
+      "target_pos": 2,
+      "killed": true
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "4": false
+  },
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Alchemist",
+      "Slayer",
+      "Jester",
+      "Bishop",
+      "Dreamer",
+      "Empress",
+      "Architect"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Chancellor",
+      "Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    3,
+    6,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc75_v4",
+  "true_evil_positions": {
+    "2": "Chancellor",
+    "7": "Baa",
+    "8": "Minion"
+  },
+  "notes": "5HP (wrong exec #4 Bishop); Slayer killed #2 Chancellor; PD clean on #4 before, Jester 2 evils in [1,4,7]"
+}

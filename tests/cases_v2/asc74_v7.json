@@ -1,0 +1,154 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 9,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 3
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "copied_role": "Gemcrafter"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    }
+  ],
+  "executed": [
+    4,
+    5,
+    10
+  ],
+  "confirmed_evil": [
+    5
+  ],
+  "confirmed_good": [
+    4,
+    10
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    10
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 0,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "4": true,
+    "10": false
+  },
+  "deck": {
+    "villagers": [
+      "Rambler",
+      "Poet",
+      "Knitter",
+      "Dreamer",
+      "Scout",
+      "Witness",
+      "Judge",
+      "Knight"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Drunk",
+      "Wretch"
+    ],
+    "minions": [
+      "Witch",
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7,
+    1,
+    3
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v7",
+  "true_evil_positions": {
+    "5": "Pooka"
+  },
+  "notes": "Loss at v7 final. Wrong exec #4 Knitter (60% solver pick, was corrupted good), wrong exec #10 Rambler (30% manual per rule 1). Witch#9 blocked #10 throughout. Solver stuck at budget=1 HP=5 with no position reaching 85% threshold. True evils: 3=Chancellor, 5=Pooka (killed), 9=Witch."
+}

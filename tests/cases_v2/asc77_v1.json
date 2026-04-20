@@ -1,0 +1,144 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 1,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          1,
+          4
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1,
+        "copied_role": "Lover"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    }
+  ],
+  "executed": [
+    4,
+    2
+  ],
+  "confirmed_evil": [
+    4,
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Witch",
+    "2": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Bishop",
+      "Witness",
+      "Poet",
+      "Alchemist",
+      "Judge",
+      "Baker"
+    ],
+    "outcasts": [
+      "Rambler"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    2
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc77_v1",
+  "true_evil_positions": {
+    "2": "Lilis",
+    "4": "Witch"
+  },
+  "notes": "REAL asc77 v1 WIN 8HP. Lilis game. Witch blocked #7 Baker; executed Witch first to unblock, then Judge found Lilis #2 lying, executed Lilis."
+}

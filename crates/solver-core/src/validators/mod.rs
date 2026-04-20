@@ -35,6 +35,7 @@ pub fn validate_card(card: &CardInfo, scenario: &Scenario, state: &GameState) ->
         "bountyhunter" => validate_bounty_hunter(card, scenario, state),
         "baker" => validate_baker(card, scenario, state),
         "poet" => validate_poet(card, scenario, state),
+        "rambler" => validate_rambler(card, scenario, state),
         _ => true,
     }
 }
@@ -510,6 +511,28 @@ fn validate_jester(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
 }
 
 fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    // Shape 2: ambiguous Dreamer (corrupted Dreamer1 OR Dreamer2 post-patch):
+    //   {"targets": [a, b, ...], "evil_role_options": [R1, R2]}
+    // Semantics: "Among these targets, there is one of these roles."
+    // Truthful: at least one target's evil role ∈ claimed_options.
+    // Lying: no target's evil role ∈ claimed_options (we picked a lie).
+    if let (Some(targets), Some(options)) = (
+        info_targets(&card.info_parsed, "targets"),
+        info_str_array(&card.info_parsed, "evil_role_options"),
+    ) {
+        let truth = truth_status(card.position, scenario, state);
+        let any_match = targets.iter().any(|&t| {
+            known_evil_role(t, scenario, state)
+                .map(|r| options.iter().any(|o| roles_equal(o, r)))
+                .unwrap_or(false)
+        });
+        return match truth {
+            TruthStatus::Truthful => any_match,
+            TruthStatus::Lying => !any_match,
+        };
+    }
+
+    // Shape 1 (original Dreamer1): {"target": pos, "evil_role": role}
     let target = match info_pos(&card.info_parsed, "target") {
         Some(v) => v,
         None => return true,
@@ -648,23 +671,31 @@ fn validate_bishop(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     let truth = truth_status(card.position, scenario, state);
 
     if let Some(ref ct) = claimed_types {
-        let mut actual_types: Vec<String> = Vec::new();
-        let mut incomplete = false;
-        for &t in &targets {
-            if let Some(tp) = get_position_type(t, scenario, state) {
-                actual_types.push(tp.to_string());
-            } else {
-                incomplete = true;
-                break;
+        // Bishop's clue reflects a snapshot of its 3 targets at game start.
+        // Chancellor's conversion is an independent random game-start event:
+        // in observed games (asc71_v6), Bishop's claim stays consistent with
+        // a PRE-conversion view of its targets. In other games (asc51_v1),
+        // the claim matches the POST-conversion view. We accept either.
+        let mut sorted_claimed = ct.clone();
+        sorted_claimed.sort();
+
+        let try_view = |include_conv: bool| -> Option<bool> {
+            let mut actual: Vec<String> = Vec::new();
+            for &t in &targets {
+                match get_position_type_ex(t, scenario, state, include_conv) {
+                    Some(tp) => actual.push(tp.to_string()),
+                    None => return None, // Unrevealed target — skip this view
+                }
             }
-        }
-        if !incomplete {
-            let mut sorted_actual = actual_types.clone();
-            sorted_actual.sort();
-            let mut sorted_claimed = ct.clone();
-            sorted_claimed.sort();
-            let types_match = sorted_actual == sorted_claimed;
-            return if truth == TruthStatus::Truthful { types_match } else { !types_match };
+            actual.sort();
+            Some(actual == sorted_claimed)
+        };
+
+        let post = try_view(true);
+        let pre = try_view(false);
+        if post.is_some() || pre.is_some() {
+            let any_match = post.unwrap_or(false) || pre.unwrap_or(false);
+            return if truth == TruthStatus::Truthful { any_match } else { !any_match };
         }
     }
 
@@ -750,6 +781,109 @@ fn validate_poet(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
         "bountyhunter" | "bounty hunter" | "bounty_hunter" => validate_bounty_hunter(card, scenario, state),
         "baker" => validate_baker(card, scenario, state),
         _ => true,
+    }
+}
+
+/// Rambler: passively displays a quote when flipped. If the FIRST active-ability
+/// picker of Rambler (post-flip) is a "Liar" (currently lying — evil-not-Puppet,
+/// or corrupted, including Drunk), Rambler is Silenced. If Rambler itself lies
+/// (corrupted, since Rambler is Outcast and never evil), the condition inverts.
+///
+/// Data entry: `info_parsed = {"silenced": true|false}`. If absent, validator is a no-op.
+fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    let claimed_silenced = match info_bool(&card.info_parsed, "silenced") {
+        Some(v) => v,
+        None => return true,
+    };
+    let rambler_pos = card.position;
+
+    // Explicit picker override from info_parsed["silenced_by"]: use as the first picker
+    // (handles cases like PD silencing where no pd_ability_result is registered).
+    if let Some(explicit_picker) = info_pos(&card.info_parsed, "silenced_by") {
+        let picker_liar = truth_status(explicit_picker, scenario, state) == TruthStatus::Lying;
+        let truth = truth_status(rambler_pos, scenario, state);
+        return if truth == TruthStatus::Truthful {
+            claimed_silenced == picker_liar
+        } else {
+            claimed_silenced != picker_liar
+        };
+    }
+
+    // Reveal order indices. If Rambler never flipped, no info to discriminate.
+    let reveal_idx: HashMap<u8, usize> = state.reveal_order.iter()
+        .enumerate().map(|(i, &p)| (p, i)).collect();
+    let rambler_flip = match reveal_idx.get(&rambler_pos) {
+        Some(&i) => i,
+        None => return true,
+    };
+
+    // Collect active-ability picks of Rambler with their reveal indices.
+    // "Active" = roles whose ability requires the player to choose targets.
+    // Passive info (Hunter, Oracle, Bishop, Empress, Medium, etc.) does not
+    // count as "picking" per Rambler's wording.
+    let mut candidates: Vec<(usize, u8)> = Vec::new();
+
+    for &ability_pos in &state.used_abilities {
+        let ability_flip = match reveal_idx.get(&ability_pos) {
+            Some(&i) => i,
+            None => continue,
+        };
+        if ability_flip <= rambler_flip { continue; }
+        let acard = match state.card_at(ability_pos) {
+            Some(c) => c,
+            None => continue,
+        };
+        let role = normalize_role(&acard.apparent_role);
+        let targets: Vec<u8> = match role.as_str() {
+            "jester" | "druid" | "fortuneteller" => {
+                info_targets(&acard.info_parsed, "targets").unwrap_or_default()
+            }
+            "dreamer" | "judge" => {
+                info_pos(&acard.info_parsed, "target")
+                    .map(|p| vec![p]).unwrap_or_default()
+            }
+            _ => vec![],
+        };
+        if targets.contains(&rambler_pos) {
+            candidates.push((ability_flip, ability_pos));
+        }
+    }
+    // PD and Slayer results live in dedicated lists.
+    for pd_res in &state.pd_ability_results {
+        if pd_res.target == rambler_pos {
+            if let Some(&idx) = reveal_idx.get(&pd_res.pd_pos) {
+                if idx > rambler_flip {
+                    candidates.push((idx, pd_res.pd_pos));
+                }
+            }
+        }
+    }
+    for sl_res in &state.slayer_results {
+        if sl_res.target_pos == rambler_pos {
+            if let Some(&idx) = reveal_idx.get(&sl_res.slayer_pos) {
+                if idx > rambler_flip {
+                    candidates.push((idx, sl_res.slayer_pos));
+                }
+            }
+        }
+    }
+
+    // Earliest picker wins ("If Picked (once)").
+    candidates.sort_by_key(|(idx, _)| *idx);
+    let picker_pos = match candidates.first() {
+        Some(&(_, p)) => p,
+        None => return true, // Never picked → no info to discriminate.
+    };
+
+    // "Liar" = currently lying (evil-not-Puppet OR corrupted, which includes Drunk).
+    // Doppelganger no longer triggers silencing since it doesn't lie.
+    let picker_liar = truth_status(picker_pos, scenario, state) == TruthStatus::Lying;
+
+    let truth = truth_status(rambler_pos, scenario, state);
+    if truth == TruthStatus::Truthful {
+        claimed_silenced == picker_liar
+    } else {
+        claimed_silenced != picker_liar
     }
 }
 
@@ -951,17 +1085,26 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
         if shaman_allowance == 0 && baker_count > 1 { return false; }
     }
 
-    // Baker conversion chain ordering
+    // Baker conversion chain existence
     // Skip when Shaman is in the deck — Shaman creates duplicate Bakers at game
     // start (not via reveal-order-triggered conversion), so chain ordering doesn't apply.
+    // NOTE (asc77 v6): we previously required chain-converted Bakers to reveal
+    // AFTER the original, but the in-game conversion chain pre-seeds at game
+    // start — chain Bakers can reveal in any order (observed: chain-Baker at #1
+    // revealed before original at #6). Keep the existence requirement (an
+    // original Baker must be somewhere in the truthful-Baker set) but drop the
+    // reveal-ordering constraint.
     let shaman_in_deck = state.deck.minions.iter()
         .any(|m| normalize_role(m) == "shaman");
-    if !shaman_in_deck && !state.reveal_order.is_empty() && !baker_claimed_counts.is_empty() {
-        let reveal_idx: HashMap<u8, usize> = state.reveal_order.iter().enumerate()
-            .map(|(i, &p)| (p, i)).collect();
+    if !shaman_in_deck && !baker_claimed_counts.is_empty() {
+        // If any truthful Baker claims "I was <role>", at least one truthful
+        // Baker must claim to be the original (or it must be possible that
+        // the original Baker is an unrevealed/night-killed/puppet position
+        // where we can't observe its claim).
+        let mut has_chain_claim = false;
+        let mut has_original_claim = false;
+        let mut has_unobservable_baker_slot = false;
 
-        // Find earliest good original Baker
-        let mut original_baker_idx: Option<usize> = None;
         for card in &state.cards {
             if normalize_role(&card.apparent_role) != "baker" { continue; }
             let pos = card.position;
@@ -971,30 +1114,25 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             if truth != TruthStatus::Truthful { continue; }
             let claimed = info_str(&card.info_parsed, "original_role").unwrap_or("");
             if claimed.eq_ignore_ascii_case("original") || claimed.eq_ignore_ascii_case("baker") {
-                if let Some(&idx) = reveal_idx.get(&pos) {
-                    original_baker_idx = Some(idx);
-                    break;
-                }
+                has_original_claim = true;
+            } else if !claimed.is_empty() {
+                has_chain_claim = true;
+            }
+        }
+        // Also allow the original Baker to be a hidden (unrevealed) or
+        // night-killed good position — we can't see its claim in those cases.
+        for card in &state.cards {
+            if !state.blocked_positions.contains(&card.position)
+               && !state.night_kills.contains(&card.position) { continue; }
+            // Hidden/night-killed Good positions could be the original Baker
+            if known_evil_role(card.position, scenario, state).is_none() {
+                has_unobservable_baker_slot = true;
+                break;
             }
         }
 
-        match original_baker_idx {
-            None => return false, // No original Baker — no conversion possible
-            Some(orig_idx) => {
-                for card in &state.cards {
-                    if normalize_role(&card.apparent_role) != "baker" { continue; }
-                    let pos = card.position;
-                    if known_evil_role(pos, scenario, state).is_some() { continue; }
-                    if scenario.puppet_position == Some(pos) { continue; }
-                    let claimed = info_str(&card.info_parsed, "original_role").unwrap_or("");
-                    if claimed.is_empty() || claimed.eq_ignore_ascii_case("original") { continue; }
-                    let truth = truth_status(pos, scenario, state);
-                    if truth != TruthStatus::Truthful { continue; }
-                    if let Some(&idx) = reveal_idx.get(&pos) {
-                        if idx < orig_idx { return false; }
-                    }
-                }
-            }
+        if has_chain_claim && !has_original_claim && !has_unobservable_baker_slot {
+            return false;
         }
     }
 

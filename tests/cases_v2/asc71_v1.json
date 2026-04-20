@@ -1,0 +1,182 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Equal"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          10
+        ],
+        "minion_role": "Minion",
+        "copied_role": "Oracle"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Baker"
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "evil_role": "Chancellor"
+      }
+    }
+  ],
+  "executed": [
+    4,
+    5,
+    3,
+    10
+  ],
+  "confirmed_evil": [
+    5,
+    3,
+    10
+  ],
+  "confirmed_good": [
+    1,
+    4
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "5": "Chancellor",
+    "3": "Pooka",
+    "10": "Minion"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 5,
+      "target_pos": 7,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 2,
+      "target": 7,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {
+    "4": true
+  },
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Architect",
+      "Slayer",
+      "Enlightened",
+      "Poet",
+      "Scout",
+      "Knight",
+      "Medium",
+      "Dreamer"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    10,
+    2,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc71_v1",
+  "true_evil_positions": {
+    "3": "Pooka",
+    "5": "Chancellor",
+    "10": "Minion"
+  },
+  "notes": "5HP first Asc71 village. Knight #1 immunity free check, Dreamer #10 evil lied '#3 Chancellor' (Pooka), PD #2 clean #7, Slayer #5 fail. Exec #4 Arch corrupted wrong (-5 HP), then 3 evils all found."
+}

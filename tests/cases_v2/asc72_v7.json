@@ -1,0 +1,143 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Medium"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Bishop"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    1,
+    4
+  ],
+  "confirmed_evil": [
+    10,
+    1,
+    4
+  ],
+  "confirmed_good": [
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Poisoner",
+    "4": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    6,
+    10
+  ],
+  "night_kill_evil_count": 1,
+  "hp": 1,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "2": true
+  },
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Hunter",
+      "Knitter",
+      "Medium",
+      "Witness",
+      "Baker",
+      "Rambler",
+      "Bishop",
+      "Gemcrafter"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Witch",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 2,
+  "name": "asc72_v7",
+  "true_evil_positions": {
+    "1": "Poisoner",
+    "4": "Lilis",
+    "10": "Witch"
+  },
+  "notes": "1HP. Lilis night-killed #10 Witch (evil). Wrong exec #2 Hunter (solver bug: top pick #10 already dead, executed next-live #2 at 83%, wrong). Then #1 Poisoner and #4 Lilis definite. ASC72 COMPLETE 7/7!"
+}

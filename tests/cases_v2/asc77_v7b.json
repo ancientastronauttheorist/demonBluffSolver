@@ -1,0 +1,148 @@
+{
+  "n_cards": 8,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "evil_count": 0
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 0
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 1,
+        "copied_role": "Knitter"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Puppet",
+        "distance": 3
+      }
+    }
+  ],
+  "executed": [
+    8,
+    5,
+    6
+  ],
+  "confirmed_evil": [
+    8,
+    5,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Baa",
+    "5": "Puppeteer",
+    "6": "Puppet"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Jester",
+      "Slayer",
+      "Alchemist",
+      "Dreamer",
+      "Poet",
+      "Scout"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Puppeteer"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    5,
+    1,
+    6
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc77_v7b",
+  "true_evil_positions": {
+    "5": "Puppeteer",
+    "6": "Puppet",
+    "8": "Baa"
+  },
+  "notes": "asc77 v7 retry WIN 10HP perfect. ASCENSION 77 COMPLETE! Full reveal, clean exec #8 Baa, Jester cleared #2,3,4 good, #5 Puppeteer, #6 Puppet."
+}

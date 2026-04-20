@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**461 games played** — 92% win rate (426W / 35L), 218 perfect games (10 HP)
+**540 games played** — 91% win rate (494W / 46L), 244 perfect games (10 HP)
 
-Tested through **Ascension 68** with 9-card boards, up to 4 evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, and Shaman Baker-conversion chains.
+Tested through **Ascension 77** with up to 10-card boards, 4+ evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, Shaman Baker-conversion chains, Doppelganger disguises, Baa (demon-as-outcast), and Dreamer2 ambiguous output.
 
 ## How It Works
 
@@ -60,7 +60,7 @@ The full pipeline:
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 307 test cases — card vision pipeline, high accuracy |
+| `tests/cases_v2/` | 376 test cases — card vision pipeline, high accuracy |
 | `tests/cases/` | 137 legacy test cases — manual data entry |
 | `tests/simulation.rs` | Rust simulation test — constraint validation + strategy-driven execution on all v2 cases |
 | `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
@@ -69,13 +69,13 @@ The full pipeline:
 
 - Full constraint-satisfaction over all possible evil placements
 - Handles disguises, lying, corruption, and role-specific validation
-- 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
+- 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer (including Dreamer2 ambiguous "Among X, Y there is: R1 or R2"), Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
 - Bombardier protection (instant loss if wrongly executed)
 - Execution lookahead with HP-aware decision making
 - Ascension 10+ pool-vs-board role count validation
 - Lilis night-kill tracking and Witch card-blocking mechanics
 - Drunk execution cost modeling (2 HP vs 5 HP)
-- Baker conversion chain validation with reveal-order tracking
+- Baker conversion chain validation (chain pre-seeds at game start — chain-Bakers can reveal in any order)
 - Shaman role duplication handling
 - Puppeteer/Puppet mechanics — Puppet is evil but truthful, auto-generated from adjacent Villager
 - Flip verification via memory reader — detects click failures before they become misdiagnosed blocks
@@ -132,7 +132,7 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-cargo test --release --test simulation  # Rust simulation tests (307 v2 cases)
+cargo test --release --test simulation  # Rust simulation tests (376 v2 cases)
 python -m tests.test_replay --v2-only  # Python v2 replay tests
 python -m tests.test_replay            # all test cases
 

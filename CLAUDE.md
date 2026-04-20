@@ -6,121 +6,138 @@
 **Track B — Memory reader (secondary).** Build `memory_reader.py` to replace the visual pipeline. Runs alongside every screenshot — any mismatch = stop and fix.
 
 ## Core Rules
-1. **Always follow the solver.** No second-guessing, no manual overrides. **Even for probabilistic executions: execute the solver's top pick.** A wrong answer from the solver is a bug to fix — overriding hides bugs. Lost asc50_v1 data because Claude overrode #8 (68% solver pick) to execute #5 instead.
-2. **HONOR RULE: memory reader is VALIDATION ONLY.** Memory reader shows the true game state including evil roles. **NEVER use it to inform execution decisions, override the solver, or "triangulate" the answer.** Allowed uses: (a) cross-check screenshot reads, (b) verify solver bugs after the game, (c) auto-fill metadata like corruption flags via `auto_card`. Forbidden: looking at evil positions to decide who to execute, picking a target the solver didn't recommend because memory says it's evil, re-entering data multiple times until the solver lands on the position memory reader says is evil. **Lost asc52_v6 streak (47 wins) by reasoning about memory reader truth during a degraded solver state.** If the solver is degraded, fix the data entry — do not reverse-engineer the truth.
-3. **0 scenarios = STOP. Recovery protocol:**
-   - **(a) Identify the most recent data entry** (which card/ability result was added last). That's almost always the source.
-   - **(b) Re-screenshot** the relevant card and verify the displayed text matches what you entered. Trust the screenshot, not your memory.
-   - **(c) If the entry is correct** and 0 scenarios still survive, it's a solver bug. **Save the test case as a loss (don't try to "fix" mid-game by resetting other entries).** Resetting cascades errors and produces corrupted state — see asc52_v6.
-   - **(d) Forbidden recovery**: Do NOT cycle through different values for the problem entry hoping the solver "comes back". Do NOT reset unrelated cards to free up scenarios. Do NOT use memory reader to figure out what value would make the solver happy. These all hide the underlying bug and corrupt the state.
-   - **(e) If you're truly stuck**: accept the loss, run `game_over loss`, fix the bug afterward. Better to lose one village to a real bug than win it via state manipulation that hides three bugs.
-4. **Fix bugs before the next game.** Research the wiki (https://demonbluff.wiki.gg) first. Fix code, run simulation tests (`cargo test --release --test simulation`), verify. Same urgency for solver and memory reader bugs. **Solver work validates against v2 tests only** (card_vision pipeline, high-accuracy data). Legacy tests (`tests/cases/`) are kept for broad regression but may have manual data entry errors.
+1. **Always follow the solver.** Execute the solver's top pick, even probabilistic. A wrong answer is a bug to fix between games, not override. See `memory/feedback_never_override_solver.md` (asc50_v1, asc52_v6).
+2. **HONOR RULE: memory reader is VALIDATION ONLY.** Memory reader shows true game state including evils. Allowed: cross-check screenshots, verify bugs after the game, auto-fill metadata via `auto_card`. Forbidden: using evil positions to decide execution, re-entering data until the solver lands on the memory-confirmed position. If the solver is degraded, fix the data entry — do not reverse-engineer the truth (asc52_v6).
+3. **0 scenarios = STOP.** See [Recovery Protocol](#recovery-protocol).
+4. **Fix bugs before the next game.** Research the wiki (https://demonbluff.wiki.gg) first. Fix code, run `cargo test --release --test simulation`, verify. Solver validates against v2 tests only (`tests/cases_v2/`).
 5. **After every loss, analyze.** Spawn an agent to check critical decisions. Fix or confirm unavoidable before proceeding.
 6. **Commit and push after every game.** Do not batch.
 7. **Mouse only.** No keyboard shortcuts during live runs.
-8. **Memory reader with every screenshot.** Compare against screenshot (ground truth). Mismatch = stop and fix. (See rule 2 for what "use" memory reader means.)
+8. **Memory reader with every screenshot.** Screenshot is ground truth. Mismatch = stop and fix. (Rule 2 governs what "use" means.)
 9. **Serialize state-mutating commands.** Do not issue `game_loop.py` commands (`new`, `deck`, `card`, `execute`, `ability_used`, etc.) in parallel.
-10. **Self-improving CLAUDE.md.** When any process error occurs during the game loop (wrong flip order, missed step, data entry mistake, wrong coordinates, etc.): STOP immediately -> identify root cause -> update THIS FILE with a guard/fix to prevent recurrence -> think about related edge cases -> resume. Every mistake should make the process permanently better.
+10. **Self-improving CLAUDE.md.** When a process error occurs: STOP → identify root cause → update this file → resume. **Prefer editing or tightening an existing rule over appending a new one** — if two rules say the same thing, collapse them. Put loss anecdotes in `memory/losses_postmortem.md`; keep the CLAUDE.md citation to the ascension tag only.
+
+## Recovery Protocol
+Triggered by 0 scenarios. Do NOT guess; do NOT reset entries to make the solver happy.
+
+**(a) Identify the most recent data entry** — which card or ability result was added last. That's almost always the source.
+
+**(b) Re-screenshot and verify.** Trust the screenshot, not your memory. Check whether `auto_card`/`auto_ability` misparsed the speech bubble — e.g., a Rambler silencing message like "#X shut up!" does NOT imply FT `has_evil=False`; it's flavor text on a silencing event. Correct with manual `card ...` if needed.
+
+**(c) If the entry is correct and 0 scenarios persist, it's a solver bug.** Save the test case as a loss. Do not "fix" mid-game by resetting other entries — resetting cascades errors and corrupts state (asc52_v6).
+
+**(d) Forbidden recovery:** Do NOT cycle through different values hoping the solver "comes back." Do NOT reset unrelated cards to free up scenarios. Do NOT use memory reader to figure out what value would make the solver happy. All three hide the bug and corrupt state.
+
+**(e) "Accept the loss" ≠ "abandon in-app."** `game_over loss` is a tracking command; it does not require quitting the in-app game. Before giving up on the village:
+- **Exhaust ALL unused active abilities first.** Slayer/Druid/PD/etc. can fire in 0-scenario state — a successful kill or check often breaks the deadlock by adding a hard-confirmed data point. Check the last non-zero `next` output for `Available abilities`.
+- **Re-check every auto-entered card** for memory-reader parsing errors (see step b).
+- Only after exhausting abilities AND verifying all entries should you conclude you're stuck.
+
+**(f) NEVER abandon in-app via pause → "Go to menu" while HP > 0, unused abilities remain, unflipped cards remain, or memory reader is readable.** Abandoning kills the memory reader stream — you lose post-mortem ground truth (asc74_v1). If HP drops to 0 from in-game damage, the game ends itself and final memory state is still capturable. Rage-quit to menu resets the process and loses truth. When in doubt: leave the game on its turn, run `game_over loss` for tracking, diagnose live memory before doing anything else in-app.
 
 ## Screen & Coordinates
 - **Resolution**: 2560x1440
-- **Mouse parking** (before screenshots): `(1280, 690)` -- board center void. Avoid cards, panels, buttons, deck icon.
+- **Mouse parking** (before screenshots): `(1280, 690)` — board center void. Avoid cards, panels, buttons, deck icon.
 - If a screenshot has a hover tooltip, park and retake.
 - `safe_click` auto-focuses the game window. **Prefer `safe_click` over manual move+click.**
-- For card clicks, prefer detected card-box centers from the current screenshot. Circle formula is a fallback only.
+- For card clicks, prefer detected card-box centers from the current screenshot. Circle formula (`game_utils.game_card_coords`) is a fallback only — never hardcode card positions (asc45_v5).
+- **Execute button**: RED SWORD at ~(2265, 1235). Dismiss mark menu first by clicking `(1280, 690)`, then `safe_click btn_execute_sword`. The mark menu overlaps the execute button (template confidence ~0.45 < 0.70 threshold).
+- **Deck icon**: `safe_click icon_deck_purple` at ~(2485, 100). NEVER click near center-top (~(1230, 62)) — that hits card #7 in a 7-card game.
+- **Buttons highlight red on hover** — no highlight means the game is unfocused.
+- **Escape opens pause menu** — verify cursor before clicking.
+- **Dialog Close/Next**: ~y=860. End-screen "Next": ~(1280, 865). Score "Continue": ~(1280, 950).
+- **Pause menu**: Go to menu ~y=625, Abandon ~y=770, Settings ~y=840, Back ~y=900.
 
 ## Game Loop
 
 ### Start
-1. **`python game_loop.py start`** -- automates: Play Demo -> Standard -> dismiss intro -> park mouse -> screenshot deck -> run card_vision + memory_reader with cross-check. Or use `read_deck <screenshot>` to just re-read an existing screenshot.
-2. Verify the deck output, read board counts (V, O, M, D icons top-right) from screenshot.
-3. `python game_loop.py new <n_cards> <n_evil>` -- **n_evil = the game's displayed "Find and Execute N Evil Characters" count, NOT just minions+demons.** With Puppeteer, the Puppet counts as an extra evil. Read the intro dialog number directly. Lost asc68_v4 wrong solver state (premature WIN) because n_evil=3 missed the Puppet.
-4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` -- prefixes REQUIRED (command errors on missing prefix instead of silently ignoring). **CRITICAL: Plague Doctor = OUTCAST (Good), NOT a Minion! Enter as O=...,Plague_Doctor. Lost asc36_v6 replay test to this. Check knowledge_base.py when unsure about a role's faction.**
-5. Close deck: `safe_click icon_deck_purple` (at ~(2485, 100)). **NEVER click near the top-center area (e.g., ~(1230, 62)) thinking it's the deck icon — that hits card #7 in a 7-card game.**
+1. **`python game_loop.py start`** — automates Play Demo → Standard → dismiss intro → park mouse → screenshot deck → run card_vision + memory_reader cross-check. `read_deck <screenshot>` re-reads an existing screenshot.
+2. Verify the deck output; read board counts (V, O, M, D icons top-right) from screenshot.
+3. `python game_loop.py new <n_cards> <n_evil>` — **n_evil = the game's displayed "Find and Execute N Evil Characters" count, NOT just minions+demons.** Puppet counts as an extra evil. Read the intro dialog directly (asc68_v4).
+4. `python game_loop.py deck V=... O=... M=... D=... nv=<villager_count> no=<outcast_count>` — prefixes REQUIRED; command errors on missing prefix. When unsure about a role's faction, check `knowledge_base.py` — it's the source of truth (asc14_v1 Knight, asc26_v3 Druid, asc36_v6 PD).
+5. Close deck: `safe_click icon_deck_purple`.
 
 ### Reveal & Enter
-6. **`python game_loop.py flip`** -- flips all cards #1->#N in strict order, then auto-runs memory_reader to show board state.
+6. **`python game_loop.py flip`** — flips all cards #1→#N in strict order, then auto-runs memory_reader to verify.
    ```
    python game_loop.py flip              # Standard: all cards #1->#N
    python game_loop.py flip --lilis      # Lilis: batches of 4, stops for night phase
    python game_loop.py flip <pos>        # Single card (after Witch death)
    ```
    - **NEVER manually construct click chains.** The `flip` command handles ordering.
-   - **Why order matters**: (a) Witch blocks the LAST card attempted -- consistent order makes blocked card predictable (#N). (b) `reveal_order` must match flip order for Baker. (c) Card info must be entered in same order.
-   - **After Witch death**: `flip <blocked_pos>` -- only flips that one card.
-   - **Night-killed cards (Lilis)**: Show skull overlay, skip them.
-7. **Verify ALL cards flipped** -- `flip` auto-runs memory_reader and checks for unflipped cards. **If flip verification fails (positions still Hidden), DO NOT proceed.** Re-run `python game_loop.py flip` to retry. Card #1 is especially prone to click-not-registering (game unfocused). **NEVER mark a position as blocked without Witch in the deck** -- `block` command now rejects this and suggests re-flipping instead. Lost asc37_v5 (40% win instead of 71%) because unflipped #1 was wrongly treated as blocked.
-   - Screenshot and verify memory_reader output. **See Core Rule 2 (Honor Rule) — memory reader is validation only, never input to execution decisions.**
-8. **`auto_card`** reads clues from memory and auto-enters parseable cards. Run after flipping. Shows which cards need manual entry.
-8b. **Enter card info in order #1->#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns if positions are missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
-   - **Poet "#X is Evil" format**: Use `card poet <pos> bounty_hunter <target>` (NOT medium). The bounty_hunter pseudo-role handles direct evil-call. Lost asc37_v3 wrong exec from using wrong format.
+   - **Why order matters**: (a) Witch blocks the LAST card attempted — consistent order makes blocked card predictable (#N). (b) `reveal_order` must match flip order for Baker. (c) Card info must be entered in same order.
+   - **After Witch death**: `flip <blocked_pos>` — only that one card.
+   - **Night-killed (Lilis)**: skull overlay, skip them.
+7. **Verify ALL cards flipped.** If flip verification fails (positions still Hidden), re-run `flip`. Card #1 is especially prone to click-not-registering. **NEVER mark a position as blocked without Witch in the deck** — `block` rejects this (asc37_v5). See `memory/feedback_flip_verification.md`.
+8. **`auto_card`** reads clues from memory and auto-enters parseable cards. Run after flipping; shows which cards need manual entry.
+8b. **Enter card info in order #1→#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns on missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
+   - **Poet "#X is Evil"**: `card poet <pos> bounty_hunter <target>` (NOT medium) (asc37_v3).
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
-   - **Shaman games (multiple Bakers)**: Shaman swaps villagers to Baker at game start. Swapped Bakers say "I was a [their original role]" (self-ID, NOT Baker ability revealing previous card). Original Baker says "I am the original Baker." **Enter Druid "Wretch" result as `card druid <pos> <targets> Wretch`** (not `none`) — evil Druid lying by claiming an outcast. **Use `pd_check` command (NOT `card pd_check`)** for PD ability results. Lost asc46_v1 to wrong data entry + Baker chain bug.
+   - **Shaman games (multiple Bakers)**: Shaman swaps villagers to Baker at game start. Swapped Bakers say "I was a [original role]" (self-ID). Original Baker says "I am the original Baker."
+   - **Druid "Wretch" result**: enter as `card druid <pos> <targets> Wretch` (not `none`) — evil Druid lying by claiming an outcast.
+   - **PD ability**: `pd_check <pd_pos> <target> corrupted <evil_pos>` or `pd_check <pd_pos> <target> clean`. Use `pd_check`, NOT `card pd_check` (asc46_v1).
 
 ### Solve & Act
-10. `python game_loop.py next` -- **do what it says**. Warns if card entries missing or HP inconsistent.
-11. **Abilities**: click card -> click targets -> enter result -> `ability_used <pos>` -> `next`
-    - WARNING: clicking a card with an unused active ability activates THAT ability instead of selecting as target
-12. **Execute**: Dismiss mark menu first by clicking center board `(1280, 690)`, THEN `safe_click btn_execute_sword` -> click target -> screenshot -> `execute <pos> <evil_role|good>`. Execute command auto-prints HP reminder. The mark menu (bottom-right) can overlap `btn_execute_sword` causing template match failure.
-13. Repeat `next` until game ends
+10. `python game_loop.py next` — **do what it says**. Warns on missing entries or HP inconsistency. Auto-executes definite-evil or lookahead forced-safe picks (confidence ≥ 20%). Use `next --plan` or `next --dry` for print-only inspection.
+11. **Abilities**: click card → click targets → enter result → `ability_used <pos>` → `next`. WARNING: clicking a card with an unused active ability activates THAT ability instead of selecting it as a target.
+12. **Execute**: click center board `(1280, 690)` to dismiss mark menu → `safe_click btn_execute_sword` → click target → screenshot → `execute <pos> <evil_role|good>`. Auto-prints HP reminder.
+13. Repeat `next` until game ends.
 
 ### End
-14. Screenshot end screen. Read true evils + check `<Corrupted>` tags. **Note: game auto-advances to next village after "Next" click — screenshot BEFORE clicking Next if you need end-screen details.** End-screen dialogs: "Next" at ~(1280, 865), "Continue" (score summary) at ~(1280, 950). Ascension-complete dialogs may need the same y range.
-15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` -- auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided manually. Still accepts manual override. **CRITICAL: only EVIL positions go in the dict. Do NOT include night-killed Good cards (e.g. Lilis-killed Bard) — game_over treats every key as an executed evil and pollutes `executed`/`true_evil_positions`. Lost asc54_v4 to a regression failure for this reason. If a Good card was night-killed, leave it out of the manual evils string entirely.**
+14. Screenshot end screen. Read true evils + check `<Corrupted>` tags. Game auto-advances after "Next" click — screenshot BEFORE clicking Next if you need end-screen details.
+15. `python game_loop.py game_over win/loss <name> "<pos=Role,...>" "[notes]"` — auto-saves test, runs single replay, runs full v2 regression, prints commit checklist. `game_over` auto-reads true evils from memory_reader when not provided. **Only EVIL positions in the dict.** Do NOT include night-killed Good cards — every key is treated as an executed evil (asc54_v4).
 16. Follow the printed checklist: commit, push, analyze loss if applicable.
 
 ## Village Timing (Asc 45+)
 Track time per village from deck read to game_over. Goal: measure automation speedup.
-- **Start timer** when deck is read (after clicking Next on previous victory)
-- **Stop timer** when game_over command completes
-- Log format in commit: `Xm:Ys` (e.g., `3m:45s`)
+- **Start timer** when deck is read (after clicking Next on previous victory).
+- **Stop timer** when `game_over` completes.
+- Log format in commit: `Xm:Ys` (e.g., `3m:45s`).
 
 ## Deck Read: Memory vs Screenshot Accuracy
 Memory reader `--deck` reads the role POOL (all possible roles). Screenshot shows pool + HEADER (board counts: V=N, O=N).
-- **Memory reader deck** is 100% accurate for role names (confirmed across 7 Asc44 villages)
-- **Memory reader does NOT read header counts** (nv=, no=). These must come from screenshot or manual entry.
-- **Goal**: If we can read nv/no from memory, eliminate the deck screenshot entirely. Needs `GameData` IL2CPP offset work.
+- Memory reader deck is 100% accurate for role names (confirmed across 7 Asc44 villages).
+- Memory reader does NOT read header counts (`nv=`, `no=`). These must come from screenshot or manual entry.
+- **Goal**: read nv/no from memory to eliminate the deck screenshot. Needs `GameData` IL2CPP offset work.
 
-## Memory Reader -- Continuous Validation
+## Memory Reader — Continuous Validation
 Reads game state from process memory (`memory_reader.py`). Goal: replace the visual pipeline entirely.
 
-**Clue reading (Phase 2, confirmed working Asc44):**
-- `savedAct` (0x158): speech bubble text string — works for passive AND active ability results
-- `actedInfos` (0x128): List of {desc, targets} — includes referenced position numbers
-- `runtimeData` (0x68): Enlightened direction enum, Alchemist cures, Baker original role
-- `auto_card` uses these to auto-enter cards. Asc44 v7: 6/6 cards auto-entered, fully automated win.
+**Clue reading (Phase 2, confirmed Asc44):**
+- `savedAct` (0x158): speech bubble text — works for passive AND active ability results.
+- `actedInfos` (0x128): List of {desc, targets} including referenced position numbers.
+- `runtimeData` (0x68): Enlightened direction, Alchemist cures, Baker original role.
+- `auto_card` uses these to auto-enter cards.
 
-Every screenshot, memory reader reads state and compares against what the screenshot shows. Screenshot is ground truth. **Any mismatch = stop the game, diagnose, fix, verify, resume.**
+Every screenshot, memory reader reads state and compares against what the screenshot shows. Screenshot is ground truth. **Any mismatch = stop, diagnose, fix, verify, resume.**
 
 **Notes**:
-- Multi-village: FIXED. Uses Unity native object name at `m_CachedPtr(0x10)+0x48` (always correct) with `characterId` fallback.
-- Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` -- INIT entries have true roles in reverse position order.
-- Name mappings: Gambler->Gemcrafter, Imp->Chancellor, etc. (see DISPLAY_NAMES dict).
+- Multi-village: fixed. Uses Unity native object name at `m_CachedPtr(0x10)+0x48` with `characterId` fallback.
+- Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` — INIT entries have true roles in reverse position order.
+- Name mappings: Gambler→Gemcrafter, Imp→Chancellor, etc. (see `DISPLAY_NAMES`).
 
 ## Setup
-- Screen: 2560x1440, Python 3.13, Rust 2021 edition
-- Python dependencies: `mss`, `pyautogui`, `Pillow`
-- Cargo workspace at repo root (`Cargo.toml`); Rust crates in `crates/`
-- `game_loop.py` (CLI/session), `solver.py` (Python solver), `strategy.py` (action selection), `knowledge_base.py` (roles), `screenshot.py`, `mouse.py`, `card_vision.py`
-- **Test directories**: `tests/cases_v2/` (new, card_vision pipeline), `tests/cases/` (legacy, manual entry). Solver work validates against v2 only.
-- **REPL mode**: `python game_loop.py repl` -- persistent process, no import overhead per command. Uses `REPL_READY`/`CMD_DONE` sentinels.
+- Screen: 2560x1440, Python 3.13, Rust 2021 edition.
+- Python: `mss`, `pyautogui`, `Pillow`.
+- Cargo workspace at repo root; Rust crates in `crates/`.
+- **Test directories**: `tests/cases_v2/` (card_vision pipeline, default for `game_over`), `tests/cases/` (legacy, kept for reference, not run).
+- **REPL mode**: `python game_loop.py repl` — persistent process, no import overhead per command. Uses `REPL_READY`/`CMD_DONE` sentinels.
 
 ## Rust Solver (`crates/solver-core`)
-- **Rust solver is PRIMARY** -- `game_loop.py` calls `rust_solve_to_objects()` exclusively. Python `solve()` is no longer called.
-- **Persistent daemon**: `--daemon` mode keeps solver binary alive across calls. Falls back to one-shot if daemon fails.
-- **Fix solver bugs in Rust** (`crates/solver-core`), not Python (`solver.py`).
-- Rust port of `solver.py` — same constraint logic, reads the same `tests/cases_v2/` JSON files
-- Modules: types, knowledge_base, geometry, corruption, scenario, validators, solver
-- Build: `cargo build --release` | Test: `cargo test --release` (replays all 125 v2 test cases)
-- CLI binary: `crates/solver-cli/` → `target/release/demon-bluff-solver.exe` (reads GameState JSON from stdin, writes SolverResult JSON to stdout)
+- **Rust solver is PRIMARY** — `game_loop.py` calls `rust_solve_to_objects()` exclusively. Fix solver bugs in Rust, not Python.
+- **Persistent daemon**: `--daemon` mode keeps solver binary alive across calls; falls back to one-shot.
+- Build: `cargo build --release` | Test: `cargo test --release --test simulation`.
 - Python bridge: `rust_solver.py` wraps the CLI binary via subprocess.
 - Game loop, strategy, screenshots, memory reader, card vision remain Python.
 
 ## Gotchas (working correctly but surprising)
-- **Doppelganger counts in nv, not no (header)**: When Doppelganger is on the board, the top-right header shows it in the villager count, not the outcast count. Solver handles this correctly via `n_disguisers` allowance (`solver.py:828-832`, `crates/solver-core/src/validators/mod.rs:829-902`). Confirmed asc28_v7, asc29_v4, asc54_v7. Do NOT try to "correct" the header — enter `no=` as displayed.
-- **Two Bakers from a single-Baker pool** (no Shaman): Baker conversion chain can activate at game start, producing an "original Baker" + one or more "I was a <Role>" Bakers. Deck pool has 1 Baker; board shows 2. Solver's Baker validator (`crates/solver-core/src/validators/mod.rs:688-988`) handles this; chain ordering is enforced via reveal_order. Confirmed asc54_v5.
-- **Drunk counts as Villager in header**: `board_outcast_count` may undercount when Drunk is on board. Solver's `n_disguisers` allowance handles this too.
-- **next command auto-executes by default**: `next` now runs `auto_next` (auto-exec for definite-evil OR lookahead forced-safe picks with confidence ≥ 20%). Use `next --plan` or `next --dry` for print-only inspection. Honor Rule compliant: solver's top pick is always executed where safe.
+See `memory/project_open_solver_issues.md` for the full list. Highlights:
+- **Doppelganger counts in nv, not no** (header). Solver handles via `n_disguisers` allowance. Enter `no=` as displayed.
+- **Two Bakers from a single-Baker pool** (no Shaman) is valid — Baker conversion chain activates at game start.
+- **Drunk counts as Villager in header** — `board_outcast_count` may undercount. Handled.
+- **`next` auto-executes by default** (≥20% confidence). Use `next --plan` or `--dry` for print-only.
+- **Baa warning applies to deck-VIEW outcast count, not HUD.** Top-right HUD counts Baa as Demon (1D). Deck POOL screen counts Baa as +1 fake Outcast. If reading `no=` from HUD, do NOT subtract 1 (asc75_v3).
+- **Dreamer ability patched (asc75_v6):** new `Dreamer2` class picks 2 characters + 1 role (old was 1 target + 1 role). Rust solver now validates the ambiguous `{targets, evil_role_options}` output shape (asc77 post-mortem). **Firing Dreamer manually is PREFERRED** when the solver recommends it — it's often decisive for 50/50 picks (e.g. Bombardier disambiguation; asc77_v7 loss). Flow: click Dreamer card → pick 2 chars → pick 1 role → memory_reader auto-parses the "Among X, Y there is: R1 or R2" string. Only use `ability_used <pos>` if you've confirmed Dreamer truly can't narrow. Warning: while in target-selection mode, do NOT re-click the Dreamer card itself — that re-activates/cancels and costs 2HP.
 
 ## Game Overview
-Puzzle/deduction game. Circle of face-down cards -- reveal for role info, deduce Evil, execute them. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.
+Puzzle/deduction game. Circle of face-down cards — reveal for role info, deduce Evil, execute. Evil disguises as Villagers and lies. Good can become corrupted (unreliable info). Win by executing all Evil before HP runs out.

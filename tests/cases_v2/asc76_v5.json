@@ -1,0 +1,125 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "good_role": "Rambler"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 4
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CW",
+        "copied_role": "Enlightened"
+      }
+    }
+  ],
+  "executed": [
+    6,
+    7
+  ],
+  "confirmed_evil": [
+    6,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Chancellor",
+    "7": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 8,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Judge",
+      "Hunter",
+      "Medium",
+      "Scout",
+      "Poet"
+    ],
+    "outcasts": [
+      "Rambler",
+      "Wretch"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 2,
+  "name": "asc77_v5",
+  "true_evil_positions": {
+    "6": "Chancellor",
+    "7": "Lilis"
+  },
+  "notes": "asc77 v5 WIN 8HP, Lilis game, clean Chancellor+Lilis execution from full-reveal solver."
+}

@@ -1,0 +1,172 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Pooka",
+        "distance": 3
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Left"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          8
+        ],
+        "minion_role": "Poisoner",
+        "copied_role": "Oracle"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          5,
+          9
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    4,
+    1,
+    2
+  ],
+  "confirmed_evil": [
+    4,
+    1,
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Poisoner",
+    "1": "Minion",
+    "2": "Pooka"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 5,
+      "target_pos": 1,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 9,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Scout",
+      "Empress",
+      "Judge",
+      "Alchemist",
+      "Poet",
+      "Slayer",
+      "Architect"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Poisoner"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    9,
+    8,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc69_v1",
+  "true_evil_positions": {
+    "1": "Minion",
+    "2": "Pooka",
+    "4": "Poisoner"
+  },
+  "notes": "10HP perfect. PD clean #1, Judge #5 lying, Slayer failed (corrupted), then EXECs #4 Poisoner (85%), #1 Minion (60%), #2 Pooka (33%). 3 probabilistic in a row all correct."
+}

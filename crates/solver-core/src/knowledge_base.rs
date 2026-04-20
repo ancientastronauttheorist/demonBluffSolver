@@ -76,7 +76,8 @@ pub static ALL_CARDS: &[Card] = &[
     Card { name: "Slayer",         faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: true,  corrupted_note: false },
     Card { name: "Witness",        faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
 
-    // ── Outcasts (Good) ── 5 cards
+    // ── Outcasts (Good) ── 6 cards
+    Card { name: "Rambler",        faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Drunk",          faction: Faction::Outcast,  alignment: Alignment::Good, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: true },
     Card { name: "Wretch",         faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Bombardier",     faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
@@ -141,9 +142,9 @@ mod tests {
 
     #[test]
     fn test_card_count() {
-        assert_eq!(ALL_CARDS.len(), 40);
+        assert_eq!(ALL_CARDS.len(), 41);
         assert_eq!(ALL_CARDS.iter().filter(|c| c.faction == Faction::Villager).count(), 24);
-        assert_eq!(ALL_CARDS.iter().filter(|c| c.faction == Faction::Outcast).count(), 5);
+        assert_eq!(ALL_CARDS.iter().filter(|c| c.faction == Faction::Outcast).count(), 6);
         assert_eq!(ALL_CARDS.iter().filter(|c| c.faction == Faction::Minion).count(), 8);
         assert_eq!(ALL_CARDS.iter().filter(|c| c.faction == Faction::Demon).count(), 3);
     }

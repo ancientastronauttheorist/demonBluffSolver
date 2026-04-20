@@ -1,0 +1,139 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          5,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 5,
+        "is_lying": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1
+      }
+    }
+  ],
+  "executed": [
+    4,
+    2,
+    9
+  ],
+  "confirmed_evil": [
+    4,
+    9
+  ],
+  "confirmed_good": [
+    5,
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Lilis",
+    "9": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "executed_good_corrupted": {
+    "2": false
+  },
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Knight",
+      "Hunter",
+      "Empress",
+      "Scout",
+      "Gemcrafter",
+      "Confessor"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Drunk"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    4
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc70_v7",
+  "true_evil_positions": {
+    "4": "Lilis",
+    "9": "Witch"
+  },
+  "notes": "3HP FINAL village Asc70 COMPLETE. Lilis+Witch game, Lilis killed #8 Drunk night 1 (2HP), night 2 no kill (2HP). Judge #4 (Lilis) lied #5 lying. Knight #5 immunity free-check. Exec #4 Lilis 60%, #2 Empress wrong (-5 HP), #9 Witch 100%."
+}

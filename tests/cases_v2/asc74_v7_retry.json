@@ -1,0 +1,162 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 6
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          9
+        ],
+        "minion_role": "Puppeteer"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6
+        ],
+        "minion_role": "Twin_Minion"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    2,
+    1,
+    4,
+    7
+  ],
+  "confirmed_evil": [
+    2,
+    1,
+    4,
+    7
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Puppet",
+    "1": "Puppeteer",
+    "4": "Twin_Minion",
+    "7": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Oracle",
+      "Witness",
+      "Dreamer",
+      "Lover",
+      "Bard",
+      "Fortune Teller"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    7,
+    8
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v7_retry",
+  "true_evil_positions": {
+    "1": "Puppeteer",
+    "2": "Puppet",
+    "4": "Twin_Minion",
+    "7": "Baa"
+  },
+  "notes": "10HP PERFECT retry after v7 loss. Puppeteer+Puppet at #1/#2, Twin Minion disguised as Oracle at #4, Baa at #7. Clean solver chain: exec #2 Puppet (100%), exec #1 Puppeteer (100%), Dreamer-Baa ambig (ability_used only), FT#8 cleared {3,5}, exec #4 Twin Minion (100%), lookahead-forced #7 Baa (50%). ASC74 COMPLETED."
+}

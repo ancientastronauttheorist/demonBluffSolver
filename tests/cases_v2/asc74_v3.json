@@ -1,0 +1,166 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": true,
+        "silenced_by": 3
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5
+        ],
+        "minion_role": "Chancellor"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          6
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          5,
+          1
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    7,
+    2
+  ],
+  "confirmed_evil": [
+    7,
+    2
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "7": "Chancellor",
+    "2": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 8,
+      "target": 7,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Judge",
+      "Bishop",
+      "Jester",
+      "Oracle",
+      "Fortune Teller",
+      "Rambler"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    8,
+    3,
+    5,
+    6,
+    1
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc74_v3",
+  "true_evil_positions": {
+    "2": "Pooka",
+    "7": "Chancellor"
+  },
+  "notes": "Perfect 10HP. Doppelganger on board copying FT. Jester corrupted ability silenced Rambler #2. Solver nailed it."
+}

@@ -1,0 +1,183 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 7
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Architect"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          7,
+          10,
+          3
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Architect",
+      "info_text": "",
+      "info_parsed": {
+        "side": "Right"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 5
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "position": 10,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Baker"
+      }
+    }
+  ],
+  "executed": [
+    2,
+    6,
+    9,
+    10
+  ],
+  "confirmed_evil": [
+    2,
+    6,
+    10
+  ],
+  "confirmed_good": [
+    9
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Poisoner",
+    "6": "Pooka",
+    "10": "Minion"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 7,
+      "target": 2,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {
+    "9": true
+  },
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Architect",
+      "Baker",
+      "Lover",
+      "Bishop",
+      "Gemcrafter",
+      "Jester",
+      "Witness"
+    ],
+    "outcasts": [
+      "Plague Doctor"
+    ],
+    "minions": [
+      "Poisoner",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    7
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc73_v6_retry",
+  "true_evil_positions": {
+    "2": "Poisoner",
+    "6": "Pooka",
+    "10": "Minion"
+  },
+  "notes": "5HP. PD revealed #2 clean. Lookahead forced-win chain (Poisoner, Pooka, and wrong-exec Empress #9 corrupted, then Minion #10 definite)."
+}

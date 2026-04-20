@@ -109,9 +109,13 @@ VILLAGERS = [
 ]
 
 # ============================================================
-# OUTCASTS (Good) - 5 cards
+# OUTCASTS (Good) - 6 cards
 # ============================================================
 OUTCASTS = [
+    Card("Rambler", Role.OUTCAST, Alignment.GOOD,
+         "I tell you something really interesting. If Picked (once): I am Silenced if the character "
+         "who Picked me is a Liar. If Lies: I get Silenced if picked by a NON-Liar.",
+         lies=False, disguises=False),
     Card("Drunk", Role.OUTCAST, Alignment.GOOD,
          "I Disguise as a random not in play Villager. I am Corrupted and I Lie. I can not be Cured.",
          lies=True, disguises=True, corrupted_note=True),

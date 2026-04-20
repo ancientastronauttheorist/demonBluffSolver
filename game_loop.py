@@ -71,6 +71,12 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
+def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) -> CardInfo:
+    info = {"silenced": silenced}
+    if silenced_by is not None:
+        info["silenced_by"] = silenced_by
+    return CardInfo(pos, "Rambler", info_parsed=info)
+
 def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
     return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
 
@@ -834,9 +840,11 @@ class GameSession:
         ability_name = (action.ability_name or "").lower().replace(" ", "_")
 
         # v1: Slayer and Plague Doctor use different command paths
-        if ability_name in ("slayer", "plague_doctor"):
+        # Dreamer: game patch added 2-character pick (Dreamer2 class, ConjourInfo(Character,Character,string)).
+        # Solver still models old 1-target Dreamer; UI auto-click breaks. Manual for now.
+        if ability_name in ("slayer", "plague_doctor", "dreamer"):
             return {"success": False, "info_parsed": None,
-                    "error": f"{action.ability_name} uses slayer_result/pd_check commands — handle manually"}
+                    "error": f"{action.ability_name} requires manual handling (see CLAUDE.md; Dreamer patch awaiting new-semantics support)"}
 
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
@@ -956,8 +964,20 @@ class GameSession:
         # Route USE_ABILITY to auto_use_ability (v1: skips Slayer + Plague Doctor)
         if action.action_type == "use_ability":
             ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
-            if ability_name_lower in ("slayer", "plague_doctor"):
-                print(f"\n  [auto_next] {action.ability_name} uses slayer_result/pd_check — manual action needed.")
+            if ability_name_lower in ("slayer", "plague_doctor", "dreamer"):
+                if ability_name_lower == "dreamer":
+                    # Dreamer2 patch: new 2-char+1-role UI. Solver now validates
+                    # the ambiguous output shape ({targets, evil_role_options}).
+                    # Manual fire is PREFERRED when solver recommends — it's
+                    # often decisive (e.g. asc77 v7 Bombardier 50/50).
+                    print(f"\n  [auto_next] Dreamer is the recommended info-gathering move — FIRE MANUALLY:")
+                    print(f"    1. Click #{action.position} (Dreamer card)")
+                    print(f"    2. Pick 2 characters (Dreamer2 requires 2)")
+                    print(f"    3. Pick 1 role from the menu")
+                    print(f"    4. The result auto-parses via memory_reader.")
+                    print(f"    Only use `ability_used {action.position}` if you've confirmed Dreamer truly can't help (e.g. all suspects already narrowed).")
+                else:
+                    print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with card/slayer_result/pd_check.")
                 return action, result, None
             print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
             exec_result = self.auto_use_ability(action)
@@ -1212,10 +1232,25 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session) -> di
 # ============================================================
 
 def _parse_role_list(spec: str) -> list[str]:
-    """Parse 'Knitter,Scout,Enlightened' into list."""
+    """Parse 'knitter,scout,enlightened' into list of canonical role names.
+
+    Case-insensitive and accepts underscores or spaces. Unknown tokens
+    pass through as Title Case so downstream warnings still fire.
+    """
     if not spec or spec.lower() == "none":
         return []
-    return [r.strip() for r in spec.split(",") if r.strip()]
+    from knowledge_base import CARDS_BY_NAME
+    canonical_by_key = {
+        name.lower().replace(" ", "_"): name for name in CARDS_BY_NAME
+    }
+    out = []
+    for raw in spec.split(","):
+        token = raw.strip()
+        if not token:
+            continue
+        key = token.lower().replace(" ", "_")
+        out.append(canonical_by_key.get(key, token.replace("_", " ").title()))
+    return out
 
 
 def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
@@ -1303,6 +1338,11 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             return card_confessor(pos, True)
         if 'good' in clue.lower() or 'clean' in clue.lower():
             return card_confessor(pos, False)
+
+    # --- Rambler: silenced <=> no quote text ---
+    if role_lower == 'rambler':
+        silenced = not clue.strip()
+        return card_rambler(pos, silenced)
 
     # --- Bard: "no Corrupted" or "X card(s) away from Corrupted" ---
     if role_lower == 'bard':
@@ -1441,6 +1481,17 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             if m:
                 return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": int(m.group(1)), "copied_role": "Lover"})
             return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": 0, "copied_role": "Lover"})
+        # Scout pattern: "<EvilRole> is N cards away from closest Evil"
+        # Must come before Hunter ("I am N cards away..."): both contain "closest evil".
+        m_scout = re.search(r'^\s*([A-Z][\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
+        if m_scout and 'away' in cl and ('nearest evil' in cl or 'closest evil' in cl):
+            candidate = m_scout.group(1).strip()
+            if candidate.lower() not in ('i', 'i am'):
+                return CardInfo(pos, "Poet", info_parsed={
+                    "evil_role": candidate,
+                    "distance": int(m_scout.group(2)),
+                    "copied_role": "Scout",
+                })
         # Hunter pattern
         if ('nearest evil' in cl or 'closest evil' in cl) and 'away' in cl:
             m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
@@ -1550,6 +1601,15 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "jester":
         targets = [int(x) for x in args[2].split(",")]
         return card_jester(pos, targets, int(args[3]))
+    elif role == "rambler":
+        # Accepted forms:
+        #   card rambler 2 silenced            -> silenced, picker unknown
+        #   card rambler 2 silenced 6          -> silenced, picker was #6
+        #   card rambler 2 talking             -> quote shown
+        token = args[2].lower() if len(args) > 2 else ""
+        silenced = token in ("silenced", "quiet", "silent", "true", "yes", "1")
+        silenced_by = int(args[3]) if len(args) > 3 and args[3].isdigit() else None
+        return card_rambler(pos, silenced, silenced_by)
     elif role == "dreamer":
         return card_dreamer(pos, int(args[2]), args[3])
     elif role == "judge":
