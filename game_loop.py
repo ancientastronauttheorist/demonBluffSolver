@@ -848,9 +848,13 @@ class GameSession:
 
         # Step 7: HP update
         if not was_evil:
+            from knowledge_base import wrong_exec_cost_for
+            true_role = target_card.get('true_role')
+            cost = wrong_exec_cost_for(true_role, default=self.wrong_exec_cost)
             old_hp = self.hp
-            self.hp -= self.wrong_exec_cost
-            print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}")
+            self.hp -= cost
+            suffix = f" ({true_role}: -{cost})" if cost != self.wrong_exec_cost else ""
+            print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}{suffix}")
         else:
             print(f"  [auto_exec] Correct execution. HP remains {self.hp}")
 
@@ -2526,6 +2530,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     else:
                         # Try to auto-detect corruption status from memory reader
                         was_corrupted = None
+                        mr_true_role = None
                         try:
                             from memory_reader import MemoryReader
                             reader = MemoryReader()
@@ -2535,6 +2540,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                                     if cards:
                                         target_char = next((c for c in cards if c.get('position') == pos), None)
                                         if target_char:
+                                            mr_true_role = target_char.get('true_role')
                                             statuses = target_char.get('statuses', [])
                                             if 'Corrupted' in statuses:
                                                 was_corrupted = True
@@ -2550,6 +2556,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                             print(f"  WARNING: Memory reader error ({e})")
                         if was_corrupted is None:
                             print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
+                        # Stash for the post-execute HP warning
+                        session._last_exec_mr_true_role = mr_true_role
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
@@ -2576,8 +2584,12 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if was_evil:
                 print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
             elif was_evil is False:
-                new_hp = session.hp - session.wrong_exec_cost
-                print(f"  WARNING: Wrong execution! HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
+                from knowledge_base import wrong_exec_cost_for
+                mr_true_role = getattr(session, '_last_exec_mr_true_role', None)
+                cost = wrong_exec_cost_for(mr_true_role, default=session.wrong_exec_cost)
+                new_hp = session.hp - cost
+                suffix = f" ({mr_true_role}: -{cost})" if mr_true_role and cost != session.wrong_exec_cost else ""
+                print(f"  WARNING: Wrong execution!{suffix} HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
             else:
                 print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
         return None
