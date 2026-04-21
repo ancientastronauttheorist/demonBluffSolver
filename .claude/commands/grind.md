@@ -1,44 +1,51 @@
 ---
-description: Start the autonomous ascension grinder in the background and stream per-village summaries to this chat. Halts surface here and in a PushNotification.
+description: Start the autonomous ascension grinder in the background and stream per-village summaries to this chat. Ascension-complete and halts surface here (and as PushNotifications from the session).
 ---
 
-Start the grinder and watch its output stream.
+Start the grinder and watch its output stream. One session plays the whole current ascension — loop semantics live inside `/play-loop`, not in the wrapper.
 
 ## What to do
 
-1. Make sure we're not already grinding. Check: is `.play_loop_status` present? If yes and it's not `ok`, stop and tell the user — a previous halt needs review before a new grind.
-2. Start the wrapper under `Monitor` with `persistent: true`. Filter to only the lines worth interrupting for:
+1. Start the wrapper under `Monitor` with `persistent: true`. Filter to only the lines worth interrupting for:
 
    ```bash
-   bash scripts/play_loop.sh 2>&1 | grep -E --line-buffered "VILLAGE_END|WRAPPER_EXIT"
+   bash scripts/play_loop.sh 2>&1 | grep -E --line-buffered "VILLAGE_END|ASCENSION_COMPLETE|HALT|WRAPPER_EXIT"
    ```
 
-   Description for the monitor: `"grind: per-village end + wrapper exit"`.
+   Description for the monitor: `"grind: per-village + ascension-complete + halt + wrapper exit"`.
 
-3. Tell the user: "Grinder started. I'll post a summary after each village ends. Halts surface here."
+2. Tell the user: "Grinder started. I'll post a summary after each village ends and when the ascension completes. Halts surface here."
 
 ## Handling events as they arrive
 
-Each `VILLAGE_END` line is one village completing. When you see one:
-
-- Parse `village=<N>` and `status=<ok|halt|crash>` and `elapsed=<Xs>`.
+**`=== VILLAGE_END village=<N> status=<win|loss> hp=<HP> ascension=<asc_tag> ===`** — one village committed:
 - Pull the tip commit title: `git log -1 --pretty=format:'%s'` (one-shot Bash). That's the village's headline.
-- Post a one-liner in this chat: `village <N> · <status> · <elapsed> · <commit title>`.
-- Do NOT send a PushNotification for `status=ok` — the user is watching this chat.
+- Post a one-liner in this chat: `village <N> · <status> · <hp>HP · <commit title>`.
+- Do NOT send a `PushNotification` — the user is watching this chat.
 
-When you see a `WRAPPER_EXIT` line:
+**`=== ASCENSION_COMPLETE asc=<N> final_hp=<HP> wins=<N> losses=<count> ===`** — ascension done:
+- Pull the tip commit title.
+- Post: `🏆 Ascension <N> complete · <hp>HP · <wins> wins / <losses> losses · <commit title>`.
+- The session already sent the `PushNotification`. Don't duplicate.
 
-- The grind stopped. Tell the user why (`reason=halt | crash | preflight-stale-status`).
-- If `halt`: the halting village session already committed a fix branch and sent a PushNotification per the protocol. Surface the branch name (`git branch --show-current` in the last village's worktree if applicable, or `git log -1 --all --source` to find the `halt/...` branch).
-- If `crash`: the wrapper is reporting the village session died without writing status. Propose next steps: inspect the log tail (`tail -50 logs/grind_<date>.log`), look at `git status`, decide whether to resume.
-- Stop monitoring. No auto-restart — the user decides.
+**`=== HALT reason="..." branch=<halt/...> ===`** — session halted on a bug:
+- Post: `⛔ HALT · <reason> · branch <halt/...>`.
+- The session already committed the fix branch and sent the `PushNotification`. Don't duplicate.
+- Surface `git log -1 <branch> --pretty=format:'%s'` for context.
+
+**`=== WRAPPER_EXIT reason=<ascension-complete|halt|crash> ... ===`** — the grind stopped:
+- Tell the user why.
+- If `ascension-complete`: celebrate briefly, no action needed.
+- If `halt`: the halt marker above already surfaced detail.
+- If `crash`: the session died without emitting a terminal marker. Propose next steps: inspect the log tail (`tail -50 logs/grind_<date>.log`), look at `git status`, decide whether to resume.
+- Stop monitoring. No auto-restart — the user decides whether to begin the next ascension.
 
 ## Stopping the grind manually
 
-If the user asks to stop: call `TaskStop` on the monitor. The already-in-flight village session keeps running to completion (it's a separate process); only the *loop* stops. Confirm this to the user.
+If the user asks to stop: call `TaskStop` on the monitor. The underlying `claude -p` village session keeps running to whatever natural stopping point it reaches (committing the current village if possible); only the *monitor* detaches. Confirm this to the user.
 
 ## What this command does NOT do
 
-- Play villages itself. The wrapper + headless `claude -p` sessions do that.
+- Play villages itself. The wrapper + headless `claude -p` session do that.
 - Commit anything from this session. Every commit comes from the per-village session.
-- Retry on halt. Halts are always human-reviewed before resume.
+- Retry on halt or loop across ascensions. Halts and completions are always human-reviewed before starting a new ascension.

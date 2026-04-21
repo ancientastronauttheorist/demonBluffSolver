@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# play_loop.sh — autonomous ascension grinder.
+# play_loop.sh — autonomous ascension grinder (single-session launcher).
 #
-# Spawns a fresh `claude -p` session per village. Each session follows
-# memory/play_loop_protocol.md, signals completion via .play_loop_status,
-# and commits its own result.
+# Launches one `claude -p /play-loop` session and tees output to the day's
+# grind log. The session itself plays the whole current ascension (multiple
+# villages, including retries after losses) and exits on:
+#   - ascension complete (village 7 win)
+#   - halt (committed on halt/... branch, PushNotification sent)
+#   - hard crash (no terminal marker in stdout)
 #
-# Stop on .play_loop_status != "ok" or missing status file.
-# Kill with Ctrl-C at any time; the current village session is left to finish.
+# Per-village progress, ascension complete, and halt are all surfaced via
+# stdout markers (VILLAGE_END, ASCENSION_COMPLETE, HALT) that /grind greps.
 
 set -u
 
@@ -16,18 +19,13 @@ cd "$ROOT"
 LOG_DIR="$ROOT/logs"
 mkdir -p "$LOG_DIR"
 
-STATUS_FILE="$ROOT/.play_loop_status"
 DATE_TAG="$(date +%Y-%m-%d)"
 LOG_FILE="$LOG_DIR/grind_${DATE_TAG}.log"
-
-VILLAGE=0
 
 log() {
   printf '[%s] %s\n' "$(date +%H:%M:%S)" "$*" | tee -a "$LOG_FILE"
 }
 
-# Structured markers: one line, grep-friendly, emitted to stdout so Monitor can catch them.
-# Also tee'd into the log file for history.
 marker() {
   printf '%s\n' "$*" | tee -a "$LOG_FILE"
 }
@@ -36,52 +34,25 @@ log "=========================================="
 log "play_loop starting — logs: $LOG_FILE"
 log "=========================================="
 
-# Preflight: require a clean-ish working tree. Uncommitted halt state is a stop.
-if [ -f "$STATUS_FILE" ]; then
-  prev="$(cat "$STATUS_FILE" 2>/dev/null || echo '?')"
-  if [ "$prev" != "ok" ]; then
-    log "refusing to start: previous status was '$prev'. Review and delete $STATUS_FILE before resuming."
-    marker "=== WRAPPER_EXIT reason=preflight-stale-status prev=\"$prev\" ==="
-    exit 1
-  fi
-  rm -f "$STATUS_FILE"
-fi
+PROMPT='Run /play-loop per memory/play_loop_protocol.md.
 
-PROMPT='Run one iteration of /play-loop per memory/play_loop_protocol.md.
+You are inside the demonBluffSolver project. Read CLAUDE.md, MEMORY.md, and memory/play_loop_protocol.md before doing anything else. Play the current ascension through to completion (up to village 7, including retries on losses). Follow halt triggers and halt protocol strictly — do not silently paper over anomalies. Exit on ascension complete, halt, or hard crash.'
 
-You are inside the demonBluffSolver project. Read CLAUDE.md, MEMORY.md, and memory/play_loop_protocol.md before doing anything else. Play exactly one village: start → flip → enter → solve → act → game_over → commit. Follow the halt triggers and halt protocol strictly — do not silently paper over anomalies. Finish by writing either "ok" or "halt: <reason>" to .play_loop_status as your final action. Exit when done.'
+start_epoch=$(date +%s)
+claude -p --dangerously-skip-permissions "$PROMPT" 2>&1 | tee -a "$LOG_FILE"
+rc=$?
+elapsed=$(( $(date +%s) - start_epoch ))
 
-while true; do
-  VILLAGE=$((VILLAGE + 1))
-  log "---------- village #$VILLAGE ----------"
-  start_epoch=$(date +%s)
+log "session exited rc=$rc (elapsed ${elapsed}s)"
 
-  claude -p --dangerously-skip-permissions "$PROMPT" 2>&1 | tee -a "$LOG_FILE"
-  rc=$?
-
-  elapsed=$(( $(date +%s) - start_epoch ))
-  log "village #$VILLAGE session exited rc=$rc (elapsed ${elapsed}s)"
-
-  if [ ! -f "$STATUS_FILE" ]; then
-    log "HALT: no .play_loop_status written. Treating as crash."
-    marker "=== VILLAGE_END village=$VILLAGE status=crash elapsed=${elapsed}s reason=\"no status file\" ==="
-    marker "=== WRAPPER_EXIT reason=crash village=$VILLAGE ==="
-    exit 2
-  fi
-
-  status="$(cat "$STATUS_FILE")"
-  log "status: $status"
-
-  if [ "$status" = "ok" ]; then
-    marker "=== VILLAGE_END village=$VILLAGE status=ok elapsed=${elapsed}s ==="
-    rm -f "$STATUS_FILE"
-    continue
-  fi
-
-  # Anything non-"ok" is a halt.
-  marker "=== VILLAGE_END village=$VILLAGE status=halt elapsed=${elapsed}s reason=\"$status\" ==="
-  marker "=== WRAPPER_EXIT reason=halt village=$VILLAGE ==="
-  log "HALT: $status"
-  log "Leaving $STATUS_FILE in place for review."
+# Determine exit reason from the emitted markers (session writes its own).
+if grep -q '=== ASCENSION_COMPLETE' "$LOG_FILE"; then
+  marker "=== WRAPPER_EXIT reason=ascension-complete elapsed=${elapsed}s ==="
+  exit 0
+elif grep -q '=== HALT ' "$LOG_FILE"; then
+  marker "=== WRAPPER_EXIT reason=halt elapsed=${elapsed}s ==="
   exit 3
-done
+else
+  marker "=== WRAPPER_EXIT reason=crash elapsed=${elapsed}s rc=$rc ==="
+  exit 2
+fi
