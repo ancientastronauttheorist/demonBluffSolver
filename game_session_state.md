@@ -41414,3 +41414,114 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff
 
+
+---
+
+# New Game — 2026-04-21 11:45:47
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: 5
+- Outcasts: 1
+- Minions: 2
+- Demons: 1
+
+### [11:46:31] Revealed #1 Oracle
+Info: {'targets': [1, 7], 'minion_role': 'Twin_Minion'}
+
+### [11:46:31] Revealed #2 Wretch
+Info: {}
+
+### [11:46:31] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [11:46:31] Revealed #4 Dreamer
+Info: {}
+
+### [11:46:31] Revealed #5 Scout
+Info: {'evil_role': 'Twin Minion', 'distance': 1}
+
+### [11:46:31] Revealed #6 Empress
+Info: {'targets': [1, 4, 8]}
+
+### [11:46:31] Revealed #7 Oracle
+Info: {'targets': [3, 8], 'minion_role': 'Twin_Minion'}
+
+### [11:46:31] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [11:46:31] Revealed #9 Hunter
+Info: {'distance': 4}
+
+#### [11:46:43] Solver Output
+Scenarios: 0/0
+
+#### [11:46:43] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## Deck
+- Villagers: Empress, Dreamer, Oracle, Hunter, Confessor, Baker, Scout
+- Outcasts: Wretch
+- Minions: Twin Minion, Puppeteer
+- Demons: Baa
+
+#### [11:50:40] Solver Output
+Scenarios: 3/672
+Definite evil: ['#5', '#7', '#9']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #1=33%, #4=33%, #6=33%
+
+#### [11:50:40] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppeteer', 'Baa', 'Puppet'})
+
+#### [11:50:53] Solver Output
+Scenarios: 3/672
+Definite evil: ['#5', '#7', '#9']
+Definite good: ['#2', '#3', '#8']
+Evil probabilities: #1=33%, #4=33%, #6=33%
+
+#### [11:50:53] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Puppet', 'Baa', 'Puppeteer'})
+
+### [11:51:00] Executed #5 -> Puppet (EVIL)
+
+#### [11:51:05] Solver Output
+Scenarios: 1/84
+Definite evil: ['#5', '#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+
+#### [11:51:05] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [11:51:12] Executed #6 -> Puppeteer (EVIL)
+
+#### [11:51:16] Solver Output
+Scenarios: 1/42
+Definite evil: ['#5', '#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+
+#### [11:51:16] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Twin Minion'})
+
+### [11:51:23] Executed #7 -> Twin Minion (EVIL)
+
+#### [11:51:27] Solver Output
+Scenarios: 1/6
+Definite evil: ['#5', '#6', '#7', '#9']
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+
+#### [11:51:27] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [11:51:34] Executed #9 -> Baa (EVIL)
+
+## [11:51:52] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; deck entry fix (count-as-role-name bug self-corrected)
+

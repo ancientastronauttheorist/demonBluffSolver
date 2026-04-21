@@ -3828,6 +3828,13 @@
       "name": "asc78_v7",
       "notes": "10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff",
       "date": "2026-04-21 01:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v1",
+      "notes": "10HP perfect; deck entry fix (count-as-role-name bug self-corrected)",
+      "date": "2026-04-21 11:51"
     }
   ]
 }
