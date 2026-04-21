@@ -42156,3 +42156,121 @@ Notes: 6HP village 6/7 (Lilis game); -2HP two separate night phases (1 kill + 1 
 Final HP: 6
 Notes: 6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct.
 
+
+---
+
+# New Game — 2026-04-21 12:41:28
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Poet, Dreamer, Fortune Teller, Slayer, Empress
+- Outcasts: Plague Doctor, Bombardier, Doppelganger
+- Minions: Chancellor
+- Demons: Pooka
+
+### [12:41:48] Revealed #1 Plague_Doctor
+Info: {}
+
+### [12:41:48] Revealed #2 Fortune_Teller
+Info: {}
+
+### [12:41:48] Revealed #3 Dreamer
+Info: {}
+
+### [12:41:48] Revealed #4 Slayer
+Info: {}
+
+### [12:41:48] Revealed #5 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [12:41:48] Revealed #6 Slayer
+Info: {}
+
+### [12:41:48] Revealed #8 Bombardier
+Info: {}
+
+### [12:42:01] Revealed #7 Poet
+Info: {'targets': [1, 4, 8], 'copied_role': 'Empress'}
+
+#### [12:42:06] Solver Output
+Scenarios: 315/1488
+Evil probabilities: #4=31%, #3=31%, #5=29%, #2=27%, #8=25%, #6=24%, #7=21%, #1=12%
+
+#### [12:42:06] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 1.917 (adjusted 1.917) | timing x1.00
+
+#### [12:42:41] Solver Output
+Scenarios: 199/1488
+Evil probabilities: #4=35%, #3=34%, #6=32%, #2=30%, #8=27%, #7=21%, #5=20%, #1=2%
+
+#### [12:42:41] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#4']
+Reason: Entropy 2.149 (adjusted 1.809) | timing x1.00
+WARNING: Corruption risk: 32%
+
+### [12:43:20] Ability used at #3
+
+### [12:43:20] Revealed #3 Dreamer
+Info: {'targets': [4, 5], 'evil_role_options': ['Slayer', 'Pooka']}
+
+#### [12:43:25] Solver Output
+Scenarios: 86/1488
+Evil probabilities: #2=42%, #6=37%, #4=29%, #8=27%, #7=23%, #5=22%, #3=15%, #1=5%
+
+#### [12:43:25] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#4', '#5']
+Reason: Entropy 1.000 (adjusted 0.890) | follow-up bonus 0.274 | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [12:43:52] Revealed #2 Fortune Teller
+Info: {'targets': [4, 5], 'has_evil': True}
+
+### [12:43:52] Ability used at #2
+
+#### [12:43:53] Solver Output
+Scenarios: 43/1488
+Evil probabilities: #2=47%, #8=37%, #6=35%, #5=28%, #3=19%, #7=16%, #1=9%, #4=9%
+
+#### [12:43:53] Recommendation
+Action: **USE_ABILITY** #6 (Slayer) -> targets ['#2']
+Reason: Target #2 is 47% evil (adjusted 0.42)
+WARNING: Corruption risk: 9% -- Slayer ability disabled if corrupted
+
+#### [12:44:36] Solver Output
+Scenarios: 32/1488
+Evil probabilities: #6=47%, #5=38%, #8=31%, #2=28%, #3=19%, #1=12%, #4=12%, #7=12%
+
+#### [12:44:36] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#6']
+Reason: Target #6 is 47% evil (adjusted 0.34)
+WARNING: Corruption risk: 28% -- Slayer ability disabled if corrupted
+
+#### [12:45:08] Solver Output
+Scenarios: 19/1488
+Evil probabilities: #5=63%, #8=42%, #1=21%, #3=21%, #4=21%, #2=11%, #6=11%, #7=11%
+
+#### [12:45:08] Recommendation
+Action: **EXECUTE** #5
+Reason: No reveals available. #5 is 63% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 63% confident (budget: 2 wrong execs)
+
+### [12:45:37] Executed #5 -> Pooka (EVIL)
+
+#### [12:45:38] Solver Output
+Scenarios: 7/163
+Definite evil: ['#5']
+Definite good: ['#2', '#3', '#6', '#7']
+Evil probabilities: #1=57%, #8=29%, #4=14%
+
+#### [12:45:38] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 57% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 57% confident (budget: 2 wrong execs)
+
+### [12:46:11] Executed #1 -> Chancellor (EVIL)
+
+## [12:46:11] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP FINAL village 7/7 — ASCENSION 79 COMPLETE. PD (Chancellor disguise lie) + Dreamer2 + FT + Slayer x2 + probabilistic exec chain landed both evils.
+

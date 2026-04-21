@@ -3877,6 +3877,13 @@
       "name": "asc79_v6",
       "notes": "6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct.",
       "date": "2026-04-21 12:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v7",
+      "notes": "10HP FINAL village 7/7 \u2014 ASCENSION 79 COMPLETE. PD (Chancellor disguise lie) + Dreamer2 + FT + Slayer x2 + probabilistic exec chain landed both evils.",
+      "date": "2026-04-21 12:46"
     }
   ]
 }
