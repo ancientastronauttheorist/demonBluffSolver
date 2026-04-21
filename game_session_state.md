@@ -41688,3 +41688,128 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 5
 Notes: 5HP; wrong-exec #2 corrupted FT from click-before-exec-mode-cleared bug; Dreamer2 outcast validator halt+fix between kills
 
+
+---
+
+# New Game — 2026-04-21 12:17:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Lover, Jester, Confessor, Knitter, Druid, Baker
+- Outcasts: Doppelganger
+- Minions: Shaman
+- Demons: Pooka
+
+### [12:18:11] Revealed #1 Baker
+Info: {'original_role': 'Confessor'}
+
+### [12:18:11] Revealed #2 Knitter
+Info: {'evil_pairs': 0}
+
+### [12:18:11] Revealed #3 Druid
+Info: {}
+
+### [12:18:11] Revealed #4 Jester
+Info: {}
+
+### [12:18:11] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:18:11] Revealed #6 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:18:11] Revealed #7 Slayer
+Info: {}
+
+### [12:18:11] Revealed #8 Lover
+Info: {'evil_adjacent': 1}
+
+#### [12:18:16] Solver Output
+Scenarios: 30/336
+Definite good: ['#5', '#6']
+Evil probabilities: #1=57%, #8=40%, #4=33%, #3=30%, #2=23%, #7=17%
+
+#### [12:18:16] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#1', '#3', '#8']
+Reason: Expected posterior 13.7 scenarios (adjusted 14.2, info gain 1.083 bits) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [12:18:50] Revealed #4 Jester
+Info: {'targets': [1, 3, 8], 'evil_count': 1}
+
+#### [12:18:51] Solver Output
+Scenarios: 14/336
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=86%, #2=50%, #7=36%, #3=21%, #8=7%
+
+#### [12:18:51] Recommendation
+Action: **USE_ABILITY** #4 (Jester) -> targets ['#5', '#6', '#7']
+Reason: Expected posterior 5.9 scenarios (adjusted 6.3, info gain 1.150 bits) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [12:19:06] Ability used at #4
+
+#### [12:19:06] Solver Output
+Scenarios: 14/336
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=86%, #2=50%, #7=36%, #3=21%, #8=7%
+
+#### [12:19:06] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#1']
+Reason: Target #1 is 86% evil (adjusted 0.86) | EV=0.857
+
+#### [12:19:31] Solver Output
+Scenarios: 7/42
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=86%, #3=14%
+
+#### [12:19:31] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#2', '#4', '#5']
+Reason: Entropy 0.592 (adjusted 0.380) | timing x1.00
+WARNING: Corruption risk: 71%
+
+### [12:20:06] Revealed #3 Druid
+Info: {'targets': [2, 4, 5], 'found_outcast': None}
+
+#### [12:20:07] Solver Output
+Scenarios: 4/42
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=75%, #3=25%
+
+#### [12:20:07] Recommendation
+Action: **USE_ABILITY** #3 (Druid) -> targets ['#2', '#4', '#5']
+Reason: Entropy 0.811 (adjusted 0.608) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [12:20:24] Ability used at #3
+
+#### [12:20:24] Solver Output
+Scenarios: 4/42
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=75%, #3=25%
+
+#### [12:20:24] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (75% evil Pooka, 25% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+#### [12:20:34] Solver Output
+Scenarios: 4/42
+Definite evil: ['#1']
+Definite good: ['#4', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=75%, #3=25%
+
+#### [12:20:34] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (75% evil Pooka, 25% good Doppelganger).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [12:20:41] Executed #2 -> Pooka (EVIL)
+
+## [12:21:03] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; Slayer hit + forced-safe Pooka exec. Note: after card jester/druid entries, needed ability_used to prevent solver re-firing (no auto-mark on clue entry).
+

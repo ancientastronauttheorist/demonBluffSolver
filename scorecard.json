@@ -3842,6 +3842,13 @@
       "name": "asc79_v2",
       "notes": "5HP; wrong-exec #2 corrupted FT from click-before-exec-mode-cleared bug; Dreamer2 outcast validator halt+fix between kills",
       "date": "2026-04-21 12:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v3",
+      "notes": "10HP perfect; Slayer hit + forced-safe Pooka exec. Note: after card jester/druid entries, needed ability_used to prevent solver re-firing (no auto-mark on clue entry).",
+      "date": "2026-04-21 12:21"
     }
   ]
 }
