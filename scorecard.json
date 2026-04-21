@@ -3835,6 +3835,13 @@
       "name": "asc79_v1",
       "notes": "10HP perfect; deck entry fix (count-as-role-name bug self-corrected)",
       "date": "2026-04-21 11:51"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc79_v2",
+      "notes": "5HP; wrong-exec #2 corrupted FT from click-before-exec-mode-cleared bug; Dreamer2 outcast validator halt+fix between kills",
+      "date": "2026-04-21 12:15"
     }
   ]
 }

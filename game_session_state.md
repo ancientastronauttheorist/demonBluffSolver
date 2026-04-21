@@ -41525,3 +41525,166 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect; deck entry fix (count-as-role-name bug self-corrected)
 
+
+---
+
+# New Game — 2026-04-21 11:54:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Empress, Fortune Teller, Alchemist, Dreamer, Lover
+- Outcasts: Doppelganger
+- Minions: Poisoner
+- Demons: Baa
+
+### [11:55:25] Revealed #1 Dreamer
+Info: {}
+
+### [11:55:25] Revealed #2 Fortune_Teller
+Info: {}
+
+### [11:55:25] Revealed #3 Fortune_Teller
+Info: {}
+
+### [11:55:25] Revealed #4 Empress
+Info: {'targets': [2, 5, 6]}
+
+### [11:55:25] Revealed #5 Alchemist
+Info: {'cured_count': 2}
+
+### [11:55:25] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:55:25] Revealed #7 Knitter
+Info: {'evil_pairs': 0}
+
+### [11:55:25] Revealed #8 Lover
+Info: {'evil_adjacent': 0}
+
+#### [11:55:57] Solver Output
+Scenarios: 14/550
+Definite evil: ['#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+Evil probabilities: #3=64%, #2=36%
+
+#### [11:55:57] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Baa', 'Poisoner'})
+
+#### [11:56:01] Solver Output
+Scenarios: 14/550
+Definite evil: ['#5']
+Definite good: ['#1', '#4', '#6', '#7', '#8']
+Evil probabilities: #3=64%, #2=36%
+
+#### [11:56:01] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 14 scenarios (roles: {'Baa', 'Poisoner'})
+
+### [11:56:08] Executed #5 -> Baa (EVIL)
+
+#### [11:56:12] Solver Output
+Scenarios: 7/72
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7', '#8']
+
+#### [11:56:12] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 7 scenarios (roles: {'Poisoner'})
+
+### [11:56:37] Ability used at #3
+
+#### [11:56:43] Solver Output
+Scenarios: 7/72
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7', '#8']
+
+#### [11:56:43] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 7 scenarios (roles: {'Poisoner'})
+
+### [11:59:09] Revealed #3 Fortune Teller
+Info: {'targets': [1, 8], 'has_evil': True}
+
+#### [11:59:17] Solver Output
+Scenarios: 12/72
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #3=58%, #1=42%
+
+#### [11:59:17] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#2']
+Reason: Entropy 0.980 (adjusted 0.980) | timing x1.00
+
+### [12:01:46] Revealed #1 Dreamer
+Info: {'targets': [2, 6], 'evil_role_options': ['Baa', 'Doppelganger']}
+
+#### [12:01:57] Solver Output
+Scenarios: 5/72
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [12:01:57] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 5 scenarios (roles: {'Poisoner'})
+
+#### [12:02:57] Solver Output
+Scenarios: 5/72
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#4', '#6', '#7', '#8']
+
+#### [12:02:57] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 5 scenarios (roles: {'Poisoner'})
+
+#### [12:07:52] Solver Output
+Scenarios: 5/72
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #1=60%, #3=40%
+
+#### [12:07:52] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#2']
+Reason: Entropy 0.971 (adjusted 0.971) | timing x1.00
+
+### [12:08:01] Ability used at #1
+
+#### [12:08:02] Solver Output
+Scenarios: 5/72
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #1=60%, #3=40%
+
+#### [12:08:02] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 0.722 (adjusted 0.650) | timing x1.00
+WARNING: Corruption risk: 20%
+
+#### [12:13:18] Solver Output
+Scenarios: 5/72
+Definite evil: ['#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8']
+Evil probabilities: #1=60%, #3=40%
+
+#### [12:13:18] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#1', '#3']
+Reason: Entropy 0.722 (adjusted 0.650) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [12:14:46] Executed #2 -> GOOD (WRONG!)
+
+#### [12:14:50] Solver Output
+Scenarios: 1/60
+Definite evil: ['#3', '#5']
+Definite good: ['#1', '#2', '#4', '#6', '#7', '#8']
+
+#### [12:14:50] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [12:14:57] Executed #3 -> Poisoner (EVIL)
+
+## [12:15:16] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP; wrong-exec #2 corrupted FT from click-before-exec-mode-cleared bug; Dreamer2 outcast validator halt+fix between kills
+
