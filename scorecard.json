@@ -3814,6 +3814,34 @@
       "name": "asc78_v5",
       "notes": "5HP village 5/7 - Empress 75% pick was wrong (was Good), Pooka clean after",
       "date": "2026-04-21 00:38"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc78_v6",
+      "notes": "0 scenarios after Judge #3+#4 both 'not lying' on silenced Jester + #1 wrong exec (Baker-was-Lover); budget exhausted, Jester silenced by Rambler pre-ability",
+      "date": "2026-04-21 00:46"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc78_v6",
+      "notes": "0 scenarios halt mid-village; Judge #3+#4 both evil bluffs, Jester silenced",
+      "date": "2026-04-21 00:46"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc78_v6",
+      "notes": "HALT: 0 scenarios after Judge#3+#4 both-evil-both-not-lying + wrong exec #1 Baker-was-Lover",
+      "date": "2026-04-21 00:47"
+    },
+    {
+      "result": "loss",
+      "hp": 5,
+      "name": "asc78_v6",
+      "notes": "halt",
+      "date": "2026-04-21 00:47"
     }
   ]
 }

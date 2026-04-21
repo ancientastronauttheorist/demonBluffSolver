@@ -41172,3 +41172,116 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP village 5/7 - Empress 75% pick was wrong (was Good), Pooka clean after
 
+
+---
+
+# New Game — 2026-04-21 00:41:56
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Scout, Enlightened, Fortune Teller, Judge, Baker, Jester
+- Outcasts: Rambler, Drunk
+- Minions: Chancellor
+- Demons: Baa
+
+### [00:42:21] Revealed #1 Baker
+Info: {'original_role': 'Lover'}
+
+### [00:42:21] Revealed #2 Jester
+Info: {}
+
+### [00:42:21] Revealed #3 Judge
+Info: {}
+
+### [00:42:21] Revealed #4 Judge
+Info: {}
+
+### [00:42:21] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [00:42:21] Revealed #6 Rambler
+Info: {'silenced': False}
+
+### [00:42:21] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [00:42:21] Revealed #8 Baker
+Info: {'original_role': 'Enlightened'}
+
+#### [00:42:27] Solver Output
+Scenarios: 49/454
+Definite good: ['#5']
+Evil probabilities: #1=73%, #7=43%, #2=22%, #3=22%, #4=18%, #8=12%, #6=8%
+
+#### [00:42:27] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#6', '#8']
+Reason: Expected posterior 20.7 scenarios (adjusted 21.8, info gain 1.171 bits) | timing x1.00
+WARNING: Corruption risk: 10%
+
+### [00:44:32] Ability used at #2
+
+#### [00:44:32] Solver Output
+Scenarios: 49/454
+Definite good: ['#5']
+Evil probabilities: #1=73%, #7=43%, #2=22%, #3=22%, #4=18%, #8=12%, #6=8%
+
+#### [00:44:32] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#2']
+Reason: Expected posterior 28.0 scenarios (adjusted 30.0, info gain 0.708 bits) | timing x1.00
+WARNING: Corruption risk: 14% -- corrupted Judge results are unreliable
+
+### [00:44:37] Revealed #3 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [00:44:37] Ability used at #3
+
+#### [00:44:45] Solver Output
+Scenarios: 28/454
+Definite good: ['#5']
+Evil probabilities: #1=82%, #7=43%, #4=25%, #2=14%, #6=14%, #8=14%, #3=7%
+
+#### [00:44:45] Recommendation
+Action: **USE_ABILITY** #4 (Judge) -> targets ['#2']
+Reason: Expected posterior 16.5 scenarios (adjusted 18.0, info gain 0.638 bits) | timing x1.00
+WARNING: Corruption risk: 18% -- corrupted Judge results are unreliable
+
+### [00:44:50] Revealed #4 Judge
+Info: {'target': 2, 'is_lying': False}
+
+### [00:44:50] Ability used at #4
+
+#### [00:44:58] Solver Output
+Scenarios: 17/454
+Definite evil: ['#1']
+Definite good: ['#2', '#3', '#4', '#5']
+Evil probabilities: #7=53%, #6=24%, #8=24%
+
+#### [00:44:58] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 17 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [00:45:05] Executed #1 -> GOOD (WRONG!)
+
+#### [00:45:17] Solver Output
+Scenarios: 0/340
+
+#### [00:45:17] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+## [00:46:35] GAME OVER — LOSS
+Final HP: 5
+Notes: 0 scenarios after Judge #3+#4 both 'not lying' on silenced Jester + #1 wrong exec (Baker-was-Lover); budget exhausted, Jester silenced by Rambler pre-ability
+
+## [00:46:42] GAME OVER — LOSS
+Final HP: 5
+Notes: 0 scenarios halt mid-village; Judge #3+#4 both evil bluffs, Jester silenced
+
+## [00:47:41] GAME OVER — LOSS
+Final HP: 5
+Notes: HALT: 0 scenarios after Judge#3+#4 both-evil-both-not-lying + wrong exec #1 Baker-was-Lover
+
+## [00:47:46] GAME OVER — LOSS
+Final HP: 5
+Notes: halt
+
