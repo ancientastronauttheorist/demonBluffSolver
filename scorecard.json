@@ -3807,6 +3807,13 @@
       "name": "asc78_v4",
       "notes": "6HP village 4/7 - Lilis/Chancellor; Dreamer2 parser landed mid-village",
       "date": "2026-04-21 00:33"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc78_v5",
+      "notes": "5HP village 5/7 - Empress 75% pick was wrong (was Good), Pooka clean after",
+      "date": "2026-04-21 00:38"
     }
   ]
 }

@@ -41115,3 +41115,60 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 6
 Notes: 6HP village 4/7 - Lilis/Chancellor; Dreamer2 parser landed mid-village
 
+
+---
+
+# New Game — 2026-04-21 00:37:29
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Empress, Witness, Knitter, Lover
+- Outcasts: Doppelganger
+- Minions: 
+- Demons: Pooka
+
+### [00:37:56] Revealed #1 Lover
+Info: {'evil_adjacent': 0}
+
+### [00:37:56] Revealed #2 Empress
+Info: {'targets': [1, 4, 6]}
+
+### [00:37:56] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [00:37:56] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [00:37:56] Revealed #5 Knitter
+Info: {'evil_pairs': 0}
+
+### [00:37:56] Revealed #6 Witness
+Info: {'affected_position': 3}
+
+#### [00:38:05] Solver Output
+Scenarios: 4/30
+Definite good: ['#1', '#3', '#5', '#6']
+Evil probabilities: #2=75%, #4=25%
+
+#### [00:38:05] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (75% evil Pooka, 25% good Empress).
+WARNING: Execution lookahead override -- immediate hit chance is 75%, but all reveal branches still lead to a forced win.
+
+### [00:38:11] Executed #2 -> GOOD (WRONG!)
+
+#### [00:38:21] Solver Output
+Scenarios: 1/25
+Definite evil: ['#4']
+Definite good: ['#1', '#2', '#3', '#5', '#6']
+
+#### [00:38:21] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [00:38:27] Executed #4 -> Pooka (EVIL)
+
+## [00:38:35] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP village 5/7 - Empress 75% pick was wrong (was Good), Pooka clean after
+
