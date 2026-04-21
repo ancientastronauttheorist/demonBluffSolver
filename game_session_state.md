@@ -40847,3 +40847,87 @@ Reason: #5 is evil in ALL 6 scenarios (roles: {'Shaman'})
 ## [19:11:30] GAME OVER — WIN
 Final HP: 8
 
+
+---
+
+# New Game — 2026-04-20 23:49:59
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Witness, Judge, Druid, Enlightened, Fortune Teller, Jester
+- Outcasts: Doppelganger
+- Minions: Puppeteer
+- Demons: Baa
+
+### [23:51:04] Revealed #1 Judge
+Info: {}
+
+### [23:51:04] Revealed #2 Lover
+Info: {'evil_adjacent': 2}
+
+### [23:51:04] Revealed #3 Judge
+Info: {}
+
+### [23:51:04] Revealed #4 Jester
+Info: {}
+
+### [23:51:04] Revealed #5 Fortune_Teller
+Info: {}
+
+### [23:51:04] Revealed #6 Druid
+Info: {}
+
+### [23:51:04] Revealed #7 Witness
+Info: {'affected_position': 6}
+
+### [23:51:10] Revealed #8 Enlightened
+Info: {'direction': 'CCW'}
+
+#### [23:51:14] Solver Output
+Scenarios: 10/480
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #3=50%, #8=50%
+
+#### [23:51:14] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 10 scenarios (roles: {'Puppeteer', 'Baa'})
+
+#### [23:51:28] Solver Output
+Scenarios: 10/480
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#4', '#5', '#6']
+Evil probabilities: #3=50%, #8=50%
+
+#### [23:51:28] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 10 scenarios (roles: {'Puppeteer', 'Baa'})
+
+### [23:51:35] Executed #2 -> Baa (EVIL)
+
+#### [23:51:41] Solver Output
+Scenarios: 5/60
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [23:51:41] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 5 scenarios (roles: {'Puppeteer'})
+
+### [23:51:48] Executed #7 -> Puppeteer (EVIL)
+
+#### [23:51:53] Solver Output
+Scenarios: 5/10
+Definite evil: ['#2', '#7', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [23:51:53] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 5 scenarios (roles: {'Puppet'})
+
+### [23:52:00] Executed #8 -> Puppet (EVIL)
+
+## [23:52:33] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect - Baa-hides-outcast fix live-validated on resumption from killed session
+
