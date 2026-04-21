@@ -3849,6 +3849,13 @@
       "name": "asc79_v3",
       "notes": "10HP perfect; Slayer hit + forced-safe Pooka exec. Note: after card jester/druid entries, needed ability_used to prevent solver re-firing (no auto-mark on clue entry).",
       "date": "2026-04-21 12:21"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v4",
+      "notes": "10HP perfect; clean chain Shaman 100% -> Jester #6 (Chancellor disguise lie 3) -> Chancellor -> Baa",
+      "date": "2026-04-21 12:26"
     }
   ]
 }

@@ -41813,3 +41813,107 @@ WARNING: Execution lookahead override -- immediate hit chance is 75%, but all re
 Final HP: 10
 Notes: 10HP perfect; Slayer hit + forced-safe Pooka exec. Note: after card jester/druid entries, needed ability_used to prevent solver re-firing (no auto-mark on clue entry).
 
+
+---
+
+# New Game — 2026-04-21 12:24:14
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Jester, Knitter, Knight, Empress, Witness, Scout
+- Outcasts: Bombardier, Rambler
+- Minions: Shaman, Chancellor
+- Demons: Baa
+
+### [12:24:48] Revealed #1 Witness
+Info: {'affected_position': 4}
+
+### [12:24:48] Revealed #2 Druid
+Info: {}
+
+### [12:24:48] Revealed #3 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [12:24:48] Revealed #4 Bombardier
+Info: {}
+
+### [12:24:48] Revealed #5 Rambler
+Info: {'silenced': False}
+
+### [12:24:48] Revealed #6 Jester
+Info: {}
+
+### [12:24:48] Revealed #7 Knight
+Info: {}
+
+### [12:24:48] Revealed #8 Scout
+Info: {'evil_role': 'Chancellor', 'distance': 3}
+
+### [12:24:48] Revealed #9 Empress
+Info: {'targets': [2, 4, 5]}
+
+#### [12:24:52] Solver Output
+Scenarios: 6/636
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#5', '#8']
+Evil probabilities: #2=67%, #7=67%, #6=33%, #9=33%
+
+#### [12:24:52] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'Shaman', 'Baa'})
+
+#### [12:24:57] Solver Output
+Scenarios: 6/636
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#5', '#8']
+Evil probabilities: #2=67%, #7=67%, #6=33%, #9=33%
+
+#### [12:24:57] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'Baa', 'Shaman'})
+
+### [12:25:04] Executed #1 -> Shaman (EVIL)
+
+#### [12:25:10] Solver Output
+Scenarios: 3/66
+Definite evil: ['#1']
+Definite good: ['#3', '#4', '#5', '#8']
+Evil probabilities: #2=67%, #7=67%, #6=33%, #9=33%
+
+#### [12:25:10] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#2', '#3', '#9']
+Reason: Expected posterior 1.4 scenarios (adjusted 1.4, info gain 1.100 bits) | timing x1.00
+
+### [12:25:17] Revealed #6 Jester
+Info: {'targets': [2, 3, 9], 'evil_count': 3}
+
+### [12:25:17] Ability used at #6
+
+#### [12:25:27] Solver Output
+Scenarios: 1/66
+Definite evil: ['#1', '#6', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+
+#### [12:25:27] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [12:25:34] Executed #6 -> Chancellor (EVIL)
+
+#### [12:25:39] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#6', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+
+#### [12:25:39] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [12:25:46] Executed #9 -> Baa (EVIL)
+
+## [12:25:54] GAME OVER — WIN
+Final HP: 10
+## [12:26:41] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; clean chain Shaman 100% -> Jester #6 (Chancellor disguise lie 3) -> Chancellor -> Baa
+
