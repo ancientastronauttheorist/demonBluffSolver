@@ -493,6 +493,14 @@ fn validate_witness(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
 }
 
 fn validate_jester(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    // Silenced Jester (e.g. by Rambler): ability fired but no evil_count was
+    // emitted. Explicitly a no-op constraint — previously this case arrived
+    // here via a missing `evil_count` key and returned true by accident, which
+    // silently turned a stale/empty Jester into "any placement is fine" and
+    // mis-sized the scenario space (asc78_v6 halt).
+    if info_bool(&card.info_parsed, "silenced") == Some(true) {
+        return true;
+    }
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -1137,4 +1145,90 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     }
 
     true
+}
+
+#[cfg(test)]
+mod tests {
+    //! Validator unit tests. See tests/simulation.rs for integration tests.
+    use super::*;
+    use serde_json::json;
+
+    fn make_card(pos: u8, role: &str, info: serde_json::Value) -> CardInfo {
+        CardInfo {
+            position: pos,
+            apparent_role: role.to_string(),
+            info_text: String::new(),
+            info_parsed: info.as_object().unwrap().clone(),
+        }
+    }
+
+    fn empty_scenario() -> Scenario {
+        Scenario {
+            evil_positions: HashMap::new(),
+            puppet_position: None,
+            corrupted: HashSet::new(),
+            pd_corrupted: None,
+            doppelganger_position: None,
+            drunk_position: None,
+            alchemist_cures: HashMap::new(),
+            chancellor_conversion: None,
+        }
+    }
+
+    fn base_state(n_cards: u8, cards: Vec<CardInfo>) -> GameState {
+        let mut s = GameState::default();
+        s.n_cards = n_cards;
+        s.cards = cards;
+        s
+    }
+
+    #[test]
+    fn silenced_jester_is_vacuous_constraint() {
+        // Silenced Jester (no evil_count) must return true unconditionally,
+        // regardless of whether the scenario places evils inside targets or not.
+        let jester = make_card(
+            3,
+            "Jester",
+            json!({"targets": [1, 2, 4], "silenced": true}),
+        );
+        let state = base_state(7, vec![jester.clone()]);
+
+        // Empty scenario
+        let s1 = empty_scenario();
+        assert!(validate_jester(&jester, &s1, &state));
+
+        // Scenario with evils inside the target set
+        let mut s2 = empty_scenario();
+        s2.evil_positions.insert(1, "Pooka".to_string());
+        s2.evil_positions.insert(2, "Witch".to_string());
+        assert!(validate_jester(&jester, &s2, &state));
+
+        // Scenario with evils outside the target set
+        let mut s3 = empty_scenario();
+        s3.evil_positions.insert(5, "Pooka".to_string());
+        s3.evil_positions.insert(6, "Witch".to_string());
+        assert!(validate_jester(&jester, &s3, &state));
+    }
+
+    #[test]
+    fn non_silenced_jester_still_validates_evil_count() {
+        // With evil_count present, validator must do real work.
+        let jester = make_card(
+            3,
+            "Jester",
+            json!({"targets": [1, 2, 4], "evil_count": 1}),
+        );
+        let state = base_state(7, vec![jester.clone()]);
+
+        let mut truthy = empty_scenario();
+        truthy.evil_positions.insert(1, "Pooka".to_string());
+        // Exactly 1 evil among targets — truthful Jester ok
+        assert!(validate_jester(&jester, &truthy, &state));
+
+        let mut falsy = empty_scenario();
+        falsy.evil_positions.insert(1, "Pooka".to_string());
+        falsy.evil_positions.insert(2, "Witch".to_string());
+        // 2 evils among targets, claimed 1, Jester not evil -> inconsistent
+        assert!(!validate_jester(&jester, &falsy, &state));
+    }
 }

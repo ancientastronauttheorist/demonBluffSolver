@@ -71,6 +71,15 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
+def card_jester_silenced(pos: int, targets: list[int]) -> CardInfo:
+    """Jester whose ability fired but was silenced (e.g. by Rambler).
+
+    Records the targets (for UI / audit) plus silenced:True so the Rust
+    validator can treat the clue as vacuous (no constraint) instead of
+    accidentally returning true in the targets/evil_count lookups (asc78_v6).
+    """
+    return CardInfo(pos, "Jester", info_parsed={"targets": list(targets), "silenced": True})
+
 def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) -> CardInfo:
     info = {"silenced": silenced}
     if silenced_by is not None:
@@ -1436,6 +1445,15 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'(\d+)\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE)
         if m:
             return card_jester(pos, targets, int(m.group(1)))
+        # Silenced Jester (e.g. by Rambler): clue is flavor like "#X shut up!"
+        # or empty. Targets are preserved, but no evil_count is recoverable.
+        # Without this branch the Rust validator's targets/evil_count lookups
+        # returned true unconditionally, masking the constraint (asc78_v6).
+        silenced_pat = re.search(r'#\d+\s*shut\s*up', clue, re.IGNORECASE)
+        if silenced_pat or (not clue.strip()):
+            # Guard: only silenced if no numeric evil count is extractable.
+            if not re.search(r'\d+\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE):
+                return card_jester_silenced(pos, targets)
         # "none of them are evil"
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_jester(pos, targets, 0)
