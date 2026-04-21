@@ -3856,6 +3856,13 @@
       "name": "asc79_v4",
       "notes": "10HP perfect; clean chain Shaman 100% -> Jester #6 (Chancellor disguise lie 3) -> Chancellor -> Baa",
       "date": "2026-04-21 12:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v5",
+      "notes": "10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9",
+      "date": "2026-04-21 12:31"
     }
   ]
 }

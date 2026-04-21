@@ -41917,3 +41917,123 @@ Final HP: 10
 Final HP: 10
 Notes: 10HP perfect; clean chain Shaman 100% -> Jester #6 (Chancellor disguise lie 3) -> Chancellor -> Baa
 
+
+---
+
+# New Game — 2026-04-21 12:28:18
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Bard, Bishop, Oracle, Lover, Poet
+- Outcasts: Doppelganger
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [12:28:44] Revealed #1 Oracle
+Info: {'targets': [8, 9], 'minion_role': 'Witch'}
+
+### [12:28:44] Revealed #2 Dreamer
+Info: {}
+
+### [12:28:44] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [12:28:44] Revealed #4 Bard
+Info: {'corruption_distance': -1}
+
+### [12:28:44] Revealed #5 Dreamer
+Info: {}
+
+### [12:28:44] Revealed #6 Dreamer
+Info: {}
+
+### [12:28:44] Revealed #7 Poet
+Info: {'distance': 1, 'copied_role': 'Hunter'}
+
+### [12:28:44] Revealed #8 Bishop
+Info: {'targets': [2, 4, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+#### [12:28:53] Solver Output
+Scenarios: 84/3024
+Definite good: ['#4']
+Evil probabilities: #8=76%, #2=62%, #3=38%, #6=38%, #9=29%, #5=26%, #1=19%, #7=12%
+
+#### [12:28:53] Recommendation
+Action: **USE_ABILITY** #6 (Dreamer) -> targets ['#2']
+Reason: Entropy 2.600 (adjusted 2.600) | timing x1.00
+
+### [12:29:31] Ability used at #6
+
+### [12:29:39] Revealed #6 Dreamer
+Info: {'targets': [2, 9], 'evil_role_options': ['Bishop', 'Minion']}
+
+#### [12:29:43] Solver Output
+Scenarios: 50/3024
+Definite good: ['#4']
+Evil probabilities: #8=68%, #2=60%, #6=52%, #3=40%, #9=36%, #1=24%, #7=12%, #5=8%
+
+#### [12:29:43] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#9']
+Reason: Entropy 2.256 (adjusted 2.256) | timing x1.00
+
+### [12:30:22] Ability used at #2
+
+### [12:30:22] Revealed #2 Dreamer
+Info: {'targets': [7, 9], 'evil_role_options': ['Bishop', 'Poet']}
+
+#### [12:30:27] Solver Output
+Scenarios: 29/3024
+Definite good: ['#4']
+Evil probabilities: #6=66%, #3=62%, #8=45%, #1=41%, #2=38%, #9=24%, #7=21%, #5=3%
+
+#### [12:30:27] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.053 (adjusted 2.053) | timing x1.00
+
+### [12:30:56] Ability used at #5
+
+### [12:30:57] Revealed #5 Dreamer
+Info: {'targets': [6, 9], 'evil_role_options': ['Dreamer', 'Witch']}
+
+#### [12:31:03] Solver Output
+Scenarios: 13/3024
+Definite good: ['#4', '#5']
+Evil probabilities: #2=54%, #9=54%, #1=46%, #3=46%, #6=46%, #7=31%, #8=23%
+
+#### [12:31:03] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (46% evil Minion, 23% good Doppelganger, 23% good Dreamer).
+WARNING: Execution lookahead override -- immediate hit chance is 54%, but all reveal branches still lead to a forced win.
+
+### [12:31:10] Executed #2 -> Minion (EVIL)
+
+#### [12:31:15] Solver Output
+Scenarios: 6/336
+Definite evil: ['#2']
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #7=67%, #9=67%, #1=33%, #8=33%
+
+#### [12:31:15] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 33% good Doppelganger, 17% evil Witch).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [12:31:22] Executed #7 -> Baa (EVIL)
+
+#### [12:31:32] Solver Output
+Scenarios: 3/42
+Definite evil: ['#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8']
+Evil probabilities: #9=67%, #1=33%
+
+#### [12:31:32] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (67% evil Witch, 33% good Unknown).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [12:31:39] Executed #9 -> Witch (EVIL)
+
+## [12:31:47] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9
+
