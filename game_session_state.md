@@ -41019,3 +41019,99 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 5
 Notes: 5HP village 3/7 - 50% pick on #1 lost 5HP (Hunter <Corrupted>); Baa-hides-outcast pattern hid Drunk this time
 
+
+---
+
+# New Game — 2026-04-21 00:12:34
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Gemcrafter, Lover, Dreamer, Enlightened, Oracle, Scout
+- Outcasts: Wretch, Drunk, Plague Doctor
+- Minions: Chancellor
+- Demons: Lilis
+
+### [00:17:16] Revealed #1 Oracle
+Info: {'targets': [4, 5], 'minion_role': 'Chancellor'}
+
+### [00:17:16] Revealed #2 Plague_Doctor
+Info: {}
+
+### [00:17:16] Revealed #4 Dreamer
+Info: {}
+
+### [00:17:16] Revealed #5 Lover
+Info: {'evil_adjacent': 1}
+
+### [00:17:16] Revealed #6 Wretch
+Info: {}
+
+### [00:17:16] Revealed #9 Scout
+Info: {'evil_role': 'Lilis', 'distance': 3}
+
+### [00:19:39] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+### [00:21:31] Revealed #7 Poet
+Info: {'targets': [1, 4, 9], 'types': ['Minion', 'Villager', 'Outcast'], 'copied_role': 'Bishop'}
+
+#### [00:21:41] Solver Output
+Scenarios: 37/1943
+Definite good: ['#8']
+Evil probabilities: #1=54%, #6=38%, #3=35%, #7=30%, #9=30%, #2=5%, #4=5%, #5=3%
+
+#### [00:21:41] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.416 (adjusted 2.089) | timing x1.00
+WARNING: Corruption risk: 27%
+
+#### [00:22:10] Solver Output
+Scenarios: 37/1943
+Definite good: ['#8']
+Evil probabilities: #1=54%, #6=38%, #3=35%, #7=30%, #9=30%, #2=5%, #4=5%, #5=3%
+
+#### [00:22:10] Recommendation
+Action: **USE_ABILITY** #4 (Dreamer) -> targets ['#1']
+Reason: Entropy 2.416 (adjusted 2.089) | timing x1.00
+WARNING: Corruption risk: 27%
+
+### [00:25:01] Ability used at #4
+
+#### [00:32:18] Solver Output
+Scenarios: 37/1943
+Definite good: ['#8']
+Evil probabilities: #1=54%, #6=38%, #3=35%, #7=30%, #9=30%, #2=5%, #4=5%, #5=3%
+
+#### [00:32:18] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.865 (adjusted 1.865) | timing x1.00
+
+#### [00:32:50] Solver Output
+Scenarios: 9/1943
+Definite good: ['#4', '#5', '#6', '#8']
+Evil probabilities: #7=89%, #3=67%, #9=22%, #1=11%, #2=11%
+
+#### [00:32:50] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (67% evil Chancellor, 22% evil Lilis, 11% good Poet).
+WARNING: Execution lookahead override -- immediate hit chance is 89%, but all reveal branches still lead to a forced win.
+
+### [00:32:57] Executed #7 -> Chancellor (EVIL)
+
+#### [00:33:02] Solver Output
+Scenarios: 6/167
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#8']
+Evil probabilities: #3=67%, #9=33%
+
+#### [00:33:02] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (67% evil Lilis, 17% good Drunk (corrupted), 17% good Enlightened (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [00:33:09] Executed #3 -> Lilis (EVIL)
+
+## [00:33:24] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP village 4/7 - Lilis/Chancellor; Dreamer2 parser landed mid-village
+

@@ -3800,6 +3800,13 @@
       "name": "asc78_v3",
       "notes": "5HP village 3/7 - 50% pick on #1 lost 5HP (Hunter <Corrupted>); Baa-hides-outcast pattern hid Drunk this time",
       "date": "2026-04-21 00:03"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc78_v4",
+      "notes": "6HP village 4/7 - Lilis/Chancellor; Dreamer2 parser landed mid-village",
+      "date": "2026-04-21 00:33"
     }
   ]
 }
