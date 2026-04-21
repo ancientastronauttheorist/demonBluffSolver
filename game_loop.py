@@ -80,6 +80,44 @@ def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) ->
 def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
     return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
 
+
+def card_dreamer_ambiguous(pos: int, targets: list[int], evil_role_options: list[str]) -> CardInfo:
+    """Dreamer2 post-patch output: "Among #X, #Y there is: R1 or R2".
+
+    The Rust solver handles this shape in validators/mod.rs (Shape 2 ambiguous
+    Dreamer): {targets, evil_role_options}. One of the named roles is at one
+    of the listed positions, but the mapping is unknown.
+
+    Also fires for corrupted Dreamer1 (Drunk-as-Dreamer in asc74_v7) which
+    the game renders in the same ambiguous form.
+    """
+    return CardInfo(pos, "Dreamer", info_parsed={
+        "targets": list(targets),
+        "evil_role_options": list(evil_role_options),
+    })
+
+
+def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
+    """Parse "Among #X, #Y there is: R1 or R2" into (targets, role_options).
+
+    Returns None if the clue is not in ambiguous-among form. Matches both
+    newline-separated (game memory) and space-separated (human-typed) forms.
+    Requires "or" between the two role names — rejects Oracle's "is a X" and
+    Bishop's faction-list output.
+    """
+    if not clue:
+        return None
+    import re
+    m = re.search(
+        r'Among\s+((?:#\d+(?:\s*,\s*)?)+)\s+there\s+is\s*:?\s*([\w\s]+?)\s+or\s+([\w\s]+?)\s*\.?\s*$',
+        clue, re.IGNORECASE | re.DOTALL
+    )
+    if not m:
+        return None
+    targets = [int(x) for x in re.findall(r'#(\d+)', m.group(1))]
+    options = [m.group(2).strip(), m.group(3).strip()]
+    return (targets, options)
+
 def card_judge(pos: int, target: int, is_lying: bool) -> CardInfo:
     return CardInfo(pos, "Judge", info_parsed={"target": target, "is_lying": is_lying})
 
@@ -1418,12 +1456,18 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         return card_judge(pos, targets[0], is_lying)
 
     # --- Dreamer: target + evil role from clue ---
-    if role_lower == 'dreamer' and targets:
-        # Game shows "#N could be: <Role>" or "#N is <Role>"
-        m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
-        if m:
-            evil_role = m.group(1).strip()
-            return card_dreamer(pos, targets[0], evil_role)
+    if role_lower == 'dreamer':
+        # Dreamer2 post-patch: "Among #X, #Y there is: R1 or R2" — try ambiguous form first.
+        ambiguous = _parse_ambiguous_among(clue)
+        if ambiguous:
+            amb_targets, options = ambiguous
+            return card_dreamer_ambiguous(pos, amb_targets or targets, options)
+        # Old Dreamer1 form: "#N could be: <Role>" or "#N is <Role>"
+        if targets:
+            m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
+            if m:
+                evil_role = m.group(1).strip()
+                return card_dreamer(pos, targets[0], evil_role)
 
     # --- Oracle: targets + minion role ---
     if role_lower == 'oracle' and targets:
