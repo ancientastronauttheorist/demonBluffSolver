@@ -40789,3 +40789,61 @@ Info: {'targets': [2, 3, 4], 'found_outcast': None}
 Final HP: 10
 Notes: asc77 v7 retry WIN 10HP perfect. ASCENSION 77 COMPLETE! Full reveal, clean exec #8 Baa, Jester cleared #2,3,4 good, #5 Puppeteer, #6 Puppet.
 
+
+---
+
+# New Game — 2026-04-20 19:08:11
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Judge, Medium, Alchemist, Knitter, Dreamer
+- Outcasts: Doppelganger, Rambler
+- Minions: Shaman
+- Demons: Lilis
+
+### [19:10:03] Revealed #1 Judge
+Info: {}
+
+### [19:10:03] Revealed #2 Gemcrafter
+Info: {'good_position': 3}
+
+### [19:10:03] Revealed #3 Knitter
+Info: {'evil_pairs': 1}
+
+### [19:10:03] Revealed #4 Alchemist
+Info: {'cured_count': 1}
+
+### [19:10:03] Revealed #5 Rambler
+Info: {'silenced': False}
+
+### [19:10:03] Revealed #7 Gemcrafter
+Info: {'good_position': 2}
+
+### [19:10:03] Revealed #8 Gemcrafter
+Info: {'good_position': 1}
+
+#### [19:10:43] Solver Output
+Scenarios: 12/350
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+
+#### [19:10:43] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 12 scenarios (roles: {'Lilis', 'Shaman'})
+
+### [19:10:50] Executed #4 -> Lilis (EVIL)
+
+#### [19:10:56] Solver Output
+Scenarios: 6/43
+Definite evil: ['#4', '#5']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#8']
+
+#### [19:10:56] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 6 scenarios (roles: {'Shaman'})
+
+### [19:11:03] Executed #5 -> Shaman (EVIL)
+
+## [19:11:30] GAME OVER — WIN
+Final HP: 8
+
