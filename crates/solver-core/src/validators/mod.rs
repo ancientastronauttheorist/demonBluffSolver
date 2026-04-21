@@ -529,9 +529,11 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
         info_str_array(&card.info_parsed, "evil_role_options"),
     ) {
         let truth = truth_status(card.position, scenario, state);
+        // Dreamer2 can name any role (evil, outcast, or villager), so we need
+        // the true underlying role at each target, not just the evil role.
         let any_match = targets.iter().any(|&t| {
-            known_evil_role(t, scenario, state)
-                .map(|r| options.iter().any(|o| roles_equal(o, r)))
+            effective_role_at(t, scenario, state)
+                .map(|r| options.iter().any(|o| roles_equal(o, &r)))
                 .unwrap_or(false)
         });
         return match truth {

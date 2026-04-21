@@ -704,3 +704,26 @@ fn regression_asc76_v4_data_completeness() {
     assert_eq!(true_count as u64, n_evil,
         "asc76_v4 true_evil_positions must have all {n_evil} evils");
 }
+
+#[test]
+fn regression_asc79_v2_dreamer2_outcast_option() {
+    // asc79 village 2: Dreamer2 result "Among #2, #6 there is Baa or
+    // Doppelganger". Baa already executed at #5. Doppelganger (outcast, Good)
+    // is the true answer at #6.
+    //
+    // Pre-fix: validate_dreamer Shape 2 used known_evil_role() which only
+    // returns evil roles, so "Doppelganger" never matched any target, forcing
+    // Dreamer to be classified as lying in every scenario — which forced
+    // Dreamer #1 (truly Good) to be evil in every surviving scenario. Solver
+    // recommended EXECUTE #1 at 100% confidence.
+    //
+    // Fix: introduced effective_role_at() which also considers outcast
+    // placements (Doppelganger, Drunk) and apparent_role.
+    let path = v2_dir().join("asc79_v2_dreamer2_outcast.json");
+    let content = std::fs::read_to_string(&path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let result = simulate_game(&value);
+    if let SimResult::ConstraintFailure { detail, .. } = &result {
+        panic!("asc79_v2 truth eliminated (Dreamer2 outcast option regression): {detail}");
+    }
+}

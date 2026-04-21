@@ -43,6 +43,26 @@ pub fn is_evil_in_board_state(pos: u8, scenario: &Scenario, state: &GameState) -
     known_evil_role(pos, scenario, state).is_some()
 }
 
+/// True underlying role at a position, considering evil placements,
+/// outcast placements, and apparent_role for undisguised good cards.
+///
+/// Used by Dreamer2 / ambiguous validators that can name ANY role (not just evil).
+pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Option<String> {
+    if let Some(role) = known_evil_role(pos, scenario, state) {
+        return Some(role.to_string());
+    }
+    if scenario.doppelganger_position == Some(pos) {
+        return Some("Doppelganger".to_string());
+    }
+    if scenario.drunk_position == Some(pos) {
+        return Some("Drunk".to_string());
+    }
+    if let Some(card) = state.card_at(pos) {
+        return Some(card.apparent_role.clone());
+    }
+    None
+}
+
 /// Effective alignment as seen by abilities.
 /// Wretch registers as Evil to abilities (but is actually Good).
 pub fn effective_alignment(pos: u8, scenario: &Scenario, state: &GameState) -> EffectiveAlignment {
