@@ -1702,6 +1702,24 @@ def _validate_true_evils_against_session(true_evils: dict, session) -> tuple:
     return (true_evils, [])
 
 
+_DECK_OUTCAST_ROLES = frozenset({
+    "drunk", "wretch", "bombardier", "doppelganger", "plague_doctor", "rambler",
+})
+
+
+def _baa_hides_outcast(only_cv: set, only_mr: set, mr_set: set, cv_unclassified: int) -> bool:
+    """Baa in the deck renders one outcast as a face-down eye-symbol in the pool view.
+
+    That produces: exactly one outcast role in only_mr, zero only_cv, and at
+    least one unclassified CV box. Confirmed asc78 (Doppelganger hidden).
+    """
+    if "baa" not in mr_set:
+        return False
+    if only_cv or len(only_mr) != 1 or cv_unclassified < 1:
+        return False
+    return next(iter(only_mr)) in _DECK_OUTCAST_ROLES
+
+
 def _cmd_read_deck(screenshot_path: str):
     """Read deck using both card_vision and memory_reader, cross-check results."""
     import subprocess
@@ -1718,11 +1736,13 @@ def _cmd_read_deck(screenshot_path: str):
         capture_output=True, text=True
     )
     cv_roles = []
+    cv_unclassified = 0
     if cv_result.returncode == 0:
         try:
             import json as _json
             cards = _json.loads(cv_result.stdout)
             cv_roles = [c["name"] for c in cards if c.get("accepted")]
+            cv_unclassified = sum(1 for c in cards if not c.get("accepted"))
             factions = {}
             for c in cards:
                 if c.get("accepted"):
@@ -1732,9 +1752,12 @@ def _cmd_read_deck(screenshot_path: str):
                 roles = factions.get(faction, [])
                 if roles:
                     print(f"  {faction}s ({len(roles)}): {', '.join(roles)}")
+            if cv_unclassified:
+                print(f"  Unclassified boxes: {cv_unclassified}")
         except Exception as e:
             print(f"  ERROR parsing card_vision output: {e}")
             cv_roles = []
+            cv_unclassified = 0
     else:
         print(f"  ERROR: card_vision failed: {cv_result.stderr[:200]}")
 
@@ -1763,18 +1786,24 @@ def _cmd_read_deck(screenshot_path: str):
     # Cross-check
     cv_set = set(r.lower().replace(" ", "_") for r in cv_roles)
     mr_set = set(mr_roles)
+
     if cv_set and mr_set:
         if cv_set == mr_set:
             print(f"\n  MATCH: Both pipelines agree ({len(cv_set)} roles)")
         else:
             only_cv = cv_set - mr_set
             only_mr = mr_set - cv_set
-            print(f"\n  MISMATCH!")
-            if only_cv:
-                print(f"    Only in card_vision: {only_cv}")
-            if only_mr:
-                print(f"    Only in memory_reader: {only_mr}")
-            print(f"    STOP AND FIX before proceeding!")
+            if _baa_hides_outcast(only_cv, only_mr, mr_set, cv_unclassified):
+                role = next(iter(only_mr))
+                print(f"\n  MATCH (Baa hides outcast): CV={len(cv_set)} classified"
+                      f" + '{role}' face-down in deck view (Baa effect)")
+            else:
+                print(f"\n  MISMATCH!")
+                if only_cv:
+                    print(f"    Only in card_vision: {only_cv}")
+                if only_mr:
+                    print(f"    Only in memory_reader: {only_mr}")
+                print(f"    STOP AND FIX before proceeding!")
     elif not cv_set and not mr_set:
         print("\n  WARNING: Both pipelines returned empty results")
     else:
