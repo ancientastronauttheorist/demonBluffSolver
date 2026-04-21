@@ -3793,6 +3793,13 @@
       "name": "asc78_v2",
       "notes": "10HP perfect - Baa-hides-outcast fix live-validated on resumption from killed session",
       "date": "2026-04-20 23:52"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc78_v3",
+      "notes": "5HP village 3/7 - 50% pick on #1 lost 5HP (Hunter <Corrupted>); Baa-hides-outcast pattern hid Drunk this time",
+      "date": "2026-04-21 00:03"
     }
   ]
 }

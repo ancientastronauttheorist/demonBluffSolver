@@ -40931,3 +40931,91 @@ Reason: #8 is evil in ALL 5 scenarios (roles: {'Puppet'})
 Final HP: 10
 Notes: 10HP perfect - Baa-hides-outcast fix live-validated on resumption from killed session
 
+
+---
+
+# New Game — 2026-04-20 23:59:33
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Confessor, Enlightened, Knitter, Hunter, Empress, Oracle
+- Outcasts: Drunk
+- Minions: Poisoner
+- Demons: Baa
+
+### [23:59:58] Revealed #1 Hunter
+Info: {'distance': 4}
+
+### [23:59:58] Revealed #2 Hunter
+Info: {'distance': 4}
+
+### [23:59:58] Revealed #3 Baker
+Info: {'original_role': 'original'}
+
+### [23:59:58] Revealed #5 Empress
+Info: {'targets': [1, 7, 8]}
+
+### [23:59:58] Revealed #6 Baker
+Info: {'original_role': 'Oracle'}
+
+### [23:59:58] Revealed #7 Baker
+Info: {'original_role': 'Knitter'}
+
+### [23:59:58] Revealed #8 Confessor
+Info: {'dizzy': True}
+
+### [00:00:05] Revealed #4 Enlightened
+Info: {'direction': 'CW'}
+
+#### [00:00:10] Solver Output
+Scenarios: 10/576
+Definite good: ['#3', '#7']
+Evil probabilities: #1=50%, #2=40%, #8=40%, #4=30%, #6=30%, #5=10%
+
+#### [00:00:10] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+WARNING: Low confidence (50% < 60%) -- consider gathering more info
+
+#### [00:00:16] Solver Output
+Scenarios: 10/576
+Definite good: ['#3', '#7']
+Evil probabilities: #1=50%, #2=40%, #8=40%, #4=30%, #6=30%, #5=10%
+
+#### [00:00:16] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+WARNING: Low confidence (50% < 60%) -- consider gathering more info
+
+### [00:01:37] Executed #1 -> GOOD (WRONG!)
+
+#### [00:01:41] Solver Output
+Scenarios: 5/432
+Definite good: ['#1', '#3', '#7']
+Evil probabilities: #8=80%, #2=60%, #4=20%, #5=20%, #6=20%
+
+#### [00:01:41] Recommendation
+Action: **ERROR** #8
+Reason: #8 is 80% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 80% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 80% < 85% threshold. Consider manual override if you have extra information.
+
+### [00:02:41] Executed #8 -> Baa (EVIL)
+
+#### [00:02:41] Solver Output
+Scenarios: 1/66
+Definite evil: ['#2', '#8']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [00:02:41] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [00:02:48] Executed #2 -> Poisoner (EVIL)
+
+## [00:03:13] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP village 3/7 - 50% pick on #1 lost 5HP (Hunter <Corrupted>); Baa-hides-outcast pattern hid Drunk this time
+
