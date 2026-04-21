@@ -38,9 +38,7 @@ COMPENDIUM_PAGE_LAYOUTS: dict[str, list[list[Optional[str]]]] = {
         ["medium", "oracle", "poet", "scout", "slayer", "witness", None, None, None],
     ],
     "page3": [
-        ["drunk", "wretch", "bombardier", "doppelganger", "plague_doctor", None, None, None, None],
-        [None, None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None, None],
+        ["drunk", "wretch", "bombardier", "doppelganger", "plague_doctor", "rambler"],
     ],
     "page4": [
         ["chancellor", "witch", "minion", "poisoner", "twin_minion", "shaman", "puppeteer", "puppet", None],
