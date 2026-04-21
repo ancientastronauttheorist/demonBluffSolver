@@ -6,9 +6,9 @@ Built to be played entirely by an AI agent (Claude) — from clicking cards and 
 
 ## Current Stats
 
-**540 games played** — 91% win rate (494W / 46L), 244 perfect games (10 HP)
+**547 games played** — 92% win rate (501W / 46L), 246 perfect games (10 HP)
 
-Tested through **Ascension 77** with up to 10-card boards, 4+ evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, Shaman Baker-conversion chains, Doppelganger disguises, Baa (demon-as-outcast), and Dreamer2 ambiguous output.
+Tested through **Ascension 78** with up to 10-card boards, 4+ evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, Shaman Baker-conversion chains, Doppelganger disguises, Baa (demon-as-outcast), and Dreamer2 ambiguous output.
 
 ## How It Works
 
@@ -60,7 +60,7 @@ The full pipeline:
 
 | Directory | Purpose |
 |-----------|---------|
-| `tests/cases_v2/` | 376 test cases — card vision pipeline, high accuracy |
+| `tests/cases_v2/` | 383 test cases — card vision pipeline, high accuracy |
 | `tests/cases/` | 137 legacy test cases — manual data entry |
 | `tests/simulation.rs` | Rust simulation test — constraint validation + strategy-driven execution on all v2 cases |
 | `tests/test_replay.py` | Step-by-step replay validation (reveals → abilities → executions) |
@@ -132,7 +132,7 @@ python memory_reader.py         # read board state
 python memory_reader.py --deck  # read deck pool
 
 # Run tests
-cargo test --release --test simulation  # Rust simulation tests (376 v2 cases)
+cargo test --release --test simulation  # Rust simulation tests (383 v2 cases)
 python -m tests.test_replay --v2-only  # Python v2 replay tests
 python -m tests.test_replay            # all test cases
 
