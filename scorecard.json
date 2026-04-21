@@ -3816,32 +3816,11 @@
       "date": "2026-04-21 00:38"
     },
     {
-      "result": "loss",
-      "hp": 5,
+      "result": "win",
+      "hp": 3,
       "name": "asc78_v6",
-      "notes": "0 scenarios after Judge #3+#4 both 'not lying' on silenced Jester + #1 wrong exec (Baker-was-Lover); budget exhausted, Jester silenced by Rambler pre-ability",
-      "date": "2026-04-21 00:46"
-    },
-    {
-      "result": "loss",
-      "hp": 5,
-      "name": "asc78_v6",
-      "notes": "0 scenarios halt mid-village; Judge #3+#4 both evil bluffs, Jester silenced",
-      "date": "2026-04-21 00:46"
-    },
-    {
-      "result": "loss",
-      "hp": 5,
-      "name": "asc78_v6",
-      "notes": "HALT: 0 scenarios after Judge#3+#4 both-evil-both-not-lying + wrong exec #1 Baker-was-Lover",
-      "date": "2026-04-21 00:47"
-    },
-    {
-      "result": "loss",
-      "hp": 5,
-      "name": "asc78_v6",
-      "notes": "halt",
-      "date": "2026-04-21 00:47"
+      "notes": "3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa",
+      "date": "2026-04-21 01:13"
     }
   ]
 }

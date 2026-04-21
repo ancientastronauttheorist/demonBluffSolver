@@ -1,0 +1,156 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Lover"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          8
+        ],
+        "silenced": true
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 2,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Baa",
+        "distance": 1
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Enlightened"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    3,
+    2,
+    4
+  ],
+  "confirmed_evil": [
+    3,
+    4
+  ],
+  "confirmed_good": [
+    1,
+    2
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Chancellor",
+    "4": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 3,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    1
+  ],
+  "executed_good_corrupted": {
+    "1": false,
+    "3": false,
+    "2": true
+  },
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Scout",
+      "Enlightened",
+      "Fortune Teller",
+      "Judge",
+      "Baker",
+      "Jester"
+    ],
+    "outcasts": [
+      "Rambler",
+      "Drunk"
+    ],
+    "minions": [
+      "Chancellor"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    2,
+    3,
+    4
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc78_v6",
+  "true_evil_positions": {
+    "3": "Chancellor",
+    "4": "Baa"
+  },
+  "notes": "3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa"
+}

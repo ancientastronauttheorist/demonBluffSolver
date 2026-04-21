@@ -41285,3 +41285,84 @@ Notes: HALT: 0 scenarios after Judge#3+#4 both-evil-both-not-lying + wrong exec 
 Final HP: 5
 Notes: halt
 
+#### [00:51:52] Solver Output
+Scenarios: 8/340
+Definite good: ['#1', '#5', '#7']
+Evil probabilities: #3=50%, #6=50%, #8=50%, #2=25%, #4=25%
+
+#### [00:51:52] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual override if you have extra information.
+
+### [00:53:05] Executed #3 -> GOOD (WRONG!)
+
+#### [00:54:12] Solver Output
+Scenarios: 4/246
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [00:54:12] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [00:55:45] Solver Output
+Scenarios: 4/246
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [00:55:45] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Baa', 'Chancellor'})
+
+#### [01:01:29] Solver Output
+Scenarios: 4/246
+Definite evil: ['#6', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#7']
+
+#### [01:01:29] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [01:11:11] Solver Output
+Scenarios: 8/340
+Definite good: ['#1', '#5', '#7']
+Evil probabilities: #3=50%, #6=50%, #8=50%, #2=25%, #4=25%
+
+#### [01:11:11] Recommendation
+Action: **ERROR** #3
+Reason: #3 is 50% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 50% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 50% < 85% threshold. Consider manual override if you have extra information.
+
+### [01:12:38] Executed #3 -> Chancellor (EVIL)
+
+#### [01:12:38] Solver Output
+Scenarios: 2/52
+Definite evil: ['#3']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #2=50%, #4=50%
+
+#### [01:12:38] Recommendation
+Action: **EXECUTE** #2
+Reason: Execution lookahead: #2 guarantees a win across all reveal branches with current HP budget (50% evil Baa, 50% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [01:12:45] Executed #2 -> GOOD (WRONG!)
+
+#### [01:13:21] Solver Output
+Scenarios: 1/47
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [01:13:21] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [01:13:28] Executed #4 -> Baa (EVIL)
+
+## [01:13:59] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa
+
