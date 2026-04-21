@@ -3821,6 +3821,13 @@
       "name": "asc78_v6",
       "notes": "3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa",
       "date": "2026-04-21 01:13"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc78_v7",
+      "notes": "10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff",
+      "date": "2026-04-21 01:29"
     }
   ]
 }

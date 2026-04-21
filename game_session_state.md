@@ -41366,3 +41366,51 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 3
 Notes: 3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa
 
+
+---
+
+# New Game — 2026-04-21 01:28:34
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Alchemist, Fortune Teller, Knight, Poet, Dreamer
+- Outcasts: Wretch
+- Minions: 
+- Demons: Pooka
+
+### [01:28:55] Revealed #1 Scout
+Info: {'evil_role': 'Pooka', 'distance': 1}
+
+### [01:28:55] Revealed #2 Wretch
+Info: {}
+
+### [01:28:55] Revealed #4 Knight
+Info: {}
+
+### [01:28:55] Revealed #5 Fortune_Teller
+Info: {}
+
+### [01:28:55] Revealed #6 Dreamer
+Info: {}
+
+### [01:28:55] Revealed #7 Alchemist
+Info: {'cured_count': 0}
+
+### [01:29:03] Revealed #3 Poet
+Info: {'evil_adjacent': 0, 'copied_role': 'Lover'}
+
+#### [01:29:03] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7']
+
+#### [01:29:03] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [01:29:10] Executed #3 -> Pooka (EVIL)
+
+## [01:29:23] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff
+
