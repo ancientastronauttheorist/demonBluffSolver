@@ -2385,7 +2385,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         print("\n--- Memory Reader (board state) ---")
         if cards:
             _print_board(cards)
-            _verify_flips(cards, positions, session)
+            verify = _verify_flips(cards, positions, session)
+            # Flake-failed clicks never actually revealed — strip them from
+            # reveal_order so a subsequent `flip <pos>` retry lands them at
+            # the true reveal index. Critical for Baker-chain validation:
+            # wrong reveal_order corrupts the chain seed and can collapse
+            # the scenario space to 0 after an unrelated wrong exec
+            # (asc78_v6 halt, 2026-04-21).
+            failed = verify.get("failed", [])
+            if failed:
+                removed = False
+                for p in failed:
+                    if p in session.reveal_order:
+                        session.reveal_order.remove(p)
+                        removed = True
+                if removed:
+                    print(f"  [reveal_order] Removed failed positions {failed} from reveal_order; retry via `flip {failed[0]}` will re-append at true index.")
+                    session.save()
         else:
             print("  WARNING: memory_reader returned no cards")
         print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
