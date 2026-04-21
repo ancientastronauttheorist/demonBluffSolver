@@ -3863,6 +3863,20 @@
       "name": "asc79_v5",
       "notes": "10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9",
       "date": "2026-04-21 12:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc79_v6",
+      "notes": "6HP village 6/7 (Lilis game); -2HP two separate night phases (1 kill + 1 no-kill), all 3 evils correct. #7 Architect night-killed by Lilis.",
+      "date": "2026-04-21 12:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc79_v6",
+      "notes": "6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct.",
+      "date": "2026-04-21 12:39"
     }
   ]
 }

@@ -42037,3 +42037,122 @@ WARNING: Execution lookahead override -- immediate hit chance is 67%, but all re
 Final HP: 10
 Notes: 10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9
 
+
+---
+
+# New Game — 2026-04-21 12:34:01
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Dreamer, Bard, Architect, Scout, Empress, Knight
+- Outcasts: Bombardier
+- Minions: Twin Minion, Poisoner
+- Demons: Lilis
+
+### [12:35:05] Revealed #1 Bombardier
+Info: {}
+
+### [12:35:05] Revealed #2 Knight
+Info: {}
+
+### [12:35:05] Revealed #3 Dreamer
+Info: {}
+
+### [12:35:05] Revealed #4 Empress
+Info: {'targets': [1, 6, 9]}
+
+### [12:35:05] Revealed #5 Scout
+Info: {'evil_role': 'Lilis', 'distance': 2}
+
+### [12:35:05] Revealed #6 Knight
+Info: {}
+
+### [12:35:05] Revealed #8 Bard
+Info: {'corruption_distance': 1}
+
+### [12:35:05] Revealed #9 Jester
+Info: {}
+
+#### [12:35:10] Solver Output
+Scenarios: 24/694
+Definite good: ['#7']
+Evil probabilities: #2=62%, #6=58%, #8=54%, #4=33%, #5=33%, #1=21%, #9=21%, #3=17%
+
+#### [12:35:10] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.818 (adjusted 2.524) | timing x1.00
+WARNING: Corruption risk: 21%
+
+### [12:37:12] Ability used at #3
+
+### [12:37:12] Revealed #3 Dreamer
+Info: {'targets': [2, 6], 'evil_role_options': ['Poisoner', 'Knight']}
+
+#### [12:37:17] Solver Output
+Scenarios: 15/694
+Definite good: ['#3', '#7']
+Evil probabilities: #2=67%, #6=53%, #5=47%, #4=40%, #8=33%, #9=33%, #1=27%
+
+#### [12:37:17] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight free check: #2 is 67% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+#### [12:37:26] Solver Output
+Scenarios: 15/694
+Definite good: ['#3', '#7']
+Evil probabilities: #2=67%, #6=53%, #5=47%, #4=40%, #8=33%, #9=33%, #1=27%
+
+#### [12:37:26] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight free check: #2 is 67% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:37:53] Executed #2 -> Twin_Minion (EVIL)
+
+#### [12:37:54] Solver Output
+Scenarios: 5/79
+Definite evil: ['#2']
+Definite good: ['#3', '#7']
+Evil probabilities: #5=80%, #8=40%, #1=20%, #4=20%, #6=20%, #9=20%
+
+#### [12:37:54] Recommendation
+Action: **USE_ABILITY** #9 (Jester) -> targets ['#1', '#3', '#4']
+Reason: Expected posterior 2.3 scenarios (adjusted 2.6, info gain 0.962 bits) | timing x1.00
+WARNING: Corruption risk: 20%
+
+### [12:38:02] Revealed #9 Jester
+Info: {'targets': [1, 3, 4], 'evil_count': 0}
+
+### [12:38:02] Ability used at #9
+
+#### [12:38:10] Solver Output
+Scenarios: 3/79
+Definite evil: ['#2', '#5']
+Definite good: ['#3', '#4', '#7', '#9']
+Evil probabilities: #1=33%, #6=33%, #8=33%
+
+#### [12:38:10] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Lilis', 'Poisoner'})
+
+### [12:38:17] Executed #5 -> Lilis (EVIL)
+
+#### [12:38:25] Solver Output
+Scenarios: 2/9
+Definite evil: ['#2', '#5']
+Definite good: ['#3', '#4', '#7', '#8', '#9']
+Evil probabilities: #1=50%, #6=50%
+
+#### [12:38:25] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight free check: #6 is 50% evil. If real Knight, execution blocked (confirms good, 0 HP). If evil disguise, evil dies. No corruption risk.
+
+### [12:38:57] Executed #6 -> Poisoner (EVIL)
+
+## [12:38:58] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP village 6/7 (Lilis game); -2HP two separate night phases (1 kill + 1 no-kill), all 3 evils correct. #7 Architect night-killed by Lilis.
+
+## [12:39:06] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct.
+
