@@ -71,6 +71,15 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
+def card_jester_silenced(pos: int, targets: list[int]) -> CardInfo:
+    """Jester whose ability fired but was silenced (e.g. by Rambler).
+
+    Records the targets (for UI / audit) plus silenced:True so the Rust
+    validator can treat the clue as vacuous (no constraint) instead of
+    accidentally returning true in the targets/evil_count lookups (asc78_v6).
+    """
+    return CardInfo(pos, "Jester", info_parsed={"targets": list(targets), "silenced": True})
+
 def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) -> CardInfo:
     info = {"silenced": silenced}
     if silenced_by is not None:
@@ -79,6 +88,44 @@ def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) ->
 
 def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
     return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
+
+
+def card_dreamer_ambiguous(pos: int, targets: list[int], evil_role_options: list[str]) -> CardInfo:
+    """Dreamer2 post-patch output: "Among #X, #Y there is: R1 or R2".
+
+    The Rust solver handles this shape in validators/mod.rs (Shape 2 ambiguous
+    Dreamer): {targets, evil_role_options}. One of the named roles is at one
+    of the listed positions, but the mapping is unknown.
+
+    Also fires for corrupted Dreamer1 (Drunk-as-Dreamer in asc74_v7) which
+    the game renders in the same ambiguous form.
+    """
+    return CardInfo(pos, "Dreamer", info_parsed={
+        "targets": list(targets),
+        "evil_role_options": list(evil_role_options),
+    })
+
+
+def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
+    """Parse "Among #X, #Y there is: R1 or R2" into (targets, role_options).
+
+    Returns None if the clue is not in ambiguous-among form. Matches both
+    newline-separated (game memory) and space-separated (human-typed) forms.
+    Requires "or" between the two role names — rejects Oracle's "is a X" and
+    Bishop's faction-list output.
+    """
+    if not clue:
+        return None
+    import re
+    m = re.search(
+        r'Among\s+((?:#\d+(?:\s*,\s*)?)+)\s+there\s+is\s*:?\s*([\w\s]+?)\s+or\s+([\w\s]+?)\s*\.?\s*$',
+        clue, re.IGNORECASE | re.DOTALL
+    )
+    if not m:
+        return None
+    targets = [int(x) for x in re.findall(r'#(\d+)', m.group(1))]
+    options = [m.group(2).strip(), m.group(3).strip()]
+    return (targets, options)
 
 def card_judge(pos: int, target: int, is_lying: bool) -> CardInfo:
     return CardInfo(pos, "Judge", info_parsed={"target": target, "is_lying": is_lying})
@@ -801,9 +848,13 @@ class GameSession:
 
         # Step 7: HP update
         if not was_evil:
+            from knowledge_base import wrong_exec_cost_for
+            true_role = target_card.get('true_role')
+            cost = wrong_exec_cost_for(true_role, default=self.wrong_exec_cost)
             old_hp = self.hp
-            self.hp -= self.wrong_exec_cost
-            print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}")
+            self.hp -= cost
+            suffix = f" ({true_role}: -{cost})" if cost != self.wrong_exec_cost else ""
+            print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}{suffix}")
         else:
             print(f"  [auto_exec] Correct execution. HP remains {self.hp}")
 
@@ -1398,6 +1449,15 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         m = re.search(r'(\d+)\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE)
         if m:
             return card_jester(pos, targets, int(m.group(1)))
+        # Silenced Jester (e.g. by Rambler): clue is flavor like "#X shut up!"
+        # or empty. Targets are preserved, but no evil_count is recoverable.
+        # Without this branch the Rust validator's targets/evil_count lookups
+        # returned true unconditionally, masking the constraint (asc78_v6).
+        silenced_pat = re.search(r'#\d+\s*shut\s*up', clue, re.IGNORECASE)
+        if silenced_pat or (not clue.strip()):
+            # Guard: only silenced if no numeric evil count is extractable.
+            if not re.search(r'\d+\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE):
+                return card_jester_silenced(pos, targets)
         # "none of them are evil"
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_jester(pos, targets, 0)
@@ -1418,12 +1478,18 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         return card_judge(pos, targets[0], is_lying)
 
     # --- Dreamer: target + evil role from clue ---
-    if role_lower == 'dreamer' and targets:
-        # Game shows "#N could be: <Role>" or "#N is <Role>"
-        m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
-        if m:
-            evil_role = m.group(1).strip()
-            return card_dreamer(pos, targets[0], evil_role)
+    if role_lower == 'dreamer':
+        # Dreamer2 post-patch: "Among #X, #Y there is: R1 or R2" — try ambiguous form first.
+        ambiguous = _parse_ambiguous_among(clue)
+        if ambiguous:
+            amb_targets, options = ambiguous
+            return card_dreamer_ambiguous(pos, amb_targets or targets, options)
+        # Old Dreamer1 form: "#N could be: <Role>" or "#N is <Role>"
+        if targets:
+            m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
+            if m:
+                evil_role = m.group(1).strip()
+                return card_dreamer(pos, targets[0], evil_role)
 
     # --- Oracle: targets + minion role ---
     if role_lower == 'oracle' and targets:
@@ -1702,6 +1768,24 @@ def _validate_true_evils_against_session(true_evils: dict, session) -> tuple:
     return (true_evils, [])
 
 
+_DECK_OUTCAST_ROLES = frozenset({
+    "drunk", "wretch", "bombardier", "doppelganger", "plague_doctor", "rambler",
+})
+
+
+def _baa_hides_outcast(only_cv: set, only_mr: set, mr_set: set, cv_unclassified: int) -> bool:
+    """Baa in the deck renders one outcast as a face-down eye-symbol in the pool view.
+
+    That produces: exactly one outcast role in only_mr, zero only_cv, and at
+    least one unclassified CV box. Confirmed asc78 (Doppelganger hidden).
+    """
+    if "baa" not in mr_set:
+        return False
+    if only_cv or len(only_mr) != 1 or cv_unclassified < 1:
+        return False
+    return next(iter(only_mr)) in _DECK_OUTCAST_ROLES
+
+
 def _cmd_read_deck(screenshot_path: str):
     """Read deck using both card_vision and memory_reader, cross-check results."""
     import subprocess
@@ -1718,11 +1802,13 @@ def _cmd_read_deck(screenshot_path: str):
         capture_output=True, text=True
     )
     cv_roles = []
+    cv_unclassified = 0
     if cv_result.returncode == 0:
         try:
             import json as _json
             cards = _json.loads(cv_result.stdout)
             cv_roles = [c["name"] for c in cards if c.get("accepted")]
+            cv_unclassified = sum(1 for c in cards if not c.get("accepted"))
             factions = {}
             for c in cards:
                 if c.get("accepted"):
@@ -1732,9 +1818,12 @@ def _cmd_read_deck(screenshot_path: str):
                 roles = factions.get(faction, [])
                 if roles:
                     print(f"  {faction}s ({len(roles)}): {', '.join(roles)}")
+            if cv_unclassified:
+                print(f"  Unclassified boxes: {cv_unclassified}")
         except Exception as e:
             print(f"  ERROR parsing card_vision output: {e}")
             cv_roles = []
+            cv_unclassified = 0
     else:
         print(f"  ERROR: card_vision failed: {cv_result.stderr[:200]}")
 
@@ -1763,18 +1852,24 @@ def _cmd_read_deck(screenshot_path: str):
     # Cross-check
     cv_set = set(r.lower().replace(" ", "_") for r in cv_roles)
     mr_set = set(mr_roles)
+
     if cv_set and mr_set:
         if cv_set == mr_set:
             print(f"\n  MATCH: Both pipelines agree ({len(cv_set)} roles)")
         else:
             only_cv = cv_set - mr_set
             only_mr = mr_set - cv_set
-            print(f"\n  MISMATCH!")
-            if only_cv:
-                print(f"    Only in card_vision: {only_cv}")
-            if only_mr:
-                print(f"    Only in memory_reader: {only_mr}")
-            print(f"    STOP AND FIX before proceeding!")
+            if _baa_hides_outcast(only_cv, only_mr, mr_set, cv_unclassified):
+                role = next(iter(only_mr))
+                print(f"\n  MATCH (Baa hides outcast): CV={len(cv_set)} classified"
+                      f" + '{role}' face-down in deck view (Baa effect)")
+            else:
+                print(f"\n  MISMATCH!")
+                if only_cv:
+                    print(f"    Only in card_vision: {only_cv}")
+                if only_mr:
+                    print(f"    Only in memory_reader: {only_mr}")
+                print(f"    STOP AND FIX before proceeding!")
     elif not cv_set and not mr_set:
         print("\n  WARNING: Both pipelines returned empty results")
     else:
@@ -2312,7 +2407,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         print("\n--- Memory Reader (board state) ---")
         if cards:
             _print_board(cards)
-            _verify_flips(cards, positions, session)
+            verify = _verify_flips(cards, positions, session)
+            # Flake-failed clicks never actually revealed — strip them from
+            # reveal_order so a subsequent `flip <pos>` retry lands them at
+            # the true reveal index. Critical for Baker-chain validation:
+            # wrong reveal_order corrupts the chain seed and can collapse
+            # the scenario space to 0 after an unrelated wrong exec
+            # (asc78_v6 halt, 2026-04-21).
+            failed = verify.get("failed", [])
+            if failed:
+                removed = False
+                for p in failed:
+                    if p in session.reveal_order:
+                        session.reveal_order.remove(p)
+                        removed = True
+                if removed:
+                    print(f"  [reveal_order] Removed failed positions {failed} from reveal_order; retry via `flip {failed[0]}` will re-append at true index.")
+                    session.save()
         else:
             print("  WARNING: memory_reader returned no cards")
         print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
@@ -2419,6 +2530,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     else:
                         # Try to auto-detect corruption status from memory reader
                         was_corrupted = None
+                        mr_true_role = None
                         try:
                             from memory_reader import MemoryReader
                             reader = MemoryReader()
@@ -2428,6 +2540,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                                     if cards:
                                         target_char = next((c for c in cards if c.get('position') == pos), None)
                                         if target_char:
+                                            mr_true_role = target_char.get('true_role')
                                             statuses = target_char.get('statuses', [])
                                             if 'Corrupted' in statuses:
                                                 was_corrupted = True
@@ -2443,6 +2556,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                             print(f"  WARNING: Memory reader error ({e})")
                         if was_corrupted is None:
                             print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
+                        # Stash for the post-execute HP warning
+                        session._last_exec_mr_true_role = mr_true_role
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
@@ -2469,8 +2584,12 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if was_evil:
                 print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
             elif was_evil is False:
-                new_hp = session.hp - session.wrong_exec_cost
-                print(f"  WARNING: Wrong execution! HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
+                from knowledge_base import wrong_exec_cost_for
+                mr_true_role = getattr(session, '_last_exec_mr_true_role', None)
+                cost = wrong_exec_cost_for(mr_true_role, default=session.wrong_exec_cost)
+                new_hp = session.hp - cost
+                suffix = f" ({mr_true_role}: -{cost})" if mr_true_role and cost != session.wrong_exec_cost else ""
+                print(f"  WARNING: Wrong execution!{suffix} HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
             else:
                 print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
         return None

@@ -4,6 +4,30 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 
+# Wrong-execution HP cost per role. Default is 5 (Asc4+).
+# Confirmed empirically:
+#   Drunk: 2 (asc78_v6, 2026-04-21 — wrong exec cost -2 not -5)
+# Uncertain / not codified:
+#   Lilis: historical comment claimed Lilis=2, but Lilis is evil so
+#   wrong-executing her doesn't cleanly apply. Not added here.
+WRONG_EXEC_COST_OVERRIDES: dict[str, int] = {
+    "Drunk": 2,
+}
+DEFAULT_WRONG_EXEC_COST = 5
+
+
+def wrong_exec_cost_for(role_name: str | None, default: int | None = None) -> int:
+    """Return the HP cost for a wrong execution targeting `role_name`.
+
+    If role_name is None or not in the override table, returns `default`
+    (or DEFAULT_WRONG_EXEC_COST if default is None).
+    """
+    fallback = default if default is not None else DEFAULT_WRONG_EXEC_COST
+    if role_name is None:
+        return fallback
+    return WRONG_EXEC_COST_OVERRIDES.get(role_name, fallback)
+
+
 class Role(Enum):
     VILLAGER = "Villager"
     OUTCAST = "Outcast"

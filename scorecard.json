@@ -3779,6 +3779,55 @@
       "name": "asc77_v7b",
       "notes": "asc77 v7 retry WIN 10HP perfect. ASCENSION 77 COMPLETE! Full reveal, clean exec #8 Baa, Jester cleared #2,3,4 good, #5 Puppeteer, #6 Puppet.",
       "date": "2026-04-19 18:53"
+    },
+    {
+      "result": "win",
+      "hp": 8,
+      "name": "asc78_v1",
+      "notes": "",
+      "date": "2026-04-20 19:11"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc78_v2",
+      "notes": "10HP perfect - Baa-hides-outcast fix live-validated on resumption from killed session",
+      "date": "2026-04-20 23:52"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc78_v3",
+      "notes": "5HP village 3/7 - 50% pick on #1 lost 5HP (Hunter <Corrupted>); Baa-hides-outcast pattern hid Drunk this time",
+      "date": "2026-04-21 00:03"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc78_v4",
+      "notes": "6HP village 4/7 - Lilis/Chancellor; Dreamer2 parser landed mid-village",
+      "date": "2026-04-21 00:33"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc78_v5",
+      "notes": "5HP village 5/7 - Empress 75% pick was wrong (was Good), Pooka clean after",
+      "date": "2026-04-21 00:38"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc78_v6",
+      "notes": "3HP village 6/7 - COMEBACK after reveal_order + silenced-Jester fixes; #1 wrong (Baker-Lover), #2 wrong (Drunk-Corrupted, -2HP), #3 Chancellor, #4 Baa",
+      "date": "2026-04-21 01:13"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc78_v7",
+      "notes": "10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff",
+      "date": "2026-04-21 01:29"
     }
   ]
 }
