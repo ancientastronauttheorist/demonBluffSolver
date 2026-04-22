@@ -3884,6 +3884,20 @@
       "name": "asc79_v7",
       "notes": "10HP FINAL village 7/7 \u2014 ASCENSION 79 COMPLETE. PD (Chancellor disguise lie) + Dreamer2 + FT + Slayer x2 + probabilistic exec chain landed both evils.",
       "date": "2026-04-21 12:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v1",
+      "notes": "10HP perfect \u2014 PD4 clean narrowed to 1 scenario, Pooka chain",
+      "date": "2026-04-22 11:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v1",
+      "notes": "10HP perfect - PD4 clean narrowed to 1 scenario",
+      "date": "2026-04-22 11:17"
     }
   ]
 }

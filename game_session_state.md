@@ -42274,3 +42274,81 @@ WARNING: Probabilistic execution -- 57% confident (budget: 2 wrong execs)
 Final HP: 10
 Notes: 10HP FINAL village 7/7 — ASCENSION 79 COMPLETE. PD (Chancellor disguise lie) + Dreamer2 + FT + Slayer x2 + probabilistic exec chain landed both evils.
 
+
+---
+
+# New Game — 2026-04-22 11:15:51
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Enlightened, Oracle, Lover, Judge, Witness
+- Outcasts: Bombardier, Plaguedoctor
+- Minions: Poisoner
+- Demons: Pooka
+
+### [11:16:22] Revealed #1 Bombardier
+Info: {}
+
+### [11:16:22] Revealed #2 Enlightened
+Info: {'direction': 'CW'}
+
+### [11:16:22] Revealed #3 Judge
+Info: {}
+
+### [11:16:22] Revealed #4 Alchemist
+Info: {'cured_count': 1}
+
+### [11:16:22] Revealed #5 Oracle
+Info: {'targets': [4, 6], 'minion_role': 'Poisoner'}
+
+### [11:16:22] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:16:22] Revealed #7 Alchemist
+Info: {'cured_count': 2}
+
+### [11:16:22] Revealed #8 Witness
+Info: {'affected_position': 2}
+
+### [11:16:22] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [11:16:33] Solver Output
+Scenarios: 11/497
+Definite good: ['#1', '#2', '#3', '#6', '#9']
+Evil probabilities: #5=91%, #7=91%, #4=9%, #8=9%
+
+#### [11:16:33] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.349 (adjusted 1.349) | timing x1.00
+
+#### [11:17:11] Solver Output
+Scenarios: 1/497
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#9']
+
+#### [11:17:11] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [11:17:18] Executed #4 -> Poisoner (EVIL)
+
+#### [11:17:23] Solver Output
+Scenarios: 1/69
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#9']
+
+#### [11:17:23] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:17:30] Executed #8 -> Pooka (EVIL)
+
+## [11:17:37] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect — PD4 clean narrowed to 1 scenario, Pooka chain
+
+## [11:17:43] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect - PD4 clean narrowed to 1 scenario
+
