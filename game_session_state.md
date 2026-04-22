@@ -42486,3 +42486,104 @@ Reason: #1 is evil in ALL 3 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect - Baker-chain game, PD clean -> Poisoner -> Baa
 
+
+---
+
+# New Game — 2026-04-22 11:29:09
+Cards: 8, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Bard, Poet, Dreamer, Lover, Empress
+- Outcasts: Rambler
+- Minions: Puppeteer
+- Demons: Baa
+
+### [11:29:34] Revealed #1 Dreamer
+Info: {}
+
+### [11:29:34] Revealed #2 Bard
+Info: {'corruption_distance': -1}
+
+### [11:29:34] Revealed #3 Empress
+Info: {'targets': [1, 2, 8]}
+
+### [11:29:34] Revealed #4 Rambler
+Info: {'silenced': False}
+
+### [11:29:34] Revealed #6 Poet
+Info: {'corruption_distance': -1, 'copied_role': 'Bard'}
+
+### [11:29:34] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:29:34] Revealed #8 Alchemist
+Info: {'cured_count': 0}
+
+### [11:29:43] Revealed #5 Poet
+Info: {'copied_role': '--Help'}
+
+### [11:31:02] Revealed #5 Poet
+Info: {'good_position': 6, 'copied_role': 'Gemcrafter'}
+
+#### [11:31:06] Solver Output
+Scenarios: 2/84
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#4', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%
+
+#### [11:31:06] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [11:31:13] Executed #5 -> Puppeteer (EVIL)
+
+#### [11:31:17] Solver Output
+Scenarios: 2/12
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#4', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%
+
+#### [11:31:17] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Puppet'})
+
+### [11:31:24] Executed #6 -> Puppet (EVIL)
+
+#### [11:31:28] Solver Output
+Scenarios: 2/6
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#4', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%
+
+#### [11:31:28] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+#### [11:32:17] Solver Output
+Scenarios: 2/6
+Definite evil: ['#5', '#6']
+Definite good: ['#2', '#4', '#7', '#8']
+Evil probabilities: #1=50%, #3=50%
+
+#### [11:32:17] Recommendation
+Action: **USE_ABILITY** #1 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [11:38:30] Revealed #1 Dreamer
+Info: {'targets': [2, 3], 'evil_role_options': ['Empress', 'Bard']}
+
+#### [11:38:39] Solver Output
+Scenarios: 1/6
+Definite evil: ['#3', '#5', '#6']
+Definite good: ['#1', '#2', '#4', '#7', '#8']
+
+#### [11:38:39] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [11:38:46] Executed #3 -> Baa (EVIL)
+
+## [11:38:52] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect - Puppet chain -> Dreamer2 disambiguates Baa@1 vs Baa@3
+

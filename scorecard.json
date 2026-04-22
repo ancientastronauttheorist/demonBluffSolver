@@ -3912,6 +3912,13 @@
       "name": "asc80_v3",
       "notes": "10HP perfect - Baker-chain game, PD clean -> Poisoner -> Baa",
       "date": "2026-04-22 11:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v4",
+      "notes": "10HP perfect - Puppet chain -> Dreamer2 disambiguates Baa@1 vs Baa@3",
+      "date": "2026-04-22 11:38"
     }
   ]
 }
