@@ -42786,3 +42786,71 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect - Witness 'NO affected' + Empress/Hunter cross-check narrowed to 1 scenario
 
+
+---
+
+# New Game — 2026-04-22 11:50:48
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Bard, Slayer, Confessor, Architect
+- Outcasts: Rambler
+- Minions: 
+- Demons: Pooka
+
+### [11:51:13] Revealed #1 Slayer
+Info: {}
+
+### [11:51:13] Revealed #3 Rambler
+Info: {'silenced': False}
+
+### [11:51:13] Revealed #4 Architect
+Info: {'side': 'Equal'}
+
+### [11:51:13] Revealed #5 Bard
+Info: {'corruption_distance': -1}
+
+### [11:51:13] Revealed #6 Confessor
+Info: {'dizzy': True}
+
+### [11:51:31] Revealed #2 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 0}
+
+#### [11:51:49] Solver Output
+Scenarios: 2/6
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #5=50%, #6=50%
+
+#### [11:51:49] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#5']
+Reason: Target #5 is 50% evil (adjusted 0.25) | EV=0.250 > reveal EV=0.000
+WARNING: Corruption risk: 50% -- Slayer ability disabled if corrupted
+
+### [11:52:02] Revealed #2 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+#### [11:52:07] Solver Output
+Scenarios: 2/6
+Definite good: ['#1', '#2', '#3', '#4']
+Evil probabilities: #5=50%, #6=50%
+
+#### [11:52:07] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#5']
+Reason: Target #5 is 50% evil (adjusted 0.25)
+WARNING: Corruption risk: 50% -- Slayer ability disabled if corrupted
+
+#### [11:53:35] Solver Output
+Scenarios: 1/6
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#5']
+
+#### [11:53:35] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:53:42] Executed #6 -> Pooka (EVIL)
+
+## [11:53:50] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP PERFECT - Slayer fail on #5 confirmed corrupted Slayer + Pooka@6 in scenario 1
+
