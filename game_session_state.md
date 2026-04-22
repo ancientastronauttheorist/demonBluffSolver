@@ -42587,3 +42587,140 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect - Puppet chain -> Dreamer2 disambiguates Baa@1 vs Baa@3
 
+
+---
+
+# New Game — 2026-04-22 11:41:02
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Gemcrafter, Lover, Slayer, Poet, Baker, Confessor, Druid
+- Outcasts: Plaguedoctor
+- Minions: Minion, Poisoner
+- Demons: Pooka
+
+### [11:41:29] Revealed #1 Slayer
+Info: {}
+
+### [11:41:29] Revealed #2 Lover
+Info: {'evil_adjacent': 2}
+
+### [11:41:29] Revealed #3 Alchemist
+Info: {'cured_count': 2}
+
+### [11:41:29] Revealed #4 Plague_Doctor
+Info: {}
+
+### [11:41:29] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [11:41:29] Revealed #6 Baker
+Info: {'original_role': 'Poet'}
+
+### [11:41:29] Revealed #7 Baker
+Info: {'original_role': 'Confessor'}
+
+### [11:41:29] Revealed #8 Baker
+Info: {'original_role': 'Confessor'}
+
+### [11:41:29] Revealed #9 Druid
+Info: {}
+
+#### [11:41:33] Solver Output
+Scenarios: 577/2894
+Definite good: ['#4']
+Evil probabilities: #2=69%, #3=48%, #7=45%, #8=42%, #9=40%, #6=29%, #1=20%, #5=7%
+
+#### [11:41:33] Recommendation
+Action: **USE_ABILITY** #4 (Plague Doctor) -> targets ['#3']
+Reason: Entropy 2.165 (adjusted 2.165) | timing x1.00
+
+#### [11:41:58] Solver Output
+Scenarios: 320/2894
+Definite good: ['#4']
+Evil probabilities: #3=86%, #2=52%, #7=42%, #8=41%, #9=39%, #6=31%, #5=6%, #1=2%
+
+#### [11:41:58] Recommendation
+Action: **USE_ABILITY** #9 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.940 (adjusted 0.822) | timing x1.00
+WARNING: Corruption risk: 25%
+
+### [11:42:37] Revealed #9 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Drunk'}
+
+#### [11:42:42] Solver Output
+Scenarios: 206/2894
+Definite good: ['#4']
+Evil probabilities: #3=85%, #9=61%, #2=45%, #8=43%, #7=33%, #6=28%, #1=4%, #5=1%
+
+#### [11:42:43] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#3']
+Reason: Target #3 is 85% evil (adjusted 0.48)
+WARNING: Corruption risk: 43% -- Slayer ability disabled if corrupted
+
+#### [11:43:27] Solver Output
+Scenarios: 128/2894
+Definite good: ['#4', '#5']
+Evil probabilities: #3=76%, #9=70%, #2=59%, #8=36%, #6=27%, #7=27%, #1=6%
+
+#### [11:43:27] Recommendation
+Action: **USE_ABILITY** #9 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 30%
+
+### [11:44:07] Ability used at #9
+
+#### [11:44:07] Solver Output
+Scenarios: 128/2894
+Definite good: ['#4', '#5']
+Evil probabilities: #3=76%, #9=70%, #2=59%, #8=36%, #6=27%, #7=27%, #1=6%
+
+#### [11:44:07] Recommendation
+Action: **EXECUTE** #3
+Reason: No reveals available. #3 is 76% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 76% confident (budget: 2 wrong execs)
+
+### [11:44:36] Executed #3 -> Pooka (EVIL)
+
+#### [11:44:42] Solver Output
+Scenarios: 28/387
+Definite evil: ['#3']
+Definite good: ['#1', '#4', '#5']
+Evil probabilities: #9=82%, #7=36%, #8=36%, #2=29%, #6=18%
+
+#### [11:44:42] Recommendation
+Action: **EXECUTE** #9
+Reason: No reveals available. #9 is 82% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 82% confident (budget: 2 wrong execs)
+
+### [11:45:02] Executed #9 -> Minion (EVIL)
+
+#### [11:45:03] Solver Output
+Scenarios: 6/49
+Definite evil: ['#3', '#9']
+Definite good: ['#1', '#4', '#5']
+Evil probabilities: #2=33%, #7=33%, #6=17%, #8=17%
+
+#### [11:45:03] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 33% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 33% confident (budget: 2 wrong execs)
+WARNING: Low confidence (33% < 50%) -- consider gathering more info
+
+### [11:45:30] Executed #7 -> GOOD (WRONG!)
+
+#### [11:45:30] Solver Output
+Scenarios: 1/37
+Definite evil: ['#2', '#3', '#9']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+
+#### [11:45:30] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [11:45:37] Executed #2 -> Poisoner (EVIL)
+
+## [11:46:03] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)
+

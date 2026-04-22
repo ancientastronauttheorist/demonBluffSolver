@@ -3919,6 +3919,13 @@
       "name": "asc80_v4",
       "notes": "10HP perfect - Puppet chain -> Dreamer2 disambiguates Baa@1 vs Baa@3",
       "date": "2026-04-22 11:38"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc80_v5",
+      "notes": "5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)",
+      "date": "2026-04-22 11:46"
     }
   ]
 }
