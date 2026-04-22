@@ -181,14 +181,17 @@ pub fn pick_execution_target(
         .collect();
 
     if !active_probs.is_empty() {
-        // E4: Sort by (p_evil, tiebreak) for stable 50/50 resolution
+        // E4: Sort by (p_evil, tiebreak) for stable 50/50 resolution.
+        // tiebreak_score returns (adjacency_bonus, corruption_penalty,
+        // role_consistency, witch_boost) — higher is better on every term.
         active_probs.sort_by(|a, b| {
-            let ta = tiebreak_score(a.0, result);
-            let tb = tiebreak_score(b.0, result);
+            let ta = tiebreak_score(a.0, state, result);
+            let tb = tiebreak_score(b.0, state, result);
             b.1.partial_cmp(&a.1).unwrap()
                 .then(tb.0.partial_cmp(&ta.0).unwrap())
                 .then(tb.1.partial_cmp(&ta.1).unwrap())
                 .then(tb.2.partial_cmp(&ta.2).unwrap())
+                .then(tb.3.partial_cmp(&ta.3).unwrap())
         });
 
         let best_pos = active_probs[0].0;
