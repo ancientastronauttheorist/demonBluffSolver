@@ -42724,3 +42724,65 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Poisoner'})
 Final HP: 5
 Notes: 5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)
 
+
+---
+
+# New Game — 2026-04-22 11:47:45
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Empress, Witness, Bard, Dreamer, Confessor, Scout
+- Outcasts: Bombardier
+- Minions: Minion
+- Demons: Pooka
+
+### [11:48:03] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 3}
+
+### [11:48:03] Revealed #3 Hunter
+Info: {'distance': 2}
+
+### [11:48:03] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [11:48:03] Revealed #5 Dreamer
+Info: {}
+
+### [11:48:03] Revealed #6 Bard
+Info: {'corruption_distance': -1}
+
+### [11:48:03] Revealed #7 Bombardier
+Info: {}
+
+### [11:48:03] Revealed #8 Empress
+Info: {'targets': [2, 6, 7]}
+
+### [11:48:30] Revealed #2 Witness
+Info: {'affected_position': 0}
+
+#### [11:48:34] Solver Output
+Scenarios: 1/56
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [11:48:34] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [11:48:41] Executed #1 -> Minion (EVIL)
+
+#### [11:48:47] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#8']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [11:48:47] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:48:53] Executed #8 -> Pooka (EVIL)
+
+## [11:49:06] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect - Witness 'NO affected' + Empress/Hunter cross-check narrowed to 1 scenario
+

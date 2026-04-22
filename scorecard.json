@@ -3926,6 +3926,13 @@
       "name": "asc80_v5",
       "notes": "5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)",
       "date": "2026-04-22 11:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v6",
+      "notes": "10HP perfect - Witness 'NO affected' + Empress/Hunter cross-check narrowed to 1 scenario",
+      "date": "2026-04-22 11:49"
     }
   ]
 }
