@@ -42414,3 +42414,75 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 6
 Notes: 6HP - Lilis 2 night kills penalty, clean exec chain
 
+
+---
+
+# New Game — 2026-04-22 11:24:59
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bishop, Baker, Alchemist, Hunter, Scout, Confessor, Jester
+- Outcasts: Plaguedoctor
+- Minions: Poisoner
+- Demons: Baa
+
+### [11:25:38] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [11:25:38] Revealed #2 Alchemist
+Info: {'cured_count': 1}
+
+### [11:25:38] Revealed #3 Confessor
+Info: {'dizzy': False}
+
+### [11:25:38] Revealed #4 Bishop
+Info: {'targets': [5, 6, 8], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:25:38] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [11:25:38] Revealed #6 Baker
+Info: {'original_role': 'Baker'}
+
+### [11:25:38] Revealed #7 Plague_Doctor
+Info: {}
+
+### [11:25:38] Revealed #8 Scout
+Info: {'evil_role': 'Baa', 'distance': 3}
+
+#### [11:26:25] Solver Output
+Scenarios: 18/390
+Definite good: ['#3', '#7']
+Evil probabilities: #1=67%, #4=61%, #2=33%, #8=22%, #5=11%, #6=6%
+
+#### [11:26:25] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.681 (adjusted 1.681) | timing x1.00
+
+#### [11:26:49] Solver Output
+Scenarios: 11/390
+Definite evil: ['#4']
+Definite good: ['#3', '#5', '#6', '#7']
+Evil probabilities: #1=82%, #2=9%, #8=9%
+
+#### [11:26:49] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 11 scenarios (roles: {'Poisoner', 'Baa'})
+
+### [11:26:55] Executed #4 -> Poisoner (EVIL)
+
+#### [11:27:00] Solver Output
+Scenarios: 3/59
+Definite evil: ['#1', '#4']
+Definite good: ['#2', '#3', '#5', '#6', '#7', '#8']
+
+#### [11:27:00] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Baa'})
+
+### [11:27:07] Executed #1 -> Baa (EVIL)
+
+## [11:27:12] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect - Baker-chain game, PD clean -> Poisoner -> Baa
+
