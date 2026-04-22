@@ -3898,6 +3898,13 @@
       "name": "asc80_v1",
       "notes": "10HP perfect - PD4 clean narrowed to 1 scenario",
       "date": "2026-04-22 11:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc80_v2",
+      "notes": "6HP - Lilis 2 night kills penalty, clean exec chain",
+      "date": "2026-04-22 11:23"
     }
   ]
 }

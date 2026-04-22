@@ -42352,3 +42352,65 @@ Notes: 10HP perfect — PD4 clean narrowed to 1 scenario, Pooka chain
 Final HP: 10
 Notes: 10HP perfect - PD4 clean narrowed to 1 scenario
 
+
+---
+
+# New Game — 2026-04-22 11:19:51
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Druid, Bishop, Poet, Architect, Confessor
+- Outcasts: Wretch, Bombardier
+- Minions: Poisoner
+- Demons: Lilis
+
+### [11:21:45] Revealed #1 Scout
+Info: {'evil_role': 'Lilis', 'distance': 1}
+
+### [11:21:45] Revealed #2 Poet
+Info: {'evil_pairs': 1, 'copied_role': 'Knitter'}
+
+### [11:21:45] Revealed #4 Architect
+Info: {'side': 'Equal'}
+
+### [11:21:45] Revealed #5 Confessor
+Info: {'dizzy': False}
+
+### [11:21:45] Revealed #7 Wretch
+Info: {}
+
+### [11:21:45] Revealed #8 Bombardier
+Info: {}
+
+### [11:21:45] Revealed #9 Bishop
+Info: {'targets': [6, 5, 1], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:22:03] Revealed #3 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 9}
+
+#### [11:22:07] Solver Output
+Scenarios: 2/100
+Definite evil: ['#2', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [11:22:07] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Poisoner', 'Lilis'})
+
+### [11:22:14] Executed #2 -> Poisoner (EVIL)
+
+#### [11:22:57] Solver Output
+Scenarios: 1/14
+Definite evil: ['#2', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7', '#8']
+
+#### [11:22:57] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [11:23:04] Executed #9 -> Lilis (EVIL)
+
+## [11:23:10] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP - Lilis 2 night kills penalty, clean exec chain
+
