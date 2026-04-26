@@ -1,0 +1,138 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8,
+        "good_role": "Fortune Teller"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "Equidistant",
+        "copied_role": "Enlightened"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Fortune_Teller",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    3,
+    4
+  ],
+  "confirmed_evil": [
+    3,
+    4
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Witch",
+    "4": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Knight",
+      "Fortune Teller",
+      "Oracle",
+      "Poet",
+      "Medium",
+      "Knitter"
+    ],
+    "outcasts": [
+      "Wretch"
+    ],
+    "minions": [
+      "Witch"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc81_v7",
+  "true_evil_positions": {
+    "3": "Witch",
+    "4": "Pooka"
+  },
+  "notes": "10HP perfect village 7/7 - ASCENSION 81 COMPLETE - Oracle+Medium+Empress chain narrowed to 1 scenario instantly, exec #3 Witch + #4 Pooka definite"
+}

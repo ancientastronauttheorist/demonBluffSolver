@@ -43416,3 +43416,65 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Witch'})
 Final HP: 10
 Notes: 10HP perfect village 6/7 - Empress narrowed evil to {4,6,7} subgroup, solver narrowed to 2 scenarios immediately, exec #3 Baa + #6 Witch definite
 
+
+---
+
+# New Game — 2026-04-26 00:56:45
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Knight, Fortune Teller, Oracle, Poet, Medium, Knitter
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Pooka
+
+### [00:57:23] Revealed #1 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Witch'}
+
+### [00:57:23] Revealed #2 Medium
+Info: {'good_position': 8, 'good_role': 'Fortune Teller'}
+
+### [00:57:23] Revealed #3 Knitter
+Info: {'evil_pairs': 0}
+
+### [00:57:23] Revealed #4 Poet
+Info: {'direction': 'Equidistant', 'copied_role': 'Enlightened'}
+
+### [00:57:23] Revealed #5 Knight
+Info: {}
+
+### [00:57:23] Revealed #6 Wretch
+Info: {}
+
+### [00:57:23] Revealed #7 Empress
+Info: {'targets': [1, 6, 8]}
+
+#### [00:57:29] Solver Output
+Scenarios: 1/56
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [00:57:29] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [00:57:36] Executed #3 -> Witch (EVIL)
+
+### [00:57:47] Revealed #8 Fortune_Teller
+Info: {}
+
+#### [00:57:53] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3', '#4']
+Definite good: ['#1', '#2', '#5', '#6', '#7', '#8']
+
+#### [00:57:53] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [00:58:00] Executed #4 -> Pooka (EVIL)
+
+## [00:58:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 7/7 - ASCENSION 81 COMPLETE - Oracle+Medium+Empress chain narrowed to 1 scenario instantly, exec #3 Witch + #4 Pooka definite
+

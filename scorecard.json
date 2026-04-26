@@ -3982,6 +3982,13 @@
       "name": "asc81_v6",
       "notes": "10HP perfect village 6/7 - Empress narrowed evil to {4,6,7} subgroup, solver narrowed to 2 scenarios immediately, exec #3 Baa + #6 Witch definite",
       "date": "2026-04-26 00:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v7",
+      "notes": "10HP perfect village 7/7 - ASCENSION 81 COMPLETE - Oracle+Medium+Empress chain narrowed to 1 scenario instantly, exec #3 Witch + #4 Pooka definite",
+      "date": "2026-04-26 00:58"
     }
   ]
 }
