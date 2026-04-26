@@ -42978,3 +42978,65 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP village 1/7 - Dreamer2 ambiguous (Alch/Gravedigger), corrupted Druid lying NO outcasts, exec lookahead picked #1 wrong then #2 Pooka right
 
+
+---
+
+# New Game — 2026-04-26 00:32:01
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Fortune Teller, Bard, Alchemist, Baker, Dreamer
+- Outcasts: Doppelganger
+- Minions: Witch
+- Demons: Baa
+
+### [00:33:18] Revealed #1 Alchemist
+Info: {'cured_count': 0}
+
+### [00:33:18] Revealed #2 Baker
+Info: {'original_role': 'Bard'}
+
+### [00:33:18] Revealed #3 Fortune_Teller
+Info: {}
+
+### [00:33:18] Revealed #4 Fortune_Teller
+Info: {}
+
+### [00:33:18] Revealed #5 Dreamer
+Info: {}
+
+### [00:33:18] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [00:33:18] Revealed #7 Baker
+Info: {'original_role': 'Dreamer'}
+
+#### [00:33:48] Solver Output
+Scenarios: 12/336
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [00:33:48] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 12 scenarios (roles: {'Witch', 'Baa'})
+
+### [00:33:55] Executed #2 -> Witch (EVIL)
+
+### [00:34:06] Revealed #8 Bard
+Info: {'corruption_distance': -1}
+
+#### [00:34:12] Solver Output
+Scenarios: 6/42
+Definite evil: ['#2', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#8']
+
+#### [00:34:12] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 6 scenarios (roles: {'Baa'})
+
+### [00:34:18] Executed #7 -> Baa (EVIL)
+
+## [00:34:35] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 2/7 - Lover narrowed evil to {5,7}, Witch/Baa Baker chain immediately solvable, Bard 'no corrupted' confirms
+
