@@ -3961,6 +3961,13 @@
       "name": "asc81_v3",
       "notes": "10HP perfect village 3/7 - PD #6 corrupted by #3 Shaman, exec #3 -> #5 Pooka definite -> Jester confirms #2,#4,#7 clean -> exec #1 Minion",
       "date": "2026-04-26 00:39"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc81_v4",
+      "notes": "5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite",
+      "date": "2026-04-26 00:45"
     }
   ]
 }

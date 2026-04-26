@@ -1,0 +1,168 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          7
+        ],
+        "has_evil": false
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Fortune Teller",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          7
+        ],
+        "has_evil": true
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Judge",
+      "info_text": "",
+      "info_parsed": {
+        "target": 3,
+        "is_lying": false
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knitter",
+      "info_text": "",
+      "info_parsed": {
+        "evil_pairs": 0
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Baa",
+        "distance": 2
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Judge"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    3,
+    2,
+    7
+  ],
+  "confirmed_evil": [
+    1,
+    2,
+    7
+  ],
+  "confirmed_good": [
+    3
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "1": "Poisoner",
+    "2": "Shaman",
+    "7": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "3": false
+  },
+  "deck": {
+    "villagers": [
+      "Lover",
+      "Scout",
+      "Fortune Teller",
+      "Baker",
+      "Judge",
+      "Witness",
+      "Knitter",
+      "Architect"
+    ],
+    "outcasts": [
+      "Drunk"
+    ],
+    "minions": [
+      "Poisoner",
+      "Shaman"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    4,
+    2,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc81_v4",
+  "true_evil_positions": {
+    "1": "Poisoner",
+    "2": "Shaman",
+    "7": "Baa"
+  },
+  "notes": "5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite"
+}

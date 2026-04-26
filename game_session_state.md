@@ -43146,3 +43146,137 @@ Reason: #1 is evil in ALL 4 scenarios (roles: {'Minion'})
 Final HP: 10
 Notes: 10HP perfect village 3/7 - PD #6 corrupted by #3 Shaman, exec #3 -> #5 Pooka definite -> Jester confirms #2,#4,#7 clean -> exec #1 Minion
 
+
+---
+
+# New Game — 2026-04-26 00:42:36
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Scout, Fortune Teller, Baker, Judge, Witness, Knitter, Architect
+- Outcasts: Drunk
+- Minions: Poisoner, Shaman
+- Demons: Baa
+
+### [00:43:11] Revealed #1 Witness
+Info: {'affected_position': 1}
+
+### [00:43:11] Revealed #2 Fortune_Teller
+Info: {}
+
+### [00:43:11] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [00:43:11] Revealed #4 Fortune_Teller
+Info: {}
+
+### [00:43:11] Revealed #5 Judge
+Info: {}
+
+### [00:43:11] Revealed #6 Knitter
+Info: {'evil_pairs': 0}
+
+### [00:43:11] Revealed #7 Scout
+Info: {'evil_role': 'Baa', 'distance': 2}
+
+### [00:43:11] Revealed #8 Baker
+Info: {'original_role': 'original'}
+
+### [00:43:11] Revealed #9 Baker
+Info: {'original_role': 'Judge'}
+
+#### [00:43:19] Solver Output
+Scenarios: 190/4644
+Evil probabilities: #1=80%, #3=57%, #7=40%, #5=33%, #8=28%, #6=22%, #2=18%, #4=16%, #9=6%
+
+#### [00:43:19] Recommendation
+Action: **USE_ABILITY** #4 (Fortune Teller) -> targets ['#2', '#7']
+Reason: Entropy 1.000 (adjusted 0.853) | follow-up bonus 0.353 | timing x1.00
+WARNING: Corruption risk: 29%
+
+### [00:43:26] Revealed #4 Fortune Teller
+Info: {'targets': [2, 7], 'has_evil': True}
+
+### [00:43:26] Ability used at #4
+
+#### [00:43:32] Solver Output
+Scenarios: 68/4644
+Definite good: ['#8', '#9']
+Evil probabilities: #1=81%, #3=47%, #7=46%, #6=43%, #5=40%, #2=38%, #4=6%
+
+#### [00:43:32] Recommendation
+Action: **USE_ABILITY** #2 (Fortune Teller) -> targets ['#3', '#7']
+Reason: Entropy 0.999 (adjusted 0.860) | follow-up bonus 0.369 | timing x1.00
+WARNING: Corruption risk: 28%
+
+### [00:43:39] Revealed #2 Fortune Teller
+Info: {'targets': [3, 7], 'has_evil': False}
+
+### [00:43:39] Ability used at #2
+
+#### [00:43:48] Solver Output
+Scenarios: 43/4644
+Definite good: ['#9']
+Evil probabilities: #1=81%, #3=53%, #7=53%, #5=33%, #2=28%, #6=23%, #8=19%, #4=9%
+
+#### [00:43:48] Recommendation
+Action: **USE_ABILITY** #5 (Judge) -> targets ['#3']
+Reason: Expected posterior 24.5 scenarios (adjusted 26.2, info gain 0.714 bits) | timing x1.00
+WARNING: Corruption risk: 14% -- corrupted Judge results are unreliable
+
+### [00:43:54] Revealed #5 Judge
+Info: {'target': 3, 'is_lying': False}
+
+### [00:43:54] Ability used at #5
+
+#### [00:44:00] Solver Output
+Scenarios: 24/4644
+Definite good: ['#4', '#9']
+Evil probabilities: #1=83%, #7=58%, #2=50%, #3=42%, #5=42%, #6=17%, #8=8%
+
+#### [00:44:00] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (33% evil Shaman, 29% evil Baa, 21% evil Poisoner).
+WARNING: Execution lookahead override -- immediate hit chance is 83%, but all reveal branches still lead to a forced win.
+
+### [00:44:07] Executed #1 -> Poisoner (EVIL)
+
+#### [00:44:12] Solver Output
+Scenarios: 5/516
+Definite evil: ['#1']
+Definite good: ['#4', '#6', '#8', '#9']
+Evil probabilities: #3=60%, #7=60%, #2=40%, #5=40%
+
+#### [00:44:12] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (40% good Lover, 40% evil Shaman, 20% evil Baa).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [00:44:19] Executed #3 -> GOOD (WRONG!)
+
+#### [00:44:25] Solver Output
+Scenarios: 2/372
+Definite evil: ['#1', '#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9']
+
+#### [00:44:25] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 2 scenarios (roles: {'Shaman', 'Baa'})
+
+### [00:44:55] Executed #2 -> Shaman (EVIL)
+
+#### [00:44:55] Solver Output
+Scenarios: 1/36
+Definite evil: ['#1', '#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9']
+
+#### [00:44:55] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [00:45:02] Executed #7 -> Baa (EVIL)
+
+## [00:45:09] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite
+
