@@ -42854,3 +42854,127 @@ Reason: #6 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP PERFECT - Slayer fail on #5 confirmed corrupted Slayer + Pooka@6 in scenario 1
 
+
+---
+
+# New Game — 2026-04-26 00:21:05
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Alchemist, Baker, Medium, Dreamer
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [00:21:38] Revealed #1 Druid
+Info: {}
+
+### [00:21:38] Revealed #2 Alchemist
+Info: {'cured_count': 1}
+
+### [00:21:38] Revealed #3 Dreamer
+Info: {}
+
+### [00:21:38] Revealed #4 Bombardier
+Info: {}
+
+### [00:21:38] Revealed #5 Baker
+Info: {'original_role': 'original'}
+
+### [00:21:38] Revealed #6 Baker
+Info: {'original_role': 'Medium'}
+
+#### [00:21:52] Solver Output
+Scenarios: 3/6
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=33%, #2=33%, #3=33%
+
+#### [00:21:52] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.585 (adjusted 1.321) | timing x1.00
+WARNING: Corruption risk: 33%
+
+#### [00:22:37] Solver Output
+Scenarios: 3/6
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=33%, #2=33%, #3=33%
+
+#### [00:22:37] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.585 (adjusted 1.321) | timing x1.00
+WARNING: Corruption risk: 33%
+
+#### [00:23:59] Solver Output
+Scenarios: 3/6
+Definite good: ['#4', '#5', '#6']
+Evil probabilities: #1=33%, #2=33%, #3=33%
+
+#### [00:23:59] Recommendation
+Action: **USE_ABILITY** #3 (Dreamer) -> targets ['#2']
+Reason: Entropy 1.585 (adjusted 1.321) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [00:26:51] Ability used at #3
+
+#### [00:26:51] Solver Output
+Scenarios: 2/6
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #2=50%
+
+#### [00:26:51] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [00:27:20] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+#### [00:27:23] Solver Output
+Scenarios: 2/6
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #2=50%
+
+#### [00:27:23] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [00:27:40] Ability used at #1
+
+#### [00:27:53] Solver Output
+Scenarios: 2/6
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #2=50%
+
+#### [00:27:53] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Druid (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+#### [00:27:59] Solver Output
+Scenarios: 2/6
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #1=50%, #2=50%
+
+#### [00:27:59] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Druid (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [00:28:06] Executed #1 -> GOOD (WRONG!)
+
+#### [00:28:18] Solver Output
+Scenarios: 1/5
+Definite evil: ['#2']
+Definite good: ['#1', '#3', '#4', '#5', '#6']
+
+#### [00:28:18] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [00:28:24] Executed #2 -> Pooka (EVIL)
+
+## [00:28:47] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP village 1/7 - Dreamer2 ambiguous (Alch/Gravedigger), corrupted Druid lying NO outcasts, exec lookahead picked #1 wrong then #2 Pooka right
+

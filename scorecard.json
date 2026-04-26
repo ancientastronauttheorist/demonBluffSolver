@@ -3940,6 +3940,13 @@
       "name": "asc80_v7",
       "notes": "10HP PERFECT - Slayer fail on #5 confirmed corrupted Slayer + Pooka@6 in scenario 1",
       "date": "2026-04-22 11:53"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc81_v1",
+      "notes": "5HP village 1/7 - Dreamer2 ambiguous (Alch/Gravedigger), corrupted Druid lying NO outcasts, exec lookahead picked #1 wrong then #2 Pooka right",
+      "date": "2026-04-26 00:28"
     }
   ]
 }
