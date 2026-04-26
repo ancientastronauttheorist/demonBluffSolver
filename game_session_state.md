@@ -43357,3 +43357,62 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect village 5/7 - solver narrowed to 6 scenarios immediately, exec #9 -> #2 -> #8 all definite, no abilities needed
 
+
+---
+
+# New Game — 2026-04-26 00:52:57
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Slayer, Enlightened, Dreamer, Empress, Medium, Knitter, Hunter
+- Outcasts: Wretch
+- Minions: Witch
+- Demons: Baa
+
+### [00:53:28] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [00:53:28] Revealed #2 Wretch
+Info: {}
+
+### [00:53:28] Revealed #3 Slayer
+Info: {}
+
+### [00:53:28] Revealed #4 Dreamer
+Info: {}
+
+### [00:53:28] Revealed #5 Empress
+Info: {'targets': [4, 6, 7]}
+
+### [00:53:28] Revealed #6 Medium
+Info: {'good_position': 3, 'good_role': 'Slayer'}
+
+### [00:53:28] Revealed #7 Hunter
+Info: {'distance': 1}
+
+#### [00:53:33] Solver Output
+Scenarios: 2/56
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [00:53:33] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 2 scenarios (roles: {'Witch', 'Baa'})
+
+### [00:54:01] Executed #3 -> Baa (EVIL)
+
+#### [00:54:01] Solver Output
+Scenarios: 1/7
+Definite evil: ['#3', '#6']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8']
+
+#### [00:54:01] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Witch'})
+
+### [00:54:08] Executed #6 -> Witch (EVIL)
+
+## [00:54:16] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 6/7 - Empress narrowed evil to {4,6,7} subgroup, solver narrowed to 2 scenarios immediately, exec #3 Baa + #6 Witch definite
+

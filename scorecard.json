@@ -3975,6 +3975,13 @@
       "name": "asc81_v5",
       "notes": "10HP perfect village 5/7 - solver narrowed to 6 scenarios immediately, exec #9 -> #2 -> #8 all definite, no abilities needed",
       "date": "2026-04-26 00:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v6",
+      "notes": "10HP perfect village 6/7 - Empress narrowed evil to {4,6,7} subgroup, solver narrowed to 2 scenarios immediately, exec #3 Baa + #6 Witch definite",
+      "date": "2026-04-26 00:54"
     }
   ]
 }
