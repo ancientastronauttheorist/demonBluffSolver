@@ -3828,6 +3828,167 @@
       "name": "asc78_v7",
       "notes": "10HP perfect village 7/7 - ASCENSION 78 COMPLETE; Pooka disguised as Poet with Lover-style '0 evils adjacent' bluff",
       "date": "2026-04-21 01:29"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v1",
+      "notes": "10HP perfect; deck entry fix (count-as-role-name bug self-corrected)",
+      "date": "2026-04-21 11:51"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc79_v2",
+      "notes": "5HP; wrong-exec #2 corrupted FT from click-before-exec-mode-cleared bug; Dreamer2 outcast validator halt+fix between kills",
+      "date": "2026-04-21 12:15"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v3",
+      "notes": "10HP perfect; Slayer hit + forced-safe Pooka exec. Note: after card jester/druid entries, needed ability_used to prevent solver re-firing (no auto-mark on clue entry).",
+      "date": "2026-04-21 12:21"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v4",
+      "notes": "10HP perfect; clean chain Shaman 100% -> Jester #6 (Chancellor disguise lie 3) -> Chancellor -> Baa",
+      "date": "2026-04-21 12:26"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v5",
+      "notes": "10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9",
+      "date": "2026-04-21 12:31"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc79_v6",
+      "notes": "6HP village 6/7 (Lilis game); -2HP two separate night phases (1 kill + 1 no-kill), all 3 evils correct. #7 Architect night-killed by Lilis.",
+      "date": "2026-04-21 12:38"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc79_v6",
+      "notes": "6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct.",
+      "date": "2026-04-21 12:39"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc79_v7",
+      "notes": "10HP FINAL village 7/7 \u2014 ASCENSION 79 COMPLETE. PD (Chancellor disguise lie) + Dreamer2 + FT + Slayer x2 + probabilistic exec chain landed both evils.",
+      "date": "2026-04-21 12:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v1",
+      "notes": "10HP perfect \u2014 PD4 clean narrowed to 1 scenario, Pooka chain",
+      "date": "2026-04-22 11:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v1",
+      "notes": "10HP perfect - PD4 clean narrowed to 1 scenario",
+      "date": "2026-04-22 11:17"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc80_v2",
+      "notes": "6HP - Lilis 2 night kills penalty, clean exec chain",
+      "date": "2026-04-22 11:23"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v3",
+      "notes": "10HP perfect - Baker-chain game, PD clean -> Poisoner -> Baa",
+      "date": "2026-04-22 11:27"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v4",
+      "notes": "10HP perfect - Puppet chain -> Dreamer2 disambiguates Baa@1 vs Baa@3",
+      "date": "2026-04-22 11:38"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc80_v5",
+      "notes": "5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)",
+      "date": "2026-04-22 11:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v6",
+      "notes": "10HP perfect - Witness 'NO affected' + Empress/Hunter cross-check narrowed to 1 scenario",
+      "date": "2026-04-22 11:49"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc80_v7",
+      "notes": "10HP PERFECT - Slayer fail on #5 confirmed corrupted Slayer + Pooka@6 in scenario 1",
+      "date": "2026-04-22 11:53"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc81_v1",
+      "notes": "5HP village 1/7 - Dreamer2 ambiguous (Alch/Gravedigger), corrupted Druid lying NO outcasts, exec lookahead picked #1 wrong then #2 Pooka right",
+      "date": "2026-04-26 00:28"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v2",
+      "notes": "10HP perfect village 2/7 - Lover narrowed evil to {5,7}, Witch/Baa Baker chain immediately solvable, Bard 'no corrupted' confirms",
+      "date": "2026-04-26 00:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v3",
+      "notes": "10HP perfect village 3/7 - PD #6 corrupted by #3 Shaman, exec #3 -> #5 Pooka definite -> Jester confirms #2,#4,#7 clean -> exec #1 Minion",
+      "date": "2026-04-26 00:39"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc81_v4",
+      "notes": "5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite",
+      "date": "2026-04-26 00:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v5",
+      "notes": "10HP perfect village 5/7 - solver narrowed to 6 scenarios immediately, exec #9 -> #2 -> #8 all definite, no abilities needed",
+      "date": "2026-04-26 00:50"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v6",
+      "notes": "10HP perfect village 6/7 - Empress narrowed evil to {4,6,7} subgroup, solver narrowed to 2 scenarios immediately, exec #3 Baa + #6 Witch definite",
+      "date": "2026-04-26 00:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v7",
+      "notes": "10HP perfect village 7/7 - ASCENSION 81 COMPLETE - Oracle+Medium+Empress chain narrowed to 1 scenario instantly, exec #3 Witch + #4 Pooka definite",
+      "date": "2026-04-26 00:58"
     }
   ]
 }

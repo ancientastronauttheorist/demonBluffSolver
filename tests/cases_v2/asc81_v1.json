@@ -1,0 +1,126 @@
+{
+  "n_cards": 6,
+  "n_evil": 1,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3,
+          4
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2
+        ],
+        "evil_role_options": [
+          "Alchemist",
+          "Gravedigger"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Medium"
+      }
+    }
+  ],
+  "executed": [
+    1,
+    2
+  ],
+  "confirmed_evil": [
+    2
+  ],
+  "confirmed_good": [
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 4,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "executed_good_corrupted": {
+    "1": true
+  },
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Alchemist",
+      "Baker",
+      "Medium",
+      "Dreamer"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    3,
+    1
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc81_v1",
+  "true_evil_positions": {
+    "2": "Pooka"
+  },
+  "notes": "5HP village 1/7 - Dreamer2 ambiguous (Alch/Gravedigger), corrupted Druid lying NO outcasts, exec lookahead picked #1 wrong then #2 Pooka right"
+}

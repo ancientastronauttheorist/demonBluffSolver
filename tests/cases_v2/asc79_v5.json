@@ -1,0 +1,180 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          8,
+          9
+        ],
+        "minion_role": "Witch"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          7,
+          9
+        ],
+        "evil_role_options": [
+          "Bishop",
+          "Poet"
+        ]
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          9
+        ],
+        "evil_role_options": [
+          "Dreamer",
+          "Witch"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          9
+        ],
+        "evil_role_options": [
+          "Bishop",
+          "Minion"
+        ]
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1,
+        "copied_role": "Hunter"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bishop",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          4,
+          6
+        ],
+        "types": [
+          "Villager",
+          "Outcast",
+          "Minion"
+        ]
+      }
+    }
+  ],
+  "executed": [
+    2,
+    7,
+    9
+  ],
+  "confirmed_evil": [
+    2,
+    7,
+    9
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Minion",
+    "7": "Baa",
+    "9": "Witch"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [
+    9
+  ],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Dreamer",
+      "Bard",
+      "Bishop",
+      "Oracle",
+      "Lover",
+      "Poet"
+    ],
+    "outcasts": [
+      "Doppelganger"
+    ],
+    "minions": [
+      "Minion",
+      "Witch"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [
+    6,
+    2,
+    5
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc79_v5",
+  "true_evil_positions": {
+    "2": "Minion",
+    "7": "Baa",
+    "9": "Witch"
+  },
+  "notes": "10HP perfect; 3 Dreamer2 fires narrowed 84 scenarios to forced-safe exec on Minion -> Baa -> blocked-Witch #9"
+}

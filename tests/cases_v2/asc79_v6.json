@@ -1,0 +1,156 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          6
+        ],
+        "evil_role_options": [
+          "Poisoner",
+          "Knight"
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          9
+        ]
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "evil_role": "Lilis",
+        "distance": 2
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "evil_count": 0
+      }
+    }
+  ],
+  "executed": [
+    2,
+    5,
+    6
+  ],
+  "confirmed_evil": [
+    2,
+    5,
+    6
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Twin_Minion",
+    "5": "Lilis",
+    "6": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    7
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Dreamer",
+      "Bard",
+      "Architect",
+      "Scout",
+      "Empress",
+      "Knight"
+    ],
+    "outcasts": [
+      "Bombardier"
+    ],
+    "minions": [
+      "Twin Minion",
+      "Poisoner"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    3,
+    9
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc79_v6",
+  "true_evil_positions": {
+    "2": "Twin_Minion",
+    "5": "Lilis",
+    "6": "Poisoner"
+  },
+  "notes": "6HP village 6/7 (Lilis game); -2HP two night phases (1 kill at #7 Architect + 1 no-kill), all 3 evils correct."
+}

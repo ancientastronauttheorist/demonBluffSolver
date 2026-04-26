@@ -1,0 +1,172 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 2
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "cured_count": 2
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Poet"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Confessor"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Confessor"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Drunk"
+      }
+    }
+  ],
+  "executed": [
+    3,
+    9,
+    7,
+    2
+  ],
+  "confirmed_evil": [
+    3,
+    9,
+    2
+  ],
+  "confirmed_good": [
+    7
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Pooka",
+    "9": "Minion",
+    "2": "Poisoner"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 1,
+      "target_pos": 3,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 4,
+      "target": 3,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "7": false
+  },
+  "deck": {
+    "villagers": [
+      "Alchemist",
+      "Gemcrafter",
+      "Lover",
+      "Slayer",
+      "Poet",
+      "Baker",
+      "Confessor",
+      "Druid"
+    ],
+    "outcasts": [
+      "Plaguedoctor"
+    ],
+    "minions": [
+      "Minion",
+      "Poisoner"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    4,
+    1,
+    9
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc80_v5",
+  "true_evil_positions": {
+    "2": "Poisoner",
+    "3": "Pooka",
+    "9": "Minion"
+  },
+  "notes": "5HP - PD4 clean + Druid/Slayer ambiguity + wrong exec #7 good (5HP cost)"
+}
