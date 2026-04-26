@@ -43040,3 +43040,109 @@ Reason: #7 is evil in ALL 6 scenarios (roles: {'Baa'})
 Final HP: 10
 Notes: 10HP perfect village 2/7 - Lover narrowed evil to {5,7}, Witch/Baa Baker chain immediately solvable, Bard 'no corrupted' confirms
 
+
+---
+
+# New Game — 2026-04-26 00:37:05
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Druid, Hunter, Alchemist, Scout, Knight, Jester, Witness
+- Outcasts: Plague Doctor
+- Minions: Minion, Shaman
+- Demons: Pooka
+
+### [00:37:52] Revealed #1 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [00:37:52] Revealed #2 Knight
+Info: {}
+
+### [00:37:52] Revealed #3 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [00:37:52] Revealed #4 Knitter
+Info: {'evil_pairs': 1}
+
+### [00:37:52] Revealed #5 Hunter
+Info: {'distance': 1}
+
+### [00:37:52] Revealed #6 Knitter
+Info: {'evil_pairs': 2}
+
+### [00:37:52] Revealed #7 Druid
+Info: {}
+
+### [00:37:52] Revealed #8 Jester
+Info: {}
+
+### [00:37:52] Revealed #9 Plague_Doctor
+Info: {}
+
+### [00:37:52] Revealed #10 Witness
+Info: {'affected_position': 4}
+
+#### [00:37:57] Solver Output
+Scenarios: 39/3744
+Definite good: ['#9']
+Evil probabilities: #5=67%, #1=56%, #3=41%, #10=28%, #4=26%, #8=26%, #7=23%, #6=18%, #2=15%
+
+#### [00:37:57] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.509 (adjusted 2.509) | timing x1.00
+
+#### [00:38:32] Solver Output
+Scenarios: 16/3744
+Definite evil: ['#3', '#5']
+Definite good: ['#2', '#4', '#6', '#9', '#10']
+Evil probabilities: #1=75%, #7=12%, #8=12%
+
+#### [00:38:32] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 16 scenarios (roles: {'Minion', 'Shaman', 'Pooka'})
+
+### [00:38:39] Executed #3 -> Shaman (EVIL)
+
+#### [00:38:44] Solver Output
+Scenarios: 7/408
+Definite evil: ['#3', '#5']
+Definite good: ['#2', '#4', '#6', '#9', '#10']
+Evil probabilities: #1=71%, #7=14%, #8=14%
+
+#### [00:38:44] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 7 scenarios (roles: {'Pooka'})
+
+### [00:38:51] Executed #5 -> Pooka (EVIL)
+
+#### [00:38:56] Solver Output
+Scenarios: 7/50
+Definite evil: ['#3', '#5']
+Definite good: ['#2', '#4', '#6', '#9', '#10']
+Evil probabilities: #1=71%, #7=14%, #8=14%
+
+#### [00:38:56] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#2', '#4', '#7']
+Reason: Expected posterior 3.0 scenarios (adjusted 3.2, info gain 1.123 bits) | timing x1.00
+WARNING: Corruption risk: 14%
+
+### [00:39:03] Revealed #8 Jester
+Info: {'targets': [2, 4, 7], 'evil_count': 0}
+
+### [00:39:03] Ability used at #8
+
+#### [00:39:08] Solver Output
+Scenarios: 4/50
+Definite evil: ['#1', '#3', '#5']
+Definite good: ['#2', '#4', '#6', '#7', '#8', '#9', '#10']
+
+#### [00:39:08] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 4 scenarios (roles: {'Minion'})
+
+### [00:39:15] Executed #1 -> Minion (EVIL)
+
+## [00:39:23] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 3/7 - PD #6 corrupted by #3 Shaman, exec #3 -> #5 Pooka definite -> Jester confirms #2,#4,#7 clean -> exec #1 Minion
+

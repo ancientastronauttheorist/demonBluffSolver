@@ -3954,6 +3954,13 @@
       "name": "asc81_v2",
       "notes": "10HP perfect village 2/7 - Lover narrowed evil to {5,7}, Witch/Baa Baker chain immediately solvable, Bard 'no corrupted' confirms",
       "date": "2026-04-26 00:34"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v3",
+      "notes": "10HP perfect village 3/7 - PD #6 corrupted by #3 Shaman, exec #3 -> #5 Pooka definite -> Jester confirms #2,#4,#7 clean -> exec #1 Minion",
+      "date": "2026-04-26 00:39"
     }
   ]
 }
