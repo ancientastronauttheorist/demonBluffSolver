@@ -3968,6 +3968,13 @@
       "name": "asc81_v4",
       "notes": "5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite",
       "date": "2026-04-26 00:45"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc81_v5",
+      "notes": "10HP perfect village 5/7 - solver narrowed to 6 scenarios immediately, exec #9 -> #2 -> #8 all definite, no abilities needed",
+      "date": "2026-04-26 00:50"
     }
   ]
 }

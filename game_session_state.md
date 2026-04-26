@@ -43280,3 +43280,80 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 5
 Notes: 5HP village 4/7 - 2x FT (one Shaman lying), Judge truthful confirms Lover, exec lookahead picked #1 right, #3 wrong (-5HP), then #2 Shaman + #7 Baa definite
 
+
+---
+
+# New Game — 2026-04-26 00:47:50
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knight, Scout, Alchemist, Confessor, Dreamer, Lover
+- Outcasts: Wretch
+- Minions: Poisoner, Minion
+- Demons: Baa
+
+### [00:48:20] Revealed #1 Confessor
+Info: {'dizzy': True}
+
+### [00:48:20] Revealed #2 Lover
+Info: {'evil_adjacent': 0}
+
+### [00:48:20] Revealed #3 Wretch
+Info: {}
+
+### [00:48:20] Revealed #4 Scout
+Info: {'evil_role': 'Baa', 'distance': 1}
+
+### [00:48:20] Revealed #5 Dreamer
+Info: {}
+
+### [00:48:20] Revealed #6 Alchemist
+Info: {'cured_count': 0}
+
+### [00:48:20] Revealed #7 Lover
+Info: {'evil_adjacent': 1}
+
+### [00:48:20] Revealed #8 Knight
+Info: {}
+
+### [00:48:20] Revealed #9 Dreamer
+Info: {}
+
+#### [00:48:25] Solver Output
+Scenarios: 6/714
+Definite evil: ['#9']
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #2=83%, #8=67%, #7=33%, #1=17%
+
+#### [00:48:25] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 6 scenarios (roles: {'Baa', 'Poisoner', 'Minion'})
+
+### [00:49:31] Executed #9 -> Minion (EVIL)
+
+#### [00:49:32] Solver Output
+Scenarios: 1/76
+Definite evil: ['#2', '#8', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [00:49:32] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Poisoner'})
+
+### [00:49:39] Executed #2 -> Poisoner (EVIL)
+
+#### [00:49:57] Solver Output
+Scenarios: 1/7
+Definite evil: ['#2', '#8', '#9']
+Definite good: ['#1', '#3', '#4', '#5', '#6', '#7']
+
+#### [00:49:57] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [00:50:04] Executed #8 -> Baa (EVIL)
+
+## [00:50:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect village 5/7 - solver narrowed to 6 scenarios immediately, exec #9 -> #2 -> #8 all definite, no abilities needed
+
