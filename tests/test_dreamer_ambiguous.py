@@ -13,10 +13,14 @@ Real game strings captured (see tests/cases_v2/asc74_v2.json, asc74_v7.json):
 import unittest
 
 from game_loop import (
+    GameSession,
     _parse_ambiguous_among,
     _parse_clue_from_memory,
+    card_druid,
     card_dreamer_ambiguous,
 )
+from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult
+from strategy import recommend_abilities
 
 
 class TestParseAmbiguousAmong(unittest.TestCase):
@@ -180,6 +184,57 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
         self.assertIsNotNone(ci)
         self.assertEqual(ci.apparent_role, "Dreamer")
         self.assertEqual(ci.info_parsed["evil_role_options"], ["Pooka", "Rambler"])
+
+
+class TestDreamer2Strategy(unittest.TestCase):
+    def test_dreamer_recommendation_uses_two_targets(self):
+        state = GameState(
+            n_cards=3,
+            n_evil=1,
+            deck=DeckComposition(
+                villagers=["Dreamer", "Bard"],
+                outcasts=[],
+                minions=["Minion"],
+                demons=[],
+            ),
+            cards=[
+                CardInfo(1, "Dreamer"),
+                CardInfo(2, "Bard"),
+                CardInfo(3, "Bard"),
+            ],
+        )
+        result = SolverResult(
+            definite_evil=[],
+            definite_good=[],
+            bombardier_positions=[],
+            n_scenarios=2,
+            n_surviving=2,
+            surviving_scenarios=[
+                Scenario(evil_positions={2: "Minion"}),
+                Scenario(evil_positions={3: "Minion"}),
+            ],
+            reasoning=[],
+        )
+
+        dreamer = next(
+            rec for rec in recommend_abilities(state, result, used_abilities=[])
+            if rec.ability_name == "Dreamer"
+        )
+
+        self.assertCountEqual(dreamer.targets, [2, 3])
+        self.assertEqual(len(dreamer.targets), 2)
+
+
+class TestManualActiveAbilityBookkeeping(unittest.TestCase):
+    def test_manual_dreamer2_entry_marks_ability_used(self):
+        session = GameSession(3, 1)
+        session.add_card(card_dreamer_ambiguous(1, [2, 3], ["Minion", "Bard"]))
+        self.assertIn(1, session.used_abilities)
+
+    def test_manual_druid_none_entry_marks_ability_used(self):
+        session = GameSession(4, 1)
+        session.add_card(card_druid(1, [2, 3, 4], None))
+        self.assertIn(1, session.used_abilities)
 
 
 if __name__ == "__main__":

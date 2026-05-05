@@ -44456,3 +44456,122 @@ Reason: All evil characters have been executed!
 Final HP: 10
 Notes: 10HP. Witch blocked #9. Solver took budgeted probabilistic #1 Minion then #7 Baa; Baa death revealed hidden deck strip card as Plague Doctor; #6 Witch became certain.
 
+
+---
+
+# New Game — 2026-05-05 12:26:30
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Empress, Dreamer, Druid, Medium, Jester, Enlightened, Oracle
+- Outcasts: Bombardier, Wretch
+- Minions: Shaman
+- Demons: Lilis
+
+### [12:27:33] Revealed #1 Bombardier
+Info: {}
+
+### [12:27:33] Revealed #2 Enlightened
+Info: {'direction': 'CCW'}
+
+### [12:27:33] Revealed #3 Empress
+Info: {'targets': [1, 6, 7]}
+
+### [12:27:33] Revealed #4 Medium
+Info: {'good_position': 3, 'good_role': 'Empress'}
+
+### [12:28:28] Revealed #5 Dreamer
+Info: {}
+
+### [12:28:28] Revealed #6 Druid
+Info: {}
+
+### [12:28:28] Revealed #7 Enlightened
+Info: {'direction': 'CCW'}
+
+### [12:28:28] Revealed #9 Wretch
+Info: {}
+
+#### [12:28:36] Solver Output
+Scenarios: 8/72
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #5=50%, #6=50%, #7=50%, #9=50%
+
+#### [12:28:36] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#6']
+Reason: Entropy 2.500 (adjusted 2.500) | timing x1.00
+
+### [12:30:11] Revealed #5 Dreamer
+Info: {'targets': [6, 7], 'evil_role_options': ['Druid', 'Lilis']}
+
+#### [12:30:18] Solver Output
+Scenarios: 4/72
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #9=75%, #6=50%, #7=50%, #5=25%
+
+#### [12:30:18] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#7']
+Reason: Entropy 2.000 (adjusted 2.000) | timing x1.00
+
+### [12:30:34] Ability used at #5
+
+#### [12:30:40] Solver Output
+Scenarios: 4/72
+Definite good: ['#1', '#2', '#3', '#4', '#8']
+Evil probabilities: #9=75%, #6=50%, #7=50%, #5=25%
+
+#### [12:30:40] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [12:31:24] Revealed #6 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': None}
+
+#### [12:31:30] Solver Output
+Scenarios: 2/72
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8']
+Evil probabilities: #5=50%, #9=50%
+
+#### [12:31:30] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Shaman', 'Lilis'})
+
+### [12:31:40] Ability used at #6
+
+#### [12:31:46] Solver Output
+Scenarios: 2/72
+Definite evil: ['#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8']
+Evil probabilities: #5=50%, #9=50%
+
+#### [12:31:46] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 2 scenarios (roles: {'Lilis', 'Shaman'})
+
+### [12:32:15] Executed #6 -> Shaman (EVIL)
+
+#### [12:32:21] Solver Output
+Scenarios: 1/8
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+
+#### [12:32:21] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [12:32:49] Executed #5 -> Lilis (EVIL)
+
+#### [12:32:55] Solver Output
+Scenarios: 1/1
+Definite evil: ['#5', '#6']
+Definite good: ['#1', '#2', '#3', '#4', '#7', '#8', '#9']
+
+#### [12:32:55] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+## [12:33:15] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP. Lilis killed #8 Jester in first batch, second pulse did 2HP no kill. Dreamer2 live UI required two picks; solver requested #6, second pick #7 produced Among #6,#7 there is Druid or Lilis. Druid #6 on #1,#2,#3 said NO Outcasts.
+

@@ -536,9 +536,17 @@ class GameSession:
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
         self.cards.sort(key=lambda c: c.position)
-        # Auto-mark ability used for active abilities entered with results
-        # (Judge with target info; PD and Slayer have dedicated commands)
-        if card.apparent_role == "Judge" and card.info_parsed.get("target"):
+        # Auto-mark active abilities used when a manual card entry contains
+        # their real result. PD and Slayer keep dedicated result commands.
+        active_result_roles = {
+            "dreamer",
+            "druid",
+            "fortune_teller",
+            "jester",
+            "judge",
+        }
+        role_key = card.apparent_role.lower().replace(" ", "_")
+        if role_key in active_result_roles and _has_active_clue_result(card):
             self.mark_ability_used(card.position)
         # Medium reveals a dead card's role — auto-create card entry for
         # night-killed positions so the solver can track PD corruption etc.

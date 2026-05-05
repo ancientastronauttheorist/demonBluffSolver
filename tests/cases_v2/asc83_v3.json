@@ -1,0 +1,153 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Empress",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Empress"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          6,
+          7
+        ],
+        "evil_role_options": [
+          "Druid",
+          "Lilis"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": null
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Enlightened",
+      "info_text": "",
+      "info_parsed": {
+        "direction": "CCW"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Wretch",
+      "info_text": "",
+      "info_parsed": {}
+    }
+  ],
+  "executed": [
+    6,
+    5
+  ],
+  "confirmed_evil": [
+    6,
+    5
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "6": "Shaman",
+    "5": "Lilis"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [
+    8
+  ],
+  "night_kill_evil_count": 0,
+  "hp": 6,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Empress",
+      "Dreamer",
+      "Druid",
+      "Medium",
+      "Jester",
+      "Enlightened",
+      "Oracle"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Wretch"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Lilis"
+    ]
+  },
+  "used_abilities": [
+    5,
+    6
+  ],
+  "lilis_batch_index": 2,
+  "name": "asc83_v3",
+  "true_evil_positions": {
+    "5": "Lilis",
+    "6": "Shaman"
+  },
+  "notes": "6HP. Lilis killed #8 Jester in first batch, second pulse did 2HP no kill. Dreamer2 live UI required two picks; solver requested #6, second pick #7 produced Among #6,#7 there is Druid or Lilis. Druid #6 on #1,#2,#3 said NO Outcasts."
+}

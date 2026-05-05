@@ -4052,6 +4052,13 @@
       "name": "asc83_v2",
       "notes": "10HP. Witch blocked #9. Solver took budgeted probabilistic #1 Minion then #7 Baa; Baa death revealed hidden deck strip card as Plague Doctor; #6 Witch became certain.",
       "date": "2026-05-05 12:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc83_v3",
+      "notes": "6HP. Lilis killed #8 Jester in first batch, second pulse did 2HP no kill. Dreamer2 live UI required two picks; solver requested #6, second pick #7 produced Among #6,#7 there is Druid or Lilis. Druid #6 on #1,#2,#3 said NO Outcasts.",
+      "date": "2026-05-05 12:33"
     }
   ]
 }

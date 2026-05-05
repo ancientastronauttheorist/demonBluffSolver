@@ -615,11 +615,30 @@ def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bo
     return truth_status(target, scenario, state) == TruthStatus.LYING
 
 
-def _dreamer_ground_truth(target: int, scenario: Scenario, state: GameState) -> str:
-    """Dreamer: if target is evil, return evil role name. Else 'any_evil'."""
-    if scenario_is_evil(target, scenario):
-        return scenario.evil_positions.get(target, "Puppet")
-    return "any_evil"
+def _dreamer_effective_role(target: int, scenario: Scenario, state: GameState) -> str:
+    """Best-known role Dreamer2 could name for a selected target."""
+    if target in scenario.evil_positions:
+        return scenario.evil_positions[target]
+    if target == scenario.puppet_position:
+        return "Puppet"
+    if target in state.executed_evil_roles:
+        return state.executed_evil_roles[target]
+    if target == scenario.doppelganger_position:
+        return "Doppelganger"
+    if target == scenario.drunk_position:
+        return "Drunk"
+
+    card = get_card_at(target, state)
+    if card:
+        return card.apparent_role.replace("_", " ")
+    return "Unknown"
+
+
+def _dreamer_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
+    """Dreamer2: two targets produce an ambiguous role-pair observation."""
+    target_list = targets if isinstance(targets, list) else [targets]
+    roles = sorted(_dreamer_effective_role(t, scenario, state) for t in target_list)
+    return "|".join(roles)
 
 
 def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
@@ -1052,8 +1071,8 @@ def recommend_abilities(
                 rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
             _apply_timing(rec, timing, state, recommendations)
 
-        elif role == "Dreamer":
-            candidates = others
+        elif role == "Dreamer" and len(others) >= 2:
+            candidates = [list(c) for c in combinations(others, 2)]
             rec = _recommend_partition_ability(
                 "Dreamer", pos,
                 _dreamer_ground_truth, candidates, state, result)
