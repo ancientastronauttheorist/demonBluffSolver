@@ -45990,3 +45990,82 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: 5HP win. Followed Knight check #6 blocked, Dreamer2 results, fake PD #3 clean on #1, Slayer fail on #1, Jester #8 result, then forced-safe #1 good Bard before #2/#3 evils.
 
+
+---
+
+# New Game — 2026-05-05 14:57:35
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Dreamer, Poet, Alchemist, Oracle, Medium, Bishop, Bard
+- Outcasts: Plague_Doctor
+- Minions: Minion, Twin_Minion
+- Demons: Pooka
+
+### [14:58:29] Revealed #1 Medium
+Info: {'good_position': 5, 'good_role': 'Bishop'}
+
+### [14:58:29] Revealed #2 Poet
+Info: {'direction': 'CCW', 'copied_role': 'Enlightened'}
+
+### [14:58:29] Revealed #5 Bishop
+Info: {'targets': [6, 10, 7], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [14:58:29] Revealed #6 Medium
+Info: {'good_position': 2, 'good_role': 'Poet'}
+
+### [14:58:29] Revealed #7 Plague_Doctor
+Info: {}
+
+### [14:58:29] Revealed #8 Dreamer
+Info: {}
+
+### [14:58:29] Revealed #9 Oracle
+Info: {'targets': [6, 7], 'minion_role': 'Twin_Minion'}
+
+### [14:58:29] Revealed #10 Bard
+Info: {'corruption_distance': 1}
+
+### [14:59:02] Revealed #3 Poet
+Info: {'targets': [1, 5, 10], 'types': ['Minion', 'Outcast', 'Villager'], 'copied_role': 'Bishop'}
+
+### [14:59:11] Revealed #4 Alchemist
+Info: {'corrupted_count': 0}
+
+#### [14:59:21] Solver Output
+Scenarios: 1/3240
+Definite evil: ['#2', '#3', '#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8', '#9', '#10']
+
+#### [14:59:21] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [14:59:28] Executed #2 -> Minion (EVIL)
+
+#### [14:59:36] Solver Output
+Scenarios: 1/352
+Definite evil: ['#2', '#3', '#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8', '#9', '#10']
+
+#### [14:59:36] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:59:43] Executed #3 -> Pooka (EVIL)
+
+#### [14:59:51] Solver Output
+Scenarios: 1/43
+Definite evil: ['#2', '#3', '#6']
+Definite good: ['#1', '#4', '#5', '#7', '#8', '#9', '#10']
+
+#### [14:59:51] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 1 scenarios (roles: {'Twin_Minion'})
+
+### [14:59:58] Executed #6 -> Twin Minion (EVIL)
+
+## [15:00:20] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect final village. Manual entries: #3 Poet copied Bishop over #1,#5,#10 and #4 Alchemist corrupted_count 0; solver immediately had one scenario and executed #2/#3/#6.
+

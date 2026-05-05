@@ -4136,6 +4136,13 @@
       "name": "asc84_v6",
       "notes": "5HP win. Followed Knight check #6 blocked, Dreamer2 results, fake PD #3 clean on #1, Slayer fail on #1, Jester #8 result, then forced-safe #1 good Bard before #2/#3 evils.",
       "date": "2026-05-05 14:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc84_v7",
+      "notes": "10HP perfect final village. Manual entries: #3 Poet copied Bishop over #1,#5,#10 and #4 Alchemist corrupted_count 0; solver immediately had one scenario and executed #2/#3/#6.",
+      "date": "2026-05-05 15:00"
     }
   ]
 }
