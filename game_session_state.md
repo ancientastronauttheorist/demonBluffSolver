@@ -45223,3 +45223,196 @@ Reason: #10 is evil in ALL 15 scenarios (roles: {'Chancellor'})
 Final HP: 10
 Notes: 10HP perfect. Alchemist new corrupted_count wording parsed: There was 1 Corruption around me. PD #9 checked #7 corrupted and revealed #10 evil. Poet copied Bishop/Gemcrafter clues entered manually.
 
+
+---
+
+# New Game — 2026-05-05 13:39:25
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Knitter, Druid, Baker, Alchemist, Knight, Poet
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Chancellor
+- Demons: Baa
+
+### [13:39:33] Revealed #1 Druid
+Info: {}
+
+### [13:39:33] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [13:39:33] Revealed #3 Knight
+Info: {}
+
+### [13:39:33] Revealed #4 Poet
+Info: {'evil_pairs': 0, 'copied_role': 'Knitter'}
+
+### [13:39:33] Revealed #5 Baker
+Info: {'original_role': 'Poet'}
+
+### [13:39:33] Revealed #6 Druid
+Info: {}
+
+### [13:39:33] Revealed #7 Plague_Doctor
+Info: {}
+
+#### [13:39:34] Solver Output
+Scenarios: 130/604
+Evil probabilities: #5=54%, #2=37%, #3=31%, #6=25%, #4=18%, #7=18%, #1=17%
+
+#### [13:39:34] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#6']
+Reason: Entropy 2.505 (adjusted 2.505) | timing x1.00
+
+#### [13:39:56] Solver Output
+Scenarios: 58/604
+Evil probabilities: #6=52%, #2=48%, #5=41%, #3=24%, #1=14%, #4=14%, #7=7%
+
+#### [13:39:56] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#7']
+Reason: Entropy 1.285 (adjusted 1.240) | timing x1.00
+WARNING: Corruption risk: 7%
+
+#### [13:40:04] Solver Output
+Scenarios: 58/604
+Evil probabilities: #6=52%, #2=48%, #5=41%, #3=24%, #1=14%, #4=14%, #7=7%
+
+#### [13:40:04] Recommendation
+Action: **USE_ABILITY** #6 (Druid) -> targets ['#1', '#2', '#7']
+Reason: Entropy 1.285 (adjusted 1.240) | timing x1.00
+WARNING: Corruption risk: 7%
+
+### [13:40:12] Revealed #6 Druid
+Info: {'targets': [1, 2, 7], 'found_outcast': None}
+
+### [13:40:12] Ability used at #6
+
+#### [13:40:13] Solver Output
+Scenarios: 30/604
+Definite evil: ['#6']
+Definite good: ['#4', '#7']
+Evil probabilities: #2=40%, #5=27%, #3=20%, #1=13%
+
+#### [13:40:13] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 30 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [13:40:36] Solver Output
+Scenarios: 30/604
+Definite evil: ['#6']
+Definite good: ['#4', '#7']
+Evil probabilities: #2=40%, #5=27%, #3=20%, #1=13%
+
+#### [13:40:36] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 30 scenarios (roles: {'Baa', 'Chancellor'})
+
+### [13:40:43] Executed #6 -> GOOD (WRONG!)
+
+#### [13:40:44] Solver Output
+Scenarios: 0/438
+
+#### [13:40:44] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [13:44:33] Solver Output
+Scenarios: 26/438
+Definite good: ['#6', '#7']
+Evil probabilities: #5=73%, #3=42%, #2=31%, #4=31%, #1=23%
+
+#### [13:44:33] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.890 (adjusted 0.685) | timing x1.00
+WARNING: Corruption risk: 46%
+
+#### [13:44:57] Solver Output
+Scenarios: 26/438
+Definite good: ['#6', '#7']
+Evil probabilities: #5=73%, #3=42%, #2=31%, #4=31%, #1=23%
+
+#### [13:44:57] Recommendation
+Action: **USE_ABILITY** #1 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.890 (adjusted 0.685) | timing x1.00
+WARNING: Corruption risk: 46%
+
+### [13:45:05] Revealed #1 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': 'Drunk'}
+
+### [13:45:05] Ability used at #1
+
+#### [13:45:07] Solver Output
+Scenarios: 18/438
+Definite good: ['#6', '#7']
+Evil probabilities: #5=72%, #3=50%, #1=33%, #2=22%, #4=22%
+
+#### [13:45:07] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (39% evil Chancellor, 33% evil Baa, 17% good Baker (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 72%, but all reveal branches still lead to a forced win.
+
+#### [13:45:18] Solver Output
+Scenarios: 18/438
+Definite good: ['#6', '#7']
+Evil probabilities: #5=72%, #3=50%, #1=33%, #2=22%, #4=22%
+
+#### [13:45:18] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (39% evil Chancellor, 33% evil Baa, 17% good Baker (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 72%, but all reveal branches still lead to a forced win.
+
+### [13:45:25] Executed #5 -> GOOD (WRONG!)
+
+#### [13:45:26] Solver Output
+Scenarios: 3/262
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [13:45:26] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [13:45:34] Solver Output
+Scenarios: 3/262
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [13:45:34] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Chancellor', 'Baa'})
+
+#### [13:45:35] Solver Output
+Scenarios: 3/262
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [13:45:35] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 3 scenarios (roles: {'Chancellor', 'Baa'})
+
+### [13:46:08] Executed #1 -> Chancellor (EVIL)
+
+#### [13:46:09] Solver Output
+Scenarios: 1/41
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [13:46:09] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+#### [13:46:18] Solver Output
+Scenarios: 1/41
+Definite evil: ['#1', '#3']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+
+#### [13:46:18] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [13:46:25] Executed #3 -> Baa (EVIL)
+
+## [13:46:37] GAME OVER — WIN
+Final HP: 3
+Notes: 3HP win. Live bug found/fixed mid-village: PD #7 reported Drunk #6 as Not Corrupted; Drunk still lied as Druid and wrong-exec cost was -2. After model fix, 0 scenarios recovered to 26 scenarios. Forced-safe #5 branch hit corrupted good Baker, then #1 Chancellor and #3 Baa.
+

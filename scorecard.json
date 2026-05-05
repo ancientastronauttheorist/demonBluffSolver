@@ -4094,6 +4094,13 @@
       "name": "asc84_v1",
       "notes": "10HP perfect. Alchemist new corrupted_count wording parsed: There was 1 Corruption around me. PD #9 checked #7 corrupted and revealed #10 evil. Poet copied Bishop/Gemcrafter clues entered manually.",
       "date": "2026-05-05 13:37"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc84_v2",
+      "notes": "3HP win. Live bug found/fixed mid-village: PD #7 reported Drunk #6 as Not Corrupted; Drunk still lied as Druid and wrong-exec cost was -2. After model fix, 0 scenarios recovered to 26 scenarios. Forced-safe #5 branch hit corrupted good Baker, then #1 Chancellor and #3 Baa.",
+      "date": "2026-05-05 13:46"
     }
   ]
 }
