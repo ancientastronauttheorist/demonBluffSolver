@@ -189,9 +189,11 @@ Memory reader notes:
 - Alchemist cannot be corrupted. Their clue now reports how many corrupted
   characters were around them in range 2 at the start of the round, before the
   cure. This is represented as `corrupted_count`; legacy `cured_count` exists
-  only for historical cases.
+  only for historical cases. Live wording may be `There was N Corruption around
+  me`, not only `N Corrupted around me`.
 - Baa hides an Outcast in deck view, and when Baa dies the hidden card should
-  reveal. `game_loop.py` has `_baa_post_execute_reveal()` to detect this.
+  reveal. In asc82_v2, executing Baa revealed the hidden deck card as Drunk.
+  `game_loop.py` has `_baa_post_execute_reveal()` to detect this.
 - Dreamer2 picks two characters and produces an ambiguous result like
   `Among #X, #Y there is: RoleA or RoleB`. Some older notes mention a role
   picker; in the 2026-05-05 live build, the result appeared immediately after

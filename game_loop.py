@@ -1354,14 +1354,15 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         return card_enlightened(pos, rd['direction'])
 
     # --- Alchemist: prefer clue_text (works for Drunk-as-Alchemist too) ---
-    # Post-patch clue is "# Corrupted around me [Range 2] at start of Round (before Cure)".
+    # Post-patch clue is "# Corruption/Corrupted around me [Range 2] at
+    # start of Round (before Cure)".
     # Alchemist is now immune to Corruption — they never lie themselves, but a
     # Drunk-disguised-as-Alchemist will (true role Drunk is corrupted). Use displayed
     # value from clue_text since that's what we validate against.
     if role_lower == 'alchemist':
-        m = re.search(r'(\d+)\s+corrupted', clue, re.IGNORECASE)
+        m = re.search(r'(\d+)\s+corrupt(?:ed|ion)', clue, re.IGNORECASE)
         if not m:
-            m = re.search(r'corrupted\s+(?:character|villager)?s?\s*[:=]?\s*(\d+)', clue, re.IGNORECASE)
+            m = re.search(r'corrupt(?:ed|ion)\s+(?:character|villager)?s?\s*[:=]?\s*(\d+)', clue, re.IGNORECASE)
         if not m:
             # Legacy fallback for old "cured N" wording
             m = re.search(r'cured\s+(\d+)', clue, re.IGNORECASE)
@@ -2274,7 +2275,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         DecisionLog.log_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
         if any(d.lower() == "baa" for d in pool["demons"]):
             print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
-                  "Subtract 1 from displayed outcast count for no= value.")
+                  "Subtract only if no= came from deck view; do not adjust HUD no=.")
         print(f"Village started: {n_cards} cards, {n_evil} evil, HP={session.hp}")
         print(f"  V={pool['villagers']}")
         print(f"  O={pool['outcasts']}")
@@ -2315,7 +2316,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.set_deck(villagers, outcasts, minions, demons)
         if any(d.lower() == "baa" for d in demons):
             print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
-                  "Subtract 1 from displayed outcast count for no= value.")
+                  "Subtract only if no= came from deck view; do not adjust HUD no=.")
         pool_size = len(villagers) + len(outcasts) + len(minions) + len(demons)
         if pool_size > session.n_cards and session.board_villager_count is None:
             board_good = session.n_cards - session.n_evil
@@ -2928,7 +2929,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "game_over":
         result = args[0] if len(args) > 0 else "unknown"
         test_name = args[1] if len(args) > 1 else None
-        true_evils_str = args[2] if len(args) > 2 else None
+        true_evils_str = args[2] if len(args) > 2 and args[2].strip() else None
         notes = args[3] if len(args) > 3 else ""
 
         # Auto-read true evils from memory_reader if not provided

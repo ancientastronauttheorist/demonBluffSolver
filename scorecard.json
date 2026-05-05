@@ -3996,6 +3996,13 @@
       "name": "asc82_v1",
       "notes": "10HP perfect village 1/7 - Dreamer2 live clue auto-updated after two picks, FT #7 on #1/#6 resolved Pooka after Poisoner #8 definite",
       "date": "2026-05-05 01:26"
+    },
+    {
+      "result": "win",
+      "hp": 3,
+      "name": "asc82_v2",
+      "notes": "3HP village 2/7 - Baa death revealed hidden deck Drunk, Alchemist live wording was 'There was 1 Corruption around me', forced line survived Jester and Drunk wrong execs",
+      "date": "2026-05-05 01:38"
     }
   ]
 }

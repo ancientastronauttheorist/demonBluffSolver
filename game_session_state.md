@@ -43610,3 +43610,154 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
 ## [01:26:52] GAME OVER — WIN
 Final HP: 10
 
+
+---
+
+# New Game — 2026-05-05 01:34:43
+Cards: 7, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Alchemist, Oracle, Jester, Poet, Fortune_Teller, Knitter
+- Outcasts: Drunk, Wretch
+- Minions: Chancellor
+- Demons: Baa
+
+### [01:35:16] Revealed #1 Oracle
+Info: {'targets': [1, 3], 'minion_role': 'Chancellor'}
+
+### [01:35:16] Revealed #3 Wretch
+Info: {}
+
+### [01:35:16] Revealed #4 Knitter
+Info: {'evil_pairs': 0}
+
+### [01:35:16] Revealed #5 Knitter
+Info: {'evil_pairs': 1}
+
+### [01:35:16] Revealed #7 Jester
+Info: {}
+
+### [01:35:25] Revealed #2 Alchemist
+Info: {'corrupted_count': 1}
+
+### [01:35:31] Revealed #6 Poet
+Info: {'copied_role': 'Bounty Hunter', 'evil_position': 3}
+
+#### [01:35:36] Solver Output
+Scenarios: 34/268
+Definite good: ['#1', '#6']
+Evil probabilities: #5=65%, #4=53%, #7=41%, #3=35%, #2=6%
+
+#### [01:35:36] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#1', '#2', '#5']
+Reason: Expected posterior 19.8 scenarios (adjusted 22.2, info gain 0.616 bits) | timing x1.00
+WARNING: Corruption risk: 24%
+
+#### [01:35:42] Solver Output
+Scenarios: 34/268
+Definite good: ['#1', '#6']
+Evil probabilities: #5=65%, #4=53%, #7=41%, #3=35%, #2=6%
+
+#### [01:35:42] Recommendation
+Action: **USE_ABILITY** #7 (Jester) -> targets ['#1', '#2', '#5']
+Reason: Expected posterior 19.8 scenarios (adjusted 22.2, info gain 0.616 bits) | timing x1.00
+WARNING: Corruption risk: 24%
+
+### [01:35:50] Revealed #7 Jester
+Info: {'targets': [1, 2, 5], 'evil_count': 1}
+
+### [01:35:50] Ability used at #7
+
+#### [01:35:56] Solver Output
+Scenarios: 18/268
+Definite good: ['#1', '#6']
+Evil probabilities: #4=78%, #5=44%, #3=33%, #7=33%, #2=11%
+
+#### [01:35:56] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (44% evil Baa, 33% evil Chancellor, 22% good Knitter).
+WARNING: Execution lookahead override -- immediate hit chance is 78%, but all reveal branches still lead to a forced win.
+
+#### [01:36:05] Solver Output
+Scenarios: 18/268
+Definite good: ['#1', '#6']
+Evil probabilities: #4=78%, #5=44%, #3=33%, #7=33%, #2=11%
+
+#### [01:36:05] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (44% evil Baa, 33% evil Chancellor, 22% good Knitter).
+WARNING: Execution lookahead override -- immediate hit chance is 78%, but all reveal branches still lead to a forced win.
+
+### [01:36:12] Executed #4 -> Baa (EVIL)
+
+#### [01:36:40] Solver Output
+Scenarios: 8/37
+Definite evil: ['#4']
+Definite good: ['#1', '#6']
+Evil probabilities: #7=50%, #5=25%, #2=12%, #3=12%
+
+#### [01:36:40] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 38% good Jester, 12% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+#### [01:36:53] Solver Output
+Scenarios: 8/37
+Definite evil: ['#4']
+Definite good: ['#1', '#6']
+Evil probabilities: #7=50%, #5=25%, #2=12%, #3=12%
+
+#### [01:36:53] Recommendation
+Action: **EXECUTE** #7
+Reason: Execution lookahead: #7 guarantees a win across all reveal branches with current HP budget (50% evil Chancellor, 38% good Jester, 12% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [01:37:00] Executed #7 -> GOOD (WRONG!)
+
+#### [01:37:06] Solver Output
+Scenarios: 3/29
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#7']
+Evil probabilities: #5=67%, #2=33%
+
+#### [01:37:06] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (67% evil Chancellor, 33% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+#### [01:37:15] Solver Output
+Scenarios: 3/29
+Definite evil: ['#4']
+Definite good: ['#1', '#3', '#6', '#7']
+Evil probabilities: #5=67%, #2=33%
+
+#### [01:37:15] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (67% evil Chancellor, 33% good Drunk (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [01:37:22] Executed #5 -> GOOD (WRONG!)
+
+#### [01:37:29] Solver Output
+Scenarios: 1/25
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7']
+
+#### [01:37:29] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+#### [01:37:35] Solver Output
+Scenarios: 1/25
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7']
+
+#### [01:37:35] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
+
+### [01:37:42] Executed #2 -> Chancellor (EVIL)
+
+## [01:38:03] GAME OVER — WIN
+Final HP: 3
+
