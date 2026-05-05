@@ -44359,3 +44359,100 @@ Reason: All evil characters have been executed!
 Final HP: 10
 Notes: PD #5 checked #4 corrupted and identified #7 Pooka after first-card flip recovery
 
+
+---
+
+# New Game — 2026-05-05 12:20:42
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Enlightened, Bard, Alchemist, Scout, Confessor, Medium
+- Outcasts: Plague_Doctor
+- Minions: Minion, Witch
+- Demons: Baa
+
+### [12:21:10] Revealed #1 Bard
+Info: {'corruption_distance': 3}
+
+### [12:21:10] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [12:21:10] Revealed #3 Baker
+Info: {'original_role': 'Alchemist'}
+
+### [12:21:10] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [12:21:10] Revealed #5 Plague_Doctor
+Info: {}
+
+### [12:21:10] Revealed #6 Baker
+Info: {'original_role': 'Enlightened'}
+
+### [12:21:10] Revealed #8 Baker
+Info: {'original_role': 'Scout'}
+
+### [12:21:28] Revealed #7 Enlightened
+Info: {'direction': 'CW'}
+
+#### [12:21:52] Solver Output
+Scenarios: 78/1848
+Definite good: ['#2', '#4']
+Evil probabilities: #6=69%, #1=54%, #7=54%, #3=38%, #8=38%, #9=38%, #5=8%
+
+#### [12:21:52] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 1.668 (adjusted 1.668) | timing x1.00
+
+#### [12:22:20] Solver Output
+Scenarios: 54/1848
+Definite good: ['#2', '#4', '#5']
+Evil probabilities: #1=67%, #6=67%, #3=44%, #8=44%, #9=44%, #7=33%
+
+#### [12:22:20] Recommendation
+Action: **EXECUTE** #1
+Reason: No reveals available. #1 is 67% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 67% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+
+### [12:22:47] Executed #1 -> Minion (EVIL)
+
+#### [12:22:52] Solver Output
+Scenarios: 12/224
+Definite evil: ['#1']
+Definite good: ['#2', '#4', '#5']
+Evil probabilities: #6=50%, #7=50%, #3=33%, #8=33%, #9=33%
+
+#### [12:22:52] Recommendation
+Action: **EXECUTE** #7
+Reason: No reveals available. #7 is 50% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 50% confident (budget: 2 wrong execs)
+WARNING: Witch is blocking reveals -- killing Witch would unblock last card
+WARNING: Low confidence (50% < 60%) -- consider gathering more info
+
+### [12:23:27] Executed #7 -> Baa (EVIL)
+
+#### [12:23:44] Solver Output
+Scenarios: 3/31
+Definite evil: ['#1', '#6', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [12:23:44] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 3 scenarios (roles: {'Witch'})
+
+### [12:24:12] Executed #6 -> Witch (EVIL)
+
+#### [12:24:16] Solver Output
+Scenarios: 3/5
+Definite evil: ['#1', '#6', '#7']
+Definite good: ['#2', '#3', '#4', '#5', '#8', '#9']
+
+#### [12:24:16] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+## [12:24:32] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP. Witch blocked #9. Solver took budgeted probabilistic #1 Minion then #7 Baa; Baa death revealed hidden deck strip card as Plague Doctor; #6 Witch became certain.
+

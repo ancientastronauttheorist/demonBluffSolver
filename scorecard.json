@@ -4045,6 +4045,13 @@
       "name": "asc83_v1",
       "notes": "PD #5 checked #4 corrupted and identified #7 Pooka after first-card flip recovery",
       "date": "2026-05-05 12:18"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc83_v2",
+      "notes": "10HP. Witch blocked #9. Solver took budgeted probabilistic #1 Minion then #7 Baa; Baa death revealed hidden deck strip card as Plague Doctor; #6 Witch became certain.",
+      "date": "2026-05-05 12:24"
     }
   ]
 }
