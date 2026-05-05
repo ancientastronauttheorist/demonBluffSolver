@@ -1,0 +1,169 @@
+{
+  "n_cards": 9,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Witness",
+      "info_text": "",
+      "info_parsed": {
+        "affected_position": 6
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Confessor"
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          3,
+          9
+        ],
+        "evil_role_options": [
+          "Puppeteer",
+          "Lover"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "found_outcast": "Plague_Doctor"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    }
+  ],
+  "executed": [
+    4,
+    2,
+    3
+  ],
+  "confirmed_evil": [
+    4,
+    2,
+    3
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Minion",
+    "2": "Puppeteer",
+    "3": "Pooka"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 1,
+      "target": 4,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Witness",
+      "Dreamer",
+      "Druid",
+      "Bard",
+      "Confessor",
+      "Lover",
+      "Baker"
+    ],
+    "outcasts": [
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Minion"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5,
+    1,
+    7
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc83_v5",
+  "true_evil_positions": {
+    "2": "Puppeteer",
+    "3": "Pooka",
+    "4": "Minion"
+  },
+  "notes": "10HP. Validated Dreamer2 strategy fix: solver recommended #5 Dreamer on #3,#9, result was Puppeteer or Lover and no Gravedigger. Manual Dreamer/Druid entries auto-marked abilities used. Lookahead-safe #3 execution hit Pooka."
+}

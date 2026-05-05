@@ -44655,3 +44655,127 @@ Reason: All evil characters have been executed!
 Final HP: 10
 Notes: 10HP. Alchemist #1 used new wording: There was 1 Corruption around me. #2 Twin Minion disguised as Plague Doctor lied #1 corrupted and #6 evil; solver used that to lock #2 then #5 Pooka.
 
+
+---
+
+# New Game — 2026-05-05 12:48:43
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Dreamer, Druid, Bard, Confessor, Lover, Baker
+- Outcasts: Plague_Doctor
+- Minions: Puppeteer, Minion
+- Demons: Pooka
+
+### [12:49:18] Revealed #1 Plague_Doctor
+Info: {}
+
+### [12:49:18] Revealed #2 Witness
+Info: {'affected_position': 6}
+
+### [12:49:18] Revealed #3 Lover
+Info: {'evil_adjacent': 1}
+
+### [12:49:18] Revealed #4 Baker
+Info: {'original_role': 'Confessor'}
+
+### [12:49:18] Revealed #5 Dreamer
+Info: {}
+
+### [12:49:18] Revealed #6 Confessor
+Info: {'dizzy': False}
+
+### [12:49:18] Revealed #7 Druid
+Info: {}
+
+### [12:49:18] Revealed #8 Bard
+Info: {'corruption_distance': 3}
+
+### [12:49:18] Revealed #9 Baker
+Info: {'original_role': 'original'}
+
+#### [12:49:32] Solver Output
+Scenarios: 148/3780
+Definite good: ['#6']
+Evil probabilities: #4=65%, #2=61%, #9=59%, #3=49%, #7=35%, #8=35%, #5=34%, #1=6%
+
+#### [12:49:32] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#3', '#9']
+Reason: Entropy 4.318 (adjusted 3.720) | timing x1.00
+WARNING: Corruption risk: 28%
+
+### [12:50:08] Revealed #5 Dreamer
+Info: {'targets': [3, 9], 'evil_role_options': ['Puppeteer', 'Lover']}
+
+#### [12:50:18] Solver Output
+Scenarios: 73/3780
+Definite good: ['#6']
+Evil probabilities: #9=59%, #4=56%, #2=53%, #3=53%, #8=41%, #5=37%, #7=37%, #1=5%
+
+#### [12:50:18] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 2.253 (adjusted 2.253) | timing x1.00
+
+#### [12:50:59] Solver Output
+Scenarios: 41/3780
+Definite good: ['#6']
+Evil probabilities: #4=95%, #2=76%, #9=51%, #3=39%, #8=37%, #5=27%, #7=22%, #1=5%
+
+#### [12:50:59] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#1', '#2', '#3']
+Reason: Entropy 1.221 (adjusted 1.087) | timing x1.00
+WARNING: Corruption risk: 22%
+
+### [12:51:41] Revealed #7 Druid
+Info: {'targets': [1, 2, 3], 'found_outcast': 'Plague_Doctor'}
+
+#### [12:51:49] Solver Output
+Scenarios: 22/3780
+Definite evil: ['#4']
+Definite good: ['#1', '#6']
+Evil probabilities: #2=95%, #3=50%, #9=45%, #5=27%, #8=23%, #7=5%
+
+#### [12:51:49] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 22 scenarios (roles: {'Pooka', 'Puppeteer', 'Minion', 'Puppet'})
+
+### [12:52:22] Executed #4 -> Minion (EVIL)
+
+#### [12:52:29] Solver Output
+Scenarios: 7/446
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#5', '#6']
+Evil probabilities: #8=43%, #9=43%, #3=29%, #7=14%
+
+#### [12:52:29] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 7 scenarios (roles: {'Puppeteer', 'Pooka'})
+
+### [12:53:03] Executed #2 -> Puppeteer (EVIL)
+
+#### [12:53:11] Solver Output
+Scenarios: 2/58
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8']
+Evil probabilities: #3=50%, #9=50%
+
+#### [12:53:11] Recommendation
+Action: **EXECUTE** #3
+Reason: Execution lookahead: #3 guarantees a win across all reveal branches with current HP budget (50% good Lover (corrupted), 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [12:53:46] Executed #3 -> Pooka (EVIL)
+
+#### [12:53:55] Solver Output
+Scenarios: 1/6
+Definite evil: ['#2', '#3', '#4']
+Definite good: ['#1', '#5', '#6', '#7', '#8', '#9']
+
+#### [12:53:55] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+## [12:54:06] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP. Validated Dreamer2 strategy fix: solver recommended #5 Dreamer on #3,#9, result was Puppeteer or Lover and no Gravedigger. Manual Dreamer/Druid entries auto-marked abilities used. Lookahead-safe #3 execution hit Pooka.
+

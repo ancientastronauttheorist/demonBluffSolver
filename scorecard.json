@@ -4066,6 +4066,13 @@
       "name": "asc83_v4",
       "notes": "10HP. Alchemist #1 used new wording: There was 1 Corruption around me. #2 Twin Minion disguised as Plague Doctor lied #1 corrupted and #6 evil; solver used that to lock #2 then #5 Pooka.",
       "date": "2026-05-05 12:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc83_v5",
+      "notes": "10HP. Validated Dreamer2 strategy fix: solver recommended #5 Dreamer on #3,#9, result was Puppeteer or Lover and no Gravedigger. Manual Dreamer/Druid entries auto-marked abilities used. Lookahead-safe #3 execution hit Pooka.",
+      "date": "2026-05-05 12:54"
     }
   ]
 }
