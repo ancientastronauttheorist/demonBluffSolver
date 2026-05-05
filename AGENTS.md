@@ -216,6 +216,9 @@ Memory reader notes:
 
 - Doppelganger counts in `nv`, not `no`.
 - Drunk can count as Villager in the header.
+- In the 2026-05-05 live build, Drunk still lies and wrong-exec costs 2 HP, but
+  Plague Doctor reports Drunk as `Not Corrupted`. Do not model Drunk as a member
+  of the Corrupted set.
 - Baa warning applies to deck-view outcast count, not HUD. HUD counts Baa as a
   Demon. If reading `no=` from HUD, do not subtract 1.
 - `next` can auto-execute by default. Use `next --plan` or `--dry` when you need

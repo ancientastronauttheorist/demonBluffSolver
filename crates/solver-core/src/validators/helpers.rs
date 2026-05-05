@@ -85,12 +85,17 @@ pub enum EffectiveAlignment {
 }
 
 /// Determine truth status of a card at a position in a scenario.
+/// - Drunk: always Lying, but no longer Corrupted in the 2026-05-05 live build
 /// - Confessor: always Truthful (can't lie)
 /// - Puppet: always Truthful (evil but can't lie)
 /// - Evil (non-Puppet, non-Confessor): Lying
 /// - Corrupted: Lying
 /// - Otherwise: Truthful
 pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
+    // Drunk lies intrinsically even though PD reports it as Not Corrupted.
+    if scenario.drunk_position == Some(pos) {
+        return TruthStatus::Lying;
+    }
     // Confessor always truthful
     if let Some(card) = state.card_at(pos) {
         if card.apparent_role == "Confessor" {

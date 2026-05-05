@@ -1,4 +1,4 @@
-/// Corruption computation: Pooka, Poisoner, PD, Drunk → Puppet cure → Alchemist cures.
+/// Corruption computation: Pooka, Poisoner, PD -> Puppet cure -> Alchemist cures.
 
 use std::collections::{HashMap, HashSet};
 use crate::geometry::{adjacent_positions, positions_in_range};
@@ -7,7 +7,8 @@ use crate::types::GameState;
 
 /// Compute the raw corruption set for a scenario, BEFORE Puppet cure and Alchemist cures.
 ///
-/// Sources: Pooka (adjacent), Poisoner (1 adjacent), PD (1 villager), Drunk (inherent).
+/// Sources: Pooka (adjacent), Poisoner (1 adjacent), PD (1 villager).
+/// Drunk lies intrinsically in the current build, but is not Corrupted.
 /// Doppelganger is immune to Pooka/Poisoner (Outcast, not Villager).
 /// Alchemist is immune to all corruption sources.
 pub fn compute_corruption(
@@ -16,7 +17,7 @@ pub fn compute_corruption(
     pd_target: Option<u8>,
     doppelganger_pos: Option<u8>,
     poisoner_target: Option<u8>,
-    drunk_pos: Option<u8>,
+    _drunk_pos: Option<u8>,
 ) -> HashSet<u8> {
     let n = state.n_cards;
     let mut corrupted = HashSet::new();
@@ -73,19 +74,6 @@ pub fn compute_corruption(
         }
     }
 
-    // Drunk: inherently corrupted
-    if let Some(dp) = drunk_pos {
-        if !full_evil.contains_key(&dp) {
-            corrupted.insert(dp);
-        }
-    }
-    // Also handle explicitly revealed Drunk cards
-    for card in &state.cards {
-        if card.apparent_role == "Drunk" && !full_evil.contains_key(&card.position) {
-            corrupted.insert(card.position);
-        }
-    }
-
     corrupted
 }
 
@@ -94,14 +82,14 @@ pub fn compute_corruption(
 /// Returns (final corrupted set, alch_cures map). The map's value is the count
 /// each Alchemist reports — post-patch this is the number of Corrupted characters
 /// in Range 2 at the start of the Round (i.e., AFTER Puppet cure but BEFORE any
-/// Alchemist cure), INCLUDING uncureables like Drunk. The cure mechanic itself
-/// is unchanged (Alchemist still removes corruption from cureable neighbors).
+/// Alchemist cure). The cure mechanic itself is unchanged (Alchemist removes
+/// corruption from cureable neighbors).
 pub fn apply_post_corruption(
     mut corrupted: HashSet<u8>,
     full_evil: &HashMap<u8, String>,
     state: &GameState,
     puppet_pos: Option<u8>,
-    drunk_pos: Option<u8>,
+    _drunk_pos: Option<u8>,
     extra_alch_positions: &[u8],
 ) -> (HashSet<u8>, HashMap<u8, u8>) {
     let n = state.n_cards;
@@ -131,8 +119,7 @@ pub fn apply_post_corruption(
 
     for &alch_pos in &alchemist_positions {
         // Count = corrupted-in-range from start-of-round snapshot (post-patch).
-        // Includes Drunk and other uncureables; excludes the Alchemist itself
-        // (immune, never in the corrupted set).
+        // Excludes the Alchemist itself (immune, never in the corrupted set).
         let mut count = 0u8;
         for p in positions_in_range(alch_pos, 2, n) {
             if start_of_round.contains(&p) {
@@ -146,18 +133,10 @@ pub fn apply_post_corruption(
         if !can_cure {
             continue;
         }
-        // Apply cures to the live corrupted set (Drunk and other uncureables stay).
+        // Apply cures to the live corrupted set.
         for p in positions_in_range(alch_pos, 2, n) {
             if !corrupted.contains(&p) {
                 continue;
-            }
-            if Some(p) == drunk_pos {
-                continue;
-            }
-            if let Some(card) = state.card_at(p) {
-                if card.apparent_role == "Drunk" {
-                    continue;
-                }
             }
             corrupted.remove(&p);
         }

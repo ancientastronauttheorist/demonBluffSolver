@@ -1439,7 +1439,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     # Post-patch clue is "# Corruption/Corrupted around me [Range 2] at
     # start of Round (before Cure)".
     # Alchemist is now immune to Corruption — they never lie themselves, but a
-    # Drunk-disguised-as-Alchemist will (true role Drunk is corrupted). Use displayed
+    # Drunk-disguised-as-Alchemist still lies intrinsically. Use displayed
     # value from clue_text since that's what we validate against.
     if role_lower == 'alchemist':
         m = re.search(r'(\d+)\s+corrupt(?:ed|ion)', clue, re.IGNORECASE)

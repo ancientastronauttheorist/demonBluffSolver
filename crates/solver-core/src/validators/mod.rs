@@ -1335,4 +1335,24 @@ mod tests {
         lying_to_fake_rambler.evil_positions.insert(2, "Puppeteer".to_string());
         assert!(validate_rambler_shut_ups(&lying_to_fake_rambler, &state));
     }
+
+    #[test]
+    fn drunk_lies_but_pd_reports_not_corrupted() {
+        let pd = make_card(7, "Plague_Doctor", json!({}));
+        let druid = make_card(6, "Druid", json!({"targets": [1, 2, 7], "found_outcast": null}));
+        let mut state = base_state(7, vec![druid, pd]);
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 7,
+            target: 6,
+            is_corrupted: false,
+            evil_revealed: None,
+        });
+
+        let mut scenario = empty_scenario();
+        scenario.drunk_position = Some(6);
+
+        assert_eq!(truth_status(6, &scenario, &state), TruthStatus::Lying);
+        assert!(!scenario.corrupted.contains(&6));
+        assert!(validate_pd_ability(&scenario, &state));
+    }
 }

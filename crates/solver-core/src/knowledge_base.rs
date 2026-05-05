@@ -78,7 +78,7 @@ pub static ALL_CARDS: &[Card] = &[
 
     // ── Outcasts (Good) ── 6 cards
     Card { name: "Rambler",        faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
-    Card { name: "Drunk",          faction: Faction::Outcast,  alignment: Alignment::Good, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: true },
+    Card { name: "Drunk",          faction: Faction::Outcast,  alignment: Alignment::Good, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Wretch",         faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Bombardier",     faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Doppelganger",   faction: Faction::Outcast,  alignment: Alignment::Good, lies: false, disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },

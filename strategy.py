@@ -201,7 +201,7 @@ def _execution_reveal_outcome(
         return ("Puppet", True, False)
 
     if pos == scenario.drunk_position:
-        return ("Drunk", False, True)
+        return ("Drunk", False, False)
 
     if pos == scenario.doppelganger_position:
         return ("Doppelganger", False, pos in scenario.corrupted)

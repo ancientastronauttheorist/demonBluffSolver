@@ -216,7 +216,7 @@ class Scenario:
     corrupted: set[int] = field(default_factory=set)  # Corrupted positions
     pd_corrupted: Optional[int] = None  # Plague Doctor corruption target
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
-    drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always corrupted)
+    drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always lies)
     alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
     chancellor_conversion: Optional[int] = None  # Position converted to Outcast by Chancellor
 
@@ -313,6 +313,10 @@ def effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Align
 
 def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
     """Determine if a card tells truth or lies in this scenario."""
+    # Drunk lies intrinsically even though PD reports it as Not Corrupted.
+    if pos == scenario.drunk_position:
+        return TruthStatus.LYING
+
     # Confessor can't lie — always truthful regardless of Evil/Corrupted status.
     # This affects Judge validation: Judge sees Confessor as "truthful" even if Evil.
     card = _get_card_at(pos, state)
