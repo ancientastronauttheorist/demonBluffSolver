@@ -49,3 +49,54 @@ pub fn solve(state: &GameState) -> SolverResult {
         reasoning: Vec::new(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::types::GameState;
+    use serde_json::json;
+
+    #[test]
+    fn asc84_v5_keeps_drunk_bard_corruption_scenario() {
+        let state = GameState::from_json(&json!({
+            "n_cards": 9,
+            "n_evil": 3,
+            "cards": [
+                {"position": 1, "apparent_role": "Scout", "info_parsed": {"evil_role": "Shaman", "distance": 2}},
+                {"position": 2, "apparent_role": "Baker", "info_parsed": {"original_role": "original"}},
+                {"position": 3, "apparent_role": "Enlightened", "info_parsed": {"direction": "CW"}},
+                {"position": 4, "apparent_role": "Baker", "info_parsed": {"original_role": "Witness"}},
+                {"position": 5, "apparent_role": "Medium", "info_parsed": {"good_position": 4, "good_role": "Baker"}},
+                {"position": 7, "apparent_role": "Oracle", "info_parsed": {"targets": [2, 4], "minion_role": "Minion"}},
+                {"position": 8, "apparent_role": "Scout", "info_parsed": {"evil_role": "Minion", "distance": 2}},
+                {"position": 9, "apparent_role": "Bard", "info_parsed": {"corruption_distance": 1}}
+            ],
+            "night_kills": [6],
+            "night_kill_evil_count": 0,
+            "hp": 6,
+            "wrong_exec_cost": 5,
+            "board_villager_count": 5,
+            "board_outcast_count": 1,
+            "reveal_order": [1, 2, 3, 4, 6, 9, 5, 7, 8],
+            "deck": {
+                "villagers": ["Witness", "Oracle", "Scout", "Medium", "Bard", "Baker", "Enlightened"],
+                "outcasts": ["Drunk"],
+                "minions": ["Minion", "Shaman"],
+                "demons": ["Lilis"]
+            }
+        })).unwrap();
+
+        let result = solve(&state);
+        assert!(result.n_surviving > 0);
+        assert!(!result.definite_evil.contains(&1));
+
+        let true_branch = result.surviving_scenarios.iter().any(|s| {
+            s.drunk_position == Some(1)
+                && s.corrupted.contains(&1)
+                && s.evil_positions.get(&3).is_some_and(|r| r == "Minion")
+                && s.evil_positions.get(&7).is_some_and(|r| r == "Shaman")
+                && s.evil_positions.get(&8).is_some_and(|r| r == "Lilis")
+        });
+        assert!(true_branch);
+    }
+}

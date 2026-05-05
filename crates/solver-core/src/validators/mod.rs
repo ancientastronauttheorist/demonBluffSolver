@@ -994,7 +994,10 @@ fn validate_pd_ability(scenario: &Scenario, state: &GameState) -> bool {
         let evil_revealed = result.evil_revealed;
 
         let pd_is_evil = is_evil_in_board_state(pd_pos, scenario, state);
-        let actual_corrupted = scenario.corrupted.contains(&target);
+        // Drunk carries the corrupted status for clue/truth purposes, but the
+        // live build's Plague Doctor check reports Drunk as Not Corrupted.
+        let actual_corrupted = scenario.corrupted.contains(&target)
+            && scenario.drunk_position != Some(target);
 
         if pd_is_evil {
             if claimed_corrupted == actual_corrupted { return false; }
@@ -1337,10 +1340,11 @@ mod tests {
     }
 
     #[test]
-    fn drunk_lies_but_pd_reports_not_corrupted() {
+    fn drunk_counts_corrupted_but_pd_reports_not_corrupted() {
         let pd = make_card(7, "Plague_Doctor", json!({}));
         let druid = make_card(6, "Druid", json!({"targets": [1, 2, 7], "found_outcast": null}));
-        let mut state = base_state(7, vec![druid, pd]);
+        let bard = make_card(5, "Bard", json!({"corruption_distance": 1}));
+        let mut state = base_state(7, vec![druid, bard.clone(), pd]);
         state.pd_ability_results.push(crate::types::PdAbilityResult {
             pd_pos: 7,
             target: 6,
@@ -1350,9 +1354,11 @@ mod tests {
 
         let mut scenario = empty_scenario();
         scenario.drunk_position = Some(6);
+        scenario.corrupted.insert(6);
 
         assert_eq!(truth_status(6, &scenario, &state), TruthStatus::Lying);
-        assert!(!scenario.corrupted.contains(&6));
+        assert!(scenario.corrupted.contains(&6));
+        assert!(validate_bard(&bard, &scenario, &state));
         assert!(validate_pd_ability(&scenario, &state));
     }
 }

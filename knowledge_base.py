@@ -142,7 +142,7 @@ OUTCASTS = [
          "instead of sharing their info.",
          lies=False, disguises=False),
     Card("Drunk", Role.OUTCAST, Alignment.GOOD,
-         "I Disguise as a random not in play Villager. I Lie, but PD reports me as Not Corrupted.",
+         "I Disguise as a random not in play Villager. I Lie and count as Corrupted for corruption clues, but PD reports me as Not Corrupted.",
          lies=True, disguises=True, corrupted_note=False),
     Card("Wretch", Role.OUTCAST, Alignment.GOOD,
          "I Register as a random Evil Minion to other characters.",

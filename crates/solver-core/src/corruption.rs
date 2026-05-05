@@ -7,8 +7,11 @@ use crate::types::GameState;
 
 /// Compute the raw corruption set for a scenario, BEFORE Puppet cure and Alchemist cures.
 ///
-/// Sources: Pooka (adjacent), Poisoner (1 adjacent), PD (1 villager).
-/// Drunk lies intrinsically in the current build, but is not Corrupted.
+/// Sources: Drunk (intrinsic status), Pooka (adjacent), Poisoner (1 adjacent),
+/// PD (1 villager).
+///
+/// Drunk is special in the current build: corruption-status clues such as Bard
+/// count Drunk as Corrupted, but Plague Doctor reports Drunk as Not Corrupted.
 /// Doppelganger is immune to Pooka/Poisoner (Outcast, not Villager).
 /// Alchemist is immune to all corruption sources.
 pub fn compute_corruption(
@@ -17,10 +20,14 @@ pub fn compute_corruption(
     pd_target: Option<u8>,
     doppelganger_pos: Option<u8>,
     poisoner_target: Option<u8>,
-    _drunk_pos: Option<u8>,
+    drunk_pos: Option<u8>,
 ) -> HashSet<u8> {
     let n = state.n_cards;
     let mut corrupted = HashSet::new();
+
+    if let Some(dp) = drunk_pos {
+        corrupted.insert(dp);
+    }
 
     let is_alchemist = |p: u8| -> bool {
         state.card_at(p)
@@ -89,7 +96,7 @@ pub fn apply_post_corruption(
     full_evil: &HashMap<u8, String>,
     state: &GameState,
     puppet_pos: Option<u8>,
-    _drunk_pos: Option<u8>,
+    drunk_pos: Option<u8>,
     extra_alch_positions: &[u8],
 ) -> (HashSet<u8>, HashMap<u8, u8>) {
     let n = state.n_cards;
@@ -138,9 +145,43 @@ pub fn apply_post_corruption(
             if !corrupted.contains(&p) {
                 continue;
             }
-            corrupted.remove(&p);
+            if Some(p) != drunk_pos {
+                corrupted.remove(&p);
+            }
         }
     }
 
     (corrupted, alch_cures)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::types::CardInfo;
+
+    #[test]
+    fn drunk_is_intrinsic_corruption_status_and_not_alchemist_cured() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            CardInfo {
+                position: 1,
+                apparent_role: "Scout".to_string(),
+                ..CardInfo::default()
+            },
+            CardInfo {
+                position: 2,
+                apparent_role: "Alchemist".to_string(),
+                ..CardInfo::default()
+            },
+        ];
+
+        let raw = compute_corruption(&HashMap::new(), &state, None, None, None, Some(1));
+        assert!(raw.contains(&1));
+
+        let (final_corrupted, alch_counts) =
+            apply_post_corruption(raw, &HashMap::new(), &state, None, Some(1), &[]);
+        assert!(final_corrupted.contains(&1));
+        assert_eq!(alch_counts.get(&2), Some(&1));
+    }
 }

@@ -27,7 +27,11 @@ pub fn execution_reveal_outcome(
 
     // Drunk (disguised as villager)
     if scenario.drunk_position == Some(pos) {
-        return ("Drunk".to_string(), false, false);
+        return (
+            "Drunk".to_string(),
+            false,
+            scenario.corrupted.contains(&pos),
+        );
     }
 
     // Doppelganger (disguised as villager)

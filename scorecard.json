@@ -4115,6 +4115,13 @@
       "name": "asc84_v4",
       "notes": "5HP win. Forced-safe #1 branch hit corrupted good Lover, then solver forced #2 Pooka and #4 Shaman.",
       "date": "2026-05-05 14:00"
+    },
+    {
+      "result": "loss",
+      "hp": -1,
+      "name": "asc84_v5",
+      "notes": "Loss at HP -1. Solver bug fixed after loss: Drunk counts as corrupted for Bard/truth status while PD still reports Not Corrupted. Pre-fix solver eliminated #1 Drunk, forced #9 good Bard then #1 Drunk at 1 HP.",
+      "date": "2026-05-05 14:16"
     }
   ]
 }

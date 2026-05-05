@@ -45634,3 +45634,84 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
 Final HP: 5
 Notes: 5HP win. Forced-safe #1 branch hit corrupted good Lover, then solver forced #2 Pooka and #4 Shaman.
 
+
+---
+
+# New Game — 2026-05-05 14:02:59
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Oracle, Scout, Medium, Bard, Baker, Enlightened
+- Outcasts: Drunk
+- Minions: Minion, Shaman
+- Demons: Lilis
+
+### [14:03:56] Revealed #1 Scout
+Info: {'evil_role': 'Shaman', 'distance': 2}
+
+### [14:03:56] Revealed #2 Baker
+Info: {'original_role': 'original'}
+
+### [14:03:56] Revealed #4 Baker
+Info: {'original_role': 'Witness'}
+
+### [14:03:56] Revealed #5 Medium
+Info: {'good_position': 4, 'good_role': 'Baker'}
+
+### [14:03:56] Revealed #7 Oracle
+Info: {'targets': [2, 4], 'minion_role': 'Minion'}
+
+### [14:03:56] Revealed #8 Scout
+Info: {'evil_role': 'Minion', 'distance': 2}
+
+### [14:03:56] Revealed #9 Bard
+Info: {'corruption_distance': 1}
+
+### [14:05:37] Revealed #3 Enlightened
+Info: {'direction': 'CW'}
+
+#### [14:05:43] Solver Output
+Scenarios: 21/3024
+Definite good: ['#4', '#6', '#8']
+Evil probabilities: #9=90%, #7=86%, #3=62%, #1=29%, #5=29%, #2=5%
+
+#### [14:05:43] Recommendation
+Action: **EXECUTE** #9
+Reason: Execution lookahead: #9 guarantees a win across all reveal branches with current HP budget (38% evil Shaman, 29% evil Lilis, 24% evil Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 90%, but all reveal branches still lead to a forced win.
+
+### [14:05:50] Executed #9 -> GOOD (WRONG!)
+
+#### [14:06:01] Solver Output
+Scenarios: 2/2016
+Definite evil: ['#1', '#3', '#7']
+Definite good: ['#2', '#4', '#5', '#6', '#8', '#9']
+
+#### [14:06:01] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Lilis', 'Minion'})
+
+#### [14:06:34] Solver Output
+Scenarios: 2/2016
+Definite evil: ['#1', '#3', '#7']
+Definite good: ['#2', '#4', '#5', '#6', '#8', '#9']
+
+#### [14:06:34] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Minion', 'Lilis'})
+
+#### [14:07:05] Solver Output
+Scenarios: 2/2016
+Definite evil: ['#1', '#3', '#7']
+Definite good: ['#2', '#4', '#5', '#6', '#8', '#9']
+
+#### [14:07:05] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Lilis', 'Minion'})
+
+### [14:07:12] Executed #1 -> GOOD (WRONG!)
+
+## [14:16:22] GAME OVER — LOSS
+Final HP: -1
+Notes: Loss at HP -1. Solver bug fixed after loss: Drunk counts as corrupted for Bard/truth status while PD still reports Not Corrupted. Pre-fix solver eliminated #1 Drunk, forced #9 good Bard then #1 Drunk at 1 HP.
+
