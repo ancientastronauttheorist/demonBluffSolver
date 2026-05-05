@@ -4003,6 +4003,13 @@
       "name": "asc82_v2",
       "notes": "3HP village 2/7 - Baa death revealed hidden deck Drunk, Alchemist live wording was 'There was 1 Corruption around me', forced line survived Jester and Drunk wrong execs",
       "date": "2026-05-05 01:38"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc82_v3",
+      "notes": "5HP village 3/7 - Alchemist corruption wording auto-parsed, PD #6 found #7 corrupted and named #3 evil, corrupted Slayer #1 failed on #9, final #9 Minion",
+      "date": "2026-05-05 11:24"
     }
   ]
 }

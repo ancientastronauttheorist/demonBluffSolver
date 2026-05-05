@@ -43761,3 +43761,182 @@ Reason: #2 is evil in ALL 1 scenarios (roles: {'Chancellor'})
 ## [01:38:03] GAME OVER — WIN
 Final HP: 3
 
+
+---
+
+# New Game — 2026-05-05 11:18:05
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Judge, Alchemist, Enlightened, Slayer, Bishop, Confessor
+- Outcasts: Plague_Doctor
+- Minions: Minion, Poisoner
+- Demons: Pooka
+
+### [11:18:53] Revealed #1 Slayer
+Info: {}
+
+### [11:18:53] Revealed #2 Judge
+Info: {}
+
+### [11:18:53] Revealed #3 Confessor
+Info: {'dizzy': True}
+
+### [11:18:53] Revealed #4 Alchemist
+Info: {'corrupted_count': 1}
+
+### [11:18:53] Revealed #5 Bishop
+Info: {'targets': [5, 8, 6], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:18:53] Revealed #6 Plague_Doctor
+Info: {}
+
+### [11:18:53] Revealed #7 Enlightened
+Info: {'direction': 'CCW'}
+
+### [11:18:53] Revealed #9 Confessor
+Info: {'dizzy': True}
+
+### [11:18:53] Revealed #10 Lover
+Info: {'evil_adjacent': 1}
+
+### [11:19:03] Revealed #8 Enlightened
+Info: {'direction': 'Equidistant'}
+
+#### [11:19:09] Solver Output
+Scenarios: 16/4309
+Definite evil: ['#8']
+Definite good: ['#2', '#6']
+Evil probabilities: #3=88%, #9=38%, #10=38%, #1=12%, #4=12%, #5=6%, #7=6%
+
+#### [11:19:09] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 16 scenarios (roles: {'Poisoner', 'Pooka', 'Minion'})
+
+#### [11:19:18] Solver Output
+Scenarios: 16/4309
+Definite evil: ['#8']
+Definite good: ['#2', '#6']
+Evil probabilities: #3=88%, #9=38%, #10=38%, #1=12%, #4=12%, #5=6%, #7=6%
+
+#### [11:19:18] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 16 scenarios (roles: {'Pooka', 'Poisoner', 'Minion'})
+
+### [11:19:25] Executed #8 -> Poisoner (EVIL)
+
+#### [11:19:34] Solver Output
+Scenarios: 11/539
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #9=36%, #10=36%, #1=18%, #7=9%
+
+#### [11:19:34] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 11 scenarios (roles: {'Minion', 'Pooka'})
+
+#### [11:19:42] Solver Output
+Scenarios: 11/539
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #9=36%, #10=36%, #1=18%, #7=9%
+
+#### [11:19:42] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 11 scenarios (roles: {'Minion', 'Pooka'})
+
+### [11:19:49] Executed #3 -> Pooka (EVIL)
+
+#### [11:19:56] Solver Output
+Scenarios: 9/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6']
+Evil probabilities: #9=44%, #1=22%, #10=22%, #7=11%
+
+#### [11:19:56] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 1.837 (adjusted 1.837) | timing x1.00
+
+#### [11:21:18] Solver Output
+Scenarios: 8/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+Evil probabilities: #9=50%, #1=25%, #10=25%
+
+#### [11:21:18] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 4.2 scenarios (adjusted 4.2, info gain 0.913 bits) | timing x1.00
+
+#### [11:21:26] Solver Output
+Scenarios: 8/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7']
+Evil probabilities: #9=50%, #1=25%, #10=25%
+
+#### [11:21:26] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 4.2 scenarios (adjusted 4.2, info gain 0.913 bits) | timing x1.00
+
+### [11:21:31] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [11:21:31] Ability used at #2
+
+#### [11:21:39] Solver Output
+Scenarios: 3/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=67%, #9=33%
+
+#### [11:21:39] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#9']
+Reason: Target #9 is 33% evil (adjusted 0.22)
+WARNING: Corruption risk: 33% -- Slayer ability disabled if corrupted
+
+#### [11:23:03] Solver Output
+Scenarios: 3/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=67%, #9=33%
+
+#### [11:23:03] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (67% evil Minion, 33% good Slayer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+#### [11:23:14] Solver Output
+Scenarios: 3/74
+Definite evil: ['#3', '#8']
+Definite good: ['#2', '#4', '#5', '#6', '#7', '#10']
+Evil probabilities: #1=67%, #9=33%
+
+#### [11:23:14] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (67% evil Minion, 33% good Slayer (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [11:23:21] Executed #1 -> GOOD (WRONG!)
+
+#### [11:23:29] Solver Output
+Scenarios: 1/62
+Definite evil: ['#3', '#8', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7', '#10']
+
+#### [11:23:29] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+#### [11:23:38] Solver Output
+Scenarios: 1/62
+Definite evil: ['#3', '#8', '#9']
+Definite good: ['#1', '#2', '#4', '#5', '#6', '#7', '#10']
+
+#### [11:23:38] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
+
+### [11:23:45] Executed #9 -> Minion (EVIL)
+
+## [11:24:19] GAME OVER — WIN
+Final HP: 5
+

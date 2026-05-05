@@ -2929,7 +2929,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "game_over":
         result = args[0] if len(args) > 0 else "unknown"
         test_name = args[1] if len(args) > 1 else None
-        true_evils_str = args[2] if len(args) > 2 and args[2].strip() else None
+        true_evils_str = None
+        if len(args) > 2:
+            candidate = args[2].strip().strip('"').strip("'")
+            if candidate and "=" in candidate:
+                true_evils_str = candidate
         notes = args[3] if len(args) > 3 else ""
 
         # Auto-read true evils from memory_reader if not provided
