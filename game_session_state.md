@@ -44284,3 +44284,78 @@ Reason: #4 is evil in ALL 2 scenarios (roles: {'Poisoner'})
 Final HP: 5
 Notes: 5HP village 7/7 - PD #6 found #9 corrupted and #8 evil; solver executed #8 Pooka, used Druid #2 on #1,#3,#4, lookahead safely spent one wrong execution on corrupted #5 Oracle, then executed #4 Poisoner. Druid live wording was Among #1, #3, #4 there is: Bombardier.
 
+
+---
+
+# New Game — 2026-05-05 12:09:54
+Cards: 7, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Bard, Bishop, Knitter, Slayer, Lover, Medium
+- Outcasts: Plague_Doctor
+- Minions: 
+- Demons: Pooka
+
+### [12:15:31] Revealed #1 Knitter
+Info: {'evil_pairs': 1}
+
+### [12:15:31] Revealed #2 Bishop
+Info: {'targets': [7, 6, 5], 'types': ['Villager', 'Outcast', 'Demon']}
+
+### [12:15:31] Revealed #3 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:15:31] Revealed #4 Bard
+Info: {'corruption_distance': 1}
+
+### [12:15:31] Revealed #5 Plague_Doctor
+Info: {}
+
+### [12:15:31] Revealed #6 Medium
+Info: {'good_position': 7, 'good_role': 'Slayer'}
+
+### [12:15:31] Revealed #7 Slayer
+Info: {}
+
+#### [12:15:39] Solver Output
+Scenarios: 6/31
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #2=67%, #1=17%, #7=17%
+
+#### [12:15:39] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.792 (adjusted 1.792) | timing x1.00
+
+#### [12:16:48] Solver Output
+Scenarios: 6/31
+Definite good: ['#3', '#4', '#5', '#6']
+Evil probabilities: #2=67%, #1=17%, #7=17%
+
+#### [12:16:48] Recommendation
+Action: **USE_ABILITY** #5 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.792 (adjusted 1.792) | timing x1.00
+
+#### [12:17:23] Solver Output
+Scenarios: 1/31
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [12:17:23] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [12:17:56] Executed #7 -> Pooka (EVIL)
+
+#### [12:17:59] Solver Output
+Scenarios: 1/5
+Definite evil: ['#7']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6']
+
+#### [12:17:59] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+## [12:18:26] GAME OVER — WIN
+Final HP: 10
+Notes: PD #5 checked #4 corrupted and identified #7 Pooka after first-card flip recovery
+
