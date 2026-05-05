@@ -115,5 +115,23 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         self.assertEqual(ci.info_parsed.get("targets"), [1, 2, 4])
 
 
+class TestShutUpCluesForNonJester(unittest.TestCase):
+    def test_lover_shut_up_is_not_adjacent_evil_count(self):
+        card = {
+            "position": 1,
+            "true_role": "Lover",
+            "disguise": "Lover",
+            "clue_text": "#10 shut up!",
+            "acted_infos": [{"desc": "...", "targets": [10]}],
+            "runtime_data": None,
+            "ability_used": False,
+            "uses": 0,
+        }
+        ci = _parse_clue_from_memory(card)
+        self.assertIsNotNone(ci)
+        self.assertEqual(ci.apparent_role, "Lover")
+        self.assertEqual(ci.info_parsed, {})
+
+
 if __name__ == "__main__":
     unittest.main()

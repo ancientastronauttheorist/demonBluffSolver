@@ -1349,6 +1349,14 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     if role_lower in ACTIVE_ONLY_ROLES and not active_fired:
         return card_no_info(pos, role)
 
+    shut_up_pat = re.search(r'#\d+\s*shut\s*up', clue, re.IGNORECASE)
+    if shut_up_pat and role_lower != 'jester':
+        # New Rambler behavior can replace an adjacent truthful character's
+        # normal clue with "#X shut up!". Until the validator models that rule,
+        # keep it as known role/no-info rather than parsing the target number
+        # as the role's normal numeric clue.
+        return card_no_info(pos, role)
+
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
         return card_enlightened(pos, rd['direction'])

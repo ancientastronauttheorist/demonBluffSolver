@@ -44017,3 +44017,121 @@ Reason: #1 is evil in ALL 6 scenarios (roles: {'Twin_Minion'})
 ## [11:33:08] GAME OVER — WIN
 Final HP: 6
 
+
+---
+
+# New Game — 2026-05-05 11:37:56
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Hunter, Lover, Scout, Jester, Baker, Oracle, Bishop
+- Outcasts: Plague_Doctor, Rambler
+- Minions: Shaman, Chancellor
+- Demons: Lilis
+
+### [11:38:51] Revealed #1 Lover
+Info: {'evil_adjacent': 10}
+
+### [11:38:51] Revealed #2 Jester
+Info: {}
+
+### [11:38:51] Revealed #3 Scout
+Info: {'evil_role': 'Shaman', 'distance': 4}
+
+### [11:38:51] Revealed #4 Hunter
+Info: {'distance': 2}
+
+### [11:40:06] Revealed #1 Lover
+Info: {}
+
+#### [11:40:15] rambler_shut_up_v5
+#1 Lover displayed '#10 shut up!' adjacent to hidden #10 in a Rambler deck; parser corrected to no-info until Rambler validator is modeled.
+
+### [11:41:01] Revealed #5 Bishop
+Info: {'targets': [2, 1, 10], 'types': ['Villager', 'Outcast', 'Minion']}
+
+### [11:41:01] Revealed #6 Jester
+Info: {}
+
+### [11:41:01] Revealed #7 Oracle
+Info: {'targets': [1, 9], 'minion_role': 'Shaman'}
+
+### [11:41:01] Revealed #8 Plague_Doctor
+Info: {}
+
+#### [11:41:12] Solver Output
+Scenarios: 68/3260
+Definite good: ['#9', '#10']
+Evil probabilities: #3=63%, #7=56%, #4=41%, #5=41%, #2=35%, #1=32%, #6=28%, #8=3%
+
+#### [11:41:12] Recommendation
+Action: **USE_ABILITY** #8 (Plague Doctor) -> targets ['#4']
+Reason: Entropy 1.896 (adjusted 1.896) | timing x1.00
+
+#### [11:41:53] Solver Output
+Scenarios: 41/3260
+Definite good: ['#8', '#9', '#10']
+Evil probabilities: #4=68%, #7=54%, #3=49%, #2=41%, #6=32%, #5=29%, #1=27%
+
+#### [11:41:53] Recommendation
+Action: **USE_ABILITY** #6 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 18.0 scenarios (adjusted 18.5, info gain 1.152 bits) | timing x1.00
+WARNING: Corruption risk: 5%
+
+### [11:42:01] Revealed #6 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [11:42:01] Ability used at #6
+
+#### [11:42:07] Solver Output
+Scenarios: 21/3260
+Definite good: ['#8', '#9', '#10']
+Evil probabilities: #7=76%, #2=62%, #6=62%, #4=38%, #5=29%, #1=24%, #3=10%
+
+#### [11:42:07] Recommendation
+Action: **USE_ABILITY** #2 (Jester) -> targets ['#1', '#5', '#6']
+Reason: Expected posterior 11.9 scenarios (adjusted 11.9, info gain 0.820 bits) | timing x1.00
+
+### [11:42:15] Revealed #2 Jester
+Info: {'targets': [1, 5, 6], 'evil_count': 3}
+
+### [11:42:15] Ability used at #2
+
+#### [11:42:21] Solver Output
+Scenarios: 13/3260
+Definite evil: ['#2', '#6']
+Definite good: ['#3', '#4', '#5', '#8', '#9', '#10']
+Evil probabilities: #7=77%, #1=23%
+
+#### [11:42:21] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 13 scenarios (roles: {'Chancellor', 'Lilis', 'Shaman'})
+
+### [11:42:28] Executed #2 -> Shaman (EVIL)
+
+#### [11:42:33] Solver Output
+Scenarios: 4/337
+Definite evil: ['#2', '#6', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#8', '#9', '#10']
+
+#### [11:42:33] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 4 scenarios (roles: {'Chancellor', 'Lilis'})
+
+### [11:42:40] Executed #6 -> Lilis (EVIL)
+
+#### [11:42:46] Solver Output
+Scenarios: 2/35
+Definite evil: ['#2', '#6', '#7']
+Definite good: ['#1', '#3', '#4', '#5', '#8', '#9', '#10']
+
+#### [11:42:46] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 2 scenarios (roles: {'Chancellor'})
+
+### [11:42:53] Executed #7 -> Chancellor (EVIL)
+
+## [11:43:18] GAME OVER — WIN
+Final HP: 6
+Notes: 6HP village 5/7 - Rambler redesign live data: #1 Lover said #10 shut up, #10 was hidden Rambler and later Lilis-killed; parser now keeps non-Jester shut-up clues as no-info. Lilis killed #9 and #10 as good; PD #8 checked #4 clean; Jester abilities led to #2 Shaman, #6 Lilis, #7 Chancellor.
+
