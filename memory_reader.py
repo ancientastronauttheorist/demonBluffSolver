@@ -31,30 +31,30 @@ PROCESS_QUERY_INFORMATION = 0x0400
 
 # IL2CPP offsets (from dump.cs / Il2CppDumper script.json analysis)
 # Gameplay class
-GAMEPLAY_TYPEINFO_RVA = 0x26D6C98  # Il2CppClass* pointer address (RVA from GA base)
+GAMEPLAY_TYPEINFO_RVA = 0x26F8140  # Il2CppClass* pointer address (RVA from GA base)
 IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
-GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x8
-GAMEPLAY_CHARACTERS_OFFSET = 0x60
-GAMEPLAY_SCORE_STATIC_OFFSET = 0x0   # static Score score (first static field)
+GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x10
+GAMEPLAY_CHARACTERS_OFFSET = 0x68
+GAMEPLAY_SCORE_STATIC_OFFSET = 0x8   # static Score Score
 
 # Score class field offsets
-SCORE_KILLED_GOODS_OFFSET = 0x10
-SCORE_COMPLETED_STAGES_OFFSET = 0x14
-SCORE_TEMP_UNREVEALED_OFFSET = 0x18
-SCORE_UNREVEALED_CARDS_OFFSET = 0x1C
-SCORE_KILLED_EVILS_OFFSET = 0x20
-SCORE_TEMP_KILLED_EVILS_OFFSET = 0x24
-SCORE_POINT_PER_KILL_OFFSET = 0x28
-SCORE_POINTS_PER_UNREVEALED_OFFSET = 0x2C
-SCORE_POINTS_FOR_COMPLETING_OFFSET = 0x30
-SCORE_COMPLETED_DAYS_OFFSET = 0x34
-SCORE_MULTIPLIER_OFFSET = 0x38
+SCORE_COMPLETED_STAGES_OFFSET = 0x10
+SCORE_POINTS_FOR_COMPLETING_OFFSET = 0x14
+SCORE_COMPLETED_DAYS_OFFSET = 0x18
+SCORE_MULTIPLIER_OFFSET = 0x1C
+SCORE_KILLED_GOODS_OFFSET = 0x28
+SCORE_TEMP_UNREVEALED_OFFSET = 0x2C
+SCORE_UNREVEALED_CARDS_OFFSET = 0x30
+SCORE_KILLED_EVILS_OFFSET = 0x34
+SCORE_TEMP_KILLED_EVILS_OFFSET = 0x38
+SCORE_POINT_PER_KILL_OFFSET = 0x3C
+SCORE_POINTS_PER_UNREVEALED_OFFSET = 0x40
 
 # Gameplay deck lists (List<CharacterData>)
-GAMEPLAY_TOWNSFOLKS_OFFSET = 0x20
-GAMEPLAY_OUTSIDERS_OFFSET = 0x28
-GAMEPLAY_MINIONS_OFFSET = 0x30
-GAMEPLAY_DEMONS_OFFSET = 0x38
+GAMEPLAY_TOWNSFOLKS_OFFSET = 0x28
+GAMEPLAY_OUTSIDERS_OFFSET = 0x30
+GAMEPLAY_MINIONS_OFFSET = 0x38
+GAMEPLAY_DEMONS_OFFSET = 0x40
 
 # Characters class
 CHARACTERS_LIST_OFFSET = 0x20
@@ -92,12 +92,12 @@ CHAR_STATUS = {
 
 # Character clue/ability field offsets (Phase 2)
 CHAR_RUNTIME_DATA_OFFSET = 0x70  # RuntimeCharacterData (polymorphic per role)
-CHAR_ACTED_OFFSET = 0xA0         # Acted (speech bubble component)
-CHAR_LEFT_ACT_OFFSET = 0xA8      # bool (left ability activated)
-CHAR_USES_OFFSET = 0xBC          # int (ability use count)
+CHAR_ACTED_OFFSET = 0xA8         # Acted (speech bubble component)
+CHAR_LEFT_ACT_OFFSET = 0xB0      # bool (left ability activated)
+CHAR_USES_OFFSET = 0xDC          # int (ability use count / pickableUses)
 CHAR_ACTED_INFOS_OFFSET = 0x148  # List<ActedInfo>
 CHAR_SAVED_ACT_OFFSET = 0x198    # string (cached clue text)
-CHAR_ACT_OFFSET = 0x161          # bool (ability activated flag)
+CHAR_ACT_OFFSET = 0x1A1          # bool (ability activated flag)
 
 # ActedInfo class field offsets
 ACTED_INFO_DESC_OFFSET = 0x10    # string (formatted clue text)
@@ -110,8 +110,8 @@ EVIL_DIRECTION = {0: 'Equidistant', 10: 'CW', 20: 'CCW'}
 CD_CHARACTER_ID_OFFSET = 0x18    # string (role name) -- STALE in multi-village!
 CD_CACHED_PTR_OFFSET = 0x10      # IntPtr m_CachedPtr (Unity native object)
 CD_NATIVE_NAME_OFFSET = 0x48     # char* name in Unity native object (RELIABLE)
-CD_TYPE_OFFSET = 0xF8            # ECharacterType (int32)
-CD_ALIGNMENT_OFFSET = 0xFC       # EAlignment (int32)
+CD_TYPE_OFFSET = 0x130           # ECharacterType (int32)
+CD_ALIGNMENT_OFFSET = 0x134      # EAlignment (int32)
 
 # Enum mappings
 ALIGNMENT = {0: 'None', 10: 'Good', 20: 'Evil'}
@@ -189,7 +189,7 @@ def clean_name(raw_name):
 # Validated against GameAssembly.dll with this fingerprint. Offsets in this file
 # were derived from Il2CppDumper output of a matching DLL; any mismatch means
 # the game updated and offsets are likely stale.
-KNOWN_DLL_FINGERPRINT: dict = {"size": 44688896, "pe_timestamp": 1776463886}
+KNOWN_DLL_FINGERPRINT: dict = {"size": 44834304, "pe_timestamp": 1777936964}
 
 
 def validate_dll_version(reader: 'MemoryReader'):
