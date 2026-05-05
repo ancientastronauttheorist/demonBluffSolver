@@ -4010,6 +4010,13 @@
       "name": "asc82_v3",
       "notes": "5HP village 3/7 - Alchemist corruption wording auto-parsed, PD #6 found #7 corrupted and named #3 evil, corrupted Slayer #1 failed on #9, final #9 Minion",
       "date": "2026-05-05 11:24"
+    },
+    {
+      "result": "win",
+      "hp": 6,
+      "name": "asc82_v4",
+      "notes": "6HP village 4/7 - Lilis dealt two no-kill damage ticks, solver executed #6 Lilis, Judge #3 found #1 lying, then solver executed #1 Twin Minion",
+      "date": "2026-05-05 11:33"
     }
   ]
 }

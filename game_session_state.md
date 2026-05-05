@@ -43940,3 +43940,80 @@ Reason: #9 is evil in ALL 1 scenarios (roles: {'Minion'})
 ## [11:24:19] GAME OVER — WIN
 Final HP: 5
 
+
+---
+
+# New Game — 2026-05-05 11:29:07
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Lover, Druid, Knight, Gemcrafter, Judge, Hunter
+- Outcasts: Doppelganger
+- Minions: Twin_Minion
+- Demons: Lilis
+
+### [11:31:45] Revealed #1 Hunter
+Info: {'distance': 2}
+
+### [11:31:45] Revealed #2 Druid
+Info: {}
+
+### [11:31:45] Revealed #3 Judge
+Info: {}
+
+### [11:31:45] Revealed #4 Lover
+Info: {'evil_adjacent': 0}
+
+### [11:32:15] Revealed #5 Knight
+Info: {}
+
+### [11:32:15] Revealed #6 Hunter
+Info: {'distance': 4}
+
+### [11:32:15] Revealed #7 Druid
+Info: {}
+
+### [11:32:15] Revealed #8 Gemcrafter
+Info: {'good_position': 2}
+
+#### [11:32:21] Solver Output
+Scenarios: 24/336
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #7=50%
+
+#### [11:32:21] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 24 scenarios (roles: {'Twin_Minion', 'Lilis'})
+
+### [11:32:28] Executed #6 -> Lilis (EVIL)
+
+#### [11:32:32] Solver Output
+Scenarios: 12/42
+Definite evil: ['#6']
+Definite good: ['#2', '#3', '#4', '#5', '#8']
+Evil probabilities: #1=50%, #7=50%
+
+#### [11:32:32] Recommendation
+Action: **USE_ABILITY** #3 (Judge) -> targets ['#1']
+Reason: Expected posterior 6.0 scenarios (adjusted 6.0, info gain 1.000 bits) | timing x1.00
+
+### [11:32:37] Revealed #3 Judge
+Info: {'target': 1, 'is_lying': True}
+
+### [11:32:37] Ability used at #3
+
+#### [11:32:42] Solver Output
+Scenarios: 6/42
+Definite evil: ['#1', '#6']
+Definite good: ['#2', '#3', '#4', '#5', '#7', '#8']
+
+#### [11:32:42] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 6 scenarios (roles: {'Twin_Minion'})
+
+### [11:32:49] Executed #1 -> Twin Minion (EVIL)
+
+## [11:33:08] GAME OVER — WIN
+Final HP: 6
+

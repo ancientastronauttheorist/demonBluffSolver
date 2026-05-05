@@ -2888,7 +2888,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         return None
 
     if cmd == "night_no_kill":
-        revealed = {c.position for c in session.cards}
+        revealed = {c.position for c in session.cards} | set(session.reveal_order)
         dead = set(session.executed) | set(session.night_kills)
         all_positions = set(range(1, session.n_cards + 1))
         unrevealed = all_positions - revealed - dead
@@ -2909,13 +2909,14 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print(f"  HP: {old_hp} -> {session.hp}")
         elif len(unrevealed) == 0:
             session.save()
-            print("WARNING: No unrevealed positions. Night shouldn't have triggered.")
+            print("Lilis night dealt 2HP but no kill; all positions are revealed/dead.")
+            print("  No Lilis position can be inferred from this no-kill.")
             print(f"  HP: {old_hp} -> {session.hp}")
         else:
             session.save()
-            print(f"WARNING: {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
-            print("  Cannot auto-deduce Lilis — multiple unrevealed cards exist.")
-            print("  Check if a card was actually killed and use night_kill instead.")
+            print(f"Lilis night dealt 2HP but no kill; {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
+            print("  No Lilis position can be inferred yet.")
+            print("  If a card actually died, use night_kill instead.")
             print(f"  HP: {old_hp} -> {session.hp}")
         return None
 
@@ -2930,11 +2931,17 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         result = args[0] if len(args) > 0 else "unknown"
         test_name = args[1] if len(args) > 1 else None
         true_evils_str = None
+        notes = ""
         if len(args) > 2:
-            candidate = args[2].strip().strip('"').strip("'")
+            raw_candidate = args[2].strip()
+            candidate = raw_candidate.strip('"').strip("'")
             if candidate and "=" in candidate:
                 true_evils_str = candidate
-        notes = args[3] if len(args) > 3 else ""
+                notes = " ".join(args[3:]) if len(args) > 3 else ""
+            elif candidate:
+                notes = " ".join(args[2:])
+            elif len(args) > 3:
+                notes = " ".join(args[3:])
 
         # Auto-read true evils from memory_reader if not provided
         if not true_evils_str and test_name:
