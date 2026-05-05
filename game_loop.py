@@ -1088,10 +1088,10 @@ class GameSession:
             print(f"\n  [auto_next] #{pos} is potential Bombardier (not forced-safe) — manual decision needed.")
             return action, result, None
 
-        # HP budget guard: skip for forced_safe picks since lookahead already
-        # budgeted HP across all branches during its DFS. Keep for non-forced
-        # definite_evil picks as defense in depth.
-        if not is_forced_safe:
+        # HP budget guard: skip for forced_safe picks (lookahead budgeted HP)
+        # and definite evils (a correct execution cannot reduce HP). This guard
+        # is only for future non-definite auto paths.
+        if not is_forced_safe and not is_definite:
             if self.hp <= self.wrong_exec_cost and result.n_surviving > 1:
                 print(f"\n  [auto_next] HP={self.hp} too low for auto-exec (cost={self.wrong_exec_cost}). Manual decision needed.")
                 return action, result, None
