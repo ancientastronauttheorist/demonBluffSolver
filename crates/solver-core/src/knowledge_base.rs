@@ -51,7 +51,7 @@ pub struct Card {
 /// All 40 cards in the game.
 pub static ALL_CARDS: &[Card] = &[
     // ── Villagers (Good) ── 24 cards
-    Card { name: "Alchemist",      faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: true },
+    Card { name: "Alchemist",      faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Architect",      faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Baker",          faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Bard",           faction: Faction::Villager, alignment: Alignment::Good, lies: false, disguises: false, cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: true },

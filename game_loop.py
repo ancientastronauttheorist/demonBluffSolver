@@ -130,8 +130,9 @@ def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], lis
 def card_judge(pos: int, target: int, is_lying: bool) -> CardInfo:
     return CardInfo(pos, "Judge", info_parsed={"target": target, "is_lying": is_lying})
 
-def card_alchemist(pos: int, cured_count: int) -> CardInfo:
-    return CardInfo(pos, "Alchemist", info_parsed={"cured_count": cured_count})
+def card_alchemist(pos: int, corrupted_count: int) -> CardInfo:
+    """Post-patch: clue is # Corrupted around me [Range 2] at start of Round (before Cure)."""
+    return CardInfo(pos, "Alchemist", info_parsed={"corrupted_count": corrupted_count})
 
 def card_druid(pos: int, targets: list[int], found_outcast: Optional[str] = None) -> CardInfo:
     return CardInfo(pos, "Druid", info_parsed={"targets": targets, "found_outcast": found_outcast})
@@ -1340,16 +1341,22 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         return card_enlightened(pos, rd['direction'])
 
     # --- Alchemist: prefer clue_text (works for Drunk-as-Alchemist too) ---
-    # Runtime cures field is the TRUE count, but the card DISPLAYS a possibly
-    # different number (corrupted Alchemist lies). Solver needs displayed value.
-    # Key off apparent role so Drunk-disguised-as-Alchemist still parses (Drunk
-    # has no 'cures' runtime_data since _read_runtime_data dispatches on TRUE role).
+    # Post-patch clue is "# Corrupted around me [Range 2] at start of Round (before Cure)".
+    # Alchemist is now immune to Corruption — they never lie themselves, but a
+    # Drunk-disguised-as-Alchemist will (true role Drunk is corrupted). Use displayed
+    # value from clue_text since that's what we validate against.
     if role_lower == 'alchemist':
-        m = re.search(r'cured\s+(\d+)', clue, re.IGNORECASE)
+        m = re.search(r'(\d+)\s+corrupted', clue, re.IGNORECASE)
+        if not m:
+            m = re.search(r'corrupted\s+(?:character|villager)?s?\s*[:=]?\s*(\d+)', clue, re.IGNORECASE)
+        if not m:
+            # Legacy fallback for old "cured N" wording
+            m = re.search(r'cured\s+(\d+)', clue, re.IGNORECASE)
         if m:
             return card_alchemist(pos, int(m.group(1)))
-        if rd and rd.get('type') == 'cures':
-            return card_alchemist(pos, rd['cures'] or 0)
+        if rd and rd.get('type') in ('corrupted_around', 'cures'):
+            val = rd.get('corrupted_around') if rd.get('type') == 'corrupted_around' else rd.get('cures')
+            return card_alchemist(pos, val or 0)
 
     # --- Baker: prefer clue_text over runtime_data ---
     # Runtime original_role can mismatch displayed text (e.g., Shaman games,
@@ -1784,6 +1791,62 @@ def _baa_hides_outcast(only_cv: set, only_mr: set, mr_set: set, cv_unclassified:
     if only_cv or len(only_mr) != 1 or cv_unclassified < 1:
         return False
     return next(iter(only_mr)) in _DECK_OUTCAST_ROLES
+
+
+def _baa_post_execute_reveal(session) -> None:
+    """When Baa dies, the game auto-reveals the Outcast it was hiding on the board.
+    Detect that position via memory reader and add it to reveal_order so the
+    user can immediately enter its info via auto_card / card.
+    """
+    from memory_reader import MemoryReader, get_monitor
+    already = set(session.reveal_order) | set(session.executed) | set(session.night_kills)
+    blocked = set(session.blocked_positions)
+    cards = None
+    try:
+        mon = get_monitor()
+        if mon and mon.is_healthy():
+            def _revealed(board):
+                if not board:
+                    return False
+                for c in board:
+                    p = c.get('position')
+                    if p in already or p in blocked:
+                        continue
+                    if c.get('state') in ('Alive', 'Revealed'):
+                        return True
+                return False
+            time.sleep(0.5)
+            mon.wait_for(_revealed, timeout=4, min_delay=0.5)
+            cards = mon.get_board()
+    except Exception:
+        cards = None
+    if cards is None:
+        time.sleep(1.5)
+        reader = MemoryReader()
+        if reader.open():
+            try:
+                cards = reader.read_board()
+            finally:
+                reader.close()
+    if not cards:
+        print("  [Baa] Could not read memory — flip the newly-revealed card manually.")
+        return
+    newly = []
+    for c in cards:
+        p = c.get('position')
+        if p in already or p in blocked:
+            continue
+        if c.get('state') in ('Alive', 'Revealed'):
+            newly.append(c)
+    if not newly:
+        print("  [Baa] No newly-revealed position detected (Witch may have blocked it).")
+        return
+    for c in newly:
+        p = c['position']
+        session.reveal_order.append(p)
+        role = c.get('disguise') or c.get('true_role') or '?'
+        print(f"  [Baa] Revealed #{p} -> {role}. Run: auto_card  (or: card {role.lower()} {p} ...)")
+    session.save()
 
 
 def _cmd_read_deck(screenshot_path: str):
@@ -2592,6 +2655,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 print(f"  WARNING: Wrong execution!{suffix} HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
             else:
                 print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
+
+            # Baa death reveals the previously-hidden Outcast on the board.
+            if evil_role and evil_role.lower().replace(' ', '_') == "baa":
+                _baa_post_execute_reveal(session)
         return None
 
     if cmd == "pd_target":

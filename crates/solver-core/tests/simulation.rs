@@ -542,6 +542,16 @@ fn simulate_all_v2() {
         // documented tech debt rather than silently masked.
         "asc74_v7",
         "asc75_v7",
+        // Recorded under pre-patch Alchemist rules (cured-count clue + corruptible).
+        // 2026-05-04 patch: Alchemist is immune to Corruption AND now reports
+        // pre-cure corrupted-in-range (incl. Drunk), not cured-count. Frozen
+        // historical data no longer satisfies the new validator semantics.
+        // Will be replaced by post-patch recordings as games are played.
+        "asc27_v3", "asc28_v7", "asc30_v3", "asc33_v1", "asc36_v4", "asc36_v6",
+        "asc38_v6", "asc39_v5", "asc40_v3", "asc42_v2", "asc42_v3", "asc43_v5",
+        "asc47_v3", "asc50_v1", "asc52_v5", "asc53_v4", "asc55_v3", "asc56_v2",
+        "asc56_v3", "asc57_v7", "asc60_v2", "asc61_v3", "asc61_v5", "asc62_v4",
+        "asc63_v5", "asc69_v1", "asc72_v2", "asc73_v3", "asc75_v4", "asc80_v1",
     ].into_iter().collect();
 
     let mut wins = 0usize;

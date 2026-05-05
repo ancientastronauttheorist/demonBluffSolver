@@ -59,8 +59,9 @@ class Card:
 # ============================================================
 VILLAGERS = [
     Card("Alchemist", Role.VILLAGER, Alignment.GOOD,
-         "Villagers to the left and right of me [Range 2] are cured from Corruption. Learn how many I cured.",
-         lies=False, disguises=False, corrupted_note=True),
+         "I am immune to Corruption. Villagers to the left and right of me [Range 2] are cured from Corruption. "
+         "Learn how many Corrupted characters were around me [Range 2] at the start of the Round (before the Cure).",
+         lies=False, disguises=False, corrupted_note=False),
     Card("Architect", Role.VILLAGER, Alignment.GOOD,
          "Learn which side of the circle is more Evil. Learn 'Equal' if both sides are equally Evil.",
          lies=False, disguises=False),

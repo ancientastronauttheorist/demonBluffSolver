@@ -606,7 +606,12 @@ fn validate_judge(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
 }
 
 fn validate_alchemist(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
-    let claimed = match info_i64(&card.info_parsed, "cured_count") {
+    // Post-patch: the clue is "# of Corrupted characters around me [Range 2] at
+    // the start of the Round (before the Cure)", stored as info_parsed["corrupted_count"].
+    // Legacy test cases use "cured_count" — accept both during migration.
+    let claimed = match info_i64(&card.info_parsed, "corrupted_count")
+        .or_else(|| info_i64(&card.info_parsed, "cured_count"))
+    {
         Some(v) => v,
         None => return true,
     };
