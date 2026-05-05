@@ -917,12 +917,14 @@ class GameSession:
         targets = list(action.targets or [])
         ability_name = (action.ability_name or "").lower().replace(" ", "_")
 
-        # v1: Slayer and Plague Doctor use different command paths
-        # Dreamer: game patch added 2-character pick (Dreamer2 class, ConjourInfo(Character,Character,string)).
-        # Solver still models old 1-target Dreamer; UI auto-click breaks. Manual for now.
-        if ability_name in ("slayer", "plague_doctor", "dreamer"):
+        # Slayer and Plague Doctor use dedicated result-entry commands.
+        if ability_name in ("slayer", "plague_doctor"):
             return {"success": False, "info_parsed": None,
-                    "error": f"{action.ability_name} requires manual handling (see CLAUDE.md; Dreamer patch awaiting new-semantics support)"}
+                    "error": f"{action.ability_name} requires manual handling (use slayer_result/pd_check)"}
+
+        if ability_name == "dreamer" and len(targets) != 2:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Dreamer2 requires exactly 2 targets, got {targets}"}
 
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
@@ -936,6 +938,18 @@ class GameSession:
             if t not in coords:
                 return {"success": False, "info_parsed": None,
                         "error": f"Target {t} not valid for {self.n_cards}-card game"}
+
+        from knowledge_base import get_card
+        for t in targets:
+            if t in self.used_abilities:
+                continue
+            target_card_entry = next((c for c in self.cards if c.position == t), None)
+            if not target_card_entry:
+                continue
+            kb_card = get_card(target_card_entry.apparent_role)
+            if kb_card and kb_card.activated_ability:
+                return {"success": False, "info_parsed": None,
+                        "error": f"#{t} ({target_card_entry.apparent_role}) has unused active ability; clicking it would activate the card instead of selecting it. Use ability_used {t} first or handle this ability manually."}
 
         # Step 1: Click active card to enter target-selection mode
         x, y = coords[pos]
@@ -958,7 +972,8 @@ class GameSession:
                         "error": f"Failed to click target #{t}: {e}"}
             time.sleep(0.25)  # pause between target clicks
 
-        # Step 3: Wait for ability result in memory (uses > 0 or acted_infos populated)
+        # Step 3: Wait for ability result in memory. Dreamer2 can set the act
+        # flag and clue text while leaving uses at 0.
         print(f"  [auto_ability] Waiting for ability result...")
         target_card_data = None
 
@@ -968,7 +983,11 @@ class GameSession:
             card = next((c for c in board if c['position'] == pos), None)
             if not card:
                 return False
-            return card.get('uses', 0) > 0 or bool(card.get('acted_infos'))
+            return (
+                card.get('uses', 0) > 0
+                or bool(card.get('acted_infos'))
+                or bool(card.get('ability_used') and card.get('clue_text'))
+            )
 
         if monitor and monitor.is_healthy():
             resolved = monitor.wait_for(_ability_resolved, timeout=6, min_delay=0.8)
@@ -997,7 +1016,12 @@ class GameSession:
         if not target_card_data:
             return {"success": False, "info_parsed": None,
                     "error": f"Position #{pos} not found in memory reader after activation"}
-        if target_card_data.get('uses', 0) == 0 and not target_card_data.get('acted_infos'):
+        has_recorded_result = (
+            target_card_data.get('uses', 0) > 0
+            or bool(target_card_data.get('acted_infos'))
+            or bool(target_card_data.get('ability_used') and target_card_data.get('clue_text'))
+        )
+        if not has_recorded_result:
             return {"success": False, "info_parsed": None,
                     "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
 
@@ -1039,23 +1063,12 @@ class GameSession:
         action = print_recommendation(state, result, self.used_abilities)
         DecisionLog.log_recommendation(action)
 
-        # Route USE_ABILITY to auto_use_ability (v1: skips Slayer + Plague Doctor)
+        # Route USE_ABILITY to auto_use_ability. Slayer and Plague Doctor still
+        # use dedicated result-entry commands.
         if action.action_type == "use_ability":
             ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
-            if ability_name_lower in ("slayer", "plague_doctor", "dreamer"):
-                if ability_name_lower == "dreamer":
-                    # Dreamer2 patch: new 2-char+1-role UI. Solver now validates
-                    # the ambiguous output shape ({targets, evil_role_options}).
-                    # Manual fire is PREFERRED when solver recommends — it's
-                    # often decisive (e.g. asc77 v7 Bombardier 50/50).
-                    print(f"\n  [auto_next] Dreamer is the recommended info-gathering move — FIRE MANUALLY:")
-                    print(f"    1. Click #{action.position} (Dreamer card)")
-                    print(f"    2. Pick 2 characters (Dreamer2 requires 2)")
-                    print(f"    3. If this build shows a role menu, pick the solver-relevant role")
-                    print(f"    4. The result auto-parses via memory_reader.")
-                    print(f"    Only use `ability_used {action.position}` if you've confirmed Dreamer truly can't help (e.g. all suspects already narrowed).")
-                else:
-                    print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with card/slayer_result/pd_check.")
+            if ability_name_lower in ("slayer", "plague_doctor"):
+                print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with slayer_result/pd_check.")
                 return action, result, None
             print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
             exec_result = self.auto_use_ability(action)
@@ -1442,6 +1455,8 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     # Drunk-disguised-as-Alchemist still lies intrinsically. Use displayed
     # value from clue_text since that's what we validate against.
     if role_lower == 'alchemist':
+        if re.search(r'\b(?:no|none|zero)\s+(?:one\s+)?(?:was\s+|were\s+)?corrupt(?:ed|ion)', clue, re.IGNORECASE):
+            return card_alchemist(pos, 0)
         m = re.search(r'(\d+)\s+corrupt(?:ed|ion)', clue, re.IGNORECASE)
         if not m:
             m = re.search(r'corrupt(?:ed|ion)\s+(?:character|villager)?s?\s*[:=]?\s*(\d+)', clue, re.IGNORECASE)

@@ -21,6 +21,7 @@ from game_loop import (
 )
 from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult
 from strategy import recommend_abilities
+from strategy import Action
 
 
 class TestParseAmbiguousAmong(unittest.TestCase):
@@ -235,6 +236,37 @@ class TestManualActiveAbilityBookkeeping(unittest.TestCase):
         session = GameSession(4, 1)
         session.add_card(card_druid(1, [2, 3, 4], None))
         self.assertIn(1, session.used_abilities)
+
+
+class TestDreamerAutoAbilityGuards(unittest.TestCase):
+    def test_dreamer_requires_two_targets(self):
+        session = GameSession(3, 1)
+        action = Action(
+            "use_ability",
+            position=1,
+            targets=[2],
+            ability_name="Dreamer",
+        )
+
+        result = session.auto_use_ability(action)
+
+        self.assertFalse(result["success"])
+        self.assertIn("exactly 2 targets", result["error"])
+
+    def test_dreamer_refuses_unused_active_target(self):
+        session = GameSession(3, 1)
+        session.add_card(CardInfo(2, "Jester"))
+        action = Action(
+            "use_ability",
+            position=1,
+            targets=[2, 3],
+            ability_name="Dreamer",
+        )
+
+        result = session.auto_use_ability(action)
+
+        self.assertFalse(result["success"])
+        self.assertIn("unused active ability", result["error"])
 
 
 if __name__ == "__main__":

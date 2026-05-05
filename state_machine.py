@@ -648,6 +648,13 @@ class GameStateMachine:
             )
             return
 
+        if ability_name == "Dreamer" and len(targets or []) != 2:
+            self._pause(
+                f"Dreamer2 requires exactly 2 targets; solver returned {targets}. "
+                f"Handle manually, then 'resume'."
+            )
+            return
+
         # Safety: check that targets don't have unused active abilities
         for t in (targets or []):
             if self._has_active_ability(t):
@@ -693,7 +700,11 @@ class GameStateMachine:
                 if not card:
                     return False
                 new_uses = card.get('uses', 0)
-                return new_uses > (old_uses or 0)
+                return (
+                    new_uses > (old_uses or 0)
+                    or bool(card.get('acted_infos'))
+                    or bool(card.get('ability_used') and card.get('clue_text'))
+                )
 
             resolved = self.monitor.wait_for(_ability_resolved, timeout=5, min_delay=0.5)
             if not resolved:

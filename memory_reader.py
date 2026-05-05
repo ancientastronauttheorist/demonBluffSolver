@@ -554,9 +554,18 @@ class MemoryReader:
 
             # Stale clue filter: for displayed roles with no passive speech bubble,
             # savedAct is always stale (persists from previous village). Null it
-            # unless the active ability has been used (uses>0 or acted_infos non-empty).
+            # unless the active ability has been used (uses>0, acted_infos
+            # non-empty, or the act flag is set). Plague Doctor is stricter
+            # because game-start setup can set the act flag before the active
+            # check ability is used.
             display_role_lower = (disguise or true_role or '').lower().replace('_', ' ')
-            is_active_unused = ability_state['uses'] == 0 and not acted_infos
+            is_active_unused = (
+                ability_state['uses'] == 0
+                and not acted_infos
+                and not ability_state['act']
+            )
+            if display_role_lower == 'plague doctor':
+                is_active_unused = ability_state['uses'] == 0 and not acted_infos
             if display_role_lower in NO_PASSIVE_CLUE_DISPLAY_ROLES and is_active_unused:
                 saved_act = None
 
