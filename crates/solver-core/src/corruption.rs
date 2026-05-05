@@ -9,6 +9,7 @@ use crate::types::GameState;
 ///
 /// Sources: Pooka (adjacent), Poisoner (1 adjacent), PD (1 villager), Drunk (inherent).
 /// Doppelganger is immune to Pooka/Poisoner (Outcast, not Villager).
+/// Alchemist is immune to all corruption sources.
 pub fn compute_corruption(
     full_evil: &HashMap<u8, String>,
     state: &GameState,
@@ -20,6 +21,12 @@ pub fn compute_corruption(
     let n = state.n_cards;
     let mut corrupted = HashSet::new();
 
+    let is_alchemist = |p: u8| -> bool {
+        state.card_at(p)
+            .map(|c| c.apparent_role == "Alchemist" || c.apparent_role == "alchemist")
+            .unwrap_or(false)
+    };
+
     // Evil-role corruption
     for (&pos, role) in full_evil {
         match role.as_str() {
@@ -30,6 +37,9 @@ pub fn compute_corruption(
                     }
                     if Some(adj) == doppelganger_pos {
                         continue; // Doppelganger immune
+                    }
+                    if is_alchemist(adj) {
+                        continue; // Alchemist immune
                     }
                     // Must be a Villager or unrevealed
                     if let Some(card) = state.card_at(adj) {
@@ -44,7 +54,10 @@ pub fn compute_corruption(
             }
             "Poisoner" => {
                 if let Some(pt) = poisoner_target {
-                    if !full_evil.contains_key(&pt) && Some(pt) != doppelganger_pos {
+                    if !full_evil.contains_key(&pt)
+                        && Some(pt) != doppelganger_pos
+                        && !is_alchemist(pt)
+                    {
                         corrupted.insert(pt);
                     }
                 }
@@ -55,7 +68,7 @@ pub fn compute_corruption(
 
     // PD corruption (Good ability, not from evil — but still a corruption source)
     if let Some(pd_t) = pd_target {
-        if !full_evil.contains_key(&pd_t) {
+        if !full_evil.contains_key(&pd_t) && !is_alchemist(pd_t) {
             corrupted.insert(pd_t);
         }
     }
@@ -77,7 +90,12 @@ pub fn compute_corruption(
 }
 
 /// Apply post-corruption processing: Puppet cure then Alchemist cures.
-/// Returns the final corrupted set and alchemist_cures map.
+///
+/// Returns (final corrupted set, alch_cures map). The map's value is the count
+/// each Alchemist reports — post-patch this is the number of Corrupted characters
+/// in Range 2 at the start of the Round (i.e., AFTER Puppet cure but BEFORE any
+/// Alchemist cure), INCLUDING uncureables like Drunk. The cure mechanic itself
+/// is unchanged (Alchemist still removes corruption from cureable neighbors).
 pub fn apply_post_corruption(
     mut corrupted: HashSet<u8>,
     full_evil: &HashMap<u8, String>,
@@ -94,6 +112,10 @@ pub fn apply_post_corruption(
         corrupted.remove(&pp);
     }
 
+    // Snapshot the start-of-round corrupted set for Alchemist's clue.
+    // All Alchemists report from this same snapshot — order-independent.
+    let start_of_round = corrupted.clone();
+
     // Step 2: Alchemist cures in reverse seat order
     let mut alchemist_positions: Vec<u8> = Vec::new();
     for card in &state.cards {
@@ -108,23 +130,27 @@ pub fn apply_post_corruption(
     alchemist_positions.reverse();
 
     for &alch_pos in &alchemist_positions {
-        // Evil Alchemist can't cure
-        if full_evil.contains_key(&alch_pos) {
-            alch_cures.insert(alch_pos, 0);
-            continue;
-        }
-        // Corrupted Alchemist can't cure
-        if corrupted.contains(&alch_pos) {
-            alch_cures.insert(alch_pos, 0);
-            continue;
-        }
-
+        // Count = corrupted-in-range from start-of-round snapshot (post-patch).
+        // Includes Drunk and other uncureables; excludes the Alchemist itself
+        // (immune, never in the corrupted set).
         let mut count = 0u8;
+        for p in positions_in_range(alch_pos, 2, n) {
+            if start_of_round.contains(&p) {
+                count += 1;
+            }
+        }
+        // Evil Alchemist still reports a count (will be inverted by truth_status
+        // in the validator since they lie). But evil Alchemist also can't cure.
+        let can_cure = !full_evil.contains_key(&alch_pos);
+        alch_cures.insert(alch_pos, count);
+        if !can_cure {
+            continue;
+        }
+        // Apply cures to the live corrupted set (Drunk and other uncureables stay).
         for p in positions_in_range(alch_pos, 2, n) {
             if !corrupted.contains(&p) {
                 continue;
             }
-            // Skip Drunk — can't be cured
             if Some(p) == drunk_pos {
                 continue;
             }
@@ -134,9 +160,7 @@ pub fn apply_post_corruption(
                 }
             }
             corrupted.remove(&p);
-            count += 1;
         }
-        alch_cures.insert(alch_pos, count);
     }
 
     (corrupted, alch_cures)

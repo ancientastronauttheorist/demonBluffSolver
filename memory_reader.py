@@ -485,8 +485,10 @@ class MemoryReader:
             val = self._read_i32(rd_ptr + 0x10)
             return {'type': 'direction', 'direction': EVIL_DIRECTION.get(val, f'?{val}')}
         elif role_lower == 'alchemist':
+            # Post-patch: this field is "# Corrupted in range at start of round (before cure)",
+            # not "# cured" as before. Offset assumed unchanged — verify in-game on first use.
             val = self._read_i32(rd_ptr + 0x10)
-            return {'type': 'cures', 'cures': val}
+            return {'type': 'corrupted_around', 'corrupted_around': val}
         elif role_lower == 'baker':
             name_ptr = self._read_ptr(rd_ptr + 0x10)
             name = self._read_string(name_ptr) if name_ptr else None
@@ -932,6 +934,8 @@ def print_board(cards):
                 rd = c['runtime_data']
                 if rd.get('type') == 'direction':
                     parts.append(f"direction={rd['direction']}")
+                elif rd.get('type') == 'corrupted_around':
+                    parts.append(f"corrupted_around={rd['corrupted_around']}")
                 elif rd.get('type') == 'cures':
                     parts.append(f"cures={rd['cures']}")
                 elif rd.get('type') == 'baker':
