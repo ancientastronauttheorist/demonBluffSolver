@@ -1220,6 +1220,66 @@ class GameSession:
 # Flip Verification
 # ============================================================
 
+def _read_board_once_for_flip() -> Optional[list[dict]]:
+    """Read the live board for click verification without owning long-lived state."""
+    try:
+        from memory_reader import get_monitor as _get_monitor
+        mon = _get_monitor()
+        if mon.is_healthy():
+            return mon.get_board()
+    except Exception:
+        pass
+
+    try:
+        from memory_reader import MemoryReader as _MR
+        reader = _MR()
+        if reader.open():
+            try:
+                return reader.read_board()
+            finally:
+                reader.close()
+    except Exception:
+        pass
+    return None
+
+
+def _position_flipped_in_board(board: Optional[list[dict]], pos: int) -> bool:
+    if not board:
+        return False
+    card = next((c for c in board if c.get("position") == pos), None)
+    if not card:
+        return False
+    return card.get("state") != "Hidden" or bool(card.get("killed_hidden"))
+
+
+def _wait_position_flipped(pos: int, timeout: float = 1.5) -> bool:
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        if _position_flipped_in_board(_read_board_once_for_flip(), pos):
+            return True
+        time.sleep(0.15)
+    return False
+
+
+def _click_flip_card(pos: int, coords: dict[int, tuple[int, int]], label: str,
+                     verified: bool = False) -> bool:
+    """Click one card during reveal; verified mode retries immediately on a miss."""
+    import template_match as _tm
+
+    x, y = coords[pos]
+    print(f"  #{pos} at ({x},{y})")
+    if verified:
+        _tm.safe_click_at(x, y, label)
+        if _wait_position_flipped(pos):
+            return True
+        print(f"  [flip] #{pos} still hidden after first click; retrying before continuing.")
+        _tm.safe_click_at(x, y, f"{label}_retry")
+        return _wait_position_flipped(pos)
+
+    _tm.fast_click_at(x, y, label)
+    return True
+
+
 def _verify_flips(cards_or_output, expected_positions: list[int], session) -> dict:
     """Check that all targeted cards actually flipped.
 
@@ -2416,11 +2476,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         if lilis:
             batch_size = 4
             batch = positions[:batch_size]
+            expected_positions = batch
             print(f"Flipping batch: {['#'+str(p) for p in batch]}")
-            for pos in batch:
-                x, y = coords[pos]
-                print(f"  #{pos} at ({x},{y})")
-                _tm.fast_click_at(x, y, f"card{pos}")
+            for idx, pos in enumerate(batch):
+                _click_flip_card(pos, coords, f"card{pos}", verified=(idx == 0))
                 time.sleep(0.2)
             print(f"Batch complete: {['#'+str(p) for p in batch]}")
             # Record reveal order for this batch
@@ -2459,11 +2518,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             elif remaining:
                 print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
+            expected_positions = positions
             print(f"Flipping all {len(positions)} cards: #1 -> #{positions[-1]}")
-            for pos in positions:
-                x, y = coords[pos]
-                print(f"  #{pos} at ({x},{y})")
-                _tm.fast_click_at(x, y, f"card{pos}")
+            for idx, pos in enumerate(positions):
+                _click_flip_card(pos, coords, f"card{pos}", verified=(idx == 0))
                 time.sleep(0.2)
             print(f"All {len(positions)} cards flipped in order #1->#{positions[-1]}")
             # Record reveal order
@@ -2506,7 +2564,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         print("\n--- Memory Reader (board state) ---")
         if cards:
             _print_board(cards)
-            verify = _verify_flips(cards, positions, session)
+            verify = _verify_flips(cards, expected_positions, session)
             # Flake-failed clicks never actually revealed — strip them from
             # reveal_order so a subsequent `flip <pos>` retry lands them at
             # the true reveal index. Critical for Baker-chain validation:
@@ -2525,7 +2583,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     session.save()
         else:
             print("  WARNING: memory_reader returned no cards")
-        print("\nNow screenshot and enter card info in order #1->#{}.".format(positions[-1]))
+        print("\nNow screenshot and enter card info in order #1->#{}.".format(expected_positions[-1]))
         return None
 
     if cmd == "auto_card":

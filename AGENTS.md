@@ -101,13 +101,16 @@ Triggered by 0 scenarios.
    Witch death.
 2. Never manually construct click chains. `flip` preserves reveal order for
    Baker, makes Witch blocks predictable, and verifies the board afterward.
-3. If verification reports positions still hidden, rerun `flip`. Do not mark a
+3. The first click of any multi-card `flip` can be swallowed by focus or board
+   readiness. Use the verified first-click path in `game_loop.py`; if #1 still
+   remains hidden, recover with `flip 1` before `auto_card`.
+4. If verification reports positions still hidden, rerun `flip`. Do not mark a
    position blocked unless Witch is in the deck.
-4. Run `auto_card` after flipping. It reads clues from memory and enters
+5. Run `auto_card` after flipping. It reads clues from memory and enters
    parseable cards.
-5. Enter manual card info in reveal order. Active-only cards can be recorded as
+6. Enter manual card info in reveal order. Active-only cards can be recorded as
    `card no_info <pos> <Role>` until their ability is used.
-6. At game start, set HP if needed: `set_hp <hp> <wrong_exec_cost>`. Default
+7. At game start, set HP if needed: `set_hp <hp> <wrong_exec_cost>`. Default
    high-ascension wrong execution cost is 5.
 
 Important entry reminders:
