@@ -4031,6 +4031,13 @@
       "name": "asc82_v6",
       "notes": "10HP village 6/7 - single Pooka solved from Empress, Medium, corrupted Gemcrafter, and Architect constraints; solver executed #5 Pooka immediately.",
       "date": "2026-05-05 11:47"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc82_v7",
+      "notes": "5HP village 7/7 - PD #6 found #9 corrupted and #8 evil; solver executed #8 Pooka, used Druid #2 on #1,#3,#4, lookahead safely spent one wrong execution on corrupted #5 Oracle, then executed #4 Poisoner. Druid live wording was Among #1, #3, #4 there is: Bombardier.",
+      "date": "2026-05-05 11:53"
     }
   ]
 }

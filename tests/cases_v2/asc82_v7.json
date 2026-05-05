@@ -1,0 +1,162 @@
+{
+  "n_cards": 9,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bombardier",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 2,
+      "apparent_role": "Druid",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          3,
+          4
+        ],
+        "found_outcast": "Bombardier"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 4,
+        "good_role": "Hunter"
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 3
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Oracle",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          2,
+          3
+        ],
+        "minion_role": "Poisoner"
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 8,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 8
+      }
+    }
+  ],
+  "executed": [
+    8,
+    5,
+    4
+  ],
+  "confirmed_evil": [
+    8,
+    4
+  ],
+  "confirmed_good": [
+    5
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "8": "Pooka",
+    "4": "Poisoner"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 6,
+      "target": 9,
+      "is_corrupted": true,
+      "evil_revealed": 8
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 2,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "5": true
+  },
+  "deck": {
+    "villagers": [
+      "Druid",
+      "Gemcrafter",
+      "Slayer",
+      "Oracle",
+      "Hunter",
+      "Medium"
+    ],
+    "outcasts": [
+      "Bombardier",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Poisoner"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    6,
+    2
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc82_v7",
+  "true_evil_positions": {
+    "4": "Poisoner",
+    "8": "Pooka"
+  },
+  "notes": "5HP village 7/7 - PD #6 found #9 corrupted and #8 evil; solver executed #8 Pooka, used Druid #2 on #1,#3,#4, lookahead safely spent one wrong execution on corrupted #5 Oracle, then executed #4 Poisoner. Druid live wording was Among #1, #3, #4 there is: Bombardier."
+}

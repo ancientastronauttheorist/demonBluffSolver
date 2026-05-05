@@ -1520,6 +1520,16 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
                 evil_role = m.group(1).strip()
                 return card_dreamer(pos, targets[0], evil_role)
 
+    # --- Druid: "Among #A, #B, #C there is: <Outcast>" or no outcasts ---
+    if role_lower == 'druid' and targets:
+        cl = clue.lower()
+        if 'no outcast' in cl or 'none' in cl:
+            return card_druid(pos, targets, None)
+        m = re.search(r'there\s+(?:is|was)\s*:?\s*([A-Za-z][A-Za-z ]*)', clue, re.IGNORECASE)
+        if m:
+            found = m.group(1).strip().rstrip('.!').replace(' ', '_')
+            return card_druid(pos, targets, found)
+
     # --- Oracle: targets + minion role ---
     if role_lower == 'oracle' and targets:
         # Look for a role name in the clue

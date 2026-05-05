@@ -44180,3 +44180,107 @@ Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP village 6/7 - single Pooka solved from Empress, Medium, corrupted Gemcrafter, and Architect constraints; solver executed #5 Pooka immediately.
 
+
+---
+
+# New Game — 2026-05-05 11:50:11
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Druid, Gemcrafter, Slayer, Oracle, Hunter, Medium
+- Outcasts: Bombardier, Plague_Doctor
+- Minions: Poisoner
+- Demons: Pooka
+
+### [11:50:29] Revealed #1 Bombardier
+Info: {}
+
+### [11:50:29] Revealed #2 Druid
+Info: {}
+
+### [11:50:29] Revealed #3 Medium
+Info: {'good_position': 4, 'good_role': 'Hunter'}
+
+### [11:50:29] Revealed #4 Hunter
+Info: {'distance': 3}
+
+### [11:50:29] Revealed #5 Oracle
+Info: {'targets': [2, 3], 'minion_role': 'Poisoner'}
+
+### [11:50:29] Revealed #6 Plague_Doctor
+Info: {}
+
+### [11:50:29] Revealed #7 Slayer
+Info: {}
+
+### [11:50:29] Revealed #8 Hunter
+Info: {'distance': 1}
+
+### [11:50:30] Revealed #9 Gemcrafter
+Info: {'good_position': 8}
+
+#### [11:50:36] Solver Output
+Scenarios: 19/422
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#9']
+Evil probabilities: #8=89%, #5=58%, #4=53%
+
+#### [11:50:36] Recommendation
+Action: **USE_ABILITY** #6 (Plague Doctor) -> targets ['#9']
+Reason: Entropy 1.847 (adjusted 1.847) | timing x1.00
+
+#### [11:51:06] Solver Output
+Scenarios: 17/422
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#9']
+Evil probabilities: #5=53%, #4=47%
+
+#### [11:51:06] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 17 scenarios (roles: {'Poisoner', 'Pooka'})
+
+### [11:51:14] Executed #8 -> Pooka (EVIL)
+
+#### [11:51:20] Solver Output
+Scenarios: 6/53
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#9']
+Evil probabilities: #5=67%, #4=33%
+
+#### [11:51:20] Recommendation
+Action: **USE_ABILITY** #2 (Druid) -> targets ['#1', '#3', '#4']
+Reason: Entropy 0.650 (adjusted 0.596) | timing x1.00
+WARNING: Corruption risk: 17%
+
+### [11:51:48] Revealed #2 Druid
+Info: {'targets': [1, 3, 4], 'found_outcast': 'Bombardier'}
+
+### [11:51:54] Ability used at #2
+
+#### [11:52:01] Solver Output
+Scenarios: 5/53
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#6', '#7', '#9']
+Evil probabilities: #5=60%, #4=40%
+
+#### [11:52:01] Recommendation
+Action: **EXECUTE** #5
+Reason: Execution lookahead: #5 guarantees a win across all reveal branches with current HP budget (60% evil Poisoner, 40% good Oracle (corrupted)).
+WARNING: Execution lookahead override -- immediate hit chance is 60%, but all reveal branches still lead to a forced win.
+
+### [11:52:09] Executed #5 -> GOOD (WRONG!)
+
+#### [11:52:18] Solver Output
+Scenarios: 2/48
+Definite evil: ['#4', '#8']
+Definite good: ['#1', '#2', '#3', '#5', '#6', '#7', '#9']
+
+#### [11:52:18] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 2 scenarios (roles: {'Poisoner'})
+
+### [11:52:42] Executed #4 -> Poisoner (EVIL)
+
+## [11:53:06] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP village 7/7 - PD #6 found #9 corrupted and #8 evil; solver executed #8 Pooka, used Druid #2 on #1,#3,#4, lookahead safely spent one wrong execution on corrupted #5 Oracle, then executed #4 Poisoner. Druid live wording was Among #1, #3, #4 there is: Bombardier.
+
