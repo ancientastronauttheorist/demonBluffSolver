@@ -43478,3 +43478,135 @@ Reason: #4 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 10
 Notes: 10HP perfect village 7/7 - ASCENSION 81 COMPLETE - Oracle+Medium+Empress chain narrowed to 1 scenario instantly, exec #3 Witch + #4 Pooka definite
 
+
+---
+
+# New Game — 2026-05-05 01:19:49
+Cards: 9, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Fortune Teller, Empress, Hunter, Confessor, Knight, Dreamer, Baker
+- Outcasts: Bombardier, Wretch
+- Minions: Poisoner
+- Demons: Pooka
+
+### [01:20:33] Revealed #1 Confessor
+Info: {'dizzy': False}
+
+### [01:20:33] Revealed #2 Dreamer
+Info: {}
+
+### [01:20:33] Revealed #3 Wretch
+Info: {}
+
+### [01:20:33] Revealed #4 Baker
+Info: {'original_role': 'original'}
+
+### [01:20:33] Revealed #5 Bombardier
+Info: {}
+
+### [01:20:33] Revealed #6 Baker
+Info: {'original_role': 'Dreamer'}
+
+### [01:20:33] Revealed #7 Fortune_Teller
+Info: {}
+
+### [01:20:33] Revealed #8 Empress
+Info: {'targets': [1, 2, 9]}
+
+### [01:20:33] Revealed #9 Hunter
+Info: {'distance': 3}
+
+#### [01:20:43] Solver Output
+Scenarios: 0/0
+  ERROR: Rust solver binary not found
+
+#### [01:20:43] Recommendation
+Action: **ERROR**
+Reason: No surviving scenarios -- check input data
+
+#### [01:21:19] Solver Output
+Scenarios: 4/108
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [01:21:19] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 4 scenarios (roles: {'Pooka', 'Poisoner'})
+
+#### [01:21:24] Solver Output
+Scenarios: 4/108
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [01:21:24] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 4 scenarios (roles: {'Pooka', 'Poisoner'})
+
+### [01:21:31] Executed #8 -> Poisoner (EVIL)
+
+#### [01:21:37] Solver Output
+Scenarios: 2/14
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [01:21:37] Recommendation
+Action: **USE_ABILITY** #2 (Dreamer) -> targets ['#6']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00
+
+### [01:25:52] Revealed #2 Dreamer
+Info: {'targets': [6, 7], 'evil_role_options': ['Baker', 'Fortune Teller']}
+
+#### [01:25:59] Solver Output
+Scenarios: 2/14
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [01:25:59] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#6']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+#### [01:26:07] Solver Output
+Scenarios: 2/14
+Definite evil: ['#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#9']
+Evil probabilities: #6=50%, #7=50%
+
+#### [01:26:07] Recommendation
+Action: **USE_ABILITY** #7 (Fortune Teller) -> targets ['#1', '#6']
+Reason: Entropy 1.000 (adjusted 0.750) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [01:26:13] Revealed #7 Fortune Teller
+Info: {'targets': [1, 6], 'has_evil': True}
+
+### [01:26:13] Ability used at #7
+
+#### [01:26:19] Solver Output
+Scenarios: 1/14
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#9']
+
+#### [01:26:19] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+#### [01:26:23] Solver Output
+Scenarios: 1/14
+Definite evil: ['#7', '#8']
+Definite good: ['#1', '#2', '#3', '#4', '#5', '#6', '#9']
+
+#### [01:26:23] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [01:26:30] Executed #7 -> Pooka (EVIL)
+
+## [01:26:52] GAME OVER — WIN
+Final HP: 10
+

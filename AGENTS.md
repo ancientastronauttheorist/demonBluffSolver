@@ -192,10 +192,12 @@ Memory reader notes:
   only for historical cases.
 - Baa hides an Outcast in deck view, and when Baa dies the hidden card should
   reveal. `game_loop.py` has `_baa_post_execute_reveal()` to detect this.
-- Dreamer2 picks two characters and one role, producing an ambiguous result like
-  `Among #X, #Y there is: RoleA or RoleB`. The Rust validator can match any role
-  type, not only evil roles. Watch live outputs to confirm `Gravedigger` no
-  longer appears.
+- Dreamer2 picks two characters and produces an ambiguous result like
+  `Among #X, #Y there is: RoleA or RoleB`. Some older notes mention a role
+  picker; in the 2026-05-05 live build, the result appeared immediately after
+  the second character pick. The Rust validator can match any role type, not
+  only evil roles. Watch live outputs to confirm `Gravedigger` no longer
+  appears.
 - Rambler was redesigned. Old solver code modeled "picked by a liar silences
   Rambler"; that rule is obsolete. New rule: adjacent truthful characters tell
   Rambler to shut up instead of sharing their own info. Collect live data before

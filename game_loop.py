@@ -106,6 +106,17 @@ def card_dreamer_ambiguous(pos: int, targets: list[int], evil_role_options: list
     })
 
 
+def _has_active_clue_result(card: CardInfo) -> bool:
+    """True when an active ability entry contains a real clue result."""
+    role = card.apparent_role.lower().replace(" ", "_")
+    info = card.info_parsed or {}
+    if role == "dreamer":
+        return bool(info.get("target") or info.get("targets"))
+    if role in {"fortune_teller", "jester", "druid", "judge"}:
+        return bool(info)
+    return False
+
+
 def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
     """Parse "Among #X, #Y there is: R1 or R2" into (targets, role_options).
 
@@ -1025,7 +1036,7 @@ class GameSession:
                     print(f"\n  [auto_next] Dreamer is the recommended info-gathering move — FIRE MANUALLY:")
                     print(f"    1. Click #{action.position} (Dreamer card)")
                     print(f"    2. Pick 2 characters (Dreamer2 requires 2)")
-                    print(f"    3. Pick 1 role from the menu")
+                    print(f"    3. If this build shows a role menu, pick the solver-relevant role")
                     print(f"    4. The result auto-parses via memory_reader.")
                     print(f"    Only use `ability_used {action.position}` if you've confirmed Dreamer truly can't help (e.g. all suspects already narrowed).")
                 else:
@@ -1326,14 +1337,16 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     # --- Guard: active-ability-only roles with unused abilities ---
     # These roles have NO passive speech bubble. If ability hasn't been used,
     # any clue_text/acted_infos is stale from a previous village — ignore it.
-    # Use `uses` count (not `act` flag) because PD's game_start_ability sets
-    # act=True even before the active check ability is used.
+    # Prefer `uses`, but Dreamer2 currently sets ability_used=True while leaving
+    # uses at 0 after a real fire. PD is stricter because its game-start setup
+    # can set the act flag before the active check ability is used.
     ACTIVE_ONLY_ROLES = {
         'dreamer', 'druid', 'fortune_teller', 'jester', 'judge',
         'slayer', 'plague_doctor',
     }
     uses_count = card.get('uses', 0)
-    if role_lower in ACTIVE_ONLY_ROLES and uses_count == 0:
+    active_fired = uses_count > 0 or (ability_used and role_lower != 'plague_doctor')
+    if role_lower in ACTIVE_ONLY_ROLES and not active_fired:
         return card_no_info(pos, role)
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
@@ -1685,6 +1698,10 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         return card_rambler(pos, silenced, silenced_by)
     elif role == "dreamer":
         return card_dreamer(pos, int(args[2]), args[3])
+    elif role in ("dreamer2", "dreamer_ambiguous"):
+        targets = [int(x) for x in args[2].split(",")]
+        roles = [x.strip().replace("_", " ") for x in args[3].split(",") if x.strip()]
+        return card_dreamer_ambiguous(pos, targets, roles)
     elif role == "judge":
         is_lying = args[3].lower() in ("lying", "true", "1", "yes")
         return card_judge(pos, int(args[2]), is_lying)
@@ -2506,14 +2523,14 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("ERROR: No board data from memory reader")
             return None
 
-        entered = {c.position for c in session.cards}
+        entered = {c.position: c for c in session.cards}
         dead = set(session.executed) | set(session.night_kills)
         auto_count = 0
         manual_needed = []
 
         for mc in cards:
             pos = mc['position']
-            if pos in entered or pos in dead:
+            if pos in dead:
                 continue
             state = mc.get('state', '')
             if state not in ('Alive', 'Revealed'):
@@ -2521,11 +2538,27 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
             parsed = _parse_clue_from_memory(mc)
             if parsed:
+                existing = entered.get(pos)
+                if existing:
+                    active_update = (
+                        (mc.get('uses', 0) > 0 or mc.get('ability_used', False))
+                        and existing.apparent_role == parsed.apparent_role
+                        and existing.info_parsed != parsed.info_parsed
+                        and _has_active_clue_result(parsed)
+                    )
+                    if not active_update:
+                        continue
                 session.add_card(parsed)
                 DecisionLog.log_card(parsed)
-                print(f"  [auto] #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
+                if (mc.get('uses', 0) > 0 or mc.get('ability_used', False)) and _has_active_clue_result(parsed):
+                    session.mark_ability_used(parsed.position)
+                verb = "updated" if pos in entered else "entered"
+                print(f"  [auto] {verb} #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
+                entered[pos] = parsed
                 auto_count += 1
             else:
+                if pos in entered:
+                    continue
                 clue = mc.get('clue_text', '')
                 role = mc.get('disguise') or mc.get('true_role', '?')
                 if clue:
@@ -2907,14 +2940,32 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 if mr.returncode == 0:
                     # Parse memory_reader output for evil cards
                     auto_evils = {}
+                    in_evil_section = False
                     for line in mr.stdout.split("\n"):
                         line = line.strip()
-                        # Format: "#N: RoleName (Evil) ..."
-                        if "(Evil)" in line and line.startswith("#"):
-                            import re
-                            m = re.match(r"#(\d+):\s+(\S+)\s+\(Evil\)", line)
+                        import re
+                        if line.startswith("Evil cards"):
+                            in_evil_section = True
+                            continue
+                        if in_evil_section:
+                            if not line:
+                                continue
+                            if line.startswith("Clue data"):
+                                in_evil_section = False
+                                continue
+                            m = re.match(r"#\s*(\d+)\s+(.+?)(?:\s+\(|$)", line)
                             if m:
-                                auto_evils[int(m.group(1))] = m.group(2)
+                                auto_evils[int(m.group(1))] = m.group(2).strip().replace(" ", "_")
+                                continue
+                        # Older format: "#N: RoleName (Evil) ..."
+                        m = re.match(r"#(\d+):\s+(.+?)\s+\(Evil\)", line)
+                        if m:
+                            auto_evils[int(m.group(1))] = m.group(2).strip().replace(" ", "_")
+                            continue
+                        # Current table format: "# 7* Pooka ... Evil ..."
+                        m = re.match(r"#\s*(\d+)\*?\s+(.+?)\s{2,}.+\s{2,}Evil\b", line)
+                        if m:
+                            auto_evils[int(m.group(1))] = m.group(2).strip().replace(" ", "_")
                     if auto_evils:
                         # Validate auto-detected evils against session state before accepting
                         _auto_cleaned, _auto_errors = _validate_true_evils_against_session(
