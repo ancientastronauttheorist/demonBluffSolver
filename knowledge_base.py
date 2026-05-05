@@ -138,8 +138,8 @@ VILLAGERS = [
 # ============================================================
 OUTCASTS = [
     Card("Rambler", Role.OUTCAST, Alignment.GOOD,
-         "I tell you something really interesting. If Picked (once): I am Silenced if the character "
-         "who Picked me is a Liar. If Lies: I get Silenced if picked by a NON-Liar.",
+         "I tell you something really interesting. Adjacent Truthful characters tell me to shut up "
+         "instead of sharing their info.",
          lies=False, disguises=False),
     Card("Drunk", Role.OUTCAST, Alignment.GOOD,
          "I Disguise as a random not in play Villager. I am Corrupted and I Lie. I can not be Cured.",

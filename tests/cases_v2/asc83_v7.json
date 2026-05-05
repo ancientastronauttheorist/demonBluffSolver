@@ -1,0 +1,157 @@
+{
+  "n_cards": 9,
+  "n_evil": 4,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Scout",
+      "info_text": "",
+      "info_parsed": {
+        "shut_up_target": 1
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "shut_up_target": 4
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Rambler",
+      "info_text": "",
+      "info_parsed": {
+        "silenced": false
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Gemcrafter",
+      "info_text": "",
+      "info_parsed": {
+        "shut_up_target": 4
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Lover",
+      "info_text": "",
+      "info_parsed": {
+        "evil_adjacent": 1
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 1,
+        "good_role": "Rambler"
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Confessor",
+      "info_text": "",
+      "info_parsed": {
+        "dizzy": false
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "shut_up_target": 1
+      }
+    }
+  ],
+  "executed": [
+    4,
+    6,
+    2,
+    3,
+    5
+  ],
+  "confirmed_evil": [
+    4,
+    2,
+    3,
+    5
+  ],
+  "confirmed_good": [
+    6
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "4": "Twin_Minion",
+    "2": "Puppet",
+    "3": "Puppeteer",
+    "5": "Baa"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "executed_good_corrupted": {
+    "6": false
+  },
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Scout",
+      "Gemcrafter",
+      "Confessor",
+      "Lover",
+      "Medium"
+    ],
+    "outcasts": [
+      "Rambler"
+    ],
+    "minions": [
+      "Puppeteer",
+      "Twin_Minion"
+    ],
+    "demons": [
+      "Baa"
+    ]
+  },
+  "used_abilities": [],
+  "lilis_batch_index": 0,
+  "name": "asc83_v7",
+  "true_evil_positions": {
+    "2": "Puppet",
+    "3": "Puppeteer",
+    "4": "Twin_Minion",
+    "5": "Baa"
+  },
+  "notes": "Rambler redesign regression: after parser/validator fix, shut_up_target clues collapsed the stuck 4-scenario HP5 state to one scenario. Truthful #2 Puppet and #9 Baker said #1 shut up for real Rambler #1; lying #3 Puppeteer and #5 Baa pointed shut-up at fake Rambler #4. Wrong pre-fix solver execution #6 Lover cost 5 HP."
+}

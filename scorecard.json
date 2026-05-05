@@ -4080,6 +4080,13 @@
       "name": "asc83_v6",
       "notes": "Baa execution revealed hidden deck card as Wretch; Judge #2 confirmed #3 truthful; Druid #7 on #2/#3/#4 found no Outcasts; forced-safe #4 execution hit Puppet.",
       "date": "2026-05-05 13:02"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc83_v7",
+      "notes": "Rambler redesign regression: after parser/validator fix, shut_up_target clues collapsed the stuck 4-scenario HP5 state to one scenario. Truthful #2 Puppet and #9 Baker said #1 shut up for real Rambler #1; lying #3 Puppeteer and #5 Baa pointed shut-up at fake Rambler #4. Wrong pre-fix solver execution #6 Lover cost 5 HP.",
+      "date": "2026-05-05 13:17"
     }
   ]
 }

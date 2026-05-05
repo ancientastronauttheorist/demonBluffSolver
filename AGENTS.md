@@ -206,8 +206,11 @@ Memory reader notes:
   ability. Watch live outputs to confirm `Gravedigger` no longer appears.
 - Rambler was redesigned. Old solver code modeled "picked by a liar silences
   Rambler"; that rule is obsolete. New rule: adjacent truthful characters tell
-  Rambler to shut up instead of sharing their own info. Collect live data before
-  rewriting the validator.
+  Rambler to shut up instead of sharing their own info. `auto_card` should record
+  non-Jester `#X shut up!` as `shut_up_target`, not no-info and not the role's
+  normal numeric clue. Live asc83_v7 data: truthful #2 Puppet and #9 Baker told
+  real Rambler #1 to shut up; lying #3 Puppeteer and #5 Baa pointed shut-up at
+  fake Rambler #4.
 
 ## Known Gotchas
 

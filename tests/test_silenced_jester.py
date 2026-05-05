@@ -48,6 +48,10 @@ class TestCardJesterSilenced(unittest.TestCase):
             {"targets": [1, 2, 4], "silenced": True},
         )
 
+    def test_constructor_preserves_shut_up_target(self):
+        ci = card_jester_silenced(3, [1, 2, 4], shut_up_target=5)
+        self.assertEqual(ci.info_parsed["shut_up_target"], 5)
+
     def test_copies_targets_defensively(self):
         targets = [1, 2, 4]
         ci = card_jester_silenced(3, targets)
@@ -63,6 +67,7 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         self.assertEqual(ci.apparent_role, "Jester")
         self.assertEqual(ci.info_parsed.get("silenced"), True)
         self.assertEqual(ci.info_parsed.get("targets"), [1, 2, 4])
+        self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
         # Must NOT have an evil_count key (the validator keys off silenced first).
         self.assertNotIn("evil_count", ci.info_parsed)
 
@@ -71,6 +76,7 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
         self.assertEqual(ci.info_parsed.get("silenced"), True)
+        self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
 
     def test_silenced_empty_clue_with_targets(self):
         # MR sometimes zeroes the clue entirely when silenced.
@@ -113,6 +119,7 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         self.assertEqual(ci.apparent_role, "Jester")
         self.assertEqual(ci.info_parsed.get("silenced"), True)
         self.assertEqual(ci.info_parsed.get("targets"), [1, 2, 4])
+        self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
 
 
 class TestShutUpCluesForNonJester(unittest.TestCase):
@@ -130,7 +137,7 @@ class TestShutUpCluesForNonJester(unittest.TestCase):
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
         self.assertEqual(ci.apparent_role, "Lover")
-        self.assertEqual(ci.info_parsed, {})
+        self.assertEqual(ci.info_parsed, {"shut_up_target": 10})
 
 
 if __name__ == "__main__":

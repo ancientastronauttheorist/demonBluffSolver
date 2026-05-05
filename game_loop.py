@@ -71,20 +71,27 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
-def card_jester_silenced(pos: int, targets: list[int]) -> CardInfo:
+def card_jester_silenced(pos: int, targets: list[int], shut_up_target: Optional[int] = None) -> CardInfo:
     """Jester whose ability fired but was silenced (e.g. by Rambler).
 
     Records the targets (for UI / audit) plus silenced:True so the Rust
     validator can treat the clue as vacuous (no constraint) instead of
     accidentally returning true in the targets/evil_count lookups (asc78_v6).
     """
-    return CardInfo(pos, "Jester", info_parsed={"targets": list(targets), "silenced": True})
+    info = {"targets": list(targets), "silenced": True}
+    if shut_up_target is not None:
+        info["shut_up_target"] = shut_up_target
+    return CardInfo(pos, "Jester", info_parsed=info)
 
 def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) -> CardInfo:
     info = {"silenced": silenced}
     if silenced_by is not None:
         info["silenced_by"] = silenced_by
     return CardInfo(pos, "Rambler", info_parsed=info)
+
+def card_shut_up(pos: int, role: str, target: int) -> CardInfo:
+    """A Rambler-redesign clue: this card said "#target shut up!"."""
+    return CardInfo(pos, _normalize_role_name(role), info_parsed={"shut_up_target": target})
 
 def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
     return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
@@ -1417,13 +1424,12 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     if role_lower in ACTIVE_ONLY_ROLES and not active_fired:
         return card_no_info(pos, role)
 
-    shut_up_pat = re.search(r'#\d+\s*shut\s*up', clue, re.IGNORECASE)
+    shut_up_pat = re.search(r'#\s*(\d+)\s*shut\s*up', clue, re.IGNORECASE)
     if shut_up_pat and role_lower != 'jester':
-        # New Rambler behavior can replace an adjacent truthful character's
-        # normal clue with "#X shut up!". Until the validator models that rule,
-        # keep it as known role/no-info rather than parsing the target number
-        # as the role's normal numeric clue.
-        return card_no_info(pos, role)
+        # New Rambler behavior replaces an adjacent truthful character's
+        # normal clue with "#X shut up!". Preserve the target as a global
+        # Rambler constraint instead of parsing the number as role info.
+        return card_shut_up(pos, role, int(shut_up_pat.group(1)))
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
@@ -1550,11 +1556,12 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         # or empty. Targets are preserved, but no evil_count is recoverable.
         # Without this branch the Rust validator's targets/evil_count lookups
         # returned true unconditionally, masking the constraint (asc78_v6).
-        silenced_pat = re.search(r'#\d+\s*shut\s*up', clue, re.IGNORECASE)
+        silenced_pat = re.search(r'#\s*(\d+)\s*shut\s*up', clue, re.IGNORECASE)
         if silenced_pat or (not clue.strip()):
             # Guard: only silenced if no numeric evil count is extractable.
             if not re.search(r'\d+\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE):
-                return card_jester_silenced(pos, targets)
+                shut_target = int(silenced_pat.group(1)) if silenced_pat else None
+                return card_jester_silenced(pos, targets, shut_target)
         # "none of them are evil"
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_jester(pos, targets, 0)
@@ -1783,6 +1790,9 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         silenced = token in ("silenced", "quiet", "silent", "true", "yes", "1")
         silenced_by = int(args[3]) if len(args) > 3 and args[3].isdigit() else None
         return card_rambler(pos, silenced, silenced_by)
+    elif role in ("shut_up", "shutup"):
+        # card shut_up <pos> <apparent_role> <target>
+        return card_shut_up(pos, args[2], int(args[3]))
     elif role == "dreamer":
         return card_dreamer(pos, int(args[2]), args[3])
     elif role in ("dreamer2", "dreamer_ambiguous"):

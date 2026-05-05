@@ -44911,3 +44911,190 @@ WARNING: Execution lookahead override -- immediate hit chance is 50%, but all re
 Final HP: 10
 Notes: Baa execution revealed hidden deck card as Wretch; Judge #2 confirmed #3 truthful; Druid #7 on #2/#3/#4 found no Outcasts; forced-safe #4 execution hit Puppet.
 
+
+---
+
+# New Game — 2026-05-05 13:04:54
+Cards: 9, Evil: 4, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Scout, Gemcrafter, Confessor, Lover, Medium
+- Outcasts: Rambler
+- Minions: Puppeteer, Twin_Minion
+- Demons: Baa
+
+### [13:05:33] Revealed #1 Rambler
+Info: {'silenced': False}
+
+### [13:05:33] Revealed #2 Scout
+Info: {}
+
+### [13:05:33] Revealed #3 Baker
+Info: {}
+
+### [13:05:33] Revealed #4 Rambler
+Info: {'silenced': False}
+
+### [13:05:33] Revealed #5 Gemcrafter
+Info: {}
+
+### [13:05:33] Revealed #6 Lover
+Info: {'evil_adjacent': 1}
+
+### [13:05:33] Revealed #7 Medium
+Info: {'good_position': 1, 'good_role': 'Rambler'}
+
+### [13:05:33] Revealed #8 Confessor
+Info: {'dizzy': False}
+
+### [13:05:33] Revealed #9 Baker
+Info: {}
+
+#### [13:05:34] Solver Output
+Scenarios: 58/588
+Definite good: ['#8']
+Evil probabilities: #4=66%, #3=59%, #2=55%, #7=52%, #1=48%, #6=45%, #5=41%, #9=34%
+
+#### [13:05:34] Recommendation
+Action: **EXECUTE** #4
+Reason: No reveals available. #4 is 66% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 66% confident (budget: 2 wrong execs)
+WARNING: Low confidence (66% < 66%) -- consider gathering more info
+
+### [13:06:30] Executed #4 -> Twin_Minion (EVIL)
+
+#### [13:06:31] Solver Output
+Scenarios: 11/72
+Definite evil: ['#4']
+Definite good: ['#8']
+Evil probabilities: #6=64%, #2=55%, #5=55%, #3=45%, #7=36%, #1=27%, #9=18%
+
+#### [13:06:31] Recommendation
+Action: **EXECUTE** #6
+Reason: No reveals available. #6 is 64% likely evil (HP=10, budget=2 wrong execs)
+WARNING: Probabilistic execution -- 64% confident (budget: 2 wrong execs)
+WARNING: Low confidence (64% < 65%) -- consider gathering more info
+
+### [13:06:55] Executed #6 -> GOOD (WRONG!)
+
+#### [13:06:55] Solver Output
+Scenarios: 4/40
+Definite evil: ['#4']
+Definite good: ['#6', '#8']
+Evil probabilities: #2=75%, #1=50%, #3=50%, #5=50%, #7=50%, #9=25%
+
+#### [13:06:55] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 75% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 75% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 75% < 85% threshold. Consider manual override if you have extra information.
+
+#### [13:15:37] Solver Output
+Scenarios: 4/40
+Definite evil: ['#4']
+Definite good: ['#6', '#8']
+Evil probabilities: #2=75%, #1=50%, #3=50%, #5=50%, #7=50%, #9=25%
+
+#### [13:15:37] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 75% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 75% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 75% < 85% threshold. Consider manual override if you have extra information.
+
+### [13:15:45] Revealed #2 Scout
+Info: {'shut_up_target': 1}
+
+### [13:15:46] Revealed #3 Baker
+Info: {'shut_up_target': 4}
+
+### [13:15:46] Revealed #5 Gemcrafter
+Info: {'shut_up_target': 4}
+
+### [13:15:46] Revealed #9 Baker
+Info: {'shut_up_target': 1}
+
+#### [13:15:47] Solver Output
+Scenarios: 4/40
+Definite evil: ['#4']
+Definite good: ['#6', '#8']
+Evil probabilities: #2=75%, #1=50%, #3=50%, #5=50%, #7=50%, #9=25%
+
+#### [13:15:47] Recommendation
+Action: **ERROR** #2
+Reason: #2 is 75% likely evil but budget=1 requires >=85% confidence (HP=5, cost=5).
+WARNING: Probabilistic execution -- 75% confident (budget: 1 wrong execs)
+WARNING: CAUTION: budget=1, confidence 75% < 85% threshold. Consider manual override if you have extra information.
+
+#### [13:16:25] Solver Output
+Scenarios: 1/40
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:16:25] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+#### [13:16:32] Solver Output
+Scenarios: 1/40
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:16:32] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Puppet'})
+
+### [13:16:39] Executed #2 -> Puppet (EVIL)
+
+#### [13:16:46] Solver Output
+Scenarios: 1/10
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:16:46] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+#### [13:16:52] Solver Output
+Scenarios: 1/10
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:16:52] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Puppeteer'})
+
+### [13:16:59] Executed #3 -> Puppeteer (EVIL)
+
+#### [13:17:00] Solver Output
+Scenarios: 1/5
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:17:00] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+#### [13:17:08] Solver Output
+Scenarios: 1/5
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:17:08] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Baa'})
+
+### [13:17:15] Executed #5 -> Baa (EVIL)
+
+## [13:17:35] GAME OVER — WIN
+Final HP: 5
+Notes: Rambler redesign regression: after parser/validator fix, shut_up_target clues collapsed the stuck 4-scenario HP5 state to one scenario. Truthful #2 Puppet and #9 Baker said #1 shut up for real Rambler #1; lying #3 Puppeteer and #5 Baa pointed shut-up at fake Rambler #4. Wrong pre-fix solver execution #6 Lover cost 5 HP.
+
+#### [13:22:21] Solver Output
+Scenarios: 1/1
+Definite evil: ['#2', '#3', '#4', '#5']
+Definite good: ['#1', '#6', '#7', '#8', '#9']
+
+#### [13:22:21] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+

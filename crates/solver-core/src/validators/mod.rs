@@ -51,6 +51,10 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // Structural: role counts
     if !validate_role_counts(scenario, state) { return false; }
 
+    // Patch 2026-05-05 Rambler redesign: adjacent truthful characters say
+    // "#R shut up!" instead of giving their own clue.
+    if !validate_rambler_shut_ups(scenario, state) { return false; }
+
     // Card info validators
     for card in &state.cards {
         if state.executed.contains(&card.position) {
@@ -805,7 +809,13 @@ fn validate_poet(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
 /// (corrupted, since Rambler is Outcast and never evil), the condition inverts.
 ///
 /// Data entry: `info_parsed = {"silenced": true|false}`. If absent, validator is a no-op.
+#[allow(unreachable_code, unused_variables)]
 fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    // The old "picked by a liar silences Rambler" mechanic is obsolete.
+    // Post-patch Rambler constraints are checked globally by
+    // validate_rambler_shut_ups().
+    return true;
+
     let claimed_silenced = match info_bool(&card.info_parsed, "silenced") {
         Some(v) => v,
         None => return true,
@@ -903,6 +913,54 @@ fn validate_rambler(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
 }
 
 // ── Special ability validators ──
+
+fn is_real_rambler(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
+    effective_role_at(pos, scenario, state)
+        .map_or(false, |role| normalize_role(&role) == "rambler")
+}
+
+fn card_has_normal_clue(card: &CardInfo) -> bool {
+    if card.info_parsed.is_empty() || info_pos(&card.info_parsed, "shut_up_target").is_some() {
+        return false;
+    }
+    let role = normalize_role(&card.apparent_role);
+    if role == "rambler" {
+        return false;
+    }
+    if role == "jester" && info_bool(&card.info_parsed, "silenced") == Some(true) {
+        return false;
+    }
+    true
+}
+
+fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
+    if !state.cards.iter().any(|card| info_pos(&card.info_parsed, "shut_up_target").is_some()) {
+        return true;
+    }
+
+    for card in &state.cards {
+        let adjacent_ramblers: Vec<u8> = adjacent_positions(card.position, state.n_cards)
+            .into_iter()
+            .filter(|&p| is_real_rambler(p, scenario, state))
+            .collect();
+        let truthful = truth_status(card.position, scenario, state) == TruthStatus::Truthful;
+
+        if let Some(target) = info_pos(&card.info_parsed, "shut_up_target") {
+            let actual = adjacent_ramblers.contains(&target);
+            if truthful {
+                if !actual { return false; }
+            } else if actual {
+                return false;
+            }
+            continue;
+        }
+
+        if truthful && card_has_normal_clue(card) && !adjacent_ramblers.is_empty() {
+            return false;
+        }
+    }
+    true
+}
 
 fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
     for result in &state.slayer_results {
@@ -1237,5 +1295,44 @@ mod tests {
         falsy.evil_positions.insert(2, "Witch".to_string());
         // 2 evils among targets, claimed 1, Jester not evil -> inconsistent
         assert!(!validate_jester(&jester, &falsy, &state));
+    }
+
+    #[test]
+    fn truthful_adjacent_card_must_shut_up_for_real_rambler() {
+        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let scout_normal = make_card(2, "Scout", json!({"evil_role": "Pooka", "distance": 1}));
+        let baker_shut_up = make_card(5, "Baker", json!({"shut_up_target": 1}));
+        let state = base_state(5, vec![rambler, scout_normal, baker_shut_up]);
+
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn truthful_shut_up_target_must_be_adjacent_real_rambler() {
+        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let scout = make_card(2, "Scout", json!({"shut_up_target": 1}));
+        let state = base_state(5, vec![rambler, scout]);
+
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        let mut fake_rambler = empty_scenario();
+        fake_rambler.evil_positions.insert(1, "Puppeteer".to_string());
+        assert!(!validate_rambler_shut_ups(&fake_rambler, &state));
+    }
+
+    #[test]
+    fn liar_shut_up_target_must_be_false() {
+        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let baker = make_card(2, "Baker", json!({"shut_up_target": 1}));
+        let state = base_state(5, vec![rambler, baker]);
+
+        let mut lying_next_to_real_rambler = empty_scenario();
+        lying_next_to_real_rambler.evil_positions.insert(2, "Puppeteer".to_string());
+        assert!(!validate_rambler_shut_ups(&lying_next_to_real_rambler, &state));
+
+        let mut lying_to_fake_rambler = empty_scenario();
+        lying_to_fake_rambler.evil_positions.insert(1, "Twin_Minion".to_string());
+        lying_to_fake_rambler.evil_positions.insert(2, "Puppeteer".to_string());
+        assert!(validate_rambler_shut_ups(&lying_to_fake_rambler, &state));
     }
 }
