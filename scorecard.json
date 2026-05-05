@@ -4024,6 +4024,13 @@
       "name": "asc82_v5",
       "notes": "6HP village 5/7 - Rambler redesign live data: #1 Lover said #10 shut up, #10 was hidden Rambler and later Lilis-killed; parser now keeps non-Jester shut-up clues as no-info. Lilis killed #9 and #10 as good; PD #8 checked #4 clean; Jester abilities led to #2 Shaman, #6 Lilis, #7 Chancellor.",
       "date": "2026-05-05 11:43"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc82_v6",
+      "notes": "10HP village 6/7 - single Pooka solved from Empress, Medium, corrupted Gemcrafter, and Architect constraints; solver executed #5 Pooka immediately.",
+      "date": "2026-05-05 11:47"
     }
   ]
 }

@@ -44135,3 +44135,48 @@ Reason: #7 is evil in ALL 2 scenarios (roles: {'Chancellor'})
 Final HP: 6
 Notes: 6HP village 5/7 - Rambler redesign live data: #1 Lover said #10 shut up, #10 was hidden Rambler and later Lilis-killed; parser now keeps non-Jester shut-up clues as no-info. Lilis killed #9 and #10 as good; PD #8 checked #4 clean; Jester abilities led to #2 Shaman, #6 Lilis, #7 Chancellor.
 
+
+---
+
+# New Game — 2026-05-05 11:46:30
+Cards: 6, Evil: 1, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Gemcrafter, Empress, Slayer, Architect, Medium
+- Outcasts: Bombardier
+- Minions: 
+- Demons: Pooka
+
+### [11:46:52] Revealed #1 Empress
+Info: {'targets': [3, 5, 6]}
+
+### [11:46:52] Revealed #2 Slayer
+Info: {}
+
+### [11:46:52] Revealed #3 Medium
+Info: {'good_position': 6, 'good_role': 'Bombardier'}
+
+### [11:46:52] Revealed #4 Gemcrafter
+Info: {'good_position': 5}
+
+### [11:46:52] Revealed #5 Architect
+Info: {'side': 'Equal'}
+
+### [11:46:52] Revealed #6 Bombardier
+Info: {}
+
+#### [11:47:01] Solver Output
+Scenarios: 1/6
+Definite evil: ['#5']
+Definite good: ['#1', '#2', '#3', '#4', '#6']
+
+#### [11:47:01] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [11:47:08] Executed #5 -> Pooka (EVIL)
+
+## [11:47:29] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP village 6/7 - single Pooka solved from Empress, Medium, corrupted Gemcrafter, and Architect constraints; solver executed #5 Pooka immediately.
+
