@@ -45715,3 +45715,131 @@ Reason: #1 is evil in ALL 2 scenarios (roles: {'Lilis', 'Minion'})
 Final HP: -1
 Notes: Loss at HP -1. Solver bug fixed after loss: Drunk counts as corrupted for Bard/truth status while PD still reports Not Corrupted. Pre-fix solver eliminated #1 Drunk, forced #9 good Bard then #1 Drunk at 1 HP.
 
+
+---
+
+# New Game — 2026-05-05 14:38:58
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Scout, Judge, Knitter, Enlightened, Architect, Witness
+- Outcasts: Plague_Doctor, Bombardier
+- Minions: Twin_Minion, Minion
+- Demons: Pooka
+
+### [14:39:36] Revealed #1 Plague_Doctor
+Info: {}
+
+### [14:39:36] Revealed #2 Judge
+Info: {}
+
+### [14:39:36] Revealed #3 Enlightened
+Info: {'direction': 'CCW'}
+
+### [14:39:36] Revealed #4 Knitter
+Info: {'evil_pairs': 2}
+
+### [14:39:36] Revealed #5 Architect
+Info: {'side': 'Equal'}
+
+### [14:39:36] Revealed #6 Scout
+Info: {'evil_role': 'Minion', 'distance': 1}
+
+### [14:39:36] Revealed #7 Plague_Doctor
+Info: {}
+
+### [14:39:36] Revealed #8 Witness
+Info: {'affected_position': 3}
+
+### [14:39:36] Revealed #9 Bombardier
+Info: {}
+
+#### [14:39:44] Solver Output
+Scenarios: 29/2304
+Definite evil: ['#9']
+Definite good: ['#3', '#5']
+Evil probabilities: #1=72%, #8=55%, #4=28%, #7=28%, #2=14%, #6=3%
+
+#### [14:39:44] Recommendation
+Action: **EXECUTE** #9
+Reason: #9 is evil in ALL 29 scenarios (roles: {'Minion', 'Pooka', 'Twin_Minion'})
+
+### [14:39:51] Executed #9 -> Minion (EVIL)
+
+#### [14:39:59] Solver Output
+Scenarios: 10/296
+Definite evil: ['#9']
+Definite good: ['#3', '#5', '#6']
+Evil probabilities: #1=70%, #8=50%, #4=40%, #7=30%, #2=10%
+
+#### [14:39:59] Recommendation
+Action: **USE_ABILITY** #1 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.971 (adjusted 1.971) | timing x1.00
+
+#### [14:40:40] Solver Output
+Scenarios: 7/296
+Definite evil: ['#9']
+Definite good: ['#3', '#5', '#6']
+Evil probabilities: #1=57%, #8=57%, #7=43%, #4=29%, #2=14%
+
+#### [14:40:40] Recommendation
+Action: **USE_ABILITY** #7 (Plague Doctor) -> targets ['#2']
+Reason: Entropy 1.842 (adjusted 1.842) | timing x1.00
+
+#### [14:41:33] Solver Output
+Scenarios: 7/296
+Definite evil: ['#9']
+Definite good: ['#3', '#5', '#6']
+Evil probabilities: #1=57%, #8=57%, #7=43%, #4=29%, #2=14%
+
+#### [14:41:33] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#1']
+Reason: Expected posterior 5.5 scenarios (adjusted 7.1, info gain 0.000 bits) | timing x1.00
+WARNING: Corruption risk: 57% -- corrupted Judge results are unreliable
+
+### [14:41:38] Revealed #2 Judge
+Info: {'target': 1, 'is_lying': False}
+
+### [14:41:38] Ability used at #2
+
+#### [14:41:46] Solver Output
+Scenarios: 6/296
+Definite evil: ['#9']
+Definite good: ['#2', '#3', '#5', '#6']
+Evil probabilities: #1=67%, #8=67%, #4=33%, #7=33%
+
+#### [14:41:46] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (33% good Plague_Doctor, 33% evil Pooka, 33% evil Twin_Minion).
+WARNING: Execution lookahead override -- immediate hit chance is 67%, but all reveal branches still lead to a forced win.
+
+### [14:41:53] Executed #1 -> Twin Minion (EVIL)
+
+#### [14:41:59] Solver Output
+Scenarios: 2/37
+Definite evil: ['#1', '#9']
+Definite good: ['#2', '#3', '#5', '#6', '#7']
+Evil probabilities: #4=50%, #8=50%
+
+#### [14:41:59] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% good Knitter, 50% evil Pooka).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:42:07] Executed #4 -> GOOD (WRONG!)
+
+#### [14:42:15] Solver Output
+Scenarios: 1/31
+Definite evil: ['#1', '#8', '#9']
+Definite good: ['#2', '#3', '#4', '#5', '#6', '#7']
+
+#### [14:42:15] Recommendation
+Action: **EXECUTE** #8
+Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:42:22] Executed #8 -> Pooka (EVIL)
+
+## [14:42:41] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win after restart. Patched Drunk corruption rule before redo; solver executed Bombardier-disguised Minion #9, used both PD checks on #2, then forced #1/#4/#8.
+

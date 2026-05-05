@@ -4122,6 +4122,13 @@
       "name": "asc84_v5",
       "notes": "Loss at HP -1. Solver bug fixed after loss: Drunk counts as corrupted for Bard/truth status while PD still reports Not Corrupted. Pre-fix solver eliminated #1 Drunk, forced #9 good Bard then #1 Drunk at 1 HP.",
       "date": "2026-05-05 14:16"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc84_v5_redo",
+      "notes": "5HP win after restart. Patched Drunk corruption rule before redo; solver executed Bombardier-disguised Minion #9, used both PD checks on #2, then forced #1/#4/#8.",
+      "date": "2026-05-05 14:42"
     }
   ]
 }
