@@ -4073,6 +4073,13 @@
       "name": "asc83_v5",
       "notes": "10HP. Validated Dreamer2 strategy fix: solver recommended #5 Dreamer on #3,#9, result was Puppeteer or Lover and no Gravedigger. Manual Dreamer/Druid entries auto-marked abilities used. Lookahead-safe #3 execution hit Pooka.",
       "date": "2026-05-05 12:54"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc83_v6",
+      "notes": "Baa execution revealed hidden deck card as Wretch; Judge #2 confirmed #3 truthful; Druid #7 on #2/#3/#4 found no Outcasts; forced-safe #4 execution hit Puppet.",
+      "date": "2026-05-05 13:02"
     }
   ]
 }

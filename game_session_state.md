@@ -44779,3 +44779,135 @@ Reason: All evil characters have been executed!
 Final HP: 10
 Notes: 10HP. Validated Dreamer2 strategy fix: solver recommended #5 Dreamer on #3,#9, result was Puppeteer or Lover and no Gravedigger. Manual Dreamer/Druid entries auto-marked abilities used. Lookahead-safe #3 execution hit Pooka.
 
+
+---
+
+# New Game — 2026-05-05 12:56:53
+Cards: 7, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Judge, Druid, Scout, Lover, Bard
+- Outcasts: Wretch
+- Minions: Puppeteer
+- Demons: Baa
+
+### [12:57:45] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [12:57:45] Revealed #2 Judge
+Info: {}
+
+### [12:57:45] Revealed #3 Wretch
+Info: {}
+
+### [12:57:45] Revealed #4 Scout
+Info: {'evil_role': 'Puppeteer', 'distance': 1}
+
+### [12:57:45] Revealed #5 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:57:45] Revealed #6 Bard
+Info: {'corruption_distance': -1}
+
+### [12:57:45] Revealed #7 Druid
+Info: {}
+
+#### [12:58:01] Solver Output
+Scenarios: 7/60
+Definite evil: ['#1']
+Evil probabilities: #2=57%, #3=43%, #7=43%, #5=29%, #4=14%, #6=14%
+
+#### [12:58:01] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 7 scenarios (roles: {'Puppet', 'Baa', 'Puppeteer'})
+
+### [12:59:11] Executed #1 -> Baa (EVIL)
+
+#### [12:59:28] Solver Output
+Scenarios: 4/9
+Definite evil: ['#1']
+Definite good: ['#7']
+Evil probabilities: #2=50%, #3=50%, #5=50%, #4=25%, #6=25%
+
+#### [12:59:28] Recommendation
+Action: **USE_ABILITY** #2 (Judge) -> targets ['#3']
+Reason: Expected posterior 2.0 scenarios (adjusted 2.0, info gain 1.000 bits) | timing x1.00
+
+### [13:01:06] Revealed #2 Judge
+Info: {'target': 3, 'is_lying': False}
+
+#### [13:01:06] Solver Output
+Scenarios: 2/9
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:01:06] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+#### [13:01:39] Solver Output
+Scenarios: 2/9
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:01:39] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 2 scenarios (roles: {'Puppeteer'})
+
+### [13:01:46] Executed #5 -> Puppeteer (EVIL)
+
+#### [13:01:54] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:01:54] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+#### [13:01:59] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:01:59] Recommendation
+Action: **USE_ABILITY** #7 (Druid) -> targets ['#2', '#3', '#4']
+Reason: Entropy 0.000 (adjusted 0.000) | timing x1.00
+
+### [13:02:07] Revealed #7 Druid
+Info: {'targets': [2, 3, 4], 'found_outcast': None}
+
+### [13:02:07] Ability used at #7
+
+#### [13:02:13] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:02:13] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Puppet, 50% good Scout).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+#### [13:02:20] Solver Output
+Scenarios: 2/2
+Definite evil: ['#1', '#5']
+Definite good: ['#2', '#3', '#7']
+Evil probabilities: #4=50%, #6=50%
+
+#### [13:02:20] Recommendation
+Action: **EXECUTE** #4
+Reason: Execution lookahead: #4 guarantees a win across all reveal branches with current HP budget (50% evil Puppet, 50% good Scout).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [13:02:27] Executed #4 -> Puppet (EVIL)
+
+## [13:02:39] GAME OVER — WIN
+Final HP: 10
+Notes: Baa execution revealed hidden deck card as Wretch; Judge #2 confirmed #3 truthful; Druid #7 on #2/#3/#4 found no Outcasts; forced-safe #4 execution hit Puppet.
+
