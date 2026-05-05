@@ -44575,3 +44575,83 @@ Reason: All evil characters have been executed!
 Final HP: 6
 Notes: 6HP. Lilis killed #8 Jester in first batch, second pulse did 2HP no kill. Dreamer2 live UI required two picks; solver requested #6, second pick #7 produced Among #6,#7 there is Druid or Lilis. Druid #6 on #1,#2,#3 said NO Outcasts.
 
+
+---
+
+# New Game — 2026-05-05 12:41:24
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Poet, Fortune_Teller, Alchemist, Lover, Enlightened, Empress
+- Outcasts: Plague_Doctor
+- Minions: Twin_Minion
+- Demons: Pooka
+
+### [12:41:57] Revealed #1 Alchemist
+Info: {'corrupted_count': 1}
+
+### [12:41:57] Revealed #2 Plague_Doctor
+Info: {}
+
+### [12:41:57] Revealed #3 Fortune_Teller
+Info: {}
+
+### [12:41:57] Revealed #4 Plague_Doctor
+Info: {}
+
+### [12:41:57] Revealed #6 Empress
+Info: {'targets': [3, 4, 7]}
+
+### [12:41:57] Revealed #7 Lover
+Info: {'evil_adjacent': 0}
+
+### [12:42:32] Revealed #5 Enlightened
+Info: {'direction': 'CW'}
+
+### [12:42:39] Revealed #8 Poet
+Info: {'targets': [2, 8], 'minion_role': 'Twin_Minion', 'copied_role': 'Oracle'}
+
+#### [12:42:46] Solver Output
+Scenarios: 4/242
+Definite good: ['#3', '#6', '#7', '#8']
+Evil probabilities: #2=75%, #5=75%, #1=25%, #4=25%
+
+#### [12:42:46] Recommendation
+Action: **USE_ABILITY** #2 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 0.811 (adjusted 0.811) | timing x1.00
+
+#### [12:43:34] Solver Output
+Scenarios: 3/242
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+
+#### [12:43:34] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 3 scenarios (roles: {'Twin_Minion'})
+
+### [12:44:38] Executed #2 -> Twin_Minion (EVIL)
+
+#### [12:44:46] Solver Output
+Scenarios: 3/31
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+
+#### [12:44:46] Recommendation
+Action: **EXECUTE** #5
+Reason: #5 is evil in ALL 3 scenarios (roles: {'Pooka'})
+
+### [12:45:29] Executed #5 -> Pooka (EVIL)
+
+#### [12:45:45] Solver Output
+Scenarios: 3/5
+Definite evil: ['#2', '#5']
+Definite good: ['#1', '#3', '#4', '#6', '#7', '#8']
+
+#### [12:45:45] Recommendation
+Action: **WIN**
+Reason: All evil characters have been executed!
+
+## [12:46:16] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP. Alchemist #1 used new wording: There was 1 Corruption around me. #2 Twin Minion disguised as Plague Doctor lied #1 corrupted and #6 evil; solver used that to lock #2 then #5 Pooka.
+

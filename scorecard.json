@@ -4059,6 +4059,13 @@
       "name": "asc83_v3",
       "notes": "6HP. Lilis killed #8 Jester in first batch, second pulse did 2HP no kill. Dreamer2 live UI required two picks; solver requested #6, second pick #7 produced Among #6,#7 there is Druid or Lilis. Druid #6 on #1,#2,#3 said NO Outcasts.",
       "date": "2026-05-05 12:33"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc83_v4",
+      "notes": "10HP. Alchemist #1 used new wording: There was 1 Corruption around me. #2 Twin Minion disguised as Plague Doctor lied #1 corrupted and #6 evil; solver used that to lock #2 then #5 Pooka.",
+      "date": "2026-05-05 12:46"
     }
   ]
 }
