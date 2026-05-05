@@ -4101,6 +4101,13 @@
       "name": "asc84_v2",
       "notes": "3HP win. Live bug found/fixed mid-village: PD #7 reported Drunk #6 as Not Corrupted; Drunk still lied as Druid and wrong-exec cost was -2. After model fix, 0 scenarios recovered to 26 scenarios. Forced-safe #5 branch hit corrupted good Baker, then #1 Chancellor and #3 Baa.",
       "date": "2026-05-05 13:46"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc84_v3",
+      "notes": "Asc84 village 3 perfect HP10. Lilis batch flip killed #5 Alchemist; solver used both Slayer-shot failures then executed #1/#7.",
+      "date": "2026-05-05 13:55"
     }
   ]
 }

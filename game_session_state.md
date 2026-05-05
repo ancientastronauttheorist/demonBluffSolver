@@ -45416,3 +45416,147 @@ Reason: #3 is evil in ALL 1 scenarios (roles: {'Baa'})
 Final HP: 3
 Notes: 3HP win. Live bug found/fixed mid-village: PD #7 reported Drunk #6 as Not Corrupted; Drunk still lied as Druid and wrong-exec cost was -2. After model fix, 0 scenarios recovered to 26 scenarios. Forced-safe #5 branch hit corrupted good Baker, then #1 Chancellor and #3 Baa.
 
+
+---
+
+# New Game — 2026-05-05 13:50:33
+Cards: 9, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Witness, Alchemist, Confessor, Slayer, Gemcrafter, Fortune_Teller, Medium
+- Outcasts: Bombardier
+- Minions: Twin_Minion, Shaman
+- Demons: Lilis
+
+### [13:50:45] Revealed #1 Slayer
+Info: {}
+
+### [13:50:45] Revealed #2 Witness
+Info: {'affected_position': 5}
+
+### [13:50:45] Revealed #3 Fortune_Teller
+Info: {}
+
+### [13:50:45] Revealed #4 Confessor
+Info: {'dizzy': False}
+
+### [13:50:45] Revealed #9 Fortune_Teller
+Info: {}
+
+#### [13:50:45] Solver Output
+Scenarios: 126/504
+Definite evil: ['#2']
+Definite good: ['#4']
+Evil probabilities: #1=29%, #3=29%, #5=29%, #6=29%, #7=29%, #8=29%, #9=29%
+
+#### [13:50:45] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 126 scenarios (roles: {'Twin_Minion', 'Shaman', 'Lilis'})
+
+### [13:51:05] Revealed #6 Bombardier
+Info: {}
+
+### [13:51:05] Revealed #7 Slayer
+Info: {}
+
+### [13:51:05] Revealed #8 Medium
+Info: {'good_position': 5, 'good_role': 'Alchemist'}
+
+#### [13:51:06] Solver Output
+Scenarios: 60/504
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #1=40%, #3=40%, #6=40%, #7=40%, #9=40%
+
+#### [13:51:06] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 60 scenarios (roles: {'Twin_Minion', 'Shaman', 'Lilis'})
+
+#### [13:52:22] Solver Output
+Scenarios: 60/504
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #1=40%, #3=40%, #6=40%, #7=40%, #9=40%
+
+#### [13:52:22] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 60 scenarios (roles: {'Twin_Minion', 'Lilis', 'Shaman'})
+
+### [13:52:29] Executed #2 -> Shaman (EVIL)
+
+#### [13:52:35] Solver Output
+Scenarios: 20/56
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #1=40%, #3=40%, #6=40%, #7=40%, #9=40%
+
+#### [13:52:35] Recommendation
+Action: **USE_ABILITY** #3 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 0.971 (adjusted 0.971) | timing x1.00 | EV=0.971 > reveal EV=0.000
+
+### [13:52:42] Revealed #3 Fortune Teller
+Info: {'targets': [1, 4], 'has_evil': True}
+
+### [13:52:42] Ability used at #3
+
+#### [13:52:48] Solver Output
+Scenarios: 12/56
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #1=50%, #3=50%, #6=33%, #7=33%, #9=33%
+
+#### [13:52:48] Recommendation
+Action: **USE_ABILITY** #9 (Fortune Teller) -> targets ['#1', '#4']
+Reason: Entropy 1.000 (adjusted 1.000) | timing x1.00 | EV=1.000 > reveal EV=0.000
+
+### [13:52:55] Revealed #9 Fortune Teller
+Info: {'targets': [1, 4], 'has_evil': True}
+
+### [13:52:55] Ability used at #9
+
+#### [13:52:59] Solver Output
+Scenarios: 6/56
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#8']
+Evil probabilities: #1=67%, #3=33%, #6=33%, #7=33%, #9=33%
+
+#### [13:52:59] Recommendation
+Action: **USE_ABILITY** #7 (Slayer) -> targets ['#1']
+Reason: Target #1 is 67% evil (adjusted 0.67) | EV=0.667 > reveal EV=0.000
+
+#### [13:54:38] Solver Output
+Scenarios: 4/56
+Definite evil: ['#2']
+Definite good: ['#4', '#5', '#6', '#8']
+Evil probabilities: #1=50%, #3=50%, #7=50%, #9=50%
+
+#### [13:54:38] Recommendation
+Action: **USE_ABILITY** #1 (Slayer) -> targets ['#3']
+Reason: Target #3 is 50% evil (adjusted 0.50) | EV=0.500 > reveal EV=0.000
+
+#### [13:55:06] Solver Output
+Scenarios: 2/56
+Definite evil: ['#1', '#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9']
+
+#### [13:55:06] Recommendation
+Action: **EXECUTE** #1
+Reason: #1 is evil in ALL 2 scenarios (roles: {'Twin_Minion', 'Lilis'})
+
+### [13:55:13] Executed #1 -> Twin Minion (EVIL)
+
+#### [13:55:18] Solver Output
+Scenarios: 1/7
+Definite evil: ['#1', '#2', '#7']
+Definite good: ['#3', '#4', '#5', '#6', '#8', '#9']
+
+#### [13:55:18] Recommendation
+Action: **EXECUTE** #7
+Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
+
+### [13:55:25] Executed #7 -> Lilis (EVIL)
+
+## [13:55:38] GAME OVER — WIN
+Final HP: 10
+Notes: Asc84 village 3 perfect HP10. Lilis batch flip killed #5 Alchemist; solver used both Slayer-shot failures then executed #1/#7.
+
