@@ -1,0 +1,174 @@
+{
+  "n_cards": 8,
+  "n_evil": 2,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": -1
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Medium",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "good_role": "Plague Doctor"
+      }
+    },
+    {
+      "position": 3,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 4,
+      "apparent_role": "Slayer",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 5,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          8
+        ],
+        "evil_role_options": [
+          "Drunk",
+          "Shaman"
+        ]
+      }
+    },
+    {
+      "position": 6,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 7,
+      "apparent_role": "Dreamer",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          4,
+          6
+        ],
+        "evil_role_options": [
+          "Knight",
+          "Pooka"
+        ]
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Jester",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          2,
+          3
+        ],
+        "evil_count": 0
+      }
+    }
+  ],
+  "executed": [
+    1,
+    2,
+    3
+  ],
+  "confirmed_evil": [
+    2,
+    3
+  ],
+  "confirmed_good": [
+    6,
+    1
+  ],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "2": "Pooka",
+    "3": "Shaman"
+  },
+  "slayer_results": [
+    {
+      "slayer_pos": 4,
+      "target_pos": 1,
+      "killed": false
+    }
+  ],
+  "pd_ability_results": [
+    {
+      "pd_pos": 3,
+      "target": 1,
+      "is_corrupted": false,
+      "evil_revealed": null
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 5,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 5,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "executed_good_corrupted": {
+    "1": true
+  },
+  "deck": {
+    "villagers": [
+      "Jester",
+      "Druid",
+      "Dreamer",
+      "Knight",
+      "Bard",
+      "Medium",
+      "Slayer"
+    ],
+    "outcasts": [
+      "Plague_Doctor",
+      "Drunk"
+    ],
+    "minions": [
+      "Shaman"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    5,
+    3,
+    7,
+    4,
+    8
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc84_v6",
+  "true_evil_positions": {
+    "2": "Pooka",
+    "3": "Shaman"
+  },
+  "notes": "5HP win. Followed Knight check #6 blocked, Dreamer2 results, fake PD #3 clean on #1, Slayer fail on #1, Jester #8 result, then forced-safe #1 good Bard before #2/#3 evils."
+}

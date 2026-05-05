@@ -45843,3 +45843,150 @@ Reason: #8 is evil in ALL 1 scenarios (roles: {'Pooka'})
 Final HP: 5
 Notes: 5HP win after restart. Patched Drunk corruption rule before redo; solver executed Bombardier-disguised Minion #9, used both PD checks on #2, then forced #1/#4/#8.
 
+
+---
+
+# New Game — 2026-05-05 14:46:00
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Jester, Druid, Dreamer, Knight, Bard, Medium, Slayer
+- Outcasts: Plague_Doctor, Drunk
+- Minions: Shaman
+- Demons: Pooka
+
+### [14:46:50] Revealed #1 Bard
+Info: {'corruption_distance': -1}
+
+### [14:46:50] Revealed #2 Medium
+Info: {'good_position': 3, 'good_role': 'Plague Doctor'}
+
+### [14:46:50] Revealed #3 Plague_Doctor
+Info: {}
+
+### [14:46:50] Revealed #4 Slayer
+Info: {}
+
+### [14:46:50] Revealed #5 Dreamer
+Info: {}
+
+### [14:46:50] Revealed #6 Knight
+Info: {}
+
+### [14:46:50] Revealed #7 Dreamer
+Info: {}
+
+### [14:46:50] Revealed #8 Jester
+Info: {}
+
+#### [14:46:57] Solver Output
+Scenarios: 163/1400
+Definite good: ['#5', '#7']
+Evil probabilities: #8=50%, #1=47%, #4=41%, #6=41%, #3=16%, #2=5%
+
+#### [14:46:57] Recommendation
+Action: **EXECUTE** #6
+Reason: Knight check: #6 is 41% evil, 18% corruption risk. Expected HP cost: 0.9 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 18% -- corrupted Knight loses immunity + 4 extra damage
+
+#### [14:48:10] Execution Blocked
+#6 Knight immunity — confirmed good, no HP loss
+
+#### [14:48:20] Solver Output
+Scenarios: 96/1014
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #1=58%, #8=54%, #4=53%, #3=26%, #2=8%
+
+#### [14:48:20] Recommendation
+Action: **USE_ABILITY** #5 (Dreamer) -> targets ['#1', '#8']
+Reason: Entropy 3.639 (adjusted 2.729) | timing x1.00
+WARNING: Corruption risk: 50%
+
+### [14:49:25] Revealed #5 Dreamer
+Info: {'targets': [1, 8], 'evil_role_options': ['Drunk', 'Shaman']}
+
+#### [14:49:53] Solver Output
+Scenarios: 37/1014
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #8=65%, #1=57%, #3=38%, #4=30%, #2=11%
+
+#### [14:49:53] Recommendation
+Action: **USE_ABILITY** #3 (Plague Doctor) -> targets ['#1']
+Reason: Entropy 2.234 (adjusted 2.234) | timing x1.00
+
+#### [14:50:40] Solver Output
+Scenarios: 18/1014
+Definite good: ['#5', '#6', '#7']
+Evil probabilities: #8=89%, #1=72%, #4=17%, #2=11%, #3=11%
+
+#### [14:50:40] Recommendation
+Action: **USE_ABILITY** #7 (Dreamer) -> targets ['#4', '#6']
+Reason: Entropy 2.175 (adjusted 1.208) | timing x1.00
+WARNING: Corruption risk: 89%
+
+### [14:51:40] Revealed #7 Dreamer
+Info: {'targets': [4, 6], 'evil_role_options': ['Knight', 'Pooka']}
+
+#### [14:51:55] Solver Output
+Scenarios: 5/1014
+Definite good: ['#4', '#5', '#6', '#7']
+Evil probabilities: #1=60%, #8=60%, #2=40%, #3=40%
+
+#### [14:51:55] Recommendation
+Action: **USE_ABILITY** #4 (Slayer) -> targets ['#1']
+Reason: Target #1 is 60% evil (adjusted 0.48)
+WARNING: Corruption risk: 20% -- Slayer ability disabled if corrupted
+
+#### [14:52:46] Solver Output
+Scenarios: 3/1014
+Definite good: ['#4', '#5', '#6', '#7']
+Evil probabilities: #2=67%, #3=67%, #1=33%, #8=33%
+
+#### [14:52:46] Recommendation
+Action: **USE_ABILITY** #8 (Jester) -> targets ['#1', '#2', '#3']
+Reason: Expected posterior 1.9 scenarios (adjusted 2.2, info gain 0.469 bits) | timing x1.00
+WARNING: Corruption risk: 33%
+
+### [14:52:54] Revealed #8 Jester
+Info: {'targets': [1, 2, 3], 'evil_count': 0}
+
+### [14:52:54] Ability used at #8
+
+#### [14:53:15] Solver Output
+Scenarios: 2/1014
+Definite good: ['#4', '#5', '#6', '#7']
+Evil probabilities: #1=50%, #2=50%, #3=50%, #8=50%
+
+#### [14:53:15] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Bard (corrupted), 50% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [14:53:22] Executed #1 -> GOOD (WRONG!)
+
+#### [14:53:31] Solver Output
+Scenarios: 1/690
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:53:31] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [14:53:38] Executed #2 -> Pooka (EVIL)
+
+#### [14:53:45] Solver Output
+Scenarios: 1/131
+Definite evil: ['#2', '#3']
+Definite good: ['#1', '#4', '#5', '#6', '#7', '#8']
+
+#### [14:53:45] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:53:52] Executed #3 -> Shaman (EVIL)
+
+## [14:54:10] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win. Followed Knight check #6 blocked, Dreamer2 results, fake PD #3 clean on #1, Slayer fail on #1, Jester #8 result, then forced-safe #1 good Bard before #2/#3 evils.
+
