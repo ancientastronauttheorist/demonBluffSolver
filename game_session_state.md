@@ -45098,3 +45098,128 @@ Definite good: ['#1', '#6', '#7', '#8', '#9']
 Action: **WIN**
 Reason: All evil characters have been executed!
 
+
+---
+
+# New Game — 2026-05-05 13:35:47
+Cards: 10, Evil: 3, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Baker, Poet, Empress, Alchemist, Knight, Druid, Bard, Hunter
+- Outcasts: Doppelganger, Plague_Doctor
+- Minions: Minion, Chancellor
+- Demons: Pooka
+
+### [13:35:57] Revealed #1 Baker
+Info: {'original_role': 'original'}
+
+### [13:35:57] Revealed #2 Knight
+Info: {}
+
+### [13:35:57] Revealed #3 Hunter
+Info: {'distance': 1}
+
+### [13:35:57] Revealed #4 Alchemist
+Info: {'corrupted_count': 1}
+
+### [13:35:57] Revealed #5 Knight
+Info: {}
+
+### [13:35:57] Revealed #7 Bard
+Info: {'corruption_distance': 3}
+
+### [13:35:57] Revealed #8 Baker
+Info: {'original_role': 'Druid'}
+
+### [13:35:57] Revealed #9 Plague_Doctor
+Info: {}
+
+#### [13:35:58] Solver Output
+Scenarios: 1654/16146
+Evil probabilities: #7=51%, #3=44%, #8=40%, #6=38%, #2=36%, #4=24%, #10=23%, #5=20%, #1=15%, #9=9%
+
+#### [13:35:58] Recommendation
+Action: **EXECUTE** #2
+Reason: Knight check: #2 is 36% evil, 5% corruption risk. Expected HP cost: 0.3 (corrupted Knight = 9 HP).
+WARNING: Corruption risk: 5% -- corrupted Knight loses immunity + 4 extra damage
+
+### [13:36:32] Revealed #6 Poet
+Info: {'targets': [1, 4, 8], 'types': ['Outcast', 'Minion', 'Villager'], 'copied_role': 'Bishop'}
+
+### [13:36:33] Revealed #10 Poet
+Info: {'good_position': 3, 'copied_role': 'Gemcrafter'}
+
+#### [13:36:33] Solver Output
+Scenarios: 400/23352
+Evil probabilities: #6=79%, #2=56%, #7=37%, #8=36%, #4=25%, #3=24%, #5=18%, #10=16%, #9=6%, #1=4%
+
+#### [13:36:33] Recommendation
+Action: **USE_ABILITY** #9 (Plague Doctor) -> targets ['#7']
+Reason: Entropy 2.453 (adjusted 2.453) | timing x1.00
+
+#### [13:36:54] Solver Output
+Scenarios: 63/23352
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#9']
+Evil probabilities: #6=90%, #8=10%
+
+#### [13:36:54] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 63 scenarios (roles: {'Minion', 'Pooka', 'Chancellor'})
+
+#### [13:37:02] Solver Output
+Scenarios: 63/23352
+Definite evil: ['#3', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#9']
+Evil probabilities: #6=90%, #8=10%
+
+#### [13:37:02] Recommendation
+Action: **EXECUTE** #3
+Reason: #3 is evil in ALL 63 scenarios (roles: {'Minion', 'Chancellor', 'Pooka'})
+
+### [13:37:09] Executed #3 -> Minion (EVIL)
+
+#### [13:37:11] Solver Output
+Scenarios: 15/2462
+Definite evil: ['#3', '#6', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [13:37:11] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 15 scenarios (roles: {'Pooka'})
+
+#### [13:37:16] Solver Output
+Scenarios: 15/2462
+Definite evil: ['#3', '#6', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [13:37:16] Recommendation
+Action: **EXECUTE** #6
+Reason: #6 is evil in ALL 15 scenarios (roles: {'Pooka'})
+
+### [13:37:23] Executed #6 -> Pooka (EVIL)
+
+#### [13:37:24] Solver Output
+Scenarios: 15/254
+Definite evil: ['#3', '#6', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [13:37:24] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 15 scenarios (roles: {'Chancellor'})
+
+#### [13:37:29] Solver Output
+Scenarios: 15/254
+Definite evil: ['#3', '#6', '#10']
+Definite good: ['#1', '#2', '#4', '#5', '#7', '#8', '#9']
+
+#### [13:37:29] Recommendation
+Action: **EXECUTE** #10
+Reason: #10 is evil in ALL 15 scenarios (roles: {'Chancellor'})
+
+### [13:37:36] Executed #10 -> Chancellor (EVIL)
+
+## [13:37:52] GAME OVER — WIN
+Final HP: 10
+Notes: 10HP perfect. Alchemist new corrupted_count wording parsed: There was 1 Corruption around me. PD #9 checked #7 corrupted and revealed #10 evil. Poet copied Bishop/Gemcrafter clues entered manually.
+

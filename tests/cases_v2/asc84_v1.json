@@ -1,0 +1,173 @@
+{
+  "n_cards": 10,
+  "n_evil": 3,
+  "cards": [
+    {
+      "position": 1,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "original"
+      }
+    },
+    {
+      "position": 2,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 3,
+      "apparent_role": "Hunter",
+      "info_text": "",
+      "info_parsed": {
+        "distance": 1
+      }
+    },
+    {
+      "position": 4,
+      "apparent_role": "Alchemist",
+      "info_text": "",
+      "info_parsed": {
+        "corrupted_count": 1
+      }
+    },
+    {
+      "position": 5,
+      "apparent_role": "Knight",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 6,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "targets": [
+          1,
+          4,
+          8
+        ],
+        "types": [
+          "Outcast",
+          "Minion",
+          "Villager"
+        ],
+        "copied_role": "Bishop"
+      }
+    },
+    {
+      "position": 7,
+      "apparent_role": "Bard",
+      "info_text": "",
+      "info_parsed": {
+        "corruption_distance": 3
+      }
+    },
+    {
+      "position": 8,
+      "apparent_role": "Baker",
+      "info_text": "",
+      "info_parsed": {
+        "original_role": "Druid"
+      }
+    },
+    {
+      "position": 9,
+      "apparent_role": "Plague_Doctor",
+      "info_text": "",
+      "info_parsed": {}
+    },
+    {
+      "position": 10,
+      "apparent_role": "Poet",
+      "info_text": "",
+      "info_parsed": {
+        "good_position": 3,
+        "copied_role": "Gemcrafter"
+      }
+    }
+  ],
+  "executed": [
+    3,
+    6,
+    10
+  ],
+  "confirmed_evil": [
+    3,
+    6,
+    10
+  ],
+  "confirmed_good": [],
+  "pd_corruption_target": null,
+  "executed_evil_roles": {
+    "3": "Minion",
+    "6": "Pooka",
+    "10": "Chancellor"
+  },
+  "slayer_results": [],
+  "pd_ability_results": [
+    {
+      "pd_pos": 9,
+      "target": 7,
+      "is_corrupted": true,
+      "evil_revealed": 10
+    }
+  ],
+  "blocked_positions": [],
+  "night_kills": [],
+  "night_kill_evil_count": 0,
+  "hp": 10,
+  "wrong_exec_cost": 5,
+  "board_villager_count": 6,
+  "board_outcast_count": 1,
+  "board_minion_count": null,
+  "board_demon_count": null,
+  "reveal_order": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "executed_good_corrupted": {},
+  "deck": {
+    "villagers": [
+      "Baker",
+      "Poet",
+      "Empress",
+      "Alchemist",
+      "Knight",
+      "Druid",
+      "Bard",
+      "Hunter"
+    ],
+    "outcasts": [
+      "Doppelganger",
+      "Plague_Doctor"
+    ],
+    "minions": [
+      "Minion",
+      "Chancellor"
+    ],
+    "demons": [
+      "Pooka"
+    ]
+  },
+  "used_abilities": [
+    9
+  ],
+  "lilis_batch_index": 0,
+  "name": "asc84_v1",
+  "true_evil_positions": {
+    "3": "Minion",
+    "6": "Pooka",
+    "10": "Chancellor"
+  },
+  "notes": "10HP perfect. Alchemist new corrupted_count wording parsed: There was 1 Corruption around me. PD #9 checked #7 corrupted and revealed #10 evil. Poet copied Bishop/Gemcrafter clues entered manually."
+}

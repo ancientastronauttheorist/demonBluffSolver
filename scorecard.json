@@ -4087,6 +4087,13 @@
       "name": "asc83_v7",
       "notes": "Rambler redesign regression: after parser/validator fix, shut_up_target clues collapsed the stuck 4-scenario HP5 state to one scenario. Truthful #2 Puppet and #9 Baker said #1 shut up for real Rambler #1; lying #3 Puppeteer and #5 Baa pointed shut-up at fake Rambler #4. Wrong pre-fix solver execution #6 Lover cost 5 HP.",
       "date": "2026-05-05 13:17"
+    },
+    {
+      "result": "win",
+      "hp": 10,
+      "name": "asc84_v1",
+      "notes": "10HP perfect. Alchemist new corrupted_count wording parsed: There was 1 Corruption around me. PD #9 checked #7 corrupted and revealed #10 evil. Poet copied Bishop/Gemcrafter clues entered manually.",
+      "date": "2026-05-05 13:37"
     }
   ]
 }
