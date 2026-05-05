@@ -4108,6 +4108,13 @@
       "name": "asc84_v3",
       "notes": "Asc84 village 3 perfect HP10. Lilis batch flip killed #5 Alchemist; solver used both Slayer-shot failures then executed #1/#7.",
       "date": "2026-05-05 13:55"
+    },
+    {
+      "result": "win",
+      "hp": 5,
+      "name": "asc84_v4",
+      "notes": "5HP win. Forced-safe #1 branch hit corrupted good Lover, then solver forced #2 Pooka and #4 Shaman.",
+      "date": "2026-05-05 14:00"
     }
   ]
 }

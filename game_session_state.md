@@ -45560,3 +45560,77 @@ Reason: #7 is evil in ALL 1 scenarios (roles: {'Lilis'})
 Final HP: 10
 Notes: Asc84 village 3 perfect HP10. Lilis batch flip killed #5 Alchemist; solver used both Slayer-shot failures then executed #1/#7.
 
+
+---
+
+# New Game — 2026-05-05 13:58:53
+Cards: 8, Evil: 2, HP: 10, Wrong exec cost: 5
+
+## Deck
+- Villagers: Architect, Lover, Hunter, Baker, Scout, Jester
+- Outcasts: Bombardier
+- Minions: Shaman
+- Demons: Pooka
+
+### [13:59:25] Revealed #1 Lover
+Info: {'evil_adjacent': 2}
+
+### [13:59:25] Revealed #2 Hunter
+Info: {'distance': 1}
+
+### [13:59:25] Revealed #3 Scout
+Info: {'evil_role': 'Shaman', 'distance': 3}
+
+### [13:59:25] Revealed #4 Scout
+Info: {'evil_role': 'Pooka', 'distance': 3}
+
+### [13:59:25] Revealed #5 Bombardier
+Info: {}
+
+### [13:59:25] Revealed #6 Baker
+Info: {'original_role': 'original'}
+
+### [13:59:25] Revealed #7 Baker
+Info: {'original_role': 'Architect'}
+
+### [13:59:25] Revealed #8 Baker
+Info: {'original_role': 'Baker'}
+
+#### [13:59:30] Solver Output
+Scenarios: 2/56
+Definite good: ['#3', '#5', '#7', '#8']
+Evil probabilities: #1=50%, #2=50%, #4=50%, #6=50%
+
+#### [13:59:30] Recommendation
+Action: **EXECUTE** #1
+Reason: Execution lookahead: #1 guarantees a win across all reveal branches with current HP budget (50% good Lover (corrupted), 50% evil Shaman).
+WARNING: Execution lookahead override -- immediate hit chance is 50%, but all reveal branches still lead to a forced win.
+
+### [13:59:37] Executed #1 -> GOOD (WRONG!)
+
+#### [13:59:43] Solver Output
+Scenarios: 1/42
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [13:59:43] Recommendation
+Action: **EXECUTE** #2
+Reason: #2 is evil in ALL 1 scenarios (roles: {'Pooka'})
+
+### [13:59:50] Executed #2 -> Pooka (EVIL)
+
+#### [13:59:55] Solver Output
+Scenarios: 1/6
+Definite evil: ['#2', '#4']
+Definite good: ['#1', '#3', '#5', '#6', '#7', '#8']
+
+#### [13:59:55] Recommendation
+Action: **EXECUTE** #4
+Reason: #4 is evil in ALL 1 scenarios (roles: {'Shaman'})
+
+### [14:00:02] Executed #4 -> Shaman (EVIL)
+
+## [14:00:15] GAME OVER — WIN
+Final HP: 5
+Notes: 5HP win. Forced-safe #1 branch hit corrupted good Lover, then solver forced #2 Pooka and #4 Shaman.
+
