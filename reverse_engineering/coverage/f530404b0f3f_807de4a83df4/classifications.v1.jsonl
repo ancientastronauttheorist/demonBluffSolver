@@ -45,3 +45,19 @@
 {"method":"tdi5618.m0002","state":"understood","reason":"Native Night gate and unguarded coroutine launch are documented.","evidence":["ev.night-phase.1"]}
 {"method":"tdi5617.m0002","state":"understood","reason":"Native fade, wait, per-character Night action, Day transition, and local-counter-reset timeline are documented.","evidence":["ev.night-phase.1"]}
 {"method":"tdi5618.m0006","state":"understood","reason":"Native membership selection and stable first-index night ordering are documented.","evidence":["ev.night-phase.1"]}
+{"method":"tdi5487.m0066","state":"understood","reason":"Native trigger gating, callback order, one-shot Start handling, and real/bluff dispatch are documented.","evidence":["ev.character.action-dispatch.1"]}
+{"method":"tdi5487.m0067","state":"understood","reason":"Native role callback replacement and Act-versus-BluffAct dispatch are documented.","evidence":["ev.character.action-dispatch.1"]}
+{"method":"tdi5687.m0001","state":"understood","reason":"Native corruption, HealthyBluff, alignment, and bluff-reference lying precedence is documented.","evidence":["ev.character.action-dispatch.1"]}
+{"method":"tdi5853.m0015","state":"understood","reason":"The native default wrong-execution damage constant is documented.","evidence":["ev.execution.damage-clamp.1"]}
+{"method":"tdi5904.m0005","state":"understood","reason":"The native Drunk wrong-execution damage override is documented.","evidence":["ev.execution.damage-clamp.1"]}
+{"method":"tdi5544.m0000","state":"understood","reason":"Native signed reduction, lower-bound clamping, and value-change callback behavior are documented.","evidence":["ev.execution.damage-clamp.1"]}
+{"method":"tdi5853.m0020","state":"understood","reason":"The native default killability result is documented.","evidence":["ev.execution.protection.1"]}
+{"method":"tdi5869.m0006","state":"understood","reason":"Native Knight HealthyBluff, corruption, and alignment protection precedence is documented.","evidence":["ev.execution.protection.1"]}
+{"method":"tdi5908.m0007","state":"understood","reason":"Native Doppelganger HealthyBluff handling and bluff-role delegation are documented.","evidence":["ev.execution.protection.1"]}
+{"method":"tdi5869.m0003","state":"understood","reason":"Native Knight protection bookkeeping and corrupted-good execution damage are documented.","evidence":["ev.execution.protection.1"]}
+{"method":"tdi5869.m0004","state":"understood","reason":"Native Knight bluff-action protection bookkeeping and corrupted-good execution damage are documented.","evidence":["ev.execution.protection.1"]}
+{"method":"tdi5659.m0003","state":"understood","reason":"Native terminal-check coroutine launch behavior is documented.","evidence":["ev.win-conditions.terminal.1"]}
+{"method":"tdi5657.m0002","state":"understood","reason":"Native delayed Saint, health, and evil-count terminal precedence is documented.","evidence":["ev.win-conditions.terminal.1"]}
+{"method":"tdi5659.m0005","state":"understood","reason":"Native ordinary and final-day win branch ordering is documented.","evidence":["ev.win-conditions.terminal.1"]}
+{"method":"tdi5659.m0008","state":"understood","reason":"Native loss reveal, score, Summary scheduling, and death-event order are documented.","evidence":["ev.win-conditions.terminal.1"]}
+{"method":"tdi5656.m0002","state":"understood","reason":"Native delayed Summary transition timing and dispatch are documented.","evidence":["ev.win-conditions.terminal.1"]}

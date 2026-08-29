@@ -2,9 +2,11 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **metadata plus managed-reconstruction hypothesis only**. None
-of the 30 methods in this boundary has been promoted to native-static evidence
-by this note.
+Evidence status: **mixed**. Sixteen methods covering generic action dispatch,
+wrong-execution damage, Knight/Doppelganger protection, and terminal result
+selection have native-static confirmation. The other fourteen methods remain
+metadata/managed hypotheses. No statement here is based on live dynamic
+observation.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_execution_resolution.json`](../../targets/gameplay_execution_resolution.json).
@@ -17,7 +19,7 @@ Decompiled native bodies remain outside the repository.
 
 ## Boundary groups
 
-### Trigger dispatch and status application
+### Action and lying dispatch
 
 | Method | RVA |
 | --- | ---: |
@@ -26,13 +28,39 @@ Decompiled native bodies remain outside the repository.
 | `CharacterHelper.CheckLying` | `0x397750` |
 | `CharacterStatuses.AddStatus` | `0x363AA0` |
 
-The managed reconstruction suggests that `Character.Act` gates repeated Start
-actions, decides whether the real and bluff roles use `Act` or `BluffAct`, and
-routes role-produced information through `Character.RoleAct`. Native audit must
-confirm the exact lying/bluff decision table, callback assignment, null paths,
-and ordering.
+Native-static audit confirms that `CharacterHelper.CheckLying` returns true when
+the character is Corrupted, or when it is not HealthyBluff and either its
+runtime alignment is Evil or its bluff data is Unity-non-null. Corruption has
+precedence over HealthyBluff; otherwise HealthyBluff forces a truthful result.
+The helper does not consult the separate Lying, AppearTruthfull, or AppearLying
+statuses, and it uses the runtime alignment and bluff reference rather than the
+starting alignment or cloned role fields.
 
-### Wrong-execution damage, healing primitive, and terminal result
+`Character.Act` has one special early return: while the gameplay state is
+Summary, a Day trigger is suppressed when the real data or non-null bluff data
+is still marked as picking. Otherwise it logs and invokes `onTrigger` before
+role dispatch. Start is one-shot only after that callback: the first Start marks
+`characterStartActed` before dispatch, and later Start calls return at that
+point.
+
+Role dispatch uses this matrix:
+
+| Lying result | Runtime alignment | Real role | Bluff role, when present |
+| --- | --- | --- | --- |
+| false | any | `Act` | `Act` |
+| true | non-Evil | `BluffAct` | `BluffAct` |
+| true | Evil | `Act` | `BluffAct` |
+
+The Evil exception therefore applies even when corruption caused the lying
+result. `Character.RoleAct` replaces the selected role's `onActed` callback,
+then calls `Act` for case zero and `BluffAct` for every nonzero case. The
+callback starts `ShowActedDelayed(0.0, info, trigger)`; creation of the acted
+information remains the role implementation's responsibility. The real role is
+required, while a missing bluff role is a clean no-op after real dispatch.
+
+`CharacterStatuses.AddStatus` remains a managed hypothesis in this boundary.
+
+### Wrong-execution damage and value reduction
 
 | Method | RVA |
 | --- | ---: |
@@ -40,25 +68,53 @@ and ordering.
 | `Drunk.GetDamageToYou` | `0x3DA560` |
 | `CurrentMaxValue.Reduce` | `0x379610` |
 | `CurrentMaxValue.Add` | `0x3795D0` |
+
+Native-static audit confirms that the default wrong-execution cost is 5 HP and
+Drunk overrides it with 2 HP. `CurrentMaxValue.Reduce` performs signed
+subtraction, clamps only the lower bound to zero, stores the result, and invokes
+`onValueChanged` exactly once even when the value was already zero or clamps to
+zero. A negative input therefore increases the current value without applying
+the maximum bound. `CurrentMaxValue.Add` remains a managed hypothesis.
+
+### Terminal result selection
+
+| Method | RVA |
+| --- | ---: |
 | `WinConditions.CheckEndGameConditions` | `0x3ADEA0` |
 | `WinConditions.DelayedCheckCondition.MoveNext` | `0x3A9480` |
 | `WinConditions.Win` | `0x3AF320` |
 | `WinConditions.Lose` | `0x3ADFC0` |
 | `WinConditions.ChangeGameplayState.MoveNext` | `0x3A9100` |
 
-The existing core target already contains `PlayerController.ManageResources`,
-`Health.Damage`, `Health.Heal`, `Health.AddMaxHp`, `Health.ResetHp`, and
-`CurrentMaxValue.GetValue`. Managed output suggests that the ordinary damage
-override returns 5, Drunk returns 2, `Reduce` clamps toward zero, and `Add`
-clamps toward the maximum. These values and clamp branches are hypotheses until
-the selected native methods are audited.
+`CheckEndGameConditions` starts an independent coroutine every time it is
+called; it does not coalesce requests or guard against an existing terminal
+state. After a scaled 0.1-second delay, the iterator applies this precedence:
 
-The delayed win-condition iterator is included because its managed output is
-substantially malformed around evil counts, player health, Saint handling, and
-the win/lose branches. The wrapper and result methods close the intended
-call-chain boundary without importing score-panel and restart UI internals.
+1. if any dead real-role Saint was not killed by a demon, activate the automatic
+   loss panel and lose;
+2. otherwise, if signed player HP is at most zero, activate the ordinary loss
+   panel and lose;
+3. otherwise, if the number of Evil-aligned dead-list entries is at least the
+   number of Evil-aligned current-character entries, win; and
+4. otherwise, do nothing.
 
-### Execution protection
+The two Evil counts are independent raw-list scans with no identity matching or
+deduplication. Saint detection ignores demon-killed Saints and checks the real
+role object, not displayed alignment or statuses. As a result, duplicate dead
+entries can satisfy the win comparison early, and empty current/dead lists win
+when HP is positive and no qualifying Saint exists.
+
+`Win` reveals all characters first. Its final-day Roguelike branch activates
+the last-day panel, updates scores, and schedules Summary without invoking the
+ordinary round-win event. The ordinary branch invokes `OnRoundWon`, optionally
+signals ascension completion after rereading the mode, activates the win panel,
+and schedules Summary. `Lose` reveals all, updates scores, schedules Summary,
+and only then invokes `OnDied`; panel selection belongs to the delayed
+predicate. The state-change iterator waits a scaled 0.03 seconds before asking
+Gameplay to enter Summary. Repeated condition checks can therefore schedule
+duplicate terminal work.
+
+### Knight and Doppelganger protection
 
 | Method | RVA |
 | --- | ---: |
@@ -68,13 +124,25 @@ call-chain boundary without importing score-panel and restart UI internals.
 | `Immortal.Act` | `0x3BC2A0` |
 | `Immortal.BluffAct` | `0x3BC3A0` |
 
-`Immortal` is the managed implementation associated with Knight behavior. The
-managed reconstruction suggests that alignment, Corrupted, and HealthyBluff
-status participate in protection; it also suggests that Doppelganger can
-delegate the check to its bluff role and that the protected/executed triggers
-have additional effects. Native audit must establish the exact predicates,
-damage amount, trigger ordering, and exceptional paths. `Doppleganger` is the
-spelling present in current metadata.
+`Role.CheckIfCanBeKilled` always returns true. `Immortal`, the managed
+implementation associated with Knight behavior, applies this native predicate
+in order: HealthyBluff is protected; otherwise Corrupted can be killed;
+otherwise Evil alignment can be killed; otherwise the character is protected.
+HealthyBluff therefore has absolute precedence over corruption and alignment.
+
+`Doppleganger.CheckIfCanBeKilled` returns true whenever HealthyBluff is absent.
+With HealthyBluff it delegates virtually to the role stored in the character's
+bluff data; missing bluff data or its role is not handled as a protected
+fallback. `Doppleganger` is the spelling present in current metadata.
+
+`Immortal.Act` and `Immortal.BluffAct` are semantically identical. A Protected
+trigger performs only unique-Knight achievement bookkeeping. An Executed
+trigger deals an additional 4 HP only when the runtime alignment is non-Evil
+and the character is Corrupted. Joined to the previously audited execution
+path, a normally executed corrupted good Knight incurs the ordinary 5 HP first
+and this separate 4 HP hit afterward, for 9 total. NoDamage suppresses only the
+ordinary hit; an Evil Knight receives neither hit. Each applied hit performs
+its own value mutation and callback.
 
 ### Night-rule lifecycle and target selection
 
@@ -150,29 +218,17 @@ The intended joined hypotheses are:
   unrelated role actions, and general status resistance/removal remain later
   boundaries.
 
-## Recommended first native slice
+## Native-audited first slice
 
-Audit these 13 methods first:
+The 16 methods in the action/lying, wrong-execution damage, Knight and
+Doppelganger protection, and terminal-result sections above now have
+native-static coverage. This closes the first execution slice, including all
+five selected terminal methods rather than only the wrapper and predicate.
 
-1. `Character.Act` (`0x3645C0`)
-2. `Character.RoleAct` (`0x368790`)
-3. `CharacterHelper.CheckLying` (`0x397750`)
-4. `Role.GetDamageToYou` (`0x3C4CD0`)
-5. `Drunk.GetDamageToYou` (`0x3DA560`)
-6. `CurrentMaxValue.Reduce` (`0x379610`)
-7. `Role.CheckIfCanBeKilled` (`0x3B24C0`)
-8. `Immortal.CheckIfCanBeKilled` (`0x3BC4A0`)
-9. `Doppleganger.CheckIfCanBeKilled` (`0x3D7090`)
-10. `Immortal.Act` (`0x3BC2A0`)
-11. `Immortal.BluffAct` (`0x3BC3A0`)
-12. `WinConditions.CheckEndGameConditions` (`0x3ADEA0`)
-13. `WinConditions.DelayedCheckCondition.MoveNext` (`0x3A9480`)
-
-This slice is intended to close the execution path first: real/bluff action
-dispatch, ordinary and Drunk HP costs, lower-bound clamping, Knight and
-Doppelganger protection, and terminal-condition selection. It prioritizes the
-managed bodies with malformed branches or indirect virtual dispatch before the
-larger night-selection slice.
+The remaining 14 targets are `CharacterStatuses.AddStatus`,
+`CurrentMaxValue.Add`, the four Striga/NightModeRule methods, the two Demon kill
+selectors, and the five Characters collection helpers. They form the next
+native slice around status insertion and Striga's night-victim pipeline.
 
 ## Metadata alias cautions
 
