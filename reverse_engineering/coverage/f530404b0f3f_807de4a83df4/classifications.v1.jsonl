@@ -17,3 +17,14 @@
 {"method":"tdi5604.m0040","state":"understood","reason":"Native faction dispatch and append behavior are documented.","evidence":["ev.gameplay.roster-insertion.1"]}
 {"method":"tdi5604.m0042","state":"understood","reason":"Native refill sources, ignored input, removal, and faction filter behavior are documented.","evidence":["ev.gameplay.empty-roster-refill.1"]}
 {"method":"tdi5683.m0003","state":"understood","reason":"Native random range and strict floating-point comparison are documented.","evidence":["ev.gameplay.always-in-deck.1"]}
+{"method":"tdi5604.m0010","state":"understood","reason":"Native handout resource resets, counter updates, coroutine launch, and event ordering are documented.","evidence":["ev.gameplay.handout-setup.1"]}
+{"method":"tdi5603.m0002","state":"understood","reason":"Both native setup-coroutine states, their yield boundary, and setup callback order are documented.","evidence":["ev.gameplay.handout-setup.1"]}
+{"method":"tdi5505.m0005","state":"understood","reason":"Native board-pool disabling, size matching, duplicate-match behavior, and no-match behavior are documented.","evidence":["ev.characters.board-construction.1"]}
+{"method":"tdi5505.m0006","state":"understood","reason":"Native character construction, publication, action passes, setup callback, and shuffle order are documented.","evidence":["ev.characters.board-construction.1"]}
+{"method":"tdi5604.m0033","state":"understood","reason":"Native publication creates a new shallow list containing the board-card references.","evidence":["ev.characters.board-construction.1"]}
+{"method":"tdi5487.m0025","state":"understood","reason":"Native per-card reset fields, state callback ordering, status clearing, and ID sentinel behavior are documented.","evidence":["ev.character.lifecycle-init.1"]}
+{"method":"tdi5482.m0002","state":"understood","reason":"Native delayed-reveal role cloning, 0.3-second yield, and continuation are documented.","evidence":["ev.character.lifecycle-init.1"]}
+{"method":"tdi5487.m0043","state":"understood","reason":"Native register-as, bluff, action, presentation, and refresh ordering are documented.","evidence":["ev.character.internal-reveal.1"]}
+{"method":"tdi5487.m0037","state":"understood","reason":"Native phase, picker, reveal, ability, protection, and successful-execution branches are documented.","evidence":["ev.character.click-kill.1"]}
+{"method":"tdi5487.m0047","state":"understood","reason":"Native death-state mutation, callbacks, role death action, kill event, and order snapshot are documented.","evidence":["ev.character.click-kill.1"]}
+{"method":"tdi5604.m0019","state":"understood","reason":"Native hidden-kill reveal-order increment and its synchronous event relationship are documented.","evidence":["ev.character.click-kill.1"]}

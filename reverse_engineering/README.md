@@ -96,12 +96,26 @@ powershell -ExecutionPolicy Bypass -File `
   -Stage export-core
 ```
 
+Export any other checked-in target set from the completed baseline project with
+the generic, read-only target exporter:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage export-target `
+  -TargetSet gameplay_lifecycle
+```
+
 The import and analysis stages write explicit completion summaries; the wrapper
 rejects cancelled imports, analysis timeouts, missing target symbols, partial
 exports, stale files, and filename collisions. Raw Ghidra state remains outside
 the public repository under the build-keyed artifact directory. The current
 `gameplay-core` export is expected to produce 13 of 13 functions. Folded native
 bodies retain every requested managed-method identity in their export headers.
+The generic exporter applies the same build, RVA, signature, filename, and
+count checks without mutating or reanalyzing the saved project; the current
+`gameplay_lifecycle` boundary exports 28 of 28 functions.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -142,8 +156,8 @@ graphs reachable from the checked-in function signatures and validates exact
 entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
 completion before writing success summaries. `typed-analyze` and `typed-all`
 also reopen the saved program read-only and repeat those checks; `typed-export`
-requires their fresh success summaries and opens the project read-only. The
-current two target sets cover 19 methods, all of which survived the complete
+requires their fresh success summaries and opens the project read-only. The two
+target sets typed so far cover 19 methods, all of which survived the complete
 2,588-second analysis pass with 55 parameter-storage locations validated.
 
 Compare private baseline and typed exports without putting decompiled bodies or

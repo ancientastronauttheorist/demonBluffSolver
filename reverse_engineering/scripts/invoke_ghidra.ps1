@@ -8,6 +8,7 @@ param(
         'analyze',
         'all',
         'export-core',
+        'export-target',
         'build-types',
         'typed-import',
         'typed-analyze',
@@ -92,6 +93,7 @@ $typedStages = @(
     'typed-export'
 )
 $isTypedStage = $Stage -in $typedStages
+$needsTargetInventory = $isTypedStage -or $Stage -eq 'export-target'
 $typedInputRoot = Join-Path $artifactRoot 'typed-headers'
 $normalizedHeaderPath = Join-Path $typedInputRoot 'il2cpp_ghidra.h'
 $prototypeHeaderPath = Join-Path $typedInputRoot 'il2cpp_target_prototypes.h'
@@ -273,7 +275,7 @@ function Get-ValidateSummaryPath {
     return Join-Path $typedProjectRoot ("logs\validate-{0}-summary.json" -f $TargetInfo.BaseName)
 }
 
-if ($isTypedStage) {
+if ($needsTargetInventory) {
     $targetDirectory = Join-Path $reverseEngineeringRoot 'targets'
     $targetPaths = [Collections.Generic.List[string]]::new()
     foreach ($targetFile in Get-ChildItem -LiteralPath $targetDirectory -File -Filter '*.json') {
@@ -357,7 +359,8 @@ if ($isTypedStage) {
     $prototypeNameList.Sort([StringComparer]::Ordinal)
     $expectedPrototypeNames = @($prototypeNameList)
 
-    if ($Stage -eq 'typed-export' -and -not $targetByName.ContainsKey($TargetSet)) {
+    if ($Stage -in @('export-target', 'typed-export') -and
+        -not $targetByName.ContainsKey($TargetSet)) {
         throw "Unknown checked-in target-set basename '$TargetSet'"
     }
 }
@@ -770,6 +773,96 @@ function Invoke-TypedValidate {
     Assert-TypedValidationState
 }
 
+function Invoke-BaselineTargetExport {
+    param([Parameter(Mandatory = $true)]$TargetInfo)
+
+    Assert-AnalysisSummary -Path $analysisSummaryPath
+    $baselineProjectFile = Join-Path $projectDirectory "$projectName.gpr"
+    if (-not (Test-Path -LiteralPath $baselineProjectFile -PathType Leaf)) {
+        throw "Missing analyzed baseline Ghidra project: $baselineProjectFile"
+    }
+
+    $resolvedExportRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot 'exports'))
+    $resolvedExportDirectory = [IO.Path]::GetFullPath(
+        (Join-Path $resolvedExportRoot $TargetInfo.BaseName)
+    )
+    if ([IO.Path]::GetDirectoryName($resolvedExportDirectory) -ine $resolvedExportRoot -or
+        [IO.Path]::GetFileName($resolvedExportDirectory) -cne $TargetInfo.BaseName) {
+        throw "Refusing to use unsafe baseline export directory: $resolvedExportDirectory"
+    }
+    New-Item -ItemType Directory -Force -Path $resolvedExportDirectory | Out-Null
+
+    Get-ChildItem `
+        -LiteralPath $resolvedExportDirectory `
+        -File `
+        -Filter '*.c' `
+        -ErrorAction SilentlyContinue |
+        Remove-Item -Force
+    $summaryPath = Join-Path $resolvedExportDirectory '_export_summary.json'
+    Remove-Item -LiteralPath $summaryPath -Force -ErrorAction SilentlyContinue
+
+    $arguments = @(
+        $projectDirectory,
+        $projectName,
+        '-process', $programName,
+        '-readOnly',
+        '-noanalysis',
+        '-scriptPath', $ghidraScripts,
+        '-postScript',
+            'ExportFunctionDecompilations.java',
+            $resolvedExportDirectory,
+            $TargetInfo.Path,
+        '-log',
+            (Join-Path $projectRoot ("logs\export-target-{0}.log" -f $TargetInfo.BaseName)),
+        '-scriptlog',
+            (Join-Path $projectRoot ("logs\export-target-{0}-script.log" -f $TargetInfo.BaseName))
+    )
+    Invoke-HeadlessWithChecks `
+        -Arguments $arguments `
+        -Description "Ghidra baseline export/$($TargetInfo.BaseName)"
+
+    if (-not (Test-Path -LiteralPath $summaryPath -PathType Leaf)) {
+        throw "Baseline Ghidra export did not write its completion summary: $summaryPath"
+    }
+    $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+    foreach ($requiredField in @('requested', 'processed', 'exported', 'failed', 'cancelled')) {
+        if ($null -eq $summary.PSObject.Properties[$requiredField]) {
+            throw "Baseline Ghidra export summary is missing '$requiredField'"
+        }
+    }
+    if ($summary.cancelled -isnot [bool]) {
+        throw 'Baseline Ghidra export summary has a non-Boolean cancelled value'
+    }
+    if ([int]$summary.requested -ne $TargetInfo.FunctionCount -or
+        [int]$summary.processed -ne $TargetInfo.FunctionCount -or
+        [int]$summary.exported -ne $TargetInfo.FunctionCount -or
+        [int]$summary.failed -ne 0 -or
+        [bool]$summary.cancelled) {
+        throw "Incomplete baseline Ghidra export: $($summary | ConvertTo-Json -Compress)"
+    }
+
+    $expectedNames = [Collections.Generic.List[string]]::new()
+    foreach ($target in @($TargetInfo.Data.functions)) {
+        $safeName = $target.name -replace '[^A-Za-z0-9_.-]', '_'
+        $expectedNames.Add("$safeName.c")
+    }
+    $expectedNames.Sort([StringComparer]::Ordinal)
+    $actualNames = [Collections.Generic.List[string]]::new()
+    foreach ($outputFile in Get-ChildItem -LiteralPath $resolvedExportDirectory -File -Filter '*.c') {
+        if ($outputFile.Length -le 0) {
+            throw "Empty baseline Ghidra export: $($outputFile.FullName)"
+        }
+        $actualNames.Add($outputFile.Name)
+    }
+    $actualNames.Sort([StringComparer]::Ordinal)
+    Assert-StringArrayEqual `
+        -Actual @($actualNames) `
+        -Expected @($expectedNames) `
+        -Description "Baseline Ghidra exports/$($TargetInfo.BaseName)"
+
+    Write-Output "decompiled_target_$($TargetInfo.BaseName)=$resolvedExportDirectory"
+}
+
 function Invoke-TypedExport {
     param([Parameter(Mandatory = $true)]$TargetInfo)
     Assert-GdtState
@@ -956,6 +1049,10 @@ if ($Stage -eq 'export-core') {
         throw "Expected $expectedCount distinct C exports, found $actualExportCount"
     }
     Write-Output "decompiled_core=$exportDirectory"
+}
+
+if ($Stage -eq 'export-target') {
+    Invoke-BaselineTargetExport -TargetInfo $targetByName[$TargetSet]
 }
 
 if ($Stage -eq 'build-types') {

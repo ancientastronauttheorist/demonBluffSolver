@@ -34,6 +34,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   read-only post-save signature/ABI validation.
 - [x] Export and confirm the first gameplay-core native target set.
 - [x] Recover and native-audit the first roster-selection helper boundary.
+- [x] Map and baseline-export the 28-method gameplay-lifecycle boundary, then
+  native-audit its first 11-method setup, board, reveal, and click/kill slice.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [ ] Recover the gameplay lifecycle and its call graph.

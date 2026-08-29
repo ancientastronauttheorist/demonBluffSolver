@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "functions": [
+    {
+      "name": "Gameplay.Init",
+      "metadata_name": "Gameplay$$Init",
+      "signature": "void Gameplay__Init (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37DEF0"
+    },
+    {
+      "name": "Gameplay.InitCoroutine.MoveNext",
+      "metadata_name": "Gameplay.<InitCoroutine>d__41$$MoveNext",
+      "signature": "bool Gameplay__InitCoroutine_d__41__MoveNext (Gameplay__InitCoroutine_d__41_o* __this, const MethodInfo* method);",
+      "rva": "0x38FD10"
+    },
+    {
+      "name": "Gameplay.LoadCharacters",
+      "metadata_name": "Gameplay$$LoadCharacters",
+      "signature": "void Gameplay__LoadCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37E240"
+    },
+    {
+      "name": "Gameplay.HandOut",
+      "metadata_name": "Gameplay$$HandOut",
+      "signature": "void Gameplay__HandOut (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37DCD0"
+    },
+    {
+      "name": "Gameplay.SetupDelay.MoveNext",
+      "metadata_name": "Gameplay.<SetupDelay>d__47$$MoveNext",
+      "signature": "bool Gameplay__SetupDelay_d__47__MoveNext (Gameplay__SetupDelay_d__47_o* __this, const MethodInfo* method);",
+      "rva": "0x390AB0"
+    },
+    {
+      "name": "Gameplay.TriggerRelics",
+      "metadata_name": "Gameplay$$TriggerRelics",
+      "signature": "void Gameplay__TriggerRelics (Gameplay_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x381050"
+    },
+    {
+      "name": "Gameplay.UpdateRules",
+      "metadata_name": "Gameplay$$UpdateRules",
+      "signature": "void Gameplay__UpdateRules (Gameplay_o* __this, System_Collections_Generic_List_CharacterData__o* randomCharacters, const MethodInfo* method);",
+      "rva": "0x3814F0"
+    },
+    {
+      "name": "Characters.Init",
+      "metadata_name": "Characters$$Init",
+      "signature": "void Characters__Init (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CC40"
+    },
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Gameplay.UpdateCharacters",
+      "metadata_name": "Gameplay$$UpdateCharacters",
+      "signature": "void Gameplay__UpdateCharacters (System_Collections_Generic_List_Character__o* newCh, const MethodInfo* method);",
+      "rva": "0x3811B0"
+    },
+    {
+      "name": "Character.DelayReveal.MoveNext",
+      "metadata_name": "Character.<DelayReveal>d__84$$MoveNext",
+      "signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "rva": "0x3756B0"
+    },
+    {
+      "name": "Character.OnReveal",
+      "metadata_name": "Character$$OnReveal",
+      "signature": "void Character__OnReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367500"
+    },
+    {
+      "name": "Gameplay.OnCharacterReveal",
+      "metadata_name": "Gameplay$$OnCharacterReveal",
+      "signature": "void Gameplay__OnCharacterReveal (Gameplay_o* __this, Character_o* obj, const MethodInfo* method);",
+      "rva": "0x37ED60"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.Reveal",
+      "metadata_name": "Character$$Reveal",
+      "signature": "void Character__Reveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368410"
+    },
+    {
+      "name": "Character.RevealAllReal",
+      "metadata_name": "Character$$RevealAllReal",
+      "signature": "void Character__RevealAllReal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367E80"
+    },
+    {
+      "name": "Character.ExecuteAndReveal",
+      "metadata_name": "Character$$ExecuteAndReveal",
+      "signature": "void Character__ExecuteAndReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364B50"
+    },
+    {
+      "name": "Character.KillAndReveal",
+      "metadata_name": "Character$$KillAndReveal",
+      "signature": "void Character__KillAndReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365F10"
+    },
+    {
+      "name": "Character.KillProtected",
+      "metadata_name": "Character$$KillProtected",
+      "signature": "void Character__KillProtected (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366080"
+    },
+    {
+      "name": "Character.Kill",
+      "metadata_name": "Character$$Kill",
+      "signature": "void Character__Kill (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366130"
+    },
+    {
+      "name": "Character.KillByDemon",
+      "metadata_name": "Character$$KillByDemon",
+      "signature": "void Character__KillByDemon (Character_o* __this, Character_o* evilRef, const MethodInfo* method);",
+      "rva": "0x365FB0"
+    },
+    {
+      "name": "Character.DelayedDemonKill.MoveNext",
+      "metadata_name": "Character.<DelayedDemonKill>d__103$$MoveNext",
+      "signature": "bool Character__DelayedDemonKill_d__103__MoveNext (Character__DelayedDemonKill_d__103_o* __this, const MethodInfo* method);",
+      "rva": "0x3757F0"
+    },
+    {
+      "name": "Gameplay.IncreaseOrderCountOnHiddenKill",
+      "metadata_name": "Gameplay$$IncreaseOrderCountOnHiddenKill",
+      "signature": "void Gameplay__IncreaseOrderCountOnHiddenKill (Gameplay_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x37DE30"
+    },
+    {
+      "name": "Gameplay.ManageKilledCharacter",
+      "metadata_name": "Gameplay$$ManageKilledCharacter",
+      "signature": "void Gameplay__ManageKilledCharacter (Gameplay_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x37EBD0"
+    },
+    {
+      "name": "NightPhase.ManagePhase",
+      "metadata_name": "NightPhase$$ManagePhase",
+      "signature": "void NightPhase__ManagePhase (NightPhase_o* __this, const MethodInfo* method);",
+      "rva": "0x383540"
+    },
+    {
+      "name": "NightPhase.StartPhase.MoveNext",
+      "metadata_name": "NightPhase.<StartPhase>d__7$$MoveNext",
+      "signature": "bool NightPhase__StartPhase_d__7__MoveNext (NightPhase__StartPhase_d__7_o* __this, const MethodInfo* method);",
+      "rva": "0x3927C0"
+    },
+    {
+      "name": "NightPhase.ReorderList",
+      "metadata_name": "NightPhase$$ReorderList",
+      "signature": "void NightPhase__ReorderList (NightPhase_o* __this, const MethodInfo* method);",
+      "rva": "0x3838D0"
+    }
+  ]
+}
