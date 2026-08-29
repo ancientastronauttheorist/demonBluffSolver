@@ -122,8 +122,8 @@ The subsequent `gameplay_execution_resolution` boundary baseline-exports 30 of
 30 functions, including four explicitly tracked shared-body identities. Its
 first 16-method slice now has native-static coverage for action/lying dispatch,
 wrong-execution damage, Knight and Doppelganger protection, and terminal result
-selection; the remaining 14 methods cover status insertion and Striga's night
-pipeline.
+selection. The remaining 14-method status-insertion and Striga night slice is
+also native-audited, closing all 30 selected methods.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:

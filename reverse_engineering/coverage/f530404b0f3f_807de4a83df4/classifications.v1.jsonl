@@ -61,3 +61,17 @@
 {"method":"tdi5659.m0005","state":"understood","reason":"Native ordinary and final-day win branch ordering is documented.","evidence":["ev.win-conditions.terminal.1"]}
 {"method":"tdi5659.m0008","state":"understood","reason":"Native loss reveal, score, Summary scheduling, and death-event order are documented.","evidence":["ev.win-conditions.terminal.1"]}
 {"method":"tdi5656.m0002","state":"understood","reason":"Native delayed Summary transition timing and dispatch are documented.","evidence":["ev.win-conditions.terminal.1"]}
+{"method":"tdi5488.m0000","state":"understood","reason":"Native exact resistance, duplicate suppression, and shared target-reference behavior are documented.","evidence":["ev.character.status-add.1"]}
+{"method":"tdi5544.m0001","state":"understood","reason":"Native signed addition, upper-bound clamping, overflow, and value-change callback behavior are documented.","evidence":["ev.current-max-value.add.1"]}
+{"method":"tdi5923.m0000","state":"understood","reason":"Native Striga rule-list construction and reveal-threshold configuration are documented.","evidence":["ev.striga.night-rule.1"]}
+{"method":"tdi5926.m0001","state":"understood","reason":"Native NightModeRule event subscription order and duplicate-init behavior are documented.","evidence":["ev.striga.night-rule.1"]}
+{"method":"tdi5926.m0002","state":"understood","reason":"Native NightModeRule event removal order and single-occurrence behavior are documented.","evidence":["ev.striga.night-rule.1"]}
+{"method":"tdi5926.m0003","state":"understood","reason":"Native reveal gates, counter callbacks, Night transition, and reset order are documented.","evidence":["ev.striga.night-rule.1"]}
+{"method":"tdi5923.m0001","state":"understood","reason":"Native Striga Start protection and Night kill-plus-player-damage ordering are documented.","evidence":["ev.striga.night-action.1"]}
+{"method":"tdi5919.m0004","state":"understood","reason":"Native preferred hidden-Good victim pipeline and random fallback are documented.","evidence":["ev.striga.night-action.1"]}
+{"method":"tdi5919.m0005","state":"understood","reason":"Native alignment-free fallback victim pipeline and empty-result behavior are documented.","evidence":["ev.striga.night-action.1"]}
+{"method":"tdi5505.m0043","state":"understood","reason":"Native non-Dead filter semantics, order, and multiplicity preservation are documented.","evidence":["ev.characters.selection-filters.1"]}
+{"method":"tdi5505.m0032","state":"understood","reason":"Native register-as-versus-runtime alignment filtering and Unity fake-null behavior are documented.","evidence":["ev.characters.selection-filters.1"]}
+{"method":"tdi5505.m0036","state":"understood","reason":"Native exact-Hidden filter semantics, order, and multiplicity preservation are documented.","evidence":["ev.characters.selection-filters.1"]}
+{"method":"tdi5505.m0028","state":"understood","reason":"Native active-status absence filter semantics and null paths are documented.","evidence":["ev.characters.selection-filters.1"]}
+{"method":"tdi5505.m0022","state":"understood","reason":"Native single-draw index selection, multiplicity weighting, and empty-list failure are documented.","evidence":["ev.characters.selection-filters.1"]}

@@ -43,6 +43,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Map and baseline-export the 30-method execution-resolution boundary.
 - [x] Native-audit the first 16-method execution, damage, protection, and
   terminal-result slice.
+- [x] Native-audit the remaining 14 status-insertion, Night-rule, Striga,
+  Demon-selection, and collection-helper methods; close the boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

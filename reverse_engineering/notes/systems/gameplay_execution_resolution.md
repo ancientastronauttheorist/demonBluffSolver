@@ -2,11 +2,8 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **mixed**. Sixteen methods covering generic action dispatch,
-wrong-execution damage, Knight/Doppelganger protection, and terminal result
-selection have native-static confirmation. The other fourteen methods remain
-metadata/managed hypotheses. No statement here is based on live dynamic
-observation.
+Evidence status: **native-static**. All 30 selected methods have native control
+flow confirmation. No statement here is based on live dynamic observation.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_execution_resolution.json`](../../targets/gameplay_execution_resolution.json).
@@ -58,7 +55,14 @@ callback starts `ShowActedDelayed(0.0, info, trigger)`; creation of the acted
 information remains the role implementation's responsibility. The real role is
 required, while a missing bluff role is a clean no-op after real dispatch.
 
-`CharacterStatuses.AddStatus` remains a managed hypothesis in this boundary.
+`CharacterStatuses.AddStatus` first checks exact enum membership in the
+resistance list. A resisted value returns without touching any other field.
+Otherwise the method appends only when the status is not already present, then
+overwrites the single shared `targetCharacter` field even for a duplicate
+status. `sourceRef` is unused, `targetRef` may be null, and there is no event,
+role notification, resistance consumption, or character-state gate. Thus most
+two-argument calls, whose optional target is null, clear the shared target after
+an accepted status application.
 
 ### Wrong-execution damage and value reduction
 
@@ -74,7 +78,13 @@ Drunk overrides it with 2 HP. `CurrentMaxValue.Reduce` performs signed
 subtraction, clamps only the lower bound to zero, stores the result, and invokes
 `onValueChanged` exactly once even when the value was already zero or clamps to
 zero. A negative input therefore increases the current value without applying
-the maximum bound. `CurrentMaxValue.Add` remains a managed hypothesis.
+the maximum bound.
+
+`CurrentMaxValue.Add` is the signed mirror with only an upper clamp: it stores
+the unchecked 32-bit sum unless that sum is greater than `max`, in which case it
+stores `max`. Negative inputs can reduce below zero, and overflow occurs before
+the signed comparison. As with `Reduce`, the value-change callback fires once
+after the store even when the effective value did not change.
 
 ### Terminal result selection
 
@@ -161,16 +171,54 @@ its own value mutation and callback.
 | `Characters.FilterCharacterMissingStatus` | `0x36A8C0` |
 | `Characters.GetRandomAliveCharacter` | `0x36C740` |
 
-The managed hypothesis is that `Striga.GetRules` introduces a `NightModeRule`,
-the rule subscribes to reveal/kill events, and its reveal counter transitions
-the round into Night. The existing lifecycle target then dispatches Night
-actions through `Character.Act`. Managed output further suggests that
-`Striga.Act` applies a demon-kill immunity status during Start, selects a night
-victim through `Demon.KillHidden`, and damages the player during Night.
+`Striga.GetRules` returns a new list containing exactly one new `NightModeRule`
+whose reveal threshold is 4. Every call produces distinct list and rule objects
+with a zero counter and null callbacks; it does not initialize or register the
+rule. Rule initialization subscribes bound handlers to the global
+killed-character event first and revealed-character event second; it does not
+reset the counter. Repeated initialization appends duplicate subscriptions.
+Removal performs the corresponding two delegate removals in the same order,
+removing only one matching occurrence from each event.
 
-The two Demon methods and five collection helpers are kept together so native
-audit can determine the exact alive/alignment/visibility/status filters,
-fallback relationship, empty-list behavior, and random-selection semantics.
+The reveal handler ignores events while Gameplay is in Summary and ignores a
+character whose state is exactly Dead. Every other event increments
+`currentStep`, invokes `onStepIncrease`, and then rereads the counter and
+threshold. At or above the threshold it invokes `onNightStart`, asks Gameplay
+to enter Night, and resets the counter to zero, in that order. Callback changes
+can therefore affect the comparison, and callback exceptions can prevent the
+later transition or reset. Gameplay state-change callbacks observe the
+pre-reset counter. Duplicate subscriptions can count the same reveal more than
+once and, because Night is not excluded, a later duplicate can start a fresh
+cycle after an earlier copy crossed the threshold and reset it.
+
+On Start, `Striga.Act` applies `UnkillableByDemon` to its own character with a
+null target reference. On Night, a non-Dead Striga first dispatches
+`Demon.KillHidden` and then deals 2 HP to the player. The kill call only starts
+the previously audited delayed demon-kill path, so the player damage happens
+before the victim's delayed death resolves. It still occurs when both victim
+passes find no candidate, and it is not rolled back if the delayed kill later
+finds the target dead or protected.
+
+`Demon.KillHidden` filters the global current-character list through: state is
+not Dead, apparent alignment is Good, state is exactly Hidden, and the active
+status list lacks `UnkillableByDemon`. A nonempty result produces one random
+target and one `KillByDemon` dispatch. An empty result falls back to
+`KillRandom`, which rebuilds the pipeline without the alignment filter. The
+fallback can therefore select any alignment, returns cleanly when empty, and
+never rerolls after a delayed kill is rejected.
+
+The selected helpers all allocate new lists, preserve source order and duplicate
+occurrences, and do not mutate their inputs. `FilterAliveCharacters` means only
+`state != Dead`; `FilterHiddenCharacters` requires exactly Hidden; and the
+missing-status helper consults only `statuses.statuses`, not resistances or the
+shared target. The `List<Character>` alignment overload uses live
+`registerAs.startingAlignment` when `registerAs` is Unity-non-null, otherwise it
+uses the character's runtime alignment; it does not read `bluff`.
+`GetRandomAliveCharacter` performs no alive check of its own: it draws one
+integer index in `[0, Count)` and returns that item. Callers guard the empty
+case, while a direct empty-list call fails at lookup. Preserved duplicates
+therefore bias selection probability.
+
 The `Characters$$FilterAlignmentCharacters` metadata name is overloaded; this
 boundary deliberately selects the `List<Character>` overload at `0x36A030`,
 not the `List<CharacterData>` overload at `0x369EB0`.
@@ -191,7 +239,7 @@ duplicated here:
   `Gameplay.ManageKilledCharacter`, and the three `NightPhase` methods; and
 - roster helpers: no direct overlap or required duplicate.
 
-The intended joined hypotheses are:
+The audited joined call chains are:
 
 1. execution request: existing `Gameplay.StartKill` and `Character.OnClick`
    dispatch into the selected protection and `Character.Act` methods;
@@ -218,17 +266,12 @@ The intended joined hypotheses are:
   unrelated role actions, and general status resistance/removal remain later
   boundaries.
 
-## Native-audited first slice
+## Native-audited boundary
 
-The 16 methods in the action/lying, wrong-execution damage, Knight and
-Doppelganger protection, and terminal-result sections above now have
-native-static coverage. This closes the first execution slice, including all
-five selected terminal methods rather than only the wrapper and predicate.
-
-The remaining 14 targets are `CharacterStatuses.AddStatus`,
-`CurrentMaxValue.Add`, the four Striga/NightModeRule methods, the two Demon kill
-selectors, and the five Characters collection helpers. They form the next
-native slice around status insertion and Striga's night-victim pipeline.
+All 30 methods now have native-static coverage: action and lying dispatch,
+status insertion, wrong-execution damage, bounded-value mutation, Knight and
+Doppelganger protection, terminal resolution, Night-rule lifecycle, Striga's
+action, Demon victim selection, and the supporting collection filters.
 
 ## Metadata alias cautions
 
