@@ -26,11 +26,14 @@ public class ImportIl2CppSymbols extends GhidraScript {
     @Override
     protected void run() throws Exception {
         String[] args = getScriptArgs();
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Expected one argument: path to Il2CppDumper script.json");
+        if (args.length != 2) {
+            throw new IllegalArgumentException(
+                "Expected two arguments: Il2CppDumper script.json and completion-summary path"
+            );
         }
 
         Path jsonPath = Path.of(args[0]).toAbsolutePath().normalize();
+        Path summaryPath = Path.of(args[1]).toAbsolutePath().normalize();
         println("Importing IL2CPP symbols from " + jsonPath);
         try (BufferedReader buffered = Files.newBufferedReader(jsonPath, StandardCharsets.UTF_8);
                 JsonReader reader = new JsonReader(buffered)) {
@@ -64,6 +67,19 @@ public class ImportIl2CppSymbols extends GhidraScript {
         println("  metadata labels: " + metadataLabels);
         println("  string labels:   " + stringLabels);
         println("  skipped RVAs:    " + skippedAddresses);
+        String summary = String.format(
+            "{\n  \"method_labels\": %d,\n  \"unique_functions\": %d,\n" +
+            "  \"metadata_labels\": %d,\n  \"string_labels\": %d,\n" +
+            "  \"skipped_rvas\": %d,\n  \"cancelled\": %s\n}\n",
+            methodLabels,
+            functionAddresses.size(),
+            metadataLabels,
+            stringLabels,
+            skippedAddresses,
+            Boolean.toString(monitor.isCancelled())
+        );
+        Files.createDirectories(summaryPath.getParent());
+        Files.writeString(summaryPath, summary, StandardCharsets.UTF_8);
     }
 
     private void readMethods(JsonReader reader) throws Exception {

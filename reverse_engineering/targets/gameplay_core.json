@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "functions": [
+    {
+      "name": "Gameplay.ChangeGameplayState",
+      "metadata_name": "Gameplay$$ChangeGameplayState",
+      "signature": "void Gameplay__ChangeGameplayState (int32_t newState, const MethodInfo* method);",
+      "rva": "0x37B620"
+    },
+    {
+      "name": "Gameplay.GetCurrentScript",
+      "metadata_name": "Gameplay$$GetCurrentScript",
+      "signature": "CharactersCount_o* Gameplay__GetCurrentScript (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37C710"
+    },
+    {
+      "name": "Gameplay.GetRandomCharacters",
+      "metadata_name": "Gameplay$$GetRandomCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetRandomCharacters (Gameplay_o* __this, int32_t chNumber, const MethodInfo* method);",
+      "rva": "0x37CE10"
+    },
+    {
+      "name": "Gameplay.SetupCurrentVillageForStandard",
+      "metadata_name": "Gameplay$$SetupCurrentVillageForStandard",
+      "signature": "void Gameplay__SetupCurrentVillageForStandard (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x3802D0"
+    },
+    {
+      "name": "Gameplay.StartKill",
+      "metadata_name": "Gameplay$$StartKill",
+      "signature": "void Gameplay__StartKill (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x380DA0"
+    },
+    {
+      "name": "Gameplay.StartNight",
+      "metadata_name": "Gameplay$$StartNight",
+      "signature": "void Gameplay__StartNight (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x380ED0"
+    },
+    {
+      "name": "PlayerController.ManageResources",
+      "metadata_name": "PlayerController$$ManageResources",
+      "signature": "void PlayerController__ManageResources (PlayerController_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x384C20"
+    },
+    {
+      "name": "Health.Damage",
+      "metadata_name": "Health$$Damage",
+      "signature": "void Health__Damage (Health_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x382100"
+    },
+    {
+      "name": "Health.Heal",
+      "metadata_name": "Health$$Heal",
+      "signature": "void Health__Heal (Health_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x3820D0"
+    },
+    {
+      "name": "Health.AddMaxHp",
+      "metadata_name": "Health$$AddMaxHp",
+      "signature": "void Health__AddMaxHp (Health_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x382130"
+    },
+    {
+      "name": "Health.ResetHp",
+      "metadata_name": "Health$$ResetHp",
+      "signature": "void Health__ResetHp (Health_o* __this, const MethodInfo* method);",
+      "rva": "0x382220"
+    },
+    {
+      "name": "CurrentMaxValue.GetValue",
+      "metadata_name": "CurrentMaxValue$$GetValue",
+      "signature": "int32_t CurrentMaxValue__GetValue (CurrentMaxValue_o* __this, const MethodInfo* method);",
+      "rva": "0x379600"
+    },
+    {
+      "name": "CharactersCount.ctor",
+      "metadata_name": "CharactersCount$$.ctor",
+      "signature": "void CharactersCount___ctor (CharactersCount_o* __this, int32_t allCharCount, int32_t towns, int32_t demons, int32_t outsiders, int32_t minions, const MethodInfo* method);",
+      "rva": "0x3B58F0"
+    }
+  ]
+}

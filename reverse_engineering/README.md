@@ -88,6 +88,11 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage analyze
+
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage export-core
 ```
 
 ## Evidence levels

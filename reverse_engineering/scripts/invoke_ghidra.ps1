@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$GameRoot,
 
-    [ValidateSet('import', 'analyze', 'all')]
+    [ValidateSet('import', 'analyze', 'all', 'export-core')]
     [string]$Stage = 'all',
 
     [string]$WorkspaceRoot = 'B:\CodexTools\DemonBluffReverseEngineering',
@@ -66,15 +66,32 @@ $projectName = "DemonBluff_$buildId"
 $programName = 'GameAssembly.dll'
 $ghidraScripts = Join-Path $reverseEngineeringRoot 'ghidra_scripts'
 New-Item -ItemType Directory -Force -Path $projectDirectory, (Join-Path $projectRoot 'logs') | Out-Null
+$importSummaryPath = Join-Path $projectRoot 'logs\import-summary.json'
+$analysisSummaryPath = Join-Path $projectRoot 'logs\analysis-summary.json'
+
+function Assert-AnalysisSummary {
+    param([Parameter(Mandatory = $true)][string]$Path)
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        throw "Ghidra analysis did not write its completion summary: $Path"
+    }
+    $analysisSummary = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    if ($analysisSummary.program -ne $programName -or $analysisSummary.analysis_timeout_occurred) {
+        throw "Incomplete Ghidra analysis: $($analysisSummary | ConvertTo-Json -Compress)"
+    }
+}
 
 if ($Stage -in @('import', 'all')) {
+    Remove-Item -LiteralPath $importSummaryPath -Force -ErrorAction SilentlyContinue
+    if ($Stage -eq 'all') {
+        Remove-Item -LiteralPath $analysisSummaryPath -Force -ErrorAction SilentlyContinue
+    }
     $arguments = @(
         $projectDirectory,
         $projectName,
         '-import', $gameAssembly,
         '-overwrite',
         '-scriptPath', $ghidraScripts,
-        '-preScript', 'ImportIl2CppSymbols.java', $scriptJson,
+        '-preScript', 'ImportIl2CppSymbols.java', $scriptJson, $importSummaryPath,
         '-max-cpu', $MaxCpu,
         '-log', (Join-Path $projectRoot 'logs\import.log'),
         '-scriptlog', (Join-Path $projectRoot 'logs\import-script.log')
@@ -83,24 +100,110 @@ if ($Stage -in @('import', 'all')) {
         $arguments += '-noanalysis'
     }
     else {
-        $arguments += @('-analysisTimeoutPerFile', $AnalysisTimeoutSeconds)
+        $arguments += @(
+            '-analysisTimeoutPerFile', $AnalysisTimeoutSeconds,
+            '-postScript', 'RecordAnalysisCompletion.java', $analysisSummaryPath
+        )
     }
     & $headless @arguments
     if ($LASTEXITCODE -ne 0) { throw "Ghidra import failed with exit code $LASTEXITCODE" }
+    if (-not (Test-Path -LiteralPath $importSummaryPath -PathType Leaf)) {
+        throw 'Ghidra symbol import did not write its completion summary'
+    }
+    $importSummary = Get-Content -LiteralPath $importSummaryPath -Raw | ConvertFrom-Json
+    if ($importSummary.cancelled -or
+        $importSummary.method_labels -le 0 -or
+        $importSummary.unique_functions -le 0 -or
+        $importSummary.metadata_labels -le 0 -or
+        $importSummary.string_labels -le 0) {
+        throw "Incomplete Ghidra symbol import: $($importSummary | ConvertTo-Json -Compress)"
+    }
+    if ($Stage -eq 'all') {
+        Assert-AnalysisSummary -Path $analysisSummaryPath
+    }
 }
 
 if ($Stage -eq 'analyze') {
+    Remove-Item -LiteralPath $analysisSummaryPath -Force -ErrorAction SilentlyContinue
     $arguments = @(
         $projectDirectory,
         $projectName,
         '-process', $programName,
         '-analysisTimeoutPerFile', $AnalysisTimeoutSeconds,
         '-max-cpu', $MaxCpu,
+        '-scriptPath', $ghidraScripts,
+        '-postScript', 'RecordAnalysisCompletion.java', $analysisSummaryPath,
         '-log', (Join-Path $projectRoot 'logs\analysis.log'),
         '-scriptlog', (Join-Path $projectRoot 'logs\analysis-script.log')
     )
     & $headless @arguments
     if ($LASTEXITCODE -ne 0) { throw "Ghidra analysis failed with exit code $LASTEXITCODE" }
+    Assert-AnalysisSummary -Path $analysisSummaryPath
+}
+
+if ($Stage -eq 'export-core') {
+    $targetPath = Join-Path $reverseEngineeringRoot 'targets\gameplay_core.json'
+    $targets = Get-Content -LiteralPath $targetPath -Raw | ConvertFrom-Json
+    if ($targets.build_id -ne $buildId) {
+        throw "Core export targets belong to $($targets.build_id), not $buildId"
+    }
+    & python (Join-Path $scriptDirectory 'validate_ghidra_targets.py') `
+        --targets $targetPath `
+        --script-json $scriptJson
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Ghidra target validation failed'
+    }
+    $exportDirectory = Join-Path $projectRoot 'exports\gameplay-core'
+    New-Item -ItemType Directory -Force -Path $exportDirectory | Out-Null
+    $resolvedProjectRoot = [IO.Path]::GetFullPath($projectRoot)
+    $resolvedExportDirectory = [IO.Path]::GetFullPath($exportDirectory)
+    $expectedPrefix = $resolvedProjectRoot.TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+    if (-not $resolvedExportDirectory.StartsWith($expectedPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Refusing to clean export directory outside project root: $resolvedExportDirectory"
+    }
+    Get-ChildItem -LiteralPath $resolvedExportDirectory -File -Filter '*.c' -ErrorAction SilentlyContinue |
+        Remove-Item -Force
+    $summaryPath = Join-Path $resolvedExportDirectory '_export_summary.json'
+    Remove-Item -LiteralPath $summaryPath -Force -ErrorAction SilentlyContinue
+    $arguments = @(
+        $projectDirectory,
+        $projectName,
+        '-process', $programName,
+        '-noanalysis',
+        '-scriptPath', $ghidraScripts,
+        '-postScript', 'ExportFunctionDecompilations.java', $exportDirectory, $targetPath,
+        '-log', (Join-Path $projectRoot 'logs\export-core.log'),
+        '-scriptlog', (Join-Path $projectRoot 'logs\export-core-script.log')
+    )
+    & $headless @arguments
+    if ($LASTEXITCODE -ne 0) { throw "Ghidra export failed with exit code $LASTEXITCODE" }
+    if (-not (Test-Path -LiteralPath $summaryPath -PathType Leaf)) {
+        throw 'Ghidra export did not write its completion summary'
+    }
+    $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+    $expectedCount = @($targets.functions).Count
+    if ($summary.requested -ne $expectedCount -or
+        $summary.processed -ne $expectedCount -or
+        $summary.exported -ne $expectedCount -or
+        $summary.failed -ne 0 -or
+        $summary.cancelled) {
+        throw "Incomplete Ghidra export: $($summary | ConvertTo-Json -Compress)"
+    }
+    foreach ($target in $targets.functions) {
+        $safeName = $target.name -replace '[^A-Za-z0-9_.-]', '_'
+        $outputPath = Join-Path $resolvedExportDirectory "$safeName.c"
+        if (-not (Test-Path -LiteralPath $outputPath -PathType Leaf) -or
+            (Get-Item -LiteralPath $outputPath).Length -eq 0) {
+            throw "Missing or empty Ghidra export: $outputPath"
+        }
+    }
+    $actualExportCount = @(
+        Get-ChildItem -LiteralPath $resolvedExportDirectory -File -Filter '*.c'
+    ).Count
+    if ($actualExportCount -ne $expectedCount) {
+        throw "Expected $expectedCount distinct C exports, found $actualExportCount"
+    }
+    Write-Output "decompiled_core=$exportDirectory"
 }
 
 Write-Output "build_id=$buildId"
