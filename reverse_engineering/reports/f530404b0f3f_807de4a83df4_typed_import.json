@@ -33,9 +33,13 @@
       "requested": 13,
       "applied": 13,
       "validated": 13,
+      "post_analysis_validated": 13,
       "imported_datatypes": 1874,
       "seven_argument_targets": 1,
       "preserved_labels": 65,
+      "verified_metadata_labels": 13,
+      "validated_parameter_storages": 36,
+      "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     },
     {
@@ -44,11 +48,48 @@
       "requested": 6,
       "applied": 6,
       "validated": 6,
+      "post_analysis_validated": 6,
       "imported_datatypes": 0,
       "seven_argument_targets": 0,
       "preserved_labels": 6,
+      "verified_metadata_labels": 6,
+      "validated_parameter_storages": 19,
+      "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     }
   ],
-  "analysis_complete": false
+  "analysis_complete": true,
+  "analysis": {
+    "program": "GameAssembly.dll",
+    "elapsed_seconds": 2588,
+    "timeout_occurred": false,
+    "post_analysis_succeeded": true,
+    "saved": true
+  },
+  "decompilation_quality_reports": [
+    {
+      "name": "gameplay_core",
+      "report": "f530404b0f3f_807de4a83df4_typed_quality_gameplay_core.json",
+      "target_count": 13,
+      "check_passed": true,
+      "baseline_unresolved_type_tokens": 78,
+      "typed_unresolved_type_tokens": 43,
+      "baseline_raw_field_offset_accesses": 237,
+      "typed_raw_field_offset_accesses": 144,
+      "baseline_decompiler_error_markers": 4,
+      "typed_decompiler_error_markers": 4
+    },
+    {
+      "name": "gameplay_roster_helpers",
+      "report": "f530404b0f3f_807de4a83df4_typed_quality_gameplay_roster_helpers.json",
+      "target_count": 6,
+      "check_passed": true,
+      "baseline_unresolved_type_tokens": 38,
+      "typed_unresolved_type_tokens": 34,
+      "baseline_raw_field_offset_accesses": 76,
+      "typed_raw_field_offset_accesses": 41,
+      "baseline_decompiler_error_markers": 0,
+      "typed_decompiler_error_markers": 0
+    }
+  ]
 }

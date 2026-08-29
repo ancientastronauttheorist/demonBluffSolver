@@ -86,6 +86,22 @@ filter. Under faction-consistent ascension data, a Demon refill returns an
 empty list because no Demon source array was added. Whether either case is
 reachable during normal selection remains behaviorally unverified.
 
+## Typed-Analysis Corroboration
+
+The isolated typed Ghidra project completed its full analysis pass without a
+timeout, saved, and then passed a read-only reopen check for all six helper
+signatures and all 19 parameter-storage locations. In particular, the typed
+`ManageAlwaysInDeck` decompilation recovers the three-argument managed ABI,
+names `CharacterData.usuallyDisguised`, and renders the numerator and
+`characterCount` conversions as `float` before division. This independently
+corroborates the raw-instruction audit above.
+
+The count-only comparison in
+[`../../reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_roster_helpers.json`](../../reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_roster_helpers.json)
+records 38 to 34 unresolved-type tokens and 76 to 41 raw field-offset accesses,
+with no decompiler-error markers in either export. Decompiled bodies remain in
+the private artifact store.
+
 ## Remaining Uncertainty
 
 The target-local logic and immediate helper boundary are understood. Exact

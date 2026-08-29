@@ -135,6 +135,11 @@ boundary are now covered by the follow-on
 methods and concrete resource implementations remain separate entries in the
 complete coverage ledger. The isolated typed Ghidra project now applies the
 selected IL2CPP structures and prototypes with validated Windows x64 storage;
-typed auto-analysis and broader call-graph expansion are the next static-
-analysis gates. Live behavior and screenshot-paired memory checks remain
-pending.
+its complete auto-analysis pass finished without a timeout, saved, and passed a
+read-only reopen check for all 13 signatures and all 36 parameter-storage
+locations. The count-only
+[`typed quality report`](../../reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_core.json)
+records 78 to 43 unresolved-type tokens and 237 to 144 raw field-offset
+accesses, with the same four unrecovered-jumptable warnings as the baseline.
+Broader call-graph expansion is the next static-analysis gate. Live behavior
+and screenshot-paired memory checks remain pending.

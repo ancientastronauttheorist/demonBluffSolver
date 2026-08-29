@@ -30,7 +30,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Import `GameAssembly.dll` into Ghidra and apply IL2CPP method, metadata,
   and string symbols.
 - [x] Import IL2CPP headers, selected prototypes, and reachable field layouts
-  into an isolated typed Ghidra project.
+  into an isolated typed Ghidra project; complete full auto-analysis and
+  read-only post-save signature/ABI validation.
 - [x] Export and confirm the first gameplay-core native target set.
 - [x] Recover and native-audit the first roster-selection helper boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.

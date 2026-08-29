@@ -11,6 +11,7 @@ param(
         'build-types',
         'typed-import',
         'typed-analyze',
+        'typed-validate',
         'typed-all',
         'typed-export'
     )]
@@ -82,7 +83,14 @@ New-Item -ItemType Directory -Force -Path $projectDirectory, (Join-Path $project
 $importSummaryPath = Join-Path $projectRoot 'logs\import-summary.json'
 $analysisSummaryPath = Join-Path $projectRoot 'logs\analysis-summary.json'
 
-$typedStages = @('build-types', 'typed-import', 'typed-analyze', 'typed-all', 'typed-export')
+$typedStages = @(
+    'build-types',
+    'typed-import',
+    'typed-analyze',
+    'typed-validate',
+    'typed-all',
+    'typed-export'
+)
 $isTypedStage = $Stage -in $typedStages
 $typedInputRoot = Join-Path $artifactRoot 'typed-headers'
 $normalizedHeaderPath = Join-Path $typedInputRoot 'il2cpp_ghidra.h'
@@ -260,6 +268,11 @@ function Get-ApplySummaryPath {
     return Join-Path $typedProjectRoot ("logs\apply-{0}-summary.json" -f $TargetInfo.BaseName)
 }
 
+function Get-ValidateSummaryPath {
+    param([Parameter(Mandatory = $true)]$TargetInfo)
+    return Join-Path $typedProjectRoot ("logs\validate-{0}-summary.json" -f $TargetInfo.BaseName)
+}
+
 if ($isTypedStage) {
     $targetDirectory = Join-Path $reverseEngineeringRoot 'targets'
     $targetPaths = [Collections.Generic.List[string]]::new()
@@ -289,6 +302,7 @@ if ($isTypedStage) {
             throw "Duplicate target-set basename: $targetBaseName"
         }
 
+        $parameterCount = 0
         $sevenArgumentCount = 0
         foreach ($targetFunction in $targetFunctions) {
             $signature = [string]$targetFunction.signature
@@ -308,7 +322,9 @@ if ($isTypedStage) {
             else {
                 $expectedPrototypeSignatures.Add($prototypeName, $signature)
             }
-            if ((Get-SignatureParameterCount -Signature $signature) -eq 7) {
+            $signatureParameterCount = Get-SignatureParameterCount -Signature $signature
+            $parameterCount += $signatureParameterCount
+            if ($signatureParameterCount -eq 7) {
                 $sevenArgumentCount++
             }
         }
@@ -326,6 +342,7 @@ if ($isTypedStage) {
             BaseName = $targetBaseName
             Data = $targetData
             FunctionCount = $targetFunctions.Count
+            ParameterCount = $parameterCount
             SevenArgumentCount = $sevenArgumentCount
             Sha256 = Get-Sha256Lower -Path $targetPath
         }
@@ -503,6 +520,39 @@ function Assert-TypedAnalysisState {
         -Description 'typed Ghidra analysis'
 }
 
+function Assert-ValidateSummary {
+    param([Parameter(Mandatory = $true)]$TargetInfo)
+    $summaryPath = Get-ValidateSummaryPath -TargetInfo $TargetInfo
+    Assert-SummaryNotOlderThan `
+        -SummaryPath $summaryPath `
+        -InputPaths @($typedAnalysisSummaryPath, $gdtPath, $TargetInfo.Path) `
+        -Description "ValidateGdtSignatures/$($TargetInfo.BaseName)"
+    $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+    if ([int]$summary.schema_version -ne 1 -or
+        [string]$summary.program -cne $programName -or
+        [string]$summary.target_build_id -cne $buildId -or
+        [int]$summary.requested -ne $TargetInfo.FunctionCount -or
+        [int]$summary.validated -ne $TargetInfo.FunctionCount -or
+        [int]$summary.unique_function_definitions -ne $TargetInfo.FunctionCount -or
+        [int]$summary.preserved_labels -lt $TargetInfo.FunctionCount -or
+        [int]$summary.verified_metadata_labels -ne $TargetInfo.FunctionCount -or
+        [int]$summary.validated_parameter_storages -ne $TargetInfo.ParameterCount -or
+        [int]$summary.seven_argument_targets -ne $TargetInfo.SevenArgumentCount -or
+        [string]$summary.calling_convention -cne '__fastcall' -or
+        [int]$summary.program_mutations -ne 0 -or
+        -not [bool]$summary.read_only -or
+        [bool]$summary.cancelled) {
+        throw "Incomplete typed-signature validation for $($TargetInfo.BaseName): $($summary | ConvertTo-Json -Compress)"
+    }
+}
+
+function Assert-TypedValidationState {
+    Assert-TypedAnalysisState
+    foreach ($targetInfo in $targetInfos) {
+        Assert-ValidateSummary -TargetInfo $targetInfo
+    }
+}
+
 function Invoke-BuildTypes {
     New-Item -ItemType Directory -Force -Path `
         $typedInputRoot, `
@@ -581,6 +631,14 @@ function Remove-TypedApplySummaries {
     }
 }
 
+function Remove-TypedValidationSummaries {
+    foreach ($targetInfo in $targetInfos) {
+        Remove-Item -LiteralPath (Get-ValidateSummaryPath -TargetInfo $targetInfo) `
+            -Force `
+            -ErrorAction SilentlyContinue
+    }
+}
+
 function Invoke-TypedImport {
     param([Parameter(Mandatory = $true)][bool]$Analyze)
     Assert-GdtState
@@ -590,6 +648,7 @@ function Invoke-TypedImport {
     Remove-Item -LiteralPath $typedImportSummaryPath -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $typedAnalysisSummaryPath -Force -ErrorAction SilentlyContinue
     Remove-TypedApplySummaries
+    Remove-TypedValidationSummaries
 
     $argumentList = [Collections.Generic.List[object]]::new()
     foreach ($argument in @(
@@ -638,6 +697,7 @@ function Invoke-TypedAnalyze {
     Assert-TypedImportState
     Remove-Item -LiteralPath $typedAnalysisSummaryPath -Force -ErrorAction SilentlyContinue
     Remove-TypedApplySummaries
+    Remove-TypedValidationSummaries
 
     $argumentList = [Collections.Generic.List[object]]::new()
     foreach ($argument in @(
@@ -667,11 +727,54 @@ function Invoke-TypedAnalyze {
     Assert-TypedAnalysisState
 }
 
+function Invoke-TypedValidate {
+    Assert-GdtState
+    Assert-TypedImportState
+    Assert-TypedAnalysisState
+    Remove-TypedValidationSummaries
+
+    $argumentList = [Collections.Generic.List[object]]::new()
+    foreach ($argument in @(
+        $typedProjectDirectory,
+        $typedProjectName,
+        '-process', $programName,
+        '-readOnly',
+        '-noanalysis',
+        '-scriptPath', $ghidraScripts
+    )) {
+        $argumentList.Add($argument)
+    }
+    foreach ($targetInfo in $targetInfos) {
+        foreach ($argument in @(
+            '-postScript',
+            'ValidateGdtSignatures.java',
+            $gdtPath,
+            $targetInfo.Path,
+            (Get-ValidateSummaryPath -TargetInfo $targetInfo)
+        )) {
+            $argumentList.Add($argument)
+        }
+    }
+    foreach ($argument in @(
+        '-max-cpu', $MaxCpu,
+        '-log', (Join-Path $typedProjectRoot 'logs\typed-validate.log'),
+        '-scriptlog', (Join-Path $typedProjectRoot 'logs\typed-validate-script.log')
+    )) {
+        $argumentList.Add($argument)
+    }
+
+    Invoke-HeadlessWithChecks `
+        -Arguments @($argumentList) `
+        -Description 'Ghidra typed signature validation' `
+        -LargeHeap
+    Assert-TypedValidationState
+}
+
 function Invoke-TypedExport {
     param([Parameter(Mandatory = $true)]$TargetInfo)
     Assert-GdtState
     Assert-TypedImportState
-    Assert-TypedAnalysisState
+    Assert-TypedValidationState
 
     $exportDirectory = Join-Path $typedProjectRoot ("exports\{0}" -f $TargetInfo.BaseName)
     New-Item -ItemType Directory -Force -Path $exportDirectory | Out-Null
@@ -690,6 +793,7 @@ function Invoke-TypedExport {
         $typedProjectDirectory,
         $typedProjectName,
         '-process', $programName,
+        '-readOnly',
         '-noanalysis',
         '-scriptPath', $ghidraScripts,
         '-postScript', 'ExportFunctionDecompilations.java', $resolvedExportDirectory, $TargetInfo.Path,
@@ -864,11 +968,17 @@ if ($Stage -eq 'typed-import') {
 
 if ($Stage -eq 'typed-analyze') {
     Invoke-TypedAnalyze
+    Invoke-TypedValidate
+}
+
+if ($Stage -eq 'typed-validate') {
+    Invoke-TypedValidate
 }
 
 if ($Stage -eq 'typed-all') {
     Invoke-BuildTypes
     Invoke-TypedImport -Analyze $true
+    Invoke-TypedValidate
 }
 
 if ($Stage -eq 'typed-export') {
