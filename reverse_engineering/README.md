@@ -76,7 +76,8 @@ is source-accurate. Complex methods contain explicit recovery warnings and must
 be checked against Ghidra/native instructions and live behavior. The checked-in
 quality report keeps those warnings visible.
 
-Create a symbolized Ghidra project in two steps:
+Create a symbolized Ghidra project and export the first native target set in
+three stages:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File `
@@ -94,6 +95,21 @@ powershell -ExecutionPolicy Bypass -File `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage export-core
 ```
+
+The import and analysis stages write explicit completion summaries; the wrapper
+rejects cancelled imports, analysis timeouts, missing target symbols, partial
+exports, stale files, and filename collisions. Raw Ghidra state remains outside
+the public repository under the build-keyed artifact directory. The current
+`gameplay-core` export is expected to produce 13 of 13 functions. Folded native
+bodies retain every requested managed-method identity in their export headers.
+
+## Method coverage
+
+[`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
+sparse authored classifications, and reusable evidence. Missing classifications
+resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
+method identities. See [`coverage/README.md`](coverage/README.md) for the
+generation and byte-for-byte check command.
 
 ## Evidence levels
 
@@ -115,6 +131,7 @@ toolchain/              Pinned tool versions and configuration
 scripts/                Reproducible extraction and indexing tools
 offsets/                Versioned field/RVA evidence
 symbols/                Small normalized, reviewable symbol indexes
+coverage/               Complete method denominator and sparse evidence
 notes/systems/           Authored subsystem reconstruction notes
 notes/roles/             Authored per-role reconstruction notes
 reports/                 Coverage and build-diff summaries

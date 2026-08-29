@@ -23,10 +23,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Create and push a dedicated branch.
 - [x] Fingerprint the current game and metadata.
 - [x] Produce a current-build Il2CppDumper extraction.
-- [ ] Commit the reproducible foundation and build manifest.
+- [x] Commit the reproducible foundation and build manifest.
 - [x] Generate the first complete `Assembly-CSharp` type inventory.
+- [x] Establish the complete 4,207-method coverage and evidence ledger.
 - [x] Produce Cpp2IL managed-IL recovery and an explicit quality baseline.
-- [ ] Import `GameAssembly.dll` into Ghidra and apply IL2CPP symbols/types.
+- [x] Import `GameAssembly.dll` into Ghidra and apply IL2CPP method, metadata,
+  and string symbols.
+- [ ] Import IL2CPP headers, prototypes, and field layouts into Ghidra.
+- [x] Export and confirm the first gameplay-core native target set.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [ ] Recover the gameplay lifecycle and its call graph.

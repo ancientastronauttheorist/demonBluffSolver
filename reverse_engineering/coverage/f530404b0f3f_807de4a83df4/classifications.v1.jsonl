@@ -1,0 +1,13 @@
+{"method":"tdi5535.m0006","state":"understood","reason":"Native branch conditions and resource effects are documented.","evidence":["ev.player.manage-resources.1"]}
+{"method":"tdi5539.m0000","state":"understood","reason":"The native wrapper dispatches the documented Reduce operation.","evidence":["ev.resources.wrappers.1"]}
+{"method":"tdi5539.m0001","state":"understood","reason":"The native wrapper dispatches the documented Add operation.","evidence":["ev.resources.wrappers.1"]}
+{"method":"tdi5539.m0002","state":"understood","reason":"Native max/current mutation and notification order are documented.","evidence":["ev.health.add-max-hp.1"]}
+{"method":"tdi5539.m0003","state":"understood","reason":"The native wrapper dispatches the documented Reset operation.","evidence":["ev.resources.wrappers.1"]}
+{"method":"tdi5544.m0003","state":"understood","reason":"The native shared getter reads the documented current field.","evidence":["ev.resources.wrappers.1"]}
+{"method":"tdi5604.m0014","state":"understood","reason":"Native list selection, clamping, and failure behavior are documented.","evidence":["ev.gameplay.current-script.1"]}
+{"method":"tdi5604.m0032","state":"understood","reason":"Native state guards and transitions are documented.","evidence":["ev.gameplay.state-transitions.1"]}
+{"method":"tdi5604.m0034","state":"understood","reason":"The native method delegates the documented Night transition.","evidence":["ev.gameplay.state-transitions.1"]}
+{"method":"tdi5604.m0035","state":"understood","reason":"Native state suppression, storage, and event behavior are documented.","evidence":["ev.gameplay.state-transitions.1"]}
+{"method":"tdi5604.m0036","state":"understood","reason":"Native faction order, target counts, and candidate movement are documented.","evidence":["ev.gameplay.standard-roster.1"]}
+{"method":"tdi5604.m0041","state":"understood","reason":"Native roster orchestration, quotas, refill points, and shuffle are documented.","evidence":["ev.gameplay.random-roster.1"]}
+{"method":"tdi5838.m0000","state":"understood","reason":"Native stores confirm all constructor arguments and field offsets.","evidence":["ev.characters-count.constructor.1"]}

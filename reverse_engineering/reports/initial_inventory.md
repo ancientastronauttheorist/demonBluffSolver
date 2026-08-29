@@ -1,7 +1,9 @@
 # Initial IL2CPP Inventory
 
-Build: `f530404b0f3f_807de4a83df4`  
-Steam build: `23084916`  
+Build: `f530404b0f3f_807de4a83df4`
+
+Steam build: `23084916`
+
 Unity: `2022.3.10f1`, Windows x86-64, IL2CPP metadata 29/29.1
 
 ## Il2CppDumper baseline
@@ -15,7 +17,9 @@ Unity: `2022.3.10f1`, Windows x86-64, IL2CPP metadata 29/29.1
   - 7 structs
   - 5 interfaces
 - Those types declare 2,931 offset-bearing fields and 4,207 methods.
-- 4,133 of those methods have native RVAs; 74 are abstract/generic/runtime-only.
+- 4,133 of those methods have direct native RVAs. Of the other 74, 19 generic
+  definitions have 25 instantiated native bindings and 55 are abstract methods
+  with no body.
 - `script.json` contains 158,195 method mappings, 97,885 candidate native
   addresses, 9,839 metadata symbols, and 14,380 string literals across all
   images and generic instantiations.
@@ -39,6 +43,40 @@ methods such as `Health.Damage`, `Health.Heal`, `Health.ResetHp`, and
 code can be noisy or structurally wrong. Every important method therefore needs
 native Ghidra confirmation or behavioral validation.
 
+## Native Ghidra baseline
+
+Ghidra 12.1.3 imported 158,195 method labels at 91,930 unique native entry
+points, plus 30,899 metadata labels and 14,380 string labels. No imported RVA
+fell outside the image. Full Windows x86-64 analysis completed and saved in
+2,131 seconds; an independent second pass completed in 1,290 seconds and wrote
+`analysis_timeout_occurred: false`. The resulting private project is roughly
+1.5 GB.
+
+The first checked target set contains 13 gameplay/resource methods. Target
+metadata names, signatures, and RVAs are validated against `script.json`, and
+the exporter additionally requires the expected imported Ghidra symbol at each
+address. All 13 native decompilations completed with zero failures. Four target
+methods use folded native bodies: `Health.Damage` (3 aliases), `Health.Heal`
+(3), `Health.ResetHp` (2), and `CurrentMaxValue.GetValue` (48).
+
+Native review corrected two material Cpp2IL failures: `CharactersCount` stores
+the `outsiders` and `minions` constructor arguments rather than zero, and
+`Health.AddMaxHp` increments max, dispatches Add, then explicitly raises its
+change and UI notifications. The authored findings and evidence links are in
+[`../notes/systems/gameplay_core.md`](../notes/systems/gameplay_core.md).
+
+Ghidra currently has the full label map, but IL2CPP header structures and
+function prototypes have not yet been applied. The native target exports and
+analysis database remain local/private.
+
+## Method coverage denominator
+
+The generated coverage ledger accounts for all 4,207 managed methods using
+4,158 native bindings and 3,066 unique native bodies. It identifies 107 shared-
+body groups containing 1,199 bindings. The first 13 methods are classified
+`understood` with eight `native-static` evidence records; every missing overlay
+row remains explicitly `unresolved/not-reviewed`.
+
 ## First missing-offset candidates
 
 The dump exposes all three offsets previously listed as blocking full autonomy:
@@ -55,6 +93,7 @@ They must be checked against screenshots and controlled state changes before
 
 ## Next gate
 
-Import the native binary into Ghidra, apply the 158k method mappings and
-metadata/string labels, run x64 analysis, then cross-check the three candidate
-pointer chains in a live game.
+Import IL2CPP header types and prototypes into the analyzed project, then
+cross-check the three candidate pointer chains in a live game. Continue outward
+from the reviewed gameplay-core methods while preserving the 4,207-method
+coverage denominator.
