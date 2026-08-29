@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "source": {
+    "dump_cs_sha256": "53F5DA90D056AE96970EEBC3293FD48190F2C7F70605348FCD38FA3302C438B7",
+    "script_json_sha256": "6C4E6E01A7672B69096E0D52491F3B848237AC40EF3B3817BEB8B442AB18F769"
+  },
+  "runtime": {
+    "il2cpp_class_static_fields_offset": "0xB8",
+    "pointer_size": 8
+  },
+  "discoveries": [
+    {
+      "name": "gameplay_state",
+      "root_type": "Gameplay",
+      "type_info_rva": "0x26F8140",
+      "chain": [
+        { "operation": "dereference", "offset": "0x0", "result": "Il2CppClass*" },
+        { "operation": "dereference", "offset": "0xB8", "result": "Gameplay.StaticFields*" },
+        { "operation": "read_i32", "offset": "0x28", "result": "EGameplayState" }
+      ],
+      "enum": {
+        "0": "None",
+        "1": "Init",
+        "5": "Intro",
+        "8": "DeckIntro",
+        "10": "Day",
+        "15": "NightPrepare",
+        "20": "Night",
+        "30": "PickCharacters",
+        "40": "Killing",
+        "45": "Draw",
+        "50": "Summary",
+        "60": "Shop",
+        "70": "Map",
+        "100": "RoguelikePickCharacters",
+        "200": "BugReport"
+      },
+      "evidence": "metadata",
+      "validation": "pending_live_validation"
+    },
+    {
+      "name": "board_role_counts",
+      "root_type": "Gameplay",
+      "type_info_rva": "0x26F8140",
+      "chain": [
+        { "operation": "dereference", "offset": "0x0", "result": "Il2CppClass*" },
+        { "operation": "dereference", "offset": "0xB8", "result": "Gameplay.StaticFields*" },
+        { "operation": "dereference", "offset": "0x30", "result": "CharactersCount*" }
+      ],
+      "fields": {
+        "allCharCount": "0x10",
+        "town": "0x14",
+        "demon": "0x18",
+        "outs": "0x1C",
+        "minion": "0x20",
+        "dTown": "0x24",
+        "dDemon": "0x28",
+        "dOuts": "0x2C",
+        "dMinion": "0x30"
+      },
+      "interpretation": "town and outs are candidate nv/no values; confirm against the HUD before use",
+      "evidence": "metadata",
+      "validation": "pending_live_validation"
+    },
+    {
+      "name": "player_health",
+      "root_type": "PlayerController",
+      "type_info_rva": "0x271CFE0",
+      "chain": [
+        { "operation": "dereference", "offset": "0x0", "result": "Il2CppClass*" },
+        { "operation": "dereference", "offset": "0xB8", "result": "PlayerController.StaticFields*" },
+        { "operation": "dereference", "offset": "0x0", "result": "PlayerInfo*" },
+        { "operation": "dereference", "offset": "0x10", "result": "Health*" },
+        { "operation": "dereference", "offset": "0x10", "result": "Value*" },
+        { "operation": "read_i32", "offset": "0x1C", "result": "current_hp" }
+      ],
+      "notes": "Both CurrentMaxValue and CurrentStartingValue place current at 0x1C. Confirm the live Health.value subtype.",
+      "evidence": "metadata",
+      "validation": "pending_live_validation"
+    }
+  ]
+}

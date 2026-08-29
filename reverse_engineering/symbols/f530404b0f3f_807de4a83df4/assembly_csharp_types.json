@@ -1,0 +1,6942 @@
+{
+  "schema_version": 1,
+  "assembly": "Assembly-CSharp.dll",
+  "source": {
+    "dump_cs_sha256": "53F5DA90D056AE96970EEBC3293FD48190F2C7F70605348FCD38FA3302C438B7",
+    "script_json_sha256": "6C4E6E01A7672B69096E0D52491F3B848237AC40EF3B3817BEB8B442AB18F769"
+  },
+  "type_start": 5422,
+  "type_end_exclusive": 6192,
+  "types": [
+    {
+      "type_def_index": 5422,
+      "namespace": "",
+      "name": "<Module>",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5423,
+      "namespace": "",
+      "name": "FEasing.EFease",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5424,
+      "namespace": "",
+      "name": "FEasing.Function",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5425,
+      "namespace": "",
+      "name": "FEasing",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5426,
+      "namespace": "",
+      "name": "FHierarchyIcons",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5427,
+      "namespace": "",
+      "name": "IFHierarchyIcon",
+      "kind": "interface",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5428,
+      "namespace": "",
+      "name": "FPD_FixedCurveWindowAttribute",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5429,
+      "namespace": "",
+      "name": "FPD_HeaderAttribute",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5430,
+      "namespace": "",
+      "name": "FPD_LayersAttribute",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5431,
+      "namespace": "",
+      "name": "FPD_OverridableFloatAttribute",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5432,
+      "namespace": "",
+      "name": "BackgroundColorAttribute",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5433,
+      "namespace": "",
+      "name": "FPD_WidthAttribute",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5434,
+      "namespace": "",
+      "name": "FPD_IndentAttribute",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5435,
+      "namespace": "",
+      "name": "FPD_HorizontalLineAttribute",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5436,
+      "namespace": "",
+      "name": "FPD_SuffixAttribute.SuffixMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5437,
+      "namespace": "",
+      "name": "FPD_SuffixAttribute",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5438,
+      "namespace": "",
+      "name": "SteamManager",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5439,
+      "namespace": "",
+      "name": "InteractiveSquishSSU",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5440,
+      "namespace": "",
+      "name": "ChatController",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5441,
+      "namespace": "",
+      "name": "DropdownSample",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5442,
+      "namespace": "",
+      "name": "EnvMapAnimator.<Start>d__4",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5443,
+      "namespace": "",
+      "name": "EnvMapAnimator",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5444,
+      "namespace": "",
+      "name": "Readme.Section",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5445,
+      "namespace": "",
+      "name": "Readme",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5446,
+      "namespace": "",
+      "name": "AudioClipController",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5447,
+      "namespace": "",
+      "name": "AudioClipInfo",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5448,
+      "namespace": "",
+      "name": "AudioClipSingleInfo.<>c__DisplayClass4_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5449,
+      "namespace": "",
+      "name": "AudioClipSingleInfo.<>c__DisplayClass5_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5450,
+      "namespace": "",
+      "name": "AudioClipSingleInfo.<>c__DisplayClass6_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5451,
+      "namespace": "",
+      "name": "AudioClipSingleInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5452,
+      "namespace": "",
+      "name": "AudioClipIntroLoopInfo.<>c__DisplayClass4_0",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5453,
+      "namespace": "",
+      "name": "AudioClipIntroLoopInfo.<>c__DisplayClass4_1",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5454,
+      "namespace": "",
+      "name": "AudioClipIntroLoopInfo.<>c__DisplayClass5_0",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5455,
+      "namespace": "",
+      "name": "AudioClipIntroLoopInfo.<>c__DisplayClass6_0",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5456,
+      "namespace": "",
+      "name": "AudioClipIntroLoopInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5457,
+      "namespace": "",
+      "name": "AudioClipTimelineInfo.<>c__DisplayClass4_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5458,
+      "namespace": "",
+      "name": "AudioClipTimelineInfo.<>c__DisplayClass5_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5459,
+      "namespace": "",
+      "name": "AudioClipTimelineInfo.<>c__DisplayClass6_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5460,
+      "namespace": "",
+      "name": "AudioClipTimelineInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5461,
+      "namespace": "",
+      "name": "AudioSourceInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5462,
+      "namespace": "",
+      "name": "AudioController",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5463,
+      "namespace": "",
+      "name": "MusicController.<SwitchMusic>d__19",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5464,
+      "namespace": "",
+      "name": "MusicController",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 13,
+      "native_method_count": 13
+    },
+    {
+      "type_def_index": 5465,
+      "namespace": "",
+      "name": "SfxController",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5466,
+      "namespace": "",
+      "name": "SFXInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5467,
+      "namespace": "",
+      "name": "ESFX",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5468,
+      "namespace": "",
+      "name": "CardInteraction",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 5469,
+      "namespace": "",
+      "name": "CardPlaceholder",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5470,
+      "namespace": "",
+      "name": "EActedSide",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5471,
+      "namespace": "",
+      "name": "CardRotate.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5472,
+      "namespace": "",
+      "name": "CardRotate.<>c__DisplayClass26_0",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5473,
+      "namespace": "",
+      "name": "CardRotate",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 16,
+      "native_method_count": 16
+    },
+    {
+      "type_def_index": 5474,
+      "namespace": "",
+      "name": "CardsUnlockController.<RoutineFinishedRoutine>d__14",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5475,
+      "namespace": "",
+      "name": "CardsUnlockController",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5476,
+      "namespace": "",
+      "name": "Acted.<ActDelayed>d__9",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5477,
+      "namespace": "",
+      "name": "Acted",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5478,
+      "namespace": "",
+      "name": "ActedVersion",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5479,
+      "namespace": "",
+      "name": "EActedSizeVersion",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5480,
+      "namespace": "",
+      "name": "Character.EBluffCase",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5481,
+      "namespace": "",
+      "name": "Character.<>c__DisplayClass125_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5482,
+      "namespace": "",
+      "name": "Character.<DelayReveal>d__84",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5483,
+      "namespace": "",
+      "name": "Character.<DelayedDemonKill>d__103",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5484,
+      "namespace": "",
+      "name": "Character.<InterfereDelay>d__131",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5485,
+      "namespace": "",
+      "name": "Character.<ShowActedDelayed>d__133",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5486,
+      "namespace": "",
+      "name": "Character.<ShowInfoDelayed>d__134",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5487,
+      "namespace": "",
+      "name": "Character",
+      "kind": "class",
+      "field_count": 58,
+      "method_count": 77,
+      "native_method_count": 77
+    },
+    {
+      "type_def_index": 5488,
+      "namespace": "",
+      "name": "CharacterStatuses",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5489,
+      "namespace": "",
+      "name": "ECharacterState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5490,
+      "namespace": "",
+      "name": "ECharacterPlacement",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5491,
+      "namespace": "",
+      "name": "ECharacterStatus",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5492,
+      "namespace": "",
+      "name": "EAlignment",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5493,
+      "namespace": "",
+      "name": "RegisterAsCharacter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5494,
+      "namespace": "",
+      "name": "RuntimeCharacterData",
+      "kind": "interface",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5495,
+      "namespace": "",
+      "name": "AlchemistRuntimeData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5496,
+      "namespace": "",
+      "name": "BakerRuntimeData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5497,
+      "namespace": "",
+      "name": "EnlightenedRuntimeData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5498,
+      "namespace": "",
+      "name": "ActedInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5499,
+      "namespace": "",
+      "name": "ContextOnAboutToAct",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5500,
+      "namespace": "",
+      "name": "CharacterReward",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5501,
+      "namespace": "",
+      "name": "Characters.<>c__DisplayClass22_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5502,
+      "namespace": "",
+      "name": "Characters.<>c__DisplayClass50_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5503,
+      "namespace": "",
+      "name": "Characters.<>c__DisplayClass51_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5504,
+      "namespace": "",
+      "name": "Characters.<ShuffleDeck>d__16",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5505,
+      "namespace": "",
+      "name": "Characters",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 45,
+      "native_method_count": 43
+    },
+    {
+      "type_def_index": 5506,
+      "namespace": "",
+      "name": "CharacterShuffleAnimation.<Animate>d__6",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5507,
+      "namespace": "",
+      "name": "CharacterShuffleAnimation.<PlayAudioDelay>d__9",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5508,
+      "namespace": "",
+      "name": "CharacterShuffleAnimation.<ShuffleCardsRoutine>d__8",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5509,
+      "namespace": "",
+      "name": "CharacterShuffleAnimation",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5510,
+      "namespace": "",
+      "name": "CharactersPool",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5511,
+      "namespace": "",
+      "name": "CharacterView",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5512,
+      "namespace": "",
+      "name": "CompendiumCharacter",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 13,
+      "native_method_count": 13
+    },
+    {
+      "type_def_index": 5513,
+      "namespace": "",
+      "name": "ECompendiumCardState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5514,
+      "namespace": "",
+      "name": "DeckCharacter",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5515,
+      "namespace": "",
+      "name": "SingleCharacterDrawAnimation",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5516,
+      "namespace": "",
+      "name": "DeckController",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5517,
+      "namespace": "",
+      "name": "EDeckState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5518,
+      "namespace": "",
+      "name": "GameEvents",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5519,
+      "namespace": "",
+      "name": "GameplayEvents",
+      "kind": "class",
+      "field_count": 29,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5520,
+      "namespace": "",
+      "name": "GlobalEvents",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5521,
+      "namespace": "",
+      "name": "VFXEvents",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5522,
+      "namespace": "",
+      "name": "CardsEvents",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5523,
+      "namespace": "",
+      "name": "UIEvents",
+      "kind": "class",
+      "field_count": 21,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5524,
+      "namespace": "",
+      "name": "AudioEvents",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5525,
+      "namespace": "",
+      "name": "DebugEvents",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5526,
+      "namespace": "",
+      "name": "GameplayController",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5527,
+      "namespace": "",
+      "name": "ModeController",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5528,
+      "namespace": "",
+      "name": "StandardController",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5529,
+      "namespace": "",
+      "name": "KillMode",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5530,
+      "namespace": "",
+      "name": "Map.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5531,
+      "namespace": "",
+      "name": "Map.<CloseMapCoroutine>d__18",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5532,
+      "namespace": "",
+      "name": "Map.<SetupMap>d__16",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5533,
+      "namespace": "",
+      "name": "Map",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5534,
+      "namespace": "",
+      "name": "PlayerController.<DelayedInit>d__9",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5535,
+      "namespace": "",
+      "name": "PlayerController",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5536,
+      "namespace": "",
+      "name": "PlayerInfo",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5537,
+      "namespace": "",
+      "name": "Resource",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5538,
+      "namespace": "",
+      "name": "Gold",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5539,
+      "namespace": "",
+      "name": "Health",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5540,
+      "namespace": "",
+      "name": "Mana",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5541,
+      "namespace": "",
+      "name": "Block",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5542,
+      "namespace": "",
+      "name": "Value",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5543,
+      "namespace": "",
+      "name": "SimpleValue",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5544,
+      "namespace": "",
+      "name": "CurrentMaxValue",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5545,
+      "namespace": "",
+      "name": "CurrentStartingValue",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5546,
+      "namespace": "",
+      "name": "ProjectContext",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5547,
+      "namespace": "",
+      "name": "SavesGame.<>c__DisplayClass15_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5548,
+      "namespace": "",
+      "name": "SavesGame",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 18,
+      "native_method_count": 18
+    },
+    {
+      "type_def_index": 5549,
+      "namespace": "",
+      "name": "GameModeAscension",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5550,
+      "namespace": "",
+      "name": "SavedAchievements",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5551,
+      "namespace": "",
+      "name": "SavedSkins",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5552,
+      "namespace": "",
+      "name": "SavedCharacters",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5553,
+      "namespace": "",
+      "name": "CharacterPreference",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5554,
+      "namespace": "",
+      "name": "Shop.<>c__DisplayClass14_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5555,
+      "namespace": "",
+      "name": "Shop",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5556,
+      "namespace": "",
+      "name": "ShopCardInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5557,
+      "namespace": "",
+      "name": "AddManaCard",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5558,
+      "namespace": "",
+      "name": "AddHealthCard",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5559,
+      "namespace": "",
+      "name": "RemoveCardCard",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5560,
+      "namespace": "",
+      "name": "AddRandomCharacterCard",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5561,
+      "namespace": "",
+      "name": "PassiveCardCard",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5562,
+      "namespace": "",
+      "name": "ViewController",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5563,
+      "namespace": "",
+      "name": "BgChangeButtonDebug",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5564,
+      "namespace": "",
+      "name": "BgChangeDebug",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5565,
+      "namespace": "",
+      "name": "SpriteVersion",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5566,
+      "namespace": "",
+      "name": "BgSpriteInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5567,
+      "namespace": "",
+      "name": "CharacterInputFieldDebug",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5568,
+      "namespace": "",
+      "name": "DebugChangeCardsStyle",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5569,
+      "namespace": "",
+      "name": "ECardStyle",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5570,
+      "namespace": "",
+      "name": "DebugGoThroughBgs",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5571,
+      "namespace": "",
+      "name": "DebugIncreaseBackgroundSize",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5572,
+      "namespace": "",
+      "name": "DebugInitialization.<DelayedDebugInit>d__5",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5573,
+      "namespace": "",
+      "name": "DebugInitialization",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5574,
+      "namespace": "",
+      "name": "DebugKills.<ShowVisualDelay>d__4",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5575,
+      "namespace": "",
+      "name": "DebugKills",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5576,
+      "namespace": "",
+      "name": "DebugMode",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5577,
+      "namespace": "",
+      "name": "DebugMusicController",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5578,
+      "namespace": "",
+      "name": "DebugScript",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5579,
+      "namespace": "",
+      "name": "FollowCursor",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5580,
+      "namespace": "",
+      "name": "DebugAddRelic",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5581,
+      "namespace": "",
+      "name": "KillModeFix.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5582,
+      "namespace": "",
+      "name": "KillModeFix",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5583,
+      "namespace": "",
+      "name": "DebugLocalization.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5584,
+      "namespace": "",
+      "name": "DebugLocalization",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5585,
+      "namespace": "",
+      "name": "RestartScene",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5586,
+      "namespace": "",
+      "name": "Screenshot",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5587,
+      "namespace": "",
+      "name": "SongButtonDebug",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5588,
+      "namespace": "",
+      "name": "ScrollCharacters.<AnimateCard>d__9",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5589,
+      "namespace": "",
+      "name": "ScrollCharacters.<ScrollAnimate>d__8",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5590,
+      "namespace": "",
+      "name": "ScrollCharacters",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5591,
+      "namespace": "",
+      "name": "TrailerCharacters",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5592,
+      "namespace": "",
+      "name": "CharacterTrailerInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5593,
+      "namespace": "",
+      "name": "TrailerProduction.<AnimateVignetteAndCards>d__25",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5594,
+      "namespace": "",
+      "name": "TrailerProduction.<IterateAnimation>d__24",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5595,
+      "namespace": "",
+      "name": "TrailerProduction.<RotatePanCamera>d__23",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5596,
+      "namespace": "",
+      "name": "TrailerProduction",
+      "kind": "class",
+      "field_count": 22,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5597,
+      "namespace": "",
+      "name": "UnlockAllDebug.<UnlockAll>d__1",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5598,
+      "namespace": "",
+      "name": "UnlockAllDebug",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5599,
+      "namespace": "",
+      "name": "CharacterPicker",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5600,
+      "namespace": "",
+      "name": "Gameplay.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5601,
+      "namespace": "",
+      "name": "Gameplay.<DelayedDeckIntro>d__50",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5602,
+      "namespace": "",
+      "name": "Gameplay.<InitCoroutine>d__41",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5603,
+      "namespace": "",
+      "name": "Gameplay.<SetupDelay>d__47",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5604,
+      "namespace": "",
+      "name": "Gameplay",
+      "kind": "class",
+      "field_count": 24,
+      "method_count": 55,
+      "native_method_count": 53
+    },
+    {
+      "type_def_index": 5605,
+      "namespace": "",
+      "name": "ETriggerPhase",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5606,
+      "namespace": "",
+      "name": "ERelicTrigger",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5607,
+      "namespace": "",
+      "name": "EGameplayState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5608,
+      "namespace": "",
+      "name": "DebugSettings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5609,
+      "namespace": "",
+      "name": "Score",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5610,
+      "namespace": "",
+      "name": "ScoreNew",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5611,
+      "namespace": "",
+      "name": "ScoreOld",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5612,
+      "namespace": "",
+      "name": "GenericPanel",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5613,
+      "namespace": "",
+      "name": "IntroMessage",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5614,
+      "namespace": "",
+      "name": "NewCharactersUnlocked.<ClosePanelRoutine>d__13",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5615,
+      "namespace": "",
+      "name": "NewCharactersUnlocked.<ShowNewCharactersRoutine>d__11",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5616,
+      "namespace": "",
+      "name": "NewCharactersUnlocked",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5617,
+      "namespace": "",
+      "name": "NightPhase.<StartPhase>d__7",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5618,
+      "namespace": "",
+      "name": "NightPhase",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5619,
+      "namespace": "",
+      "name": "Menu",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5620,
+      "namespace": "",
+      "name": "PickNewCharacters.<>c__DisplayClass11_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5621,
+      "namespace": "",
+      "name": "PickNewCharacters.<AnimateRewards>d__11",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5622,
+      "namespace": "",
+      "name": "PickNewCharacters.<RefreshNewCharacters>d__12",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5623,
+      "namespace": "",
+      "name": "PickNewCharacters.<RevealRoutine>d__14",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5624,
+      "namespace": "",
+      "name": "PickNewCharacters",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5625,
+      "namespace": "",
+      "name": "ERevealState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5626,
+      "namespace": "",
+      "name": "RevealCard.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5627,
+      "namespace": "",
+      "name": "RevealCard",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 20,
+      "native_method_count": 20
+    },
+    {
+      "type_def_index": 5628,
+      "namespace": "",
+      "name": "CustomHint.<ShowHintCoroutine>d__7",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5629,
+      "namespace": "",
+      "name": "CustomHint",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5630,
+      "namespace": "",
+      "name": "RoleHint",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5631,
+      "namespace": "",
+      "name": "EnlightenedHint",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5632,
+      "namespace": "",
+      "name": "TutorialNote.<CloseCooldown>d__12",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5633,
+      "namespace": "",
+      "name": "TutorialNote",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5634,
+      "namespace": "",
+      "name": "ETutorialState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5635,
+      "namespace": "",
+      "name": "ETutorialType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5636,
+      "namespace": "",
+      "name": "TutorialsController.<>c__DisplayClass20_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5637,
+      "namespace": "",
+      "name": "TutorialsController.<>c__DisplayClass21_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5638,
+      "namespace": "",
+      "name": "TutorialsController.<>c__DisplayClass25_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5639,
+      "namespace": "",
+      "name": "TutorialsController.<CancelKillTutorial>d__22",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5640,
+      "namespace": "",
+      "name": "TutorialsController.<CharacterInfoTutorial>d__18",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5641,
+      "namespace": "",
+      "name": "TutorialsController.<CharacterKillRoutine>d__11",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5642,
+      "namespace": "",
+      "name": "TutorialsController.<HoverCharacterRoutine>d__26",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5643,
+      "namespace": "",
+      "name": "TutorialsController.<HoverObjective>d__21",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5644,
+      "namespace": "",
+      "name": "TutorialsController.<KillTutorial>d__20",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5645,
+      "namespace": "",
+      "name": "TutorialsController.<PickableCharacterType>d__25",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5646,
+      "namespace": "",
+      "name": "TutorialsController.<PoisonKilledRoutine>d__12",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5647,
+      "namespace": "",
+      "name": "TutorialsController.<RevealCardTutorial>d__19",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5648,
+      "namespace": "",
+      "name": "TutorialsController.<SecondLevelNoteCoroutine>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5649,
+      "namespace": "",
+      "name": "TutorialsController.<ThirdLevelNoteCoroutine>d__9",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5650,
+      "namespace": "",
+      "name": "TutorialsController",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 29,
+      "native_method_count": 29
+    },
+    {
+      "type_def_index": 5651,
+      "namespace": "",
+      "name": "TutorialQueue",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5652,
+      "namespace": "",
+      "name": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5653,
+      "namespace": "",
+      "name": "UnlockNewCharacterPanel.<RevealRoutine>d__10",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5654,
+      "namespace": "",
+      "name": "UnlockNewCharacterPanel",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5655,
+      "namespace": "",
+      "name": "WinConditions.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5656,
+      "namespace": "",
+      "name": "WinConditions.<ChangeGameplayState>d__27",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5657,
+      "namespace": "",
+      "name": "WinConditions.<DelayedCheckCondition>d__21",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5658,
+      "namespace": "",
+      "name": "WinConditions.<NewHandoutRoutine>d__32",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5659,
+      "namespace": "",
+      "name": "WinConditions",
+      "kind": "class",
+      "field_count": 17,
+      "method_count": 17,
+      "native_method_count": 17
+    },
+    {
+      "type_def_index": 5660,
+      "namespace": "",
+      "name": "DisableOnMode",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5661,
+      "namespace": "",
+      "name": "EColor",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5662,
+      "namespace": "",
+      "name": "DrawWithMouse",
+      "kind": "class",
+      "field_count": 14,
+      "method_count": 15,
+      "native_method_count": 15
+    },
+    {
+      "type_def_index": 5663,
+      "namespace": "",
+      "name": "EnableOnMode",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5664,
+      "namespace": "",
+      "name": "LayoutRebuilder.<ForceRebuildCoroutine>d__2",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5665,
+      "namespace": "",
+      "name": "LayoutRebuilder",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5666,
+      "namespace": "",
+      "name": "AchievementsHelper",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5667,
+      "namespace": "",
+      "name": "KnightsAchivementHelper",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5668,
+      "namespace": "",
+      "name": "LoversAchivementHelper",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5669,
+      "namespace": "",
+      "name": "BakersAchivementHelper",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5670,
+      "namespace": "",
+      "name": "CharacterLocalisation",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5671,
+      "namespace": "",
+      "name": "LocalizedRole",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5672,
+      "namespace": "",
+      "name": "ScoutLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5673,
+      "namespace": "",
+      "name": "KnitterLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5674,
+      "namespace": "",
+      "name": "WitnessLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5675,
+      "namespace": "",
+      "name": "ArchitectLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5676,
+      "namespace": "",
+      "name": "EmpathLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5677,
+      "namespace": "",
+      "name": "BakerLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5678,
+      "namespace": "",
+      "name": "AlchemistLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5679,
+      "namespace": "",
+      "name": "SlayerLoc",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5680,
+      "namespace": "",
+      "name": "Helpers",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5681,
+      "namespace": "",
+      "name": "ClassConv",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5682,
+      "namespace": "",
+      "name": "AudioHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5683,
+      "namespace": "",
+      "name": "Calculator",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5684,
+      "namespace": "",
+      "name": "ListHelper.<>c__DisplayClass0_0<T>",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5685,
+      "namespace": "",
+      "name": "ListHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5686,
+      "namespace": "",
+      "name": "CharactersHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5687,
+      "namespace": "",
+      "name": "CharacterHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5688,
+      "namespace": "",
+      "name": "ECharacterCondition",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5689,
+      "namespace": "",
+      "name": "SaveHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5690,
+      "namespace": "",
+      "name": "LocalizationHelper.EPlurals",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5691,
+      "namespace": "",
+      "name": "LocalizationHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5692,
+      "namespace": "",
+      "name": "StringHelper.<>c__DisplayClass0_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5693,
+      "namespace": "",
+      "name": "StringHelper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5694,
+      "namespace": "",
+      "name": "PickNewRelics.<>c__DisplayClass10_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5695,
+      "namespace": "",
+      "name": "PickNewRelics.<AnimateRewards>d__10",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5696,
+      "namespace": "",
+      "name": "PickNewRelics.<RefreshNewCharacters>d__11",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5697,
+      "namespace": "",
+      "name": "PickNewRelics.<RevealRoutine>d__13",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5698,
+      "namespace": "",
+      "name": "PickNewRelics",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5699,
+      "namespace": "",
+      "name": "Relic",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5700,
+      "namespace": "",
+      "name": "ICard",
+      "kind": "interface",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5701,
+      "namespace": "",
+      "name": "RelicReward",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5702,
+      "namespace": "",
+      "name": "RevealObject.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5703,
+      "namespace": "",
+      "name": "RevealObject",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 5704,
+      "namespace": "",
+      "name": "Achievement",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5705,
+      "namespace": "",
+      "name": "EAchievementState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5706,
+      "namespace": "",
+      "name": "Achievements",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5707,
+      "namespace": "",
+      "name": "AchievementCompendiumPage",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5708,
+      "namespace": "",
+      "name": "SkinUnlockedUI.<RevealDelay>d__15",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5709,
+      "namespace": "",
+      "name": "SkinUnlockedUI",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 13,
+      "native_method_count": 13
+    },
+    {
+      "type_def_index": 5710,
+      "namespace": "",
+      "name": "MoveCardBasedOnMouse",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5711,
+      "namespace": "",
+      "name": "BugReportPanel",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5712,
+      "namespace": "",
+      "name": "AbandonRunButton",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5713,
+      "namespace": "",
+      "name": "ActivateOnKeyDown",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5714,
+      "namespace": "",
+      "name": "ChangeGameModeButton",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5715,
+      "namespace": "",
+      "name": "ChangeGameStateButton",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5716,
+      "namespace": "",
+      "name": "DisguiseIcon.<EnableHovering>d__5",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5717,
+      "namespace": "",
+      "name": "DisguiseIcon.<ShowDisguiseDelayed>d__7",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5718,
+      "namespace": "",
+      "name": "DisguiseIcon",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5719,
+      "namespace": "",
+      "name": "CompleteAscensionButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5720,
+      "namespace": "",
+      "name": "DiscordButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5721,
+      "namespace": "",
+      "name": "GenericButton",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5722,
+      "namespace": "",
+      "name": "KillButton",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5723,
+      "namespace": "",
+      "name": "DrawButton",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5724,
+      "namespace": "",
+      "name": "NextChallengeButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5725,
+      "namespace": "",
+      "name": "QuitGameButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5726,
+      "namespace": "",
+      "name": "ResetTutorialButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5727,
+      "namespace": "",
+      "name": "BlindDeckToggleButton",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5728,
+      "namespace": "",
+      "name": "PinDeckViewButton",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5729,
+      "namespace": "",
+      "name": "WishlistButton",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5730,
+      "namespace": "",
+      "name": "CardExplanationUI.<ForceRebuildCoroutine>d__18",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5731,
+      "namespace": "",
+      "name": "CardExplanationUI",
+      "kind": "class",
+      "field_count": 13,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5732,
+      "namespace": "",
+      "name": "CardHighlight.<HighlightCoroutine>d__4",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5733,
+      "namespace": "",
+      "name": "CardHighlight",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5734,
+      "namespace": "",
+      "name": "CardTokens",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5735,
+      "namespace": "",
+      "name": "RevealOrder",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5736,
+      "namespace": "",
+      "name": "Compendium.<RevealIfAble>d__17",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5737,
+      "namespace": "",
+      "name": "Compendium",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 5738,
+      "namespace": "",
+      "name": "CharactersCompendiumPage",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5739,
+      "namespace": "",
+      "name": "Credits",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5740,
+      "namespace": "",
+      "name": "DayView",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5741,
+      "namespace": "",
+      "name": "DeckIntro",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5742,
+      "namespace": "",
+      "name": "DeckRemoveCard",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5743,
+      "namespace": "",
+      "name": "DeckView.<RevealAll>d__24",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5744,
+      "namespace": "",
+      "name": "DeckView",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 18,
+      "native_method_count": 18
+    },
+    {
+      "type_def_index": 5745,
+      "namespace": "",
+      "name": "DisableOnState",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5746,
+      "namespace": "",
+      "name": "EnableOnRule",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5747,
+      "namespace": "",
+      "name": "EnableOnState",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5748,
+      "namespace": "",
+      "name": "EyeOracleController",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5749,
+      "namespace": "",
+      "name": "GameModeCard",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5750,
+      "namespace": "",
+      "name": "GameplayInfo",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5751,
+      "namespace": "",
+      "name": "FadeInOnEnable",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5752,
+      "namespace": "",
+      "name": "Popup",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5753,
+      "namespace": "",
+      "name": "PopupInfo",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5754,
+      "namespace": "",
+      "name": "ButtonInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5755,
+      "namespace": "",
+      "name": "AchievementHint.<ForceRebuildCoroutine>d__5",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5756,
+      "namespace": "",
+      "name": "AchievementHint",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5757,
+      "namespace": "",
+      "name": "CharacterHint.<ForceRebuildCoroutine>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5758,
+      "namespace": "",
+      "name": "CharacterHint",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5759,
+      "namespace": "",
+      "name": "HintObject",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5760,
+      "namespace": "",
+      "name": "AdditionalCharacterInfo",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5761,
+      "namespace": "",
+      "name": "CharacterHintInfo",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5762,
+      "namespace": "",
+      "name": "StaticHints",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5763,
+      "namespace": "",
+      "name": "Keywords",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5764,
+      "namespace": "",
+      "name": "CharacterTag",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5765,
+      "namespace": "",
+      "name": "GenericHint.<ForceRebuildCoroutine>d__7",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5766,
+      "namespace": "",
+      "name": "GenericHint",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5767,
+      "namespace": "",
+      "name": "MarksHintHelper.<ShowMarksDelay>d__6",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5768,
+      "namespace": "",
+      "name": "MarksHintHelper",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5769,
+      "namespace": "",
+      "name": "InGameSettings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5770,
+      "namespace": "",
+      "name": "BeforeGameInfo.<ShowInfo>d__6",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5771,
+      "namespace": "",
+      "name": "BeforeGameInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5772,
+      "namespace": "",
+      "name": "BeforeGameInfoPanel",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5773,
+      "namespace": "",
+      "name": "NightCycle",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5774,
+      "namespace": "",
+      "name": "NightStep",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5775,
+      "namespace": "",
+      "name": "HeartsCounter",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5776,
+      "namespace": "",
+      "name": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5777,
+      "namespace": "",
+      "name": "ObjectivesUI",
+      "kind": "class",
+      "field_count": 14,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5778,
+      "namespace": "",
+      "name": "ObjectiveUI",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5779,
+      "namespace": "",
+      "name": "PinnedDeckView.<RevealAllCoroutine>d__13",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5780,
+      "namespace": "",
+      "name": "PinnedDeckView",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5781,
+      "namespace": "",
+      "name": "PostProcessController",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5782,
+      "namespace": "",
+      "name": "GoldView",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5783,
+      "namespace": "",
+      "name": "HealthView",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5784,
+      "namespace": "",
+      "name": "HealthAnimation",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5785,
+      "namespace": "",
+      "name": "AnimateHealthDamage.<Animate>d__3",
+      "kind": "struct",
+      "field_count": 6,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5786,
+      "namespace": "",
+      "name": "AnimateHealthDamage",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5787,
+      "namespace": "",
+      "name": "AnimateBounceDamage",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5788,
+      "namespace": "",
+      "name": "AnimateParticle",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5789,
+      "namespace": "",
+      "name": "ControllObjectsHealth",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5790,
+      "namespace": "",
+      "name": "ObjectsFloatValue",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5791,
+      "namespace": "",
+      "name": "ManaView",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5792,
+      "namespace": "",
+      "name": "UIScoreSystem",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5793,
+      "namespace": "",
+      "name": "SettingsPanel.<>c",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5794,
+      "namespace": "",
+      "name": "SettingsPanel",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5795,
+      "namespace": "",
+      "name": "Settings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 5796,
+      "namespace": "",
+      "name": "ShopCard.<TrailerCoroutine>d__8",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5797,
+      "namespace": "",
+      "name": "ShopCard",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5798,
+      "namespace": "",
+      "name": "SimpleUIInfo.<ShowInfoCoroutine>d__19",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5799,
+      "namespace": "",
+      "name": "SimpleUIInfo",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 5800,
+      "namespace": "",
+      "name": "HintInfo",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5801,
+      "namespace": "",
+      "name": "SkinsPicker",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5802,
+      "namespace": "",
+      "name": "TextTooltipRecognizer",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5803,
+      "namespace": "",
+      "name": "TextHolder",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5804,
+      "namespace": "",
+      "name": "TransitionPanel.<>c__DisplayClass5_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5805,
+      "namespace": "",
+      "name": "TransitionPanel.<>c__DisplayClass6_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5806,
+      "namespace": "",
+      "name": "TransitionPanel.<TransitionDelayed>d__7",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5807,
+      "namespace": "",
+      "name": "TransitionPanel.<TransitionDelayed>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5808,
+      "namespace": "",
+      "name": "TransitionPanel",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5809,
+      "namespace": "",
+      "name": "VersionView",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5810,
+      "namespace": "",
+      "name": "FlickeringBg.<Flick>d__3",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5811,
+      "namespace": "",
+      "name": "FlickeringBg.<FlickOut>d__4",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5812,
+      "namespace": "",
+      "name": "FlickeringBg",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5813,
+      "namespace": "",
+      "name": "BloodStain",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5814,
+      "namespace": "",
+      "name": "CardFloat",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5815,
+      "namespace": "",
+      "name": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5816,
+      "namespace": "",
+      "name": "CharacterAnimationResponder",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5817,
+      "namespace": "",
+      "name": "CharacterNightVFX",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5818,
+      "namespace": "",
+      "name": "CharactersAnimationResponder.<>c__DisplayClass7_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5819,
+      "namespace": "",
+      "name": "CharactersAnimationResponder",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5820,
+      "namespace": "",
+      "name": "RevealAnimation",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5821,
+      "namespace": "",
+      "name": "DiedResponse",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5822,
+      "namespace": "",
+      "name": "EyeController.<Despawn>d__21",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5823,
+      "namespace": "",
+      "name": "EyeController.<SpawnCoroutine>d__18",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5824,
+      "namespace": "",
+      "name": "EyeController",
+      "kind": "class",
+      "field_count": 13,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5825,
+      "namespace": "",
+      "name": "FloatingScore.<Animate>d__6",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5826,
+      "namespace": "",
+      "name": "FloatingScore",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5827,
+      "namespace": "",
+      "name": "VfxController",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5828,
+      "namespace": "",
+      "name": "VfxInstance.<DestroyDelay>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5829,
+      "namespace": "",
+      "name": "VfxInstance",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5830,
+      "namespace": "",
+      "name": "VfxObjects",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5831,
+      "namespace": "",
+      "name": "CardsEntry",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5832,
+      "namespace": "",
+      "name": "AchievementData",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5833,
+      "namespace": "",
+      "name": "AchievementUnlockLogic",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5834,
+      "namespace": "",
+      "name": "UnlockableAchiv",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5835,
+      "namespace": "",
+      "name": "AutoUnlockedAchiv",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5836,
+      "namespace": "",
+      "name": "LockedAchiv",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5837,
+      "namespace": "",
+      "name": "AscensionsData",
+      "kind": "class",
+      "field_count": 16,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 5838,
+      "namespace": "",
+      "name": "CharactersCount",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5839,
+      "namespace": "",
+      "name": "CardAdditionPerDay",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5840,
+      "namespace": "",
+      "name": "CardAdditionInfo",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5841,
+      "namespace": "",
+      "name": "EAdditionType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5842,
+      "namespace": "",
+      "name": "ERewardType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5843,
+      "namespace": "",
+      "name": "ScriptInfo",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5844,
+      "namespace": "",
+      "name": "ICardData",
+      "kind": "interface",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5845,
+      "namespace": "",
+      "name": "CharacterData",
+      "kind": "class",
+      "field_count": 39,
+      "method_count": 21,
+      "native_method_count": 21
+    },
+    {
+      "type_def_index": 5846,
+      "namespace": "",
+      "name": "RoguelikeDataInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5847,
+      "namespace": "",
+      "name": "ERarity",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5848,
+      "namespace": "",
+      "name": "ECharacterType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5849,
+      "namespace": "",
+      "name": "EAbilityUsage",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5850,
+      "namespace": "",
+      "name": "ECharacterTag",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5851,
+      "namespace": "",
+      "name": "RoleUses",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5852,
+      "namespace": "",
+      "name": "Role.<>c__DisplayClass14_0",
+      "kind": "struct",
+      "field_count": 3,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5853,
+      "namespace": "",
+      "name": "Role",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 25,
+      "native_method_count": 22
+    },
+    {
+      "type_def_index": 5854,
+      "namespace": "",
+      "name": "Scout",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5855,
+      "namespace": "",
+      "name": "Knitter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5856,
+      "namespace": "",
+      "name": "Gossip",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5857,
+      "namespace": "",
+      "name": "Villager",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5858,
+      "namespace": "",
+      "name": "Witness",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5859,
+      "namespace": "",
+      "name": "RangedEmpath",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5860,
+      "namespace": "",
+      "name": "Architect.ECircleSide",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5861,
+      "namespace": "",
+      "name": "Architect.ArchitectInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5862,
+      "namespace": "",
+      "name": "Architect",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5863,
+      "namespace": "",
+      "name": "Empath",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5864,
+      "namespace": "",
+      "name": "Sapper",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5865,
+      "namespace": "",
+      "name": "Sapper2",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5866,
+      "namespace": "",
+      "name": "Rambler",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5867,
+      "namespace": "",
+      "name": "Rambler2.<>c__DisplayClass9_0",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5868,
+      "namespace": "",
+      "name": "Rambler2",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 5869,
+      "namespace": "",
+      "name": "Immortal",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5870,
+      "namespace": "",
+      "name": "Mathematician",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5871,
+      "namespace": "",
+      "name": "BountyHunter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5872,
+      "namespace": "",
+      "name": "Baker",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5873,
+      "namespace": "",
+      "name": "Alchemist",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5874,
+      "namespace": "",
+      "name": "Dreamer.<>c",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5875,
+      "namespace": "",
+      "name": "Dreamer",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5876,
+      "namespace": "",
+      "name": "DreamerOld",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5877,
+      "namespace": "",
+      "name": "Dreamer2",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5878,
+      "namespace": "",
+      "name": "Slayer",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5879,
+      "namespace": "",
+      "name": "FortuneTeller.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5880,
+      "namespace": "",
+      "name": "FortuneTeller",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5881,
+      "namespace": "",
+      "name": "Lookout",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5882,
+      "namespace": "",
+      "name": "Noble.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5883,
+      "namespace": "",
+      "name": "Noble",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5884,
+      "namespace": "",
+      "name": "Archivist",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5885,
+      "namespace": "",
+      "name": "Bishop.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5886,
+      "namespace": "",
+      "name": "Bishop.<>c__DisplayClass2_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5887,
+      "namespace": "",
+      "name": "Bishop.<>c__DisplayClass5_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5888,
+      "namespace": "",
+      "name": "Bishop",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5889,
+      "namespace": "",
+      "name": "Shugenja.EEvilDirection",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5890,
+      "namespace": "",
+      "name": "Shugenja",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5891,
+      "namespace": "",
+      "name": "Tracker",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5892,
+      "namespace": "",
+      "name": "Investigator.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5893,
+      "namespace": "",
+      "name": "Investigator",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5894,
+      "namespace": "",
+      "name": "Confessor",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5895,
+      "namespace": "",
+      "name": "Acrobat",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5896,
+      "namespace": "",
+      "name": "Acrobat2",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5897,
+      "namespace": "",
+      "name": "Arbiter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5898,
+      "namespace": "",
+      "name": "Judge2",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5899,
+      "namespace": "",
+      "name": "Librarian.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5900,
+      "namespace": "",
+      "name": "Librarian",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5901,
+      "namespace": "",
+      "name": "Juggler.<>c",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5902,
+      "namespace": "",
+      "name": "Juggler",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 5903,
+      "namespace": "",
+      "name": "Mutant",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5904,
+      "namespace": "",
+      "name": "Drunk",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5905,
+      "namespace": "",
+      "name": "Recluse",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5906,
+      "namespace": "",
+      "name": "Saint",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5907,
+      "namespace": "",
+      "name": "SaintVillager",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5908,
+      "namespace": "",
+      "name": "Doppleganger",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 5909,
+      "namespace": "",
+      "name": "Puzzlemaster",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5910,
+      "namespace": "",
+      "name": "Minion",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5911,
+      "namespace": "",
+      "name": "Spy",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5912,
+      "namespace": "",
+      "name": "Poisoner",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5913,
+      "namespace": "",
+      "name": "Baron",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5914,
+      "namespace": "",
+      "name": "Marionette",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5915,
+      "namespace": "",
+      "name": "Illuzionist",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5916,
+      "namespace": "",
+      "name": "Puppet",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5917,
+      "namespace": "",
+      "name": "Mezepheles",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5918,
+      "namespace": "",
+      "name": "Cipher",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5919,
+      "namespace": "",
+      "name": "Demon",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 5920,
+      "namespace": "",
+      "name": "Imp",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5921,
+      "namespace": "",
+      "name": "Skinwalker",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5922,
+      "namespace": "",
+      "name": "Pooka",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5923,
+      "namespace": "",
+      "name": "Striga",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5924,
+      "namespace": "",
+      "name": "SpecialRule",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5925,
+      "namespace": "",
+      "name": "NightModeRule.<ManageKill>d__8",
+      "kind": "struct",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5926,
+      "namespace": "",
+      "name": "NightModeRule",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5927,
+      "namespace": "",
+      "name": "CustomScriptData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5928,
+      "namespace": "",
+      "name": "GameData",
+      "kind": "class",
+      "field_count": 23,
+      "method_count": 23,
+      "native_method_count": 23
+    },
+    {
+      "type_def_index": 5929,
+      "namespace": "",
+      "name": "AscensionsList",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5930,
+      "namespace": "",
+      "name": "EGameState",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5931,
+      "namespace": "",
+      "name": "EGameMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5932,
+      "namespace": "",
+      "name": "GameMode",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 21,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5933,
+      "namespace": "",
+      "name": "RoguelikeMode",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 19,
+      "native_method_count": 19
+    },
+    {
+      "type_def_index": 5934,
+      "namespace": "",
+      "name": "StandardMode",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 24,
+      "native_method_count": 24
+    },
+    {
+      "type_def_index": 5935,
+      "namespace": "",
+      "name": "AdvancedMode",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 23,
+      "native_method_count": 23
+    },
+    {
+      "type_def_index": 5936,
+      "namespace": "",
+      "name": "RoguelikeStandard",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 29,
+      "native_method_count": 29
+    },
+    {
+      "type_def_index": 5937,
+      "namespace": "",
+      "name": "RoguelikeAdvanced",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 17,
+      "native_method_count": 17
+    },
+    {
+      "type_def_index": 5938,
+      "namespace": "",
+      "name": "Advanced",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 17,
+      "native_method_count": 17
+    },
+    {
+      "type_def_index": 5939,
+      "namespace": "",
+      "name": "RelicData",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5940,
+      "namespace": "",
+      "name": "RelicInfo",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5941,
+      "namespace": "",
+      "name": "SadTeddy",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5942,
+      "namespace": "",
+      "name": "UselessHat",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5943,
+      "namespace": "",
+      "name": "SavedGameData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5944,
+      "namespace": "",
+      "name": "SavedGameInfo",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5945,
+      "namespace": "",
+      "name": "SkinData",
+      "kind": "class",
+      "field_count": 13,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5946,
+      "namespace": "",
+      "name": "EArtType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5947,
+      "namespace": "",
+      "name": "UnlockWith",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5948,
+      "namespace": "",
+      "name": "UnlockWithAchievement",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5949,
+      "namespace": "",
+      "name": "AutoUnlocked",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5950,
+      "namespace": "",
+      "name": "ICharacterLocData",
+      "kind": "interface",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5951,
+      "namespace": "",
+      "name": "ELanguageMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5952,
+      "namespace": "",
+      "name": "CharacterLocProvider",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5953,
+      "namespace": "",
+      "name": "CharacterLocalizationAPI",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5954,
+      "namespace": "",
+      "name": "TranslationContext",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 5955,
+      "namespace": "",
+      "name": "ObjectsList",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5956,
+      "namespace": "",
+      "name": "EGender",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5957,
+      "namespace": "",
+      "name": "EPlurals",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5958,
+      "namespace": "",
+      "name": "Plurals",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5959,
+      "namespace": "",
+      "name": "CustomVariable",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5960,
+      "namespace": "",
+      "name": "ValuesLocal",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5961,
+      "namespace": "",
+      "name": "PluralsRange",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 4,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5962,
+      "namespace": "",
+      "name": "PluralCustomRange",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5963,
+      "namespace": "",
+      "name": "PluralDefault",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5964,
+      "namespace": "",
+      "name": "CharacterId",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 3,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5965,
+      "namespace": "",
+      "name": "CharacterIdDefault",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5966,
+      "namespace": "",
+      "name": "CharacterIdGender",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5967,
+      "namespace": "",
+      "name": "CharacterIdExactName",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5968,
+      "namespace": "",
+      "name": "SettingsGroup",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5969,
+      "namespace": "",
+      "name": "LocaleLoc",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5970,
+      "namespace": "",
+      "name": "CustomValuess",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5971,
+      "namespace": "",
+      "name": "CustomOptionValue",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 5972,
+      "namespace": "",
+      "name": "CharacterLoc",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 16,
+      "native_method_count": 16
+    },
+    {
+      "type_def_index": 5973,
+      "namespace": "",
+      "name": "CharacterLocBundleFile",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5974,
+      "namespace": "",
+      "name": "CharacterLocBundleEntry",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5975,
+      "namespace": "",
+      "name": "CharacterLocSerializer.CharacterLocDto",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5976,
+      "namespace": "",
+      "name": "CharacterLocSerializer.LocaleLocDto",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5977,
+      "namespace": "",
+      "name": "CharacterLocSerializer.CustomValuessDto",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5978,
+      "namespace": "",
+      "name": "CharacterLocSerializer",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 5979,
+      "namespace": "",
+      "name": "LocalePluralForms",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 5980,
+      "namespace": "",
+      "name": "LocalizationAPI",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5981,
+      "namespace": "",
+      "name": "LocalizationData",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5982,
+      "namespace": "",
+      "name": "Hints.EKeys",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5983,
+      "namespace": "",
+      "name": "Hints",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5984,
+      "namespace": "",
+      "name": "EWordType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5985,
+      "namespace": "",
+      "name": "ELanguage",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 5986,
+      "namespace": "",
+      "name": "WordTypeHelper",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5987,
+      "namespace": "",
+      "name": "Hint",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5988,
+      "namespace": "",
+      "name": "TooltipInfo",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5989,
+      "namespace": "",
+      "name": "Localization",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5990,
+      "namespace": "",
+      "name": "Keys",
+      "kind": "class",
+      "field_count": 14,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 5991,
+      "namespace": "",
+      "name": "OptionSettings",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 5992,
+      "namespace": "",
+      "name": "PluralsSettings",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5993,
+      "namespace": "",
+      "name": "BoolsSettings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5994,
+      "namespace": "",
+      "name": "CharactersSettings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5995,
+      "namespace": "",
+      "name": "CustomSettings",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5996,
+      "namespace": "",
+      "name": "IdsSettings",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5997,
+      "namespace": "",
+      "name": "IdsList",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 5998,
+      "namespace": "",
+      "name": "StringInfoSettings",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 5999,
+      "namespace": "",
+      "name": "KeywordsSettings",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 15,
+      "native_method_count": 15
+    },
+    {
+      "type_def_index": 6000,
+      "namespace": "",
+      "name": "KeywordsList",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6001,
+      "namespace": "",
+      "name": "OptionSettingsSerializer.Envelope",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6002,
+      "namespace": "",
+      "name": "OptionSettingsSerializer.EntryJson",
+      "kind": "class",
+      "field_count": 19,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6003,
+      "namespace": "",
+      "name": "OptionSettingsSerializer",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6004,
+      "namespace": "",
+      "name": "TranslationExporter.LocalizationHintsExportFile",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6005,
+      "namespace": "",
+      "name": "TranslationExporter.HintLocaleEntry",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6006,
+      "namespace": "",
+      "name": "TranslationExporter.ExportFile",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6007,
+      "namespace": "",
+      "name": "TranslationExporter.ExportEntry",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6008,
+      "namespace": "",
+      "name": "TranslationExporter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6009,
+      "namespace": "",
+      "name": "TranslationImporter",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6010,
+      "namespace": "",
+      "name": "TranslationPersistenceManager.LocalesWrapper",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6011,
+      "namespace": "",
+      "name": "TranslationPersistenceManager",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 15,
+      "native_method_count": 15
+    },
+    {
+      "type_def_index": 6012,
+      "namespace": "",
+      "name": "TranslationSettings",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6013,
+      "namespace": "",
+      "name": "UnitySourceGeneratedAssemblyMonoScriptTypes_v1.MonoScriptData",
+      "kind": "struct",
+      "field_count": 5,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6014,
+      "namespace": "",
+      "name": "UnitySourceGeneratedAssemblyMonoScriptTypes_v1",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6015,
+      "namespace": "",
+      "name": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6016,
+      "namespace": "",
+      "name": "BugReport.<ShowCodecksFormCoroutine>d__6",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6017,
+      "namespace": "Codecks.Runtime",
+      "name": "BugReport",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6018,
+      "namespace": "TMPro",
+      "name": "TMP_DigitValidator",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6019,
+      "namespace": "TMPro",
+      "name": "TMP_PhoneNumberValidator",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6020,
+      "namespace": "",
+      "name": "TMP_TextEventHandler.CharacterSelectionEvent",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6021,
+      "namespace": "",
+      "name": "TMP_TextEventHandler.SpriteSelectionEvent",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6022,
+      "namespace": "",
+      "name": "TMP_TextEventHandler.WordSelectionEvent",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6023,
+      "namespace": "",
+      "name": "TMP_TextEventHandler.LineSelectionEvent",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6024,
+      "namespace": "",
+      "name": "TMP_TextEventHandler.LinkSelectionEvent",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6025,
+      "namespace": "TMPro",
+      "name": "TMP_TextEventHandler",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 20,
+      "native_method_count": 20
+    },
+    {
+      "type_def_index": 6026,
+      "namespace": "",
+      "name": "Benchmark01.<Start>d__10",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6027,
+      "namespace": "TMPro.Examples",
+      "name": "Benchmark01",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6028,
+      "namespace": "",
+      "name": "Benchmark01_UGUI.<Start>d__10",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6029,
+      "namespace": "TMPro.Examples",
+      "name": "Benchmark01_UGUI",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6030,
+      "namespace": "TMPro.Examples",
+      "name": "Benchmark02",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6031,
+      "namespace": "",
+      "name": "Benchmark03.BenchmarkType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6032,
+      "namespace": "TMPro.Examples",
+      "name": "Benchmark03",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6033,
+      "namespace": "TMPro.Examples",
+      "name": "Benchmark04",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6034,
+      "namespace": "",
+      "name": "CameraController.CameraModes",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6035,
+      "namespace": "TMPro.Examples",
+      "name": "CameraController",
+      "kind": "class",
+      "field_count": 23,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6036,
+      "namespace": "",
+      "name": "ObjectSpin.MotionType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6037,
+      "namespace": "TMPro.Examples",
+      "name": "ObjectSpin",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6038,
+      "namespace": "",
+      "name": "ShaderPropAnimator.<AnimateProperties>d__6",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6039,
+      "namespace": "TMPro.Examples",
+      "name": "ShaderPropAnimator",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6040,
+      "namespace": "TMPro.Examples",
+      "name": "SimpleScript",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6041,
+      "namespace": "",
+      "name": "SkewTextExample.<WarpText>d__7",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6042,
+      "namespace": "TMPro.Examples",
+      "name": "SkewTextExample",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6043,
+      "namespace": "",
+      "name": "TeleType.<Start>d__4",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6044,
+      "namespace": "TMPro.Examples",
+      "name": "TeleType",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6045,
+      "namespace": "",
+      "name": "TextConsoleSimulator.<RevealCharacters>d__7",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6046,
+      "namespace": "",
+      "name": "TextConsoleSimulator.<RevealWords>d__8",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6047,
+      "namespace": "TMPro.Examples",
+      "name": "TextConsoleSimulator",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 6048,
+      "namespace": "",
+      "name": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6049,
+      "namespace": "",
+      "name": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6050,
+      "namespace": "TMPro.Examples",
+      "name": "TextMeshProFloatingText",
+      "kind": "class",
+      "field_count": 13,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6051,
+      "namespace": "TMPro.Examples",
+      "name": "TextMeshSpawner",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6052,
+      "namespace": "",
+      "name": "TMPro_InstructionOverlay.FpsCounterAnchorPositions",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6053,
+      "namespace": "TMPro.Examples",
+      "name": "TMPro_InstructionOverlay",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6054,
+      "namespace": "",
+      "name": "TMP_ExampleScript_01.objectType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6055,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_ExampleScript_01",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6056,
+      "namespace": "",
+      "name": "TMP_FrameRateCounter.FpsCounterAnchorPositions",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6057,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_FrameRateCounter",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6058,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_TextEventCheck",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 6059,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_TextInfoDebugTool",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6060,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_TextSelector_A",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6061,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_TextSelector_B",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 6062,
+      "namespace": "",
+      "name": "TMP_UiFrameRateCounter.FpsCounterAnchorPositions",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6063,
+      "namespace": "TMPro.Examples",
+      "name": "TMP_UiFrameRateCounter",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6064,
+      "namespace": "",
+      "name": "VertexColorCycler.<AnimateVertexColors>d__3",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6065,
+      "namespace": "TMPro.Examples",
+      "name": "VertexColorCycler",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6066,
+      "namespace": "",
+      "name": "VertexJitter.VertexAnim",
+      "kind": "struct",
+      "field_count": 3,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6067,
+      "namespace": "",
+      "name": "VertexJitter.<AnimateVertexColors>d__11",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6068,
+      "namespace": "TMPro.Examples",
+      "name": "VertexJitter",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6069,
+      "namespace": "",
+      "name": "VertexShakeA.<AnimateVertexColors>d__11",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6070,
+      "namespace": "TMPro.Examples",
+      "name": "VertexShakeA",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6071,
+      "namespace": "",
+      "name": "VertexShakeB.<AnimateVertexColors>d__10",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6072,
+      "namespace": "TMPro.Examples",
+      "name": "VertexShakeB",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6073,
+      "namespace": "",
+      "name": "VertexZoom.<>c__DisplayClass10_0",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6074,
+      "namespace": "",
+      "name": "VertexZoom.<AnimateVertexColors>d__10",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6075,
+      "namespace": "TMPro.Examples",
+      "name": "VertexZoom",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6076,
+      "namespace": "",
+      "name": "WarpTextExample.<WarpText>d__8",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6077,
+      "namespace": "TMPro.Examples",
+      "name": "WarpTextExample",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6078,
+      "namespace": "SpriteShadersUltimate",
+      "name": "ImageSSU",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6079,
+      "namespace": "SpriteShadersUltimate",
+      "name": "InteractiveWindSSU",
+      "kind": "class",
+      "field_count": 25,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6080,
+      "namespace": "SpriteShadersUltimate",
+      "name": "WindManagerSSU",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6081,
+      "namespace": "SpriteShadersUltimate",
+      "name": "WindParallaxSSU",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6082,
+      "namespace": "SpriteShadersUltimate",
+      "name": "InstancerSSU",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6083,
+      "namespace": "SpriteShadersUltimate",
+      "name": "MaterialInstancerSSU",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6084,
+      "namespace": "SpriteShadersUltimate",
+      "name": "ShaderFaderSSU",
+      "kind": "class",
+      "field_count": 16,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 6085,
+      "namespace": "SpriteShadersUltimate",
+      "name": "BaseFaderSSU",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6086,
+      "namespace": "SpriteShadersUltimate",
+      "name": "FloatFaderSSU",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6087,
+      "namespace": "SpriteShadersUltimate",
+      "name": "VectorFaderSSU",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6088,
+      "namespace": "SpriteShadersUltimate",
+      "name": "ColorFaderSSU",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6089,
+      "namespace": "SpriteShadersUltimate",
+      "name": "SpriteSheetSSU",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6090,
+      "namespace": "SpriteShadersUltimate",
+      "name": "UnscaledTimeSSU",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6091,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_Camera",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6092,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_ColorPicker",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6093,
+      "namespace": "",
+      "name": "Demo_Display.<CycleShader>d__19",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6094,
+      "namespace": "",
+      "name": "Demo_Display.<HandlePosition>d__20",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6095,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_Display",
+      "kind": "class",
+      "field_count": 17,
+      "method_count": 17,
+      "native_method_count": 17
+    },
+    {
+      "type_def_index": 6096,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_DisplayTitle",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6097,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_FloatPicker",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6098,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_GUI",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 6099,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_Player",
+      "kind": "class",
+      "field_count": 14,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6100,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_Shaders",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6101,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_SpriteFader",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6102,
+      "namespace": "",
+      "name": "Demo_Trigger.<PlayEvent>d__6",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6103,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_Trigger",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6104,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_TriggerEvent",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6105,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_VectorFollow",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6106,
+      "namespace": "SpriteShadersUltimate.Demo",
+      "name": "Demo_VectorPicker",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6107,
+      "namespace": "SoftMasking.Samples",
+      "name": "Draggable",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6108,
+      "namespace": "SoftMasking.Samples",
+      "name": "HorizontalFovSetter",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6109,
+      "namespace": "SoftMasking.Samples",
+      "name": "Item",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6110,
+      "namespace": "SoftMasking.Samples",
+      "name": "ItemsGenerator",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6111,
+      "namespace": "SoftMasking.Samples",
+      "name": "MaskPainter",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6112,
+      "namespace": "SoftMasking.Samples",
+      "name": "Minimap",
+      "kind": "class",
+      "field_count": 6,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6113,
+      "namespace": "SoftMasking.Samples",
+      "name": "PaintedMask",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6114,
+      "namespace": "",
+      "name": "RectManipulator.ManipulationType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6115,
+      "namespace": "SoftMasking.Samples",
+      "name": "RectManipulator",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 22,
+      "native_method_count": 22
+    },
+    {
+      "type_def_index": 6116,
+      "namespace": "SoftMasking.Samples",
+      "name": "ShowOnHover",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6117,
+      "namespace": "",
+      "name": "SoftMaskSampleChooser.<>c__DisplayClass2_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6118,
+      "namespace": "SoftMasking.Samples",
+      "name": "SoftMaskSampleChooser",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6119,
+      "namespace": "SoftMasking.Samples",
+      "name": "SoftMaskToggler",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6120,
+      "namespace": "SoftMasking.Samples",
+      "name": "Tooltip",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6121,
+      "namespace": "DissolveExample",
+      "name": "DissolveChilds",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6122,
+      "namespace": "DissolveExample",
+      "name": "DissolveOffest",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6123,
+      "namespace": "DissolveExample",
+      "name": "Follow",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6124,
+      "namespace": "DissolveExample",
+      "name": "Rotator",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6125,
+      "namespace": "DissolveExample",
+      "name": "RotatorDissolveDir",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6126,
+      "namespace": "LayerLab.CasualGame",
+      "name": "PanelView",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6127,
+      "namespace": "LayerLab.GUIScripts",
+      "name": "PanelControl",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 13,
+      "native_method_count": 13
+    },
+    {
+      "type_def_index": 6128,
+      "namespace": "UnityEngine.UI.Extensions.FantasyRPG",
+      "name": "UIParticleSystem",
+      "kind": "class",
+      "field_count": 15,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 6129,
+      "namespace": "UnityEngine.UI.Extensions.CasualGame",
+      "name": "UIParticleSystem",
+      "kind": "class",
+      "field_count": 15,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 6130,
+      "namespace": "FIMSpace",
+      "name": "FAnimatorMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6131,
+      "namespace": "FIMSpace",
+      "name": "FColorMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6132,
+      "namespace": "FIMSpace",
+      "name": "FDebug",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 15,
+      "native_method_count": 15
+    },
+    {
+      "type_def_index": 6133,
+      "namespace": "FIMSpace",
+      "name": "FStringMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6134,
+      "namespace": "FIMSpace",
+      "name": "FEngineering",
+      "kind": "class",
+      "field_count": 5,
+      "method_count": 63,
+      "native_method_count": 63
+    },
+    {
+      "type_def_index": 6135,
+      "namespace": "FIMSpace",
+      "name": "FLogicMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 22,
+      "native_method_count": 19
+    },
+    {
+      "type_def_index": 6136,
+      "namespace": "FIMSpace",
+      "name": "FTransformMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 8,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6137,
+      "namespace": "FIMSpace",
+      "name": "FVectorMethods",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 23,
+      "native_method_count": 23
+    },
+    {
+      "type_def_index": 6138,
+      "namespace": "",
+      "name": "FImp_ColliderData_Base.EFColliderType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6139,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Base",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 17,
+      "native_method_count": 17
+    },
+    {
+      "type_def_index": 6140,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Box",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 30,
+      "native_method_count": 30
+    },
+    {
+      "type_def_index": 6141,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Capsule",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 16,
+      "native_method_count": 16
+    },
+    {
+      "type_def_index": 6142,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_CharacterCapsule",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 6143,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Mesh",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 9,
+      "native_method_count": 9
+    },
+    {
+      "type_def_index": 6144,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Sphere",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 6145,
+      "namespace": "FIMSpace",
+      "name": "FImp_ColliderData_Terrain",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6146,
+      "namespace": "FIMSpace.FEditor",
+      "name": "FGUI_Finders",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 10,
+      "native_method_count": 10
+    },
+    {
+      "type_def_index": 6147,
+      "namespace": "FIMSpace.FTools",
+      "name": "FIK_ProcessorBase",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 15,
+      "native_method_count": 15
+    },
+    {
+      "type_def_index": 6148,
+      "namespace": "FIMSpace.FTools",
+      "name": "FIK_IKBoneBase",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6149,
+      "namespace": "",
+      "name": "FIK_CCDProcessor.CCDIKBone",
+      "kind": "class",
+      "field_count": 11,
+      "method_count": 11,
+      "native_method_count": 11
+    },
+    {
+      "type_def_index": 6150,
+      "namespace": "FIMSpace.FTools",
+      "name": "FIK_CCDProcessor",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 6151,
+      "namespace": "FIMSpace.Basics",
+      "name": "FBasic_ObjectVibrate",
+      "kind": "class",
+      "field_count": 12,
+      "method_count": 8,
+      "native_method_count": 8
+    },
+    {
+      "type_def_index": 6152,
+      "namespace": "FIMSpace.Basics",
+      "name": "FBasic_RotateSpinSin",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6153,
+      "namespace": "FIMSpace.Basics",
+      "name": "FBasic_Rotator",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6154,
+      "namespace": "FIMSpace.Basics",
+      "name": "FBasic_FreeCameraBehaviour",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 4,
+      "native_method_count": 4
+    },
+    {
+      "type_def_index": 6155,
+      "namespace": "FIMSpace.Basics",
+      "name": "FAnimationClips",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 6156,
+      "namespace": "FIMSpace.Basics",
+      "name": "FAnimator",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 14,
+      "native_method_count": 14
+    },
+    {
+      "type_def_index": 6157,
+      "namespace": "FIMSpace.Basics",
+      "name": "EFUpdateClock",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6158,
+      "namespace": "",
+      "name": "TailAnimator2.TailSegment",
+      "kind": "class",
+      "field_count": 50,
+      "method_count": 57,
+      "native_method_count": 57
+    },
+    {
+      "type_def_index": 6159,
+      "namespace": "",
+      "name": "TailAnimator2.ECollisionSpace",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6160,
+      "namespace": "",
+      "name": "TailAnimator2.ECollisionMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6161,
+      "namespace": "",
+      "name": "TailAnimator2.IKBoneSettings",
+      "kind": "class",
+      "field_count": 3,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6162,
+      "namespace": "",
+      "name": "TailAnimator2.FEWavingType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6163,
+      "namespace": "",
+      "name": "TailAnimator2.EFDeltaType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6164,
+      "namespace": "",
+      "name": "TailAnimator2.EAnimationStyle",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6165,
+      "namespace": "",
+      "name": "TailAnimator2.ETailCategory",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6166,
+      "namespace": "",
+      "name": "TailAnimator2.ETailFeaturesCategory",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6167,
+      "namespace": "",
+      "name": "TailAnimator2.EFixedMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6168,
+      "namespace": "",
+      "name": "TailAnimator2.<>c__DisplayClass44_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6169,
+      "namespace": "",
+      "name": "TailAnimator2.<>c__DisplayClass45_0",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6170,
+      "namespace": "",
+      "name": "TailAnimator2.<LateFixed>d__278",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6171,
+      "namespace": "FIMSpace.FTail",
+      "name": "TailAnimator2",
+      "kind": "class",
+      "field_count": 225,
+      "method_count": 127,
+      "native_method_count": 127
+    },
+    {
+      "type_def_index": 6172,
+      "namespace": "FIMSpace.FTail",
+      "name": "FTail_Skinning",
+      "kind": "class",
+      "field_count": 0,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6173,
+      "namespace": "",
+      "name": "FTail_SkinningVertexData.<>c",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 3,
+      "native_method_count": 3
+    },
+    {
+      "type_def_index": 6174,
+      "namespace": "FIMSpace.FTail",
+      "name": "FTail_SkinningVertexData",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 7,
+      "native_method_count": 7
+    },
+    {
+      "type_def_index": 6175,
+      "namespace": "FIMSpace.FTail",
+      "name": "TailAnimatorWind",
+      "kind": "class",
+      "field_count": 29,
+      "method_count": 13,
+      "native_method_count": 13
+    },
+    {
+      "type_def_index": 6176,
+      "namespace": "FIMSpace.FTail",
+      "name": "TailCollisionHelper",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 6177,
+      "namespace": "",
+      "name": "FEyesAnimator.FERandomMovementType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6178,
+      "namespace": "",
+      "name": "FEyesAnimator.FE_EyesBlinkingMode",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6179,
+      "namespace": "",
+      "name": "FEyesAnimator.BlinkTimers",
+      "kind": "class",
+      "field_count": 4,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6180,
+      "namespace": "",
+      "name": "FEyesAnimator.EyesAnimator_BlenshapesInfo",
+      "kind": "class",
+      "field_count": 9,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6181,
+      "namespace": "",
+      "name": "FEyesAnimator.Eye",
+      "kind": "class",
+      "field_count": 13,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6182,
+      "namespace": "",
+      "name": "FEyesAnimator.EyeSetup.EEyeControlType",
+      "kind": "enum",
+      "field_count": 1,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6183,
+      "namespace": "",
+      "name": "FEyesAnimator.EyeSetup",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 5,
+      "native_method_count": 5
+    },
+    {
+      "type_def_index": 6184,
+      "namespace": "",
+      "name": "FEyesAnimator.<BlendInOut>d__180",
+      "kind": "class",
+      "field_count": 7,
+      "method_count": 6,
+      "native_method_count": 6
+    },
+    {
+      "type_def_index": 6185,
+      "namespace": "FIMSpace.FEyes",
+      "name": "FEyesAnimator",
+      "kind": "class",
+      "field_count": 97,
+      "method_count": 67,
+      "native_method_count": 66
+    },
+    {
+      "type_def_index": 6186,
+      "namespace": "FIMSpace.FEyes",
+      "name": "FEyesAnimator_Demo_AccesingCues",
+      "kind": "class",
+      "field_count": 10,
+      "method_count": 12,
+      "native_method_count": 12
+    },
+    {
+      "type_def_index": 6187,
+      "namespace": "FIMSpace.FEyes",
+      "name": "FEyesAnimator_Demo_AccesingCuesClips",
+      "kind": "class",
+      "field_count": 8,
+      "method_count": 1,
+      "native_method_count": 1
+    },
+    {
+      "type_def_index": 6188,
+      "namespace": "FIMSpace.FEyes",
+      "name": "FEyesAnimator_Demo_VoiceScaler",
+      "kind": "class",
+      "field_count": 1,
+      "method_count": 2,
+      "native_method_count": 2
+    },
+    {
+      "type_def_index": 6189,
+      "namespace": "",
+      "name": "<PrivateImplementationDetails>.__StaticArrayInitTypeSize=13888",
+      "kind": "struct",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6190,
+      "namespace": "",
+      "name": "<PrivateImplementationDetails>.__StaticArrayInitTypeSize=22291",
+      "kind": "struct",
+      "field_count": 0,
+      "method_count": 0,
+      "native_method_count": 0
+    },
+    {
+      "type_def_index": 6191,
+      "namespace": "",
+      "name": "<PrivateImplementationDetails>",
+      "kind": "class",
+      "field_count": 2,
+      "method_count": 1,
+      "native_method_count": 1
+    }
+  ]
+}

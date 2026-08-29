@@ -1,6 +1,21 @@
 {
   "schema_version": 1,
   "tools": {
+    "cpp2il": {
+      "commit": "cae273a255d317f334ad8d71f457848645635d83",
+      "commit_date": "2026-08-19T10:53:29Z",
+      "output_format": "dll_il_recovery",
+      "repository": "https://github.com/SamboyCoding/Cpp2IL.git",
+      "version": "2022.1.0+cae273a255d317f334ad8d71f457848645635d83"
+    },
+    "dotnet_sdk": {
+      "archive_name": "dotnet-sdk-10.0.400-win-x64.zip",
+      "archive_sha512": "9B8B88590E4DA131BFD0DA7AA089D0FC04D5418D5F8607EC13D55DC5A17B4399AFD54D496C12657FA05C6C6546DC5EAB930F26AC6C50F2D3A7712C0FB378C366",
+      "archive_size": 300546129,
+      "archive_url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.400/dotnet-sdk-10.0.400-win-x64.zip",
+      "runtime_version": "10.0.11",
+      "version": "10.0.400"
+    },
     "ghidra": {
       "archive_sha256": "93A5D11A9AD510622ACAAF908C556A7B9B764D338E78A7567F3689BF5081FD54",
       "archive_size": 569445154,
@@ -32,6 +47,13 @@
       },
       "release": "v6.7.46",
       "version": "6.7.46"
+    },
+    "ilspycmd": {
+      "archive_name": "ilspycmd.11.0.0.9375.zip",
+      "archive_sha256": "8F555B3FCA90A1D7A59050D78539C69DEEDAAD421756BD4FE478D135BDAC2DEA",
+      "archive_size": 4861836,
+      "archive_url": "https://api.nuget.org/v3-flatcontainer/ilspycmd/11.0.0.9375/ilspycmd.11.0.0.9375.nupkg",
+      "version": "11.0.0.9375"
     }
   }
 }

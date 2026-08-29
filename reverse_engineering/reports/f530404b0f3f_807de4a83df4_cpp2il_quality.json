@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_file_count": 558,
+  "source_bytes": 5445059,
+  "source_line_count": 165514,
+  "files_with_decompiler_issue_notes": 343,
+  "quality_markers": {
+    "decompiler_issue_notes": 8993,
+    "method_not_found_notes": 2240,
+    "indirect_call_notes": 348,
+    "ilspy_expected_type_warnings": 2957,
+    "unknown_result_type_warnings": 3304,
+    "throw_null_statements": 13
+  },
+  "assembly_csharp": {
+    "sha256": "24882B1B2E5453D0DCFBBA8920A8A92829E9A4DC3317BF96A1AE89DD6F7A9BFD",
+    "size": 2246656
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "tool": {
+    "name": "Il2CppDumper",
+    "version": "6.7.46",
+    "config": "../../toolchain/toolchain.lock.json"
+  },
+  "detected": {
+    "metadata_version": 29,
+    "il2cpp_version": "29.1",
+    "image_base": "0x180000000",
+    "code_registration_va": "0x181FB0000",
+    "metadata_registration_va": "0x18232BC80"
+  },
+  "outputs": {
+    "dump_cs": {
+      "sha256": "53F5DA90D056AE96970EEBC3293FD48190F2C7F70605348FCD38FA3302C438B7",
+      "size": 22972879
+    },
+    "il2cpp_h": {
+      "sha256": "E1556B4DC5953FEA2D9DE2D071E76AD0B795A3B502AC31DA10D47DCA51D688C6",
+      "size": 35138658
+    },
+    "script_json": {
+      "sha256": "6C4E6E01A7672B69096E0D52491F3B848237AC40EF3B3817BEB8B442AB18F769",
+      "size": 67431376
+    },
+    "stringliteral_json": {
+      "sha256": "C887901812880F63D941CDD16188BD7E736CB4107D12822A8EB8352FE231C452",
+      "size": 1288373
+    },
+    "dummy_dll_count": 87
+  }
+}

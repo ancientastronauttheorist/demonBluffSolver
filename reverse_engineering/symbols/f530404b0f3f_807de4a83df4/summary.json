@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "dump_cs_sha256": "53F5DA90D056AE96970EEBC3293FD48190F2C7F70605348FCD38FA3302C438B7",
+    "script_json_sha256": "6C4E6E01A7672B69096E0D52491F3B848237AC40EF3B3817BEB8B442AB18F769"
+  },
+  "dump": {
+    "line_count": 623492,
+    "image_count": 87,
+    "type_count": 12540
+  },
+  "script_json": {
+    "ScriptMethod": 158195,
+    "ScriptString": 14380,
+    "ScriptMetadata": 9839,
+    "ScriptMetadataMethod": 21060,
+    "Addresses": 97885
+  },
+  "assembly_csharp": {
+    "type_count": 770,
+    "kind_counts": {
+      "class": 696,
+      "enum": 62,
+      "interface": 5,
+      "struct": 7
+    },
+    "field_count": 2931,
+    "method_count": 4207,
+    "native_method_count": 4133,
+    "type_start": 5422,
+    "type_end_exclusive": 6192
+  }
+}

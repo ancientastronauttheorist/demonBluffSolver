@@ -162,9 +162,20 @@ def main() -> int:
     (args.output_dir / "summary.json").write_text(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )
+    public_game_types = [
+        {key: value for key, value in item.items() if key != "assembly"}
+        for item in game_types
+    ]
     (args.output_dir / "assembly_csharp_types.json").write_text(
         json.dumps(
-            {"schema_version": 1, "assembly": "Assembly-CSharp.dll", "types": game_types},
+            {
+                "schema_version": 1,
+                "assembly": "Assembly-CSharp.dll",
+                "source": summary["inputs"],
+                "type_start": summary["assembly_csharp"]["type_start"],
+                "type_end_exclusive": summary["assembly_csharp"]["type_end_exclusive"],
+                "types": public_game_types,
+            },
             indent=2,
         )
         + "\n",

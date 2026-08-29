@@ -62,6 +62,34 @@ python reverse_engineering/scripts/index_il2cpp_dump.py `
   --output-dir reverse_engineering/generated/current
 ```
 
+Recover native methods into managed IL with the pinned Cpp2IL development
+commit, then render the recovered assembly as local C# with ILSpyCmd:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_cpp2il.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest'
+```
+
+Cpp2IL's “success” count means it emitted IL for a method, not that the output
+is source-accurate. Complex methods contain explicit recovery warnings and must
+be checked against Ghidra/native instructions and live behavior. The checked-in
+quality report keeps those warnings visible.
+
+Create a symbolized Ghidra project in two steps:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage import
+
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage analyze
+```
+
 ## Evidence levels
 
 Every behavioral or layout claim should carry one of these labels:
