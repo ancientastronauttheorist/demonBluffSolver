@@ -38,6 +38,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   native-audit its first 11-method setup, board, reveal, and click/kill slice.
 - [x] Native-audit the remaining 17 initialization, reveal/kill-helper,
   bookkeeping, and Night-flow methods; close the lifecycle boundary.
+- [x] Expand the isolated typed project to all 28 lifecycle methods and pass
+  post-save ABI validation plus baseline-versus-typed quality checks.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

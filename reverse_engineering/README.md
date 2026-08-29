@@ -152,15 +152,15 @@ powershell -ExecutionPolicy Bypass -File `
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
-rewrites and 6,159 explicit alignments, and builds a 151,087-datatype GDT. The
+rewrites and 6,159 explicit alignments, and builds a 151,120-datatype GDT. The
 typed project is separate from the baseline project. It applies only datatype
 graphs reachable from the checked-in function signatures and validates exact
 entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
 completion before writing success summaries. `typed-analyze` and `typed-all`
 also reopen the saved program read-only and repeat those checks; `typed-export`
-requires their fresh success summaries and opens the project read-only. The two
-target sets typed so far cover 19 methods, all of which survived the complete
-2,588-second analysis pass with 55 parameter-storage locations validated.
+requires their fresh success summaries and opens the project read-only. The
+three checked target sets cover 47 methods, all of which survived the complete
+2,458-second analysis pass with 121 parameter-storage locations validated.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -174,10 +174,12 @@ python reverse_engineering/scripts/audit_ghidra_type_quality.py `
 ```
 
 For the current exports, unresolved-type tokens fell from 78 to 43 in
-`gameplay_core` and from 38 to 34 in `gameplay_roster_helpers`; raw field-offset
-accesses fell from 237 to 144 and from 76 to 41, respectively, without adding
-decompiler-error markers. The current public counts and artifact observations
-are recorded in
+`gameplay_core`, from 370 to 149 in `gameplay_lifecycle`, and from 38 to 34 in
+`gameplay_roster_helpers`. Raw field-offset accesses fell from 237 to 144, from
+678 to 289, and from 76 to 41, respectively. Error-marker counts did not
+increase; lifecycle gained one nonfatal type-propagation warning in
+`Characters.ManageCharacters`. The current public counts and artifact
+observations are recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json).
 
 ## Method coverage

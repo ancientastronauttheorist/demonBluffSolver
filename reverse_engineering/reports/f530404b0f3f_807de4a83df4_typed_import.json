@@ -5,18 +5,18 @@
   "normalization": {
     "il2cpp_h_sha256": "E1556B4DC5953FEA2D9DE2D071E76AD0B795A3B502AC31DA10D47DCA51D688C6",
     "normalized_header_sha256": "EAC93D9A7AF73C0CEFD9B8B4156794A90215BAA1DF8801A4ECEFBB90D96A8D0C",
-    "prototype_header_sha256": "1A2C100B5B99CAB49C2635BD9DB5AFA5854D5EC71B53EE4C7D51F63D72788D34",
+    "prototype_header_sha256": "25E9D409B32587E170891EAE58421B2392975B34DC203478405C59CECAA92DA4",
     "inheritance_rewrites": 5830,
     "explicit_alignments": 6159,
-    "prototype_count": 19
+    "prototype_count": 47
   },
   "datatype_archive": {
     "language": "x86:LE:64:default",
     "compiler": "windows",
-    "datatype_count": 151087,
+    "datatype_count": 151120,
     "critical_layouts_validated": true,
-    "observed_size": 32087291,
-    "observed_sha256": "21F2DCA5397800FEC0205E495CEF73D0DB8DC4D5818CAECF69CC4B732400E650"
+    "observed_size": 32114395,
+    "observed_sha256": "FFDF931F240800DA123FFE7BDCD4493BF12D0CFEF004E279BB9A59CDA27E3E26"
   },
   "symbol_import": {
     "method_labels": 158195,
@@ -43,6 +43,21 @@
       "calling_convention": "__fastcall"
     },
     {
+      "name": "gameplay_lifecycle",
+      "target_sha256": "183F540E3F35241860F1070D0BC138EA493C09B4C24141CB32B6E75602E72C19",
+      "requested": 28,
+      "applied": 28,
+      "validated": 28,
+      "post_analysis_validated": 28,
+      "imported_datatypes": 48,
+      "seven_argument_targets": 0,
+      "preserved_labels": 28,
+      "verified_metadata_labels": 28,
+      "validated_parameter_storages": 66,
+      "program_mutations_during_read_only_validation": 0,
+      "calling_convention": "__fastcall"
+    },
+    {
       "name": "gameplay_roster_helpers",
       "target_sha256": "962B579949F31DEE1ACF01F62E2F1F7DDDED588D62B307276D4767B5937FEA36",
       "requested": 6,
@@ -61,7 +76,7 @@
   "analysis_complete": true,
   "analysis": {
     "program": "GameAssembly.dll",
-    "elapsed_seconds": 2588,
+    "elapsed_seconds": 2458,
     "timeout_occurred": false,
     "post_analysis_succeeded": true,
     "saved": true
@@ -78,6 +93,18 @@
       "typed_raw_field_offset_accesses": 144,
       "baseline_decompiler_error_markers": 4,
       "typed_decompiler_error_markers": 4
+    },
+    {
+      "name": "gameplay_lifecycle",
+      "report": "f530404b0f3f_807de4a83df4_typed_quality_gameplay_lifecycle.json",
+      "target_count": 28,
+      "check_passed": true,
+      "baseline_unresolved_type_tokens": 370,
+      "typed_unresolved_type_tokens": 149,
+      "baseline_raw_field_offset_accesses": 678,
+      "typed_raw_field_offset_accesses": 289,
+      "baseline_decompiler_error_markers": 1,
+      "typed_decompiler_error_markers": 1
     },
     {
       "name": "gameplay_roster_helpers",

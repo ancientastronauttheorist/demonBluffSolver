@@ -8,7 +8,10 @@ boundary. No statement here is based on live dynamic observation.
 The checked target set is
 [`reverse_engineering/targets/gameplay_lifecycle.json`](../../targets/gameplay_lifecycle.json).
 Its baseline Ghidra export completed read-only at 28/28 functions with no shared
-native bodies. Decompiled bodies remain in the private artifact tree.
+native bodies. The isolated typed project also validated and exported 28/28
+after full analysis. Typed decompilation reduced unresolved-type tokens from
+370 to 149 and raw field-offset accesses from 678 to 289. Decompiled bodies
+remain in the private artifact tree.
 
 ## Boundary
 
