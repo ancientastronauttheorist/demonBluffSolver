@@ -40,6 +40,7 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   bookkeeping, and Night-flow methods; close the lifecycle boundary.
 - [x] Expand the isolated typed project to all 28 lifecycle methods and pass
   post-save ABI validation plus baseline-versus-typed quality checks.
+- [x] Map and baseline-export the 30-method execution-resolution boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

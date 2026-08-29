@@ -118,6 +118,8 @@ count checks without mutating or reanalyzing the saved project; the current
 `gameplay_lifecycle` boundary exports 28 of 28 functions. All 28 entries now
 carry native-static behavioral coverage in the
 [`gameplay_lifecycle` audit](notes/systems/gameplay_lifecycle.md).
+The subsequent `gameplay_execution_resolution` boundary baseline-exports 30 of
+30 functions, including four explicitly tracked shared-body identities.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
