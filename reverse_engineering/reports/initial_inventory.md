@@ -59,23 +59,36 @@ address. All 13 native decompilations completed with zero failures. Four target
 methods use folded native bodies: `Health.Damage` (3 aliases), `Health.Heal`
 (3), `Health.ResetHp` (2), and `CurrentMaxValue.GetValue` (48).
 
+A six-method roster-helper follow-up also exported without failure. It confirms
+that always-in-deck probability uses floating-point division and reveals a
+current-build refill quirk: `ManageEmptyCharacterList` ignores its input, adds
+the Townsfolk source twice, and omits the Demon source. The behavioral
+reachability of the resulting duplicate Townsfolk and empty Demon pools remains
+unverified.
+
 Native review corrected two material Cpp2IL failures: `CharactersCount` stores
 the `outsiders` and `minions` constructor arguments rather than zero, and
 `Health.AddMaxHp` increments max, dispatches Add, then explicitly raises its
 change and UI notifications. The authored findings and evidence links are in
 [`../notes/systems/gameplay_core.md`](../notes/systems/gameplay_core.md).
 
-Ghidra currently has the full label map, but IL2CPP header structures and
-function prototypes have not yet been applied. The native target exports and
-analysis database remain local/private.
+The deterministic typed-header pipeline parses 151,087 datatypes, restores all
+6,159 explicit alignments, validates critical object layouts, and validates 19
+selected FunctionDefinitions. The isolated typed project then imported 1,874
+reachable datatypes while applying the 13 gameplay-core signatures; the six
+roster-helper signatures reused that graph without conflicts. All 19 exact
+entry points, metadata labels, prototypes, dynamic `__fastcall` storage, and
+the seven-argument constructor ABI passed validation. Typed auto-analysis is
+the next gate. The native exports, GDT, and analysis databases remain
+local/private.
 
 ## Method coverage denominator
 
 The generated coverage ledger accounts for all 4,207 managed methods using
 4,158 native bindings and 3,066 unique native bodies. It identifies 107 shared-
-body groups containing 1,199 bindings. The first 13 methods are classified
-`understood` with eight `native-static` evidence records; every missing overlay
-row remains explicitly `unresolved/not-reviewed`.
+body groups containing 1,199 bindings. The first 19 methods are classified
+`understood` with eleven `native-static` evidence records; every missing
+overlay row remains explicitly `unresolved/not-reviewed`.
 
 ## First missing-offset candidates
 
@@ -93,7 +106,7 @@ They must be checked against screenshots and controlled state changes before
 
 ## Next gate
 
-Import IL2CPP header types and prototypes into the analyzed project, then
-cross-check the three candidate pointer chains in a live game. Continue outward
-from the reviewed gameplay-core methods while preserving the 4,207-method
-coverage denominator.
+Run full analysis on the typed project, export and compare the reviewed target
+sets, then cross-check the three candidate pointer chains in a live game.
+Continue outward from the reviewed gameplay and roster methods while preserving
+the 4,207-method coverage denominator.

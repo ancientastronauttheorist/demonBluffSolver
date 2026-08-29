@@ -29,8 +29,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Produce Cpp2IL managed-IL recovery and an explicit quality baseline.
 - [x] Import `GameAssembly.dll` into Ghidra and apply IL2CPP method, metadata,
   and string symbols.
-- [ ] Import IL2CPP headers, prototypes, and field layouts into Ghidra.
+- [x] Import IL2CPP headers, selected prototypes, and reachable field layouts
+  into an isolated typed Ghidra project.
 - [x] Export and confirm the first gameplay-core native target set.
+- [x] Recover and native-audit the first roster-selection helper boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [ ] Recover the gameplay lifecycle and its call graph.

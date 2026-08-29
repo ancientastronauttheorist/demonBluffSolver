@@ -28,3 +28,6 @@ reverse_engineering/**/script.json
 reverse_engineering/**/stringliteral.json
 reverse_engineering/**/*.i64
 reverse_engineering/**/*.idb
+reverse_engineering/**/*.gdt
+reverse_engineering/**/*_CParser.out
+reverse_engineering/**/*.ulock

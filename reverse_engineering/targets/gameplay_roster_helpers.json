@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "functions": [
+    {
+      "name": "Gameplay.ManageAlwaysInDeck",
+      "metadata_name": "Gameplay$$ManageAlwaysInDeck",
+      "signature": "void Gameplay__ManageAlwaysInDeck (Gameplay_o* __this, int32_t charCount, const MethodInfo* method);",
+      "rva": "0x37E760"
+    },
+    {
+      "name": "Gameplay.ManageEmptyCharacterList",
+      "metadata_name": "Gameplay$$ManageEmptyCharacterList",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__ManageEmptyCharacterList (Gameplay_o* __this, System_Collections_Generic_List_CharacterData__o* data, int32_t type, const MethodInfo* method);",
+      "rva": "0x37E990"
+    },
+    {
+      "name": "Gameplay.AddCharacterToTheRoster",
+      "metadata_name": "Gameplay$$AddCharacterToTheRoster",
+      "signature": "void Gameplay__AddCharacterToTheRoster (Gameplay_o* __this, CharacterData_o* cd, const MethodInfo* method);",
+      "rva": "0x37B080"
+    },
+    {
+      "name": "Calculator.GetPercentageChance",
+      "metadata_name": "Calculator$$GetPercentageChance",
+      "signature": "bool Calculator__GetPercentageChance (float percentage, const MethodInfo* method);",
+      "rva": "0x396460"
+    },
+    {
+      "name": "Characters.FilterNotInPlayCharacters",
+      "metadata_name": "Characters$$FilterNotInPlayCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterNotInPlayCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* inpuCharacters, const MethodInfo* method);",
+      "rva": "0x36B660"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.CharacterData",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36B9C0"
+    }
+  ]
+}

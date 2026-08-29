@@ -11,3 +11,9 @@
 {"method":"tdi5604.m0036","state":"understood","reason":"Native faction order, target counts, and candidate movement are documented.","evidence":["ev.gameplay.standard-roster.1"]}
 {"method":"tdi5604.m0041","state":"understood","reason":"Native roster orchestration, quotas, refill points, and shuffle are documented.","evidence":["ev.gameplay.random-roster.1"]}
 {"method":"tdi5838.m0000","state":"understood","reason":"Native stores confirm all constructor arguments and field offsets.","evidence":["ev.characters-count.constructor.1"]}
+{"method":"tdi5505.m0031","state":"understood","reason":"Native filtering preserves order and duplicates while selecting the exact CharacterData faction type.","evidence":["ev.gameplay.empty-roster-refill.1"]}
+{"method":"tdi5505.m0040","state":"understood","reason":"Native filtering clones the input and removes one occurrence for each in-play dataRef.","evidence":["ev.gameplay.empty-roster-refill.1"]}
+{"method":"tdi5604.m0039","state":"understood","reason":"Native floating-point probability and disguised-role routing are documented.","evidence":["ev.gameplay.always-in-deck.1"]}
+{"method":"tdi5604.m0040","state":"understood","reason":"Native faction dispatch and append behavior are documented.","evidence":["ev.gameplay.roster-insertion.1"]}
+{"method":"tdi5604.m0042","state":"understood","reason":"Native refill sources, ignored input, removal, and faction filter behavior are documented.","evidence":["ev.gameplay.empty-roster-refill.1"]}
+{"method":"tdi5683.m0003","state":"understood","reason":"Native random range and strict floating-point comparison are documented.","evidence":["ev.gameplay.always-in-deck.1"]}

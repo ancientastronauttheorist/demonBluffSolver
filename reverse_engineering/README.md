@@ -103,6 +103,41 @@ the public repository under the build-keyed artifact directory. The current
 `gameplay-core` export is expected to produce 13 of 13 functions. Folded native
 bodies retain every requested managed-method identity in their export headers.
 
+Build the deterministic IL2CPP datatype archive, create the isolated typed
+project, analyze it, and export any checked-in target set with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage build-types
+
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage typed-import
+
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage typed-analyze
+
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage typed-export `
+  -TargetSet gameplay_roster_helpers
+```
+
+`build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
+rewrites and 6,159 explicit alignments, and builds a 151,087-datatype GDT. The
+typed project is separate from the baseline project. It applies only datatype
+graphs reachable from the checked-in function signatures and validates exact
+entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
+completion before writing success summaries. The current two target sets cover
+19 methods. The current public counts and artifact observations are recorded in
+[`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json).
+
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,

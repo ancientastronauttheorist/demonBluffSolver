@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "ghidra_version": "12.1.3",
+  "normalization": {
+    "il2cpp_h_sha256": "E1556B4DC5953FEA2D9DE2D071E76AD0B795A3B502AC31DA10D47DCA51D688C6",
+    "normalized_header_sha256": "EAC93D9A7AF73C0CEFD9B8B4156794A90215BAA1DF8801A4ECEFBB90D96A8D0C",
+    "prototype_header_sha256": "1A2C100B5B99CAB49C2635BD9DB5AFA5854D5EC71B53EE4C7D51F63D72788D34",
+    "inheritance_rewrites": 5830,
+    "explicit_alignments": 6159,
+    "prototype_count": 19
+  },
+  "datatype_archive": {
+    "language": "x86:LE:64:default",
+    "compiler": "windows",
+    "datatype_count": 151087,
+    "critical_layouts_validated": true,
+    "observed_size": 32087291,
+    "observed_sha256": "21F2DCA5397800FEC0205E495CEF73D0DB8DC4D5818CAECF69CC4B732400E650"
+  },
+  "symbol_import": {
+    "method_labels": 158195,
+    "unique_functions": 91930,
+    "metadata_labels": 30899,
+    "string_labels": 14380,
+    "skipped_rvas": 0,
+    "cancelled": false
+  },
+  "signature_sets": [
+    {
+      "name": "gameplay_core",
+      "target_sha256": "D35D619BE97F82AAB206BCEDEA4A95C1554382E6521955CE36E36566EB3843ED",
+      "requested": 13,
+      "applied": 13,
+      "validated": 13,
+      "imported_datatypes": 1874,
+      "seven_argument_targets": 1,
+      "preserved_labels": 65,
+      "calling_convention": "__fastcall"
+    },
+    {
+      "name": "gameplay_roster_helpers",
+      "target_sha256": "962B579949F31DEE1ACF01F62E2F1F7DDDED588D62B307276D4767B5937FEA36",
+      "requested": 6,
+      "applied": 6,
+      "validated": 6,
+      "imported_datatypes": 0,
+      "seven_argument_targets": 0,
+      "preserved_labels": 6,
+      "calling_convention": "__fastcall"
+    }
+  ],
+  "analysis_complete": false
+}

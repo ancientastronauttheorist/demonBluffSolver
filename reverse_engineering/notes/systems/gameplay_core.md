@@ -128,9 +128,13 @@ passed to `ManageAlwaysInDeck` and is not used as a loop bound here.
 
 ## Remaining Boundaries
 
-This audit classifies the 13 target methods themselves as understood. Callees
-such as `ManageAlwaysInDeck`, `ManageEmptyCharacterList`, role damage methods,
-and resource implementations remain separate entries in the complete coverage
-ledger. Ghidra currently has imported IL2CPP symbols but not parsed IL2CPP
-structures and prototypes; adding those types is the next static-analysis
-quality gate. Live behavior and screenshot-paired memory checks remain pending.
+This audit classifies the 13 target methods themselves as understood.
+`ManageAlwaysInDeck`, `ManageEmptyCharacterList`, and their immediate helper
+boundary are now covered by the follow-on
+[`gameplay_roster_helpers.md`](gameplay_roster_helpers.md) audit. Role damage
+methods and concrete resource implementations remain separate entries in the
+complete coverage ledger. The isolated typed Ghidra project now applies the
+selected IL2CPP structures and prototypes with validated Windows x64 storage;
+typed auto-analysis and broader call-graph expansion are the next static-
+analysis gates. Live behavior and screenshot-paired memory checks remain
+pending.
