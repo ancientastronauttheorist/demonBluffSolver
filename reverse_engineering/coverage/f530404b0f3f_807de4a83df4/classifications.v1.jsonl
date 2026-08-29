@@ -28,3 +28,20 @@
 {"method":"tdi5487.m0037","state":"understood","reason":"Native phase, picker, reveal, ability, protection, and successful-execution branches are documented.","evidence":["ev.character.click-kill.1"]}
 {"method":"tdi5487.m0047","state":"understood","reason":"Native death-state mutation, callbacks, role death action, kill event, and order snapshot are documented.","evidence":["ev.character.click-kill.1"]}
 {"method":"tdi5604.m0019","state":"understood","reason":"Native hidden-kill reveal-order increment and its synchronous event relationship are documented.","evidence":["ev.character.click-kill.1"]}
+{"method":"tdi5604.m0015","state":"understood","reason":"Native new-run state, collection, score, level, character-loading, and coroutine-start order are documented.","evidence":["ev.gameplay.init.1"]}
+{"method":"tdi5602.m0002","state":"understood","reason":"Native null-yield, game-init callback, mode reread, and game-start/map dispatch are documented.","evidence":["ev.gameplay.init.1"]}
+{"method":"tdi5604.m0020","state":"understood","reason":"Native unlocked-character filtering and faction-list append behavior are documented.","evidence":["ev.gameplay.load-characters.1"]}
+{"method":"tdi5604.m0024","state":"understood","reason":"Native relic enumeration and unfiltered trigger dispatch are documented.","evidence":["ev.gameplay.rules-relics.1"]}
+{"method":"tdi5604.m0027","state":"understood","reason":"Native old-rule removal, double GetRules call, aggregation, initialization, and event order are documented.","evidence":["ev.gameplay.rules-relics.1"]}
+{"method":"tdi5487.m0028","state":"understood","reason":"Native reveal-event dispatch followed by reveal-order snapshot is documented.","evidence":["ev.character.reveal-accounting.1"]}
+{"method":"tdi5604.m0018","state":"understood","reason":"Native global reveal-counter increment and configured subscriber relationship are documented.","evidence":["ev.character.reveal-accounting.1"]}
+{"method":"tdi5487.m0045","state":"understood","reason":"Native forced real-name, status, color, art, and view exposure without reveal accounting is documented.","evidence":["ev.character.forced-kill.1"]}
+{"method":"tdi5487.m0050","state":"understood","reason":"Native forced execution, death actions, state restoration, and final order snapshot are documented.","evidence":["ev.character.forced-kill.1"]}
+{"method":"tdi5487.m0051","state":"understood","reason":"Native forced kill/reveal path and its omission of Executed and final resnapshot are documented.","evidence":["ev.character.forced-kill.1"]}
+{"method":"tdi5487.m0052","state":"understood","reason":"Native protected action and gameplay-state restoration helper are documented.","evidence":["ev.character.forced-kill.1"]}
+{"method":"tdi5487.m0048","state":"understood","reason":"Native immediate demon-pick VFX and delayed-kill coroutine capture are documented.","evidence":["ev.character.demon-kill.1"]}
+{"method":"tdi5483.m0002","state":"understood","reason":"Native demon-kill delay, gates, state/status/event mutations, and death-action ordering are documented.","evidence":["ev.character.demon-kill.1"]}
+{"method":"tdi5604.m0031","state":"understood","reason":"Native evil scoring, dead-list append, UI, and end-condition event order are documented.","evidence":["ev.gameplay.dead-bookkeeping.1"]}
+{"method":"tdi5618.m0002","state":"understood","reason":"Native Night gate and unguarded coroutine launch are documented.","evidence":["ev.night-phase.1"]}
+{"method":"tdi5617.m0002","state":"understood","reason":"Native fade, wait, per-character Night action, Day transition, and local-counter-reset timeline are documented.","evidence":["ev.night-phase.1"]}
+{"method":"tdi5618.m0006","state":"understood","reason":"Native membership selection and stable first-index night ordering are documented.","evidence":["ev.night-phase.1"]}

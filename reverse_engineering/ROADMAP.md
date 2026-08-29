@@ -36,9 +36,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Recover and native-audit the first roster-selection helper boundary.
 - [x] Map and baseline-export the 28-method gameplay-lifecycle boundary, then
   native-audit its first 11-method setup, board, reveal, and click/kill slice.
+- [x] Native-audit the remaining 17 initialization, reveal/kill-helper,
+  bookkeeping, and Night-flow methods; close the lifecycle boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
-- [ ] Recover the gameplay lifecycle and its call graph.
+- [x] Recover the gameplay lifecycle and its call graph.
 - [ ] Recover deck/board construction and ascension rules.
 - [ ] Recover status, corruption, truth/lie, and clue-generation pipelines.
 - [ ] Recover execution, damage, protection, and night-resolution pipelines.

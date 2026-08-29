@@ -115,7 +115,9 @@ the public repository under the build-keyed artifact directory. The current
 bodies retain every requested managed-method identity in their export headers.
 The generic exporter applies the same build, RVA, signature, filename, and
 count checks without mutating or reanalyzing the saved project; the current
-`gameplay_lifecycle` boundary exports 28 of 28 functions.
+`gameplay_lifecycle` boundary exports 28 of 28 functions. All 28 entries now
+carry native-static behavioral coverage in the
+[`gameplay_lifecycle` audit](notes/systems/gameplay_lifecycle.md).
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:

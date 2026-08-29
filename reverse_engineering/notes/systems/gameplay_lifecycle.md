@@ -2,11 +2,8 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **mixed**. Eleven methods in the first setup, board,
-per-card, and click/kill slice have native-static confirmation. The remaining
-seventeen methods in the 28-method boundary are still metadata/managed
-hypotheses and are listed as follow-up work below. No statement here is based on
-live dynamic observation.
+Evidence status: **native-static** for all 28 methods in the checked lifecycle
+boundary. No statement here is based on live dynamic observation.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_lifecycle.json`](../../targets/gameplay_lifecycle.json).
@@ -112,9 +109,10 @@ tail-calls `ManageCharacters`.
 10. shuffle the deck.
 
 The ordinary `Init` pass therefore precedes all ordered `Start` actions, and
-the global character list is visible before either action pass. Every matching
-entry in `startGameActOrder` is processed, so duplicate entries can trigger
-multiple starts.
+the global character list is visible before either action pass. For ordinary
+roles the first matching card ends that role's scan. Alchemist, Poisoner, and
+Puzzlemaster are explicit exceptions: every card sharing their data receives
+the ordered `Start` action.
 
 ## Per-card initialization and internal reveal
 
@@ -186,40 +184,219 @@ The role-level `ActOnDied` call and later `Character.Act(Died)` dispatch are
 distinct surfaces. The role validation happens after state and UI mutation, so
 a missing role can leave a partially killed card before the native guard fails.
 
-## Native-static anchors
+## Initialization entry
 
-The first slice was checked against these native entry points:
+`Gameplay.Init` orders a new run as follows:
+
+1. call `ResetSavedCharacters` (its internals are a separate boundary);
+2. request the Init gameplay state (`1`);
+3. set `currentDay` to zero;
+4. clear the Roguelike deck and global current-relic list;
+5. clone each saved faction list into its corresponding current list;
+6. replace the global score with a new `ScoreOld`, initialized with 100 points
+   for completion, 50 per kill, and 10 per unrevealed card;
+7. call the current mode's `GetStartingLevel` twice, storing the results as
+   `currentLevel` and `startingLevel`;
+8. call `LoadCharacters` when `GetGameMode` returns Standard (`0`); and
+9. start `Gameplay.InitCoroutine`.
+
+Advanced and Standard both return zero from `GetGameMode` in this build. The
+state-change request precedes the day, relic, faction-list, and score resets, so
+synchronous state-change subscribers can observe the old values. This method
+does not directly clear `DeadCharacters`, `CurrentReveal`, or `specialRules`.
+
+`Gameplay.InitCoroutine.MoveNext` first yields null once. On resumption it
+invokes `OnGameInit`, re-reads the current game mode, and then either invokes
+`OnGameStart` for a zero-valued mode or requests the Map state (`70`) for a
+nonzero mode. Because the mode read follows `OnGameInit`, that callback can
+affect the branch.
+
+## Character loading
+
+`Gameplay.LoadCharacters` first tests `ProjectContext.Instance` with Unity
+object equality and returns for a null or destroyed instance. Otherwise it:
+
+1. copies `GameData.GetAllCharactersData` into a temporary list;
+2. filters it in source order by `unlockedCharactersId.Contains(characterId)`;
+3. appends each remaining entry through `Gameplay.Instance` according to its
+   exact faction value: Villager (`10`), Outcast (`20`), Minion (`30`), or
+   Demon (`100`).
+
+Other faction values are ignored. The method neither clears nor deduplicates
+the destination lists, so these unlocked roles append to the saved-list clones
+created by `Init`. The passed receiver is unused; all writes use the global
+instance. Only the initial project-context check is a graceful null path.
+
+## Relic and special-rule dispatch
+
+`Gameplay.TriggerRelics` walks `CurrentRelics` in list order and calls every
+relic's virtual `Act(trigger)`. The dispatcher performs no trigger filtering.
+
+`Gameplay.UpdateRules` first calls `Remove` on every existing rule, leaving the
+old list intact until all removals finish, and then clears it. It next walks the
+new roster in order. For each role it calls `GetRules`; when that first result
+is nonempty it calls `GetRules` a second time and appends the second result with
+`AddRange`. It then calls `Init` on every aggregated rule and finally invokes
+`OnSpecialRulesInit`.
+
+Rule order is roster order followed by each role's returned-list order, with no
+deduplication. The two `GetRules` calls for a nonempty result are native fact;
+static evidence does not assume that both calls return the same list. If the
+new roster is null, old rules have already been removed and cleared before the
+failure. An empty roster still reaches the final event.
+
+## Normal reveal accounting
+
+`Character.OnReveal` invokes `GameplayEvents.OnCharacterRevealed` and, after
+the complete multicast delegate returns, copies `Gameplay.CurrentReveal` into
+the card's order. `Gameplay.OnCharacterReveal` simply increments
+`CurrentReveal`.
+
+`Gameplay.OnEnable` normally subscribes that increment handler to the reveal
+event. Thus the configured path increments the counter before `Character`
+snapshots it, while other subscribers can run before or after the increment
+according to registration order. This method is distinct from the `onReveal`
+UI delegate used by forced reveal helpers.
+
+## Forced real reveal and kill helpers
+
+`Character.RevealAllReal` sets `revealed`, displays the uppercase real role
+name, appends Corrupted (`10`) and Mad (`20`) status labels when present, copies
+the real color and art, and updates the real view. It does not change state or
+`prevState`, invoke either reveal delegate, or update reveal order. Because
+`revealed` is stored first, a later missing dependency can leave a partial
+visual reveal.
+
+`Character.ExecuteAndReveal` performs the same forced-execution sequence used
+by the normal click path:
+
+1. `RevealAllReal`;
+2. `Kill`;
+3. invoke the `onReveal` UI delegate;
+4. run Executed (`40`) and Died (`50`) actions;
+5. request the global previous gameplay state; and
+6. resnapshot `CurrentReveal` into order.
+
+`Character.KillAndReveal` omits Executed and the final order resnapshot, but
+otherwise follows the same sequence. Both helpers bypass
+`Role.CheckIfCanBeKilled`. If the card is already Dead, the internal `Kill` is
+a no-op while the reveal delegate, actions, and state restoration still run.
+
+`Character.KillProtected` only logs, runs Protected (`60`), and requests the
+global previous gameplay state. It performs no protection check and changes no
+card state, reveal flag, order, or status. Native `Character.OnClick` contains
+the execution and protection sequences directly rather than calling these
+helper symbols.
+
+## Demon kill delay
+
+`Character.KillByDemon` immediately invokes the demon-picked-character VFX
+event, captures the victim and evil source in an iterator, and starts the
+coroutine on the victim. It performs no immediate state mutation or killability
+check, so the VFX also fires for an already-dead or protected target.
+
+`Character.DelayedDemonKill.MoveNext` yields `0.45f` and then:
+
+1. exits silently if the victim is already Dead;
+2. asks the current real role whether the victim can be killed, also exiting
+   silently when it cannot;
+3. preserves the old state, sets `killedByDemon`, and changes state to Dead;
+4. invokes the state callback;
+5. adds MessedUpByEvil (`50`) and KilledByEvil (`55`), both sourced from the
+   captured evil card;
+6. invokes the UI update;
+7. runs the card's Died action (`50`) and then the role's `ActOnDied`;
+8. invokes `OnCharacterKilled`; and
+9. calls `Character.UpdateUI`, which snapshots `CurrentReveal`.
+
+This path does not call `Character.Kill`, `RevealAllReal`, or `onReveal`, and it
+does not restore gameplay state. It also does not directly set `killedHidden`,
+although the normal hidden-kill event subscriber still sees the preserved
+Hidden `prevState`. Its card-action/role-action order is the reverse of the
+ordinary `Kill` plus caller path.
+
+## Dead-character bookkeeping
+
+`Gameplay.ManageKilledCharacter` awards score through the runtime score object
+only when alignment is exactly Evil (`20`), appends every killed card to
+`DeadCharacters`, invokes the UI update, and finally tail-dispatches
+`OnCheckEndGameCondition`. It performs no duplicate check, removal from
+`CurrentCharacters`, or direct state/order/counter mutation.
+
+The baseline decompiler's unrecovered-jump-table warning is a false positive.
+Raw x64 shows a normal delegate `invoke_impl` tail dispatch for the end-condition
+event, not a switch. With the normal subscription order, hidden-order increment
+runs before this score/list/UI/end-condition handler. A normal kill therefore
+emits one UI update before the role death action and another after the dead-list
+append.
+
+## Night flow
+
+`NightPhase.ManagePhase` returns unless the global state is Night (`20`). In
+Night it logs and starts a new `StartPhase` coroutine. There is no saved handle,
+overlap guard, cancellation, or later state recheck.
+
+`NightPhase.ReorderList` clears its private list, selects every global character
+whose `dataRef` occurs in `nightCharactersOrder`, then stably sorts those cards
+by the first `IndexOf(dataRef)` in the order list. Selection ignores card ID,
+circle position, reveal order, alignment, and state, so Dead or Hidden cards are
+included when their data appears in the order. Duplicate order entries do not
+duplicate cards; multiple cards sharing a data object keep global-list order
+within their equal key.
+
+`NightPhase.StartPhase.MoveNext` has this exact timeline:
+
+1. fade the night canvas to alpha `1.0` over `0.3f`, then wait `0.8f`;
+2. rebuild the ordered list;
+3. before each selected card, wait `0.4f`, then log its name and run its Night
+   action (`20`);
+4. after the list is exhausted, wait another `0.8f`;
+5. request Day (`10`), set `NightPhase.currentRevealed` to zero, and start an
+   unawaited `0.3f` fade to alpha `0.0`.
+
+For `N` selected cards, the explicit waits total `1.6 + 0.4N` seconds. The Day
+transition happens before resetting the NightPhase-local counter and before
+fade-out. That counter is distinct from `Gameplay.CurrentReveal`. Once started,
+the coroutine can force Day even if another path changed the phase while it was
+waiting.
+
+## Native-static anchors
 
 | Method | RVA |
 | --- | ---: |
+| `Gameplay.Init` | `0x37DEF0` |
+| `Gameplay.InitCoroutine.MoveNext` | `0x38FD10` |
+| `Gameplay.LoadCharacters` | `0x37E240` |
 | `Gameplay.HandOut` | `0x37DCD0` |
 | `Gameplay.SetupDelay.MoveNext` | `0x390AB0` |
+| `Gameplay.TriggerRelics` | `0x381050` |
+| `Gameplay.UpdateRules` | `0x3814F0` |
 | `Characters.Init` | `0x36CC40` |
 | `Characters.ManageCharacters` | `0x36CE30` |
 | `Character.Init` | `0x365A20` |
 | `Gameplay.UpdateCharacters` | `0x3811B0` |
 | `Character.DelayReveal.MoveNext` | `0x3756B0` |
+| `Character.OnReveal` | `0x367500` |
+| `Gameplay.OnCharacterReveal` | `0x37ED60` |
 | `Character.OnClick` | `0x366270` |
 | `Character.Reveal` | `0x368410` |
+| `Character.RevealAllReal` | `0x367E80` |
+| `Character.ExecuteAndReveal` | `0x364B50` |
+| `Character.KillAndReveal` | `0x365F10` |
+| `Character.KillProtected` | `0x366080` |
 | `Character.Kill` | `0x366130` |
+| `Character.KillByDemon` | `0x365FB0` |
+| `Character.DelayedDemonKill.MoveNext` | `0x3757F0` |
 | `Gameplay.IncreaseOrderCountOnHiddenKill` | `0x37DE30` |
+| `Gameplay.ManageKilledCharacter` | `0x37EBD0` |
+| `NightPhase.ManagePhase` | `0x383540` |
+| `NightPhase.StartPhase.MoveNext` | `0x3927C0` |
+| `NightPhase.ReorderList` | `0x3838D0` |
 
-## Remaining lifecycle targets
+## Follow-up boundaries
 
-The next native audit should close the other seventeen target entries:
-
-- outer initialization and loading: `Gameplay.Init`,
-  `Gameplay.InitCoroutine.MoveNext`, and `Gameplay.LoadCharacters`;
-- setup helpers: `Gameplay.TriggerRelics` and `Gameplay.UpdateRules`;
-- reveal callbacks and concrete kill variants: `Character.OnReveal`,
-  `Gameplay.OnCharacterReveal`, `Character.RevealAllReal`,
-  `Character.ExecuteAndReveal`, `Character.KillAndReveal`,
-  `Character.KillProtected`, `Character.KillByDemon`, and
-  `Character.DelayedDemonKill.MoveNext`;
-- dead-character bookkeeping: `Gameplay.ManageKilledCharacter`; and
-- night flow: `NightPhase.ManagePhase`, `NightPhase.StartPhase.MoveNext`, and
-  `NightPhase.ReorderList`.
-
-`Gameplay.ManageKilledCharacter` is the only target in the complete baseline
-export carrying a decompiler warning: an unrecovered jump table. Its control
-flow needs explicit native inspection rather than a managed-only promotion.
+The lifecycle boundary is closed natively, but several dispatched systems remain
+separate work: `ResetSavedCharacters`, gameplay-state transition guards,
+bluff/duplicate selection, `Character.Act`, concrete role/relic/rule/status
+behavior, score overrides, shuffle/reveal animation, and event subscribers
+outside the recovered Gameplay registrations.
