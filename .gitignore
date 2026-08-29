@@ -11,3 +11,20 @@ dump.cs
 target/
 solver_validation.json
 mismatch_state.json
+
+# Local reverse-engineering inputs and generated artifacts. The repository is
+# public, so only manifests, authored analysis, and reproducible tooling belong
+# in Git.
+reverse_engineering/work/
+reverse_engineering/generated/
+reverse_engineering/private/
+reverse_engineering/**/*.gpr
+reverse_engineering/**/*.rep/
+reverse_engineering/**/DummyDll/
+reverse_engineering/**/GameAssembly.dll
+reverse_engineering/**/global-metadata.dat
+reverse_engineering/**/il2cpp.h
+reverse_engineering/**/script.json
+reverse_engineering/**/stringliteral.json
+reverse_engineering/**/*.i64
+reverse_engineering/**/*.idb

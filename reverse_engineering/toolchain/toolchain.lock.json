@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "tools": {
+    "ghidra": {
+      "archive_sha256": "93A5D11A9AD510622ACAAF908C556A7B9B764D338E78A7567F3689BF5081FD54",
+      "archive_size": 569445154,
+      "archive_url": "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.3_build/ghidra_12.1.3_PUBLIC_20260817.zip",
+      "release": "Ghidra_12.1.3_build",
+      "version": "12.1.3"
+    },
+    "il2cpp_dumper": {
+      "archive_name": "Il2CppDumper-net6-win-v6.7.46.zip",
+      "archive_sha256": "D1117D66B9F8A130FD4933AE99F8EB9A0ECBBDB79D1FC494EB738AD910FF765A",
+      "archive_size": 788161,
+      "archive_url": "https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.46/Il2CppDumper-net6-win-v6.7.46.zip",
+      "config": {
+        "DumpAttribute": true,
+        "DumpField": true,
+        "DumpFieldOffset": true,
+        "DumpMethod": true,
+        "DumpMethodOffset": true,
+        "DumpProperty": true,
+        "DumpTypeDefIndex": true,
+        "DummyDllAddToken": true,
+        "ForceDump": false,
+        "ForceIl2CppVersion": false,
+        "ForceVersion": 16,
+        "GenerateDummyDll": true,
+        "GenerateStruct": true,
+        "NoRedirectedPointer": false,
+        "RequireAnyKey": false
+      },
+      "release": "v6.7.46",
+      "version": "6.7.46"
+    }
+  }
+}
