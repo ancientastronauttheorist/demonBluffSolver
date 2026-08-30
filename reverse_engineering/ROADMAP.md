@@ -55,6 +55,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   truth/appearance methods in that boundary.
 - [x] Native-audit the next 11 Pooka, Poisoner, Puzzlemaster/Plague Doctor,
   Drunk, and Alchemist status-lifecycle methods in that boundary.
+- [x] Native-audit the final 13 bluff storage, Puppet/Puppeteer,
+  Doppelganger, Confessor, Reveal, and shared orchestration methods; close the
+  40-method status/corruption/truth boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

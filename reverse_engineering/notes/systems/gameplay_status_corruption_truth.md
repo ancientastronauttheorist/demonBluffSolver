@@ -2,9 +2,9 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **native-static** for the first 27 methods and the three base
-bluff-storage/query methods in the checked boundary. No statement here is
-based on live dynamic observation.
+Evidence status: **native-static** for all 40 methods in the checked boundary.
+No statement here is based on live dynamic observation unless explicitly
+identified as a scheduling inference.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_status_corruption_truth.json`](../../targets/gameplay_status_corruption_truth.json).
@@ -12,9 +12,12 @@ Its baseline Ghidra export completed read-only at 40/40 functions with no
 failures. The first slice covers status storage and removal, the selection
 helpers used by corruption sources, actual and apparent lying, and disguised
 appearance. The second slice covers the Pooka, Poisoner, Puzzlemaster, Drunk,
-and Alchemist status lifecycle. The remaining 13 role and bluff-orchestration
-methods are mapped but not yet claimed as native-audited here. Decompiled
-bodies remain outside the repository.
+and Alchemist status lifecycle. The final slice covers bluff storage and
+lookup, Puppet/Puppeteer conversion, Doppelganger selection, Confessor
+appearance, and the internal Reveal boundary. Five exact overlaps reuse the
+earlier native audits of `Character.Reveal`, `Character.Init`,
+`Characters.ManageCharacters`, `Character.Act`, and `Character.RoleAct`.
+Decompiled bodies remain outside the repository.
 
 ## Status storage and cure
 
@@ -139,6 +142,120 @@ constant-null native body is shared with hundreds of unrelated managed
 identities, so the managed method identity and signature remain part of the
 evidence even though the machine-code body is not unique to Role.
 
+## Puppet bluff and Start statuses
+
+`Puppet.GetBluffIfAble` ignores its character argument. It obtains the current
+script roles in Villager, Outcast, Minion, then Demon pool order, retains
+`CharacterData` whose stored alignment is Good and whose `bluffable` flag is
+set, and returns one random entry. It does not require Villager type or current
+board presence. An empty pool or missing singleton/list dependency reaches the
+native failure path rather than returning no bluff.
+
+`Puppet.Act` handles only Start. It attempts `HealthyBluff`, then
+`BrokenAbility`, then `MessedUpByEvil`, using Puppet as source and null as the
+shared target for every insertion. Each exact resistance independently blocks
+its own status. Other triggers are clean no-ops; a missing character or status
+container fails.
+
+## Puppeteer conversion
+
+The public Puppeteer role is managed type `Mezepheles`; its configured
+`minionId` resolves the public Puppet data. At Start it rotates current cards
+with Puppeteer first, removes Puppeteer, and examines only the first and last
+remaining entries--the two physical circular neighbours. It retains each
+occurrence whose real `dataRef.type` is Villager, ignoring register-as data,
+alignment, statuses, resistance, and liveness.
+
+It then removes only the first retained neighbour whose real role object is
+`SaintVillager`, the internal Bombardier role, and stops searching for another
+Bombardier. If no candidate remains, conversion is a clean no-op. Otherwise
+one candidate is selected randomly and conversion is mandatory. Preserved
+multiplicity matters on a two-card board: the same Bombardier neighbour occurs
+twice, removing one occurrence still leaves a convertible candidate.
+
+For the selected target, the native mutation order is:
+
+1. save its old `CharacterData`;
+2. resolve Puppet data through `minionId`;
+3. call `Character.Init(puppetData, -100)`;
+4. call `GiveBluff(savedOldData)`;
+5. add `HealthyBluff`;
+6. add `BrokenAbility`;
+7. add `AlteredCharacter`; and
+8. add `MessedUpByEvil`.
+
+All four statuses use Puppeteer as source and null target. `Init` clears active
+statuses, bluff, register-as, runtime/acted state, and the Start latch while
+preserving physical ID and resistance storage. The Puppet therefore displays
+the victim's former true Villager identity, not Puppet data. Malformed
+neighbours, missing game data, a failed Puppet lookup, or missing status
+storage can fail after earlier mutations; the operation is not transactional.
+
+The reset Start latch is consumed later at Puppet's serialized Start slot.
+HealthyBluff makes dispatch truthful: real `Puppet.Act(Start)` runs, followed
+by the copied Villager role's `Act(Start)`. `BrokenAbility` is already present
+when that copied action runs, which prevents a copied Alchemist from becoming
+an ordinary extra cure actor.
+
+## Doppelganger bluff selection
+
+The native managed spelling is `Doppleganger`. Its clean selection branch acts
+in this order:
+
+1. add `HealthyBluff` to self;
+2. copy current board cards;
+3. retain sources whose real `dataRef.bluffable` is set;
+4. retain apparent Villagers by `(live registerAs ?? dataRef).type`;
+5. retain runtime alignment Good; and
+6. randomly select a source and return its real `dataRef`.
+
+There is no explicit self-removal. The real Outcast normally excludes itself
+because Doppelganger's base register-as result is null. An empty source pool
+fails rather than yielding no disguise.
+
+When Doppelganger is Corrupted, it does not add HealthyBluff. It instead keeps
+real-bluffable sources with runtime alignment Evil, with no type filter, then
+returns the selected source's `GetCharacterBluffIfAble()` result. That helper
+returns a live unrevealed source bluff when available and otherwise the
+source's real data. A corrupted Doppelganger can therefore copy either an
+evil's current disguise or its real role according to setup/reveal timing.
+
+Doppelganger is absent from `startGameActOrder`. During internal Reveal, a
+clean Doppelganger's new HealthyBluff causes its first Start dispatch; the real
+Doppelganger action is a no-op, but the cloned role's Start action runs before
+Reveal's Init. A clean Doppelganger-as-Alchemist can consequently perform a
+late cure after the ordered Alchemist pass. A corrupted Doppelganger receives
+no such Start dispatch. Cross-card `registerAs` eligibility is schedule-
+sensitive because another card publishes it only when that card's delayed
+Reveal resumes; this slice does not establish coroutine resume order.
+
+## Confessor appearance and internal Reveal
+
+`Confessor.OnInit` attempts to add `AppearTruthfull` with self as source and
+null target. Resistance can block it. The status affects perceived truth only;
+actual action dispatch ignores it. Both the real and bluff Confessor Init path
+call this hook, so any displayed Confessor identity can appear truthful while
+still actually lying because of Evil alignment or Corruption.
+
+`Character.Reveal` performs setup and presentation in this exact order:
+
+1. store the real role's `GetRegisterAsRole` result, including null;
+2. when bluff is Unity-null, obtain the ordinary role bluff or trailer bluff
+   and pass it to `GiveBluff`, including a null result;
+3. when HealthyBluff is active, dispatch Start;
+4. always dispatch Init;
+5. always dispatch AfterRoundStart (`7`); and
+6. present real data when bluff is null, otherwise present the bluff name,
+   color, art, optional background, and refreshed view.
+
+It does not change player-facing card state, the separate `revealed` flag,
+reveal order, or reveal delegates. Role/status actions precede most view
+dependency checks, so a later failure does not roll them back. `Character.Init`
+starts a new delayed-Reveal coroutine without cancelling an earlier one; the
+possibility of multiple resumptions after Puppeteer reinitialization follows
+the native call structure, while exact Unity frame scheduling remains to be
+validated dynamically.
+
 ## Corruption producers
 
 ### Pooka Start neighbour corruption
@@ -253,6 +370,15 @@ Puzzle/PD -> Corrupted only on one eligible apparent-type current card
 Drunk     -> Corrupted on self with the self role as cure-veto target
 Alchemist -> live Corrupted scan -> counted cure attempts
 
+Puppeteer -> eligible real-Villager neighbour -> Puppet Init
+           -> saved former data as bluff -> four setup statuses
+Puppet Start -> Puppet status action -> copied Villager Start action
+
+clean Doppel -> HealthyBluff -> good apparent-Villager source's real data
+              -> internal Reveal -> copied role Start
+corrupt Doppel -> evil bluffable source -> current bluff-or-real data
+                -> internal Reveal without copied role Start
+
 Character.Act
   -> CharacterHelper.CheckLying
   -> not lying:      real Act,      then bluff-role Act
@@ -265,7 +391,7 @@ separate from actual action dispatch.
 
 ## Managed-reconstruction corrections
 
-Native review corrected four material managed-output gaps in this slice:
+Native review corrected seven material managed-output gaps in this slice:
 
 - Drunk's status-removal predicate is the simple `status != Corrupted` rule;
   the recovered managed body was structurally mangled.
@@ -277,12 +403,23 @@ Native review corrected four material managed-output gaps in this slice:
 - Alchemist increments its clue counter before each cure attempt and preserves
   overlap duplicates, rather than counting distinct or successfully cured
   characters.
+- Puppeteer passes the victim's saved former data to `GiveBluff`; the recovered
+  managed output appeared to pass the new Puppet data.
+- Puppeteer conversion is mandatory when a candidate remains and removes only
+  the first Bombardier occurrence, rather than treating no conversion or all
+  Bombardier occurrences as equivalent branches.
+- Clean and corrupted Doppelganger use different source predicates and return
+  surfaces, and only the clean copied role receives the internal-Reveal Start
+  action.
 
 ## Metadata and prototype cautions
 
 - `Role.CheckIfCanRemoveStatus` shares a constant-true native body with 864
   other metadata identities. Evidence must preserve the requested managed
   identity and exact signature, not only the primary native symbol.
+- Base `Role.GetBluffIfAble` shares its constant-null body with 322 other
+  metadata identities. The exact managed identity and return signature remain
+  evidence even when the program uses one canonical prototype for that RVA.
 - The selected `List<Character>` and earlier `List<CharacterData>` overloads of
   `Characters.FilterRealCharacterType` emit the same C identifier in
   Il2CppDumper output. The target's explicit `prototype_name` aliases only its
