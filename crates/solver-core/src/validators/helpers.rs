@@ -84,38 +84,147 @@ pub enum EffectiveAlignment {
     Evil,
 }
 
-/// Determine truth status of a card at a position in a scenario.
-/// - Drunk: always Lying and counts as Corrupted for clue/truth status, while
-///   Plague Doctor reports it as Not Corrupted in the 2026-05-05 live build
-/// - Confessor: always Truthful (can't lie)
-/// - Puppet: always Truthful (evil but can't lie)
-/// - Evil (non-Puppet, non-Confessor): Lying
-/// - Corrupted: Lying
-/// - Otherwise: Truthful
+/// Determine truth status using the native `CharacterHelper.CheckLying` order:
+/// Corrupted, HealthyBluff, runtime Evil/non-null bluff, then truthful.
+///
+/// The scenario model has no general bluff-data pointer or status collection;
+/// consequently there is no `Lying`/`Appear` status to consult (native code does
+/// not consult either one here anyway).
+/// It can represent the native cases relevant to generated scenarios as follows:
+/// clean Puppet and clean Doppelganger model HealthyBluff, while Drunk models a
+/// non-null bluff without HealthyBluff. Arbitrary good characters with bluff data
+/// cannot be expressed until the scenario model gains such a field.
 pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
-    // Drunk lies intrinsically and is in the corrupted-status set, with a
-    // Plague Doctor reporting exception handled by the PD validator.
-    if scenario.drunk_position == Some(pos) {
-        return TruthStatus::Lying;
-    }
-    // Confessor always truthful
-    if let Some(card) = state.card_at(pos) {
-        if card.apparent_role == "Confessor" {
-            return TruthStatus::Truthful;
-        }
-    }
-    // Evil characters
-    if let Some(role) = known_evil_role(pos, scenario, state) {
-        if role == "Puppet" {
-            return TruthStatus::Truthful;
-        }
-        return TruthStatus::Lying;
-    }
-    // Corrupted
+    // Native precedence: corruption overrides HealthyBluff and cant_lie roles.
+    // Drunk is normally also present in this set; the explicit bluff mapping
+    // below keeps hand-built scenarios faithful even when it is omitted.
     if scenario.corrupted.contains(&pos) {
         return TruthStatus::Lying;
     }
+
+    let evil_role = known_evil_role(pos, scenario, state);
+
+    // Puppet applies HealthyBluff during Start. A clean Doppelganger applies it
+    // while acquiring its good bluff. Corrupted variants were handled above.
+    let modeled_healthy_bluff = evil_role
+        .map(|role| roles_equal(role, "Puppet"))
+        .unwrap_or(false)
+        || scenario.doppelganger_position == Some(pos);
+    if modeled_healthy_bluff {
+        return TruthStatus::Truthful;
+    }
+
+    // Runtime Evil is sufficient to lie even without bluff data. Drunk and
+    // Doppelganger are the model's explicit non-null-bluff positions; the clean
+    // Doppelganger case already returned via HealthyBluff.
+    let modeled_non_null_bluff =
+        scenario.drunk_position == Some(pos) || scenario.doppelganger_position == Some(pos);
+    if evil_role.is_some() || modeled_non_null_bluff {
+        return TruthStatus::Lying;
+    }
+
     TruthStatus::Truthful
+}
+
+#[cfg(test)]
+mod truth_status_tests {
+    use super::*;
+    use crate::types::CardInfo;
+    use std::collections::{HashMap, HashSet};
+
+    fn state_with_apparent_role(role: &str) -> GameState {
+        let mut state = GameState::default();
+        state.n_cards = 1;
+        state.cards.push(CardInfo {
+            position: 1,
+            apparent_role: role.to_string(),
+            ..CardInfo::default()
+        });
+        state
+    }
+
+    fn scenario() -> Scenario {
+        Scenario {
+            evil_positions: HashMap::new(),
+            puppet_position: None,
+            corrupted: HashSet::new(),
+            pd_corrupted: None,
+            doppelganger_position: None,
+            drunk_position: None,
+            alchemist_cures: HashMap::new(),
+            chancellor_conversion: None,
+        }
+    }
+
+    #[test]
+    fn corrupted_confessor_lies_despite_cant_lie_role() {
+        let state = state_with_apparent_role("Confessor");
+        let mut scenario = scenario();
+        scenario.corrupted.insert(1);
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn corruption_overrides_puppet_healthy_bluff() {
+        let state = state_with_apparent_role("Baker");
+        let mut scenario = scenario();
+        scenario.puppet_position = Some(1);
+        scenario.corrupted.insert(1);
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn corruption_overrides_doppelganger_healthy_bluff() {
+        let state = state_with_apparent_role("Baker");
+        let mut scenario = scenario();
+        scenario.doppelganger_position = Some(1);
+        scenario.corrupted.insert(1);
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn clean_puppet_and_doppelganger_model_healthy_bluff() {
+        let state = state_with_apparent_role("Baker");
+
+        let mut puppet = scenario();
+        puppet.puppet_position = Some(1);
+        assert_eq!(truth_status(1, &puppet, &state), TruthStatus::Truthful);
+
+        let mut doppelganger = scenario();
+        doppelganger.doppelganger_position = Some(1);
+        assert_eq!(
+            truth_status(1, &doppelganger, &state),
+            TruthStatus::Truthful
+        );
+    }
+
+    #[test]
+    fn drunk_models_non_null_bluff_without_healthy_bluff() {
+        let state = state_with_apparent_role("Baker");
+        let mut scenario = scenario();
+        scenario.drunk_position = Some(1);
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn ordinary_evil_lies_even_when_appearing_as_confessor() {
+        let state = state_with_apparent_role("Confessor");
+        let mut scenario = scenario();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn clean_good_character_is_truthful() {
+        let state = state_with_apparent_role("Baker");
+
+        assert_eq!(truth_status(1, &scenario(), &state), TruthStatus::Truthful);
+    }
 }
 
 /// Get the "real" role at a position, accounting for Doppelganger/Drunk disguise.

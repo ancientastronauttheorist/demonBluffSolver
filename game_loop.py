@@ -12,7 +12,7 @@ import time
 from datetime import datetime
 from typing import Optional
 
-from solver import CardInfo, DeckComposition, GameState, SolverResult, EXECUTION_IMMUNE_ROLES
+from solver import CardInfo, DeckComposition, GameState, SolverResult
 from rust_solver import rust_solve_to_objects
 from strategy import recommend_action, print_recommendation, evil_probabilities
 
@@ -209,6 +209,60 @@ def _normalize_role_name(role: str) -> str:
     if card_def:
         return card_def.name.replace(" ", "_")
     return role
+
+
+def _execution_role_key(role: str | None) -> str:
+    """Normalize role/status text for post-execution identity checks."""
+    return (role or "").strip().replace("_", " ").replace("-", " ").casefold()
+
+
+def _execution_apparent_role(observed: dict | None,
+                             fallback_role: str | None = None) -> str | None:
+    """Return the displayed role from a post-action memory observation.
+
+    The live bluff pointer is preferred.  A card entry is UI-derived and is a
+    safe fallback when memory has no bluff object; true identity is last.
+    """
+    if observed:
+        return observed.get("disguise") or fallback_role or observed.get("true_role")
+    return fallback_role
+
+
+def _observed_knight_immunity(observed: dict | None,
+                              fallback_role: str | None = None) -> bool:
+    """Whether a just-attempted execution is natively consistent with immunity.
+
+    This is intentionally a post-action validator, never a pre-click decision
+    helper.  A clean good true Knight is protected.  A Doppelganger showing as
+    Knight is protected only while HealthyBluff makes it delegate protection to
+    the bluff role.  Drunk-as-Knight and other merely apparent Knights remain
+    killable and must not be auto-labelled immune from deck/card data alone.
+    """
+    if not observed or observed.get("state") not in ("Alive", "Revealed"):
+        return False
+    if observed.get("is_evil") is not False:
+        return False
+    apparent_role = _execution_apparent_role(observed, fallback_role)
+    if _execution_role_key(apparent_role) != "knight":
+        return False
+
+    true_role = _execution_role_key(observed.get("true_role"))
+    statuses = {
+        _execution_role_key(status).replace(" ", "")
+        for status in observed.get("statuses", [])
+    }
+    healthy_bluff = "healthybluff" in statuses
+    corrupted = "corrupted" in statuses
+    if true_role in ("knight", "immortal"):
+        return healthy_bluff or not corrupted
+    if true_role in ("doppelganger", "doppleganger"):
+        return healthy_bluff
+    return False
+
+
+def _clamped_post_damage_hp(current_hp: int, damage: int) -> int:
+    """Mirror CurrentMaxValue.Reduce's lower clamp for local bookkeeping."""
+    return max(0, current_hp - damage)
 
 
 def card_no_info(pos: int, role: str) -> CardInfo:
@@ -583,6 +637,18 @@ class GameSession:
         if was_evil is False and was_corrupted is not None:
             self.executed_good_corrupted[pos] = was_corrupted
 
+    def record_execution_blocked(self, pos: int,
+                                 reason: str = "Knight immunity") -> None:
+        """Persist a confirmed-good execution attempt that left the card alive."""
+        if pos not in self.confirmed_good:
+            self.confirmed_good.append(pos)
+        # A protected card is alive and must never enter the executed list.
+        self.save()
+        DecisionLog.log_custom(
+            "Execution Blocked",
+            f"#{pos} {reason} — confirmed good, no HP loss",
+        )
+
     def set_pd_target(self, pos: int):
         self.pd_corruption_target = pos
 
@@ -758,7 +824,8 @@ class GameSession:
         Args:
             forced_safe: If True, bypass Bombardier guard (lookahead proved safety).
 
-        Returns: {"success": bool, "was_evil": bool|None, "evil_role": str|None, "error": str|None}
+        Returns: {"success": bool, "blocked": bool, "was_evil": bool|None,
+                  "evil_role": str|None, "error": str|None}
         """
         import template_match as _tm
         import mouse as _mouse
@@ -849,15 +916,26 @@ class GameSession:
                     "error": f"Position #{pos} not found in memory reader"}
 
         if target_card['state'] != 'Dead':
-            # Knight immunity: card stays Alive after execution attempt
-            if target_card['state'] == 'Alive':
-                print(f"  [auto_exec] #{pos} still Alive — possible Knight immunity")
-                return {"success": True, "was_evil": False, "evil_role": None,
-                        "error": "Knight immunity — card not killed"}
+            target_entry = next((c for c in self.cards if c.position == pos), None)
+            fallback_role = target_entry.apparent_role if target_entry else None
+            if _observed_knight_immunity(target_card, fallback_role):
+                true_role = target_card.get('true_role') or "Knight"
+                self.record_execution_blocked(pos, f"{true_role} Knight immunity")
+                print(f"  [auto_exec] BLOCKED: #{pos} survived with confirmed Knight immunity")
+                print(f"  [auto_exec] #{pos} confirmed GOOD. HP remains {self.hp}")
+                return {"success": True, "blocked": True, "was_evil": False,
+                        "evil_role": None, "error": None}
             # Hidden = click likely missed (game unfocused?)
             if target_card['state'] == 'Hidden':
                 return {"success": False, "was_evil": None, "evil_role": None,
                         "error": f"Card still Hidden — click didn't register (game focused?)"}
+            if target_card['state'] in ('Alive', 'Revealed'):
+                apparent_role = _execution_apparent_role(target_card, fallback_role) or "unknown"
+                true_role = target_card.get('true_role') or "unknown"
+                return {"success": False, "was_evil": None, "evil_role": None,
+                        "error": (f"Card survived, but post-action identity/status does not "
+                                  f"confirm immunity ({true_role} showing as {apparent_role}); "
+                                  "the click may have missed")}
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Card state is {target_card['state']}, expected Dead"}
 
@@ -875,12 +953,25 @@ class GameSession:
 
         # Step 7: HP update
         if not was_evil:
-            from knowledge_base import wrong_exec_cost_for
+            from knowledge_base import execution_cost_for
             true_role = target_card.get('true_role')
-            cost = wrong_exec_cost_for(true_role, default=self.wrong_exec_cost)
+            target_entry = next((c for c in self.cards if c.position == pos), None)
+            fallback_role = target_entry.apparent_role if target_entry else None
+            apparent_role = _execution_apparent_role(target_card, fallback_role)
+            cost = execution_cost_for(
+                true_role,
+                apparent_role=apparent_role,
+                was_evil=False,
+                was_corrupted=bool(was_corrupted),
+                was_killable=True,
+                default=self.wrong_exec_cost,
+            )
             old_hp = self.hp
-            self.hp -= cost
-            suffix = f" ({true_role}: -{cost})" if cost != self.wrong_exec_cost else ""
+            self.hp = _clamped_post_damage_hp(self.hp, cost)
+            suffix = ""
+            if cost != self.wrong_exec_cost:
+                shown = f", showing as {apparent_role}" if apparent_role else ""
+                suffix = f" ({true_role or 'unknown'}{shown}: -{cost})"
             print(f"  [auto_exec] WRONG EXECUTION! HP {old_hp} -> {self.hp}{suffix}")
         else:
             print(f"  [auto_exec] Correct execution. HP remains {self.hp}")
@@ -888,7 +979,8 @@ class GameSession:
         self.save()
         DecisionLog.log_execution(pos, was_evil, evil_role)
 
-        return {"success": True, "was_evil": was_evil, "evil_role": evil_role, "error": None}
+        return {"success": True, "blocked": False, "was_evil": was_evil,
+                "evil_role": evil_role, "error": None}
 
     def auto_use_ability(self, action, monitor=None) -> dict:
         """Perform in-game active-ability activation + target clicks + auto-parse.
@@ -1134,7 +1226,9 @@ class GameSession:
         exec_result = self.auto_execute(pos, result, forced_safe=is_forced_safe)
 
         if exec_result["success"]:
-            if exec_result["was_evil"]:
+            if exec_result.get("blocked"):
+                print(f"  AUTO-EXEC BLOCKED: #{pos} survived with Knight immunity (confirmed good)")
+            elif exec_result["was_evil"]:
                 print(f"  AUTO-EXEC SUCCESS: #{pos} was {exec_result['evil_role']}")
             else:
                 print(f"  AUTO-EXEC: #{pos} was GOOD (wrong execution)")
@@ -2699,6 +2793,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         evil_role = None
         was_corrupted = None
         knight_blocked = False
+        corruption_explicit = False
+        target_entry = next((c for c in session.cards if c.position == pos), None)
+        apparent_role = target_entry.apparent_role if target_entry else None
+        observed_target = None
+        observed_true_role = None
         if len(args) > 1:
             w = args[1].lower()
             if w in ("evil", "true", "1", "yes"):
@@ -2714,66 +2813,80 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         knight_blocked = True
                     elif c in ("corrupted", "corrupt", "c"):
                         was_corrupted = True
+                        corruption_explicit = True
                     elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
                         was_corrupted = False
-                else:
-                    # Auto-detect Knight immunity from card entry
-                    target_card = next((c for c in session.cards if c.position == pos), None)
-                    if target_card and target_card.apparent_role in EXECUTION_IMMUNE_ROLES:
-                        # Check if corruption sources exist in deck — corrupted Knight loses immunity
-                        corruption_sources = {"Pooka", "Poisoner", "Plague_Doctor"}
-                        deck_roles = set()
-                        for faction_roles in [session.villagers, session.outcasts,
-                                              session.minions, session.demons]:
-                            deck_roles.update(faction_roles)
-                        has_corruption = bool(deck_roles & corruption_sources)
-                        if has_corruption:
-                            print(f"  #{pos} shows as {target_card.apparent_role} (execution immune) but corruption sources in deck!")
-                            print(f"  Corrupted Knight LOSES immunity. Specify: 'execute {pos} good blocked' or 'execute {pos} good corrupted'")
-                        else:
-                            knight_blocked = True
-                            print(f"  Auto-detected Knight immunity for #{pos} (apparent role: {target_card.apparent_role}, no corruption sources)")
-                    else:
-                        # Try to auto-detect corruption status from memory reader
-                        was_corrupted = None
-                        mr_true_role = None
-                        try:
-                            from memory_reader import MemoryReader
-                            reader = MemoryReader()
-                            if reader.open():
-                                try:
-                                    cards = reader.read_board()
-                                    if cards:
-                                        target_char = next((c for c in cards if c.get('position') == pos), None)
-                                        if target_char:
-                                            mr_true_role = target_char.get('true_role')
-                                            statuses = target_char.get('statuses', [])
-                                            if 'Corrupted' in statuses:
-                                                was_corrupted = True
-                                                print(f"  Auto-detected #{pos} CORRUPTED from memory reader")
-                                            else:
-                                                was_corrupted = False
-                                                print(f"  Auto-detected #{pos} NOT corrupted from memory reader")
-                                finally:
-                                    reader.close()
-                            else:
-                                print(f"  WARNING: Could not open memory reader for corruption check")
-                        except Exception as e:
-                            print(f"  WARNING: Memory reader error ({e})")
-                        if was_corrupted is None:
-                            print("  WARNING: No corruption flag given. Use 'execute <pos> good corrupted' or 'execute <pos> good clean'.")
-                        # Stash for the post-execute HP warning
-                        session._last_exec_mr_true_role = mr_true_role
+                        corruption_explicit = True
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
+
+        if was_evil is False:
+            # This command is run only after the in-game action. Memory validates
+            # that just-observed result; it is never consulted to choose a target.
+            try:
+                from memory_reader import MemoryReader
+                reader = MemoryReader()
+                if reader.open():
+                    try:
+                        cards = reader.read_board()
+                        if cards:
+                            observed_target = next(
+                                (c for c in cards if c.get('position') == pos),
+                                None,
+                            )
+                    finally:
+                        reader.close()
+                else:
+                    print("  WARNING: Could not open memory reader for post-execution validation")
+            except Exception as e:
+                print(f"  WARNING: Memory reader error ({e})")
+
+            if observed_target:
+                observed_true_role = observed_target.get('true_role')
+                apparent_role = _execution_apparent_role(observed_target, apparent_role)
+                statuses = observed_target.get('statuses', [])
+                if was_corrupted is None and observed_target.get('state') == 'Dead':
+                    was_corrupted = 'Corrupted' in statuses
+                    corruption_word = "CORRUPTED" if was_corrupted else "NOT corrupted"
+                    print(f"  Post-action validation: #{pos} {corruption_word}")
+
+                if _observed_knight_immunity(observed_target, apparent_role):
+                    knight_blocked = True
+                    print(f"  Post-action validation: #{pos} survived with Knight immunity")
+                elif knight_blocked:
+                    true_role = observed_true_role or "unknown"
+                    shown = apparent_role or "unknown"
+                    print(f"  REFUSING BOOKKEEPING: explicit blocked outcome contradicts "
+                          f"live #{pos} state/identity ({observed_target.get('state')}, "
+                          f"{true_role} showing as {shown}).")
+                    print("  Re-check the UI and memory observation before recording the result.")
+                    return None
+                elif observed_target.get('state') in ('Alive', 'Revealed', 'Hidden'):
+                    true_role = observed_true_role or "unknown"
+                    shown = apparent_role or "unknown"
+                    print(f"  REFUSING BOOKKEEPING: #{pos} is still {observed_target.get('state')} "
+                          f"({true_role} showing as {shown}), but identity/status does not "
+                          "confirm Knight immunity.")
+                    print("  The click may have missed. Re-check the UI; use 'execute "
+                          f"{pos} good blocked' only if the game visibly blocked it.")
+                    return None
+            elif (not knight_blocked and not corruption_explicit
+                  and _execution_role_key(apparent_role) == "knight"):
+                # Offline/card-only Knight data cannot distinguish a protected
+                # Knight from a killable Drunk-as-Knight. Require observation.
+                print(f"  Cannot classify apparent Knight #{pos} without post-action memory.")
+                print(f"  Use 'execute {pos} good blocked' if it survived, or "
+                      f"'execute {pos} good corrupted'/'clean' if it died.")
+                return None
+
+            if not knight_blocked and was_corrupted is None:
+                print("  WARNING: No corruption flag available. Use 'execute <pos> good "
+                      "corrupted' or 'execute <pos> good clean' when offline.")
+
         if knight_blocked:
             # Knight immunity: card survives, confirmed good, no HP loss
-            if pos not in session.confirmed_good:
-                session.confirmed_good.append(pos)
-            # Do NOT add to executed list — card is still alive
-            session.save()
-            DecisionLog.log_custom("Execution Blocked", f"#{pos} Knight immunity — confirmed good, no HP loss")
+            session.record_execution_blocked(pos)
             print(f"Executed #{pos} -> BLOCKED (Knight immunity)")
             print(f"  #{pos} confirmed GOOD. No HP loss. HP: {session.hp}/10")
         else:
@@ -2790,11 +2903,27 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if was_evil:
                 print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
             elif was_evil is False:
-                from knowledge_base import wrong_exec_cost_for
-                mr_true_role = getattr(session, '_last_exec_mr_true_role', None)
-                cost = wrong_exec_cost_for(mr_true_role, default=session.wrong_exec_cost)
-                new_hp = session.hp - cost
-                suffix = f" ({mr_true_role}: -{cost})" if mr_true_role and cost != session.wrong_exec_cost else ""
+                if observed_true_role is None:
+                    print("  WARNING: Wrong execution recorded, but exact HP damage cannot "
+                          "be inferred without the revealed true role.")
+                    print("  Check the live HP display and run: set_hp <current_hp>")
+                    return None
+                from knowledge_base import execution_cost_for
+                cost = execution_cost_for(
+                    observed_true_role,
+                    apparent_role=apparent_role,
+                    was_evil=False,
+                    was_corrupted=bool(was_corrupted),
+                    # Reaching this branch records a successful, non-blocked
+                    # execution. In offline mode that outcome is user-supplied.
+                    was_killable=True,
+                    default=session.wrong_exec_cost,
+                )
+                new_hp = _clamped_post_damage_hp(session.hp, cost)
+                suffix = ""
+                if cost != session.wrong_exec_cost or _execution_role_key(apparent_role) == "knight":
+                    shown = f", showing as {apparent_role}" if apparent_role else ""
+                    suffix = f" ({observed_true_role or 'unknown'}{shown}: -{cost})"
                 print(f"  WARNING: Wrong execution!{suffix} HP {session.hp} -> {new_hp}. Run: set_hp {new_hp}")
             else:
                 print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")

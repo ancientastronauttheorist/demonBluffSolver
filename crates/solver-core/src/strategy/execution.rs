@@ -11,7 +11,8 @@ use super::{
     ExecutionPick, ExecutionReason,
     evil_probabilities, remaining_evil_bounds, corruption_risk,
     witch_might_be_alive, unrevealed_positions, tiebreak_score,
-    get_card_role, EXECUTION_IMMUNE_ROLES,
+    execution_terminal_outcome, get_card_role, ExecutionTerminalOutcome,
+    EXECUTION_IMMUNE_ROLES,
 };
 use super::forced::find_forced_execution;
 
@@ -39,10 +40,12 @@ pub fn pick_execution_target(
         return None;
     }
 
-    // 2. Win check
+    // 2. Terminal check. Native resolution loses on depleted HP before it
+    // considers the evil-count win condition.
     let (_, max_remaining) = remaining_evil_bounds(state, result);
-    if max_remaining == 0 {
-        return None;
+    match execution_terminal_outcome(state.hp, max_remaining == 0) {
+        ExecutionTerminalOutcome::HpLoss | ExecutionTerminalOutcome::Win => return None,
+        ExecutionTerminalOutcome::Continue => {}
     }
 
     let probs = evil_probabilities(state, result);

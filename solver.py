@@ -312,29 +312,38 @@ def effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Align
 
 
 def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
-    """Determine if a card tells truth or lies in this scenario."""
-    # Drunk lies intrinsically even though PD reports it as Not Corrupted.
-    if pos == scenario.drunk_position:
-        return TruthStatus.LYING
+    """Apply native CheckLying precedence to the scenario abstraction.
 
-    # Confessor can't lie — always truthful regardless of Evil/Corrupted status.
-    # This affects Judge validation: Judge sees Confessor as "truthful" even if Evil.
-    card = _get_card_at(pos, state)
-    if card and card.apparent_role == "Confessor":
-        return TruthStatus.TRUTHFUL
-
-    # Evil characters lie (except Puppet)
-    role = _known_evil_role(pos, scenario, state)
-    if role is not None:
-        if role == "Puppet":
-            return TruthStatus.TRUTHFUL
-        return TruthStatus.LYING
-
-    # Corrupted characters lie
+    The model has no general bluff-data pointer or status collection. Clean
+    Puppet/Doppelganger scenarios represent HealthyBluff, while Drunk represents
+    a non-null bluff without it. Other arbitrary good bluff holders cannot be
+    represented without extending Scenario. Lying/Appear are intentionally not
+    inferred from apparent roles; native CheckLying does not consult them.
+    """
+    # Corruption wins over HealthyBluff and over cant_lie roles such as
+    # Confessor. Drunk is normally in this set, but its explicit bluff mapping
+    # below also keeps hand-built scenarios faithful when it is omitted.
     if pos in scenario.corrupted:
         return TruthStatus.LYING
 
-    # Good uncorrupted = truthful
+    evil_role = _known_evil_role(pos, scenario, state)
+
+    # Both roles apply HealthyBluff in the represented clean runtime cases.
+    modeled_healthy_bluff = (
+        evil_role == "Puppet" or pos == scenario.doppelganger_position
+    )
+    if modeled_healthy_bluff:
+        return TruthStatus.TRUTHFUL
+
+    # Runtime Evil lies regardless of bluff data. Drunk and Doppelganger are
+    # the model's explicit non-null-bluff positions; clean Doppelganger already
+    # returned through HealthyBluff above.
+    modeled_non_null_bluff = (
+        pos == scenario.drunk_position or pos == scenario.doppelganger_position
+    )
+    if evil_role is not None or modeled_non_null_bluff:
+        return TruthStatus.LYING
+
     return TruthStatus.TRUTHFUL
 
 

@@ -14,6 +14,7 @@ WRONG_EXEC_COST_OVERRIDES: dict[str, int] = {
     "Drunk": 2,
 }
 DEFAULT_WRONG_EXEC_COST = 5
+KNIGHT_BLUFF_EXTRA_DAMAGE = 4
 
 
 def wrong_exec_cost_for(role_name: str | None, default: int | None = None) -> int:
@@ -26,6 +27,42 @@ def wrong_exec_cost_for(role_name: str | None, default: int | None = None) -> in
     if role_name is None:
         return fallback
     return WRONG_EXEC_COST_OVERRIDES.get(role_name, fallback)
+
+
+def execution_cost_for(
+    role_name: str | None,
+    *,
+    apparent_role: str | None = None,
+    was_evil: bool = False,
+    was_corrupted: bool = False,
+    was_killable: bool = False,
+    execution_blocked: bool = False,
+    default: int | None = None,
+) -> int:
+    """Return total HP damage for an observed execution result.
+
+    ``wrong_exec_cost_for`` remains the base cost for the target's true role.
+    A successfully killed good target showing as Knight fires the Knight bluff's
+    separate 4-HP execution effect only when it is Corrupted. Drunk is treated
+    as intrinsically Corrupted for this effect even when Plague Doctor reports
+    it clean. This covers a corrupted true Knight and a Drunk disguised as
+    Knight (base 2 + extra 4) without charging clean bluff holders.
+    Correct evil executions and protected/blocked attempts cost no HP.
+
+    ``was_killable`` is deliberately an observed/post-action input.  Callers
+    must not use hidden identity or status to predict whether a target is safe
+    to execute.
+    """
+    if was_evil or execution_blocked:
+        return 0
+
+    cost = wrong_exec_cost_for(role_name, default=default)
+    role_key = (role_name or "").strip().replace("_", " ").casefold()
+    apparent_key = (apparent_role or "").strip().replace("_", " ").casefold()
+    if (was_killable and apparent_key == "knight"
+            and (was_corrupted or role_key == "drunk")):
+        cost += KNIGHT_BLUFF_EXTRA_DAMAGE
+    return cost
 
 
 class Role(Enum):

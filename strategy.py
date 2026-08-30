@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from itertools import combinations
 from typing import Optional
 
-from knowledge_base import get_card, Role, CARDS_BY_NAME
+from knowledge_base import execution_cost_for, get_card, Role, CARDS_BY_NAME
 from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
     truth_status, scenario_is_evil, effective_alignment,
@@ -211,6 +211,54 @@ def _execution_reveal_outcome(
     return (role, False, pos in scenario.corrupted)
 
 
+def _execution_branch_is_protected(
+    revealed_role: str,
+    apparent_role: str,
+    was_evil: bool,
+    was_corrupted: bool,
+) -> bool:
+    """Mirror native Knight/HealthyBluff protection in lookahead branches."""
+    if was_evil:
+        return False
+    if revealed_role == "Knight" and not was_corrupted:
+        return True
+    return (
+        revealed_role in ("Doppelganger", "Doppleganger")
+        and apparent_role == "Knight"
+    )
+
+
+def _execution_observation_key(
+    pos: int,
+    outcome: tuple[str, bool, bool],
+    state: GameState,
+) -> tuple:
+    """Canonicalize an execution branch to information the player observes."""
+    role, was_evil, was_corrupted = outcome
+    card_at = get_card_at(pos, state)
+    apparent_role = card_at.apparent_role if card_at else "Unknown"
+    if not was_evil and role == "Bombardier":
+        return ("bombardier_loss",)
+    if _execution_branch_is_protected(
+        role,
+        apparent_role,
+        was_evil,
+        was_corrupted,
+    ):
+        # A protected true Knight and a protected Doppelganger-as-Knight both
+        # remain face-up as Knight. Hidden real identity must not split DFS.
+        return ("protected",)
+    damage = execution_cost_for(
+        role,
+        apparent_role=apparent_role,
+        was_evil=was_evil,
+        was_corrupted=was_corrupted,
+        was_killable=True,
+        default=state.wrong_exec_cost,
+    )
+    return ("killed", role, was_evil, was_corrupted, damage)
+
+
 def _find_forced_execution(
     state: GameState,
     result: SolverResult,
@@ -251,6 +299,12 @@ def _find_forced_execution(
         if key in memo:
             return memo[key]
 
+        # Native execution resolution checks depleted HP before the evil-count
+        # win condition.
+        if hp <= 0:
+            memo[key] = (False, None)
+            return memo[key]
+
         if all_evils_gone(indices, executed_now):
             memo[key] = (True, None)
             return memo[key]
@@ -264,31 +318,22 @@ def _find_forced_execution(
             return memo[key]
 
         for pos in available:
-            branches: dict[tuple[str, bool, bool], list[int]] = {}
+            branches: dict[tuple, list[int]] = {}
             for idx in indices:
                 outcome = _execution_reveal_outcome(pos, scenarios[idx], state)
-                branches.setdefault(outcome, []).append(idx)
+                observation = _execution_observation_key(pos, outcome, state)
+                branches.setdefault(observation, []).append(idx)
 
             branch_ok = True
-            for (role, was_evil, was_corrupted), branch_indices in branches.items():
-                if was_evil:
-                    next_hp = hp
-                elif role == "Bombardier":
-                    # Executing a good Bombardier = instant game loss
+            for observation, branch_indices in branches.items():
+                if observation[0] == "bombardier_loss":
                     branch_ok = False
                     break
-                elif role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
-                    # Execution blocked by immunity — no HP cost, confirms good
+                if observation[0] == "protected":
                     next_hp = hp
-                elif role == "Drunk":
-                    # Drunk execution costs 2 HP, but Drunk-as-Knight costs 6 HP (wiki)
-                    card_at = next((c for c in state.cards if c.position == pos), None)
-                    if card_at and card_at.apparent_role == "Knight":
-                        next_hp = hp - 6
-                    else:
-                        next_hp = hp - 2
                 else:
-                    next_hp = hp - state.wrong_exec_cost
+                    damage = observation[4]
+                    next_hp = max(0, hp - damage)
                 if next_hp <= 0:
                     branch_ok = False
                     break
@@ -333,10 +378,25 @@ def _forced_execution_reasoning(
         key=lambda item: (-item[1], item[0][0], item[0][1], item[0][2]),
     ):
         label = f"{'evil' if was_evil else 'good'} {role}"
-        if not was_evil and role in EXECUTION_IMMUNE_ROLES and not was_corrupted:
+        card_at = get_card_at(pos, state)
+        apparent_role = card_at.apparent_role if card_at else "Unknown"
+        if _execution_branch_is_protected(
+            role,
+            apparent_role,
+            was_evil,
+            was_corrupted,
+        ):
             label += " (immune, 0 HP)"
-        elif was_corrupted and not was_evil:
-            label += " (corrupted)"
+        elif not was_evil:
+            damage = execution_cost_for(
+                role,
+                apparent_role=apparent_role,
+                was_corrupted=was_corrupted,
+                was_killable=True,
+                default=state.wrong_exec_cost,
+            )
+            status = ", corrupted" if was_corrupted else ""
+            label += f" (-{damage} HP{status})"
         parts.append(f"{count / total:.0%} {label}")
 
     summary = ", ".join(parts[:3])

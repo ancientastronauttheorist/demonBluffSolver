@@ -8,7 +8,11 @@
 
 use solver_core::solver::solve;
 use solver_core::strategy::execution::pick_execution_target;
-use solver_core::strategy::{remaining_evil_bounds, EXECUTION_IMMUNE_ROLES, get_card_role};
+use solver_core::strategy::{
+    apply_execution_damage, execution_consequence, execution_terminal_outcome,
+    get_card_role, remaining_evil_bounds, ExecutionConsequence,
+    ExecutionTerminalOutcome,
+};
 use solver_core::types::*;
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
@@ -92,22 +96,96 @@ enum SimResult {
     Win { executions: usize, wrong_execs: usize },
     ConstraintFailure { phase: String, detail: String },
     SimLoss { reason: String, executions: usize },
+    InsufficientTruth { detail: String },
 }
 
-// ── Find the true scenario among surviving scenarios ──
+// ── Retain every scenario compatible with recorded evil ground truth ──
 
-fn find_true_scenario<'a>(
+fn truth_compatible_scenarios<'a>(
     result: &'a SolverResult,
     true_evil_set: &HashSet<u8>,
     executed: &[u8],
-) -> Option<&'a Scenario> {
+) -> Vec<&'a Scenario> {
     let exec_set: HashSet<u8> = executed.iter().copied().collect();
     let non_exec_true: HashSet<u8> = true_evil_set.difference(&exec_set).copied().collect();
-    result.surviving_scenarios.iter().find(|s| {
+    result.surviving_scenarios.iter().filter(|s| {
         let mut scenario_evil: HashSet<u8> = s.evil_positions.keys().copied().collect();
         if let Some(pp) = s.puppet_position { scenario_evil.insert(pp); }
         let non_exec_scenario: HashSet<u8> = scenario_evil.difference(&exec_set).copied().collect();
         non_exec_true == non_exec_scenario
+    }).collect()
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct GoodExecutionObservation {
+    consequence: ExecutionConsequence,
+    /// Corruption value persisted by the live bridge. Drunk is reported clean
+    /// on this surface even though its role effects use intrinsic corruption.
+    observed_corrupted: bool,
+}
+
+fn good_execution_observation(
+    scenario: &Scenario,
+    pos: u8,
+    apparent_role: &str,
+    wrong_exec_cost: i32,
+) -> GoodExecutionObservation {
+    let revealed_role = if scenario.drunk_position == Some(pos) {
+        "Drunk"
+    } else if scenario.doppelganger_position == Some(pos) {
+        "Doppelganger"
+    } else {
+        apparent_role
+    };
+    let observed_corrupted = if revealed_role == "Drunk" {
+        false
+    } else {
+        scenario.corrupted.contains(&pos)
+    };
+    GoodExecutionObservation {
+        consequence: execution_consequence(
+            revealed_role,
+            apparent_role,
+            false,
+            observed_corrupted,
+            wrong_exec_cost,
+        ),
+        observed_corrupted,
+    }
+}
+
+/// Resolve an execution only when every truth-compatible hidden-Outcast world
+/// produces the same state-relevant observation. This prevents the harness from
+/// picking the first scenario and inventing Drunk/Doppelganger identity.
+fn consensus_good_execution_observation(
+    scenarios: &[&Scenario],
+    pos: u8,
+    apparent_role: &str,
+    wrong_exec_cost: i32,
+    required_corruption: Option<bool>,
+) -> Result<GoodExecutionObservation, String> {
+    let mut consensus = None;
+    for scenario in scenarios {
+        let observation = good_execution_observation(
+            scenario,
+            pos,
+            apparent_role,
+            wrong_exec_cost,
+        );
+        if required_corruption.is_some_and(|value| value != observation.observed_corrupted) {
+            continue;
+        }
+        if consensus.is_some_and(|value| value != observation) {
+            return Err(format!(
+                "execution #{pos} has multiple truth-compatible outcomes for apparent {apparent_role}"
+            ));
+        }
+        consensus = Some(observation);
+    }
+    consensus.ok_or_else(|| {
+        format!(
+            "execution #{pos} has no truth-compatible outcome for apparent {apparent_role}"
+        )
     })
 }
 
@@ -118,7 +196,8 @@ fn reconstruct_phase3_hp(
     true_evil_set: &HashSet<u8>,
     night_kills_set: &HashSet<u8>,
     slayer_killed: &HashSet<u8>,
-) -> i32 {
+    truth_scenarios: &[&Scenario],
+) -> Result<i32, String> {
     let obj = case.as_object().unwrap();
     let json_hp = obj.get("hp").and_then(|v| v.as_i64()).unwrap_or(10) as i32;
     let wrong_exec_cost = obj.get("wrong_exec_cost").and_then(|v| v.as_i64()).unwrap_or(2) as i32;
@@ -152,22 +231,31 @@ fn reconstruct_phase3_hp(
             // Correct execution: 0 HP cost
             continue;
         }
-        // Wrong execution: check special cases
+        // Historical saves used `executed` for both dead targets and resolved
+        // protected Knight checks. Recorded corruption can filter worlds, but
+        // killed versus protected must remain part of the consensus.
         let apparent = card_roles.get(&pos).map(|s| s.as_str()).unwrap_or("");
-        if EXECUTION_IMMUNE_ROLES.contains(&apparent) {
-            // Knight immunity check
-            let is_corrupted = exec_good_corr.get(&pos).copied().unwrap_or(false);
-            if !is_corrupted {
-                // Immunity blocked: 0 HP cost
-                continue;
+        let observation = consensus_good_execution_observation(
+            truth_scenarios,
+            pos,
+            apparent,
+            wrong_exec_cost,
+            exec_good_corr.get(&pos).copied(),
+        )?;
+        match observation.consequence {
+            ExecutionConsequence::Protected => {}
+            ExecutionConsequence::Killed { hp_damage } => {
+                cost_addback = cost_addback.wrapping_add(hp_damage);
+            }
+            ExecutionConsequence::BombardierLoss => {
+                return Err(format!(
+                    "recorded good Bombardier execution #{pos} would be terminal"
+                ));
             }
         }
-        // TODO: Drunk detection for 2 HP cost — we don't know the true drunk position
-        // from the JSON. Use wrong_exec_cost as default (game_loop.py does this too).
-        cost_addback += wrong_exec_cost;
     }
 
-    json_hp + cost_addback
+    Ok(json_hp + cost_addback)
 }
 
 // ── Main simulation function ──
@@ -332,7 +420,25 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
 
     // ── Phase 3: Strategy-driven execution ──
     // Reconstruct HP at start of execution phase
-    let mut hp = reconstruct_phase3_hp(value, &true_evil_set, &nk_set, &slayer_killed);
+    let truth_scenarios = truth_compatible_scenarios(
+        &result,
+        &true_evil_set,
+        &current_executed,
+    );
+    let mut hp = match reconstruct_phase3_hp(
+        value,
+        &true_evil_set,
+        &nk_set,
+        &slayer_killed,
+        &truth_scenarios,
+    ) {
+        Ok(hp) => hp,
+        Err(detail) => {
+            return SimResult::InsufficientTruth {
+                detail: format!("{case_name}: HP reconstruction: {detail}"),
+            };
+        }
+    };
     let wrong_exec_cost = state.wrong_exec_cost;
 
     // Strip recorded executions — simulation drives its own
@@ -381,10 +487,22 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             };
         }
 
-        // Win check
+        // Native terminal precedence: depleted HP loses before evil-count win.
         let (_, max_remaining) = remaining_evil_bounds(&state_with_hp, &result);
-        if max_remaining == 0 {
-            return SimResult::Win { executions: total_executions, wrong_execs: wrong_executions };
+        match execution_terminal_outcome(hp, max_remaining == 0) {
+            ExecutionTerminalOutcome::HpLoss => {
+                return SimResult::SimLoss {
+                    reason: format!("{case_name}: HP exhausted (hp={hp}) before win resolution"),
+                    executions: total_executions,
+                };
+            }
+            ExecutionTerminalOutcome::Win => {
+                return SimResult::Win {
+                    executions: total_executions,
+                    wrong_execs: wrong_executions,
+                };
+            }
+            ExecutionTerminalOutcome::Continue => {}
         }
 
         // Strategy picks target
@@ -427,59 +545,50 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         } else {
             // Wrong execution — check special cases
             let apparent = get_card_role(pos, &state_with_hp).unwrap_or("");
-
-            if apparent == "Bombardier" && !result.definite_evil.contains(&pos) {
-                return SimResult::SimLoss {
-                    reason: format!("{case_name}: executed good Bombardier #{pos}"),
-                    executions: total_executions,
-                };
-            }
-
-            // Knight immunity check
-            if EXECUTION_IMMUNE_ROLES.contains(&apparent) {
-                let is_corrupted = if let Some(&c) = case_exec_good_corr.get(&pos) {
-                    c
-                } else {
-                    // Derive from true scenario
-                    find_true_scenario(&result, &true_evil_set, &current_executed)
-                        .map(|s| s.corrupted.contains(&pos))
-                        .unwrap_or(false)
-                };
-
-                if !is_corrupted {
-                    // Immunity blocks — no HP loss, not removed, confirmed good
+            let truth_scenarios = truth_compatible_scenarios(
+                &result,
+                &true_evil_set,
+                &current_executed,
+            );
+            let observation = match consensus_good_execution_observation(
+                &truth_scenarios,
+                pos,
+                apparent,
+                wrong_exec_cost,
+                case_exec_good_corr.get(&pos).copied(),
+            ) {
+                Ok(observation) => observation,
+                Err(detail) => {
+                    return SimResult::InsufficientTruth {
+                        detail: format!("{case_name}: {detail}"),
+                    };
+                }
+            };
+            let hp_damage = match observation.consequence {
+                ExecutionConsequence::BombardierLoss => {
+                    return SimResult::SimLoss {
+                        reason: format!("{case_name}: executed good Bombardier #{pos}"),
+                        executions: total_executions,
+                    };
+                }
+                ExecutionConsequence::Protected => {
+                    // Immunity blocks — no HP loss, not removed, confirmed good.
                     if !current_confirmed_good.contains(&pos) {
                         current_confirmed_good.push(pos);
                     }
                     immunity_blocked.insert(pos);
-                    continue; // Next iteration
+                    continue;
                 }
-            }
-
-            // Normal wrong execution
-            wrong_executions += 1;
-
-            // Check if truly Drunk (special cost)
-            let is_drunk = find_true_scenario(&result, &true_evil_set, &current_executed)
-                .map(|s| s.drunk_position == Some(pos))
-                .unwrap_or(false);
-
-            let cost = if is_drunk {
-                if apparent == "Knight" { 6 } else { 2 }
-            } else {
-                wrong_exec_cost
+                ExecutionConsequence::Killed { hp_damage } => hp_damage,
             };
 
-            hp -= cost;
+            wrong_executions += 1;
+            hp = apply_execution_damage(hp, hp_damage);
             current_executed.push(pos);
             if !current_confirmed_good.contains(&pos) {
                 current_confirmed_good.push(pos);
             }
-            // Track corruption status
-            let corrupted = find_true_scenario(&result, &true_evil_set, &current_executed)
-                .map(|s| s.corrupted.contains(&pos))
-                .unwrap_or(false);
-            current_good_corr.insert(pos, corrupted);
+            current_good_corr.insert(pos, observation.observed_corrupted);
 
             immunity_blocked.clear();
 
@@ -496,6 +605,144 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         reason: format!("{case_name}: exceeded max iterations ({max_iterations})"),
         executions: total_executions,
     }
+}
+
+#[test]
+fn hp_reconstruction_uses_composite_knight_damage() {
+    let empty = HashSet::new();
+    let mut knight_scenario = Scenario {
+        evil_positions: HashMap::new(),
+        puppet_position: None,
+        corrupted: HashSet::new(),
+        pd_corrupted: None,
+        doppelganger_position: None,
+        drunk_position: None,
+        alchemist_cures: HashMap::new(),
+        chancellor_conversion: None,
+    };
+    knight_scenario.corrupted.insert(1);
+    let corrupted_knight = serde_json::json!({
+        "hp": 1,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": true},
+        "cards": [{"position": 1, "apparent_role": "Knight"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &corrupted_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&knight_scenario],
+        ).unwrap(),
+        10,
+    );
+
+    let mut drunk_scenario = knight_scenario;
+    drunk_scenario.drunk_position = Some(1);
+    let drunk_as_knight = serde_json::json!({
+        "hp": 4,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        // Plague Doctor reports Drunk as not corrupted, but execution still
+        // uses Drunk's intrinsic corrupted semantics (2 + Knight's 4).
+        "executed_good_corrupted": {"1": false},
+        "cards": [{"position": 1, "apparent_role": "Knight"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &drunk_as_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&drunk_scenario],
+        ).unwrap(),
+        10,
+    );
+
+    let mut corrupted_scout_scenario = Scenario {
+        evil_positions: HashMap::new(),
+        puppet_position: None,
+        corrupted: HashSet::from([1]),
+        pd_corrupted: None,
+        doppelganger_position: None,
+        drunk_position: None,
+        alchemist_cures: HashMap::new(),
+        chancellor_conversion: None,
+    };
+    let corrupted_scout = serde_json::json!({
+        "hp": 5,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": true},
+        "cards": [{"position": 1, "apparent_role": "Scout"}]
+    });
+    // A first-match harness could pick this incompatible Drunk world and add
+    // back only 2 HP. The recorded Corrupted result excludes Drunk's clean
+    // bookkeeping surface, leaving the actual 5-damage Scout observation.
+    let mut incompatible_drunk = corrupted_scout_scenario.clone();
+    incompatible_drunk.drunk_position = Some(1);
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &corrupted_scout,
+            &empty,
+            &empty,
+            &empty,
+            &[&incompatible_drunk, &corrupted_scout_scenario],
+        ).unwrap(),
+        10,
+    );
+
+    corrupted_scout_scenario.corrupted.clear();
+    let ambiguous_clean_scout = serde_json::json!({
+        "hp": 5,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": false},
+        "cards": [{"position": 1, "apparent_role": "Scout"}]
+    });
+    assert!(
+        reconstruct_phase3_hp(
+            &ambiguous_clean_scout,
+            &empty,
+            &empty,
+            &empty,
+            &[&incompatible_drunk, &corrupted_scout_scenario],
+        ).is_err(),
+    );
+
+    let protected_knight = serde_json::json!({
+        "hp": 10,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": false},
+        "cards": [{"position": 1, "apparent_role": "Knight"}]
+    });
+    let mut doppelganger_knight = corrupted_scout_scenario.clone();
+    doppelganger_knight.doppelganger_position = Some(1);
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &protected_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&corrupted_scout_scenario, &doppelganger_knight],
+        ).unwrap(),
+        10,
+    );
+
+    // Adding a clean Drunk-as-Knight world makes the historical `executed`
+    // entry ambiguous: protected in two worlds, killed for 6 HP in the third.
+    assert!(
+        reconstruct_phase3_hp(
+            &protected_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&corrupted_scout_scenario, &doppelganger_knight, &incompatible_drunk],
+        ).is_err(),
+    );
 }
 
 // ── Test entry point ──
@@ -563,6 +810,7 @@ fn simulate_all_v2() {
     let mut expected_constraint_issues = 0usize;
     let mut unexpected_losses: Vec<String> = Vec::new();
     let mut unexpected_constraint_fails: Vec<String> = Vec::new();
+    let mut insufficient_truth: Vec<String> = Vec::new();
 
     for path in &files {
         let name = path.file_name().unwrap().to_str().unwrap();
@@ -589,6 +837,9 @@ fn simulate_all_v2() {
                     unexpected_losses.push(reason);
                 }
             }
+            SimResult::InsufficientTruth { detail } => {
+                insufficient_truth.push(detail);
+            }
         }
     }
 
@@ -599,6 +850,7 @@ fn simulate_all_v2() {
     println!("  Expected constraint issues: {expected_constraint_issues}");
     println!("  Unexpected constraint failures: {constraint_failures}");
     println!("  Unexpected simulation losses: {}", unexpected_losses.len());
+    println!("  Cases missing hidden-Outcast truth: {}", insufficient_truth.len());
     println!("  Total: {total}");
 
     if !unexpected_constraint_fails.is_empty() {
@@ -613,6 +865,12 @@ fn simulate_all_v2() {
             println!("  - {l}");
         }
     }
+    if !insufficient_truth.is_empty() {
+        println!("\nCases missing hidden-Outcast truth:");
+        for detail in &insufficient_truth {
+            println!("  - {detail}");
+        }
+    }
 
     // Constraint failures are always real bugs
     assert_eq!(constraint_failures, 0,
@@ -624,6 +882,15 @@ fn simulate_all_v2() {
     assert!(unexpected_losses.len() <= max_unexpected_losses,
         "{} unexpected simulation losses (max {max_unexpected_losses}): {unexpected_losses:?}",
         unexpected_losses.len());
+
+    // Never silently turn missing hidden-Outcast ground truth into a passing
+    // simulated win. These cases are reported separately until fixtures gain
+    // explicit hidden-role truth or the harness branches every compatible
+    // native outcome. The bound prevents this known corpus gap from growing.
+    const MAX_INSUFFICIENT_TRUTH_CASES: usize = 25;
+    assert!(insufficient_truth.len() <= MAX_INSUFFICIENT_TRUTH_CASES,
+        "{} cases lack a unique native execution outcome (max {MAX_INSUFFICIENT_TRUTH_CASES}): {insufficient_truth:?}",
+        insufficient_truth.len());
 }
 
 /// Debug test for asc68_v3: verifies truth scenario (evils at 3,7,8) survives constraint validation.
@@ -661,7 +928,7 @@ fn debug_asc68_v3() {
         SimResult::ConstraintFailure { detail, .. } => {
             panic!("Truth eliminated: {detail}");
         }
-        _ => {} // Win or SimLoss are both acceptable (this was a 0HP loss game)
+        _ => {} // Win, SimLoss, or insufficient truth are acceptable here.
     }
 }
 

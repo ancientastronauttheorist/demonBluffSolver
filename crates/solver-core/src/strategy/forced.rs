@@ -5,7 +5,11 @@
 
 use std::collections::{BTreeSet, HashMap, HashSet};
 use crate::types::{GameState, Scenario, SolverResult};
-use super::{evil_probabilities, EXECUTION_IMMUNE_ROLES, get_card_role};
+use super::{
+    apply_execution_damage, evil_probabilities, execution_consequence,
+    execution_terminal_outcome, get_card_role, ExecutionConsequence,
+    ExecutionTerminalOutcome,
+};
 
 /// Observed outcome if `pos` is executed in a given scenario.
 /// Returns (revealed_role, was_evil, was_corrupted).
@@ -48,6 +52,46 @@ pub fn execution_reveal_outcome(
         .unwrap_or("Unknown")
         .to_string();
     (role, false, scenario.corrupted.contains(&pos))
+}
+
+/// Canonical execution result visible to the player and therefore safe to use
+/// as a DFS branch key. Protected true-Knight and Doppelganger-as-Knight
+/// outcomes intentionally collapse: both leave the same face-up Knight alive.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum ExecutionObservation {
+    Protected,
+    Killed {
+        revealed_role: String,
+        was_evil: bool,
+        was_corrupted: bool,
+        hp_damage: i32,
+    },
+    BombardierLoss,
+}
+
+fn execution_observation(
+    revealed_role: String,
+    apparent_role: &str,
+    was_evil: bool,
+    was_corrupted: bool,
+    default_wrong_exec_cost: i32,
+) -> ExecutionObservation {
+    match execution_consequence(
+        &revealed_role,
+        apparent_role,
+        was_evil,
+        was_corrupted,
+        default_wrong_exec_cost,
+    ) {
+        ExecutionConsequence::Protected => ExecutionObservation::Protected,
+        ExecutionConsequence::Killed { hp_damage } => ExecutionObservation::Killed {
+            revealed_role,
+            was_evil,
+            was_corrupted,
+            hp_damage,
+        },
+        ExecutionConsequence::BombardierLoss => ExecutionObservation::BombardierLoss,
+    }
 }
 
 /// Maximum scenarios for the DFS to avoid combinatorial explosion.
@@ -128,7 +172,7 @@ fn can_force(
         return cached;
     }
 
-    // Check if all evils are gone in all scenarios
+    // Check terminal conditions in native order: HP loss precedes evil-count win.
     let all_done = indices.iter().all(|&idx| {
         let s = &scenarios[idx];
         !(1..=state.n_cards).any(|pos| {
@@ -137,9 +181,16 @@ fn can_force(
                 && s.is_evil(pos)
         })
     });
-    if all_done {
-        memo.insert(key, (true, None));
-        return (true, None);
+    match execution_terminal_outcome(hp, all_done) {
+        ExecutionTerminalOutcome::HpLoss => {
+            memo.insert(key, (false, None));
+            return (false, None);
+        }
+        ExecutionTerminalOutcome::Win => {
+            memo.insert(key, (true, None));
+            return (true, None);
+        }
+        ExecutionTerminalOutcome::Continue => {}
     }
 
     // Try each candidate position
@@ -154,34 +205,34 @@ fn can_force(
     }
 
     for pos in &available {
-        // Partition scenarios by execution outcome
-        let mut branches: HashMap<(String, bool, bool), Vec<usize>> = HashMap::new();
+        // Partition by observable execution outcome. Hidden real identity must
+        // not split two otherwise identical protected-Knight branches.
+        let mut branches: HashMap<ExecutionObservation, Vec<usize>> = HashMap::new();
+        let apparent_role = get_card_role(*pos, state).unwrap_or("");
         for &idx in indices {
-            let outcome = execution_reveal_outcome(*pos, &scenarios[idx], state);
-            branches.entry(outcome).or_default().push(idx);
+            let (role, was_evil, was_corrupted) =
+                execution_reveal_outcome(*pos, &scenarios[idx], state);
+            let observation = execution_observation(
+                role,
+                apparent_role,
+                was_evil,
+                was_corrupted,
+                state.wrong_exec_cost,
+            );
+            branches.entry(observation).or_default().push(idx);
         }
 
         let mut branch_ok = true;
-        for ((role, was_evil, was_corrupted), branch_indices) in &branches {
-            let next_hp = if *was_evil {
-                hp // Correct execution, no HP cost
-            } else if role == "Bombardier" {
-                // Executing good Bombardier = instant game loss
-                branch_ok = false;
-                break;
-            } else if EXECUTION_IMMUNE_ROLES.contains(&role.as_str()) && !was_corrupted {
-                // Knight immunity blocks — no HP cost, confirms good
-                hp
-            } else if role == "Drunk" {
-                // Drunk-as-Knight costs 6 HP, regular Drunk costs 2 HP
-                let apparent = get_card_role(*pos, state).unwrap_or("");
-                if apparent == "Knight" {
-                    hp - 6
-                } else {
-                    hp - 2
+        for (observation, branch_indices) in &branches {
+            let next_hp = match observation {
+                ExecutionObservation::BombardierLoss => {
+                    branch_ok = false;
+                    break;
                 }
-            } else {
-                hp - state.wrong_exec_cost
+                ExecutionObservation::Protected => hp,
+                ExecutionObservation::Killed { hp_damage, .. } => {
+                    apply_execution_damage(hp, *hp_damage)
+                }
             };
 
             if next_hp <= 0 {
@@ -193,10 +244,10 @@ fn can_force(
             sorted_branch.sort();
 
             let mut next_executed = executed_now.clone();
-            // Knight immunity: position NOT removed (stays on board)
-            if !(EXECUTION_IMMUNE_ROLES.contains(&role.as_str()) && !was_corrupted) {
-                next_executed.insert(*pos);
-            }
+            // This set means "resolved/unavailable" inside the planner. A
+            // protected target remains physically alive but is confirmed good
+            // in this branch and must not be attempted repeatedly.
+            next_executed.insert(*pos);
 
             let (can_win, _) = can_force(
                 &sorted_branch,
@@ -360,5 +411,115 @@ mod tests {
         // Position 1 should be chosen (safe) — can force via 1 then 2 in surviving branch
         let pos = find_forced_execution(&state, &result, &[1, 2, 3]);
         assert_eq!(pos, Some(1));
+    }
+
+    #[test]
+    fn corrupted_knight_uses_nine_hp_in_forced_search() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 9,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let first = make_scenario(&[(1, "Pooka")]);
+        let mut second = make_scenario(&[(2, "Pooka")]);
+        second.corrupted.insert(1);
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![first, second],
+            reasoning: vec![],
+        };
+
+        // #1 is fatal in the corrupted-Knight branch. #2 is the only forcing move.
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2]), Some(2));
+    }
+
+    #[test]
+    fn clean_doppelganger_as_knight_is_a_protected_information_branch() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 5,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let first = make_scenario(&[(1, "Pooka")]);
+        let mut second = make_scenario(&[(2, "Pooka")]);
+        second.doppelganger_position = Some(1);
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![first, second],
+            reasoning: vec![],
+        };
+
+        // Executing #1 either kills Pooka or is blocked and identifies #2 as evil.
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2]), Some(1));
+    }
+
+    #[test]
+    fn forced_search_does_not_turn_zero_hp_into_a_win() {
+        let state = GameState { n_cards: 1, ..GameState::default() };
+        let scenarios = vec![make_scenario(&[])];
+        let mut memo = HashMap::new();
+
+        let outcome = can_force(
+            &[0],
+            &BTreeSet::new(),
+            0,
+            &[],
+            &HashSet::new(),
+            &scenarios,
+            &state,
+            &mut memo,
+            0,
+        );
+
+        assert_eq!(outcome, (false, None));
+    }
+
+    #[test]
+    fn protected_outcome_does_not_reveal_knight_vs_doppelganger_identity() {
+        let state = GameState {
+            n_cards: 3,
+            hp: 5,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+                CardInfo { position: 3, apparent_role: "Baker".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let first = make_scenario(&[(2, "Pooka")]);
+        let mut second = make_scenario(&[(3, "Pooka")]);
+        second.doppelganger_position = Some(1);
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![first, second],
+            reasoning: vec![],
+        };
+
+        // Executing #1 is protected in both worlds and reveals no distinction.
+        // With only 5 HP, neither remaining 50/50 target is safely forced.
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2, 3]), None);
     }
 }

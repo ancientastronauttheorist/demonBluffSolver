@@ -10,7 +10,9 @@ import unittest
 
 from knowledge_base import (
     DEFAULT_WRONG_EXEC_COST,
+    KNIGHT_BLUFF_EXTRA_DAMAGE,
     WRONG_EXEC_COST_OVERRIDES,
+    execution_cost_for,
     wrong_exec_cost_for,
 )
 
@@ -48,6 +50,86 @@ class WrongExecCostTests(unittest.TestCase):
         # accidental whitespace-munging in the lookup path.
         self.assertEqual(wrong_exec_cost_for("Plague Doctor"), 5)
         self.assertEqual(wrong_exec_cost_for("Plague Doctor", default=3), 3)
+
+    def test_knight_bluff_extra_is_four(self):
+        self.assertEqual(KNIGHT_BLUFF_EXTRA_DAMAGE, 4)
+
+    def test_corrupted_true_knight_costs_nine(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Knight",
+                apparent_role="Knight",
+                was_corrupted=True,
+                was_killable=True,
+            ),
+            9,
+        )
+
+    def test_killable_drunk_as_knight_costs_six(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Drunk",
+                apparent_role="Knight",
+                was_killable=True,
+            ),
+            6,
+        )
+
+    def test_drunk_non_knight_keeps_base_override(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Drunk",
+                apparent_role="Bard",
+                was_killable=True,
+            ),
+            2,
+        )
+
+    def test_apparent_knight_without_killable_or_corrupted_signal_has_no_extra(self):
+        self.assertEqual(
+            execution_cost_for("Knight", apparent_role="knight"),
+            5,
+        )
+
+    def test_clean_killable_non_drunk_knight_bluff_has_no_extra(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Doppelganger",
+                apparent_role="Knight",
+                was_killable=True,
+            ),
+            5,
+        )
+
+    def test_blocked_or_evil_execution_costs_zero(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Knight",
+                apparent_role="Knight",
+                was_corrupted=True,
+                execution_blocked=True,
+            ),
+            0,
+        )
+        self.assertEqual(
+            execution_cost_for(
+                "Drunk",
+                apparent_role="Knight",
+                was_killable=True,
+                was_evil=True,
+            ),
+            0,
+        )
+
+    def test_apparent_role_normalizes_underscores_and_case(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Drunk",
+                apparent_role="  KNIGHT  ",
+                was_killable=True,
+            ),
+            6,
+        )
 
 
 if __name__ == "__main__":

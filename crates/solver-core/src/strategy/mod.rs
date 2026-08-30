@@ -164,6 +164,99 @@ pub fn get_card_role(pos: u8, state: &GameState) -> Option<&str> {
         .map(|c| c.apparent_role.as_str())
 }
 
+/// Native execution result for one resolved target.
+///
+/// The revealed role is the target's real role after execution, while the
+/// apparent role is the role shown before execution. Keeping both identities is
+/// required to distinguish a protected Doppelganger-as-Knight from a killable
+/// Drunk-as-Knight.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ExecutionConsequence {
+    /// The execution was blocked; the character remains alive and HP is unchanged.
+    Protected,
+    /// The character dies and this much HP is removed from the player.
+    Killed { hp_damage: i32 },
+    /// Executing the real Bombardier/Saint is an immediate terminal loss.
+    BombardierLoss,
+}
+
+/// Resolve native-static execution protection and HP damage for one target.
+pub fn execution_consequence(
+    revealed_role: &str,
+    apparent_role: &str,
+    was_evil: bool,
+    was_corrupted: bool,
+    default_wrong_exec_cost: i32,
+) -> ExecutionConsequence {
+    // Correct executions always kill and never damage the player, regardless
+    // of the role used as the target's disguise.
+    if was_evil {
+        return ExecutionConsequence::Killed { hp_damage: 0 };
+    }
+
+    if revealed_role == "Bombardier" {
+        return ExecutionConsequence::BombardierLoss;
+    }
+
+    let true_clean_knight = revealed_role == "Knight" && !was_corrupted;
+    // HealthyBluff makes Doppelganger delegate killability to its Knight bluff.
+    // Knight checks HealthyBluff before Corrupted, so this stays protected even
+    // in a hand-built scenario that carries both statuses.
+    let healthy_bluff_doppelganger_as_knight =
+        revealed_role == "Doppelganger" && apparent_role == "Knight";
+    if true_clean_knight || healthy_bluff_doppelganger_as_knight {
+        return ExecutionConsequence::Protected;
+    }
+
+    let base_damage = if revealed_role == "Drunk" {
+        2
+    } else {
+        default_wrong_exec_cost
+    };
+    // Drunk is intrinsically Corrupted for this role effect even though Plague
+    // Doctor reports it as not corrupted and some saved scenarios omit it from
+    // the generic corrupted set.
+    let knight_extra = if apparent_role == "Knight"
+        && (was_corrupted || revealed_role == "Drunk")
+    {
+        4
+    } else {
+        0
+    };
+
+    ExecutionConsequence::Killed {
+        hp_damage: base_damage.wrapping_add(knight_extra),
+    }
+}
+
+/// Apply `CurrentMaxValue.Reduce`'s native lower-clamped subtraction.
+pub fn apply_execution_damage(current_hp: i32, hp_damage: i32) -> i32 {
+    current_hp.wrapping_sub(hp_damage).max(0)
+}
+
+/// Terminal outcome relevant to execution planning after Saint/Bombardier has
+/// already been handled by [`ExecutionConsequence::BombardierLoss`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ExecutionTerminalOutcome {
+    Continue,
+    HpLoss,
+    Win,
+}
+
+/// Apply the native terminal precedence: depleted HP loses before evil-count win.
+pub fn execution_terminal_outcome(
+    current_hp: i32,
+    all_evils_gone: bool,
+) -> ExecutionTerminalOutcome {
+    if current_hp <= 0 {
+        ExecutionTerminalOutcome::HpLoss
+    } else if all_evils_gone {
+        ExecutionTerminalOutcome::Win
+    } else {
+        ExecutionTerminalOutcome::Continue
+    }
+}
+
 /// Roles that grant execution immunity when Good and uncorrupted.
 pub const EXECUTION_IMMUNE_ROLES: &[&str] = &["Knight"];
 
@@ -233,6 +326,61 @@ mod tests {
         let (min, max) = remaining_evil_bounds(&state, &result);
         assert_eq!(min, 1);
         assert_eq!(max, 2);
+    }
+
+    #[test]
+    fn execution_consequence_distinguishes_real_and_apparent_knights() {
+        assert_eq!(
+            execution_consequence("Knight", "Knight", false, false, 5),
+            ExecutionConsequence::Protected,
+        );
+        assert_eq!(
+            execution_consequence("Knight", "Knight", false, true, 5),
+            ExecutionConsequence::Killed { hp_damage: 9 },
+        );
+        assert_eq!(
+            execution_consequence("Drunk", "Knight", false, true, 5),
+            ExecutionConsequence::Killed { hp_damage: 6 },
+        );
+        assert_eq!(
+            execution_consequence("Drunk", "Knight", false, false, 5),
+            ExecutionConsequence::Killed { hp_damage: 6 },
+        );
+        assert_eq!(
+            execution_consequence("Doppelganger", "Knight", false, false, 5),
+            ExecutionConsequence::Protected,
+        );
+        assert_eq!(
+            execution_consequence("Doppelganger", "Knight", false, true, 5),
+            ExecutionConsequence::Protected,
+        );
+        assert_eq!(
+            execution_consequence("Pooka", "Knight", true, false, 5),
+            ExecutionConsequence::Killed { hp_damage: 0 },
+        );
+    }
+
+    #[test]
+    fn hp_loss_precedes_evil_count_win() {
+        assert_eq!(
+            execution_terminal_outcome(0, true),
+            ExecutionTerminalOutcome::HpLoss,
+        );
+        assert_eq!(
+            execution_terminal_outcome(1, true),
+            ExecutionTerminalOutcome::Win,
+        );
+        assert_eq!(
+            execution_terminal_outcome(1, false),
+            ExecutionTerminalOutcome::Continue,
+        );
+    }
+
+    #[test]
+    fn execution_damage_clamps_only_the_lower_bound() {
+        assert_eq!(apply_execution_damage(4, 5), 0);
+        assert_eq!(apply_execution_damage(0, 5), 0);
+        assert_eq!(apply_execution_damage(4, -2), 6);
     }
 
     #[test]

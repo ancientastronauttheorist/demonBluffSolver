@@ -40,12 +40,26 @@ pub fn validate_card(card: &CardInfo, scenario: &Scenario, state: &GameState) ->
     }
 }
 
+fn matches_executed_good_corruption(
+    scenario: &Scenario,
+    pos: u8,
+    was_corrupted: bool,
+) -> bool {
+    // Drunk is intrinsically Corrupted for status clues but is observed as
+    // clean on the Plague Doctor/execution-bookkeeping surface.
+    if scenario.drunk_position == Some(pos) {
+        return !was_corrupted;
+    }
+    scenario.corrupted.contains(&pos) == was_corrupted
+}
+
 /// Check if all revealed cards + ability results + structural constraints are consistent.
 pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
-    // Check observed corruption status of executed good cards
+    // Check observed corruption status of executed good cards.
     for (&pos, &was_corrupted) in &state.executed_good_corrupted {
-        if was_corrupted && !scenario.corrupted.contains(&pos) { return false; }
-        if !was_corrupted && scenario.corrupted.contains(&pos) { return false; }
+        if !matches_executed_good_corruption(scenario, pos, was_corrupted) {
+            return false;
+        }
     }
 
     // Structural: role counts
@@ -1257,5 +1271,8 @@ mod tests {
         assert!(scenario.corrupted.contains(&6));
         assert!(validate_bard(&bard, &scenario, &state));
         assert!(validate_pd_ability(&scenario, &state));
+
+        assert!(matches_executed_good_corruption(&scenario, 6, false));
+        assert!(!matches_executed_good_corruption(&scenario, 6, true));
     }
 }

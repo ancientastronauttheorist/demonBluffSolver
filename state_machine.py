@@ -474,7 +474,9 @@ class GameStateMachine:
         exec_result = self.session.auto_execute(pos, result, monitor=self.monitor, forced_safe=forced_safe)
 
         if exec_result["success"]:
-            if exec_result["was_evil"]:
+            if exec_result.get("blocked"):
+                print(f"  [auto] Execution blocked on #{pos}: confirmed Knight immunity")
+            elif exec_result["was_evil"]:
                 print(f"  [auto] Executed #{pos}: {exec_result['evil_role']} (EVIL)")
                 # Check if we just killed the Witch — unblock any blocked position
                 if exec_result['evil_role'] and 'Witch' in exec_result['evil_role']:
@@ -482,10 +484,6 @@ class GameStateMachine:
                         blocked_pos = self.session.blocked_positions[0]
                         print(f"  [auto] Witch killed! Unblocking #{blocked_pos}")
                         # Will be handled by next solve -> reveal recommendation
-            elif exec_result.get("error") and "Knight" in exec_result["error"]:
-                print(f"  [auto] Knight immunity on #{pos}")
-                self._pause(f"Knight immunity on #{pos} — manual handling needed")
-                return
             else:
                 print(f"  [auto] WRONG EXECUTION on #{pos}! HP now {self.session.hp}")
                 if self.session.hp <= 0:
