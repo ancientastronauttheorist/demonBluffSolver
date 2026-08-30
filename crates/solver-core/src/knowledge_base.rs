@@ -35,6 +35,46 @@ pub enum Alignment {
     Evil,
 }
 
+/// Runtime-data shape preserved when Shaman overwrites a Villager with Baker.
+///
+/// Most roles leave `Character.runtimeData` null. Alchemist and Enlightened
+/// install distinct managed runtime objects, and Baker's Day action cannot cast
+/// either object to `BakerRuntimeData`. Keep those identities in separate
+/// Shaman trace classes because Alchemist also preserves corruption resistance.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum BakerPreservedRuntimeClass {
+    Null,
+    Alchemist,
+    Enlightened,
+}
+
+pub fn baker_preserved_runtime_class(role: &str) -> BakerPreservedRuntimeClass {
+    match normalize_role(role).as_str() {
+        "alchemist" => BakerPreservedRuntimeClass::Alchemist,
+        "enlightened" => BakerPreservedRuntimeClass::Enlightened,
+        _ => BakerPreservedRuntimeClass::Null,
+    }
+}
+
+/// Solver-visible equivalence for a Shaman destination's erased identity.
+/// Alchemist resistance is visible for every copied role. Enlightened's
+/// preserved runtime object matters only when the copied role is Baker and
+/// later tries to cast that object as `BakerRuntimeData`.
+pub fn shaman_erased_role_class(
+    copied_role: &str,
+    erased_role: &str,
+) -> BakerPreservedRuntimeClass {
+    match baker_preserved_runtime_class(erased_role) {
+        BakerPreservedRuntimeClass::Alchemist => BakerPreservedRuntimeClass::Alchemist,
+        BakerPreservedRuntimeClass::Enlightened if normalize_role(copied_role) == "baker" => {
+            BakerPreservedRuntimeClass::Enlightened
+        }
+        BakerPreservedRuntimeClass::Null | BakerPreservedRuntimeClass::Enlightened => {
+            BakerPreservedRuntimeClass::Null
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Card {
     pub name: &'static str,

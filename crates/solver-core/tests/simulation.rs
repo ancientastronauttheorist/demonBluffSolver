@@ -1724,7 +1724,6 @@ fn simulate_all_v2() {
     // Cases with known bad data that may cause constraint failures
     let known_constraint_issues: HashSet<&str> = [
         "asc52_v6",     // Invalid Doppelganger in Druid claim (poisoned data)
-        "asc59_v7",     // 0 scenarios constraint chain bug (3 Bakers + Drunk)
         // Recorded under old Rambler rule (silenced ⟺ Disguised picker). New rule
         // is "silenced ⟺ Liar picker" — Doppelganger picker no longer silences,
         // so historical clue values no longer satisfy the validator.
@@ -1737,6 +1736,10 @@ fn simulate_all_v2() {
         // documented tech debt rather than silently masked.
         "asc74_v7",
         "asc75_v7",
+        // Frozen Lilis history says two night kills contained zero Evil even
+        // though the recorded truth makes victim #10 the Twin Minion. The
+        // Baker/Drunk witness is covered independently in validator tests.
+        "asc59_v7",
         // Recorded under pre-patch Alchemist rules (cured-count clue + corruptible).
         // 2026-05-04 patch: Alchemist is immune to Corruption AND now reports
         // pre-cure corrupted-in-range (incl. Drunk), not cured-count. Frozen
@@ -1982,7 +1985,7 @@ fn regression_asc55_v2_separates_bard_shaman_trace_from_baker_chain() {
 }
 
 #[test]
-fn regression_asc46_v1_keeps_copied_baker_chain_opaque() {
+fn regression_asc46_v1_legacy_missing_copied_baker_clue_stays_conservative() {
     let path = v2_dir().join("asc46_v1.json");
     let content = std::fs::read_to_string(path).unwrap();
     let value: serde_json::Value = serde_json::from_str(&content).unwrap();
@@ -2002,7 +2005,7 @@ fn regression_asc46_v1_keeps_copied_baker_chain_opaque() {
     });
 
     native_world.expect(
-        "asc46_v1 truth must survive without invented copied-Baker runtime provenance",
+        "asc46_v1 legacy 'none' must survive through an exact copied-Baker runtime class",
     );
 }
 
@@ -2023,12 +2026,9 @@ fn regression_legacy_header_count_does_not_invent_a_second_outcast() {
 
 #[test]
 fn regression_asc77_v6_baker_chain_before_original() {
-    // asc77 village 6: 3 Bakers on board, with chain-converted Baker at #1
-    // ("I was a Judge", reveal_idx 0) revealing BEFORE the original Baker at
-    // #6 ("I am the original Baker", reveal_idx 5). The old validator required
-    // chain Bakers to reveal after the original and rejected truth, leaving
-    // 0 surviving scenarios after #1 was wrongly executed. True evils were
-    // #3 Pooka + #4 Minion + #10 Twin Minion — the Bakers were all Good.
+    // asc77 predates verified reveal capture: its sorted list records click
+    // attempts, while #1's swallowed first click made its real reveal last.
+    // Unversioned fixtures must retain a conservative ordering search.
     let path = v2_dir().join("asc77_v6.json");
     let content = std::fs::read_to_string(&path).unwrap();
     let value: serde_json::Value = serde_json::from_str(&content).unwrap();

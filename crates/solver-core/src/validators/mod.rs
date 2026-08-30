@@ -1,7 +1,13 @@
 /// Card info validators — check if a card's claimed info is consistent with a scenario.
 
+mod baker;
 mod helpers;
 pub use helpers::*;
+
+use baker::{
+    baker_history_can_erase_role, medium_uses_baker_history,
+    validate_baker_history,
+};
 
 use std::collections::{HashMap, HashSet};
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions};
@@ -122,7 +128,7 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // by `night_kills` rather than inferring chronology from final reveal data.
     if !validate_lilis_night_kills(scenario, state) { return false; }
 
-    true
+    validate_baker_history(scenario, state)
 }
 
 fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
@@ -246,11 +252,7 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
         || scenario.puppet_position.is_some()
         || scenario.drunk_position.is_some()
         || scenario.doppelganger_position.is_some()
-        || state.cards.iter().any(|card| {
-            normalize_role(&card.apparent_role) == "baker"
-                && info_str(&card.info_parsed, "original_role")
-                    .is_some_and(|role| normalize_role(role) == "knight")
-        });
+        || baker_history_can_erase_role(scenario, state, "Knight");
     if !knight_identity_may_be_erased
         && state.deck.villagers.iter().any(|role| normalize_role(role) == "knight")
     {
@@ -609,15 +611,16 @@ fn validate_medium(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     let actual_role = get_real_role(claimed_pos, scenario, state);
     let mut actual_match = is_good && actual_role.replace(' ', "_") == claimed_role.replace(' ', "_");
 
-    // Baker conversion: Medium may see original role
-    if !actual_match && is_good && actual_role == "Baker" {
-        if let Some(target_card) = state.card_at(claimed_pos) {
-            if let Some(orig) = info_str(&target_card.info_parsed, "original_role") {
-                if orig.replace(' ', "_") == claimed_role.replace(' ', "_") {
-                    actual_match = true;
-                }
-            }
-        }
+    // A truthful Medium can observe a Baker predecessor before conversion or
+    // through BakerRuntimeData afterward. The shared history validator owns
+    // that temporal fact; never infer it from the target's own (possibly
+    // lying) speech.
+    if !actual_match
+        && is_good
+        && truth == TruthStatus::Truthful
+        && medium_uses_baker_history(claimed_pos, scenario, state)
+    {
+        actual_match = true;
     }
     // Night-killed: actual_role is "Unknown", accept valid good role
     if actual_role == "Unknown" && is_good {
@@ -1452,15 +1455,10 @@ fn validate_bounty_hunter(card: &CardInfo, scenario: &Scenario, state: &GameStat
 }
 
 fn validate_baker(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
-    if scenario
-        .shaman_trace
-        .as_ref()
-        .is_some_and(|trace| normalize_role(&trace.copied_role) == "baker")
-    {
-        // InitWithNoReset preserves the destination's prior runtimeData, and
-        // the native Baker composition has not yet been recovered. Treat all
-        // Baker clue text as opaque in copied-Baker worlds rather than pruning
-        // from a synthesized runtime provenance.
+    if normalize_role(&card.apparent_role) == "baker" {
+        // Ordinary Baker cards are validated together by the native Day/reveal
+        // history. This scalar entry remains only for Poet's copied-role
+        // delegation below.
         return true;
     }
     let claimed = match info_str(&card.info_parsed, "original_role") {
@@ -2026,6 +2024,9 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     let mut good_villager_counts: HashMap<String, i32> = HashMap::new();
     let mut good_outcast_counts: HashMap<String, i32> = HashMap::new();
     let mut counted_good_villager_positions = HashSet::new();
+    let shaman_endpoints = scenario.shaman_trace.as_ref().map(|trace| {
+        HashSet::from([trace.source_position, trace.target_position])
+    });
 
     for card in &state.cards {
         let pos = card.position;
@@ -2038,8 +2039,18 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             .filter(|role| !matches!(normalize_role(role).as_str(), "drunk" | "doppelganger"))
             .unwrap_or(&card.apparent_role);
         if knowledge_base::is_villager_role(role) {
-            *good_villager_counts.entry(normalize_role(role)).or_insert(0) += 1;
             counted_good_villager_positions.insert(pos);
+            // Baker Day rewrites and both Shaman endpoints are projected back
+            // to their one shared initial-role witness by `baker::history`.
+            // Counting their final appearances here would either invent
+            // duplicate Baker assets or commit to the erased Shaman identity.
+            if normalize_role(role) != "baker"
+                && !shaman_endpoints
+                    .as_ref()
+                    .is_some_and(|positions| positions.contains(&pos))
+            {
+                *good_villager_counts.entry(normalize_role(role)).or_insert(0) += 1;
+            }
         } else if state.deck.outcasts.iter().any(|o| o == role || o.replace('_', " ") == role) {
             *good_outcast_counts.entry(normalize_role(role)).or_insert(0) += 1;
         }
@@ -2053,12 +2064,9 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
         return false;
     }
 
-    // Project the final duplicate back through Shaman's one-way overwrite so
-    // deck multiplicity is checked against the identities that existed before
-    // its Start action. Hidden endpoints are still real selected identities.
-    // Solver-equivalent erased roles share one trace, so keep one count map per
-    // viable prior identity and accept the trace if any map fits the deck.
-    let mut initial_good_villager_count_variants = vec![good_villager_counts.clone()];
+    // Structural Shaman trace checks remain here. Its initial role multiset is
+    // validated jointly with Baker conversions, since either endpoint may be
+    // overwritten again during a later Day reveal.
     if let Some(trace) = scenario.shaman_trace.as_ref() {
         let copied = normalize_role(&trace.copied_role);
         let previous_roles: Vec<String> = trace
@@ -2068,9 +2076,10 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             .collect();
         let previous_role_set: HashSet<&str> =
             previous_roles.iter().map(String::as_str).collect();
-        let previous_was_alchemist = previous_roles
+        let previous_runtime_class = trace
+            .target_previous_roles
             .first()
-            .is_some_and(|role| role == "alchemist");
+            .map(|role| knowledge_base::shaman_erased_role_class(&trace.copied_role, role));
         if trace.source_position == trace.target_position
             || trace.source_position == 0
             || trace.target_position == 0
@@ -2078,9 +2087,10 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             || trace.target_position > state.n_cards
             || previous_roles.is_empty()
             || previous_role_set.len() != previous_roles.len()
-            || previous_roles
-                .iter()
-                .any(|role| (role == "alchemist") != previous_was_alchemist)
+            || trace.target_previous_roles.iter().any(|role| {
+                Some(knowledge_base::shaman_erased_role_class(&trace.copied_role, role))
+                    != previous_runtime_class
+            })
             || !state
                 .deck
                 .villagers
@@ -2112,33 +2122,13 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
                 let observed = state
                     .card_at(endpoint)
                     .map(|card| normalize_role(&card.apparent_role));
-                if observed.as_deref() != Some(copied.as_str()) {
+                if observed.as_deref() != Some("baker")
+                    && observed.as_deref() != Some(copied.as_str())
+                {
                     return false;
                 }
             }
         }
-
-        let mut base_initial_counts = good_villager_counts.clone();
-        if counted_good_villager_positions.contains(&trace.target_position) {
-            let Some(count) = base_initial_counts.get_mut(&copied) else {
-                return false;
-            };
-            *count -= 1;
-            if *count == 0 {
-                base_initial_counts.remove(&copied);
-            }
-        }
-        if !counted_good_villager_positions.contains(&trace.source_position) {
-            *base_initial_counts.entry(copied).or_insert(0) += 1;
-        }
-        initial_good_villager_count_variants = previous_roles
-            .into_iter()
-            .map(|previous| {
-                let mut counts = base_initial_counts.clone();
-                *counts.entry(previous).or_insert(0) += 1;
-                counts
-            })
-            .collect();
     }
 
     // Disguiser count
@@ -2169,19 +2159,14 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
         }
         m
     };
-    let has_baker_in_deck = state.deck.villagers.iter().any(|v| normalize_role(v) == "baker");
-
-    let any_initial_role_multiset_fits = initial_good_villager_count_variants
-        .iter()
-        .any(|counts| {
-            let mut total_excess = 0i32;
-            for (role, &count) in counts {
-                if role == "baker" && has_baker_in_deck { continue; }
-                let deck_count = deck_v_counts.get(role).copied().unwrap_or(0);
-                if count > deck_count { total_excess += count - deck_count; }
-            }
-            total_excess <= n_disguisers
-        });
+    let mut total_excess = 0i32;
+    for (role, &count) in &good_villager_counts {
+        let deck_count = deck_v_counts.get(role).copied().unwrap_or(0);
+        if count > deck_count {
+            total_excess += count - deck_count;
+        }
+    }
+    let any_initial_role_multiset_fits = total_excess <= n_disguisers;
     if !any_initial_role_multiset_fits { return false; }
 
     // Check outcast counts
@@ -2207,121 +2192,8 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
 
     // Board villager count ceiling
     if let Some(bvc) = state.board_villager_count {
-        let total_good_villagers: i32 = good_villager_counts.values().sum();
+        let total_good_villagers = counted_good_villager_positions.len() as i32;
         if total_good_villagers > bvc as i32 + n_disguisers { return false; }
-    }
-
-    let shaman_copied_baker = scenario
-        .shaman_trace
-        .as_ref()
-        .is_some_and(|trace| normalize_role(&trace.copied_role) == "baker");
-    if shaman_copied_baker {
-        // Copied Baker immediately acts with preserved destination runtimeData.
-        // Until that native composition is modeled, Baker-derived uniqueness
-        // and chain-existence pruning would be stronger than our evidence.
-        return true;
-    }
-
-    // Baker original-role uniqueness
-    let deck_villagers_norm: HashSet<String> = state.deck.villagers.iter().map(|v| normalize_role(v)).collect();
-    let mut baker_claimed_counts: HashMap<String, i32> = HashMap::new();
-    for card in &state.cards {
-        if normalize_role(&card.apparent_role) != "baker" { continue; }
-        let pos = card.position;
-        if known_evil_role(pos, scenario, state).is_some() { continue; }
-        if scenario.puppet_position == Some(pos) { continue; }
-        let claimed = match info_str(&card.info_parsed, "original_role") {
-            Some(s) => s,
-            None => continue,
-        };
-        if claimed.is_empty() || claimed.eq_ignore_ascii_case("original") { continue; }
-        let truth = truth_status(pos, scenario, state);
-        if truth != TruthStatus::Truthful { continue; }
-        let claimed_cd = match get_card(claimed) {
-            Some(c) if c.faction == Faction::Villager => c,
-            _ => continue,
-        };
-        if !deck_villagers_norm.contains(&normalize_role(claimed_cd.name)) { continue; }
-        *baker_claimed_counts.entry(normalize_role(claimed)).or_insert(0) += 1;
-    }
-
-    for (norm_role, &baker_count) in &baker_claimed_counts {
-        if norm_role == "baker" { continue; }
-        let mut non_baker_real = 0i32;
-        for card_c in &state.cards {
-            if normalize_role(&card_c.apparent_role) != *norm_role { continue; }
-            let pos_c = card_c.position;
-            if known_evil_role(pos_c, scenario, state).is_some() { continue; }
-            if scenario.puppet_position == Some(pos_c) { continue; }
-            if scenario.drunk_position == Some(pos_c) || scenario.doppelganger_position == Some(pos_c) { continue; }
-            non_baker_real += 1;
-        }
-        let deck_count = deck_v_counts.get(norm_role).copied().unwrap_or(0);
-        let copied_role_allowance =
-            i32::from(scenario.shaman_trace.as_ref().is_some_and(|trace| {
-                let copied = normalize_role(&trace.copied_role);
-                copied == *norm_role
-            }));
-        if non_baker_real + baker_count > deck_count + copied_role_allowance {
-            return false;
-        }
-
-        // At most one ordinary Baker chain conversion can produce a given
-        // "I was <role>" claim. Copied-Baker worlds returned above because
-        // their preserved runtime provenance is still opaque.
-        // Safe for current v2 suite (no deck has duplicate villagers, so the
-        // existing deck_count check already enforces this implicitly). Adds
-        // stricter behavior for hypothetical duplicate-villager decks.
-        if baker_count > 1 { return false; }
-    }
-
-    // Baker conversion chain existence for fully modeled runtime provenance.
-    // Copied-Baker worlds already returned above; merely listing or placing
-    // Shaman does not disable this check.
-    // NOTE (asc77 v6): we previously required chain-converted Bakers to reveal
-    // AFTER the original, but the in-game conversion chain pre-seeds at game
-    // start — chain Bakers can reveal in any order (observed: chain-Baker at #1
-    // revealed before original at #6). Keep the existence requirement (an
-    // original Baker must be somewhere in the truthful-Baker set) but drop the
-    // reveal-ordering constraint.
-    if !baker_claimed_counts.is_empty() {
-        // If any truthful Baker claims "I was <role>", at least one truthful
-        // Baker must claim to be the original (or it must be possible that
-        // the original Baker is an unrevealed/night-killed/puppet position
-        // where we can't observe its claim).
-        let mut has_chain_claim = false;
-        let mut has_original_claim = false;
-        let mut has_unobservable_baker_slot = false;
-
-        for card in &state.cards {
-            if normalize_role(&card.apparent_role) != "baker" { continue; }
-            let pos = card.position;
-            if known_evil_role(pos, scenario, state).is_some() { continue; }
-            if scenario.puppet_position == Some(pos) { continue; }
-            let truth = truth_status(pos, scenario, state);
-            if truth != TruthStatus::Truthful { continue; }
-            let claimed = info_str(&card.info_parsed, "original_role").unwrap_or("");
-            if claimed.eq_ignore_ascii_case("original") || claimed.eq_ignore_ascii_case("baker") {
-                has_original_claim = true;
-            } else if !claimed.is_empty() {
-                has_chain_claim = true;
-            }
-        }
-        // Also allow the original Baker to be a hidden (unrevealed) or
-        // night-killed good position — we can't see its claim in those cases.
-        for card in &state.cards {
-            if !state.blocked_positions.contains(&card.position)
-               && !state.night_kills.contains(&card.position) { continue; }
-            // Hidden/night-killed Good positions could be the original Baker
-            if known_evil_role(card.position, scenario, state).is_none() {
-                has_unobservable_baker_slot = true;
-                break;
-            }
-        }
-
-        if has_chain_claim && !has_original_claim && !has_unobservable_baker_slot {
-            return false;
-        }
     }
 
     true
@@ -3739,7 +3611,9 @@ mod tests {
 
         let baker = make_card(1, "Baker", json!({"original_role": "original"}));
         let baker_state = base_state(3, vec![baker.clone()]);
-        assert!(!validate_baker(&baker, &scenario, &baker_state));
+        // The shared history (rather than this scalar dispatcher) owns Baker
+        // truth and the legacy parser's original/Baker ambiguity.
+        assert!(validate_baker(&baker, &scenario, &baker_state));
         assert!(validate_baker(&baker, &empty_scenario(), &baker_state));
 
         assert!(matches_executed_good_corruption(&scenario, 1, false));
@@ -4299,7 +4173,7 @@ mod tests {
             affected_anchor_positions: vec![],
         });
 
-        assert!(!validate_role_counts(&generated_drunk, &state));
+        assert!(!check_scenario(&generated_drunk, &state));
     }
 
     #[test]
@@ -4317,6 +4191,7 @@ mod tests {
             "Scout".to_string(),
             "Witness".to_string(),
             "Judge".to_string(),
+            "Baker".to_string(),
         ];
         state.deck.minions = vec!["Shaman".to_string()];
         state.board_villager_count = Some(3);
@@ -4330,7 +4205,7 @@ mod tests {
             target_previous_roles: vec!["Scout".to_string(), "Judge".to_string()],
         });
 
-        assert!(validate_role_counts(&scenario, &state));
+        assert!(check_scenario(&scenario, &state));
 
         scenario
             .shaman_trace
@@ -4338,7 +4213,7 @@ mod tests {
             .unwrap()
             .target_previous_roles = vec!["Scout".to_string()];
         assert!(
-            !validate_role_counts(&scenario, &state),
+            !check_scenario(&scenario, &state),
             "an equivalence class with no deck-compatible erased role must fail"
         );
 
@@ -4350,7 +4225,7 @@ mod tests {
 
         state.board_villager_count = Some(2);
         assert!(
-            !validate_role_counts(&scenario, &state),
+            !check_scenario(&scenario, &state),
             "Shaman changes a role identity, not the physical Villager count"
         );
     }
@@ -4368,6 +4243,48 @@ mod tests {
         state.deck.minions = vec!["Shaman".to_string()];
 
         assert!(!validate_role_counts(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn legacy_asc59_three_baker_drunk_history_survives_unrelated_lilis_data() {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/cases_v2/asc59_v7.json");
+        let value: serde_json::Value = serde_json::from_str(
+            &std::fs::read_to_string(path).unwrap(),
+        )
+        .unwrap();
+        let state = GameState::from_json(&value).unwrap();
+        let witness = crate::scenario::build_scenarios(&state)
+            .into_iter()
+            .find(|scenario| {
+                scenario
+                    .evil_positions
+                    .get(&1)
+                    .is_some_and(|role| normalize_role(role) == "lilis")
+                    && scenario
+                        .evil_positions
+                        .get(&3)
+                        .is_some_and(|role| normalize_role(role) == "poisoner")
+                    && scenario
+                        .evil_positions
+                        .get(&10)
+                        .is_some_and(|role| normalize_role(role) == "twinminion")
+                    && scenario.drunk_position == Some(8)
+                    && scenario.corrupted.contains(&2)
+                    && scenario.corrupted.contains(&8)
+                    && validate_role_counts(scenario, &state)
+                    && validate_baker_history(scenario, &state)
+                    && state
+                        .cards
+                        .iter()
+                        .all(|card| validate_card(card, scenario, &state))
+            })
+            .expect("asc59_v7 must retain its legacy three-Baker/Drunk witness");
+
+        // The frozen case records two Lilis victims but zero evil kills even
+        // though #10 is the true Twin Minion. Keep that independent stale
+        // surface out of this Baker regression rather than weakening Lilis.
+        assert!(!validate_lilis_night_kills(&witness, &state));
     }
 
     #[test]

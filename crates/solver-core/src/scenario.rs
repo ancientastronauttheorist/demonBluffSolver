@@ -4,7 +4,10 @@
 use std::collections::{HashMap, HashSet};
 use crate::corruption::{enumerate_start_corruption, StartCorruptionContext};
 use crate::geometry::adjacent_positions;
-use crate::knowledge_base::{get_card, normalize_role, Faction};
+use crate::knowledge_base::{
+    get_card, normalize_role, shaman_erased_role_class,
+    BakerPreservedRuntimeClass, Faction,
+};
 use crate::types::{BoardCountProvenance, ChancellorTrace, GameState, Scenario, ShamanTrace};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1824,19 +1827,26 @@ fn shaman_start_context_variants(
                     .filter(|role| {
                         source_role
                             .as_deref()
-                            .is_none_or(|known| normalize_role(known) == normalize_role(role))
+                            .is_none_or(|known| {
+                                normalize_role(known) == "baker"
+                                    || normalize_role(known) == normalize_role(role)
+                            })
                             && target_role
                                 .as_deref()
-                                .is_none_or(|known| normalize_role(known) == normalize_role(role))
+                                .is_none_or(|known| {
+                                    normalize_role(known) == "baker"
+                                        || normalize_role(known) == normalize_role(role)
+                                })
                     })
                     .collect();
 
                 for copied_role in copied_roles {
-                    // Alchemist is the only overwritten identity whose preserved
-                    // Init-time resistance remains solver-visible. Keep it in a
-                    // separate trace, while grouping every viable non-Alchemist
-                    // identity without multiplying this endpoint's probability.
-                    let mut previous_role_classes: Vec<(bool, Vec<String>)> = Vec::new();
+                    // InitWithNoReset preserves runtimeData. Alchemist stays
+                    // distinct for its resistance. Enlightened differs from
+                    // null-runtime roles only when copied Baker later attempts
+                    // the BakerRuntimeData cast.
+                    let mut previous_role_classes:
+                        Vec<(BakerPreservedRuntimeClass, Vec<String>)> = Vec::new();
                     for target_previous_role in &deck_roles {
                         let exact_trace = ShamanTrace {
                             source_position,
@@ -1848,15 +1858,18 @@ fn shaman_start_context_variants(
                             continue;
                         }
 
-                        let was_alchemist = normalize_role(target_previous_role) == "alchemist";
+                        let runtime_class = shaman_erased_role_class(
+                            copied_role,
+                            target_previous_role,
+                        );
                         if let Some((_, roles)) = previous_role_classes
                             .iter_mut()
-                            .find(|(class, _)| *class == was_alchemist)
+                            .find(|(class, _)| *class == runtime_class)
                         {
                             roles.push(target_previous_role.clone());
                         } else {
                             previous_role_classes
-                                .push((was_alchemist, vec![target_previous_role.clone()]));
+                                .push((runtime_class, vec![target_previous_role.clone()]));
                         }
                     }
 
@@ -1906,9 +1919,9 @@ fn observed_final_villager_role(position: u8, state: &GameState) -> Option<Strin
         .map(str::to_string)
 }
 
-/// Cheap pre-pruning for erased-role alternatives. Baker identities are left
-/// to the dedicated chain validator because their Start conversions rewrite
-/// this same multiset independently of Shaman.
+/// Cheap pre-pruning for erased-role alternatives. A visible final Baker may
+/// have replaced any hidden Villager after Shaman's Start, so its initial
+/// identity is deferred to the dedicated Baker history validator.
 fn shaman_initial_role_counts_fit(
     trace: &ShamanTrace,
     state: &GameState,
@@ -1927,6 +1940,14 @@ fn shaman_initial_role_counts_fit(
         } else if let Some(observed) = observed_final_villager_role(position, state) {
             if position == trace.source_position {
                 source_seen = true;
+            }
+            if normalize_role(&observed) == "baker" {
+                if position == trace.source_position
+                    && normalize_role(&trace.copied_role) == "baker"
+                {
+                    *counts.entry("baker".to_string()).or_insert(0) += 1;
+                }
+                continue;
             }
             // The trace generator has already required the source observation
             // to equal copied_role.
@@ -1950,7 +1971,7 @@ fn shaman_initial_role_counts_fit(
     }
     counts
         .into_iter()
-        .all(|(role, count)| role == "baker" || count <= available.get(&role).copied().unwrap_or(0))
+        .all(|(role, count)| count <= available.get(&role).copied().unwrap_or(0))
 }
 
 fn apply_shaman_trace_to_context(
@@ -2931,6 +2952,97 @@ mod tests {
                 .map(|role| normalize_role(role))
                 .collect::<HashSet<_>>(),
             HashSet::from(["witness".to_string(), "judge".to_string()])
+        );
+    }
+
+    #[test]
+    fn shaman_splits_only_solver_visible_preserved_runtime_classes() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec![
+            "Scout".to_string(),
+            "Witness".to_string(),
+            "Judge".to_string(),
+            "Baker".to_string(),
+            "Alchemist".to_string(),
+            "Enlightened".to_string(),
+        ];
+        let real = HashSet::from([2, 3]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: real.clone(),
+            registered_villagers_at_pd_call: real,
+            ..StartCorruptionContext::default()
+        };
+        let evil = HashMap::from([(1, "Shaman".to_string())]);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, None, None, false, context,
+        );
+        let traces: Vec<&ShamanTrace> = variants
+            .iter()
+            .filter_map(|context| context.shaman_trace.as_ref())
+            .filter(|trace| {
+                trace.source_position == 2
+                    && trace.target_position == 3
+                    && normalize_role(&trace.copied_role) == "scout"
+            })
+            .collect();
+
+        assert_eq!(traces.len(), 2);
+        let classes: HashSet<Vec<String>> = traces
+            .iter()
+            .map(|trace| {
+                trace
+                    .target_previous_roles
+                    .iter()
+                    .map(|role| normalize_role(role))
+                    .collect()
+            })
+            .collect();
+        assert_eq!(
+            classes,
+            HashSet::from([
+                vec!["alchemist".to_string()],
+                vec![
+                    "baker".to_string(),
+                    "enlightened".to_string(),
+                    "judge".to_string(),
+                    "witness".to_string(),
+                ],
+            ]),
+        );
+
+        let baker_traces: Vec<&ShamanTrace> = variants
+            .iter()
+            .filter_map(|context| context.shaman_trace.as_ref())
+            .filter(|trace| {
+                trace.source_position == 2
+                    && trace.target_position == 3
+                    && normalize_role(&trace.copied_role) == "baker"
+            })
+            .collect();
+        assert_eq!(baker_traces.len(), 3);
+        let baker_classes: HashSet<Vec<String>> = baker_traces
+            .iter()
+            .map(|trace| {
+                trace
+                    .target_previous_roles
+                    .iter()
+                    .map(|role| normalize_role(role))
+                    .collect()
+            })
+            .collect();
+        assert_eq!(
+            baker_classes,
+            HashSet::from([
+                vec!["alchemist".to_string()],
+                vec!["enlightened".to_string()],
+                vec![
+                    "judge".to_string(),
+                    "scout".to_string(),
+                    "witness".to_string(),
+                ],
+            ]),
         );
     }
 

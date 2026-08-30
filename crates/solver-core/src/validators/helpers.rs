@@ -55,6 +55,15 @@ pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
     // `known_evil_role` / `effective_alignment` below.
     if let Some(trace) = scenario.shaman_trace.as_ref() {
         if trace.source_position == pos || trace.target_position == pos {
+            if state
+                .executed_good_roles
+                .get(&pos)
+                .map(String::as_str)
+                .or_else(|| state.card_at(pos).map(|card| card.apparent_role.as_str()))
+                .is_some_and(|role| normalize_role(role) == "baker")
+            {
+                return Some("Baker".to_string());
+            }
             return Some(trace.copied_role.clone());
         }
     }
@@ -333,6 +342,15 @@ mod truth_status_tests {
 pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) -> &'a str {
     if let Some(trace) = scenario.shaman_trace.as_ref() {
         if trace.source_position == pos || trace.target_position == pos {
+            if state
+                .executed_good_roles
+                .get(&pos)
+                .map(String::as_str)
+                .or_else(|| state.card_at(pos).map(|card| card.apparent_role.as_str()))
+                .is_some_and(|role| normalize_role(role) == "baker")
+            {
+                return "Baker";
+            }
             return &trace.copied_role;
         }
     }

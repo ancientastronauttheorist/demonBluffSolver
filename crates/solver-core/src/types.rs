@@ -217,6 +217,12 @@ pub struct GameState {
     #[serde(default)]
     pub reveal_order: Vec<u8>,
 
+    /// Public capture provenance for shipped Baker Day/reveal chronology.
+    /// Missing/null preserves archived fixtures whose `reveal_order` recorded
+    /// click attempts or card-entry order rather than verified native reveals.
+    #[serde(default)]
+    pub baker_rule_version: Option<String>,
+
     #[serde(
         default,
         serialize_with = "serialize_int_key_map",
@@ -285,6 +291,7 @@ impl Default for GameState {
             board_demon_count: None,
             board_count_provenance: BoardCountProvenance::LegacyUnknown,
             reveal_order: vec![],
+            baker_rule_version: None,
             executed_good_corrupted: HashMap::new(),
             executed_good_roles: HashMap::new(),
             used_abilities: vec![],
@@ -577,7 +584,33 @@ mod tests {
             BoardCountProvenance::LegacyUnknown,
         );
         assert!(state.rambler_rule_version.is_none());
+        assert!(state.baker_rule_version.is_none());
         assert!(state.rambler_shut_up_observations.is_empty());
+    }
+
+    #[test]
+    fn baker_rule_version_defaults_for_legacy_and_round_trips_current_marker() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": ["Baker"], "outcasts": [], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.baker_rule_version.is_none());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": ["Baker"], "outcasts": [], "minions": [], "demons": []},
+            "baker_rule_version": "baker_day_reveal_v1"
+        }))
+        .unwrap();
+        assert_eq!(
+            current.baker_rule_version.as_deref(),
+            Some("baker_day_reveal_v1"),
+        );
+        assert_eq!(
+            serde_json::to_value(current).unwrap()["baker_rule_version"],
+            serde_json::json!("baker_day_reveal_v1"),
+        );
     }
 
     #[test]
