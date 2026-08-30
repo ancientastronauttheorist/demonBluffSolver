@@ -226,6 +226,9 @@ Memory reader notes:
 - Wrong-executing Drunk has special HP behavior. Keep HP in sync with `set_hp`.
 - Knight immunity and corrupted Knight damage need careful confirmation in live
   games.
+- Current serialized role/display mappings include internal `Marionette` ->
+  Twin Minion, `Mezepheles` -> Puppeteer, and `Puzzlemaster` -> Plague Doctor.
+  Do not infer a public role name from its managed class name.
 
 ## Setup
 

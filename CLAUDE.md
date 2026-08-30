@@ -114,7 +114,9 @@ Every screenshot, memory reader reads state and compares against what the screen
 **Notes**:
 - Multi-village: fixed. Uses Unity native object name at `m_CachedPtr(0x10)+0x48` with `characterId` fallback.
 - Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` — INIT entries have true roles in reverse position order.
-- Name mappings: Gambler→Gemcrafter, Imp→Chancellor, etc. (see `DISPLAY_NAMES`).
+- Name mappings: Gambler→Gemcrafter and Imp→Chancellor, plus the asset-proven
+  internal mappings Marionette→Twin Minion, Mezepheles→Puppeteer, and
+  Puzzlemaster→Plague Doctor (see `DISPLAY_NAMES`).
 
 ## Setup
 - Screen: 2560x1440, Python 3.13, Rust 2021 edition.
