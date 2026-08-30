@@ -2,8 +2,9 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **native-static** for the first 27 methods in the checked
-boundary. No statement here is based on live dynamic observation.
+Evidence status: **native-static** for the first 27 methods and the three base
+bluff-storage/query methods in the checked boundary. No statement here is
+based on live dynamic observation.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_status_corruption_truth.json`](../../targets/gameplay_status_corruption_truth.json).
@@ -118,6 +119,25 @@ non-null, then walks active statuses in stored order. `AppearDisguised` sets the
 result true and `AppearHonest` sets it false. When both exist, the later list
 entry wins. Status insertion prevents a duplicate of each enum but does not
 make these two statuses mutually exclusive.
+
+## Bluff storage and fallback queries
+
+`Character.GiveBluff` always stores the supplied `CharacterData` in `bluff`.
+When that reference is live under Unity object semantics, it clones the
+referenced role into `bluffRole`. A null or destroyed bluff does **not** clear
+an existing `bluffRole`; it leaves that separate field untouched. The method
+does not change alignment, register-as data, statuses, or reveal state.
+
+`Character.GetCharacterBluffIfAble` returns `bluff` only when all four native
+conditions hold: state is neither Dead nor Revealed, the separate `revealed`
+flag is false, and the bluff reference is Unity-live. Every other path returns
+`dataRef`. It does not consult `bluffRole`, lying/disguise status, alignment, or
+the role's virtual bluff selector.
+
+The base `Role.GetBluffIfAble` always returns null and mutates nothing. Its
+constant-null native body is shared with hundreds of unrelated managed
+identities, so the managed method identity and signature remain part of the
+evidence even though the machine-code body is not unique to Role.
 
 ## Corruption producers
 

@@ -101,3 +101,6 @@
 {"method":"tdi5873.m0004","state":"understood","reason":"Native live Corrupted range scan, raw-status filter, and overlap preservation are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
 {"method":"tdi5913.m0002","state":"understood","reason":"Native Chancellor/Baron Start role addition, anywhere-Villager replacement, and relocation dispatch are documented.","evidence":["ev.chancellor.start-relocation.1"]}
 {"method":"tdi5913.m0003","state":"understood","reason":"Native real-Outcast anchor selection, neighbour choice, status insertion, and role-data swap are documented.","evidence":["ev.chancellor.start-relocation.1"]}
+{"method":"tdi5487.m0013","state":"understood","reason":"Native bluff-versus-real fallback gates and Unity object semantics are documented.","evidence":["ev.character.bluff-storage-query.1"]}
+{"method":"tdi5487.m0016","state":"understood","reason":"Native bluff storage, role cloning, and stale bluff-role behavior are documented.","evidence":["ev.character.bluff-storage-query.1"]}
+{"method":"tdi5853.m0018","state":"understood","reason":"The native base bluff selector's constant-null result is documented under its exact managed identity.","evidence":["ev.character.bluff-storage-query.1"]}
