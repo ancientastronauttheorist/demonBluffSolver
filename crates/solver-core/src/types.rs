@@ -223,6 +223,12 @@ pub struct GameState {
     #[serde(default)]
     pub baker_rule_version: Option<String>,
 
+    /// Native clean-Doppelganger physical-source filtering provenance.
+    /// Missing/null keeps archived fixtures on the pre-audit conservative
+    /// model; fresh current sessions opt into the audited reveal lifecycle.
+    #[serde(default)]
+    pub doppel_drunk_rule_version: Option<String>,
+
     #[serde(
         default,
         serialize_with = "serialize_int_key_map",
@@ -292,6 +298,7 @@ impl Default for GameState {
             board_count_provenance: BoardCountProvenance::LegacyUnknown,
             reveal_order: vec![],
             baker_rule_version: None,
+            doppel_drunk_rule_version: None,
             executed_good_corrupted: HashMap::new(),
             executed_good_roles: HashMap::new(),
             used_abilities: vec![],
@@ -585,7 +592,33 @@ mod tests {
         );
         assert!(state.rambler_rule_version.is_none());
         assert!(state.baker_rule_version.is_none());
+        assert!(state.doppel_drunk_rule_version.is_none());
         assert!(state.rambler_shut_up_observations.is_empty());
+    }
+
+    #[test]
+    fn doppel_drunk_rule_version_defaults_for_legacy_and_round_trips_current_marker() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": ["Knight"], "outcasts": ["Doppelganger"], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.doppel_drunk_rule_version.is_none());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": ["Knight"], "outcasts": ["Doppelganger"], "minions": [], "demons": []},
+            "doppel_drunk_rule_version": "doppel_drunk_reveal_v1"
+        }))
+        .unwrap();
+        assert_eq!(
+            current.doppel_drunk_rule_version.as_deref(),
+            Some("doppel_drunk_reveal_v1"),
+        );
+        assert_eq!(
+            serde_json::to_value(current).unwrap()["doppel_drunk_rule_version"],
+            serde_json::json!("doppel_drunk_reveal_v1"),
+        );
     }
 
     #[test]

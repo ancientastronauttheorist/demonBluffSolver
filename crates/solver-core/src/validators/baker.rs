@@ -852,10 +852,30 @@ fn coherent_exact_order(problem: &Problem<'_>) -> bool {
         })
 }
 
-fn history_exists(
+fn require_pre_day_role(
+    problem: &Problem<'_>,
+    search: SearchState,
+    position: u8,
+    role: u8,
+) -> Option<SearchState> {
+    if position == 0 || position > problem.state.n_cards {
+        return None;
+    }
+    let seat = &search.seats[usize::from(position)];
+    if !seat.physical_villager {
+        return None;
+    }
+    match seat.current_role {
+        Some(current) => (current == role).then_some(search),
+        None => activate_with_initial_role(problem, &search, position, role),
+    }
+}
+
+fn history_exists_with_pre_day_role(
     scenario: &Scenario,
     state: &GameState,
     required_erased_role: Option<&str>,
+    required_pre_day_role: Option<(u8, &str)>,
 ) -> bool {
     let baker_cards: Vec<&CardInfo> = state
         .cards
@@ -868,7 +888,11 @@ fn history_exists(
         // has actually been revealed and captured.
         return false;
     }
-    if baker_cards.is_empty() && required_erased_role.is_none() && scenario.shaman_trace.is_none() {
+    if baker_cards.is_empty()
+        && required_erased_role.is_none()
+        && required_pre_day_role.is_none()
+        && scenario.shaman_trace.is_none()
+    {
         return true;
     }
     let Some(problem) = build_problem(scenario, state, required_erased_role) else {
@@ -877,6 +901,15 @@ fn history_exists(
     if required_erased_role.is_some() && problem.required_erased_role.is_none() {
         return false;
     }
+    let required_pre_day_role = match required_pre_day_role {
+        Some((position, role)) => {
+            let Some(role) = problem.role_index(role) else {
+                return false;
+            };
+            Some((position, role))
+        }
+        None => None,
+    };
     if problem.baker_role.is_none() && !baker_cards.is_empty() {
         // An authored Baker appearance needs the Baker script asset even when
         // the physical actor is an Evil/Outcast disguise.
@@ -905,7 +938,16 @@ fn history_exists(
         };
         initial_villager_assignments(&problem, initial)
             .into_iter()
-            .any(|mut initial| {
+            .any(|initial| {
+                let constrained = match required_pre_day_role {
+                    Some((position, role)) => {
+                        require_pre_day_role(&problem, initial, position, role)
+                    }
+                    None => Some(initial),
+                };
+                let Some(mut initial) = constrained else {
+                    return false;
+                };
                 for &position in &state.night_kills {
                     if position > 0 && position <= state.n_cards {
                         initial.revealed[usize::from(position)] = true;
@@ -969,6 +1011,14 @@ fn history_exists(
     })
 }
 
+fn history_exists(
+    scenario: &Scenario,
+    state: &GameState,
+    required_erased_role: Option<&str>,
+) -> bool {
+    history_exists_with_pre_day_role(scenario, state, required_erased_role, None)
+}
+
 pub(super) fn validate_baker_history(scenario: &Scenario, state: &GameState) -> bool {
     history_exists(scenario, state, None)
 }
@@ -979,6 +1029,20 @@ pub(super) fn baker_history_can_erase_role(
     role: &str,
 ) -> bool {
     history_exists(scenario, state, Some(role))
+}
+
+/// Whether one concrete seat can have carried `role` after all native Start
+/// mutations but before the first player-triggered Day reveal. This shared
+/// chronology surface lets clean Doppelganger validation resolve both final
+/// Baker identities and trusted hidden-seat occupancy against the same
+/// physical-role multiset and reveal history as ordinary Baker validation.
+pub(super) fn baker_history_supports_pre_day_role(
+    scenario: &Scenario,
+    state: &GameState,
+    position: u8,
+    role: &str,
+) -> bool {
+    history_exists_with_pre_day_role(scenario, state, None, Some((position, role)))
 }
 
 /// Whether a truthful Medium observation aimed at a final Good Baker is owned

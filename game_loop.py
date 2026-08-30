@@ -19,6 +19,7 @@ from solver import (
     BAKER_RULE_VERSION,
     CardInfo,
     DeckComposition,
+    DOPPEL_DRUNK_RULE_VERSION,
     GameState,
     RAMBLER_RULE_VERSION,
     SolverResult,
@@ -771,6 +772,7 @@ class GameSession:
         self.rambler_rule_version: Optional[str] = RAMBLER_RULE_VERSION
         self.rambler_shut_up_observations: list[dict] = []
         self.baker_rule_version: Optional[str] = BAKER_RULE_VERSION
+        self.doppel_drunk_rule_version: Optional[str] = DOPPEL_DRUNK_RULE_VERSION
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
         # Trigger/result synchronization is live-session bookkeeping only.
@@ -829,6 +831,7 @@ class GameSession:
         self.rambler_rule_version = RAMBLER_RULE_VERSION
         self.rambler_shut_up_observations.clear()
         self.baker_rule_version = BAKER_RULE_VERSION
+        self.doppel_drunk_rule_version = DOPPEL_DRUNK_RULE_VERSION
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.lilis_nights_resolved = 0
@@ -1520,6 +1523,7 @@ class GameSession:
                 for observation in self.rambler_shut_up_observations
             ],
             baker_rule_version=self.baker_rule_version,
+            doppel_drunk_rule_version=self.doppel_drunk_rule_version,
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
             executed_good_roles=dict(self.executed_good_roles),
@@ -1559,6 +1563,7 @@ class GameSession:
             for observation in state.rambler_shut_up_observations
         ]
         session.baker_rule_version = state.baker_rule_version
+        session.doppel_drunk_rule_version = state.doppel_drunk_rule_version
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))

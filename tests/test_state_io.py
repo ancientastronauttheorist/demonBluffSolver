@@ -11,7 +11,7 @@ class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-6:],
+            names[-7:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
@@ -19,6 +19,7 @@ class TestGameStateIO(unittest.TestCase):
                 "rambler_rule_version",
                 "rambler_shut_up_observations",
                 "baker_rule_version",
+                "doppel_drunk_rule_version",
             ],
         )
 
@@ -69,6 +70,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertIsNone(loaded.rambler_rule_version)
         self.assertEqual(loaded.rambler_shut_up_observations, [])
         self.assertIsNone(loaded.baker_rule_version)
+        self.assertIsNone(loaded.doppel_drunk_rule_version)
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -111,6 +113,10 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.rambler_rule_version, "rambler2_shut_up")
         self.assertEqual(loaded.baker_rule_version, "baker_day_reveal_v1")
         self.assertEqual(
+            loaded.doppel_drunk_rule_version,
+            "doppel_drunk_reveal_v1",
+        )
+        self.assertEqual(
             loaded.rambler_shut_up_observations,
             session.rambler_shut_up_observations,
         )
@@ -133,11 +139,17 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(current["rambler_rule_version"], "rambler2_shut_up")
         self.assertEqual(current["rambler_shut_up_observations"], [])
         self.assertEqual(current["baker_rule_version"], "baker_day_reveal_v1")
+        self.assertEqual(
+            current["doppel_drunk_rule_version"],
+            "doppel_drunk_reveal_v1",
+        )
         self.assertIsNone(legacy.rambler_rule_version)
         self.assertEqual(legacy.rambler_shut_up_observations, [])
         self.assertIsNone(legacy.baker_rule_version)
+        self.assertIsNone(legacy.doppel_drunk_rule_version)
         self.assertNotIn("rambler_rule_version", legacy.to_dict())
         self.assertNotIn("baker_rule_version", legacy.to_dict())
+        self.assertNotIn("doppel_drunk_rule_version", legacy.to_dict())
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):
         data = {

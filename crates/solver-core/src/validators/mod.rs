@@ -1,6 +1,7 @@
 /// Card info validators — check if a card's claimed info is consistent with a scenario.
 
 mod baker;
+mod disguisers;
 mod helpers;
 pub use helpers::*;
 
@@ -8,6 +9,7 @@ use baker::{
     baker_history_can_erase_role, medium_uses_baker_history,
     validate_baker_history,
 };
+use disguisers::validate_clean_doppel_source_support;
 
 use std::collections::{HashMap, HashSet};
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions};
@@ -98,6 +100,10 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
 
     // Structural: role counts
     if !validate_role_counts(scenario, state) { return false; }
+
+    // Audited delayed Reveal: a clean Doppelganger needs at least one
+    // physically surviving, real-bluffable Good Villager source.
+    if !validate_clean_doppel_source_support(scenario, state) { return false; }
 
     // Patch 2026-05-05 Rambler redesign: adjacent truthful characters say
     // "#R shut up!" instead of giving their own clue.
