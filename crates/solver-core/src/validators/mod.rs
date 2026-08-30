@@ -635,7 +635,13 @@ fn validate_alchemist(card: &CardInfo, scenario: &Scenario, state: &GameState) -
     };
     let pos = card.position;
     let truth = truth_status(pos, scenario, state);
-    let actual = scenario.alchemist_cures.get(&pos).copied().unwrap_or(0) as i64;
+    // A visible Alchemist can be an evil/Drunk/Doppelganger/Puppet bluff. A
+    // missing native Start actor has no real cure counter; zero would invent a
+    // constraint and discard valid disguise worlds.
+    let actual = match scenario.alchemist_cures.get(&pos).copied() {
+        Some(value) => value as i64,
+        None => return true,
+    };
 
     if truth == TruthStatus::Truthful { claimed == actual }
     else { claimed != actual }

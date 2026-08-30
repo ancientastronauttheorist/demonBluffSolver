@@ -108,7 +108,7 @@
   ],
   "executed_good_corrupted": {
     "7": false,
-    "5": true
+    "5": false
   },
   "deck": {
     "villagers": [
@@ -139,5 +139,5 @@
     "2": "Chancellor",
     "4": "Baa"
   },
-  "notes": "3HP village 2/7 - Baa death revealed hidden deck Drunk, Alchemist live wording was 'There was 1 Corruption around me', forced line survived Jester and Drunk wrong execs"
+  "notes": "3HP village 2/7 - Baa death revealed hidden deck Drunk, Alchemist live wording was 'There was 1 Corruption around me', forced line survived Jester and Drunk wrong execs. Drunk execution observation normalized to Not Corrupted per current execution/PD surface."
 }

@@ -799,6 +799,12 @@ fn simulate_all_v2() {
         "asc47_v3", "asc50_v1", "asc52_v5", "asc53_v4", "asc55_v3", "asc56_v2",
         "asc56_v3", "asc57_v7", "asc60_v2", "asc61_v3", "asc61_v5", "asc62_v4",
         "asc63_v5", "asc69_v1", "asc72_v2", "asc73_v3", "asc75_v4", "asc80_v1",
+        // Frozen clues conflict with the recovered current-build Start order.
+        // asc32/33 predate mandatory PD targeting against the live post-Drunk
+        // set; asc55 records both duplicate Alchemists seeing the same prior
+        // corruption, while native high-ID-first live cures make the second
+        // actor observe zero.
+        "asc32_v4", "asc33_v3", "asc55_v7",
         // Recorded before asc84_v2 live evidence showed the current build has
         // Drunk lie intrinsically while PD reports Drunk as Not Corrupted.
         "asc31_v1", "asc34_v3", "asc48_v3", "asc54_v2", "asc63_v6", "asc71_v3", "asc73_v1",
