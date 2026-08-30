@@ -825,9 +825,25 @@ fn validate_rambler(_card: &CardInfo, _scenario: &Scenario, _state: &GameState) 
 
 // ── Special ability validators ──
 
-fn is_real_rambler(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
-    effective_role_at(pos, scenario, state)
-        .map_or(false, |role| normalize_role(&role) == "rambler")
+fn is_truthful_rambler_act_surface(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
+    if truth_status(pos, scenario, state) != TruthStatus::Truthful {
+        return false;
+    }
+
+    let underlying_rambler = effective_role_at(pos, scenario, state)
+        .map_or(false, |role| normalize_role(&role) == "rambler");
+    if underlying_rambler {
+        return true;
+    }
+
+    let apparent_rambler = state
+        .card_at(pos)
+        .map(|card| normalize_role(&card.apparent_role) == "rambler")
+        .unwrap_or(false);
+    let modeled_healthy_bluff_holder = scenario.puppet_position == Some(pos)
+        || scenario.doppelganger_position == Some(pos);
+
+    apparent_rambler && modeled_healthy_bluff_holder
 }
 
 fn card_has_normal_clue(card: &CardInfo) -> bool {
@@ -852,9 +868,10 @@ fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
     for card in &state.cards {
         let adjacent_ramblers: Vec<u8> = adjacent_positions(card.position, state.n_cards)
             .into_iter()
-            .filter(|&p| is_real_rambler(p, scenario, state))
+            .filter(|&p| is_truthful_rambler_act_surface(p, scenario, state))
             .collect();
-        let truthful = truth_status(card.position, scenario, state) == TruthStatus::Truthful;
+        let truthful =
+            truth_appearance_status(card.position, scenario, state) == TruthStatus::Truthful;
 
         if let Some(target) = info_pos(&card.info_parsed, "shut_up_target") {
             let actual = adjacent_ramblers.contains(&target);
@@ -1232,6 +1249,65 @@ mod tests {
         let mut fake_rambler = empty_scenario();
         fake_rambler.evil_positions.insert(1, "Puppeteer".to_string());
         assert!(!validate_rambler_shut_ups(&fake_rambler, &state));
+    }
+
+    #[test]
+    fn confessor_disguise_uses_apparent_truth_for_rambler() {
+        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let confessor = make_card(2, "Confessor", json!({"shut_up_target": 1}));
+        let state = base_state(5, vec![rambler, confessor]);
+
+        let mut evil_confessor = empty_scenario();
+        evil_confessor
+            .evil_positions
+            .insert(2, "Puppeteer".to_string());
+
+        assert_eq!(truth_status(2, &evil_confessor, &state), TruthStatus::Lying);
+        assert_eq!(
+            truth_appearance_status(2, &evil_confessor, &state),
+            TruthStatus::Truthful
+        );
+        assert!(validate_rambler_shut_ups(&evil_confessor, &state));
+
+        let mut corrupted_confessor = empty_scenario();
+        corrupted_confessor.corrupted.insert(2);
+        assert_eq!(
+            truth_status(2, &corrupted_confessor, &state),
+            TruthStatus::Lying
+        );
+        assert!(validate_rambler_shut_ups(&corrupted_confessor, &state));
+    }
+
+    #[test]
+    fn rambler_act_surface_follows_actual_dispatch_truth() {
+        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let state = base_state(1, vec![rambler]);
+
+        assert!(is_truthful_rambler_act_surface(1, &empty_scenario(), &state));
+
+        let mut corrupted_real = empty_scenario();
+        corrupted_real.corrupted.insert(1);
+        assert!(!is_truthful_rambler_act_surface(1, &corrupted_real, &state));
+
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(is_truthful_rambler_act_surface(1, &puppet, &state));
+        puppet.corrupted.insert(1);
+        assert!(!is_truthful_rambler_act_surface(1, &puppet, &state));
+
+        let mut doppelganger = empty_scenario();
+        doppelganger.doppelganger_position = Some(1);
+        assert!(is_truthful_rambler_act_surface(1, &doppelganger, &state));
+        doppelganger.corrupted.insert(1);
+        assert!(!is_truthful_rambler_act_surface(1, &doppelganger, &state));
+
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(!is_truthful_rambler_act_surface(1, &drunk, &state));
+
+        let mut evil = empty_scenario();
+        evil.evil_positions.insert(1, "Pooka".to_string());
+        assert!(!is_truthful_rambler_act_surface(1, &evil, &state));
     }
 
     #[test]

@@ -126,6 +126,27 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     TruthStatus::Truthful
 }
 
+/// Determine the truth condition exposed by native
+/// `CharacterHelper.CheckLyingAppearance` for the statuses represented by the
+/// scenario model.
+///
+/// Confessor applies `AppearTruthfull` during both its real and bluff-role Init
+/// dispatch, so every card appearing as Confessor is perceived as truthful even
+/// when actual action dispatch lies because it is corrupted or evil. The model
+/// does not yet represent arbitrary appearance statuses; all other cards fall
+/// back to the actual native lie predicate modeled by [`truth_status`].
+pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
+    if state
+        .card_at(pos)
+        .map(|card| normalize_role(&card.apparent_role) == "confessor")
+        .unwrap_or(false)
+    {
+        return TruthStatus::Truthful;
+    }
+
+    truth_status(pos, scenario, state)
+}
+
 #[cfg(test)]
 mod truth_status_tests {
     use super::*;
@@ -217,6 +238,23 @@ mod truth_status_tests {
         scenario.evil_positions.insert(1, "Pooka".to_string());
 
         assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+        assert_eq!(
+            truth_appearance_status(1, &scenario, &state),
+            TruthStatus::Truthful
+        );
+    }
+
+    #[test]
+    fn corrupted_confessor_lies_but_appears_truthful() {
+        let state = state_with_apparent_role("Confessor");
+        let mut scenario = scenario();
+        scenario.corrupted.insert(1);
+
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+        assert_eq!(
+            truth_appearance_status(1, &scenario, &state),
+            TruthStatus::Truthful
+        );
     }
 
     #[test]
