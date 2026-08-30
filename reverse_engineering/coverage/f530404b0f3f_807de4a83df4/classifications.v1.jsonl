@@ -99,3 +99,5 @@
 {"method":"tdi5873.m0006","state":"understood","reason":"Native Alchemist bluff cure gate, runtime-data replacement, and Day reporting dispatch are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
 {"method":"tdi5873.m0003","state":"understood","reason":"Native attempt-before-cure counting, ordered enumeration, and ignored cure result are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
 {"method":"tdi5873.m0004","state":"understood","reason":"Native live Corrupted range scan, raw-status filter, and overlap preservation are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
+{"method":"tdi5913.m0002","state":"understood","reason":"Native Chancellor/Baron Start role addition, anywhere-Villager replacement, and relocation dispatch are documented.","evidence":["ev.chancellor.start-relocation.1"]}
+{"method":"tdi5913.m0003","state":"understood","reason":"Native real-Outcast anchor selection, neighbour choice, status insertion, and role-data swap are documented.","evidence":["ev.chancellor.start-relocation.1"]}

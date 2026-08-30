@@ -139,6 +139,69 @@ mutations. Ordinary roles stop after the first, highest-ID match. The asset
 review found one shipped `Characters` instance and no normal writer for the
 order, but did not dynamically rule out a mode or addressable replacing it.
 
+## Chancellor/Baron Start replacement and relocation
+
+The display role Chancellor is implemented by managed type `Baron`. Its Start
+action performs two distinct transformations; it is not an adjacent in-place
+Villager conversion.
+
+First, Baron selects a real Outcast `CharacterData` absent from the current
+script when that pool is nonempty, with an all-ascension real-Outcast fallback.
+It registers that role in the script, selects one non-Dead real Villager from
+anywhere on the board, and reinitializes that physical card with the selected
+Outcast data using ID sentinel `-100`. There is no adjacency, status,
+resistance, or Alchemist exclusion on this Villager draw. Empty role or
+Villager pools reach native index/get-item failure paths rather than producing
+a playable no-conversion outcome.
+
+Second, Baron selects an Outcast through `FilterCharacterType`. At this ordered
+pre-Reveal slot the relevant `registerAs` values are clear, so the selection is
+the current real Outcast identity. It adds `MessedUpByEvil` to that anchor,
+chooses one of its non-Dead circular neighbours, and swaps that neighbour's
+`CharacterData` with Baron's by two `Character.Init(..., -100)` calls. The
+Chancellor identity and Evil alignment therefore move to the neighbour; the
+original Chancellor card receives the neighbour's former role. The anchor is
+not itself a lie source: `MessedUpByEvil` is absent from the actual
+`CheckLying` predicate documented in the status boundary.
+
+For the one-Chancellor Standard pool, define:
+
+- `c`: original Chancellor card;
+- `v`: Villager card replaced in the first transformation;
+- `r`: added Outcast role;
+- `o`: selected real-Outcast anchor;
+- `f`: final Chancellor card; and
+- `a`: final card holding `r`.
+
+The stable post-action identities are:
+
+```text
+a = if v == f { c } else { v }
+v = if a == c { f } else { a }
+```
+
+Always `a != f`, `v != c`, and `f` is adjacent to a real Outcast anchor `o`
+with `o != c` and `o != f`. `o` may equal `a` except on the `a == c` path.
+Self-swap (`c == f`) is legal. When `v == f`, the selected Villager becomes
+Chancellor while the original Chancellor card becomes the added Outcast.
+
+`Character.Init` clears active statuses, bluff, register-as, and runtime data,
+but preserves the physical card's resistance collection. This makes role data
+and resistance provenance intentionally diverge. For example, if `f` held an
+Alchemist before the swap, Alchemist data moves to `c` while Corrupted
+resistance remains on physical card `f`; the moved Alchemist can consequently
+be corrupted before its later ordered Start slot. If the first replacement
+selects an Alchemist, that role data is discarded and never reaches the
+Alchemist Start slot, while its already-installed resistance remains on the
+now-Outcast physical card.
+
+The post-Start deck view already includes `r`; it is a role pool, not a board
+assignment. HUD Villager/Outcast counts come from the pre-Baron script slots.
+At real-data level the first transformation is Villager minus one and Outcast
+plus one, while the later swap preserves the multiset. A solver trace therefore
+needs at least `c`, `a`, and `r`; one position called "Chancellor conversion"
+cannot encode the native lifecycle.
+
 ## Per-card initialization and internal reveal
 
 `Character.Init` clears trailer text, acted UI, acted-info and runtime-data
