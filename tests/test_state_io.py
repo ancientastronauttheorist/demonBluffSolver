@@ -11,11 +11,13 @@ class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-3:],
+            names[-5:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
                 "board_count_provenance",
+                "rambler_rule_version",
+                "rambler_shut_up_observations",
             ],
         )
 
@@ -63,6 +65,8 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.executed_evil_roles, {3: "Minion"})
         self.assertEqual(loaded.executed_good_roles, {})
         self.assertEqual(loaded.board_count_provenance, "legacy_unknown")
+        self.assertIsNone(loaded.rambler_rule_version)
+        self.assertEqual(loaded.rambler_shut_up_observations, [])
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -79,6 +83,9 @@ class TestGameStateIO(unittest.TestCase):
         session.used_abilities = [4]
         session.executed_good_corrupted = {1: False}
         session.executed_good_roles = {1: "Plague_Doctor"}
+        session.rambler_shut_up_observations = [
+            {"speaker_position": 2, "shut_up_target": 5},
+        ]
         session.pd_ability_results = [{
             "pd_pos": 3,
             "target": 2,
@@ -99,10 +106,32 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.board_villager_count, 2)
         self.assertEqual(loaded.board_outcast_count, 1)
         self.assertEqual(loaded.board_count_provenance, "trusted_pre_start")
+        self.assertEqual(loaded.rambler_rule_version, "rambler2_shut_up")
+        self.assertEqual(
+            loaded.rambler_shut_up_observations,
+            session.rambler_shut_up_observations,
+        )
         self.assertEqual(loaded.used_abilities, [4])
         self.assertEqual(loaded.pd_ability_results, session.pd_ability_results)
         self.assertEqual(loaded.executed_good_corrupted, {1: False})
         self.assertEqual(loaded.executed_good_roles, {1: "Plague_Doctor"})
+
+    def test_fresh_session_emits_rambler2_provenance_but_legacy_state_does_not(self):
+        current = GameSession(4, 1).to_game_state().to_dict()
+        legacy = GameState.from_dict({
+            "n_cards": 4,
+            "n_evil": 1,
+            "villagers": ["Lover"],
+            "outcasts": ["Rambler"],
+            "minions": ["Minion"],
+            "demons": [],
+        })
+
+        self.assertEqual(current["rambler_rule_version"], "rambler2_shut_up")
+        self.assertEqual(current["rambler_shut_up_observations"], [])
+        self.assertIsNone(legacy.rambler_rule_version)
+        self.assertEqual(legacy.rambler_shut_up_observations, [])
+        self.assertNotIn("rambler_rule_version", legacy.to_dict())
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):
         data = {

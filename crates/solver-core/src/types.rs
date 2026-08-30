@@ -135,6 +135,18 @@ pub struct PdAbilityResult {
     pub evil_revealed: Option<u8>,
 }
 
+/// One publicly observed Rambler2 replacement in chronological capture order.
+///
+/// `speaker_position` is the character whose clue was replaced;
+/// `shut_up_target` is the Rambler source named by the public text. The
+/// top-level history survives later actions that replace a card's latest
+/// `info_parsed.shut_up_target` alias.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RamblerShutUpObservation {
+    pub speaker_position: u8,
+    pub shut_up_target: u8,
+}
+
 // ── GameState ──
 
 /// Full state of a game in progress. Matches Python's GameState exactly.
@@ -225,6 +237,16 @@ pub struct GameState {
     // ── Test-only / session fields (silently ignored if absent) ──
     #[serde(default)]
     pub used_abilities: Vec<u8>,
+    /// Public clue-capture provenance for Rambler's current replacement rule.
+    /// Missing/null preserves frozen fixtures whose absent `shut_up_target`
+    /// values cannot be interpreted as negative evidence.
+    #[serde(default)]
+    pub rambler_rule_version: Option<String>,
+    /// Append-only public Rambler interruption history. Per-card
+    /// `info_parsed.shut_up_target` remains a backward-compatible latest-value
+    /// alias and is merged with this history during validation.
+    #[serde(default)]
+    pub rambler_shut_up_observations: Vec<RamblerShutUpObservation>,
     #[serde(default)]
     pub name: Option<String>,
     #[serde(default)]
@@ -266,6 +288,8 @@ impl Default for GameState {
             executed_good_corrupted: HashMap::new(),
             executed_good_roles: HashMap::new(),
             used_abilities: vec![],
+            rambler_rule_version: None,
+            rambler_shut_up_observations: vec![],
             name: None,
             notes: None,
         }
@@ -552,6 +576,93 @@ mod tests {
             state.board_count_provenance,
             BoardCountProvenance::LegacyUnknown,
         );
+        assert!(state.rambler_rule_version.is_none());
+        assert!(state.rambler_shut_up_observations.is_empty());
+    }
+
+    #[test]
+    fn rambler_history_deserializes_with_legacy_default_and_round_trips() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 2,
+            "deck": {"villagers": [], "outcasts": ["Rambler"], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.rambler_rule_version.is_none());
+        assert!(legacy.rambler_shut_up_observations.is_empty());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 3,
+            "deck": {"villagers": [], "outcasts": ["Rambler"], "minions": [], "demons": []},
+            "rambler_rule_version": "rambler2_shut_up",
+            "rambler_shut_up_observations": [
+                {"speaker_position": 2, "shut_up_target": 1},
+                {"speaker_position": 2, "shut_up_target": 3}
+            ]
+        }))
+        .unwrap();
+        assert_eq!(
+            current.rambler_rule_version.as_deref(),
+            Some("rambler2_shut_up"),
+        );
+        assert_eq!(
+            current.rambler_shut_up_observations,
+            vec![
+                RamblerShutUpObservation {
+                    speaker_position: 2,
+                    shut_up_target: 1,
+                },
+                RamblerShutUpObservation {
+                    speaker_position: 2,
+                    shut_up_target: 3,
+                },
+            ],
+        );
+
+        let serialized = serde_json::to_value(&current).unwrap();
+        assert_eq!(
+            serialized["rambler_shut_up_observations"],
+            serde_json::json!([
+                {"speaker_position": 2, "shut_up_target": 1},
+                {"speaker_position": 2, "shut_up_target": 3}
+            ]),
+        );
+    }
+
+    #[test]
+    fn rambler_history_rejects_non_integer_and_non_u8_positions() {
+        for malformed in [
+            serde_json::json!(-1),
+            serde_json::json!(256),
+            serde_json::json!("1"),
+            serde_json::json!(1.0),
+            serde_json::json!(1.5),
+            serde_json::json!(true),
+            serde_json::json!([]),
+            serde_json::json!({}),
+            serde_json::Value::Null,
+        ] {
+            for field in ["speaker_position", "shut_up_target"] {
+                let mut observation = serde_json::json!({
+                    "speaker_position": 2,
+                    "shut_up_target": 1
+                });
+                observation[field] = malformed.clone();
+                let value = serde_json::json!({
+                    "n_cards": 3,
+                    "deck": {
+                        "villagers": [],
+                        "outcasts": ["Rambler"],
+                        "minions": [],
+                        "demons": []
+                    },
+                    "rambler_shut_up_observations": [observation]
+                });
+                assert!(
+                    GameState::from_json(&value).is_err(),
+                    "{field}={malformed} must not deserialize as a position",
+                );
+            }
+        }
     }
 
     #[test]

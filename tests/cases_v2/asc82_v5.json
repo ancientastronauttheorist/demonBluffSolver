@@ -6,7 +6,9 @@
       "position": 1,
       "apparent_role": "Lover",
       "info_text": "",
-      "info_parsed": {}
+      "info_parsed": {
+        "shut_up_target": 10
+      }
     },
     {
       "position": 2,
@@ -164,11 +166,18 @@
     2
   ],
   "lilis_batch_index": 2,
+  "rambler_rule_version": "rambler2_shut_up",
+  "rambler_shut_up_observations": [
+    {
+      "speaker_position": 1,
+      "shut_up_target": 10
+    }
+  ],
   "name": "asc82_v5",
   "true_evil_positions": {
     "2": "Shaman",
     "6": "Lilis",
     "7": "Chancellor"
   },
-  "notes": "6HP village 5/7 - Rambler redesign live data: #1 Lover said #10 shut up, #10 was hidden Rambler and later Lilis-killed; parser now keeps non-Jester shut-up clues as no-info. Lilis killed #9 and #10 as good; PD #8 checked #4 clean; Jester abilities led to #2 Shaman, #6 Lilis, #7 Chancellor."
+  "notes": "6HP village 5/7 - Rambler redesign live data: #1 Lover said #10 shut up, #10 was hidden Rambler and later Lilis-killed; public output is retained as shut_up_target evidence. Lilis killed #9 and #10 as good; PD #8 checked #4 clean; Jester abilities led to #2 Shaman, #6 Lilis, #7 Chancellor."
 }

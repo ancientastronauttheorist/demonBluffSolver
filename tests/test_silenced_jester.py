@@ -1,19 +1,15 @@
-"""Unit tests for silenced-Jester parsing.
+"""Unit tests for Rambler2-interrupted Jester parsing.
 
 Covers:
   - card_jester_silenced constructor (CardInfo shape)
-  - _parse_clue_from_memory silenced branch (Rambler-style "#X shut up!"
-    flavor text + empty clue fallback)
+  - _parse_clue_from_memory interruption branch ("#X shut up!")
   - Normal "N evil" Jester clue still parses as non-silenced
   - Drunk-disguised-as-Jester silenced flow keys off apparent role
 
-Background: when Rambler silences Jester's ability, memory_reader emits a
-clue like "#X shut up!" with targets still populated in acted_infos. The
-original parser fell through to card_no_info and the Rust validator
-returned true unconditionally on the missing evil_count — silently
-treating a silenced Jester as a vacuous constraint. We now make that
-explicit via silenced:True so the Rust validator's early-return is a
-deliberate short-circuit, not an accident (asc78_v6 halt).
+Rambler2 rewrites the emitted ActedInfo to description "#R shut up!" and
+references [R]. Those references are not Jester's original picks. The parser
+therefore keeps the global shut_up_target plus an explicit silenced marker,
+but never invents the discarded Jester target trio.
 """
 
 import unittest
@@ -31,7 +27,7 @@ def _base_jester(clue, targets=None, position=3, true_role="Jester",
         "true_role": true_role,
         "disguise": disguise,
         "clue_text": clue,
-        "acted_infos": [{"desc": "...", "targets": targets or []}],
+        "acted_infos": [{"desc": clue, "targets": targets or []}],
         "runtime_data": None,
         "ability_used": True,
         "uses": 1,
@@ -61,29 +57,32 @@ class TestCardJesterSilenced(unittest.TestCase):
 
 class TestParseClueFromMemorySilencedJester(unittest.TestCase):
     def test_silenced_by_rambler_shut_up(self):
-        card = _base_jester("#5 shut up!", targets=[1, 2, 4])
+        card = _base_jester("#5 shut up!", targets=[5])
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
         self.assertEqual(ci.apparent_role, "Jester")
         self.assertEqual(ci.info_parsed.get("silenced"), True)
-        self.assertEqual(ci.info_parsed.get("targets"), [1, 2, 4])
+        self.assertNotIn("targets", ci.info_parsed)
         self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
         # Must NOT have an evil_count key (the validator keys off silenced first).
         self.assertNotIn("evil_count", ci.info_parsed)
 
     def test_silenced_case_insensitive(self):
-        card = _base_jester("#5 SHUT UP!", targets=[1, 2, 4])
+        card = _base_jester("#5 SHUT UP!", targets=[5])
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
         self.assertEqual(ci.info_parsed.get("silenced"), True)
         self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
 
-    def test_silenced_empty_clue_with_targets(self):
-        # MR sometimes zeroes the clue entirely when silenced.
-        card = _base_jester("", targets=[1, 2, 4])
+    def test_saved_act_empty_requires_manual_recovery(self):
+        card = _base_jester("", targets=[5])
+        card["acted_infos"][0]["desc"] = "#5 shut up!"
         ci = _parse_clue_from_memory(card)
-        self.assertIsNotNone(ci)
-        self.assertEqual(ci.info_parsed.get("silenced"), True)
+        self.assertIsNone(ci)
+
+    def test_empty_result_does_not_invent_rambler_interference(self):
+        card = _base_jester("", targets=[1, 2, 4])
+        self.assertIsNone(_parse_clue_from_memory(card))
 
     def test_normal_jester_n_evil_preserved(self):
         # Real "2 of them are evil" clue must NOT be misclassified as silenced.
@@ -109,7 +108,7 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
             "true_role": "Drunk",
             "disguise": "Jester",
             "clue_text": "#5 shut up!",
-            "acted_infos": [{"desc": "...", "targets": [1, 2, 4]}],
+            "acted_infos": [{"desc": "#5 shut up!", "targets": [5]}],
             "runtime_data": None,
             "ability_used": True,
             "uses": 1,
@@ -118,7 +117,7 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         self.assertIsNotNone(ci)
         self.assertEqual(ci.apparent_role, "Jester")
         self.assertEqual(ci.info_parsed.get("silenced"), True)
-        self.assertEqual(ci.info_parsed.get("targets"), [1, 2, 4])
+        self.assertNotIn("targets", ci.info_parsed)
         self.assertEqual(ci.info_parsed.get("shut_up_target"), 5)
 
 
@@ -129,7 +128,7 @@ class TestShutUpCluesForNonJester(unittest.TestCase):
             "true_role": "Lover",
             "disguise": "Lover",
             "clue_text": "#10 shut up!",
-            "acted_infos": [{"desc": "...", "targets": [10]}],
+            "acted_infos": [{"desc": "#10 shut up!", "targets": [10]}],
             "runtime_data": None,
             "ability_used": False,
             "uses": 0,

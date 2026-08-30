@@ -641,42 +641,83 @@ class GameStateMachine:
             print(f"  [auto] Lilis night triggered (reveal #{total_reveals})")
             # Let the delayed native kill (or protected/no-victim timeout)
             # settle before reading the result surface.
-            self.phase = GamePhase.LILIS_NIGHT
             # Parse clue first before night phase
-            self._auto_enter_single_card(pos)
+            if not self._auto_enter_single_card(pos):
+                self._pause(
+                    f"Public clue for revealed #{pos} did not settle in memory; "
+                    "enter it manually before resolving the pending Night"
+                )
+                return
+            self.phase = GamePhase.LILIS_NIGHT
             self.session.save()
             return
 
         # Parse clue from memory
-        self._auto_enter_single_card(pos)
+        if not self._auto_enter_single_card(pos):
+            self._pause(
+                f"Public clue for revealed #{pos} did not settle in memory; "
+                "enter it manually, then resume"
+            )
+            return
         self.session.save()
 
         self._snapshot_counts()
         self.phase = GamePhase.SOLVING
 
     def _auto_enter_single_card(self, pos: int):
-        """Parse and enter a single card's clue from memory reader."""
+        """Wait for one coherent public clue surface, then enter it."""
         from game_loop import _parse_clue_from_memory, DecisionLog
 
         if not self.monitor or not self.monitor.is_healthy():
             print(f"  [auto] No monitor — manual entry needed for #{pos}")
             return False
 
-        board = self.monitor.get_board()
-        if not board:
-            return False
+        captured = {"parsed": None, "card": None}
 
-        mc = next((c for c in board if c['position'] == pos), None)
-        if not mc:
-            return False
+        def _parse_from_board(board):
+            if not board:
+                return None
+            mc = next(
+                (card for card in board if card.get('position') == pos),
+                None,
+            )
+            if not mc:
+                return None
+            captured["card"] = mc
+            return _parse_clue_from_memory(
+                mc,
+                n_cards=self.session.n_cards,
+            )
 
-        parsed = _parse_clue_from_memory(mc)
+        parsed = _parse_from_board(self.monitor.get_board())
+        if parsed is None:
+            def _clue_settled(board):
+                candidate = _parse_from_board(board)
+                if candidate is None:
+                    return False
+                captured["parsed"] = candidate
+                return True
+
+            settled = self.monitor.wait_for(
+                _clue_settled,
+                timeout=2.5,
+                min_delay=0.15,
+            )
+            if settled:
+                parsed = captured["parsed"]
+                if parsed is None:
+                    # Some lightweight monitor adapters report readiness
+                    # without invoking the predicate; verify their latest
+                    # snapshot once before treating it as a timeout.
+                    parsed = _parse_from_board(self.monitor.get_board())
+
         if parsed:
             self.session.add_card(parsed)
             DecisionLog.log_card(parsed)
             print(f"  [auto] #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
             return True
         else:
+            mc = captured["card"] or {}
             role = mc.get('disguise') or mc.get('true_role', '?')
             clue = mc.get('clue_text', '')
             print(f"  [auto] #{pos} {role}: couldn't parse clue \"{clue}\" — needs manual entry")
@@ -704,28 +745,34 @@ class GameStateMachine:
             )
             return
 
-        # Plague Doctor now has an exact public-speech parser. Reuse the
-        # session implementation so the autonomous loop gets the same target
-        # checks, memory cross-checks, self-target handling, and correction
-        # semantics as `next`/`auto_next`.
-        if ability_name in ("Plague Doctor", "Plague_Doctor"):
+        # Reuse the strict session path for Plague Doctor and resettable Judge
+        # so autonomous play gets the same target checks, event-freshness
+        # boundary, and recovery semantics as `next`/`auto_next`.
+        if ability_name in ("Plague Doctor", "Plague_Doctor", "Judge"):
             from strategy import Action
 
-            pd_action = Action(
+            strict_action = Action(
                 action_type="use_ability",
                 position=pos,
                 targets=list(targets or []),
-                ability_name="Plague Doctor",
+                ability_name=ability_name.replace("_", " "),
             )
             exec_result = self.session.auto_use_ability(
-                pd_action,
+                strict_action,
                 monitor=self.monitor,
             )
             if not exec_result["success"]:
+                display_name = ability_name.replace("_", " ")
+                recovery = (
+                    "Read the public speech bubble and enter it with pd_check, "
+                    "then 'resume'."
+                    if display_name == "Plague Doctor"
+                    else "Read the public speech bubble, enter it manually, "
+                    "then 'resume'."
+                )
                 self._pause(
-                    f"Plague Doctor ability on #{pos} could not be recorded: "
-                    f"{exec_result['error']}. Read the public speech bubble and "
-                    "enter it with pd_check, then 'resume'."
+                    f"{display_name} ability on #{pos} could not be recorded: "
+                    f"{exec_result['error']}. {recovery}"
                 )
                 return
 
@@ -809,7 +856,10 @@ class GameStateMachine:
             if board:
                 mc = next((c for c in board if c['position'] == pos), None)
                 if mc:
-                    parsed = _parse_clue_from_memory(mc)
+                    parsed = _parse_clue_from_memory(
+                        mc,
+                        n_cards=self.session.n_cards,
+                    )
                     if parsed:
                         self.session.add_card(parsed)
                         DecisionLog.log_card(parsed)

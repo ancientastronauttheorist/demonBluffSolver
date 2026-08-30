@@ -157,13 +157,18 @@ class JudgeAutonomousUseTests(unittest.TestCase):
             ability_name="Judge",
         )
         memory_result = _memory_card("#2 is\nsaying Truth", [2])
+        before = _memory_card("", [], position=2, infos=0)
 
         class Reader:
+            def __init__(self):
+                self.reads = 0
+
             def open(self):
                 return True
 
             def read_board(self):
-                return [memory_result]
+                self.reads += 1
+                return [before if self.reads == 1 else memory_result]
 
             def close(self):
                 return None
@@ -206,18 +211,97 @@ class JudgeAutonomousUseTests(unittest.TestCase):
             CardInfo(2, "Dreamer"),
         ])
         action = Action("use_ability", 1, [2], "Judge")
+        before = _memory_card("", [], position=1, infos=0)
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [before]
+
+            def close(self):
+                return None
 
         # Reaching the activation click proves the unused-active target did not
         # trip the generic preflight guard. Stop there; result parsing is
         # covered independently.
-        with patch(
-            "template_match.safe_click_at",
-            side_effect=RuntimeError("sentinel after preflight"),
+        with (
+            patch(
+                "template_match.safe_click_at",
+                side_effect=RuntimeError("sentinel after preflight"),
+            ),
+            patch("memory_reader.MemoryReader", return_value=Reader()),
         ):
             result = session.auto_use_ability(action)
 
         self.assertIn("sentinel after preflight", result["error"])
         self.assertNotIn("unused active ability", result["error"])
+
+    def test_resettable_judge_rejects_unchanged_stale_latest_event(self):
+        session = GameSession(4, 1)
+        session.cards.append(CardInfo(2, "Judge"))
+        action = Action("use_ability", 2, [3], "Judge")
+        stale = _memory_card("#3 is\nsaying Truth", [3])
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [stale]
+
+            def close(self):
+                return None
+
+        with (
+            patch("template_match.safe_click_at"),
+            patch("game_loop.time.sleep"),
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+        ):
+            result = session.auto_use_ability(action)
+
+        self.assertFalse(result["success"])
+        self.assertIn("new or changed latest", result["error"])
+        self.assertNotIn(2, session.used_abilities)
+        self.assertEqual(session.cards[0].info_parsed, {})
+
+    def test_resettable_judge_accepts_changed_latest_event(self):
+        session = GameSession(4, 1)
+        session.cards.append(CardInfo(2, "Judge"))
+        action = Action("use_ability", 2, [3], "Judge")
+        before = _memory_card("#1 is\nsaying Truth", [1])
+        after = _memory_card("#3 is\nLying", [3])
+
+        class Reader:
+            def __init__(self):
+                self.reads = 0
+
+            def open(self):
+                return True
+
+            def read_board(self):
+                self.reads += 1
+                return [before if self.reads == 1 else after]
+
+            def close(self):
+                return None
+
+        with (
+            patch("template_match.safe_click_at"),
+            patch("game_loop.time.sleep"),
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_card"),
+            patch.object(DecisionLog, "log_ability_used"),
+        ):
+            result = session.auto_use_ability(action)
+
+        self.assertTrue(result["success"], result["error"])
+        self.assertEqual(
+            result["info_parsed"],
+            {"target": 3, "is_lying": True},
+        )
 
 
 class JudgeResetAfterNightTests(unittest.TestCase):

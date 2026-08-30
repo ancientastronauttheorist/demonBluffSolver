@@ -95,6 +95,11 @@ def replay_case(case):
             board_villager_count=case.get("board_villager_count"),
             board_outcast_count=case.get("board_outcast_count"),
             board_count_provenance=case.get("board_count_provenance", "legacy_unknown"),
+            rambler_rule_version=case.get("rambler_rule_version"),
+            rambler_shut_up_observations=[
+                dict(observation)
+                for observation in case.get("rambler_shut_up_observations", [])
+            ],
             reveal_order=list(reveal_order),
             executed_good_corrupted=dict(cur_exec_good_corrupted),
             executed_good_roles=dict(cur_exec_good_roles),

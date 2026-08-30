@@ -8,6 +8,9 @@ from typing import Optional
 from knowledge_base import get_card, Role, Alignment, CARDS_BY_NAME
 
 
+RAMBLER_RULE_VERSION = "rambler2_shut_up"
+
+
 # ============================================================
 # Circle Geometry
 # ============================================================
@@ -141,6 +144,13 @@ class GameState:
     executed_good_corrupted: dict[int, bool] = field(default_factory=dict)  # Corruption status of executed good cards
     executed_good_roles: dict[int, str] = field(default_factory=dict)  # Revealed true roles of executed good cards
     board_count_provenance: str = "legacy_unknown"  # Appended for positional ABI compatibility
+    # Missing means an archived pre-audit fixture.  Fresh live sessions opt in
+    # explicitly so absence of a shut-up observation can constrain Rambler2.
+    rambler_rule_version: Optional[str] = None
+    # Ordered public Rambler2 replacements.  The scalar stored on each card is
+    # only the latest-value compatibility alias; this ledger survives later
+    # ResetAfterNight results on the same speaker.
+    rambler_shut_up_observations: list[dict] = field(default_factory=list)
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -167,7 +177,13 @@ class GameState:
             "reveal_order": list(self.reveal_order),
             "executed_good_corrupted": {str(k): v for k, v in self.executed_good_corrupted.items()},
             "executed_good_roles": {str(k): v for k, v in self.executed_good_roles.items()},
+            "rambler_shut_up_observations": [
+                dict(observation)
+                for observation in self.rambler_shut_up_observations
+            ],
         }
+        if self.rambler_rule_version is not None:
+            data["rambler_rule_version"] = self.rambler_rule_version
         if nest_deck:
             data["deck"] = self.deck.to_dict()
         else:
@@ -213,6 +229,11 @@ class GameState:
             reveal_order=list(data.get("reveal_order", [])),
             executed_good_corrupted={int(k): v for k, v in data.get("executed_good_corrupted", {}).items()},
             executed_good_roles={int(k): v for k, v in data.get("executed_good_roles", {}).items()},
+            rambler_rule_version=data.get("rambler_rule_version"),
+            rambler_shut_up_observations=[
+                dict(observation)
+                for observation in data.get("rambler_shut_up_observations", [])
+            ],
         )
 
 

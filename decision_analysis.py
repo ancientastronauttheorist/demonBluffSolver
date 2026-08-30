@@ -146,6 +146,10 @@ def analyze_game(case: dict) -> GameAnalysis:
     )
 
     def make_state() -> GameState:
+        revealed_positions = {
+            card["position"]
+            for card in current_cards
+        }
         return GameState(
             n_cards=case["n_cards"],
             deck=DeckComposition.from_dict(deck_data),
@@ -168,6 +172,12 @@ def analyze_game(case: dict) -> GameAnalysis:
             board_minion_count=case.get("board_minion_count"),
             board_demon_count=case.get("board_demon_count"),
             board_count_provenance=case.get("board_count_provenance", "legacy_unknown"),
+            rambler_rule_version=case.get("rambler_rule_version"),
+            rambler_shut_up_observations=[
+                dict(observation)
+                for observation in case.get("rambler_shut_up_observations", [])
+                if observation.get("speaker_position") in revealed_positions
+            ],
             reveal_order=list(current_reveal_order),
             executed_good_corrupted=dict(current_executed_good_corrupted),
             executed_good_roles=dict(current_executed_good_roles),

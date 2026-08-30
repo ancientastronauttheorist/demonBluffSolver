@@ -1539,69 +1539,361 @@ fn validate_rambler(_card: &CardInfo, _scenario: &Scenario, _state: &GameState) 
 
 // ── Special ability validators ──
 
-fn is_truthful_rambler_act_surface(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
-    if truth_status(pos, scenario, state) != TruthStatus::Truthful {
-        return false;
-    }
+const RAMBLER_MATCHES_TRUTHFUL: u8 = 1;
+const RAMBLER_MATCHES_LYING: u8 = 2;
+const RAMBLER_CURRENT_RULE: &str = "rambler2_shut_up";
 
-    let underlying_rambler = effective_role_at(pos, scenario, state)
-        .map_or(false, |role| normalize_role(&role) == "rambler");
-    if underlying_rambler {
-        return true;
-    }
-
-    let apparent_rambler = state
-        .card_at(pos)
-        .map(|card| normalize_role(&card.apparent_role) == "rambler")
-        .unwrap_or(false);
-    let modeled_healthy_bluff_holder = scenario.puppet_position == Some(pos)
-        || scenario.doppelganger_position == Some(pos);
-
-    apparent_rambler && modeled_healthy_bluff_holder
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct RamblerSourceAlternative {
+    matchers: u8,
+    /// This alternative assigns the physical source an anonymous natural
+    /// Rambler identity and therefore consumes one real pool occurrence.
+    anonymous_natural: bool,
 }
 
-fn card_has_normal_clue(card: &CardInfo) -> bool {
-    if card.info_parsed.is_empty() || info_pos(&card.info_parsed, "shut_up_target").is_some() {
+#[derive(Debug, Default)]
+struct RamblerSourceSupport {
+    /// Matchers that must have been installed in this represented scenario.
+    definite: u8,
+    /// Complete matcher sets from viable identity/bluff assignments grouped
+    /// into this scenario. Each entry is one alternative, not an additive
+    /// union of unrelated anonymous-role worlds.
+    possibilities: Vec<RamblerSourceAlternative>,
+}
+
+fn add_rambler_matcher(mask: &mut u8, act: bool) {
+    *mask |= if act {
+        RAMBLER_MATCHES_TRUTHFUL
+    } else {
+        RAMBLER_MATCHES_LYING
+    };
+}
+
+fn rambler_source_support(pos: u8, scenario: &Scenario, state: &GameState) -> RamblerSourceSupport {
+    let truth = truth_status(pos, scenario, state);
+    let runtime_evil = is_evil_in_board_state(pos, scenario, state);
+    let effective_role = state
+        .executed_good_roles
+        .get(&pos)
+        .cloned()
+        .or_else(|| effective_role_at(pos, scenario, state));
+    let real_rambler = effective_role
+        .as_deref()
+        .is_some_and(|role| normalize_role(role) == "rambler");
+
+    // These are the explicit non-null-bluff surfaces represented by Scenario.
+    // Ordinary Evil roles also receive a bluff in the shipped setup. Shaman's
+    // InitWithNoReset preserves that pointer, which matters when its copied
+    // real role is Rambler on an Evil-aligned destination.
+    let has_modeled_bluff = runtime_evil
+        || scenario.doppelganger_position == Some(pos)
+        || scenario.drunk_position == Some(pos)
+        || effective_role.as_deref().is_some_and(|role| {
+            matches!(normalize_role(role).as_str(), "doppelganger" | "drunk")
+        });
+    let apparent_rambler = state
+        .card_at(pos)
+        .is_some_and(|card| normalize_role(&card.apparent_role) == "rambler");
+    // A normal Good Rambler displays its real data; equality alone does not
+    // prove a second bluff-role dispatch. A represented disguiser does.
+    let known_rambler_bluff = apparent_rambler && (!real_rambler || has_modeled_bluff);
+
+    let mut definite = 0;
+    if real_rambler {
+        // Native Character.Act matrix:
+        // truthful => real Act;
+        // lying non-Evil => real BluffAct;
+        // lying Evil with a non-null bluff => real Act, otherwise BluffAct.
+        let real_act = truth == TruthStatus::Truthful || (runtime_evil && has_modeled_bluff);
+        add_rambler_matcher(&mut definite, real_act);
+    }
+    if known_rambler_bluff {
+        add_rambler_matcher(&mut definite, truth == TruthStatus::Truthful);
+    }
+
+    let mut possibilities = vec![RamblerSourceAlternative {
+        matchers: definite,
+        anonymous_natural: false,
+    }];
+    let deck_has_rambler = state
+        .deck
+        .villagers
+        .iter()
+        .chain(state.deck.outcasts.iter())
+        .any(|role| normalize_role(role) == "rambler");
+
+    // A hidden modeled disguiser has a non-null but unobserved bluff identity.
+    // It can supply a Rambler bluff surface without consuming the natural
+    // Rambler occurrence; asc83 demonstrates simultaneous real and fake
+    // displayed Ramblers from a one-Rambler pool.
+    if state.card_at(pos).is_none()
+        && has_modeled_bluff
+        && !known_rambler_bluff
+        && deck_has_rambler
+    {
+        let mut with_rambler_bluff = definite;
+        add_rambler_matcher(
+            &mut with_rambler_bluff,
+            truth == TruthStatus::Truthful,
+        );
+        possibilities.push(RamblerSourceAlternative {
+            matchers: with_rambler_bluff,
+            anonymous_natural: false,
+        });
+    }
+
+    // Ordinary hidden Villager/Outcast assignments are intentionally grouped
+    // in Scenario. Reuse scenario generation's exact pool/header accounting to
+    // ask whether this particular physical seat can be the natural Rambler.
+    if !real_rambler
+        && crate::scenario::scenario_allows_anonymous_natural_outcast_role_at(
+            pos, "Rambler", scenario, state,
+        )
+    {
+        let mut natural_rambler = 0;
+        add_rambler_matcher(
+            &mut natural_rambler,
+            truth == TruthStatus::Truthful,
+        );
+        possibilities.push(RamblerSourceAlternative {
+            matchers: natural_rambler,
+            anonymous_natural: true,
+        });
+    }
+
+    let mut unique_possibilities = Vec::new();
+    for possibility in possibilities {
+        if !unique_possibilities.contains(&possibility) {
+            unique_possibilities.push(possibility);
+        }
+    }
+    RamblerSourceSupport {
+        definite,
+        possibilities: unique_possibilities,
+    }
+}
+
+fn card_has_normal_clue(card: &CardInfo, current_rules: bool) -> bool {
+    if card.info_parsed.is_empty() {
         return false;
     }
     let role = normalize_role(&card.apparent_role);
     if role == "rambler" {
-        return false;
+        // Current capture writes `quote_observed=true`; the versioned
+        // `silenced=false` form is retained only for an early live-parser
+        // compatibility window. False/empty quote flags and the old
+        // silencing metadata are not evidence that a Day action completed.
+        return info_bool(&card.info_parsed, "quote_observed") == Some(true)
+            || (current_rules && info_bool(&card.info_parsed, "silenced") == Some(false));
     }
     if role == "jester" && info_bool(&card.info_parsed, "silenced") == Some(true) {
         return false;
     }
-    true
+    // `shut_up_target` is only the latest-value compatibility alias. Active
+    // roles such as Judge can retain an earlier/later normal observation in
+    // the same object, and that evidence still proves a callback did not
+    // replace that action. A scalar by itself carries no such negative fact.
+    card.info_parsed.iter().any(|(key, value)| match key.as_str() {
+        "shut_up_target" | "silenced" | "silenced_by" | "quote_observed" => false,
+        // An empty Judge history is the initialized no-info shape, not an
+        // observed uninterrupted action. Non-empty history remains evidence
+        // even when a later/earlier shut-up alias coexists on the same card.
+        "observations" => value
+            .as_array()
+            .is_some_and(|observations| !observations.is_empty()),
+        _ => true,
+    })
+}
+
+fn rambler_required_sources_are_jointly_possible(
+    required_by_source: &HashMap<u8, u8>,
+    forbidden_by_source: &HashMap<u8, u8>,
+    forbidden_anonymous_natural_sources: &HashSet<u8>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let mut requirements: Vec<(u8, Vec<RamblerSourceAlternative>)> = required_by_source
+        .iter()
+        .map(|(&source, &required_matchers)| {
+            let support = rambler_source_support(source, scenario, state);
+            let possibilities = support
+                .possibilities
+                .into_iter()
+                .filter(|possibility| {
+                    possibility.matchers & required_matchers == required_matchers
+                        && possibility.matchers
+                            & forbidden_by_source.get(&source).copied().unwrap_or(0)
+                            == 0
+                })
+                .collect();
+            (source, possibilities)
+        })
+        .collect();
+    requirements.sort_unstable_by_key(|(source, _)| *source);
+    if requirements
+        .iter()
+        .any(|(_, possibilities)| possibilities.is_empty())
+    {
+        return false;
+    }
+
+    fn search(
+        index: usize,
+        requirements: &[(u8, Vec<RamblerSourceAlternative>)],
+        anonymous_natural_sources: &mut HashSet<u8>,
+        forbidden_anonymous_natural_sources: &HashSet<u8>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == requirements.len() {
+            return crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+                anonymous_natural_sources,
+                "Rambler",
+                forbidden_anonymous_natural_sources,
+                scenario,
+                state,
+            );
+        }
+
+        let (source, possibilities) = &requirements[index];
+        for possibility in possibilities {
+            let inserted = possibility.anonymous_natural
+                && anonymous_natural_sources.insert(*source);
+            if search(
+                index + 1,
+                requirements,
+                anonymous_natural_sources,
+                forbidden_anonymous_natural_sources,
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+            if inserted {
+                anonymous_natural_sources.remove(source);
+            }
+        }
+        false
+    }
+
+    search(
+        0,
+        &requirements,
+        &mut HashSet::new(),
+        forbidden_anonymous_natural_sources,
+        scenario,
+        state,
+    )
 }
 
 fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
-    if !state.cards.iter().any(|card| info_pos(&card.info_parsed, "shut_up_target").is_some()) {
+    let current_rules = state.rambler_rule_version.as_deref() == Some(RAMBLER_CURRENT_RULE);
+    let mut observations: Vec<(u8, u8)> = Vec::new();
+    for observation in &state.rambler_shut_up_observations {
+        if observation.speaker_position == 0
+            || observation.speaker_position > state.n_cards
+            || observation.shut_up_target == 0
+            || observation.shut_up_target > state.n_cards
+        {
+            return false;
+        }
+        let public_pair = (observation.speaker_position, observation.shut_up_target);
+        if !observations.contains(&public_pair) {
+            observations.push(public_pair);
+        }
+    }
+    let mut forbidden_by_source: HashMap<u8, u8> = HashMap::new();
+    for card in &state.cards {
+        if let Some(raw_source) = card.info_parsed.get("shut_up_target") {
+            let Some(source) = raw_source
+                .as_u64()
+                .and_then(|value| u8::try_from(value).ok())
+                .filter(|source| *source > 0 && *source <= state.n_cards)
+            else {
+                // Presence means the capture intended to assert a public
+                // position. Never silently discard malformed scalar evidence
+                // or wrap a signed/wide integer through `as u8`.
+                return false;
+            };
+            if card.position == 0 || card.position > state.n_cards {
+                return false;
+            }
+            let latest_alias = (card.position, source);
+            if !observations.contains(&latest_alias) {
+                observations.push(latest_alias);
+            }
+        }
+    }
+    let has_positive = !observations.is_empty();
+    // Frozen fixtures without a version predate the redesign, so clue absence
+    // is not evidence. A positive public replacement is self-provenance and is
+    // still validated exactly for backward compatibility.
+    if !current_rules && !has_positive {
         return true;
     }
 
-    for card in &state.cards {
-        let adjacent_ramblers: Vec<u8> = adjacent_positions(card.position, state.n_cards)
-            .into_iter()
-            .filter(|&p| is_truthful_rambler_act_surface(p, scenario, state))
-            .collect();
-        let truthful =
-            truth_appearance_status(card.position, scenario, state) == TruthStatus::Truthful;
+    let mut required_by_source: HashMap<u8, u8> = HashMap::new();
+    for (speaker, source) in observations {
+        let Some(card) = state.card_at(speaker) else {
+            return false;
+        };
+        if !adjacent_positions(speaker, state.n_cards).contains(&source) {
+            return false;
+        }
+        let required_matcher =
+            if truth_appearance_status(card.position, scenario, state) == TruthStatus::Truthful {
+                RAMBLER_MATCHES_TRUTHFUL
+            } else {
+                RAMBLER_MATCHES_LYING
+            };
+        *required_by_source.entry(source).or_insert(0) |= required_matcher;
+    }
 
-        if let Some(target) = info_pos(&card.info_parsed, "shut_up_target") {
-            let actual = adjacent_ramblers.contains(&target);
-            if truthful {
-                if !actual { return false; }
-            } else if actual {
+    if current_rules {
+        for card in &state.cards {
+            if !card_has_normal_clue(card, true) {
+                continue;
+            }
+            if card.position == 0 || card.position > state.n_cards {
                 return false;
             }
-            continue;
+            let appearance_truthful =
+                truth_appearance_status(card.position, scenario, state) == TruthStatus::Truthful;
+            let required_matcher = if appearance_truthful {
+                RAMBLER_MATCHES_TRUTHFUL
+            } else {
+                RAMBLER_MATCHES_LYING
+            };
+            for source in adjacent_positions(card.position, state.n_cards) {
+                *forbidden_by_source.entry(source).or_insert(0) |= required_matcher;
+            }
         }
-
-        if truthful && card_has_normal_clue(card) && !adjacent_ramblers.is_empty() {
+    }
+    for (&source, &forbidden_matchers) in &forbidden_by_source {
+        if rambler_source_support(source, scenario, state).definite & forbidden_matchers != 0 {
             return false;
         }
     }
-    true
+    let forbidden_anonymous_natural_sources: HashSet<u8> = forbidden_by_source
+        .iter()
+        .filter_map(|(&source, &forbidden_matchers)| {
+            let natural_matcher =
+                if truth_status(source, scenario, state) == TruthStatus::Truthful {
+                    RAMBLER_MATCHES_TRUTHFUL
+                } else {
+                    RAMBLER_MATCHES_LYING
+                };
+            (forbidden_matchers & natural_matcher != 0).then_some(source)
+        })
+        .collect();
+
+    rambler_required_sources_are_jointly_possible(
+        &required_by_source,
+        &forbidden_by_source,
+        &forbidden_anonymous_natural_sources,
+        scenario,
+        state,
+    )
 }
 
 fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
@@ -2822,18 +3114,159 @@ mod tests {
     }
 
     #[test]
-    fn truthful_adjacent_card_must_shut_up_for_real_rambler() {
-        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
-        let scout_normal = make_card(2, "Scout", json!({"evil_role": "Pooka", "distance": 1}));
-        let baker_shut_up = make_card(5, "Baker", json!({"shut_up_target": 1}));
-        let state = base_state(5, vec![rambler, scout_normal, baker_shut_up]);
+    fn current_negative_evidence_rejects_a_normal_adjacent_clue() {
+        let rambler = make_card(1, "Rambler", json!({"quote_observed": true}));
+        let scout = make_card(2, "Scout", json!({"evil_role": "Pooka", "distance": 1}));
+        let mut state = base_state(5, vec![rambler, scout]);
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
 
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        // Unversioned historical clues predate deterministic replacement, so
+        // their absence remains non-evidence.
+        state.rambler_rule_version = None;
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn legacy_positive_is_validated_without_activating_current_negative_evidence() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Rambler", json!({"quote_observed": true})),
+                make_card(2, "Scout", json!({"shut_up_target": 1})),
+                make_card(3, "Baker", json!({"original_role": "original"})),
+            ],
+        );
+
+        // Positive replacements are self-provenancing even in an old save,
+        // but the neighboring normal clue predates reliable absence capture.
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        for non_exact in [" rambler2_shut_up", "RAMBLER2_SHUT_UP", "rambler2_shut_up "] {
+            state.rambler_rule_version = Some(non_exact.to_string());
+            assert!(
+                validate_rambler_shut_ups(&empty_scenario(), &state),
+                "non-exact marker {non_exact:?} must remain legacy-compatible",
+            );
+        }
+
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
         assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
     }
 
     #[test]
-    fn truthful_shut_up_target_must_be_adjacent_real_rambler() {
-        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+    fn rambler_latest_alias_does_not_hide_coexisting_judge_evidence() {
+        let source = make_card(1, "Rambler", json!({}));
+        let judge = make_card(
+            2,
+            "Judge",
+            json!({
+                "target": 4,
+                "target_was_truthful": true,
+                "shut_up_target": 1
+            }),
+        );
+        let mut state = base_state(5, vec![source, judge]);
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+
+        // The positive alias proves the Rambler callback, while the retained
+        // normal Judge result claims an un-interrupted action at the same
+        // appearance. Both public facts must be checked, so this is impossible.
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn empty_judge_and_rambler_metadata_are_not_normal_clue_evidence() {
+        let source = make_card(1, "Rambler", json!({}));
+        let judge = make_card(
+            2,
+            "Judge",
+            json!({
+                "observations": [],
+                "silenced_by": null,
+                "quote_observed": false
+            }),
+        );
+        let mut state = base_state(5, vec![source, judge]);
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+
+        assert!(!card_has_normal_clue(&state.cards[1], true));
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.cards[1].info_parsed = json!({
+            "observations": [{"target": 4, "is_lying": false}],
+            "silenced_by": 1
+        })
+        .as_object()
+        .unwrap()
+        .clone();
+        assert!(card_has_normal_clue(&state.cards[1], true));
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        let metadata_only_rambler = make_card(
+            3,
+            "Rambler",
+            json!({"silenced": true, "silenced_by": 2, "quote_observed": false}),
+        );
+        assert!(!card_has_normal_clue(&metadata_only_rambler, true));
+    }
+
+    #[test]
+    fn rambler_history_survives_a_later_normal_role_result() {
+        let source = make_card(1, "Rambler", json!({}));
+        let judge = make_card(
+            2,
+            "Judge",
+            json!({"target": 4, "target_was_truthful": true}),
+        );
+        let mut state = base_state(5, vec![source, judge]);
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        state.rambler_shut_up_observations = vec![crate::types::RamblerShutUpObservation {
+            speaker_position: 2,
+            shut_up_target: 1,
+        }];
+
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        // With no later normal observation, the same historical interruption
+        // is sufficient positive evidence even though the latest alias is gone.
+        state.cards[1].info_parsed.clear();
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn rambler_history_and_latest_alias_merge_all_observed_sources() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Rambler", json!({})),
+                make_card(2, "Scout", json!({"shut_up_target": 3})),
+                make_card(3, "Rambler", json!({})),
+            ],
+        );
+        state.rambler_shut_up_observations = vec![
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 2,
+                shut_up_target: 1,
+            },
+            // Exact duplicates are harmless validation-wise and remain legal
+            // append-only history records.
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 2,
+                shut_up_target: 1,
+            },
+        ];
+
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.rambler_shut_up_observations[0].speaker_position = 4;
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn truthful_shut_up_target_requires_an_adjacent_act_surface() {
+        let rambler = make_card(1, "Rambler", json!({"quote_observed": true}));
         let scout = make_card(2, "Scout", json!({"shut_up_target": 1}));
         let state = base_state(5, vec![rambler, scout]);
 
@@ -2842,11 +3275,23 @@ mod tests {
         let mut fake_rambler = empty_scenario();
         fake_rambler.evil_positions.insert(1, "Puppeteer".to_string());
         assert!(!validate_rambler_shut_ups(&fake_rambler, &state));
+
+        let non_adjacent = base_state(
+            5,
+            vec![
+                make_card(1, "Rambler", json!({"quote_observed": true})),
+                make_card(3, "Scout", json!({"shut_up_target": 1})),
+            ],
+        );
+        assert!(!validate_rambler_shut_ups(
+            &empty_scenario(),
+            &non_adjacent,
+        ));
     }
 
     #[test]
     fn confessor_disguise_uses_apparent_truth_for_rambler() {
-        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+        let rambler = make_card(1, "Rambler", json!({"quote_observed": true}));
         let confessor = make_card(2, "Confessor", json!({"shut_up_target": 1}));
         let state = base_state(5, vec![rambler, confessor]);
 
@@ -2872,40 +3317,64 @@ mod tests {
     }
 
     #[test]
-    fn rambler_act_surface_follows_actual_dispatch_truth() {
-        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+    fn rambler_source_modes_follow_native_real_and_bluff_dispatch() {
+        let rambler = make_card(1, "Rambler", json!({"quote_observed": true}));
         let state = base_state(1, vec![rambler]);
 
-        assert!(is_truthful_rambler_act_surface(1, &empty_scenario(), &state));
+        assert_eq!(
+            rambler_source_support(1, &empty_scenario(), &state).definite,
+            RAMBLER_MATCHES_TRUTHFUL,
+        );
 
         let mut corrupted_real = empty_scenario();
         corrupted_real.corrupted.insert(1);
-        assert!(!is_truthful_rambler_act_surface(1, &corrupted_real, &state));
+        assert_eq!(
+            rambler_source_support(1, &corrupted_real, &state).definite,
+            RAMBLER_MATCHES_LYING,
+        );
 
         let mut puppet = empty_scenario();
         puppet.puppet_position = Some(1);
-        assert!(is_truthful_rambler_act_surface(1, &puppet, &state));
+        assert_eq!(
+            rambler_source_support(1, &puppet, &state).definite,
+            RAMBLER_MATCHES_TRUTHFUL,
+        );
         puppet.corrupted.insert(1);
-        assert!(!is_truthful_rambler_act_surface(1, &puppet, &state));
+        assert_eq!(
+            rambler_source_support(1, &puppet, &state).definite,
+            RAMBLER_MATCHES_LYING,
+        );
 
         let mut doppelganger = empty_scenario();
         doppelganger.doppelganger_position = Some(1);
-        assert!(is_truthful_rambler_act_surface(1, &doppelganger, &state));
+        assert_eq!(
+            rambler_source_support(1, &doppelganger, &state).definite,
+            RAMBLER_MATCHES_TRUTHFUL,
+        );
         doppelganger.corrupted.insert(1);
-        assert!(!is_truthful_rambler_act_surface(1, &doppelganger, &state));
+        assert_eq!(
+            rambler_source_support(1, &doppelganger, &state).definite,
+            RAMBLER_MATCHES_LYING,
+        );
 
         let mut drunk = empty_scenario();
         drunk.drunk_position = Some(1);
-        assert!(!is_truthful_rambler_act_surface(1, &drunk, &state));
+        assert_eq!(
+            rambler_source_support(1, &drunk, &state).definite,
+            RAMBLER_MATCHES_LYING,
+        );
 
         let mut evil = empty_scenario();
         evil.evil_positions.insert(1, "Pooka".to_string());
-        assert!(!is_truthful_rambler_act_surface(1, &evil, &state));
+        assert_eq!(
+            rambler_source_support(1, &evil, &state).definite,
+            RAMBLER_MATCHES_LYING,
+        );
     }
 
     #[test]
-    fn liar_shut_up_target_must_be_false() {
-        let rambler = make_card(1, "Rambler", json!({"silenced": false}));
+    fn lying_target_requires_a_rambler_bluffact_surface() {
+        let rambler = make_card(1, "Rambler", json!({"quote_observed": true}));
         let baker = make_card(2, "Baker", json!({"shut_up_target": 1}));
         let state = base_state(5, vec![rambler, baker]);
 
@@ -2917,6 +3386,293 @@ mod tests {
         lying_to_fake_rambler.evil_positions.insert(1, "Twin_Minion".to_string());
         lying_to_fake_rambler.evil_positions.insert(2, "Puppeteer".to_string());
         assert!(validate_rambler_shut_ups(&lying_to_fake_rambler, &state));
+    }
+
+    #[test]
+    fn hidden_natural_rambler_uses_pool_multiplicity_and_header_capacity() {
+        let target = make_card(2, "Scout", json!({"shut_up_target": 1}));
+        let mut state = base_state(5, vec![target.clone()]);
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.deck.outcasts.clear();
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(0);
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.board_outcast_count = Some(1);
+        state.cards.push(make_card(4, "Rambler", json!({"quote_observed": true})));
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.deck.outcasts.push("Rambler".to_string());
+        state.board_outcast_count = Some(2);
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn multiple_hidden_rambler_sources_share_one_joint_natural_pool_budget() {
+        let mut state = base_state(
+            6,
+            vec![
+                make_card(2, "Scout", json!({"shut_up_target": 1})),
+                make_card(5, "Baker", json!({"shut_up_target": 4})),
+            ],
+        );
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+
+        // Independent existentials would incorrectly reuse the only natural
+        // Rambler at both named physical sources.
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.deck.outcasts.push("Rambler".to_string());
+        state.board_outcast_count = Some(2);
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        // A represented Evil Rambler bluff is a separate physical install and
+        // does not consume a second natural pool occurrence.
+        state.deck.outcasts.pop();
+        state.board_outcast_count = Some(1);
+        state.cards.push(make_card(4, "Rambler", json!({})));
+        let mut one_natural_one_fake = empty_scenario();
+        one_natural_one_fake
+            .evil_positions
+            .insert(4, "Twin_Minion".to_string());
+        one_natural_one_fake
+            .evil_positions
+            .insert(5, "Puppeteer".to_string());
+        assert!(validate_rambler_shut_ups(&one_natural_one_fake, &state));
+    }
+
+    #[test]
+    fn forced_anonymous_rambler_source_respects_other_normal_neighbor_evidence() {
+        let mut state = base_state(
+            5,
+            vec![
+                make_card(2, "Scout", json!({"shut_up_target": 1})),
+                make_card(5, "Baker", json!({"original_role": "Poet"})),
+            ],
+        );
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+
+        // #2's positive replacement forces hidden #1 to have installed an Act
+        // matcher, which would also have replaced truthful adjacent #5's
+        // retained Baker output. The anonymous alternative must honor both.
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn current_normal_clue_rejects_a_forced_hidden_rambler_without_any_positive() {
+        let mut state = base_state(
+            3,
+            vec![make_card(
+                1,
+                "Baker",
+                json!({"original_role": "original"}),
+            )],
+        );
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+
+        // Both hidden seats neighbor #1. The exact O=1 header forces the sole
+        // natural Rambler into one of them, where its Act callback would have
+        // replaced the retained Baker clue.
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn hidden_rambler_completion_preserves_mandatory_plague_doctor_occupancy() {
+        let mut state = base_state(
+            3,
+            vec![make_card(2, "Scout", json!({"shut_up_target": 1}))],
+        );
+        state.deck.outcasts = vec!["Plague_Doctor".to_string(), "Rambler".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        state.pd_corruption_target = Some(3);
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+
+        // The known Start target proves that the sole ordinary-Outcast seat
+        // was Plague Doctor. It cannot simultaneously be hidden Rambler #1.
+        assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn malformed_rambler_positions_are_rejected_without_wrapping_or_panicking() {
+        for malformed in [
+            json!(-255),
+            json!(0),
+            json!(4),
+            json!(257),
+            json!("1"),
+            json!(null),
+            json!(1.0),
+            json!(1.5),
+            json!(true),
+            json!([]),
+            json!({}),
+        ] {
+            let mut state = base_state(
+                3,
+                vec![
+                    make_card(1, "Rambler", json!({})),
+                    make_card(2, "Scout", json!({"shut_up_target": malformed})),
+                ],
+            );
+            state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+            assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+        }
+
+        let mut zero_speaker = base_state(3, vec![make_card(0, "Scout", json!({}))]);
+        zero_speaker.rambler_shut_up_observations =
+            vec![crate::types::RamblerShutUpObservation {
+                speaker_position: 0,
+                shut_up_target: 1,
+            }];
+        assert!(!validate_rambler_shut_ups(
+            &empty_scenario(),
+            &zero_speaker,
+        ));
+
+        let mut out_of_range_source = base_state(3, vec![make_card(2, "Scout", json!({}))]);
+        out_of_range_source.rambler_shut_up_observations =
+            vec![crate::types::RamblerShutUpObservation {
+                speaker_position: 2,
+                shut_up_target: 4,
+            }];
+        assert!(!validate_rambler_shut_ups(
+            &empty_scenario(),
+            &out_of_range_source,
+        ));
+
+        let mut zero_cards = base_state(0, vec![]);
+        zero_cards.rambler_shut_up_observations =
+            vec![crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 1,
+            }];
+        assert!(!validate_rambler_shut_ups(
+            &empty_scenario(),
+            &zero_cards,
+        ));
+    }
+
+    #[test]
+    fn shaman_copied_good_rambler_reserves_its_natural_pool_occurrence() {
+        let mut state = base_state(
+            5,
+            vec![make_card(2, "Scout", json!({"shut_up_target": 1}))],
+        );
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.board_outcast_count = Some(2);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+
+        let mut copied = empty_scenario();
+        copied.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 3,
+            target_position: 4,
+            copied_role: "Rambler".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+        assert!(!validate_rambler_shut_ups(&copied, &state));
+
+        state.deck.outcasts.push("Rambler".to_string());
+        assert!(validate_rambler_shut_ups(&copied, &state));
+    }
+
+    #[test]
+    fn hidden_disguised_rambler_uses_source_mode_without_consuming_pool_copy() {
+        let target = make_card(2, "Baker", json!({"shut_up_target": 1}));
+        let mut state = base_state(5, vec![target]);
+        state.deck.outcasts = vec!["Rambler".to_string()];
+
+        let mut source_and_target_evil = empty_scenario();
+        source_and_target_evil
+            .evil_positions
+            .insert(1, "Twin_Minion".to_string());
+        source_and_target_evil
+            .evil_positions
+            .insert(2, "Puppeteer".to_string());
+        assert!(validate_rambler_shut_ups(&source_and_target_evil, &state));
+
+        source_and_target_evil.evil_positions.remove(&2);
+        assert!(!validate_rambler_shut_ups(&source_and_target_evil, &state));
+    }
+
+    #[test]
+    fn shaman_copied_evil_rambler_can_install_real_and_stale_bluff_matchers() {
+        let targets = vec![
+            make_card(2, "Scout", json!({"shut_up_target": 1})),
+            make_card(5, "Baker", json!({"shut_up_target": 1})),
+        ];
+        let mut state = base_state(5, targets);
+        state.deck.outcasts = vec!["Rambler".to_string()];
+
+        let mut copied = empty_scenario();
+        copied.evil_positions.insert(1, "Pooka".to_string());
+        copied.evil_positions.insert(5, "Puppeteer".to_string());
+        copied.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 1,
+            target_position: 3,
+            copied_role: "Rambler".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+
+        // With a non-Rambler displayed bluff, the Evil real role installs Act
+        // only, so one physical source cannot explain both appearance modes.
+        state.cards.push(make_card(1, "Baker", json!({})));
+        assert!(!validate_rambler_shut_ups(&copied, &state));
+
+        // A stale Rambler bluff dispatches BluffAct after the real Act and the
+        // physical card installs both matchers.
+        state.cards.retain(|card| card.position != 1);
+        state.cards.push(make_card(1, "Rambler", json!({"quote_observed": true})));
+        assert!(validate_rambler_shut_ups(&copied, &state));
+    }
+
+    #[test]
+    fn persistent_callbacks_survive_source_death_and_any_final_writer_is_possible() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Rambler", json!({})),
+                make_card(2, "Scout", json!({"shut_up_target": 1})),
+                make_card(3, "Rambler", json!({})),
+            ],
+        );
+        state.executed = vec![1];
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+
+        state.cards[1].info_parsed = json!({"shut_up_target": 3})
+            .as_object()
+            .unwrap()
+            .clone();
+        // Cross-card same-delay install order is scheduler-owned and not
+        // represented, so either matching adjacent callback may be last.
+        assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn rambler_quote_and_legacy_unsilenced_marker_are_negative_evidence_only_when_current() {
+        for info in [json!({"quote_observed": true}), json!({"silenced": false})] {
+            let source = make_card(1, "Rambler", json!({"quote_observed": true}));
+            let target = make_card(2, "Rambler", info);
+            let mut state = base_state(3, vec![source, target]);
+            assert!(validate_rambler_shut_ups(&empty_scenario(), &state));
+            state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+            assert!(!validate_rambler_shut_ups(&empty_scenario(), &state));
+        }
     }
 
     #[test]

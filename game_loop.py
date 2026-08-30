@@ -17,6 +17,7 @@ from solver import (
     CardInfo,
     DeckComposition,
     GameState,
+    RAMBLER_RULE_VERSION,
     SolverResult,
     slayer_revealed_role,
 )
@@ -78,27 +79,58 @@ def card_witness(pos: int, affected_position: int) -> CardInfo:
 def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
     return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
 
-def card_jester_silenced(pos: int, targets: list[int], shut_up_target: Optional[int] = None) -> CardInfo:
-    """Jester whose ability fired but was silenced (e.g. by Rambler).
+def card_jester_silenced(
+    pos: int,
+    targets: Optional[list[int]] = None,
+    shut_up_target: Optional[int] = None,
+    info_text: str = "",
+) -> CardInfo:
+    """Jester whose emitted result was replaced by Rambler2 interference.
 
-    Records the targets (for UI / audit) plus silenced:True so the Rust
-    validator can treat the clue as vacuous (no constraint) instead of
-    accidentally returning true in the targets/evil_count lookups (asc78_v6).
+    Current native interference rewrites the emitted ``ActedInfo`` reference
+    list to the Rambler target, so the live parser must not treat that list as
+    Jester's original picks. ``targets`` remains optional only for archived,
+    explicitly reconstructed observations.
     """
-    info = {"targets": list(targets), "silenced": True}
+    info = {"silenced": True}
+    if targets is not None:
+        info["targets"] = list(targets)
     if shut_up_target is not None:
         info["shut_up_target"] = shut_up_target
-    return CardInfo(pos, "Jester", info_parsed=info)
+    return CardInfo(pos, "Jester", info_text=info_text, info_parsed=info)
 
 def card_rambler(pos: int, silenced: bool, silenced_by: Optional[int] = None) -> CardInfo:
+    """Build the archived, pre-Rambler2 observation shape."""
     info = {"silenced": silenced}
     if silenced_by is not None:
         info["silenced_by"] = silenced_by
     return CardInfo(pos, "Rambler", info_parsed=info)
 
-def card_shut_up(pos: int, role: str, target: int) -> CardInfo:
+
+def card_rambler_quote(pos: int, info_text: str) -> CardInfo:
+    """Current Rambler2 Day output when it was not interrupted."""
+    return CardInfo(
+        pos,
+        "Rambler",
+        info_text=info_text,
+        info_parsed={"quote_observed": True},
+    )
+
+def card_shut_up(
+    pos: int,
+    role: str,
+    target: int,
+    info_text: str = "",
+) -> CardInfo:
     """A Rambler-redesign clue: this card said "#target shut up!"."""
-    return CardInfo(pos, _normalize_role_name(role), info_parsed={"shut_up_target": target})
+    if type(target) is not int or target <= 0:
+        raise ValueError("Rambler shut-up target must be a positive integer")
+    return CardInfo(
+        pos,
+        _normalize_role_name(role),
+        info_text=info_text,
+        info_parsed={"shut_up_target": target},
+    )
 
 def card_dreamer(
     pos: int,
@@ -195,11 +227,93 @@ def _has_active_clue_result(card: CardInfo) -> bool:
     """True when an active ability entry contains a real clue result."""
     role = card.apparent_role.lower().replace(" ", "_")
     info = card.info_parsed or {}
+    if type(info.get("shut_up_target")) is int:
+        # Rambler2 replaces the normal result, but the active use was consumed.
+        return True
     if role == "dreamer":
         return bool(info.get("target") or info.get("targets"))
     if role in {"fortune_teller", "jester", "druid", "judge"}:
         return bool(info)
     return False
+
+
+def _judge_observation_history(
+    info: dict,
+    *,
+    n_cards: Optional[int] = None,
+) -> list[dict]:
+    """Validate and return Judge-only evidence.
+
+    Rambler interference may coexist with an empty Judge history, but a
+    present Judge observation must be complete and typed.  Raising a focused
+    ``ValueError`` here keeps malformed manual/session data from becoming an
+    opaque Rust zero-scenario result (or a Python ``TypeError``).
+    """
+    if not isinstance(info, dict):
+        raise ValueError("Judge info_parsed must be an object")
+
+    def validate_observation(observation, label: str) -> dict:
+        if not isinstance(observation, dict):
+            raise ValueError(f"{label} must be an object")
+        if "target" not in observation or "is_lying" not in observation:
+            raise ValueError(
+                f"{label} must contain both target and is_lying"
+            )
+        target = observation["target"]
+        is_lying = observation["is_lying"]
+        if type(target) is not int:
+            raise ValueError(f"{label}.target must be an integer")
+        if target <= 0 or (n_cards is not None and target > n_cards):
+            suffix = f"1..{n_cards}" if n_cards is not None else "positive"
+            raise ValueError(f"{label}.target must be within {suffix}")
+        if type(is_lying) is not bool:
+            raise ValueError(f"{label}.is_lying must be a boolean")
+        return {"target": target, "is_lying": is_lying}
+
+    has_target = "target" in info
+    has_is_lying = "is_lying" in info
+    top_level = None
+    if has_target != has_is_lying:
+        raise ValueError(
+            "Judge info_parsed must contain both target and is_lying, or neither"
+        )
+    if has_target:
+        top_level = validate_observation(info, "Judge top-level observation")
+
+    if "observations" in info:
+        raw_observations = info["observations"]
+        if not isinstance(raw_observations, list):
+            raise ValueError("Judge observations must be an array")
+        observations = [
+            validate_observation(
+                observation,
+                f"Judge observations[{index}]",
+            )
+            for index, observation in enumerate(raw_observations)
+        ]
+        if observations:
+            return observations
+
+    return [top_level] if top_level is not None else []
+
+
+def _latest_acted_event_fingerprint(card: Optional[dict]):
+    """Stable fingerprint of the newest public event, including history size."""
+    if not isinstance(card, dict):
+        return None
+    infos = card.get("acted_infos")
+    if not isinstance(infos, list) or not infos:
+        return None
+    try:
+        newest = json.dumps(
+            infos[-1],
+            sort_keys=True,
+            separators=(",", ":"),
+            default=repr,
+        )
+    except (TypeError, ValueError):
+        newest = repr(infos[-1])
+    return len(infos), newest
 
 
 def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
@@ -621,6 +735,8 @@ class GameSession:
         self.board_villager_count: Optional[int] = None  # Normalized pre-Start header V count
         self.board_outcast_count: Optional[int] = None   # Normalized pre-Start header O count
         self.board_count_provenance: str = "legacy_unknown"
+        self.rambler_rule_version: Optional[str] = RAMBLER_RULE_VERSION
+        self.rambler_shut_up_observations: list[dict] = []
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
         # Trigger/result synchronization is live-session bookkeeping only.
@@ -676,6 +792,8 @@ class GameSession:
         self.board_villager_count = None
         self.board_outcast_count = None
         self.board_count_provenance = "legacy_unknown"
+        self.rambler_rule_version = RAMBLER_RULE_VERSION
+        self.rambler_shut_up_observations.clear()
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.lilis_nights_resolved = 0
@@ -774,6 +892,41 @@ class GameSession:
     # -- Cards --
 
     def add_card(self, card: CardInfo):
+        role_key = card.apparent_role.lower().replace(" ", "_")
+        existing = next(
+            (previous for previous in self.cards if previous.position == card.position),
+            None,
+        )
+        existing_role_key = (
+            existing.apparent_role.lower().replace(" ", "_")
+            if existing is not None else None
+        )
+
+        incoming_shut_up_target = card.info_parsed.get("shut_up_target")
+        if "shut_up_target" in card.info_parsed:
+            if type(incoming_shut_up_target) is not int:
+                raise ValueError("Rambler shut-up target must be an integer")
+            if not 1 <= incoming_shut_up_target <= self.n_cards:
+                raise ValueError(
+                    f"Rambler shut-up target #{incoming_shut_up_target} "
+                    f"is outside 1..{self.n_cards}"
+                )
+
+        # Validate Judge evidence before mutating reveal order or any session
+        # list, so a malformed history is rejected atomically.
+        current_judge_history: list[dict] = []
+        prior_judge_history: list[dict] = []
+        if role_key == "judge":
+            current_judge_history = _judge_observation_history(
+                card.info_parsed,
+                n_cards=self.n_cards,
+            )
+            if existing is not None and existing_role_key == "judge":
+                prior_judge_history = _judge_observation_history(
+                    existing.info_parsed,
+                    n_cards=self.n_cards,
+                )
+
         # Track reveal order (first entry per position)
         if card.position not in self.reveal_order:
             self.reveal_order.append(card.position)
@@ -786,43 +939,130 @@ class GameSession:
                 print(f"  Current reveal_order: {self.reveal_order}")
                 print(f"  If cards were flipped out of #1->#N order, this is correct.")
                 print(f"  If this is a mistake, fix now — reveal_order affects Baker validation.")
-        # Judge is ResetAfterNight in the shipped asset. Preserve every prior
-        # result when a later round reuses the same apparent Judge; the
-        # top-level target/is_lying pair remains the newest observation for
-        # backward compatibility with existing saves.
-        role_key = card.apparent_role.lower().replace(" ", "_")
-        if role_key == "judge" and _has_active_clue_result(card):
-            existing = next(
-                (
-                    previous
-                    for previous in self.cards
-                    if previous.position == card.position
-                    and previous.apparent_role.lower().replace(" ", "_") == "judge"
-                ),
-                None,
-            )
-            # A position still marked used is a same-round re-read/correction,
-            # so replace it. Only append after Night has reset that marker.
+        # Judge is ResetAfterNight. A same-round reread corrects the one
+        # current event; only a post-Night use extends the chronological
+        # history. Native memory may supply either just the newest result or
+        # the full normal-result history, so merge both shapes deliberately.
+        judge_event_observed = (
+            role_key == "judge" and _has_active_clue_result(card)
+        )
+        same_judge_event = (
+            judge_event_observed
+            and existing is not None
+            and existing_role_key == "judge"
+            and card.position in self.used_abilities
+        )
+        reset_judge_event = (
+            judge_event_observed
+            and existing is not None
+            and existing_role_key == "judge"
+            and card.position not in self.used_abilities
+        )
+        existing_shut_up_target = (
+            existing.info_parsed.get("shut_up_target")
+            if existing is not None else None
+        )
+
+        def merge_judge_history(
+            older: list[dict],
+            incoming: list[dict],
+        ) -> list[dict]:
+            if not incoming:
+                return list(older)
             if (
-                existing is not None
-                and _has_active_clue_result(existing)
-                and card.position not in self.used_abilities
+                len(incoming) > len(older)
+                and incoming[:len(older)] == older
             ):
-                prior = existing.info_parsed.get("observations")
-                if isinstance(prior, list):
-                    observations = [
-                        dict(item) for item in prior if isinstance(item, dict)
-                    ]
-                else:
-                    observations = [{
-                        "target": existing.info_parsed["target"],
-                        "is_lying": existing.info_parsed["is_lying"],
-                    }]
-                observations.append({
-                    "target": card.info_parsed["target"],
-                    "is_lying": card.info_parsed["is_lying"],
-                })
+                return list(incoming)
+            return list(older) + [dict(incoming[-1])]
+
+        if judge_event_observed and existing is not None and existing_role_key == "judge":
+            incoming_is_shut_up = type(incoming_shut_up_target) is int
+            existing_is_shut_up = type(existing_shut_up_target) is int
+
+            if same_judge_event:
+                # If the existing event was a normal Judge result, its last
+                # observation is the current round and must be replaced. A
+                # shut-up event has no normal observation, so all retained
+                # entries are older rounds.
+                older_rounds = (
+                    prior_judge_history
+                    if existing_is_shut_up
+                    else prior_judge_history[:-1]
+                )
+                observations = (
+                    list(older_rounds)
+                    if incoming_is_shut_up
+                    else merge_judge_history(
+                        list(older_rounds),
+                        current_judge_history,
+                    )
+                )
+            elif reset_judge_event:
+                observations = (
+                    list(prior_judge_history)
+                    if incoming_is_shut_up
+                    else merge_judge_history(
+                        prior_judge_history,
+                        current_judge_history,
+                    )
+                )
+            else:
+                observations = list(current_judge_history)
+
+            if len(observations) > 1 or (
+                incoming_is_shut_up and observations
+            ):
                 card.info_parsed["observations"] = observations
+            else:
+                card.info_parsed.pop("observations", None)
+
+        # The ledger is chronological public-event state, not an audit log of
+        # parser corrections. Editing a non-reset event replaces/removes its
+        # current record in place, preserving global event order. A later
+        # ResetAfterNight Judge event appends a new record even if identical.
+        incoming_is_shut_up = type(incoming_shut_up_target) is int
+        existing_is_shut_up = type(existing_shut_up_target) is int
+        incoming_is_event = role_key != "judge" or judge_event_observed
+
+        if incoming_is_event:
+            new_record = (
+                {
+                    "speaker_position": card.position,
+                    "shut_up_target": incoming_shut_up_target,
+                }
+                if incoming_is_shut_up else None
+            )
+            if existing is None or reset_judge_event:
+                if new_record is not None:
+                    self.rambler_shut_up_observations.append(new_record)
+            else:
+                current_record_index = None
+                if existing_is_shut_up:
+                    for index in range(
+                        len(self.rambler_shut_up_observations) - 1,
+                        -1,
+                        -1,
+                    ):
+                        observation = self.rambler_shut_up_observations[index]
+                        if (
+                            observation.get("speaker_position") == card.position
+                            and observation.get("shut_up_target")
+                            == existing_shut_up_target
+                        ):
+                            current_record_index = index
+                            break
+                if current_record_index is not None:
+                    if new_record is None:
+                        self.rambler_shut_up_observations.pop(
+                            current_record_index
+                        )
+                    else:
+                        self.rambler_shut_up_observations[
+                            current_record_index
+                        ] = new_record
+                elif new_record is not None:
+                    self.rambler_shut_up_observations.append(new_record)
 
         # Replace if same position already exists (re-read)
         self.cards = [c for c in self.cards if c.position != card.position]
@@ -836,6 +1076,8 @@ class GameSession:
             "fortune_teller",
             "jester",
             "judge",
+            "plague_doctor",
+            "slayer",
         }
         if role_key in active_result_roles and _has_active_clue_result(card):
             self.mark_ability_used(card.position)
@@ -1231,6 +1473,11 @@ class GameSession:
             board_villager_count=self.board_villager_count,
             board_outcast_count=self.board_outcast_count,
             board_count_provenance=self.board_count_provenance,
+            rambler_rule_version=self.rambler_rule_version,
+            rambler_shut_up_observations=[
+                dict(observation)
+                for observation in self.rambler_shut_up_observations
+            ],
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
             executed_good_roles=dict(self.executed_good_roles),
@@ -1264,6 +1511,11 @@ class GameSession:
         session.board_villager_count = state.board_villager_count
         session.board_outcast_count = state.board_outcast_count
         session.board_count_provenance = state.board_count_provenance
+        session.rambler_rule_version = state.rambler_rule_version
+        session.rambler_shut_up_observations = [
+            dict(observation)
+            for observation in state.rambler_shut_up_observations
+        ]
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
@@ -1624,6 +1876,48 @@ class GameSession:
                 return {"success": False, "info_parsed": None,
                         "error": f"#{t} ({target_card_entry.apparent_role}) has unused active ability; clicking it would activate the card instead of selecting it. Use ability_used {t} first or handle this ability manually."}
 
+        # Judge is ResetAfterNight, so an old acted-info list is expected on
+        # later uses. Snapshot the latest event before any click and accept
+        # only a newly appended or mutated current event afterward.
+        judge_pre_event = None
+        if ability_name == "judge":
+            before_board = None
+            if monitor and monitor.is_healthy():
+                before_board = monitor.get_board()
+            else:
+                from memory_reader import MemoryReader
+                before_reader = MemoryReader()
+                if not before_reader.open():
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            "Cannot open memory reader for pre-click Judge "
+                            "event snapshot"
+                        ),
+                    }
+                try:
+                    before_board = before_reader.read_board()
+                finally:
+                    before_reader.close()
+            if not before_board:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": "Cannot read board for pre-click Judge event snapshot",
+                }
+            before_card = next(
+                (card for card in before_board if card.get('position') == pos),
+                None,
+            )
+            if before_card is None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": f"Judge #{pos} missing from pre-click memory snapshot",
+                }
+            judge_pre_event = _latest_acted_event_fingerprint(before_card)
+
         # Step 1: Click active card to enter target-selection mode
         x, y = coords[pos]
         print(f"  [auto_ability] Activating {action.ability_name} at #{pos} ({x},{y})...")
@@ -1656,6 +1950,9 @@ class GameSession:
             card = next((c for c in board if c['position'] == pos), None)
             if not card:
                 return False
+            if ability_name == "judge":
+                latest = _latest_acted_event_fingerprint(card)
+                return latest is not None and latest != judge_pre_event
             return (
                 card.get('uses', 0) > 0
                 or bool(card.get('acted_infos'))
@@ -1689,17 +1986,47 @@ class GameSession:
         if not target_card_data:
             return {"success": False, "info_parsed": None,
                     "error": f"Position #{pos} not found in memory reader after activation"}
-        has_recorded_result = (
-            target_card_data.get('uses', 0) > 0
-            or bool(target_card_data.get('acted_infos'))
-            or bool(target_card_data.get('ability_used') and target_card_data.get('clue_text'))
-        )
+        if ability_name == "judge":
+            latest_judge_event = _latest_acted_event_fingerprint(target_card_data)
+            has_recorded_result = (
+                latest_judge_event is not None
+                and latest_judge_event != judge_pre_event
+            )
+        else:
+            has_recorded_result = (
+                target_card_data.get('uses', 0) > 0
+                or bool(target_card_data.get('acted_infos'))
+                or bool(target_card_data.get('ability_used') and target_card_data.get('clue_text'))
+            )
         if not has_recorded_result:
+            if ability_name == "judge":
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        "Judge result did not produce a new or changed latest "
+                        "acted-info event — click may have missed"
+                    ),
+                }
             return {"success": False, "info_parsed": None,
                     "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
 
-        # Step 4a: PD has a distinct result object rather than passive CardInfo.
-        if ability_name == "plague_doctor":
+        # Rambler2 replaces an adjacent actor's normal result surface.  Handle
+        # that before role-specific strict parsers: the emitted references now
+        # name the Rambler, not the target(s) the active role originally chose.
+        parsed, interruption_error = _card_from_rambler_interruption(
+            target_card_data,
+            n_cards=self.n_cards,
+        )
+        if interruption_error is not None:
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": interruption_error,
+            }
+
+        # Step 4a: PD has a distinct result object unless Rambler replaced it.
+        if parsed is None and ability_name == "plague_doctor":
             pd_result, parse_error = _parse_pd_ability_result_from_memory(
                 target_card_data,
                 ability_pos=pos,
@@ -1737,7 +2064,7 @@ class GameSession:
             return {"success": True, "info_parsed": pd_result, "error": None}
 
         # Step 4b: Judge has a strict one-target public result boundary.
-        if ability_name == "judge":
+        if parsed is None and ability_name == "judge":
             parsed, parse_error = _parse_judge_result_from_memory(
                 target_card_data,
                 expected_target=targets[0],
@@ -1746,9 +2073,12 @@ class GameSession:
             if parse_error:
                 return {"success": False, "info_parsed": None,
                         "error": parse_error}
-        else:
+        elif parsed is None:
             # Parse ordinary clue-producing abilities via auto_card.
-            parsed = _parse_clue_from_memory(target_card_data)
+            parsed = _parse_clue_from_memory(
+                target_card_data,
+                n_cards=self.n_cards,
+            )
         if parsed is None:
             return {"success": False, "info_parsed": None,
                     "error": f"Could not parse ability result from memory data"}
@@ -2384,13 +2714,30 @@ def _parse_judge_result_from_memory(
         return None, f"Judge target #{expected_target} is outside 1..{n_cards}"
 
     clue = (card.get('clue_text') or '').strip()
-    infos = card.get('acted_infos') or []
+    raw_infos = card.get('acted_infos')
+    if raw_infos is not None and not isinstance(raw_infos, list):
+        return None, "Judge acted_infos must be an array"
+    infos = raw_infos or []
     if not infos:
         return None, "Judge result has no acted-info record"
 
     observations = []
     for index, info in enumerate(infos):
-        targets = info.get('targets') or []
+        if not isinstance(info, dict):
+            return None, f"Judge acted_infos[{index}] must be an object"
+        raw_desc = info.get('desc')
+        if raw_desc is not None and not isinstance(raw_desc, str):
+            return None, f"Judge acted_infos[{index}].desc must be a string"
+        desc = (raw_desc or '').strip()
+        if _parse_shut_up_target_text(desc, n_cards=n_cards) is not None:
+            # Rambler2 replaces both the description and reference list.  This
+            # history entry contains no Judge target/result to validate.
+            continue
+        targets = info.get('targets')
+        if not isinstance(targets, list):
+            return None, (
+                f"Judge acted_infos[{index}].targets must be an array"
+            )
         if len(targets) != 1:
             return None, (
                 "Each Judge result must contain exactly one picked-character "
@@ -2398,7 +2745,7 @@ def _parse_judge_result_from_memory(
             )
         recorded_target = targets[0]
         if (
-            not isinstance(recorded_target, int)
+            type(recorded_target) is not int
             or not 1 <= recorded_target <= n_cards
         ):
             return None, (
@@ -2406,7 +2753,6 @@ def _parse_judge_result_from_memory(
                 f"{recorded_target!r}"
             )
 
-        desc = (info.get('desc') or '').strip()
         match = re.fullmatch(
             r'#\s*(\d+)\s+is\s+(saying\s+Truth|Lying)',
             desc,
@@ -2426,6 +2772,9 @@ def _parse_judge_result_from_memory(
             "target": recorded_target,
             "is_lying": match.group(2).lower() == 'lying',
         })
+
+    if not observations:
+        return None, "Judge result contains only Rambler shut-up interference"
 
     newest = observations[-1]
     recorded_target = newest["target"]
@@ -2451,6 +2800,224 @@ def _parse_judge_result_from_memory(
         info_text=clue,
         info_parsed=info_parsed,
     ), None
+
+
+def _parse_shut_up_target_text(
+    text,
+    *,
+    n_cards: Optional[int] = None,
+) -> Optional[int]:
+    """Parse the exact public Rambler2 replacement sentence."""
+    import re
+
+    if not isinstance(text, str):
+        return None
+    match = re.fullmatch(
+        r'\s*#\s*(\d+)\s+shut\s+up\s*!?\s*',
+        text,
+        re.IGNORECASE,
+    )
+    if not match:
+        return None
+    target = int(match.group(1))
+    if target <= 0 or (n_cards is not None and target > n_cards):
+        return None
+    return target
+
+
+def _looks_like_shut_up_text(text) -> bool:
+    """Whether text belongs to the public shut-up sentence family."""
+    import re
+
+    return isinstance(text, str) and re.search(
+        r'\bshut\s+up\b',
+        text,
+        re.IGNORECASE,
+    ) is not None
+
+
+def _rambler_interruption_from_memory(
+    card: dict,
+    *,
+    n_cards: Optional[int] = None,
+) -> tuple[Optional[tuple[int, str]], Optional[str]]:
+    """Read one current Rambler2 replacement from the newest native event.
+
+    ``savedAct`` and the latest ``ActedInfo.desc`` are two views of the same
+    public output.  Treat either missing history or disagreement as pending
+    recovery; older entries are history, never the current clue surface.
+    """
+    raw_clue = card.get('clue_text')
+    clue = raw_clue.strip() if isinstance(raw_clue, str) else ''
+    raw_infos = card.get('acted_infos')
+    infos = raw_infos if isinstance(raw_infos, list) else []
+    latest = infos[-1] if infos else None
+    latest_desc = (
+        latest.get('desc').strip()
+        if isinstance(latest, dict)
+        and isinstance(latest.get('desc'), str)
+        else ''
+    )
+
+    if not (
+        _looks_like_shut_up_text(clue)
+        or _looks_like_shut_up_text(latest_desc)
+    ):
+        return None, None
+    if not clue:
+        return None, (
+            "Rambler shut-up observation has no nonempty savedAct text to "
+            "agree with the latest acted-info record"
+        )
+    if not isinstance(raw_infos, list) or not raw_infos:
+        return None, (
+            "Rambler shut-up observation has no current acted-info history; "
+            "wait for memory to settle or enter it manually"
+        )
+    if not isinstance(latest, dict):
+        return None, "Latest acted-info record is malformed"
+    if not latest_desc:
+        return None, "Latest acted-info record has no description"
+    if clue != latest_desc:
+        return None, (
+            "Rambler savedAct does not match the newest acted-info text: "
+            f"{clue!r} != {latest_desc!r}"
+        )
+
+    target = _parse_shut_up_target_text(clue, n_cards=n_cards)
+    if target is None:
+        return None, (
+            "Malformed or out-of-range Rambler shut-up observation: "
+            f"{clue!r}"
+        )
+    refs = latest.get('targets')
+    if (
+        not isinstance(refs, list)
+        or len(refs) != 1
+        or type(refs[0]) is not int
+        or refs[0] != target
+    ):
+        return None, (
+            "Rambler shut-up acted-info must reference exactly its displayed "
+            f"target #{target}; got {refs!r}"
+        )
+    return (target, clue), None
+
+
+def _card_from_rambler_interruption(
+    card: dict,
+    *,
+    n_cards: Optional[int] = None,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    interruption, error = _rambler_interruption_from_memory(
+        card,
+        n_cards=n_cards,
+    )
+    if error is not None:
+        return None, error
+    if interruption is None:
+        return None, None
+    shut_up_target, interruption_text = interruption
+    position = card['position']
+    role = card.get('disguise') or card.get('true_role', '')
+    role_key = role.lower().replace(' ', '_')
+    if role_key == 'jester':
+        return card_jester_silenced(
+            position,
+            shut_up_target=shut_up_target,
+            info_text=interruption_text,
+        ), None
+    return (
+        card_shut_up(
+            position,
+            role,
+            shut_up_target,
+            info_text=interruption_text,
+        ),
+        None,
+    )
+
+
+def _rambler_quote_targets(position: int, n_cards: int) -> list[int]:
+    """Native Rambler2 Day quote refs: predecessor, then successor."""
+    if type(position) is not int or not 1 <= position <= n_cards:
+        raise ValueError(f"Rambler position must be within 1..{n_cards}")
+    predecessor = n_cards if position == 1 else position - 1
+    successor = 1 if position == n_cards else position + 1
+    return [predecessor, successor]
+
+
+def _card_from_rambler_quote(
+    card: dict,
+    *,
+    n_cards: int,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Capture a current Rambler2 Day quote from one consistent event."""
+    position = card.get('position')
+    if type(position) is not int or not 1 <= position <= n_cards:
+        return None, f"Rambler position {position!r} is outside 1..{n_cards}"
+
+    raw_clue = card.get('clue_text')
+    clue = raw_clue.strip() if isinstance(raw_clue, str) else ''
+    if not clue:
+        return None, (
+            "Rambler quote has no nonempty savedAct text; wait for memory to "
+            "settle or enter it manually"
+        )
+    infos = card.get('acted_infos')
+    if not isinstance(infos, list) or not infos:
+        return None, (
+            "Rambler quote has no current acted-info history; wait for memory "
+            "to settle or enter it manually"
+        )
+    latest = infos[-1]
+    if not isinstance(latest, dict):
+        return None, "Latest Rambler acted-info record is malformed"
+    desc = latest.get('desc')
+    latest_desc = desc.strip() if isinstance(desc, str) else ''
+    if not latest_desc:
+        return None, "Latest Rambler acted-info record has no description"
+    if clue != latest_desc:
+        return None, (
+            "Rambler savedAct does not match the newest acted-info text: "
+            f"{clue!r} != {latest_desc!r}"
+        )
+
+    expected_refs = _rambler_quote_targets(position, n_cards)
+    refs = latest.get('targets')
+    if (
+        not isinstance(refs, list)
+        or any(type(ref) is not int for ref in refs)
+        or refs != expected_refs
+    ):
+        return None, (
+            "Rambler quote acted-info refs must be circular predecessor then "
+            f"successor {expected_refs}; got {refs!r}"
+        )
+    return card_rambler_quote(position, clue), None
+
+
+def _card_from_rambler_surface(
+    card: dict,
+    *,
+    n_cards: Optional[int],
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Parse the strict current Rambler surface, if this card has one."""
+    interrupted, error = _card_from_rambler_interruption(
+        card,
+        n_cards=n_cards,
+    )
+    if interrupted is not None or error is not None:
+        return interrupted, error
+    role = card.get('disguise') or card.get('true_role', '')
+    if role.lower().replace(' ', '_') == 'rambler':
+        if n_cards is None:
+            return None, (
+                "Rambler quote capture requires the board size to validate "
+                "its circular neighbor references"
+            )
+        return _card_from_rambler_quote(card, n_cards=n_cards)
+    return None, None
 
 
 def _parse_clue_from_memory(
@@ -2495,12 +3062,16 @@ def _parse_clue_from_memory(
     if role_lower in ACTIVE_ONLY_ROLES and not active_fired:
         return card_no_info(pos, role)
 
-    shut_up_pat = re.search(r'#\s*(\d+)\s*shut\s*up', clue, re.IGNORECASE)
-    if shut_up_pat and role_lower != 'jester':
-        # New Rambler behavior replaces an adjacent truthful character's
-        # normal clue with "#X shut up!". Preserve the target as a global
-        # Rambler constraint instead of parsing the number as role info.
-        return card_shut_up(pos, role, int(shut_up_pat.group(1)))
+    rambler_surface, rambler_error = _card_from_rambler_surface(
+        card,
+        n_cards=n_cards,
+    )
+    if rambler_error is not None:
+        return None
+    if rambler_surface is not None:
+        # The emitted refs were rewritten to [shut_up_target]; they are not
+        # the interrupted role's original selections.
+        return rambler_surface
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
@@ -2565,11 +3136,6 @@ def _parse_clue_from_memory(
             return card_confessor(pos, True)
         if 'good' in clue.lower() or 'clean' in clue.lower():
             return card_confessor(pos, False)
-
-    # --- Rambler: silenced <=> no quote text ---
-    if role_lower == 'rambler':
-        silenced = not clue.strip()
-        return card_rambler(pos, silenced)
 
     # --- Bard: "no Corrupted" or "X card(s) away from Corrupted" ---
     if role_lower == 'bard':
@@ -2666,16 +3232,6 @@ def _parse_clue_from_memory(
         m = re.search(r'(\d+)\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE)
         if m:
             return card_jester(pos, targets, int(m.group(1)))
-        # Silenced Jester (e.g. by Rambler): clue is flavor like "#X shut up!"
-        # or empty. Targets are preserved, but no evil_count is recoverable.
-        # Without this branch the Rust validator's targets/evil_count lookups
-        # returned true unconditionally, masking the constraint (asc78_v6).
-        silenced_pat = re.search(r'#\s*(\d+)\s*shut\s*up', clue, re.IGNORECASE)
-        if silenced_pat or (not clue.strip()):
-            # Guard: only silenced if no numeric evil count is extractable.
-            if not re.search(r'\d+\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE):
-                shut_target = int(silenced_pat.group(1)) if silenced_pat else None
-                return card_jester_silenced(pos, targets, shut_target)
         # "none of them are evil"
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_jester(pos, targets, 0)
@@ -2938,17 +3494,40 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         targets = [int(x) for x in args[2].split(",")]
         return card_jester(pos, targets, int(args[3]))
     elif role == "rambler":
-        # Accepted forms:
+        # Bare current Rambler is passive no-info. Explicit quote/talking is a
+        # current visible Day quote; silenced tokens remain available only for
+        # archived pre-Rambler2 reconstruction:
         #   card rambler 2 silenced            -> silenced, picker unknown
         #   card rambler 2 silenced 6          -> silenced, picker was #6
         #   card rambler 2 talking             -> quote shown
         token = args[2].lower() if len(args) > 2 else ""
-        silenced = token in ("silenced", "quiet", "silent", "true", "yes", "1")
-        silenced_by = int(args[3]) if len(args) > 3 and args[3].isdigit() else None
-        return card_rambler(pos, silenced, silenced_by)
+        if not token or token in ("current", "no_info", "none"):
+            return card_no_info(pos, "Rambler")
+        if token in ("quote", "talking", "spoke"):
+            quote = " ".join(args[3:]).strip() or "<observed Rambler quote>"
+            return card_rambler_quote(pos, quote)
+        if token in ("silenced", "quiet", "silent", "true", "yes", "1"):
+            silenced_by = (
+                int(args[3])
+                if len(args) > 3 and args[3].isdigit()
+                else None
+            )
+            return card_rambler(pos, True, silenced_by)
+        if token in ("unsilenced", "false", "no", "0"):
+            return card_rambler(pos, False)
+        raise ValueError(
+            f"Unknown Rambler observation token {token!r}; use quote/talking, "
+            "current/no_info, or an explicit archived silenced/unsilenced token"
+        )
     elif role in ("shut_up", "shutup"):
         # card shut_up <pos> <apparent_role> <target>
-        return card_shut_up(pos, args[2], int(args[3]))
+        target = int(args[3])
+        if session is not None and target > session.n_cards:
+            raise ValueError(
+                f"Rambler shut-up target #{target} is outside "
+                f"1..{session.n_cards}"
+            )
+        return card_shut_up(pos, args[2], target)
     elif role in ("dreamer", "dreamer2", "dreamer_ambiguous"):
         targets = [int(x) for x in args[2].split(",")]
         roles = [x.strip().replace("_", " ") for x in args[3].split(",")]
@@ -3958,16 +4537,45 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 continue  # Hidden/Dead — skip
 
             parsed = _parse_clue_from_memory(mc, n_cards=session.n_cards)
+            rambler_capture_error = None
+            if parsed is None:
+                _, rambler_capture_error = _card_from_rambler_surface(
+                    mc,
+                    n_cards=session.n_cards,
+                )
             if parsed:
                 existing = entered.get(pos)
                 if existing:
+                    same_role = (
+                        _execution_role_key(existing.apparent_role)
+                        == _execution_role_key(parsed.apparent_role)
+                    )
+                    changed = (
+                        existing.info_parsed != parsed.info_parsed
+                        or existing.info_text != parsed.info_text
+                    )
                     active_update = (
                         (mc.get('uses', 0) > 0 or mc.get('ability_used', False))
-                        and existing.apparent_role == parsed.apparent_role
-                        and existing.info_parsed != parsed.info_parsed
+                        and same_role
+                        and changed
                         and _has_active_clue_result(parsed)
                     )
-                    if not active_update:
+                    # Passive reveal callbacks can settle after an initial
+                    # memory read. Never let an earlier ordinary/no-info entry
+                    # hide a later verified public Rambler replacement.
+                    shut_up_update = (
+                        same_role
+                        and changed
+                        and type(parsed.info_parsed.get('shut_up_target')) is int
+                    )
+                    quote_update = (
+                        same_role
+                        and changed
+                        and parsed.info_parsed.get('quote_observed') is True
+                        and type(existing.info_parsed.get('shut_up_target')) is not int
+                        and existing.info_parsed.get('quote_observed') is not True
+                    )
+                    if not active_update and not shut_up_update and not quote_update:
                         continue
                 session.add_card(parsed)
                 DecisionLog.log_card(parsed)
@@ -3978,6 +4586,12 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 entered[pos] = parsed
                 auto_count += 1
             else:
+                if rambler_capture_error is not None:
+                    role = mc.get('disguise') or mc.get('true_role', '?')
+                    manual_needed.append(
+                        f"  #{pos} {role}: [RECOVERY] {rambler_capture_error}"
+                    )
+                    continue
                 if pos in entered:
                     continue
                 clue = mc.get('clue_text', '')

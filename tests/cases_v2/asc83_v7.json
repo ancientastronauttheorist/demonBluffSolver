@@ -7,7 +7,7 @@
       "apparent_role": "Rambler",
       "info_text": "",
       "info_parsed": {
-        "silenced": false
+        "quote_observed": true
       }
     },
     {
@@ -31,7 +31,7 @@
       "apparent_role": "Rambler",
       "info_text": "",
       "info_parsed": {
-        "silenced": false
+        "quote_observed": true
       }
     },
     {
@@ -146,6 +146,25 @@
   },
   "used_abilities": [],
   "lilis_batch_index": 0,
+  "rambler_rule_version": "rambler2_shut_up",
+  "rambler_shut_up_observations": [
+    {
+      "speaker_position": 2,
+      "shut_up_target": 1
+    },
+    {
+      "speaker_position": 3,
+      "shut_up_target": 4
+    },
+    {
+      "speaker_position": 5,
+      "shut_up_target": 4
+    },
+    {
+      "speaker_position": 9,
+      "shut_up_target": 1
+    }
+  ],
   "name": "asc83_v7",
   "true_evil_positions": {
     "2": "Puppet",

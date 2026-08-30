@@ -119,7 +119,7 @@ STATE = {0: 'None', 5: 'Hidden', 10: 'Alive', 20: 'Dead', 30: 'Revealed'}
 CHAR_TYPE = {0: 'None', 10: 'Villager', 20: 'Outcast', 30: 'Minion', 100: 'Demon'}
 
 # Displayed roles that NEVER show a passive speech bubble.
-# The game's savedAct field (offset 0x158) persists stale clue strings from a
+# The game's savedAct field (offset 0x198) persists stale clue strings from a
 # previous village until overwritten. For display roles with no passive clue,
 # the string is always stale — null it out here so print_board and auto_card
 # see a clean input. Matches NO_INFO_ROLES + ACTIVE_ONLY_ROLES in
@@ -470,7 +470,7 @@ class MemoryReader:
         return results
 
     def _read_saved_act(self, char_ptr):
-        """Read the cached clue text string (savedAct at 0x158)."""
+        """Read the cached clue text string (savedAct at 0x198)."""
         str_ptr = self._read_ptr(char_ptr + CHAR_SAVED_ACT_OFFSET)
         if not str_ptr or str_ptr < 0x10000:
             return None

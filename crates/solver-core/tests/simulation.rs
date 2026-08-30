@@ -1393,6 +1393,99 @@ fn chancellor_witness_v2_observations_parse_as_positive_targets() {
 }
 
 #[test]
+fn rambler_current_v2_observations_survive_incremental_and_final_solves() {
+    for (case_name, expected_observations) in [
+        ("asc82_v5", vec![(1, 10)]),
+        ("asc83_v7", vec![(2, 1), (3, 4), (5, 4), (9, 1)]),
+    ] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).unwrap();
+        let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+        let case = TestCase::from_json(&value).unwrap();
+        assert_eq!(
+            case.state.rambler_rule_version.as_deref(),
+            Some("rambler2_shut_up"),
+        );
+
+        let ledger: Vec<(u8, u8)> = case
+            .state
+            .rambler_shut_up_observations
+            .iter()
+            .map(|observation| {
+                (observation.speaker_position, observation.shut_up_target)
+            })
+            .collect();
+        assert_eq!(
+            ledger, expected_observations,
+            "{case_name} must retain the exact append-only public observation order",
+        );
+
+        let observed: Vec<(u8, u8)> = case
+            .state
+            .cards
+            .iter()
+            .filter_map(|card| {
+                Some((
+                    card.position,
+                    card.info_parsed.get("shut_up_target")?.as_u64()? as u8,
+                ))
+            })
+            .collect();
+        assert_eq!(observed, expected_observations);
+
+        let result = solve(&case.state);
+        assert!(
+            result.n_surviving > 0,
+            "{case_name} final current-Rambler observations eliminated every world",
+        );
+        let true_evil_positions: HashMap<u8, String> = value
+            .get("true_evil_positions")
+            .and_then(serde_json::Value::as_object)
+            .unwrap()
+            .iter()
+            .map(|(position, role)| {
+                (
+                    position.parse::<u8>().unwrap(),
+                    role.as_str().unwrap().to_string(),
+                )
+            })
+            .collect();
+        assert!(result.surviving_scenarios.iter().any(|scenario| {
+            let represented_count = scenario.evil_positions.len()
+                + usize::from(
+                    scenario.puppet_position.is_some()
+                        && !scenario
+                            .evil_positions
+                            .contains_key(&scenario.puppet_position.unwrap()),
+                );
+            represented_count == true_evil_positions.len()
+                && true_evil_positions.iter().all(|(position, role)| {
+                    if normalize_role(role) == "puppet" {
+                        scenario.puppet_position == Some(*position)
+                    } else {
+                        scenario
+                            .evil_positions
+                            .get(position)
+                            .is_some_and(|candidate| {
+                                normalize_role(candidate) == normalize_role(role)
+                            })
+                    }
+                })
+        }), "{case_name} exact postmortem evil-role world was pruned");
+        if case_name == "asc83_v7" {
+            assert_eq!(
+                result.n_surviving, 1,
+                "asc83's two real/two fake Rambler observations should retain its unique world",
+            );
+        }
+
+        if let SimResult::ConstraintFailure { detail, .. } = simulate_game(&value) {
+            panic!("{case_name} incremental current-Rambler truth eliminated: {detail}");
+        }
+    }
+}
+
+#[test]
 fn execution_branches_ordinary_and_drunk_damage_with_revealed_roles() {
     let ordinary = Scenario::default();
     let mut drunk = Scenario::default();
