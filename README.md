@@ -91,6 +91,7 @@ The live build as of 2026-05-05 changed several solver-relevant rules:
 - **Alchemist:** cannot be corrupted and now reports how many corrupted characters were around them at the start of the round, before cure. Zero wording such as `NO one was Corrupted around me` is parsed as `corrupted_count: 0`.
 - **Baa:** managed `Imp` hides one existing Outcast identity in deck view at Start. Any Baa death reveals that deck-strip identity; no board card is flipped and the HUD counts are unchanged.
 - **Shaman:** managed `Illuzionist` selects an ordered apparent-Villager pair after Plague Doctor and before Alchemist. The source stays put; the destination is overwritten and immediately fires the copied role's Start action with its preserved status/runtime state. Shaman independently attempts `MessedUpByEvil` on both endpoints, so resistance can suppress either marker. The solver models the ordered identity trace and copied-Alchemist timing; copied Baker/runtime-data composition remains deliberately opaque. Managed `Cipher` is Witch, not Shaman.
+- **Plague Doctor:** managed `Puzzlemaster` checks raw active Corrupted status. Its active picker includes self and dead cards; self always displays clean. Corrupted truth results uniformly reveal registered/runtime Evil (including Wretch), while Bluff inverts the status and uniformly names Good as Evil. The strategy scores this stochastic output instead of inventing a lowest-position reveal.
 - **Dreamer:** the public asset picks exactly two targets and immediately returns a role pair like `Among #X, #Y there is: RoleA or RoleB`, or a Wretch/Cabbage result. `next` can auto-fire it when the solver recommends two targets, while still refusing targets with unused active abilities. The separate managed `Dreamer2` class is not bound by current gameplay assets.
 - **Deckbuilding mode:** experimental and not the primary supported live loop yet; current automation is focused on Standard ascension play.
 
@@ -129,7 +130,7 @@ python game_loop.py repl
 #   auto_card                        - auto-enter parseable cards from memory reader
 #   card <role> <pos> <info>         - enter a revealed card
 #   ability_used <pos>               - mark an active ability as spent
-#   pd_check <pd_pos> <target> ...   - enter Plague Doctor ability result
+#   pd_check <pd_pos> <target> ...   - recover/manual-enter the public PD result
 #   slayer_result <pos> <target> ... - enter Slayer ability result
 #   next                             - run solver + auto-use/auto-execute recommended action
 #   next --plan                      - print recommendation without executing

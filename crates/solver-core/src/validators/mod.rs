@@ -45,8 +45,9 @@ fn matches_executed_good_corruption(
     pos: u8,
     was_corrupted: bool,
 ) -> bool {
-    // Drunk is intrinsically Corrupted for status clues but is observed as
-    // clean on the Plague Doctor/execution-bookkeeping surface.
+    // Execution bookkeeping reports Drunk clean even when its active
+    // Corrupted status still affects role hooks. Plague Doctor does not share
+    // this projection: its native callback reads the active status directly.
     if scenario.drunk_position == Some(pos)
         || (scenario.chancellor_added_outcast_position() == Some(pos)
             && scenario
@@ -1342,37 +1343,73 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
 }
 
 fn validate_pd_ability(scenario: &Scenario, state: &GameState) -> bool {
+    let mut used_pd_actors = HashSet::new();
     for result in &state.pd_ability_results {
         let pd_pos = result.pd_pos;
         let target = result.target;
         let claimed_corrupted = result.is_corrupted;
         let evil_revealed = result.evil_revealed;
 
-        let pd_lies = truth_status(pd_pos, scenario, state) == TruthStatus::Lying;
-        // Drunk carries the corrupted status for clue/truth purposes, but the
-        // live build's Plague Doctor check reports Drunk as Not Corrupted.
-        let target_is_drunk = effective_role_at(target, scenario, state)
-            .is_some_and(|role| normalize_role(&role) == "drunk");
-        let actual_corrupted = scenario.corrupted.contains(&target) && !target_is_drunk;
+        if pd_pos == 0
+            || pd_pos > state.n_cards
+            || target == 0
+            || target > state.n_cards
+        {
+            return false;
+        }
+        if !used_pd_actors.insert(pd_pos) {
+            // The shipped ability is once-use. Repeated evidence for one
+            // apparent actor is malformed rather than a second observation.
+            return false;
+        }
+        let Some(actor) = state.card_at(pd_pos) else {
+            return false;
+        };
+        if !knowledge_base::is_plague_doctor(&actor.apparent_role) {
+            // Validate the visible role, not the underlying scenario role:
+            // an Evil character bluffing as PD is a legal lying actor.
+            return false;
+        }
 
-        if pd_lies {
-            if claimed_corrupted == actual_corrupted { return false; }
-            if claimed_corrupted {
-                if let Some(er) = evil_revealed {
-                    if effective_alignment(er, scenario, state) == EffectiveAlignment::Evil {
-                        return false;
-                    }
-                }
+        let pd_lies = truth_status(pd_pos, scenario, state) == TruthStatus::Lying;
+        let actual_corrupted = scenario.corrupted.contains(&target);
+
+        // ConjourInfo always formats a self-check as clean, even when the
+        // truthful/bluff callback already drew a hidden result pointer.
+        let expected_corrupted = target != pd_pos
+            && if pd_lies {
+                !actual_corrupted
+            } else {
+                actual_corrupted
+            };
+        if claimed_corrupted != expected_corrupted {
+            return false;
+        }
+
+        if !claimed_corrupted {
+            // The visible clean branch has no revealed character.
+            if evil_revealed.is_some() {
+                return false;
             }
+            continue;
+        }
+
+        let Some(revealed) = evil_revealed else {
+            return false;
+        };
+        if revealed == 0 || revealed > state.n_cards {
+            return false;
+        }
+
+        // Truth chooses uniformly from runtime/apparent Evil; Bluff chooses
+        // uniformly from runtime/apparent Good and falsely labels it Evil.
+        let expected_alignment = if pd_lies {
+            EffectiveAlignment::Good
         } else {
-            if claimed_corrupted != actual_corrupted { return false; }
-            if claimed_corrupted {
-                if let Some(er) = evil_revealed {
-                    if effective_alignment(er, scenario, state) != EffectiveAlignment::Evil {
-                        return false;
-                    }
-                }
-            }
+            EffectiveAlignment::Evil
+        };
+        if effective_alignment(revealed, scenario, state) != expected_alignment {
+            return false;
         }
     }
     true
@@ -2254,7 +2291,7 @@ mod tests {
     }
 
     #[test]
-    fn drunk_counts_corrupted_but_pd_reports_not_corrupted() {
+    fn ordinary_drunk_status_is_visible_to_pd_but_execution_projects_clean() {
         let pd = make_card(7, "Plague_Doctor", json!({}));
         let druid = make_card(6, "Druid", json!({"targets": [1, 2, 7], "found_outcast": null}));
         let bard = make_card(5, "Bard", json!({"corruption_distance": 1}));
@@ -2262,11 +2299,12 @@ mod tests {
         state.pd_ability_results.push(crate::types::PdAbilityResult {
             pd_pos: 7,
             target: 6,
-            is_corrupted: false,
-            evil_revealed: None,
+            is_corrupted: true,
+            evil_revealed: Some(2),
         });
 
         let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Pooka".to_string());
         scenario.drunk_position = Some(6);
         scenario.corrupted.insert(6);
 
@@ -2367,7 +2405,7 @@ mod tests {
     }
 
     #[test]
-    fn pd_reports_trace_only_drunk_clean_but_ordinary_corruption_normally() {
+    fn resistant_generated_drunk_is_clean_but_active_corruption_is_not() {
         let mut state = base_state(3, vec![make_card(3, "Plague_Doctor", json!({}))]);
         state.pd_ability_results.push(crate::types::PdAbilityResult {
             pd_pos: 3,
@@ -2386,8 +2424,124 @@ mod tests {
         assert!(!validate_pd_ability(&drunk, &state));
 
         let mut scout = empty_scenario();
+        scout.evil_positions.insert(2, "Pooka".to_string());
         scout.corrupted.insert(1);
+        state.pd_ability_results[0].evil_revealed = Some(2);
         assert!(validate_pd_ability(&scout, &state));
+    }
+
+    #[test]
+    fn pd_enforces_native_truth_bluff_and_visible_result_shapes() {
+        let mut state = base_state(5, vec![make_card(1, "Plague_Doctor", json!({}))]);
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 4,
+            is_corrupted: true,
+            evil_revealed: Some(2),
+        });
+
+        let mut truthful = empty_scenario();
+        truthful.evil_positions.insert(2, "Pooka".to_string());
+        truthful.corrupted.insert(4);
+        assert!(validate_pd_ability(&truthful, &state));
+
+        state.pd_ability_results[0].evil_revealed = None;
+        assert!(!validate_pd_ability(&truthful, &state));
+        state.pd_ability_results[0].evil_revealed = Some(5);
+        assert!(!validate_pd_ability(&truthful, &state));
+        state.pd_ability_results[0].is_corrupted = false;
+        state.pd_ability_results[0].evil_revealed = Some(2);
+        assert!(!validate_pd_ability(&truthful, &state));
+
+        let mut bluff = truthful.clone();
+        bluff.evil_positions.insert(1, "Minion".to_string());
+        bluff.corrupted.remove(&4);
+        state.pd_ability_results[0].is_corrupted = true;
+        state.pd_ability_results[0].evil_revealed = Some(5);
+        assert!(validate_pd_ability(&bluff, &state));
+        state.pd_ability_results[0].evil_revealed = Some(2);
+        assert!(!validate_pd_ability(&bluff, &state));
+
+        bluff.corrupted.insert(4);
+        state.pd_ability_results[0].is_corrupted = false;
+        state.pd_ability_results[0].evil_revealed = None;
+        assert!(validate_pd_ability(&bluff, &state));
+    }
+
+    #[test]
+    fn pd_rejects_non_pd_actors_and_duplicate_once_use_evidence() {
+        let mut state = base_state(4, vec![make_card(1, "Bard", json!({}))]);
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 3,
+            is_corrupted: false,
+            evil_revealed: None,
+        });
+        let scenario = empty_scenario();
+        assert!(!validate_pd_ability(&scenario, &state));
+
+        state.cards[0].apparent_role = "Plague_Doctor".to_string();
+        assert!(validate_pd_ability(&scenario, &state));
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 4,
+            is_corrupted: false,
+            evil_revealed: None,
+        });
+        assert!(!validate_pd_ability(&scenario, &state));
+    }
+
+    #[test]
+    fn pd_self_check_is_visibly_clean_regardless_of_truth_or_status() {
+        let mut state = base_state(3, vec![make_card(1, "Plague_Doctor", json!({}))]);
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 1,
+            is_corrupted: false,
+            evil_revealed: None,
+        });
+
+        let truthful_clean = empty_scenario();
+        assert!(validate_pd_ability(&truthful_clean, &state));
+
+        let mut corrupted_good = empty_scenario();
+        corrupted_good.corrupted.insert(1);
+        assert!(validate_pd_ability(&corrupted_good, &state));
+
+        let mut bluff = empty_scenario();
+        bluff.evil_positions.insert(1, "Minion".to_string());
+        assert!(validate_pd_ability(&bluff, &state));
+
+        state.pd_ability_results[0].is_corrupted = true;
+        state.pd_ability_results[0].evil_revealed = Some(2);
+        assert!(!validate_pd_ability(&truthful_clean, &state));
+        assert!(!validate_pd_ability(&corrupted_good, &state));
+        assert!(!validate_pd_ability(&bluff, &state));
+    }
+
+    #[test]
+    fn pd_truthful_reveal_pool_uses_wretch_registered_alignment() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Plague_Doctor", json!({})),
+                make_card(3, "Wretch", json!({})),
+            ],
+        );
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 2,
+            is_corrupted: true,
+            evil_revealed: Some(3),
+        });
+        let mut scenario = empty_scenario();
+        scenario.corrupted.insert(2);
+
+        assert_eq!(
+            effective_alignment(3, &scenario, &state),
+            EffectiveAlignment::Evil,
+        );
+        assert!(validate_pd_ability(&scenario, &state));
     }
 
     #[test]

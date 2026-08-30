@@ -23,7 +23,7 @@ from strategy import (
     _druid_ground_truth,
     _execution_reveal_outcome,
     _execution_observation_key,
-    _pd_ground_truth,
+    _pd_observation_likelihoods,
     _recommend_slayer,
     _wretch_kill_probability,
 )
@@ -227,19 +227,19 @@ class ChancellorTraceTests(unittest.TestCase):
 
     def test_resistant_generated_drunk_keeps_truth_pd_risk_and_damage_surfaces(self):
         state = GameState(
-            n_cards=1,
+            n_cards=3,
             deck=DeckComposition([], ["Drunk"], ["Chancellor"], []),
-            cards=[CardInfo(1, "Knight")],
+            cards=[CardInfo(1, "Knight"), CardInfo(2, "Plague_Doctor")],
             hp=5,
             wrong_exec_cost=5,
         )
         resistant = Scenario(
-            {},
+            {3: "Pooka"},
             chancellor_trace=ChancellorTrace([1], 1, "Drunk"),
             chancellor_conversion=1,
         )
         statused = Scenario(
-            {},
+            {3: "Pooka"},
             corrupted={1},
             drunk_position=1,
             chancellor_trace=ChancellorTrace([1], 1, "Drunk"),
@@ -248,8 +248,14 @@ class ChancellorTraceTests(unittest.TestCase):
         result = SolverResult([], [], [], 1, 1, [resistant])
 
         self.assertEqual(truth_status(1, resistant, state), TruthStatus.LYING)
-        self.assertEqual(_pd_ground_truth(1, resistant, state), (False, None))
-        self.assertEqual(_pd_ground_truth(1, statused, state), (False, None))
+        self.assertEqual(
+            _pd_observation_likelihoods(1, 2, resistant, state),
+            {("clean",): 1.0},
+        )
+        self.assertEqual(
+            _pd_observation_likelihoods(1, 2, statused, state),
+            {("corrupted", 3): 1.0},
+        )
         self.assertEqual(_corruption_risk(1, result, state), 1.0)
 
         resistant_outcome = _execution_reveal_outcome(1, resistant, state)
@@ -269,21 +275,27 @@ class ChancellorTraceTests(unittest.TestCase):
             _compute_position_fingerprint(1, statused, state),
         )
 
-        ordinary_corrupted = Scenario({}, corrupted={1})
-        self.assertEqual(_pd_ground_truth(1, ordinary_corrupted, state), (True, None))
+        ordinary_corrupted = Scenario({3: "Pooka"}, corrupted={1})
+        self.assertEqual(
+            _pd_observation_likelihoods(1, 2, ordinary_corrupted, state),
+            {("corrupted", 3): 1.0},
+        )
 
-    def test_pd_ground_truth_does_not_depend_on_evil_map_insertion_order(self):
+    def test_pd_reveal_distribution_does_not_depend_on_evil_map_insertion_order(self):
         state = GameState(
-            n_cards=3,
+            n_cards=4,
             deck=DeckComposition([], [], [], []),
-            cards=[],
+            cards=[CardInfo(4, "Plague_Doctor")],
         )
         scenario = Scenario(
             {2: "Witch", 1: "Pooka"},
             corrupted={3},
         )
 
-        self.assertEqual(_pd_ground_truth(3, scenario, state), (True, 1))
+        self.assertEqual(
+            _pd_observation_likelihoods(3, 4, scenario, state),
+            {("corrupted", 1): 0.5, ("corrupted", 2): 0.5},
+        )
 
 
 if __name__ == "__main__":

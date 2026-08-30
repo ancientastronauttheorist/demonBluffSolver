@@ -122,7 +122,9 @@ class GameState:
     executed: list[int] = field(default_factory=list)  # Already executed positions
     confirmed_evil: list[int] = field(default_factory=list)
     confirmed_good: list[int] = field(default_factory=list)
-    pd_corruption_target: Optional[int] = None  # If PD target is known
+    # Hidden native Start history. Keep null during live solving; populated
+    # only by an explicit offline fixture or post-mortem reconstruction.
+    pd_corruption_target: Optional[int] = None
     executed_evil_roles: dict[int, str] = field(default_factory=dict)  # pos -> evil role name (e.g. {2: "Chancellor"})
     slayer_results: list[dict] = field(default_factory=list)  # [{slayer_pos, target_pos, killed, revealed_role?}]
     night_kills: list[int] = field(default_factory=list)  # Positions killed by Lilis night (unrevealed)

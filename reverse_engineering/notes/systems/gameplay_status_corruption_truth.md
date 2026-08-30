@@ -303,7 +303,9 @@ At `Day` (trigger 30), the role stores `charRef`, starts a one-character picker,
 then combines `CharacterPicked` and `StopPick` handlers onto the two static
 picker delegates. The picker starts before those subscriptions, and repeated
 Day calls can combine additional handlers until external cleanup. The eventual
-callback and clue-building bodies are outside this slice.
+callbacks, alignment pools, exact clue construction, acted-information shape,
+and raw-status Drunk boundary are closed by the dedicated
+[Plague Doctor role audit](../roles/gameplay_role_plague_doctor.md).
 
 ### Drunk self-corruption and bluff selection
 

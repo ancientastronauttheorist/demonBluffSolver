@@ -14,6 +14,9 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Mezepheles": "Puppeteer",
             "Puzzlemaster": "Plague Doctor",
             "Skinwalker": "Mutant",
+            # Spy is a distinct native Minion implementation, not the managed
+            # class bound by the public Plague Doctor CharacterData.
+            "Spy": "Spy",
         }
 
         for internal_name, display_name in expected.items():
@@ -26,7 +29,6 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Imp_58992273": "Baa",
             "Marionette_21595": "Twin Minion",
             "Mezepheles_09511163": "Puppeteer",
-            "Puzzlemaster_49312486": "Plague Doctor",
             "Plague Doctor_49312486": "Plague Doctor",
             "Shaman_26945607": "Shaman",
             "Witch_25286521": "Witch",

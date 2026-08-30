@@ -782,11 +782,20 @@ class GameSession:
             f"#{pos} {reason} — confirmed good, no HP loss",
         )
 
-    def set_pd_target(self, pos: int):
-        self.pd_corruption_target = pos
-
     def add_pd_ability_result(self, pd_pos: int, target: int, is_corrupted: bool,
                               evil_revealed: Optional[int] = None):
+        if any(result.get("pd_pos") == pd_pos for result in self.pd_ability_results):
+            raise ValueError(f"Plague Doctor #{pd_pos} already has a recorded result")
+        actor = next((card for card in self.cards if card.position == pd_pos), None)
+        actor_role = (
+            actor.apparent_role.lower().replace(" ", "_")
+            if actor is not None else None
+        )
+        if actor_role != "plague_doctor":
+            shown = actor.apparent_role if actor is not None else "unrevealed"
+            raise ValueError(
+                f"Position #{pd_pos} is {shown}, not an apparent Plague Doctor"
+            )
         self.pd_ability_results.append({
             "pd_pos": pd_pos,
             "target": target,
@@ -794,6 +803,19 @@ class GameSession:
             "evil_revealed": evil_revealed,
         })
         self.mark_ability_used(pd_pos)
+
+    def clear_pd_ability_result(self, pd_pos: int) -> int:
+        """Remove recorded PD evidence so a mistaken UI entry can be corrected."""
+        before = len(self.pd_ability_results)
+        self.pd_ability_results = [
+            result
+            for result in self.pd_ability_results
+            if result.get("pd_pos") != pd_pos
+        ]
+        removed = before - len(self.pd_ability_results)
+        if removed and pd_pos in self.used_abilities:
+            self.used_abilities.remove(pd_pos)
+        return removed
 
     def mark_ability_used(self, pos: int):
         if pos not in self.used_abilities:
@@ -1181,8 +1203,9 @@ class GameSession:
         """Perform in-game active-ability activation + target clicks + auto-parse.
 
         Template: auto_execute, but for active abilities like Jester/Dreamer/FT/Judge.
-        Slayer and Plague_Doctor use dedicated commands (slayer_result, pd_check)
-        and are explicitly rejected here.
+        Slayer still uses its dedicated `slayer_result` command. Plague Doctor
+        is parsed from its exact public speech text and recorded through the
+        same state path as `pd_check`.
 
         Flow:
           1. Click active card → game enters target-selection mode
@@ -1204,14 +1227,33 @@ class GameSession:
         targets = list(action.targets or [])
         ability_name = (action.ability_name or "").lower().replace(" ", "_")
 
-        # Slayer and Plague Doctor use dedicated result-entry commands.
-        if ability_name in ("slayer", "plague_doctor"):
+        # Slayer's kill/death result still needs its dedicated execution path.
+        if ability_name == "slayer":
             return {"success": False, "info_parsed": None,
-                    "error": f"{action.ability_name} requires manual handling (use slayer_result/pd_check)"}
+                    "error": f"{action.ability_name} requires manual handling (use slayer_result)"}
 
         if ability_name == "dreamer" and len(targets) != 2:
             return {"success": False, "info_parsed": None,
                     "error": f"Dreamer requires exactly 2 targets, got {targets}"}
+        if ability_name == "plague_doctor" and len(targets) != 1:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Plague Doctor requires exactly 1 target, got {targets}"}
+        if ability_name == "plague_doctor":
+            actor = next((card for card in self.cards if card.position == pos), None)
+            actor_role = (
+                actor.apparent_role.lower().replace(" ", "_")
+                if actor is not None else None
+            )
+            if actor_role != "plague_doctor":
+                shown = actor.apparent_role if actor is not None else "unrevealed"
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Position #{pos} is {shown}, not an apparent "
+                        "Plague Doctor"
+                    ),
+                }
 
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
@@ -1228,6 +1270,10 @@ class GameSession:
 
         from knowledge_base import get_card
         for t in targets:
+            # Native PD explicitly supports self-targeting. Once its picker is
+            # active, the repeated card click is routed to that picker.
+            if ability_name == "plague_doctor" and t == pos:
+                continue
             if t in self.used_abilities:
                 continue
             target_card_entry = next((c for c in self.cards if c.position == t), None)
@@ -1312,7 +1358,45 @@ class GameSession:
             return {"success": False, "info_parsed": None,
                     "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
 
-        # Step 4: Parse the result via the existing auto_card pipeline
+        # Step 4a: PD has a distinct result object rather than passive CardInfo.
+        if ability_name == "plague_doctor":
+            pd_result, parse_error = _parse_pd_ability_result_from_memory(
+                target_card_data,
+                ability_pos=pos,
+                expected_target=targets[0],
+                n_cards=self.n_cards,
+            )
+            if parse_error:
+                return {"success": False, "info_parsed": None,
+                        "error": parse_error}
+            try:
+                self.add_pd_ability_result(
+                    pos,
+                    pd_result["target"],
+                    pd_result["is_corrupted"],
+                    pd_result["evil_revealed"],
+                )
+            except ValueError as exc:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": str(exc),
+                }
+            self.save()
+            DecisionLog.log_ability_used(pos)
+            DecisionLog.log_custom(
+                "Plague Doctor Result",
+                f"#{pos} -> #{pd_result['target']}: "
+                + (f"Corrupted, #{pd_result['evil_revealed']} is Evil"
+                   if pd_result["is_corrupted"] else "Not Corrupted"),
+            )
+            print(
+                f"  [auto_ability] Plague Doctor #{pos} -> {targets}: "
+                f"{pd_result}"
+            )
+            return {"success": True, "info_parsed": pd_result, "error": None}
+
+        # Step 4b: Parse ordinary clue-producing abilities via auto_card.
         parsed = _parse_clue_from_memory(target_card_data)
         if parsed is None:
             return {"success": False, "info_parsed": None,
@@ -1350,12 +1434,12 @@ class GameSession:
         action = print_recommendation(state, result, self.used_abilities)
         DecisionLog.log_recommendation(action)
 
-        # Route USE_ABILITY to auto_use_ability. Slayer and Plague Doctor still
-        # use dedicated result-entry commands.
+        # Route USE_ABILITY to auto_use_ability. Slayer still uses its
+        # dedicated kill-result command.
         if action.action_type == "use_ability":
             ability_name_lower = (action.ability_name or "").lower().replace(" ", "_")
-            if ability_name_lower in ("slayer", "plague_doctor"):
-                print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with slayer_result/pd_check.")
+            if ability_name_lower == "slayer":
+                print(f"\n  [auto_next] {action.ability_name} requires manual handling — use ability_used to skip, or fire the ability in-game and record with slayer_result.")
                 return action, result, None
             print(f"\n  === AUTO-ABILITY #{action.position} ({action.ability_name}) -> targets {action.targets} ===")
             exec_result = self.auto_use_ability(action)
@@ -1363,7 +1447,14 @@ class GameSession:
                 print(f"  AUTO-ABILITY SUCCESS: {action.ability_name} #{action.position} result recorded")
             else:
                 print(f"  AUTO-ABILITY FAILED: {exec_result['error']}")
-                print(f"  [RECOVERY] Re-run 'next --plan' to see state; enter manually via 'card {ability_name_lower} {action.position} ...' or `ability_used {action.position}`")
+                if ability_name_lower == "plague_doctor":
+                    print(
+                        "  [RECOVERY] Read the public speech bubble and enter "
+                        f"it with `pd_check {action.position} <target> ...`; use "
+                        f"`ability_used {action.position}` only if no result exists"
+                    )
+                else:
+                    print(f"  [RECOVERY] Re-run 'next --plan' to see state; enter manually via 'card {ability_name_lower} {action.position} ...' or `ability_used {action.position}`")
             return action, result, exec_result
 
         # Safety checks for auto-execution
@@ -1458,7 +1549,10 @@ class GameSession:
         if self.executed:
             print(f"  Executed: {['#'+str(p) for p in self.executed]}")
         if self.pd_corruption_target:
-            print(f"  PD corruption target: #{self.pd_corruption_target}")
+            print(
+                "  PD corruption target (fixture/post-mortem only): "
+                f"#{self.pd_corruption_target}"
+            )
         print()
 
     # -- Game actions (wraps game_utils) --
@@ -1691,6 +1785,121 @@ def _parse_role_list(spec: str) -> list[str]:
         key = token.lower().replace(" ", "_")
         out.append(canonical_by_key.get(key, token.replace("_", " ").title()))
     return out
+
+
+def _parse_pd_ability_result_from_memory(
+    card: dict,
+    *,
+    ability_pos: int,
+    expected_target: int,
+    n_cards: int,
+) -> tuple[Optional[dict], Optional[str]]:
+    """Parse PD's exact public result while honoring the UI/memory boundary.
+
+    The first acted-info reference must be the character the automation
+    clicked. The visible speech text supplies the status and any revealed
+    position. A native self-check can retain a hidden second reference even
+    though it displays clean; this parser deliberately ignores that reference.
+    """
+    import re
+
+    if not 1 <= ability_pos <= n_cards:
+        return None, (
+            f"Plague Doctor position #{ability_pos} is outside 1..{n_cards}"
+        )
+    if not 1 <= expected_target <= n_cards:
+        return None, (
+            f"Plague Doctor target #{expected_target} is outside 1..{n_cards}"
+        )
+
+    clue = (card.get('clue_text') or '').strip()
+    infos = card.get('acted_infos') or []
+    targets = infos[0].get('targets', []) if infos else []
+    if not targets:
+        return None, "Plague Doctor result has no recorded picked target"
+    if any(not isinstance(position, int) or not 1 <= position <= n_cards
+           for position in targets):
+        return None, (
+            f"Plague Doctor memory references must all be within 1..{n_cards}: "
+            f"{targets}"
+        )
+    if targets[0] != expected_target:
+        return None, (
+            f"Plague Doctor picked-target mismatch: clicked #{expected_target}, "
+            f"memory recorded #{targets[0]}"
+        )
+
+    corrupted = re.fullmatch(
+        r'#\s*(\d+)\s+is\s+Evil\s*#\s*(\d+)\s+is\s+Corrupted',
+        clue,
+        re.IGNORECASE,
+    )
+    if corrupted:
+        evil_revealed = int(corrupted.group(1))
+        clue_target = int(corrupted.group(2))
+        if expected_target == ability_pos:
+            return None, (
+                "Native Plague Doctor self-check cannot display a Corrupted result"
+            )
+        if not 1 <= evil_revealed <= n_cards or not 1 <= clue_target <= n_cards:
+            return None, (
+                f"Plague Doctor speech positions must be within 1..{n_cards}"
+            )
+        if clue_target != expected_target:
+            return None, (
+                f"Plague Doctor clue-target mismatch: clicked #{expected_target}, "
+                f"speech named #{clue_target}"
+            )
+        if len(targets) != 2:
+            return None, (
+                "Plague Doctor Corrupted result must contain exactly the "
+                "picked and revealed character references"
+            )
+        if targets[1] != evil_revealed:
+            return None, (
+                f"Plague Doctor revealed-position mismatch: speech named "
+                f"#{evil_revealed}, memory recorded #{targets[1]}"
+            )
+        return {
+            "target": expected_target,
+            "is_corrupted": True,
+            "evil_revealed": evil_revealed,
+        }, None
+
+    clean = re.fullmatch(
+        r'#\s*(\d+)\s+is\s+Not\s+Corrupted',
+        clue,
+        re.IGNORECASE,
+    )
+    if clean:
+        clue_target = int(clean.group(1))
+        if not 1 <= clue_target <= n_cards:
+            return None, (
+                f"Plague Doctor speech position must be within 1..{n_cards}"
+            )
+        if clue_target != expected_target:
+            return None, (
+                f"Plague Doctor clue-target mismatch: clicked #{expected_target}, "
+                f"speech named #{clue_target}"
+            )
+        # Only self can carry a hidden non-null result reference while the
+        # public formatter still displays clean. Ordinary clean callbacks
+        # append null, which memory_reader intentionally omits.
+        target_is_self = expected_target == ability_pos
+        if not target_is_self and len(targets) != 1:
+            return None, (
+                "Non-self Plague Doctor clean result must contain only the "
+                "picked character reference"
+            )
+        if target_is_self and len(targets) > 2:
+            return None, "Plague Doctor result contains too many character references"
+        return {
+            "target": expected_target,
+            "is_corrupted": False,
+            "evil_revealed": None,
+        }, None
+
+    return None, f"Unrecognized Plague Doctor result text: {clue!r}"
 
 
 def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
@@ -2369,6 +2578,77 @@ def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
     print(f"  Test case saved: tests/cases_v2/{name}.json")
 
 
+def _parse_pd_check_args(
+    args: list[str],
+    n_cards: int,
+    used_abilities: list[int] | set[int] | tuple[int, ...] = (),
+    apparent_roles: Optional[dict[int, str]] = None,
+) -> tuple[Optional[dict], Optional[str]]:
+    """Validate CLI PD evidence before it can mutate the live session."""
+    if len(args) < 3:
+        return None, (
+            "Usage: pd_check <pd_pos> <target> "
+            "<clean|corrupted [evil_pos]>"
+        )
+    try:
+        pd_pos = int(args[0])
+        target = int(args[1])
+    except ValueError:
+        return None, "Plague Doctor and target positions must be integers"
+
+    if not 1 <= pd_pos <= n_cards:
+        return None, f"Plague Doctor position #{pd_pos} is outside 1..{n_cards}"
+    if not 1 <= target <= n_cards:
+        return None, f"Plague Doctor target #{target} is outside 1..{n_cards}"
+    if pd_pos in used_abilities:
+        return None, f"Plague Doctor #{pd_pos} ability is already recorded as used"
+    if apparent_roles is not None:
+        apparent_role = apparent_roles.get(pd_pos)
+        role_key = (
+            apparent_role.lower().replace(" ", "_")
+            if apparent_role is not None else None
+        )
+        if role_key != "plague_doctor":
+            shown = apparent_role if apparent_role is not None else "unrevealed"
+            return None, (
+                f"Position #{pd_pos} is {shown}, not an apparent Plague Doctor"
+            )
+
+    status = args[2].lower()
+    if status == "clean":
+        if len(args) != 3:
+            return None, "Clean PD result must not include an evil position"
+        return {
+            "pd_pos": pd_pos,
+            "target": target,
+            "is_corrupted": False,
+            "evil_revealed": None,
+        }, None
+
+    if status == "corrupted":
+        if len(args) != 4:
+            return None, "Corrupted PD result requires exactly one evil position"
+        if target == pd_pos:
+            return None, "Native Plague Doctor self-check always displays Not Corrupted"
+        try:
+            evil_revealed = int(args[3])
+        except ValueError:
+            return None, "Plague Doctor revealed position must be an integer"
+        if not 1 <= evil_revealed <= n_cards:
+            return None, (
+                f"Plague Doctor revealed position #{evil_revealed} is outside "
+                f"1..{n_cards}"
+            )
+        return {
+            "pd_pos": pd_pos,
+            "target": target,
+            "is_corrupted": True,
+            "evil_revealed": evil_revealed,
+        }, None
+
+    return None, f"Unknown PD check status: {status} (use 'corrupted' or 'clean')"
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python game_loop.py <command> [args...]")
@@ -2390,9 +2670,9 @@ def main():
         print("  execute <pos> good blocked            Knight immunity (no HP loss, confirmed good)")
         print("  execute <pos> good <clean|corrupted> [revealed_role]")
         print("                                           Wrong exec with optional UI-observed role")
-        print("  pd_target <pos>                       Set Plague Doctor corruption target")
         print("  pd_check <pd_pos> <target> corrupted <evil_pos>  PD found corruption + evil")
         print("  pd_check <pd_pos> <target> clean                 PD found no corruption")
+        print("  pd_clear <pd_pos>                    Remove a mistaken PD result before re-entry")
         print("  set_hp <hp> [wrong_exec_cost]         Update HP and wrong execution cost")
         print("  solve                                 Run solver")
         print("  status                                Print session state")
@@ -3170,28 +3450,63 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 _baa_post_death_deck_refresh(session)
         return None
 
-    if cmd == "pd_target":
-        pos = int(args[0])
-        session.set_pd_target(pos)
+    if cmd == "pd_check":
+        parsed, error = _parse_pd_check_args(
+            args,
+            session.n_cards,
+            session.used_abilities,
+            {
+                card.position: card.apparent_role
+                for card in session.cards
+            },
+        )
+        if error:
+            print(f"  ERROR: {error}")
+            return None
+        try:
+            session.add_pd_ability_result(
+                parsed["pd_pos"],
+                parsed["target"],
+                parsed["is_corrupted"],
+                parsed["evil_revealed"],
+            )
+        except ValueError as exc:
+            print(f"  ERROR: {exc}")
+            return None
         session.save()
-        print(f"PD corruption target set to #{pos}")
+        if parsed["is_corrupted"]:
+            print(
+                f"PD #{parsed['pd_pos']} checked #{parsed['target']}: "
+                f"Corrupted, #{parsed['evil_revealed']} is Evil"
+            )
+        else:
+            print(
+                f"PD #{parsed['pd_pos']} checked #{parsed['target']}: "
+                "Not Corrupted"
+            )
         return None
 
-    if cmd == "pd_check":
-        pd_pos = int(args[0])
-        target = int(args[1])
-        status = args[2].lower()
-        if status == "corrupted":
-            evil_revealed = int(args[3])
-            session.add_pd_ability_result(pd_pos, target, True, evil_revealed)
-            session.save()
-            print(f"PD #{pd_pos} checked #{target}: Corrupted, #{evil_revealed} is Evil")
-        elif status == "clean":
-            session.add_pd_ability_result(pd_pos, target, False)
-            session.save()
-            print(f"PD #{pd_pos} checked #{target}: Not Corrupted")
-        else:
-            print(f"Unknown PD check status: {status} (use 'corrupted' or 'clean')")
+    if cmd == "pd_clear":
+        if len(args) != 1:
+            print("  ERROR: Usage: pd_clear <pd_pos>")
+            return None
+        try:
+            pd_pos = int(args[0])
+        except ValueError:
+            print("  ERROR: Plague Doctor position must be an integer")
+            return None
+        if not 1 <= pd_pos <= session.n_cards:
+            print(
+                f"  ERROR: Plague Doctor position #{pd_pos} is outside "
+                f"1..{session.n_cards}"
+            )
+            return None
+        removed = session.clear_pd_ability_result(pd_pos)
+        if not removed:
+            print(f"  ERROR: No Plague Doctor result recorded for #{pd_pos}")
+            return None
+        session.save()
+        print(f"Cleared {removed} Plague Doctor result(s) for #{pd_pos}; re-enter with pd_check")
         return None
 
     if cmd == "solve":

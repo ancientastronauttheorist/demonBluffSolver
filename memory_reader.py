@@ -146,7 +146,6 @@ DISPLAY_NAMES = {
     'Baron': 'Chancellor',
     'Marionette': 'Twin Minion',
     'Illuzionist': 'Shaman',
-    'Spy': 'Plague Doctor',
     'Mezepheles': 'Puppeteer',
     'Saint': 'Bombardier',
     'SaintVillager': 'Bombardier',

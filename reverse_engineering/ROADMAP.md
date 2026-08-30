@@ -88,6 +88,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   role methods plus seven selection, status, and lifecycle helpers, expand the
   typed union to twelve target sets and 198 memberships, and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Plague Doctor to managed `Puzzlemaster`; native-audit
+  all 11 role methods plus 12 dispatch, click, picker, status, and filter
+  helpers, close truthful/bluff Day output and Drunk status handling, expand
+  the typed union to thirteen target sets and 221 memberships, and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

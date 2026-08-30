@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Plague Doctor role implementation, managed internally as Puzzlemaster",
+  "functions": [
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "Characters.FilterCharacterMissingStatus",
+      "metadata_name": "Characters$$FilterCharacterMissingStatus",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterMissingStatus (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36A8C0"
+    },
+    {
+      "name": "Characters.FilterCharactersWithoutResistance.Character",
+      "metadata_name": "Characters$$FilterCharactersWithoutResistance",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharactersWithoutResistance (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36AE50"
+    },
+    {
+      "name": "Characters.FilterCharacterType.Character",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36AC30"
+    },
+    {
+      "name": "Characters.FilterAlignmentCharacters.Character",
+      "metadata_name": "Characters$$FilterAlignmentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAlignmentCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t alignment, const MethodInfo* method);",
+      "rva": "0x36A030"
+    },
+    {
+      "name": "CharacterPicker.CancelPick",
+      "metadata_name": "CharacterPicker$$CancelPick",
+      "signature": "void CharacterPicker__CancelPick (CharacterPicker_o* __this, const MethodInfo* method);",
+      "rva": "0x378CC0"
+    },
+    {
+      "name": "CharacterPicker.StartPickCharacters",
+      "metadata_name": "CharacterPicker$$StartPickCharacters",
+      "signature": "void CharacterPicker__StartPickCharacters (CharacterPicker_o* __this, int32_t howMany, Character_o* picker, const MethodInfo* method);",
+      "rva": "0x379260"
+    },
+    {
+      "name": "CharacterPicker.ClickedCharacter",
+      "metadata_name": "CharacterPicker$$ClickedCharacter",
+      "signature": "void CharacterPicker__ClickedCharacter (Character_o* ch, const MethodInfo* method);",
+      "rva": "0x378DB0"
+    },
+    {
+      "name": "Puzzlemaster.get_Description",
+      "metadata_name": "Puzzlemaster$$get_Description",
+      "signature": "System_String_o* Puzzlemaster__get_Description (Puzzlemaster_o* __this, const MethodInfo* method);",
+      "rva": "0x3E85B0"
+    },
+    {
+      "name": "Puzzlemaster.GetInfo",
+      "metadata_name": "Puzzlemaster$$GetInfo",
+      "signature": "ActedInfo_o* Puzzlemaster__GetInfo (Puzzlemaster_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E80A0"
+    },
+    {
+      "name": "Puzzlemaster.GetBluffInfo",
+      "metadata_name": "Puzzlemaster$$GetBluffInfo",
+      "signature": "ActedInfo_o* Puzzlemaster__GetBluffInfo (Puzzlemaster_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E8040"
+    },
+    {
+      "name": "Puzzlemaster.Act",
+      "metadata_name": "Puzzlemaster$$Act",
+      "signature": "void Puzzlemaster__Act (Puzzlemaster_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6D90"
+    },
+    {
+      "name": "Puzzlemaster.PoisonRandomVillager",
+      "metadata_name": "Puzzlemaster$$PoisonRandomVillager",
+      "signature": "void Puzzlemaster__PoisonRandomVillager (Puzzlemaster_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E8100"
+    },
+    {
+      "name": "Puzzlemaster.StopPick",
+      "metadata_name": "Puzzlemaster$$StopPick",
+      "signature": "void Puzzlemaster__StopPick (Puzzlemaster_o* __this, const MethodInfo* method);",
+      "rva": "0x3E82A0"
+    },
+    {
+      "name": "Puzzlemaster.CharacterPicked",
+      "metadata_name": "Puzzlemaster$$CharacterPicked",
+      "signature": "void Puzzlemaster__CharacterPicked (Puzzlemaster_o* __this, const MethodInfo* method);",
+      "rva": "0x3E7960"
+    },
+    {
+      "name": "Puzzlemaster.BluffAct",
+      "metadata_name": "Puzzlemaster$$BluffAct",
+      "signature": "void Puzzlemaster__BluffAct (Puzzlemaster_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E7190"
+    },
+    {
+      "name": "Puzzlemaster.CharacterPickedDrunk",
+      "metadata_name": "Puzzlemaster$$CharacterPickedDrunk",
+      "signature": "void Puzzlemaster__CharacterPickedDrunk (Puzzlemaster_o* __this, const MethodInfo* method);",
+      "rva": "0x3E7410"
+    },
+    {
+      "name": "Puzzlemaster.ConjourInfo",
+      "metadata_name": "Puzzlemaster$$ConjourInfo",
+      "signature": "System_String_o* Puzzlemaster__ConjourInfo (Puzzlemaster_o* __this, Character_o* evilCharacter, Character_o* pickedCharacter, const MethodInfo* method);",
+      "rva": "0x3E7EB0"
+    },
+    {
+      "name": "Puzzlemaster.ctor",
+      "metadata_name": "Puzzlemaster$$.ctor",
+      "signature": "void Puzzlemaster___ctor (Puzzlemaster_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    }
+  ]
+}

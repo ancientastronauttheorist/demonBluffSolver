@@ -129,6 +129,9 @@ pub struct PdAbilityResult {
     pub pd_pos: u8,
     pub target: u8,
     pub is_corrupted: bool,
+    /// Public evil-position result. Early v2 fixtures used `evil_pos` before
+    /// the live bridge standardized on `evil_revealed`.
+    #[serde(default, alias = "evil_pos")]
     pub evil_revealed: Option<u8>,
 }
 
@@ -160,6 +163,8 @@ pub struct GameState {
     pub confirmed_evil: Vec<u8>,
     #[serde(default)]
     pub confirmed_good: Vec<u8>,
+    /// Hidden native Start history. Live play must leave this unknown; an
+    /// explicit value is reserved for offline fixtures/post-mortem checks.
     #[serde(default)]
     pub pd_corruption_target: Option<u8>,
 
@@ -544,6 +549,22 @@ mod tests {
         let value = serde_json::to_value(&legacy).unwrap();
         assert_eq!(value["revealed_role"], "Shaman");
         assert!(value.get("evil_role").is_none());
+    }
+
+    #[test]
+    fn pd_revealed_position_accepts_legacy_key_and_serializes_neutrally() {
+        let legacy: PdAbilityResult = serde_json::from_value(serde_json::json!({
+            "pd_pos": 6,
+            "target": 1,
+            "is_corrupted": true,
+            "evil_pos": 5
+        }))
+        .unwrap();
+        assert_eq!(legacy.evil_revealed, Some(5));
+
+        let value = serde_json::to_value(&legacy).unwrap();
+        assert_eq!(value["evil_revealed"], 5);
+        assert!(value.get("evil_pos").is_none());
     }
 
     #[test]

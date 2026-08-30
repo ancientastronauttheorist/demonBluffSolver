@@ -951,21 +951,46 @@ def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
     return scenario_is_evil(target, scenario)
 
 
-def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple:
-    """Plague Doctor: (is_corrupted, evil_char_pos or None)."""
-    role = effective_role_at(target, scenario, state)
-    role_key = role.lower().replace(" ", "").replace("_", "") if role else None
-    # Native PD reports Drunk as Not Corrupted even though Drunk uses intrinsic
-    # corruption for truth/clue surfaces.
-    is_corrupted = target in scenario.corrupted and role_key != "drunk"
-    evil_pos = None
-    if is_corrupted:
-        # Learn an evil character
-        evil_pos = min(
-            (p for p in scenario.evil_positions if p not in state.executed),
-            default=None,
-        )
-    return (is_corrupted, evil_pos)
+def _pd_observation_likelihoods(
+    target: int,
+    ability_pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple, float]:
+    """Native visible Plague Doctor output distribution for one target.
+
+    The shipped callback reads the target's active Corrupted status directly.
+    A truthful check that reports Corrupted uniformly names any runtime/
+    registered Evil character; Bluff performs the inverse and uniformly names
+    a Good character as Evil. CurrentCharacters retains dead cards. A self-
+    check is always displayed as clean, even if the callback drew a hidden
+    second reference before formatting.
+    """
+    if target == ability_pos:
+        return {("clean",): 1.0}
+
+    truthful = truth_status(ability_pos, scenario, state) == TruthStatus.TRUTHFUL
+    actually_corrupted = target in scenario.corrupted
+    reports_corrupted = actually_corrupted if truthful else not actually_corrupted
+    if not reports_corrupted:
+        return {("clean",): 1.0}
+
+    reveal_alignment = Alignment.EVIL if truthful else Alignment.GOOD
+    candidates = [
+        position
+        for position in range(1, state.n_cards + 1)
+        if effective_alignment(position, scenario, state) == reveal_alignment
+    ]
+    if not candidates:
+        # Native has no empty-pool guard. Treat such a synthetic world as having
+        # no valid visible observation rather than inventing a fallback.
+        return {}
+
+    probability = 1.0 / len(candidates)
+    return {
+        ("corrupted", position): probability
+        for position in candidates
+    }
 
 
 # ============================================================
@@ -1177,34 +1202,28 @@ def _recommend_count_ability(
     )
 
 
-def _dreamer_information_for_targets(
-    targets: list[int] | tuple[int, int],
-    ability_pos: int,
-    state: GameState,
-    scenarios: list[Scenario],
+def _information_from_observation_likelihoods(
+    likelihoods: list[dict[tuple, float]],
 ) -> tuple[float, float, int]:
-    """Return (mutual information, expected posterior entropy, outcomes)."""
-    scenario_count = len(scenarios)
+    """Return mutual information for equally likely scenario distributions."""
+    scenario_count = len(likelihoods)
     if scenario_count == 0:
         return (0.0, 0.0, 0)
 
-    likelihoods: list[dict[tuple[str, ...], float]] = []
-    for scenario in scenarios:
-        distribution = _dreamer_observation_likelihoods(
-            targets, ability_pos, scenario, state
-        )
+    normalized_likelihoods: list[dict[tuple, float]] = []
+    for distribution in likelihoods:
         total = sum(distribution.values())
         if total <= 0:
             return (0.0, math.log2(scenario_count), 0)
-        # The native models above are normalized.  Renormalizing here makes
+        # Native models are normalized. Renormalizing here makes
         # posterior arithmetic robust to floating-point accumulation.
-        likelihoods.append({
+        normalized_likelihoods.append({
             observation: probability / total
             for observation, probability in distribution.items()
         })
 
-    marginal_weights: dict[tuple[str, ...], float] = {}
-    for distribution in likelihoods:
+    marginal_weights: dict[tuple, float] = {}
+    for distribution in normalized_likelihoods:
         for observation, probability in distribution.items():
             marginal_weights[observation] = (
                 marginal_weights.get(observation, 0.0) + probability
@@ -1215,7 +1234,7 @@ def _dreamer_information_for_targets(
         if likelihood_sum <= 0:
             continue
         posterior_entropy = 0.0
-        for distribution in likelihoods:
+        for distribution in normalized_likelihoods:
             posterior = distribution.get(observation, 0.0) / likelihood_sum
             if posterior > 0:
                 posterior_entropy -= posterior * math.log2(posterior)
@@ -1232,6 +1251,19 @@ def _dreamer_information_for_targets(
         expected_posterior_entropy,
         len(marginal_weights),
     )
+
+
+def _dreamer_information_for_targets(
+    targets: list[int] | tuple[int, int],
+    ability_pos: int,
+    state: GameState,
+    scenarios: list[Scenario],
+) -> tuple[float, float, int]:
+    """Return (mutual information, expected posterior entropy, outcomes)."""
+    return _information_from_observation_likelihoods([
+        _dreamer_observation_likelihoods(targets, ability_pos, scenario, state)
+        for scenario in scenarios
+    ])
 
 
 def _recommend_dreamer_ability(
@@ -1306,6 +1338,76 @@ def _recommend_dreamer_ability(
     )
 
 
+def _pd_information_for_target(
+    target: int,
+    ability_pos: int,
+    state: GameState,
+    scenarios: list[Scenario],
+) -> tuple[float, float, int]:
+    """Return native PD mutual information for one selectable character."""
+    return _information_from_observation_likelihoods([
+        _pd_observation_likelihoods(target, ability_pos, scenario, state)
+        for scenario in scenarios
+    ])
+
+
+def _recommend_pd_ability(
+    ability_pos: int,
+    candidate_targets: list[int],
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend a PD target using its stochastic native reveal callback."""
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_targets:
+        return None
+
+    best_target: Optional[int] = None
+    best_information = -1.0
+    best_expected_entropy = float("inf")
+    best_outcome_count = 0
+
+    for target in candidate_targets:
+        information, expected_entropy, outcome_count = _pd_information_for_target(
+            target, ability_pos, state, scenarios
+        )
+        if outcome_count == 0:
+            continue
+        if best_target is None or information > best_information + 1e-12:
+            best_target = target
+            best_information = information
+            best_expected_entropy = expected_entropy
+            best_outcome_count = outcome_count
+
+    if best_target is None:
+        return None
+
+    liar_probability = sum(
+        truth_status(ability_pos, scenario, state) == TruthStatus.LYING
+        for scenario in scenarios
+    ) / len(scenarios)
+    warnings = []
+    if liar_probability > 0:
+        warnings.append(
+            f"Lying Plague Doctor path: {liar_probability:.0%} -- included in native likelihood"
+        )
+    if best_target == ability_pos:
+        warnings.append("Native self-check always displays Not Corrupted")
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Plague Doctor",
+        targets=[best_target],
+        score=best_information,
+        reasoning=(
+            f"Mutual information {best_information:.3f} bits; "
+            f"expected posterior entropy {best_expected_entropy:.3f} bits "
+            f"across {best_outcome_count} native PD observations"
+        ),
+        warnings=warnings,
+    )
+
+
 def _recommend_partition_ability(
     ability_name: str,
     ability_pos: int,
@@ -1314,7 +1416,7 @@ def _recommend_partition_ability(
     state: GameState,
     result: SolverResult,
 ) -> Optional[AbilityRecommendation]:
-    """Recommend targets for a multi-valued partition ability (Dreamer, Druid, PD)."""
+    """Recommend targets for a deterministic multi-valued partition ability."""
     best_targets = None
     best_entropy = -1.0
 
@@ -1518,11 +1620,19 @@ def recommend_abilities(
                 recommendations.append(rec)
 
         elif role == "Plague Doctor":
-            candidates = others
-            rec = _recommend_partition_ability(
-                "Plague Doctor", pos,
-                lambda t, s, st: str(_pd_ground_truth(t, s, st)),
-                candidates, state, result)
+            # Native's generic character picker permits self and dead cards.
+            # Prefer live non-self targets on equal information, then dead
+            # targets, with the always-clean self-check last.
+            dead_positions = set(state.executed) | set(state.night_kills)
+            candidates = (
+                [
+                    p for p in range(1, state.n_cards + 1)
+                    if p != pos and p not in dead_positions
+                ]
+                + sorted(p for p in dead_positions if p != pos)
+                + [pos]
+            )
+            rec = _recommend_pd_ability(pos, candidates, state, result)
             _apply_timing(rec, timing, state, recommendations)
 
     return recommendations

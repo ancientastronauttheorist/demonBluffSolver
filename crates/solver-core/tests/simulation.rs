@@ -973,8 +973,9 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         "hp": 4,
         "wrong_exec_cost": 5,
         "executed": [1],
-        // PD/bookkeeping reports Drunk clean, while its active status still
-        // drives Knight's separate four-damage hook.
+        // Execution bookkeeping reports Drunk clean, while its active status
+        // still drives Knight's separate four-damage hook. Plague Doctor reads
+        // that active status directly and is intentionally a different surface.
         "executed_good_corrupted": {"1": false},
         "executed_good_roles": {"1": "Drunk"},
         "cards": [{"position": 1, "apparent_role": "Knight"}]
@@ -1380,9 +1381,6 @@ fn simulate_all_v2() {
         // corruption, while native high-ID-first live cures make the second
         // actor observe zero.
         "asc32_v4", "asc33_v3", "asc55_v7",
-        // Recorded before asc84_v2 live evidence showed the current build has
-        // Drunk lie intrinsically while PD reports Drunk as Not Corrupted.
-        "asc31_v1", "asc34_v3", "asc48_v3", "asc54_v2", "asc63_v6", "asc71_v3", "asc73_v1",
     ].into_iter().collect();
 
     let mut wins = 0usize;

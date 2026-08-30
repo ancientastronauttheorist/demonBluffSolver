@@ -44,8 +44,9 @@ def execution_cost_for(
     ``wrong_exec_cost_for`` remains the base cost for the target's true role.
     A successfully killed good target showing as Knight fires the Knight bluff's
     separate 4-HP execution effect only when it has the active Corrupted status.
-    Plague Doctor and execution bookkeeping report Drunk as clean, so callers
-    resolving damage must pass the underlying active-status value separately.
+    Execution bookkeeping reports Drunk as clean, so callers resolving damage
+    must pass the underlying active-status value separately. Plague Doctor is
+    different: its native callback reads active Corrupted directly.
     This distinguishes an ordinary Corrupted Drunk-as-Knight (2 + 4) from a
     Chancellor-generated Drunk whose inherited Alchemist resistance blocked
     that status (2 only).
@@ -180,7 +181,7 @@ OUTCASTS = [
          "instead of sharing their info.",
          lies=False, disguises=False),
     Card("Drunk", Role.OUTCAST, Alignment.GOOD,
-         "I Disguise as a random not in play Villager. I Lie and count as Corrupted for corruption clues, but PD reports me as Not Corrupted.",
+         "I Disguise as a random not in play Villager. I Lie and attempt to add Corrupted to myself at Start; exact resistance can block that status.",
          lies=True, disguises=True, corrupted_note=False),
     Card("Wretch", Role.OUTCAST, Alignment.GOOD,
          "I Register as a random Evil Minion to other characters.",
@@ -192,7 +193,7 @@ OUTCASTS = [
          "Game Start: I Disguise as a Good Villager currently in play.",
          lies=False, disguises=True, game_start_ability=True),
     Card("Plague Doctor", Role.OUTCAST, Alignment.GOOD,
-         "Game Start: 1 Good Villager is Corrupted. Pick 1 character. If it's Corrupted, learn an Evil character.",
+         "Truthful Start: corrupt 1 eligible apparent Villager. Pick 1 character; if it is Corrupted, learn an apparent Evil character.",
          lies=False, disguises=False, game_start_ability=True, activated_ability=True, corrupted_note=True),
 ]
 

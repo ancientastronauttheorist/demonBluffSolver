@@ -238,8 +238,11 @@ Memory reader notes:
 - Doppelganger counts in `nv`, not `no`.
 - Drunk can count as Villager in the header.
 - In the 2026-05-05 live build, Drunk still lies and wrong-exec costs 2 HP.
-  Drunk counts as Corrupted for status clues such as Bard, but Plague Doctor
-  reports Drunk as `Not Corrupted`. Keep those two rule surfaces separate.
+  Plague Doctor reads the active `Corrupted` status directly, including on an
+  ordinary Drunk. The clean Drunk in asc84_v2 was Chancellor-generated from an
+  Alchemist: inherited resistance blocked Drunk's Start status. Execution
+  bookkeeping still projects Drunk as clean; do not apply that projection to
+  Plague Doctor.
 - Baa's eye-symbol mismatch applies only to deck view, not HUD. HUD counts Baa
   as a Demon. If reading `no=` from HUD, do not subtract 1.
 - `next` can auto-execute by default. Use `next --plan` or `--dry` when you need
@@ -250,6 +253,13 @@ Memory reader notes:
 - Current serialized role/display mappings include internal `Marionette` ->
   Twin Minion, `Mezepheles` -> Puppeteer, and `Puzzlemaster` -> Plague Doctor.
   Do not infer a public role name from its managed class name.
+- Plague Doctor can target any board character, including self and dead cards.
+  A self-check always displays `Not Corrupted`. A truthful corrupted check
+  uniformly names a registered/runtime Evil character (including Wretch or a
+  dead Evil); a lying clean check uniformly names Good and falsely calls it
+  Evil. `next`/the autonomous loop parses and cross-checks the exact public
+  speech; on failure, recover with `pd_check`. Never inject the hidden Start
+  target from memory into live solver state.
 
 ## Setup
 

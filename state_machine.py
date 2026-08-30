@@ -37,7 +37,7 @@ class GameStateMachine:
     - Probabilistic execution (not definite_evil and not forced_safe)
     - HP <= wrong_exec_cost and multiple scenarios remain
     - 0 surviving scenarios (solver bug)
-    - Active ability with complex multi-step interaction (Slayer, PD)
+    - Active ability with complex kill-result interaction (Slayer)
     - Target card has unused active ability (would trigger wrong ability)
     """
 
@@ -638,12 +638,41 @@ class GameStateMachine:
         pos, targets, ability_name, result = self._pending_ability
         print(f"\n  [auto] Phase: ABILITY_USE #{pos} ({ability_name}) -> targets {targets}")
 
-        # Slayer and PD are complex — pause for human
-        if ability_name in ("Slayer", "Plague Doctor", "Plague_Doctor"):
+        # Slayer's kill/death result still needs its dedicated manual path.
+        if ability_name == "Slayer":
             self._pause(
                 f"Use {ability_name} on #{pos} -> targets {targets}. "
                 f"Complex ability — enter result manually, then 'resume'."
             )
+            return
+
+        # Plague Doctor now has an exact public-speech parser. Reuse the
+        # session implementation so the autonomous loop gets the same target
+        # checks, memory cross-checks, self-target handling, and correction
+        # semantics as `next`/`auto_next`.
+        if ability_name in ("Plague Doctor", "Plague_Doctor"):
+            from strategy import Action
+
+            pd_action = Action(
+                action_type="use_ability",
+                position=pos,
+                targets=list(targets or []),
+                ability_name="Plague Doctor",
+            )
+            exec_result = self.session.auto_use_ability(
+                pd_action,
+                monitor=self.monitor,
+            )
+            if not exec_result["success"]:
+                self._pause(
+                    f"Plague Doctor ability on #{pos} could not be recorded: "
+                    f"{exec_result['error']}. Read the public speech bubble and "
+                    "enter it with pd_check, then 'resume'."
+                )
+                return
+
+            self._snapshot_counts()
+            self.phase = GamePhase.SOLVING
             return
 
         if ability_name == "Dreamer" and len(targets or []) != 2:

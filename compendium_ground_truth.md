@@ -115,8 +115,11 @@
 - **Hints**: Always consider themselves as a Disguised role.
 
 ### Plague Doctor
-- **Ability**: Game Start: 1 Good Villager is Corrupted. Pick 1 character: If its Corrupted, Learn an Evil character.
-- **Hints**: I always see myself as NOT Corrupted, even if I am Evil.
+- **Ability**: At truthful Start, uniformly add Corrupted to one eligible apparent Villager that lacks the status and exact resistance; there is no alignment, liveness, or self filter. During Day, pick one character and learn the result below.
+- **Native targeting**: The active picker allows any board character, including self and dead cards.
+- **Truthful result**: A Corrupted target uniformly reveals one registered/runtime Evil character; Wretch and dead Evil characters remain eligible. A clean target reports `Not Corrupted`.
+- **Lying result**: The status answer is inverted. A clean target is called Corrupted and one registered/runtime Good character is uniformly mislabeled Evil; a Corrupted target is called clean.
+- **Hints**: A self-check always displays `Not Corrupted`, even if the Plague Doctor is Evil or has the status. Ordinary Drunk is checked by raw active status; asc84_v2's generated Drunk was clean because inherited Alchemist resistance blocked that status.
 
 ---
 

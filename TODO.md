@@ -32,7 +32,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Bombardier — no issues
 - [x] Doppelganger — no issues
 - [x] Drunk — Knight HP edge case
-- [x] Plague Doctor — low test coverage (2 cases)
+- [x] Plague Doctor — 154 active observations plus focused native callback tests
 - [x] Wretch — root cause of 4 validator bugs
 - [x] Chancellor — outcast count + Witness tracking gaps
 - [x] Minion — no issues
@@ -72,6 +72,12 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 
 - [x] **Shaman ordered overwrite trace** — FIXED. Enumerates ordered source/target pairs, carries the copied role plus an existential erased-role candidate class, and admits mixed-faction hidden endpoints only when the exact Outcast budget can make them Villagers.
+
+- [ ] **Native branch probability weights** — surviving scenarios are still
+  treated as equally likely after semantic deduplication. Preserve native draw
+  probabilities and hidden identity multiplicities for PD/Shaman/Chancellor
+  histories without reintroducing duplicate logical worlds, so confidence and
+  mutual-information scores reflect probability mass rather than world count.
 
 - [x] ~~**Bishop lying = all Villagers**~~ — DROPPED. Wiki claim doesn't match game: corrupted Bishops show mixed types, not all Villagers.
 
@@ -126,4 +132,6 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 ### Test Coverage Gaps
 
 - [x] **Witness**: 2 test cases now (asc11_g3_live, asc23_v2). Fixed validator for "no one affected" (position=0) and PD/Drunk corruption exclusion. Still no coverage for Chancellor conversion tracking (see P0).
-- [ ] **Plague Doctor**: Only 2 test cases. Need more coverage for active ability validation.
+- [x] **Plague Doctor**: Full managed `Puzzlemaster` boundary audited; strict
+  active-result shape, self/dead targeting, Wretch alignment, ordinary Drunk
+  status, random truth/bluff reveal support, and legacy `evil_pos` covered.
