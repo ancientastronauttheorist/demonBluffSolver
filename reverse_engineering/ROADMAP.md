@@ -76,8 +76,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   and the complete `GetDreamerClue` provider set.
 - [x] Asset-bind the public Dreamer card to managed `Dreamer`; prove that
   `Dreamer2` and `DreamerOld` are unbound in the current gameplay assets.
-- [ ] Recover and validate the bound 11-method public `Dreamer`
-  implementation and its role-pair likelihood model.
+- [x] Map, baseline-export, type, and native-audit the complete public
+  `Dreamer` boundary: all 11 role methods plus five compiler-generated helpers,
+  including its Cabbage branch and exact current-build role-pair weighting.
+- [ ] Implement and regression-test the public Dreamer parser, native-support
+  validator, and weighted role-pair recommendation model.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

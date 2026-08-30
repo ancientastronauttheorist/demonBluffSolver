@@ -153,7 +153,13 @@ The next role-class boundary adds all ten `Dreamer2` methods plus the two
 two-character randomized type-exclusion result. Serialized asset evidence
 binds the public card to managed `Dreamer`, however, and finds no current
 gameplay binding for `Dreamer2`; the alternate class therefore does not replace
-the live role-pair contract.
+the live role-pair contract. The subsequent
+[`public Dreamer`](notes/roles/gameplay_role_dreamer.md) boundary adds all 11
+role methods plus five compiler-generated helpers. It reconstructs the exact
+weighted role-pair and Cabbage paths and proves that all 46 shipped core
+CharacterData assets currently have `usuallyDisguised == false`. The resulting
+board-entry fallback can truthfully emit both selected roles, while a selected
+bluff can make a lying clue collide with the other target's real role.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -196,9 +202,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,251
-datatypes. Its nine-set inventory contains 166 target memberships, 156 distinct
-selected FunctionDefinitions, and 153 unique native RVAs. The typed project is
+the union of every checked target set. The current archive contains 151,268
+datatypes. Its ten-set inventory contains 182 target memberships, 172 distinct
+selected FunctionDefinitions, and 167 unique native RVAs. The typed project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
 labels, prototypes, dynamic Windows x64 storage, and transaction completion
@@ -211,17 +217,18 @@ and then performs the same exact validations in a separate read-only headless
 pass. Splitting those phases keeps the growing target inventory below Windows'
 command-line limit.
 
-The preserved fully analyzed typed project now covers all nine target sets
+The preserved fully analyzed typed project now covers all ten target sets
 after a no-analysis refresh. Ten memberships are exact overlaps between
-boundaries. Folded/shared bodies make the 156 selected definitions exceed the
-153 unique native RVAs by three; each canonical native prototype is explicit
+boundaries. Folded/shared bodies make the 172 selected definitions exceed the
+167 unique native RVAs by five; each canonical native prototype is explicit
 while all exact managed definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
-seconds without a timeout. Subsequent refreshes imported 49 additional
-reachable datatypes, most recently reapplied and validated all 166 memberships
-without rerunning auto-analysis. The final read-only pass validated all 166
-memberships (156 exact definitions) and 482 membership-level parameter-storage
-locations with zero program mutations.
+seconds without a timeout. Subsequent refreshes imported 89 additional
+reachable datatypes, including 40 for the public Dreamer boundary, and most
+recently reapplied and validated all 182 memberships without rerunning
+auto-analysis. The final read-only pass validated all 182 memberships (172
+exact definitions) and 525 membership-level parameter-storage locations with
+zero program mutations.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -237,17 +244,17 @@ python reverse_engineering/scripts/audit_ghidra_type_quality.py `
 For the current exports, unresolved-type tokens fell from 78 to 43 in
 `gameplay_core`, from 160 to 96 in `gameplay_execution_resolution`, from 370
 to 140 in `gameplay_lifecycle`, from 38 to 34 in
-`gameplay_roster_helpers`, and from 281 to 145 in
-`gameplay_status_corruption_truth`, from 114 to 70 in
-`gameplay_bluff_acquisition`, from 70 to 51 in `gameplay_role_slayer`, and from
-14 to 5 in `gameplay_role_wretch`, and from 105 to 80 in
-`gameplay_role_dreamer2`. Raw field-offset accesses fell from 237 to 144, from
+`gameplay_roster_helpers`, from 281 to 145 in
+`gameplay_status_corruption_truth`, and from 114 to 70 in
+`gameplay_bluff_acquisition`. The role boundaries fell from 70 to 51 for
+Slayer, from 14 to 5 for Wretch, from 105 to 80 for Dreamer2, and from 190 to
+92 for the public Dreamer. Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
-for Wretch, and from 167 to 156 for Dreamer2. Error-marker counts did not
-increase; lifecycle and the status boundary each gained one nonfatal
-decompiler warning, while all three role reports retained their baseline
-warning counts. The original typed import is
+for Wretch, from 167 to 156 for Dreamer2, and from 370 to 186 for the public
+Dreamer. Error-marker counts did not increase; lifecycle and the status
+boundary each gained one nonfatal decompiler warning, while all four role
+reports retained their baseline warning counts. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -255,15 +262,17 @@ with the new role comparisons in the
 and
 [`Wretch typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_wretch.json),
 plus the
-[`Dreamer2 typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_dreamer2.json).
+[`Dreamer2 typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_dreamer2.json)
+and
+[`public Dreamer typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_dreamer.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 147 classifications backed by
-58 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 175 classifications backed by
+67 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

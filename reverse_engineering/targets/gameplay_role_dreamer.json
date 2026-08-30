@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Dreamer role implementation, including its compiler-generated ConjourInfo helpers",
+  "functions": [
+    {
+      "name": "Dreamer.CompilerGenerated.cctor",
+      "metadata_name": "Dreamer.<>c$$.cctor",
+      "signature": "void Dreamer___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F0A90"
+    },
+    {
+      "name": "Dreamer.CompilerGenerated.ctor",
+      "metadata_name": "Dreamer.<>c$$.ctor",
+      "signature": "void Dreamer___c___ctor (Dreamer___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Dreamer.CompilerGenerated.ConjourInfoSortIds",
+      "metadata_name": "Dreamer.<>c$$<ConjourInfo>b__10_0",
+      "signature": "int32_t Dreamer___c___ConjourInfo_b__10_0 (Dreamer___c_o* __this, int32_t i, const MethodInfo* method);",
+      "rva": "0x3F07B0"
+    },
+    {
+      "name": "Dreamer.CompilerGenerated.ConjourInfoShuffleIds",
+      "metadata_name": "Dreamer.<>c$$<ConjourInfo>b__10_1",
+      "signature": "float Dreamer___c___ConjourInfo_b__10_1 (Dreamer___c_o* __this, int32_t __, const MethodInfo* method);",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Dreamer.CompilerGenerated.ConjourInfoShuffleNames",
+      "metadata_name": "Dreamer.<>c$$<ConjourInfo>b__10_2",
+      "signature": "float Dreamer___c___ConjourInfo_b__10_2 (Dreamer___c_o* __this, System_String_o* i, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Dreamer.get_Description",
+      "metadata_name": "Dreamer$$get_Description",
+      "signature": "System_String_o* Dreamer__get_Description (Dreamer_o* __this, const MethodInfo* method);",
+      "rva": "0x3B9110"
+    },
+    {
+      "name": "Dreamer.GetInfo",
+      "metadata_name": "Dreamer$$GetInfo",
+      "signature": "ActedInfo_o* Dreamer__GetInfo (Dreamer_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B8AC0"
+    },
+    {
+      "name": "Dreamer.GetBluffInfo",
+      "metadata_name": "Dreamer$$GetBluffInfo",
+      "signature": "ActedInfo_o* Dreamer__GetBluffInfo (Dreamer_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B8A60"
+    },
+    {
+      "name": "Dreamer.Act",
+      "metadata_name": "Dreamer$$Act",
+      "signature": "void Dreamer__Act (Dreamer_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B5ED0"
+    },
+    {
+      "name": "Dreamer.CharacterPicked",
+      "metadata_name": "Dreamer$$CharacterPicked",
+      "signature": "void Dreamer__CharacterPicked (Dreamer_o* __this, const MethodInfo* method);",
+      "rva": "0x3B7530"
+    },
+    {
+      "name": "Dreamer.BluffAct",
+      "metadata_name": "Dreamer$$BluffAct",
+      "signature": "void Dreamer__BluffAct (Dreamer_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B6140"
+    },
+    {
+      "name": "Dreamer.StopPick",
+      "metadata_name": "Dreamer$$StopPick",
+      "signature": "void Dreamer__StopPick (Dreamer_o* __this, const MethodInfo* method);",
+      "rva": "0x3B8E00"
+    },
+    {
+      "name": "Dreamer.CharacterPickedDrunk",
+      "metadata_name": "Dreamer$$CharacterPickedDrunk",
+      "signature": "void Dreamer__CharacterPickedDrunk (Dreamer_o* __this, const MethodInfo* method);",
+      "rva": "0x3B63B0"
+    },
+    {
+      "name": "Dreamer.GetRandomNonRepeatedFakeCharacter",
+      "metadata_name": "Dreamer$$GetRandomNonRepeatedFakeCharacter",
+      "signature": "CharacterData_o* Dreamer__GetRandomNonRepeatedFakeCharacter (Dreamer_o* __this, System_Collections_Generic_List_CharacterData__o* nonRepeatList, const MethodInfo* method);",
+      "rva": "0x3B8B20"
+    },
+    {
+      "name": "Dreamer.ConjourInfo",
+      "metadata_name": "Dreamer$$ConjourInfo",
+      "signature": "System_String_o* Dreamer__ConjourInfo (Dreamer_o* __this, System_Collections_Generic_List_int__o* ids, System_Collections_Generic_List_string__o* names, const MethodInfo* method);",
+      "rva": "0x3B8650"
+    },
+    {
+      "name": "Dreamer.ctor",
+      "metadata_name": "Dreamer$$.ctor",
+      "signature": "void Dreamer___ctor (Dreamer_o* __this, const MethodInfo* method);",
+      "rva": "0x357920"
+    }
+  ]
+}

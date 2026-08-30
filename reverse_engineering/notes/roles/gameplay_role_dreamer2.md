@@ -63,7 +63,8 @@ observed concrete-role-pair clues. A read-only scan of the current
 
 Consequently, this class's type-exclusion clue must not replace the public
 Dreamer's role-pair parser, validator, or recommendation model. The bound
-11-method `Dreamer` implementation is the next role boundary.
+11-method `Dreamer` implementation and its five generated helpers are audited
+separately in [`gameplay_role_dreamer.md`](gameplay_role_dreamer.md).
 
 ## Two-character picker and cleanup
 
@@ -123,6 +124,13 @@ The selected type is consequently present at one or both targets, making
 false type is sampled and its probability; it does not change the truth
 predicate.
 
+A read-only audit of all 46 shipped core CharacterData assets found
+`usuallyDisguised == false` on every record. In the current roster the first
+step is therefore always empty, so the unbound alternate's lying path falls
+back to sampling the two selected registered types with equal entry weight.
+This current-build fact does not make the unbound clue format part of the
+public Dreamer contract.
+
 ## Typed-analysis corroboration
 
 The target validates 12 of 12 metadata entries and baseline-exports all 12
@@ -139,9 +147,9 @@ from 105 to 80, and reduces raw field-offset accesses from 167 to 156.
 ## Reachability and remaining uncertainty
 
 This class's local control flow is understood, but no current gameplay asset
-binds it. The separate public `Dreamer` audit must reconstruct its concrete-role
-selection and random weighting before the solver recommender can claim native
-parity.
+binds it. The separate public `Dreamer` audit reconstructs the shipped
+concrete-role selection and random weighting; solver parity must use that bound
+implementation rather than this alternate.
 
 Picker-level rejection of self-selection or duplicate selection belongs to the
 shared `CharacterPicker` boundary and is not inferred here. English output is
