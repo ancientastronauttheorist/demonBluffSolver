@@ -5,18 +5,18 @@
   "normalization": {
     "il2cpp_h_sha256": "E1556B4DC5953FEA2D9DE2D071E76AD0B795A3B502AC31DA10D47DCA51D688C6",
     "normalized_header_sha256": "EAC93D9A7AF73C0CEFD9B8B4156794A90215BAA1DF8801A4ECEFBB90D96A8D0C",
-    "prototype_header_sha256": "896FFF08E84357B8DA1B7051C4FB62221A8769D0B3C8CDEEA811694F5D5629E6",
+    "prototype_header_sha256": "A6B0E73A5FB8C425F37E15D938DE6EF59FF9EBB145E6B37C29B4B6D7AEB04F02",
     "inheritance_rewrites": 5830,
     "explicit_alignments": 6159,
-    "prototype_count": 77
+    "prototype_count": 109
   },
   "datatype_archive": {
     "language": "x86:LE:64:default",
     "compiler": "windows",
-    "datatype_count": 151157,
+    "datatype_count": 151197,
     "critical_layouts_validated": true,
-    "observed_size": 32127447,
-    "observed_sha256": "EF5A978DF6BBE342389267FC5F6AD1FF8127DE7854CF488C3447BA3CD4A5E2D4"
+    "observed_size": 32124616,
+    "observed_sha256": "88F0743751A5DF7CB4B98A11782628DF6BA8FF42E4CE6EDF0AF9FB7CF2C05879"
   },
   "symbol_import": {
     "method_labels": 158195,
@@ -26,6 +26,14 @@
     "skipped_rvas": 0,
     "cancelled": false
   },
+  "selected_targets": {
+    "target_set_count": 5,
+    "target_memberships": 117,
+    "exact_overlap_memberships": 8,
+    "unique_function_definitions": 109,
+    "unique_native_rvas": 108,
+    "canonicalized_incompatible_shared_bodies": 1
+  },
   "signature_sets": [
     {
       "name": "gameplay_core",
@@ -34,11 +42,14 @@
       "applied": 13,
       "validated": 13,
       "post_analysis_validated": 13,
+      "post_analysis_refresh_applied": 13,
       "imported_datatypes": 1874,
+      "post_analysis_refresh_imported_datatypes": 0,
       "seven_argument_targets": 1,
       "preserved_labels": 65,
       "verified_metadata_labels": 13,
       "validated_parameter_storages": 36,
+      "canonicalized_shared_bodies": 0,
       "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     },
@@ -49,11 +60,14 @@
       "applied": 30,
       "validated": 30,
       "post_analysis_validated": 30,
+      "post_analysis_refresh_applied": 30,
       "imported_datatypes": 57,
+      "post_analysis_refresh_imported_datatypes": 0,
       "seven_argument_targets": 0,
       "preserved_labels": 993,
       "verified_metadata_labels": 30,
       "validated_parameter_storages": 88,
+      "canonicalized_shared_bodies": 0,
       "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     },
@@ -64,11 +78,14 @@
       "applied": 28,
       "validated": 28,
       "post_analysis_validated": 28,
+      "post_analysis_refresh_applied": 28,
       "imported_datatypes": 48,
+      "post_analysis_refresh_imported_datatypes": 0,
       "seven_argument_targets": 0,
       "preserved_labels": 28,
       "verified_metadata_labels": 28,
       "validated_parameter_storages": 66,
+      "canonicalized_shared_bodies": 0,
       "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     },
@@ -79,11 +96,32 @@
       "applied": 6,
       "validated": 6,
       "post_analysis_validated": 6,
+      "post_analysis_refresh_applied": 6,
       "imported_datatypes": 0,
+      "post_analysis_refresh_imported_datatypes": 0,
       "seven_argument_targets": 0,
       "preserved_labels": 6,
       "verified_metadata_labels": 6,
       "validated_parameter_storages": 19,
+      "canonicalized_shared_bodies": 0,
+      "program_mutations_during_read_only_validation": 0,
+      "calling_convention": "__fastcall"
+    },
+    {
+      "name": "gameplay_status_corruption_truth",
+      "target_sha256": "5B101A2D15C168E615B8DC72CC0895F2991A3AAA7CED630E08B27AF30D48A0BB",
+      "requested": 40,
+      "applied": 40,
+      "validated": 40,
+      "post_analysis_validated": 40,
+      "post_analysis_refresh_applied": 40,
+      "imported_datatypes": 53,
+      "post_analysis_refresh_imported_datatypes": 0,
+      "seven_argument_targets": 0,
+      "preserved_labels": 1226,
+      "verified_metadata_labels": 40,
+      "validated_parameter_storages": 133,
+      "canonicalized_shared_bodies": 1,
       "program_mutations_during_read_only_validation": 0,
       "calling_convention": "__fastcall"
     }
@@ -91,10 +129,27 @@
   "analysis_complete": true,
   "analysis": {
     "program": "GameAssembly.dll",
-    "elapsed_seconds": 2870,
+    "elapsed_seconds": 2781,
     "timeout_occurred": false,
     "post_analysis_succeeded": true,
     "saved": true
+  },
+  "post_analysis_refresh": {
+    "analysis_disabled": true,
+    "saved": true,
+    "target_memberships_applied": 117,
+    "target_memberships_validated": 117,
+    "validated_parameter_storages": 342,
+    "imported_datatypes": 0,
+    "canonicalized_incompatible_shared_bodies": 1,
+    "program_mutations_during_read_only_validation": 0
+  },
+  "independent_read_only_validation": {
+    "target_memberships_validated": 117,
+    "validated_parameter_storages": 342,
+    "canonicalized_incompatible_shared_bodies": 1,
+    "program_mutations": 0,
+    "cancelled": false
   },
   "decompilation_quality_reports": [
     {
@@ -127,7 +182,7 @@
       "target_count": 28,
       "check_passed": true,
       "baseline_unresolved_type_tokens": 370,
-      "typed_unresolved_type_tokens": 141,
+      "typed_unresolved_type_tokens": 140,
       "baseline_raw_field_offset_accesses": 678,
       "typed_raw_field_offset_accesses": 289,
       "baseline_decompiler_error_markers": 1,
@@ -144,6 +199,18 @@
       "typed_raw_field_offset_accesses": 41,
       "baseline_decompiler_error_markers": 0,
       "typed_decompiler_error_markers": 0
+    },
+    {
+      "name": "gameplay_status_corruption_truth",
+      "report": "f530404b0f3f_807de4a83df4_typed_quality_gameplay_status_corruption_truth.json",
+      "target_count": 40,
+      "check_passed": true,
+      "baseline_unresolved_type_tokens": 281,
+      "typed_unresolved_type_tokens": 145,
+      "baseline_raw_field_offset_accesses": 421,
+      "typed_raw_field_offset_accesses": 148,
+      "baseline_decompiler_error_markers": 1,
+      "typed_decompiler_error_markers": 1
     }
   ]
 }

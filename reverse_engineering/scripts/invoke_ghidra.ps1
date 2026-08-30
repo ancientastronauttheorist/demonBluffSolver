@@ -12,6 +12,7 @@ param(
         'build-types',
         'typed-import',
         'typed-analyze',
+        'typed-refresh',
         'typed-validate',
         'typed-all',
         'typed-export'
@@ -88,6 +89,7 @@ $typedStages = @(
     'build-types',
     'typed-import',
     'typed-analyze',
+    'typed-refresh',
     'typed-validate',
     'typed-all',
     'typed-export'
@@ -609,7 +611,12 @@ function Assert-ValidateSummary {
     $summaryPath = Get-ValidateSummaryPath -TargetInfo $TargetInfo
     Assert-SummaryNotOlderThan `
         -SummaryPath $summaryPath `
-        -InputPaths @($typedAnalysisSummaryPath, $gdtPath, $TargetInfo.Path) `
+        -InputPaths @(
+            $typedAnalysisSummaryPath,
+            $gdtPath,
+            $TargetInfo.Path,
+            (Get-ApplySummaryPath -TargetInfo $TargetInfo)
+        ) `
         -Description "ValidateGdtSignatures/$($TargetInfo.BaseName)"
     $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
     if ([int]$summary.schema_version -ne 1 -or
@@ -632,7 +639,8 @@ function Assert-ValidateSummary {
 }
 
 function Assert-TypedValidationState {
-    Assert-TypedAnalysisState
+    Assert-AnalysisSummary -Path $typedAnalysisSummaryPath
+    Assert-TypedImportState
     foreach ($targetInfo in $targetInfos) {
         Assert-ValidateSummary -TargetInfo $targetInfo
     }
@@ -815,7 +823,7 @@ function Invoke-TypedAnalyze {
 function Invoke-TypedValidate {
     Assert-GdtState
     Assert-TypedImportState
-    Assert-TypedAnalysisState
+    Assert-AnalysisSummary -Path $typedAnalysisSummaryPath
     Remove-TypedValidationSummaries
 
     $argumentList = [Collections.Generic.List[object]]::new()
@@ -851,6 +859,54 @@ function Invoke-TypedValidate {
     Invoke-HeadlessWithChecks `
         -Arguments @($argumentList) `
         -Description 'Ghidra typed signature validation' `
+        -LargeHeap
+    Assert-TypedValidationState
+}
+
+function Invoke-TypedRefresh {
+    Assert-GdtState
+    $typedProjectFile = Join-Path $typedProjectDirectory "$typedProjectName.gpr"
+    if (-not (Test-Path -LiteralPath $typedProjectFile -PathType Leaf)) {
+        throw "Missing typed Ghidra project: $typedProjectFile"
+    }
+    Assert-ImportSummary -Path $typedImportSummaryPath -Description 'typed Ghidra symbol import'
+    Assert-AnalysisSummary -Path $typedAnalysisSummaryPath
+    Remove-TypedApplySummaries
+    Remove-TypedValidationSummaries
+
+    $argumentList = [Collections.Generic.List[object]]::new()
+    foreach ($argument in @(
+        $typedProjectDirectory,
+        $typedProjectName,
+        '-process', $programName,
+        '-noanalysis',
+        '-scriptPath', $ghidraScripts
+    )) {
+        $argumentList.Add($argument)
+    }
+    Add-ApplyPreScripts -Arguments $argumentList
+    foreach ($targetInfo in $targetInfos) {
+        foreach ($argument in @(
+            '-postScript',
+            'ValidateGdtSignatures.java',
+            $gdtPath,
+            $targetInfo.Path,
+            (Get-ValidateSummaryPath -TargetInfo $targetInfo)
+        )) {
+            $argumentList.Add($argument)
+        }
+    }
+    foreach ($argument in @(
+        '-max-cpu', $MaxCpu,
+        '-log', (Join-Path $typedProjectRoot 'logs\typed-refresh.log'),
+        '-scriptlog', (Join-Path $typedProjectRoot 'logs\typed-refresh-script.log')
+    )) {
+        $argumentList.Add($argument)
+    }
+
+    Invoke-HeadlessWithChecks `
+        -Arguments @($argumentList) `
+        -Description 'Ghidra typed signature refresh' `
         -LargeHeap
     Assert-TypedValidationState
 }
@@ -1148,6 +1204,10 @@ if ($Stage -eq 'typed-import') {
 if ($Stage -eq 'typed-analyze') {
     Invoke-TypedAnalyze
     Invoke-TypedValidate
+}
+
+if ($Stage -eq 'typed-refresh') {
+    Invoke-TypedRefresh
 }
 
 if ($Stage -eq 'typed-validate') {

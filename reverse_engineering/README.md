@@ -154,6 +154,13 @@ powershell -ExecutionPolicy Bypass -File `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-analyze
 
+# Reapply the current canonical signatures to an already analyzed project,
+# with analysis disabled, then validate every checked target set.
+powershell -ExecutionPolicy Bypass -File `
+  reverse_engineering/scripts/invoke_ghidra.ps1 `
+  -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
+  -Stage typed-refresh
+
 # Repeat the post-save, read-only signature/ABI validation without reanalysis.
 powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
@@ -175,13 +182,21 @@ graphs reachable from the checked-in function signatures and validates exact
 entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
 completion before writing success summaries. `typed-analyze` and `typed-all`
 also reopen the saved program read-only and repeat those checks; `typed-export`
-requires their fresh success summaries and opens the project read-only. The
-most recent fully analyzed typed project covers the earlier four target sets
-and 77 methods, cumulatively importing 1,979 reachable datatypes. All 77
-signatures survived the complete 2,870-second analysis pass with 209
-parameter-storage locations validated and no mutations during the post-save
-read-only checks. Typed import and analysis of the new status boundary remain a
-separate validation gate.
+requires their fresh success summaries and opens the project read-only.
+`typed-refresh` is the bounded post-analysis path for a changed canonical
+signature: it reopens the preserved project with analysis disabled, reapplies
+all target sets, saves, and then performs the same exact validations.
+
+The current fully analyzed typed project covers all five target sets: 117
+target memberships resolve to 109 exact FunctionDefinitions and 108 unique
+native RVAs. Eight memberships are exact overlaps between boundaries; the one
+remaining shared RVA has incompatible managed identities and is explicitly
+canonicalized for the native program while both exact definitions remain in
+the GDT. The full import cumulatively added 2,032 reachable datatypes, and the
+project completed its analysis pass in 2,781 seconds without a timeout. The
+subsequent no-analysis refresh reapplied all 109 exact signatures across 117
+memberships. An independent read-only pass then validated all 117 memberships
+and 342 parameter storage locations with zero program mutations.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -196,12 +211,13 @@ python reverse_engineering/scripts/audit_ghidra_type_quality.py `
 
 For the current exports, unresolved-type tokens fell from 78 to 43 in
 `gameplay_core`, from 160 to 96 in `gameplay_execution_resolution`, from 370
-to 141 in `gameplay_lifecycle`, and from 38 to 34 in
-`gameplay_roster_helpers`. Raw field-offset accesses fell from 237 to 144, from
-243 to 120, from 678 to 289, and from 76 to 41, respectively. Error-marker
-counts did not increase; lifecycle gained one nonfatal type-propagation warning
-in `Characters.ManageCharacters`. The current public counts and artifact
-observations are recorded in
+to 140 in `gameplay_lifecycle`, from 38 to 34 in
+`gameplay_roster_helpers`, and from 281 to 145 in
+`gameplay_status_corruption_truth`. Raw field-offset accesses fell from 237 to
+144, from 243 to 120, from 678 to 289, from 76 to 41, and from 421 to 148,
+respectively. Error-marker counts did not increase; lifecycle and the status
+boundary each gained one nonfatal decompiler warning. The current public counts
+and artifact observations are recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json).
 
 ## Method coverage
