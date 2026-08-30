@@ -137,6 +137,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   physical order/duplicates, small boards, and achievement ordering; expand
   the typed union to 19 target sets and 415 memberships and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Doppelganger and Drunk to managed `Doppleganger` and
+  `Drunk`; native-audit all 17 role methods plus 22 setup, delayed-reveal,
+  source-filter, unique-pool, registration, status, and execution helpers;
+  close ordered Start/Puppeteer conversion before disguise selection,
+  erased-Villager exclusion, clean/corrupted source pools, state and duplicate
+  weighting, Drunk's two-draw must-include priority and bounded not-in-play
+  guarantee, failure mutations, and register-as/HUD separation; expand the
+  typed union to 20 target sets and 454 memberships and publish its combined
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

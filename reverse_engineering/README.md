@@ -245,6 +245,19 @@ stores that target's real current name before `InitWithNoReset`, and extends
 only on the descendant's later user reveal. Real and lying prior-role clues,
 runtime cast failures, Broken/Working/Altered status gates, Shaman composition,
 small boards, physical multiplicity, and achievement ordering are closed.
+The combined
+[`Doppelganger/Drunk`](notes/roles/gameplay_roles_doppelganger_drunk.md)
+boundary asset-binds both public Good Outcasts to managed `Doppleganger` and
+`Drunk`, covers all 17 declared role methods plus 22 exact setup, reveal,
+filter, pool, registration, status, and execution helpers, and closes their
+complete disguise lifecycle. Drunk runs before Puppeteer, while both disguise
+selectors run only in delayed Reveal after the synchronous ordered Start pass;
+a converted former Villager is real non-bluffable Puppet and cannot be copied
+through its saved display bluff. The audit also fixes clean/corrupted
+Doppelganger source weighting and state-sensitive returned identity, Drunk's
+two-draw must-include priority, its bounded not-in-play guarantee, duplicate
+pool behavior, failure mutations, and the separation between display bluff,
+register-as data, script-role registration, and upstream HUD counts.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -282,14 +295,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_baker
+  -TargetSet gameplay_roles_doppelganger_drunk
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,381
-datatypes. Its nineteen-set inventory contains 415 target memberships, 294
-distinct selected FunctionDefinitions, and 278 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,416
+datatypes. Its twenty-set inventory contains 454 target memberships, 307
+distinct selected FunctionDefinitions, and 287 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -303,13 +316,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current nineteen-set run used three batches for each phase. Ghidra
+sets; the current twenty-set run used three batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all nineteen target sets
-after a no-analysis refresh. One hundred twenty-one memberships are exact
-overlaps between boundaries. Folded/shared bodies make the 294 selected
-definitions exceed the 278 unique native RVAs by sixteen; each canonical native prototype is explicit
+The preserved fully analyzed typed project now covers all twenty target sets
+after a no-analysis refresh. One hundred forty-seven memberships are exact
+overlaps between boundaries. Folded/shared bodies make the 307 selected
+definitions exceed the 287 unique native RVAs by twenty; each canonical native prototype is explicit
 while all exact managed definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
 seconds without a timeout. Subsequent refreshes imported 121 additional
@@ -317,9 +330,10 @@ reachable datatypes, including 40 for the public Dreamer boundary, six for
 Baa, eight for Plague Doctor, six for Judge, and 12 for Witch; the latest
 Chancellor/Witness refresh imported 12 more, and the first Lilis/Knight refresh
 imported 212 more. The Rambler refresh imported 36 more, and the first Baker
-refresh imported 18 more. The three-batch refresh reapplied and validated all
-415 memberships without rerunning auto-analysis. The final read-only pass
-validated all 415 memberships (294 exact definitions) and 1,214
+refresh imported 18 more. The first Doppelganger/Drunk refresh required no new
+reachable datatypes. The three-batch refresh reapplied and validated all 454
+memberships without rerunning auto-analysis. The final read-only pass
+validated all 454 memberships (307 exact definitions) and 1,328
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -352,7 +366,7 @@ Slayer, from 14 to 5 for Wretch, from 105 to 80 for Dreamer2, and from 190 to
 from 190 to 123 for Plague Doctor, from 146 to 80 for Judge, from 119 to 30 for
 Witch, from 237 to 105 for Chancellor/Witness, and from 387 to 154 for the
 combined Lilis/Knight boundary. Rambler fell from 405 to 103, and Baker fell
-from 261 to 71.
+from 261 to 71. The combined Doppelganger/Drunk boundary fell from 216 to 72.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -361,7 +375,7 @@ Dreamer, from 33 to 28 for Baa, from 144 to 21 for Shaman, from 329 to 223
 for Plague Doctor, from 268 to 175 for Judge, and from 241 to 89 for Witch.
 The Chancellor/Witness boundary fell from 294 raw field-offset accesses to
 102, Lilis/Knight fell from 581 to 203, Rambler fell from 699 to 95, and Baker
-fell from 396 to 85.
+fell from 396 to 85. Doppelganger/Drunk fell from 266 to 54.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -372,7 +386,9 @@ patterns from 44 to 12. Rambler retained zero error markers, gained one
 nonfatal warning, reduced placeholder parameters from 436 to zero, and reduced
 indirect-call patterns from 16 to three. Baker retained its two error and 50
 warning markers, reduced placeholder parameters from 360 to zero, and reduced
-indirect-call patterns from 24 to four. The original typed import is
+indirect-call patterns from 24 to four. Doppelganger/Drunk retained one error
+marker, gained one nonfatal warning, reduced placeholder parameters from 291
+to zero, and reduced indirect-call patterns from nine to zero. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -401,14 +417,16 @@ The current Rambler comparison is in the
 [`Rambler typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_rambler.json).
 The current Baker comparison is in the
 [`Baker typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_baker.json).
+The current combined comparison is in the
+[`Doppelganger/Drunk typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_roles_doppelganger_drunk.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 295 classifications backed by
-119 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 309 classifications backed by
+125 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

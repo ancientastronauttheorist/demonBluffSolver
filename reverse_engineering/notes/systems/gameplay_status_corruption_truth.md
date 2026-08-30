@@ -229,7 +229,12 @@ Reveal's Init. A clean Doppelganger-as-Alchemist can consequently perform a
 late cure after the ordered Alchemist pass. A corrupted Doppelganger receives
 no such Start dispatch. Cross-card `registerAs` eligibility is schedule-
 sensitive because another card publishes it only when that card's delayed
-Reveal resumes; this slice does not establish coroutine resume order.
+Reveal resumes; this slice does not establish coroutine resume order. The
+dedicated
+[`Doppelganger/Drunk` audit](../roles/gameplay_roles_doppelganger_drunk.md#setup-and-delayed-reveal-chronology)
+closes the stronger Start boundary: Puppeteer conversion completes before any
+initial delayed Reveal resumes, and the resulting real non-bluffable Puppet is
+excluded from both Doppelganger branches regardless of sibling resume order.
 
 ## Confessor appearance and internal Reveal
 
@@ -308,6 +313,11 @@ and raw-status Drunk boundary are closed by the dedicated
 [Plague Doctor role audit](../roles/gameplay_role_plague_doctor.md).
 
 ### Drunk self-corruption and bluff selection
+
+The dedicated
+[`Doppelganger/Drunk` audit](../roles/gameplay_roles_doppelganger_drunk.md#drunk-selection-and-registration)
+adds the exact two-draw must-include priority, fallback reuse, duplicate
+weighting, bounded not-in-play guarantee, and registration consequences.
 
 `Drunk.Act` attempts one self-targeted Corrupted insertion at `Start`: Drunk is
 both source and shared cure target. Exact Corrupted resistance makes the whole

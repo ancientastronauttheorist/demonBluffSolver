@@ -142,7 +142,12 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Witness + Shaman tracking** — FIXED. `Scenario.messed_up_by_evil` carries each resistance-aware Shaman marker attempt through the ordered Start pass.
 
-- [ ] **Doppelganger can't copy Puppet's original role** — Villager turned into Puppet is no longer "in play" as Good Villager. Doppelganger can't disguise as that role.
+- [x] **Doppelganger can't copy Puppet's original role** — NATIVE-CLOSED.
+  Puppeteer finishes conversion before delayed disguise selection. The target's
+  real `dataRef` is then non-bluffable Evil Puppet; its saved Villager exists
+  only as a display bluff, so both clean and Corrupted Doppelganger reject the
+  converted physical card. A separate surviving copy remains independently
+  eligible.
 
 - [x] **Puppeteer can't convert Shaman clones** — FIXED. Puppet conversion runs before Shaman; the generated Puppet is removed from Shaman's eligible Villager set and covered by a focused regression.
 
