@@ -145,3 +145,15 @@
 {"method":"tdi5905.m0004","state":"understood","reason":"Wretch's bluff action is a distinct managed no-op sharing the real action's native body.","evidence":["ev.role.wretch.surface.1"]}
 {"method":"tdi5905.m0005","state":"understood","reason":"The exact Minion primary/fallback pools, uniform draw, non-mutation, and failure behavior are documented.","evidence":["ev.role.wretch.registration.1","ev.roles.slayer-wretch.bridge.1"]}
 {"method":"tdi5905.m0006","state":"understood","reason":"The constructor's legacy identifier and chat-list initialization are documented as unused by current selection.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5853.m0002","state":"understood","reason":"The base GetDreamerClue provider's constant fallback text and lack of use by Dreamer2 are documented.","evidence":["ev.role.dreamer2.surface.1"]}
+{"method":"tdi5854.m0001","state":"understood","reason":"Scout is the only GetDreamerClue override and returns the same constant fallback as Role.","evidence":["ev.role.dreamer2.surface.1"]}
+{"method":"tdi5877.m0000","state":"understood","reason":"The Dreamer2 description literal and its stale one-character wording are documented.","evidence":["ev.role.dreamer2.surface.1"]}
+{"method":"tdi5877.m0001","state":"understood","reason":"The real-role passive surface returns a fresh empty acted-information record.","evidence":["ev.role.dreamer2.surface.1"]}
+{"method":"tdi5877.m0002","state":"understood","reason":"The bluff passive surface returns a fresh empty acted-information record.","evidence":["ev.role.dreamer2.surface.1"]}
+{"method":"tdi5877.m0003","state":"understood","reason":"The Day gate, exactly-two-character picker setup, normal completion subscription, and stop subscription are documented.","evidence":["ev.role.dreamer2.picker.1"]}
+{"method":"tdi5877.m0004","state":"understood","reason":"Normal resolution removes both registered target types from the four-type pool, samples uniformly, and emits the stored true exclusion clue.","evidence":["ev.role.dreamer2.resolve.1"]}
+{"method":"tdi5877.m0005","state":"understood","reason":"The Day-gated bluff path installs the two-character picker with its false-result completion handler.","evidence":["ev.role.dreamer2.picker.1"]}
+{"method":"tdi5877.m0006","state":"understood","reason":"Cancellation removes both possible completion handlers and the stop handler.","evidence":["ev.role.dreamer2.picker.1"]}
+{"method":"tdi5877.m0007","state":"understood","reason":"Bluff resolution samples registered types from usually-disguised targets or both targets as fallback, preserving duplicate weight and emitting a false exclusion clue.","evidence":["ev.role.dreamer2.resolve.1"]}
+{"method":"tdi5877.m0008","state":"understood","reason":"The exact two-ID type-exclusion string layout, including the single literal number prefix, is documented.","evidence":["ev.role.dreamer2.resolve.1"]}
+{"method":"tdi5877.m0009","state":"understood","reason":"The compiler-provided Dreamer2 constructor follows only the folded base-role initialization path.","evidence":["ev.role.dreamer2.surface.1"]}

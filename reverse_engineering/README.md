@@ -147,6 +147,13 @@ methods (the latter is managed internally as `Recluse`). Their paired
 [`Wretch`](notes/roles/gameplay_role_wretch.md) audits join registered
 alignment, picker dispatch, the folded Wretch action body, and Slayer's
 kill-and-reveal behavior to the live Wretch regression.
+The next role-class boundary adds all ten `Dreamer2` methods plus the two
+`GetDreamerClue` virtual providers. Its
+[`Dreamer2`](notes/roles/gameplay_role_dreamer2.md) audit reconstructs the
+two-character randomized type-exclusion result. Serialized asset evidence
+binds the public card to managed `Dreamer`, however, and finds no current
+gameplay binding for `Dreamer2`; the alternate class therefore does not replace
+the live role-pair contract.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -189,9 +196,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,237
-datatypes. Its eight-set inventory contains 154 target memberships, 144 distinct
-selected FunctionDefinitions, and 142 unique native RVAs. The typed project is
+the union of every checked target set. The current archive contains 151,251
+datatypes. Its nine-set inventory contains 166 target memberships, 156 distinct
+selected FunctionDefinitions, and 153 unique native RVAs. The typed project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
 labels, prototypes, dynamic Windows x64 storage, and transaction completion
@@ -204,16 +211,17 @@ and then performs the same exact validations in a separate read-only headless
 pass. Splitting those phases keeps the growing target inventory below Windows'
 command-line limit.
 
-The preserved fully analyzed typed project now covers all eight target sets
+The preserved fully analyzed typed project now covers all nine target sets
 after a no-analysis refresh. Ten memberships are exact overlaps between
-boundaries; two shared RVAs have incompatible managed identities and are
-explicitly canonicalized for the native program while all exact definitions
-remain in the GDT. The original full import added 2,032 reachable datatypes and
-completed its analysis pass in 2,781 seconds without a timeout. Subsequent
-refreshes imported 37 additional reachable datatypes, most recently reapplied
-and validated all 154 memberships without rerunning auto-analysis. The final
-read-only pass validated all 154 memberships (144 exact definitions) and 449
-membership-level parameter-storage locations with zero program mutations.
+boundaries. Folded/shared bodies make the 156 selected definitions exceed the
+153 unique native RVAs by three; each canonical native prototype is explicit
+while all exact managed definitions remain in the GDT. The original full
+import added 2,032 reachable datatypes and completed its analysis pass in 2,781
+seconds without a timeout. Subsequent refreshes imported 49 additional
+reachable datatypes, most recently reapplied and validated all 166 memberships
+without rerunning auto-analysis. The final read-only pass validated all 166
+memberships (156 exact definitions) and 482 membership-level parameter-storage
+locations with zero program mutations.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -232,18 +240,22 @@ to 140 in `gameplay_lifecycle`, from 38 to 34 in
 `gameplay_roster_helpers`, and from 281 to 145 in
 `gameplay_status_corruption_truth`, from 114 to 70 in
 `gameplay_bluff_acquisition`, from 70 to 51 in `gameplay_role_slayer`, and from
-14 to 5 in `gameplay_role_wretch`. Raw field-offset accesses fell from 237 to
-144, from 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from
-132 to 62 for the six subsystem boundaries, then from 97 to 83 for Slayer and
-20 to 8 for Wretch. Error-marker counts did not increase; lifecycle and the
-status boundary each gained one nonfatal decompiler warning, while both role
-reports retained their baseline warning counts. The original typed import is
+14 to 5 in `gameplay_role_wretch`, and from 105 to 80 in
+`gameplay_role_dreamer2`. Raw field-offset accesses fell from 237 to 144, from
+243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
+for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
+for Wretch, and from 167 to 156 for Dreamer2. Error-marker counts did not
+increase; lifecycle and the status boundary each gained one nonfatal
+decompiler warning, while all three role reports retained their baseline
+warning counts. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
 [`Slayer typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_slayer.json)
 and
-[`Wretch typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_wretch.json).
+[`Wretch typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_wretch.json),
+plus the
+[`Dreamer2 typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_dreamer2.json).
 
 ## Method coverage
 

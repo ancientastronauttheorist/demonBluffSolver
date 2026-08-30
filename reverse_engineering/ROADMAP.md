@@ -71,6 +71,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Expand the deterministic typed union to eight target sets and 154 target
   memberships; support folded per-role native bodies in apply/validation and
   publish both role quality reports.
+- [x] Map, baseline-export, type, and native-audit all 12 methods in the
+  internal `Dreamer2` boundary, including its randomized type-exclusion clue
+  and the complete `GetDreamerClue` provider set.
+- [x] Asset-bind the public Dreamer card to managed `Dreamer`; prove that
+  `Dreamer2` and `DreamerOld` are unbound in the current gameplay assets.
+- [ ] Recover and validate the bound 11-method public `Dreamer`
+  implementation and its role-pair likelihood model.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.
