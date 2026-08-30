@@ -208,7 +208,10 @@ Memory reader notes:
   through the other target's bluff. Validate exact native output support rather
   than enforcing authored one-match/zero-match counts. Solver recommendations
   must include two targets; if only one is printed, stop and fix the strategy.
-  Do not infer that a role such as Gravedigger was removed from a few outputs.
+  New observations carry `dreamer_variant: public_current`; unversioned role
+  pairs are archived pre-audit fixtures and intentionally use their conservative
+  legacy predicate. Do not infer that a role such as Gravedigger was removed
+  from a few outputs.
 - Rambler was redesigned. Old solver code modeled "picked by a liar silences
   Rambler"; that rule is obsolete. New rule: adjacent truthful characters tell
   Rambler to shut up instead of sharing their own info. `auto_card` should record

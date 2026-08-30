@@ -70,7 +70,7 @@ The full pipeline:
 
 - Full constraint-satisfaction over all possible evil placements
 - Handles disguises, lying, corruption, and role-specific validation
-- 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer/Dreamer2, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
+- 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
 - Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, Baa hidden-deck reveal after death, and public Dreamer two-target automation
 - Bombardier protection (instant loss if wrongly executed)
 - Execution lookahead with HP-aware decision making

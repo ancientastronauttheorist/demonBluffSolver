@@ -41,6 +41,7 @@ class TestDreamerConstructors(unittest.TestCase):
             {
                 "targets": [3, 9],
                 "evil_role_options": ["Puppeteer", "Lover"],
+                "dreamer_variant": "public_current",
             },
         )
 
@@ -77,7 +78,11 @@ class TestDreamerConstructors(unittest.TestCase):
         self.assertEqual(card.info_text, clue)
         self.assertEqual(
             card.info_parsed,
-            {"targets": [3, 9], "cabbage": True},
+            {
+                "targets": [3, 9],
+                "cabbage": True,
+                "dreamer_variant": "public_current",
+            },
         )
 
         for targets in ([3], [3, 9, 10], [3, "9"], None):
@@ -168,6 +173,7 @@ class TestDreamerMemoryIngestion(unittest.TestCase):
             {
                 "targets": [3, 9],
                 "evil_role_options": ["Puppeteer", "Lover"],
+                "dreamer_variant": "public_current",
             },
         )
 
@@ -181,7 +187,11 @@ class TestDreamerMemoryIngestion(unittest.TestCase):
         self.assertEqual(parsed.info_text, clue)
         self.assertEqual(
             parsed.info_parsed,
-            {"targets": [3, 9], "cabbage": True},
+            {
+                "targets": [3, 9],
+                "cabbage": True,
+                "dreamer_variant": "public_current",
+            },
         )
 
     def test_legacy_one_target_uses_its_clue_id(self):
@@ -216,6 +226,7 @@ class TestDreamerManualRouting(unittest.TestCase):
             {
                 "targets": [3, 9],
                 "evil_role_options": ["Puppeteer", "Lover"],
+                "dreamer_variant": "public_current",
             },
         )
 
@@ -244,7 +255,11 @@ class TestDreamerManualRouting(unittest.TestCase):
         parsed = _parse_card_cli(["dreamer_cabbage", "5", "3,9"])
         self.assertEqual(
             parsed.info_parsed,
-            {"targets": [3, 9], "cabbage": True},
+            {
+                "targets": [3, 9],
+                "cabbage": True,
+                "dreamer_variant": "public_current",
+            },
         )
 
 

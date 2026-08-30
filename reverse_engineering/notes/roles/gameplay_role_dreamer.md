@@ -165,19 +165,35 @@ references are stored in the emitted `ActedInfo`, and the result is passed to
 
 ## Solver implications
 
-- The public parser should require exactly two displayed target IDs and two
-  nonempty, distinct role options, while retaining the historical one-target
-  shape only for old builds and fixtures.
-- Validation must compare against underlying `dataRef` roles while also using
-  the known apparent bluffs to model native output reachability. A truthful pair
-  needs at least one match, and the reachable two-match fallback must remain
-  valid. A lying pair normally has zero matches, but a selected bluff can equal
-  the other target's real role; an unconditional zero-match rule is too strict.
+- The public parser requires exactly two displayed target IDs and two nonempty,
+  distinct role options, while retaining the historical one-target shape for
+  old builds and fixtures.
+- Validation compares underlying `dataRef` roles and known apparent bluffs to
+  model native output reachability. A truthful pair needs at least one match,
+  and the reachable two-match fallback remains valid. A lying pair normally
+  has zero matches, but a selected bluff can equal the other target's real
+  role; an unconditional zero-match rule would be too strict.
 - A Cabbage clue proves a truthful Dreamer selected at least one Wretch.
-- The recommender cannot treat the output as the sorted roles of both targets
-  or create one deterministic `lie_<roles>` branch. The native observation is
-  a weighted distribution over anchor choice, target bluffs, board-entry draws,
-  and unique-identity draws.
+- The recommender uses a weighted distribution over anchor choice, target
+  bluffs, board-entry draws, and unique-identity draws rather than treating the
+  output as the sorted target roles or a deterministic `lie_<roles>` branch.
+
+## Clean-room solver parity
+
+New parser and manual-entry records carry
+`dreamer_variant: "public_current"`. That marker selects the exact native
+support validator. Older unversioned role-pair fixtures were recorded before
+this schema marker and lack exact build provenance, so they retain their
+conservative historical match/no-match predicate. This keeps the active replay
+corpus usable without weakening new live observations.
+
+The Python recommender computes mutual information from the complete native
+observation likelihood `P(output | scenario)`, including board-entry
+multiplicity and liar draws without replacement. An incomplete board projection
+does not invent fake outputs or an information score. Focused parser,
+validator, likelihood, Cabbage, collision, malformed-schema, and stable-tie
+regressions accompany the implementation. The release simulation corpus passes
+with the historical/current schema boundary in place.
 
 ## Typed-analysis corroboration
 

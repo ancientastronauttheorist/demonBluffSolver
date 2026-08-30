@@ -100,7 +100,11 @@ class TestCardDreamerAmbiguous(unittest.TestCase):
         self.assertEqual(ci.apparent_role, "Dreamer")
         self.assertEqual(
             ci.info_parsed,
-            {"targets": [4, 9], "evil_role_options": ["Pooka", "Rambler"]},
+            {
+                "targets": [4, 9],
+                "evil_role_options": ["Pooka", "Rambler"],
+                "dreamer_variant": "public_current",
+            },
         )
 
     def test_copies_lists_defensively(self):
@@ -137,7 +141,11 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
         self.assertEqual(ci.apparent_role, "Dreamer")
         self.assertEqual(
             ci.info_parsed,
-            {"targets": [4, 9], "evil_role_options": ["Pooka", "Rambler"]},
+            {
+                "targets": [4, 9],
+                "evil_role_options": ["Pooka", "Rambler"],
+                "dreamer_variant": "public_current",
+            },
         )
 
     def test_ambiguous_asc74_v2(self):
@@ -150,7 +158,11 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
         self.assertIsNotNone(ci)
         self.assertEqual(
             ci.info_parsed,
-            {"targets": [1, 8], "evil_role_options": ["Lilis", "Knitter"]},
+            {
+                "targets": [1, 8],
+                "evil_role_options": ["Lilis", "Knitter"],
+                "dreamer_variant": "public_current",
+            },
         )
 
     def test_standard_dreamer_fallthrough(self):

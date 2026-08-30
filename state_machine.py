@@ -648,7 +648,7 @@ class GameStateMachine:
 
         if ability_name == "Dreamer" and len(targets or []) != 2:
             self._pause(
-                f"Dreamer2 requires exactly 2 targets; solver returned {targets}. "
+                f"Dreamer requires exactly 2 targets; solver returned {targets}. "
                 f"Handle manually, then 'resume'."
             )
             return

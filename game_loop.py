@@ -161,6 +161,7 @@ def card_dreamer_ambiguous(
         info_parsed={
             "targets": normalized_targets,
             "evil_role_options": normalized_options,
+            "dreamer_variant": "public_current",
         },
     )
 
@@ -176,7 +177,11 @@ def card_dreamer_cabbage(
         pos,
         "Dreamer",
         info_text=info_text,
-        info_parsed={"targets": normalized_targets, "cabbage": True},
+        info_parsed={
+            "targets": normalized_targets,
+            "cabbage": True,
+            "dreamer_variant": "public_current",
+        },
     )
 
 
@@ -1205,7 +1210,7 @@ class GameSession:
 
         if ability_name == "dreamer" and len(targets) != 2:
             return {"success": False, "info_parsed": None,
-                    "error": f"Dreamer2 requires exactly 2 targets, got {targets}"}
+                    "error": f"Dreamer requires exactly 2 targets, got {targets}"}
 
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
@@ -1253,7 +1258,7 @@ class GameSession:
                         "error": f"Failed to click target #{t}: {e}"}
             time.sleep(0.25)  # pause between target clicks
 
-        # Step 3: Wait for ability result in memory. Dreamer2 can set the act
+        # Step 3: Wait for ability result in memory. Public Dreamer can set the act
         # flag and clue text while leaving uses at 0.
         print(f"  [auto_ability] Waiting for ability result...")
         target_card_data = None
@@ -1708,7 +1713,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
     # --- Guard: active-ability-only roles with unused abilities ---
     # These roles have NO passive speech bubble. If ability hasn't been used,
     # any clue_text/acted_infos is stale from a previous village — ignore it.
-    # Prefer `uses`, but Dreamer2 currently sets ability_used=True while leaving
+    # Prefer `uses`, but public Dreamer currently sets ability_used=True while leaving
     # uses at 0 after a real fire. PD is stricter because its game-start setup
     # can set the act flag before the active check ability is used.
     ACTIVE_ONLY_ROLES = {
@@ -1900,7 +1905,7 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             )
 
         # Old Dreamer1 form. Anchor the complete clue and capture its own ID;
-        # otherwise Dreamer2's "None of them is <type>" sentence can be
+        # otherwise the unbound Dreamer2 "None of them is <type>" sentence can be
         # mistaken for a one-target role clue.
         m = re.fullmatch(
             r"\s*#\s*(\d+)\s+(?:could\s+be|is)\s*:?\s*"

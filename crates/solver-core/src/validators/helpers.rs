@@ -46,7 +46,7 @@ pub fn is_evil_in_board_state(pos: u8, scenario: &Scenario, state: &GameState) -
 /// True underlying role at a position, considering evil placements,
 /// outcast placements, and apparent_role for undisguised good cards.
 ///
-/// Used by Dreamer2 / ambiguous validators that can name ANY role (not just evil).
+/// Used by public Dreamer role-pair validation, which can name any role.
 pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Option<String> {
     if let Some(role) = known_evil_role(pos, scenario, state) {
         return Some(role.to_string());
@@ -399,7 +399,7 @@ pub fn info_targets(info: &serde_json::Map<String, serde_json::Value>, key: &str
     Some(arr.iter().filter_map(|v| v.as_i64().map(|x| x as u8)).collect())
 }
 
-/// Helper to read a list of strings from info_parsed (e.g. Dreamer2 evil_role_options).
+/// Helper to read a list of strings from info_parsed (for example role options).
 pub fn info_str_array<'a>(
     info: &'a serde_json::Map<String, serde_json::Value>,
     key: &str,

@@ -79,7 +79,7 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Map, baseline-export, type, and native-audit the complete public
   `Dreamer` boundary: all 11 role methods plus five compiler-generated helpers,
   including its Cabbage branch and exact current-build role-pair weighting.
-- [ ] Implement and regression-test the public Dreamer parser, native-support
+- [x] Implement and regression-test the public Dreamer parser, native-support
   validator, and weighted role-pair recommendation model.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.

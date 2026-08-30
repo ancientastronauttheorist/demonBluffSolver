@@ -1593,8 +1593,8 @@ fn regression_asc76_v4_data_completeness() {
 }
 
 #[test]
-fn regression_asc79_v2_dreamer2_outcast_option() {
-    // asc79 village 2: Dreamer2 result "Among #2, #6 there is Baa or
+fn regression_asc79_v2_dreamer_outcast_option() {
+    // asc79 village 2: archived Dreamer result "Among #2, #6 there is Baa or
     // Doppelganger". Baa already executed at #5. Doppelganger (outcast, Good)
     // is the true answer at #6.
     //
@@ -1611,6 +1611,6 @@ fn regression_asc79_v2_dreamer2_outcast_option() {
     let value: serde_json::Value = serde_json::from_str(&content).unwrap();
     let result = simulate_game(&value);
     if let SimResult::ConstraintFailure { detail, .. } = &result {
-        panic!("asc79_v2 truth eliminated (Dreamer2 outcast option regression): {detail}");
+        panic!("asc79_v2 truth eliminated (Dreamer outcast option regression): {detail}");
     }
 }
