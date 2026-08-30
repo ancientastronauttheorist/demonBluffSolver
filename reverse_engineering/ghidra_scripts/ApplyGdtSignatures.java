@@ -27,6 +27,7 @@ import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;
 import ghidra.app.cmd.function.FunctionRenameOption;
 import ghidra.app.util.headless.HeadlessScript;
 import ghidra.program.model.address.Address;
+import ghidra.program.model.data.AbstractFloatDataType;
 import ghidra.program.model.data.DataType;
 import ghidra.program.model.data.DataTypeConflictHandler;
 import ghidra.program.model.data.FileDataTypeManager;
@@ -561,14 +562,26 @@ public class ApplyGdtSignatures extends HeadlessScript {
         }
         for (int index = 0; index < WINDOWS_X64_ARGUMENT_REGISTERS.length; index++) {
             VariableStorage storage = parameters[index].getVariableStorage();
+            DataType parameterType = prepared.archiveDefinition
+                .getArguments()[index]
+                .getDataType();
+            String expectedRegister = parameterType instanceof AbstractFloatDataType
+                ? "XMM" + index
+                : WINDOWS_X64_ARGUMENT_REGISTERS[index];
+            String actualRegister = storage.isRegisterStorage() &&
+                    storage.getRegister() != null
+                ? storage.getRegister().getBaseRegister().getName()
+                : null;
+            String storageDescription = storage.toString();
             if (!storage.isRegisterStorage() || storage.getRegister() == null ||
-                    !WINDOWS_X64_ARGUMENT_REGISTERS[index].equals(
-                        storage.getRegister().getBaseRegister().getName()
-                    )) {
+                    !(expectedRegister.equals(actualRegister) ||
+                        actualRegister.startsWith(expectedRegister + "_") ||
+                        storageDescription.startsWith(expectedRegister + ":") ||
+                        storageDescription.startsWith(expectedRegister + "_"))) {
                 throw new IllegalStateException(
                     prepared.target.name + ": parameter " + index +
                     " expected register family " +
-                    WINDOWS_X64_ARGUMENT_REGISTERS[index] + ", got " + storage
+                    expectedRegister + ", got " + storage
                 );
             }
         }

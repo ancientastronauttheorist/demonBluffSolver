@@ -121,6 +121,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   additional-four/total-nine corrupted-Good execution result; expand the typed
   union to 17 target sets and 343 memberships and publish the combined quality
   report.
+- [x] Asset-bind public Rambler to managed `Rambler2`; native-audit all 14 role
+  methods, both compiler-generated closure methods, and 20 setup, dispatch,
+  adjacency, interference, acted-history, and reveal helpers; close pre-flip
+  AfterRoundStart installation, actual-source versus apparent-target truth,
+  hidden callback persistence and last-writer behavior, duplicate/small-board
+  adjacency, immediate versus pre-append history, and constraint-free Day
+  quotes with exact references; expand the typed union to 18 target sets and
+  379 memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

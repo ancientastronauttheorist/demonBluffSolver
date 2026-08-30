@@ -36,6 +36,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Doppelganger — no issues
 - [x] Drunk — Knight HP edge case
 - [x] Plague Doctor — 154 active observations plus focused native callback tests
+- [x] Rambler — full managed `Rambler2` boundary native-audited; pre-flip
+  installation, real/bluff source dispatch, target appearance, persistent
+  callbacks, exact history/reference shape, and duplicate ordering closed
 - [x] Wretch — root cause of 4 validator bugs
 - [x] Chancellor — outcast count + Witness tracking gaps
 - [x] Minion — no issues
@@ -168,3 +171,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   audited; hard registered-Good selection, repeated/duplicate Night timing,
   protected/no-target fixed damage, real/bluff identity interactions, Slayer
   bypass, and exact 0/4/6/9 HP outcomes have focused regressions.
+- [x] **Rambler**: Full managed `Rambler2` boundary audited; pre-flip
+  AfterRoundStart installation, actual-source/apparent-target truth, hidden
+  persistent callbacks, immediate versus pre-append history, exact one-source
+  shut-up references, duplicate/small-board behavior, and constraint-free quote
+  references are documented against focused regressions.

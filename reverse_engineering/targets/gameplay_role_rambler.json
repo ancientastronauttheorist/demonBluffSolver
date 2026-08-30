@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Rambler implementation, managed as Rambler2, with pre-reveal AfterRoundStart dispatch, truthful-versus-lying adjacent interference, hidden-neighbor callbacks, acted-history mutation, Day quote, and legacy picker residue boundary",
+  "functions": [
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Characters.ShuffleDeck.MoveNext",
+      "metadata_name": "Characters.<ShuffleDeck>d__16$$MoveNext",
+      "signature": "bool Characters__ShuffleDeck_d__16__MoveNext (Characters__ShuffleDeck_d__16_o* __this, const MethodInfo* method);",
+      "rva": "0x376B00"
+    },
+    {
+      "name": "Gameplay.ShuffleDeck",
+      "metadata_name": "Gameplay$$ShuffleDeck",
+      "signature": "void Gameplay__ShuffleDeck (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x380CE0"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Character.DelayReveal.MoveNext",
+      "metadata_name": "Character.<DelayReveal>d__84$$MoveNext",
+      "signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "rva": "0x3756B0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "Character.Reveal",
+      "metadata_name": "Character$$Reveal",
+      "signature": "void Character__Reveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368410"
+    },
+    {
+      "name": "RevealCard.Reveal",
+      "metadata_name": "RevealCard$$Reveal",
+      "signature": "void RevealCard__Reveal (RevealCard_o* __this, const MethodInfo* method);",
+      "rva": "0x386A60"
+    },
+    {
+      "name": "Character.InterfereActed",
+      "metadata_name": "Character$$InterfereActed",
+      "signature": "void Character__InterfereActed (Character_o* __this, ActedInfo_o* info, float delay, float howLong, bool isDelay, bool clearMemory, const MethodInfo* method);",
+      "rva": "0x365D90"
+    },
+    {
+      "name": "Character.InterfereDelay",
+      "metadata_name": "Character$$InterfereDelay",
+      "signature": "System_Collections_IEnumerator_o* Character__InterfereDelay (Character_o* __this, ActedInfo_o* info, float delay, float timer, bool isDelay, bool clearMemory, const MethodInfo* method);",
+      "rva": "0x365E50"
+    },
+    {
+      "name": "Character.InterfereDelay.MoveNext",
+      "metadata_name": "Character.<InterfereDelay>d__131$$MoveNext",
+      "signature": "bool Character__InterfereDelay_d__131__MoveNext (Character__InterfereDelay_d__131_o* __this, const MethodInfo* method);",
+      "rva": "0x375A50"
+    },
+    {
+      "name": "Character.ShowActedDelayed",
+      "metadata_name": "Character$$ShowActedDelayed",
+      "signature": "System_Collections_IEnumerator_o* Character__ShowActedDelayed (Character_o* __this, float delay, ActedInfo_o* info, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x368A50"
+    },
+    {
+      "name": "Character.ShowActedDelayed.MoveNext",
+      "metadata_name": "Character.<ShowActedDelayed>d__133$$MoveNext",
+      "signature": "bool Character__ShowActedDelayed_d__133__MoveNext (Character__ShowActedDelayed_d__133_o* __this, const MethodInfo* method);",
+      "rva": "0x375FE0"
+    },
+    {
+      "name": "Characters.GetAdjacentCharacters",
+      "metadata_name": "Characters$$GetAdjacentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C2E0"
+    },
+    {
+      "name": "CharacterHelper.CheckLyingAppearance",
+      "metadata_name": "CharacterHelper$$CheckLyingAppearance",
+      "signature": "bool CharacterHelper__CheckLyingAppearance (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397630"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Role.ManagePreAct",
+      "metadata_name": "Role$$ManagePreAct",
+      "signature": "void Role__ManagePreAct (Role_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3C4DD0"
+    },
+    {
+      "name": "Role.OnActed",
+      "metadata_name": "Role$$OnActed",
+      "signature": "bool Role__OnActed (Role_o* __this, int32_t trigger, Character_o* charRef, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x3C4E30"
+    },
+    {
+      "name": "Rambler2.DisplayClass9.ctor",
+      "metadata_name": "Rambler2.<>c__DisplayClass9_0$$.ctor",
+      "signature": "void Rambler2___c__DisplayClass9_0___ctor (Rambler2___c__DisplayClass9_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Rambler2.DisplayClass9.InterefereCharacter",
+      "metadata_name": "Rambler2.<>c__DisplayClass9_0$$<InterefereCharacter>b__0",
+      "signature": "void Rambler2___c__DisplayClass9_0___InterefereCharacter_b__0 (Rambler2___c__DisplayClass9_0_o* __this, ActedInfo_o* info, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3CDE30"
+    },
+    {
+      "name": "Rambler2.get_Description",
+      "metadata_name": "Rambler2$$get_Description",
+      "signature": "System_String_o* Rambler2__get_Description (Rambler2_o* __this, const MethodInfo* method);",
+      "rva": "0x3C2790"
+    },
+    {
+      "name": "Rambler2.Act",
+      "metadata_name": "Rambler2$$Act",
+      "signature": "void Rambler2__Act (Rambler2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C09D0"
+    },
+    {
+      "name": "Rambler2.BluffAct",
+      "metadata_name": "Rambler2$$BluffAct",
+      "signature": "void Rambler2__BluffAct (Rambler2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C0AE0"
+    },
+    {
+      "name": "Rambler2.ShutUpAdjacentTruthfulls",
+      "metadata_name": "Rambler2$$ShutUpAdjacentTruthfulls",
+      "signature": "void Rambler2__ShutUpAdjacentTruthfulls (Rambler2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C1700"
+    },
+    {
+      "name": "Rambler2.ShutUpAdjacentLyings",
+      "metadata_name": "Rambler2$$ShutUpAdjacentLyings",
+      "signature": "void Rambler2__ShutUpAdjacentLyings (Rambler2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C15B0"
+    },
+    {
+      "name": "Rambler2.InterefereCharacter",
+      "metadata_name": "Rambler2$$InterefereCharacter",
+      "signature": "void Rambler2__InterefereCharacter (Rambler2_o* __this, Character_o* charRef, Character_o* ch, bool shouldLie, const MethodInfo* method);",
+      "rva": "0x3C10F0"
+    },
+    {
+      "name": "Rambler2.InterfereCharacterOnReveal",
+      "metadata_name": "Rambler2$$InterfereCharacterOnReveal",
+      "signature": "void Rambler2__InterfereCharacterOnReveal (Rambler2_o* __this, bool shouldLie, ActedInfo_o* info, int32_t trigger, Character_o* charRef, Character_o* targetCh, const MethodInfo* method);",
+      "rva": "0x3C1450"
+    },
+    {
+      "name": "Rambler2.GetInfo",
+      "metadata_name": "Rambler2$$GetInfo",
+      "signature": "ActedInfo_o* Rambler2__GetInfo (Rambler2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C0F60"
+    },
+    {
+      "name": "Rambler2.GetBluffInfo",
+      "metadata_name": "Rambler2$$GetBluffInfo",
+      "signature": "ActedInfo_o* Rambler2__GetBluffInfo (Rambler2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C0DD0"
+    },
+    {
+      "name": "Rambler2.IsCharacterLying",
+      "metadata_name": "Rambler2$$IsCharacterLying",
+      "signature": "bool Rambler2__IsCharacterLying (Rambler2_o* __this, Character_o* c, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C1590"
+    },
+    {
+      "name": "Rambler2.GetARandomQuote",
+      "metadata_name": "Rambler2$$GetARandomQuote",
+      "signature": "System_String_o* Rambler2__GetARandomQuote (Rambler2_o* __this, const MethodInfo* method);",
+      "rva": "0x3C0D40"
+    },
+    {
+      "name": "Rambler2.ConjourInfo",
+      "metadata_name": "Rambler2$$ConjourInfo",
+      "signature": "System_String_o* Rambler2__ConjourInfo (Rambler2_o* __this, bool isPickerDisguised, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x3C0C50"
+    },
+    {
+      "name": "Rambler2.CheckAchievementsAndUnlockIfAble",
+      "metadata_name": "Rambler2$$CheckAchievementsAndUnlockIfAble",
+      "signature": "void Rambler2__CheckAchievementsAndUnlockIfAble (Rambler2_o* __this, System_String_o* info, const MethodInfo* method);",
+      "rva": "0x3C0BF0"
+    },
+    {
+      "name": "Rambler2.ctor",
+      "metadata_name": "Rambler2$$.ctor",
+      "signature": "void Rambler2___ctor (Rambler2_o* __this, const MethodInfo* method);",
+      "rva": "0x3C1850"
+    }
+  ]
+}

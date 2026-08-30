@@ -222,6 +222,18 @@ Knight protection follows HealthyBluff, Corrupted, then runtime-Evil
 precedence. A corrupted runtime-Good Knight costs the ordinary five HP plus a
 fixed additional four, for nine total; Lilis and Slayer never run that
 OnExecuted hook.
+The following [`Rambler`](notes/roles/gameplay_role_rambler.md) boundary
+asset-binds the public card to managed `Rambler2` and covers all 14 role
+methods, both compiler-generated closure methods, and 20 exact setup,
+truth-dispatch, adjacency, reveal, interference, and acted-history helpers.
+It proves that interference installs during each physical card's internal
+pre-flip AfterRoundStart reveal. Clean real and HealthyBluff fake Rambler
+surfaces target appearance-truthful neighbours; corrupted real and ordinary
+lying fake surfaces target appearance-lying neighbours. Hidden targets retain
+persistent callbacks which replace the imminent acted record with exactly one
+Rambler reference, while already non-Hidden targets receive a separate history
+entry. User-reveal quotes are constraint-free but carry exact circular
+predecessor/successor references, including duplicate small-board entries.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -259,14 +271,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_roles_lilis_knight
+  -TargetSet gameplay_role_rambler
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,350
-datatypes. Its seventeen-set inventory contains 343 target memberships, 247
-distinct selected FunctionDefinitions, and 233 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,381
+datatypes. Its eighteen-set inventory contains 379 target memberships, 274
+distinct selected FunctionDefinitions, and 259 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -277,26 +289,34 @@ their fresh success summaries and opens the project read-only. `typed-refresh`
 is the bounded post-analysis path for a changed canonical signature: it reopens
 the preserved project with analysis disabled, reapplies all target sets, saves,
 and then performs the same exact validations in a separate read-only headless
-pass. At seventeen target sets the single all-target `typed-refresh` wrapper can
+pass. At eighteen target sets the single all-target `typed-refresh` wrapper can
 exceed Windows' command-line limit before Ghidra launches. The current refresh
 therefore ran the same apply/save and read-only validation stages in two
-serialized nine- and eight-target batches; Ghidra commands still must not
+serialized nine-target batches; Ghidra commands still must not
 overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all seventeen target sets
-after a no-analysis refresh. Ninety-six memberships are exact overlaps between
-boundaries. Folded/shared bodies make the 247 selected definitions exceed the
-233 unique native RVAs by fourteen; each canonical native prototype is explicit
+The preserved fully analyzed typed project now covers all eighteen target sets
+after a no-analysis refresh. One hundred five memberships are exact overlaps
+between boundaries. Folded/shared bodies make the 274 selected definitions
+exceed the 259 unique native RVAs by fifteen; each canonical native prototype is explicit
 while all exact managed definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
 seconds without a timeout. Subsequent refreshes imported 121 additional
 reachable datatypes, including 40 for the public Dreamer boundary, six for
 Baa, eight for Plague Doctor, six for Judge, and 12 for Witch; the latest
 Chancellor/Witness refresh imported 12 more, and the first Lilis/Knight refresh
-imported 212 more. The two-batch refresh reapplied and validated all 343
-memberships without rerunning auto-analysis. The final read-only pass validated
-all 343 memberships (247 exact definitions) and 990
+imported 212 more. The Rambler refresh imported 36 more. The two-batch refresh
+reapplied and validated all 379 memberships without rerunning auto-analysis.
+The final read-only pass validated all 379 memberships (274 exact definitions) and 1,112
 membership-level parameter-storage locations with zero program mutations.
+
+The signature-application ABI check now derives each of the first four Win64
+register families from the parameter datatype: integer and pointer parameters
+use `RCX`/`RDX`/`R8`/`R9` at their ordinal, while `float` and `double` use the
+corresponding `XMM0`-`XMM3` family. It also recognizes Ghidra's width-specific
+names such as `XMM2_Da` as members of `XMM2`. Rambler's mixed float-argument
+`Character.InterfereActed` and `Character.InterfereDelay` signatures exercise
+this path. This is an ABI-validator correction, not a gameplay inference.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -319,7 +339,7 @@ Slayer, from 14 to 5 for Wretch, from 105 to 80 for Dreamer2, and from 190 to
 92 for the public Dreamer, from 25 to 17 for Baa, from 95 to 18 for Shaman,
 from 190 to 123 for Plague Doctor, from 146 to 80 for Judge, from 119 to 30 for
 Witch, from 237 to 105 for Chancellor/Witness, and from 387 to 154 for the
-combined Lilis/Knight boundary.
+combined Lilis/Knight boundary. Rambler fell from 405 to 103.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -327,14 +347,16 @@ for Wretch, from 167 to 156 for Dreamer2, from 370 to 186 for the public
 Dreamer, from 33 to 28 for Baa, from 144 to 21 for Shaman, from 329 to 223
 for Plague Doctor, from 268 to 175 for Judge, and from 241 to 89 for Witch.
 The Chancellor/Witness boundary fell from 294 raw field-offset accesses to
-102, and Lilis/Knight fell from 581 to 203.
+102, Lilis/Knight fell from 581 to 203, and Rambler fell from 699 to 95.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
 Chancellor/Witness boundary each gained one nonfatal warning marker. The
 Lilis/Knight boundary retained four error markers and gained one nonfatal
 warning; placeholder parameters fell from 451 to zero and indirect-call
-patterns from 44 to 12. The original typed import is
+patterns from 44 to 12. Rambler retained zero error markers, gained one
+nonfatal warning, reduced placeholder parameters from 436 to zero, and reduced
+indirect-call patterns from 16 to three. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -359,14 +381,16 @@ The Chancellor/Witness comparison is in the
 [`Chancellor/Witness typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_chancellor.json).
 The combined boundary comparison is in the
 [`Lilis/Knight typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_roles_lilis_knight.json).
+The current Rambler comparison is in the
+[`Rambler typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_rambler.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 248 classifications backed by
-106 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 275 classifications backed by
+112 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
