@@ -43,10 +43,12 @@ def execution_cost_for(
 
     ``wrong_exec_cost_for`` remains the base cost for the target's true role.
     A successfully killed good target showing as Knight fires the Knight bluff's
-    separate 4-HP execution effect only when it is Corrupted. Drunk is treated
-    as intrinsically Corrupted for this effect even when Plague Doctor reports
-    it clean. This covers a corrupted true Knight and a Drunk disguised as
-    Knight (base 2 + extra 4) without charging clean bluff holders.
+    separate 4-HP execution effect only when it has the active Corrupted status.
+    Plague Doctor and execution bookkeeping report Drunk as clean, so callers
+    resolving damage must pass the underlying active-status value separately.
+    This distinguishes an ordinary Corrupted Drunk-as-Knight (2 + 4) from a
+    Chancellor-generated Drunk whose inherited Alchemist resistance blocked
+    that status (2 only).
     Correct evil executions and protected/blocked attempts cost no HP.
 
     ``was_killable`` is deliberately an observed/post-action input.  Callers
@@ -57,10 +59,9 @@ def execution_cost_for(
         return 0
 
     cost = wrong_exec_cost_for(role_name, default=default)
-    role_key = (role_name or "").strip().replace("_", " ").casefold()
     apparent_key = (apparent_role or "").strip().replace("_", " ").casefold()
     if (was_killable and apparent_key == "knight"
-            and (was_corrupted or role_key == "drunk")):
+            and was_corrupted):
         cost += KNIGHT_BLUFF_EXTRA_DAMAGE
     return cost
 

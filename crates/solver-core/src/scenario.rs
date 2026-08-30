@@ -4,17 +4,137 @@
 use std::collections::{HashMap, HashSet};
 use crate::corruption::{enumerate_start_corruption, StartCorruptionContext};
 use crate::geometry::adjacent_positions;
-use crate::knowledge_base::{self, get_card, is_villager_role, normalize_role, Faction};
-use crate::types::{GameState, Scenario};
+use crate::knowledge_base::{get_card, normalize_role, Faction};
+use crate::types::{BoardCountProvenance, ChancellorTrace, GameState, Scenario};
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct RawChancellorTrace {
+    original_position: u8,
+    added_outcast_position: u8,
+    added_outcast_role: String,
+    anchor_position: u8,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct ScenarioSemanticKey {
+    corrupted: Vec<u8>,
+    messed_up_by_evil: Vec<u8>,
+    pd_target: Option<u8>,
+    alchemist_counts: Vec<(u8, u8)>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    chancellor_added: Option<(u8, String)>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct StartContextSemanticKey {
+    real_villagers_before_puppet: Vec<u8>,
+    registered_villagers_at_pd_call: Vec<u8>,
+    corruption_resistant_at_init: Vec<u8>,
+    messed_up_resistant_at_init: Vec<u8>,
+    true_alchemists: Vec<u8>,
+    initial_messed_up_by_evil: Vec<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    plague_doctor_acts: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct PendingStartKey {
+    chancellor_added: Option<(u8, String)>,
+    context: StartContextSemanticKey,
+}
+
+struct PendingStartContext {
+    context: StartCorruptionContext,
+    added_outcast_position: Option<u8>,
+    added_outcast_role: Option<String>,
+    original_positions: Vec<u8>,
+}
+
+/// Prefer the serialized pool's faction over the current knowledge base.
+/// Frozen cases span role redesigns (notably Rambler's Villager -> Outcast
+/// move), while live states also serialize the current pool explicitly.
+fn role_faction_in_state(role: &str, state: &GameState) -> Option<Faction> {
+    let wanted = normalize_role(role);
+    if state
+        .deck
+        .villagers
+        .iter()
+        .any(|candidate| normalize_role(candidate) == wanted)
+    {
+        return Some(Faction::Villager);
+    }
+    if state
+        .deck
+        .outcasts
+        .iter()
+        .any(|candidate| normalize_role(candidate) == wanted)
+    {
+        return Some(Faction::Outcast);
+    }
+    if state
+        .deck
+        .minions
+        .iter()
+        .any(|candidate| normalize_role(candidate) == wanted)
+    {
+        return Some(Faction::Minion);
+    }
+    if state
+        .deck
+        .demons
+        .iter()
+        .any(|candidate| normalize_role(candidate) == wanted)
+    {
+        return Some(Faction::Demon);
+    }
+    get_card(role).map(|card| card.faction)
+}
+
+fn is_state_villager_role(role: &str, state: &GameState) -> bool {
+    role_faction_in_state(role, state) == Some(Faction::Villager)
+}
+
+fn is_state_outcast_role(role: &str, state: &GameState) -> bool {
+    role_faction_in_state(role, state) == Some(Faction::Outcast)
+}
+
+fn is_hud_villager_outcast(role: &str) -> bool {
+    matches!(normalize_role(role).as_str(), "doppelganger" | "drunk")
+}
+
+#[allow(clippy::too_many_arguments)]
+fn is_known_natural_ordinary_outcast(
+    position: u8,
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    generated_position: Option<u8>,
+) -> bool {
+    if full_evil.contains_key(&position)
+        || doppelganger_position == Some(position)
+        || drunk_position == Some(position)
+        || generated_position == Some(position)
+    {
+        return false;
+    }
+    let role = state
+        .executed_good_roles
+        .get(&position)
+        .map(String::as_str)
+        .or_else(|| state.card_at(position).map(|card| card.apparent_role.as_str()));
+    role.is_some_and(|role| {
+        is_state_outcast_role(role, state) && !is_hud_villager_outcast(role)
+    })
+}
 
 /// Generate all candidate scenarios for the current game state.
 pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
     let placements = generate_evil_placements(state);
     let mut scenarios = Vec::new();
     let n = state.n_cards;
-
-    let pd_in_deck = state.deck.outcasts.iter().any(|o| knowledge_base::is_plague_doctor(o));
-    let (pd_can_be_on_board, pd_can_be_absent) = hidden_outcast_presence_flags("Plague_Doctor", state);
 
     for placement in &placements {
         if !apply_placement_constraints(placement, state) {
@@ -42,15 +162,40 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
             }
         }
 
+        // `full_evil` is the final post-Start role map. Chancellor's original
+        // physical seat is a hidden history variable, not the final evil seat.
+        let final_chancellor_positions: Vec<u8> = full_evil.iter()
+            .filter(|(_, role)| role.as_str() == "Chancellor")
+            .map(|(&position, _)| position)
+            .collect();
+        if final_chancellor_positions.len() > 1 {
+            // The audited Standard pool contains one Chancellor. Multiple
+            // interacting Baron swaps need a separate lifecycle model.
+            continue;
+        }
+        let final_chancellor_position = final_chancellor_positions.first().copied();
+
+        // `state.deck.outcasts` is the authoritative full role pool. Baa only
+        // obscures one of those entries in the visual deck view; normalization
+        // restores it before the state reaches the solver.
+        let chancellor_present = final_chancellor_position.is_some();
         // Doppelganger candidates
-        let has_doppelganger = state.deck.outcasts.iter().any(|o| o == "Doppelganger");
-        let (can_have_dopp, can_skip_dopp) = hidden_outcast_presence_flags("Doppelganger", state);
+        let has_doppelganger = state
+            .deck
+            .outcasts
+            .iter()
+            .any(|o| normalize_role(o) == "doppelganger");
+        let (can_have_dopp, can_skip_dopp) = hidden_outcast_presence_flags(
+            "Doppelganger",
+            state,
+            chancellor_present,
+        );
         let mut dopp_candidates: Vec<Option<u8>> = if can_skip_dopp { vec![None] } else { vec![] };
         if has_doppelganger && can_have_dopp {
             for p in 1..=n {
                 if full_evil.contains_key(&p) || puppet_pos == Some(p) { continue; }
                 if let Some(card) = state.card_at(p) {
-                    if is_villager_role(&card.apparent_role) {
+                    if is_state_villager_role(&card.apparent_role, state) {
                         dopp_candidates.push(Some(p));
                     }
                 } else {
@@ -60,15 +205,23 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
         }
 
         // Drunk candidates
-        let has_drunk = state.deck.outcasts.iter().any(|o| o == "Drunk");
+        let has_drunk = state
+            .deck
+            .outcasts
+            .iter()
+            .any(|o| normalize_role(o) == "drunk");
         let drunk_already_known = state.cards.iter().any(|c| c.apparent_role == "Drunk");
-        let (can_have_drunk, can_skip_drunk) = hidden_outcast_presence_flags("Drunk", state);
+        let (can_have_drunk, can_skip_drunk) = hidden_outcast_presence_flags(
+            "Drunk",
+            state,
+            chancellor_present,
+        );
         let mut drunk_candidates: Vec<Option<u8>> = if drunk_already_known || can_skip_drunk { vec![None] } else { vec![] };
         if has_drunk && !drunk_already_known && can_have_drunk {
             for p in 1..=n {
                 if full_evil.contains_key(&p) || puppet_pos == Some(p) { continue; }
                 if let Some(card) = state.card_at(p) {
-                    if is_villager_role(&card.apparent_role) {
+                    if is_state_villager_role(&card.apparent_role, state) {
                         drunk_candidates.push(Some(p));
                     }
                 } else {
@@ -77,152 +230,1050 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
             }
         }
 
-        // `full_evil` describes the board after Chancellor has moved its role
-        // identity beside a real Outcast. The separate conversion hypothesis is
-        // built below, after hidden-Outcast identities are known.
-        let chancellor_pos_opt = full_evil.iter()
-            .filter(|(_, role)| role.as_str() == "Chancellor")
-            .map(|(&position, _)| position)
-            .max();
-
         // Identity hypotheses feed one ordered Start simulator. Random
         // Poisoner and Plague Doctor choices branch inside that simulator so
         // each actor sees the live statuses left by earlier actors.
-        let mut seen: HashSet<(
-            Vec<u8>, Option<u8>, Vec<(u8, u8)>, Option<u8>, Option<u8>, Option<u8>,
-        )> = HashSet::new();
+        let mut seen: HashMap<ScenarioSemanticKey, usize> = HashMap::new();
+        let mut placement_scenarios: Vec<Scenario> = Vec::new();
 
         for &dopp_pos_opt in &dopp_candidates {
             for &drunk_pos_opt in &drunk_candidates {
                 if drunk_pos_opt.is_some() && drunk_pos_opt == dopp_pos_opt {
                     continue;
                 }
+                if final_chancellor_position.is_none()
+                    && !natural_outcast_hypothesis_allows(
+                        state,
+                        &full_evil,
+                        puppet_pos,
+                        dopp_pos_opt,
+                        drunk_pos_opt,
+                        None,
+                        None,
+                    )
+                {
+                    continue;
+                }
+                let trace_variants: Vec<Option<RawChancellorTrace>> =
+                    if let Some(final_chancellor_position) = final_chancellor_position {
+                        enumerate_raw_chancellor_traces(
+                            state,
+                            &full_evil,
+                            puppet_pos,
+                            dopp_pos_opt,
+                            drunk_pos_opt,
+                            final_chancellor_position,
+                        )
+                        .into_iter()
+                        .map(Some)
+                        .collect()
+                    } else {
+                        vec![None]
+                    };
 
-                let chancellor_conv_cands = chancellor_conversion_candidates(
-                    state,
-                    &full_evil,
-                    puppet_pos,
-                    dopp_pos_opt,
-                    drunk_pos_opt,
-                    chancellor_pos_opt,
-                );
-                for &chan_conv in &chancellor_conv_cands {
-
-                    let pd_act_variants = plague_doctor_act_variants(
-                        state, &full_evil, dopp_pos_opt, drunk_pos_opt, puppet_pos,
-                        pd_in_deck, pd_can_be_on_board, pd_can_be_absent,
-                    );
-                    let nk_alch_variants = night_killed_alchemist_variants(
-                        state, &full_evil, dopp_pos_opt, drunk_pos_opt, puppet_pos, chan_conv,
-                    );
-
-                    for nk_alchemists in &nk_alch_variants {
-                        for &plague_doctor_acts in &pd_act_variants {
-                            let context = build_start_corruption_context(
-                                state, &full_evil, dopp_pos_opt, drunk_pos_opt, puppet_pos,
-                                chan_conv, nk_alchemists, plague_doctor_acts,
+                let mut pending_seen: HashMap<PendingStartKey, usize> = HashMap::new();
+                let mut pending_contexts: Vec<PendingStartContext> = Vec::new();
+                let mut pd_variants_cache: HashMap<(u8, String, u8), Vec<bool>> = HashMap::new();
+                let mut context_variants_cache: HashMap<
+                    (u8, u8, u8, bool),
+                    Vec<StartCorruptionContext>,
+                > = HashMap::new();
+                for raw_trace in &trace_variants {
+                    let pd_act_variants = if let Some(trace) = raw_trace.as_ref() {
+                        let cache_key = (
+                            trace.added_outcast_position,
+                            normalize_role(&trace.added_outcast_role),
+                            trace.anchor_position,
+                        );
+                        if let Some(cached) = pd_variants_cache.get(&cache_key) {
+                            cached.clone()
+                        } else {
+                            let variants = plague_doctor_act_variants(
+                                state,
+                                &full_evil,
+                                dopp_pos_opt,
+                                drunk_pos_opt,
+                                puppet_pos,
+                                Some(trace),
                             );
-                            let outcomes = enumerate_start_corruption(
-                                n, &full_evil, &context, state.pd_corruption_target,
-                            );
-
-                            for outcome in outcomes {
-                                let mut corr_key: Vec<u8> = outcome.corrupted.iter().copied().collect();
-                                corr_key.sort_unstable();
-                                let mut alch_key: Vec<(u8, u8)> = outcome.alchemist_counts.iter()
-                                    .map(|(&position, &count)| (position, count)).collect();
-                                alch_key.sort_unstable();
-                                let key = (
-                                    corr_key, outcome.pd_target, alch_key,
-                                    dopp_pos_opt, drunk_pos_opt, chan_conv,
-                                );
-                                if !seen.insert(key) {
-                                    continue;
-                                }
-
-                                scenarios.push(Scenario {
-                                    evil_positions: full_evil.clone(),
-                                    puppet_position: puppet_pos,
-                                    corrupted: outcome.corrupted,
-                                    pd_corrupted: outcome.pd_target,
-                                    doppelganger_position: dopp_pos_opt,
-                                    drunk_position: drunk_pos_opt,
-                                    alchemist_cures: outcome.alchemist_counts,
-                                    chancellor_conversion: chan_conv,
-                                });
-                            }
+                            pd_variants_cache.insert(cache_key, variants.clone());
+                            variants
                         }
+                    } else {
+                        plague_doctor_act_variants(
+                            state,
+                            &full_evil,
+                            dopp_pos_opt,
+                            drunk_pos_opt,
+                            puppet_pos,
+                            None,
+                        )
+                    };
+
+                    for &plague_doctor_acts in &pd_act_variants {
+                        let context_variants = if let Some(trace) = raw_trace.as_ref() {
+                            let cache_key = (
+                                trace.original_position,
+                                trace.added_outcast_position,
+                                trace.anchor_position,
+                                plague_doctor_acts,
+                            );
+                            if let Some(cached) = context_variants_cache.get(&cache_key) {
+                                cached.clone()
+                            } else {
+                                let variants = build_chancellor_start_context_variants(
+                                    state,
+                                    &full_evil,
+                                    dopp_pos_opt,
+                                    drunk_pos_opt,
+                                    puppet_pos,
+                                    final_chancellor_position.expect("trace requires Chancellor"),
+                                    trace,
+                                    plague_doctor_acts,
+                                );
+                                context_variants_cache.insert(cache_key, variants.clone());
+                                variants
+                            }
+                        } else {
+                            let nk_alch_variants = night_killed_alchemist_variants(
+                                state, &full_evil, dopp_pos_opt, drunk_pos_opt, puppet_pos, None,
+                            );
+                            nk_alch_variants
+                                .iter()
+                                .map(|nk_alchemists| {
+                                    build_start_corruption_context(
+                                        state,
+                                        &full_evil,
+                                        dopp_pos_opt,
+                                        drunk_pos_opt,
+                                        puppet_pos,
+                                        None,
+                                        nk_alchemists,
+                                        plague_doctor_acts,
+                                    )
+                                })
+                                .collect()
+                        };
+
+                        for context in context_variants {
+                            let chancellor_added = raw_trace.as_ref().map(|trace| {
+                                (
+                                    trace.added_outcast_position,
+                                    normalize_role(&trace.added_outcast_role),
+                                )
+                            });
+                            let key = PendingStartKey {
+                                chancellor_added,
+                                context: start_context_key(&context),
+                            };
+                            if let Some(&index) = pending_seen.get(&key) {
+                                if let Some(trace) = raw_trace.as_ref() {
+                                    if !pending_contexts[index]
+                                        .original_positions
+                                        .contains(&trace.original_position)
+                                    {
+                                        pending_contexts[index]
+                                            .original_positions
+                                            .push(trace.original_position);
+                                        pending_contexts[index]
+                                            .original_positions
+                                            .sort_unstable();
+                                    }
+                                }
+                                continue;
+                            }
+
+                            let index = pending_contexts.len();
+                            pending_contexts.push(PendingStartContext {
+                                context,
+                                added_outcast_position: raw_trace
+                                    .as_ref()
+                                    .map(|trace| trace.added_outcast_position),
+                                added_outcast_role: raw_trace
+                                    .as_ref()
+                                    .map(|trace| trace.added_outcast_role.clone()),
+                                original_positions: raw_trace
+                                    .as_ref()
+                                    .map(|trace| vec![trace.original_position])
+                                    .unwrap_or_default(),
+                            });
+                            pending_seen.insert(key, index);
+                        }
+                    }
+                }
+
+                for pending in pending_contexts {
+                    let outcomes = enumerate_start_corruption(
+                        n,
+                        &full_evil,
+                        &pending.context,
+                        state.pd_corruption_target,
+                    );
+                    for outcome in outcomes {
+                        let mut corr_key: Vec<u8> = outcome.corrupted.iter().copied().collect();
+                        corr_key.sort_unstable();
+                        let mut affected_key: Vec<u8> = outcome
+                            .messed_up_by_evil
+                            .iter()
+                            .copied()
+                            .collect();
+                        affected_key.sort_unstable();
+                        let mut alch_key: Vec<(u8, u8)> = outcome
+                            .alchemist_counts
+                            .iter()
+                            .map(|(&position, &count)| (position, count))
+                            .collect();
+                        alch_key.sort_unstable();
+                        let chancellor_added = pending.added_outcast_position.zip(
+                            pending
+                                .added_outcast_role
+                                .as_deref()
+                                .map(normalize_role),
+                        );
+                        let key = ScenarioSemanticKey {
+                            corrupted: corr_key,
+                            messed_up_by_evil: affected_key,
+                            pd_target: outcome.pd_target,
+                            alchemist_counts: alch_key,
+                            doppelganger_position: dopp_pos_opt,
+                            drunk_position: drunk_pos_opt,
+                            chancellor_added,
+                        };
+
+                        if let Some(&index) = seen.get(&key) {
+                            if let Some(trace) = placement_scenarios[index]
+                                .chancellor_trace
+                                .as_mut()
+                            {
+                                for original in &pending.original_positions {
+                                    if !trace.original_positions.contains(original) {
+                                        trace.original_positions.push(*original);
+                                    }
+                                }
+                                trace.original_positions.sort_unstable();
+                            }
+                            continue;
+                        }
+
+                        let chancellor_trace = pending
+                            .added_outcast_position
+                            .zip(pending.added_outcast_role.clone())
+                            .map(|(added_outcast_position, added_outcast_role)| {
+                                ChancellorTrace {
+                                    original_positions: pending.original_positions.clone(),
+                                    added_outcast_position,
+                                    added_outcast_role,
+                                }
+                            });
+                        let chancellor_conversion = pending.added_outcast_position;
+                        let scenario = Scenario {
+                            evil_positions: full_evil.clone(),
+                            puppet_position: puppet_pos,
+                            corrupted: outcome.corrupted,
+                            pd_corrupted: outcome.pd_target,
+                            doppelganger_position: dopp_pos_opt,
+                            drunk_position: drunk_pos_opt,
+                            alchemist_cures: outcome.alchemist_counts,
+                            messed_up_by_evil: outcome.messed_up_by_evil,
+                            chancellor_trace,
+                            chancellor_conversion,
+                        };
+                        let index = placement_scenarios.len();
+                        placement_scenarios.push(scenario);
+                        seen.insert(key, index);
                     }
                 }
             }
         }
+        scenarios.extend(placement_scenarios);
     }
 
     scenarios
 }
 
-/// Enumerate the final position of the Outcast identity Chancellor added at
-/// Start. Native code first replaces a real Villager anywhere on the board,
-/// then moves Chancellor beside a real Outcast before delayed Reveal populates
-/// register-as values. Consequently the added
-/// identity is observed after Reveal either as a visible Outcast, as a hidden
-/// Drunk/Doppelganger, or on an unrevealed good card; it is not an arbitrary
-/// adjacent apparent Villager.
-///
-/// The rare path where Chancellor swaps through the just-converted physical
-/// card moves the added Outcast data to Chancellor's original card. At the
-/// scenario layer we track that final Outcast home, which is the identity fact
-/// consumed by type/count validators and keeps the state space bounded.
+/// Enumerate native Chancellor histories. `c` and the selected Outcast anchor
+/// remain internal history variables; final scenarios later aggregate every
+/// `c` that yields the same represented runtime outcome.
 #[allow(clippy::too_many_arguments)]
-fn chancellor_conversion_candidates(
+fn enumerate_raw_chancellor_traces(
     state: &GameState,
     full_evil: &HashMap<u8, String>,
     puppet_position: Option<u8>,
     doppelganger_position: Option<u8>,
     drunk_position: Option<u8>,
-    chancellor_position: Option<u8>,
-) -> Vec<Option<u8>> {
-    let Some(chancellor_position) = chancellor_position else {
-        return vec![None];
-    };
+    final_chancellor_position: u8,
+) -> Vec<RawChancellorTrace> {
+    let mut role_candidates = Vec::new();
+    let mut seen_roles = HashSet::new();
+    for role in &state.deck.outcasts {
+        let normalized = normalize_role(role);
+        if seen_roles.insert(normalized) {
+            role_candidates.push(role.clone());
+        }
+    }
+    let mut traces = Vec::new();
+    for added_outcast_role in role_candidates {
+        for added_outcast_position in 1..=state.n_cards {
+            if added_outcast_position == final_chancellor_position
+                || full_evil.contains_key(&added_outcast_position)
+                || puppet_position == Some(added_outcast_position)
+                || !added_outcast_matches_final_position(
+                    state,
+                    added_outcast_position,
+                    &added_outcast_role,
+                    doppelganger_position,
+                    drunk_position,
+                )
+            {
+                continue;
+            }
 
-    let is_final_outcast = |position: u8| {
-        if full_evil.contains_key(&position) || puppet_position == Some(position) {
-            return false;
-        }
-        if doppelganger_position == Some(position) || drunk_position == Some(position) {
-            return true;
-        }
-        match state.card_at(position) {
-            Some(card) => get_card(&card.apparent_role)
-                .map(|role| role.faction == Faction::Outcast)
-                .unwrap_or(false),
-            // A killed or Witch-blocked card can hold the generated Outcast.
-            None => true,
-        }
-    };
+            // These compatibility checks depend on (a, r), not on the hidden
+            // original Chancellor seat. Keeping them outside the `c` loop is
+            // both probability-safe and important on large role pools.
+            if final_board_has_another_true_role(
+                state,
+                full_evil,
+                puppet_position,
+                doppelganger_position,
+                drunk_position,
+                added_outcast_position,
+                &added_outcast_role,
+            ) {
+                continue;
+            }
 
-    let has_outcast_neighbor = adjacent_positions(chancellor_position, state.n_cards)
-        .into_iter()
-        .any(&is_final_outcast);
-    if !has_outcast_neighbor {
-        return Vec::new();
+            for anchor_position in
+                adjacent_positions(final_chancellor_position, state.n_cards)
+            {
+                if anchor_position == final_chancellor_position
+                    || !can_be_final_outcast_anchor(
+                        state,
+                        full_evil,
+                        puppet_position,
+                        doppelganger_position,
+                        drunk_position,
+                        added_outcast_position,
+                        anchor_position,
+                    )
+                    || !natural_outcast_hypothesis_allows(
+                        state,
+                        full_evil,
+                        puppet_position,
+                        doppelganger_position,
+                        drunk_position,
+                        Some(&RawChancellorTrace {
+                            original_position: 0,
+                            added_outcast_position,
+                            added_outcast_role: added_outcast_role.clone(),
+                            anchor_position,
+                        }),
+                        None,
+                    )
+                {
+                    continue;
+                }
+
+                for original_position in 1..=state.n_cards {
+                    // Before the swap, c is Chancellor and f is the chosen
+                    // neighbour. Neither can be the selected Outcast anchor.
+                    if anchor_position == original_position {
+                        continue;
+                    }
+                    traces.push(RawChancellorTrace {
+                        original_position,
+                        added_outcast_position,
+                        added_outcast_role: added_outcast_role.clone(),
+                        anchor_position,
+                    });
+                }
+            }
+        }
     }
 
-    let mut candidates: Vec<Option<u8>> = (1..=state.n_cards)
-        .filter(|&position| is_final_outcast(position))
-        .map(Some)
-        .collect();
-    candidates.sort_unstable();
-    candidates.dedup();
+    traces.sort_by(|left, right| {
+        (
+            left.added_outcast_position,
+            normalize_role(&left.added_outcast_role),
+            left.original_position,
+            left.anchor_position,
+        )
+            .cmp(&(
+                right.added_outcast_position,
+                normalize_role(&right.added_outcast_role),
+                right.original_position,
+                right.anchor_position,
+            ))
+    });
+    traces.dedup();
+    traces
+}
 
-    // "Add one Outcast if able." A board with no surviving candidate can only
-    // represent the unable branch; normally the generated identity itself
-    // guarantees at least one candidate.
-    if candidates.is_empty() {
-        vec![None]
+fn added_outcast_matches_final_position(
+    state: &GameState,
+    position: u8,
+    added_role: &str,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+) -> bool {
+    let normalized = normalize_role(added_role);
+    if normalized == "doppelganger" {
+        return doppelganger_position == Some(position) && drunk_position != Some(position);
+    }
+    if normalized == "drunk" {
+        return drunk_position == Some(position) && doppelganger_position != Some(position);
+    }
+    if doppelganger_position == Some(position) || drunk_position == Some(position) {
+        return false;
+    }
+
+    match state.card_at(position) {
+        Some(card) => {
+            is_state_outcast_role(&card.apparent_role, state)
+                && normalize_role(&card.apparent_role) == normalized
+        }
+        None => true,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn final_board_has_another_true_role(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    added_position: u8,
+    added_role: &str,
+) -> bool {
+    let wanted = normalize_role(added_role);
+    (1..=state.n_cards).any(|position| {
+        if position == added_position
+            || full_evil.contains_key(&position)
+            || puppet_position == Some(position)
+        {
+            return false;
+        }
+        let role = if doppelganger_position == Some(position) {
+            Some("Doppelganger")
+        } else if drunk_position == Some(position) {
+            Some("Drunk")
+        } else {
+            state.card_at(position).map(|card| card.apparent_role.as_str())
+        };
+        role.is_some_and(|role| {
+            is_state_outcast_role(role, state) && normalize_role(role) == wanted
+        })
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn can_be_final_outcast_anchor(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    added_position: u8,
+    position: u8,
+) -> bool {
+    if full_evil.contains_key(&position) || puppet_position == Some(position) {
+        return false;
+    }
+    if position == added_position
+        || doppelganger_position == Some(position)
+        || drunk_position == Some(position)
+    {
+        return true;
+    }
+    match state.card_at(position) {
+        Some(card) => is_state_outcast_role(&card.apparent_role, state),
+        // An unrevealed good card can be a natural Outcast anchor when the HUD
+        // and pool budgets below leave such a slot available.
+        None => true,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn take_outcast_role(pool: &mut HashMap<String, usize>, role: &str) -> bool {
+    let Some(count) = pool.get_mut(role) else {
+        return false;
+    };
+    if *count == 0 {
+        return false;
+    }
+    *count -= 1;
+    true
+}
+
+fn add_fixed_outcast(
+    fixed: &mut HashMap<u8, String>,
+    position: u8,
+    role: String,
+) -> bool {
+    match fixed.get(&position) {
+        Some(existing) => existing == &role,
+        None => {
+            fixed.insert(position, role);
+            true
+        }
+    }
+}
+
+fn natural_outcast_hypothesis_allows(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    trace: Option<&RawChancellorTrace>,
+    plague_doctor_acts: Option<bool>,
+) -> bool {
+    let doppelganger_role = normalize_role("Doppelganger");
+    let drunk_role = normalize_role("Drunk");
+    let pd_role = normalize_role("Plague Doctor");
+
+    // Pf is authoritative and already includes Chancellor's generated role.
+    // Subtract exactly that occurrence to recover the natural pre-Chancellor
+    // multiset P0; no Baa/availability hypothesis may add another role.
+    let mut pool: HashMap<String, usize> = HashMap::new();
+    for role in &state.deck.outcasts {
+        *pool.entry(normalize_role(role)).or_insert(0) += 1;
+    }
+    let generated_position = trace.map(|trace| trace.added_outcast_position);
+    let generated_role = trace.map(|trace| normalize_role(&trace.added_outcast_role));
+    if let Some(role) = generated_role.as_deref() {
+        if !take_outcast_role(&mut pool, role) {
+            return false;
+        }
+    }
+
+    let excluded = |position: u8| {
+        full_evil.contains_key(&position)
+            || puppet_position == Some(position)
+            || generated_position == Some(position)
+    };
+    let can_host_special = |position: u8, special: &str| {
+        if excluded(position) {
+            return false;
+        }
+        if let Some(role) = state.executed_good_roles.get(&position) {
+            return normalize_role(role) == special;
+        }
+        match state.card_at(position) {
+            None => true,
+            Some(card) if is_state_outcast_role(&card.apparent_role, state) => {
+                normalize_role(&card.apparent_role) == special
+            }
+            Some(card) => is_state_villager_role(&card.apparent_role, state),
+        }
+    };
+
+    if doppelganger_position.is_some() && doppelganger_position == drunk_position {
+        return false;
+    }
+    let mut fixed: HashMap<u8, String> = HashMap::new();
+    for (special, position) in [
+        (doppelganger_role.as_str(), doppelganger_position),
+        (drunk_role.as_str(), drunk_position),
+    ] {
+        let generated_special = generated_role.as_deref() == Some(special);
+        match (generated_special, position) {
+            (true, Some(position)) if Some(position) == generated_position => {}
+            (true, _) => return false,
+            (false, Some(position)) if Some(position) == generated_position => return false,
+            (false, Some(position)) => {
+                if !can_host_special(position, special)
+                    || !add_fixed_outcast(&mut fixed, position, special.to_string())
+                {
+                    return false;
+                }
+            }
+            (false, None) => {}
+        }
+    }
+
+    // Exact killed-good roles supersede apparent identities. Otherwise every
+    // revealed serialized Outcast is a fixed natural role, except at replaced
+    // evil/Puppet/generated positions.
+    for position in 1..=state.n_cards {
+        if excluded(position) {
+            continue;
+        }
+        let observed = if let Some(role) = state.executed_good_roles.get(&position) {
+            is_state_outcast_role(role, state).then(|| normalize_role(role))
+        } else {
+            state.card_at(position).and_then(|card| {
+                is_state_outcast_role(&card.apparent_role, state)
+                    .then(|| normalize_role(&card.apparent_role))
+            })
+        };
+        if let Some(role) = observed {
+            if !add_fixed_outcast(&mut fixed, position, role) {
+                return false;
+            }
+        }
+    }
+
+    // Unknown natural identities need actual hidden, unconstrained good seats.
+    let anonymous_hosts: HashSet<u8> = (1..=state.n_cards)
+        .filter(|position| !excluded(*position))
+        .filter(|position| !fixed.contains_key(position))
+        .filter(|position| state.card_at(*position).is_none())
+        .filter(|position| !state.executed_good_roles.contains_key(position))
+        .collect();
+    let mut required_anonymous_positions = HashSet::new();
+    if let Some(trace) = trace {
+        if trace.anchor_position != trace.added_outcast_position
+            && !fixed.contains_key(&trace.anchor_position)
+        {
+            if !anonymous_hosts.contains(&trace.anchor_position) {
+                return false;
+            }
+            required_anonymous_positions.insert(trace.anchor_position);
+        }
+    }
+
+    for role in fixed.values() {
+        if !take_outcast_role(&mut pool, role) {
+            return false;
+        }
+    }
+    let fixed_has_pd = fixed.values().any(|role| role == &pd_role);
+
+    let mut role_only = Vec::new();
+    match plague_doctor_acts {
+        None => {}
+        Some(false) => {
+            if state.pd_corruption_target.is_some()
+                || generated_role.as_ref() == Some(&pd_role)
+                || fixed_has_pd
+            {
+                return false;
+            }
+        }
+        Some(true) => {
+            if generated_role.as_ref() != Some(&pd_role) && !fixed_has_pd {
+                role_only.push(pd_role.clone());
+            }
+        }
+    }
+    for role in &role_only {
+        if !take_outcast_role(&mut pool, role) {
+            return false;
+        }
+    }
+
+    // Dopp/Drunk can only be the explicitly represented natural/generated
+    // identity above. Once PD behavior is concrete, PD has likewise already
+    // been accounted for and cannot silently occupy another filler slot.
+    let mut forbidden_filler = HashSet::from([
+        doppelganger_role,
+        drunk_role,
+    ]);
+    if plague_doctor_acts.is_some() {
+        forbidden_filler.insert(pd_role);
+    }
+
+    // Doppelganger and Drunk consume real identities from P0, but native
+    // registers both disguisers in the Villager HUD count rather than the
+    // Outcast count. They therefore constrain the pool and physical host
+    // without consuming one of `board_outcast_count`'s natural O slots.
+    let fixed_count = fixed
+        .values()
+        .filter(|role| !matches!(role.as_str(), "doppelganger" | "drunk"))
+        .count();
+    let anchor_count = required_anonymous_positions.len();
+    let role_only_count = role_only.len();
+    let minimum_anonymous = anchor_count.max(role_only_count);
+    let anonymous_needed = match (
+        state.board_outcast_count,
+        state.board_count_provenance,
+    ) {
+        (Some(count), BoardCountProvenance::TrustedPreStart) => {
+            let count = count as usize;
+            if count < fixed_count {
+                return false;
+            }
+            let remaining = count - fixed_count;
+            if remaining < minimum_anonymous {
+                return false;
+            }
+            remaining
+        }
+        (Some(count), BoardCountProvenance::LegacyUnknown) => {
+            // Old sessions did not retain whether `no` came from the HUD,
+            // Baa-obscured deck view, or a post-hoc transcription. Preserve it
+            // as a safe ceiling, but do not invent anonymous identities merely
+            // to make an unproven historical value exact.
+            if fixed_count + minimum_anonymous > count as usize {
+                return false;
+            }
+            minimum_anonymous
+        }
+        (None, _) => minimum_anonymous,
+    };
+    if anonymous_needed > anonymous_hosts.len() {
+        return false;
+    }
+    let filler_needed = anonymous_needed - role_only_count;
+    let filler_capacity: usize = pool
+        .iter()
+        .filter(|(role, _)| !forbidden_filler.contains(*role))
+        .map(|(_, count)| *count)
+        .sum();
+    filler_capacity >= filler_needed
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum InitialAlchemistConstraint {
+    Never,
+    Maybe,
+    Required,
+}
+
+#[allow(clippy::too_many_arguments)]
+fn build_chancellor_start_context_variants(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    final_chancellor_position: u8,
+    trace: &RawChancellorTrace,
+    plague_doctor_acts: bool,
+) -> Vec<StartCorruptionContext> {
+    let initial_alchemist_variants = enumerate_initial_alchemist_positions(
+        state,
+        full_evil,
+        doppelganger_position,
+        drunk_position,
+        puppet_position,
+        final_chancellor_position,
+        trace,
+    );
+
+    let mut contexts = Vec::new();
+    let mut seen = HashSet::new();
+    for initial_alchemists in initial_alchemist_variants {
+        let replaced_villager = if trace.original_position == trace.added_outcast_position {
+            final_chancellor_position
+        } else {
+            trace.added_outcast_position
+        };
+
+        let mut alchemists_before_puppet = HashSet::new();
+        for &initial_position in &initial_alchemists {
+            if initial_position == replaced_villager {
+                continue;
+            }
+            let actor_position = if initial_position == final_chancellor_position
+                && trace.original_position != final_chancellor_position
+            {
+                trace.original_position
+            } else {
+                initial_position
+            };
+            alchemists_before_puppet.insert(actor_position);
+        }
+
+        let mut true_alchemist_positions: Vec<u8> = alchemists_before_puppet
+            .iter()
+            .copied()
+            .filter(|position| puppet_position != Some(*position))
+            .collect();
+        true_alchemist_positions.sort_unstable();
+
+        let mut real_villagers_before_puppet = HashSet::new();
+        for position in 1..=state.n_cards {
+            let is_real_villager = if puppet_position == Some(position) {
+                true
+            } else if position == final_chancellor_position
+                || position == trace.added_outcast_position
+                || full_evil.contains_key(&position)
+                || doppelganger_position == Some(position)
+                || drunk_position == Some(position)
+            {
+                false
+            } else if alchemists_before_puppet.contains(&position) {
+                true
+            } else if let Some(card) = state.card_at(position) {
+                is_state_villager_role(&card.apparent_role, state)
+            } else {
+                trace_unrevealed_must_be_villager(
+                    position,
+                    state,
+                    full_evil,
+                    doppelganger_position,
+                    drunk_position,
+                    trace,
+                )
+            };
+            if is_real_villager {
+                real_villagers_before_puppet.insert(position);
+            }
+        }
+
+        let mut registered_villagers_at_pd_call = real_villagers_before_puppet.clone();
+        if let Some(puppet_position) = puppet_position {
+            registered_villagers_at_pd_call.remove(&puppet_position);
+        }
+
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet,
+            registered_villagers_at_pd_call,
+            corruption_resistant_at_init: initial_alchemists,
+            messed_up_resistant_at_init: HashSet::new(),
+            true_alchemist_positions,
+            initial_messed_up_by_evil: HashSet::from([trace.anchor_position]),
+            drunk_position,
+            puppet_position,
+            plague_doctor_acts,
+        };
+        let key = start_context_key(&context);
+        if seen.insert(key) {
+            contexts.push(context);
+        }
+    }
+    contexts
+}
+
+#[allow(clippy::too_many_arguments)]
+fn enumerate_initial_alchemist_positions(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    final_chancellor_position: u8,
+    trace: &RawChancellorTrace,
+) -> Vec<HashSet<u8>> {
+    let available_count = state
+        .deck
+        .villagers
+        .iter()
+        .filter(|role| normalize_role(role) == "alchemist")
+        .count();
+
+    let replaced_villager = if trace.original_position == trace.added_outcast_position {
+        final_chancellor_position
     } else {
-        candidates
+        trace.added_outcast_position
+    };
+    let mut required = Vec::new();
+    let mut maybe = Vec::new();
+    for position in 1..=state.n_cards {
+        let constraint = initial_alchemist_constraint(
+            position,
+            state,
+            full_evil,
+            doppelganger_position,
+            drunk_position,
+            puppet_position,
+            final_chancellor_position,
+            trace,
+            replaced_villager,
+        );
+        match constraint {
+            InitialAlchemistConstraint::Never => {}
+            InitialAlchemistConstraint::Maybe => maybe.push(position),
+            InitialAlchemistConstraint::Required => required.push(position),
+        }
+    }
+
+    required.sort_unstable();
+    required.dedup();
+    maybe.sort_unstable();
+    maybe.dedup();
+    maybe.retain(|position| !required.contains(position));
+
+    if required.len() > available_count {
+        return Vec::new();
+    }
+    let remaining = available_count - required.len();
+    let mut variants = Vec::new();
+    for count in 0..=remaining.min(maybe.len()) {
+        for selected in combinations_of(&maybe, count) {
+            let mut positions: HashSet<u8> = required.iter().copied().collect();
+            positions.extend(selected);
+            variants.push(positions);
+        }
+    }
+    if variants.is_empty() && required.is_empty() {
+        variants.push(HashSet::new());
+    }
+    variants
+}
+
+#[allow(clippy::too_many_arguments)]
+fn initial_alchemist_constraint(
+    position: u8,
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    final_chancellor_position: u8,
+    trace: &RawChancellorTrace,
+    replaced_villager: u8,
+) -> InitialAlchemistConstraint {
+    // c was Chancellor during the universal Init pass.
+    if position == trace.original_position {
+        return InitialAlchemistConstraint::Never;
+    }
+    // The first Baron target was a real Villager whose precise role is erased.
+    if position == replaced_villager {
+        return InitialAlchemistConstraint::Maybe;
+    }
+
+    // When Chancellor moves, pre-swap f's data moves to c. If c is later made
+    // Puppet that source role is another erased real-Villager identity.
+    if position == final_chancellor_position
+        && trace.original_position != final_chancellor_position
+    {
+        if puppet_position == Some(trace.original_position) {
+            return puppet_displayed_alchemist_constraint(
+                trace.original_position,
+                state,
+            );
+        }
+        return final_position_alchemist_constraint(
+            trace.original_position,
+            state,
+            full_evil,
+            doppelganger_position,
+            drunk_position,
+            trace.added_outcast_position,
+        );
+    }
+
+    if puppet_position == Some(position) {
+        return puppet_displayed_alchemist_constraint(position, state);
+    }
+    final_position_alchemist_constraint(
+        position,
+        state,
+        full_evil,
+        doppelganger_position,
+        drunk_position,
+        trace.added_outcast_position,
+    )
+}
+
+fn puppet_displayed_alchemist_constraint(
+    position: u8,
+    state: &GameState,
+) -> InitialAlchemistConstraint {
+    match state.card_at(position) {
+        Some(card) if normalize_role(&card.apparent_role) == "alchemist" => {
+            InitialAlchemistConstraint::Required
+        }
+        Some(_) => InitialAlchemistConstraint::Never,
+        None => InitialAlchemistConstraint::Maybe,
+    }
+}
+
+fn final_position_alchemist_constraint(
+    position: u8,
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    added_outcast_position: u8,
+) -> InitialAlchemistConstraint {
+    if position == added_outcast_position
+        || full_evil.contains_key(&position)
+        || doppelganger_position == Some(position)
+        || drunk_position == Some(position)
+    {
+        return InitialAlchemistConstraint::Never;
+    }
+    match state.card_at(position) {
+        Some(card) if normalize_role(&card.apparent_role) == "alchemist" => {
+            InitialAlchemistConstraint::Required
+        }
+        Some(_) => InitialAlchemistConstraint::Never,
+        None => InitialAlchemistConstraint::Maybe,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn trace_unrevealed_must_be_villager(
+    position: u8,
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    trace: &RawChancellorTrace,
+) -> bool {
+    let Some(board_outcasts) = state.board_outcast_count else {
+        return false;
+    };
+    if trace.anchor_position == position
+        && trace.anchor_position != trace.added_outcast_position
+        && doppelganger_position != Some(position)
+        && drunk_position != Some(position)
+    {
+        return false;
+    }
+    let mut occupied = HashSet::new();
+    for candidate in 1..=state.n_cards {
+        if candidate == position {
+            continue;
+        }
+        if is_known_natural_ordinary_outcast(
+            candidate,
+            state,
+            full_evil,
+            doppelganger_position,
+            drunk_position,
+            Some(trace.added_outcast_position),
+        ) {
+            occupied.insert(candidate);
+        }
+    }
+    if trace.anchor_position != position
+        && trace.anchor_position != trace.added_outcast_position
+        && !full_evil.contains_key(&trace.anchor_position)
+        && doppelganger_position != Some(trace.anchor_position)
+        && drunk_position != Some(trace.anchor_position)
+    {
+        // An unrevealed anchor admitted by the exact multiset helper is a
+        // required natural ordinary Outcast even before its role is visible.
+        occupied.insert(trace.anchor_position);
+    }
+    occupied.len() >= board_outcasts as usize
+}
+
+fn sorted_positions(values: &HashSet<u8>) -> Vec<u8> {
+    let mut result: Vec<u8> = values.iter().copied().collect();
+    result.sort_unstable();
+    result
+}
+
+fn start_context_key(context: &StartCorruptionContext) -> StartContextSemanticKey {
+    let mut alchemists = context.true_alchemist_positions.clone();
+    alchemists.sort_unstable();
+    StartContextSemanticKey {
+        real_villagers_before_puppet: sorted_positions(
+            &context.real_villagers_before_puppet,
+        ),
+        registered_villagers_at_pd_call: sorted_positions(
+            &context.registered_villagers_at_pd_call,
+        ),
+        corruption_resistant_at_init: sorted_positions(
+            &context.corruption_resistant_at_init,
+        ),
+        messed_up_resistant_at_init: sorted_positions(
+            &context.messed_up_resistant_at_init,
+        ),
+        true_alchemists: alchemists,
+        initial_messed_up_by_evil: sorted_positions(
+            &context.initial_messed_up_by_evil,
+        ),
+        drunk_position: context.drunk_position,
+        puppet_position: context.puppet_position,
+        plague_doctor_acts: context.plague_doctor_acts,
     }
 }
 
@@ -253,7 +1304,7 @@ fn build_start_corruption_context(
         } else if extra_alchemists.contains(&position) {
             true
         } else if let Some(card) = state.card_at(position) {
-            is_villager_role(&card.apparent_role)
+            is_state_villager_role(&card.apparent_role, state)
         } else {
             unrevealed_must_be_villager(
                 position, full_evil, state, doppelganger_position, drunk_position,
@@ -300,7 +1351,9 @@ fn build_start_corruption_context(
         real_villagers_before_puppet,
         registered_villagers_at_pd_call,
         corruption_resistant_at_init,
+        messed_up_resistant_at_init: HashSet::new(),
         true_alchemist_positions,
+        initial_messed_up_by_evil: HashSet::new(),
         drunk_position,
         puppet_position,
         plague_doctor_acts,
@@ -314,33 +1367,25 @@ fn plague_doctor_act_variants(
     doppelganger_position: Option<u8>,
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
-    pd_in_deck: bool,
-    pd_can_be_on_board: bool,
-    pd_can_be_absent: bool,
+    chancellor_trace: Option<&RawChancellorTrace>,
 ) -> Vec<bool> {
-    let identity_replaced = |position: u8| {
-        full_evil.contains_key(&position)
-            || Some(position) == doppelganger_position
-            || Some(position) == drunk_position
-            || Some(position) == puppet_position
-    };
-    // Chancellor runs before Plague Doctor. If its generated Outcast identity
-    // is the visible PD, that newly initialized role is a real actor here; the
-    // final Outcast home must therefore not be classified as a fake identity.
-    let known_true_pd = state.cards.iter().any(|card| {
-        knowledge_base::is_plague_doctor(&card.apparent_role)
-            && !identity_replaced(card.position)
-    });
-    let revealed: HashSet<u8> = state.cards.iter().map(|card| card.position).collect();
-    let hidden_slot_exists = (1..=state.n_cards)
-        .any(|position| !revealed.contains(&position) && !identity_replaced(position));
-    let hidden_pd_possible = !known_true_pd && pd_in_deck
-        && pd_can_be_on_board && hidden_slot_exists;
-
     let mut variants = Vec::new();
-    if known_true_pd || hidden_pd_possible { variants.push(true); }
-    if !known_true_pd && pd_can_be_absent { variants.push(false); }
-    if state.pd_corruption_target.is_some() { variants.retain(|acts| *acts); }
+    for acts in [false, true] {
+        if state.pd_corruption_target.is_some() && !acts {
+            continue;
+        }
+        if natural_outcast_hypothesis_allows(
+            state,
+            full_evil,
+            puppet_position,
+            doppelganger_position,
+            drunk_position,
+            chancellor_trace,
+            Some(acts),
+        ) {
+            variants.push(acts);
+        }
+    }
     variants.sort_unstable();
     variants.dedup();
     variants
@@ -560,7 +1605,7 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
                 let mut has_known_villager = false;
                 for &pc in &puppet_cands {
                     if let Some(card) = state.card_at(pc) {
-                        if is_villager_role(&card.apparent_role) {
+                        if is_state_villager_role(&card.apparent_role, state) {
                             villager_or_unknown.push(pc);
                             has_known_villager = true;
                         }
@@ -673,46 +1718,65 @@ fn unrevealed_must_be_villager(
     pos: u8, evil_positions: &HashMap<u8, String>, state: &GameState,
     doppelganger_pos: Option<u8>, drunk_pos: Option<u8>,
 ) -> bool {
-    let mut max_outcasts = state.board_outcast_count
-        .unwrap_or(state.deck.outcasts.len() as u8) as i32;
-    if state.deck.minions.iter().any(|m| m == "Chancellor") {
-        max_outcasts += 1;
+    // This helper is used only by the ordinary/no-trace Start path. A
+    // Chancellor merely being available in the pool does not add an Outcast;
+    // the concrete trace path projects its generated identity separately.
+    if let Some(max_outcasts) = state.board_outcast_count {
+        let occupied = (1..=state.n_cards)
+            .filter(|position| *position != pos)
+            .filter(|position| {
+                is_known_natural_ordinary_outcast(
+                    *position,
+                    state,
+                    evil_positions,
+                    doppelganger_pos,
+                    drunk_pos,
+                    None,
+                )
+            })
+            .count();
+        return occupied >= max_outcasts as usize;
     }
-    let mut occupied = 0i32;
+
+    // Without a header count, retain the conservative total-pool fallback.
+    // Here the represented Dopp/Drunk identities do consume pool identities.
+    let max_outcasts = state.deck.outcasts.len();
+    let mut occupied = HashSet::new();
     for card in &state.cards {
-        if evil_positions.contains_key(&card.position) || card.position == pos { continue; }
-        if let Some(cd) = get_card(&card.apparent_role) {
-            if cd.faction == Faction::Outcast {
-                occupied += 1;
-            }
+        if evil_positions.contains_key(&card.position) || card.position == pos {
+            continue;
+        }
+        if is_state_outcast_role(&card.apparent_role, state) {
+            occupied.insert(card.position);
         }
     }
-    if let Some(dp) = doppelganger_pos {
-        if dp != pos && !evil_positions.contains_key(&dp) { occupied += 1; }
+    for special in [doppelganger_pos, drunk_pos].into_iter().flatten() {
+        if special != pos && !evil_positions.contains_key(&special) {
+            occupied.insert(special);
+        }
     }
-    if let Some(dp) = drunk_pos {
-        if dp != pos && !evil_positions.contains_key(&dp) { occupied += 1; }
-    }
-    occupied >= max_outcasts
+    occupied.len() >= max_outcasts
 }
 
-fn hidden_outcast_presence_flags(role_name: &str, state: &GameState) -> (bool, bool) {
+fn hidden_outcast_presence_flags(
+    role_name: &str,
+    state: &GameState,
+    _chancellor_present: bool,
+) -> (bool, bool) {
     let normalized_role = normalize_role(role_name);
-    if !state.deck.outcasts.iter().any(|role| normalize_role(role) == normalized_role) {
+    let role_visible = state
+        .deck
+        .outcasts
+        .iter()
+        .any(|role| normalize_role(role) == normalized_role);
+    if !role_visible {
         return (false, true);
     }
-    let mut slots = match state.board_outcast_count {
-        Some(s) => s as i32,
-        None => return (true, true),
-    };
-    // The identity hypotheses describe the post-Start board. Chancellor adds
-    // one Outcast identity, whose final home may overlap a hidden-Outcast
-    // position such as Drunk.
-    if state.deck.minions.iter().any(|m| m == "Chancellor") {
-        slots += 1;
-    }
-    let other_outcasts = state.deck.outcasts.len() as i32 - 1;
-    (slots > 0, other_outcasts >= slots)
+    // Dopp/Drunk register as Villagers in the HUD, and Chancellor may generate
+    // either identity after those base counts are captured. The exact shared
+    // multiset/host check below decides whether each candidate is feasible;
+    // the header alone cannot require or exclude the special identity.
+    (true, true)
 }
 
 fn evil_role_subsets_fn(evil_roles: &[String], state: &GameState, expected_remaining: usize) -> Vec<Vec<String>> {
@@ -854,6 +1918,340 @@ mod tests {
         HashMap::from([(position, "Chancellor".to_string())])
     }
 
+    fn raw_trace(added_position: u8, added_role: &str, anchor_position: u8) -> RawChancellorTrace {
+        RawChancellorTrace {
+            original_position: 1,
+            added_outcast_position: added_position,
+            added_outcast_role: added_role.to_string(),
+            anchor_position,
+        }
+    }
+
+    #[test]
+    fn pd_presence_uses_the_natural_pool_left_by_each_trace() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.cards = vec![card(1, "Baker"), card(2, "Wretch")];
+        state.deck.outcasts = vec!["Plague Doctor".to_string(), "Wretch".to_string()];
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        let full_evil = chancellor_at(1);
+        let trace = raw_trace(2, "Wretch", 2);
+
+        state.board_outcast_count = Some(0);
+        assert_eq!(
+            plague_doctor_act_variants(
+                &state, &full_evil, None, None, None, Some(&trace),
+            ),
+            vec![false],
+        );
+
+        state.board_outcast_count = Some(1);
+        assert_eq!(
+            plague_doctor_act_variants(
+                &state, &full_evil, None, None, None, Some(&trace),
+            ),
+            vec![true],
+        );
+    }
+
+    #[test]
+    fn natural_outcast_hypotheses_share_one_multiset_budget() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.outcasts = vec!["Doppelganger".to_string(), "Drunk".to_string()];
+
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            None,
+        ));
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            Some(2),
+            None,
+            None,
+            None,
+        ));
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            Some(3),
+            None,
+            None,
+        ));
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            Some(2),
+            Some(3),
+            None,
+            None,
+        ));
+
+        let generated_doppelganger = raw_trace(2, "Doppelganger", 2);
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &chancellor_at(1),
+            None,
+            None,
+            Some(3),
+            Some(&generated_doppelganger),
+            None,
+        ));
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &chancellor_at(1),
+            None,
+            Some(2),
+            Some(3),
+            Some(&generated_doppelganger),
+            None,
+        ));
+
+        state.board_outcast_count = Some(0);
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            Some(2),
+            Some(3),
+            None,
+            None,
+        ));
+
+        state.board_outcast_count = Some(1);
+        state.deck.outcasts = vec![
+            "Wretch".to_string(),
+            "Doppelganger".to_string(),
+            "Drunk".to_string(),
+        ];
+        let generated_wretch = raw_trace(2, "Wretch", 2);
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &chancellor_at(1),
+            None,
+            Some(3),
+            Some(4),
+            Some(&generated_wretch),
+            None,
+        ));
+
+        state.board_outcast_count = Some(0);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        let anchor_is_generated = raw_trace(2, "Wretch", 2);
+        let natural_anchor = raw_trace(2, "Wretch", 3);
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &chancellor_at(1),
+            None,
+            None,
+            None,
+            Some(&anchor_is_generated),
+            None,
+        ));
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &chancellor_at(1),
+            None,
+            None,
+            None,
+            Some(&natural_anchor),
+            None,
+        ));
+    }
+
+    #[test]
+    fn disguised_outcasts_do_not_consume_trusted_hud_outcast_slots() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.outcasts = vec!["Bombardier".to_string(), "Drunk".to_string()];
+        state.cards = vec![card(1, "Bombardier"), card(2, "Knitter")];
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            Some(2),
+            None,
+            None,
+        ));
+
+        state.deck.outcasts = vec![
+            "Plague Doctor".to_string(),
+            "Doppelganger".to_string(),
+        ];
+        state.cards = vec![card(1, "Plague Doctor"), card(2, "Knitter")];
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            Some(2),
+            None,
+            None,
+            None,
+        ));
+    }
+
+    #[test]
+    fn legacy_unknown_header_count_is_a_ceiling_not_an_equality() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.board_outcast_count = Some(2);
+        state.deck.outcasts = vec!["Bombardier".to_string(), "Wretch".to_string()];
+        state.cards = vec![
+            card(1, "Bombardier"),
+            card(2, "Knitter"),
+            card(3, "Baker"),
+        ];
+
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            None,
+        ));
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            None,
+        ));
+    }
+
+    #[test]
+    fn pd_role_only_fact_needs_a_real_anonymous_host() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.board_outcast_count = Some(1);
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.cards = vec![card(1, "Baker"), card(2, "Baker"), card(3, "Baker")];
+
+        assert!(!natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            Some(true),
+        ));
+    }
+
+    #[test]
+    fn hidden_villager_saturation_ignores_natural_drunk_hud_slot() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.outcasts = vec!["Bombardier".to_string(), "Drunk".to_string()];
+        let evil = HashMap::from([(1, "Pooka".to_string())]);
+
+        assert!(!unrevealed_must_be_villager(
+            2,
+            &evil,
+            &state,
+            None,
+            Some(3),
+        ));
+        state.cards.push(card(4, "Bombardier"));
+        assert!(unrevealed_must_be_villager(
+            2,
+            &evil,
+            &state,
+            None,
+            Some(3),
+        ));
+    }
+
+    #[test]
+    fn trace_saturation_excludes_generated_role_and_natural_drunk() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.outcasts = vec![
+            "Bombardier".to_string(),
+            "Drunk".to_string(),
+            "Wretch".to_string(),
+        ];
+        let evil = chancellor_at(1);
+        let generated_anchor = raw_trace(2, "Bombardier", 2);
+
+        assert!(!trace_unrevealed_must_be_villager(
+            4,
+            &state,
+            &evil,
+            None,
+            Some(3),
+            &generated_anchor,
+        ));
+        state.cards.push(card(5, "Wretch"));
+        assert!(trace_unrevealed_must_be_villager(
+            4,
+            &state,
+            &evil,
+            None,
+            Some(3),
+            &generated_anchor,
+        ));
+
+        state.cards.clear();
+        let anonymous_natural_anchor = raw_trace(2, "Bombardier", 4);
+        assert!(trace_unrevealed_must_be_villager(
+            5,
+            &state,
+            &evil,
+            None,
+            Some(3),
+            &anonymous_natural_anchor,
+        ));
+        assert!(!trace_unrevealed_must_be_villager(
+            4,
+            &state,
+            &evil,
+            None,
+            Some(3),
+            &anonymous_natural_anchor,
+        ));
+    }
+
+    #[test]
+    fn undealt_chancellor_does_not_add_an_outcast_slot() {
+        let mut state = GameState::default();
+        state.n_cards = 2;
+        state.board_outcast_count = Some(0);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Chancellor".to_string()];
+
+        assert!(unrevealed_must_be_villager(
+            1,
+            &HashMap::new(),
+            &state,
+            None,
+            None,
+        ));
+    }
+
     #[test]
     fn chancellor_added_outcast_is_not_restricted_to_adjacent_cards() {
         let mut state = GameState::default();
@@ -866,19 +2264,21 @@ mod tests {
             card(5, "Baker"),
             card(6, "Baker"),
         ];
+        state.board_outcast_count = Some(1);
+        state.deck.outcasts = vec!["Plague Doctor".to_string(), "Bombardier".to_string()];
 
-        let candidates = chancellor_conversion_candidates(
+        let candidates = enumerate_raw_chancellor_traces(
             &state,
             &chancellor_at(1),
             None,
             None,
             None,
-            Some(1),
+            1,
         );
 
-        assert!(candidates.contains(&Some(2)));
-        assert!(candidates.contains(&Some(4)));
-        assert!(!candidates.contains(&Some(3)));
+        assert!(candidates.iter().any(|trace| trace.added_outcast_position == 2));
+        assert!(candidates.iter().any(|trace| trace.added_outcast_position == 4));
+        assert!(!candidates.iter().any(|trace| trace.added_outcast_position == 3));
     }
 
     #[test]
@@ -892,17 +2292,22 @@ mod tests {
             card(4, "Architect"),
             card(5, "Baker"),
         ];
+        state.board_outcast_count = Some(1);
+        state.deck.outcasts = vec!["Plague Doctor".to_string(), "Doppelganger".to_string()];
 
-        let candidates = chancellor_conversion_candidates(
+        let candidates = enumerate_raw_chancellor_traces(
             &state,
             &chancellor_at(1),
             None,
             Some(4),
             None,
-            Some(1),
+            1,
         );
 
-        assert!(candidates.contains(&Some(4)));
+        assert!(candidates.iter().any(|trace| {
+            trace.added_outcast_position == 4
+                && normalize_role(&trace.added_outcast_role) == "doppelganger"
+        }));
     }
 
     #[test]
@@ -916,14 +2321,16 @@ mod tests {
             card(4, "Baker"),
             card(5, "Baker"),
         ];
+        state.board_outcast_count = Some(0);
+        state.deck.outcasts = vec!["Bombardier".to_string()];
 
-        let candidates = chancellor_conversion_candidates(
+        let candidates = enumerate_raw_chancellor_traces(
             &state,
             &chancellor_at(1),
             None,
             None,
             None,
-            Some(1),
+            1,
         );
 
         assert!(candidates.is_empty());
@@ -943,12 +2350,14 @@ mod tests {
         state.deck.villagers = vec!["Baker".to_string(), "Architect".to_string()];
         state.deck.outcasts = vec!["Plague Doctor".to_string()];
         state.deck.minions = vec!["Chancellor".to_string()];
+        state.board_villager_count = Some(3);
+        state.board_outcast_count = Some(0);
 
         let generated_pd_worlds: Vec<Scenario> = build_scenarios(&state)
             .into_iter()
             .filter(|scenario| {
                 scenario.evil_positions.get(&1).map(String::as_str) == Some("Chancellor")
-                    && scenario.chancellor_conversion == Some(2)
+                    && scenario.chancellor_added_outcast_position() == Some(2)
             })
             .collect();
 
@@ -956,5 +2365,434 @@ mod tests {
         assert!(generated_pd_worlds
             .iter()
             .all(|scenario| scenario.pd_corrupted.is_some()));
+    }
+
+    #[test]
+    fn equivalent_original_chancellor_seats_do_not_multiply_world_weight() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.n_evil = 1;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Plague Doctor"),
+            card(3, "Baker"),
+            card(4, "Architect"),
+        ];
+        state.deck.villagers = vec!["Baker".to_string(), "Architect".to_string()];
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.deck.minions = vec!["Chancellor".to_string()];
+        state.board_villager_count = Some(3);
+        state.board_outcast_count = Some(0);
+
+        let worlds: Vec<Scenario> = build_scenarios(&state)
+            .into_iter()
+            .filter(|scenario| {
+                scenario.evil_positions.get(&1).map(String::as_str) == Some("Chancellor")
+                    && scenario.chancellor_added_outcast_position() == Some(2)
+            })
+            .collect();
+
+        // The generated Plague Doctor has two observable random targets. The
+        // three compatible original Chancellor seats are history aliases of
+        // each outcome, not six weighted solver worlds.
+        assert_eq!(worlds.len(), 2);
+        let pd_targets: HashSet<Option<u8>> = worlds
+            .iter()
+            .map(|scenario| scenario.pd_corrupted)
+            .collect();
+        assert_eq!(pd_targets, HashSet::from([Some(3), Some(4)]));
+        for scenario in worlds {
+            let trace = scenario.chancellor_trace.expect("new worlds carry a trace");
+            assert_eq!(trace.original_positions, vec![1, 3, 4]);
+            assert_eq!(trace.added_outcast_role, "Plague Doctor");
+            assert_eq!(scenario.chancellor_conversion, Some(2));
+        }
+    }
+
+    #[test]
+    fn puppeteer_target_cannot_be_chancellors_added_outcast() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Bombardier"),
+            card(3, "Baker"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+        ];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.board_outcast_count = Some(0);
+        let full_evil = HashMap::from([
+            (1, "Chancellor".to_string()),
+            (4, "Puppet".to_string()),
+        ]);
+
+        let traces = enumerate_raw_chancellor_traces(
+            &state,
+            &full_evil,
+            Some(4),
+            None,
+            None,
+            1,
+        );
+
+        assert!(!traces.is_empty());
+        assert!(traces
+            .iter()
+            .all(|trace| trace.added_outcast_position != 4));
+    }
+
+    #[test]
+    fn baa_cannot_invent_a_role_absent_from_authoritative_pool() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Wretch"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+        ];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.demons = vec!["Baa".to_string()];
+        state.board_outcast_count = Some(1);
+        let full_evil = HashMap::from([
+            (1, "Chancellor".to_string()),
+            (5, "Baa".to_string()),
+        ]);
+
+        let traces = enumerate_raw_chancellor_traces(
+            &state,
+            &full_evil,
+            None,
+            None,
+            Some(3),
+            1,
+        );
+
+        assert!(!traces.iter().any(|trace| {
+            normalize_role(&trace.added_outcast_role) == "drunk"
+        }));
+        assert_eq!(
+            hidden_outcast_presence_flags("Drunk", &state, true),
+            (false, true),
+        );
+    }
+
+    #[test]
+    fn authoritative_pool_is_independent_of_whether_baa_was_placed() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Wretch"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+        ];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.demons = vec!["Baa".to_string()];
+        state.board_outcast_count = Some(1);
+
+        let traces = enumerate_raw_chancellor_traces(
+            &state,
+            &chancellor_at(1),
+            None,
+            None,
+            Some(3),
+            1,
+        );
+
+        assert!(!traces.iter().any(|trace| {
+            normalize_role(&trace.added_outcast_role) == "drunk"
+        }));
+    }
+
+    #[test]
+    fn absent_doppelganger_and_drunk_cannot_supply_chancellor_role() {
+        let mut state = GameState::default();
+        state.n_cards = 6;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Wretch"),
+            card(3, "Baker"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+            card(6, "Baker"),
+        ];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.demons = vec!["Baa".to_string()];
+        state.board_outcast_count = Some(2);
+        let full_evil = HashMap::from([
+            (1, "Chancellor".to_string()),
+            (6, "Baa".to_string()),
+        ]);
+
+        let traces = enumerate_raw_chancellor_traces(
+            &state,
+            &full_evil,
+            None,
+            Some(3),
+            Some(4),
+            1,
+        );
+
+        assert!(traces.is_empty());
+    }
+
+    #[test]
+    fn alchemist_data_moves_but_its_resistance_stays_on_physical_f() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Bombardier"),
+            card(3, "Alchemist"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+        ];
+        state.deck.villagers = vec!["Alchemist".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        let full_evil = chancellor_at(1);
+        let trace = RawChancellorTrace {
+            original_position: 3,
+            added_outcast_position: 2,
+            added_outcast_role: "Bombardier".to_string(),
+            anchor_position: 2,
+        };
+
+        let contexts = build_chancellor_start_context_variants(
+            &state,
+            &full_evil,
+            None,
+            None,
+            None,
+            1,
+            &trace,
+            false,
+        );
+
+        assert_eq!(contexts.len(), 1);
+        assert_eq!(contexts[0].corruption_resistant_at_init, HashSet::from([1]));
+        assert_eq!(contexts[0].true_alchemist_positions, vec![3]);
+        assert!(!contexts[0].corruption_resistant_at_init.contains(&3));
+    }
+
+    #[test]
+    fn puppet_former_displayed_identity_determines_alchemist_resistance() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.cards = vec![card(2, "Alchemist"), card(3, "Baker")];
+        let trace = raw_trace(4, "Wretch", 4);
+        let full_evil = HashMap::from([
+            (1, "Chancellor".to_string()),
+            (2, "Puppet".to_string()),
+        ]);
+
+        assert_eq!(
+            initial_alchemist_constraint(
+                2, &state, &full_evil, None, None, Some(2), 1, &trace, 4,
+            ),
+            InitialAlchemistConstraint::Required,
+        );
+        assert_eq!(
+            initial_alchemist_constraint(
+                3, &state, &full_evil, None, None, Some(3), 1, &trace, 4,
+            ),
+            InitialAlchemistConstraint::Never,
+        );
+        state.cards.retain(|card| card.position != 2);
+        assert_eq!(
+            initial_alchemist_constraint(
+                2, &state, &full_evil, None, None, Some(2), 1, &trace, 4,
+            ),
+            InitialAlchemistConstraint::Maybe,
+        );
+    }
+
+    #[test]
+    fn erased_alchemist_resistance_can_block_generated_drunk_at_v() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Baker"),
+            card(3, "Baker"),
+            card(4, "Baker"),
+            card(5, "Baker"),
+        ];
+        state.deck.villagers = vec!["Alchemist".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        let full_evil = chancellor_at(1);
+        let trace = RawChancellorTrace {
+            original_position: 1,
+            added_outcast_position: 2,
+            added_outcast_role: "Drunk".to_string(),
+            anchor_position: 2,
+        };
+
+        let contexts = build_chancellor_start_context_variants(
+            &state,
+            &full_evil,
+            None,
+            Some(2),
+            None,
+            1,
+            &trace,
+            false,
+        );
+        let resistant = contexts
+            .iter()
+            .find(|context| context.corruption_resistant_at_init.contains(&2))
+            .expect("the erased Villager may have been Alchemist");
+
+        assert!(resistant.true_alchemist_positions.is_empty());
+        let outcomes = enumerate_start_corruption(5, &full_evil, resistant, None);
+        assert_eq!(outcomes.len(), 1);
+        assert!(!outcomes[0].corrupted.contains(&2));
+        assert!(outcomes[0].messed_up_by_evil.contains(&2));
+    }
+
+    #[test]
+    fn c_equals_a_keeps_erased_f_resistance_on_f_not_generated_drunk() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Baker"),
+            card(3, "Baker"),
+            card(4, "Baker"),
+            card(5, "Wretch"),
+        ];
+        state.deck.villagers = vec!["Alchemist".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string(), "Wretch".to_string()];
+        let full_evil = chancellor_at(1);
+        let trace = RawChancellorTrace {
+            original_position: 2,
+            added_outcast_position: 2,
+            added_outcast_role: "Drunk".to_string(),
+            anchor_position: 5,
+        };
+
+        let contexts = build_chancellor_start_context_variants(
+            &state,
+            &full_evil,
+            None,
+            Some(2),
+            None,
+            1,
+            &trace,
+            false,
+        );
+        let erased_f_alchemist = contexts
+            .iter()
+            .find(|context| context.corruption_resistant_at_init.contains(&1))
+            .expect("the first Villager target f may have been Alchemist");
+
+        assert!(!erased_f_alchemist
+            .corruption_resistant_at_init
+            .contains(&2));
+        assert!(erased_f_alchemist.true_alchemist_positions.is_empty());
+        let outcomes = enumerate_start_corruption(5, &full_evil, erased_f_alchemist, None);
+        assert_eq!(outcomes.len(), 1);
+        assert!(outcomes[0].corrupted.contains(&2));
+        assert!(outcomes[0].messed_up_by_evil.contains(&5));
+    }
+
+    #[test]
+    fn asc74_v1_true_chancellor_trace_survives_generation() {
+        let mut state = GameState::default();
+        state.n_cards = 8;
+        state.n_evil = 2;
+        state.cards = vec![
+            card(1, "Poet"),
+            card(2, "Rambler"),
+            card(3, "Confessor"),
+            card(4, "Empress"),
+            card(5, "Bishop"),
+            card(6, "Bombardier"),
+            card(8, "Plague_Doctor"),
+        ];
+        state.executed = vec![7];
+        state.night_kills = vec![7];
+        state.board_villager_count = Some(5);
+        state.board_outcast_count = Some(1);
+        state.deck.villagers = vec![
+            "Bishop".to_string(),
+            "Judge".to_string(),
+            "Empress".to_string(),
+            "Confessor".to_string(),
+            "Poet".to_string(),
+            "Rambler".to_string(),
+        ];
+        state.deck.outcasts = vec![
+            "Wretch".to_string(),
+            "Plague Doctor".to_string(),
+            "Bombardier".to_string(),
+        ];
+        state.deck.minions = vec!["Chancellor".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+
+        let full_evil = HashMap::from([
+            (4, "Lilis".to_string()),
+            (5, "Chancellor".to_string()),
+        ]);
+        let traces = enumerate_raw_chancellor_traces(
+            &state,
+            &full_evil,
+            None,
+            None,
+            None,
+            5,
+        );
+        assert!(added_outcast_matches_final_position(
+            &state,
+            6,
+            "Bombardier",
+            None,
+            None,
+        ));
+        assert!(!final_board_has_another_true_role(
+            &state,
+            &full_evil,
+            None,
+            None,
+            None,
+            6,
+            "Bombardier",
+        ));
+        assert!(can_be_final_outcast_anchor(
+            &state,
+            &full_evil,
+            None,
+            None,
+            None,
+            6,
+            6,
+        ));
+        let trace = RawChancellorTrace {
+            original_position: 5,
+            added_outcast_position: 6,
+            added_outcast_role: "Bombardier".to_string(),
+            anchor_position: 6,
+        };
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &full_evil,
+            None,
+            None,
+            None,
+            Some(&trace),
+            None,
+        ));
+        assert!(traces.iter().any(|trace| {
+            trace.added_outcast_position == 6
+                && trace.anchor_position == 6
+                && normalize_role(&trace.added_outcast_role) == "bombardier"
+        }));
+
+        assert!(build_scenarios(&state).into_iter().any(|scenario| {
+            scenario.evil_positions == full_evil
+                && scenario.chancellor_added_outcast_position() == Some(6)
+                && scenario.chancellor_added_outcast_role() == Some("Bombardier")
+        }));
     }
 }

@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from solver import GameState, CardInfo, DeckComposition
 from rust_solver import rust_solve_to_objects
-from knowledge_base import get_card, Role
+from knowledge_base import execution_cost_for
 
 CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "tests", "cases")
 CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases_v2")
@@ -136,6 +136,9 @@ def _reconstruct_starting_hp(case: dict) -> int:
     executed = case.get("executed", [])
     night_kills = set(case.get("night_kills", []))
     exec_good_corrupted = case.get("executed_good_corrupted", {})
+    exec_good_roles = {
+        int(k): v for k, v in case.get("executed_good_roles", {}).items()
+    }
 
     # Cards executed as wrong (good, not night-killed)
     # Use confirmed_good if available; otherwise use true_evil_set to detect
@@ -154,11 +157,22 @@ def _reconstruct_starting_hp(case: dict) -> int:
         # This was a wrong execution
         card = next((c for c in case.get("cards", [])
                      if c["position"] == pos), None)
-        is_drunk = False
-        if card:
-            cd = get_card(card.get("apparent_role", ""))
-            is_drunk = cd and cd.name == "Drunk"
-        hp += 2 if is_drunk else wrong_exec_cost
+        apparent_role = card.get("apparent_role", "") if card else None
+        execution_role = exec_good_roles.get(pos, apparent_role)
+        recorded_corrupted = exec_good_corrupted.get(
+            str(pos), exec_good_corrupted.get(pos, False)
+        )
+        # For non-Drunk this is the active status. Drunk is always persisted
+        # clean, so false cannot distinguish ordinary statused Drunk from an
+        # Alchemist-resistant generated one. Use the conservative 2-HP base;
+        # never fabricate Knight's +4 without separate active-status evidence.
+        hp += execution_cost_for(
+            execution_role,
+            apparent_role=apparent_role,
+            was_corrupted=bool(recorded_corrupted),
+            was_killable=True,
+            default=wrong_exec_cost,
+        )
 
     # Lilis night kills cost 2 HP each
     hp += len(night_kills) * 2
@@ -189,9 +203,11 @@ def replay_hindsight(case: dict) -> HindsightResult:
     pre_confirmed_good = []
     pre_exec_evil_roles = {}
     pre_exec_good_corrupted = {}
+    pre_exec_good_roles = {}
 
     case_confirmed_good = set(case.get("confirmed_good", []))
     case_evil_roles = {int(k): v for k, v in case.get("executed_evil_roles", {}).items()}
+    case_good_roles = {int(k): v for k, v in case.get("executed_good_roles", {}).items()}
 
     for sr in case.get("slayer_results", []):
         if sr.get("killed"):
@@ -199,6 +215,8 @@ def replay_hindsight(case: dict) -> HindsightResult:
             pre_executed.append(tp)
             if tp in case_confirmed_good:
                 pre_confirmed_good.append(tp)
+                if tp in case_good_roles:
+                    pre_exec_good_roles[tp] = case_good_roles[tp]
             else:
                 pre_confirmed_evil.append(tp)
                 evil_role = sr.get("evil_role") or case_evil_roles.get(tp)
@@ -214,7 +232,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
 
     # Build base state (all cards, pre-applied abilities)
     def make_state(executed, confirmed_evil, confirmed_good,
-                   exec_evil_roles, exec_good_corrupted):
+                   exec_evil_roles, exec_good_corrupted, exec_good_roles):
         return GameState(
             n_cards=n_cards,
             deck=DeckComposition.from_dict(deck_data),
@@ -236,8 +254,10 @@ def replay_hindsight(case: dict) -> HindsightResult:
             board_outcast_count=case.get("board_outcast_count"),
             board_minion_count=case.get("board_minion_count"),
             board_demon_count=case.get("board_demon_count"),
+            board_count_provenance=case.get("board_count_provenance", "legacy_unknown"),
             reveal_order=list(case.get("reveal_order", [])),
             executed_good_corrupted=dict(exec_good_corrupted),
+            executed_good_roles=dict(exec_good_roles),
         )
 
     executed = list(pre_executed)
@@ -245,6 +265,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
     confirmed_good = list(pre_confirmed_good)
     exec_evil_roles = dict(pre_exec_evil_roles)
     exec_good_corrupted = dict(pre_exec_good_corrupted)
+    exec_good_roles = dict(pre_exec_good_roles)
     evils_found = len([p for p in confirmed_evil if p in true_evil_set])
     evils_found += night_kill_evil_count
 
@@ -263,7 +284,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
 
     while evils_needed > 0 and hp > 0:
         state = make_state(executed, confirmed_evil, confirmed_good,
-                           exec_evil_roles, exec_good_corrupted)
+                           exec_evil_roles, exec_good_corrupted, exec_good_roles)
         try:
             result = rust_solve_to_objects(state)
         except Exception as e:
@@ -313,7 +334,6 @@ def replay_hindsight(case: dict) -> HindsightResult:
             evils_needed -= 1
         else:
             confirmed_good.append(target)
-            # Check if Drunk
             card_data = next((c for c in case.get("cards", [])
                               if c["position"] == target), None)
             apparent = card_data["apparent_role"] if card_data else "?"
@@ -325,32 +345,26 @@ def replay_hindsight(case: dict) -> HindsightResult:
             if str(target) in real_corrupted or target in real_corrupted:
                 was_corrupted = real_corrupted.get(str(target), real_corrupted.get(target, False))
                 exec_good_corrupted[target] = was_corrupted
+            if target in case_good_roles:
+                exec_good_roles[target] = case_good_roles[target]
 
-            # Drunk costs 2, others cost wrong_exec_cost
-            card_def = get_card(apparent)
-            is_drunk = (card_def and card_def.role == Role.OUTCAST
-                        and card_def.name == "Drunk")
-            # Also check if the true role might be Drunk
-            # (e.g. Drunk disguised as Baker)
-            all_outcasts = deck_data.get("outcasts", [])
-            # Simple heuristic: if apparent role is NOT in villagers list
-            # and Drunk is in deck, might be Drunk
-            if not is_drunk and "Drunk" in all_outcasts:
-                # Check if this position's apparent role isn't in villagers
-                # (Drunk disguises as not-in-play Villager)
-                pass  # Hard to know for sure; use wrong_exec_cost as default
-
-            if is_drunk:
-                hp_cost = 2
-                evil_role = "Drunk"
-            else:
-                hp_cost = wrong_exec_cost
-                evil_role = "good"
+            execution_role = case_good_roles.get(target, apparent)
+            recorded_corrupted = exec_good_corrupted.get(target, False)
+            hp_cost = execution_cost_for(
+                execution_role,
+                apparent_role=apparent,
+                # Drunk=false is observed-clean evidence, so this remains a
+                # conservative base-cost fallback in historical replays.
+                was_corrupted=bool(recorded_corrupted),
+                was_killable=True,
+                default=wrong_exec_cost,
+            )
+            evil_role = execution_role if target in case_good_roles else "good"
             hp -= hp_cost
 
         # Run solver again to get scenarios_after
         state_after = make_state(executed, confirmed_evil, confirmed_good,
-                                 exec_evil_roles, exec_good_corrupted)
+                                 exec_evil_roles, exec_good_corrupted, exec_good_roles)
         try:
             result_after = rust_solve_to_objects(state_after)
             scenarios_after = result_after.n_surviving

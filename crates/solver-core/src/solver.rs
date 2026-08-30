@@ -1,8 +1,41 @@
 /// Main solver entry point.
 
 use rayon::prelude::*;
+use crate::knowledge_base::normalize_role;
 use crate::scenario::build_scenarios;
-use crate::types::{GameState, SolverResult};
+use crate::types::{GameState, Scenario, SolverResult};
+
+fn collect_bombardier_positions(
+    state: &GameState,
+    surviving: &[Scenario],
+    definite_evil: &[u8],
+) -> Vec<u8> {
+    let mut positions: Vec<u8> = state.cards.iter()
+        .filter(|card| {
+            normalize_role(&card.apparent_role) == "bombardier"
+                && !definite_evil.contains(&card.position)
+        })
+        .map(|card| card.position)
+        .collect();
+
+    for pos in 1..=state.n_cards {
+        if definite_evil.contains(&pos) {
+            continue;
+        }
+        if surviving.iter().any(|scenario| {
+            !scenario.is_evil(pos)
+                && scenario.chancellor_added_outcast_position() == Some(pos)
+                && scenario
+                    .chancellor_added_outcast_role()
+                    .is_some_and(|role| normalize_role(role) == "bombardier")
+        }) {
+            positions.push(pos);
+        }
+    }
+    positions.sort_unstable();
+    positions.dedup();
+    positions
+}
 use crate::validators::check_scenario;
 
 /// Run the solver on the current game state.
@@ -28,11 +61,11 @@ pub fn solve(state: &GameState) -> SolverResult {
             if all_evil { definite_evil.push(pos); }
             if all_good { definite_good.push(pos); }
         }
-        for card in &state.cards {
-            if card.apparent_role == "Bombardier" && !definite_evil.contains(&card.position) {
-                bombardier_positions.push(card.position);
-            }
-        }
+        bombardier_positions = collect_bombardier_positions(
+            state,
+            &surviving,
+            &definite_evil,
+        );
     }
 
     definite_evil.sort_unstable();
@@ -53,7 +86,7 @@ pub fn solve(state: &GameState) -> SolverResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::GameState;
+    use crate::types::{ChancellorTrace, GameState, Scenario};
     use serde_json::json;
 
     #[test]
@@ -98,5 +131,25 @@ mod tests {
                 && s.evil_positions.get(&8).is_some_and(|r| r == "Lilis")
         });
         assert!(true_branch);
+    }
+
+    #[test]
+    fn generated_bombardier_is_always_excluded_from_good_targets() {
+        let mut state = GameState::default();
+        state.n_cards = 2;
+        let mut generated = Scenario::default();
+        generated.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Bombardier".to_string(),
+        });
+        let mut evil = Scenario::default();
+        evil.evil_positions.insert(1, "Lilis".to_string());
+
+        assert_eq!(
+            collect_bombardier_positions(&state, &[generated, evil], &[]),
+            vec![1],
+        );
+        assert!(collect_bombardier_positions(&state, &[], &[1]).is_empty());
     }
 }

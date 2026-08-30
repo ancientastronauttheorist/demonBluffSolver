@@ -7,6 +7,7 @@
 //! Phase 3: Strategy-driven execution loop — verify the solver would WIN
 
 use solver_core::solver::solve;
+use solver_core::knowledge_base::normalize_role;
 use solver_core::strategy::execution::pick_execution_target;
 use solver_core::strategy::{
     apply_execution_damage, execution_consequence, execution_terminal_outcome,
@@ -14,7 +15,7 @@ use solver_core::strategy::{
     ExecutionTerminalOutcome,
 };
 use solver_core::types::*;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::path::PathBuf;
 
 fn v2_dir() -> PathBuf {
@@ -65,6 +66,7 @@ fn make_state(
     confirmed_good: &[u8],
     executed_evil_roles: &HashMap<u8, String>,
     executed_good_corrupted: &HashMap<u8, bool>,
+    executed_good_roles: &HashMap<u8, String>,
     slayer_results: &[SlayerResult],
     pd_ability_results: &[PdAbilityResult],
     night_kills: &[u8],
@@ -80,6 +82,7 @@ fn make_state(
     state.confirmed_good = confirmed_good.to_vec();
     state.executed_evil_roles = executed_evil_roles.clone();
     state.executed_good_corrupted = executed_good_corrupted.clone();
+    state.executed_good_roles = executed_good_roles.clone();
     state.slayer_results = slayer_results.to_vec();
     state.pd_ability_results = pd_ability_results.to_vec();
     state.night_kills = night_kills.to_vec();
@@ -103,9 +106,10 @@ enum SimResult {
 
 fn truth_compatible_scenarios<'a>(
     result: &'a SolverResult,
-    true_evil_set: &HashSet<u8>,
+    true_evil_positions: &HashMap<u8, String>,
     executed: &[u8],
 ) -> Vec<&'a Scenario> {
+    let true_evil_set: HashSet<u8> = true_evil_positions.keys().copied().collect();
     let exec_set: HashSet<u8> = executed.iter().copied().collect();
     let non_exec_true: HashSet<u8> = true_evil_set.difference(&exec_set).copied().collect();
     result.surviving_scenarios.iter().filter(|s| {
@@ -113,15 +117,30 @@ fn truth_compatible_scenarios<'a>(
         if let Some(pp) = s.puppet_position { scenario_evil.insert(pp); }
         let non_exec_scenario: HashSet<u8> = scenario_evil.difference(&exec_set).copied().collect();
         non_exec_true == non_exec_scenario
+            && non_exec_true.iter().all(|position| {
+                let Some(true_role) = true_evil_positions.get(position) else {
+                    return false;
+                };
+                if normalize_role(true_role) == "puppet" {
+                    s.puppet_position == Some(*position)
+                } else {
+                    s.evil_positions
+                        .get(position)
+                        .is_some_and(|role| normalize_role(role) == normalize_role(true_role))
+                }
+            })
     }).collect()
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 struct GoodExecutionObservation {
     consequence: ExecutionConsequence,
     /// Corruption value persisted by the live bridge. Drunk is reported clean
-    /// on this surface even though its role effects use intrinsic corruption.
+    /// here even when a separate active Corrupted status affects role hooks.
     observed_corrupted: bool,
+    /// A killed good card reveals its real role. Protected Knight outcomes do
+    /// not reveal a distinct hidden identity and intentionally keep this None.
+    revealed_role: Option<String>,
 }
 
 fn good_execution_observation(
@@ -134,22 +153,37 @@ fn good_execution_observation(
         "Drunk"
     } else if scenario.doppelganger_position == Some(pos) {
         "Doppelganger"
+    } else if scenario.chancellor_added_outcast_position() == Some(pos) {
+        scenario
+            .chancellor_added_outcast_role()
+            .unwrap_or(apparent_role)
     } else {
         apparent_role
     };
-    let observed_corrupted = if revealed_role == "Drunk" {
+    let observed_corrupted = if normalize_role(revealed_role) == "drunk" {
         false
     } else {
         scenario.corrupted.contains(&pos)
     };
+    let active_corrupted = scenario.corrupted.contains(&pos);
+    let consequence = execution_consequence(
+        revealed_role,
+        apparent_role,
+        false,
+        active_corrupted,
+        wrong_exec_cost,
+    );
+    let revealed_role = if consequence == ExecutionConsequence::Protected
+        || revealed_role.trim().is_empty()
+        || matches!(normalize_role(revealed_role).as_str(), "unknown" | "none" | "?")
+    {
+        None
+    } else {
+        Some(revealed_role.to_string())
+    };
     GoodExecutionObservation {
-        consequence: execution_consequence(
-            revealed_role,
-            apparent_role,
-            false,
-            observed_corrupted,
-            wrong_exec_cost,
-        ),
+        revealed_role,
+        consequence,
         observed_corrupted,
     }
 }
@@ -163,8 +197,45 @@ fn consensus_good_execution_observation(
     apparent_role: &str,
     wrong_exec_cost: i32,
     required_corruption: Option<bool>,
+    required_role: Option<&str>,
 ) -> Result<GoodExecutionObservation, String> {
-    let mut consensus = None;
+    let observations = distinct_good_execution_observations(
+        scenarios,
+        pos,
+        apparent_role,
+        wrong_exec_cost,
+        required_corruption,
+        required_role,
+    );
+    let Some(first) = observations.first() else {
+        return Err(format!(
+            "execution #{pos} has no truth-compatible outcome for apparent {apparent_role}"
+        ));
+    };
+    if observations.iter().skip(1).any(|observation| {
+        observation.consequence != first.consequence
+            || observation.observed_corrupted != first.observed_corrupted
+    }) {
+        Err(format!(
+            "execution #{pos} has multiple truth-compatible outcomes for apparent {apparent_role}"
+        ))
+    } else {
+        // HP reconstruction needs only the persisted consequence/corruption
+        // surface. Role-distinct killed outcomes are branched later by the
+        // strategy simulation and persisted for the next solve.
+        Ok(first.clone())
+    }
+}
+
+fn distinct_good_execution_observations(
+    scenarios: &[&Scenario],
+    pos: u8,
+    apparent_role: &str,
+    wrong_exec_cost: i32,
+    required_corruption: Option<bool>,
+    required_role: Option<&str>,
+) -> Vec<GoodExecutionObservation> {
+    let mut observations = Vec::new();
     for scenario in scenarios {
         let observation = good_execution_observation(
             scenario,
@@ -175,18 +246,165 @@ fn consensus_good_execution_observation(
         if required_corruption.is_some_and(|value| value != observation.observed_corrupted) {
             continue;
         }
-        if consensus.is_some_and(|value| value != observation) {
-            return Err(format!(
-                "execution #{pos} has multiple truth-compatible outcomes for apparent {apparent_role}"
-            ));
+        if required_role.is_some_and(|required| {
+            observation
+                .revealed_role
+                .as_deref()
+                .map(|role| normalize_role(role) != normalize_role(required))
+                .unwrap_or(true)
+        }) {
+            continue;
         }
-        consensus = Some(observation);
+        if !observations.contains(&observation) {
+            observations.push(observation);
+        }
     }
-    consensus.ok_or_else(|| {
-        format!(
-            "execution #{pos} has no truth-compatible outcome for apparent {apparent_role}"
-        )
-    })
+    observations
+}
+
+#[derive(Debug, Clone, Default)]
+struct ExecutionBranch {
+    cards: Vec<serde_json::Value>,
+    executed: Vec<u8>,
+    confirmed_evil: Vec<u8>,
+    confirmed_good: Vec<u8>,
+    evil_roles: HashMap<u8, String>,
+    good_corrupted: HashMap<u8, bool>,
+    good_roles: HashMap<u8, String>,
+    immunity_blocked: HashSet<u8>,
+    hp: i32,
+    total_executions: usize,
+    wrong_executions: usize,
+    iterations: usize,
+    observations: Vec<String>,
+}
+
+impl ExecutionBranch {
+    fn context(&self) -> String {
+        if self.observations.is_empty() {
+            "initial".to_string()
+        } else {
+            self.observations.join(" -> ")
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct ExecutionBranchKey {
+    card_positions: Vec<u8>,
+    executed: Vec<u8>,
+    confirmed_evil: Vec<u8>,
+    confirmed_good: Vec<u8>,
+    evil_roles: Vec<(u8, String)>,
+    good_corrupted: Vec<(u8, bool)>,
+    good_roles: Vec<(u8, String)>,
+    immunity_blocked: Vec<u8>,
+    hp: i32,
+}
+
+fn sorted_positions(positions: impl IntoIterator<Item = u8>) -> Vec<u8> {
+    let mut positions: Vec<u8> = positions.into_iter().collect();
+    positions.sort_unstable();
+    positions.dedup();
+    positions
+}
+
+fn execution_branch_key(branch: &ExecutionBranch) -> ExecutionBranchKey {
+    let mut evil_roles: Vec<(u8, String)> = branch
+        .evil_roles
+        .iter()
+        .map(|(&position, role)| (position, role.clone()))
+        .collect();
+    evil_roles.sort_unstable();
+    let mut good_corrupted: Vec<(u8, bool)> = branch
+        .good_corrupted
+        .iter()
+        .map(|(&position, &corrupted)| (position, corrupted))
+        .collect();
+    good_corrupted.sort_unstable();
+    let mut good_roles: Vec<(u8, String)> = branch
+        .good_roles
+        .iter()
+        .map(|(&position, role)| (position, role.clone()))
+        .collect();
+    good_roles.sort_unstable();
+
+    ExecutionBranchKey {
+        card_positions: sorted_positions(branch.cards.iter().filter_map(|card| {
+            card.get("position")
+                .and_then(|value| value.as_u64())
+                .map(|position| position as u8)
+        })),
+        executed: sorted_positions(branch.executed.iter().copied()),
+        confirmed_evil: sorted_positions(branch.confirmed_evil.iter().copied()),
+        confirmed_good: sorted_positions(branch.confirmed_good.iter().copied()),
+        evil_roles,
+        good_corrupted,
+        good_roles,
+        immunity_blocked: sorted_positions(branch.immunity_blocked.iter().copied()),
+        hp: branch.hp,
+    }
+}
+
+fn enqueue_execution_branch(
+    queue: &mut VecDeque<ExecutionBranch>,
+    seen: &mut HashMap<ExecutionBranchKey, usize>,
+    branch: ExecutionBranch,
+) {
+    let key = execution_branch_key(&branch);
+    if seen
+        .get(&key)
+        .is_some_and(|&best_iterations| best_iterations <= branch.iterations)
+    {
+        return;
+    }
+    seen.insert(key, branch.iterations);
+    queue.push_back(branch);
+}
+
+#[derive(Debug)]
+enum GoodExecutionContinuation {
+    Continue(ExecutionBranch),
+    BombardierLoss,
+}
+
+fn continue_good_execution(
+    branch: &ExecutionBranch,
+    pos: u8,
+    observation: GoodExecutionObservation,
+) -> GoodExecutionContinuation {
+    let mut next = branch.clone();
+    next.iterations += 1;
+    next.total_executions += 1;
+    next.observations.push(format!("#{pos}={observation:?}"));
+
+    match observation.consequence {
+        ExecutionConsequence::BombardierLoss => GoodExecutionContinuation::BombardierLoss,
+        ExecutionConsequence::Protected => {
+            if !next.confirmed_good.contains(&pos) {
+                next.confirmed_good.push(pos);
+            }
+            next.immunity_blocked.insert(pos);
+            GoodExecutionContinuation::Continue(next)
+        }
+        ExecutionConsequence::Killed { hp_damage } => {
+            next.wrong_executions += 1;
+            next.hp = apply_execution_damage(next.hp, hp_damage);
+            if !next.executed.contains(&pos) {
+                next.executed.push(pos);
+            }
+            if !next.confirmed_good.contains(&pos) {
+                next.confirmed_good.push(pos);
+            }
+            next.good_corrupted
+                .insert(pos, observation.observed_corrupted);
+            if let Some(role) = observation.revealed_role {
+                next.good_roles.insert(pos, role);
+            }
+            next.immunity_blocked.clear();
+            GoodExecutionContinuation::Continue(next)
+        }
+    }
 }
 
 // ── HP reconstruction ──
@@ -211,6 +429,12 @@ fn reconstruct_phase3_hp(
         .and_then(|v| v.as_object())
         .map(|m| m.iter().filter_map(|(k, v)| Some((k.parse::<u8>().ok()?, v.as_bool()?))).collect())
         .unwrap_or_default();
+    let exec_good_roles: HashMap<u8, String> = obj.get("executed_good_roles")
+        .and_then(|v| v.as_object())
+        .map(|m| m.iter().filter_map(|(k, v)| {
+            Some((k.parse::<u8>().ok()?, v.as_str()?.to_string()))
+        }).collect())
+        .unwrap_or_default();
 
     let cards: Vec<serde_json::Value> = obj.get("cards")
         .and_then(|v| v.as_array())
@@ -223,6 +447,7 @@ fn reconstruct_phase3_hp(
 
     // Add back execution costs for recorded player executions
     let mut cost_addback = 0i32;
+    let mut compatible_scenarios = truth_scenarios.to_vec();
     for &pos in &case_executed {
         if night_kills_set.contains(&pos) || slayer_killed.contains(&pos) {
             continue; // Not a player execution
@@ -235,12 +460,37 @@ fn reconstruct_phase3_hp(
         // protected Knight checks. Recorded corruption can filter worlds, but
         // killed versus protected must remain part of the consensus.
         let apparent = card_roles.get(&pos).map(|s| s.as_str()).unwrap_or("");
+        let required_corruption = exec_good_corr.get(&pos).copied();
+        let required_role = exec_good_roles.get(&pos).map(String::as_str);
+        compatible_scenarios.retain(|scenario| {
+            let observation = good_execution_observation(
+                scenario,
+                pos,
+                apparent,
+                wrong_exec_cost,
+            );
+            let corruption_matches = required_corruption
+                .map_or(true, |required| required == observation.observed_corrupted);
+            let role_matches = required_role.map_or(true, |required| {
+                observation
+                    .revealed_role
+                    .as_deref()
+                    .is_some_and(|role| normalize_role(role) == normalize_role(required))
+            });
+            corruption_matches && role_matches
+        });
+        if compatible_scenarios.is_empty() {
+            return Err(format!(
+                "execution evidence through #{pos} has no shared truth-compatible world"
+            ));
+        }
         let observation = consensus_good_execution_observation(
-            truth_scenarios,
+            &compatible_scenarios,
             pos,
             apparent,
             wrong_exec_cost,
-            exec_good_corr.get(&pos).copied(),
+            required_corruption,
+            required_role,
         )?;
         match observation.consequence {
             ExecutionConsequence::Protected => {}
@@ -307,6 +557,12 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         .and_then(|v| v.as_object())
         .map(|m| m.iter().filter_map(|(k, v)| Some((k.parse::<u8>().ok()?, v.as_bool()?))).collect())
         .unwrap_or_default();
+    let case_exec_good_roles: HashMap<u8, String> = obj.get("executed_good_roles")
+        .and_then(|v| v.as_object())
+        .map(|m| m.iter().filter_map(|(k, v)| {
+            Some((k.parse::<u8>().ok()?, v.as_str()?.to_string()))
+        }).collect())
+        .unwrap_or_default();
 
     // Incremental state (Phases 1-2)
     let mut current_cards: Vec<serde_json::Value> = Vec::new();
@@ -315,7 +571,8 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let mut current_confirmed_evil: Vec<u8> = Vec::new();
     let mut current_confirmed_good: Vec<u8> = Vec::new();
     let mut current_evil_roles: HashMap<u8, String> = HashMap::new();
-    let mut current_good_corr: HashMap<u8, bool> = HashMap::new();
+    let current_good_corr: HashMap<u8, bool> = HashMap::new();
+    let current_good_roles: HashMap<u8, String> = HashMap::new();
     let mut current_slayer: Vec<SlayerResult> = Vec::new();
     let mut current_pd: Vec<PdAbilityResult> = Vec::new();
     let mut current_night_kills: Vec<u8> = Vec::new();
@@ -390,6 +647,7 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let state = make_state(value, &current_cards, &current_executed,
         &current_confirmed_evil, &current_confirmed_good,
         &current_evil_roles, &current_good_corr,
+        &current_good_roles,
         &current_slayer, &current_pd,
         &current_night_kills, current_nk_evil_count,
         &current_reveal_order);
@@ -422,10 +680,10 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     // Reconstruct HP at start of execution phase
     let truth_scenarios = truth_compatible_scenarios(
         &result,
-        &true_evil_set,
+        &true_evil_positions,
         &current_executed,
     );
-    let mut hp = match reconstruct_phase3_hp(
+    let hp = match reconstruct_phase3_hp(
         value,
         &true_evil_set,
         &nk_set,
@@ -452,82 +710,125 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         .filter(|p| slayer_killed.contains(p))
         .copied().collect();
 
-    current_executed = pre_exec_executed;
-    current_confirmed_evil = pre_exec_confirmed_evil;
-    current_confirmed_good = pre_exec_confirmed_good;
-    current_evil_roles = current_evil_roles.iter()
+    let pre_exec_evil_roles = current_evil_roles.iter()
         .filter(|(p, _)| nk_set.contains(p) || slayer_killed.contains(p))
         .map(|(&p, r)| (p, r.clone())).collect();
-    current_good_corr.clear();
-
-    let mut immunity_blocked: HashSet<u8> = HashSet::new();
-    let mut total_executions = 0usize;
-    let mut wrong_executions = 0usize;
     let max_iterations = 20; // Safety valve
+    let initial_branch = ExecutionBranch {
+        cards: current_cards,
+        executed: pre_exec_executed,
+        confirmed_evil: pre_exec_confirmed_evil,
+        confirmed_good: pre_exec_confirmed_good,
+        evil_roles: pre_exec_evil_roles,
+        good_corrupted: HashMap::new(),
+        good_roles: HashMap::new(),
+        immunity_blocked: HashSet::new(),
+        hp,
+        total_executions: 0,
+        wrong_executions: 0,
+        iterations: 0,
+        observations: Vec::new(),
+    };
+    let mut branches = VecDeque::new();
+    let mut seen_branches = HashMap::new();
+    enqueue_execution_branch(&mut branches, &mut seen_branches, initial_branch);
+    let mut completed_wins = 0usize;
+    let mut max_win_executions = 0usize;
+    let mut max_win_wrong_executions = 0usize;
 
-    for _iteration in 0..max_iterations {
+    while let Some(branch) = branches.pop_front() {
         // Build state and solve
-        let state = make_state(value, &current_cards, &current_executed,
-            &current_confirmed_evil, &current_confirmed_good,
-            &current_evil_roles, &current_good_corr,
+        let state = make_state(value, &branch.cards, &branch.executed,
+            &branch.confirmed_evil, &branch.confirmed_good,
+            &branch.evil_roles, &branch.good_corrupted,
+            &branch.good_roles,
             &current_slayer, &current_pd,
             &current_night_kills, current_nk_evil_count,
             &current_reveal_order);
         let mut state_with_hp = state;
-        state_with_hp.hp = hp;
+        state_with_hp.hp = branch.hp;
         state_with_hp.wrong_exec_cost = wrong_exec_cost;
 
         let result = solve(&state_with_hp);
 
         // Constraint check
-        if !truth_in_set(&result, &true_evil_set, &current_executed) {
+        if !truth_in_set(&result, &true_evil_set, &branch.executed) {
             return SimResult::ConstraintFailure {
-                phase: format!("exec_step_{total_executions}"),
-                detail: format!("{case_name}: truth eliminated during simulation ({} surviving)", result.n_surviving),
+                phase: format!("exec_step_{}", branch.total_executions),
+                detail: format!(
+                    "{case_name}: truth eliminated during simulation ({} surviving) [branch {}]",
+                    result.n_surviving,
+                    branch.context(),
+                ),
             };
         }
 
         // Native terminal precedence: depleted HP loses before evil-count win.
         let (_, max_remaining) = remaining_evil_bounds(&state_with_hp, &result);
-        match execution_terminal_outcome(hp, max_remaining == 0) {
+        match execution_terminal_outcome(branch.hp, max_remaining == 0) {
             ExecutionTerminalOutcome::HpLoss => {
                 return SimResult::SimLoss {
-                    reason: format!("{case_name}: HP exhausted (hp={hp}) before win resolution"),
-                    executions: total_executions,
+                    reason: format!(
+                        "{case_name}: HP exhausted (hp={}) before win resolution [branch {}]",
+                        branch.hp,
+                        branch.context(),
+                    ),
+                    executions: branch.total_executions,
                 };
             }
             ExecutionTerminalOutcome::Win => {
-                return SimResult::Win {
-                    executions: total_executions,
-                    wrong_execs: wrong_executions,
-                };
+                completed_wins += 1;
+                max_win_executions = max_win_executions.max(branch.total_executions);
+                max_win_wrong_executions =
+                    max_win_wrong_executions.max(branch.wrong_executions);
+                continue;
             }
             ExecutionTerminalOutcome::Continue => {}
         }
 
+        if branch.iterations >= max_iterations {
+            return SimResult::SimLoss {
+                reason: format!(
+                    "{case_name}: exceeded max iterations ({max_iterations}) [branch {}]",
+                    branch.context(),
+                ),
+                executions: branch.total_executions,
+            };
+        }
+
         // Strategy picks target
-        let pick = match pick_execution_target(&state_with_hp, &result, &immunity_blocked) {
+        let pick = match pick_execution_target(&state_with_hp, &result, &branch.immunity_blocked) {
             Some(p) => p,
             None => {
                 return SimResult::SimLoss {
-                    reason: format!("{case_name}: no valid execution target (hp={hp}, budget={}, remaining={})",
-                        if wrong_exec_cost > 0 { hp / wrong_exec_cost } else { 99 }, max_remaining),
-                    executions: total_executions,
+                    reason: format!(
+                        "{case_name}: no valid execution target (hp={}, budget={}, remaining={}) [branch {}]",
+                        branch.hp,
+                        if wrong_exec_cost > 0 { branch.hp / wrong_exec_cost } else { 99 },
+                        max_remaining,
+                        branch.context(),
+                    ),
+                    executions: branch.total_executions,
                 };
             }
         };
 
         let pos = pick.position;
-        total_executions += 1;
 
         // Simulate execution using ground truth
         if let Some(evil_role) = true_evil_positions.get(&pos) {
             // Correct: evil found
-            current_executed.push(pos);
-            if !current_confirmed_evil.contains(&pos) {
-                current_confirmed_evil.push(pos);
+            let mut next = branch.clone();
+            next.iterations += 1;
+            next.total_executions += 1;
+            next.observations.push(format!("#{pos}=evil({evil_role})"));
+            if !next.executed.contains(&pos) {
+                next.executed.push(pos);
             }
-            current_evil_roles.insert(pos, evil_role.clone());
+            if !next.confirmed_evil.contains(&pos) {
+                next.confirmed_evil.push(pos);
+            }
+            next.evil_roles.insert(pos, evil_role.clone());
 
             // Witch unblock
             if evil_role == "Witch" {
@@ -535,75 +836,83 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
                 for &bp in &blocked {
                     if state_with_hp.cards.iter().all(|c| c.position != bp) {
                         if let Some(card_val) = card_by_pos.get(&bp) {
-                            current_cards.push((*card_val).clone());
+                            next.cards.push((*card_val).clone());
                         }
                     }
                 }
             }
 
-            immunity_blocked.clear();
+            next.immunity_blocked.clear();
+            enqueue_execution_branch(&mut branches, &mut seen_branches, next);
         } else {
-            // Wrong execution — check special cases
+            // Wrong execution: fork every distinct native observation. A
+            // killed good card reveals and persists its real role; a protected
+            // attempt records only confirmed-good immunity, never hidden
+            // memory identity.
             let apparent = get_card_role(pos, &state_with_hp).unwrap_or("");
             let truth_scenarios = truth_compatible_scenarios(
                 &result,
-                &true_evil_set,
-                &current_executed,
+                &true_evil_positions,
+                &branch.executed,
             );
-            let observation = match consensus_good_execution_observation(
+            let observations = distinct_good_execution_observations(
                 &truth_scenarios,
                 pos,
                 apparent,
                 wrong_exec_cost,
                 case_exec_good_corr.get(&pos).copied(),
-            ) {
-                Ok(observation) => observation,
-                Err(detail) => {
-                    return SimResult::InsufficientTruth {
-                        detail: format!("{case_name}: {detail}"),
-                    };
-                }
-            };
-            let hp_damage = match observation.consequence {
-                ExecutionConsequence::BombardierLoss => {
-                    return SimResult::SimLoss {
-                        reason: format!("{case_name}: executed good Bombardier #{pos}"),
-                        executions: total_executions,
-                    };
-                }
-                ExecutionConsequence::Protected => {
-                    // Immunity blocks — no HP loss, not removed, confirmed good.
-                    if !current_confirmed_good.contains(&pos) {
-                        current_confirmed_good.push(pos);
-                    }
-                    immunity_blocked.insert(pos);
-                    continue;
-                }
-                ExecutionConsequence::Killed { hp_damage } => hp_damage,
-            };
-
-            wrong_executions += 1;
-            hp = apply_execution_damage(hp, hp_damage);
-            current_executed.push(pos);
-            if !current_confirmed_good.contains(&pos) {
-                current_confirmed_good.push(pos);
-            }
-            current_good_corr.insert(pos, observation.observed_corrupted);
-
-            immunity_blocked.clear();
-
-            if hp <= 0 {
-                return SimResult::SimLoss {
-                    reason: format!("{case_name}: HP exhausted (hp={hp}) after wrong exec #{pos}"),
-                    executions: total_executions,
+                case_exec_good_roles.get(&pos).map(String::as_str),
+            );
+            if observations.is_empty() {
+                return SimResult::InsufficientTruth {
+                    detail: format!(
+                        "{case_name}: execution #{pos} has no truth-compatible outcome for apparent {apparent}"
+                    ),
                 };
+            }
+
+            for observation in observations {
+                let observation_context = format!("{observation:?}");
+                match continue_good_execution(&branch, pos, observation) {
+                    GoodExecutionContinuation::BombardierLoss => {
+                        return SimResult::SimLoss {
+                            reason: format!(
+                                "{case_name}: executed good Bombardier #{pos} [branch {} -> #{pos}={observation_context}]",
+                                branch.context(),
+                            ),
+                            executions: branch.total_executions + 1,
+                        };
+                    }
+                    GoodExecutionContinuation::Continue(next) if next.hp <= 0 => {
+                        return SimResult::SimLoss {
+                            reason: format!(
+                                "{case_name}: HP exhausted (hp={}) after wrong exec #{pos} [branch {}]",
+                                next.hp,
+                                next.context(),
+                            ),
+                            executions: next.total_executions,
+                        };
+                    }
+                    GoodExecutionContinuation::Continue(next) => {
+                        enqueue_execution_branch(&mut branches, &mut seen_branches, next);
+                    }
+                }
             }
         }
     }
 
-    SimResult::SimLoss {
-        reason: format!("{case_name}: exceeded max iterations ({max_iterations})"),
-        executions: total_executions,
+    if completed_wins > 0 {
+        SimResult::Win {
+            executions: max_win_executions,
+            wrong_execs: max_win_wrong_executions,
+        }
+    } else {
+        SimResult::SimLoss {
+            reason: format!(
+                "{case_name}: all execution branches were deduplicated before a terminal outcome"
+            ),
+            executions: 0,
+        }
     }
 }
 
@@ -618,6 +927,8 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         doppelganger_position: None,
         drunk_position: None,
         alchemist_cures: HashMap::new(),
+        messed_up_by_evil: HashSet::new(),
+        chancellor_trace: None,
         chancellor_conversion: None,
     };
     knight_scenario.corrupted.insert(1);
@@ -645,9 +956,10 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         "hp": 4,
         "wrong_exec_cost": 5,
         "executed": [1],
-        // Plague Doctor reports Drunk as not corrupted, but execution still
-        // uses Drunk's intrinsic corrupted semantics (2 + Knight's 4).
+        // PD/bookkeeping reports Drunk clean, while its active status still
+        // drives Knight's separate four-damage hook.
         "executed_good_corrupted": {"1": false},
+        "executed_good_roles": {"1": "Drunk"},
         "cards": [{"position": 1, "apparent_role": "Knight"}]
     });
     assert_eq!(
@@ -661,6 +973,41 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         10,
     );
 
+    let mut resistant_drunk_scenario = drunk_scenario.clone();
+    resistant_drunk_scenario.corrupted.clear();
+    resistant_drunk_scenario.chancellor_trace = Some(ChancellorTrace {
+        original_positions: vec![2],
+        added_outcast_position: 1,
+        added_outcast_role: "Drunk".to_string(),
+    });
+    let resistant_drunk_as_knight = serde_json::json!({
+        "hp": 8,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": false},
+        "executed_good_roles": {"1": "Drunk"},
+        "cards": [{"position": 1, "apparent_role": "Knight"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &resistant_drunk_as_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&resistant_drunk_scenario],
+        ).unwrap(),
+        10,
+    );
+    assert!(
+        reconstruct_phase3_hp(
+            &resistant_drunk_as_knight,
+            &empty,
+            &empty,
+            &empty,
+            &[&drunk_scenario, &resistant_drunk_scenario],
+        ).is_err(),
+    );
+
     let mut corrupted_scout_scenario = Scenario {
         evil_positions: HashMap::new(),
         puppet_position: None,
@@ -669,6 +1016,8 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         doppelganger_position: None,
         drunk_position: None,
         alchemist_cures: HashMap::new(),
+        messed_up_by_evil: HashSet::new(),
+        chancellor_trace: None,
         chancellor_conversion: None,
     };
     let corrupted_scout = serde_json::json!({
@@ -711,6 +1060,24 @@ fn hp_reconstruction_uses_composite_knight_damage() {
             &[&incompatible_drunk, &corrupted_scout_scenario],
         ).is_err(),
     );
+    let observed_drunk = serde_json::json!({
+        "hp": 8,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "executed_good_corrupted": {"1": false},
+        "executed_good_roles": {"1": "Drunk"},
+        "cards": [{"position": 1, "apparent_role": "Scout"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &observed_drunk,
+            &empty,
+            &empty,
+            &empty,
+            &[&incompatible_drunk, &corrupted_scout_scenario],
+        ).unwrap(),
+        10,
+    );
 
     let protected_knight = serde_json::json!({
         "hp": 10,
@@ -732,8 +1099,9 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         10,
     );
 
-    // Adding a clean Drunk-as-Knight world makes the historical `executed`
-    // entry ambiguous: protected in two worlds, killed for 6 HP in the third.
+    // Adding an observed-clean, actively Corrupted Drunk-as-Knight world makes
+    // the historical `executed` entry ambiguous: protected in two worlds,
+    // killed for 6 HP in the third.
     assert!(
         reconstruct_phase3_hp(
             &protected_knight,
@@ -743,6 +1111,195 @@ fn hp_reconstruction_uses_composite_knight_damage() {
             &[&corrupted_scout_scenario, &doppelganger_knight, &incompatible_drunk],
         ).is_err(),
     );
+}
+
+#[test]
+fn hp_reconstruction_requires_one_shared_world_across_execution_evidence() {
+    let empty = HashSet::new();
+    let mut drunk_at_one = Scenario::default();
+    drunk_at_one.drunk_position = Some(1);
+    drunk_at_one.corrupted.insert(1);
+    let mut drunk_at_two = Scenario::default();
+    drunk_at_two.drunk_position = Some(2);
+    drunk_at_two.corrupted.insert(2);
+    let impossible_pair = serde_json::json!({
+        "hp": 6,
+        "wrong_exec_cost": 2,
+        "executed": [1, 2],
+        "executed_good_corrupted": {"1": false, "2": false},
+        "executed_good_roles": {"1": "Drunk", "2": "Drunk"},
+        "cards": [
+            {"position": 1, "apparent_role": "Scout"},
+            {"position": 2, "apparent_role": "Scout"}
+        ]
+    });
+
+    let error = reconstruct_phase3_hp(
+        &impossible_pair,
+        &empty,
+        &empty,
+        &empty,
+        &[&drunk_at_one, &drunk_at_two],
+    )
+    .unwrap_err();
+
+    assert!(error.contains("no shared truth-compatible world"));
+}
+
+#[test]
+fn truth_worlds_include_exact_evil_role_assignments() {
+    let mut actual = Scenario::default();
+    actual.evil_positions = HashMap::from([
+        (6, "Chancellor".to_string()),
+        (7, "Lilis".to_string()),
+    ]);
+    let mut swapped = Scenario::default();
+    swapped.evil_positions = HashMap::from([
+        (6, "Lilis".to_string()),
+        (7, "Chancellor".to_string()),
+    ]);
+    let result = SolverResult {
+        definite_evil: Vec::new(),
+        definite_good: Vec::new(),
+        bombardier_positions: Vec::new(),
+        n_scenarios: 2,
+        n_surviving: 2,
+        surviving_scenarios: vec![actual, swapped],
+        reasoning: Vec::new(),
+    };
+    let truth = HashMap::from([
+        (6, "Chancellor".to_string()),
+        (7, "Lilis".to_string()),
+    ]);
+
+    let compatible = truth_compatible_scenarios(&result, &truth, &[]);
+    assert_eq!(compatible.len(), 1);
+    assert_eq!(compatible[0].evil_positions.get(&6).unwrap(), "Chancellor");
+}
+
+#[test]
+fn execution_branches_ordinary_and_drunk_damage_with_revealed_roles() {
+    let ordinary = Scenario::default();
+    let mut drunk = Scenario::default();
+    drunk.drunk_position = Some(1);
+    drunk.corrupted.insert(1);
+    let observations = distinct_good_execution_observations(
+        &[&ordinary, &drunk],
+        1,
+        "Scout",
+        5,
+        None,
+        None,
+    );
+    assert_eq!(observations.len(), 2);
+
+    let branch = ExecutionBranch {
+        hp: 10,
+        ..ExecutionBranch::default()
+    };
+    let continuations: Vec<ExecutionBranch> = observations
+        .into_iter()
+        .map(|observation| match continue_good_execution(&branch, 1, observation) {
+            GoodExecutionContinuation::Continue(next) => next,
+            GoodExecutionContinuation::BombardierLoss => panic!("Scout is not Bombardier"),
+        })
+        .collect();
+    let hp_values: HashSet<i32> = continuations.iter().map(|next| next.hp).collect();
+    assert_eq!(hp_values, HashSet::from([5, 8]));
+    assert!(continuations.iter().all(|next| next.executed == vec![1]));
+    assert!(continuations
+        .iter()
+        .all(|next| next.good_corrupted == HashMap::from([(1, false)])));
+    let revealed_roles: HashSet<&str> = continuations
+        .iter()
+        .filter_map(|next| next.good_roles.get(&1).map(String::as_str))
+        .collect();
+    assert_eq!(revealed_roles, HashSet::from(["Scout", "Drunk"]));
+    assert_ne!(
+        execution_branch_key(&continuations[0]),
+        execution_branch_key(&continuations[1]),
+    );
+}
+
+#[test]
+fn execution_branch_does_not_persist_an_empty_revealed_role() {
+    let observation = good_execution_observation(&Scenario::default(), 1, "", 2);
+    assert_eq!(
+        observation.consequence,
+        ExecutionConsequence::Killed { hp_damage: 2 },
+    );
+    assert_eq!(observation.revealed_role, None);
+
+    let branch = ExecutionBranch {
+        hp: 10,
+        ..ExecutionBranch::default()
+    };
+    let GoodExecutionContinuation::Continue(next) =
+        continue_good_execution(&branch, 1, observation)
+    else {
+        panic!("ordinary unknown-role execution must continue");
+    };
+    assert_eq!(next.hp, 8);
+    assert!(next.good_roles.is_empty());
+}
+
+#[test]
+fn execution_branches_protected_knight_and_drunk_kill_continuations() {
+    let ordinary = Scenario::default();
+    let mut drunk = Scenario::default();
+    drunk.drunk_position = Some(1);
+    drunk.corrupted.insert(1);
+    let mut resistant_drunk = drunk.clone();
+    resistant_drunk.corrupted.clear();
+    resistant_drunk.chancellor_trace = Some(ChancellorTrace {
+        original_positions: vec![2],
+        added_outcast_position: 1,
+        added_outcast_role: "Drunk".to_string(),
+    });
+    let observations = distinct_good_execution_observations(
+        &[&ordinary, &drunk, &resistant_drunk],
+        1,
+        "Knight",
+        5,
+        None,
+        None,
+    );
+    assert_eq!(observations.len(), 3);
+
+    let branch = ExecutionBranch {
+        hp: 10,
+        ..ExecutionBranch::default()
+    };
+    let continuations: Vec<ExecutionBranch> = observations
+        .into_iter()
+        .map(|observation| match continue_good_execution(&branch, 1, observation) {
+            GoodExecutionContinuation::Continue(next) => next,
+            GoodExecutionContinuation::BombardierLoss => panic!("Knight is not Bombardier"),
+        })
+        .collect();
+    let protected = continuations
+        .iter()
+        .find(|next| next.immunity_blocked.contains(&1))
+        .expect("ordinary Knight branch is protected");
+    assert_eq!(protected.hp, 10);
+    assert!(protected.executed.is_empty());
+    assert_eq!(protected.confirmed_good, vec![1]);
+    assert!(protected.good_roles.is_empty());
+
+    let killed: Vec<&ExecutionBranch> = continuations
+        .iter()
+        .filter(|next| next.executed.contains(&1))
+        .collect();
+    assert_eq!(killed.len(), 2);
+    assert_eq!(
+        killed.iter().map(|next| next.hp).collect::<HashSet<_>>(),
+        HashSet::from([4, 8]),
+    );
+    for branch in killed {
+        assert!(branch.immunity_blocked.is_empty());
+        assert_eq!(branch.good_corrupted, HashMap::from([(1, false)]));
+        assert_eq!(branch.good_roles, HashMap::from([(1, "Drunk".to_string())]));
+    }
 }
 
 // ── Test entry point ──
@@ -954,6 +1511,34 @@ fn regression_asc71_v6_bishop_vs_chancellor() {
         }
         _ => {}
     }
+}
+
+#[test]
+fn regression_disguised_outcasts_do_not_consume_trusted_outcast_slots() {
+    for case_name in ["asc37_v5", "asc63_v2"] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).unwrap();
+        let mut value: serde_json::Value = serde_json::from_str(&content).unwrap();
+        value["board_count_provenance"] = serde_json::json!("trusted_pre_start");
+        if let SimResult::ConstraintFailure { detail, .. } = simulate_game(&value) {
+            panic!("{case_name} truth eliminated with trusted no=1: {detail}");
+        }
+    }
+}
+
+#[test]
+fn regression_legacy_header_count_does_not_invent_a_second_outcast() {
+    let path = v2_dir().join("asc57_v5.json");
+    let content = std::fs::read_to_string(path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    assert!(matches!(simulate_game(&value), SimResult::Win { .. }));
+
+    let mut falsely_trusted = value;
+    falsely_trusted["board_count_provenance"] = serde_json::json!("trusted_pre_start");
+    assert!(matches!(
+        simulate_game(&falsely_trusted),
+        SimResult::ConstraintFailure { .. },
+    ));
 }
 
 #[test]

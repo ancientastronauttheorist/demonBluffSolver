@@ -10,6 +10,8 @@ pub mod forced;
 use std::collections::{HashMap, HashSet};
 use crate::types::{GameState, SolverResult};
 use crate::geometry::adjacent_positions;
+use crate::knowledge_base::normalize_role;
+use crate::validators::effective_role_at;
 
 /// Result of pick_execution_target().
 #[derive(Debug, Clone)]
@@ -73,14 +75,20 @@ pub fn remaining_evil_bounds(state: &GameState, result: &SolverResult) -> (usize
     (*counts.iter().min().unwrap(), *counts.iter().max().unwrap())
 }
 
-/// Probability that position is corrupted across surviving scenarios.
+/// Probability that a position is unsafe to treat as a clean execution/clue
+/// surface. Drunk is intrinsically lying and killable even when an inherited
+/// Alchemist resistance prevents its generic Corrupted status bit.
 /// Ported from strategy.py:179-184.
-pub fn corruption_risk(pos: u8, result: &SolverResult) -> f64 {
+pub fn corruption_risk(pos: u8, state: &GameState, result: &SolverResult) -> f64 {
     if result.n_surviving == 0 {
         return 0.0;
     }
     let count = result.surviving_scenarios.iter()
-        .filter(|s| s.corrupted.contains(&pos))
+        .filter(|scenario| {
+            scenario.corrupted.contains(&pos)
+                || effective_role_at(pos, scenario, state)
+                    .is_some_and(|role| normalize_role(&role) == "drunk")
+        })
         .count();
     count as f64 / result.n_surviving as f64
 }
@@ -130,7 +138,7 @@ pub fn tiebreak_score(pos: u8, state: &GameState, result: &SolverResult) -> (f64
     };
 
     // 1. Corruption risk (lower = safer, negate for "higher is better")
-    let corr = corruption_risk(pos, result);
+    let corr = corruption_risk(pos, state, result);
     let corruption_penalty = -corr;
 
     // 2. Role consistency: count distinct evil roles this position could be
@@ -213,12 +221,10 @@ pub fn execution_consequence(
     } else {
         default_wrong_exec_cost
     };
-    // Drunk is intrinsically Corrupted for this role effect even though Plague
-    // Doctor reports it as not corrupted and some saved scenarios omit it from
-    // the generic corrupted set.
-    let knight_extra = if apparent_role == "Knight"
-        && (was_corrupted || revealed_role == "Drunk")
-    {
+    // Knight's separate damage hook checks the active Corrupted status. PD and
+    // execution bookkeeping still report Drunk as clean, so callers must pass
+    // the role-effect status rather than that persisted observation here.
+    let knight_extra = if apparent_role == "Knight" && was_corrupted {
         4
     } else {
         0
@@ -275,6 +281,8 @@ mod tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::new(),
+            messed_up_by_evil: HashSet::new(),
+            chancellor_trace: None,
             chancellor_conversion: None,
         }
     }
@@ -344,7 +352,7 @@ mod tests {
         );
         assert_eq!(
             execution_consequence("Drunk", "Knight", false, false, 5),
-            ExecutionConsequence::Killed { hp_damage: 6 },
+            ExecutionConsequence::Killed { hp_damage: 2 },
         );
         assert_eq!(
             execution_consequence("Doppelganger", "Knight", false, false, 5),
@@ -476,5 +484,36 @@ mod tests {
         assert_eq!(tiebreak_score(9, &state, &result).0, 1.0);
         assert_eq!(tiebreak_score(2, &state, &result).0, 1.0);
         assert_eq!(tiebreak_score(5, &state, &result).0, 0.0);
+    }
+
+    #[test]
+    fn resistant_generated_drunk_is_never_a_zero_risk_knight_check() {
+        let state = GameState {
+            n_cards: 1,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Knight".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+        let mut scenario = make_scenario(&[]);
+        scenario.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![1],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+        assert!(scenario.corrupted.is_empty());
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 1,
+            n_surviving: 1,
+            surviving_scenarios: vec![scenario],
+            reasoning: vec![],
+        };
+
+        assert_eq!(corruption_risk(1, &state, &result), 1.0);
     }
 }

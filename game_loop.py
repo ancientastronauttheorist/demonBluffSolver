@@ -497,8 +497,10 @@ class GameSession:
         self.pd_ability_results: list[dict] = []  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
         self.blocked_positions: list[int] = []  # Positions blocked from reveal (e.g. Witch)
         self.executed_good_corrupted: dict[int, bool] = {}  # pos -> was corrupted (from execution observation)
-        self.board_villager_count: Optional[int] = None  # Actual villagers on board (pool > board)
-        self.board_outcast_count: Optional[int] = None   # Actual outcasts on board (pool > board)
+        self.executed_good_roles: dict[int, str] = {}  # pos -> revealed true role after a wrong execution
+        self.board_villager_count: Optional[int] = None  # Normalized pre-Start header V count
+        self.board_outcast_count: Optional[int] = None   # Normalized pre-Start header O count
+        self.board_count_provenance: str = "legacy_unknown"
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
 
@@ -543,8 +545,10 @@ class GameSession:
         self.pd_ability_results.clear()
         self.blocked_positions.clear()
         self.executed_good_corrupted.clear()
+        self.executed_good_roles.clear()
         self.board_villager_count = None
         self.board_outcast_count = None
+        self.board_count_provenance = "legacy_unknown"
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.villagers.clear()
@@ -624,7 +628,8 @@ class GameSession:
 
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
                       evil_role: Optional[str] = None,
-                      was_corrupted: Optional[bool] = None):
+                      was_corrupted: Optional[bool] = None,
+                      true_role: Optional[str] = None):
         if pos not in self.executed:
             self.executed.append(pos)
         if was_evil is True and pos not in self.confirmed_evil:
@@ -633,9 +638,17 @@ class GameSession:
             self.confirmed_good.append(pos)
         if evil_role:
             self.executed_evil_roles[pos] = evil_role.replace(' ', '_')
-        # Track corruption status for executed good cards
+        # Execution bookkeeping exposes Drunk as clean even when its active
+        # Corrupted status drove role effects such as Knight's +4 damage.
         if was_evil is False and was_corrupted is not None:
-            self.executed_good_corrupted[pos] = was_corrupted
+            observed_corrupted = (
+                False if _execution_role_key(true_role) == "drunk"
+                else was_corrupted
+            )
+            self.executed_good_corrupted[pos] = observed_corrupted
+        if (was_evil is False and true_role
+                and true_role.strip().lower() not in {"unknown", "?", "none"}):
+            self.executed_good_roles[pos] = true_role.replace(' ', '_')
 
     def record_execution_blocked(self, pos: int,
                                  reason: str = "Knight immunity") -> None:
@@ -711,8 +724,10 @@ class GameSession:
             wrong_exec_cost=self.wrong_exec_cost,
             board_villager_count=self.board_villager_count,
             board_outcast_count=self.board_outcast_count,
+            board_count_provenance=self.board_count_provenance,
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
+            executed_good_roles=dict(self.executed_good_roles),
         )
 
     @classmethod
@@ -739,8 +754,10 @@ class GameSession:
         session.wrong_exec_cost = state.wrong_exec_cost
         session.board_villager_count = state.board_villager_count
         session.board_outcast_count = state.board_outcast_count
+        session.board_count_provenance = state.board_count_provenance
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
+        session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
         session.used_abilities = list(used_abilities or [])
         session.lilis_batch_index = lilis_batch_index
         return session
@@ -919,8 +936,9 @@ class GameSession:
             target_entry = next((c for c in self.cards if c.position == pos), None)
             fallback_role = target_entry.apparent_role if target_entry else None
             if _observed_knight_immunity(target_card, fallback_role):
-                true_role = target_card.get('true_role') or "Knight"
-                self.record_execution_blocked(pos, f"{true_role} Knight immunity")
+                # The memory-only true identity validates the public blocked
+                # outcome but must not enter session state or decision logs.
+                self.record_execution_blocked(pos)
                 print(f"  [auto_exec] BLOCKED: #{pos} survived with confirmed Knight immunity")
                 print(f"  [auto_exec] #{pos} confirmed GOOD. HP remains {self.hp}")
                 return {"success": True, "blocked": True, "was_evil": False,
@@ -949,7 +967,13 @@ class GameSession:
             statuses = target_card.get('statuses', [])
             was_corrupted = 'Corrupted' in statuses
 
-        self.mark_executed(pos, was_evil, evil_role, was_corrupted)
+        self.mark_executed(
+            pos,
+            was_evil,
+            evil_role,
+            was_corrupted,
+            target_card.get('true_role') if not was_evil else None,
+        )
 
         # Step 7: HP update
         if not was_evil:
@@ -2199,7 +2223,8 @@ def main():
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
         print("  execute <pos> good blocked            Knight immunity (no HP loss, confirmed good)")
-        print("  execute <pos> good corrupted          Corrupted Knight (immunity lost, wrong exec)")
+        print("  execute <pos> good <clean|corrupted> [revealed_role]")
+        print("                                           Wrong exec with optional UI-observed role")
         print("  pd_target <pos>                       Set Plague Doctor corruption target")
         print("  pd_check <pd_pos> <target> corrupted <evil_pos>  PD found corruption + evil")
         print("  pd_check <pd_pos> <target> clean                 PD found no corruption")
@@ -2246,7 +2271,7 @@ def main():
         return
 
     # Commands that don't need an existing session
-    if cmd in ("start", "read_deck", "new", "auto"):
+    if cmd in ("start", "start_village", "read_deck", "new", "auto"):
         session = dispatch(cmd, args)
         return
 
@@ -2313,7 +2338,7 @@ def repl_loop():
         args = parts[1:]
 
         try:
-            if cmd in ("start", "read_deck", "new", "auto"):
+            if cmd in ("start", "start_village", "read_deck", "new", "auto"):
                 result = dispatch(cmd, args, session)
                 if result is not None:
                     session = result
@@ -2475,6 +2500,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.set_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
         session.board_villager_count = nv
         session.board_outcast_count = no
+        if nv is not None and no is not None:
+            session.board_count_provenance = "trusted_pre_start"
         session.save()
         DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
         DecisionLog.log_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
@@ -2500,6 +2527,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
 
     if cmd == "deck":
         villagers, outcasts, minions, demons = [], [], [], []
+        parsed_nv: Optional[int] = None
+        parsed_no: Optional[int] = None
         for arg in args:
             if arg.startswith("V=") or arg.startswith("v="):
                 villagers = _parse_role_list(arg[2:])
@@ -2510,15 +2539,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             elif arg.startswith("D=") or arg.startswith("d="):
                 demons = _parse_role_list(arg[2:])
             elif arg.lower().startswith("nv="):
-                session.board_villager_count = int(arg[3:])
+                parsed_nv = int(arg[3:])
             elif arg.lower().startswith("no="):
-                session.board_outcast_count = int(arg[3:])
+                parsed_no = int(arg[3:])
             else:
                 print(f"  ERROR: Unrecognized arg '{arg}' -- missing prefix?")
                 print(f"  Required: V=roles O=roles M=roles D=roles nv=N no=N")
                 print(f"  Command aborted. Fix and re-run deck command.")
                 return None
+        if (parsed_nv is None) != (parsed_no is None):
+            print("  ERROR: nv= and no= must be supplied together.")
+            print("  Command aborted without changing the deck or board counts.")
+            return None
         session.set_deck(villagers, outcasts, minions, demons)
+        if parsed_nv is not None and parsed_no is not None:
+            session.board_villager_count = parsed_nv
+            session.board_outcast_count = parsed_no
+            session.board_count_provenance = "trusted_pre_start"
         if any(d.lower() == "baa" for d in demons):
             print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
                   "Subtract only if no= came from deck view; do not adjust HUD no=.")
@@ -2807,9 +2844,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
                 knight_blocked = False
-                if len(args) > 2:
-                    c = args[2].lower()
-                    if c in ("blocked", "immune", "knight", "knight_block"):
+                outcome_args = args[2:]
+                for raw in outcome_args:
+                    c = raw.lower()
+                    if c in ("blocked", "immune", "knight_block") or (
+                            c == "knight" and len(outcome_args) == 1):
                         knight_blocked = True
                     elif c in ("corrupted", "corrupt", "c"):
                         was_corrupted = True
@@ -2817,6 +2856,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     elif c in ("clean", "uncorrupted", "u", "not_corrupted"):
                         was_corrupted = False
                         corruption_explicit = True
+                    elif observed_true_role is None:
+                        observed_true_role = _normalize_role_name(raw)
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
@@ -2846,10 +2887,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 observed_true_role = observed_target.get('true_role')
                 apparent_role = _execution_apparent_role(observed_target, apparent_role)
                 statuses = observed_target.get('statuses', [])
-                if was_corrupted is None and observed_target.get('state') == 'Dead':
-                    was_corrupted = 'Corrupted' in statuses
-                    corruption_word = "CORRUPTED" if was_corrupted else "NOT corrupted"
-                    print(f"  Post-action validation: #{pos} {corruption_word}")
+                if observed_target.get('state') == 'Dead':
+                    memory_active_corrupted = 'Corrupted' in statuses
+                    if (was_corrupted is not None
+                            and was_corrupted != memory_active_corrupted):
+                        print("  Post-action validation overrides the supplied corruption "
+                              "flag with the active memory status.")
+                    was_corrupted = memory_active_corrupted
+                    if _execution_role_key(observed_true_role) == "drunk":
+                        active_word = (
+                            "ACTIVE Corrupted" if was_corrupted
+                            else "no active Corrupted"
+                        )
+                        print(f"  Post-action validation: #{pos} {active_word}; "
+                              "Drunk execution reports clean")
+                    else:
+                        corruption_word = "CORRUPTED" if was_corrupted else "NOT corrupted"
+                        print(f"  Post-action validation: #{pos} {corruption_word}")
 
                 if _observed_knight_immunity(observed_target, apparent_role):
                     knight_blocked = True
@@ -2890,13 +2944,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print(f"Executed #{pos} -> BLOCKED (Knight immunity)")
             print(f"  #{pos} confirmed GOOD. No HP loss. HP: {session.hp}/10")
         else:
-            session.mark_executed(pos, was_evil, evil_role, was_corrupted)
+            session.mark_executed(
+                pos,
+                was_evil,
+                evil_role,
+                was_corrupted,
+                observed_true_role if was_evil is False else None,
+            )
             session.save()
             DecisionLog.log_execution(pos, was_evil, evil_role)
             tag = f" (evil: {evil_role})" if evil_role else (f" (was_evil={was_evil})" if was_evil is not None else "")
             corr_tag = ""
             if was_corrupted is True:
-                corr_tag = " <Corrupted>"
+                corr_tag = (
+                    " <ACTIVE Corrupted; observed clean>"
+                    if _execution_role_key(observed_true_role) == "drunk"
+                    else " <Corrupted>"
+                )
             elif was_corrupted is False and was_evil is False:
                 corr_tag = " (clean)"
             print(f"Executed #{pos}{tag}{corr_tag}")
@@ -2906,6 +2970,14 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 if observed_true_role is None:
                     print("  WARNING: Wrong execution recorded, but exact HP damage cannot "
                           "be inferred without the revealed true role.")
+                    print("  Check the live HP display and run: set_hp <current_hp>")
+                    return None
+                if (observed_target is None
+                        and _execution_role_key(observed_true_role) == "drunk"
+                        and _execution_role_key(apparent_role) == "knight"):
+                    print("  WARNING: Offline Drunk-as-Knight damage is ambiguous: the "
+                          "revealed clean observation does not expose whether its active "
+                          "Corrupted status fired Knight's +4 effect.")
                     print("  Check the live HP display and run: set_hp <current_hp>")
                     return None
                 from knowledge_base import execution_cost_for

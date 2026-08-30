@@ -108,7 +108,11 @@ class ExecutionBookkeepingTests(unittest.TestCase):
 
             @staticmethod
             def get_board():
-                return [_observed_card()]
+                return [_observed_card(
+                    true_role="Doppelganger",
+                    disguise="Knight",
+                    statuses=["HealthyBluff"],
+                )]
 
         with (
             patch("game_utils.all_game_card_coords", return_value={1: (100, 100)}),
@@ -125,9 +129,11 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         self.assertIsNone(observed["error"])
         self.assertEqual(session.confirmed_good, [1])
         self.assertEqual(session.executed, [])
+        self.assertEqual(session.executed_good_roles, {})
         self.assertEqual(session.hp, 10)
         save.assert_called_once_with()
         log_custom.assert_called_once()
+        self.assertNotIn("Doppelganger", str(log_custom.call_args))
 
     def test_auto_corrupted_knight_damage_is_stored_with_zero_clamp(self):
         session = GameSession(1, 1)
@@ -167,6 +173,47 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         self.assertEqual(session.executed_good_corrupted, {1: True})
         save.assert_called_once_with()
         log_execution.assert_called_once()
+
+    def test_auto_statused_drunk_uses_active_damage_but_persists_clean_role(self):
+        session = GameSession(1, 1)
+        session.hp = 10
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+        result = SimpleNamespace(bombardier_positions=[])
+        dead_drunk = _observed_card(
+            true_role="Drunk",
+            disguise="Knight",
+            state="Dead",
+            statuses=["Corrupted"],
+        )
+
+        class FakeMonitor:
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def wait_for(_predicate, timeout, min_delay):
+                return True
+
+            @staticmethod
+            def get_board():
+                return [dead_drunk]
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={1: (100, 100)}),
+            patch("template_match.safe_click_at"),
+            patch("mouse.click"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()),
+        ):
+            observed = session.auto_execute(1, result, monitor=FakeMonitor())
+
+        self.assertTrue(observed["success"])
+        self.assertEqual(session.hp, 4)
+        self.assertEqual(session.executed_good_corrupted, {1: False})
+        self.assertEqual(session.executed_good_roles, {1: "Drunk"})
 
     def test_explicit_blocked_refuses_live_dead_card(self):
         session = GameSession(1, 1)
@@ -215,7 +262,7 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         self.assertIn("confirmed Knight immunity", output.getvalue())
         self.assertNotIn("WRONG EXECUTION", output.getvalue())
 
-    def test_manual_drunk_as_knight_recommends_six_and_clamps_to_zero(self):
+    def test_manual_statused_drunk_as_knight_recommends_six_but_persists_clean(self):
         session = GameSession(1, 1)
         session.hp = 3
         session.cards = [CardInfo(1, "Knight", info_parsed={})]
@@ -223,6 +270,7 @@ class ExecutionBookkeepingTests(unittest.TestCase):
             true_role="Drunk",
             disguise="Knight",
             state="Dead",
+            statuses=["Corrupted"],
         )
 
         with (
@@ -237,8 +285,37 @@ class ExecutionBookkeepingTests(unittest.TestCase):
 
         self.assertEqual(session.executed, [1])
         self.assertIn(1, session.confirmed_good)
+        self.assertEqual(session.executed_good_corrupted, {1: False})
+        self.assertEqual(session.executed_good_roles, {1: "Drunk"})
+        self.assertIn("ACTIVE Corrupted; observed clean", output.getvalue())
         self.assertIn("Drunk, showing as Knight: -6", output.getvalue())
         self.assertIn("HP 3 -> 0", output.getvalue())
+
+    def test_manual_resistant_drunk_as_knight_recommends_two_and_persists_clean(self):
+        session = GameSession(1, 1)
+        session.hp = 3
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+        dead_drunk = _observed_card(
+            true_role="Drunk",
+            disguise="Knight",
+            state="Dead",
+            statuses=[],
+        )
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            reader_type.return_value.open.return_value = True
+            reader_type.return_value.read_board.return_value = [dead_drunk]
+            dispatch("execute", ["1", "good"], session)
+
+        self.assertEqual(session.executed_good_corrupted, {1: False})
+        self.assertEqual(session.executed_good_roles, {1: "Drunk"})
+        self.assertIn("Drunk, showing as Knight: -2", output.getvalue())
+        self.assertIn("HP 3 -> 1", output.getvalue())
 
     def test_offline_apparent_knight_requires_explicit_outcome(self):
         session = GameSession(1, 1)
@@ -276,6 +353,47 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         self.assertIn("exact HP damage cannot be inferred", output.getvalue())
         self.assertIn("set_hp <current_hp>", output.getvalue())
         self.assertNotIn("HP 3 ->", output.getvalue())
+
+    def test_offline_revealed_drunk_role_persists_but_knight_damage_stays_ambiguous(self):
+        session = GameSession(1, 1)
+        session.hp = 5
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            reader_type.return_value.open.return_value = False
+            dispatch("execute", ["1", "good", "clean", "Drunk"], session)
+
+        self.assertEqual(session.executed_good_roles, {1: "Drunk"})
+        self.assertEqual(session.executed_good_corrupted, {1: False})
+        self.assertIn("Offline Drunk-as-Knight damage is ambiguous", output.getvalue())
+        self.assertIn("set_hp <current_hp>", output.getvalue())
+        self.assertNotIn("HP 5 ->", output.getvalue())
+
+    def test_offline_corrupted_true_knight_is_not_misparsed_as_blocked(self):
+        session = GameSession(1, 1)
+        session.hp = 10
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            reader_type.return_value.open.return_value = False
+            dispatch("execute", ["1", "good", "corrupted", "Knight"], session)
+
+        self.assertEqual(session.executed, [1])
+        self.assertEqual(session.confirmed_good, [1])
+        self.assertEqual(session.executed_good_corrupted, {1: True})
+        self.assertEqual(session.executed_good_roles, {1: "Knight"})
+        self.assertIn("Knight, showing as Knight: -9", output.getvalue())
+        self.assertNotIn("BLOCKED", output.getvalue())
 
 
 if __name__ == "__main__":

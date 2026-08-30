@@ -96,7 +96,7 @@ pub fn pick_execution_target(
                 && !result.definite_good.contains(&card.position)
                 && !result.definite_evil.contains(&card.position)
             {
-                let corr_risk = corruption_risk(card.position, result);
+                let corr_risk = corruption_risk(card.position, state, result);
                 let evil_prob = probs.get(&card.position).copied().unwrap_or(0.0);
                 knight_checks.push((card.position, evil_prob, corr_risk));
             }
@@ -302,6 +302,8 @@ mod tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::new(),
+            messed_up_by_evil: HashSet::new(),
+            chancellor_trace: None,
             chancellor_conversion: None,
         }
     }

@@ -28,9 +28,19 @@ pub struct StartCorruptionContext {
     /// Positions whose Init hook installed exact Corrupted resistance.
     pub corruption_resistant_at_init: HashSet<u8>,
 
+    /// Positions whose Init hook installed exact `MessedUpByEvil`
+    /// resistance. Status resistances are enum-specific; this must not be
+    /// inferred from Corrupted resistance.
+    pub messed_up_resistant_at_init: HashSet<u8>,
+
     /// True Alchemist actors that still own the role at the ordered Alchemist
     /// Start slot. Apparent Alchemist bluffs do not belong here.
     pub true_alchemist_positions: Vec<u8>,
+
+    /// `MessedUpByEvil` statuses already present when Pooka begins. Chancellor
+    /// installs one on its chosen real-Outcast anchor before every corruption
+    /// producer in the serialized Start order.
+    pub initial_messed_up_by_evil: HashSet<u8>,
 
     pub drunk_position: Option<u8>,
     pub puppet_position: Option<u8>,
@@ -46,6 +56,9 @@ pub struct StartCorruptionOutcome {
     pub pd_target: Option<u8>,
     /// Per-Alchemist live scan/attempt count at that actor's Start turn.
     pub alchemist_counts: HashMap<u8, u8>,
+    /// Persistent evil-effect marker used by Witness. Alchemist cures do not
+    /// remove this status.
+    pub messed_up_by_evil: HashSet<u8>,
 }
 
 /// Enumerate native-order corruption outcomes for a single role-placement
@@ -58,6 +71,12 @@ pub fn enumerate_start_corruption(
     known_pd_target: Option<u8>,
 ) -> Vec<StartCorruptionOutcome> {
     let mut corrupted = HashSet::new();
+    let mut messed_up_by_evil: HashSet<u8> = context
+        .initial_messed_up_by_evil
+        .iter()
+        .copied()
+        .filter(|position| !context.messed_up_resistant_at_init.contains(position))
+        .collect();
 
     // Ordinary Start roles stop after the first match in CurrentCharacters,
     // whose construction order is highest displayed ID first.
@@ -68,10 +87,15 @@ pub fn enumerate_start_corruption(
         .max()
     {
         for target in adjacent_positions(pooka_position, n_cards) {
-            if context.real_villagers_before_puppet.contains(&target)
-                && !context.corruption_resistant_at_init.contains(&target)
-            {
-                corrupted.insert(target);
+            if context.real_villagers_before_puppet.contains(&target) {
+                if !context.corruption_resistant_at_init.contains(&target) {
+                    corrupted.insert(target);
+                }
+                // Pooka attempts this independently after Corrupted. The
+                // represented Init resistance is exact-Corrupted only.
+                if !context.messed_up_resistant_at_init.contains(&target) {
+                    messed_up_by_evil.insert(target);
+                }
             }
         }
     }
@@ -85,10 +109,10 @@ pub fn enumerate_start_corruption(
         .collect();
     poisoner_positions.sort_unstable_by(|a, b| b.cmp(a));
 
-    let mut corruption_branches = vec![corrupted];
+    let mut corruption_branches = vec![(corrupted, messed_up_by_evil)];
     for poisoner_position in poisoner_positions {
         let mut next_branches = Vec::new();
-        for branch in corruption_branches {
+        for (branch, affected) in corruption_branches {
             let mut candidates: Vec<u8> = adjacent_positions(poisoner_position, n_cards)
                 .into_iter()
                 .filter(|target| {
@@ -101,7 +125,7 @@ pub fn enumerate_start_corruption(
             candidates.dedup();
 
             if candidates.is_empty() {
-                next_branches.push(branch);
+                next_branches.push((branch, affected));
             } else {
                 // Native selection is mandatory when the filtered pool is not
                 // empty. Duplicate occurrences only change probability weight,
@@ -109,29 +133,42 @@ pub fn enumerate_start_corruption(
                 for target in candidates {
                     let mut selected = branch.clone();
                     selected.insert(target);
-                    next_branches.push(selected);
+                    let mut selected_affected = affected.clone();
+                    if !context.messed_up_resistant_at_init.contains(&target) {
+                        selected_affected.insert(target);
+                    }
+                    next_branches.push((selected, selected_affected));
                 }
             }
         }
-        corruption_branches = dedup_corruption_sets(next_branches);
+        corruption_branches = dedup_status_sets(next_branches);
     }
 
-    let mut pd_branches: Vec<(HashSet<u8>, Option<u8>)> = Vec::new();
-    for mut branch in corruption_branches {
+    let mut pd_branches: Vec<(HashSet<u8>, HashSet<u8>, Option<u8>)> = Vec::new();
+    for (mut branch, mut affected) in corruption_branches {
         // Drunk acts after Poisoner and writes a self-targeted Corrupted status.
         if let Some(drunk_position) = context.drunk_position {
-            branch.insert(drunk_position);
+            if !context.corruption_resistant_at_init.contains(&drunk_position) {
+                branch.insert(drunk_position);
+            }
         }
 
         // Puppeteer conversion calls Character.Init again, clearing active
         // statuses before Plague Doctor and Alchemist act.
         if let Some(puppet_position) = context.puppet_position {
             branch.remove(&puppet_position);
+            affected.remove(&puppet_position);
+            // Puppeteer initializes the replacement Puppet, which clears the
+            // former role's statuses and immediately marks the new Puppet as
+            // MessedUpByEvil for Witness.
+            if !context.messed_up_resistant_at_init.contains(&puppet_position) {
+                affected.insert(puppet_position);
+            }
         }
 
         if !context.plague_doctor_acts {
             if known_pd_target.is_none() {
-                pd_branches.push((branch, None));
+                pd_branches.push((branch, affected, None));
             }
             continue;
         }
@@ -149,21 +186,21 @@ pub fn enumerate_start_corruption(
         if let Some(known_target) = known_pd_target {
             if candidates.binary_search(&known_target).is_ok() {
                 branch.insert(known_target);
-                pd_branches.push((branch, Some(known_target)));
+                pd_branches.push((branch, affected, Some(known_target)));
             }
         } else if candidates.is_empty() {
-            pd_branches.push((branch, None));
+            pd_branches.push((branch, affected, None));
         } else {
             for target in candidates {
                 let mut selected = branch.clone();
                 selected.insert(target);
-                pd_branches.push((selected, Some(target)));
+                pd_branches.push((selected, affected.clone(), Some(target)));
             }
         }
     }
 
     let mut outcomes = Vec::new();
-    for (mut branch, pd_target) in pd_branches {
+    for (mut branch, affected, pd_target) in pd_branches {
         let alchemist_counts = apply_alchemists(
             n_cards,
             &context.true_alchemist_positions,
@@ -174,6 +211,7 @@ pub fn enumerate_start_corruption(
             corrupted: branch,
             pd_target,
             alchemist_counts,
+            messed_up_by_evil: affected,
         });
     }
     dedup_outcomes(outcomes)
@@ -246,11 +284,15 @@ fn sorted_count_key(values: &HashMap<u8, u8>) -> Vec<(u8, u8)> {
     key
 }
 
-fn dedup_corruption_sets(values: Vec<HashSet<u8>>) -> Vec<HashSet<u8>> {
+fn dedup_status_sets(
+    values: Vec<(HashSet<u8>, HashSet<u8>)>,
+) -> Vec<(HashSet<u8>, HashSet<u8>)> {
     let mut seen = HashSet::new();
     values
         .into_iter()
-        .filter(|value| seen.insert(sorted_set_key(value)))
+        .filter(|(corrupted, affected)| {
+            seen.insert((sorted_set_key(corrupted), sorted_set_key(affected)))
+        })
         .collect()
 }
 
@@ -263,6 +305,7 @@ fn dedup_outcomes(values: Vec<StartCorruptionOutcome>) -> Vec<StartCorruptionOut
                 sorted_set_key(&value.corrupted),
                 value.pd_target,
                 sorted_count_key(&value.alchemist_counts),
+                sorted_set_key(&value.messed_up_by_evil),
             ))
         })
         .collect()
@@ -320,6 +363,33 @@ mod tests {
         ctx.corruption_resistant_at_init.insert(2);
         let outcomes = enumerate_start_corruption(5, &roles(&[(1, "Pooka")]), &ctx, None);
         assert_eq!(outcomes[0].corrupted, HashSet::from([5]));
+        assert_eq!(outcomes[0].messed_up_by_evil, HashSet::from([2, 5]));
+    }
+
+    #[test]
+    fn alchemist_cure_does_not_remove_messed_up_by_evil() {
+        let mut ctx = context(&[2, 5]);
+        ctx.true_alchemist_positions = vec![3];
+        ctx.corruption_resistant_at_init.insert(3);
+
+        let outcomes = enumerate_start_corruption(5, &roles(&[(1, "Pooka")]), &ctx, None);
+
+        assert_eq!(outcomes.len(), 1);
+        assert!(outcomes[0].corrupted.is_empty());
+        assert_eq!(outcomes[0].alchemist_counts.get(&3), Some(&2));
+        assert_eq!(outcomes[0].messed_up_by_evil, HashSet::from([2, 5]));
+    }
+
+    #[test]
+    fn exact_corrupted_resistance_blocks_drunk_self_corruption() {
+        let mut ctx = context(&[]);
+        ctx.drunk_position = Some(2);
+        ctx.corruption_resistant_at_init.insert(2);
+
+        let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, None);
+
+        assert_eq!(outcomes.len(), 1);
+        assert!(outcomes[0].corrupted.is_empty());
     }
 
     #[test]
@@ -341,6 +411,7 @@ mod tests {
         let outcomes =
             enumerate_start_corruption(5, &roles(&[(1, "Poisoner"), (2, "Puppet")]), &ctx, None);
         assert_eq!(outcomes[0].corrupted, HashSet::new());
+        assert_eq!(outcomes[0].messed_up_by_evil, HashSet::from([2]));
     }
 
     #[test]

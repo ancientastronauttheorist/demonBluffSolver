@@ -46,6 +46,16 @@ impl DeckComposition {
     }
 }
 
+/// Whether serialized board V/O counts are normalized current-build header
+/// evidence or an older value whose UI source is unknown.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum BoardCountProvenance {
+    TrustedPreStart,
+    #[default]
+    LegacyUnknown,
+}
+
 // ── Serde helpers for dict[int, T] stored as dict[str, T] in JSON ──
 
 fn serialize_int_key_map<S: Serializer, V: Serialize>(
@@ -181,6 +191,8 @@ pub struct GameState {
     pub board_minion_count: Option<u8>,
     #[serde(default)]
     pub board_demon_count: Option<u8>,
+    #[serde(default)]
+    pub board_count_provenance: BoardCountProvenance,
 
     #[serde(default)]
     pub reveal_order: Vec<u8>,
@@ -191,6 +203,16 @@ pub struct GameState {
         deserialize_with = "deserialize_int_key_map_bool"
     )]
     pub executed_good_corrupted: HashMap<u8, bool>,
+
+    /// Revealed true roles of executed good cards. This preserves observable
+    /// generated-Outcast identity across solver calls without exposing it
+    /// before execution.
+    #[serde(
+        default,
+        serialize_with = "serialize_int_key_map",
+        deserialize_with = "deserialize_int_key_map_str"
+    )]
+    pub executed_good_roles: HashMap<u8, String>,
 
     // ── Test-only / session fields (silently ignored if absent) ──
     #[serde(default)]
@@ -231,8 +253,10 @@ impl Default for GameState {
             board_outcast_count: None,
             board_minion_count: None,
             board_demon_count: None,
+            board_count_provenance: BoardCountProvenance::LegacyUnknown,
             reveal_order: vec![],
             executed_good_corrupted: HashMap::new(),
+            executed_good_roles: HashMap::new(),
             used_abilities: vec![],
             name: None,
             notes: None,
@@ -307,8 +331,22 @@ fn parse_string_array(
 
 // ── Scenario ──
 
+/// Native Chancellor/Baron Start history projected onto the final board.
+///
+/// `original_positions` is a sorted equivalence class rather than a source of
+/// scenario multiplicity: every listed original Chancellor seat produces the
+/// same represented runtime outcome. The final Chancellor position is derived
+/// from `Scenario::evil_positions`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ChancellorTrace {
+    #[serde(default)]
+    pub original_positions: Vec<u8>,
+    pub added_outcast_position: u8,
+    pub added_outcast_role: String,
+}
+
 /// A hypothetical assignment of evil roles to positions.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Scenario {
     #[serde(
         serialize_with = "serialize_int_key_map",
@@ -325,17 +363,42 @@ pub struct Scenario {
         deserialize_with = "deserialize_int_key_map_u8"
     )]
     pub alchemist_cures: HashMap<u8, u8>,
+    /// Positions retaining native `MessedUpByEvil` after the ordered Start
+    /// pass. This is distinct from Corrupted: Alchemist only cures Corrupted.
+    #[serde(default)]
+    pub messed_up_by_evil: HashSet<u8>,
+    /// Probability-safe Chancellor history projection. Original physical-seat
+    /// alternatives are grouped inside this value instead of duplicating
+    /// otherwise identical solver scenarios.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub chancellor_trace: Option<ChancellorTrace>,
     /// Final physical card holding the Outcast identity Chancellor added.
     ///
     /// The historical field name is retained for JSON/Python compatibility;
     /// this is not necessarily the first Villager target when Chancellor's
     /// later role swap passes through that card.
+    #[serde(default)]
     pub chancellor_conversion: Option<u8>,
 }
 
 impl Scenario {
     pub fn is_evil(&self, pos: u8) -> bool {
         self.evil_positions.contains_key(&pos) || self.puppet_position == Some(pos)
+    }
+
+    /// Final home of Chancellor's generated Outcast identity. New traces take
+    /// precedence; the historical scalar remains a deserialization fallback.
+    pub fn chancellor_added_outcast_position(&self) -> Option<u8> {
+        self.chancellor_trace
+            .as_ref()
+            .map(|trace| trace.added_outcast_position)
+            .or(self.chancellor_conversion)
+    }
+
+    pub fn chancellor_added_outcast_role(&self) -> Option<&str> {
+        self.chancellor_trace
+            .as_ref()
+            .map(|trace| trace.added_outcast_role.as_str())
     }
 }
 
@@ -411,6 +474,10 @@ mod tests {
         assert_eq!(state.deck.villagers, vec!["Enlightened"]);
         assert!(state.executed.is_empty());
         assert!(state.pd_corruption_target.is_none());
+        assert_eq!(
+            state.board_count_provenance,
+            BoardCountProvenance::LegacyUnknown,
+        );
     }
 
     #[test]
@@ -421,11 +488,21 @@ mod tests {
             "deck": { "villagers": [], "outcasts": [], "minions": [], "demons": ["Pooka"] },
             "cards": [],
             "executed_evil_roles": {"7": "Pooka"},
-            "executed_good_corrupted": {"3": true}
+            "executed_good_corrupted": {"3": true},
+            "executed_good_roles": {"3": "Plague_Doctor"}
         });
         let state = GameState::from_json(&json).unwrap();
         assert_eq!(state.executed_evil_roles.get(&7), Some(&"Pooka".to_string()));
         assert_eq!(state.executed_good_corrupted.get(&3), Some(&true));
+        assert_eq!(
+            state.executed_good_roles.get(&3),
+            Some(&"Plague_Doctor".to_string()),
+        );
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": [], "outcasts": [], "minions": [], "demons": []}
+        })).unwrap();
+        assert!(legacy.executed_good_roles.is_empty());
     }
 
     #[test]
@@ -453,7 +530,13 @@ mod tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::from([(5, 2)]),
-            chancellor_conversion: None,
+            messed_up_by_evil: HashSet::from([4]),
+            chancellor_trace: Some(ChancellorTrace {
+                original_positions: vec![1, 6],
+                added_outcast_position: 2,
+                added_outcast_role: "Plague Doctor".to_string(),
+            }),
+            chancellor_conversion: Some(2),
         };
         let json = serde_json::to_value(&scenario).unwrap();
         // Keys must be strings in JSON
@@ -461,11 +544,38 @@ mod tests {
         assert_eq!(json["evil_positions"]["3"], "Pooka");
         assert!(json["alchemist_cures"]["5"].is_number());
         assert!(json["corrupted"].is_array());
+        assert_eq!(json["chancellor_trace"]["original_positions"], serde_json::json!([1, 6]));
+        assert_eq!(json["chancellor_trace"]["added_outcast_position"], 2);
+        assert_eq!(json["chancellor_trace"]["added_outcast_role"], "Plague Doctor");
         // Round-trip
         let back: Scenario = serde_json::from_value(json).unwrap();
         assert_eq!(back.evil_positions.get(&3), Some(&"Pooka".to_string()));
         assert_eq!(back.alchemist_cures.get(&5), Some(&2));
         assert!(back.corrupted.contains(&2));
+        assert!(back.messed_up_by_evil.contains(&4));
+        assert_eq!(back.chancellor_added_outcast_position(), Some(2));
+        assert_eq!(back.chancellor_added_outcast_role(), Some("Plague Doctor"));
+    }
+
+    #[test]
+    fn legacy_chancellor_conversion_deserializes_as_position_fallback() {
+        let legacy = serde_json::json!({
+            "evil_positions": {"1": "Chancellor"},
+            "puppet_position": null,
+            "corrupted": [],
+            "pd_corrupted": null,
+            "doppelganger_position": null,
+            "drunk_position": null,
+            "alchemist_cures": {},
+            "chancellor_conversion": 3
+        });
+
+        let scenario: Scenario = serde_json::from_value(legacy).unwrap();
+
+        assert!(scenario.chancellor_trace.is_none());
+        assert!(scenario.messed_up_by_evil.is_empty());
+        assert_eq!(scenario.chancellor_added_outcast_position(), Some(3));
+        assert_eq!(scenario.chancellor_added_outcast_role(), None);
     }
 
     #[test]

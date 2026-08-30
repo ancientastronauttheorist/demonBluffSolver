@@ -12,27 +12,28 @@ use super::{
 };
 
 /// Observed outcome if `pos` is executed in a given scenario.
-/// Returns (revealed_role, was_evil, was_corrupted).
+/// Returns (revealed_role, was_evil, observed_corrupted, active_corrupted).
 /// Ported from strategy.py:187-211.
 pub fn execution_reveal_outcome(
     pos: u8,
     scenario: &Scenario,
     state: &GameState,
-) -> (String, bool, bool) {
+) -> (String, bool, bool, bool) {
     // Evil position
     if let Some(role) = scenario.evil_positions.get(&pos) {
-        return (role.clone(), true, false);
+        return (role.clone(), true, false, false);
     }
 
     // Puppet (evil but separate from evil_positions)
     if scenario.puppet_position == Some(pos) {
-        return ("Puppet".to_string(), true, false);
+        return ("Puppet".to_string(), true, false, false);
     }
 
     // Drunk (disguised as villager)
     if scenario.drunk_position == Some(pos) {
         return (
             "Drunk".to_string(),
+            false,
             false,
             scenario.corrupted.contains(&pos),
         );
@@ -44,14 +45,28 @@ pub fn execution_reveal_outcome(
             "Doppelganger".to_string(),
             false,
             scenario.corrupted.contains(&pos),
+            scenario.corrupted.contains(&pos),
         );
+    }
+
+    if scenario.chancellor_added_outcast_position() == Some(pos) {
+        if let Some(role) = scenario.chancellor_added_outcast_role() {
+            let active_corrupted = scenario.corrupted.contains(&pos);
+            let observed_corrupted = if crate::knowledge_base::normalize_role(role) == "drunk" {
+                false
+            } else {
+                active_corrupted
+            };
+            return (role.to_string(), false, observed_corrupted, active_corrupted);
+        }
     }
 
     // Normal card — use apparent role
     let role = get_card_role(pos, state)
         .unwrap_or("Unknown")
         .to_string();
-    (role, false, scenario.corrupted.contains(&pos))
+    let corrupted = scenario.corrupted.contains(&pos);
+    (role, false, corrupted, corrupted)
 }
 
 /// Canonical execution result visible to the player and therefore safe to use
@@ -73,21 +88,22 @@ fn execution_observation(
     revealed_role: String,
     apparent_role: &str,
     was_evil: bool,
-    was_corrupted: bool,
+    observed_corrupted: bool,
+    active_corrupted: bool,
     default_wrong_exec_cost: i32,
 ) -> ExecutionObservation {
     match execution_consequence(
         &revealed_role,
         apparent_role,
         was_evil,
-        was_corrupted,
+        active_corrupted,
         default_wrong_exec_cost,
     ) {
         ExecutionConsequence::Protected => ExecutionObservation::Protected,
         ExecutionConsequence::Killed { hp_damage } => ExecutionObservation::Killed {
             revealed_role,
             was_evil,
-            was_corrupted,
+            was_corrupted: observed_corrupted,
             hp_damage,
         },
         ExecutionConsequence::BombardierLoss => ExecutionObservation::BombardierLoss,
@@ -210,13 +226,14 @@ fn can_force(
         let mut branches: HashMap<ExecutionObservation, Vec<usize>> = HashMap::new();
         let apparent_role = get_card_role(*pos, state).unwrap_or("");
         for &idx in indices {
-            let (role, was_evil, was_corrupted) =
+            let (role, was_evil, observed_corrupted, active_corrupted) =
                 execution_reveal_outcome(*pos, &scenarios[idx], state);
             let observation = execution_observation(
                 role,
                 apparent_role,
                 was_evil,
-                was_corrupted,
+                observed_corrupted,
+                active_corrupted,
                 state.wrong_exec_cost,
             );
             branches.entry(observation).or_default().push(idx);
@@ -294,6 +311,8 @@ mod tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::new(),
+            messed_up_by_evil: HashSet::new(),
+            chancellor_trace: None,
             chancellor_conversion: None,
         }
     }
@@ -521,5 +540,66 @@ mod tests {
         // Executing #1 is protected in both worlds and reveals no distinction.
         // With only 5 HP, neither remaining 50/50 target is safely forced.
         assert_eq!(find_forced_execution(&state, &result, &[1, 2, 3]), None);
+    }
+
+    #[test]
+    fn drunk_observation_keeps_active_status_damage_separate_from_clean_evidence() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 5,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let mut statused = make_scenario(&[(2, "Pooka")]);
+        statused.drunk_position = Some(1);
+        statused.corrupted.insert(1);
+        let mut resistant = statused.clone();
+        resistant.corrupted.clear();
+        resistant.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+
+        assert_eq!(
+            execution_reveal_outcome(1, &statused, &state),
+            ("Drunk".to_string(), false, false, true),
+        );
+        assert_eq!(
+            execution_reveal_outcome(1, &resistant, &state),
+            ("Drunk".to_string(), false, false, false),
+        );
+        let statused_observation = execution_observation(
+            "Drunk".to_string(), "Knight", false, false, true, 5,
+        );
+        let resistant_observation = execution_observation(
+            "Drunk".to_string(), "Knight", false, false, false, 5,
+        );
+        assert!(matches!(
+            &statused_observation,
+            ExecutionObservation::Killed { hp_damage: 6, was_corrupted: false, .. }
+        ));
+        assert!(matches!(
+            &resistant_observation,
+            ExecutionObservation::Killed { hp_damage: 2, was_corrupted: false, .. }
+        ));
+        assert_ne!(statused_observation, resistant_observation);
+
+        let result = SolverResult {
+            definite_evil: vec![2],
+            definite_good: vec![1],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![statused, resistant],
+            reasoning: vec![],
+        };
+        // The statused branch dies at HP 5, so #1 cannot be a forced-safe move
+        // even though the resistant branch would survive on the same evidence.
+        assert_eq!(find_forced_execution(&state, &result, &[1]), None);
     }
 }

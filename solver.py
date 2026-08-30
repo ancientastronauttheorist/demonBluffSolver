@@ -131,12 +131,14 @@ class GameState:
     wrong_exec_cost: int = 2        # HP lost per wrong execution (varies by ascension)
     pd_ability_results: list[dict] = field(default_factory=list)  # [{"pd_pos": N, "target": N, "is_corrupted": bool, "evil_revealed": N|None}]
     blocked_positions: list[int] = field(default_factory=list)  # Positions blocked from reveal (Witch)
-    board_villager_count: Optional[int] = None  # Actual villagers on board (when pool > board)
-    board_outcast_count: Optional[int] = None   # Actual outcasts on board (when pool > board)
+    board_villager_count: Optional[int] = None  # Normalized pre-Start header V count
+    board_outcast_count: Optional[int] = None   # Normalized pre-Start header O count
     board_minion_count: Optional[int] = None    # Actual minions on board (when pool > board)
     board_demon_count: Optional[int] = None     # Actual demons on board (when pool > board)
     reveal_order: list[int] = field(default_factory=list)  # Order positions were flipped (for Baker)
     executed_good_corrupted: dict[int, bool] = field(default_factory=dict)  # Corruption status of executed good cards
+    executed_good_roles: dict[int, str] = field(default_factory=dict)  # Revealed true roles of executed good cards
+    board_count_provenance: str = "legacy_unknown"  # Appended for positional ABI compatibility
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -159,8 +161,10 @@ class GameState:
             "board_outcast_count": self.board_outcast_count,
             "board_minion_count": self.board_minion_count,
             "board_demon_count": self.board_demon_count,
+            "board_count_provenance": self.board_count_provenance,
             "reveal_order": list(self.reveal_order),
             "executed_good_corrupted": {str(k): v for k, v in self.executed_good_corrupted.items()},
+            "executed_good_roles": {str(k): v for k, v in self.executed_good_roles.items()},
         }
         if nest_deck:
             data["deck"] = self.deck.to_dict()
@@ -203,9 +207,19 @@ class GameState:
             board_outcast_count=data.get("board_outcast_count"),
             board_minion_count=data.get("board_minion_count"),
             board_demon_count=data.get("board_demon_count"),
+            board_count_provenance=data.get("board_count_provenance", "legacy_unknown"),
             reveal_order=list(data.get("reveal_order", [])),
             executed_good_corrupted={int(k): v for k, v in data.get("executed_good_corrupted", {}).items()},
+            executed_good_roles={int(k): v for k, v in data.get("executed_good_roles", {}).items()},
         )
+
+
+@dataclass
+class ChancellorTrace:
+    """Probability-safe projection of Chancellor's native Start relocation."""
+    original_positions: list[int] = field(default_factory=list)
+    added_outcast_position: int = 0
+    added_outcast_role: str = ""
 
 
 @dataclass
@@ -218,8 +232,10 @@ class Scenario:
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
     drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always lies)
     alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
-    # Final home of Chancellor's added Outcast identity (legacy field name).
+    # Keep the legacy scalar in its historical positional-constructor slot.
     chancellor_conversion: Optional[int] = None
+    messed_up_by_evil: set[int] = field(default_factory=set)
+    chancellor_trace: Optional[ChancellorTrace] = None
 
 
 @dataclass
@@ -297,12 +313,30 @@ def scenario_is_evil(pos: int, scenario: Scenario) -> bool:
     return _is_evil_in_scenario(pos, scenario)
 
 
+def effective_role_at(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
+    """True represented role, including generated and hidden Outcasts."""
+    evil_role = _known_evil_role(pos, scenario, state)
+    if evil_role is not None:
+        return evil_role
+    if (
+        scenario.chancellor_trace is not None
+        and pos == scenario.chancellor_trace.added_outcast_position
+    ):
+        return scenario.chancellor_trace.added_outcast_role
+    if pos == scenario.doppelganger_position:
+        return "Doppelganger"
+    if pos == scenario.drunk_position:
+        return "Drunk"
+    card = _get_card_at(pos, state)
+    return card.apparent_role if card else None
+
+
 def _effective_alignment(pos: int, scenario: Scenario, state: GameState) -> Alignment:
     """Effective alignment for ability purposes. Wretch registers as Evil."""
     if _is_evil_in_board_state(pos, scenario, state):
         return Alignment.EVIL
-    card = _get_card_at(pos, state)
-    if card and card.apparent_role == "Wretch":
+    role = effective_role_at(pos, scenario, state)
+    if role and role.lower().replace(" ", "").replace("_", "") == "wretch":
         return Alignment.EVIL  # Wretch registers as Evil to abilities
     return Alignment.GOOD
 
@@ -328,10 +362,15 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
         return TruthStatus.LYING
 
     evil_role = _known_evil_role(pos, scenario, state)
+    effective_role = effective_role_at(pos, scenario, state)
+    effective_role_key = (
+        effective_role.lower().replace(" ", "").replace("_", "")
+        if effective_role else None
+    )
 
     # Both roles apply HealthyBluff in the represented clean runtime cases.
     modeled_healthy_bluff = (
-        evil_role == "Puppet" or pos == scenario.doppelganger_position
+        evil_role == "Puppet" or effective_role_key == "doppelganger"
     )
     if modeled_healthy_bluff:
         return TruthStatus.TRUTHFUL
@@ -339,9 +378,7 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
     # Runtime Evil lies regardless of bluff data. Drunk and Doppelganger are
     # the model's explicit non-null-bluff positions; clean Doppelganger already
     # returned through HealthyBluff above.
-    modeled_non_null_bluff = (
-        pos == scenario.drunk_position or pos == scenario.doppelganger_position
-    )
+    modeled_non_null_bluff = effective_role_key in {"drunk", "doppelganger"}
     if evil_role is not None or modeled_non_null_bluff:
         return TruthStatus.LYING
 

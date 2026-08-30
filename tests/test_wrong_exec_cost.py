@@ -65,14 +65,26 @@ class WrongExecCostTests(unittest.TestCase):
             9,
         )
 
-    def test_killable_drunk_as_knight_costs_six(self):
+    def test_statused_drunk_as_knight_costs_six(self):
         self.assertEqual(
             execution_cost_for(
                 "Drunk",
                 apparent_role="Knight",
+                was_corrupted=True,
                 was_killable=True,
             ),
             6,
+        )
+
+    def test_resistant_drunk_as_knight_costs_two(self):
+        self.assertEqual(
+            execution_cost_for(
+                "Drunk",
+                apparent_role="Knight",
+                was_corrupted=False,
+                was_killable=True,
+            ),
+            2,
         )
 
     def test_drunk_non_knight_keeps_base_override(self):
@@ -126,6 +138,7 @@ class WrongExecCostTests(unittest.TestCase):
             execution_cost_for(
                 "Drunk",
                 apparent_role="  KNIGHT  ",
+                was_corrupted=True,
                 was_killable=True,
             ),
             6,

@@ -17,6 +17,7 @@ from knowledge_base import execution_cost_for, get_card, Role, CARDS_BY_NAME
 from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
     truth_status, scenario_is_evil, effective_alignment,
+    effective_role_at,
     get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
     circle_distance, circle_direction,
@@ -176,11 +177,20 @@ def _witch_might_be_alive(state: GameState, result: SolverResult) -> bool:
     return False
 
 
-def _corruption_risk(pos: int, result: SolverResult) -> float:
-    """Probability that position is corrupted across surviving scenarios."""
+def _corruption_risk(pos: int, result: SolverResult, state: GameState) -> float:
+    """Probability that a position is unsafe as a clean clue/execution surface.
+
+    Drunk is intrinsically lying and killable even when inherited Alchemist
+    resistance prevents its generic Corrupted status bit.
+    """
     if result.n_surviving == 0:
         return 0.0
-    count = sum(1 for s in result.surviving_scenarios if pos in s.corrupted)
+    count = 0
+    for scenario in result.surviving_scenarios:
+        role = effective_role_at(pos, scenario, state)
+        role_key = role.lower().replace(" ", "").replace("_", "") if role else None
+        if pos in scenario.corrupted or role_key == "drunk":
+            count += 1
     return count / result.n_surviving
 
 
@@ -188,27 +198,42 @@ def _execution_reveal_outcome(
     pos: int,
     scenario: Scenario,
     state: GameState,
-) -> tuple[str, bool, bool]:
+) -> tuple[str, bool, bool, bool]:
     """Observed outcome if `pos` is executed in a scenario.
 
-    Returns `(revealed_role, was_evil, was_corrupted)` using the real revealed
-    role when a hidden outcast flips over.
+    Returns `(revealed_role, was_evil, observed_corrupted, active_corrupted)`.
+    The split matters for Drunk: bookkeeping reports clean, while an active
+    Corrupted status still drives Knight's separate four-damage hook.
     """
     if pos in scenario.evil_positions:
-        return (scenario.evil_positions[pos], True, False)
+        return (scenario.evil_positions[pos], True, False, False)
 
     if pos == scenario.puppet_position:
-        return ("Puppet", True, False)
+        return ("Puppet", True, False, False)
 
     if pos == scenario.drunk_position:
-        return ("Drunk", False, False)
+        return ("Drunk", False, False, pos in scenario.corrupted)
 
     if pos == scenario.doppelganger_position:
-        return ("Doppelganger", False, pos in scenario.corrupted)
+        corrupted = pos in scenario.corrupted
+        return ("Doppelganger", False, corrupted, corrupted)
+
+    if (
+        scenario.chancellor_trace is not None
+        and pos == scenario.chancellor_trace.added_outcast_position
+    ):
+        role = scenario.chancellor_trace.added_outcast_role
+        active_corrupted = pos in scenario.corrupted
+        observed_corrupted = (
+            False if role.lower().replace(" ", "").replace("_", "") == "drunk"
+            else active_corrupted
+        )
+        return (role, False, observed_corrupted, active_corrupted)
 
     card = get_card_at(pos, state)
     role = card.apparent_role if card else "Unknown"
-    return (role, False, pos in scenario.corrupted)
+    corrupted = pos in scenario.corrupted
+    return (role, False, corrupted, corrupted)
 
 
 def _execution_branch_is_protected(
@@ -230,11 +255,11 @@ def _execution_branch_is_protected(
 
 def _execution_observation_key(
     pos: int,
-    outcome: tuple[str, bool, bool],
+    outcome: tuple[str, bool, bool, bool],
     state: GameState,
 ) -> tuple:
     """Canonicalize an execution branch to information the player observes."""
-    role, was_evil, was_corrupted = outcome
+    role, was_evil, observed_corrupted, active_corrupted = outcome
     card_at = get_card_at(pos, state)
     apparent_role = card_at.apparent_role if card_at else "Unknown"
     if not was_evil and role == "Bombardier":
@@ -243,7 +268,7 @@ def _execution_observation_key(
         role,
         apparent_role,
         was_evil,
-        was_corrupted,
+        active_corrupted,
     ):
         # A protected true Knight and a protected Doppelganger-as-Knight both
         # remain face-up as Knight. Hidden real identity must not split DFS.
@@ -252,11 +277,11 @@ def _execution_observation_key(
         role,
         apparent_role=apparent_role,
         was_evil=was_evil,
-        was_corrupted=was_corrupted,
+        was_corrupted=active_corrupted,
         was_killable=True,
         default=state.wrong_exec_cost,
     )
-    return ("killed", role, was_evil, was_corrupted, damage)
+    return ("killed", role, was_evil, observed_corrupted, damage)
 
 
 def _find_forced_execution(
@@ -366,14 +391,14 @@ def _forced_execution_reasoning(
     result: SolverResult,
 ) -> str:
     """Explain why an execution is safe under lookahead."""
-    branches: dict[tuple[str, bool, bool], int] = {}
+    branches: dict[tuple[str, bool, bool, bool], int] = {}
     for scenario in result.surviving_scenarios:
         outcome = _execution_reveal_outcome(pos, scenario, state)
         branches[outcome] = branches.get(outcome, 0) + 1
 
     parts = []
     total = max(1, result.n_surviving)
-    for (role, was_evil, was_corrupted), count in sorted(
+    for (role, was_evil, observed_corrupted, active_corrupted), count in sorted(
         branches.items(),
         key=lambda item: (-item[1], item[0][0], item[0][1], item[0][2]),
     ):
@@ -384,18 +409,18 @@ def _forced_execution_reasoning(
             role,
             apparent_role,
             was_evil,
-            was_corrupted,
+            active_corrupted,
         ):
             label += " (immune, 0 HP)"
         elif not was_evil:
             damage = execution_cost_for(
                 role,
                 apparent_role=apparent_role,
-                was_corrupted=was_corrupted,
+                was_corrupted=active_corrupted,
                 was_killable=True,
                 default=state.wrong_exec_cost,
             )
-            status = ", corrupted" if was_corrupted else ""
+            status = ", corrupted" if active_corrupted else ""
             label += f" (-{damage} HP{status})"
         parts.append(f"{count / total:.0%} {label}")
 
@@ -558,7 +583,7 @@ def _tiebreak_score(
     Used as secondary sort key when primary ranking_score is within 0.01 margin.
     """
     # 1. Corruption risk (lower = safer, so negate for "higher is better")
-    corr = _corruption_risk(pos, result)
+    corr = _corruption_risk(pos, result, state)
     corruption_penalty = -corr  # Higher = less corrupted = safer
 
     # 2. Role consistency: count distinct evil roles this position could be
@@ -677,21 +702,8 @@ def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bo
 
 def _dreamer_effective_role(target: int, scenario: Scenario, state: GameState) -> str:
     """Best-known role Dreamer2 could name for a selected target."""
-    if target in scenario.evil_positions:
-        return scenario.evil_positions[target]
-    if target == scenario.puppet_position:
-        return "Puppet"
-    if target in state.executed_evil_roles:
-        return state.executed_evil_roles[target]
-    if target == scenario.doppelganger_position:
-        return "Doppelganger"
-    if target == scenario.drunk_position:
-        return "Drunk"
-
-    card = get_card_at(target, state)
-    if card:
-        return card.apparent_role.replace("_", " ")
-    return "Unknown"
+    role = effective_role_at(target, scenario, state)
+    return role.replace("_", " ") if role else "Unknown"
 
 
 def _dreamer_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
@@ -706,11 +718,12 @@ def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState
     for t in targets:
         if scenario_is_evil(t, scenario):
             continue
-        card = get_card_at(t, state)
-        if card:
-            card_def = get_card(card.apparent_role)
-            if card_def and card_def.role == Role.OUTCAST and card.apparent_role != "Wretch":
-                return card.apparent_role
+        role = effective_role_at(t, scenario, state)
+        if role:
+            card_def = get_card(role)
+            role_key = role.lower().replace(" ", "").replace("_", "")
+            if card_def and card_def.role == Role.OUTCAST and role_key != "wretch":
+                return role.replace("_", " ")
     return "none"
 
 
@@ -721,7 +734,11 @@ def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
 
 def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple:
     """Plague Doctor: (is_corrupted, evil_char_pos or None)."""
-    is_corrupted = target in scenario.corrupted
+    role = effective_role_at(target, scenario, state)
+    role_key = role.lower().replace(" ", "").replace("_", "") if role else None
+    # Native PD reports Drunk as Not Corrupted even though Drunk uses intrinsic
+    # corruption for truth/clue surfaces.
+    is_corrupted = target in scenario.corrupted and role_key != "drunk"
     evil_pos = None
     if is_corrupted:
         # Learn an evil character
@@ -786,7 +803,7 @@ def _recommend_boolean_ability(
         key=lambda item: (item[0], item[1], item[2]),
     )
 
-    corr = _corruption_risk(ability_pos, result)
+    corr = _corruption_risk(ability_pos, result, state)
     adjusted = best_entropy * (1 - 0.5 * corr)
     warnings = []
     if corr > 0:
@@ -851,7 +868,7 @@ def _recommend_judge(
     if best_target is None:
         return None
 
-    corr = _corruption_risk(ability_pos, result)
+    corr = _corruption_risk(ability_pos, result, state)
     adjusted = best_expected_posterior * (1 + 0.5 * corr)
     info_gain = 0.0
     if adjusted > 0:
@@ -918,7 +935,7 @@ def _recommend_count_ability(
     if best_targets is None:
         return None
 
-    corr = _corruption_risk(ability_pos, result)
+    corr = _corruption_risk(ability_pos, result, state)
     adjusted = best_expected_posterior * (1 + 0.5 * corr)
     info_gain = 0.0
     if scenario_count > 0 and adjusted > 0:
@@ -972,7 +989,7 @@ def _recommend_partition_ability(
     if best_targets is None:
         return None
 
-    corr = _corruption_risk(ability_pos, result)
+    corr = _corruption_risk(ability_pos, result, state)
     adjusted = best_entropy * (1 - 0.5 * corr)
     warnings = []
     if corr > 0:
@@ -1000,8 +1017,8 @@ def _wretch_kill_probability(target: int, state: GameState, result: SolverResult
     for s in result.surviving_scenarios:
         if not scenario_is_evil(target, s):
             # Target is good in this scenario — check if it's Wretch
-            card = get_card_at(target, state)
-            if card and card.apparent_role == "Wretch":
+            role = effective_role_at(target, s, state)
+            if role and role.lower().replace(" ", "").replace("_", "") == "wretch":
                 count += 1
     return count / result.n_surviving
 
@@ -1024,7 +1041,7 @@ def _recommend_slayer(
         return None
 
     # Score each candidate accounting for Wretch HP penalty
-    corr = _corruption_risk(ability_pos, result)
+    corr = _corruption_risk(ability_pos, result, state)
     best_pos = None
     best_score = -1
     best_prob = 0
@@ -1190,7 +1207,21 @@ def _compute_position_fingerprint(
     elif pos == scenario.puppet_position:
         evil_role = "Puppet"
 
-    # Corruption status (Confessor)
+    # Ordinary generated Outcast data is visible when this position flips.
+    # Drunk/Doppelganger keep their Villager disguise, so do not leak their
+    # hidden identity into a pre-flip information fingerprint.
+    generated_role = None
+    if (
+        scenario.chancellor_trace is not None
+        and pos == scenario.chancellor_trace.added_outcast_position
+    ):
+        role = scenario.chancellor_trace.added_outcast_role
+        role_key = role.lower().replace(" ", "").replace("_", "")
+        if role_key not in {"drunk", "doppelganger"}:
+            generated_role = role_key
+
+    # Active corruption can change copied Confessor/Bard clue surfaces even
+    # when the underlying Drunk identity itself remains hidden.
     is_corrupted = pos in scenario.corrupted
 
     # Build set of effective-evil positions (Wretch counts)
@@ -1200,7 +1231,8 @@ def _compute_position_fingerprint(
             evil_set.append(p)
 
     if not evil_set:
-        return (is_evil, evil_role, is_corrupted, -1, "None", 0, 0, "Equal", -1)
+        return (is_evil, evil_role, generated_role, is_corrupted,
+                -1, "None", 0, 0, "Equal", -1)
 
     # Hunter: distance to nearest evil
     dist_nearest = min(circle_distance(pos, ep, n) for ep in evil_set)
@@ -1267,7 +1299,7 @@ def _compute_position_fingerprint(
     else:
         dist_corrupted = -1  # no corrupted
 
-    return (is_evil, evil_role, is_corrupted, dist_nearest, direction,
+    return (is_evil, evil_role, generated_role, is_corrupted, dist_nearest, direction,
             adj_evil, pairs, arch_side, dist_corrupted)
 
 
@@ -1406,7 +1438,7 @@ def recommend_action(
                 and card.position not in state.executed
                 and card.position not in result.definite_good
                 and card.position not in result.definite_evil):
-            corr_risk = _corruption_risk(card.position, result)
+            corr_risk = _corruption_risk(card.position, result, state)
             evil_prob = probs.get(card.position, 0)
             knight_checks.append((card.position, evil_prob, corr_risk))
 

@@ -47,10 +47,26 @@ fn matches_executed_good_corruption(
 ) -> bool {
     // Drunk is intrinsically Corrupted for status clues but is observed as
     // clean on the Plague Doctor/execution-bookkeeping surface.
-    if scenario.drunk_position == Some(pos) {
+    if scenario.drunk_position == Some(pos)
+        || (scenario.chancellor_added_outcast_position() == Some(pos)
+            && scenario
+                .chancellor_added_outcast_role()
+                .is_some_and(|role| normalize_role(role) == "drunk"))
+    {
         return !was_corrupted;
     }
     scenario.corrupted.contains(&pos) == was_corrupted
+}
+
+fn matches_executed_good_role(
+    scenario: &Scenario,
+    state: &GameState,
+    pos: u8,
+    observed_role: &str,
+) -> bool {
+    effective_role_at(pos, scenario, state)
+        .as_deref()
+        .is_some_and(|role| roles_equal(role, observed_role))
 }
 
 /// Check if all revealed cards + ability results + structural constraints are consistent.
@@ -58,6 +74,11 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // Check observed corruption status of executed good cards.
     for (&pos, &was_corrupted) in &state.executed_good_corrupted {
         if !matches_executed_good_corruption(scenario, pos, was_corrupted) {
+            return false;
+        }
+    }
+    for (&pos, observed_role) in &state.executed_good_roles {
+        if !matches_executed_good_role(scenario, state, pos, observed_role) {
             return false;
         }
     }
@@ -98,15 +119,22 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
 
         // Knight immunity check
         if state.deck.villagers.iter().any(|v| v == "Knight") {
-            let knight_revealed = state.cards.iter().any(|c|
-                c.apparent_role == "Knight" && !scenario.evil_positions.contains_key(&c.position));
+            let knight_revealed = state.cards.iter().any(|card| {
+                !scenario.evil_positions.contains_key(&card.position)
+                    && effective_role_at(card.position, scenario, state)
+                        .is_some_and(|role| normalize_role(&role) == "knight")
+            });
             if !knight_revealed {
                 let revealed: HashSet<u8> = state.cards.iter().map(|c| c.position).collect();
-                let valid = (1..=state.n_cards).any(|p|
+                let valid = (1..=state.n_cards).any(|p| {
+                    let intrinsically_killable = effective_role_at(p, scenario, state)
+                        .is_some_and(|role| normalize_role(&role) == "drunk");
                     !scenario.evil_positions.contains_key(&p)
-                    && !revealed.contains(&p)
-                    && !(state.night_kills.contains(&p) && !scenario.corrupted.contains(&p))
-                );
+                        && !revealed.contains(&p)
+                        && !(state.night_kills.contains(&p)
+                            && !scenario.corrupted.contains(&p)
+                            && !intrinsically_killable)
+                });
                 let pool_gt_board = state.board_villager_count
                     .map_or(false, |bvc| state.deck.villagers.len() as u8 > bvc);
                 if !valid && !pool_gt_board { return false; }
@@ -316,10 +344,10 @@ fn validate_oracle(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     };
     let target_matches_possible = |t: u8| -> bool {
         if target_matches_definite(t) { return true; }
-        if let Some(c) = state.card_at(t) {
-            if c.apparent_role == "Wretch" {
-                return get_card(minion_role).map_or(false, |cd| cd.faction == Faction::Minion);
-            }
+        if effective_role_at(t, scenario, state)
+            .is_some_and(|role| roles_equal(&role, "Wretch"))
+        {
+            return get_card(minion_role).map_or(false, |cd| cd.faction == Faction::Minion);
         }
         false
     };
@@ -486,18 +514,10 @@ fn validate_witness(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     };
     let truth = truth_status(card.position, scenario, state);
 
-    // Build affected set: evil-sourced corruption + puppet + night kills
-    let mut evil_corrupted = scenario.corrupted.clone();
-    if let Some(pd) = scenario.pd_corrupted { evil_corrupted.remove(&pd); }
-    if let Some(dp) = scenario.drunk_position { evil_corrupted.remove(&dp); }
-    for c in &state.cards {
-        if c.apparent_role == "Drunk" { evil_corrupted.remove(&c.position); }
-    }
-    let mut affected = evil_corrupted;
-    if let Some(pp) = scenario.puppet_position { affected.insert(pp); }
-    for (&pos, role) in &state.executed_evil_roles {
-        if role == "Puppet" { affected.insert(pos); }
-    }
+    // `MessedUpByEvil` is its own persistent native status. Alchemist can cure
+    // Corrupted without removing this marker, and Chancellor adds it to the
+    // selected Outcast anchor without adding Corrupted at all.
+    let mut affected = scenario.messed_up_by_evil.clone();
     for &nk in &state.night_kills { affected.insert(nk); }
 
     if claimed_pos == 0 {
@@ -571,7 +591,8 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     };
     let truth = truth_status(card.position, scenario, state);
     let target_is_evil = is_evil_in_board_state(target, scenario, state);
-    let target_is_wretch = state.card_at(target).map_or(false, |c| c.apparent_role == "Wretch");
+    let target_is_wretch = effective_role_at(target, scenario, state)
+        .is_some_and(|role| roles_equal(&role, "Wretch"));
 
     // Gather all known evil roles on the board
     let evil_roles: Vec<&str> = (1..=state.n_cards)
@@ -661,6 +682,14 @@ fn validate_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
 
     for &t in &targets {
         if is_evil_in_board_state(t, scenario, state) { continue; }
+        if scenario.chancellor_added_outcast_position() == Some(t) {
+            if let Some(role) = scenario.chancellor_added_outcast_role() {
+                if normalize_role(role) != "wretch" {
+                    actual_outcasts.push(role.to_string());
+                }
+                continue;
+            }
+        }
         if scenario.doppelganger_position == Some(t) {
             actual_outcasts.push("Doppelganger".to_string());
             continue;
@@ -686,7 +715,8 @@ fn validate_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     if truth == TruthStatus::Truthful {
         if let Some(fo) = found_outcast {
             // Operator precedence matches Python: (has_outcast && found in list) || unrevealed
-            (has_outcast && actual_outcasts.iter().any(|a| a == fo)) || has_unrevealed_good_target
+            (has_outcast && actual_outcasts.iter().any(|a| roles_equal(a, fo)))
+                || has_unrevealed_good_target
         } else {
             !has_outcast
         }
@@ -766,8 +796,9 @@ fn validate_baker(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
         if truth == TruthStatus::Lying {
             // Original Baker is immune to corruption, and corrupted converted
             // Bakers lie about their role but do NOT claim "I am the original Baker".
-            // So a corrupted good position claiming "original" is impossible.
-            if !is_evil_in_board_state(pos, scenario, state) && scenario.corrupted.contains(&pos) {
+            // Thus any lying good position (including a resistant Drunk) claiming
+            // "original" is impossible.
+            if !is_evil_in_board_state(pos, scenario, state) {
                 return false;
             }
         }
@@ -904,15 +935,15 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
         let slayer_evil_role = known_evil_role(slayer_pos, scenario, state);
         let slayer_is_evil = slayer_evil_role.is_some();
         let slayer_is_puppet = slayer_evil_role == Some("Puppet");
-        let slayer_is_corrupted = scenario.corrupted.contains(&slayer_pos);
+        let slayer_lies = truth_status(slayer_pos, scenario, state) == TruthStatus::Lying;
         let target_is_evil = effective_alignment(target_pos, scenario, state) == EffectiveAlignment::Evil;
 
         if killed {
             if slayer_is_evil && !slayer_is_puppet { return false; }
-            if slayer_is_corrupted { return false; }
+            if slayer_lies { return false; }
             if !target_is_evil { return false; }
         } else {
-            let slayer_works = (!slayer_is_evil || slayer_is_puppet) && !slayer_is_corrupted;
+            let slayer_works = (!slayer_is_evil || slayer_is_puppet) && !slayer_lies;
             if slayer_works && target_is_evil { return false; }
         }
     }
@@ -926,13 +957,14 @@ fn validate_pd_ability(scenario: &Scenario, state: &GameState) -> bool {
         let claimed_corrupted = result.is_corrupted;
         let evil_revealed = result.evil_revealed;
 
-        let pd_is_evil = is_evil_in_board_state(pd_pos, scenario, state);
+        let pd_lies = truth_status(pd_pos, scenario, state) == TruthStatus::Lying;
         // Drunk carries the corrupted status for clue/truth purposes, but the
         // live build's Plague Doctor check reports Drunk as Not Corrupted.
-        let actual_corrupted = scenario.corrupted.contains(&target)
-            && scenario.drunk_position != Some(target);
+        let target_is_drunk = effective_role_at(target, scenario, state)
+            .is_some_and(|role| normalize_role(&role) == "drunk");
+        let actual_corrupted = scenario.corrupted.contains(&target) && !target_is_drunk;
 
-        if pd_is_evil {
+        if pd_lies {
             if claimed_corrupted == actual_corrupted { return false; }
             if claimed_corrupted {
                 if let Some(er) = evil_revealed {
@@ -964,22 +996,39 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     for card in &state.cards {
         let pos = card.position;
         if known_evil_role(pos, scenario, state).is_some() { continue; }
-        let role = &card.apparent_role;
+        let generated_role = scenario
+            .chancellor_added_outcast_position()
+            .filter(|position| *position == pos)
+            .and_then(|_| scenario.chancellor_added_outcast_role());
+        let role = generated_role
+            .filter(|role| !matches!(normalize_role(role).as_str(), "drunk" | "doppelganger"))
+            .unwrap_or(&card.apparent_role);
         if knowledge_base::is_villager_role(role) {
-            *good_villager_counts.entry(role.clone()).or_insert(0) += 1;
-        } else if state.deck.outcasts.iter().any(|o| o == role || o.replace('_', " ") == *role) {
-            *good_outcast_counts.entry(role.clone()).or_insert(0) += 1;
+            *good_villager_counts.entry(role.to_string()).or_insert(0) += 1;
+        } else if state.deck.outcasts.iter().any(|o| o == role || o.replace('_', " ") == role) {
+            *good_outcast_counts.entry(role.to_string()).or_insert(0) += 1;
         }
     }
 
     // Disguiser count
-    let mut n_disguisers = 0i32;
+    let mut disguiser_positions = HashSet::new();
     if let Some(dp) = scenario.doppelganger_position {
-        if !scenario.evil_positions.contains_key(&dp) { n_disguisers += 1; }
+        if !scenario.evil_positions.contains_key(&dp) { disguiser_positions.insert(dp); }
     }
     if let Some(dp) = scenario.drunk_position {
-        if !scenario.evil_positions.contains_key(&dp) { n_disguisers += 1; }
+        if !scenario.evil_positions.contains_key(&dp) { disguiser_positions.insert(dp); }
     }
+    if let (Some(position), Some(role)) = (
+        scenario.chancellor_added_outcast_position(),
+        scenario.chancellor_added_outcast_role(),
+    ) {
+        if matches!(normalize_role(role).as_str(), "drunk" | "doppelganger")
+            && !scenario.evil_positions.contains_key(&position)
+        {
+            disguiser_positions.insert(position);
+        }
+    }
+    let n_disguisers = disguiser_positions.len() as i32;
 
     // Check villager excess
     let deck_v_counts: HashMap<String, i32> = {
@@ -1037,7 +1086,9 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
 
     // Board outcast count ceiling
     if let Some(boc) = state.board_outcast_count {
-        let chancellor_allowance = if state.deck.minions.iter().any(|m| m == "Chancellor") { 1 } else { 0 };
+        let chancellor_allowance = i32::from(
+            scenario.chancellor_added_outcast_position().is_some()
+        );
         let total_good_outcasts: i32 = good_outcast_counts.values().sum();
         if total_good_outcasts > boc as i32 + chancellor_allowance { return false; }
     }
@@ -1172,6 +1223,8 @@ mod tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::new(),
+            messed_up_by_evil: HashSet::new(),
+            chancellor_trace: None,
             chancellor_conversion: None,
         }
     }
@@ -1209,6 +1262,25 @@ mod tests {
         s3.evil_positions.insert(5, "Pooka".to_string());
         s3.evil_positions.insert(6, "Witch".to_string());
         assert!(validate_jester(&jester, &s3, &state));
+    }
+
+    #[test]
+    fn witness_uses_persistent_messed_up_status_not_live_corruption() {
+        let witness = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 2}),
+        );
+        let state = base_state(3, vec![witness.clone(), make_card(2, "Baker", json!({}))]);
+
+        let mut cured = empty_scenario();
+        cured.messed_up_by_evil.insert(2);
+        assert!(validate_witness(&witness, &cured, &state));
+
+        let mut plague_doctor_only = empty_scenario();
+        plague_doctor_only.corrupted.insert(2);
+        plague_doctor_only.pd_corrupted = Some(2);
+        assert!(!validate_witness(&witness, &plague_doctor_only, &state));
     }
 
     #[test]
@@ -1355,5 +1427,231 @@ mod tests {
 
         assert!(matches_executed_good_corruption(&scenario, 6, false));
         assert!(!matches_executed_good_corruption(&scenario, 6, true));
+    }
+
+    #[test]
+    fn resistant_generated_drunk_keeps_native_actor_and_target_surfaces() {
+        let mut scenario = empty_scenario();
+        scenario.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+        assert!(scenario.corrupted.is_empty());
+
+        let mut slayer_state = base_state(3, vec![make_card(1, "Slayer", json!({}))]);
+        slayer_state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            evil_role: None,
+        });
+        assert!(!validate_slayer_results(&scenario, &slayer_state));
+        slayer_state.slayer_results[0].killed = false;
+        assert!(validate_slayer_results(&scenario, &slayer_state));
+
+        let mut pd_state = base_state(3, vec![make_card(1, "Plague_Doctor", json!({}))]);
+        pd_state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 1,
+            target: 3,
+            is_corrupted: true,
+            evil_revealed: Some(3),
+        });
+        assert!(validate_pd_ability(&scenario, &pd_state));
+        pd_state.pd_ability_results[0].is_corrupted = false;
+        pd_state.pd_ability_results[0].evil_revealed = None;
+        assert!(!validate_pd_ability(&scenario, &pd_state));
+
+        let baker = make_card(1, "Baker", json!({"original_role": "original"}));
+        let baker_state = base_state(3, vec![baker.clone()]);
+        assert!(!validate_baker(&baker, &scenario, &baker_state));
+        assert!(validate_baker(&baker, &empty_scenario(), &baker_state));
+
+        assert!(matches_executed_good_corruption(&scenario, 1, false));
+        assert!(!matches_executed_good_corruption(&scenario, 1, true));
+    }
+
+    #[test]
+    fn pd_reports_trace_only_drunk_clean_but_ordinary_corruption_normally() {
+        let mut state = base_state(3, vec![make_card(3, "Plague_Doctor", json!({}))]);
+        state.pd_ability_results.push(crate::types::PdAbilityResult {
+            pd_pos: 3,
+            target: 1,
+            is_corrupted: false,
+            evil_revealed: None,
+        });
+        let mut drunk = empty_scenario();
+        drunk.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+        assert!(validate_pd_ability(&drunk, &state));
+        state.pd_ability_results[0].is_corrupted = true;
+        assert!(!validate_pd_ability(&drunk, &state));
+
+        let mut scout = empty_scenario();
+        scout.corrupted.insert(1);
+        assert!(validate_pd_ability(&scout, &state));
+    }
+
+    #[test]
+    fn resistant_generated_drunk_can_fill_a_night_killed_knight_identity() {
+        let mut state = base_state(1, vec![]);
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.night_kills = vec![1];
+        state.night_kill_evil_count = 0;
+        state.board_villager_count = Some(1);
+
+        let clean_unknown = empty_scenario();
+        assert!(!check_scenario(&clean_unknown, &state));
+
+        let mut generated_drunk = empty_scenario();
+        generated_drunk.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![1],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+        assert!(check_scenario(&generated_drunk, &state));
+    }
+
+    #[test]
+    fn hidden_generated_drunk_counts_its_apparent_villager_and_one_disguise() {
+        let mut state = base_state(3, vec![
+            make_card(1, "Baker", json!({})),
+            make_card(2, "Knight", json!({})),
+            make_card(3, "Knight", json!({})),
+        ]);
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        let mut generated_drunk = empty_scenario();
+        generated_drunk.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+
+        assert!(!validate_role_counts(&generated_drunk, &state));
+    }
+
+    #[test]
+    fn generated_wretch_uses_every_special_registration_surface() {
+        let fortune_teller = make_card(
+            1,
+            "Fortune_Teller",
+            json!({"targets": [2], "has_evil": true}),
+        );
+        let oracle = make_card(
+            1,
+            "Oracle",
+            json!({"targets": [2], "minion_role": "Minion"}),
+        );
+        let dreamer = make_card(
+            1,
+            "Dreamer",
+            json!({"target": 2, "evil_role": "cabbage"}),
+        );
+        let state = base_state(3, vec![fortune_teller.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Wretch".to_string(),
+        });
+
+        assert_eq!(
+            effective_alignment(2, &scenario, &state),
+            EffectiveAlignment::Evil,
+        );
+        assert_eq!(get_position_type(2, &scenario, &state), Some("Minion"));
+        assert!(validate_fortune_teller(&fortune_teller, &scenario, &state));
+        assert!(validate_oracle(&oracle, &scenario, &state));
+        assert!(validate_dreamer(&dreamer, &scenario, &state));
+    }
+
+    #[test]
+    fn druid_projects_trace_hidden_outcasts_and_legacy_fallback() {
+        let pd_druid = make_card(
+            1,
+            "Druid",
+            json!({"targets": [2], "found_outcast": "Plague Doctor"}),
+        );
+        let none_druid = make_card(
+            1,
+            "Druid",
+            json!({"targets": [2], "found_outcast": null}),
+        );
+        let mut state = base_state(3, vec![pd_druid.clone()]);
+
+        let mut generated_pd = empty_scenario();
+        generated_pd.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Plague_Doctor".to_string(),
+        });
+        assert!(validate_druid(&pd_druid, &generated_pd, &state));
+
+        let mut generated_wretch = generated_pd.clone();
+        generated_wretch
+            .chancellor_trace
+            .as_mut()
+            .unwrap()
+            .added_outcast_role = "Wretch".to_string();
+        assert!(validate_druid(&none_druid, &generated_wretch, &state));
+
+        state.cards.push(make_card(2, "Plague_Doctor", json!({})));
+        let mut legacy = empty_scenario();
+        legacy.chancellor_conversion = Some(2);
+        assert!(validate_druid(&pd_druid, &legacy, &state));
+
+        state.cards.retain(|card| card.position != 2);
+        let mut doppelganger = empty_scenario();
+        doppelganger.doppelganger_position = Some(2);
+        let dopp_druid = make_card(
+            1,
+            "Druid",
+            json!({"targets": [2], "found_outcast": "Doppelganger"}),
+        );
+        assert!(validate_druid(&dopp_druid, &doppelganger, &state));
+
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(2);
+        let drunk_druid = make_card(
+            1,
+            "Druid",
+            json!({"targets": [2], "found_outcast": "Drunk"}),
+        );
+        assert!(validate_druid(&drunk_druid, &drunk, &state));
+    }
+
+    #[test]
+    fn observed_executed_good_role_filters_role_distinct_trace_worlds() {
+        let mut state = base_state(3, vec![]);
+        state.executed = vec![2];
+        state.confirmed_good = vec![2];
+        state.executed_good_roles.insert(2, "Plague Doctor".to_string());
+
+        let trace = |role: &str| {
+            let mut scenario = empty_scenario();
+            scenario.chancellor_trace = Some(crate::types::ChancellorTrace {
+                original_positions: vec![3],
+                added_outcast_position: 2,
+                added_outcast_role: role.to_string(),
+            });
+            scenario
+        };
+        assert!(matches_executed_good_role(
+            &trace("Plague_Doctor"),
+            &state,
+            2,
+            "Plague Doctor",
+        ));
+        assert!(!matches_executed_good_role(
+            &trace("Rambler"),
+            &state,
+            2,
+            "Plague Doctor",
+        ));
     }
 }

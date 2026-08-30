@@ -67,6 +67,8 @@ def replay_case(case):
     cur_confirmed_evil = []
     cur_confirmed_good = []
     cur_exec_evil_roles = {}
+    cur_exec_good_corrupted = {}
+    cur_exec_good_roles = {}
     cur_slayer_results = []
     cur_pd_results = []
 
@@ -90,8 +92,10 @@ def replay_case(case):
             wrong_exec_cost=case.get("wrong_exec_cost", 5),
             board_villager_count=case.get("board_villager_count"),
             board_outcast_count=case.get("board_outcast_count"),
+            board_count_provenance=case.get("board_count_provenance", "legacy_unknown"),
             reveal_order=list(reveal_order),
-            executed_good_corrupted={int(k): v for k, v in case.get("executed_good_corrupted", {}).items()},
+            executed_good_corrupted=dict(cur_exec_good_corrupted),
+            executed_good_roles=dict(cur_exec_good_roles),
         )
 
     def solve_step():
@@ -135,6 +139,15 @@ def replay_case(case):
                     desc = f"Slayer #{pos} kills #{target} ({role})"
                 else:
                     cur_confirmed_good.append(target)
+                    recorded_corruption = case.get("executed_good_corrupted", {})
+                    if str(target) in recorded_corruption or target in recorded_corruption:
+                        cur_exec_good_corrupted[target] = recorded_corruption.get(
+                            str(target), recorded_corruption.get(target)
+                        )
+                    recorded_roles = case.get("executed_good_roles", {})
+                    role = recorded_roles.get(str(target), recorded_roles.get(target))
+                    if role:
+                        cur_exec_good_roles[target] = role
                     role = card_lookup.get(target, {}).get("apparent_role", "?")
                     desc = f"Slayer #{pos} kills #{target} ({role})"
             else:
@@ -167,6 +180,14 @@ def replay_case(case):
                 desc = f"Execute #{exec_pos}: good corrupted ({role})"
             else:
                 desc = f"Execute #{exec_pos}: good ({role})"
+            if str(exec_pos) in corr or exec_pos in corr:
+                cur_exec_good_corrupted[exec_pos] = corr.get(
+                    str(exec_pos), corr.get(exec_pos)
+                )
+            recorded_roles = case.get("executed_good_roles", {})
+            observed_role = recorded_roles.get(str(exec_pos), recorded_roles.get(exec_pos))
+            if observed_role:
+                cur_exec_good_roles[exec_pos] = observed_role
 
         ns, de, dg = solve_step()
         steps.append((desc, ns, de, dg))

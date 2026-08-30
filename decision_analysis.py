@@ -118,6 +118,7 @@ def analyze_game(case: dict) -> GameAnalysis:
     current_night_kill_evil_count = 0
     current_reveal_order = []
     current_executed_good_corrupted = {}
+    current_executed_good_roles = {}
     used_abilities = []
 
     decisions = []
@@ -150,8 +151,10 @@ def analyze_game(case: dict) -> GameAnalysis:
             board_outcast_count=case.get("board_outcast_count"),
             board_minion_count=case.get("board_minion_count"),
             board_demon_count=case.get("board_demon_count"),
+            board_count_provenance=case.get("board_count_provenance", "legacy_unknown"),
             reveal_order=list(current_reveal_order),
             executed_good_corrupted=dict(current_executed_good_corrupted),
+            executed_good_roles=dict(current_executed_good_roles),
         )
 
     def analyze_at_step(phase: str, description: str, actual_action: str,
@@ -282,9 +285,15 @@ def analyze_game(case: dict) -> GameAnalysis:
         else:
             if pos not in current_confirmed_good:
                 current_confirmed_good.append(pos)
-            corrupted = case.get("executed_good_corrupted", {}).get(str(pos), False)
-            if corrupted:
-                current_executed_good_corrupted[pos] = True
+            observed_corruption = case.get("executed_good_corrupted", {})
+            if str(pos) in observed_corruption or pos in observed_corruption:
+                current_executed_good_corrupted[pos] = observed_corruption.get(
+                    str(pos), observed_corruption.get(pos)
+                )
+            observed_roles = case.get("executed_good_roles", {})
+            observed_role = observed_roles.get(str(pos), observed_roles.get(pos))
+            if observed_role:
+                current_executed_good_roles[pos] = observed_role
 
     # ── Summary ──
     total = len(decisions)

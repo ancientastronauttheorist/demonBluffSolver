@@ -51,6 +51,11 @@ pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
     if let Some(role) = known_evil_role(pos, scenario, state) {
         return Some(role.to_string());
     }
+    if scenario.chancellor_added_outcast_position() == Some(pos) {
+        if let Some(role) = scenario.chancellor_added_outcast_role() {
+            return Some(role.to_string());
+        }
+    }
     if scenario.doppelganger_position == Some(pos) {
         return Some("Doppelganger".to_string());
     }
@@ -69,11 +74,12 @@ pub fn effective_alignment(pos: u8, scenario: &Scenario, state: &GameState) -> E
     if is_evil_in_board_state(pos, scenario, state) {
         return EffectiveAlignment::Evil;
     }
-    // Wretch registers as Evil
-    if let Some(card) = state.card_at(pos) {
-        if card.apparent_role == "Wretch" {
-            return EffectiveAlignment::Evil;
-        }
+    // Wretch registers as Evil, including a Chancellor-generated Wretch whose
+    // apparent Villager identity does not expose that role.
+    if effective_role_at(pos, scenario, state)
+        .is_some_and(|role| roles_equal(&role, "Wretch"))
+    {
+        return EffectiveAlignment::Evil;
     }
     EffectiveAlignment::Good
 }
@@ -103,13 +109,16 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     }
 
     let evil_role = known_evil_role(pos, scenario, state);
+    let effective_role = effective_role_at(pos, scenario, state);
 
     // Puppet applies HealthyBluff during Start. A clean Doppelganger applies it
     // while acquiring its good bluff. Corrupted variants were handled above.
     let modeled_healthy_bluff = evil_role
         .map(|role| roles_equal(role, "Puppet"))
         .unwrap_or(false)
-        || scenario.doppelganger_position == Some(pos);
+        || effective_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Doppelganger"));
     if modeled_healthy_bluff {
         return TruthStatus::Truthful;
     }
@@ -117,8 +126,9 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     // Runtime Evil is sufficient to lie even without bluff data. Drunk and
     // Doppelganger are the model's explicit non-null-bluff positions; the clean
     // Doppelganger case already returned via HealthyBluff.
-    let modeled_non_null_bluff =
-        scenario.drunk_position == Some(pos) || scenario.doppelganger_position == Some(pos);
+    let modeled_non_null_bluff = effective_role.as_deref().is_some_and(|role| {
+        roles_equal(role, "Drunk") || roles_equal(role, "Doppelganger")
+    });
     if evil_role.is_some() || modeled_non_null_bluff {
         return TruthStatus::Lying;
     }
@@ -150,7 +160,7 @@ pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) 
 #[cfg(test)]
 mod truth_status_tests {
     use super::*;
-    use crate::types::CardInfo;
+    use crate::types::{CardInfo, ChancellorTrace};
     use std::collections::{HashMap, HashSet};
 
     fn state_with_apparent_role(role: &str) -> GameState {
@@ -173,6 +183,8 @@ mod truth_status_tests {
             doppelganger_position: None,
             drunk_position: None,
             alchemist_cures: HashMap::new(),
+            messed_up_by_evil: HashSet::new(),
+            chancellor_trace: None,
             chancellor_conversion: None,
         }
     }
@@ -232,6 +244,20 @@ mod truth_status_tests {
     }
 
     #[test]
+    fn trace_only_resistant_drunk_still_lies() {
+        let state = state_with_apparent_role("Baker");
+        let mut scenario = scenario();
+        scenario.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![1],
+            added_outcast_position: 1,
+            added_outcast_role: "Drunk".to_string(),
+        });
+
+        assert!(scenario.corrupted.is_empty());
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
     fn ordinary_evil_lies_even_when_appearing_as_confessor() {
         let state = state_with_apparent_role("Confessor");
         let mut scenario = scenario();
@@ -270,6 +296,11 @@ pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) 
     // Check evil role first
     if let Some(role) = known_evil_role(pos, scenario, state) {
         return role;
+    }
+    if scenario.chancellor_added_outcast_position() == Some(pos) {
+        if let Some(role) = scenario.chancellor_added_outcast_role() {
+            return role;
+        }
     }
     // Hidden outcasts
     if scenario.doppelganger_position == Some(pos) {
@@ -318,7 +349,13 @@ pub fn get_position_type_ex(
         return Some("Outcast");
     }
     // Chancellor's added identity has real Outcast data at its final home.
-    if include_chancellor_conv && scenario.chancellor_conversion == Some(pos) {
+    if include_chancellor_conv && scenario.chancellor_added_outcast_position() == Some(pos) {
+        if scenario
+            .chancellor_added_outcast_role()
+            .is_some_and(|role| roles_equal(role, "Wretch"))
+        {
+            return Some("Minion");
+        }
         return Some("Outcast");
     }
     // Revealed card

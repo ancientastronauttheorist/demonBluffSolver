@@ -1,11 +1,24 @@
+from dataclasses import fields
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from game_loop import GameSession, _release_session_lock
+from game_loop import DecisionLog, GameSession, _release_session_lock, dispatch
 from solver import CardInfo, DeckComposition, GameState
 
 
 class TestGameStateIO(unittest.TestCase):
+    def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
+        names = [field.name for field in fields(GameState)]
+        self.assertEqual(
+            names[-3:],
+            [
+                "executed_good_corrupted",
+                "executed_good_roles",
+                "board_count_provenance",
+            ],
+        )
+
     def test_round_trip_nested_deck(self):
         state = GameState(
             n_cards=5,
@@ -23,6 +36,8 @@ class TestGameStateIO(unittest.TestCase):
             hp=7,
             wrong_exec_cost=5,
             reveal_order=[2, 4],
+            executed_good_corrupted={3: False},
+            executed_good_roles={3: "Plague_Doctor"},
         )
 
         data = state.to_dict()
@@ -46,6 +61,8 @@ class TestGameStateIO(unittest.TestCase):
 
         self.assertEqual(loaded.deck.villagers, ["Confessor", "Enlightened"])
         self.assertEqual(loaded.executed_evil_roles, {3: "Minion"})
+        self.assertEqual(loaded.executed_good_roles, {})
+        self.assertEqual(loaded.board_count_provenance, "legacy_unknown")
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -57,8 +74,11 @@ class TestGameStateIO(unittest.TestCase):
         )
         session.board_villager_count = 2
         session.board_outcast_count = 1
+        session.board_count_provenance = "trusted_pre_start"
         session.cards = [CardInfo(2, "Confessor", info_parsed={"dizzy": True})]
         session.used_abilities = [4]
+        session.executed_good_corrupted = {1: False}
+        session.executed_good_roles = {1: "Plague_Doctor"}
         session.pd_ability_results = [{
             "pd_pos": 3,
             "target": 2,
@@ -78,8 +98,11 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.demons, session.demons)
         self.assertEqual(loaded.board_villager_count, 2)
         self.assertEqual(loaded.board_outcast_count, 1)
+        self.assertEqual(loaded.board_count_provenance, "trusted_pre_start")
         self.assertEqual(loaded.used_abilities, [4])
         self.assertEqual(loaded.pd_ability_results, session.pd_ability_results)
+        self.assertEqual(loaded.executed_good_corrupted, {1: False})
+        self.assertEqual(loaded.executed_good_roles, {1: "Plague_Doctor"})
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):
         data = {
@@ -93,6 +116,40 @@ class TestGameStateIO(unittest.TestCase):
         }
         loaded = GameState.from_dict(data)
         self.assertEqual(loaded.reveal_order, [])
+
+    def test_partial_deck_counts_do_not_promote_legacy_metadata(self):
+        session = GameSession(5, 1)
+        session.set_deck(["Confessor"], ["Wretch"], ["Minion"], ["Baa"])
+        session.board_villager_count = 3
+        session.board_outcast_count = 2
+        session.board_count_provenance = "legacy_unknown"
+
+        dispatch(
+            "deck",
+            ["V=Bard", "O=Bombardier", "M=Minion", "D=Pooka", "nv=3"],
+            session,
+        )
+
+        self.assertEqual(session.villagers, ["Confessor"])
+        self.assertEqual(session.board_villager_count, 3)
+        self.assertEqual(session.board_outcast_count, 2)
+        self.assertEqual(session.board_count_provenance, "legacy_unknown")
+
+    def test_complete_deck_counts_are_saved_as_trusted(self):
+        session = GameSession(5, 1)
+        with (
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_deck"),
+        ):
+            dispatch(
+                "deck",
+                ["V=Bard", "O=Bombardier", "M=Minion", "D=Pooka", "nv=3", "no=1"],
+                session,
+            )
+
+        self.assertEqual(session.board_villager_count, 3)
+        self.assertEqual(session.board_outcast_count, 1)
+        self.assertEqual(session.board_count_provenance, "trusted_pre_start")
 
     def test_reveal_order_round_trip(self):
         state = GameState(

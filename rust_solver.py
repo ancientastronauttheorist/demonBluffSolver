@@ -347,7 +347,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
     Returns:
         SolverResult object, or None if Rust solver unavailable.
     """
-    from solver import Scenario, SolverResult
+    from solver import ChancellorTrace, Scenario, SolverResult
 
     state_dict = state.to_dict()
 
@@ -362,6 +362,14 @@ def rust_solve_to_objects(state, summary_only: bool = False):
 
     scenarios = []
     for s in data.get("surviving_scenarios", []):
+        raw_trace = s.get("chancellor_trace")
+        trace = None
+        if raw_trace is not None:
+            trace = ChancellorTrace(
+                original_positions=list(raw_trace.get("original_positions", [])),
+                added_outcast_position=int(raw_trace["added_outcast_position"]),
+                added_outcast_role=str(raw_trace["added_outcast_role"]),
+            )
         scenarios.append(Scenario(
             evil_positions={int(k): v for k, v in s["evil_positions"].items()},
             puppet_position=s.get("puppet_position"),
@@ -370,6 +378,8 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             doppelganger_position=s.get("doppelganger_position"),
             drunk_position=s.get("drunk_position"),
             alchemist_cures={int(k): int(v) for k, v in s.get("alchemist_cures", {}).items()},
+            messed_up_by_evil=set(s.get("messed_up_by_evil", [])),
+            chancellor_trace=trace,
             chancellor_conversion=s.get("chancellor_conversion"),
         ))
 
