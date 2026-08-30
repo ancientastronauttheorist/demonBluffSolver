@@ -63,7 +63,7 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   shared-body identity, and stale-role lifecycle reachability.
 - [x] Add bluff acquisition to deterministic checked-target discovery and the
   six-set typed-header/refresh union with exact overload aliases.
-- [ ] Refresh the preserved typed project and publish the bluff-acquisition
+- [x] Refresh the preserved typed project and publish the bluff-acquisition
   baseline-versus-typed quality report.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
