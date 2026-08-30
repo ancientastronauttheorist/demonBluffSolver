@@ -167,11 +167,13 @@ occurrence whose real `dataRef.type` is Villager, ignoring register-as data,
 alignment, statuses, resistance, and liveness.
 
 It then removes only the first retained neighbour whose real role object is
-`SaintVillager`, the internal Bombardier role, and stops searching for another
-Bombardier. If no candidate remains, conversion is a clean no-op. Otherwise
-one candidate is selected randomly and conversion is mandatory. Preserved
-multiplicity matters on a two-card board: the same Bombardier neighbour occurs
-twice, removing one occurrence still leaves a convertible candidate.
+`SaintVillager`, the role embedded by the shipped Villager named Saint, and
+stops searching for another Saint. Bombardier instead embeds `Saint` and has
+real type Outcast, so it never enters this Villager candidate pool. If no
+candidate remains, conversion is a clean no-op. Otherwise one candidate is
+selected randomly and conversion is mandatory. Preserved multiplicity matters
+on a two-card board: the same Saint neighbour occurs twice, so removing one
+occurrence still leaves a convertible candidate.
 
 For the selected target, the native mutation order is:
 
@@ -406,8 +408,9 @@ Native review corrected seven material managed-output gaps in this slice:
 - Puppeteer passes the victim's saved former data to `GiveBluff`; the recovered
   managed output appeared to pass the new Puppet data.
 - Puppeteer conversion is mandatory when a candidate remains and removes only
-  the first Bombardier occurrence, rather than treating no conversion or all
-  Bombardier occurrences as equivalent branches.
+  the first Saint/`SaintVillager` occurrence, rather than treating no conversion
+  or all Saint occurrences as equivalent branches. Bombardier is an Outcast and
+  never enters the real-Villager candidate pool.
 - Clean and corrupted Doppelganger use different source predicates and return
   surfaces, and only the clean copied role receives the internal-Reveal Start
   action.

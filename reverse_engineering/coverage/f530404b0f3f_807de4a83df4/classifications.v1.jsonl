@@ -106,6 +106,6 @@
 {"method":"tdi5853.m0018","state":"understood","reason":"The native base bluff selector's constant-null result is documented under its exact managed identity.","evidence":["ev.character.bluff-storage-query.1"]}
 {"method":"tdi5916.m0003","state":"understood","reason":"Native Puppet Start-only status insertion order and independent resistance behavior are documented.","evidence":["ev.puppet.bluff-start.1"]}
 {"method":"tdi5916.m0005","state":"understood","reason":"Native Puppet bluff pool construction, filters, random selection, and failure behavior are documented.","evidence":["ev.puppet.bluff-start.1"]}
-{"method":"tdi5917.m0002","state":"understood","reason":"Native Puppeteer neighbour eligibility, first-Bombardier removal, mandatory selection, conversion, saved bluff, and status order are documented.","evidence":["ev.puppeteer.conversion.1"]}
+{"method":"tdi5917.m0002","state":"understood","reason":"Native Puppeteer neighbour eligibility, first-SaintVillager removal, mandatory selection, conversion, saved bluff, and status order are documented.","evidence":["ev.puppeteer.conversion.1"]}
 {"method":"tdi5894.m0002","state":"understood","reason":"Native Confessor apparent-truth status insertion and failure behavior are documented.","evidence":["ev.confessor.appearance.1"]}
 {"method":"tdi5908.m0003","state":"understood","reason":"Native clean and Corrupted Doppelganger source filters, returned identity surfaces, and Reveal-Start relationship are documented.","evidence":["ev.doppelganger.bluff-reveal.1"]}
