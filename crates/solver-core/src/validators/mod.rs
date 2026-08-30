@@ -78,6 +78,27 @@ fn matches_executed_good_role(
         .is_some_and(|role| roles_equal(role, observed_role))
 }
 
+fn valid_executed_current_role_entry(
+    state: &GameState,
+    pos: u8,
+    observed_role: &str,
+) -> bool {
+    if pos == 0
+        || pos > state.n_cards
+        || !state.executed.contains(&pos)
+        || state.night_kills.contains(&pos)
+        || state
+            .slayer_results
+            .iter()
+            .any(|result| result.killed && result.target_pos == pos)
+    {
+        return false;
+    }
+
+    let normalized = normalize_role(observed_role);
+    !matches!(normalized.as_str(), "" | "unknown" | "?" | "none" | "null")
+}
+
 /// Check if all revealed cards + ability results + structural constraints are consistent.
 pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // Check observed corruption status of executed good cards.
@@ -88,6 +109,13 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     }
     for (&pos, observed_role) in &state.executed_good_roles {
         if !matches_executed_good_role(scenario, state, pos, observed_role) {
+            return false;
+        }
+    }
+    for (&pos, observed_role) in &state.executed_current_roles {
+        if !valid_executed_current_role_entry(state, pos, observed_role)
+            || !matches_executed_good_role(scenario, state, pos, observed_role)
+        {
             return false;
         }
     }
@@ -4678,5 +4706,75 @@ mod tests {
             2,
             "Plague Doctor",
         ));
+    }
+
+    #[test]
+    fn observed_evil_current_role_prunes_incompatible_shaman_trace() {
+        let mut state = base_state(3, vec![]);
+        state.n_evil = 1;
+        state.deck.villagers = vec!["Scout".to_string(), "Bombardier".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.executed = vec![2];
+        state.executed_current_roles.insert(2, "Scout".to_string());
+
+        let trace = |copied_role: &str| {
+            let mut scenario = empty_scenario();
+            scenario.evil_positions.insert(3, "Shaman".to_string());
+            scenario.shaman_trace = Some(crate::types::ShamanTrace {
+                source_position: 1,
+                target_position: 2,
+                copied_role: copied_role.to_string(),
+                target_previous_roles: vec!["Bombardier".to_string()],
+            });
+            scenario
+        };
+
+        let compatible = trace("Scout");
+        assert!(matches_executed_good_role(
+            &compatible,
+            &state,
+            2,
+            "Scout",
+        ));
+        assert!(validate_witch_block_evidence(&compatible, &state));
+        assert!(validate_role_counts(&compatible, &state));
+        assert!(validate_clean_doppel_source_support(&compatible, &state));
+        assert!(validate_rambler_shut_ups(&compatible, &state));
+        assert!(validate_slayer_results(&compatible, &state));
+        assert!(validate_pd_ability(&compatible, &state));
+        assert!(validate_lilis_night_kills(&compatible, &state));
+        assert!(validate_baker_history(&compatible, &state));
+        assert!(check_scenario(&compatible, &state));
+        assert!(!check_scenario(&trace("Bombardier"), &state));
+    }
+
+    #[test]
+    fn executed_current_role_entries_require_an_ordinary_exact_death() {
+        let mut state = base_state(3, vec![]);
+        state.executed = vec![2];
+        assert!(valid_executed_current_role_entry(&state, 2, "Scout"));
+
+        state.executed.clear();
+        assert!(!valid_executed_current_role_entry(&state, 2, "Scout"));
+
+        state.executed = vec![2];
+        state.night_kills = vec![2];
+        assert!(!valid_executed_current_role_entry(&state, 2, "Scout"));
+
+        state.night_kills.clear();
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Scout".to_string()),
+        });
+        assert!(!valid_executed_current_role_entry(&state, 2, "Scout"));
+
+        state.slayer_results.clear();
+        assert!(!valid_executed_current_role_entry(&state, 0, "Scout"));
+        assert!(!valid_executed_current_role_entry(&state, 4, "Scout"));
+        for unknown in ["", "unknown", "?", "none", "null"] {
+            assert!(!valid_executed_current_role_entry(&state, 2, unknown));
+        }
     }
 }

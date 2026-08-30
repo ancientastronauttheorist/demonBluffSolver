@@ -235,6 +235,12 @@ pub struct GameState {
     #[serde(default)]
     pub fortune_teller_rule_version: Option<String>,
 
+    /// Public terminal marker written after a qualifying non-Night death of
+    /// canonical CharacterData Bombardier. Missing/null preserves legacy and
+    /// in-progress states. Managed class names are never serialized here.
+    #[serde(default)]
+    pub terminal_loss_role: Option<String>,
+
     #[serde(
         default,
         serialize_with = "serialize_int_key_map",
@@ -269,6 +275,16 @@ pub struct GameState {
     pub name: Option<String>,
     #[serde(default)]
     pub notes: Option<String>,
+
+    /// Exact public current CharacterData exposed by successful ordinary
+    /// executions. This is distinct from the physical card's original Evil
+    /// assignment in `executed_evil_roles` and from legacy Good-only evidence.
+    #[serde(
+        default,
+        serialize_with = "serialize_int_key_map",
+        deserialize_with = "deserialize_int_key_map_str"
+    )]
+    pub executed_current_roles: HashMap<u8, String>,
 }
 
 fn default_hp() -> i32 {
@@ -306,6 +322,7 @@ impl Default for GameState {
             baker_rule_version: None,
             doppel_drunk_rule_version: None,
             fortune_teller_rule_version: None,
+            terminal_loss_role: None,
             executed_good_corrupted: HashMap::new(),
             executed_good_roles: HashMap::new(),
             used_abilities: vec![],
@@ -313,6 +330,7 @@ impl Default for GameState {
             rambler_shut_up_observations: vec![],
             name: None,
             notes: None,
+            executed_current_roles: HashMap::new(),
         }
     }
 }
@@ -630,6 +648,31 @@ mod tests {
     }
 
     #[test]
+    fn terminal_loss_role_defaults_legacy_and_round_trips_public_bombardier() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": [], "outcasts": ["Bombardier"], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.terminal_loss_role.is_none());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": [], "outcasts": ["Bombardier"], "minions": [], "demons": []},
+            "terminal_loss_role": "Bombardier"
+        }))
+        .unwrap();
+        assert_eq!(
+            current.terminal_loss_role.as_deref(),
+            Some("Bombardier"),
+        );
+        assert_eq!(
+            serde_json::to_value(current).unwrap()["terminal_loss_role"],
+            serde_json::json!("Bombardier"),
+        );
+    }
+
+    #[test]
     fn doppel_drunk_rule_version_defaults_for_legacy_and_round_trips_current_marker() {
         let legacy = GameState::from_json(&serde_json::json!({
             "n_cards": 1,
@@ -773,7 +816,8 @@ mod tests {
             "cards": [],
             "executed_evil_roles": {"7": "Pooka"},
             "executed_good_corrupted": {"3": true},
-            "executed_good_roles": {"3": "Plague_Doctor"}
+            "executed_good_roles": {"3": "Plague_Doctor"},
+            "executed_current_roles": {"7": "Scout"}
         });
         let state = GameState::from_json(&json).unwrap();
         assert_eq!(state.executed_evil_roles.get(&7), Some(&"Pooka".to_string()));
@@ -782,11 +826,16 @@ mod tests {
             state.executed_good_roles.get(&3),
             Some(&"Plague_Doctor".to_string()),
         );
+        assert_eq!(
+            state.executed_current_roles.get(&7),
+            Some(&"Scout".to_string()),
+        );
         let legacy = GameState::from_json(&serde_json::json!({
             "n_cards": 1,
             "deck": {"villagers": [], "outcasts": [], "minions": [], "demons": []}
         })).unwrap();
         assert!(legacy.executed_good_roles.is_empty());
+        assert!(legacy.executed_current_roles.is_empty());
     }
 
     #[test]

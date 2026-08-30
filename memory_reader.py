@@ -148,8 +148,6 @@ DISPLAY_NAMES = {
     'Marionette': 'Twin Minion',
     'Illuzionist': 'Shaman',
     'Mezepheles': 'Puppeteer',
-    'Saint': 'Bombardier',
-    'SaintVillager': 'Bombardier',
     'Athlete': 'Bard',
     'Acrobat': 'Acrobat',
     # The shipped public Judge CharacterData binds Judge2. Arbiter is a

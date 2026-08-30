@@ -27,7 +27,6 @@ pub enum ExecutionReason {
     KnightFreeCheck { evil_prob: f64, corruption_risk: f64 },
     ForcedExecution,
     Probabilistic { p_evil: f64 },
-    BombardierDisguiseOverride { p_evil: f64 },
     WitchHunting { witch_prob: f64 },
     BombardierSafetyFallback { p_evil: f64 },
 }
@@ -187,8 +186,83 @@ pub enum ExecutionConsequence {
     Protected,
     /// The character dies and this much HP is removed from the player.
     Killed { hp_damage: i32 },
-    /// Executing the real Bombardier/Saint is an immediate terminal loss.
+    /// Killing a current-role public Bombardier is an immediate terminal loss.
     BombardierLoss,
+}
+
+/// Only canonical public CharacterData Bombardier has the managed Saint death
+/// hook. Public CharacterData named Saint binds a different managed role and
+/// must never alias this predicate.
+pub fn is_terminal_loss_role(role: &str) -> bool {
+    normalize_role(role) == "bombardier"
+}
+
+/// Return an already-dead qualifying position in one exact solver world.
+/// Night kills are exempt. A wrong execution's public revealed current role is
+/// stronger evidence than its pre-death appearance; other worlds use the
+/// scenario-exact effective current role (including generated/Shaman roles).
+pub fn scenario_terminal_loss_position(
+    state: &GameState,
+    scenario: &Scenario,
+) -> Option<u8> {
+    state.executed.iter().copied().find(|position| {
+        if state.night_kills.contains(position) {
+            return false;
+        }
+        public_death_role_at(state, *position)
+            .map(str::to_string)
+            .or_else(|| effective_role_at(*position, scenario, state))
+            .as_deref()
+            .is_some_and(is_terminal_loss_role)
+    })
+}
+
+fn public_death_role_at(state: &GameState, position: u8) -> Option<&str> {
+    state
+        .slayer_results
+        .iter()
+        .rev()
+        .find(|result| result.killed && result.target_pos == position)
+        .and_then(|result| result.revealed_role.as_deref())
+        .or_else(|| {
+            state
+                .executed_current_roles
+                .get(&position)
+                .map(String::as_str)
+        })
+        .or_else(|| {
+            state
+                .executed_good_roles
+                .get(&position)
+                .map(String::as_str)
+        })
+}
+
+/// Return a qualifying death established entirely by public persisted
+/// evidence, even when constraint validation currently has zero worlds.
+pub fn public_terminal_loss_position(state: &GameState) -> Option<u8> {
+    state.executed.iter().copied().find(|position| {
+        if state.night_kills.contains(position) {
+            return false;
+        }
+        public_death_role_at(state, *position)
+            .is_some_and(is_terminal_loss_role)
+    })
+}
+
+/// Fail closed when any surviving world has already reached the native
+/// Bombardier terminal. Public death evidence normally makes all worlds agree;
+/// a mixed result still cannot safely recommend another in-game action.
+pub fn has_terminal_role_loss(state: &GameState, result: &SolverResult) -> bool {
+    state
+        .terminal_loss_role
+        .as_deref()
+        .is_some_and(is_terminal_loss_role)
+        || public_terminal_loss_position(state).is_some()
+        || result
+            .surviving_scenarios
+            .iter()
+            .any(|scenario| scenario_terminal_loss_position(state, scenario).is_some())
 }
 
 /// Resolve native-static execution protection and HP damage for one target.
@@ -199,17 +273,21 @@ pub fn execution_consequence(
     was_corrupted: bool,
     default_wrong_exec_cost: i32,
 ) -> ExecutionConsequence {
-    // Correct executions always kill and never damage the player, regardless
-    // of the role used as the target's disguise.
-    if was_evil {
-        return ExecutionConsequence::Killed { hp_damage: 0 };
-    }
-
     let revealed_role_norm = normalize_role(revealed_role);
     let apparent_role_norm = normalize_role(apparent_role);
 
-    if revealed_role_norm == "bombardier" {
+    // Native checks the killed Character's current data before runtime
+    // alignment. A Shaman-copied Bombardier therefore loses even when the
+    // preserved physical Character is Evil. Bluff-only appearances, Drunk,
+    // and Doppelganger reveal different current roles and remain safe.
+    if is_terminal_loss_role(&revealed_role_norm) {
         return ExecutionConsequence::BombardierLoss;
+    }
+
+    // Other correct executions kill and never damage the player, regardless
+    // of the role used as the target's disguise.
+    if was_evil {
+        return ExecutionConsequence::Killed { hp_damage: 0 };
     }
 
     let true_clean_knight = revealed_role_norm == "knight" && !was_corrupted;
@@ -328,21 +406,25 @@ pub fn apply_execution_damage(current_hp: i32, hp_damage: i32) -> i32 {
     current_hp.wrapping_sub(hp_damage).max(0)
 }
 
-/// Terminal outcome relevant to execution planning after Saint/Bombardier has
-/// already been handled by [`ExecutionConsequence::BombardierLoss`].
+/// Terminal outcome for execution planning after applying the resolved
+/// current-role death and HP state.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ExecutionTerminalOutcome {
+    BombardierLoss,
     Continue,
     HpLoss,
     Win,
 }
 
-/// Apply the native terminal precedence: depleted HP loses before evil-count win.
+/// Apply native terminal precedence: Bombardier, depleted HP, evil-count win.
 pub fn execution_terminal_outcome(
+    bombardier_loss: bool,
     current_hp: i32,
     all_evils_gone: bool,
 ) -> ExecutionTerminalOutcome {
-    if current_hp <= 0 {
+    if bombardier_loss {
+        ExecutionTerminalOutcome::BombardierLoss
+    } else if current_hp <= 0 {
         ExecutionTerminalOutcome::HpLoss
     } else if all_evils_gone {
         ExecutionTerminalOutcome::Win
@@ -549,6 +631,207 @@ mod tests {
     }
 
     #[test]
+    fn bombardier_terminal_uses_exact_current_role_before_runtime_alignment() {
+        assert_eq!(
+            execution_consequence("Bombardier", "Bombardier", false, false, 5),
+            ExecutionConsequence::BombardierLoss,
+        );
+        assert_eq!(
+            execution_consequence("Bombardier", "Minion", true, false, 5),
+            ExecutionConsequence::BombardierLoss,
+        );
+        // Public CharacterData Saint is distinct from the managed Saint class
+        // that implements public Bombardier.
+        assert_eq!(
+            execution_consequence("Saint", "Saint", false, false, 5),
+            ExecutionConsequence::Killed { hp_damage: 5 },
+        );
+
+        let state = GameState {
+            n_cards: 2,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Bombardier".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+
+        let bluff_only = make_scenario(&[(1, "Pooka")]);
+        assert_eq!(
+            scenario_execution_consequence(1, &bluff_only, &state),
+            ExecutionConsequence::Killed { hp_damage: 0 },
+        );
+
+        let mut drunk_display = make_scenario(&[]);
+        drunk_display.drunk_position = Some(1);
+        assert!(matches!(
+            scenario_execution_consequence(1, &drunk_display, &state),
+            ExecutionConsequence::Killed { .. }
+        ));
+
+        let mut doppel_display = make_scenario(&[]);
+        doppel_display.doppelganger_position = Some(1);
+        assert!(matches!(
+            scenario_execution_consequence(1, &doppel_display, &state),
+            ExecutionConsequence::Killed { .. }
+        ));
+
+        let mut shaman_current = make_scenario(&[(1, "Pooka")]);
+        shaman_current.shaman_trace = Some(ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Bombardier".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+        assert_eq!(
+            scenario_execution_consequence(1, &shaman_current, &state),
+            ExecutionConsequence::BombardierLoss,
+        );
+    }
+
+    #[test]
+    fn prior_bombardier_death_uses_generated_roles_and_exempts_night() {
+        let ordinary_state = GameState {
+            n_cards: 2,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Bombardier".to_string(),
+                ..CardInfo::default()
+            }],
+            executed: vec![1],
+            ..GameState::default()
+        };
+        let ordinary = make_scenario(&[]);
+        assert_eq!(
+            scenario_terminal_loss_position(&ordinary_state, &ordinary),
+            Some(1),
+        );
+
+        let night_state = GameState {
+            night_kills: vec![1],
+            ..ordinary_state.clone()
+        };
+        assert_eq!(
+            scenario_terminal_loss_position(&night_state, &ordinary),
+            None,
+        );
+
+        let generated_state = GameState {
+            n_cards: 3,
+            executed: vec![2],
+            ..GameState::default()
+        };
+        let mut generated = make_scenario(&[]);
+        generated.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        assert_eq!(
+            scenario_terminal_loss_position(&generated_state, &generated),
+            Some(2),
+        );
+
+        let mut shaman_current = make_scenario(&[(2, "Pooka")]);
+        shaman_current.shaman_trace = Some(ShamanTrace {
+            source_position: 3,
+            target_position: 2,
+            copied_role: "Bombardier".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+        assert_eq!(
+            scenario_terminal_loss_position(&generated_state, &shaman_current),
+            Some(2),
+        );
+
+        let public_good = GameState {
+            n_cards: 1,
+            executed: vec![1],
+            executed_good_roles: HashMap::from([(1, "Bombardier".to_string())]),
+            ..GameState::default()
+        };
+        assert_eq!(public_terminal_loss_position(&public_good), Some(1));
+
+        let public_slayer = GameState {
+            n_cards: 1,
+            executed: vec![1],
+            slayer_results: vec![SlayerResult {
+                slayer_pos: 2,
+                target_pos: 1,
+                killed: true,
+                revealed_role: Some("Bombardier".to_string()),
+            }],
+            ..GameState::default()
+        };
+        assert_eq!(public_terminal_loss_position(&public_slayer), Some(1));
+
+        let public_evil_current_bomb = GameState {
+            confirmed_evil: vec![1],
+            executed_evil_roles: HashMap::from([(1, "Shaman".to_string())]),
+            executed_current_roles: HashMap::from([(1, "Bombardier".to_string())]),
+            ..public_good.clone()
+        };
+        assert_eq!(
+            public_terminal_loss_position(&public_evil_current_bomb),
+            Some(1),
+        );
+
+        let public_non_bomb_overrides_legacy_and_scenario = GameState {
+            confirmed_evil: vec![1],
+            executed_evil_roles: HashMap::from([(1, "Shaman".to_string())]),
+            executed_current_roles: HashMap::from([(1, "Scout".to_string())]),
+            ..public_good.clone()
+        };
+        assert_eq!(
+            public_terminal_loss_position(&public_non_bomb_overrides_legacy_and_scenario),
+            None,
+        );
+        assert_eq!(
+            scenario_terminal_loss_position(
+                &public_non_bomb_overrides_legacy_and_scenario,
+                &ordinary,
+            ),
+            None,
+        );
+
+        let public_saint = GameState {
+            executed_good_roles: HashMap::from([(1, "Saint".to_string())]),
+            ..public_good.clone()
+        };
+        assert_eq!(public_terminal_loss_position(&public_saint), None);
+
+        let slayer_saint_overrides_scenario_bomb = GameState {
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Bombardier".to_string(),
+                ..CardInfo::default()
+            }],
+            slayer_results: vec![SlayerResult {
+                slayer_pos: 2,
+                target_pos: 1,
+                killed: true,
+                revealed_role: Some("Saint".to_string()),
+            }],
+            ..public_good.clone()
+        };
+        assert_eq!(
+            scenario_terminal_loss_position(
+                &slayer_saint_overrides_scenario_bomb,
+                &ordinary,
+            ),
+            None,
+        );
+
+        let public_night = GameState {
+            night_kills: vec![1],
+            ..public_good
+        };
+        assert_eq!(public_terminal_loss_position(&public_night), None);
+    }
+
+    #[test]
     fn knight_damage_profile_uses_real_generated_and_disguised_identities() {
         let state = GameState {
             n_cards: 2,
@@ -657,16 +940,24 @@ mod tests {
     #[test]
     fn hp_loss_precedes_evil_count_win() {
         assert_eq!(
-            execution_terminal_outcome(0, true),
+            execution_terminal_outcome(false, 0, true),
             ExecutionTerminalOutcome::HpLoss,
         );
         assert_eq!(
-            execution_terminal_outcome(1, true),
+            execution_terminal_outcome(false, 1, true),
             ExecutionTerminalOutcome::Win,
         );
         assert_eq!(
-            execution_terminal_outcome(1, false),
+            execution_terminal_outcome(false, 1, false),
             ExecutionTerminalOutcome::Continue,
+        );
+    }
+
+    #[test]
+    fn bombardier_loss_precedes_hp_loss_and_evil_count_win() {
+        assert_eq!(
+            execution_terminal_outcome(true, 0, true),
+            ExecutionTerminalOutcome::BombardierLoss,
         );
     }
 

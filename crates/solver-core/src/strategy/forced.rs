@@ -9,8 +9,9 @@ use crate::types::{GameState, Scenario, SolverResult};
 use crate::validators::effective_role_at;
 use super::{
     apply_execution_damage, evil_probabilities, execution_consequence,
-    execution_terminal_outcome, get_card_role, ExecutionConsequence,
-    ExecutionTerminalOutcome,
+    execution_terminal_outcome, get_card_role, is_terminal_loss_role,
+    public_terminal_loss_position, scenario_terminal_loss_position,
+    ExecutionConsequence, ExecutionTerminalOutcome,
 };
 
 /// Observed outcome if `pos` is executed in a given scenario.
@@ -156,7 +157,17 @@ fn can_force(
         return cached;
     }
 
-    // Check terminal conditions in native order: HP loss precedes evil-count win.
+    // Check terminal conditions in native order: Bombardier loss, HP loss,
+    // then evil-count win. Existing public terminal state is authoritative;
+    // otherwise evaluate each remaining exact world.
+    let bombardier_loss = state
+        .terminal_loss_role
+        .as_deref()
+        .is_some_and(is_terminal_loss_role)
+        || public_terminal_loss_position(state).is_some()
+        || indices.iter().any(|&idx| {
+            scenario_terminal_loss_position(state, &scenarios[idx]).is_some()
+        });
     let all_done = indices.iter().all(|&idx| {
         let s = &scenarios[idx];
         !(1..=state.n_cards).any(|pos| {
@@ -165,7 +176,11 @@ fn can_force(
                 && s.is_evil(pos)
         })
     });
-    match execution_terminal_outcome(hp, all_done) {
+    match execution_terminal_outcome(bombardier_loss, hp, all_done) {
+        ExecutionTerminalOutcome::BombardierLoss => {
+            memo.insert(key, (false, None));
+            return (false, None);
+        }
         ExecutionTerminalOutcome::HpLoss => {
             memo.insert(key, (false, None));
             return (false, None);

@@ -798,6 +798,45 @@ def _execution_role_key(role: str | None) -> str:
     return (role or "").strip().replace("_", " ").replace("-", " ").casefold()
 
 
+def _canonical_terminal_loss_role(role: str | None) -> Optional[str]:
+    """Return the sole public CharacterData role that ends the game on death.
+
+    Managed ``Saint`` is the implementation class behind public Bombardier;
+    public CharacterData named Saint is a different role and must not alias it.
+    """
+    if _execution_role_key(role) == "bombardier":
+        return "Bombardier"
+    return None
+
+
+def _consensus_original_evil_role(
+    position: int,
+    result,
+    current_role: str | None,
+) -> Optional[str]:
+    """Keep runtime-Evil identity separate from a transformed current role.
+
+    Solver worlds retain the original Evil assignment after Shaman overwrites
+    Character.dataRef. When those worlds are unavailable, preserve the legacy
+    memory-reader fallback because ordinary Evil cards reveal that same role.
+    """
+    scenarios = list(getattr(result, "surviving_scenarios", []) or [])
+    if not scenarios:
+        return _normalize_role_name(current_role) if current_role else None
+
+    roles: set[str] = set()
+    for scenario in scenarios:
+        role = scenario.evil_positions.get(position)
+        if role is None and scenario.puppet_position == position:
+            role = "Puppet"
+        if role is None:
+            return None
+        roles.add(_normalize_role_name(role))
+    if len(roles) == 1:
+        return next(iter(roles))
+    return None
+
+
 def _execution_apparent_role(observed: dict | None,
                              fallback_role: str | None = None) -> str | None:
     """Return the displayed role from a post-action memory observation.
@@ -1099,6 +1138,8 @@ class GameSession:
         self.baker_rule_version: Optional[str] = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version: Optional[str] = DOPPEL_DRUNK_RULE_VERSION
         self.fortune_teller_rule_version: Optional[str] = FORTUNE_TELLER_RULE_VERSION
+        self.terminal_loss_role: Optional[str] = None
+        self.executed_current_roles: dict[int, str] = {}
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
         # Trigger/result synchronization is live-session bookkeeping only.
@@ -1159,6 +1200,8 @@ class GameSession:
         self.baker_rule_version = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version = DOPPEL_DRUNK_RULE_VERSION
         self.fortune_teller_rule_version = FORTUNE_TELLER_RULE_VERSION
+        self.terminal_loss_role = None
+        self.executed_current_roles.clear()
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.lilis_nights_resolved = 0
@@ -1551,9 +1594,20 @@ class GameSession:
     def mark_executed(self, pos: int, was_evil: Optional[bool] = None,
                       evil_role: Optional[str] = None,
                       was_corrupted: Optional[bool] = None,
-                      true_role: Optional[str] = None):
+                      true_role: Optional[str] = None,
+                      record_current_role: bool = True):
         if pos not in self.executed:
             self.executed.append(pos)
+        # ``evil_role`` is the physical card's original Evil assignment and
+        # may differ after Shaman overwrites current CharacterData. Only the
+        # exact public death reveal can trigger Bombardier's terminal hook.
+        self.mark_terminal_loss(true_role)
+        if (
+            record_current_role
+            and true_role
+            and true_role.strip().lower() not in {"unknown", "?", "none"}
+        ):
+            self.executed_current_roles[pos] = true_role.replace(' ', '_')
         if was_evil is True and pos not in self.confirmed_evil:
             self.confirmed_evil.append(pos)
         elif was_evil is False and pos not in self.confirmed_good:
@@ -1573,6 +1627,14 @@ class GameSession:
         if (was_evil is False and true_role
                 and true_role.strip().lower() not in {"unknown", "?", "none"}):
             self.executed_good_roles[pos] = true_role.replace(' ', '_')
+
+    def mark_terminal_loss(self, current_role: Optional[str]) -> bool:
+        """Persist a public non-Night terminal-role death, if applicable."""
+        role = _canonical_terminal_loss_role(current_role)
+        if role is None:
+            return False
+        self.terminal_loss_role = role
+        return True
 
     def record_execution_blocked(self, pos: int,
                                  reason: str = "Knight immunity") -> None:
@@ -1820,10 +1882,15 @@ class GameSession:
         if killed:
             if not revealed_role:
                 raise ValueError("Slayer kill requires the revealed role")
-            role_def = get_card(revealed_role)
-            if role_def is None:
+            public_role = revealed_role.strip()
+            role_def = get_card(public_role)
+            if role_def is None and public_role not in ("Saint", "SaintVillager"):
                 raise ValueError(f"Unknown Slayer revealed role: {revealed_role}")
-            canonical_role = role_def.name.replace(" ", "_")
+            canonical_role = (
+                role_def.name.replace(" ", "_")
+                if role_def is not None
+                else public_role
+            )
         elif revealed_role:
             raise ValueError("A failed Slayer attempt does not reveal a role")
         elif was_corrupted is not None:
@@ -1844,6 +1911,8 @@ class GameSession:
             # A Good-class revealed role can still live on a preserved
             # runtime-Evil Shaman destination. Without the public HP outcome,
             # keep that alignment unresolved instead of asking hidden memory.
+        elif was_evil is not None:
+            target_was_evil = was_evil
 
         if target_was_evil is not False and was_corrupted is not None:
             raise ValueError(
@@ -1862,6 +1931,12 @@ class GameSession:
         self.mark_ability_used(slayer_pos)
 
         if killed:
+            # KillAndReveal invokes the same current-data death hook as an
+            # execution. Check the revealed current role before runtime
+            # alignment; a Shaman-copied Bombardier on an Evil body is still
+            # terminal, while bluff-only Bombardier appearances never reach
+            # this public revealed-role surface.
+            self.mark_terminal_loss(canonical_role)
             if target_was_evil is True:
                 # A transformed runtime-Evil card can reveal a copied Good role.
                 # In that case the public current role is carried by
@@ -1873,9 +1948,12 @@ class GameSession:
                     was_evil=True,
                     evil_role=(
                         canonical_role
-                        if role_def.alignment == Alignment.EVIL
+                        if role_def is not None
+                        and role_def.alignment == Alignment.EVIL
                         else None
                     ),
+                    true_role=canonical_role,
+                    record_current_role=False,
                 )
             elif target_was_evil is False:
                 self.mark_executed(
@@ -1883,14 +1961,18 @@ class GameSession:
                     was_evil=False,
                     was_corrupted=was_corrupted,
                     true_role=canonical_role,
+                    record_current_role=False,
                 )
                 # KillAndReveal publishes Character.Kill and therefore base
                 # wrong-kill damage, but never runs OnExecuted. In particular,
                 # a Slayer-killed corrupted Good Knight costs 5, not 5+4.
-                damage = wrong_exec_cost_for(
-                    canonical_role, default=self.wrong_exec_cost,
-                )
-                self.hp = _clamped_post_damage_hp(self.hp, damage)
+                # Bombardier's OnDied terminal resolves before the ordinary HP
+                # loss branch, so preserve the public pre-loss HP snapshot.
+                if self.terminal_loss_role is None:
+                    damage = wrong_exec_cost_for(
+                        canonical_role, default=self.wrong_exec_cost,
+                    )
+                    self.hp = _clamped_post_damage_hp(self.hp, damage)
             else:
                 # Kill and revealed current role are public facts. Runtime
                 # alignment, confirmation maps, corruption, and HP remain
@@ -1935,6 +2017,8 @@ class GameSession:
             baker_rule_version=self.baker_rule_version,
             doppel_drunk_rule_version=self.doppel_drunk_rule_version,
             fortune_teller_rule_version=self.fortune_teller_rule_version,
+            terminal_loss_role=self.terminal_loss_role,
+            executed_current_roles=dict(self.executed_current_roles),
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
             executed_good_roles=dict(self.executed_good_roles),
@@ -1976,6 +2060,12 @@ class GameSession:
         session.baker_rule_version = state.baker_rule_version
         session.doppel_drunk_rule_version = state.doppel_drunk_rule_version
         session.fortune_teller_rule_version = state.fortune_teller_rule_version
+        session.terminal_loss_role = _canonical_terminal_loss_role(
+            getattr(state, 'terminal_loss_role', None)
+        )
+        session.executed_current_roles = dict(
+            getattr(state, 'executed_current_roles', {})
+        )
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
@@ -2010,19 +2100,32 @@ class GameSession:
         return result
 
     def solve(self) -> SolverResult:
+        from strategy import _has_terminal_role_loss
+
         state = self.to_game_state()
         result = self._solve(state)
         print(f"\n=== SOLVER RESULT ===")
         for line in result.reasoning:
             print(f"  {line}")
-        if result.definite_evil:
-            print(f"\n  >> EXECUTE: {['#'+str(p) for p in result.definite_evil]}")
-        if result.bombardier_positions:
+        terminal_loss = _has_terminal_role_loss(state, result)
+        safe_definite_evil = [
+            pos
+            for pos in result.definite_evil
+            if pos not in result.bombardier_positions
+        ]
+        if terminal_loss:
+            print(
+                "\n  >> TERMINAL LOSS: a current-role Bombardier died "
+                "outside Night. No further execution is legal."
+            )
+        elif safe_definite_evil:
+            print(f"\n  >> EXECUTE: {['#'+str(p) for p in safe_definite_evil]}")
+        if result.bombardier_positions and not terminal_loss:
             print(f"  >> DO NOT EXECUTE (Bombardier): {['#'+str(p) for p in result.bombardier_positions]}")
-        if result.n_surviving == 0:
+        if result.n_surviving == 0 and not terminal_loss:
             print(f"\n  !! NO VALID SCENARIOS — check your input data !!")
-        elif not result.definite_evil:
-            print(f"\n  >> No definite evil yet. Reveal more cards.")
+        elif not terminal_loss and not safe_definite_evil:
+            print(f"\n  >> No safe definite evil yet. Reveal more cards.")
             # Show per-position evil probability
             if result.n_surviving > 0:
                 state = self.to_game_state()
@@ -2073,7 +2176,8 @@ class GameSession:
         Falls back to fixed sleeps if no monitor provided.
 
         Args:
-            forced_safe: If True, bypass Bombardier guard (lookahead proved safety).
+            forced_safe: Marks an ordinary execution line proven survivable by
+                lookahead. It never bypasses a current-role Bombardier guard.
 
         Returns: {"success": bool, "blocked": bool, "was_evil": bool|None,
                   "evil_role": str|None, "error": str|None}
@@ -2082,8 +2186,10 @@ class GameSession:
         import mouse as _mouse
         from game_utils import all_game_card_coords
 
-        # Bombardier hard guard (Issue #9: bypass when forced_safe is True)
-        if pos in result.bombardier_positions and not forced_safe:
+        # Every listed position has current Bombardier data in at least one
+        # surviving world. No execution proof can make that terminal branch
+        # safe, including a stale/incorrect forced_safe recommendation.
+        if pos in result.bombardier_positions:
             return {"success": False, "was_evil": None, "evil_role": None,
                     "error": f"Bombardier protection: refusing to execute #{pos}"}
 
@@ -2193,7 +2299,11 @@ class GameSession:
 
         # Step 5: Determine result
         was_evil = target_card['is_evil']
-        evil_role = target_card['true_role'] if was_evil else None
+        current_role = target_card.get('true_role')
+        evil_role = (
+            _consensus_original_evil_role(pos, result, current_role)
+            if was_evil else None
+        )
 
         # Step 6: Record into session
         was_corrupted = None
@@ -2206,13 +2316,18 @@ class GameSession:
             was_evil,
             evil_role,
             was_corrupted,
-            target_card.get('true_role') if not was_evil else None,
+            current_role,
         )
 
         # Step 7: HP update
-        if not was_evil:
+        if self.terminal_loss_role:
+            print(
+                "  [auto_exec] TERMINAL LOSS: a current-role Bombardier "
+                f"died; HP remains {self.hp}."
+            )
+        elif not was_evil:
             from knowledge_base import execution_cost_for
-            true_role = target_card.get('true_role')
+            true_role = current_role
             target_entry = next((c for c in self.cards if c.position == pos), None)
             fallback_role = target_entry.apparent_role if target_entry else None
             apparent_role = _execution_apparent_role(target_card, fallback_role)
@@ -2238,7 +2353,9 @@ class GameSession:
         DecisionLog.log_execution(pos, was_evil, evil_role)
 
         return {"success": True, "blocked": False, "was_evil": was_evil,
-                "evil_role": evil_role, "error": None}
+                "evil_role": evil_role,
+                "terminal_loss_role": self.terminal_loss_role,
+                "error": None}
 
     def auto_use_ability(self, action, monitor=None) -> dict:
         """Perform in-game active-ability activation + target clicks + auto-parse.
@@ -2723,8 +2840,8 @@ class GameSession:
                   f"manual decision needed.")
             return action, result, None
 
-        if pos in result.bombardier_positions and not is_forced_safe:
-            print(f"\n  [auto_next] #{pos} is potential Bombardier (not forced-safe) — manual decision needed.")
+        if pos in result.bombardier_positions:
+            print(f"\n  [auto_next] #{pos} is a possible current-role Bombardier — refusing execution.")
             return action, result, None
 
         # HP budget guard: skip for forced_safe picks (lookahead budgeted HP)
@@ -4642,6 +4759,7 @@ def main():
         print("  card <role> <pos> [args...]           Add a revealed card")
         print("  auto_card                             Auto-enter cards from memory reader")
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
+        print("  execute <pos> evil <role> current=<role>  Preserve original Evil role after a transformed reveal")
         print("  execute <pos> <RoleName>              Shorthand: mark as evil with role")
         print("  execute <pos> good blocked            Knight immunity (no HP loss, confirmed good)")
         print("  execute <pos> good <clean|corrupted> [revealed_role]")
@@ -5457,6 +5575,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 was_evil = True
                 if len(args) > 2:
                     evil_role = _normalize_role_name(args[2])
+                for raw in args[3:]:
+                    if raw.casefold().startswith(("current=", "revealed=")):
+                        observed_true_role = _normalize_role_name(
+                            raw.split("=", 1)[1]
+                        )
             elif w in ("good", "false", "0", "no"):
                 was_evil = False
                 knight_blocked = False
@@ -5477,6 +5600,41 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             else:
                 was_evil = True
                 evil_role = _normalize_role_name(args[1])
+
+        if was_evil is True:
+            # Runtime alignment and current CharacterData can diverge after a
+            # Shaman overwrite. Read the post-action public reveal separately
+            # from the supplied original Evil role, so a current Bombardier
+            # can trigger its death hook without being recorded as an Evil
+            # named Bombardier. ``current=Role`` is the offline equivalent.
+            try:
+                from memory_reader import MemoryReader
+                reader = MemoryReader()
+                if reader.open():
+                    try:
+                        cards = reader.read_board()
+                        if cards:
+                            observed_target = next(
+                                (c for c in cards if c.get('position') == pos),
+                                None,
+                            )
+                    finally:
+                        reader.close()
+            except Exception as e:
+                print(f"  WARNING: Memory reader error ({e})")
+
+            if observed_target:
+                if observed_target.get('state') != 'Dead':
+                    print(
+                        f"  REFUSING BOOKKEEPING: #{pos} is still "
+                        f"{observed_target.get('state')}; the execution may "
+                        "not have resolved."
+                    )
+                    return None
+                observed_true_role = observed_target.get('true_role')
+                apparent_role = _execution_apparent_role(
+                    observed_target, apparent_role
+                )
 
         if was_evil is False:
             # This command is run only after the in-game action. Memory validates
@@ -5565,7 +5723,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 was_evil,
                 evil_role,
                 was_corrupted,
-                observed_true_role if was_evil is False else None,
+                observed_true_role,
             )
             session.save()
             DecisionLog.log_execution(pos, was_evil, evil_role)
@@ -5580,7 +5738,12 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             elif was_corrupted is False and was_evil is False:
                 corr_tag = " (clean)"
             print(f"Executed #{pos}{tag}{corr_tag}")
-            if was_evil:
+            if session.terminal_loss_role:
+                print(
+                    "  TERMINAL LOSS: a current-role Bombardier died; "
+                    f"HP remains {session.hp}."
+                )
+            elif was_evil:
                 print(f"  HP: {session.hp}/10 (correct execution, no HP loss)")
             elif was_evil is False:
                 if observed_true_role is None:
@@ -5852,7 +6015,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             from knowledge_base import Alignment, get_card
             revealed_def = get_card(revealed_role)
             if (revealed_def is not None
-                    and revealed_def.alignment == Alignment.GOOD):
+                    and revealed_def.alignment == Alignment.GOOD
+                    and revealed_def.name != "Bombardier"):
                 print(
                     "  ERROR: A Good-class revealed role does not expose its "
                     "preserved runtime alignment."
@@ -5888,6 +6052,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             recorded_role,
         )
         print(f"Slayer #{slayer_pos} {result_str}")
+        if session.terminal_loss_role:
+            print(
+                "  TERMINAL LOSS: a current-role Bombardier died; "
+                "native play cannot continue."
+            )
         if session.hp != old_hp:
             print(f"  Wrong Slayer kill: HP {old_hp} -> {session.hp}")
         if recorded_role == "Baa":

@@ -14,7 +14,8 @@ use super::{
     evil_probabilities, remaining_evil_bounds, corruption_risk,
     execution_damage_profile,
     unrevealed_positions, tiebreak_score,
-    execution_terminal_outcome, get_card_role, ExecutionTerminalOutcome,
+    execution_terminal_outcome, get_card_role, has_terminal_role_loss,
+    ExecutionTerminalOutcome,
     EXECUTION_IMMUNE_ROLES,
 };
 use super::forced::find_forced_execution;
@@ -85,16 +86,26 @@ pub fn pick_execution_target(
     result: &SolverResult,
     immunity_blocked: &HashSet<u8>,
 ) -> Option<ExecutionPick> {
-    // 1. Error: 0 scenarios
+    // Native terminal precedence is current-role Bombardier death, depleted
+    // HP, data error, then the evil-count win condition. A public terminal can
+    // remain provable even when contradictory evidence leaves zero worlds.
+    if has_terminal_role_loss(state, result) || state.hp <= 0 {
+        return None;
+    }
+
     if result.n_surviving == 0 {
         return None;
     }
 
-    // 2. Terminal check. Native resolution loses on depleted HP before it
-    // considers the evil-count win condition.
     let (_, max_remaining) = remaining_evil_bounds(state, result);
-    match execution_terminal_outcome(state.hp, max_remaining == 0) {
-        ExecutionTerminalOutcome::HpLoss | ExecutionTerminalOutcome::Win => return None,
+    match execution_terminal_outcome(
+        false,
+        state.hp,
+        max_remaining == 0,
+    ) {
+        ExecutionTerminalOutcome::BombardierLoss
+        | ExecutionTerminalOutcome::HpLoss
+        | ExecutionTerminalOutcome::Win => return None,
         ExecutionTerminalOutcome::Continue => {}
     }
 
@@ -223,7 +234,11 @@ pub fn pick_execution_target(
 
     // Bombardier candidates (excluded from normal selection)
     let bombardier_candidates: Vec<(u8, f64)> = result.bombardier_positions.iter()
-        .filter(|&&p| !executed.contains(&p) && probs.get(&p).copied().unwrap_or(0.0) > 0.0)
+        .filter(|&&p| {
+            !executed.contains(&p)
+                && !result.definite_evil.contains(&p)
+                && probs.get(&p).copied().unwrap_or(0.0) > 0.0
+        })
         .map(|&p| (p, probs[&p]))
         .collect();
 
@@ -246,25 +261,6 @@ pub fn pick_execution_target(
 
         let best_pos = active_probs[0].0;
         let best_prob = active_probs[0].1;
-
-        // Bombardier-disguise override: if every non-Bombardier candidate is 0% evil
-        // but a Bombardier candidate has non-zero evil probability, the remaining evil
-        // MUST be a Bombardier disguise.
-        if best_prob == 0.0 && !bombardier_candidates.is_empty() {
-            if let Some(&(bomb_pos, bomb_prob)) = bombardier_candidates.iter()
-                .max_by(|a, b| {
-                    a.1.total_cmp(&b.1)
-                        .then_with(|| b.0.cmp(&a.0))
-                })
-            {
-                if bomb_prob > 0.0 {
-                    return Some(ExecutionPick {
-                        position: bomb_pos,
-                        reason: ExecutionReason::BombardierDisguiseOverride { p_evil: bomb_prob },
-                    });
-                }
-            }
-        }
 
         // Witch hunting needs an unresolved current marker, not stale marker
         // list length retained by a historical fixture.
@@ -693,7 +689,7 @@ mod tests {
     }
 
     #[test]
-    fn equal_bombardier_overrides_choose_lowest_position() {
+    fn current_bombardier_candidates_never_override_a_safe_position() {
         let state = GameState {
             n_cards: 3,
             hp: 4,
@@ -719,11 +715,8 @@ mod tests {
         };
 
         let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
-        assert_eq!(pick.position, 1);
-        assert!(matches!(
-            pick.reason,
-            ExecutionReason::BombardierDisguiseOverride { .. }
-        ));
+        assert_eq!(pick.position, 3);
+        assert!(matches!(pick.reason, ExecutionReason::Probabilistic { .. }));
     }
 
     #[test]
@@ -822,5 +815,71 @@ mod tests {
         // Since 2 has 0% evil probability with budget >= 2, it should still pick 2
         // Actually with only 1 scenario where #1 is evil, #2 has 0% → no valid target
         assert!(pick.is_none() || pick.unwrap().position != 1);
+    }
+
+    #[test]
+    fn definite_evil_current_bombardier_is_never_picked() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 10,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo {
+                    position: 1,
+                    apparent_role: "Minion".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 2,
+                    apparent_role: "Bombardier".to_string(),
+                    ..CardInfo::default()
+                },
+            ],
+            ..GameState::default()
+        };
+        let mut world = make_scenario(&[(1, "Shaman")]);
+        world.shaman_trace = Some(ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Bombardier".to_string(),
+            target_previous_roles: vec!["Shaman".to_string()],
+        });
+        let result = SolverResult {
+            definite_evil: vec![1],
+            definite_good: vec![2],
+            bombardier_positions: vec![1],
+            n_scenarios: 1,
+            n_surviving: 1,
+            surviving_scenarios: vec![world],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new());
+        assert!(pick.is_none() || pick.unwrap().position != 1);
+    }
+
+    #[test]
+    fn public_terminal_precedes_zero_world_error() {
+        let state = GameState {
+            n_cards: 1,
+            executed: vec![1],
+            executed_current_roles: HashMap::from([(
+                1,
+                "Bombardier".to_string(),
+            )]),
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 0,
+            n_surviving: 0,
+            surviving_scenarios: vec![],
+            reasoning: vec![],
+        };
+
+        assert!(has_terminal_role_loss(&state, &result));
+        assert!(pick_execution_target(&state, &result, &HashSet::new()).is_none());
     }
 }

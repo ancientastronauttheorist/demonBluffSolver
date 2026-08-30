@@ -190,7 +190,7 @@ OUTCASTS = [
          "I Register as a random Evil Minion to other characters.",
          lies=False, disguises=False),
     Card("Bombardier", Role.OUTCAST, Alignment.GOOD,
-         "Lose if you Execute me.",
+         "Lose when my current role dies outside Lilis Night, including Slayer kills and current-role overwrites.",
          lies=False, disguises=False),
     Card("Doppelganger", Role.OUTCAST, Alignment.GOOD,
          "Game Start: I Disguise as a Good Villager currently in play.",

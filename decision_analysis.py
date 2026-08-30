@@ -30,7 +30,13 @@ from solver import (
 )
 from knowledge_base import Alignment, get_card
 from rust_solver import rust_solve_to_objects
-from strategy import recommend_action, evil_probabilities, _compute_confidence
+from strategy import (
+    _compute_confidence,
+    _is_terminal_loss_role,
+    _public_terminal_loss_position,
+    evil_probabilities,
+    recommend_action,
+)
 
 
 CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases_v2")
@@ -102,6 +108,9 @@ def analyze_game(case: dict) -> GameAnalysis:
     confirmed_evil = set(case.get("confirmed_evil", []))
     confirmed_good = set(case.get("confirmed_good", []))
     executed_evil_roles = {int(k): v for k, v in case.get("executed_evil_roles", {}).items()}
+    executed_current_roles = {
+        int(k): v for k, v in case.get("executed_current_roles", {}).items()
+    }
     slayer_results = case.get("slayer_results", [])
     slayer_killed = {
         sr["target_pos"] for sr in slayer_results if sr.get("killed")
@@ -119,7 +128,12 @@ def analyze_game(case: dict) -> GameAnalysis:
     hp = case.get("hp", 10)
     cost = case.get("wrong_exec_cost", 5)
     remaining_hp = hp - len(wrong_execs) * cost
-    if remaining_hp <= 0:
+    terminal_loss_role = case.get("terminal_loss_role")
+    if (
+        isinstance(terminal_loss_role, str)
+        and terminal_loss_role.strip().replace("_", " ").casefold()
+        == "bombardier"
+    ) or remaining_hp <= 0:
         game_result = "loss"
 
     # Build incremental state
@@ -135,6 +149,7 @@ def analyze_game(case: dict) -> GameAnalysis:
     current_reveal_order = []
     current_executed_good_corrupted = {}
     current_executed_good_roles = {}
+    current_executed_current_roles = {}
     used_abilities = []
 
     decisions = []
@@ -181,6 +196,13 @@ def analyze_game(case: dict) -> GameAnalysis:
             baker_rule_version=case.get("baker_rule_version"),
             doppel_drunk_rule_version=case.get("doppel_drunk_rule_version"),
             fortune_teller_rule_version=case.get("fortune_teller_rule_version"),
+            terminal_loss_role=(
+                terminal_loss_role
+                if terminal_loss_role == "Bombardier"
+                and all(pos in current_executed for pos in executed)
+                else None
+            ),
+            executed_current_roles=dict(current_executed_current_roles),
             reveal_order=list(current_reveal_order),
             executed_good_corrupted=dict(current_executed_good_corrupted),
             executed_good_roles=dict(current_executed_good_roles),
@@ -274,10 +296,18 @@ def analyze_game(case: dict) -> GameAnalysis:
                 current_executed.append(t)
             revealed_role = slayer_revealed_role(sr)
             role_def = get_card(revealed_role) if revealed_role else None
-            target_was_good = (
-                role_def is not None and role_def.alignment == Alignment.GOOD
-            ) or (t in confirmed_good and t not in confirmed_evil)
-            if target_was_good:
+            recorded_evil_role = executed_evil_roles.get(t)
+            if t in confirmed_evil or recorded_evil_role is not None:
+                target_was_good = False
+            elif t in confirmed_good:
+                target_was_good = True
+            elif _is_terminal_loss_role(revealed_role):
+                target_was_good = None
+            elif role_def is not None:
+                target_was_good = role_def.alignment == Alignment.GOOD
+            else:
+                target_was_good = None
+            if target_was_good is True:
                 if t not in current_confirmed_good:
                     current_confirmed_good.append(t)
                 observed_corruption = case.get("executed_good_corrupted", {})
@@ -292,12 +322,11 @@ def analyze_game(case: dict) -> GameAnalysis:
                 )
                 if observed_role:
                     current_executed_good_roles[t] = observed_role
-            else:
+            elif target_was_good is False:
                 if t not in current_confirmed_evil:
                     current_confirmed_evil.append(t)
-                evil_role = revealed_role or executed_evil_roles.get(t)
-                if evil_role:
-                    current_executed_evil_roles[t] = evil_role
+                if recorded_evil_role:
+                    current_executed_evil_roles[t] = recorded_evil_role
 
     for pd in pd_results:
         current_pd_results.append(pd)
@@ -330,6 +359,9 @@ def analyze_game(case: dict) -> GameAnalysis:
 
         # Apply the execution
         current_executed.append(pos)
+        current_role = executed_current_roles.get(pos)
+        if current_role:
+            current_executed_current_roles[pos] = current_role
         if was_evil:
             if pos not in current_confirmed_evil:
                 current_confirmed_evil.append(pos)
@@ -347,6 +379,17 @@ def analyze_game(case: dict) -> GameAnalysis:
             observed_role = observed_roles.get(str(pos), observed_roles.get(pos))
             if observed_role:
                 current_executed_good_roles[pos] = observed_role
+
+    # A legacy/offline case may lack the explicit terminal marker while still
+    # carrying authoritative public death evidence. Classify the completed
+    # game from the fully applied state; this does not leak final evidence into
+    # any earlier decision snapshot.
+    final_state = make_state()
+    if (
+        _is_terminal_loss_role(final_state.terminal_loss_role)
+        or _public_terminal_loss_position(final_state) is not None
+    ):
+        game_result = "loss"
 
     # ── Summary ──
     total = len(decisions)

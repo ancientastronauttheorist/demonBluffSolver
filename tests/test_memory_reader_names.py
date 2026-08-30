@@ -42,6 +42,11 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             with self.subTest(native_name=native_name):
                 self.assertEqual(clean_name(native_name), display_name)
 
+    def test_public_saint_names_are_not_bombardier_aliases(self):
+        self.assertEqual(clean_name("Saint"), "Saint")
+        self.assertEqual(clean_name("SaintVillager"), "SaintVillager")
+        self.assertEqual(clean_name("Saint_12345"), "Saint")
+
 
 if __name__ == "__main__":
     unittest.main()

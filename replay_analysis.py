@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from solver import GameState, CardInfo, DeckComposition, slayer_revealed_role
 from knowledge_base import Alignment, get_card
 from rust_solver import rust_solve_to_objects
+from strategy import _is_terminal_loss_role
 
 OUTPUT_FILE = "scenario_analysis.txt"
 CASES_DIR = "tests/cases_v2"
@@ -40,7 +41,12 @@ def replay_case(case):
     reveal_order = case.get("reveal_order", [c["position"] for c in card_list])
     true_evil = case.get("true_evil_positions", {})
     exec_evil_roles = case.get("executed_evil_roles", {})
+    executed_current_roles = case.get("executed_current_roles", {})
+    confirmed_evil = set(case.get("confirmed_evil", []))
     confirmed_good = set(case.get("confirmed_good", []))
+    recorded_executed = set(case.get("executed", []))
+    night_kill_set = set(case.get("night_kills", []))
+    terminal_loss_role = case.get("terminal_loss_role")
 
     # Header
     evil_desc = " + ".join(
@@ -71,6 +77,7 @@ def replay_case(case):
     cur_exec_evil_roles = {}
     cur_exec_good_corrupted = {}
     cur_exec_good_roles = {}
+    cur_exec_current_roles = {}
     cur_slayer_results = []
     cur_pd_results = []
 
@@ -103,6 +110,17 @@ def replay_case(case):
             baker_rule_version=case.get("baker_rule_version"),
             doppel_drunk_rule_version=case.get("doppel_drunk_rule_version"),
             fortune_teller_rule_version=case.get("fortune_teller_rule_version"),
+            terminal_loss_role=(
+                terminal_loss_role
+                if terminal_loss_role == "Bombardier"
+                and recorded_executed.issubset(
+                    set(cur_executed) | night_kill_set
+                )
+                else None
+            ),
+            executed_current_roles={
+                int(k): v for k, v in cur_exec_current_roles.items()
+            },
             reveal_order=list(reveal_order),
             executed_good_corrupted=dict(cur_exec_good_corrupted),
             executed_good_roles=dict(cur_exec_good_roles),
@@ -148,23 +166,26 @@ def replay_case(case):
                 recorded_good_role = recorded_roles.get(
                     str(target), recorded_roles.get(target)
                 )
-                target_was_good = (
-                    role_def is not None and role_def.alignment == Alignment.GOOD
-                ) or (
-                    target in confirmed_good
-                    and str(target) not in exec_evil_roles
-                    and target not in exec_evil_roles
+                recorded_evil_role = exec_evil_roles.get(
+                    str(target), exec_evil_roles.get(target)
                 )
-                if not target_was_good:
-                    role = (
-                        revealed_role
-                        or exec_evil_roles.get(str(target), exec_evil_roles.get(target))
-                        or "?"
-                    )
-                    cur_confirmed_evil.append(target)
-                    cur_exec_evil_roles[str(target)] = role
-                    desc = f"Slayer #{pos} kills #{target} ({role})"
+                if target in confirmed_evil or recorded_evil_role is not None:
+                    target_was_good = False
+                elif target in confirmed_good:
+                    target_was_good = True
+                elif _is_terminal_loss_role(revealed_role):
+                    target_was_good = None
+                elif role_def is not None:
+                    target_was_good = role_def.alignment == Alignment.GOOD
                 else:
+                    target_was_good = None
+                if target_was_good is False:
+                    cur_confirmed_evil.append(target)
+                    if recorded_evil_role:
+                        cur_exec_evil_roles[str(target)] = recorded_evil_role
+                    shown_role = revealed_role or recorded_evil_role or "?"
+                    desc = f"Slayer #{pos} kills #{target} ({shown_role})"
+                elif target_was_good is True:
                     cur_confirmed_good.append(target)
                     recorded_corruption = case.get("executed_good_corrupted", {})
                     if str(target) in recorded_corruption or target in recorded_corruption:
@@ -176,6 +197,12 @@ def replay_case(case):
                         cur_exec_good_roles[target] = role
                     shown_role = role or card_lookup.get(target, {}).get("apparent_role", "?")
                     desc = f"Slayer #{pos} kills #{target} ({shown_role})"
+                else:
+                    shown_role = revealed_role or "?"
+                    desc = (
+                        f"Slayer #{pos} kills #{target} ({shown_role}; "
+                        "runtime alignment unresolved)"
+                    )
             else:
                 desc = f"Slayer #{pos} targets #{sr['target_pos']}: survives"
 
@@ -186,10 +213,19 @@ def replay_case(case):
     # Executions (non-slayer)
     evil_found = len(cur_confirmed_evil)
     for exec_pos in case.get("executed", []):
-        if exec_pos in slayer_killed or exec_pos in cur_executed:
+        if (
+            exec_pos in slayer_killed
+            or exec_pos in night_kill_set
+            or exec_pos in cur_executed
+        ):
             continue
 
         cur_executed.append(exec_pos)
+        current_role = executed_current_roles.get(
+            str(exec_pos), executed_current_roles.get(exec_pos)
+        )
+        if current_role:
+            cur_exec_current_roles[exec_pos] = current_role
 
         if str(exec_pos) in exec_evil_roles:
             role = exec_evil_roles[str(exec_pos)]

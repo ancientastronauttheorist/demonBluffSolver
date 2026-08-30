@@ -72,7 +72,7 @@ The full pipeline:
 - Handles disguises, lying, corruption, and role-specific validation
 - 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
 - Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, native-verified Baa deck-view reveal on death, ordered Shaman source/target identity traces, and public Dreamer two-target automation
-- Bombardier protection (instant loss if wrongly executed)
+- Bombardier terminal protection (any qualifying non-Lilis death, including Slayer and current-role overwrites)
 - Execution lookahead with HP-aware decision making
 - Ascension 10+ pool-vs-board role count validation
 - Lilis night-kill tracking and Witch card-blocking mechanics

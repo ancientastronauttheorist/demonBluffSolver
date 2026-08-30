@@ -163,6 +163,14 @@ class GameState:
     # Missing means an archived pre-audit Fortune Teller fixture/session.
     # Fresh live sessions retain the exact native speech/reference history.
     fortune_teller_rule_version: Optional[str] = None
+    # Public terminal marker set only after a non-Night death reveals the
+    # canonical current CharacterData role Bombardier. Missing preserves
+    # legacy fixtures and in-progress games.
+    terminal_loss_role: Optional[str] = None
+    # Exact public current CharacterData revealed by successful ordinary
+    # executions. Appended for positional ABI compatibility; original Evil
+    # identity remains in executed_evil_roles.
+    executed_current_roles: dict[int, str] = field(default_factory=dict)
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -189,6 +197,9 @@ class GameState:
             "reveal_order": list(self.reveal_order),
             "executed_good_corrupted": {str(k): v for k, v in self.executed_good_corrupted.items()},
             "executed_good_roles": {str(k): v for k, v in self.executed_good_roles.items()},
+            "executed_current_roles": {
+                str(k): v for k, v in self.executed_current_roles.items()
+            },
             "rambler_shut_up_observations": [
                 dict(observation)
                 for observation in self.rambler_shut_up_observations
@@ -202,6 +213,8 @@ class GameState:
             data["doppel_drunk_rule_version"] = self.doppel_drunk_rule_version
         if self.fortune_teller_rule_version is not None:
             data["fortune_teller_rule_version"] = self.fortune_teller_rule_version
+        if self.terminal_loss_role is not None:
+            data["terminal_loss_role"] = self.terminal_loss_role
         if nest_deck:
             data["deck"] = self.deck.to_dict()
         else:
@@ -255,6 +268,11 @@ class GameState:
             baker_rule_version=data.get("baker_rule_version"),
             doppel_drunk_rule_version=data.get("doppel_drunk_rule_version"),
             fortune_teller_rule_version=data.get("fortune_teller_rule_version"),
+            terminal_loss_role=data.get("terminal_loss_role"),
+            executed_current_roles={
+                int(k): v
+                for k, v in data.get("executed_current_roles", {}).items()
+            },
         )
 
 

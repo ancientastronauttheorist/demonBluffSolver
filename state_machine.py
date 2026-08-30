@@ -327,9 +327,25 @@ class GameStateMachine:
         """Handle game over — record result and transition to POST_GAME."""
         print(f"\n  [auto] Phase: GAME_OVER")
 
-        if self.session.hp <= 0:
+        terminal_loss_role = getattr(self.session, "terminal_loss_role", None)
+        if terminal_loss_role == "Bombardier":
+            self._game_result = "loss"
+            print(
+                "  [auto] GAME LOST — "
+                f"{terminal_loss_role} died outside Night "
+                f"(HP retained at {self.session.hp})"
+            )
+        elif self.session.hp <= 0:
             self._game_result = "loss"
             print(f"  [auto] GAME LOST — HP depleted ({self.session.hp})")
+        elif self._game_result == "loss":
+            # SOLVING can establish a terminal loss from exact scenario/public
+            # death evidence before a legacy session has a persisted marker.
+            # Never let the final phase overwrite that known loss with a win.
+            print(
+                "  [auto] GAME LOST — terminal loss was established "
+                f"during planning (HP retained at {self.session.hp})"
+            )
         else:
             self._game_result = "win"
             remaining_evil = self.session.n_evil - len([
@@ -419,7 +435,12 @@ class GameStateMachine:
 
     def _do_solving(self):
         """Run solver and decide next action."""
-        from strategy import recommend_action, print_recommendation, evil_probabilities, _compute_confidence
+        from strategy import (
+            _compute_confidence,
+            _has_terminal_role_loss,
+            evil_probabilities,
+            recommend_action,
+        )
         print(f"\n  [auto] Phase: SOLVING")
 
         state = self.session.to_game_state()
@@ -445,7 +466,19 @@ class GameStateMachine:
             print(f"  WARNING: {w}")
 
         # Decision tree
-        if action.action_type == "win":
+        if action.action_type == "loss":
+            # A legacy/unmarked state can still prove the native Bombardier
+            # terminal from public death evidence or every surviving exact
+            # world. Persist that fact before GAME_OVER so a later reload and
+            # final-result classification cannot reinterpret it as a win.
+            if _has_terminal_role_loss(state, result):
+                self.session.terminal_loss_role = "Bombardier"
+            self._game_result = "loss"
+            self.phase = GamePhase.GAME_OVER
+            self.session.save()
+            print(f"\n  [auto] TERMINAL LOSS - {action.reasoning}")
+
+        elif action.action_type == "win":
             self.phase = GamePhase.GAME_OVER
             print(f"\n  [auto] ALL EVIL EXECUTED - GAME WON!")
 
@@ -457,7 +490,12 @@ class GameStateMachine:
             is_bombardier = action.position in result.bombardier_positions
             is_forced_safe = getattr(action, 'forced_safe', False)
 
-            if (is_definite and not is_bombardier) or is_forced_safe:
+            if is_bombardier:
+                self._pause(
+                    f"Refusing execution of possible current-role "
+                    f"Bombardier #{action.position}"
+                )
+            elif is_definite or is_forced_safe:
                 self._pending_exec = (action.position, result, is_forced_safe)
                 self.phase = GamePhase.EXECUTING
             else:
@@ -486,6 +524,18 @@ class GameStateMachine:
         exec_result = self.session.auto_execute(pos, result, monitor=self.monitor, forced_safe=forced_safe)
 
         if exec_result["success"]:
+            terminal_loss_role = getattr(
+                self.session, "terminal_loss_role", None
+            )
+            if terminal_loss_role == "Bombardier":
+                self._game_result = "loss"
+                self.phase = GamePhase.GAME_OVER
+                self.session.save()
+                print(
+                    f"\n  [auto] GAME LOST - {terminal_loss_role} "
+                    f"died outside Night (HP retained at {self.session.hp})"
+                )
+                return
             if exec_result.get("blocked"):
                 print(f"  [auto] Execution blocked on #{pos}: confirmed Knight immunity")
             elif exec_result["was_evil"]:

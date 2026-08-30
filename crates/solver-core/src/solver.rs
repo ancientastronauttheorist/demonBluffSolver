@@ -4,37 +4,20 @@ use rayon::prelude::*;
 use crate::knowledge_base::normalize_role;
 use crate::scenario::build_scenarios;
 use crate::types::{GameState, Scenario, SolverResult};
+use crate::validators::effective_role_at;
 
 fn collect_bombardier_positions(
     state: &GameState,
     surviving: &[Scenario],
-    definite_evil: &[u8],
 ) -> Vec<u8> {
-    let mut positions: Vec<u8> = state.cards.iter()
-        .filter(|card| {
-            normalize_role(&card.apparent_role) == "bombardier"
-                && !definite_evil.contains(&card.position)
+    (1..=state.n_cards)
+        .filter(|&position| {
+            surviving.iter().any(|scenario| {
+                effective_role_at(position, scenario, state)
+                    .is_some_and(|role| normalize_role(&role) == "bombardier")
+            })
         })
-        .map(|card| card.position)
-        .collect();
-
-    for pos in 1..=state.n_cards {
-        if definite_evil.contains(&pos) {
-            continue;
-        }
-        if surviving.iter().any(|scenario| {
-            !scenario.is_evil(pos)
-                && scenario.chancellor_added_outcast_position() == Some(pos)
-                && scenario
-                    .chancellor_added_outcast_role()
-                    .is_some_and(|role| normalize_role(role) == "bombardier")
-        }) {
-            positions.push(pos);
-        }
-    }
-    positions.sort_unstable();
-    positions.dedup();
-    positions
+        .collect()
 }
 use crate::validators::check_scenario;
 
@@ -64,7 +47,6 @@ pub fn solve(state: &GameState) -> SolverResult {
         bombardier_positions = collect_bombardier_positions(
             state,
             &surviving,
-            &definite_evil,
         );
     }
 
@@ -86,7 +68,7 @@ pub fn solve(state: &GameState) -> SolverResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::{ChancellorTrace, GameState, Scenario};
+    use crate::types::{CardInfo, ChancellorTrace, GameState, Scenario, ShamanTrace};
     use serde_json::json;
 
     #[test]
@@ -148,9 +130,51 @@ mod tests {
         evil.evil_positions.insert(1, "Lilis".to_string());
 
         assert_eq!(
-            collect_bombardier_positions(&state, &[generated, evil], &[]),
+            collect_bombardier_positions(&state, &[generated, evil]),
             vec![1],
         );
-        assert!(collect_bombardier_positions(&state, &[], &[1]).is_empty());
+        assert!(collect_bombardier_positions(&state, &[]).is_empty());
+    }
+
+    #[test]
+    fn current_bombardier_collection_includes_runtime_evil_shaman_copy() {
+        let state = GameState {
+            n_cards: 2,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Bombardier".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+
+        let mut shaman_current = Scenario::default();
+        shaman_current
+            .evil_positions
+            .insert(1, "Pooka".to_string());
+        shaman_current.shaman_trace = Some(ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Bombardier".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+        assert_eq!(
+            collect_bombardier_positions(&state, &[shaman_current]),
+            // The copied runtime-Evil body and its still-surviving physical
+            // Villager source are both fatal current-role targets.
+            vec![1, 2],
+        );
+
+        let mut bluff_only = Scenario::default();
+        bluff_only.evil_positions.insert(1, "Pooka".to_string());
+        assert!(collect_bombardier_positions(&state, &[bluff_only]).is_empty());
+
+        let mut drunk_display = Scenario::default();
+        drunk_display.drunk_position = Some(1);
+        assert!(collect_bombardier_positions(&state, &[drunk_display]).is_empty());
+
+        let mut doppel_display = Scenario::default();
+        doppel_display.doppelganger_position = Some(1);
+        assert!(collect_bombardier_positions(&state, &[doppel_display]).is_empty());
     }
 }

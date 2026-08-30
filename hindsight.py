@@ -21,6 +21,11 @@ sys.path.insert(0, os.path.dirname(__file__))
 from solver import GameState, CardInfo, DeckComposition, slayer_revealed_role
 from knowledge_base import Alignment, execution_cost_for, get_card
 from rust_solver import rust_solve_to_objects
+from strategy import (
+    _has_terminal_role_loss,
+    _is_terminal_loss_role,
+    _public_terminal_loss_position,
+)
 
 CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "tests", "cases")
 CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases_v2")
@@ -37,6 +42,7 @@ class ExecStep:
     scenarios_after: int
     definite_evil_before: list[int] = field(default_factory=list)
     hp_cost: int = 0
+    terminal_loss: bool = False
     note: str = ""
 
 
@@ -78,45 +84,27 @@ def _evil_probs(result, n_cards, executed):
 
 def _pick_target(result, probs, bombardier_positions, wretch_positions):
     """Pick the best execution target (mirrors strategy.py logic)."""
-    # Definite evil first (Bombardiers/Wretch safe to execute if definite evil)
+    # Definite runtime Evil is still fatal when its current CharacterData is
+    # Bombardier (for example a Shaman overwrite), so the collector guard wins.
     for pos in sorted(result.definite_evil):
-        if pos not in probs:
+        if pos not in probs or pos in bombardier_positions:
             continue  # already executed
         return pos
 
     # Never voluntarily execute Wretch — it's always good, abilities just
     # "see" it as evil. Executing Wretch = guaranteed wrong exec penalty.
     # Only exception: definite evil (evil disguised as Wretch, handled above).
-    safe = {p: pr for p, pr in probs.items() if p not in wretch_positions}
+    safe = {
+        p: pr for p, pr in probs.items()
+        if p not in wretch_positions and p not in bombardier_positions
+    }
+    if safe:
+        return max(safe, key=safe.get)
 
-    # Bombardier: risky but not suicidal. Allow execution when it's the
-    # top candidate and clearly the best choice (prob > 0.5 and beats
-    # non-Bombardier alternatives by a margin).
-    non_bomb = {p: pr for p, pr in safe.items() if p not in bombardier_positions}
-    if non_bomb:
-        best_non_bomb = max(non_bomb, key=non_bomb.get)
-        best_non_bomb_pr = non_bomb[best_non_bomb]
-
-        # Check if a Bombardier clearly dominates
-        bomb_candidates = {p: pr for p, pr in safe.items()
-                          if p in bombardier_positions and pr > 0.5}
-        if bomb_candidates:
-            best_bomb = max(bomb_candidates, key=bomb_candidates.get)
-            best_bomb_pr = bomb_candidates[best_bomb]
-            # Pick Bombardier if it's significantly better
-            if best_bomb_pr > best_non_bomb_pr + 0.1:
-                return best_bomb
-
-        return best_non_bomb
-
-    # Only Bombardier candidates left (all non-Bombardier/Wretch exhausted)
-    bomb_only = {p: pr for p, pr in safe.items() if p in bombardier_positions}
-    if bomb_only:
-        return max(bomb_only, key=bomb_only.get)
-
-    # Absolute fallback: even Wretch
-    if probs:
-        return max(probs, key=probs.get)
+    # Absolute fallback may use Wretch, but never a possible current Bombardier.
+    fallback = {p: pr for p, pr in probs.items() if p not in bombardier_positions}
+    if fallback:
+        return max(fallback, key=fallback.get)
     return None
 
 
@@ -139,6 +127,9 @@ def _reconstruct_starting_hp(case: dict) -> int:
     exec_good_roles = {
         int(k): v for k, v in case.get("executed_good_roles", {}).items()
     }
+    exec_current_roles = {
+        int(k): v for k, v in case.get("executed_current_roles", {}).items()
+    }
 
     # Cards executed as wrong (good, not night-killed)
     # Use confirmed_good if available; otherwise use true_evil_set to detect
@@ -159,6 +150,12 @@ def _reconstruct_starting_hp(case: dict) -> int:
                      if c["position"] == pos), None)
         apparent_role = card.get("apparent_role", "") if card else None
         execution_role = exec_good_roles.get(pos, apparent_role)
+        public_current_role = exec_current_roles.get(
+            pos, exec_good_roles.get(pos)
+        )
+        if _is_terminal_loss_role(public_current_role):
+            # The stored HP is already the native pre-terminal snapshot.
+            continue
         recorded_corrupted = exec_good_corrupted.get(
             str(pos), exec_good_corrupted.get(pos, False)
         )
@@ -206,8 +203,12 @@ def replay_hindsight(case: dict) -> HindsightResult:
     pre_exec_good_roles = {}
 
     case_confirmed_good = set(case.get("confirmed_good", []))
+    case_confirmed_evil = set(case.get("confirmed_evil", []))
     case_evil_roles = {int(k): v for k, v in case.get("executed_evil_roles", {}).items()}
     case_good_roles = {int(k): v for k, v in case.get("executed_good_roles", {}).items()}
+    case_current_roles = {
+        int(k): v for k, v in case.get("executed_current_roles", {}).items()
+    }
     case_good_corrupted = {
         int(k): v for k, v in case.get("executed_good_corrupted", {}).items()
     }
@@ -218,21 +219,28 @@ def replay_hindsight(case: dict) -> HindsightResult:
             pre_executed.append(tp)
             revealed_role = slayer_revealed_role(sr)
             role_def = get_card(revealed_role) if revealed_role else None
-            target_was_good = (
-                role_def is not None and role_def.alignment == Alignment.GOOD
-            ) or (tp in case_confirmed_good and tp not in case_evil_roles)
-            if target_was_good:
+            recorded_evil_role = case_evil_roles.get(tp)
+            if tp in case_confirmed_evil or recorded_evil_role is not None:
+                target_was_good = False
+            elif tp in case_confirmed_good:
+                target_was_good = True
+            elif _is_terminal_loss_role(revealed_role):
+                target_was_good = None
+            elif role_def is not None:
+                target_was_good = role_def.alignment == Alignment.GOOD
+            else:
+                target_was_good = None
+            if target_was_good is True:
                 pre_confirmed_good.append(tp)
                 good_role = revealed_role or case_good_roles.get(tp)
                 if good_role:
                     pre_exec_good_roles[tp] = good_role
                 if tp in case_good_corrupted:
                     pre_exec_good_corrupted[tp] = case_good_corrupted[tp]
-            else:
+            elif target_was_good is False:
                 pre_confirmed_evil.append(tp)
-                evil_role = revealed_role or case_evil_roles.get(tp)
-                if evil_role:
-                    pre_exec_evil_roles[tp] = evil_role
+                if recorded_evil_role:
+                    pre_exec_evil_roles[tp] = recorded_evil_role
 
     # Night kills are also pre-executed
     night_kills = case.get("night_kills", [])
@@ -243,7 +251,8 @@ def replay_hindsight(case: dict) -> HindsightResult:
 
     # Build base state (all cards, pre-applied abilities)
     def make_state(executed, confirmed_evil, confirmed_good,
-                   exec_evil_roles, exec_good_corrupted, exec_good_roles):
+                   exec_evil_roles, exec_good_corrupted, exec_good_roles,
+                   exec_current_roles):
         return GameState(
             n_cards=n_cards,
             deck=DeckComposition.from_dict(deck_data),
@@ -274,6 +283,11 @@ def replay_hindsight(case: dict) -> HindsightResult:
             baker_rule_version=case.get("baker_rule_version"),
             doppel_drunk_rule_version=case.get("doppel_drunk_rule_version"),
             fortune_teller_rule_version=case.get("fortune_teller_rule_version"),
+            # Hindsight executes a counterfactual branch. A marker from the
+            # recorded final outcome must not leak into its initial state;
+            # public/scenario death evidence derives any terminal later.
+            terminal_loss_role=None,
+            executed_current_roles=dict(exec_current_roles),
             reveal_order=list(case.get("reveal_order", [])),
             executed_good_corrupted=dict(exec_good_corrupted),
             executed_good_roles=dict(exec_good_roles),
@@ -285,25 +299,48 @@ def replay_hindsight(case: dict) -> HindsightResult:
     exec_evil_roles = dict(pre_exec_evil_roles)
     exec_good_corrupted = dict(pre_exec_good_corrupted)
     exec_good_roles = dict(pre_exec_good_roles)
+    exec_current_roles = {}
     evils_found = len([p for p in confirmed_evil if p in true_evil_set])
     evils_found += night_kill_evil_count
 
     # Dangerous positions to avoid executing
-    bombardier_positions = set()
     wretch_positions = set()
     for c in case.get("cards", []):
-        if c.get("apparent_role") == "Bombardier":
-            bombardier_positions.add(c["position"])
         if c.get("apparent_role") == "Wretch":
             wretch_positions.add(c["position"])
 
     steps = []
     step_num = 0
     evils_needed = n_evil - evils_found
+    terminal_loss = False
 
-    while evils_needed > 0 and hp > 0:
+    # Slayer results are pre-applied before the counterfactual execution loop.
+    # Their public current-role reveal can already have ended the game even
+    # when that kill also reduced evils_needed to zero, so terminal precedence
+    # must not depend on entering the loop.
+    initial_state = make_state(
+        executed,
+        confirmed_evil,
+        confirmed_good,
+        exec_evil_roles,
+        exec_good_corrupted,
+        exec_good_roles,
+        exec_current_roles,
+    )
+    if _public_terminal_loss_position(initial_state) is not None:
+        terminal_loss = True
+        steps.append(ExecStep(
+            step_num=step_num, position=0, prob_evil=0,
+            was_evil=False, evil_role="Bombardier terminal",
+            scenarios_before=0, scenarios_after=0,
+            terminal_loss=True,
+            note="current-role Bombardier died outside Night",
+        ))
+
+    while evils_needed > 0 and hp > 0 and not terminal_loss:
         state = make_state(executed, confirmed_evil, confirmed_good,
-                           exec_evil_roles, exec_good_corrupted, exec_good_roles)
+                           exec_evil_roles, exec_good_corrupted, exec_good_roles,
+                           exec_current_roles)
         try:
             result = rust_solve_to_objects(state)
         except Exception as e:
@@ -312,6 +349,17 @@ def replay_hindsight(case: dict) -> HindsightResult:
                 was_evil=False, evil_role="ERROR",
                 scenarios_before=0, scenarios_after=0,
                 note=f"Solver crashed: {e}",
+            ))
+            break
+
+        if _has_terminal_role_loss(state, result):
+            terminal_loss = True
+            steps.append(ExecStep(
+                step_num=step_num, position=0, prob_evil=0,
+                was_evil=False, evil_role="Bombardier terminal",
+                scenarios_before=result.n_surviving, scenarios_after=0,
+                terminal_loss=True,
+                note="current-role Bombardier died outside Night",
             ))
             break
 
@@ -325,7 +373,12 @@ def replay_hindsight(case: dict) -> HindsightResult:
             break
 
         probs = _evil_probs(result, n_cards, set(executed))
-        target = _pick_target(result, probs, bombardier_positions, wretch_positions)
+        target = _pick_target(
+            result,
+            probs,
+            set(result.bombardier_positions),
+            wretch_positions,
+        )
 
         if target is None:
             steps.append(ExecStep(
@@ -343,6 +396,8 @@ def replay_hindsight(case: dict) -> HindsightResult:
         # Execute
         was_evil = target in true_evil_set
         executed.append(target)
+        if target in case_current_roles:
+            exec_current_roles[target] = case_current_roles[target]
 
         if was_evil:
             confirmed_evil.append(target)
@@ -369,24 +424,41 @@ def replay_hindsight(case: dict) -> HindsightResult:
 
             execution_role = case_good_roles.get(target, apparent)
             recorded_corrupted = exec_good_corrupted.get(target, False)
-            hp_cost = execution_cost_for(
-                execution_role,
-                apparent_role=apparent,
-                # Drunk=false is observed-clean evidence, so this remains a
-                # conservative base-cost fallback in historical replays.
-                was_corrupted=bool(recorded_corrupted),
-                was_killable=True,
-                default=wrong_exec_cost,
-            )
             evil_role = execution_role if target in case_good_roles else "good"
-            hp -= hp_cost
+            public_death_state = make_state(
+                executed,
+                confirmed_evil,
+                confirmed_good,
+                exec_evil_roles,
+                exec_good_corrupted,
+                exec_good_roles,
+                exec_current_roles,
+            )
+            if _public_terminal_loss_position(public_death_state) is not None:
+                # Native OnDied terminal resolution precedes ordinary
+                # wrong-kill damage, so preserve the pre-death HP snapshot.
+                hp_cost = 0
+                terminal_loss = True
+            else:
+                hp_cost = execution_cost_for(
+                    execution_role,
+                    apparent_role=apparent,
+                    # Drunk=false is observed-clean evidence, so this remains a
+                    # conservative base-cost fallback in historical replays.
+                    was_corrupted=bool(recorded_corrupted),
+                    was_killable=True,
+                    default=wrong_exec_cost,
+                )
+                hp -= hp_cost
 
         # Run solver again to get scenarios_after
         state_after = make_state(executed, confirmed_evil, confirmed_good,
-                                 exec_evil_roles, exec_good_corrupted, exec_good_roles)
+                                 exec_evil_roles, exec_good_corrupted, exec_good_roles,
+                                 exec_current_roles)
         try:
             result_after = rust_solve_to_objects(state_after)
             scenarios_after = result_after.n_surviving
+            terminal_loss = _has_terminal_role_loss(state_after, result_after)
         except Exception:
             scenarios_after = -1
 
@@ -406,11 +478,14 @@ def replay_hindsight(case: dict) -> HindsightResult:
             scenarios_after=scenarios_after,
             definite_evil_before=def_evil_before,
             hp_cost=hp_cost,
+            terminal_loss=terminal_loss,
             note=note,
         ))
         step_num += 1
+        if terminal_loss:
+            break
 
-    won = evils_needed <= 0 and hp > 0
+    won = evils_needed <= 0 and hp > 0 and not terminal_loss
 
     return HindsightResult(
         name=name, n_cards=n_cards, n_evil=n_evil,
@@ -444,24 +519,23 @@ def print_result(r: HindsightResult):
         if s.position == 0:
             action = s.evil_role  # error message
             prob_str = ""
-            result_str = ""
-            hp_str = ""
+            result_str = "TERMINAL" if s.terminal_loss else ""
+            hp_str = f"{running_hp}" if s.terminal_loss else ""
             scen_str = f"{s.scenarios_before}"
         else:
             action = f"Execute #{s.position}"
             prob_str = f"{s.prob_evil*100:.0f}%"
-            if s.was_evil:
+            if s.terminal_loss:
+                result_str = "TERMINAL (Bomb)"
+            elif s.was_evil:
                 result_str = f"Evil ({s.evil_role})"
             elif s.evil_role == "Drunk":
-                result_str = "good (Drunk -2)"
-                running_hp -= 2
+                result_str = f"good (Drunk -{s.hp_cost})"
+                running_hp -= s.hp_cost
             else:
-                result_str = f"WRONG (-{r.wrong_exec_cost})"
-                running_hp -= r.wrong_exec_cost
-            if s.was_evil:
-                hp_str = f"{running_hp}"
-            else:
-                hp_str = f"{running_hp}"
+                result_str = f"WRONG (-{s.hp_cost})"
+                running_hp -= s.hp_cost
+            hp_str = f"{running_hp}"
             scen_str = f"{s.scenarios_before}->{s.scenarios_after}"
 
         print(f"  {s.step_num:>4}  {action:<22}  {prob_str:>5}  {result_str:<16}  "

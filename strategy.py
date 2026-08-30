@@ -18,6 +18,7 @@ from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
     truth_status, truth_appearance_status, scenario_is_evil, effective_alignment,
     effective_role_at,
+    slayer_revealed_role,
     get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
     circle_distance, circle_direction,
@@ -42,14 +43,14 @@ LOW_ABILITY_SCORE_THRESHOLD = 0.30  # info bits
 
 @dataclass
 class Action:
-    action_type: str  # "execute", "reveal", "use_ability", "win", "error"
+    action_type: str  # execute, reveal, use_ability, loss, win, error
     position: Optional[int] = None
     targets: Optional[list[int]] = None
     ability_name: Optional[str] = None
     reasoning: str = ""
     warnings: list[str] = field(default_factory=list)
     confidence: float = 0.0  # 0-1, how certain this is the right move
-    forced_safe: bool = False  # True when lookahead proves execution is safe (bypass Bombardier guard)
+    forced_safe: bool = False  # Lookahead-safe ordinary execution; never bypasses Bombardier
     _ability_recs: Optional[list] = field(default_factory=lambda: None, repr=False)  # cached for display
 
 
@@ -270,6 +271,76 @@ def _execution_reveal_outcome(
     return (role, False, observed_corrupted, active_corrupted)
 
 
+def _is_terminal_loss_role(role: Optional[str]) -> bool:
+    """Match only canonical public CharacterData Bombardier.
+
+    Managed Saint implements Bombardier, but public CharacterData Saint is a
+    distinct role and must not be treated as an alias.
+    """
+    key = (role or "").strip().replace("_", " ").replace("-", " ").casefold()
+    return key == "bombardier"
+
+
+def _scenario_terminal_loss_position(
+    state: GameState,
+    scenario: Scenario,
+) -> Optional[int]:
+    """Return a qualifying already-dead Bombardier in one exact world."""
+    night_kills = set(state.night_kills)
+    for pos in state.executed:
+        if pos in night_kills:
+            continue
+        # Public KillAndReveal/execution identity is authoritative, including
+        # a non-Bombardier negative. Only otherwise infer scenario-effective
+        # current data (Shaman/generated roles before bluff appearance).
+        role = _public_death_role_at(state, pos)
+        if role is None:
+            role = effective_role_at(pos, scenario, state)
+        if _is_terminal_loss_role(role):
+            return pos
+    return None
+
+
+def _public_death_role_at(state: GameState, pos: int) -> Optional[str]:
+    """Best authoritative public current-role reveal for one death."""
+    for result in reversed(state.slayer_results):
+        if result.get("killed") is True and result.get("target_pos") == pos:
+            role = slayer_revealed_role(result)
+            if role is not None:
+                return role
+    current_role = state.executed_current_roles.get(pos)
+    if current_role is not None:
+        return current_role
+    return state.executed_good_roles.get(pos)
+
+
+def _public_terminal_loss_position(state: GameState) -> Optional[int]:
+    """Return a terminal death proven without any surviving solver world."""
+    night_kills = set(state.night_kills)
+    for pos in state.executed:
+        if pos in night_kills:
+            continue
+        role = _public_death_role_at(state, pos)
+        if _is_terminal_loss_role(role):
+            return pos
+    return None
+
+
+def _has_terminal_role_loss(
+    state: GameState,
+    result: SolverResult,
+) -> bool:
+    """Whether public state or any surviving exact world is already terminal."""
+    if _is_terminal_loss_role(getattr(state, "terminal_loss_role", None)):
+        return True
+    if _public_terminal_loss_position(state) is not None:
+        return True
+    return any(
+        _scenario_terminal_loss_position(state, scenario) is not None
+        for scenario in result.surviving_scenarios
+    )
+
+
 def _execution_branch_is_protected(
     revealed_role: str,
     apparent_role: str,
@@ -297,7 +368,9 @@ def _execution_observation_key(
     role, was_evil, observed_corrupted, active_corrupted = outcome
     card_at = get_card_at(pos, state)
     apparent_role = card_at.apparent_role if card_at else "Unknown"
-    if not was_evil and role == "Bombardier":
+    # Current-role death precedes runtime alignment: a Shaman-copied
+    # Bombardier on a preserved Evil body is still terminal.
+    if _is_terminal_loss_role(role):
         return ("bombardier_loss",)
     if _execution_branch_is_protected(
         role,
@@ -400,8 +473,20 @@ def _find_forced_execution(
         if key in memo:
             return memo[key]
 
-        # Native execution resolution checks depleted HP before the evil-count
-        # win condition.
+        # Native terminal order is current-role Bombardier death, depleted HP,
+        # then the evil-count win condition.
+        if (
+            _is_terminal_loss_role(getattr(state, "terminal_loss_role", None))
+            or _public_terminal_loss_position(state) is not None
+            or any(
+                _scenario_terminal_loss_position(state, scenarios[idx])
+                is not None
+                for idx in indices
+            )
+        ):
+            memo[key] = (False, None)
+            return memo[key]
+
         if hp <= 0:
             memo[key] = (False, None)
             return memo[key]
@@ -1535,6 +1620,23 @@ def _wretch_kill_probability(target: int, state: GameState, result: SolverResult
     return count / result.n_surviving
 
 
+def _slayer_terminal_loss_probability(
+    target: int,
+    state: GameState,
+    result: SolverResult,
+) -> float:
+    """Chance Slayer kills a runtime-Evil current Bombardier at this seat."""
+    if result.n_surviving == 0:
+        return 0.0
+    losing = sum(
+        1
+        for scenario in result.surviving_scenarios
+        if effective_alignment(target, scenario, state) == Alignment.EVIL
+        and _is_terminal_loss_role(effective_role_at(target, scenario, state))
+    )
+    return losing / result.n_surviving
+
+
 def _recommend_slayer(
     ability_pos: int,
     state: GameState,
@@ -1543,9 +1645,10 @@ def _recommend_slayer(
     """Slayer: pick target with highest evil probability. Not entropy-based."""
     probs = evil_probabilities(state, result)
     # Native Slayer checks registered alignment before calling KillAndReveal.
-    # A Good Bombardier or Knight registers Good and survives harmlessly; an
-    # Evil bluffing as either registers Evil, and KillAndReveal bypasses normal
-    # execution-loss and kill-immunity surfaces.
+    # A Good Bombardier or Knight registers Good and survives harmlessly. An
+    # Evil bluffing as either reveals its real Evil role and is safe, but a
+    # runtime-Evil Shaman destination whose *current* role is Bombardier invokes
+    # the terminal death hook after KillAndReveal.
     dead = set(state.executed) | set(state.night_kills)
     candidates = [
         p
@@ -1564,6 +1667,12 @@ def _recommend_slayer(
     for pos in candidates:
         prob = probs.get(pos, 0)
         wretch_prob = _wretch_kill_probability(pos, state, result)
+        terminal_prob = _slayer_terminal_loss_probability(pos, state, result)
+
+        # There is no strategic continuation after this branch. Require every
+        # surviving exact world to be free of the current-role death hook.
+        if terminal_prob > 0:
+            continue
 
         # Base score: true evil probability (successful kill)
         # Penalty: Wretch kill costs wrong_exec_cost HP
@@ -1617,14 +1726,6 @@ def recommend_abilities(
         p for p in range(1, state.n_cards + 1)
         if p not in dead_positions
     ]
-
-    # Build sets of dangerous or ineffective targets for abilities that impose
-    # native target restrictions or kill their target.
-    # Bombardier targets are dangerous for Slayer (auto-lose if killed)
-    bombardier_safe = set(result.bombardier_positions)
-    # Execution-immune targets are useless for Slayer
-    immune_positions = {c.position for c in state.cards
-                        if c.apparent_role in EXECUTION_IMMUNE_ROLES}
 
     for card in state.cards:
         pos = card.position
@@ -1936,8 +2037,9 @@ def recommend_action(
     """Recommend the best next action given solver results.
 
     Priority:
-    1. Error -- 0 surviving scenarios
-    2. Win -- all evil executed
+    1. Loss -- qualifying Bombardier death, then depleted HP
+    2. Error -- 0 surviving scenarios
+    3. Win -- all evil executed
     3. Execute -- definite evil found (skip Bombardier)
     3.5. Knight free check
     4. Use ability -- if EV > reveal EV (E1: expected-value scoring)
@@ -1951,11 +2053,25 @@ def recommend_action(
     probs = evil_probabilities(state, result)
     dead_positions = set(state.executed) | set(state.night_kills)
 
-    # 1. Error
+    # Native terminal precedence is Bombardier death, HP loss, then
+    # all-evils-gone win. Never recommend another action from terminal state.
+    if _has_terminal_role_loss(state, result):
+        return Action(
+            "loss",
+            reasoning=(
+                "A canonical current-role Bombardier died outside Lilis Night; "
+                "native resolution is already a terminal loss."
+            ),
+        )
+
+    if state.hp <= 0:
+        return Action("loss", reasoning="HP is depleted; the game is lost.")
+
+    # Data error
     if result.n_surviving == 0:
         return Action("error", reasoning="No surviving scenarios -- check input data")
 
-    # 2. Win check
+    # Win check
     _, max_remaining = _remaining_evil_bounds(state, result)
     if max_remaining == 0:
         return Action("win", reasoning="All evil characters have been executed!")
@@ -2162,8 +2278,11 @@ def recommend_action(
     # 6b. Probabilistic execution
     # Bombardier candidates excluded from normal probability selection
     bombardier_candidates = {p: probs.get(p, 0) for p in result.bombardier_positions
-                            if p not in dead_positions and probs.get(p, 0) > 0.0}
-    # Exclude Bombardier (instant loss) and Wretch (always wrong exec —
+                            if p not in dead_positions
+                            and p not in result.definite_evil
+                            and probs.get(p, 0) > 0.0}
+    # Exclude a possible current-role Bombardier (instant loss if killed) and
+    # Wretch (always wrong exec —
     # abilities see Wretch as evil, inflating evil_probability, but executing
     # Wretch is guaranteed wrong exec penalty with zero upside).
     wretch_positions = {c.position for c in state.cards
@@ -2186,19 +2305,6 @@ def recommend_action(
         sorted_candidates = sorted(active_probs.keys(), key=_exec_sort_key, reverse=True)
         best_pos = sorted_candidates[0]
         best_prob = active_probs[best_pos]
-
-        # Bombardier-disguise override: if every non-Bombardier candidate is 0%
-        # evil but a Bombardier candidate has a non-zero evil probability, the
-        # remaining evil MUST be a Bombardier disguise. Picking 0% non-Bombardier
-        # is a guaranteed wrong execution; picking the Bombardier candidate is
-        # the only winning move. (asc58_v5 lesson — solver picked 0%-evil #1
-        # then #3 instead of Witch-disguised-as-Bombardier #8, losing to HP=0.)
-        if best_prob == 0.0 and bombardier_candidates:
-            best_bomb_pos = max(bombardier_candidates, key=bombardier_candidates.get)
-            best_bomb_prob = bombardier_candidates[best_bomb_pos]
-            if best_bomb_prob > 0.0:
-                best_pos = best_bomb_pos
-                best_prob = best_bomb_prob
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
@@ -2247,8 +2353,9 @@ def recommend_action(
             min_confidence = max(0.75, 0.95 - 0.1 * (hp_ratio_b1))
             if best_prob < min_confidence:
                 if bombardier_candidates:
-                    # Bombardier safety: bypass threshold — wrong exec on non-Bombardier
-                    # costs HP, wrong exec on Bombardier = instant game loss.
+                    # Bombardier safety: bypass the confidence threshold for
+                    # the safe candidate. Killing any possible current-role
+                    # Bombardier is an instant game loss.
                     warnings.append(
                         f"Bombardier safety: executing #{best_pos} ({best_prob:.0%}) despite "
                         f"low confidence — Bombardier candidate(s) {sorted(bombardier_candidates.keys())} "
@@ -2276,7 +2383,8 @@ def recommend_action(
 
     # 6c. Bombardier safety fallback: when all high-probability candidates are
     # Bombardier (excluded from active_probs), prefer a non-Bombardier uncertain
-    # position. Wrong exec on non-Bombardier = HP cost; Bombardier = game loss.
+    # position. A non-Bombardier mistake costs HP; killing a possible current-
+    # role Bombardier ends the game immediately.
     if bombardier_candidates:
         # Include Wretch — wrong exec on Wretch = HP cost, not game loss
         safety_probs = {p: prob for p, prob in probs.items()
@@ -2294,7 +2402,7 @@ def recommend_action(
                 reasoning=f"Bombardier safety: #{safe_pos} ({role_label}, {safe_prob:.0%} evil) "
                           f"preferred over Bombardier candidate(s) {bomb_positions}. "
                           f"Wrong exec costs {state.wrong_exec_cost} HP; "
-                          f"Bombardier wrong exec = instant game loss.",
+                          f"killing a current-role Bombardier = instant game loss.",
                 warnings=[f"Bombardier safety play — testing non-Bombardier first "
                          f"(HP={state.hp}, budget={wrong_exec_budget} wrong execs)"]))
 
@@ -2304,7 +2412,7 @@ def recommend_action(
 
 def _compute_confidence(action: Action, state, result, probs: dict) -> float:
     """Compute confidence score (0-1) for an action, based on action type."""
-    if action.action_type == "win":
+    if action.action_type in {"loss", "win"}:
         return 1.0
     elif action.action_type == "error":
         return 0.0

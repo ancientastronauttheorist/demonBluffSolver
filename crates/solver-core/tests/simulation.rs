@@ -11,8 +11,8 @@ use solver_core::knowledge_base::normalize_role;
 use solver_core::strategy::execution::pick_execution_target;
 use solver_core::strategy::{
     apply_execution_damage, execution_consequence, execution_terminal_outcome,
-    get_card_role, remaining_evil_bounds, ExecutionConsequence,
-    ExecutionTerminalOutcome,
+    get_card_role, has_terminal_role_loss, is_terminal_loss_role, remaining_evil_bounds,
+    scenario_terminal_loss_position, ExecutionConsequence, ExecutionTerminalOutcome,
 };
 use solver_core::types::*;
 use std::collections::{HashMap, HashSet, VecDeque};
@@ -67,6 +67,7 @@ fn make_state(
     executed_evil_roles: &HashMap<u8, String>,
     executed_good_corrupted: &HashMap<u8, bool>,
     executed_good_roles: &HashMap<u8, String>,
+    executed_current_roles: &HashMap<u8, String>,
     slayer_results: &[SlayerResult],
     pd_ability_results: &[PdAbilityResult],
     night_kills: &[u8],
@@ -83,11 +84,16 @@ fn make_state(
     state.executed_evil_roles = executed_evil_roles.clone();
     state.executed_good_corrupted = executed_good_corrupted.clone();
     state.executed_good_roles = executed_good_roles.clone();
+    state.executed_current_roles = executed_current_roles.clone();
     state.slayer_results = slayer_results.to_vec();
     state.pd_ability_results = pd_ability_results.to_vec();
     state.night_kills = night_kills.to_vec();
     state.night_kill_evil_count = night_kill_evil_count;
     state.reveal_order = reveal_order.to_vec();
+    // Simulation rebuilds incremental/counterfactual states from the final
+    // fixture. Never leak a final terminal marker before its death evidence;
+    // public roles and exact surviving worlds derive it at the proper step.
+    state.terminal_loss_role = None;
     state
 }
 
@@ -149,25 +155,15 @@ fn good_execution_observation(
     apparent_role: &str,
     wrong_exec_cost: i32,
 ) -> GoodExecutionObservation {
-    let revealed_role = if scenario.drunk_position == Some(pos) {
-        "Drunk"
-    } else if scenario.doppelganger_position == Some(pos) {
-        "Doppelganger"
-    } else if scenario.chancellor_added_outcast_position() == Some(pos) {
-        scenario
-            .chancellor_added_outcast_role()
-            .unwrap_or(apparent_role)
-    } else {
-        apparent_role
-    };
-    let observed_corrupted = if normalize_role(revealed_role) == "drunk" {
+    let revealed_role = execution_revealed_role(scenario, pos, apparent_role);
+    let observed_corrupted = if normalize_role(&revealed_role) == "drunk" {
         false
     } else {
         scenario.corrupted.contains(&pos)
     };
     let active_corrupted = scenario.corrupted.contains(&pos);
     let consequence = execution_consequence(
-        revealed_role,
+        &revealed_role,
         apparent_role,
         false,
         active_corrupted,
@@ -175,17 +171,67 @@ fn good_execution_observation(
     );
     let revealed_role = if consequence == ExecutionConsequence::Protected
         || revealed_role.trim().is_empty()
-        || matches!(normalize_role(revealed_role).as_str(), "unknown" | "none" | "?")
+        || matches!(normalize_role(&revealed_role).as_str(), "unknown" | "none" | "?")
     {
         None
     } else {
-        Some(revealed_role.to_string())
+        Some(revealed_role)
     };
     GoodExecutionObservation {
         revealed_role,
         consequence,
         observed_corrupted,
     }
+}
+
+fn execution_revealed_role(
+    scenario: &Scenario,
+    pos: u8,
+    apparent_role: &str,
+) -> String {
+    if scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        pos == trace.source_position || pos == trace.target_position
+    }) {
+        scenario
+            .shaman_trace
+            .as_ref()
+            .map(|trace| trace.copied_role.clone())
+            .unwrap_or_else(|| apparent_role.to_string())
+    } else if scenario.drunk_position == Some(pos) {
+        "Drunk".to_string()
+    } else if scenario.doppelganger_position == Some(pos) {
+        "Doppelganger".to_string()
+    } else if scenario.chancellor_added_outcast_position() == Some(pos) {
+        scenario
+            .chancellor_added_outcast_role()
+            .unwrap_or(apparent_role)
+            .to_string()
+    } else {
+        apparent_role.to_string()
+    }
+}
+
+fn evil_execution_revealed_role(
+    scenario: &Scenario,
+    pos: u8,
+    apparent_role: &str,
+) -> String {
+    if scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        pos == trace.source_position || pos == trace.target_position
+    }) {
+        return scenario
+            .shaman_trace
+            .as_ref()
+            .map(|trace| trace.copied_role.clone())
+            .unwrap_or_else(|| apparent_role.to_string());
+    }
+    if let Some(role) = scenario.evil_positions.get(&pos) {
+        return role.clone();
+    }
+    if scenario.puppet_position == Some(pos) {
+        return "Puppet".to_string();
+    }
+    execution_revealed_role(scenario, pos, apparent_role)
 }
 
 /// Resolve an execution only when every truth-compatible hidden-Outcast world
@@ -273,6 +319,7 @@ struct ExecutionBranch {
     evil_roles: HashMap<u8, String>,
     good_corrupted: HashMap<u8, bool>,
     good_roles: HashMap<u8, String>,
+    current_roles: HashMap<u8, String>,
     immunity_blocked: HashSet<u8>,
     hp: i32,
     total_executions: usize,
@@ -302,6 +349,7 @@ struct ExecutionBranchKey {
     evil_roles: Vec<(u8, String)>,
     good_corrupted: Vec<(u8, bool)>,
     good_roles: Vec<(u8, String)>,
+    current_roles: Vec<(u8, String)>,
     immunity_blocked: Vec<u8>,
     hp: i32,
 }
@@ -388,6 +436,12 @@ fn execution_branch_key(branch: &ExecutionBranch) -> ExecutionBranchKey {
         .map(|(&position, role)| (position, role.clone()))
         .collect();
     good_roles.sort_unstable();
+    let mut current_roles: Vec<(u8, String)> = branch
+        .current_roles
+        .iter()
+        .map(|(&position, role)| (position, role.clone()))
+        .collect();
+    current_roles.sort_unstable();
 
     ExecutionBranchKey {
         card_positions: sorted_positions(branch.cards.iter().filter_map(json_card_position)),
@@ -399,6 +453,7 @@ fn execution_branch_key(branch: &ExecutionBranch) -> ExecutionBranchKey {
         evil_roles,
         good_corrupted,
         good_roles,
+        current_roles,
         immunity_blocked: sorted_positions(branch.immunity_blocked.iter().copied()),
         hp: branch.hp,
     }
@@ -457,7 +512,8 @@ fn continue_good_execution(
             next.good_corrupted
                 .insert(pos, observation.observed_corrupted);
             if let Some(role) = observation.revealed_role {
-                next.good_roles.insert(pos, role);
+                next.good_roles.insert(pos, role.clone());
+                next.current_roles.insert(pos, role);
             }
             next.immunity_blocked.clear();
             GoodExecutionContinuation::Continue(next)
@@ -556,9 +612,9 @@ fn reconstruct_phase3_hp(
                 cost_addback = cost_addback.wrapping_add(hp_damage);
             }
             ExecutionConsequence::BombardierLoss => {
-                return Err(format!(
-                    "recorded good Bombardier execution #{pos} would be terminal"
-                ));
+                // Terminal resolution precedes ordinary wrong-kill damage, so
+                // the saved HP is already the usable pre-loss snapshot. Phase
+                // 3 intentionally replays a counterfactual strategy from it.
             }
         }
     }
@@ -631,6 +687,7 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let mut current_evil_roles: HashMap<u8, String> = HashMap::new();
     let mut current_good_corr: HashMap<u8, bool> = HashMap::new();
     let mut current_good_roles: HashMap<u8, String> = HashMap::new();
+    let current_current_roles: HashMap<u8, String> = HashMap::new();
     let mut current_slayer: Vec<SlayerResult> = Vec::new();
     let mut current_pd: Vec<PdAbilityResult> = Vec::new();
     let mut current_night_kills: Vec<u8> = Vec::new();
@@ -681,11 +738,11 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
                     if !current_confirmed_evil.contains(&sr.target_pos) {
                         current_confirmed_evil.push(sr.target_pos);
                     }
-                    let role = sr.revealed_role.clone()
-                        .or_else(|| case_evil_roles.get(&sr.target_pos).cloned())
-                        .unwrap_or_default();
-                    if !role.is_empty() {
-                        current_evil_roles.insert(sr.target_pos, role);
+                    // Slayer reveals current CharacterData, which may be a
+                    // Good-class Shaman copy. Preserve only a separately
+                    // recorded original Evil assignment in this map.
+                    if let Some(role) = case_evil_roles.get(&sr.target_pos) {
+                        current_evil_roles.insert(sr.target_pos, role.clone());
                     }
                 } else {
                     if !current_confirmed_good.contains(&sr.target_pos) {
@@ -716,11 +773,20 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         &current_confirmed_evil, &current_confirmed_good,
         &current_evil_roles, &current_good_corr,
         &current_good_roles,
+        &current_current_roles,
         &current_slayer, &current_pd,
         &current_night_kills, current_nk_evil_count,
         &current_reveal_order);
     let result = solve(&state);
 
+    if has_terminal_role_loss(&state, &result) {
+        return SimResult::SimLoss {
+            reason: format!(
+                "{case_name}: current-role Bombardier died before post-reveal constraint validation"
+            ),
+            executions: 0,
+        };
+    }
     if !truth_in_set(&result, &true_evil_set, &current_executed) {
         return SimResult::ConstraintFailure {
             phase: "post_reveal".into(),
@@ -810,6 +876,7 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         evil_roles: pre_exec_evil_roles,
         good_corrupted: pre_exec_good_corrupted,
         good_roles: pre_exec_good_roles,
+        current_roles: HashMap::new(),
         immunity_blocked: HashSet::new(),
         hp,
         total_executions: 0,
@@ -830,6 +897,7 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             &branch.confirmed_evil, &branch.confirmed_good,
             &branch.evil_roles, &branch.good_corrupted,
             &branch.good_roles,
+            &branch.current_roles,
             &current_slayer, &current_pd,
             &current_night_kills, current_nk_evil_count,
             &branch.reveal_order);
@@ -840,7 +908,29 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
 
         let result = solve(&state_with_hp);
 
-        // Constraint check
+        // Native terminal/HP checks precede contradictory-world detection and
+        // the evil-count win. Public death evidence can prove terminal even
+        // when the new observation leaves zero surviving worlds.
+        if has_terminal_role_loss(&state_with_hp, &result) {
+            return SimResult::SimLoss {
+                reason: format!(
+                    "{case_name}: current-role Bombardier already died outside Night [branch {}]",
+                    branch.context(),
+                ),
+                executions: branch.total_executions,
+            };
+        }
+        if branch.hp <= 0 {
+            return SimResult::SimLoss {
+                reason: format!(
+                    "{case_name}: HP exhausted (hp={}) before win resolution [branch {}]",
+                    branch.hp,
+                    branch.context(),
+                ),
+                executions: branch.total_executions,
+            };
+        }
+
         if !truth_in_set(&result, &true_evil_set, &branch.executed) {
             return SimResult::ConstraintFailure {
                 phase: format!("exec_step_{}", branch.total_executions),
@@ -852,19 +942,16 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             };
         }
 
-        // Native terminal precedence: depleted HP loses before evil-count win.
         let (_, max_remaining) = remaining_evil_bounds(&state_with_hp, &result);
-        match execution_terminal_outcome(branch.hp, max_remaining == 0) {
-            ExecutionTerminalOutcome::HpLoss => {
-                return SimResult::SimLoss {
-                    reason: format!(
-                        "{case_name}: HP exhausted (hp={}) before win resolution [branch {}]",
-                        branch.hp,
-                        branch.context(),
-                    ),
-                    executions: branch.total_executions,
-                };
-            }
+        match execution_terminal_outcome(
+            false,
+            branch.hp,
+            max_remaining == 0,
+        ) {
+            ExecutionTerminalOutcome::BombardierLoss
+            | ExecutionTerminalOutcome::HpLoss => unreachable!(
+                "terminal and HP loss were handled before constraint validation"
+            ),
             ExecutionTerminalOutcome::Win => {
                 completed_wins += 1;
                 max_win_executions = max_win_executions.max(branch.total_executions);
@@ -906,27 +993,69 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
 
         // Simulate execution using ground truth
         if let Some(evil_role) = true_evil_positions.get(&pos) {
-            // Correct: evil found
-            let mut next = branch.clone();
-            next.iterations += 1;
-            next.total_executions += 1;
-            next.observations.push(format!("#{pos}=evil({evil_role})"));
-            if !next.executed.contains(&pos) {
-                next.executed.push(pos);
+            let truth_scenarios = truth_compatible_scenarios(
+                &result,
+                &true_evil_positions,
+                &branch.executed,
+            );
+            let apparent = get_card_role(pos, &state_with_hp).unwrap_or("");
+            let mut revealed_current_roles = Vec::new();
+            for scenario in &truth_scenarios {
+                let current_role = evil_execution_revealed_role(
+                    scenario,
+                    pos,
+                    apparent,
+                );
+                if !revealed_current_roles.iter().any(|known: &String| {
+                    normalize_role(known) == normalize_role(&current_role)
+                }) {
+                    revealed_current_roles.push(current_role);
+                }
             }
-            if !next.confirmed_evil.contains(&pos) {
-                next.confirmed_evil.push(pos);
+            if revealed_current_roles.is_empty() {
+                return SimResult::InsufficientTruth {
+                    detail: format!(
+                        "{case_name}: evil execution #{pos} has no truth-compatible current-role observation"
+                    ),
+                };
             }
-            next.evil_roles.insert(pos, evil_role.clone());
 
-            // Any real Cipher death clears the represented shipped scalar.
-            // Persist that release so later solves cannot reload stale data.
-            if normalize_role(evil_role) == "witch" {
-                release_one_witch_block(&mut next, &card_by_pos);
-            }
+            for current_role in revealed_current_roles {
+                if is_terminal_loss_role(&current_role) {
+                    return SimResult::SimLoss {
+                        reason: format!(
+                            "{case_name}: executed runtime-Evil current-role Bombardier #{pos} [branch {}]",
+                            branch.context(),
+                        ),
+                        executions: branch.total_executions + 1,
+                    };
+                }
+                // Runtime alignment confirms the original Evil assignment,
+                // while KillAndReveal independently publishes current data.
+                let mut next = branch.clone();
+                next.iterations += 1;
+                next.total_executions += 1;
+                next.observations.push(format!(
+                    "#{pos}=evil({evil_role}),current({current_role})"
+                ));
+                if !next.executed.contains(&pos) {
+                    next.executed.push(pos);
+                }
+                if !next.confirmed_evil.contains(&pos) {
+                    next.confirmed_evil.push(pos);
+                }
+                next.evil_roles.insert(pos, evil_role.clone());
+                next.current_roles.insert(pos, current_role);
 
-            next.immunity_blocked.clear();
-            enqueue_execution_branch(&mut branches, &mut seen_branches, next);
+                // Any real Cipher death clears the represented shipped scalar.
+                // Persist that release so later solves cannot reload stale data.
+                if normalize_role(evil_role) == "witch" {
+                    release_one_witch_block(&mut next, &card_by_pos);
+                }
+
+                next.immunity_blocked.clear();
+                enqueue_execution_branch(&mut branches, &mut seen_branches, next);
+            }
         } else {
             // Wrong execution: fork every distinct native observation. A
             // killed good card reveals and persists its real role; a protected
@@ -1693,6 +1822,154 @@ fn corrupted_doppelganger_as_knight_is_a_nine_hp_kill_branch() {
     assert!(next.immunity_blocked.is_empty());
 }
 
+#[test]
+fn shaman_current_bombardier_is_terminal_in_simulated_good_observation() {
+    let mut scenario = Scenario::default();
+    scenario.shaman_trace = Some(ShamanTrace {
+        source_position: 1,
+        target_position: 2,
+        copied_role: "Bombardier".to_string(),
+        target_previous_roles: vec!["Scout".to_string()],
+    });
+
+    let observation = good_execution_observation(&scenario, 2, "Scout", 5);
+    assert_eq!(
+        observation.consequence,
+        ExecutionConsequence::BombardierLoss,
+    );
+    assert_eq!(observation.revealed_role.as_deref(), Some("Bombardier"));
+}
+
+#[test]
+fn incremental_current_role_overrides_final_fixture_and_stale_bomb_world() {
+    let case = serde_json::json!({
+        "n_cards": 2,
+        "n_evil": 1,
+        "deck": {
+            "villagers": ["Scout", "Bombardier"],
+            "outcasts": [],
+            "minions": ["Shaman"],
+            "demons": []
+        },
+        "executed_current_roles": {"1": "Bombardier"}
+    });
+    let current_roles = HashMap::from([(1, "Scout".to_string())]);
+    let state = make_state(
+        &case,
+        &[],
+        &[1],
+        &[1],
+        &[],
+        &HashMap::from([(1, "Shaman".to_string())]),
+        &HashMap::new(),
+        &HashMap::new(),
+        &current_roles,
+        &[],
+        &[],
+        &[],
+        0,
+        &[],
+    );
+    assert_eq!(state.executed_current_roles, current_roles);
+
+    let mut stale_bomb_world = Scenario::default();
+    stale_bomb_world.evil_positions.insert(1, "Shaman".to_string());
+    stale_bomb_world.shaman_trace = Some(ShamanTrace {
+        source_position: 2,
+        target_position: 1,
+        copied_role: "Bombardier".to_string(),
+        target_previous_roles: vec!["Shaman".to_string()],
+    });
+    assert_eq!(
+        scenario_terminal_loss_position(&state, &stale_bomb_world),
+        None,
+    );
+
+    let mut alternate = ExecutionBranch::default();
+    alternate.current_roles.insert(1, "Bombardier".to_string());
+    let mut observed_safe = alternate.clone();
+    observed_safe.current_roles.insert(1, "Scout".to_string());
+    assert_ne!(
+        execution_branch_key(&alternate),
+        execution_branch_key(&observed_safe),
+    );
+}
+
+#[test]
+fn slayer_bombardier_terminal_precedes_zero_world_constraint_failure() {
+    let value = serde_json::json!({
+        "name": "terminal_before_zero",
+        "n_cards": 2,
+        "n_evil": 1,
+        "deck": {
+            "villagers": ["Slayer", "Bombardier"],
+            "outcasts": [],
+            "minions": ["Minion"],
+            "demons": []
+        },
+        "cards": [
+            {"position": 1, "apparent_role": "Slayer"},
+            {"position": 2, "apparent_role": "Bombardier"}
+        ],
+        "reveal_order": [1, 2],
+        "used_abilities": [1],
+        "slayer_results": [{
+            "slayer_pos": 1,
+            "target_pos": 2,
+            "killed": true,
+            "revealed_role": "Bombardier"
+        }],
+        "executed": [2],
+        "confirmed_good": [2],
+        "executed_good_roles": {"2": "Bombardier"},
+        "true_evil_positions": {"1": "Minion"},
+        "hp": 10,
+        "wrong_exec_cost": 5
+    });
+
+    match simulate_game(&value) {
+        SimResult::SimLoss { reason, .. } => {
+            assert!(reason.contains("Bombardier"), "{reason}");
+        }
+        other => panic!(
+            "public Slayer Bombardier death must precede zero-world failure: {other:?}"
+        ),
+    }
+}
+
+#[test]
+fn regression_terminal_bombardier_corpus_boundaries() {
+    let terminal_value: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string(v2_dir().join("asc77_v7.json")).unwrap(),
+    )
+    .unwrap();
+    let terminal_state = GameState::from_json(&terminal_value).unwrap();
+    let terminal_result = solve(&terminal_state);
+    assert!(has_terminal_role_loss(&terminal_state, &terminal_result));
+    match simulate_game(&terminal_value) {
+        SimResult::SimLoss { reason, .. } => {
+            assert!(
+                reason.contains("Bombardier") || reason.contains("HP exhausted"),
+                "asc77_v7 must remain an explicitly classified loss: {reason}",
+            );
+        }
+        other => panic!("asc77_v7 must simulate as a classified loss, got {other:?}"),
+    }
+
+    for name in ["asc35_v5.json", "asc68_v7.json"] {
+        let value: serde_json::Value = serde_json::from_str(
+            &std::fs::read_to_string(v2_dir().join(name)).unwrap(),
+        )
+        .unwrap();
+        let state = GameState::from_json(&value).unwrap();
+        let result = solve(&state);
+        assert!(
+            !has_terminal_role_loss(&state, &result),
+            "{name} has only a Night-killed Bombardier and must remain playable",
+        );
+    }
+}
+
 // ── Test entry point ──
 
 #[test]
@@ -1719,6 +1996,7 @@ fn simulate_all_v2() {
         "asc71_v7",     // 0HP loss: Bombardier-safety skipped true TM-as-Bombardier #2
         "asc72_v2",     // 0HP loss: corrupted Alchemist cured-count + no Rambler validator
         "asc73_v6",     // 0HP loss: Rambler-silenced by PD requires picker detection that lacks pd_ability_result
+        "asc77_v7",     // Forced 50/50 current-Bomb ambiguity; every legal safe branch loses
     ].into_iter().collect();
 
     // Cases with known bad data that may cause constraint failures
