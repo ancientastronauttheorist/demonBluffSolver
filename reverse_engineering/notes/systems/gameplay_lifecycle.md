@@ -10,7 +10,7 @@ The checked target set is
 Its baseline Ghidra export completed read-only at 28/28 functions with no shared
 native bodies. The isolated typed project also validated and exported 28/28
 after full analysis. Typed decompilation reduced unresolved-type tokens from
-370 to 149 and raw field-offset accesses from 678 to 289. Decompiled bodies
+370 to 141 and raw field-offset accesses from 678 to 289. Decompiled bodies
 remain in the private artifact tree.
 
 ## Boundary

@@ -72,23 +72,24 @@ the `outsiders` and `minions` constructor arguments rather than zero, and
 change and UI notifications. The authored findings and evidence links are in
 [`../notes/systems/gameplay_core.md`](../notes/systems/gameplay_core.md).
 
-The deterministic typed-header pipeline parses 151,087 datatypes, restores all
-6,159 explicit alignments, validates critical object layouts, and validates 19
-selected FunctionDefinitions. The isolated typed project then imported 1,874
-reachable datatypes while applying the 13 gameplay-core signatures; the six
-roster-helper signatures reused that graph without conflicts. All 19 exact
-entry points, metadata labels, prototypes, dynamic `__fastcall` storage, and
-the seven-argument constructor ABI passed validation. Typed auto-analysis is
-the next gate. The native exports, GDT, and analysis databases remain
+The deterministic typed-header pipeline builds a 151,157-datatype archive,
+restores all 6,159 explicit alignments, validates critical object layouts, and
+contains 77 selected FunctionDefinitions. The isolated typed project
+cumulatively imported 1,979 reachable datatypes while applying the four target
+sets. Full analysis completed and saved in 2,870 seconds. All 77 exact entry
+points, metadata labels, prototypes, and dynamic `__fastcall` storage passed
+post-save validation, covering 209 parameter-storage locations without a
+program mutation. Body-free quality comparisons also passed for all four
+target sets. The native exports, GDT, and analysis databases remain
 local/private.
 
 ## Method coverage denominator
 
 The generated coverage ledger accounts for all 4,207 managed methods using
 4,158 native bindings and 3,066 unique native bodies. It identifies 107 shared-
-body groups containing 1,199 bindings. The first 19 methods are classified
-`understood` with eleven `native-static` evidence records; every missing
-overlay row remains explicitly `unresolved/not-reviewed`.
+body groups containing 1,199 bindings. The first 77 reviewed methods have
+authored classifications backed by 33 evidence records; every missing overlay
+row remains explicitly `unresolved/not-reviewed`.
 
 ## First missing-offset candidates
 
@@ -106,7 +107,7 @@ They must be checked against screenshots and controlled state changes before
 
 ## Next gate
 
-Run full analysis on the typed project, export and compare the reviewed target
-sets, then cross-check the three candidate pointer chains in a live game.
-Continue outward from the reviewed gameplay and roster methods while preserving
-the 4,207-method coverage denominator.
+Map and native-audit the status, corruption, and truth/lie boundary, then
+cross-check the three candidate pointer chains in a live game. Continue outward
+from the reviewed gameplay methods while preserving the 4,207-method coverage
+denominator.

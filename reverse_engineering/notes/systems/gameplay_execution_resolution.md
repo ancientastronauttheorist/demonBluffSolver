@@ -14,6 +14,16 @@ zero failures. Four entries use expected shared constant/helper bodies, while
 their requested managed identities remain preserved in the export headers.
 Decompiled native bodies remain outside the repository.
 
+## Typed-analysis corroboration
+
+The fully analyzed isolated typed project also validated and exported all 30
+methods. Post-save read-only ABI checks confirmed 88 parameter-storage
+locations without mutating the program. Relative to the baseline export,
+unresolved-type tokens fell from 160 to 96 and raw field-offset accesses fell
+from 243 to 120; the four pre-existing decompiler error markers did not
+increase. Aggregate, body-free metrics are recorded in the
+[`typed quality report`](../../reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_execution_resolution.json).
+
 ## Boundary groups
 
 ### Action and lying dispatch

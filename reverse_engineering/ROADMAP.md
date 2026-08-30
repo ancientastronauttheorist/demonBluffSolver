@@ -45,12 +45,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   terminal-result slice.
 - [x] Native-audit the remaining 14 status-insertion, Night-rule, Striga,
   Demon-selection, and collection-helper methods; close the boundary.
+- [x] Expand the isolated typed project to all 77 methods across the four
+  reviewed target sets; pass post-save ABI validation and body-free quality
+  checks for every set.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.
 - [ ] Recover deck/board construction and ascension rules.
 - [ ] Recover status, corruption, truth/lie, and clue-generation pipelines.
-- [ ] Recover execution, damage, protection, and night-resolution pipelines.
+- [x] Recover execution, damage, protection, and night-resolution pipelines.
 - [ ] Recover and validate every role implementation.
 - [ ] Extract an authored clean-room behavioral core with differential tests.
 - [ ] Run and publish the final method-classification coverage audit.
