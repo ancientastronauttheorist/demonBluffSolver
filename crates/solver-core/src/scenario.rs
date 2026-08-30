@@ -705,9 +705,9 @@ fn hidden_outcast_presence_flags(role_name: &str, state: &GameState) -> (bool, b
         Some(s) => s as i32,
         None => return (true, true),
     };
-    // The identity hypotheses describe the post-conversion board. Chancellor
-    // adds one Outcast identity, represented by allowing its conversion target
-    // to overlap a hidden-Outcast position such as Drunk.
+    // The identity hypotheses describe the post-Start board. Chancellor adds
+    // one Outcast identity, whose final home may overlap a hidden-Outcast
+    // position such as Drunk.
     if state.deck.minions.iter().any(|m| m == "Chancellor") {
         slots += 1;
     }

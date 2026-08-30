@@ -325,6 +325,11 @@ pub struct Scenario {
         deserialize_with = "deserialize_int_key_map_u8"
     )]
     pub alchemist_cures: HashMap<u8, u8>,
+    /// Final physical card holding the Outcast identity Chancellor added.
+    ///
+    /// The historical field name is retained for JSON/Python compatibility;
+    /// this is not necessarily the first Villager target when Chancellor's
+    /// later role swap passes through that card.
     pub chancellor_conversion: Option<u8>,
 }
 

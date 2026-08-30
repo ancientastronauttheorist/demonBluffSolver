@@ -218,7 +218,8 @@ class Scenario:
     doppelganger_position: Optional[int] = None  # Doppelganger pos (real role != apparent)
     drunk_position: Optional[int] = None  # Drunk pos (disguised as Villager, always lies)
     alchemist_cures: dict = field(default_factory=dict)  # alch_pos -> cure count (pre-cure)
-    chancellor_conversion: Optional[int] = None  # Position converted to Outcast by Chancellor
+    # Final home of Chancellor's added Outcast identity (legacy field name).
+    chancellor_conversion: Optional[int] = None
 
 
 @dataclass

@@ -711,10 +711,9 @@ fn validate_bishop(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
 
     if let Some(ref ct) = claimed_types {
         // Bishop's clue reflects a snapshot of its 3 targets at game start.
-        // Chancellor's conversion is an independent random game-start event:
-        // in observed games (asc71_v6), Bishop's claim stays consistent with
-        // a PRE-conversion view of its targets. In other games (asc51_v1),
-        // the claim matches the POST-conversion view. We accept either.
+        // Chancellor reinitializes and later reveals the added Outcast role;
+        // frozen observations span both its real-data type and its eventual
+        // register-as role surface, so retain both timing views.
         let mut sorted_claimed = ct.clone();
         sorted_claimed.sort();
 

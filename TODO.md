@@ -64,7 +64,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Witness "no one affected" (position=0)** — FIXED. `affected_position=0` means "nobody affected," not position 0. Also excluded PD/Drunk corruption from "affected by Evil" set — only Poisoner/Pooka/Puppeteer/Lilis count.
 
-- [ ] **Witness + Chancellor conversion** — Chancellor-converted positions should count as "affected by evil ability" for Witness. Requires tracking which position Chancellor converted in Scenario.
+- [ ] **Witness + Chancellor trace** — the first Villager target should count as
+  "affected by evil ability." The existing legacy field now tracks the final
+  home of the added Outcast identity; derive the original target from the full
+  Chancellor swap trace instead of treating those positions as identical.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 

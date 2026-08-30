@@ -288,9 +288,10 @@ pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) 
 /// Get the type category of a position for Bishop validator.
 /// Returns "Villager", "Outcast", "Minion", "Demon", or None if unknown.
 ///
-/// When `include_chancellor_conv` is true (default), Chancellor's conversion
-/// target is reported as Outcast. When false, the conversion is ignored — used
-/// to model the "pre-conversion view" for Bishop's if-possible semantics.
+/// When `include_chancellor_conv` is true (default), the final home of
+/// Chancellor's added identity is reported by its real Outcast type. When
+/// false, its revealed/register-as role surface is used instead. Bishop
+/// fixtures currently require both native timing views.
 pub fn get_position_type(pos: u8, scenario: &Scenario, state: &GameState) -> Option<&'static str> {
     get_position_type_ex(pos, scenario, state, true)
 }
@@ -316,7 +317,7 @@ pub fn get_position_type_ex(
     if scenario.doppelganger_position == Some(pos) || scenario.drunk_position == Some(pos) {
         return Some("Outcast");
     }
-    // Chancellor conversion target becomes Outcast (only if caller wants it)
+    // Chancellor's added identity has real Outcast data at its final home.
     if include_chancellor_conv && scenario.chancellor_conversion == Some(pos) {
         return Some("Outcast");
     }
