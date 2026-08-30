@@ -51,7 +51,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Wretch — root cause of 4 validator bugs
 - [x] Chancellor — outcast count + Witness tracking gaps
 - [x] Minion — no issues
-- [x] Poisoner — no issues
+- [x] Poisoner — full managed `Poisoner` boundary native-audited; exact
+  post-Pooka Start slot, previous-then-next real-Villager eligibility, live
+  Corrupted/resistance filters, paired-status composition, all-match duplicate
+  ordering, dead/small-board behavior, and stale-description legacy surface
+  closed with no solver delta
 - [x] Puppet — no issues
 - [x] Puppeteer — no issues
 - [x] Shaman — guaranteed duplicate not enforced

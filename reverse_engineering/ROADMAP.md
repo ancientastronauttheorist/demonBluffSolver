@@ -171,6 +171,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   private random-one-neighbour `PoisonClosestNeighbours` is unreachable in the
   shipped flow; expand the typed union to 23 target sets and 511 memberships
   and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Poisoner to exact managed `Poisoner`; native-audit all
+  four declared role methods plus 13 ordered-Start, dispatch, output,
+  adjacency, real-type, status, resistance, and integer-RNG helpers; close
+  previous-then-next eligibility, live Corrupted exclusion, independent marker
+  resistance, all-match high-ID-first duplicates, dead and small-board
+  behavior, and the stale managed-description/nonexistent-dormant-helper
+  distinction; expand the typed union to 24 target sets and 528 memberships and
+  publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

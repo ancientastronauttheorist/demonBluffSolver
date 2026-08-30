@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Poisoner role boundary, including every declared managed method, ordered Start and Evil truth dispatch, passive output, circular adjacency, real-Villager/status/resistance filtering, paired status insertion, integer RNG selection, and Alchemist Init resistance composition",
+  "functions": [
+    {
+      "name": "Poisoner.get_Description",
+      "metadata_name": "Poisoner$$get_Description",
+      "signature": "System_String_o* Poisoner__get_Description (Poisoner_o* __this, const MethodInfo* method);",
+      "rva": "0x3E66D0"
+    },
+    {
+      "name": "Poisoner.GetInfo",
+      "metadata_name": "Poisoner$$GetInfo",
+      "signature": "ActedInfo_o* Poisoner__GetInfo (Poisoner_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6670"
+    },
+    {
+      "name": "Poisoner.Act",
+      "metadata_name": "Poisoner$$Act",
+      "signature": "void Poisoner__Act (Poisoner_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E64F0"
+    },
+    {
+      "name": "Poisoner.ctor",
+      "metadata_name": "Poisoner$$.ctor",
+      "signature": "void Poisoner___ctor (Poisoner_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "Alchemist.OnInit",
+      "metadata_name": "Alchemist$$OnInit",
+      "signature": "void Alchemist__OnInit (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B05F0"
+    },
+    {
+      "name": "Characters.GetAdjacentCharacters",
+      "metadata_name": "Characters$$GetAdjacentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C2E0"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.Character",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "prototype_name": "Characters__FilterRealCharacterType_Character",
+      "rva": "0x36BB40"
+    },
+    {
+      "name": "Characters.FilterCharacterMissingStatus",
+      "metadata_name": "Characters$$FilterCharacterMissingStatus",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterMissingStatus (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36A8C0"
+    },
+    {
+      "name": "Characters.FilterCharactersWithoutResistance.Character",
+      "metadata_name": "Characters$$FilterCharactersWithoutResistance",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharactersWithoutResistance (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36AE50"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    }
+  ]
+}

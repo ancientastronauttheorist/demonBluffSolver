@@ -293,15 +293,32 @@ consequences are closed in the dedicated
 
 ### Poisoner Start adjacent corruption
 
-`Poisoner.Act` does work only at `Start`. It obtains the circular adjacent pair,
-then retains real Villagers that lack both active Corrupted and exact Corrupted
-resistance. An empty candidate list is a clean no-op. Otherwise it makes one
-random index draw and applies Corrupted followed by MessedUpByEvil, with
-Poisoner as source and a null shared cure target.
+The shipped public Minion asset binds exact managed `Poisoner` and occupies
+ordered-Start index two, after Pooka and before Drunk. `Poisoner.Act` does work
+only at `Start`. It obtains the circular previous-then-next adjacent pair, then
+retains current real Villagers that lack both active Corrupted and exact
+Corrupted resistance. The filters preserve order and duplicate occurrences;
+they do not inspect registered or apparent type, alignment, liveness, dead
+state, MessedUpByEvil, or its resistance.
 
-The filters preserve duplicate occurrences and there is no liveness filter. On
-a two-card board the one neighbour therefore occurs twice in the random pool,
-although either index selects the same character.
+An empty candidate list is a clean no-op with no RNG consumption. Otherwise
+Poisoner makes exactly one max-exclusive integer random-index draw and applies
+Corrupted followed by an independent MessedUpByEvil attempt, with Poisoner as
+source and a null shared cure target. Corrupted or Corrupted-resistant
+neighbours never enter the pool and therefore receive neither attempt. A
+MessedUpByEvil-resistant selected card still receives Corrupted but blocks only
+the marker.
+
+Poisoner is an explicit all-matches lifecycle exception: duplicate assets act
+synchronously from highest displayed ID to lowest and each later actor sees
+the earlier status mutations. On a two-card board the sole neighbour occurs
+twice in the random pool, although either index selects the same character. On
+a one-card board the self-reference pair is removed by the real-Villager
+filter, producing a clean no-op. Managed `Poisoner` has no alternate private
+helper; its older `1 adjacent good character is Poisoned` getter is stale text,
+not dormant gameplay. The complete asset binding, xref route, resistance and
+small-board composition, and solver implications are closed in the dedicated
+[`Poisoner` role audit](../roles/gameplay_role_poisoner.md).
 
 ### Puzzlemaster Start corruption and Day picker
 
