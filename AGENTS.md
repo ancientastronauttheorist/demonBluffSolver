@@ -122,8 +122,10 @@ Important entry reminders:
 - Druid claiming Wretch: enter `card druid <pos> <targets> Wretch`, not `none`.
 - Plague Doctor active ability: use `pd_check <pd_pos> <target> corrupted
   <evil_pos>` or `pd_check <pd_pos> <target> clean`.
-- Shaman Baker swaps happen at game start. Swapped Bakers say "I was a
-  <role>"; the original Baker says "I am the original Baker."
+- Shaman can overwrite any eligible Villager with another Villager's role at
+  game start. When the copied role is Baker, later Baker clue text remains the
+  safest identity surface: chain Bakers say "I was a <role>" and an original
+  Baker says "I am the original Baker."
 
 ### Solve And Act
 
@@ -202,6 +204,15 @@ Memory reader notes:
   make the selection uniform because every `usuallyDisguised` flag is false.
   On any Baa death it removes that record and refreshes the deck view. This
   reveals only the hidden deck-strip identity, not a board card.
+- Shaman is managed internally as `Illuzionist`; Witch is `Cipher`. After
+  Plague Doctor and before Alchemist, Shaman selects an ordered pair of
+  apparent Villagers, attempts `MessedUpByEvil` on the source, overwrites the
+  destination with the source's bluff-or-real identity, immediately fires the
+  copied Start action, then attempts the marker on the destination. The source
+  is unchanged. `InitWithNoReset` preserves destination statuses, resistance,
+  and runtime data. The solver's `ShamanTrace` keeps ordered endpoints, copied
+  role, and a viable erased-role candidate class; copied Baker/runtime-data
+  composition remains opaque pending its own native audit.
 - The public Dreamer asset binds managed `Dreamer`, not the unbound alternate
   `Dreamer2`. It picks exactly two characters and immediately produces either
   `Among #X, #Y there is: RoleA or RoleB` or the truthful Wretch/Cabbage clue;

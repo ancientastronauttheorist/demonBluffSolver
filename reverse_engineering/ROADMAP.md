@@ -84,6 +84,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Asset-bind public Baa to managed `Imp`; native-audit its complete role
   class plus deck-view add/remove helpers, and remove the false board-reveal
   inference from the live wrapper.
+- [x] Asset-bind public Shaman to managed `Illuzionist`; native-audit its four
+  role methods plus seven selection, status, and lifecycle helpers, expand the
+  typed union to twelve target sets and 198 memberships, and publish its
+  baseline-versus-typed quality report.
+- [x] Replace the solver's generic Shaman duplicate allowance with an ordered
+  source/target/copied trace plus a viable overwritten-identity class,
+  native-timed status effects, and copied-Alchemist Start regressions.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

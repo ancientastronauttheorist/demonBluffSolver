@@ -944,6 +944,7 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         drunk_position: None,
         alchemist_cures: HashMap::new(),
         messed_up_by_evil: HashSet::new(),
+        shaman_trace: None,
         chancellor_trace: None,
         chancellor_conversion: None,
     };
@@ -1033,6 +1034,7 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         drunk_position: None,
         alchemist_cures: HashMap::new(),
         messed_up_by_evil: HashSet::new(),
+        shaman_trace: None,
         chancellor_trace: None,
         chancellor_conversion: None,
     };
@@ -1540,6 +1542,84 @@ fn regression_disguised_outcasts_do_not_consume_trusted_outcast_slots() {
             panic!("{case_name} truth eliminated with trusted no=1: {detail}");
         }
     }
+}
+
+#[test]
+fn regression_asc63_v2_uses_native_shaman_trace_instead_of_fake_drunk() {
+    let path = v2_dir().join("asc63_v2.json");
+    let content = std::fs::read_to_string(path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let state = GameState::from_json(&value).unwrap();
+
+    let result = solve(&state);
+    let native_world = result.surviving_scenarios.iter().find(|scenario| {
+        scenario.evil_positions.get(&1)
+            .is_some_and(|role| normalize_role(role) == "baa")
+            && scenario.evil_positions.get(&5)
+                .is_some_and(|role| normalize_role(role) == "poisoner")
+            && scenario.evil_positions.get(&8)
+                .is_some_and(|role| normalize_role(role) == "shaman")
+            && scenario.drunk_position.is_none()
+            && scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                HashSet::from([trace.source_position, trace.target_position])
+                    == HashSet::from([4, 9])
+                    && normalize_role(&trace.copied_role) == "empress"
+            })
+    });
+
+    let scenario = native_world.expect(
+        "asc63_v2 truth must survive as Empress #4/#9 Shaman endpoints without fake Drunk #2",
+    );
+    assert!(scenario.messed_up_by_evil.contains(&4));
+    assert!(scenario.messed_up_by_evil.contains(&9));
+}
+
+#[test]
+fn regression_asc55_v2_separates_bard_shaman_trace_from_baker_chain() {
+    let path = v2_dir().join("asc55_v2.json");
+    let content = std::fs::read_to_string(path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let state = GameState::from_json(&value).unwrap();
+
+    let result = solve(&state);
+    let native_world = result.surviving_scenarios.iter().find(|scenario| {
+        scenario.evil_positions.get(&3)
+            .is_some_and(|role| normalize_role(role) == "baa")
+            && scenario.evil_positions.get(&4)
+                .is_some_and(|role| normalize_role(role) == "shaman")
+            && scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                HashSet::from([trace.source_position, trace.target_position])
+                    == HashSet::from([1, 5])
+                    && normalize_role(&trace.copied_role) == "bard"
+            })
+    });
+
+    native_world.expect("asc55_v2 Baker chain must not be mistaken for Shaman's Bard #1/#5 copy");
+}
+
+#[test]
+fn regression_asc46_v1_keeps_copied_baker_chain_opaque() {
+    let path = v2_dir().join("asc46_v1.json");
+    let content = std::fs::read_to_string(path).unwrap();
+    let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let state = GameState::from_json(&value).unwrap();
+
+    let result = solve(&state);
+    let native_world = result.surviving_scenarios.iter().find(|scenario| {
+        scenario.evil_positions.get(&2)
+            .is_some_and(|role| normalize_role(role) == "pooka")
+            && scenario.evil_positions.get(&3)
+                .is_some_and(|role| normalize_role(role) == "minion")
+            && scenario.evil_positions.get(&5)
+                .is_some_and(|role| normalize_role(role) == "shaman")
+            && scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                normalize_role(&trace.copied_role) == "baker"
+            })
+    });
+
+    native_world.expect(
+        "asc46_v1 truth must survive without invented copied-Baker runtime provenance",
+    );
 }
 
 #[test]

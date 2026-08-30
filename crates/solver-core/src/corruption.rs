@@ -3,12 +3,14 @@
 //! The shipped build does not compute one immutable corruption snapshot. Its
 //! serialized Start order mutates the live status lists in this order:
 //! Pooka, every Poisoner, Drunk, Puppeteer conversion, every Plague Doctor,
-//! then every Alchemist. This module keeps those mutations together so target
-//! eligibility and later Alchemist clues observe the correct prior state.
+//! Shaman, then every Alchemist. This module keeps those mutations together so
+//! target eligibility and later Alchemist clues observe the correct prior state.
 
 use std::collections::{HashMap, HashSet};
 
 use crate::geometry::adjacent_positions;
+use crate::knowledge_base::normalize_role;
+use crate::types::ShamanTrace;
 
 /// Role/type facts that are already fixed by a placement hypothesis.
 #[derive(Debug, Clone, Default)]
@@ -45,6 +47,10 @@ pub struct StartCorruptionContext {
     pub drunk_position: Option<u8>,
     pub puppet_position: Option<u8>,
     pub plague_doctor_acts: bool,
+
+    /// Caller-enumerated native Shaman source/target history. Placement and
+    /// final-role consistency are validated outside this status simulator.
+    pub shaman_trace: Option<ShamanTrace>,
 }
 
 /// One observable outcome of Start-phase random target selection.
@@ -59,6 +65,9 @@ pub struct StartCorruptionOutcome {
     /// Persistent evil-effect marker used by Witness. Alchemist cures do not
     /// remove this status.
     pub messed_up_by_evil: HashSet<u8>,
+    /// The ordered trace representation that produced Shaman's status/action
+    /// effects; solver-equivalent overwritten roles share one candidate class.
+    pub shaman_trace: Option<ShamanTrace>,
 }
 
 /// Enumerate native-order corruption outcomes for a single role-placement
@@ -200,18 +209,61 @@ pub fn enumerate_start_corruption(
     }
 
     let mut outcomes = Vec::new();
-    for (mut branch, affected, pd_target) in pd_branches {
-        let alchemist_counts = apply_alchemists(
+    for (mut branch, mut affected, pd_target) in pd_branches {
+        let shaman_trace = context.shaman_trace.clone();
+        let mut alchemist_counts = HashMap::new();
+
+        // Shaman acts after Plague Doctor and before the global Alchemist pass.
+        // Its source marker precedes the target reinitialization and copied
+        // Start action; its target marker follows that action.
+        if let Some(trace) = shaman_trace.as_ref() {
+            if !context
+                .messed_up_resistant_at_init
+                .contains(&trace.source_position)
+            {
+                affected.insert(trace.source_position);
+            }
+
+            if normalize_role(&trace.copied_role) == "alchemist" {
+                let target = trace.target_position;
+                if branch.contains(&target) {
+                    // A pre-Shaman Corrupted Good target dispatches copied
+                    // Alchemist.BluffAct(Start). Without WorkingAbility it
+                    // records/reset state at zero and does not cure.
+                    alchemist_counts.insert(target, 0);
+                } else {
+                    let count =
+                        apply_alchemist(target, n_cards, context.drunk_position, &mut branch);
+                    alchemist_counts.insert(target, count);
+                }
+            }
+
+            if !context
+                .messed_up_resistant_at_init
+                .contains(&trace.target_position)
+            {
+                affected.insert(trace.target_position);
+            }
+        }
+
+        // The caller removes any copied target whose immediate Start guard
+        // suppresses its later global dispatch. Preserve an immediate count if
+        // a transitional caller accidentally supplies the same position here.
+        let global_alchemist_counts = apply_alchemists(
             n_cards,
             &context.true_alchemist_positions,
             context.drunk_position,
             &mut branch,
         );
+        for (position, count) in global_alchemist_counts {
+            alchemist_counts.entry(position).or_insert(count);
+        }
         outcomes.push(StartCorruptionOutcome {
             corrupted: branch,
             pd_target,
             alchemist_counts,
             messed_up_by_evil: affected,
+            shaman_trace,
         });
     }
     dedup_outcomes(outcomes)
@@ -229,24 +281,34 @@ fn apply_alchemists(
 
     let mut counts = HashMap::new();
     for actor in actors {
-        // The native helper builds this list from live status at call time and
-        // preserves the overlap duplicate found on three- and four-card boards.
-        let poisoned_scan: Vec<u8> = alchemist_scan_positions(actor, n_cards)
-            .into_iter()
-            .filter(|position| corrupted.contains(position))
-            .collect();
-        let count = u8::try_from(poisoned_scan.len()).unwrap_or(u8::MAX);
+        let count = apply_alchemist(actor, n_cards, drunk_position, corrupted);
         counts.insert(actor, count);
-
-        // CurePoisons increments before every attempt and ignores the return
-        // value. Drunk's role veto leaves its self-targeted status in place.
-        for target in poisoned_scan {
-            if Some(target) != drunk_position {
-                corrupted.remove(&target);
-            }
-        }
     }
     counts
+}
+
+fn apply_alchemist(
+    actor: u8,
+    n_cards: u8,
+    drunk_position: Option<u8>,
+    corrupted: &mut HashSet<u8>,
+) -> u8 {
+    // The native helper builds this list from live status at call time and
+    // preserves the overlap duplicate found on three- and four-card boards.
+    let poisoned_scan: Vec<u8> = alchemist_scan_positions(actor, n_cards)
+        .into_iter()
+        .filter(|position| corrupted.contains(position))
+        .collect();
+    let count = u8::try_from(poisoned_scan.len()).unwrap_or(u8::MAX);
+
+    // CurePoisons increments before every attempt and ignores the return
+    // value. Drunk's role veto leaves its self-targeted status in place.
+    for target in poisoned_scan {
+        if Some(target) != drunk_position {
+            corrupted.remove(&target);
+        }
+    }
+    count
 }
 
 /// Reproduce the shipped helper's asymmetric list scan. CurrentCharacters is
@@ -306,6 +368,7 @@ fn dedup_outcomes(values: Vec<StartCorruptionOutcome>) -> Vec<StartCorruptionOut
                 value.pd_target,
                 sorted_count_key(&value.alchemist_counts),
                 sorted_set_key(&value.messed_up_by_evil),
+                value.shaman_trace.clone(),
             ))
         })
         .collect()
@@ -466,5 +529,87 @@ mod tests {
         let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, None);
         assert_eq!(outcomes.len(), 1);
         assert_eq!(outcomes[0].pd_target, None);
+    }
+
+    fn shaman_trace(source: u8, target: u8, copied_role: &str) -> ShamanTrace {
+        ShamanTrace {
+            source_position: source,
+            target_position: target,
+            copied_role: copied_role.to_string(),
+            target_previous_roles: vec!["Witness".to_string()],
+        }
+    }
+
+    #[test]
+    fn shaman_marks_both_distinct_endpoints_and_preserves_trace() {
+        let mut ctx = context(&[2, 4]);
+        ctx.shaman_trace = Some(shaman_trace(2, 4, "Scout"));
+
+        let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, None);
+
+        assert_eq!(outcomes.len(), 1);
+        assert_eq!(outcomes[0].messed_up_by_evil, HashSet::from([2, 4]));
+        assert_eq!(outcomes[0].shaman_trace, ctx.shaman_trace);
+    }
+
+    #[test]
+    fn shaman_endpoint_markers_honor_exact_resistance() {
+        let mut ctx = context(&[2, 4]);
+        ctx.shaman_trace = Some(shaman_trace(2, 4, "Scout"));
+        ctx.messed_up_resistant_at_init.insert(2);
+
+        let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, None);
+
+        assert_eq!(outcomes[0].messed_up_by_evil, HashSet::from([4]));
+    }
+
+    #[test]
+    fn clean_copied_alchemist_acts_before_global_alchemists() {
+        let mut ctx = context(&[2, 3, 4, 5]);
+        ctx.shaman_trace = Some(shaman_trace(4, 3, "Alchemist"));
+        ctx.true_alchemist_positions = vec![4];
+        ctx.corruption_resistant_at_init.insert(4);
+
+        let outcomes = enumerate_start_corruption(5, &roles(&[(1, "Pooka")]), &ctx, None);
+
+        assert_eq!(outcomes.len(), 1);
+        assert_eq!(outcomes[0].alchemist_counts.get(&3), Some(&2));
+        assert_eq!(outcomes[0].alchemist_counts.get(&4), Some(&0));
+        assert!(outcomes[0].corrupted.is_empty());
+    }
+
+    #[test]
+    fn corrupted_copied_alchemist_records_zero_and_does_not_cure() {
+        let mut ctx = context(&[1, 4]);
+        ctx.plague_doctor_acts = true;
+        ctx.shaman_trace = Some(shaman_trace(1, 4, "alchemist"));
+        ctx.true_alchemist_positions = vec![1];
+        ctx.corruption_resistant_at_init.insert(1);
+
+        let outcomes = enumerate_start_corruption(7, &HashMap::new(), &ctx, Some(4));
+
+        assert_eq!(outcomes.len(), 1);
+        assert_eq!(outcomes[0].pd_target, Some(4));
+        assert_eq!(outcomes[0].alchemist_counts.get(&4), Some(&0));
+        assert_eq!(outcomes[0].alchemist_counts.get(&1), Some(&0));
+        assert_eq!(outcomes[0].corrupted, HashSet::from([4]));
+    }
+
+    #[test]
+    fn outcome_dedup_keeps_distinct_shaman_traces() {
+        let outcome = |trace| StartCorruptionOutcome {
+            corrupted: HashSet::new(),
+            pd_target: None,
+            alchemist_counts: HashMap::new(),
+            messed_up_by_evil: HashSet::from([2, 4]),
+            shaman_trace: Some(trace),
+        };
+
+        let outcomes = dedup_outcomes(vec![
+            outcome(shaman_trace(2, 4, "Scout")),
+            outcome(shaman_trace(4, 2, "Scout")),
+        ]);
+
+        assert_eq!(outcomes.len(), 2);
     }
 }

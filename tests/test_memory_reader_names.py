@@ -7,7 +7,9 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
     def test_asset_proven_internal_role_names(self):
         expected = {
             "Baron": "Chancellor",
+            "Cipher": "Witch",
             "Imp": "Baa",
+            "Illuzionist": "Shaman",
             "Marionette": "Twin Minion",
             "Mezepheles": "Puppeteer",
             "Puzzlemaster": "Plague Doctor",
@@ -26,6 +28,8 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Mezepheles_09511163": "Puppeteer",
             "Puzzlemaster_49312486": "Plague Doctor",
             "Plague Doctor_49312486": "Plague Doctor",
+            "Shaman_26945607": "Shaman",
+            "Witch_25286521": "Witch",
         }
 
         for native_name, display_name in expected.items():

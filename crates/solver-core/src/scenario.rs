@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 use crate::corruption::{enumerate_start_corruption, StartCorruptionContext};
 use crate::geometry::adjacent_positions;
 use crate::knowledge_base::{get_card, normalize_role, Faction};
-use crate::types::{BoardCountProvenance, ChancellorTrace, GameState, Scenario};
+use crate::types::{BoardCountProvenance, ChancellorTrace, GameState, Scenario, ShamanTrace};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct RawChancellorTrace {
@@ -24,6 +24,7 @@ struct ScenarioSemanticKey {
     doppelganger_position: Option<u8>,
     drunk_position: Option<u8>,
     chancellor_added: Option<(u8, String)>,
+    shaman_trace: Option<ShamanTrace>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -37,6 +38,7 @@ struct StartContextSemanticKey {
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
     plague_doctor_acts: bool,
+    shaman_trace: Option<ShamanTrace>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -355,49 +357,60 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                                 .collect()
                         };
 
-                        for context in context_variants {
-                            let chancellor_added = raw_trace.as_ref().map(|trace| {
-                                (
-                                    trace.added_outcast_position,
-                                    normalize_role(&trace.added_outcast_role),
-                                )
-                            });
-                            let key = PendingStartKey {
-                                chancellor_added,
-                                context: start_context_key(&context),
-                            };
-                            if let Some(&index) = pending_seen.get(&key) {
-                                if let Some(trace) = raw_trace.as_ref() {
-                                    if !pending_contexts[index]
-                                        .original_positions
-                                        .contains(&trace.original_position)
-                                    {
-                                        pending_contexts[index]
+                        for base_context in context_variants {
+                            for context in shaman_start_context_variants(
+                                state,
+                                &full_evil,
+                                dopp_pos_opt,
+                                drunk_pos_opt,
+                                puppet_pos,
+                                raw_trace.as_ref(),
+                                plague_doctor_acts,
+                                base_context,
+                            ) {
+                                let chancellor_added = raw_trace.as_ref().map(|trace| {
+                                    (
+                                        trace.added_outcast_position,
+                                        normalize_role(&trace.added_outcast_role),
+                                    )
+                                });
+                                let key = PendingStartKey {
+                                    chancellor_added,
+                                    context: start_context_key(&context),
+                                };
+                                if let Some(&index) = pending_seen.get(&key) {
+                                    if let Some(trace) = raw_trace.as_ref() {
+                                        if !pending_contexts[index]
                                             .original_positions
-                                            .push(trace.original_position);
-                                        pending_contexts[index]
-                                            .original_positions
-                                            .sort_unstable();
+                                            .contains(&trace.original_position)
+                                        {
+                                            pending_contexts[index]
+                                                .original_positions
+                                                .push(trace.original_position);
+                                            pending_contexts[index]
+                                                .original_positions
+                                                .sort_unstable();
+                                        }
                                     }
+                                    continue;
                                 }
-                                continue;
-                            }
 
-                            let index = pending_contexts.len();
-                            pending_contexts.push(PendingStartContext {
-                                context,
-                                added_outcast_position: raw_trace
-                                    .as_ref()
-                                    .map(|trace| trace.added_outcast_position),
-                                added_outcast_role: raw_trace
-                                    .as_ref()
-                                    .map(|trace| trace.added_outcast_role.clone()),
-                                original_positions: raw_trace
-                                    .as_ref()
-                                    .map(|trace| vec![trace.original_position])
-                                    .unwrap_or_default(),
-                            });
-                            pending_seen.insert(key, index);
+                                let index = pending_contexts.len();
+                                pending_contexts.push(PendingStartContext {
+                                    context,
+                                    added_outcast_position: raw_trace
+                                        .as_ref()
+                                        .map(|trace| trace.added_outcast_position),
+                                    added_outcast_role: raw_trace
+                                        .as_ref()
+                                        .map(|trace| trace.added_outcast_role.clone()),
+                                    original_positions: raw_trace
+                                        .as_ref()
+                                        .map(|trace| vec![trace.original_position])
+                                        .unwrap_or_default(),
+                                });
+                                pending_seen.insert(key, index);
+                            }
                         }
                     }
                 }
@@ -438,12 +451,12 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                             doppelganger_position: dopp_pos_opt,
                             drunk_position: drunk_pos_opt,
                             chancellor_added,
+                            shaman_trace: outcome.shaman_trace.clone(),
                         };
 
                         if let Some(&index) = seen.get(&key) {
-                            if let Some(trace) = placement_scenarios[index]
-                                .chancellor_trace
-                                .as_mut()
+                            if let Some(trace) =
+                                placement_scenarios[index].chancellor_trace.as_mut()
                             {
                                 for original in &pending.original_positions {
                                     if !trace.original_positions.contains(original) {
@@ -475,6 +488,7 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                             drunk_position: drunk_pos_opt,
                             alchemist_cures: outcome.alchemist_counts,
                             messed_up_by_evil: outcome.messed_up_by_evil,
+                            shaman_trace: outcome.shaman_trace,
                             chancellor_trace,
                             chancellor_conversion,
                         };
@@ -729,6 +743,29 @@ fn natural_outcast_hypothesis_allows(
     trace: Option<&RawChancellorTrace>,
     plague_doctor_acts: Option<bool>,
 ) -> bool {
+    natural_outcast_hypothesis_allows_with_required_villagers(
+        state,
+        full_evil,
+        puppet_position,
+        doppelganger_position,
+        drunk_position,
+        trace,
+        plague_doctor_acts,
+        &HashSet::new(),
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn natural_outcast_hypothesis_allows_with_required_villagers(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    trace: Option<&RawChancellorTrace>,
+    plague_doctor_acts: Option<bool>,
+    required_villagers: &HashSet<u8>,
+) -> bool {
     let doppelganger_role = normalize_role("Doppelganger");
     let drunk_role = normalize_role("Drunk");
     let pd_role = normalize_role("Plague Doctor");
@@ -753,8 +790,14 @@ fn natural_outcast_hypothesis_allows(
             || puppet_position == Some(position)
             || generated_position == Some(position)
     };
+    if required_villagers
+        .iter()
+        .any(|position| *position == 0 || *position > state.n_cards || excluded(*position))
+    {
+        return false;
+    }
     let can_host_special = |position: u8, special: &str| {
-        if excluded(position) {
+        if excluded(position) || required_villagers.contains(&position) {
             return false;
         }
         if let Some(role) = state.executed_good_roles.get(&position) {
@@ -809,6 +852,9 @@ fn natural_outcast_hypothesis_allows(
             })
         };
         if let Some(role) = observed {
+            if required_villagers.contains(&position) {
+                return false;
+            }
             if !add_fixed_outcast(&mut fixed, position, role) {
                 return false;
             }
@@ -818,6 +864,7 @@ fn natural_outcast_hypothesis_allows(
     // Unknown natural identities need actual hidden, unconstrained good seats.
     let anonymous_hosts: HashSet<u8> = (1..=state.n_cards)
         .filter(|position| !excluded(*position))
+        .filter(|position| !required_villagers.contains(position))
         .filter(|position| !fixed.contains_key(position))
         .filter(|position| state.card_at(*position).is_none())
         .filter(|position| !state.executed_good_roles.contains_key(position))
@@ -1029,6 +1076,7 @@ fn build_chancellor_start_context_variants(
             drunk_position,
             puppet_position,
             plague_doctor_acts,
+            shaman_trace: None,
         };
         let key = start_context_key(&context);
         if seen.insert(key) {
@@ -1245,6 +1293,272 @@ fn trace_unrevealed_must_be_villager(
     occupied.len() >= board_outcasts as usize
 }
 
+/// Expand the native Shaman Start action into ordered source/target identity
+/// histories. The source remains unchanged; the target's former Villager
+/// identity is erased and replaced with the source's current identity.
+#[allow(clippy::too_many_arguments)]
+fn shaman_start_context_variants(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    chancellor_trace: Option<&RawChancellorTrace>,
+    plague_doctor_acts: bool,
+    base: StartCorruptionContext,
+) -> Vec<StartCorruptionContext> {
+    let shaman_acts = full_evil
+        .values()
+        .any(|role| normalize_role(role) == "shaman");
+    if !shaman_acts {
+        return vec![base];
+    }
+
+    let mut eligible: Vec<u8> = base
+        .registered_villagers_at_pd_call
+        .iter()
+        .copied()
+        .collect();
+    for position in 1..=state.n_cards {
+        if eligible.contains(&position)
+            || full_evil.contains_key(&position)
+            || doppelganger_position == Some(position)
+            || drunk_position == Some(position)
+            || puppet_position == Some(position)
+        {
+            continue;
+        }
+        let observed_role = state
+            .executed_good_roles
+            .get(&position)
+            .map(String::as_str)
+            .or_else(|| state.card_at(position).map(|card| card.apparent_role.as_str()));
+        if observed_role.is_none_or(|role| is_state_villager_role(role, state)) {
+            // Hidden faction assignments are resolved per ordered endpoint
+            // pair below against the exact natural-Outcast multiset budget.
+            eligible.push(position);
+        }
+    }
+    eligible.sort_unstable();
+    eligible.dedup();
+    if eligible.len() < 2 {
+        // Native code has no count guard and cannot complete the second draw.
+        return Vec::new();
+    }
+
+    let deck_roles = unique_deck_villager_roles(state);
+    if deck_roles.is_empty() {
+        return Vec::new();
+    }
+
+    let mut variants = Vec::new();
+    let mut endpoint_pair_feasibility = HashMap::new();
+    for &source_position in &eligible {
+        for &target_position in &eligible {
+            if source_position == target_position {
+                continue;
+            }
+
+            let required_villagers = HashSet::from([source_position, target_position]);
+            let endpoint_key = (
+                source_position.min(target_position),
+                source_position.max(target_position),
+            );
+            let pair_is_feasible = *endpoint_pair_feasibility
+                .entry(endpoint_key)
+                .or_insert_with(|| {
+                    natural_outcast_hypothesis_allows_with_required_villagers(
+                        state,
+                        full_evil,
+                        puppet_position,
+                        doppelganger_position,
+                        drunk_position,
+                        chancellor_trace,
+                        Some(plague_doctor_acts),
+                        &required_villagers,
+                    )
+                });
+            if !pair_is_feasible {
+                continue;
+            }
+            let mut pair_base = base.clone();
+            pair_base.real_villagers_before_puppet.extend(required_villagers.iter());
+            pair_base
+                .registered_villagers_at_pd_call
+                .extend(required_villagers.iter());
+
+            let source_role = observed_final_villager_role(source_position, state);
+            let target_role = observed_final_villager_role(target_position, state);
+            let copied_roles: Vec<&String> = deck_roles
+                .iter()
+                .filter(|role| {
+                    source_role
+                        .as_deref()
+                        .is_none_or(|known| normalize_role(known) == normalize_role(role))
+                        && target_role
+                            .as_deref()
+                            .is_none_or(|known| normalize_role(known) == normalize_role(role))
+                })
+                .collect();
+
+            for copied_role in copied_roles {
+                // Alchemist is the only overwritten identity whose preserved
+                // Init-time resistance remains solver-visible. Keep it in a
+                // separate trace, while grouping every viable non-Alchemist
+                // identity without multiplying this endpoint's probability.
+                let mut previous_role_classes: Vec<(bool, Vec<String>)> = Vec::new();
+                for target_previous_role in &deck_roles {
+                    let exact_trace = ShamanTrace {
+                        source_position,
+                        target_position,
+                        copied_role: copied_role.clone(),
+                        target_previous_roles: vec![target_previous_role.clone()],
+                    };
+                    if !shaman_initial_role_counts_fit(&exact_trace, state, &pair_base) {
+                        continue;
+                    }
+
+                    let was_alchemist = normalize_role(target_previous_role) == "alchemist";
+                    if let Some((_, roles)) = previous_role_classes
+                        .iter_mut()
+                        .find(|(class, _)| *class == was_alchemist)
+                    {
+                        roles.push(target_previous_role.clone());
+                    } else {
+                        previous_role_classes
+                            .push((was_alchemist, vec![target_previous_role.clone()]));
+                    }
+                }
+
+                for (_, mut target_previous_roles) in previous_role_classes {
+                    target_previous_roles.sort_by_key(|role| normalize_role(role));
+                    let trace = ShamanTrace {
+                        source_position,
+                        target_position,
+                        copied_role: copied_role.clone(),
+                        target_previous_roles,
+                    };
+                    variants.push(apply_shaman_trace_to_context(pair_base.clone(), trace));
+                }
+            }
+        }
+    }
+    variants
+}
+
+fn unique_deck_villager_roles(state: &GameState) -> Vec<String> {
+    let mut roles = Vec::new();
+    let mut seen = HashSet::new();
+    for role in &state.deck.villagers {
+        if seen.insert(normalize_role(role)) {
+            roles.push(role.clone());
+        }
+    }
+    roles
+}
+
+fn observed_final_villager_role(position: u8, state: &GameState) -> Option<String> {
+    state
+        .executed_good_roles
+        .get(&position)
+        .map(String::as_str)
+        .or_else(|| {
+            state
+                .card_at(position)
+                .map(|card| card.apparent_role.as_str())
+        })
+        .filter(|role| is_state_villager_role(role, state))
+        .map(str::to_string)
+}
+
+/// Cheap pre-pruning for erased-role alternatives. Baker identities are left
+/// to the dedicated chain validator because their Start conversions rewrite
+/// this same multiset independently of Shaman.
+fn shaman_initial_role_counts_fit(
+    trace: &ShamanTrace,
+    state: &GameState,
+    context: &StartCorruptionContext,
+) -> bool {
+    let mut counts: HashMap<String, usize> = HashMap::new();
+    let mut source_seen = false;
+
+    for &position in &context.registered_villagers_at_pd_call {
+        let role = if position == trace.target_position {
+            trace
+                .target_previous_roles
+                .first()
+                .expect("exact Shaman pre-pruning trace has one prior role")
+                .as_str()
+        } else if let Some(observed) = observed_final_villager_role(position, state) {
+            if position == trace.source_position {
+                source_seen = true;
+            }
+            // The trace generator has already required the source observation
+            // to equal copied_role.
+            *counts.entry(normalize_role(&observed)).or_insert(0) += 1;
+            continue;
+        } else {
+            continue;
+        };
+        *counts.entry(normalize_role(role)).or_insert(0) += 1;
+    }
+
+    if !source_seen {
+        *counts
+            .entry(normalize_role(&trace.copied_role))
+            .or_insert(0) += 1;
+    }
+
+    let mut available: HashMap<String, usize> = HashMap::new();
+    for role in &state.deck.villagers {
+        *available.entry(normalize_role(role)).or_insert(0) += 1;
+    }
+    counts
+        .into_iter()
+        .all(|(role, count)| role == "baker" || count <= available.get(&role).copied().unwrap_or(0))
+}
+
+fn apply_shaman_trace_to_context(
+    mut context: StartCorruptionContext,
+    trace: ShamanTrace,
+) -> StartCorruptionContext {
+    let source_is_alchemist = normalize_role(&trace.copied_role) == "alchemist";
+    let target_was_alchemist = trace
+        .target_previous_roles
+        .iter()
+        .any(|role| normalize_role(role) == "alchemist");
+
+    // These sets describe Init-time resistance and actors still eligible at
+    // the later all-Alchemist Start slot. InitWithNoReset preserves the
+    // target's former resistance but its immediate copied Start consumes the
+    // target's one-shot guard, so it never acts again in the global scan.
+    context
+        .corruption_resistant_at_init
+        .remove(&trace.source_position);
+    context
+        .corruption_resistant_at_init
+        .remove(&trace.target_position);
+    context.true_alchemist_positions.retain(|position| {
+        *position != trace.source_position && *position != trace.target_position
+    });
+
+    if source_is_alchemist {
+        context
+            .corruption_resistant_at_init
+            .insert(trace.source_position);
+        context.true_alchemist_positions.push(trace.source_position);
+    }
+    if target_was_alchemist {
+        context
+            .corruption_resistant_at_init
+            .insert(trace.target_position);
+    }
+    context.true_alchemist_positions.sort_unstable();
+    context.true_alchemist_positions.dedup();
+    context.shaman_trace = Some(trace);
+    context
+}
+
 fn sorted_positions(values: &HashSet<u8>) -> Vec<u8> {
     let mut result: Vec<u8> = values.iter().copied().collect();
     result.sort_unstable();
@@ -1274,6 +1588,7 @@ fn start_context_key(context: &StartCorruptionContext) -> StartContextSemanticKe
         drunk_position: context.drunk_position,
         puppet_position: context.puppet_position,
         plague_doctor_acts: context.plague_doctor_acts,
+        shaman_trace: context.shaman_trace.clone(),
     }
 }
 
@@ -1357,6 +1672,7 @@ fn build_start_corruption_context(
         drunk_position,
         puppet_position,
         plague_doctor_acts,
+        shaman_trace: None,
     }
 }
 
@@ -1925,6 +2241,225 @@ mod tests {
             added_outcast_role: added_role.to_string(),
             anchor_position,
         }
+    }
+
+    #[test]
+    fn shaman_variants_bind_the_visible_duplicate_to_an_erased_deck_role() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.cards = vec![card(2, "Scout"), card(3, "Scout")];
+        let real = HashSet::from([2, 3]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: real.clone(),
+            registered_villagers_at_pd_call: real,
+            ..StartCorruptionContext::default()
+        };
+        let evil = HashMap::from([(1, "Shaman".to_string())]);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, None, None, false, context,
+        );
+
+        assert_eq!(variants.len(), 2);
+        let traces: HashSet<(u8, u8, String, Vec<String>)> = variants
+            .into_iter()
+            .map(|context| {
+                let trace = context.shaman_trace.expect("Shaman world carries a trace");
+                (
+                    trace.source_position,
+                    trace.target_position,
+                    normalize_role(&trace.copied_role),
+                    trace
+                        .target_previous_roles
+                        .iter()
+                        .map(|role| normalize_role(role))
+                        .collect(),
+                )
+            })
+            .collect();
+        assert_eq!(
+            traces,
+            HashSet::from([
+                (2, 3, "scout".to_string(), vec!["witness".to_string()]),
+                (3, 2, "scout".to_string(), vec!["witness".to_string()]),
+            ])
+        );
+    }
+
+    #[test]
+    fn shaman_candidates_exclude_puppet_and_chancellor_generated_outcast() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.cards = vec![
+            card(2, "Scout"),
+            card(3, "Scout"),
+            card(4, "Scout"),
+            card(5, "Bombardier"),
+        ];
+        let evil = HashMap::from([(1, "Shaman".to_string()), (4, "Puppet".to_string())]);
+        let context =
+            build_start_corruption_context(&state, &evil, None, None, Some(4), Some(5), &[], false);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, Some(4), None, false, context,
+        );
+
+        assert!(!variants.is_empty());
+        assert!(variants.iter().all(|context| {
+            let trace = context.shaman_trace.as_ref().unwrap();
+            [trace.source_position, trace.target_position]
+                .into_iter()
+                .all(|position| matches!(position, 2 | 3))
+        }));
+    }
+
+    #[test]
+    fn shaman_can_select_a_hidden_villager_from_mixed_hidden_factions() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.cards = vec![card(2, "Scout")];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        let known = HashSet::from([2]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: known.clone(),
+            registered_villagers_at_pd_call: known,
+            plague_doctor_acts: true,
+            ..StartCorruptionContext::default()
+        };
+        let evil = HashMap::from([(1, "Shaman".to_string())]);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, None, None, true, context,
+        );
+        let endpoint_sets: HashSet<Vec<u8>> = variants
+            .iter()
+            .filter_map(|context| context.shaman_trace.as_ref())
+            .map(|trace| {
+                let mut endpoints = vec![trace.source_position, trace.target_position];
+                endpoints.sort_unstable();
+                endpoints
+            })
+            .collect();
+
+        assert!(endpoint_sets.contains(&vec![2, 3]));
+        assert!(endpoint_sets.contains(&vec![2, 4]));
+        assert!(
+            !endpoint_sets.contains(&vec![3, 4]),
+            "the exact Outcast budget requires one of the two hidden seats"
+        );
+
+        let hidden_three_context = variants
+            .iter()
+            .find(|context| {
+                context.shaman_trace.as_ref().is_some_and(|trace| {
+                    HashSet::from([trace.source_position, trace.target_position])
+                        == HashSet::from([2, 3])
+                })
+            })
+            .expect("one branch assigns hidden #3 as Shaman-eligible Villager");
+        assert!(hidden_three_context
+            .registered_villagers_at_pd_call
+            .contains(&3));
+        let outcomes = enumerate_start_corruption(
+            state.n_cards,
+            &evil,
+            hidden_three_context,
+            Some(3),
+        );
+        assert!(outcomes.iter().any(|outcome| {
+            outcome.pd_target == Some(3) && outcome.corrupted.contains(&3)
+        }));
+    }
+
+    #[test]
+    fn shaman_alchemist_context_keeps_only_source_as_a_later_actor() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec!["Alchemist".to_string(), "Witness".to_string()];
+        state.cards = vec![card(2, "Alchemist"), card(3, "Alchemist")];
+        let real = HashSet::from([2, 3]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: real.clone(),
+            registered_villagers_at_pd_call: real,
+            corruption_resistant_at_init: HashSet::from([2, 3]),
+            true_alchemist_positions: vec![2, 3],
+            ..StartCorruptionContext::default()
+        };
+        let evil = HashMap::from([(1, "Shaman".to_string())]);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, None, None, false, context,
+        );
+
+        assert_eq!(variants.len(), 2);
+        for context in variants {
+            let trace = context.shaman_trace.as_ref().unwrap();
+            assert_eq!(
+                context.true_alchemist_positions,
+                vec![trace.source_position]
+            );
+            assert!(context
+                .corruption_resistant_at_init
+                .contains(&trace.source_position));
+            assert!(!context
+                .corruption_resistant_at_init
+                .contains(&trace.target_position));
+            assert_eq!(
+                trace
+                    .target_previous_roles
+                    .iter()
+                    .map(|role| normalize_role(role))
+                    .collect::<Vec<_>>(),
+                vec!["witness".to_string()]
+            );
+        }
+    }
+
+    #[test]
+    fn shaman_groups_solver_equivalent_erased_roles_without_losing_candidates() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec![
+            "Scout".to_string(),
+            "Witness".to_string(),
+            "Judge".to_string(),
+        ];
+        let real = HashSet::from([2, 3]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: real.clone(),
+            registered_villagers_at_pd_call: real,
+            ..StartCorruptionContext::default()
+        };
+        let evil = HashMap::from([(1, "Shaman".to_string())]);
+
+        let variants = shaman_start_context_variants(
+            &state, &evil, None, None, None, None, false, context,
+        );
+        let scout_trace = variants
+            .iter()
+            .filter_map(|context| context.shaman_trace.as_ref())
+            .find(|trace| {
+                trace.source_position == 2
+                    && trace.target_position == 3
+                    && normalize_role(&trace.copied_role) == "scout"
+            })
+            .expect("hidden Scout copy has one grouped non-Alchemist history");
+
+        assert_eq!(
+            scout_trace
+                .target_previous_roles
+                .iter()
+                .map(|role| normalize_role(role))
+                .collect::<HashSet<_>>(),
+            HashSet::from(["witness".to_string(), "judge".to_string()])
+        );
     }
 
     #[test]

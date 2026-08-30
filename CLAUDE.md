@@ -73,7 +73,7 @@ Triggered by 0 scenarios. Do NOT guess; do NOT reset entries to make the solver 
 8b. **Enter card info in order #1→#N** (preserves `reveal_order`). Built-in validation warns on out-of-order entry. `next` warns on missing entries. Active abilities (lightning bolt icon): `card no_info <pos> <Role>`.
    - **Poet "#X is Evil"**: `card poet <pos> bounty_hunter <target>` (NOT medium) (asc37_v3).
 9. `set_hp <hp> <wrong_exec_cost>` at game start (defaults to cost=5).
-   - **Shaman games (multiple Bakers)**: Shaman swaps villagers to Baker at game start. Swapped Bakers say "I was a [original role]" (self-ID). Original Baker says "I am the original Baker."
+   - **Shaman games**: Shaman overwrites one eligible Villager with another Villager's role at game start; it is not a swap and is not Baker-specific. If Baker is copied, use the live clue text: chain Bakers say "I was a [original role]" and an original Baker says "I am the original Baker."
    - **Druid "Wretch" result**: enter as `card druid <pos> <targets> Wretch` (not `none`) — evil Druid lying by claiming an outcast.
    - **PD ability**: `pd_check <pd_pos> <target> corrupted <evil_pos>` or `pd_check <pd_pos> <target> clean`. Use `pd_check`, NOT `card pd_check` (asc46_v1).
 
@@ -114,9 +114,10 @@ Every screenshot, memory reader reads state and compares against what the screen
 **Notes**:
 - Multi-village: fixed. Uses Unity native object name at `m_CachedPtr(0x10)+0x48` with `characterId` fallback.
 - Player.log: `%LOCALAPPDATA%Low/UmiArt/Demon Bluff/Player.log` — INIT entries have true roles in reverse position order.
-- Name mappings: Gambler→Gemcrafter, Imp→Baa, Baron→Chancellor, plus the
-  asset-proven internal mappings Skinwalker→Mutant, Marionette→Twin Minion,
-  Mezepheles→Puppeteer, and Puzzlemaster→Plague Doctor (see `DISPLAY_NAMES`).
+- Name mappings: Gambler→Gemcrafter, Imp→Baa, Baron→Chancellor,
+  Illuzionist→Shaman, Cipher→Witch, plus the asset-proven internal mappings
+  Skinwalker→Mutant, Marionette→Twin Minion, Mezepheles→Puppeteer, and
+  Puzzlemaster→Plague Doctor (see `DISPLAY_NAMES`).
 
 ## Setup
 - Screen: 2560x1440, Python 3.13, Rust 2021 edition.
@@ -139,6 +140,7 @@ See `memory/project_open_solver_issues.md` for the full list. Highlights:
 - **Drunk counts as Villager in header** — `board_outcast_count` may undercount. Handled.
 - **`next` auto-executes by default** (≥20% confidence). Use `next --plan` or `--dry` for print-only.
 - **Baa's eye-symbol mismatch is deck-VIEW only, not HUD.** Native `Imp.Act` obscures one existing Outcast record and reveals that deck-strip identity on Baa's death; it does not add a gameplay role or flip a board card. Top-right HUD counts Baa as Demon (1D), so do NOT adjust `no=` (asc75_v3).
+- **Shaman is a one-way overwrite, not a swap.** Native `Illuzionist.Act` runs after Plague Doctor and before Alchemist, chooses an ordered apparent-Villager source/target pair, attempts the source marker, replaces the target with the source identity, immediately fires copied Start, then attempts the target marker. Resistance can suppress either marker. The target keeps its prior statuses, resistance, and runtime data across `InitWithNoReset`; the Rust solver represents ordered endpoints plus a viable erased-role class with `ShamanTrace`, models copied-Alchemist timing, and leaves copied Baker/runtime-data composition opaque.
 - **Public Dreamer:** the shipped asset binds managed `Dreamer`, not the unbound `Dreamer2` alternate. It picks exactly 2 characters and immediately returns `Among #X, #Y there is: R1 or R2`, with no role picker; a selected Wretch instead produces the truthful Cabbage clue. The current native fallback can truthfully report both selected roles, and a lying result can match one selected real role through the other target's bluff, so validation and recommendation must use native output support rather than a simple one-match/zero-match rule. **Firing Dreamer manually is PREFERRED** when the solver recommends it. Flow: click Dreamer card → pick 2 characters → read the immediate result. Only use `ability_used <pos>` if you've confirmed Dreamer truly cannot narrow. While target-selection mode is active, do not re-click Dreamer; that can cancel/reactivate and cost HP.
 
 ## Game Overview

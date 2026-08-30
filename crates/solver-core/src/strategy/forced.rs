@@ -312,6 +312,7 @@ mod tests {
             drunk_position: None,
             alchemist_cures: HashMap::new(),
             messed_up_by_evil: HashSet::new(),
+            shaman_trace: None,
             chancellor_trace: None,
             chancellor_conversion: None,
         }

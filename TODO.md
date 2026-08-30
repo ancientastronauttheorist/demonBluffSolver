@@ -71,7 +71,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 
-- [x] **Shaman guaranteed duplicate** — FIXED. Requires visible Villager pair when all Good positions revealed (accounts for unrevealed/night-killed positions).
+- [x] **Shaman ordered overwrite trace** — FIXED. Enumerates ordered source/target pairs, carries the copied role plus an existential erased-role candidate class, and admits mixed-faction hidden endpoints only when the exact Outcast budget can make them Villagers.
 
 - [x] ~~**Bishop lying = all Villagers**~~ — DROPPED. Wiki claim doesn't match game: corrupted Bishops show mixed types, not all Villagers.
 
@@ -97,7 +97,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Chancellor +1 outcast count** — FIXED. When Chancellor is in the deck, allow +1 on board_outcast_count in role count validation, _must_be_villager, and hidden outcast presence checks. Lost asc17_v2 to this — solver rejected true scenario with 2 Good Outcasts when header said O=1.
 
-- [ ] **Baker reveal_order validation** — `reveal_order` is tracked but unused in Baker validator. Converted Baker must be revealed after original. Could narrow scenarios in Baker-heavy games.
+- [x] **Baker reveal_order validation** — DROPPED. Live asc77_v6 proved Baker chains are pre-seeded at game start and a converted Baker may reveal before the original.
 
 - [x] **Baa hidden Outcast in deck view** — NATIVE-VERIFIED. Baa obscures one existing Outcast identity; it does not add a role. `game_loop.py deck` preserves the HUD `no=` value and explains the eye-symbol mismatch.
 
@@ -111,13 +111,13 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [ ] **Poet copied_role whitelist** — Validate that entered `copied_role` is one of the 13 valid Villager abilities (+ Bounty Hunter). Catches data entry errors.
 
-- [ ] **Witness + Shaman tracking** — Wiki says Shaman-affected positions (original + clone) are "affected by evil". Requires Scenario-level tracking.
+- [x] **Witness + Shaman tracking** — FIXED. `Scenario.messed_up_by_evil` carries each resistance-aware Shaman marker attempt through the ordered Start pass.
 
 - [ ] **Doppelganger can't copy Puppet's original role** — Villager turned into Puppet is no longer "in play" as Good Villager. Doppelganger can't disguise as that role.
 
-- [ ] **Puppeteer can't convert Shaman clones** — Wiki says Puppeteer acts before Shaman. Shaman-cloned Villagers can't be Puppet targets.
+- [x] **Puppeteer can't convert Shaman clones** — FIXED. Puppet conversion runs before Shaman; the generated Puppet is removed from Shaman's eligible Villager set and covered by a focused regression.
 
-- [ ] **Shaman clones can't be cured by Alchemist** — Wiki says cloned Villagers retain corruption and can't be cured.
+- [x] **Shaman clone corruption/cure ordering** — FIXED. Corruption initially survives `InitWithNoReset`, but a later Alchemist can cure it; `MessedUpByEvil` remains a separate persistent status.
 
 - [x] **Lilis won't kill herself when last revealed** — Confirmed in asc25_v1: Lilis deals 2 HP even with no valid kill target (can't self-kill). No code fix needed — this is a data entry issue (don't assume last card was killed). Documented in CLAUDE.md.
 

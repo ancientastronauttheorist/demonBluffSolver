@@ -8,7 +8,7 @@ Built to be played by an AI coding/automation agent from clicking cards and read
 
 **592 games played** - 92% win rate (545W / 47L), 272 perfect games (10 HP)
 
-Tested through **Ascension 84** with up to 10-card boards, 4+ evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, Shaman Baker-conversion chains, Doppelganger disguises, native-verified Baa deck-view hiding, Rambler shut-up constraints, Alchemist corrupted-count clues, and public Dreamer role-pair output.
+Tested through **Ascension 84** with up to 10-card boards, 4+ evils, corruption, extra role pools, Lilis night kills, Witch card-blocking, Puppeteer/Puppet mechanics, native-traced Shaman role overwrites, Doppelganger disguises, native-verified Baa deck-view hiding, Rambler shut-up constraints, Alchemist corrupted-count clues, and public Dreamer role-pair output.
 
 ## How It Works
 
@@ -71,14 +71,14 @@ The full pipeline:
 - Full constraint-satisfaction over all possible evil placements
 - Handles disguises, lying, corruption, and role-specific validation
 - 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
-- Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, native-verified Baa deck-view reveal on death, and public Dreamer two-target automation
+- Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, native-verified Baa deck-view reveal on death, ordered Shaman source/target identity traces, and public Dreamer two-target automation
 - Bombardier protection (instant loss if wrongly executed)
 - Execution lookahead with HP-aware decision making
 - Ascension 10+ pool-vs-board role count validation
 - Lilis night-kill tracking and Witch card-blocking mechanics
 - Drunk execution cost modeling and current Drunk corruption-status nuance
 - Baker conversion chain validation
-- Shaman role duplication handling
+- Shaman one-way role overwrite modeling, including both resistance-aware Witness marker attempts and copied-Alchemist Start timing
 - Puppeteer/Puppet mechanics: Puppet is evil but truthful, auto-generated from adjacent Villager
 - Flip verification via memory reader, including first-click recovery for multi-card flips
 - Persistent daemon mode for the Rust solver, keeping the binary alive across calls for faster response
@@ -90,6 +90,7 @@ The live build as of 2026-05-05 changed several solver-relevant rules:
 - **Rambler:** adjacent truthful characters say `#X shut up!` instead of giving normal info. The old "picked by a liar silences Rambler" mechanic is obsolete.
 - **Alchemist:** cannot be corrupted and now reports how many corrupted characters were around them at the start of the round, before cure. Zero wording such as `NO one was Corrupted around me` is parsed as `corrupted_count: 0`.
 - **Baa:** managed `Imp` hides one existing Outcast identity in deck view at Start. Any Baa death reveals that deck-strip identity; no board card is flipped and the HUD counts are unchanged.
+- **Shaman:** managed `Illuzionist` selects an ordered apparent-Villager pair after Plague Doctor and before Alchemist. The source stays put; the destination is overwritten and immediately fires the copied role's Start action with its preserved status/runtime state. Shaman independently attempts `MessedUpByEvil` on both endpoints, so resistance can suppress either marker. The solver models the ordered identity trace and copied-Alchemist timing; copied Baker/runtime-data composition remains deliberately opaque. Managed `Cipher` is Witch, not Shaman.
 - **Dreamer:** the public asset picks exactly two targets and immediately returns a role pair like `Among #X, #Y there is: RoleA or RoleB`, or a Wretch/Cabbage result. `next` can auto-fire it when the solver recommends two targets, while still refusing targets with unused active abilities. The separate managed `Dreamer2` class is not bound by current gameplay assets.
 - **Deckbuilding mode:** experimental and not the primary supported live loop yet; current automation is focused on Standard ascension play.
 

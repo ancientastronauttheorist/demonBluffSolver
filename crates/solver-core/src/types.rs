@@ -348,6 +348,23 @@ pub struct ChancellorTrace {
     pub added_outcast_role: String,
 }
 
+/// Native Shaman/Illuzionist Start history for one copied Villager identity.
+///
+/// The ordered source/target distinction is observable: Shaman independently
+/// attempts `MessedUpByEvil` on both endpoints, while only the target is
+/// reinitialized and immediately dispatches the copied role's Start action.
+/// `target_previous_roles` preserves the viable identities of the overwritten
+/// physical card. Roles with identical remaining solver state share one
+/// probability-safe trace; identities with a distinguishable Init-time effect
+/// occupy separate traces.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct ShamanTrace {
+    pub source_position: u8,
+    pub target_position: u8,
+    pub copied_role: String,
+    pub target_previous_roles: Vec<String>,
+}
+
 /// A hypothetical assignment of evil roles to positions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Scenario {
@@ -370,6 +387,11 @@ pub struct Scenario {
     /// pass. This is distinct from Corrupted: Alchemist only cures Corrupted.
     #[serde(default)]
     pub messed_up_by_evil: HashSet<u8>,
+    /// Ordered native Shaman copy history. This remains distinct from the
+    /// final role multiset because copied Start timing depends on the target;
+    /// solver-equivalent overwritten roles share one candidate-class trace.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub shaman_trace: Option<ShamanTrace>,
     /// Probability-safe Chancellor history projection. Original physical-seat
     /// alternatives are grouped inside this value instead of duplicating
     /// otherwise identical solver scenarios.
@@ -550,6 +572,12 @@ mod tests {
             drunk_position: None,
             alchemist_cures: HashMap::from([(5, 2)]),
             messed_up_by_evil: HashSet::from([4]),
+            shaman_trace: Some(ShamanTrace {
+                source_position: 5,
+                target_position: 4,
+                copied_role: "Alchemist".to_string(),
+                target_previous_roles: vec!["Witness".to_string(), "Scout".to_string()],
+            }),
             chancellor_trace: Some(ChancellorTrace {
                 original_positions: vec![1, 6],
                 added_outcast_position: 2,
@@ -563,6 +591,13 @@ mod tests {
         assert_eq!(json["evil_positions"]["3"], "Pooka");
         assert!(json["alchemist_cures"]["5"].is_number());
         assert!(json["corrupted"].is_array());
+        assert_eq!(json["shaman_trace"]["source_position"], 5);
+        assert_eq!(json["shaman_trace"]["target_position"], 4);
+        assert_eq!(json["shaman_trace"]["copied_role"], "Alchemist");
+        assert_eq!(
+            json["shaman_trace"]["target_previous_roles"],
+            serde_json::json!(["Witness", "Scout"])
+        );
         assert_eq!(json["chancellor_trace"]["original_positions"], serde_json::json!([1, 6]));
         assert_eq!(json["chancellor_trace"]["added_outcast_position"], 2);
         assert_eq!(json["chancellor_trace"]["added_outcast_role"], "Plague Doctor");
@@ -572,6 +607,15 @@ mod tests {
         assert_eq!(back.alchemist_cures.get(&5), Some(&2));
         assert!(back.corrupted.contains(&2));
         assert!(back.messed_up_by_evil.contains(&4));
+        assert_eq!(
+            back.shaman_trace,
+            Some(ShamanTrace {
+                source_position: 5,
+                target_position: 4,
+                copied_role: "Alchemist".to_string(),
+                target_previous_roles: vec!["Witness".to_string(), "Scout".to_string()],
+            })
+        );
         assert_eq!(back.chancellor_added_outcast_position(), Some(2));
         assert_eq!(back.chancellor_added_outcast_role(), Some("Plague Doctor"));
     }
@@ -606,6 +650,7 @@ mod tests {
         let scenario: Scenario = serde_json::from_value(legacy).unwrap();
 
         assert!(scenario.chancellor_trace.is_none());
+        assert!(scenario.shaman_trace.is_none());
         assert!(scenario.messed_up_by_evil.is_empty());
         assert_eq!(scenario.chancellor_added_outcast_position(), Some(3));
         assert_eq!(scenario.chancellor_added_outcast_role(), None);

@@ -1158,6 +1158,17 @@ fn validate_bounty_hunter(card: &CardInfo, scenario: &Scenario, state: &GameStat
 }
 
 fn validate_baker(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    if scenario
+        .shaman_trace
+        .as_ref()
+        .is_some_and(|trace| normalize_role(&trace.copied_role) == "baker")
+    {
+        // InitWithNoReset preserves the destination's prior runtimeData, and
+        // the native Baker composition has not yet been recovered. Treat all
+        // Baker clue text as opaque in copied-Baker worlds rather than pruning
+        // from a synthesized runtime provenance.
+        return true;
+    }
     let claimed = match info_str(&card.info_parsed, "original_role") {
         Some(s) => s,
         None => return true,
@@ -1372,6 +1383,7 @@ fn validate_pd_ability(scenario: &Scenario, state: &GameState) -> bool {
 fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     let mut good_villager_counts: HashMap<String, i32> = HashMap::new();
     let mut good_outcast_counts: HashMap<String, i32> = HashMap::new();
+    let mut counted_good_villager_positions = HashSet::new();
 
     for card in &state.cards {
         let pos = card.position;
@@ -1384,10 +1396,107 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             .filter(|role| !matches!(normalize_role(role).as_str(), "drunk" | "doppelganger"))
             .unwrap_or(&card.apparent_role);
         if knowledge_base::is_villager_role(role) {
-            *good_villager_counts.entry(role.to_string()).or_insert(0) += 1;
+            *good_villager_counts.entry(normalize_role(role)).or_insert(0) += 1;
+            counted_good_villager_positions.insert(pos);
         } else if state.deck.outcasts.iter().any(|o| o == role || o.replace('_', " ") == role) {
-            *good_outcast_counts.entry(role.to_string()).or_insert(0) += 1;
+            *good_outcast_counts.entry(normalize_role(role)).or_insert(0) += 1;
         }
+    }
+
+    let actual_shaman = (1..=state.n_cards).any(|position| {
+        known_evil_role(position, scenario, state)
+            .is_some_and(|role| normalize_role(role) == "shaman")
+    });
+    if actual_shaman != scenario.shaman_trace.is_some() {
+        return false;
+    }
+
+    // Project the final duplicate back through Shaman's one-way overwrite so
+    // deck multiplicity is checked against the identities that existed before
+    // its Start action. Hidden endpoints are still real selected identities.
+    // Solver-equivalent erased roles share one trace, so keep one count map per
+    // viable prior identity and accept the trace if any map fits the deck.
+    let mut initial_good_villager_count_variants = vec![good_villager_counts.clone()];
+    if let Some(trace) = scenario.shaman_trace.as_ref() {
+        let copied = normalize_role(&trace.copied_role);
+        let previous_roles: Vec<String> = trace
+            .target_previous_roles
+            .iter()
+            .map(|role| normalize_role(role))
+            .collect();
+        let previous_role_set: HashSet<&str> =
+            previous_roles.iter().map(String::as_str).collect();
+        let previous_was_alchemist = previous_roles
+            .first()
+            .is_some_and(|role| role == "alchemist");
+        if trace.source_position == trace.target_position
+            || trace.source_position == 0
+            || trace.target_position == 0
+            || trace.source_position > state.n_cards
+            || trace.target_position > state.n_cards
+            || previous_roles.is_empty()
+            || previous_role_set.len() != previous_roles.len()
+            || previous_roles
+                .iter()
+                .any(|role| (role == "alchemist") != previous_was_alchemist)
+            || !state
+                .deck
+                .villagers
+                .iter()
+                .any(|role| normalize_role(role) == copied)
+            || previous_roles.iter().any(|previous| {
+                !state
+                    .deck
+                    .villagers
+                    .iter()
+                    .any(|role| normalize_role(role) == *previous)
+            })
+            || known_evil_role(trace.source_position, scenario, state).is_some()
+            || known_evil_role(trace.target_position, scenario, state).is_some()
+            || scenario.puppet_position == Some(trace.source_position)
+            || scenario.puppet_position == Some(trace.target_position)
+            || scenario.doppelganger_position == Some(trace.source_position)
+            || scenario.doppelganger_position == Some(trace.target_position)
+            || scenario.drunk_position == Some(trace.source_position)
+            || scenario.drunk_position == Some(trace.target_position)
+            || scenario.chancellor_added_outcast_position() == Some(trace.source_position)
+            || scenario.chancellor_added_outcast_position() == Some(trace.target_position)
+        {
+            return false;
+        }
+
+        for endpoint in [trace.source_position, trace.target_position] {
+            if counted_good_villager_positions.contains(&endpoint) {
+                let observed = state
+                    .card_at(endpoint)
+                    .map(|card| normalize_role(&card.apparent_role));
+                if observed.as_deref() != Some(copied.as_str()) {
+                    return false;
+                }
+            }
+        }
+
+        let mut base_initial_counts = good_villager_counts.clone();
+        if counted_good_villager_positions.contains(&trace.target_position) {
+            let Some(count) = base_initial_counts.get_mut(&copied) else {
+                return false;
+            };
+            *count -= 1;
+            if *count == 0 {
+                base_initial_counts.remove(&copied);
+            }
+        }
+        if !counted_good_villager_positions.contains(&trace.source_position) {
+            *base_initial_counts.entry(copied).or_insert(0) += 1;
+        }
+        initial_good_villager_count_variants = previous_roles
+            .into_iter()
+            .map(|previous| {
+                let mut counts = base_initial_counts.clone();
+                *counts.entry(previous).or_insert(0) += 1;
+                counts
+            })
+            .collect();
     }
 
     // Disguiser count
@@ -1420,37 +1529,18 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     };
     let has_baker_in_deck = state.deck.villagers.iter().any(|v| normalize_role(v) == "baker");
 
-    let mut total_excess = 0i32;
-    for (role, &count) in &good_villager_counts {
-        if normalize_role(role) == "baker" && has_baker_in_deck { continue; }
-        let deck_count = deck_v_counts.get(&normalize_role(role)).copied().unwrap_or(0);
-        if count > deck_count { total_excess += count - deck_count; }
-    }
-
-    // Shaman allowance
-    let mut shaman_allowance = 0i32;
-    if state.deck.minions.iter().any(|m| m == "Shaman") {
-        for p in 1..=state.n_cards {
-            if known_evil_role(p, scenario, state) == Some("Shaman") {
-                shaman_allowance = 1;
-                break;
+    let any_initial_role_multiset_fits = initial_good_villager_count_variants
+        .iter()
+        .any(|counts| {
+            let mut total_excess = 0i32;
+            for (role, &count) in counts {
+                if role == "baker" && has_baker_in_deck { continue; }
+                let deck_count = deck_v_counts.get(role).copied().unwrap_or(0);
+                if count > deck_count { total_excess += count - deck_count; }
             }
-        }
-    }
-
-    // Shaman requires duplicate
-    if shaman_allowance > 0 {
-        let has_dup = good_villager_counts.values().any(|&c| c >= 2);
-        if !has_dup {
-            let revealed: HashSet<u8> = state.cards.iter().map(|c| c.position).collect();
-            let unrevealed_good = (1..=state.n_cards)
-                .filter(|&p| !revealed.contains(&p) && known_evil_role(p, scenario, state).is_none())
-                .count();
-            if unrevealed_good == 0 { return false; }
-        }
-    }
-
-    if total_excess > n_disguisers + shaman_allowance { return false; }
+            total_excess <= n_disguisers
+        });
+    if !any_initial_role_multiset_fits { return false; }
 
     // Check outcast counts
     let deck_o_counts: HashMap<String, i32> = {
@@ -1476,7 +1566,18 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
     // Board villager count ceiling
     if let Some(bvc) = state.board_villager_count {
         let total_good_villagers: i32 = good_villager_counts.values().sum();
-        if total_good_villagers > bvc as i32 + n_disguisers + shaman_allowance { return false; }
+        if total_good_villagers > bvc as i32 + n_disguisers { return false; }
+    }
+
+    let shaman_copied_baker = scenario
+        .shaman_trace
+        .as_ref()
+        .is_some_and(|trace| normalize_role(&trace.copied_role) == "baker");
+    if shaman_copied_baker {
+        // Copied Baker immediately acts with preserved destination runtimeData.
+        // Until that native composition is modeled, Baker-derived uniqueness
+        // and chain-existence pruning would be stronger than our evidence.
+        return true;
     }
 
     // Baker original-role uniqueness
@@ -1514,29 +1615,34 @@ fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
             non_baker_real += 1;
         }
         let deck_count = deck_v_counts.get(norm_role).copied().unwrap_or(0);
-        if non_baker_real + baker_count > deck_count + shaman_allowance { return false; }
+        let copied_role_allowance =
+            i32::from(scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                let copied = normalize_role(&trace.copied_role);
+                copied == *norm_role
+            }));
+        if non_baker_real + baker_count > deck_count + copied_role_allowance {
+            return false;
+        }
 
-        // Chain-uniqueness tightening: without Shaman, at most one Baker chain
-        // conversion can produce a "I was <role>" claim per distinct role. Shaman
-        // creates game-start Baker duplicates so this check is skipped there.
+        // At most one ordinary Baker chain conversion can produce a given
+        // "I was <role>" claim. Copied-Baker worlds returned above because
+        // their preserved runtime provenance is still opaque.
         // Safe for current v2 suite (no deck has duplicate villagers, so the
         // existing deck_count check already enforces this implicitly). Adds
         // stricter behavior for hypothetical duplicate-villager decks.
-        if shaman_allowance == 0 && baker_count > 1 { return false; }
+        if baker_count > 1 { return false; }
     }
 
-    // Baker conversion chain existence
-    // Skip when Shaman is in the deck — Shaman creates duplicate Bakers at game
-    // start (not via reveal-order-triggered conversion), so chain ordering doesn't apply.
+    // Baker conversion chain existence for fully modeled runtime provenance.
+    // Copied-Baker worlds already returned above; merely listing or placing
+    // Shaman does not disable this check.
     // NOTE (asc77 v6): we previously required chain-converted Bakers to reveal
     // AFTER the original, but the in-game conversion chain pre-seeds at game
     // start — chain Bakers can reveal in any order (observed: chain-Baker at #1
     // revealed before original at #6). Keep the existence requirement (an
     // original Baker must be somewhere in the truthful-Baker set) but drop the
     // reveal-ordering constraint.
-    let shaman_in_deck = state.deck.minions.iter()
-        .any(|m| normalize_role(m) == "shaman");
-    if !shaman_in_deck && !baker_claimed_counts.is_empty() {
+    if !baker_claimed_counts.is_empty() {
         // If any truthful Baker claims "I was <role>", at least one truthful
         // Baker must claim to be the original (or it must be possible that
         // the original Baker is an unrevealed/night-killed/puppet position
@@ -1604,6 +1710,7 @@ mod tests {
             drunk_position: None,
             alchemist_cures: HashMap::new(),
             messed_up_by_evil: HashSet::new(),
+            shaman_trace: None,
             chancellor_trace: None,
             chancellor_conversion: None,
         }
@@ -2320,6 +2427,74 @@ mod tests {
         });
 
         assert!(!validate_role_counts(&generated_drunk, &state));
+    }
+
+    #[test]
+    fn shaman_trace_accepts_any_viable_role_in_its_erased_identity_class() {
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Scout", json!({})),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Witness", json!({})),
+                make_card(4, "Baker", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Scout".to_string(),
+            "Witness".to_string(),
+            "Judge".to_string(),
+        ];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.board_villager_count = Some(3);
+
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Shaman".to_string());
+        scenario.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 1,
+            target_position: 2,
+            copied_role: "Scout".to_string(),
+            target_previous_roles: vec!["Scout".to_string(), "Judge".to_string()],
+        });
+
+        assert!(validate_role_counts(&scenario, &state));
+
+        scenario
+            .shaman_trace
+            .as_mut()
+            .unwrap()
+            .target_previous_roles = vec!["Scout".to_string()];
+        assert!(
+            !validate_role_counts(&scenario, &state),
+            "an equivalence class with no deck-compatible erased role must fail"
+        );
+
+        scenario
+            .shaman_trace
+            .as_mut()
+            .unwrap()
+            .target_previous_roles = vec!["Judge".to_string()];
+
+        state.board_villager_count = Some(2);
+        assert!(
+            !validate_role_counts(&scenario, &state),
+            "Shaman changes a role identity, not the physical Villager count"
+        );
+    }
+
+    #[test]
+    fn undealt_shaman_pool_entry_grants_no_duplicate_allowance() {
+        let mut state = base_state(
+            2,
+            vec![
+                make_card(1, "Scout", json!({})),
+                make_card(2, "Scout", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+
+        assert!(!validate_role_counts(&empty_scenario(), &state));
     }
 
     #[test]

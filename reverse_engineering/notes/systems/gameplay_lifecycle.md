@@ -129,9 +129,10 @@ Chancellor -> Pooka -> Poisoner -> Drunk -> Witch -> Marionette
 The asset names and embedded managed role types are separate identity layers.
 `Marionette` embeds role `Marionette` and is the solver's Twin Minion;
 `Puppeteer` embeds role `Mezepheles` and creates Puppet; `Plague Doctor` embeds
-role `Puzzlemaster`. For the corruption lifecycle, the configured sequence is
-therefore Pooka, Poisoner, Drunk, Puppeteer/Puppet conversion, Plague Doctor,
-Alchemist, then Puppet's own Start.
+role `Puzzlemaster`; `Shaman` embeds `Illuzionist`; and `Witch` embeds `Cipher`.
+For the corruption and identity lifecycle, the configured sequence is therefore
+Pooka, Poisoner, Drunk, Puppeteer/Puppet conversion, Plague Doctor, Shaman's
+one-way Villager overwrite and copied Start, Alchemist, then Puppet's own Start.
 
 Duplicate Alchemist, Poisoner, and Puzzlemaster data entries act synchronously
 from highest displayed ID to lowest; each later duplicate sees earlier status

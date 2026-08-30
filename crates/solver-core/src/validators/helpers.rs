@@ -62,6 +62,11 @@ pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
     if scenario.drunk_position == Some(pos) {
         return Some("Drunk".to_string());
     }
+    if let Some(trace) = scenario.shaman_trace.as_ref() {
+        if trace.source_position == pos || trace.target_position == pos {
+            return Some(trace.copied_role.clone());
+        }
+    }
     if let Some(card) = state.card_at(pos) {
         return Some(card.apparent_role.clone());
     }
@@ -184,6 +189,7 @@ mod truth_status_tests {
             drunk_position: None,
             alchemist_cures: HashMap::new(),
             messed_up_by_evil: HashSet::new(),
+            shaman_trace: None,
             chancellor_trace: None,
             chancellor_conversion: None,
         }
