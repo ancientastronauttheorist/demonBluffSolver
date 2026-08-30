@@ -8,12 +8,15 @@ import atexit
 from collections import Counter
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime
 from typing import Optional
 
+from knowledge_base import get_card
 from solver import (
+    BAKER_RULE_VERSION,
     CardInfo,
     DeckComposition,
     GameState,
@@ -416,13 +419,43 @@ def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> C
     return CardInfo(pos, "Poet", info_parsed=info)
 
 
-def card_baker(pos: int, original_role: str) -> CardInfo:
+def _canonical_baker_original_role(original_role: str) -> str:
+    """Validate and canonicalize the scalar stored by a Baker clue.
+
+    ``original`` is a dedicated public-text sentinel. A literal ``Baker`` is
+    an ordinary canonical role claim and must never alias that sentinel.
+    """
+    if not isinstance(original_role, str):
+        raise ValueError("Baker original role must be a role name or 'original'")
+    candidate = original_role.strip()
+    if not candidate or candidate.casefold() in {"none", "unknown", "?"}:
+        raise ValueError("Baker original role must be a known role or 'original'")
+    if candidate.casefold() == "original":
+        return "original"
+    role_def = get_card(candidate)
+    if role_def is None:
+        raise ValueError(f"Unknown Baker original role: {original_role!r}")
+    return role_def.name
+
+
+def card_baker(
+    pos: int,
+    original_role: str,
+    info_text: str = "",
+) -> CardInfo:
     """Baker: 'I am the original Baker' or 'I was a <Role>'.
 
     original_role: 'original' for the first Baker, or the Villager role name
     the Baker claims to have been before conversion.
     """
-    return CardInfo(pos, "Baker", info_parsed={"original_role": original_role})
+    return CardInfo(
+        pos,
+        "Baker",
+        info_text=info_text,
+        info_parsed={
+            "original_role": _canonical_baker_original_role(original_role),
+        },
+    )
 
 
 def _normalize_role_name(role: str) -> str:
@@ -737,6 +770,7 @@ class GameSession:
         self.board_count_provenance: str = "legacy_unknown"
         self.rambler_rule_version: Optional[str] = RAMBLER_RULE_VERSION
         self.rambler_shut_up_observations: list[dict] = []
+        self.baker_rule_version: Optional[str] = BAKER_RULE_VERSION
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
         # Trigger/result synchronization is live-session bookkeeping only.
@@ -794,6 +828,7 @@ class GameSession:
         self.board_count_provenance = "legacy_unknown"
         self.rambler_rule_version = RAMBLER_RULE_VERSION
         self.rambler_shut_up_observations.clear()
+        self.baker_rule_version = BAKER_RULE_VERSION
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.lilis_nights_resolved = 0
@@ -927,9 +962,15 @@ class GameSession:
                     n_cards=self.n_cards,
                 )
 
-        # Track reveal order (first entry per position)
+        # Compatibility fallback for manual/legacy flows that enter a card
+        # without first memory-verifying its flip. This order is useful but no
+        # longer authoritative for the current Baker model.
         if card.position not in self.reveal_order:
             self.reveal_order.append(card.position)
+            # ``baker_rule_version`` certifies that the entire order came from
+            # memory verification. Once compatibility entry order invents a
+            # missing seat, later flips cannot upgrade it back to current.
+            self.baker_rule_version = None
             # Warn if entry order doesn't match expected #1->#N sequence
             expected_next = len(self.reveal_order)  # 1st entry should be pos 1, 2nd pos 2, etc.
             if card.position != expected_next:
@@ -1478,6 +1519,7 @@ class GameSession:
                 dict(observation)
                 for observation in self.rambler_shut_up_observations
             ],
+            baker_rule_version=self.baker_rule_version,
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
             executed_good_roles=dict(self.executed_good_roles),
@@ -1516,6 +1558,7 @@ class GameSession:
             dict(observation)
             for observation in state.rambler_shut_up_observations
         ]
+        session.baker_rule_version = state.baker_rule_version
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
@@ -2078,6 +2121,7 @@ class GameSession:
             parsed = _parse_clue_from_memory(
                 target_card_data,
                 n_cards=self.n_cards,
+                baker_rule_version=self.baker_rule_version,
             )
         if parsed is None:
             return {"success": False, "info_parsed": None,
@@ -3020,10 +3064,117 @@ def _card_from_rambler_surface(
     return None, None
 
 
+def _baker_claim_from_public_text(
+    clue: object,
+    *,
+    strict: bool,
+) -> tuple[Optional[str], Optional[str]]:
+    """Decode one Baker Day sentence without conflating Baker/original.
+
+    Current capture accepts only the exact English localization templates
+    shipped by the audited asset. Legacy capture remains case-insensitive and
+    trims outer whitespace, but still requires the complete sentence and a
+    canonical role name.
+    """
+    if not isinstance(clue, str) or not clue:
+        return None, "Baker clue has no nonempty savedAct text"
+
+    text = clue if strict else clue.strip()
+    if (text == "I am the original Baker" if strict
+            else text.casefold() == "i am the original baker"):
+        return "original", None
+
+    flags = 0 if strict else re.IGNORECASE
+    match = re.fullmatch(r"I was (a|an) (.+)", text, flags)
+    if match is None:
+        return None, (
+            "Baker clue must be exactly 'I am the original Baker' or "
+            "'I was a/an <canonical role>'"
+        )
+    article = match.group(1)
+    claimed_text = match.group(2)
+    role_def = get_card(claimed_text)
+    if role_def is None or (strict and claimed_text != role_def.name):
+        return None, f"Baker clue names unknown/noncanonical role {claimed_text!r}"
+    expected_article = "an" if role_def.name[:1] in "AEIOU" else "a"
+    if strict and article != expected_article:
+        return None, (
+            f"Baker clue uses article {article!r} for {role_def.name!r}; "
+            f"native output uses {expected_article!r}"
+        )
+    return role_def.name, None
+
+
+def _card_from_baker_surface(
+    card: dict,
+    *,
+    baker_rule_version: Optional[str],
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Capture Baker's public Day event, with a legacy-only runtime fallback."""
+    role = card.get('disguise') or card.get('true_role', '')
+    if role.lower().replace(' ', '_') != 'baker':
+        return None, None
+
+    pos = card.get('position')
+    raw_clue = card.get('clue_text')
+    current = baker_rule_version == BAKER_RULE_VERSION
+
+    if current:
+        claim, error = _baker_claim_from_public_text(raw_clue, strict=True)
+        if error is not None:
+            return None, error
+
+        infos = card.get('acted_infos')
+        if not isinstance(infos, list) or not infos:
+            return None, (
+                "Baker clue has no current acted-info history; wait for memory "
+                "to settle or enter it manually"
+            )
+        latest = infos[-1]
+        if not isinstance(latest, dict):
+            return None, "Latest Baker acted-info record is malformed"
+        latest_desc = latest.get('desc')
+        if latest_desc != raw_clue:
+            return None, (
+                "Baker savedAct does not match the newest acted-info text: "
+                f"{raw_clue!r} != {latest_desc!r}"
+            )
+        refs = latest.get('targets')
+        if refs != []:
+            return None, (
+                "Normal Baker acted-info refs must be exactly empty; "
+                f"got {refs!r}"
+            )
+        return card_baker(pos, claim, info_text=raw_clue), None
+
+    # Archived sessions predate coherent-event provenance. Prefer any complete
+    # public sentence, then retain the old runtime-data recovery path. A
+    # runtime literal Baker is a real role claim, never the original sentinel.
+    if isinstance(raw_clue, str) and raw_clue.strip():
+        claim, error = _baker_claim_from_public_text(raw_clue, strict=False)
+        if error is None:
+            return card_baker(pos, claim, info_text=raw_clue), None
+
+    runtime_data = card.get('runtime_data')
+    if runtime_data and runtime_data.get('type') == 'baker':
+        original = runtime_data.get('original_role')
+        if not original or original == '?':
+            return card_baker(pos, 'original'), None
+        try:
+            return card_baker(pos, original), None
+        except ValueError:
+            return None, f"Legacy Baker runtime role is unknown: {original!r}"
+
+    if not raw_clue:
+        return card_baker(pos, 'original'), None
+    return None, None
+
+
 def _parse_clue_from_memory(
     card: dict,
     *,
     n_cards: Optional[int] = None,
+    baker_rule_version: Optional[str] = None,
 ) -> Optional[CardInfo]:
     """Parse memory reader card data into a CardInfo, or None if unparseable.
 
@@ -3032,7 +3183,6 @@ def _parse_clue_from_memory(
     guarded by the ability_used flag — stale clue data from prior villages
     is ignored unless the ability was actually used this game.
     """
-    import re
     pos = card['position']
     role = card.get('disguise') or card.get('true_role', '')
     clue = card.get('clue_text') or ''
@@ -3073,6 +3223,15 @@ def _parse_clue_from_memory(
         # the interrupted role's original selections.
         return rambler_surface
 
+    baker_surface, baker_error = _card_from_baker_surface(
+        card,
+        baker_rule_version=baker_rule_version,
+    )
+    if baker_error is not None:
+        return None
+    if baker_surface is not None:
+        return baker_surface
+
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
         return card_enlightened(pos, rd['direction'])
@@ -3097,30 +3256,6 @@ def _parse_clue_from_memory(
         if rd and rd.get('type') in ('corrupted_around', 'cures'):
             val = rd.get('corrupted_around') if rd.get('type') == 'corrupted_around' else rd.get('cures')
             return card_alchemist(pos, val or 0)
-
-    # --- Baker: prefer clue_text over runtime_data ---
-    # Runtime original_role can mismatch displayed text (e.g., Shaman games,
-    # or when Baker chain text differs from internal tracking).
-    if rd and rd.get('type') == 'baker':
-        # Try clue text first ("I was a <Role>" or "I am the original Baker")
-        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
-        if m:
-            claimed = m.group(1).strip()
-            # "I was a Baker" means converted FROM Baker (rare, but valid).
-            # Do NOT convert to 'original' -- that means "I am the original Baker".
-            return card_baker(pos, claimed)
-        if 'original' in clue.lower():
-            return card_baker(pos, 'original')
-        # Fallback to runtime_data
-        original = rd.get('original_role')
-        if not original or original == '?':
-            return card_baker(pos, 'original')
-        if original.lower() == 'baker':
-            # runtime says original was Baker but clue didn't match "I was a" pattern.
-            # If clue says "I am the original Baker" we already returned above.
-            # Otherwise this is ambiguous -- treat as original.
-            return card_baker(pos, 'original')
-        return card_baker(pos, original)
 
     # --- Knitter: "X evil pair(s)" / "X pairs of Evil" / "Evils are not adjacent" ---
     if role_lower == 'knitter':
@@ -3324,16 +3459,6 @@ def _parse_clue_from_memory(
         if m:
             minion_role = m.group(1).strip().replace(' ', '_')
             return card_oracle(pos, targets, minion_role)
-
-    # --- Baker: "I was a <Role>" or "I am the original Baker" ---
-    if role_lower == 'baker':
-        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
-        if m:
-            claimed = m.group(1).strip()
-            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
-            return card_baker(pos, claimed)
-        if 'original' in clue.lower() or not clue.strip():
-            return card_baker(pos, 'original')
 
     # --- Scout: "<Role> is N cards away from closest Evil" ---
     if role_lower == 'scout':
@@ -3554,11 +3679,9 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         return card_bishop(pos, targets, types)
     elif role == "baker":
         if len(args) > 2:
-            claim = args[2]
-            # "original" or "Baker" (same role) means the original Baker
-            if claim.lower() in ("original", "baker"):
-                claim = "original"
-            return card_baker(pos, claim)
+            # Only the explicit sentinel means "I am the original Baker".
+            # Literal Baker means the distinct "I was a Baker" observation.
+            return card_baker(pos, args[2])
         else:
             return card_baker(pos, "original")  # no arg = original Baker
     elif role == "poet":
@@ -4536,13 +4659,23 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if state not in ('Alive', 'Revealed'):
                 continue  # Hidden/Dead — skip
 
-            parsed = _parse_clue_from_memory(mc, n_cards=session.n_cards)
+            parsed = _parse_clue_from_memory(
+                mc,
+                n_cards=session.n_cards,
+                baker_rule_version=session.baker_rule_version,
+            )
             rambler_capture_error = None
+            baker_capture_error = None
             if parsed is None:
                 _, rambler_capture_error = _card_from_rambler_surface(
                     mc,
                     n_cards=session.n_cards,
                 )
+                if rambler_capture_error is None:
+                    _, baker_capture_error = _card_from_baker_surface(
+                        mc,
+                        baker_rule_version=session.baker_rule_version,
+                    )
             if parsed:
                 existing = entered.get(pos)
                 if existing:
@@ -4575,7 +4708,19 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and type(existing.info_parsed.get('shut_up_target')) is not int
                         and existing.info_parsed.get('quote_observed') is not True
                     )
-                    if not active_update and not shut_up_update and not quote_update:
+                    baker_update = (
+                        session.baker_rule_version == BAKER_RULE_VERSION
+                        and same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role) == "baker"
+                        and "original_role" in parsed.info_parsed
+                    )
+                    if not (
+                        active_update
+                        or shut_up_update
+                        or quote_update
+                        or baker_update
+                    ):
                         continue
                 session.add_card(parsed)
                 DecisionLog.log_card(parsed)
@@ -4586,10 +4731,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 entered[pos] = parsed
                 auto_count += 1
             else:
-                if rambler_capture_error is not None:
+                capture_error = rambler_capture_error or baker_capture_error
+                if capture_error is not None:
                     role = mc.get('disguise') or mc.get('true_role', '?')
                     manual_needed.append(
-                        f"  #{pos} {role}: [RECOVERY] {rambler_capture_error}"
+                        f"  #{pos} {role}: [RECOVERY] {capture_error}"
                     )
                     continue
                 if pos in entered:
@@ -4887,6 +5033,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         # Card wasn't actually revealed — remove from reveal_order if flip added it
         if pos in session.reveal_order:
             session.reveal_order.remove(pos)
+            session.baker_rule_version = None
         session.save()
         print(f"#{pos} blocked (Witch)")
         return None
@@ -4897,6 +5044,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             session.blocked_positions.append(pos)
         if pos in session.reveal_order:
             session.reveal_order.remove(pos)
+            session.baker_rule_version = None
         session.save()
         print(f"#{pos} force-blocked (override -- no Witch check)")
         return None

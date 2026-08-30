@@ -687,6 +687,7 @@ class GameStateMachine:
             return _parse_clue_from_memory(
                 mc,
                 n_cards=self.session.n_cards,
+                baker_rule_version=self.session.baker_rule_version,
             )
 
         parsed = _parse_from_board(self.monitor.get_board())
@@ -859,6 +860,7 @@ class GameStateMachine:
                     parsed = _parse_clue_from_memory(
                         mc,
                         n_cards=self.session.n_cards,
+                        baker_rule_version=self.session.baker_rule_version,
                     )
                     if parsed:
                         self.session.add_card(parsed)

@@ -33,6 +33,7 @@ PROCESS_QUERY_INFORMATION = 0x0400
 # Gameplay class
 GAMEPLAY_TYPEINFO_RVA = 0x26F8140  # Il2CppClass* pointer address (RVA from GA base)
 IL2CPP_CLASS_STATIC_FIELDS_OFFSET = 0xB8
+IL2CPP_CLASS_NAME_OFFSET = 0x10
 GAMEPLAY_INSTANCE_STATIC_OFFSET = 0x10
 GAMEPLAY_CHARACTERS_OFFSET = 0x68
 GAMEPLAY_SCORE_STATIC_OFFSET = 0x8   # static Score Score
@@ -381,6 +382,43 @@ class MemoryReader:
             return buf.raw[:length * 2].decode('utf-16-le', errors='replace')
         return None
 
+    def _read_c_string(self, char_ptr, max_length=128):
+        """Read a bounded native UTF-8/ASCII C string."""
+        if not char_ptr or char_ptr < 0x10000:
+            return None
+        buf = ctypes.create_string_buffer(max_length)
+        br = ctypes.c_size_t()
+        if not kernel32.ReadProcessMemory(
+            self.handle,
+            ctypes.c_void_p(char_ptr),
+            buf,
+            max_length,
+            ctypes.byref(br),
+        ):
+            return None
+        raw = buf.raw[:br.value or max_length]
+        end = raw.find(b'\x00')
+        if end < 0:
+            return None
+        try:
+            return raw[:end].decode('utf-8')
+        except (UnicodeDecodeError, ValueError):
+            return None
+
+    def _read_object_class_name(self, object_ptr):
+        """Read an IL2CPP object's exact managed class name.
+
+        ``Il2CppObject.klass`` is the first pointer in every managed object;
+        the class metadata's native ``name`` pointer is at +0x10 in this build.
+        """
+        if not object_ptr or object_ptr < 0x10000:
+            return None
+        klass_ptr = self._read_ptr(object_ptr)
+        if not klass_ptr or klass_ptr < 0x10000:
+            return None
+        name_ptr = self._read_ptr(klass_ptr + IL2CPP_CLASS_NAME_OFFSET)
+        return self._read_c_string(name_ptr)
+
     def _get_static_fields(self):
         """Get the Gameplay class static fields pointer."""
         il2cpp_class = self._read_ptr(self.ga_base + GAMEPLAY_TYPEINFO_RVA)
@@ -476,21 +514,28 @@ class MemoryReader:
             return None
         return self._read_string(str_ptr)
 
-    def _read_runtime_data(self, char_ptr, role_name):
-        """Read RuntimeCharacterData — dispatches by role name since it's polymorphic."""
+    def _read_runtime_data(self, char_ptr, role_name=None):
+        """Read RuntimeCharacterData using its exact IL2CPP object class.
+
+        Shaman/other transforms can preserve a destination's runtime object
+        while changing its true/displayed CharacterData. Dispatching from a
+        role name would then reinterpret an int as a string pointer (or vice
+        versa), so class metadata is the only safe layout discriminator.
+        ``role_name`` remains an ignored compatibility argument for callers.
+        """
         rd_ptr = self._read_ptr(char_ptr + CHAR_RUNTIME_DATA_OFFSET)
         if not rd_ptr or rd_ptr < 0x10000:
             return None
-        role_lower = (role_name or '').lower().replace(' ', '_')
-        if role_lower in ('enlightened', 'shugenja'):
+        runtime_class = self._read_object_class_name(rd_ptr)
+        if runtime_class == 'EnlightenedRuntimeData':
             val = self._read_i32(rd_ptr + 0x10)
             return {'type': 'direction', 'direction': EVIL_DIRECTION.get(val, f'?{val}')}
-        elif role_lower == 'alchemist':
+        elif runtime_class == 'AlchemistRuntimeData':
             # Post-patch: this field is "# Corrupted in range at start of round (before cure)",
             # not "# cured" as before. Offset assumed unchanged — verify in-game on first use.
             val = self._read_i32(rd_ptr + 0x10)
             return {'type': 'corrupted_around', 'corrupted_around': val}
-        elif role_lower == 'baker':
+        elif runtime_class == 'BakerRuntimeData':
             name_ptr = self._read_ptr(rd_ptr + 0x10)
             name = self._read_string(name_ptr) if name_ptr else None
             return {'type': 'baker', 'original_role': clean_name(name) if name else None}
@@ -551,7 +596,7 @@ class MemoryReader:
             saved_act = self._read_saved_act(char_ptr)
             acted_infos = self._read_acted_infos(char_ptr)
             ability_state = self._read_ability_state(char_ptr)
-            runtime_data = self._read_runtime_data(char_ptr, true_role)
+            runtime_data = self._read_runtime_data(char_ptr)
 
             # Stale clue filter: for displayed roles with no passive speech bubble,
             # savedAct is always stale (persists from previous village). Null it

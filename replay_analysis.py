@@ -100,6 +100,7 @@ def replay_case(case):
                 dict(observation)
                 for observation in case.get("rambler_shut_up_observations", [])
             ],
+            baker_rule_version=case.get("baker_rule_version"),
             reveal_order=list(reveal_order),
             executed_good_corrupted=dict(cur_exec_good_corrupted),
             executed_good_roles=dict(cur_exec_good_roles),

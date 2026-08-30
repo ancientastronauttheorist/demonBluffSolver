@@ -11,6 +11,7 @@ from game_loop import (
     _verify_flips,
     dispatch,
 )
+from solver import CardInfo
 from state_machine import GamePhase, GameStateMachine
 
 
@@ -48,6 +49,28 @@ class _FakeSession:
 
 
 class RevealVerificationTests(unittest.TestCase):
+    def test_memory_verification_preserves_current_baker_marker_without_upgrading_legacy(self):
+        current = GameSession(3, 1)
+        _apply_flip_verification(
+            current,
+            [1],
+            {"flipped": [1], "blocked": [], "failed": [], "dead": []},
+            persist=False,
+        )
+        self.assertEqual(current.reveal_order, [1])
+        self.assertEqual(current.baker_rule_version, "baker_day_reveal_v1")
+
+        downgraded = GameSession(3, 1)
+        downgraded.add_card(CardInfo(1, "Bard"))
+        _apply_flip_verification(
+            downgraded,
+            [2],
+            {"flipped": [2], "blocked": [], "failed": [], "dead": []},
+            persist=False,
+        )
+        self.assertEqual(downgraded.reveal_order, [1, 2])
+        self.assertIsNone(downgraded.baker_rule_version)
+
     def test_batch_persists_arbitrary_non_max_block_and_true_reveal_order(self):
         session = _FakeSession(range(1, 9))
 

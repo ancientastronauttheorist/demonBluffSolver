@@ -9,6 +9,7 @@ from knowledge_base import get_card, Role, Alignment, CARDS_BY_NAME
 
 
 RAMBLER_RULE_VERSION = "rambler2_shut_up"
+BAKER_RULE_VERSION = "baker_day_reveal_v1"
 
 
 # ============================================================
@@ -151,6 +152,9 @@ class GameState:
     # only the latest-value compatibility alias; this ledger survives later
     # ResetAfterNight results on the same speaker.
     rambler_shut_up_observations: list[dict] = field(default_factory=list)
+    # Missing means an archived pre-audit Baker fixture/session. Fresh live
+    # sessions opt in explicitly to the shipped Day/reveal-order semantics.
+    baker_rule_version: Optional[str] = None
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -184,6 +188,8 @@ class GameState:
         }
         if self.rambler_rule_version is not None:
             data["rambler_rule_version"] = self.rambler_rule_version
+        if self.baker_rule_version is not None:
+            data["baker_rule_version"] = self.baker_rule_version
         if nest_deck:
             data["deck"] = self.deck.to_dict()
         else:
@@ -234,6 +240,7 @@ class GameState:
                 dict(observation)
                 for observation in data.get("rambler_shut_up_observations", [])
             ],
+            baker_rule_version=data.get("baker_rule_version"),
         )
 
 

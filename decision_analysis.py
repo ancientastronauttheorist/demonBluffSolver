@@ -178,6 +178,7 @@ def analyze_game(case: dict) -> GameAnalysis:
                 for observation in case.get("rambler_shut_up_observations", [])
                 if observation.get("speaker_position") in revealed_positions
             ],
+            baker_rule_version=case.get("baker_rule_version"),
             reveal_order=list(current_reveal_order),
             executed_good_corrupted=dict(current_executed_good_corrupted),
             executed_good_roles=dict(current_executed_good_roles),

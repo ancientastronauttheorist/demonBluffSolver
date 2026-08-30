@@ -271,6 +271,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
                 dict(observation)
                 for observation in case.get("rambler_shut_up_observations", [])
             ],
+            baker_rule_version=case.get("baker_rule_version"),
             reveal_order=list(case.get("reveal_order", [])),
             executed_good_corrupted=dict(exec_good_corrupted),
             executed_good_roles=dict(exec_good_roles),

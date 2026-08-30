@@ -11,13 +11,14 @@ class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-5:],
+            names[-6:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
                 "board_count_provenance",
                 "rambler_rule_version",
                 "rambler_shut_up_observations",
+                "baker_rule_version",
             ],
         )
 
@@ -67,6 +68,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.board_count_provenance, "legacy_unknown")
         self.assertIsNone(loaded.rambler_rule_version)
         self.assertEqual(loaded.rambler_shut_up_observations, [])
+        self.assertIsNone(loaded.baker_rule_version)
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -107,6 +109,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.board_outcast_count, 1)
         self.assertEqual(loaded.board_count_provenance, "trusted_pre_start")
         self.assertEqual(loaded.rambler_rule_version, "rambler2_shut_up")
+        self.assertEqual(loaded.baker_rule_version, "baker_day_reveal_v1")
         self.assertEqual(
             loaded.rambler_shut_up_observations,
             session.rambler_shut_up_observations,
@@ -116,7 +119,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.executed_good_corrupted, {1: False})
         self.assertEqual(loaded.executed_good_roles, {1: "Plague_Doctor"})
 
-    def test_fresh_session_emits_rambler2_provenance_but_legacy_state_does_not(self):
+    def test_fresh_session_emits_current_rule_markers_but_legacy_state_does_not(self):
         current = GameSession(4, 1).to_game_state().to_dict()
         legacy = GameState.from_dict({
             "n_cards": 4,
@@ -129,9 +132,12 @@ class TestGameStateIO(unittest.TestCase):
 
         self.assertEqual(current["rambler_rule_version"], "rambler2_shut_up")
         self.assertEqual(current["rambler_shut_up_observations"], [])
+        self.assertEqual(current["baker_rule_version"], "baker_day_reveal_v1")
         self.assertIsNone(legacy.rambler_rule_version)
         self.assertEqual(legacy.rambler_shut_up_observations, [])
+        self.assertIsNone(legacy.baker_rule_version)
         self.assertNotIn("rambler_rule_version", legacy.to_dict())
+        self.assertNotIn("baker_rule_version", legacy.to_dict())
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):
         data = {
@@ -205,6 +211,16 @@ class TestGameStateIO(unittest.TestCase):
         session.add_card(CardInfo(1, "Bard"))
         session.add_card(CardInfo(3, "Confessor"))  # re-read, should not duplicate
         self.assertEqual(session.reveal_order, [3, 1])
+        self.assertIsNone(session.baker_rule_version)
+
+    def test_verified_card_entry_preserves_current_baker_marker(self):
+        session = GameSession(5, 1)
+        session.reveal_order = [3]
+
+        session.add_card(CardInfo(3, "Confessor"))
+
+        self.assertEqual(session.reveal_order, [3])
+        self.assertEqual(session.baker_rule_version, "baker_day_reveal_v1")
 
 
 if __name__ == "__main__":
