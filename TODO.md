@@ -59,7 +59,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Puppet — no issues
 - [x] Puppeteer — no issues
 - [x] Shaman — guaranteed duplicate not enforced
-- [x] Twin Minion — no issues
+- [x] Twin Minion — full managed `Marionette` boundary native-audited; ordered
+  Start swaps current `CharacterData` with one alive neighbour of a selected
+  current Demon while preserving physical alignment, status, resistance, and
+  runtime data. Exact solver identity traces and current-role live bookkeeping
+  remain an explicit parity gap; stable Twin/Demon adjacency is not valid.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues

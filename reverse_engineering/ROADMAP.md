@@ -179,6 +179,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   behavior, and the stale managed-description/nonexistent-dormant-helper
   distinction; expand the typed union to 24 target sets and 528 memberships and
   publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Twin Minion to exact managed `Marionette`; native-audit
+  all five declared role methods plus 15 ordered-Start, dispatch, Demon-filter,
+  alive-adjacency, current-data replacement, delayed-reveal, bluff, and integer-
+  RNG helpers; close the two-draw current-`CharacterData` swap, physical-state
+  preservation, duplicate/small-board behavior, pending-coroutine multiplicity,
+  and dormant-helper reachability; expand the typed union to 25 target sets and
+  548 memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

@@ -131,14 +131,61 @@ The asset names and embedded managed role types are separate identity layers.
 `Puppeteer` embeds role `Mezepheles` and creates Puppet; `Plague Doctor` embeds
 role `Puzzlemaster`; `Shaman` embeds `Illuzionist`; and `Witch` embeds `Cipher`.
 For the corruption and identity lifecycle, the configured sequence is therefore
-Pooka, Poisoner, Drunk, Puppeteer/Puppet conversion, Plague Doctor, Shaman's
-one-way Villager overwrite and copied Start, Alchemist, then Puppet's own Start.
+Pooka, Poisoner, Drunk, Witch's global quota, Twin Minion's current-data swap,
+Puppeteer/Puppet conversion, Plague Doctor, Shaman's one-way Villager overwrite
+and copied Start, Alchemist, then Puppet's own Start.
 
 Duplicate Alchemist, Poisoner, and Puzzlemaster data entries act synchronously
 from highest displayed ID to lowest; each later duplicate sees earlier status
 mutations. Ordinary roles stop after the first, highest-ID match. The asset
 review found one shipped `Characters` instance and no normal writer for the
 order, but did not dynamically rule out a mode or addressable replacing it.
+
+## Twin Minion/Marionette current-data swap
+
+Public Twin Minion is managed `Marionette` and occupies ordered-Start index 5,
+after Witch and before Puppeteer. Its ordinary-role scan dispatches only the
+first current exact-data match. The complete role boundary is in the
+[`Twin Minion/Marionette role audit`](../roles/gameplay_role_twin_minion.md).
+
+At Start, Marionette copies the current board list and filters it to current
+registered-or-real Demon type. The pool preserves order and multiplicity and
+does not filter by liveness, runtime alignment, status, resistance, display,
+or physical origin. It uniformly chooses one Demon occurrence, constructs the
+previous-then-next pair around that card in the alive circular ring, and
+uniformly chooses one of those two occurrences. An empty Demon pool is a clean
+no-op.
+
+Let `m` be the physical card holding current Twin Minion data and `n` the
+selected neighbour. Two `InitWithNoReset(..., -100)` calls swap `m.dataRef`
+and `n.dataRef`. They do not swap physical cards, IDs, runtime alignment,
+statuses, resistances, runtime data, or origin. Thus a runtime-Good card can
+hold current Twin data while the original runtime-Evil Twin card holds the
+neighbour's former role. Stable Twin and stable Demon positions consequently
+do not imply the native adjacency relation.
+
+Ordinary initialization already leaves one `DelayReveal` continuation pending
+per card. Twin adds one per distinct endpoint, or two more to its sole endpoint
+on a self-swap. No earlier continuation is cancelled. Every continuation later
+recomputes register-as and dispatches Init/AfterRoundStart. It asks the then-
+current role for a bluff and applies it only while the character's `bluff` is
+Unity-null: a non-null result is retained by later continuations, while a null
+result is retried. Later reinitializers can add more continuations, and sibling
+resume order is dynamically unresolved. A runtime-Good current-Twin card can
+therefore receive a Minion bluff and need not display Twin Minion, while the
+original runtime-Evil Twin card can display the moved role. Apparent role is
+not a reliable endpoint locator.
+
+Earlier Chancellor mutation can change the current data and Demon pools
+supplied to Twin. Later Puppeteer, Plague Doctor, Shaman, and all subsequent
+ordered slots consume the post-Twin identities. A later role moved onto `m`
+acts there when its slot arrives; an already-passed role does not replay.
+
+The solver currently lacks this ordered current-data permutation. A correct
+model must begin from the post-Chancellor/pre-Twin identity state, branch over
+the two native draws, preserve runtime Evil positions independently, and feed
+the resulting identities into later Start consumers. A local displayed-role
+overlay or original-position adjacency constraint cannot encode that lifecycle.
 
 ## Chancellor/Baron Start replacement and relocation
 

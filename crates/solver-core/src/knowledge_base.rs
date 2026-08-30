@@ -129,7 +129,7 @@ pub static ALL_CARDS: &[Card] = &[
     Card { name: "Witch",          faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Minion",         faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Poisoner",       faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: true },
-    Card { name: "Twin Minion",    faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
+    Card { name: "Twin Minion",    faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Shaman",         faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Puppeteer",      faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Puppet",         faction: Faction::Minion,   alignment: Alignment::Evil, lies: false, disguises: true,  cant_lie: true,  game_start_ability: false, activated_ability: false, corrupted_note: false },
@@ -233,5 +233,8 @@ mod tests {
 
         let witch = get_card("Witch").unwrap();
         assert!(witch.game_start_ability);
+
+        let twin_minion = get_card("Twin Minion").unwrap();
+        assert!(twin_minion.game_start_ability);
     }
 }

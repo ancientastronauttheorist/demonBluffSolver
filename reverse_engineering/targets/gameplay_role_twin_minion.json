@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Twin Minion implementation, managed internally as Marionette, including its ordered Start identity mutation and delayed reveal boundary",
+  "functions": [
+    {
+      "name": "Marionette.get_Description",
+      "metadata_name": "Marionette$$get_Description",
+      "signature": "System_String_o* Marionette__get_Description (Marionette_o* __this, const MethodInfo* method);",
+      "rva": "0x3E4440"
+    },
+    {
+      "name": "Marionette.GetInfo",
+      "metadata_name": "Marionette$$GetInfo",
+      "signature": "ActedInfo_o* Marionette__GetInfo (Marionette_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E4240"
+    },
+    {
+      "name": "Marionette.Act",
+      "metadata_name": "Marionette$$Act",
+      "signature": "void Marionette__Act (Marionette_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E4090"
+    },
+    {
+      "name": "Marionette.SitNextToDemon",
+      "metadata_name": "Marionette$$SitNextToDemon",
+      "signature": "void Marionette__SitNextToDemon (Marionette_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E42A0"
+    },
+    {
+      "name": "Marionette.ctor",
+      "metadata_name": "Marionette$$.ctor",
+      "signature": "void Marionette___ctor (Marionette_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Characters.FilterCharacterType.Character",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36AC30"
+    },
+    {
+      "name": "Characters.FilterAliveCharacters",
+      "metadata_name": "Characters$$FilterAliveCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAliveCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, const MethodInfo* method);",
+      "rva": "0x36A240"
+    },
+    {
+      "name": "Characters.GetAdjacentAliveCharacters",
+      "metadata_name": "Characters$$GetAdjacentAliveCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentAliveCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C050"
+    },
+    {
+      "name": "Character.InitWithNoReset",
+      "metadata_name": "Character$$InitWithNoReset",
+      "signature": "void Character__InitWithNoReset (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365720"
+    },
+    {
+      "name": "Character.DelayReveal.MoveNext",
+      "metadata_name": "Character.<DelayReveal>d__84$$MoveNext",
+      "signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "rva": "0x3756B0"
+    },
+    {
+      "name": "Character.Reveal",
+      "metadata_name": "Character$$Reveal",
+      "signature": "void Character__Reveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368410"
+    },
+    {
+      "name": "Character.GetCharacterBluffIfAble",
+      "metadata_name": "Character$$GetCharacterBluffIfAble",
+      "signature": "CharacterData_o* Character__GetCharacterBluffIfAble (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364C40"
+    },
+    {
+      "name": "Character.GiveBluff",
+      "metadata_name": "Character$$GiveBluff",
+      "signature": "void Character__GiveBluff (Character_o* __this, CharacterData_o* cd, const MethodInfo* method);",
+      "rva": "0x365160"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    }
+  ]
+}
