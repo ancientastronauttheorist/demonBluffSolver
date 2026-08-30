@@ -239,6 +239,16 @@ class ChancellorTrace:
 
 
 @dataclass
+class ShamanTrace:
+    """Current-role projection of Shaman's ordered Start overwrite."""
+
+    source_position: int
+    target_position: int
+    copied_role: str
+    target_previous_roles: list[str] = field(default_factory=list)
+
+
+@dataclass
 class Scenario:
     """A hypothetical assignment of evil roles to positions."""
     evil_positions: dict[int, str]  # pos -> evil role name
@@ -252,6 +262,8 @@ class Scenario:
     chancellor_conversion: Optional[int] = None
     messed_up_by_evil: set[int] = field(default_factory=set)
     chancellor_trace: Optional[ChancellorTrace] = None
+    # Appended to preserve every historical positional Scenario constructor.
+    shaman_trace: Optional[ShamanTrace] = None
 
     def chancellor_original_villager_positions(self) -> list[int]:
         """Return possible physical seats of Chancellor's erased Villager.
@@ -359,6 +371,18 @@ def scenario_is_evil(pos: int, scenario: Scenario) -> bool:
 
 def effective_role_at(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
     """True represented role, including generated and hidden Outcasts."""
+    # Shaman overwrites the destination's current dataRef while preserving its
+    # physical runtime alignment. The source already owns the copied role.
+    # Current-role consumers must therefore prefer this trace over the
+    # endpoints' original Evil/Drunk/Doppelganger identities.
+    if (
+        scenario.shaman_trace is not None
+        and pos in {
+            scenario.shaman_trace.source_position,
+            scenario.shaman_trace.target_position,
+        }
+    ):
+        return scenario.shaman_trace.copied_role
     evil_role = _known_evil_role(pos, scenario, state)
     if evil_role is not None:
         return evil_role
@@ -414,7 +438,9 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
 
     # Both roles apply HealthyBluff in the represented clean runtime cases.
     modeled_healthy_bluff = (
-        evil_role == "Puppet" or effective_role_key == "doppelganger"
+        evil_role == "Puppet"
+        or pos == scenario.doppelganger_position
+        or effective_role_key == "doppelganger"
     )
     if modeled_healthy_bluff:
         return TruthStatus.TRUTHFUL
@@ -422,7 +448,11 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
     # Runtime Evil lies regardless of bluff data. Drunk and Doppelganger are
     # the model's explicit non-null-bluff positions; clean Doppelganger already
     # returned through HealthyBluff above.
-    modeled_non_null_bluff = effective_role_key in {"drunk", "doppelganger"}
+    modeled_non_null_bluff = (
+        pos == scenario.drunk_position
+        or pos == scenario.doppelganger_position
+        or effective_role_key in {"drunk", "doppelganger"}
+    )
     if evil_role is not None or modeled_non_null_bluff:
         return TruthStatus.LYING
 

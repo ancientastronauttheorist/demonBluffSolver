@@ -253,35 +253,21 @@ def _execution_reveal_outcome(
     The split matters for Drunk: bookkeeping reports clean, while an active
     Corrupted status still drives Knight's separate four-damage hook.
     """
-    if pos in scenario.evil_positions:
-        return (scenario.evil_positions[pos], True, False, False)
-
-    if pos == scenario.puppet_position:
-        return ("Puppet", True, False, False)
-
-    if pos == scenario.drunk_position:
-        return ("Drunk", False, False, pos in scenario.corrupted)
-
-    if pos == scenario.doppelganger_position:
-        corrupted = pos in scenario.corrupted
-        return ("Doppelganger", False, corrupted, corrupted)
-
-    if (
-        scenario.chancellor_trace is not None
-        and pos == scenario.chancellor_trace.added_outcast_position
-    ):
-        role = scenario.chancellor_trace.added_outcast_role
-        active_corrupted = pos in scenario.corrupted
-        observed_corrupted = (
-            False if role.lower().replace(" ", "").replace("_", "") == "drunk"
-            else active_corrupted
-        )
-        return (role, False, observed_corrupted, active_corrupted)
-
     card = get_card_at(pos, state)
-    role = card.apparent_role if card else "Unknown"
-    corrupted = pos in scenario.corrupted
-    return (role, False, corrupted, corrupted)
+    role = effective_role_at(pos, scenario, state)
+    if role is None:
+        role = card.apparent_role if card else "Unknown"
+
+    was_evil = scenario_is_evil(pos, scenario)
+    if was_evil:
+        # Runtime alignment determines the correct-execution branch, while a
+        # Shaman-copied current dataRef is the role KillAndReveal exposes.
+        return (role, True, False, False)
+
+    active_corrupted = pos in scenario.corrupted
+    role_key = role.lower().replace(" ", "").replace("_", "")
+    observed_corrupted = role_key != "drunk" and active_corrupted
+    return (role, False, observed_corrupted, active_corrupted)
 
 
 def _execution_branch_is_protected(
@@ -298,6 +284,7 @@ def _execution_branch_is_protected(
     return (
         revealed_role in ("Doppelganger", "Doppleganger")
         and apparent_role == "Knight"
+        and not was_corrupted
     )
 
 
@@ -330,6 +317,46 @@ def _execution_observation_key(
         default=state.wrong_exec_cost,
     )
     return ("killed", role, was_evil, observed_corrupted, damage)
+
+
+def _knight_check_damage_profile(
+    pos: int,
+    result: SolverResult,
+    state: GameState,
+) -> tuple[float, float, int]:
+    """Return unsafe probability, expected damage, and worst damage.
+
+    An apparent Knight is not necessarily a true Knight: Chancellor can leave
+    a generated Outcast at that physical seat.  Derive safety from the same
+    native execution observation branches used by forced-execution lookahead,
+    rather than treating generic Corrupted status as the only risky outcome.
+    """
+    if result.n_surviving == 0:
+        return (0.0, 0.0, 0)
+
+    unsafe_branches = 0
+    total_damage = 0
+    worst_damage = 0
+    for scenario in result.surviving_scenarios:
+        outcome = _execution_reveal_outcome(pos, scenario, state)
+        observation = _execution_observation_key(pos, outcome, state)
+        if observation[0] == "bombardier_loss":
+            # The caller also excludes aggregate Bombardier positions.  Keep
+            # this defensive branch unsafe if an incomplete result reaches it.
+            return (1.0, math.inf, max(state.hp, 1))
+        if observation[0] != "killed":
+            continue
+        damage = observation[-1]
+        if damage > 0:
+            unsafe_branches += 1
+            total_damage += damage
+            worst_damage = max(worst_damage, damage)
+
+    return (
+        unsafe_branches / result.n_surviving,
+        total_damage / result.n_surviving,
+        worst_damage,
+    )
 
 
 def _find_forced_execution(
@@ -1964,35 +1991,48 @@ def recommend_action(
     for card in state.cards:
         if (card.apparent_role in EXECUTION_IMMUNE_ROLES
                 and card.position not in dead_positions
+                and card.position not in result.bombardier_positions
                 and card.position not in result.definite_good
                 and card.position not in result.definite_evil):
-            corr_risk = _corruption_risk(card.position, result, state)
+            damage_risk, expected_damage, worst_damage = (
+                _knight_check_damage_profile(card.position, result, state)
+            )
             evil_prob = probs.get(card.position, 0)
-            knight_checks.append((card.position, evil_prob, corr_risk))
+            knight_checks.append((
+                card.position,
+                evil_prob,
+                damage_risk,
+                expected_damage,
+                worst_damage,
+            ))
 
     if knight_checks and best_non_knight_prob < _KNIGHT_CHECK_THRESHOLD:
-        knight_checks.sort(key=lambda x: -x[1])  # highest evil prob first
-        kpos, evil_prob, corr_risk = knight_checks[0]
-        if corr_risk == 0:
-            # Truly free: 0% corruption means execution is either blocked or kills evil
+        # Match the Rust execution chooser: probability first, then the safer
+        # native consequence profile, then stable board position. Otherwise an
+        # equally likely but damaging first card can hide a truly free check.
+        knight_checks.sort(key=lambda x: (-x[1], x[2], x[0]))
+        kpos, evil_prob, damage_risk, expected_damage, worst_damage = knight_checks[0]
+        if damage_risk == 0:
+            # Truly free: every scenario either blocks or kills an Evil.
             return Action(
                 "execute", position=kpos,
                 reasoning=f"Knight free check: #{kpos} is {evil_prob:.0%} evil. "
                           f"If real Knight, execution blocked (confirms good, 0 HP). "
-                          f"If evil disguise, evil dies. No corruption risk.")
-        elif corr_risk < 0.3:
-            # Mostly free: small corruption risk lowers the expected cost
-            # Corrupted Knight deals 4 EXTRA damage on top of wrong exec cost
-            corrupted_knight_cost = state.wrong_exec_cost + 4
-            expected_cost = corr_risk * (1 - evil_prob) * corrupted_knight_cost
-            # Never attempt if corrupted Knight would kill us
-            if state.hp > corrupted_knight_cost and expected_cost < state.wrong_exec_cost * 0.3:
+                          f"If evil disguise, evil dies. No damaging branch.")
+        elif damage_risk < 0.3:
+            # Mostly free: use exact native branches, including generated
+            # Outcasts and the Drunk/Knight extra-damage combination.
+            if (state.hp > worst_damage
+                    and expected_damage < state.wrong_exec_cost * 0.3):
                 return Action(
                     "execute", position=kpos,
                     reasoning=f"Knight check: #{kpos} is {evil_prob:.0%} evil, "
-                              f"{corr_risk:.0%} corruption risk. Expected HP cost: "
-                              f"{expected_cost:.1f} (corrupted Knight = {corrupted_knight_cost} HP).",
-                    warnings=[f"Corruption risk: {corr_risk:.0%} -- corrupted Knight loses immunity + 4 extra damage"])
+                              f"{damage_risk:.0%} damaging-outcome risk. Expected HP cost: "
+                              f"{expected_damage:.1f} (worst branch = {worst_damage} HP).",
+                    warnings=[
+                        f"Damage risk: {damage_risk:.0%} -- the apparent Knight may "
+                        "be Corrupted or a killable generated identity"
+                    ])
 
     # 4. Check available abilities
     ability_recs = recommend_abilities(state, result, used_abilities)

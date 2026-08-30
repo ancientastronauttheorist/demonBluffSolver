@@ -8,7 +8,7 @@ pub mod execution;
 pub mod forced;
 
 use std::collections::{HashMap, HashSet};
-use crate::types::{GameState, SolverResult};
+use crate::types::{GameState, Scenario, SolverResult};
 use crate::geometry::adjacent_positions;
 use crate::knowledge_base::normalize_role;
 use crate::validators::effective_role_at;
@@ -205,21 +205,28 @@ pub fn execution_consequence(
         return ExecutionConsequence::Killed { hp_damage: 0 };
     }
 
-    if revealed_role == "Bombardier" {
+    let revealed_role_norm = normalize_role(revealed_role);
+    let apparent_role_norm = normalize_role(apparent_role);
+
+    if revealed_role_norm == "bombardier" {
         return ExecutionConsequence::BombardierLoss;
     }
 
-    let true_clean_knight = revealed_role == "Knight" && !was_corrupted;
-    // HealthyBluff makes Doppelganger delegate killability to its Knight bluff.
-    // Knight checks HealthyBluff before Corrupted, so this stays protected even
-    // in a hand-built scenario that carries both statuses.
+    let true_clean_knight = revealed_role_norm == "knight" && !was_corrupted;
+    // A normally modeled clean Doppelganger acquired HealthyBluff while taking
+    // its Knight bluff. A corrupted Doppelganger never acquired that status,
+    // so its real role remains killable. Native HealthyBluff would still have
+    // absolute precedence in an external both-status state Scenario cannot
+    // represent.
     let healthy_bluff_doppelganger_as_knight =
-        revealed_role == "Doppelganger" && apparent_role == "Knight";
+        matches!(revealed_role_norm.as_str(), "doppelganger" | "doppleganger")
+            && apparent_role_norm == "knight"
+            && !was_corrupted;
     if true_clean_knight || healthy_bluff_doppelganger_as_knight {
         return ExecutionConsequence::Protected;
     }
 
-    let base_damage = if revealed_role == "Drunk" {
+    let base_damage = if revealed_role_norm == "drunk" {
         2
     } else {
         default_wrong_exec_cost
@@ -227,7 +234,7 @@ pub fn execution_consequence(
     // Knight's separate damage hook checks the active Corrupted status. PD and
     // execution bookkeeping still report Drunk as clean, so callers must pass
     // the role-effect status rather than that persisted observation here.
-    let knight_extra = if apparent_role == "Knight" && was_corrupted {
+    let knight_extra = if apparent_role_norm == "knight" && was_corrupted {
         4
     } else {
         0
@@ -235,6 +242,84 @@ pub fn execution_consequence(
 
     ExecutionConsequence::Killed {
         hp_damage: base_damage.wrapping_add(knight_extra),
+    }
+}
+
+/// Resolve one solver world's execution through the same real/apparent role
+/// surface used by forced search. This keeps generated Outcasts and disguisers
+/// from drifting away from native Knight protection and damage rules.
+pub fn scenario_execution_consequence(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> ExecutionConsequence {
+    let (revealed_role, was_evil, _, active_corrupted) =
+        forced::execution_reveal_outcome(pos, scenario, state);
+    let apparent_role = get_card_role(pos, state).unwrap_or(&revealed_role);
+    execution_consequence(
+        &revealed_role,
+        apparent_role,
+        was_evil,
+        active_corrupted,
+        state.wrong_exec_cost,
+    )
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ExecutionDamageProfile {
+    /// Probability of HP damage or an immediate Bombardier loss.
+    pub risk: f64,
+    /// Mean HP damage. Infinite when any world is a terminal Bombardier loss.
+    pub expected_damage: f64,
+    /// Largest finite HP hit among surviving worlds.
+    pub max_damage: i32,
+    pub terminal_risk: bool,
+}
+
+/// Scenario-exact player risk for executing one position.
+pub fn execution_damage_profile(
+    pos: u8,
+    state: &GameState,
+    result: &SolverResult,
+) -> ExecutionDamageProfile {
+    let total = result.surviving_scenarios.len();
+    if total == 0 {
+        return ExecutionDamageProfile {
+            risk: 0.0,
+            expected_damage: 0.0,
+            max_damage: 0,
+            terminal_risk: false,
+        };
+    }
+
+    let mut damaging = 0usize;
+    let mut total_damage = 0i64;
+    let mut max_damage = 0i32;
+    let mut terminal_risk = false;
+    for scenario in &result.surviving_scenarios {
+        match scenario_execution_consequence(pos, scenario, state) {
+            ExecutionConsequence::Protected | ExecutionConsequence::Killed { hp_damage: 0 } => {}
+            ExecutionConsequence::Killed { hp_damage } => {
+                damaging += 1;
+                total_damage += i64::from(hp_damage);
+                max_damage = max_damage.max(hp_damage);
+            }
+            ExecutionConsequence::BombardierLoss => {
+                damaging += 1;
+                terminal_risk = true;
+            }
+        }
+    }
+
+    ExecutionDamageProfile {
+        risk: damaging as f64 / total as f64,
+        expected_damage: if terminal_risk {
+            f64::INFINITY
+        } else {
+            total_damage as f64 / total as f64
+        },
+        max_damage,
+        terminal_risk,
     }
 }
 
@@ -425,12 +510,148 @@ mod tests {
         );
         assert_eq!(
             execution_consequence("Doppelganger", "Knight", false, true, 5),
-            ExecutionConsequence::Protected,
+            ExecutionConsequence::Killed { hp_damage: 9 },
         );
         assert_eq!(
             execution_consequence("Pooka", "Knight", true, false, 5),
             ExecutionConsequence::Killed { hp_damage: 0 },
         );
+    }
+
+    #[test]
+    fn shaman_copied_knight_reveals_current_role_but_keeps_evil_execution() {
+        let state = GameState {
+            n_cards: 2,
+            wrong_exec_cost: 5,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Knight".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+        let mut scenario = make_scenario(&[(1, "Pooka")]);
+        scenario.shaman_trace = Some(ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Knight".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+
+        assert_eq!(
+            forced::execution_reveal_outcome(1, &scenario, &state),
+            ("Knight".to_string(), true, false, false)
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &scenario, &state),
+            ExecutionConsequence::Killed { hp_damage: 0 }
+        );
+    }
+
+    #[test]
+    fn knight_damage_profile_uses_real_generated_and_disguised_identities() {
+        let state = GameState {
+            n_cards: 2,
+            wrong_exec_cost: 5,
+            cards: vec![CardInfo {
+                position: 1,
+                apparent_role: "Knight".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+        let clean_knight = make_scenario(&[]);
+        let mut corrupted_knight = clean_knight.clone();
+        corrupted_knight.corrupted.insert(1);
+        let mut drunk = clean_knight.clone();
+        drunk.drunk_position = Some(1);
+        drunk.corrupted.insert(1);
+        let mut doppel = clean_knight.clone();
+        doppel.doppelganger_position = Some(1);
+        let mut corrupted_doppel = doppel.clone();
+        corrupted_doppel.corrupted.insert(1);
+        let mut generated_wretch = clean_knight.clone();
+        generated_wretch.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        let evil = make_scenario(&[(1, "Pooka")]);
+
+        assert_eq!(
+            scenario_execution_consequence(1, &clean_knight, &state),
+            ExecutionConsequence::Protected,
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &corrupted_knight, &state),
+            ExecutionConsequence::Killed { hp_damage: 9 },
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &drunk, &state),
+            ExecutionConsequence::Killed { hp_damage: 6 },
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &doppel, &state),
+            ExecutionConsequence::Protected,
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &corrupted_doppel, &state),
+            ExecutionConsequence::Killed { hp_damage: 9 },
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &generated_wretch, &state),
+            ExecutionConsequence::Killed { hp_damage: 5 },
+        );
+        assert_eq!(
+            scenario_execution_consequence(1, &evil, &state),
+            ExecutionConsequence::Killed { hp_damage: 0 },
+        );
+
+        let scenarios = vec![
+            clean_knight,
+            corrupted_knight,
+            drunk,
+            doppel,
+            corrupted_doppel,
+            generated_wretch,
+            evil,
+        ];
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: scenarios.len(),
+            n_surviving: scenarios.len(),
+            surviving_scenarios: scenarios,
+            reasoning: vec![],
+        };
+        let profile = execution_damage_profile(1, &state, &result);
+        assert_eq!(profile.risk, 4.0 / 7.0);
+        assert_eq!(profile.expected_damage, 29.0 / 7.0);
+        assert_eq!(profile.max_damage, 9);
+        assert!(!profile.terminal_risk);
+
+        let mut generated_bombardier = make_scenario(&[]);
+        generated_bombardier.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        let bomb_result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![1],
+            n_scenarios: 1,
+            n_surviving: 1,
+            surviving_scenarios: vec![generated_bombardier],
+            reasoning: vec![],
+        };
+        let bomb_profile = execution_damage_profile(1, &state, &bomb_result);
+        assert_eq!(bomb_profile.risk, 1.0);
+        assert!(bomb_profile.expected_damage.is_infinite());
+        assert!(bomb_profile.terminal_risk);
     }
 
     #[test]

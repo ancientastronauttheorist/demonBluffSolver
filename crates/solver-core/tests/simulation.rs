@@ -1034,6 +1034,45 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         10,
     );
 
+    let lilis_killed_corrupted_knight = serde_json::json!({
+        "hp": 8,
+        "wrong_exec_cost": 5,
+        // Some historical fixtures also retained non-player deaths here.
+        "executed": [1],
+        "cards": [{"position": 1, "apparent_role": "Knight"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &lilis_killed_corrupted_knight,
+            &empty,
+            &HashSet::from([1]),
+            &empty,
+            &[&knight_scenario],
+        ).unwrap(),
+        // Lilis's fixed 2 HP Night hit is already reflected in saved HP.
+        // Demon death fires OnDied, not Knight's Executed +4 hook.
+        8,
+    );
+
+    let slayer_killed_wretch = serde_json::json!({
+        "hp": 5,
+        "wrong_exec_cost": 5,
+        "executed": [1],
+        "cards": [{"position": 1, "apparent_role": "Wretch"}]
+    });
+    assert_eq!(
+        reconstruct_phase3_hp(
+            &slayer_killed_wretch,
+            &empty,
+            &empty,
+            &HashSet::from([1]),
+            &[&Scenario::default()],
+        ).unwrap(),
+        // Slayer bypasses protection/OnExecuted, but its wrong Good-Wretch
+        // death cost occurred before Phase 3 and remains in saved HP.
+        5,
+    );
+
     let mut drunk_scenario = knight_scenario;
     drunk_scenario.drunk_position = Some(1);
     let drunk_as_knight = serde_json::json!({
@@ -1534,6 +1573,33 @@ fn execution_branches_protected_knight_and_drunk_kill_continuations() {
     }
 }
 
+#[test]
+fn corrupted_doppelganger_as_knight_is_a_nine_hp_kill_branch() {
+    let mut doppel = Scenario::default();
+    doppel.doppelganger_position = Some(1);
+    doppel.corrupted.insert(1);
+    let observation = good_execution_observation(&doppel, 1, "Knight", 5);
+    assert_eq!(
+        observation.consequence,
+        ExecutionConsequence::Killed { hp_damage: 9 },
+    );
+    assert!(observation.observed_corrupted);
+    assert_eq!(observation.revealed_role.as_deref(), Some("Doppelganger"));
+
+    let branch = ExecutionBranch {
+        hp: 10,
+        ..ExecutionBranch::default()
+    };
+    let GoodExecutionContinuation::Continue(next) =
+        continue_good_execution(&branch, 1, observation)
+    else {
+        panic!("corrupted Doppelganger is not Bombardier");
+    };
+    assert_eq!(next.hp, 1);
+    assert_eq!(next.executed, vec![1]);
+    assert!(next.immunity_blocked.is_empty());
+}
+
 // ── Test entry point ──
 
 #[test]
@@ -1751,6 +1817,20 @@ fn regression_disguised_outcasts_do_not_consume_trusted_outcast_slots() {
         value["board_count_provenance"] = serde_json::json!("trusted_pre_start");
         if let SimResult::ConstraintFailure { detail, .. } = simulate_game(&value) {
             panic!("{case_name} truth eliminated with trusted no=1: {detail}");
+        }
+    }
+}
+
+#[test]
+fn regression_lilis_knight_and_slayer_native_surfaces() {
+    // Evil fallback victim, post-night Knight check, no-kill history retained
+    // only through saved HP, and Slayer's registered-Evil Wretch kill.
+    for case_name in ["asc33_v5", "asc69_v2", "asc70_v7", "asc26_v8"] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).unwrap();
+        let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+        if let SimResult::ConstraintFailure { detail, .. } = simulate_game(&value) {
+            panic!("{case_name} native Lilis/Knight/Slayer truth eliminated: {detail}");
         }
     }
 }

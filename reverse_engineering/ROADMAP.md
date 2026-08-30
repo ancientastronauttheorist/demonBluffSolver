@@ -113,6 +113,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   duplicate and resistance behavior, current-status Witness truth/bluff
   semantics, and death persistence; expand the typed union to 16 target sets
   and 289 memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Lilis and Knight to managed `Striga` and `Immortal`;
+  native-audit all 13 role methods plus 41 ordered-Start, Night-rule,
+  selection, delayed-kill, protection, ordinary-execution, Slayer, HP, status,
+  and reset helpers; close hard registered-Good priority, protected no-kill and
+  duplicate-Night behavior, exact Knight killability precedence, and the
+  additional-four/total-nine corrupted-Good execution result; expand the typed
+  union to 17 target sets and 343 memberships and publish the combined quality
+  report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

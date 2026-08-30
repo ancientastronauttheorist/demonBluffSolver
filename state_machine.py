@@ -78,7 +78,9 @@ class GameStateMachine:
         blocked = self._active_blocked_positions()
         unrevealed = all_positions - flipped - dead - blocked
 
-        if unrevealed and not flipped:
+        if self.session.pending_lilis_nights > 0:
+            self.phase = GamePhase.LILIS_NIGHT
+        elif unrevealed and not flipped:
             self.phase = GamePhase.FLIPPING
         elif len(entered) < len(flipped - dead):
             self.phase = GamePhase.ENTERING_CLUES
@@ -98,7 +100,9 @@ class GameStateMachine:
         new_exec = len(self.session.executed) > self._last_exec_count
         new_ability = len(self.session.used_abilities) > self._last_ability_count
 
-        if new_cards or new_exec or new_ability:
+        if self.session.pending_lilis_nights > 0:
+            self.phase = GamePhase.LILIS_NIGHT
+        elif new_cards or new_exec or new_ability:
             self._snapshot_counts()
             self.phase = GamePhase.SOLVING
         else:
@@ -345,11 +349,22 @@ class GameStateMachine:
         from game_loop import dispatch
         print(f"\n  [auto] Phase: FLIPPING")
 
-        if self.session.is_lilis_alive():
-            before_batch_index = self.session.lilis_batch_index
+        if self.session.has_duplicate_lilis():
+            self._pause(
+                "Duplicate Lilis live automation is unsupported: multiple "
+                "actors can charge HP and collide on one delayed victim"
+            )
+            return
+
+        if self.session.pending_lilis_nights > 0:
+            self.phase = GamePhase.LILIS_NIGHT
+            return
+
+        if self.session.has_lilis_night_rule():
+            before_pending_nights = self.session.pending_lilis_nights
             dispatch("flip", ["--lilis"], self.session)
             # Only this call's four verified reveals can open a fresh night.
-            if self.session.lilis_batch_index > before_batch_index:
+            if self.session.pending_lilis_nights > before_pending_nights:
                 self.phase = GamePhase.LILIS_NIGHT
                 return
             remaining = self._unrevealed_positions()
@@ -513,8 +528,19 @@ class GameStateMachine:
         pos = self._pending_reveal[0]
         print(f"\n  [auto] Phase: REVEALING #{pos}")
 
+        if self.session.has_duplicate_lilis():
+            self._pause(
+                "Duplicate Lilis live automation is unsupported: refusing a "
+                "reveal that may start an unmodeled multi-actor Night"
+            )
+            return
+        if self.session.pending_lilis_nights > 0:
+            self.phase = GamePhase.LILIS_NIGHT
+            return
+
         # Click safety protocol
         entered = {c.position for c in self.session.cards}
+        was_revealed = pos in self.session.reveal_order
         dead = set(self.session.executed) | set(self.session.night_kills)
         blocked = set(self.session.blocked_positions)
 
@@ -573,7 +599,24 @@ class GameStateMachine:
                 )
                 return
             verify = _verify_flips(board, [pos], self.session)
-            _apply_flip_verification(self.session, [pos], verify)
+            verification_changed = _apply_flip_verification(
+                self.session,
+                [pos],
+                verify,
+                persist=False,
+            )
+            night_triggered = (
+                pos in verify["flipped"]
+                and not was_revealed
+                and self.session.has_lilis_night_rule()
+                and len(self.session.reveal_order) % 4 == 0
+            )
+            if night_triggered:
+                self.session.schedule_lilis_night()
+            if verification_changed or night_triggered:
+                # Persist the fourth reveal and pending native transition as
+                # one state, before parsing or later automation can fail.
+                self.session.save()
             if pos in verify["blocked"]:
                 print(f"  [auto] #{pos} is blocked by the active Witch quota")
                 self._snapshot_counts()
@@ -591,17 +634,18 @@ class GameStateMachine:
             )
             return
 
-        # Check Lilis night trigger (every 4th reveal)
-        if self.session.is_lilis_alive():
+        # NightModeRule survives Lilis death. Stop at every fourth verified
+        # reveal even when the dead actor will contribute no victim or damage.
+        if night_triggered:
             total_reveals = len(self.session.reveal_order)
-            if total_reveals % 4 == 0:
-                self.session.lilis_batch_index += 1
-                print(f"  [auto] Lilis night triggered (reveal #{total_reveals})")
-                self.phase = GamePhase.NIGHT_RESOLVE
-                # Parse clue first before night phase
-                self._auto_enter_single_card(pos)
-                self.session.save()
-                return
+            print(f"  [auto] Lilis night triggered (reveal #{total_reveals})")
+            # Let the delayed native kill (or protected/no-victim timeout)
+            # settle before reading the result surface.
+            self.phase = GamePhase.LILIS_NIGHT
+            # Parse clue first before night phase
+            self._auto_enter_single_card(pos)
+            self.session.save()
+            return
 
         # Parse clue from memory
         self._auto_enter_single_card(pos)
@@ -791,6 +835,19 @@ class GameStateMachine:
         """Handle Lilis night phase — wait for animation, transition to resolve."""
         print(f"\n  [auto] Phase: LILIS_NIGHT")
 
+        if self.session.has_duplicate_lilis():
+            self._pause(
+                "Duplicate Lilis Night cannot be resolved safely: multiple "
+                "actors and delayed-victim collisions are not represented"
+            )
+            return
+        if self.session.pending_lilis_nights <= 0:
+            self._pause(
+                "No explicitly persisted Lilis Night is pending; legacy "
+                "batch/resolution counters are not safe to infer"
+            )
+            return
+
         if self.monitor and self.monitor.is_healthy():
             already_dead = set(self.session.night_kills) | set(self.session.executed)
 
@@ -807,8 +864,14 @@ class GameStateMachine:
                 self.phase = GamePhase.NIGHT_RESOLVE
                 return
             else:
-                # Timeout — might be a 0-kill case (Lilis is only unrevealed)
-                print(f"  [auto] No kill detected (timeout) — checking 0-kill case")
+                if self.session.is_lilis_alive():
+                    # No victim and a protected Knight victim share this surface.
+                    print("  [auto] No kill detected (timeout) — resolving zero/protected victim")
+                else:
+                    print(
+                        "  [auto] Post-death Night animation settled — "
+                        "resolving the zero-damage rule transition"
+                    )
                 self.phase = GamePhase.NIGHT_RESOLVE
                 return
         else:
@@ -821,6 +884,13 @@ class GameStateMachine:
     def _do_night_resolve(self):
         """Auto-detect killed positions from memory, deduct HP, record kills."""
         print(f"\n  [auto] Phase: NIGHT_RESOLVE")
+
+        if self.session.has_duplicate_lilis():
+            self._pause(
+                "Duplicate Lilis Night cannot be resolved safely: multiple "
+                "actors and delayed-victim collisions are not represented"
+            )
+            return
 
         if not self.monitor or not self.monitor.is_healthy():
             self._pause("Night resolve: no monitor — enter manually: night_kill <pos> <n_evil> OR night_no_kill")
@@ -846,36 +916,40 @@ class GameStateMachine:
                 if c.get('is_evil'):
                     n_evil += 1
 
+        actor_active = self.session.is_lilis_alive()
+        if killed and not actor_active:
+            self._pause(
+                "A new hidden death appeared after Lilis was known dead; "
+                "refusing to classify it as a Lilis result"
+            )
+            return
         if killed:
             print(f"  [auto] Night kills detected: {['#'+str(p) for p in killed]}, {n_evil} evil")
-            # Record kills
-            self.session.night_kills.extend(killed)
-            self.session.night_kill_evil_count += n_evil
-            if n_evil > 0:
-                self.session.release_witch_blocks(
-                    "an evil Lilis victim may have been Witch; public re-probe required"
-                )
-            if n_evil == len(killed) and n_evil > 0:
-                for p in killed:
-                    if p not in self.session.confirmed_evil:
-                        self.session.confirmed_evil.append(p)
+        elif actor_active:
+            print("  [auto] No kills detected — zero-victim/protected-victim Lilis night")
+            print(
+                "  [auto] No identity inference: a clean Knight or HealthyBluff "
+                "Doppelganger-as-Knight can survive without a reroll"
+            )
         else:
-            print(f"  [auto] No kills detected — 0-kill Lilis night")
-            # Check if Lilis is only unrevealed (confirms her position)
-            revealed = {c.position for c in self.session.cards}
-            dead = set(self.session.executed) | set(self.session.night_kills)
-            all_pos = set(range(1, self.session.n_cards + 1))
-            unrevealed = all_pos - revealed - dead
-            if len(unrevealed) == 1:
-                lilis_pos = unrevealed.pop()
-                if lilis_pos not in self.session.confirmed_evil:
-                    self.session.confirmed_evil.append(lilis_pos)
-                print(f"  [auto] Only unrevealed card is #{lilis_pos} — confirmed as Lilis")
+            print(
+                "  [auto] Lilis is known dead — synchronizing the persistent "
+                "Night rule with zero actor damage"
+            )
 
-        # Auto-deduct 2 HP
-        old_hp = self.session.hp
-        self.session.hp -= 2
-        print(f"  [auto] Lilis night HP: {old_hp} -> {self.session.hp}")
+        try:
+            if actor_active:
+                result = self.session.record_lilis_night_result(killed, n_evil)
+            else:
+                result = self.session.record_lilis_post_death_night()
+        except ValueError as exc:
+            self._pause(f"Lilis night result rejected without mutation: {exc}")
+            return
+
+        print(
+            f"  [auto] Resolved {result['resolved_events']} Lilis night(s); "
+            f"HP: {result['old_hp']} -> {result['new_hp']}"
+        )
 
         if self.session.hp <= 0:
             self.phase = GamePhase.GAME_OVER
@@ -883,7 +957,7 @@ class GameStateMachine:
             self.session.save()
             return
 
-        reset_abilities = self.session.reset_after_night_abilities()
+        reset_abilities = result["reset_abilities"]
         if reset_abilities:
             print(
                 "  [auto] ResetAfterNight abilities ready again: "
@@ -895,7 +969,7 @@ class GameStateMachine:
 
         # Check if there are more cards to flip (Lilis batches)
         remaining = self._unrevealed_positions()
-        if remaining and self.session.is_lilis_alive():
+        if remaining and self.session.has_lilis_night_rule():
             self.phase = GamePhase.FLIPPING
         else:
             self.phase = GamePhase.ENTERING_CLUES

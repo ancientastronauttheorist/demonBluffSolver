@@ -117,39 +117,217 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // PD ability results
     if !validate_pd_ability(scenario, state) { return false; }
 
-    // Lilis night kill constraint
-    if !state.night_kills.is_empty() {
-        let evil_in_nk = state.night_kills.iter()
-            .filter(|p| scenario.evil_positions.contains_key(p))
-            .count() as u8;
-        if evil_in_nk != state.night_kill_evil_count { return false; }
+    // Public successful Lilis deaths. No-kill Nights and their ordering are
+    // not represented by GameState, so this validates only exact facts carried
+    // by `night_kills` rather than inferring chronology from final reveal data.
+    if !validate_lilis_night_kills(scenario, state) { return false; }
 
-        // Knight immunity check
-        if state.deck.villagers.iter().any(|v| v == "Knight") {
-            let knight_revealed = state.cards.iter().any(|card| {
-                !scenario.evil_positions.contains_key(&card.position)
-                    && effective_role_at(card.position, scenario, state)
-                        .is_some_and(|role| normalize_role(&role) == "knight")
+    true
+}
+
+fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
+    if state.night_kills.is_empty() {
+        return state.night_kill_evil_count == 0;
+    }
+
+    // Striga/Lilis is the only shipped producer of this evidence. Historical
+    // events remain valid after Lilis is executed, so deck membership is the
+    // safe actor constraint; final-state liveness is not.
+    let deck_lilis_count = state.deck.demons.iter()
+        .filter(|role| normalize_role(role) == "lilis")
+        .count();
+    if deck_lilis_count == 0 {
+        return false;
+    }
+
+    // The public pool can contain duplicate Lilis records even when role-count
+    // selection put only one physical Lilis on this board. Ordinary Start
+    // protects exactly one physical match, so a successful Lilis victim needs
+    // two possible physical Lilis actors in this scenario, not merely two pool
+    // records. Historical confirmed-Evil deaths without a public role leave an
+    // unbound role slot; conservatively allow that slot to be another Lilis,
+    // bounded by the authored pool and trusted board Demon count.
+    let named_lilis_positions: HashSet<u8> = scenario.evil_positions.iter()
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "lilis").then_some(position)
+        })
+        .collect();
+    let mut untyped_evil_positions: HashSet<u8> = scenario.evil_positions.iter()
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "unknown").then_some(position)
+        })
+        .collect();
+    for &position in &state.confirmed_evil {
+        let dead = state.executed.contains(&position) || state.night_kills.contains(&position);
+        let public_role_is_untyped = state.executed_evil_roles.get(&position)
+            .map_or(true, |role| normalize_role(role) == "unknown");
+        if dead && public_role_is_untyped && !named_lilis_positions.contains(&position) {
+            untyped_evil_positions.insert(position);
+        }
+    }
+    let mut possible_physical_lilis = named_lilis_positions.len()
+        .saturating_add(untyped_evil_positions.len())
+        .min(deck_lilis_count);
+    if let Some(board_demon_count) = state.board_demon_count {
+        possible_physical_lilis = possible_physical_lilis.min(board_demon_count as usize);
+    }
+    if state.n_evil > 0 {
+        possible_physical_lilis = possible_physical_lilis.min(state.n_evil as usize);
+    }
+
+    let named_lilis_victims = state.night_kills.iter()
+        .filter(|position| {
+            effective_role_at(**position, scenario, state)
+                .is_some_and(|role| normalize_role(&role) == "lilis")
+        })
+        .count();
+    if named_lilis_victims > 0 && named_lilis_victims >= possible_physical_lilis {
+        // Ordinary Start protects one physical same-asset Lilis for the whole
+        // game. Other Lilis deaths do not remove that actor's status, so at
+        // most physical_count - 1 named Lilis can be successful Night victims.
+        return false;
+    }
+
+    let unique_victims: HashSet<u8> = state.night_kills.iter().copied().collect();
+    if unique_victims.len() != state.night_kills.len()
+        || unique_victims.iter().any(|position| *position == 0 || *position > state.n_cards)
+    {
+        return false;
+    }
+
+    let evil_victims = state.night_kills.iter()
+        .filter(|position| scenario.is_evil(**position))
+        .count() as u8;
+    if evil_victims != state.night_kill_evil_count {
+        return false;
+    }
+
+    for &position in &state.night_kills {
+        let role = effective_role_at(position, scenario, state);
+
+        if scenario.is_evil(position) {
+            // Runtime-Evil Knight and every ordinary Evil role are killable;
+            // Evil victims arise only from Lilis's unaligned fallback pass.
+            continue;
+        }
+
+        let corrupted = scenario.corrupted.contains(&position);
+        if role.as_deref().is_some_and(|role| normalize_role(role) == "knight")
+            && !corrupted
+        {
+            // Delayed demon death asks the current real role for protection.
+            // A clean Good Knight aborts the death and produces no night_kill.
+            return false;
+        }
+
+        let apparent_knight = state.card_at(position)
+            .is_some_and(|card| normalize_role(&card.apparent_role) == "knight");
+        let effective_doppelganger = role.as_deref().is_some_and(|role| {
+            matches!(normalize_role(role).as_str(), "doppelganger" | "doppleganger")
+        });
+        if effective_doppelganger && apparent_knight && !corrupted {
+            // A clean ordinary or Chancellor-generated Doppelganger acquired
+            // HealthyBluff and delegates protection to its Knight bluff.
+            return false;
+        }
+    }
+
+    // Preserve the legacy hidden-identity check: if the deck contains Knight
+    // but no known Good Knight is placed, at least one compatible unobserved
+    // home (or an omitted pool identity) must remain. This does not invent a
+    // particular victim role.
+    let knight_identity_may_be_erased = scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        trace.target_previous_roles.iter()
+            .any(|role| normalize_role(role) == "knight")
+    })
+        || untyped_historical_evil_may_be_start_eraser(scenario, state)
+        || scenario.chancellor_trace.is_some()
+        || scenario.chancellor_conversion.is_some()
+        || scenario.puppet_position.is_some()
+        || scenario.drunk_position.is_some()
+        || scenario.doppelganger_position.is_some()
+        || state.cards.iter().any(|card| {
+            normalize_role(&card.apparent_role) == "baker"
+                && info_str(&card.info_parsed, "original_role")
+                    .is_some_and(|role| normalize_role(role) == "knight")
+        });
+    if !knight_identity_may_be_erased
+        && state.deck.villagers.iter().any(|role| normalize_role(role) == "knight")
+    {
+        let knight_revealed = state.cards.iter().any(|card| {
+            !scenario.is_evil(card.position)
+                && effective_role_at(card.position, scenario, state)
+                    .is_some_and(|role| normalize_role(&role) == "knight")
+        });
+        if !knight_revealed {
+            let revealed: HashSet<u8> = state.cards.iter().map(|card| card.position).collect();
+            let valid = (1..=state.n_cards).any(|position| {
+                let intrinsically_killable = effective_role_at(position, scenario, state)
+                    .is_some_and(|role| normalize_role(&role) == "drunk");
+                !scenario.is_evil(position)
+                    && !revealed.contains(&position)
+                    && !(state.night_kills.contains(&position)
+                        && !scenario.corrupted.contains(&position)
+                        && !intrinsically_killable)
             });
-            if !knight_revealed {
-                let revealed: HashSet<u8> = state.cards.iter().map(|c| c.position).collect();
-                let valid = (1..=state.n_cards).any(|p| {
-                    let intrinsically_killable = effective_role_at(p, scenario, state)
-                        .is_some_and(|role| normalize_role(&role) == "drunk");
-                    !scenario.evil_positions.contains_key(&p)
-                        && !revealed.contains(&p)
-                        && !(state.night_kills.contains(&p)
-                            && !scenario.corrupted.contains(&p)
-                            && !intrinsically_killable)
-                });
-                let pool_gt_board = state.board_villager_count
-                    .map_or(false, |bvc| state.deck.villagers.len() as u8 > bvc);
-                if !valid && !pool_gt_board { return false; }
+            let pool_gt_board = state.board_villager_count
+                .is_some_and(|count| state.deck.villagers.len() as u8 > count);
+            if !valid && !pool_gt_board {
+                return false;
             }
         }
     }
 
     true
+}
+
+fn untyped_historical_evil_may_be_start_eraser(
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter())
+        .copied()
+        .collect();
+    let has_untyped_historical_evil = state.confirmed_evil.iter().any(|position| {
+        dead.contains(position)
+            && state.executed_evil_roles.get(position)
+                .is_none_or(|role| normalize_role(role) == "unknown")
+    });
+    if !has_untyped_historical_evil {
+        return false;
+    }
+
+    // Shaman and Chancellor are Minions in this fingerprint. A trusted board
+    // Minion count can prove that every physical Minion slot is already bound
+    // to a typed history/current placement, in which case the untyped death
+    // cannot be either Start eraser even if that role appears in the pool.
+    let known_minion_positions: HashSet<u8> = scenario.evil_positions.iter()
+        .chain(state.executed_evil_roles.iter())
+        .filter_map(|(&position, role)| {
+            get_card(role)
+                .is_some_and(|card| card.faction == Faction::Minion)
+                .then_some(position)
+        })
+        .collect();
+    if state.board_minion_count
+        .is_some_and(|count| known_minion_positions.len() >= count as usize)
+    {
+        return false;
+    }
+
+    ["shaman", "chancellor"].into_iter().any(|eraser| {
+        let authored = state.deck.evil_roles().iter()
+            .filter(|role| normalize_role(role) == eraser)
+            .count();
+        let represented_positions: HashSet<u8> = scenario.evil_positions.iter()
+            .chain(state.executed_evil_roles.iter())
+            .filter_map(|(&position, role)| {
+                (normalize_role(role) == eraser).then_some(position)
+            })
+            .collect();
+        authored > represented_positions.len()
+    })
 }
 
 fn validate_witch_block_evidence(scenario: &Scenario, state: &GameState) -> bool {
@@ -1427,10 +1605,30 @@ fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
 }
 
 fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
+    let mut used_actors = HashSet::new();
     for result in &state.slayer_results {
         let slayer_pos = result.slayer_pos;
         let target_pos = result.target_pos;
         let killed = result.killed;
+
+        if slayer_pos == 0
+            || slayer_pos > state.n_cards
+            || target_pos == 0
+            || target_pos > state.n_cards
+            || !used_actors.insert(slayer_pos)
+        {
+            return false;
+        }
+        let Some(actor) = state.card_at(slayer_pos) else {
+            return false;
+        };
+        if normalize_role(&actor.apparent_role) != "slayer" {
+            return false;
+        }
+        if !killed && result.revealed_role.is_some() {
+            // The disabled/failure callback reports only the selected target.
+            return false;
+        }
 
         let slayer_evil_role = known_evil_role(slayer_pos, scenario, state);
         let slayer_is_evil = slayer_evil_role.is_some();
@@ -1891,7 +2089,7 @@ mod tests {
 
     #[test]
     fn current_witch_block_marker_rejects_no_witch_scenario() {
-        let mut state = base_state(3, vec![]);
+        let mut state = base_state(3, vec![make_card(2, "Baker", json!({}))]);
         state.blocked_positions = vec![1];
         assert!(!validate_witch_block_evidence(&empty_scenario(), &state));
     }
@@ -2838,6 +3036,109 @@ mod tests {
     }
 
     #[test]
+    fn slayer_uses_registered_alignment_and_bypasses_knight_protection_only_for_evil() {
+        let mut state = base_state(
+            2,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Knight", json!({})),
+            ],
+        );
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: false,
+            revealed_role: None,
+        });
+
+        let clean_knight = empty_scenario();
+        assert!(validate_slayer_results(&clean_knight, &state));
+        state.slayer_results[0].killed = true;
+        state.slayer_results[0].revealed_role = Some("Knight".to_string());
+        assert!(!validate_slayer_results(&clean_knight, &state));
+
+        let mut corrupted_knight = clean_knight.clone();
+        corrupted_knight.corrupted.insert(2);
+        assert!(!validate_slayer_results(&corrupted_knight, &state));
+
+        let mut evil_disguise = empty_scenario();
+        evil_disguise.evil_positions.insert(2, "Shaman".to_string());
+        state.slayer_results[0].revealed_role = Some("Shaman".to_string());
+        assert!(validate_slayer_results(&evil_disguise, &state));
+    }
+
+    #[test]
+    fn shaman_copied_knight_precedes_preserved_evil_identity_for_role_surfaces() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Knight", json!({})),
+                make_card(3, "Knight", json!({})),
+            ],
+        );
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![2];
+        state.night_kill_evil_count = 1;
+
+        let mut copied_knight = empty_scenario();
+        copied_knight.evil_positions.insert(2, "Pooka".to_string());
+        copied_knight.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 3,
+            target_position: 2,
+            copied_role: "Knight".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+
+        assert_eq!(
+            effective_role_at(2, &copied_knight, &state).as_deref(),
+            Some("Knight")
+        );
+        assert_eq!(get_real_role(2, &copied_knight, &state), "Knight");
+        assert_eq!(
+            effective_alignment(2, &copied_knight, &state),
+            EffectiveAlignment::Evil
+        );
+        assert!(validate_lilis_night_kills(&copied_knight, &state));
+
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Knight".to_string()),
+        });
+        assert!(validate_slayer_results(&copied_knight, &state));
+        state.slayer_results[0].revealed_role = Some("Pooka".to_string());
+        assert!(!validate_slayer_results(&copied_knight, &state));
+    }
+
+    #[test]
+    fn slayer_rejects_malformed_actor_reuse_and_failed_reveal_shape() {
+        let mut state = base_state(
+            2,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Knight", json!({})),
+            ],
+        );
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: false,
+            revealed_role: Some("Knight".to_string()),
+        });
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+
+        state.slayer_results[0].revealed_role = None;
+        state.slayer_results.push(state.slayer_results[0].clone());
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+
+        state.slayer_results.truncate(1);
+        state.cards[0].apparent_role = "Bard".to_string();
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+    }
+
+    #[test]
     fn resistant_generated_drunk_is_clean_but_active_corruption_is_not() {
         let mut state = base_state(3, vec![make_card(3, "Plague_Doctor", json!({}))]);
         state.pd_ability_results.push(crate::types::PdAbilityResult {
@@ -2982,6 +3283,7 @@ mod tests {
     fn resistant_generated_drunk_can_fill_a_night_killed_knight_identity() {
         let mut state = base_state(1, vec![]);
         state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
         state.night_kills = vec![1];
         state.night_kill_evil_count = 0;
         state.board_villager_count = Some(1);
@@ -2997,6 +3299,231 @@ mod tests {
             affected_anchor_positions: vec![],
         });
         assert!(check_scenario(&generated_drunk, &state));
+    }
+
+    #[test]
+    fn lilis_successful_death_rejects_self_and_protected_knights() {
+        let mut state = base_state(3, vec![make_card(1, "Knight", json!({}))]);
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![1];
+
+        let clean_knight = empty_scenario();
+        assert!(!validate_lilis_night_kills(&clean_knight, &state));
+
+        let mut corrupted_knight = clean_knight.clone();
+        corrupted_knight.corrupted.insert(1);
+        assert!(validate_lilis_night_kills(&corrupted_knight, &state));
+
+        let mut evil_disguise = empty_scenario();
+        evil_disguise.evil_positions.insert(1, "Shaman".to_string());
+        state.night_kill_evil_count = 1;
+        assert!(validate_lilis_night_kills(&evil_disguise, &state));
+
+        let mut lilis_self = empty_scenario();
+        lilis_self.evil_positions.insert(1, "Lilis".to_string());
+        assert!(!validate_lilis_night_kills(&lilis_self, &state));
+    }
+
+    #[test]
+    fn lilis_self_protection_uses_scenario_physical_multiplicity() {
+        let mut state = base_state(2, vec![]);
+        state.n_evil = 1;
+        state.deck.demons = vec!["Lilis".to_string(), "Lilis".to_string()];
+        state.board_demon_count = Some(1);
+        state.night_kills = vec![1];
+        state.night_kill_evil_count = 1;
+
+        let mut one_physical_lilis = empty_scenario();
+        one_physical_lilis.evil_positions.insert(1, "Lilis".to_string());
+        assert!(!validate_lilis_night_kills(&one_physical_lilis, &state));
+
+        state.n_evil = 2;
+        state.board_demon_count = Some(2);
+        let mut two_physical_lilis = one_physical_lilis.clone();
+        two_physical_lilis.evil_positions.insert(2, "Lilis".to_string());
+        assert!(validate_lilis_night_kills(&two_physical_lilis, &state));
+
+        state.night_kills = vec![1, 2];
+        state.night_kill_evil_count = 2;
+        assert!(!validate_lilis_night_kills(&two_physical_lilis, &state));
+
+        state.night_kills = vec![1];
+        state.night_kill_evil_count = 1;
+        state.executed = vec![2];
+        state.confirmed_evil = vec![2];
+        assert!(validate_lilis_night_kills(&one_physical_lilis, &state));
+    }
+
+    #[test]
+    fn lilis_death_distinguishes_drunk_and_healthy_bluff_knight_surfaces() {
+        let mut hidden_drunk_state = base_state(1, vec![]);
+        hidden_drunk_state.deck.villagers = vec!["Knight".to_string()];
+        hidden_drunk_state.deck.demons = vec!["Lilis".to_string()];
+        hidden_drunk_state.night_kills = vec![1];
+        hidden_drunk_state.board_villager_count = Some(1);
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(validate_lilis_night_kills(&drunk, &hidden_drunk_state));
+
+        let mut doppel_state = base_state(2, vec![make_card(1, "Knight", json!({}))]);
+        doppel_state.deck.villagers = vec!["Knight".to_string()];
+        doppel_state.deck.demons = vec!["Lilis".to_string()];
+        doppel_state.night_kills = vec![1];
+        let mut doppel = empty_scenario();
+        doppel.doppelganger_position = Some(1);
+        assert!(!validate_lilis_night_kills(&doppel, &doppel_state));
+        doppel.corrupted.insert(1);
+        assert!(validate_lilis_night_kills(&doppel, &doppel_state));
+
+        let mut generated_doppel = empty_scenario();
+        generated_doppel.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Doppelganger".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        assert!(!validate_lilis_night_kills(&generated_doppel, &doppel_state));
+        generated_doppel.corrupted.insert(1);
+        assert!(validate_lilis_night_kills(&generated_doppel, &doppel_state));
+    }
+
+    #[test]
+    fn lilis_death_counts_puppet_and_rejects_malformed_evidence() {
+        let mut state = base_state(2, vec![]);
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![1];
+        state.night_kill_evil_count = 1;
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(validate_lilis_night_kills(&puppet, &state));
+
+        state.deck.demons.clear();
+        assert!(!validate_lilis_night_kills(&puppet, &state));
+        state.deck.demons.push("Lilis".to_string());
+        state.night_kills = vec![1, 1];
+        assert!(!validate_lilis_night_kills(&puppet, &state));
+        state.night_kills = vec![3];
+        assert!(!validate_lilis_night_kills(&puppet, &state));
+    }
+
+    #[test]
+    fn lilis_death_checks_shaman_copied_knight_identity_directly() {
+        let mut state = base_state(3, vec![make_card(2, "Knight", json!({}))]);
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![2];
+
+        let mut copied_knight = empty_scenario();
+        copied_knight.evil_positions.insert(3, "Shaman".to_string());
+        copied_knight.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 1,
+            target_position: 2,
+            copied_role: "Knight".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+        assert!(!validate_lilis_night_kills(&copied_knight, &state));
+        copied_knight.corrupted.insert(2);
+        assert!(validate_lilis_night_kills(&copied_knight, &state));
+    }
+
+    #[test]
+    fn hidden_knight_identity_check_allows_native_erasure_histories() {
+        let mut state = base_state(3, vec![make_card(2, "Baker", json!({}))]);
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![1];
+        state.board_villager_count = Some(1);
+
+        let mut no_erasure = empty_scenario();
+        no_erasure.evil_positions.insert(3, "Shaman".to_string());
+        assert!(!validate_lilis_night_kills(&no_erasure, &state));
+
+        let mut shaman_erased_knight = empty_scenario();
+        shaman_erased_knight.evil_positions.insert(3, "Shaman".to_string());
+        shaman_erased_knight.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Baker".to_string(),
+            target_previous_roles: vec!["Knight".to_string()],
+        });
+        assert!(validate_lilis_night_kills(&shaman_erased_knight, &state));
+
+        let mut puppet_erased_knight = empty_scenario();
+        puppet_erased_knight.puppet_position = Some(2);
+        puppet_erased_knight.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_lilis_night_kills(&puppet_erased_knight, &state));
+
+        let mut chancellor_erased_knight = empty_scenario();
+        chancellor_erased_knight.evil_positions.insert(3, "Chancellor".to_string());
+        chancellor_erased_knight.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        assert!(validate_lilis_night_kills(&chancellor_erased_knight, &state));
+    }
+
+    #[test]
+    fn untyped_historical_start_eraser_preserves_only_viable_hidden_knight_worlds() {
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(2, "Baker", json!({})),
+                make_card(3, "Baker", json!({})),
+                make_card(4, "Baker", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.night_kills = vec![1];
+        state.executed = vec![3];
+        state.confirmed_evil = vec![3];
+        state.board_villager_count = Some(1);
+        state.board_minion_count = Some(1);
+
+        let no_current_eraser = empty_scenario();
+        assert!(validate_lilis_night_kills(&no_current_eraser, &state));
+
+        let mut chancellor_history = state.clone();
+        chancellor_history.deck.minions = vec!["Chancellor".to_string()];
+        assert!(validate_lilis_night_kills(
+            &no_current_eraser,
+            &chancellor_history,
+        ));
+
+        let mut typed_history = state.clone();
+        typed_history
+            .executed_evil_roles
+            .insert(3, "Poisoner".to_string());
+        assert!(!validate_lilis_night_kills(
+            &no_current_eraser,
+            &typed_history,
+        ));
+
+        let mut eraser_already_represented = empty_scenario();
+        eraser_already_represented
+            .evil_positions
+            .insert(4, "Shaman".to_string());
+        assert!(!validate_lilis_night_kills(
+            &eraser_already_represented,
+            &state,
+        ));
+
+        let mut minion_slots_full = state.clone();
+        minion_slots_full.deck.minions = vec!["Shaman".to_string(), "Poisoner".to_string()];
+        let mut current_poisoner = empty_scenario();
+        current_poisoner
+            .evil_positions
+            .insert(4, "Poisoner".to_string());
+        assert!(!validate_lilis_night_kills(
+            &current_poisoner,
+            &minion_slots_full,
+        ));
     }
 
     #[test]

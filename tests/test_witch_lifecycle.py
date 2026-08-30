@@ -125,6 +125,7 @@ class WitchDeathLifecycleTests(unittest.TestCase):
         session.minions = ["Witch"]
         session.blocked_positions = [1]
         session.reveal_order = [2, 3]
+        session.cards = [CardInfo(2, "Slayer", info_parsed={})]
 
         session.add_slayer_result(2, 1, True, revealed_role="Witch")
 
@@ -139,6 +140,8 @@ class WitchNightLifecycleTests(unittest.TestCase):
         session.minions = ["Witch"]
         session.demons = ["Lilis"]
         session.blocked_positions = [1]
+        session.lilis_batch_index = 1
+        session.pending_lilis_nights = 1
         return session
 
     def test_manual_evil_night_kill_releases_only_for_public_reprobe(self):
@@ -298,7 +301,7 @@ class WitchStateMachineRevealTests(unittest.TestCase):
         self.assertEqual(session.blocked_positions, [])
         self.assertEqual(session.reveal_order, [2, 3, 1])
 
-    def test_flipping_uses_batch_index_delta_not_historical_nonzero_value(self):
+    def test_flipping_uses_pending_delta_not_historical_batch_index(self):
         session = self._session()
         session.demons = ["Lilis"]
         session.lilis_batch_index = 1
@@ -311,7 +314,7 @@ class WitchStateMachineRevealTests(unittest.TestCase):
 
         self.assertEqual(machine.phase, GamePhase.FLIPPING)
 
-    def test_fresh_batch_index_increment_always_enters_night_resolution(self):
+    def test_fresh_pending_night_always_enters_night_resolution(self):
         session = self._session()
         session.demons = ["Lilis"]
         session.lilis_batch_index = 1
@@ -320,7 +323,7 @@ class WitchStateMachineRevealTests(unittest.TestCase):
         machine.phase = GamePhase.FLIPPING
 
         def complete_batch(_command, _args, live_session):
-            live_session.lilis_batch_index += 1
+            live_session.schedule_lilis_night()
 
         with patch("game_loop.dispatch", side_effect=complete_batch), redirect_stdout(StringIO()):
             machine._do_flipping()

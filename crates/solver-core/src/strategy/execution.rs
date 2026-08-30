@@ -12,6 +12,7 @@ use crate::types::{GameState, SolverResult};
 use super::{
     ExecutionPick, ExecutionReason,
     evil_probabilities, remaining_evil_bounds, corruption_risk,
+    execution_damage_profile,
     unrevealed_positions, tiebreak_score,
     execution_terminal_outcome, get_card_role, ExecutionTerminalOutcome,
     EXECUTION_IMMUNE_ROLES,
@@ -137,48 +138,48 @@ pub fn pick_execution_target(
         .fold(0.0_f64, f64::max);
 
     if best_non_knight_prob < KNIGHT_CHECK_THRESHOLD {
-        let mut knight_checks: Vec<(u8, f64, f64)> = Vec::new();
+        let mut knight_checks = Vec::new();
         for card in &state.cards {
             if EXECUTION_IMMUNE_ROLES.contains(&card.apparent_role.as_str())
                 && !executed.contains(&card.position)
                 && !immunity_blocked.contains(&card.position)
+                && !bomb_set.contains(&card.position)
                 && !result.definite_good.contains(&card.position)
                 && !result.definite_evil.contains(&card.position)
             {
-                let corr_risk = corruption_risk(card.position, state, result);
+                let damage = execution_damage_profile(card.position, state, result);
                 let evil_prob = probs.get(&card.position).copied().unwrap_or(0.0);
-                knight_checks.push((card.position, evil_prob, corr_risk));
+                knight_checks.push((card.position, evil_prob, damage));
             }
         }
 
         knight_checks.sort_by(|a, b| {
             b.1.total_cmp(&a.1)
-                .then_with(|| a.2.total_cmp(&b.2))
+                .then_with(|| a.2.risk.total_cmp(&b.2.risk))
                 .then_with(|| a.0.cmp(&b.0))
         });
 
-        if let Some(&(kpos, evil_prob, corr_risk)) = knight_checks.first() {
-            if corr_risk == 0.0 {
-                // Truly free: 0% corruption → execution blocked or kills evil
+        if let Some(&(kpos, evil_prob, damage)) = knight_checks.first() {
+            if damage.risk == 0.0 {
+                // Truly free: every world is protected or kills Evil for 0 HP.
                 return Some(ExecutionPick {
                     position: kpos,
                     reason: ExecutionReason::KnightFreeCheck {
                         evil_prob,
-                        corruption_risk: corr_risk,
+                        corruption_risk: damage.risk,
                     },
                 });
-            } else if corr_risk < 0.3 {
-                // Mostly free: small corruption risk
-                let corrupted_knight_cost = state.wrong_exec_cost + 4;
-                let expected_cost = corr_risk * (1.0 - evil_prob) * corrupted_knight_cost as f64;
-                if state.hp > corrupted_knight_cost
-                    && expected_cost < state.wrong_exec_cost as f64 * 0.3
+            } else if damage.risk < 0.3 && !damage.terminal_risk {
+                // Mostly free: use the actual scenario mix. This includes
+                // true Knight's 5+4 hit, Drunk's 2/6, and generated Outcasts.
+                if state.hp > damage.max_damage
+                    && damage.expected_damage < state.wrong_exec_cost as f64 * 0.3
                 {
                     return Some(ExecutionPick {
                         position: kpos,
                         reason: ExecutionReason::KnightFreeCheck {
                             evil_prob,
-                            corruption_risk: corr_risk,
+                            corruption_risk: damage.risk,
                         },
                     });
                 }
@@ -599,6 +600,41 @@ mod tests {
             pick.reason,
             ExecutionReason::KnightFreeCheck { corruption_risk: 0.0, .. }
         ));
+    }
+
+    #[test]
+    fn generated_bombardier_disguise_is_never_a_knight_free_check() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 5,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let evil_knight = make_scenario(&[(1, "Pooka")]);
+        let mut generated_bombardier = make_scenario(&[(2, "Pooka")]);
+        generated_bombardier.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 1,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![1],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![evil_knight, generated_bombardier],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_ne!(pick.position, 1);
+        assert!(!matches!(pick.reason, ExecutionReason::KnightFreeCheck { .. }));
     }
 
     #[test]

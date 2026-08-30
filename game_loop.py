@@ -623,6 +623,13 @@ class GameSession:
         self.board_count_provenance: str = "legacy_unknown"
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
+        # Trigger/result synchronization is live-session bookkeeping only.
+        # Historical solver fixtures do not retain enough timing state to
+        # reconstruct no-kill outcomes safely.
+        self.lilis_nights_resolved: int = 0
+        # Authoritative live-only work queue. Unlike batch/resolved history,
+        # this is never reconstructed from legacy saves or final board state.
+        self.pending_lilis_nights: int = 0
 
         # Clear solver cache on new game
         try:
@@ -671,6 +678,8 @@ class GameSession:
         self.board_count_provenance = "legacy_unknown"
         self.reveal_order.clear()
         self.lilis_batch_index = 0
+        self.lilis_nights_resolved = 0
+        self.pending_lilis_nights = 0
         self.villagers.clear()
         self.outcasts.clear()
         self.minions.clear()
@@ -686,14 +695,50 @@ class GameSession:
 
         print("[full_reset] All session state cleared, solver cache + daemon reset")
 
-    def is_lilis_alive(self) -> bool:
-        """Check if Lilis is in the deck and has not been executed."""
-        if not self.has_role_in_deck("Lilis"):
-            return False
-        return not any(
-            _normalize_role_name(r) == "Lilis"
-            for r in self.executed_evil_roles.values()
+    def lilis_deck_count(self) -> int:
+        """Return the number of authored Lilis records in the public deck."""
+        return sum(
+            _normalize_role_name(role) == "Lilis"
+            for faction in [self.villagers, self.outcasts,
+                            self.minions, self.demons]
+            for role in faction
         )
+
+    def has_lilis_night_rule(self) -> bool:
+        """Whether the persistent every-four-reveals Night rule is installed."""
+        return self.lilis_deck_count() > 0
+
+    def has_duplicate_lilis(self) -> bool:
+        """Whether live Night effects exceed the Standard one-actor model."""
+        return self.lilis_deck_count() > 1
+
+    def is_lilis_alive(self) -> bool:
+        """Whether at least one public Lilis actor is not known dead.
+
+        The NightModeRule persists after every Lilis dies, so callers deciding
+        reveal batching must use ``has_lilis_night_rule`` instead. This method
+        is only for actor effects such as victim selection and 2 HP damage.
+        """
+        deck_count = self.lilis_deck_count()
+        if deck_count == 0:
+            return False
+        known_dead = sum(
+            _normalize_role_name(role) == "Lilis"
+            for role in self.executed_evil_roles.values()
+        )
+        return known_dead < deck_count
+
+    def schedule_lilis_night(self) -> None:
+        """Atomically add one verified every-four-reveals Night transition."""
+        if not self.has_lilis_night_rule():
+            raise ValueError("no Lilis Night rule exists in this deck")
+        if self.has_duplicate_lilis():
+            raise ValueError(
+                "duplicate Lilis live nights are unsupported: multiple actors "
+                "can charge HP while colliding on one delayed victim"
+            )
+        self.lilis_batch_index += 1
+        self.pending_lilis_nights += 1
 
     def is_witch_known_dead(self) -> bool:
         """Whether any known Witch death released the ordinary shared quota."""
@@ -907,19 +952,172 @@ class GameSession:
             ]
         return reset
 
+    def record_lilis_night_result(
+        self,
+        killed_positions: list[int],
+        n_evil_among_killed: int = 0,
+    ) -> dict:
+        """Atomically record one or more pending native Lilis nights.
+
+        Native selects at most one victim per night, so ``N`` unique victims
+        are a catch-up recording for ``N`` already-triggered nights. An empty
+        list records one no-kill night. Every resolved night deals 2 HP whether
+        its victim died, was protected, or did not exist.
+        """
+        if self.has_duplicate_lilis():
+            raise ValueError(
+                "duplicate Lilis live nights are unsupported: multiple actors "
+                "can charge HP while colliding on one delayed victim"
+            )
+        if not self.has_lilis_night_rule():
+            raise ValueError("no Lilis Night rule exists in this deck")
+        if not self.is_lilis_alive():
+            raise ValueError(
+                "Lilis is known dead; resolve this rule-only Night with "
+                "night_no_kill"
+            )
+
+        positions = list(killed_positions)
+        if any(not isinstance(position, int) or isinstance(position, bool)
+               for position in positions):
+            raise ValueError("Lilis victim positions must be integers")
+        if len(positions) != len(set(positions)):
+            raise ValueError("Lilis victim positions must be unique")
+        if any(not 1 <= position <= self.n_cards for position in positions):
+            raise ValueError(
+                f"Lilis victim positions must be within 1..={self.n_cards}"
+            )
+        if (not isinstance(n_evil_among_killed, int)
+                or isinstance(n_evil_among_killed, bool)
+                or not 0 <= n_evil_among_killed <= len(positions)):
+            raise ValueError(
+                "Lilis evil-victim count must be between 0 and the number "
+                "of killed positions"
+            )
+
+        already_dead = set(self.executed) | set(self.night_kills)
+        repeated_dead = sorted(set(positions) & already_dead)
+        if repeated_dead:
+            raise ValueError(f"Lilis victim(s) already dead: {repeated_dead}")
+        already_revealed = (
+            set(self.reveal_order)
+            | {card.position for card in self.cards}
+        )
+        revealed_victims = sorted(set(positions) & already_revealed)
+        if revealed_victims:
+            raise ValueError(
+                f"Lilis victim(s) were already revealed: {revealed_victims}"
+            )
+
+        resolved_events = len(positions) if positions else 1
+        pending_events = self.pending_lilis_nights
+        if pending_events < resolved_events:
+            raise ValueError(
+                f"Only {max(0, pending_events)} unresolved Lilis night(s) "
+                f"remain, cannot record {resolved_events}"
+            )
+
+        # All validation completes before any mutation.
+        old_hp = self.hp
+        self.night_kills.extend(positions)
+        self.night_kill_evil_count += n_evil_among_killed
+        self.lilis_nights_resolved += resolved_events
+        self.hp = _clamped_post_damage_hp(self.hp, 2 * resolved_events)
+
+        if n_evil_among_killed > 0:
+            self.release_witch_blocks(
+                "an evil Lilis victim may have been Witch; public re-probe required"
+            )
+        if positions and n_evil_among_killed == len(positions):
+            for position in positions:
+                if position not in self.confirmed_evil:
+                    self.confirmed_evil.append(position)
+
+        reset_abilities = self.reset_after_night_abilities()
+        self.pending_lilis_nights -= resolved_events
+        return {
+            "positions": positions,
+            "n_evil": n_evil_among_killed,
+            "resolved_events": resolved_events,
+            "old_hp": old_hp,
+            "new_hp": self.hp,
+            "actor_active": True,
+            "reset_abilities": reset_abilities,
+        }
+
+    def record_lilis_post_death_night(self) -> dict:
+        """Synchronize one persistent Night after the Standard Lilis died.
+
+        Native keeps the NightModeRule and still enters Night every four
+        successful reveals. A dead Lilis actor does nothing: no victim and no
+        2 HP damage. The Night transition still resets ResetAfterNight
+        abilities and must be persisted before reveal automation continues.
+        """
+        if self.has_duplicate_lilis():
+            raise ValueError(
+                "duplicate Lilis live nights are unsupported: actor liveness "
+                "and delayed-victim collisions are not represented"
+            )
+        if not self.has_lilis_night_rule():
+            raise ValueError("no Lilis Night rule exists in this deck")
+        if self.is_lilis_alive():
+            raise ValueError(
+                "Lilis is still alive; use night_kill or night_no_kill to "
+                "record its 2 HP Night action"
+            )
+
+        pending_events = self.pending_lilis_nights
+        if pending_events < 1:
+            raise ValueError("No unresolved Lilis night remains")
+
+        old_hp = self.hp
+        self.lilis_nights_resolved += 1
+        reset_abilities = self.reset_after_night_abilities()
+        self.pending_lilis_nights -= 1
+        return {
+            "positions": [],
+            "n_evil": 0,
+            "resolved_events": 1,
+            "old_hp": old_hp,
+            "new_hp": self.hp,
+            "actor_active": False,
+            "reset_abilities": reset_abilities,
+        }
+
     def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool,
                           revealed_role: Optional[str] = None,
-                          was_corrupted: Optional[bool] = None):
+                          was_corrupted: Optional[bool] = None,
+                          was_evil: Optional[bool] = None):
         """Record the public result of Slayer's native kill-and-reveal path.
 
-        Slayer tests registered alignment, so a real Wretch registers Evil and
-        dies even though its revealed alignment is Good.  Classify the target
-        from the revealed role, never from the fact that Slayer killed it.
+        Slayer tests registered alignment, which can differ from both the
+        revealed role's authored alignment and the physical card's runtime
+        alignment. A normal Wretch is the common Good/runtime-Good exception.
+        Shaman/stale-register compositions can also make another Good-class
+        role enter the kill branch, so those outcomes must supply ``was_evil``
+        explicitly for accurate public HP and confirmation bookkeeping.
         """
-        from knowledge_base import Alignment, execution_cost_for, get_card
+        from knowledge_base import Alignment, get_card, wrong_exec_cost_for
 
         if any(sr.get("slayer_pos") == slayer_pos for sr in self.slayer_results):
             raise ValueError(f"Slayer #{slayer_pos} already has a recorded result")
+        if not 1 <= slayer_pos <= self.n_cards:
+            raise ValueError(
+                f"Slayer position must be within 1..={self.n_cards}"
+            )
+        if not 1 <= target_pos <= self.n_cards:
+            raise ValueError(
+                f"Slayer target must be within 1..={self.n_cards}"
+            )
+        actor = next(
+            (card for card in self.cards if card.position == slayer_pos),
+            None,
+        )
+        if actor is None or _normalize_role_name(actor.apparent_role) != "Slayer":
+            shown = actor.apparent_role if actor is not None else "unrevealed"
+            raise ValueError(
+                f"Position #{slayer_pos} is {shown}, not an apparent Slayer"
+            )
 
         canonical_role = None
         role_def = None
@@ -930,18 +1128,32 @@ class GameSession:
             if role_def is None:
                 raise ValueError(f"Unknown Slayer revealed role: {revealed_role}")
             canonical_role = role_def.name.replace(" ", "_")
-            if role_def.alignment == Alignment.GOOD and role_def.name != "Wretch":
-                raise ValueError(
-                    "Native Slayer can only kill an Evil character or a Good Wretch"
-                )
         elif revealed_role:
             raise ValueError("A failed Slayer attempt does not reveal a role")
         elif was_corrupted is not None:
             raise ValueError("A failed Slayer attempt does not reveal target status")
+        elif was_evil is not None:
+            raise ValueError("A failed Slayer attempt does not reveal target alignment")
 
-        if (role_def is not None and role_def.alignment == Alignment.EVIL
-                and was_corrupted is not None):
-            raise ValueError("Corruption evidence is only recorded for a killed Good Wretch")
+        target_was_evil = None
+        if role_def is not None:
+            if role_def.alignment == Alignment.EVIL:
+                if was_evil is False:
+                    raise ValueError(
+                        f"Revealed Evil role {role_def.name} cannot be recorded as runtime Good"
+                    )
+                target_was_evil = True
+            elif was_evil is not None:
+                target_was_evil = was_evil
+            # A Good-class revealed role can still live on a preserved
+            # runtime-Evil Shaman destination. Without the public HP outcome,
+            # keep that alignment unresolved instead of asking hidden memory.
+
+        if target_was_evil is not False and was_corrupted is not None:
+            raise ValueError(
+                "Target status can only be persisted after the public HP "
+                "outcome identifies a runtime-Good Slayer victim"
+            )
 
         result = {
             "slayer_pos": slayer_pos,
@@ -954,26 +1166,41 @@ class GameSession:
         self.mark_ability_used(slayer_pos)
 
         if killed:
-            if role_def.alignment == Alignment.EVIL:
+            if target_was_evil is True:
+                # A transformed runtime-Evil card can reveal a copied Good role.
+                # In that case the public current role is carried by
+                # slayer_results, while the original Evil identity remains a
+                # solver fact rather than being mislabeled as (for example)
+                # an Evil Knight.
                 self.mark_executed(
                     target_pos,
                     was_evil=True,
-                    evil_role=canonical_role,
+                    evil_role=(
+                        canonical_role
+                        if role_def.alignment == Alignment.EVIL
+                        else None
+                    ),
                 )
-            else:
+            elif target_was_evil is False:
                 self.mark_executed(
                     target_pos,
                     was_evil=False,
                     was_corrupted=was_corrupted,
                     true_role=canonical_role,
                 )
-                damage = execution_cost_for(
-                    canonical_role,
-                    apparent_role=canonical_role,
-                    was_killable=True,
-                    default=self.wrong_exec_cost,
+                # KillAndReveal publishes Character.Kill and therefore base
+                # wrong-kill damage, but never runs OnExecuted. In particular,
+                # a Slayer-killed corrupted Good Knight costs 5, not 5+4.
+                damage = wrong_exec_cost_for(
+                    canonical_role, default=self.wrong_exec_cost,
                 )
                 self.hp = _clamped_post_damage_hp(self.hp, damage)
+            else:
+                # Kill and revealed current role are public facts. Runtime
+                # alignment, confirmation maps, corruption, and HP remain
+                # unresolved until the visible HP result is entered.
+                if target_pos not in self.executed:
+                    self.executed.append(target_pos)
 
     # -- Solver --
 
@@ -1012,7 +1239,10 @@ class GameSession:
     @classmethod
     def from_game_state(cls, state: GameState,
                         used_abilities: Optional[list[int]] = None,
-                        lilis_batch_index: int = 0) -> "GameSession":
+                        lilis_batch_index: int = 0,
+                        lilis_nights_resolved: Optional[int] = None,
+                        pending_lilis_nights: int = 0,
+                        ) -> "GameSession":
         session = cls(state.n_cards, state.n_evil)
         session.villagers = list(state.deck.villagers)
         session.outcasts = list(state.deck.outcasts)
@@ -1038,7 +1268,20 @@ class GameSession:
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
         session.used_abilities = list(used_abilities or [])
-        session.lilis_batch_index = lilis_batch_index
+        if lilis_nights_resolved is None:
+            # Legacy saves retain successful victims but omit no-kill history.
+            # Infer only provable successful resolutions; never invent old
+            # no-kill evidence from final reveal order or HP.
+            session.lilis_nights_resolved = len(session.night_kills)
+        else:
+            session.lilis_nights_resolved = max(0, int(lilis_nights_resolved))
+        session.lilis_batch_index = max(
+            int(lilis_batch_index),
+            session.lilis_nights_resolved,
+        )
+        # A missing value means a legacy save. Never infer unresolved native
+        # work from historical counters because old no-kill timing is absent.
+        session.pending_lilis_nights = max(0, int(pending_lilis_nights))
         return session
 
     def _solve(self, state: GameState) -> SolverResult:
@@ -1706,6 +1949,8 @@ class GameSession:
             data = self.to_game_state().to_dict()
             data["used_abilities"] = list(self.used_abilities)
             data["lilis_batch_index"] = self.lilis_batch_index
+            data["lilis_nights_resolved"] = self.lilis_nights_resolved
+            data["pending_lilis_nights"] = self.pending_lilis_nights
 
             tmp_path = f"{path}.tmp.{os.getpid()}"
             with open(tmp_path, "w") as f:
@@ -1728,6 +1973,8 @@ class GameSession:
                 state,
                 used_abilities=data.get("used_abilities", []),
                 lilis_batch_index=data.get("lilis_batch_index", 0),
+                lilis_nights_resolved=data.get("lilis_nights_resolved"),
+                pending_lilis_nights=data.get("pending_lilis_nights", 0),
             )
             print(f"[load] Session loaded from {path}")
             return session
@@ -1933,7 +2180,13 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session) -> di
     }
 
 
-def _apply_flip_verification(session, expected_positions: list[int], verify: dict) -> bool:
+def _apply_flip_verification(
+    session,
+    expected_positions: list[int],
+    verify: dict,
+    *,
+    persist: bool = True,
+) -> bool:
     """Atomically project one verified click batch into session reveal state.
 
     Only memory-confirmed flips enter Baker reveal order. Both click failures
@@ -1966,7 +2219,7 @@ def _apply_flip_verification(session, expected_positions: list[int], verify: dic
         before_order != session.reveal_order
         or before_blocked != session.blocked_positions
     )
-    if changed:
+    if changed and persist:
         session.save()
     return changed
 
@@ -3029,7 +3282,7 @@ def main():
         print("  read_deck <screenshot>                Read deck (card_vision + memory_reader)")
         print("  flip                                  Flip all cards #1->#N in order")
         print("  flip <pos>                            Flip single card (after Witch death)")
-        print("  flip --lilis                          Flip in batches of 4 (Lilis games)")
+        print("  flip --lilis                          Flip 1-4 cards to the next verified Night boundary")
         print("  card <role> <pos> [args...]           Add a revealed card")
         print("  auto_card                             Auto-enter cards from memory reader")
         print("  execute <pos> [evil|good] [role]      Mark position executed (with evil role name)")
@@ -3048,12 +3301,13 @@ def main():
         print("  next [--plan]                         Solve + auto-execute if safe (definite OR forced-safe). --plan for print-only.")
         print("  auto_next                             Alias for `next` (auto-execute path)")
         print("  ability_used <pos>                    Mark ability as activated")
-        print("  slayer_result <pos> <target> kill <role> [clean|corrupted]  Slayer kill")
+        print("  slayer_result <pos> <target> kill <role> [good|evil] [clean|corrupted]")
+        print("                                           good/evil comes from the visible HP result")
         print("  slayer_result <pos> <target> fail                           Slayer miss")
         print("  block <pos>                           Mark position as blocked (Witch)")
         print("  unblock <pos>                         Unblock position (after Witch dies)")
-        print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
-        print("  night_no_kill                         Lilis night dealt 2HP but killed nobody (she's last unrevealed)")
+        print("  night_kill <pos1,pos2,...> <n_evil>    Resolve pending Lilis night(s), one victim each")
+        print("  night_no_kill                         Resolve one pending Night with no victim (0HP when Lilis is known dead; no identity inference)")
         print("  log <label> <text>                    Add reasoning to decision log")
         print("  game_over <w/l> <name> <evils> [note] Log result + auto-save regression test")
         print("  save_test <name> [true_evils_json]    Save game as regression test (manual)")
@@ -3393,6 +3647,27 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if arg.isdigit():
                 single_pos = int(arg)
 
+        if lilis and not session.has_lilis_night_rule():
+            print(
+                "  ERROR: --lilis requires Lilis in the recorded deck; "
+                "no cards were clicked."
+            )
+            return None
+        if session.has_duplicate_lilis():
+            print(
+                "  ERROR: Duplicate Lilis live automation is unsupported. "
+                "Multiple actors can charge HP and collide on one delayed "
+                "victim; no cards were clicked."
+            )
+            return None
+        if session.pending_lilis_nights > 0:
+            print(
+                f"  ERROR: {session.pending_lilis_nights} Lilis Night "
+                "transition(s) still need resolution; no cards were clicked. "
+                "Use night_kill or night_no_kill first."
+            )
+            return None
+
         from game_utils import all_game_card_coords
         import subprocess
         import template_match as _tm
@@ -3414,7 +3689,25 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 )
                 return None
             verify = _verify_flips(cards, [single_pos], session)
-            _apply_flip_verification(session, [single_pos], verify)
+            verification_changed = _apply_flip_verification(
+                session,
+                [single_pos],
+                verify,
+                persist=False,
+            )
+            night_total_reveals = None
+            if (
+                single_pos in verify["flipped"]
+                and not was_revealed
+                and session.has_lilis_night_rule()
+                and len(session.reveal_order) % 4 == 0
+            ):
+                night_total_reveals = len(session.reveal_order)
+                session.schedule_lilis_night()
+            if verification_changed or night_total_reveals is not None:
+                # Persist the verified reveal and pending native transition in
+                # one replace, never as an intermediate fourth-reveal save.
+                session.save()
             if single_pos in verify["blocked"]:
                 print(f"  #{single_pos} remains hidden under the Witch quota.")
                 return None
@@ -3428,40 +3721,49 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 )
                 return None
             print(f"  Verified reveal of #{single_pos}")
-            # Lilis night check for single flips
-            if not was_revealed and session.is_lilis_alive():
-                total_reveals = len(session.reveal_order)
-                if total_reveals % 4 == 0:
-                    session.lilis_batch_index += 1
-                    session.save()
-                    print()
-                    print("!" * 60)
-                    print(f"  LILIS NIGHT PHASE TRIGGERED (reveal #{total_reveals})")
+            if night_total_reveals is not None:
+                # NightModeRule survives Lilis death, so the fourth verified
+                # reveal still stops even when actor effects are now no-ops.
+                print()
+                print("!" * 60)
+                print(f"  LILIS NIGHT PHASE TRIGGERED (reveal #{night_total_reveals})")
+                if session.is_lilis_alive():
                     print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
-                    print("!" * 60)
-                    print(f"\n  --- Waiting for Lilis night animation ---")
-                    try:
-                        from memory_reader import get_monitor as _get_mon
-                        _mon = _get_mon()
-                        if _mon.is_healthy():
-                            already_done = (
-                                set(session.reveal_order)
-                                | set(session.night_kills)
-                                | set(session.executed)
-                            )
-                            def _night_resolved(board):
-                                if not board:
-                                    return False
-                                return any(c.get('killed_hidden') for c in board
-                                           if c['position'] not in already_done)
-                            _mon.wait_for(_night_resolved, timeout=8, min_delay=2.0)
-                        else:
-                            time.sleep(5)
-                    except Exception:
+                else:
+                    print(
+                        "  Lilis is known dead: the persistent Night rule "
+                        f"still runs, but HP stays {session.hp}."
+                    )
+                print("!" * 60)
+                print(f"\n  --- Waiting for Lilis night animation ---")
+                try:
+                    from memory_reader import get_monitor as _get_mon
+                    _mon = _get_mon()
+                    if _mon.is_healthy():
+                        already_done = (
+                            set(session.reveal_order)
+                            | set(session.night_kills)
+                            | set(session.executed)
+                        )
+                        def _night_resolved(board):
+                            if not board:
+                                return False
+                            return any(c.get('killed_hidden') for c in board
+                                       if c['position'] not in already_done)
+                        _mon.wait_for(_night_resolved, timeout=8, min_delay=2.0)
+                    else:
                         time.sleep(5)
-                    print(f"  Night phase complete.")
+                except Exception:
+                    time.sleep(5)
+                print(f"  Night phase complete.")
+                if session.is_lilis_alive():
                     print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
                     print(f"  (HP auto-deducted by night_kill/night_no_kill commands)")
+                else:
+                    print(
+                        "  Run: night_no_kill to persist the zero-damage "
+                        "post-death Night transition."
+                    )
             return None
 
         already_done = (
@@ -3475,10 +3777,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("All cards already flipped/dead. Nothing to flip.")
             return None
         if lilis:
-            batch_size = 4
+            reveals_before_batch = len(session.reveal_order)
+            batch_size = 4 - (reveals_before_batch % 4)
             batch = positions[:batch_size]
             expected_positions = batch
-            print(f"Flipping batch: {['#'+str(p) for p in batch]}")
+            print(
+                f"Flipping toward next Lilis Night boundary "
+                f"({batch_size} verified reveal(s) needed): "
+                f"{['#'+str(p) for p in batch]}"
+            )
             for idx, pos in enumerate(batch):
                 _click_flip_card(pos, coords, f"card{pos}", verified=(idx == 0))
                 time.sleep(0.2)
@@ -3526,16 +3833,32 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         if cards:
             _print_board(cards)
             verify = _verify_flips(cards, expected_positions, session)
-            _apply_flip_verification(session, expected_positions, verify)
+            verification_changed = _apply_flip_verification(
+                session,
+                expected_positions,
+                verify,
+                persist=False,
+            )
+            if lilis:
+                resolved_positions = (
+                    set(session.reveal_order)
+                    | set(session.night_kills)
+                    | set(session.executed)
+                    | set(session.blocked_positions)
+                )
+                remaining = [
+                    position for position in sorted(coords)
+                    if position not in resolved_positions
+                ]
+            reveals_after_batch = len(session.reveal_order)
             lilis_night_triggered = (
                 lilis
-                and len(expected_positions) == 4
-                and len(verify["flipped"]) == 4
-                and not verify["blocked"]
-                and not verify["failed"]
+                and reveals_after_batch // 4 > reveals_before_batch // 4
             )
             if lilis_night_triggered:
-                session.lilis_batch_index += 1
+                session.schedule_lilis_night()
+            if verification_changed or lilis_night_triggered:
+                # Reveal order and pending Night become durable together.
                 session.save()
             if verify["blocked"]:
                 print(
@@ -3549,7 +3872,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 )
             if lilis_night_triggered:
                 print(f"\n  --- Lilis night phase (4 verified reveals; waiting for kill animation) ---")
-                print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
+                if session.is_lilis_alive():
+                    print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
+                else:
+                    print(
+                        "  Lilis is known dead: the persistent Night rule "
+                        f"still runs, but HP stays {session.hp}."
+                    )
                 try:
                     from memory_reader import get_monitor as _get_mon
                     _mon = _get_mon()
@@ -3578,15 +3907,21 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
                 else:
                     print("  No more cards to flip. Check for night kill/damage.")
-                print("  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
-                print("  (HP auto-deducted by night_kill/night_no_kill commands)")
-            elif lilis and len(expected_positions) == 4:
+                if session.is_lilis_alive():
+                    print("  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
+                    print("  (HP auto-deducted by night_kill/night_no_kill commands)")
+                else:
+                    print(
+                        "  Run: night_no_kill to persist the zero-damage "
+                        "post-death Night transition."
+                    )
+            elif lilis:
+                verified_in_batch = reveals_after_batch - reveals_before_batch
                 print(
-                    "  Lilis night did not trigger: fewer than 4 reveals were "
+                    "  Lilis night did not trigger: "
+                    f"{verified_in_batch}/{batch_size} required reveal(s) were "
                     "memory-verified. Retry failed clicks or resolve the Witch block."
                 )
-            elif lilis and remaining:
-                print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
             print(
                 "  WARNING: memory_reader returned no cards; session reveal/block "
@@ -4028,8 +4363,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         return None
 
     if cmd == "slayer_result":
-        slayer_pos = int(args[0])
-        target_pos = int(args[1])
+        if len(args) < 3:
+            print("  ERROR: Usage: slayer_result <pos> <target> <kill|fail> [role] ...")
+            return None
+        try:
+            slayer_pos = int(args[0])
+            target_pos = int(args[1])
+        except ValueError:
+            print("  ERROR: Slayer and target positions must be integers.")
+            return None
         outcome = args[2].lower()
         kill_outcomes = ("kill", "killed", "true", "1", "yes")
         fail_outcomes = ("fail", "failed", "false", "0", "no")
@@ -4040,24 +4382,49 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         killed = outcome in kill_outcomes
         revealed_role = args[3] if len(args) > 3 else None
         was_corrupted = None
-        if len(args) > 4:
-            status = args[4].lower()
-            if status in ("corrupted", "true", "1", "yes"):
-                was_corrupted = True
-            elif status in ("clean", "false", "0", "no"):
-                was_corrupted = False
+        was_evil = None
+        for detail in args[4:]:
+            detail_key = detail.lower()
+            if detail_key in ("corrupted", "clean"):
+                if was_corrupted is not None:
+                    print("  ERROR: Slayer target status was supplied more than once.")
+                    return None
+                was_corrupted = detail_key == "corrupted"
+            elif detail_key in ("evil", "good"):
+                if was_evil is not None:
+                    print("  ERROR: Slayer target alignment was supplied more than once.")
+                    return None
+                was_evil = detail_key == "evil"
             else:
-                print(f"  ERROR: Unknown Slayer target status: {args[4]}")
-                print("  Use 'clean' or 'corrupted'.")
+                print(f"  ERROR: Unknown Slayer result detail: {detail}")
+                print("  Use 'good'/'evil' and/or 'clean'/'corrupted'.")
                 return None
         if killed and not revealed_role:
             print("  ERROR: Slayer kill requires revealed_role! Game reveals the role on kill.")
-            print(f"  Usage: slayer_result {slayer_pos} {target_pos} kill <revealed_role> [clean|corrupted]")
+            print(
+                f"  Usage: slayer_result {slayer_pos} {target_pos} kill "
+                "<revealed_role> [good|evil] [clean|corrupted]"
+            )
             return None
         if not killed and revealed_role:
             print("  ERROR: Failed Slayer attempts do not reveal a role.")
             print(f"  Usage: slayer_result {slayer_pos} {target_pos} fail")
             return None
+        if killed and revealed_role and was_evil is None:
+            from knowledge_base import Alignment, get_card
+            revealed_def = get_card(revealed_role)
+            if (revealed_def is not None
+                    and revealed_def.alignment == Alignment.GOOD):
+                print(
+                    "  ERROR: A Good-class revealed role does not expose its "
+                    "preserved runtime alignment."
+                )
+                print(
+                    "  Use the public HP result: pass 'good' if base damage "
+                    "occurred, or 'evil' if HP did not change."
+                )
+                print("  No Slayer state was recorded.")
+                return None
         old_hp = session.hp
         try:
             session.add_slayer_result(
@@ -4066,6 +4433,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 killed,
                 revealed_role=revealed_role,
                 was_corrupted=was_corrupted,
+                was_evil=was_evil,
             )
         except ValueError as exc:
             print(f"  ERROR: {exc}")
@@ -4084,89 +4452,76 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         print(f"Slayer #{slayer_pos} {result_str}")
         if session.hp != old_hp:
             print(f"  Wrong Slayer kill: HP {old_hp} -> {session.hp}")
-        if (recorded_role == "Wretch" and was_corrupted is None):
-            print("  WARNING: Wretch corruption status was not recorded. If visible, use "
-                  "'clean' or 'corrupted' in the Slayer command.")
         if recorded_role == "Baa":
             _baa_post_death_deck_refresh(session)
         return None
 
     if cmd == "night_kill":
-        positions = [int(x) for x in args[0].split(",")]
+        if not args or not args[0].strip():
+            print("  ERROR: Usage: night_kill <pos1,pos2,...> <n_evil>")
+            return None
+        try:
+            positions = [int(x) for x in args[0].split(",")]
+            n_evil_among_killed = int(args[1]) if len(args) > 1 else 0
+        except ValueError:
+            print("  ERROR: Lilis positions and evil-victim count must be integers")
+            return None
         # Second arg = how many of the killed cards were evil (usually 0).
         # NOT the total evil count in the game! Lost asc68_v5 0-scenario bug from this confusion.
-        n_evil_among_killed = int(args[1]) if len(args) > 1 else 0
-        if n_evil_among_killed > len(positions):
-            print(f"  ERROR: n_evil_among_killed ({n_evil_among_killed}) > killed positions ({len(positions)}).")
-            print(f"  This arg is 'how many killed cards were evil', NOT total game evil count.")
-            print(f"  Usually 0 (Lilis kills random Good). Use 0 or 1.")
-            return
-        # Night kills go in session.night_kills only; executed is for day executions.
-        # Readers (lines 645, 1858, 1887, 1977, 2293) union the two sets.
-        session.night_kills.extend(positions)
-        session.night_kill_evil_count += n_evil_among_killed
-        n_evil = n_evil_among_killed  # alias for existing code below
-        if n_evil > 0:
-            session.release_witch_blocks(
-                "an evil Lilis victim may have been Witch; public re-probe required"
+        try:
+            result = session.record_lilis_night_result(
+                positions,
+                n_evil_among_killed,
             )
-        if n_evil == len(positions) and n_evil > 0:
-            for p in positions:
-                if p not in session.confirmed_evil:
-                    session.confirmed_evil.append(p)
-        # Issue #7: Auto-deduct 2 HP for Lilis night
-        old_hp = session.hp
-        session.hp -= 2
-        reset_abilities = session.reset_after_night_abilities()
+        except ValueError as exc:
+            print(f"  ERROR: {exc}")
+            return None
         session.save()
         confirmed_msg = ""
-        if n_evil == len(positions) and n_evil > 0:
+        if n_evil_among_killed == len(positions) and n_evil_among_killed > 0:
             confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
-        print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
-        print(f"  Lilis night HP: {old_hp} -> {session.hp}")
-        if reset_abilities:
+        print(
+            f"Night kills: {['#'+str(p) for p in positions]}, "
+            f"{n_evil_among_killed} evil among them{confirmed_msg}"
+        )
+        print(
+            f"  Resolved {result['resolved_events']} Lilis night(s); "
+            f"HP: {result['old_hp']} -> {result['new_hp']}"
+        )
+        if result["reset_abilities"]:
             print(
                 "  ResetAfterNight abilities ready again: "
-                f"{['#' + str(position) for position in reset_abilities]}"
+                f"{['#' + str(position) for position in result['reset_abilities']]}"
             )
         return None
 
     if cmd == "night_no_kill":
-        revealed = {c.position for c in session.cards} | set(session.reveal_order)
-        dead = set(session.executed) | set(session.night_kills)
-        all_positions = set(range(1, session.n_cards + 1))
-        unrevealed = all_positions - revealed - dead
-        # Only auto-confirm Lilis when the lone unrevealed card is still
-        # blocked (e.g. Witch-blocked). If the user just flipped it and
-        # hasn't entered card data yet, the unrevealed=1 check is wrong.
-        blocked = set(session.blocked_positions)
-        # Issue #7: Auto-deduct 2 HP for Lilis night
-        old_hp = session.hp
-        session.hp -= 2
-        reset_abilities = session.reset_after_night_abilities()
-        if len(unrevealed) == 1 and unrevealed.issubset(blocked):
-            lilis_pos = next(iter(unrevealed))
-            if lilis_pos not in session.confirmed_evil:
-                session.confirmed_evil.append(lilis_pos)
-            session.save()
-            print(f"Lilis night dealt 2HP but no kill — only unrevealed card is #{lilis_pos} (blocked)")
-            print(f"  => #{lilis_pos} confirmed as Lilis (can't kill herself)")
-            print(f"  HP: {old_hp} -> {session.hp}")
-        elif len(unrevealed) == 0:
-            session.save()
-            print("Lilis night dealt 2HP but no kill; all positions are revealed/dead.")
-            print("  No Lilis position can be inferred from this no-kill.")
-            print(f"  HP: {old_hp} -> {session.hp}")
+        try:
+            if (session.has_lilis_night_rule()
+                    and not session.is_lilis_alive()):
+                result = session.record_lilis_post_death_night()
+            else:
+                result = session.record_lilis_night_result([], 0)
+        except ValueError as exc:
+            print(f"  ERROR: {exc}")
+            return None
+        session.save()
+        if result["actor_active"]:
+            print("Lilis night dealt 2HP but no victim was recorded.")
+            print(
+                "  No Lilis position can be inferred: a selected clean Knight or "
+                "HealthyBluff Doppelganger-as-Knight can survive without a reroll."
+            )
         else:
-            session.save()
-            print(f"Lilis night dealt 2HP but no kill; {len(unrevealed)} unrevealed positions remain: {sorted(unrevealed)}")
-            print("  No Lilis position can be inferred yet.")
-            print("  If a card actually died, use night_kill instead.")
-            print(f"  HP: {old_hp} -> {session.hp}")
-        if reset_abilities:
+            print(
+                "Persistent Night completed after Lilis death: no actor effect, "
+                "no victim, and no HP damage."
+            )
+        print(f"  HP: {result['old_hp']} -> {result['new_hp']}")
+        if result["reset_abilities"]:
             print(
                 "  ResetAfterNight abilities ready again: "
-                f"{['#' + str(position) for position in reset_abilities]}"
+                f"{['#' + str(position) for position in result['reset_abilities']]}"
             )
         return None
 

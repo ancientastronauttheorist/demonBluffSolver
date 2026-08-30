@@ -347,7 +347,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
     Returns:
         SolverResult object, or None if Rust solver unavailable.
     """
-    from solver import ChancellorTrace, Scenario, SolverResult
+    from solver import ChancellorTrace, Scenario, ShamanTrace, SolverResult
 
     state_dict = state.to_dict()
 
@@ -374,6 +374,18 @@ def rust_solve_to_objects(state, summary_only: bool = False):
                     for position in raw_trace.get("affected_anchor_positions", [])
                 }),
             )
+        raw_shaman_trace = s.get("shaman_trace")
+        shaman_trace = None
+        if raw_shaman_trace is not None:
+            shaman_trace = ShamanTrace(
+                source_position=int(raw_shaman_trace["source_position"]),
+                target_position=int(raw_shaman_trace["target_position"]),
+                copied_role=str(raw_shaman_trace["copied_role"]),
+                target_previous_roles=[
+                    str(role)
+                    for role in raw_shaman_trace.get("target_previous_roles", [])
+                ],
+            )
         scenarios.append(Scenario(
             evil_positions={int(k): v for k, v in s["evil_positions"].items()},
             puppet_position=s.get("puppet_position"),
@@ -385,6 +397,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             messed_up_by_evil=set(s.get("messed_up_by_evil", [])),
             chancellor_trace=trace,
             chancellor_conversion=s.get("chancellor_conversion"),
+            shaman_trace=shaman_trace,
         ))
 
     result_obj = SolverResult(

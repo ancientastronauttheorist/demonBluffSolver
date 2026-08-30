@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Lilis and Knight role implementations with ordered Start, Night-rule multiplicity, victim selection, delayed demon killability, ordinary execution, Slayer bypass, HP damage, and reset/persistence boundary",
+  "functions": [
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Gameplay.UpdateRules",
+      "metadata_name": "Gameplay$$UpdateRules",
+      "signature": "void Gameplay__UpdateRules (Gameplay_o* __this, System_Collections_Generic_List_CharacterData__o* randomCharacters, const MethodInfo* method);",
+      "rva": "0x3814F0"
+    },
+    {
+      "name": "Gameplay.ChangeGameplayState",
+      "metadata_name": "Gameplay$$ChangeGameplayState",
+      "signature": "void Gameplay__ChangeGameplayState (int32_t newState, const MethodInfo* method);",
+      "rva": "0x37B620"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.RevealAllReal",
+      "metadata_name": "Character$$RevealAllReal",
+      "signature": "void Character__RevealAllReal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367E80"
+    },
+    {
+      "name": "Character.KillProtected",
+      "metadata_name": "Character$$KillProtected",
+      "signature": "void Character__KillProtected (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366080"
+    },
+    {
+      "name": "Character.Kill",
+      "metadata_name": "Character$$Kill",
+      "signature": "void Character__Kill (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366130"
+    },
+    {
+      "name": "Character.KillAndReveal",
+      "metadata_name": "Character$$KillAndReveal",
+      "signature": "void Character__KillAndReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365F10"
+    },
+    {
+      "name": "Character.KillByDemon",
+      "metadata_name": "Character$$KillByDemon",
+      "signature": "void Character__KillByDemon (Character_o* __this, Character_o* evilRef, const MethodInfo* method);",
+      "rva": "0x365FB0"
+    },
+    {
+      "name": "Character.DelayedDemonKill.MoveNext",
+      "metadata_name": "Character.<DelayedDemonKill>d__103$$MoveNext",
+      "signature": "bool Character__DelayedDemonKill_d__103__MoveNext (Character__DelayedDemonKill_d__103_o* __this, const MethodInfo* method);",
+      "rva": "0x3757F0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "PlayerController.ManageResources",
+      "metadata_name": "PlayerController$$ManageResources",
+      "signature": "void PlayerController__ManageResources (PlayerController_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x384C20"
+    },
+    {
+      "name": "Health.Damage",
+      "metadata_name": "Health$$Damage",
+      "signature": "void Health__Damage (Health_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x382100"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "Role.CheckIfCanBeKilled",
+      "metadata_name": "Role$$CheckIfCanBeKilled",
+      "signature": "bool Role__CheckIfCanBeKilled (Role_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B24C0"
+    },
+    {
+      "name": "Role.GetDamageToYou",
+      "metadata_name": "Role$$GetDamageToYou",
+      "signature": "int32_t Role__GetDamageToYou (Role_o* __this, const MethodInfo* method);",
+      "rva": "0x3C4CD0"
+    },
+    {
+      "name": "Drunk.GetDamageToYou",
+      "metadata_name": "Drunk$$GetDamageToYou",
+      "signature": "int32_t Drunk__GetDamageToYou (Drunk_o* __this, const MethodInfo* method);",
+      "rva": "0x3DA560"
+    },
+    {
+      "name": "Doppleganger.CheckIfCanBeKilled",
+      "metadata_name": "Doppleganger$$CheckIfCanBeKilled",
+      "signature": "bool Doppleganger__CheckIfCanBeKilled (Doppleganger_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D7090"
+    },
+    {
+      "name": "Slayer.CharacterPicked",
+      "metadata_name": "Slayer$$CharacterPicked",
+      "signature": "void Slayer__CharacterPicked (Slayer_o* __this, const MethodInfo* method);",
+      "rva": "0x3EC9C0"
+    },
+    {
+      "name": "NightPhase.ManagePhase",
+      "metadata_name": "NightPhase$$ManagePhase",
+      "signature": "void NightPhase__ManagePhase (NightPhase_o* __this, const MethodInfo* method);",
+      "rva": "0x383540"
+    },
+    {
+      "name": "NightPhase.StartPhase.MoveNext",
+      "metadata_name": "NightPhase.<StartPhase>d__7$$MoveNext",
+      "signature": "bool NightPhase__StartPhase_d__7__MoveNext (NightPhase__StartPhase_d__7_o* __this, const MethodInfo* method);",
+      "rva": "0x3927C0"
+    },
+    {
+      "name": "NightPhase.ReorderList",
+      "metadata_name": "NightPhase$$ReorderList",
+      "signature": "void NightPhase__ReorderList (NightPhase_o* __this, const MethodInfo* method);",
+      "rva": "0x3838D0"
+    },
+    {
+      "name": "Characters.FilterAliveCharacters",
+      "metadata_name": "Characters$$FilterAliveCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAliveCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, const MethodInfo* method);",
+      "rva": "0x36A240"
+    },
+    {
+      "name": "Characters.FilterAlignmentCharacters.Character",
+      "metadata_name": "Characters$$FilterAlignmentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAlignmentCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t alignment, const MethodInfo* method);",
+      "rva": "0x36A030"
+    },
+    {
+      "name": "Characters.FilterHiddenCharacters",
+      "metadata_name": "Characters$$FilterHiddenCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterHiddenCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inputCharacters, const MethodInfo* method);",
+      "rva": "0x36B020"
+    },
+    {
+      "name": "Characters.FilterCharacterMissingStatus",
+      "metadata_name": "Characters$$FilterCharacterMissingStatus",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterMissingStatus (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36A8C0"
+    },
+    {
+      "name": "Characters.GetRandomAliveCharacter",
+      "metadata_name": "Characters$$GetRandomAliveCharacter",
+      "signature": "Character_o* Characters__GetRandomAliveCharacter (Characters_o* __this, System_Collections_Generic_List_Character__o* chars, const MethodInfo* method);",
+      "rva": "0x36C740"
+    },
+    {
+      "name": "Demon.KillHidden",
+      "metadata_name": "Demon$$KillHidden",
+      "signature": "void Demon__KillHidden (Demon_o* __this, Character_o* demonRef, const MethodInfo* method);",
+      "rva": "0x3D6C30"
+    },
+    {
+      "name": "Demon.KillRandom",
+      "metadata_name": "Demon$$KillRandom",
+      "signature": "void Demon__KillRandom (Demon_o* __this, Character_o* demonRef, const MethodInfo* method);",
+      "rva": "0x3D6E70"
+    },
+    {
+      "name": "NightModeRule.ctor",
+      "metadata_name": "NightModeRule$$.ctor",
+      "signature": "void NightModeRule___ctor (NightModeRule_o* __this, int32_t revealPerDay, const MethodInfo* method);",
+      "rva": "0x3E5370"
+    },
+    {
+      "name": "NightModeRule.Init",
+      "metadata_name": "NightModeRule$$Init",
+      "signature": "void NightModeRule__Init (NightModeRule_o* __this, const MethodInfo* method);",
+      "rva": "0x3E4DE0"
+    },
+    {
+      "name": "NightModeRule.Remove",
+      "metadata_name": "NightModeRule$$Remove",
+      "signature": "void NightModeRule__Remove (NightModeRule_o* __this, const MethodInfo* method);",
+      "rva": "0x3E5080"
+    },
+    {
+      "name": "NightModeRule.Revealed",
+      "metadata_name": "NightModeRule$$Revealed",
+      "signature": "void NightModeRule__Revealed (NightModeRule_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x3E52A0"
+    },
+    {
+      "name": "NightModeRule.ManageKill",
+      "metadata_name": "NightModeRule$$ManageKill",
+      "signature": "void NightModeRule__ManageKill (NightModeRule_o* __this, Character_o* obj, const MethodInfo* method);",
+      "rva": "0x3E5000"
+    },
+    {
+      "name": "NightModeRule.ManageKill.MoveNext",
+      "metadata_name": "NightModeRule.<ManageKill>d__8$$MoveNext",
+      "signature": "void NightModeRule__ManageKill_d__8__MoveNext (NightModeRule__ManageKill_d__8_o __this, const MethodInfo* method);",
+      "rva": "0x3F0640"
+    },
+    {
+      "name": "Striga.GetRules",
+      "metadata_name": "Striga$$GetRules",
+      "signature": "System_Collections_Generic_List_SpecialRule__o* Striga__GetRules (Striga_o* __this, const MethodInfo* method);",
+      "rva": "0x3EE7B0"
+    },
+    {
+      "name": "Striga.Act",
+      "metadata_name": "Striga$$Act",
+      "signature": "void Striga__Act (Striga_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EE6F0"
+    },
+    {
+      "name": "Striga.ctor",
+      "metadata_name": "Striga$$.ctor",
+      "signature": "void Striga___ctor (Striga_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Immortal.get_Description",
+      "metadata_name": "Immortal$$get_Description",
+      "signature": "System_String_o* Immortal__get_Description (Immortal_o* __this, const MethodInfo* method);",
+      "rva": "0x3BC7A0"
+    },
+    {
+      "name": "Immortal.GetInfo",
+      "metadata_name": "Immortal$$GetInfo",
+      "signature": "ActedInfo_o* Immortal__GetInfo (Immortal_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC600"
+    },
+    {
+      "name": "Immortal.GetBluffInfo",
+      "metadata_name": "Immortal$$GetBluffInfo",
+      "signature": "ActedInfo_o* Immortal__GetBluffInfo (Immortal_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC5A0"
+    },
+    {
+      "name": "Immortal.Act",
+      "metadata_name": "Immortal$$Act",
+      "signature": "void Immortal__Act (Immortal_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC2A0"
+    },
+    {
+      "name": "Immortal.BluffAct",
+      "metadata_name": "Immortal$$BluffAct",
+      "signature": "void Immortal__BluffAct (Immortal_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC3A0"
+    },
+    {
+      "name": "Immortal.GetInfo.String",
+      "metadata_name": "Immortal$$GetInfo",
+      "signature": "System_String_o* Immortal__GetInfo (Immortal_o* __this, const MethodInfo* method);",
+      "prototype_name": "Immortal__GetInfo_String",
+      "rva": "0x3BC660"
+    },
+    {
+      "name": "Immortal.CheckIfCanBeKilled",
+      "metadata_name": "Immortal$$CheckIfCanBeKilled",
+      "signature": "bool Immortal__CheckIfCanBeKilled (Immortal_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC4A0"
+    },
+    {
+      "name": "Immortal.ProtectedKnight",
+      "metadata_name": "Immortal$$ProtectedKnight",
+      "signature": "void Immortal__ProtectedKnight (Immortal_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BC690"
+    },
+    {
+      "name": "Immortal.CorruptedKnightKilled",
+      "metadata_name": "Immortal$$CorruptedKnightKilled",
+      "signature": "void Immortal__CorruptedKnightKilled (Immortal_o* __this, const MethodInfo* method);",
+      "rva": "0x3BC540"
+    },
+    {
+      "name": "Immortal.ctor",
+      "metadata_name": "Immortal$$.ctor",
+      "signature": "void Immortal___ctor (Immortal_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    }
+  ]
+}

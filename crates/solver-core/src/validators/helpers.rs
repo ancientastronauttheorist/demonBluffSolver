@@ -48,6 +48,16 @@ pub fn is_evil_in_board_state(pos: u8, scenario: &Scenario, state: &GameState) -
 ///
 /// Used by public Dreamer role-pair validation, which can name any role.
 pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Option<String> {
+    // Shaman's later InitWithNoReset changes the current role data at both
+    // endpoints without clearing the destination's runtime alignment. Current
+    // role consumers must therefore prefer the trace over the original Evil,
+    // Drunk, or Doppelganger identity; alignment consumers still use
+    // `known_evil_role` / `effective_alignment` below.
+    if let Some(trace) = scenario.shaman_trace.as_ref() {
+        if trace.source_position == pos || trace.target_position == pos {
+            return Some(trace.copied_role.clone());
+        }
+    }
     if let Some(role) = known_evil_role(pos, scenario, state) {
         return Some(role.to_string());
     }
@@ -61,11 +71,6 @@ pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
     }
     if scenario.drunk_position == Some(pos) {
         return Some("Drunk".to_string());
-    }
-    if let Some(trace) = scenario.shaman_trace.as_ref() {
-        if trace.source_position == pos || trace.target_position == pos {
-            return Some(trace.copied_role.clone());
-        }
     }
     if let Some(card) = state.card_at(pos) {
         return Some(card.apparent_role.clone());
@@ -121,6 +126,7 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     let modeled_healthy_bluff = evil_role
         .map(|role| roles_equal(role, "Puppet"))
         .unwrap_or(false)
+        || scenario.doppelganger_position == Some(pos)
         || effective_role
             .as_deref()
             .is_some_and(|role| roles_equal(role, "Doppelganger"));
@@ -131,9 +137,11 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     // Runtime Evil is sufficient to lie even without bluff data. Drunk and
     // Doppelganger are the model's explicit non-null-bluff positions; the clean
     // Doppelganger case already returned via HealthyBluff.
-    let modeled_non_null_bluff = effective_role.as_deref().is_some_and(|role| {
-        roles_equal(role, "Drunk") || roles_equal(role, "Doppelganger")
-    });
+    let modeled_non_null_bluff = scenario.drunk_position == Some(pos)
+        || scenario.doppelganger_position == Some(pos)
+        || effective_role.as_deref().is_some_and(|role| {
+            roles_equal(role, "Drunk") || roles_equal(role, "Doppelganger")
+        });
     if evil_role.is_some() || modeled_non_null_bluff {
         return TruthStatus::Lying;
     }
@@ -165,7 +173,7 @@ pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) 
 #[cfg(test)]
 mod truth_status_tests {
     use super::*;
-    use crate::types::{CardInfo, ChancellorTrace};
+    use crate::types::{CardInfo, ChancellorTrace, ShamanTrace};
     use std::collections::{HashMap, HashSet};
 
     fn state_with_apparent_role(role: &str) -> GameState {
@@ -250,6 +258,29 @@ mod truth_status_tests {
     }
 
     #[test]
+    fn shaman_role_overwrite_preserves_existing_bluff_truth_statuses() {
+        let state = state_with_apparent_role("Knight");
+        let trace = ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Knight".to_string(),
+            target_previous_roles: vec!["Drunk".to_string(), "Doppelganger".to_string()],
+        };
+
+        let mut doppelganger = scenario();
+        doppelganger.doppelganger_position = Some(1);
+        doppelganger.shaman_trace = Some(trace.clone());
+        assert_eq!(effective_role_at(1, &doppelganger, &state).as_deref(), Some("Knight"));
+        assert_eq!(truth_status(1, &doppelganger, &state), TruthStatus::Truthful);
+
+        let mut drunk = scenario();
+        drunk.drunk_position = Some(1);
+        drunk.shaman_trace = Some(trace);
+        assert_eq!(effective_role_at(1, &drunk, &state).as_deref(), Some("Knight"));
+        assert_eq!(truth_status(1, &drunk, &state), TruthStatus::Lying);
+    }
+
+    #[test]
     fn trace_only_resistant_drunk_still_lies() {
         let state = state_with_apparent_role("Baker");
         let mut scenario = scenario();
@@ -300,6 +331,11 @@ mod truth_status_tests {
 
 /// Get the "real" role at a position, accounting for Doppelganger/Drunk disguise.
 pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) -> &'a str {
+    if let Some(trace) = scenario.shaman_trace.as_ref() {
+        if trace.source_position == pos || trace.target_position == pos {
+            return &trace.copied_role;
+        }
+    }
     // Check evil role first
     if let Some(role) = known_evil_role(pos, scenario, state) {
         return role;

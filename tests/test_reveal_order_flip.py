@@ -11,6 +11,7 @@ from game_loop import (
     _verify_flips,
     dispatch,
 )
+from state_machine import GamePhase, GameStateMachine
 
 
 def _board(n_cards: int, hidden: set[int]) -> list[dict]:
@@ -142,6 +143,21 @@ class RevealVerificationTests(unittest.TestCase):
         self.assertEqual(session.reveal_order, [2, 3, 1])
         self.assertEqual(session.blocked_positions, [])
 
+    def test_lilis_mode_without_lilis_rejects_before_any_click(self):
+        session = GameSession(3, 1)
+
+        with (
+            patch("game_utils.all_game_card_coords") as coords,
+            patch("game_loop._click_flip_card") as click,
+            redirect_stdout(StringIO()) as output,
+        ):
+            dispatch("flip", ["--lilis"], session)
+
+        self.assertIn("requires Lilis", output.getvalue())
+        coords.assert_not_called()
+        click.assert_not_called()
+        self.assertEqual(session.reveal_order, [])
+
     def test_dispatch_single_killed_hidden_never_counts_as_reveal_or_night(self):
         session = GameSession(5, 1)
         session.demons = ["Lilis"]
@@ -207,6 +223,10 @@ class RevealVerificationTests(unittest.TestCase):
         session = GameSession(4, 1)
         session.demons = ["Lilis"]
         session.reveal_order = [1, 2, 3]
+        saved_states = []
+
+        def capture_save():
+            saved_states.append((list(session.reveal_order), session.pending_lilis_nights))
 
         with (
             patch("game_utils.all_game_card_coords", return_value={4: (400, 100)}),
@@ -214,7 +234,7 @@ class RevealVerificationTests(unittest.TestCase):
             patch("game_loop._read_board_once_for_flip", return_value=_board(4, set())),
             patch("memory_reader.get_monitor") as get_monitor,
             patch("game_loop.time.sleep"),
-            patch.object(session, "save"),
+            patch.object(session, "save", side_effect=capture_save),
             redirect_stdout(StringIO()),
         ):
             get_monitor.return_value.is_healthy.return_value = False
@@ -222,6 +242,109 @@ class RevealVerificationTests(unittest.TestCase):
 
         self.assertEqual(session.reveal_order, [1, 2, 3, 4])
         self.assertEqual(session.lilis_batch_index, 1)
+        self.assertEqual(session.pending_lilis_nights, 1)
+        self.assertEqual(saved_states, [([1, 2, 3, 4], 1)])
+
+    def test_manual_witch_partial_retries_only_one_reveal_at_post_death_boundary(self):
+        session = GameSession(4, 2)
+        session.minions = ["Witch"]
+        session.demons = ["Lilis"]
+
+        boards = iter([_board(4, {4}), _board(4, set())])
+
+        class Monitor:
+            wait_for = Mock(return_value=False)
+
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def get_board():
+                return next(boards)
+
+        monitor = Monitor()
+        coords = {
+            position: (position * 100, 100)
+            for position in range(1, 5)
+        }
+        with (
+            patch("game_utils.all_game_card_coords", return_value=coords),
+            patch("game_loop._click_flip_card", return_value=True) as click,
+            patch("memory_reader.get_monitor", return_value=monitor),
+            patch("memory_reader.print_board"),
+            patch("mouse.move"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()),
+        ):
+            dispatch("flip", ["--lilis"], session)
+            self.assertEqual(session.reveal_order, [1, 2, 3])
+            self.assertEqual(session.blocked_positions, [4])
+            self.assertEqual(session.pending_lilis_nights, 0)
+
+            session.mark_executed(1, was_evil=True, evil_role="Witch")
+            session.mark_executed(2, was_evil=True, evil_role="Lilis")
+            dispatch("flip", ["--lilis"], session)
+            dispatch("night_no_kill", [], session)
+
+        self.assertEqual(
+            [call.args[0] for call in click.call_args_list],
+            [1, 2, 3, 4, 4],
+        )
+        self.assertEqual(session.reveal_order, [1, 2, 3, 4])
+        self.assertEqual(session.pending_lilis_nights, 0)
+        self.assertEqual(session.lilis_nights_resolved, 1)
+        self.assertEqual(session.hp, 10)
+
+    def test_state_machine_failed_partial_retries_one_and_stops_at_active_night(self):
+        session = GameSession(8, 1)
+        session.demons = ["Lilis"]
+        boards = iter([
+            _board(8, {4, 5, 6, 7, 8}),
+            _board(8, {5, 6, 7, 8}),
+        ])
+
+        class Monitor:
+            wait_for = Mock(return_value=False)
+
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def get_board():
+                return next(boards)
+
+        coords = {
+            position: (position * 100, 100)
+            for position in range(1, 9)
+        }
+        machine = GameStateMachine(session=session, monitor=Monitor())
+        machine.phase = GamePhase.FLIPPING
+        with (
+            patch("game_utils.all_game_card_coords", return_value=coords),
+            patch("game_loop._click_flip_card", return_value=True) as click,
+            patch("memory_reader.get_monitor", return_value=machine.monitor),
+            patch("memory_reader.print_board"),
+            patch("mouse.move"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()),
+        ):
+            machine._do_flipping()
+            self.assertEqual(machine.phase, GamePhase.FLIPPING)
+            self.assertEqual(session.reveal_order, [1, 2, 3])
+            self.assertEqual(session.pending_lilis_nights, 0)
+            machine._do_flipping()
+
+        self.assertEqual(
+            [call.args[0] for call in click.call_args_list],
+            [1, 2, 3, 4, 4],
+        )
+        self.assertEqual(machine.phase, GamePhase.LILIS_NIGHT)
+        self.assertEqual(session.reveal_order, [1, 2, 3, 4])
+        self.assertEqual(session.pending_lilis_nights, 1)
 
 
 if __name__ == "__main__":

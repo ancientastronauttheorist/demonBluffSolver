@@ -4,7 +4,9 @@
 //! Ported from strategy.py:187-315.
 
 use std::collections::{BTreeSet, HashMap, HashSet};
+use crate::knowledge_base::normalize_role;
 use crate::types::{GameState, Scenario, SolverResult};
+use crate::validators::effective_role_at;
 use super::{
     apply_execution_damage, evil_probabilities, execution_consequence,
     execution_terminal_outcome, get_card_role, ExecutionConsequence,
@@ -19,54 +21,19 @@ pub fn execution_reveal_outcome(
     scenario: &Scenario,
     state: &GameState,
 ) -> (String, bool, bool, bool) {
-    // Evil position
-    if let Some(role) = scenario.evil_positions.get(&pos) {
-        return (role.clone(), true, false, false);
+    let role = effective_role_at(pos, scenario, state)
+        .or_else(|| get_card_role(pos, state).map(str::to_string))
+        .unwrap_or_else(|| "Unknown".to_string());
+    let was_evil = scenario.is_evil(pos);
+    if was_evil {
+        // Runtime Evil determines the correct-execution outcome, while Shaman's
+        // copied current role is what KillAndReveal publicly exposes.
+        return (role, true, false, false);
     }
 
-    // Puppet (evil but separate from evil_positions)
-    if scenario.puppet_position == Some(pos) {
-        return ("Puppet".to_string(), true, false, false);
-    }
-
-    // Drunk (disguised as villager)
-    if scenario.drunk_position == Some(pos) {
-        return (
-            "Drunk".to_string(),
-            false,
-            false,
-            scenario.corrupted.contains(&pos),
-        );
-    }
-
-    // Doppelganger (disguised as villager)
-    if scenario.doppelganger_position == Some(pos) {
-        return (
-            "Doppelganger".to_string(),
-            false,
-            scenario.corrupted.contains(&pos),
-            scenario.corrupted.contains(&pos),
-        );
-    }
-
-    if scenario.chancellor_added_outcast_position() == Some(pos) {
-        if let Some(role) = scenario.chancellor_added_outcast_role() {
-            let active_corrupted = scenario.corrupted.contains(&pos);
-            let observed_corrupted = if crate::knowledge_base::normalize_role(role) == "drunk" {
-                false
-            } else {
-                active_corrupted
-            };
-            return (role.to_string(), false, observed_corrupted, active_corrupted);
-        }
-    }
-
-    // Normal card — use apparent role
-    let role = get_card_role(pos, state)
-        .unwrap_or("Unknown")
-        .to_string();
-    let corrupted = scenario.corrupted.contains(&pos);
-    (role, false, corrupted, corrupted)
+    let active_corrupted = scenario.corrupted.contains(&pos);
+    let observed_corrupted = normalize_role(&role) != "drunk" && active_corrupted;
+    (role, false, observed_corrupted, active_corrupted)
 }
 
 /// Canonical execution result visible to the player and therefore safe to use

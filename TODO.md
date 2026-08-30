@@ -21,7 +21,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Jester — no issues
 - [x] Judge — full managed `Judge2` boundary native-audited; corrupted-actor
   inversion and ResetAfterNight history fixed
-- [x] Knight — no issues
+- [x] Knight — full managed `Immortal` boundary native-audited; exact
+  protection precedence and additional-four execution damage closed
 - [x] Knitter — no issues
 - [x] Lover — no issues
 - [x] Medium — lying target constraint gap
@@ -29,7 +30,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Poet — copied_role whitelist (low priority)
 - [x] Scout — no issues
 - [x] Slayer — no issues
-- [x] Witness — Lilis kills + Chancellor conversion bugs, 0 test coverage
+- [x] Witness — current-status truth semantics and Chancellor interaction
+  native-audited with focused regressions
 - [x] Bombardier — no issues
 - [x] Doppelganger — no issues
 - [x] Drunk — Knight HP edge case
@@ -45,7 +47,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues
-- [x] Lilis — Knight immunity + Good-priority constraints
+- [x] Lilis — full managed `Striga` boundary native-audited; hard Good-first
+  selection, repeated Nights, protected no-kill, and duplicate behavior closed
 - [x] Pooka — no issues
 
 ---
@@ -94,7 +97,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Medium validation for dead/night-killed cards** — FIXED. Medium pointing at a night-killed position no longer causes 0 scenarios. Accept Unknown role as match when position is Good and claimed role is valid.
 
-- [ ] **Lilis prioritizes Good kills** — Wiki says Lilis prioritizes killing Good characters. Could weight night-kill probabilities or reject scenarios where Lilis kills Evil when Good was available.
+- [x] **Lilis prioritizes Good kills** — NATIVE-CLOSED. This is not weighting:
+  Lilis first constructs the eligible registered-Good Hidden pool and samples
+  uniformly from it. Only an empty Good pool enables the unaligned fallback.
 
 ### P2: Medium Priority
 
@@ -114,7 +119,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Puppeteer targets Villagers only when possible** — FIXED. Placement generator restricts Puppet candidates to Villager (+ unrevealed) positions when a known Villager is adjacent to Puppeteer. Outcasts only eligible when no Villagers are adjacent.
 
-- [ ] **Corrupted Knight = 4 HP damage** — Patch v0.310a: "Knight deals 4 damage if Executed while Corrupted." Solver currently uses `wrong_exec_cost` (5 at Asc4+). Should be 4 specifically for corrupted Knight.
+- [x] **Corrupted Knight = 4 HP damage** — NATIVE-DISPROVEN as a total. The
+  authored/native rule is fixed **additional** 4 after ordinary event damage:
+  corrupted runtime-Good Knight is 5 + 4 = 9 normally, 4 with NoDamage, and
+  Drunk displaying Knight is 2 + 4 = 6. Lilis and Slayer do not run this hook.
 
 ### P3: Low Priority
 
@@ -128,7 +136,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Shaman clone corruption/cure ordering** — FIXED. Corruption initially survives `InitWithNoReset`, but a later Alchemist can cure it; `MessedUpByEvil` remains a separate persistent status.
 
-- [x] **Lilis won't kill herself when last revealed** — Confirmed in asc25_v1: Lilis deals 2 HP even with no valid kill target (can't self-kill). No code fix needed — this is a data entry issue (don't assume last card was killed). Documented in CLAUDE.md.
+- [x] **Lilis won't kill herself when last revealed** — NATIVE-CLOSED. Normal
+  Start gives the single same-asset Start actor status 60, so Lilis is excluded
+  from her own pool and still deals 2 HP when no target exists. Missing/resisted
+  status 60 is the bounded self-selection edge. A selected protected victim
+  also yields no kill and is not rerolled.
 
 - [x] **Alchemist "0 cured" = always truthful** — Already handled. Evil/corrupted Alchemist has actual_cures=0 and must lie, so claiming 0 is rejected by `claimed != actual`.
 
@@ -152,3 +164,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   audited; ordered anywhere-Villager replacement, independent Outcast anchor,
   exact identity-home equations, duplicate/death persistence, and current-only
   affected-status truth/bluff semantics have focused regressions.
+- [x] **Lilis + Knight**: Full managed `Striga` and `Immortal` boundaries
+  audited; hard registered-Good selection, repeated/duplicate Night timing,
+  protected/no-target fixed damage, real/bluff identity interactions, Slayer
+  bypass, and exact 0/4/6/9 HP outcomes have focused regressions.
