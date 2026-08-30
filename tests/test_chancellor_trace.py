@@ -272,6 +272,19 @@ class ChancellorTraceTests(unittest.TestCase):
         ordinary_corrupted = Scenario({}, corrupted={1})
         self.assertEqual(_pd_ground_truth(1, ordinary_corrupted, state), (True, None))
 
+    def test_pd_ground_truth_does_not_depend_on_evil_map_insertion_order(self):
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition([], [], [], []),
+            cards=[],
+        )
+        scenario = Scenario(
+            {2: "Witch", 1: "Pooka"},
+            corrupted={3},
+        )
+
+        self.assertEqual(_pd_ground_truth(3, scenario, state), (True, 1))
+
 
 if __name__ == "__main__":
     unittest.main()

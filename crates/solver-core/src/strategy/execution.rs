@@ -4,6 +4,7 @@
 //! Steps 4-5 (abilities/reveals) are skipped because the simulation
 //! pre-loads all reveals and abilities.
 
+use std::cmp::Ordering;
 use std::collections::HashSet;
 use crate::types::{GameState, SolverResult};
 #[allow(unused_imports)]
@@ -18,6 +19,27 @@ use super::forced::find_forced_execution;
 
 /// Threshold: skip Knight check if a non-Knight has >= this evil probability.
 const KNIGHT_CHECK_THRESHOLD: f64 = 0.65;
+
+fn compare_probability_then_position(a: &(u8, f64), b: &(u8, f64)) -> Ordering {
+    b.1.total_cmp(&a.1)
+        .then_with(|| a.0.cmp(&b.0))
+}
+
+fn compare_active_candidates(
+    a: &(u8, f64),
+    b: &(u8, f64),
+    state: &GameState,
+    result: &SolverResult,
+) -> Ordering {
+    let ta = tiebreak_score(a.0, state, result);
+    let tb = tiebreak_score(b.0, state, result);
+    b.1.total_cmp(&a.1)
+        .then_with(|| tb.0.total_cmp(&ta.0))
+        .then_with(|| tb.1.total_cmp(&ta.1))
+        .then_with(|| tb.2.total_cmp(&ta.2))
+        .then_with(|| tb.3.total_cmp(&ta.3))
+        .then_with(|| a.0.cmp(&b.0))
+}
 
 /// Pick the next execution target given solver results.
 ///
@@ -102,7 +124,11 @@ pub fn pick_execution_target(
             }
         }
 
-        knight_checks.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+        knight_checks.sort_by(|a, b| {
+            b.1.total_cmp(&a.1)
+                .then_with(|| a.2.total_cmp(&b.2))
+                .then_with(|| a.0.cmp(&b.0))
+        });
 
         if let Some(&(kpos, evil_prob, corr_risk)) = knight_checks.first() {
             if corr_risk == 0.0 {
@@ -134,10 +160,11 @@ pub fn pick_execution_target(
     }
 
     // 5.5a. Forced execution (E5): DFS proof that execution guarantees win
-    let all_uncertain: Vec<u8> = probs.iter()
+    let mut all_uncertain: Vec<u8> = probs.iter()
         .filter(|(p, prob)| **prob > 0.0 && !executed.contains(p))
         .map(|(p, _)| *p)
         .collect();
+    all_uncertain.sort_unstable();
 
     if !all_uncertain.is_empty() {
         if let Some(forced_pos) = find_forced_execution(state, result, &all_uncertain) {
@@ -187,15 +214,7 @@ pub fn pick_execution_target(
         // E4: Sort by (p_evil, tiebreak) for stable 50/50 resolution.
         // tiebreak_score returns (adjacency_bonus, corruption_penalty,
         // role_consistency, witch_boost) — higher is better on every term.
-        active_probs.sort_by(|a, b| {
-            let ta = tiebreak_score(a.0, state, result);
-            let tb = tiebreak_score(b.0, state, result);
-            b.1.partial_cmp(&a.1).unwrap()
-                .then(tb.0.partial_cmp(&ta.0).unwrap())
-                .then(tb.1.partial_cmp(&ta.1).unwrap())
-                .then(tb.2.partial_cmp(&ta.2).unwrap())
-                .then(tb.3.partial_cmp(&ta.3).unwrap())
-        });
+        active_probs.sort_by(|a, b| compare_active_candidates(a, b, state, result));
 
         let best_pos = active_probs[0].0;
         let best_prob = active_probs[0].1;
@@ -205,7 +224,10 @@ pub fn pick_execution_target(
         // MUST be a Bombardier disguise.
         if best_prob == 0.0 && !bombardier_candidates.is_empty() {
             if let Some(&(bomb_pos, bomb_prob)) = bombardier_candidates.iter()
-                .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
+                .max_by(|a, b| {
+                    a.1.total_cmp(&b.1)
+                        .then_with(|| b.0.cmp(&a.0))
+                })
             {
                 if bomb_prob > 0.0 {
                     return Some(ExecutionPick {
@@ -274,7 +296,7 @@ pub fn pick_execution_target(
             .collect();
 
         if !safety_probs.is_empty() {
-            safety_probs.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+            safety_probs.sort_by(compare_probability_then_position);
             let (safe_pos, safe_prob) = safety_probs[0];
             return Some(ExecutionPick {
                 position: safe_pos,
@@ -434,6 +456,201 @@ mod tests {
         let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
         // Should pick #2 (non-Bombardier) even though #1 has same probability
         assert_eq!(pick.position, 2);
+    }
+
+    #[test]
+    fn equal_knight_checks_choose_lowest_position() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 4,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 2, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_eq!(pick.position, 1);
+        assert!(matches!(pick.reason, ExecutionReason::KnightFreeCheck { .. }));
+    }
+
+    #[test]
+    fn equal_knight_probabilities_prefer_the_lower_corruption_risk() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 4,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Knight".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let first = make_scenario(&[(1, "Pooka")]);
+        let mut second = make_scenario(&[(2, "Pooka")]);
+        second.corrupted.insert(1);
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![first, second],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_eq!(pick.position, 2);
+        assert!(matches!(
+            pick.reason,
+            ExecutionReason::KnightFreeCheck { corruption_risk: 0.0, .. }
+        ));
+    }
+
+    #[test]
+    fn equal_probabilistic_candidates_choose_lowest_position() {
+        let state = GameState {
+            n_cards: 2,
+            hp: 4,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Baker".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_eq!(pick.position, 1);
+        assert!(matches!(pick.reason, ExecutionReason::Probabilistic { .. }));
+    }
+
+    #[test]
+    fn active_candidate_comparator_is_independent_of_input_order() {
+        let state = GameState {
+            n_cards: 2,
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        for mut candidates in [vec![(2, 0.5), (1, 0.5)], vec![(1, 0.5), (2, 0.5)]] {
+            candidates.sort_by(|a, b| compare_active_candidates(a, b, &state, &result));
+            assert_eq!(candidates, vec![(1, 0.5), (2, 0.5)]);
+        }
+    }
+
+    #[test]
+    fn equal_bombardier_overrides_choose_lowest_position() {
+        let state = GameState {
+            n_cards: 3,
+            hp: 4,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Bombardier".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Bombardier".to_string(), ..CardInfo::default() },
+                CardInfo { position: 3, apparent_role: "Hunter".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![3],
+            bombardier_positions: vec![1, 2],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_eq!(pick.position, 1);
+        assert!(matches!(
+            pick.reason,
+            ExecutionReason::BombardierDisguiseOverride { .. }
+        ));
+    }
+
+    #[test]
+    fn equal_bombardier_safety_candidates_choose_lowest_position() {
+        let state = GameState {
+            n_cards: 3,
+            hp: 4,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 1, apparent_role: "Wretch".to_string(), ..CardInfo::default() },
+                CardInfo { position: 2, apparent_role: "Wretch".to_string(), ..CardInfo::default() },
+                CardInfo { position: 3, apparent_role: "Bombardier".to_string(), ..CardInfo::default() },
+            ],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![3],
+            n_scenarios: 3,
+            n_surviving: 3,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Pooka")]),
+                make_scenario(&[(3, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new()).unwrap();
+        assert_eq!(pick.position, 1);
+        assert!(matches!(
+            pick.reason,
+            ExecutionReason::BombardierSafetyFallback { .. }
+        ));
+    }
+
+    #[test]
+    fn probability_comparator_is_independent_of_input_order() {
+        for mut candidates in [vec![(2, 0.5), (1, 0.5)], vec![(1, 0.5), (2, 0.5)]] {
+            candidates.sort_by(compare_probability_then_position);
+            assert_eq!(candidates, vec![(1, 0.5), (2, 0.5)]);
+        }
     }
 
     #[test]

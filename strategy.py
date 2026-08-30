@@ -742,9 +742,10 @@ def _pd_ground_truth(target: int, scenario: Scenario, state: GameState) -> tuple
     evil_pos = None
     if is_corrupted:
         # Learn an evil character
-        evil_positions = [p for p in scenario.evil_positions if p not in state.executed]
-        if evil_positions:
-            evil_pos = evil_positions[0]
+        evil_pos = min(
+            (p for p in scenario.evil_positions if p not in state.executed),
+            default=None,
+        )
     return (is_corrupted, evil_pos)
 
 

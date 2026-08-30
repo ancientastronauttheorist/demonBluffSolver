@@ -64,7 +64,9 @@ fn serialize_int_key_map<S: Serializer, V: Serialize>(
 ) -> Result<S::Ok, S::Error> {
     use serde::ser::SerializeMap;
     let mut m = serializer.serialize_map(Some(map.len()))?;
-    for (k, v) in map {
+    let mut entries: Vec<_> = map.iter().collect();
+    entries.sort_unstable_by_key(|(key, _)| **key);
+    for (k, v) in entries {
         m.serialize_entry(&k.to_string(), v)?;
     }
     m.end()
@@ -572,6 +574,20 @@ mod tests {
         assert!(back.messed_up_by_evil.contains(&4));
         assert_eq!(back.chancellor_added_outcast_position(), Some(2));
         assert_eq!(back.chancellor_added_outcast_role(), Some("Plague Doctor"));
+    }
+
+    #[test]
+    fn int_key_maps_serialize_in_numeric_position_order() {
+        let mut scenario = Scenario::default();
+        scenario.evil_positions.insert(2, "Witch".to_string());
+        scenario.evil_positions.insert(10, "Shaman".to_string());
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+
+        let json = serde_json::to_string(&scenario).unwrap();
+
+        assert!(json.contains(
+            "\"evil_positions\":{\"1\":\"Pooka\",\"2\":\"Witch\",\"10\":\"Shaman\"}"
+        ));
     }
 
     #[test]
