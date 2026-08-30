@@ -125,6 +125,11 @@ def create_manifest(game_root: Path, steam_manifest: Path | None) -> dict[str, A
         "globalgamemanagers": file_record(
             global_managers_path, "Demon Bluff_Data/globalgamemanagers"
         ),
+        "level0": file_record(data_root / "level0", "Demon Bluff_Data/level0"),
+        "sharedassets0": file_record(
+            data_root / "sharedassets0.assets",
+            "Demon Bluff_Data/sharedassets0.assets",
+        ),
         "scripting_assemblies": file_record(
             scripting_path, "Demon Bluff_Data/ScriptingAssemblies.json"
         ),

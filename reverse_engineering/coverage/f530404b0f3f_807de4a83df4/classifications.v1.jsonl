@@ -88,3 +88,14 @@
 {"method":"tdi5687.m0000","state":"understood","reason":"Native single-condition truth-appearance result and ignored input parameter are documented.","evidence":["ev.character.truth-appearance.1"]}
 {"method":"tdi5687.m0002","state":"understood","reason":"Native apparent-lying precedence across appearance, corruption, HealthyBluff, alignment, and bluff state is documented.","evidence":["ev.character.truth-appearance.1"]}
 {"method":"tdi5687.m0003","state":"understood","reason":"Native bluff-role baseline and ordered disguise-status overrides are documented.","evidence":["ev.character.truth-appearance.1"]}
+{"method":"tdi5922.m0001","state":"understood","reason":"Native Pooka Start-only dispatch is documented.","evidence":["ev.pooka.start-corruption.1"]}
+{"method":"tdi5922.m0003","state":"understood","reason":"Native real-type neighbour selection, paired status application, and small-board behavior are documented.","evidence":["ev.pooka.start-corruption.1"]}
+{"method":"tdi5912.m0002","state":"understood","reason":"Native Poisoner eligibility, multiplicity-preserving random draw, and paired status application are documented.","evidence":["ev.poisoner.start-corruption.1"]}
+{"method":"tdi5909.m0003","state":"understood","reason":"The display Plague Doctor/internal Puzzlemaster identity and native Start corruption and Day picker-registration branches are documented.","evidence":["ev.puzzlemaster.start-day.1"]}
+{"method":"tdi5904.m0003","state":"understood","reason":"Native Drunk Start self-corruption behavior is documented.","evidence":["ev.drunk.self-corruption-bluff.1"]}
+{"method":"tdi5904.m0006","state":"understood","reason":"Native Drunk mutation-before-bluff-selection and script-registration behavior are documented.","evidence":["ev.drunk.self-corruption-bluff.1"]}
+{"method":"tdi5873.m0001","state":"understood","reason":"Native Alchemist Corrupted-resistance initialization is documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
+{"method":"tdi5873.m0005","state":"understood","reason":"Native Alchemist Init, Start cure gate, and Day reporting dispatch are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
+{"method":"tdi5873.m0006","state":"understood","reason":"Native Alchemist bluff cure gate, runtime-data replacement, and Day reporting dispatch are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
+{"method":"tdi5873.m0003","state":"understood","reason":"Native attempt-before-cure counting, ordered enumeration, and ignored cure result are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}
+{"method":"tdi5873.m0004","state":"understood","reason":"Native live Corrupted range scan, raw-status filter, and overlap preservation are documented.","evidence":["ev.alchemist.cure-lifecycle.1"]}

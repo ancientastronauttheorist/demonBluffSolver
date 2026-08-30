@@ -117,6 +117,28 @@ roles the first matching card ends that role's scan. Alchemist, Poisoner, and
 Puzzlemaster are explicit exceptions: every card sharing their data receives
 the ordered `Start` action.
 
+The current build's serialized `startGameActOrder` is exact and fingerprinted
+in the build manifest:
+
+```text
+Chancellor -> Pooka -> Poisoner -> Drunk -> Witch -> Marionette
+-> Puppeteer -> Baa -> Plague Doctor -> Shaman -> Alchemist
+-> Bounty Hunter -> Puppet -> Rambler -> Lilis
+```
+
+The asset names and embedded managed role types are separate identity layers.
+`Marionette` embeds role `Marionette` and is the solver's Twin Minion;
+`Puppeteer` embeds role `Mezepheles` and creates Puppet; `Plague Doctor` embeds
+role `Puzzlemaster`. For the corruption lifecycle, the configured sequence is
+therefore Pooka, Poisoner, Drunk, Puppeteer/Puppet conversion, Plague Doctor,
+Alchemist, then Puppet's own Start.
+
+Duplicate Alchemist, Poisoner, and Puzzlemaster data entries act synchronously
+from highest displayed ID to lowest; each later duplicate sees earlier status
+mutations. Ordinary roles stop after the first, highest-ID match. The asset
+review found one shipped `Characters` instance and no normal writer for the
+order, but did not dynamically rule out a mode or addressable replacing it.
+
 ## Per-card initialization and internal reveal
 
 `Character.Init` clears trailer text, acted UI, acted-info and runtime-data

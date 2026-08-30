@@ -183,6 +183,16 @@
       "sha256": "6BD99988279019EB3190F40940B1FF2242ED28A728BE22B9C48A26F118198C32",
       "size": 202560
     },
+    "level0": {
+      "path": "Demon Bluff_Data/level0",
+      "sha256": "B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1",
+      "size": 24296436
+    },
+    "sharedassets0": {
+      "path": "Demon Bluff_Data/sharedassets0.assets",
+      "sha256": "E0D239C03FA47EC138F9C2797779E83B65AEF41F30C5AD84D4CA76767A93E967",
+      "size": 25255232
+    },
     "scripting_assemblies": {
       "path": "Demon Bluff_Data/ScriptingAssemblies.json",
       "sha256": "5DE28E0487723BDC13BB1390260403C9B5E6C0D0808943D9173174235696C63A",
