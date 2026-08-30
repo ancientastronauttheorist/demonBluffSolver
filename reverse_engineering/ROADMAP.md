@@ -93,6 +93,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   helpers, close truthful/bluff Day output and Drunk status handling, expand
   the typed union to thirteen target sets and 221 memberships, and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Judge to managed `Judge2`; native-audit all ten role
+  methods plus eight dispatch, truth-appearance, click, and picker helpers,
+  close unrestricted target legality, deterministic corrupted-actor inversion,
+  exact one-reference output, and ResetAfterNight history, expand the typed
+  union to fourteen target sets and 239 memberships, and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

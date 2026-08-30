@@ -133,8 +133,9 @@ Important entry reminders:
    `next --dry` only when you need print-only inspection.
 2. For abilities: click the ability card, click targets, enter the result, run
    `ability_used <pos>`, then run `next`.
-3. Warning: clicking a card with an unused active ability activates that ability
-   instead of selecting it as a target.
+3. Warning: outside an active native picker, clicking a card with an unused
+   active ability activates that ability. Judge's picker routes target clicks
+   first, so an unused-active target is legal once Judge is already activated.
 4. For executions: dismiss mark menu, click sword, click target, screenshot, then
    run `execute <pos> <evil_role|good>`.
 5. Repeat until the game ends.
@@ -225,6 +226,14 @@ Memory reader notes:
   pairs are archived pre-audit fixtures and intentionally use their conservative
   legacy predicate. Do not infer that a role such as Gravedigger was removed
   from a few outputs.
+- The public Judge asset binds managed `Judge2`, not the unbound `Arbiter`.
+  Judge reports `CheckLyingAppearance(target)` when its actor is truthful and
+  deterministically inverts that value when the actor is lying, including a
+  corrupted Good Judge. Its picker accepts any board card: self, dead, hidden,
+  or a target with an unused active ability. The exact results are `#X is\nLying`
+  and `#X is\nsaying Truth`, with one target reference per chronological
+  `actedInfos` entry. Judge resets after every Night without clearing prior
+  results; preserve and validate the full history.
 - Rambler was redesigned. Old solver code modeled "picked by a liar silences
   Rambler"; that rule is obsolete. New rule: adjacent truthful characters tell
   Rambler to shut up instead of sharing their own info. `auto_card` should record

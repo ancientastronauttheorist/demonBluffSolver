@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Judge role implementation, managed internally as Judge2, with its dispatch, truth-appearance, and picker boundary",
+  "functions": [
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "CharacterHelper.CheckLyingAppearance",
+      "metadata_name": "CharacterHelper$$CheckLyingAppearance",
+      "signature": "bool CharacterHelper__CheckLyingAppearance (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397630"
+    },
+    {
+      "name": "CharacterPicker.CancelPick",
+      "metadata_name": "CharacterPicker$$CancelPick",
+      "signature": "void CharacterPicker__CancelPick (CharacterPicker_o* __this, const MethodInfo* method);",
+      "rva": "0x378CC0"
+    },
+    {
+      "name": "CharacterPicker.StartPickCharacters",
+      "metadata_name": "CharacterPicker$$StartPickCharacters",
+      "signature": "void CharacterPicker__StartPickCharacters (CharacterPicker_o* __this, int32_t howMany, Character_o* picker, const MethodInfo* method);",
+      "rva": "0x379260"
+    },
+    {
+      "name": "CharacterPicker.ClickedCharacter",
+      "metadata_name": "CharacterPicker$$ClickedCharacter",
+      "signature": "void CharacterPicker__ClickedCharacter (Character_o* ch, const MethodInfo* method);",
+      "rva": "0x378DB0"
+    },
+    {
+      "name": "Judge2.get_Description",
+      "metadata_name": "Judge2$$get_Description",
+      "signature": "System_String_o* Judge2__get_Description (Judge2_o* __this, const MethodInfo* method);",
+      "rva": "0x3DFA00"
+    },
+    {
+      "name": "Judge2.GetInfo",
+      "metadata_name": "Judge2$$GetInfo",
+      "signature": "ActedInfo_o* Judge2__GetInfo (Judge2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DF690"
+    },
+    {
+      "name": "Judge2.GetBluffInfo",
+      "metadata_name": "Judge2$$GetBluffInfo",
+      "signature": "ActedInfo_o* Judge2__GetBluffInfo (Judge2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DF630"
+    },
+    {
+      "name": "Judge2.Act",
+      "metadata_name": "Judge2$$Act",
+      "signature": "void Judge2__Act (Judge2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DE600"
+    },
+    {
+      "name": "Judge2.StopPick",
+      "metadata_name": "Judge2$$StopPick",
+      "signature": "void Judge2__StopPick (Judge2_o* __this, const MethodInfo* method);",
+      "rva": "0x3DF6F0"
+    },
+    {
+      "name": "Judge2.CharacterPicked",
+      "metadata_name": "Judge2$$CharacterPicked",
+      "signature": "void Judge2__CharacterPicked (Judge2_o* __this, const MethodInfo* method);",
+      "rva": "0x3DF020"
+    },
+    {
+      "name": "Judge2.BluffAct",
+      "metadata_name": "Judge2$$BluffAct",
+      "signature": "void Judge2__BluffAct (Judge2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DE870"
+    },
+    {
+      "name": "Judge2.CharacterPickedDrunk",
+      "metadata_name": "Judge2$$CharacterPickedDrunk",
+      "signature": "void Judge2__CharacterPickedDrunk (Judge2_o* __this, const MethodInfo* method);",
+      "rva": "0x3DEAE0"
+    },
+    {
+      "name": "Judge2.ConjourInfo",
+      "metadata_name": "Judge2$$ConjourInfo",
+      "signature": "System_String_o* Judge2__ConjourInfo (Judge2_o* __this, Character_o* character, bool isLying, const MethodInfo* method);",
+      "rva": "0x3DF560"
+    },
+    {
+      "name": "Judge2.ctor",
+      "metadata_name": "Judge2$$.ctor",
+      "signature": "void Judge2___ctor (Judge2_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    }
+  ]
+}

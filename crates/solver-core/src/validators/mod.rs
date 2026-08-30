@@ -993,29 +993,87 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     }
 }
 
-fn validate_judge(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
-    let target = match info_pos(&card.info_parsed, "target") {
-        Some(v) => v,
-        None => return true,
-    };
-    let claimed_lying = match info_bool(&card.info_parsed, "is_lying") {
-        Some(v) => v,
-        None => return true,
-    };
-    let pos = card.position;
+fn judge_observation_matches(
+    pos: u8,
+    target: u8,
+    claimed_lying: bool,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
     let truth = truth_status(pos, scenario, state);
-
-    // Corrupted Judge's ability doesn't work reliably
-    if truth == TruthStatus::Lying && !is_evil_in_board_state(pos, scenario, state) {
-        // Corrupted (not evil) Judge — skip validation
-        return true;
-    }
-
-    let target_truth = truth_status(target, scenario, state);
+    // Shipped Judge2 queries CheckLyingAppearance.  BluffAct, including the
+    // path used by a corrupted Good Judge, deterministically inverts that same
+    // predicate rather than producing an unconstrained result.
+    let target_truth = truth_appearance_status(target, scenario, state);
     let actually_lying = target_truth == TruthStatus::Lying;
 
     if truth == TruthStatus::Truthful { claimed_lying == actually_lying }
     else { claimed_lying != actually_lying }
+}
+
+fn validate_judge(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    // Judge resets after Night. New state can retain every fired result under
+    // `observations`; legacy fixtures keep the single top-level shape. Once
+    // evidence is present its shape is strict so malformed records cannot
+    // silently erase a constraint.
+    if let Some(value) = card.info_parsed.get("observations") {
+        let observations = match value.as_array() {
+            Some(observations) => observations,
+            None => return false,
+        };
+        if !observations.is_empty() {
+            if card.position == 0 || card.position > state.n_cards {
+                return false;
+            }
+            return observations.iter().all(|value| {
+                let observation = match value.as_object() {
+                    Some(observation) => observation,
+                    None => return false,
+                };
+                let target = match info_pos(observation, "target") {
+                    Some(target) if target > 0 && target <= state.n_cards => target,
+                    _ => return false,
+                };
+                let claimed_lying = match info_bool(observation, "is_lying") {
+                    Some(claimed_lying) => claimed_lying,
+                    None => return false,
+                };
+                judge_observation_matches(
+                    card.position,
+                    target,
+                    claimed_lying,
+                    scenario,
+                    state,
+                )
+            });
+        }
+    }
+
+    let has_target = card.info_parsed.contains_key("target");
+    let has_result = card.info_parsed.contains_key("is_lying");
+    if !has_target && !has_result {
+        return true;
+    }
+    if !has_target || !has_result || card.position == 0 || card.position > state.n_cards {
+        return false;
+    }
+
+    let target = match info_pos(&card.info_parsed, "target") {
+        Some(target) if target > 0 && target <= state.n_cards => target,
+        _ => return false,
+    };
+    let claimed_lying = match info_bool(&card.info_parsed, "is_lying") {
+        Some(claimed_lying) => claimed_lying,
+        None => return false,
+    };
+
+    judge_observation_matches(
+        card.position,
+        target,
+        claimed_lying,
+        scenario,
+        state,
+    )
 }
 
 fn validate_alchemist(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -1758,6 +1816,168 @@ mod tests {
         s.n_cards = n_cards;
         s.cards = cards;
         s
+    }
+
+    #[test]
+    fn judge_truthful_callback_reports_target_lying_appearance() {
+        let says_lying = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": true}),
+        );
+        let says_truthful = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": false}),
+        );
+        let state = base_state(
+            2,
+            vec![says_lying.clone(), make_card(2, "Baker", json!({}))],
+        );
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Minion".to_string());
+
+        assert!(validate_judge(&says_lying, &scenario, &state));
+        assert!(!validate_judge(&says_truthful, &scenario, &state));
+    }
+
+    #[test]
+    fn corrupted_good_judge_deterministically_inverts_callback() {
+        let says_truthful = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": false}),
+        );
+        let says_lying = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": true}),
+        );
+        let state = base_state(
+            2,
+            vec![says_truthful.clone(), make_card(2, "Baker", json!({}))],
+        );
+        let mut scenario = empty_scenario();
+        scenario.corrupted.insert(1);
+        scenario.evil_positions.insert(2, "Minion".to_string());
+
+        assert!(validate_judge(&says_truthful, &scenario, &state));
+        assert!(!validate_judge(&says_lying, &scenario, &state));
+    }
+
+    #[test]
+    fn judge_uses_confessor_truthful_appearance_override() {
+        let says_truthful = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": false}),
+        );
+        let says_lying = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": true}),
+        );
+        let state = base_state(
+            2,
+            vec![
+                says_truthful.clone(),
+                make_card(2, "Confessor", json!({})),
+            ],
+        );
+        let mut corrupted = empty_scenario();
+        corrupted.corrupted.insert(2);
+
+        assert_eq!(truth_status(2, &corrupted, &state), TruthStatus::Lying);
+        assert_eq!(
+            truth_appearance_status(2, &corrupted, &state),
+            TruthStatus::Truthful,
+        );
+        assert!(validate_judge(&says_truthful, &corrupted, &state));
+        assert!(!validate_judge(&says_lying, &corrupted, &state));
+
+        let mut evil = empty_scenario();
+        evil.evil_positions.insert(2, "Minion".to_string());
+        assert!(validate_judge(&says_truthful, &evil, &state));
+        assert!(!validate_judge(&says_lying, &evil, &state));
+    }
+
+    #[test]
+    fn judge_no_info_is_vacuous_but_partial_or_out_of_range_evidence_rejects() {
+        let no_info = make_card(1, "Judge", json!({}));
+        let empty_observations = make_card(1, "Judge", json!({"observations": []}));
+        let target_only = make_card(1, "Judge", json!({"target": 1}));
+        let result_only = make_card(1, "Judge", json!({"is_lying": true}));
+        let out_of_range = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": false}),
+        );
+        let invalid_actor = make_card(
+            2,
+            "Judge",
+            json!({"target": 1, "is_lying": false}),
+        );
+        let state = base_state(1, vec![no_info.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.corrupted.insert(1);
+
+        assert!(validate_judge(&no_info, &scenario, &state));
+        assert!(validate_judge(&empty_observations, &scenario, &state));
+        assert!(!validate_judge(&target_only, &scenario, &state));
+        assert!(!validate_judge(&result_only, &scenario, &state));
+        assert!(!validate_judge(&out_of_range, &scenario, &state));
+        assert!(!validate_judge(&invalid_actor, &scenario, &state));
+    }
+
+    #[test]
+    fn judge_rejects_malformed_repeated_observation_evidence() {
+        let state = base_state(2, vec![make_card(1, "Judge", json!({}))]);
+        let scenario = empty_scenario();
+        let malformed = [
+            json!({"observations": "not-an-array"}),
+            json!({"observations": [false]}),
+            json!({"observations": [{}]}),
+            json!({"observations": [{"target": "2", "is_lying": false}]}),
+            json!({"observations": [{"target": 2, "is_lying": "false"}]}),
+            json!({"observations": [{"target": 0, "is_lying": false}]}),
+            json!({"observations": [{"target": 3, "is_lying": false}]}),
+        ];
+
+        for info in malformed {
+            let judge = make_card(1, "Judge", info);
+            assert!(!validate_judge(&judge, &scenario, &state));
+        }
+    }
+
+    #[test]
+    fn judge_validates_every_reset_after_night_observation() {
+        let repeated = make_card(
+            1,
+            "Judge",
+            json!({
+                "observations": [
+                    {"target": 2, "is_lying": false},
+                    {"target": 3, "is_lying": true}
+                ]
+            }),
+        );
+        let state = base_state(
+            3,
+            vec![
+                repeated.clone(),
+                make_card(2, "Baker", json!({})),
+                make_card(3, "Baker", json!({})),
+            ],
+        );
+        let mut compatible = empty_scenario();
+        compatible.evil_positions.insert(3, "Minion".to_string());
+        assert!(validate_judge(&repeated, &compatible, &state));
+
+        let mut contradicts_first = empty_scenario();
+        contradicts_first
+            .evil_positions
+            .insert(2, "Minion".to_string());
+        assert!(!validate_judge(&repeated, &contradicts_first, &state));
     }
 
     fn dreamer_state(

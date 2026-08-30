@@ -19,7 +19,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Gemcrafter — self-pointing constraint (medium priority)
 - [x] Hunter — Wretch bug (critical)
 - [x] Jester — no issues
-- [x] Judge — no issues
+- [x] Judge — full managed `Judge2` boundary native-audited; corrupted-actor
+  inversion and ResetAfterNight history fixed
 - [x] Knight — no issues
 - [x] Knitter — no issues
 - [x] Lover — no issues
@@ -135,3 +136,6 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] **Plague Doctor**: Full managed `Puzzlemaster` boundary audited; strict
   active-result shape, self/dead targeting, Wretch alignment, ordinary Drunk
   status, random truth/bluff reveal support, and legacy `evil_pos` covered.
+- [x] **Judge**: Full managed `Judge2` boundary audited; strict speech/reference
+  shape, self/dead/hidden/unused-active targeting, truth-appearance queries,
+  deterministic corrupted-actor inversion, and multi-night history covered.

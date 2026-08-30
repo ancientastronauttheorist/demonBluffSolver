@@ -717,6 +717,44 @@ class GameSession:
                 print(f"  Current reveal_order: {self.reveal_order}")
                 print(f"  If cards were flipped out of #1->#N order, this is correct.")
                 print(f"  If this is a mistake, fix now — reveal_order affects Baker validation.")
+        # Judge is ResetAfterNight in the shipped asset. Preserve every prior
+        # result when a later round reuses the same apparent Judge; the
+        # top-level target/is_lying pair remains the newest observation for
+        # backward compatibility with existing saves.
+        role_key = card.apparent_role.lower().replace(" ", "_")
+        if role_key == "judge" and _has_active_clue_result(card):
+            existing = next(
+                (
+                    previous
+                    for previous in self.cards
+                    if previous.position == card.position
+                    and previous.apparent_role.lower().replace(" ", "_") == "judge"
+                ),
+                None,
+            )
+            # A position still marked used is a same-round re-read/correction,
+            # so replace it. Only append after Night has reset that marker.
+            if (
+                existing is not None
+                and _has_active_clue_result(existing)
+                and card.position not in self.used_abilities
+            ):
+                prior = existing.info_parsed.get("observations")
+                if isinstance(prior, list):
+                    observations = [
+                        dict(item) for item in prior if isinstance(item, dict)
+                    ]
+                else:
+                    observations = [{
+                        "target": existing.info_parsed["target"],
+                        "is_lying": existing.info_parsed["is_lying"],
+                    }]
+                observations.append({
+                    "target": card.info_parsed["target"],
+                    "is_lying": card.info_parsed["is_lying"],
+                })
+                card.info_parsed["observations"] = observations
+
         # Replace if same position already exists (re-read)
         self.cards = [c for c in self.cards if c.position != card.position]
         self.cards.append(card)
@@ -730,7 +768,6 @@ class GameSession:
             "jester",
             "judge",
         }
-        role_key = card.apparent_role.lower().replace(" ", "_")
         if role_key in active_result_roles and _has_active_clue_result(card):
             self.mark_ability_used(card.position)
         # Medium reveals a dead card's role — auto-create card entry for
@@ -820,6 +857,29 @@ class GameSession:
     def mark_ability_used(self, pos: int):
         if pos not in self.used_abilities:
             self.used_abilities.append(pos)
+
+    def reset_after_night_abilities(self) -> list[int]:
+        """Apply shipped ResetAfterNight usage to the session model.
+
+        The current public roster audit has proven this usage mode for Judge.
+        Keep its accumulated clue evidence, but make each apparent Judge
+        available to the recommender again after a completed night.
+        """
+        from knowledge_base import get_card
+
+        resettable = set()
+        for card in self.cards:
+            card_def = get_card(card.apparent_role)
+            if card_def and card_def.ability_resets_after_night:
+                resettable.add(card.position)
+        reset = sorted(resettable.intersection(self.used_abilities))
+        if reset:
+            self.used_abilities = [
+                position
+                for position in self.used_abilities
+                if position not in resettable
+            ]
+        return reset
 
     def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool,
                           revealed_role: Optional[str] = None,
@@ -1235,23 +1295,30 @@ class GameSession:
         if ability_name == "dreamer" and len(targets) != 2:
             return {"success": False, "info_parsed": None,
                     "error": f"Dreamer requires exactly 2 targets, got {targets}"}
+        if ability_name == "judge" and len(targets) != 1:
+            return {"success": False, "info_parsed": None,
+                    "error": f"Judge requires exactly 1 target, got {targets}"}
         if ability_name == "plague_doctor" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Plague Doctor requires exactly 1 target, got {targets}"}
-        if ability_name == "plague_doctor":
+        if ability_name in {"judge", "plague_doctor"}:
             actor = next((card for card in self.cards if card.position == pos), None)
             actor_role = (
                 actor.apparent_role.lower().replace(" ", "_")
                 if actor is not None else None
             )
-            if actor_role != "plague_doctor":
+            if actor_role != ability_name:
                 shown = actor.apparent_role if actor is not None else "unrevealed"
+                display_name = (
+                    "Plague Doctor" if ability_name == "plague_doctor"
+                    else "Judge"
+                )
                 return {
                     "success": False,
                     "info_parsed": None,
                     "error": (
                         f"Position #{pos} is {shown}, not an apparent "
-                        "Plague Doctor"
+                        f"{display_name}"
                     ),
                 }
 
@@ -1270,6 +1337,10 @@ class GameSession:
 
         from knowledge_base import get_card
         for t in targets:
+            # Judge's picker-first OnClick branch accepts every board card,
+            # including self and targets with their own unused active ability.
+            if ability_name == "judge":
+                continue
             # Native PD explicitly supports self-targeting. Once its picker is
             # active, the repeated card click is routed to that picker.
             if ability_name == "plague_doctor" and t == pos:
@@ -1396,8 +1467,19 @@ class GameSession:
             )
             return {"success": True, "info_parsed": pd_result, "error": None}
 
-        # Step 4b: Parse ordinary clue-producing abilities via auto_card.
-        parsed = _parse_clue_from_memory(target_card_data)
+        # Step 4b: Judge has a strict one-target public result boundary.
+        if ability_name == "judge":
+            parsed, parse_error = _parse_judge_result_from_memory(
+                target_card_data,
+                expected_target=targets[0],
+                n_cards=self.n_cards,
+            )
+            if parse_error:
+                return {"success": False, "info_parsed": None,
+                        "error": parse_error}
+        else:
+            # Parse ordinary clue-producing abilities via auto_card.
+            parsed = _parse_clue_from_memory(target_card_data)
         if parsed is None:
             return {"success": False, "info_parsed": None,
                     "error": f"Could not parse ability result from memory data"}
@@ -1902,7 +1984,99 @@ def _parse_pd_ability_result_from_memory(
     return None, f"Unrecognized Plague Doctor result text: {clue!r}"
 
 
-def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
+def _parse_judge_result_from_memory(
+    card: dict,
+    *,
+    expected_target: int,
+    n_cards: int,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Parse the shipped Judge2 result and cross-check its public reference.
+
+    Judge2 emits exactly one ``ActedInfo`` reference: the picked character.
+    Its two public strings are ``#X is\nsaying Truth`` and
+    ``#X is\nLying``.  Treat anything else as recovery-worthy instead of
+    silently turning an unfamiliar clue into a "Truth" observation.
+    """
+    import re
+
+    if not 1 <= expected_target <= n_cards:
+        return None, f"Judge target #{expected_target} is outside 1..{n_cards}"
+
+    clue = (card.get('clue_text') or '').strip()
+    infos = card.get('acted_infos') or []
+    if not infos:
+        return None, "Judge result has no acted-info record"
+
+    observations = []
+    for index, info in enumerate(infos):
+        targets = info.get('targets') or []
+        if len(targets) != 1:
+            return None, (
+                "Each Judge result must contain exactly one picked-character "
+                f"reference; history entry {index} has {targets}"
+            )
+        recorded_target = targets[0]
+        if (
+            not isinstance(recorded_target, int)
+            or not 1 <= recorded_target <= n_cards
+        ):
+            return None, (
+                f"Judge memory reference must be within 1..{n_cards}: "
+                f"{recorded_target!r}"
+            )
+
+        desc = (info.get('desc') or '').strip()
+        match = re.fullmatch(
+            r'#\s*(\d+)\s+is\s+(saying\s+Truth|Lying)',
+            desc,
+            re.IGNORECASE,
+        )
+        if not match:
+            return None, f"Unrecognized Judge acted-info text: {desc!r}"
+        clue_target = int(match.group(1))
+        if not 1 <= clue_target <= n_cards:
+            return None, f"Judge speech position must be within 1..{n_cards}"
+        if clue_target != recorded_target:
+            return None, (
+                f"Judge history entry {index} target mismatch: speech named "
+                f"#{clue_target}, memory recorded #{recorded_target}"
+            )
+        observations.append({
+            "target": recorded_target,
+            "is_lying": match.group(2).lower() == 'lying',
+        })
+
+    newest = observations[-1]
+    recorded_target = newest["target"]
+    if recorded_target != expected_target:
+        return None, (
+            f"Judge picked-target mismatch: clicked #{expected_target}, "
+            f"latest memory record is #{recorded_target}"
+        )
+
+    latest_desc = (infos[-1].get('desc') or '').strip()
+    if clue != latest_desc:
+        return None, (
+            "Judge saved speech does not match the latest acted-info text: "
+            f"{clue!r} != {latest_desc!r}"
+        )
+
+    info_parsed = dict(newest)
+    if len(observations) > 1:
+        info_parsed["observations"] = observations
+    return CardInfo(
+        card['position'],
+        "Judge",
+        info_text=clue,
+        info_parsed=info_parsed,
+    ), None
+
+
+def _parse_clue_from_memory(
+    card: dict,
+    *,
+    n_cards: Optional[int] = None,
+) -> Optional[CardInfo]:
     """Parse memory reader card data into a CardInfo, or None if unparseable.
 
     Handles passive clues read from savedAct/actedInfos/runtimeData.
@@ -2089,10 +2263,29 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
             return card_bishop(pos, targets, types)
         return card_bishop(pos, targets)
 
-    # --- Judge: target + lying from clue ---
-    if role_lower == 'judge' and targets:
-        is_lying = 'lying' in clue.lower() or 'liar' in clue.lower()
-        return card_judge(pos, targets[0], is_lying)
+    # --- Judge2: exact public sentence + exactly one picked reference ---
+    if role_lower == 'judge' and infos:
+        latest_targets = infos[-1].get('targets') or []
+        if (
+            len(latest_targets) != 1
+            or not isinstance(latest_targets[0], int)
+            or latest_targets[0] < 1
+        ):
+            return None
+        parsed, _ = _parse_judge_result_from_memory(
+            card,
+            expected_target=latest_targets[0],
+            # The general clue parser does not own board state.  The exact
+            # automation path below supplies the real upper bound; this still
+            # rejects non-positive references and malformed shapes/text.
+            n_cards=n_cards or max(
+                target
+                for info in infos
+                for target in (info.get('targets') or [1])
+                if isinstance(target, int)
+            ),
+        )
+        return parsed
 
     # --- Dreamer: public two-target role pair/Cabbage, then legacy one-target ---
     if role_lower == 'dreamer':
@@ -3222,7 +3415,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if state not in ('Alive', 'Revealed'):
                 continue  # Hidden/Dead — skip
 
-            parsed = _parse_clue_from_memory(mc)
+            parsed = _parse_clue_from_memory(mc, n_cards=session.n_cards)
             if parsed:
                 existing = entered.get(pos)
                 if existing:
@@ -3716,12 +3909,18 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         # Issue #7: Auto-deduct 2 HP for Lilis night
         old_hp = session.hp
         session.hp -= 2
+        reset_abilities = session.reset_after_night_abilities()
         session.save()
         confirmed_msg = ""
         if n_evil == len(positions) and n_evil > 0:
             confirmed_msg = f" (confirmed evil: {['#'+str(p) for p in positions]})"
         print(f"Night kills: {['#'+str(p) for p in positions]}, {n_evil} evil among them{confirmed_msg}")
         print(f"  Lilis night HP: {old_hp} -> {session.hp}")
+        if reset_abilities:
+            print(
+                "  ResetAfterNight abilities ready again: "
+                f"{['#' + str(position) for position in reset_abilities]}"
+            )
         return None
 
     if cmd == "night_no_kill":
@@ -3736,6 +3935,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         # Issue #7: Auto-deduct 2 HP for Lilis night
         old_hp = session.hp
         session.hp -= 2
+        reset_abilities = session.reset_after_night_abilities()
         if len(unrevealed) == 1 and unrevealed.issubset(blocked):
             lilis_pos = next(iter(unrevealed))
             if lilis_pos not in session.confirmed_evil:
@@ -3755,6 +3955,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("  No Lilis position can be inferred yet.")
             print("  If a card actually died, use night_kill instead.")
             print(f"  HP: {old_hp} -> {session.hp}")
+        if reset_abilities:
+            print(
+                "  ResetAfterNight abilities ready again: "
+                f"{['#' + str(position) for position in reset_abilities]}"
+            )
         return None
 
     if cmd == "log":

@@ -397,6 +397,38 @@ def truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
     return _truth_status(pos, scenario, state)
 
 
+def _truth_appearance_status(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> TruthStatus:
+    """Model native ``CharacterHelper.CheckLyingAppearance``.
+
+    Confessor applies ``AppearTruthfull`` from both its real and bluff-role
+    initialization paths.  The scenario model does not carry arbitrary
+    appearance statuses, so every other apparent role falls back to the actual
+    native lie predicate represented by :func:`_truth_status`.
+    """
+    card = _get_card_at(pos, state)
+    if (
+        card is not None
+        and card.apparent_role.lower().replace(" ", "").replace("_", "")
+        == "confessor"
+    ):
+        return TruthStatus.TRUTHFUL
+
+    return _truth_status(pos, scenario, state)
+
+
+def truth_appearance_status(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> TruthStatus:
+    """Public query for the truthfulness a Judge perceives at a position."""
+    return _truth_appearance_status(pos, scenario, state)
+
+
 if __name__ == "__main__":
     # Quick smoke test
     print("Solver module loaded successfully (types + helpers only)")

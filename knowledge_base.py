@@ -89,6 +89,7 @@ class Card:
     disguises: bool  # Does this character disguise?
     game_start_ability: bool = False  # Does ability trigger at game start?
     activated_ability: bool = False  # Does the player activate this ability?
+    ability_resets_after_night: bool = False  # Reusable after each Night?
     corrupted_note: bool = False  # Does the card mention corruption?
     cant_lie: bool = False  # "I Can't Lie" keyword
 
@@ -141,8 +142,9 @@ VILLAGERS = [
          "Pick 3 characters. Learn how many of them are Evil.",
          lies=False, disguises=False, activated_ability=True),
     Card("Judge", Role.VILLAGER, Alignment.GOOD,
-         "Pick 1 character. Learn if they're Lying.",
-         lies=False, disguises=False, activated_ability=True),
+         "Pick 1 character. Learn if they're Lying. Resets after Night.",
+         lies=False, disguises=False, activated_ability=True,
+         ability_resets_after_night=True),
     Card("Knight", Role.VILLAGER, Alignment.GOOD,
          "I can't die.",
          lies=False, disguises=False),
@@ -286,4 +288,6 @@ if __name__ == "__main__":
             flags.append("GAME_START")
         if card.activated_ability:
             flags.append("ACTIVATED")
+        if card.ability_resets_after_night:
+            flags.append("RESET_AFTER_NIGHT")
         print(f"  [{card.role.value}] {card.name}: {' '.join(flags)}")

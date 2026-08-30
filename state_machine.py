@@ -872,6 +872,13 @@ class GameStateMachine:
             self.session.save()
             return
 
+        reset_abilities = self.session.reset_after_night_abilities()
+        if reset_abilities:
+            print(
+                "  [auto] ResetAfterNight abilities ready again: "
+                f"{['#' + str(position) for position in reset_abilities]}"
+            )
+
         self.session.save()
         self._snapshot_counts()
 

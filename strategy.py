@@ -16,7 +16,7 @@ from typing import Optional
 from knowledge_base import execution_cost_for, get_card, Role, CARDS_BY_NAME
 from solver import (
     GameState, SolverResult, Scenario, TruthStatus,
-    truth_status, scenario_is_evil, effective_alignment,
+    truth_status, truth_appearance_status, scenario_is_evil, effective_alignment,
     effective_role_at,
     get_card_at, adjacent_positions, Alignment,
     EXECUTION_IMMUNE_ROLES,
@@ -696,8 +696,8 @@ def _jester_ground_truth(targets: list[int], scenario: Scenario, state: GameStat
 
 
 def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bool:
-    """Judge: is target lying?"""
-    return truth_status(target, scenario, state) == TruthStatus.LYING
+    """Judge2: does the target appear to be lying?"""
+    return truth_appearance_status(target, scenario, state) == TruthStatus.LYING
 
 
 def _dreamer_effective_role(target: int, scenario: Scenario, state: GameState) -> str:
@@ -1074,67 +1074,51 @@ def _recommend_judge(
     result: SolverResult,
     judge_targets: list[int],
 ) -> Optional[AbilityRecommendation]:
-    """Recommend a Judge target using compatible posterior size.
-
-    A corrupted Judge does not produce a clean inversion; its observed result is
-    effectively unconstrained, so entropy over disjoint branches is the wrong
-    metric here.
-    """
+    """Recommend a Judge2 target by deterministic observed-branch entropy."""
     scenario_count = len(result.surviving_scenarios)
     if scenario_count == 0:
         return None
 
     best_target = None
-    best_expected_posterior = float('inf')
+    best_entropy = -1.0
+    best_counts = (0, 0)
 
-    for target in judge_targets:
-        compatible = {True: 0, False: 0}
+    # Native picker accepts every board Character, including the actor and dead
+    # cards.  Prefer a non-self target, then the lowest position, on exact ties.
+    ordered_targets = sorted(
+        set(judge_targets),
+        key=lambda target: (target == ability_pos, target),
+    )
+    for target in ordered_targets:
+        observed_counts = {True: 0, False: 0}
 
         for scenario in result.surviving_scenarios:
             actual = _judge_ground_truth(target, scenario, state)
-            if ability_pos in scenario.corrupted:
-                compatible[True] += 1
-                compatible[False] += 1
-                continue
-
             truth = truth_status(ability_pos, scenario, state)
             observed = actual if truth == TruthStatus.TRUTHFUL else (not actual)
-            compatible[observed] += 1
+            observed_counts[observed] += 1
 
-        total_weight = sum(compatible.values())
-        if total_weight == 0:
-            continue
-
-        expected_posterior = sum(c * c for c in compatible.values()) / total_weight
-        if expected_posterior < best_expected_posterior:
-            best_expected_posterior = expected_posterior
+        entropy = _shannon_entropy(
+            [observed_counts[False], observed_counts[True]]
+        )
+        if entropy > best_entropy:
+            best_entropy = entropy
             best_target = target
+            best_counts = (observed_counts[False], observed_counts[True])
 
     if best_target is None:
         return None
-
-    corr = _corruption_risk(ability_pos, result, state)
-    adjusted = best_expected_posterior * (1 + 0.5 * corr)
-    info_gain = 0.0
-    if adjusted > 0:
-        info_gain = max(0.0, math.log2(scenario_count) - math.log2(adjusted))
-
-    warnings = []
-    if corr > 0:
-        warnings.append(
-            f"Corruption risk: {corr:.0%} -- corrupted Judge results are unreliable"
-        )
 
     return AbilityRecommendation(
         position=ability_pos,
         ability_name="Judge",
         targets=[best_target],
-        score=info_gain,
+        score=best_entropy,
         reasoning=(
-            f"Expected posterior {best_expected_posterior:.1f} scenarios "
-            f"(adjusted {adjusted:.1f}, info gain {info_gain:.3f} bits)"
+            f"Entropy {best_entropy:.3f} bits over deterministic native Judge "
+            f"observations (not lying={best_counts[0]}, lying={best_counts[1]})"
         ),
-        warnings=warnings,
+        warnings=[],
     )
 
 
@@ -1550,11 +1534,14 @@ def recommend_abilities(
 
     timing = _ability_timing_factor(state)
     recommendations = []
-    available = [p for p in range(1, state.n_cards + 1) if p not in state.executed]
+    dead_positions = set(state.executed) | set(state.night_kills)
+    available = [
+        p for p in range(1, state.n_cards + 1)
+        if p not in dead_positions
+    ]
 
-    # Build sets of useless targets
-    # Poet targets are useless for Judge (random info = meaningless "lying" check)
-    poet_positions = {c.position for c in state.cards if c.apparent_role.replace("_", " ") == "Poet"}
+    # Build sets of dangerous or ineffective targets for abilities that impose
+    # native target restrictions or kill their target.
     # Bombardier targets are dangerous for Slayer (auto-lose if killed)
     bombardier_safe = set(result.bombardier_positions)
     # Execution-immune targets are useless for Slayer
@@ -1563,7 +1550,7 @@ def recommend_abilities(
 
     for card in state.cards:
         pos = card.position
-        if pos in state.executed or pos in used_abilities:
+        if pos in dead_positions or pos in used_abilities:
             continue
 
         role = card.apparent_role.replace("_", " ")
@@ -1592,13 +1579,10 @@ def recommend_abilities(
             _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Judge":
-            # Filter out Poets — their info is random, so Judge result is meaningless
-            judge_targets = [t for t in others if t not in poet_positions]
-            if not judge_targets:
-                continue
+            # Judge's shared picker accepts every board Character, including
+            # self, executed/night-killed cards, and Poet.
+            judge_targets = list(range(1, state.n_cards + 1))
             rec = _recommend_judge(pos, state, result, judge_targets)
-            if rec and rec.targets and rec.targets[0] in poet_positions:
-                rec.warnings.append("WARNING: Target is a Poet (random info) — Judge result meaningless!")
             _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Dreamer" and len(others) >= 2:
@@ -1623,7 +1607,6 @@ def recommend_abilities(
             # Native's generic character picker permits self and dead cards.
             # Prefer live non-self targets on equal information, then dead
             # targets, with the always-clean self-check last.
-            dead_positions = set(state.executed) | set(state.night_kills)
             candidates = (
                 [
                     p for p in range(1, state.n_cards + 1)

@@ -8,6 +8,7 @@ from solver import (
     GameState,
     Scenario,
     TruthStatus,
+    truth_appearance_status,
     truth_status,
 )
 
@@ -66,6 +67,28 @@ class TruthStatusTests(unittest.TestCase):
 
         self.assertEqual(
             truth_status(1, scenario, make_state("Baker")), TruthStatus.TRUTHFUL
+        )
+
+    def test_confessor_always_appears_truthful_to_judge(self):
+        corrupted = Scenario(evil_positions={}, corrupted={1})
+        evil = Scenario(evil_positions={1: "Pooka"})
+
+        for scenario in (corrupted, evil):
+            self.assertEqual(
+                truth_status(1, scenario, make_state("Confessor")),
+                TruthStatus.LYING,
+            )
+            self.assertEqual(
+                truth_appearance_status(1, scenario, make_state("Confessor")),
+                TruthStatus.TRUTHFUL,
+            )
+
+    def test_non_confessor_appearance_falls_back_to_actual_truth(self):
+        scenario = Scenario(evil_positions={1: "Pooka"})
+
+        self.assertEqual(
+            truth_appearance_status(1, scenario, make_state("Baker")),
+            TruthStatus.LYING,
         )
 
 

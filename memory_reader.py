@@ -151,7 +151,9 @@ DISPLAY_NAMES = {
     'SaintVillager': 'Bombardier',
     'Athlete': 'Bard',
     'Acrobat': 'Acrobat',
-    'Arbiter': 'Judge',
+    # The shipped public Judge CharacterData binds Judge2. Arbiter is a
+    # separate unbound implementation and must not be conflated with it.
+    'Judge2': 'Judge',
     'Noble': 'Noble',
     'Gossip': 'Gossip',
     'Gambler': 'Gemcrafter',

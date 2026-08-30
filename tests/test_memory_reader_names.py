@@ -10,6 +10,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Cipher": "Witch",
             "Imp": "Baa",
             "Illuzionist": "Shaman",
+            "Judge2": "Judge",
             "Marionette": "Twin Minion",
             "Mezepheles": "Puppeteer",
             "Puzzlemaster": "Plague Doctor",
@@ -17,6 +18,8 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             # Spy is a distinct native Minion implementation, not the managed
             # class bound by the public Plague Doctor CharacterData.
             "Spy": "Spy",
+            # Arbiter is a distinct, currently unbound native role.
+            "Arbiter": "Arbiter",
         }
 
         for internal_name, display_name in expected.items():
@@ -27,6 +30,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
         expected = {
             "Baron_04539999": "Chancellor",
             "Imp_58992273": "Baa",
+            "Judge_87202475": "Judge",
             "Marionette_21595": "Twin Minion",
             "Mezepheles_09511163": "Puppeteer",
             "Plague Doctor_49312486": "Plague Doctor",
