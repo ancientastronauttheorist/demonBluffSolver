@@ -197,17 +197,33 @@ class ChancellorTraceTests(unittest.TestCase):
             _compute_position_fingerprint(2, trace("Drunk"), state),
         )
 
-    def test_slayer_never_targets_generated_bombardier_candidate(self):
+    def test_slayer_can_target_probable_evil_showing_as_bombardier(self):
         state = GameState(
             n_cards=3,
             deck=DeckComposition([], ["Bombardier"], ["Chancellor"], []),
             cards=[CardInfo(1, "Slayer")],
         )
-        scenario = Scenario(evil_positions={3: "Chancellor"})
-        result = SolverResult([], [], [2], 1, 1, [scenario])
+        scenarios = [
+            Scenario(evil_positions={2: "Chancellor"}) for _ in range(4)
+        ] + [Scenario(evil_positions={3: "Chancellor"})]
+        result = SolverResult([], [], [2], 5, 5, scenarios)
         recommendation = _recommend_slayer(1, state, result)
         self.assertIsNotNone(recommendation)
-        self.assertNotEqual(recommendation.targets, [2])
+        self.assertEqual(recommendation.targets, [2])
+
+    def test_slayer_can_target_probable_evil_showing_as_knight(self):
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition(["Slayer", "Knight"], [], ["Chancellor"], []),
+            cards=[CardInfo(1, "Slayer"), CardInfo(2, "Knight")],
+        )
+        scenarios = [
+            Scenario(evil_positions={2: "Chancellor"}) for _ in range(4)
+        ] + [Scenario(evil_positions={3: "Chancellor"})]
+        result = SolverResult([], [], [], 5, 5, scenarios)
+        recommendation = _recommend_slayer(1, state, result)
+        self.assertIsNotNone(recommendation)
+        self.assertEqual(recommendation.targets, [2])
 
     def test_resistant_generated_drunk_keeps_truth_pd_risk_and_damage_surfaces(self):
         state = GameState(

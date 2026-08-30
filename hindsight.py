@@ -18,9 +18,9 @@ from dataclasses import dataclass, field
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from solver import GameState, CardInfo, DeckComposition
+from solver import GameState, CardInfo, DeckComposition, slayer_revealed_role
+from knowledge_base import Alignment, execution_cost_for, get_card
 from rust_solver import rust_solve_to_objects
-from knowledge_base import execution_cost_for
 
 CASES_DIR_LEGACY = os.path.join(os.path.dirname(__file__), "tests", "cases")
 CASES_DIR = os.path.join(os.path.dirname(__file__), "tests", "cases_v2")
@@ -208,18 +208,29 @@ def replay_hindsight(case: dict) -> HindsightResult:
     case_confirmed_good = set(case.get("confirmed_good", []))
     case_evil_roles = {int(k): v for k, v in case.get("executed_evil_roles", {}).items()}
     case_good_roles = {int(k): v for k, v in case.get("executed_good_roles", {}).items()}
+    case_good_corrupted = {
+        int(k): v for k, v in case.get("executed_good_corrupted", {}).items()
+    }
 
     for sr in case.get("slayer_results", []):
         if sr.get("killed"):
             tp = sr["target_pos"]
             pre_executed.append(tp)
-            if tp in case_confirmed_good:
+            revealed_role = slayer_revealed_role(sr)
+            role_def = get_card(revealed_role) if revealed_role else None
+            target_was_good = (
+                role_def is not None and role_def.alignment == Alignment.GOOD
+            ) or (tp in case_confirmed_good and tp not in case_evil_roles)
+            if target_was_good:
                 pre_confirmed_good.append(tp)
-                if tp in case_good_roles:
-                    pre_exec_good_roles[tp] = case_good_roles[tp]
+                good_role = revealed_role or case_good_roles.get(tp)
+                if good_role:
+                    pre_exec_good_roles[tp] = good_role
+                if tp in case_good_corrupted:
+                    pre_exec_good_corrupted[tp] = case_good_corrupted[tp]
             else:
                 pre_confirmed_evil.append(tp)
-                evil_role = sr.get("evil_role") or case_evil_roles.get(tp)
+                evil_role = revealed_role or case_evil_roles.get(tp)
                 if evil_role:
                     pre_exec_evil_roles[tp] = evil_role
 

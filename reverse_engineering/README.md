@@ -141,6 +141,12 @@ with earlier sets; CharacterData overloads receive explicit typed prototype
 aliases, and the Helpers/Calculator `RollDice` shared native body retains both
 managed identities. All 20 are documented in the
 [`bluff-acquisition audit`](notes/systems/gameplay_bluff_acquisition.md).
+The first per-role boundaries add all ten Slayer methods and all seven Wretch
+methods (the latter is managed internally as `Recluse`). Their paired
+[`Slayer`](notes/roles/gameplay_role_slayer.md) and
+[`Wretch`](notes/roles/gameplay_role_wretch.md) audits join registered
+alignment, picker dispatch, the folded Wretch action body, and Slayer's
+kill-and-reveal behavior to the live Wretch regression.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -183,9 +189,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,218
-datatypes. Its six-set inventory contains 137 target memberships, 127 distinct
-selected FunctionDefinitions, and 126 unique native RVAs. The typed project is
+the union of every checked target set. The current archive contains 151,237
+datatypes. Its eight-set inventory contains 154 target memberships, 144 distinct
+selected FunctionDefinitions, and 142 unique native RVAs. The typed project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
 labels, prototypes, dynamic Windows x64 storage, and transaction completion
@@ -194,17 +200,19 @@ the saved program read-only and repeat those checks; `typed-export` requires
 their fresh success summaries and opens the project read-only. `typed-refresh`
 is the bounded post-analysis path for a changed canonical signature: it reopens
 the preserved project with analysis disabled, reapplies all target sets, saves,
-and then performs the same exact validations.
+and then performs the same exact validations in a separate read-only headless
+pass. Splitting those phases keeps the growing target inventory below Windows'
+command-line limit.
 
-The preserved fully analyzed typed project now covers all six target sets after
-a no-analysis refresh. Ten memberships are exact overlaps between boundaries;
-the one remaining shared RVA has incompatible managed identities and is
-explicitly canonicalized for the native program while both exact definitions
+The preserved fully analyzed typed project now covers all eight target sets
+after a no-analysis refresh. Ten memberships are exact overlaps between
+boundaries; two shared RVAs have incompatible managed identities and are
+explicitly canonicalized for the native program while all exact definitions
 remain in the GDT. The original full import added 2,032 reachable datatypes and
-completed its analysis pass in 2,781 seconds without a timeout. The sixth-set
-refresh imported 17 additional reachable datatypes, reapplied and validated all
-137 memberships, and did not rerun auto-analysis. An independent read-only
-reopen then validated all 137 memberships (127 exact definitions) and 400
+completed its analysis pass in 2,781 seconds without a timeout. Subsequent
+refreshes imported 37 additional reachable datatypes, most recently reapplied
+and validated all 154 memberships without rerunning auto-analysis. The final
+read-only pass validated all 154 memberships (144 exact definitions) and 449
 membership-level parameter-storage locations with zero program mutations.
 
 Compare private baseline and typed exports without putting decompiled bodies or
@@ -222,24 +230,28 @@ For the current exports, unresolved-type tokens fell from 78 to 43 in
 `gameplay_core`, from 160 to 96 in `gameplay_execution_resolution`, from 370
 to 140 in `gameplay_lifecycle`, from 38 to 34 in
 `gameplay_roster_helpers`, and from 281 to 145 in
-`gameplay_status_corruption_truth`, and from 114 to 70 in
-`gameplay_bluff_acquisition`. Raw field-offset accesses fell from 237 to 144,
-from 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132
-to 62, respectively. Error-marker counts did not increase; lifecycle and the
-status boundary each gained one nonfatal decompiler warning, while bluff
-acquisition retained zero errors and 31 warnings. The original typed import is
+`gameplay_status_corruption_truth`, from 114 to 70 in
+`gameplay_bluff_acquisition`, from 70 to 51 in `gameplay_role_slayer`, and from
+14 to 5 in `gameplay_role_wretch`. Raw field-offset accesses fell from 237 to
+144, from 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from
+132 to 62 for the six subsystem boundaries, then from 97 to 83 for Slayer and
+20 to 8 for Wretch. Error-marker counts did not increase; lifecycle and the
+status boundary each gained one nonfatal decompiler warning, while both role
+reports retained their baseline warning counts. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
-and the sixth-set comparison is in
-[`reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_bluff_acquisition.json`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_bluff_acquisition.json).
+with the new role comparisons in the
+[`Slayer typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_slayer.json)
+and
+[`Wretch typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_wretch.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 130 classifications backed by
-52 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 147 classifications backed by
+58 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

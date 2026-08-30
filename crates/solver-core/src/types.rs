@@ -116,9 +116,10 @@ pub struct SlayerResult {
     pub slayer_pos: u8,
     pub target_pos: u8,
     pub killed: bool,
-    /// Optional: role revealed on kill (may be absent in older test cases)
-    #[serde(default)]
-    pub evil_role: Option<String>,
+    /// Public true role revealed by the native kill path. Historical saves
+    /// called this `evil_role`, before Wretch kills were modeled correctly.
+    #[serde(default, alias = "evil_role")]
+    pub revealed_role: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -503,6 +504,22 @@ mod tests {
             "deck": {"villagers": [], "outcasts": [], "minions": [], "demons": []}
         })).unwrap();
         assert!(legacy.executed_good_roles.is_empty());
+    }
+
+    #[test]
+    fn slayer_revealed_role_accepts_legacy_key_and_serializes_neutrally() {
+        let legacy: SlayerResult = serde_json::from_value(serde_json::json!({
+            "slayer_pos": 1,
+            "target_pos": 2,
+            "killed": true,
+            "evil_role": "Shaman"
+        }))
+        .unwrap();
+        assert_eq!(legacy.revealed_role.as_deref(), Some("Shaman"));
+
+        let value = serde_json::to_value(&legacy).unwrap();
+        assert_eq!(value["revealed_role"], "Shaman");
+        assert!(value.get("evil_role").is_none());
     }
 
     #[test]

@@ -14,7 +14,8 @@ import contextlib
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from solver import GameState, CardInfo, DeckComposition
+from solver import GameState, CardInfo, DeckComposition, slayer_revealed_role
+from knowledge_base import Alignment, get_card
 from rust_solver import rust_solve_to_objects
 
 OUTPUT_FILE = "scenario_analysis.txt"
@@ -39,6 +40,7 @@ def replay_case(case):
     reveal_order = case.get("reveal_order", [c["position"] for c in card_list])
     true_evil = case.get("true_evil_positions", {})
     exec_evil_roles = case.get("executed_evil_roles", {})
+    confirmed_good = set(case.get("confirmed_good", []))
 
     # Header
     evil_desc = " + ".join(
@@ -132,8 +134,25 @@ def replay_case(case):
 
             if killed:
                 cur_executed.append(target)
-                if str(target) in exec_evil_roles:
-                    role = exec_evil_roles[str(target)]
+                revealed_role = slayer_revealed_role(sr)
+                role_def = get_card(revealed_role) if revealed_role else None
+                recorded_roles = case.get("executed_good_roles", {})
+                recorded_good_role = recorded_roles.get(
+                    str(target), recorded_roles.get(target)
+                )
+                target_was_good = (
+                    role_def is not None and role_def.alignment == Alignment.GOOD
+                ) or (
+                    target in confirmed_good
+                    and str(target) not in exec_evil_roles
+                    and target not in exec_evil_roles
+                )
+                if not target_was_good:
+                    role = (
+                        revealed_role
+                        or exec_evil_roles.get(str(target), exec_evil_roles.get(target))
+                        or "?"
+                    )
                     cur_confirmed_evil.append(target)
                     cur_exec_evil_roles[str(target)] = role
                     desc = f"Slayer #{pos} kills #{target} ({role})"
@@ -144,12 +163,11 @@ def replay_case(case):
                         cur_exec_good_corrupted[target] = recorded_corruption.get(
                             str(target), recorded_corruption.get(target)
                         )
-                    recorded_roles = case.get("executed_good_roles", {})
-                    role = recorded_roles.get(str(target), recorded_roles.get(target))
+                    role = revealed_role or recorded_good_role
                     if role:
                         cur_exec_good_roles[target] = role
-                    role = card_lookup.get(target, {}).get("apparent_role", "?")
-                    desc = f"Slayer #{pos} kills #{target} ({role})"
+                    shown_role = role or card_lookup.get(target, {}).get("apparent_role", "?")
+                    desc = f"Slayer #{pos} kills #{target} ({shown_role})"
             else:
                 desc = f"Slayer #{pos} targets #{sr['target_pos']}: survives"
 

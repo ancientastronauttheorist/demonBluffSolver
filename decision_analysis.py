@@ -21,7 +21,14 @@ from collections import Counter
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from solver import GameState, CardInfo, DeckComposition, SolverResult
+from solver import (
+    GameState,
+    CardInfo,
+    DeckComposition,
+    SolverResult,
+    slayer_revealed_role,
+)
+from knowledge_base import Alignment, get_card
 from rust_solver import rust_solve_to_objects
 from strategy import recommend_action, evil_probabilities, _compute_confidence
 
@@ -93,13 +100,22 @@ def analyze_game(case: dict) -> GameAnalysis:
     night_kills = case.get("night_kills", [])
     executed = case.get("executed", [])
     confirmed_evil = set(case.get("confirmed_evil", []))
+    confirmed_good = set(case.get("confirmed_good", []))
     executed_evil_roles = {int(k): v for k, v in case.get("executed_evil_roles", {}).items()}
     slayer_results = case.get("slayer_results", [])
+    slayer_killed = {
+        sr["target_pos"] for sr in slayer_results if sr.get("killed")
+    }
     pd_results = case.get("pd_ability_results", [])
 
     # Determine game result
     game_result = "win"
-    wrong_execs = [p for p in executed if p not in confirmed_evil and p not in night_kills]
+    wrong_execs = [
+        p for p in executed
+        if p not in confirmed_evil
+        and p not in night_kills
+        and p not in slayer_killed
+    ]
     hp = case.get("hp", 10)
     cost = case.get("wrong_exec_cost", 5)
     remaining_hp = hp - len(wrong_execs) * cost
@@ -243,8 +259,32 @@ def analyze_game(case: dict) -> GameAnalysis:
             t = sr["target_pos"]
             if t not in current_executed:
                 current_executed.append(t)
-            if t not in current_confirmed_evil:
-                current_confirmed_evil.append(t)
+            revealed_role = slayer_revealed_role(sr)
+            role_def = get_card(revealed_role) if revealed_role else None
+            target_was_good = (
+                role_def is not None and role_def.alignment == Alignment.GOOD
+            ) or (t in confirmed_good and t not in confirmed_evil)
+            if target_was_good:
+                if t not in current_confirmed_good:
+                    current_confirmed_good.append(t)
+                observed_corruption = case.get("executed_good_corrupted", {})
+                if str(t) in observed_corruption or t in observed_corruption:
+                    current_executed_good_corrupted[t] = observed_corruption.get(
+                        str(t), observed_corruption.get(t)
+                    )
+                observed_roles = case.get("executed_good_roles", {})
+                observed_role = (
+                    revealed_role
+                    or observed_roles.get(str(t), observed_roles.get(t))
+                )
+                if observed_role:
+                    current_executed_good_roles[t] = observed_role
+            else:
+                if t not in current_confirmed_evil:
+                    current_confirmed_evil.append(t)
+                evil_role = revealed_role or executed_evil_roles.get(t)
+                if evil_role:
+                    current_executed_evil_roles[t] = evil_role
 
     for pd in pd_results:
         current_pd_results.append(pd)
@@ -260,7 +300,7 @@ def analyze_game(case: dict) -> GameAnalysis:
     # ── Phase 2: Executions ──
     night_kills_set = set(night_kills)
     for pos in executed:
-        if pos in night_kills_set:
+        if pos in night_kills_set or pos in slayer_killed:
             continue
 
         was_evil = pos in confirmed_evil or pos in executed_evil_roles

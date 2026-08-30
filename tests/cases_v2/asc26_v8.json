@@ -79,7 +79,8 @@
     {
       "slayer_pos": 8,
       "target_pos": 3,
-      "killed": true
+      "killed": true,
+      "revealed_role": "Wretch"
     }
   ],
   "pd_ability_results": [
@@ -111,6 +112,9 @@
     8
   ],
   "executed_good_corrupted": {},
+  "executed_good_roles": {
+    "3": "Wretch"
+  },
   "deck": {
     "villagers": [
       "Architect",

@@ -124,7 +124,7 @@ class GameState:
     confirmed_good: list[int] = field(default_factory=list)
     pd_corruption_target: Optional[int] = None  # If PD target is known
     executed_evil_roles: dict[int, str] = field(default_factory=dict)  # pos -> evil role name (e.g. {2: "Chancellor"})
-    slayer_results: list[dict] = field(default_factory=list)  # [{slayer_pos, target_pos, killed}]
+    slayer_results: list[dict] = field(default_factory=list)  # [{slayer_pos, target_pos, killed, revealed_role?}]
     night_kills: list[int] = field(default_factory=list)  # Positions killed by Lilis night (unrevealed)
     night_kill_evil_count: int = 0  # How many of the night kills were evil
     hp: int = 10                    # Current health points
@@ -212,6 +212,11 @@ class GameState:
             executed_good_corrupted={int(k): v for k, v in data.get("executed_good_corrupted", {}).items()},
             executed_good_roles={int(k): v for k, v in data.get("executed_good_roles", {}).items()},
         )
+
+
+def slayer_revealed_role(result: dict) -> Optional[str]:
+    """Return a Slayer kill's public role, accepting historical saves."""
+    return result.get("revealed_role") or result.get("evil_role")
 
 
 @dataclass

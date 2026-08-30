@@ -39,6 +39,9 @@ stop, diagnose, fix, verify, then resume.
    or similar commands in parallel.
 10. When a process error happens, improve this file. Prefer tightening an
     existing rule over appending duplicate guidance.
+11. Serialize Ghidra headless commands that open the same saved project.
+    Ghidra takes a project lock even for read-only exports, so parallel target
+    exports against one baseline or typed project will race and one will fail.
 
 ## Recovery Protocol
 

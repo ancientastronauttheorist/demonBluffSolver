@@ -571,8 +571,8 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let mut current_confirmed_evil: Vec<u8> = Vec::new();
     let mut current_confirmed_good: Vec<u8> = Vec::new();
     let mut current_evil_roles: HashMap<u8, String> = HashMap::new();
-    let current_good_corr: HashMap<u8, bool> = HashMap::new();
-    let current_good_roles: HashMap<u8, String> = HashMap::new();
+    let mut current_good_corr: HashMap<u8, bool> = HashMap::new();
+    let mut current_good_roles: HashMap<u8, String> = HashMap::new();
     let mut current_slayer: Vec<SlayerResult> = Vec::new();
     let mut current_pd: Vec<PdAbilityResult> = Vec::new();
     let mut current_night_kills: Vec<u8> = Vec::new();
@@ -623,14 +623,24 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
                     if !current_confirmed_evil.contains(&sr.target_pos) {
                         current_confirmed_evil.push(sr.target_pos);
                     }
-                    let role = sr.evil_role.clone()
+                    let role = sr.revealed_role.clone()
                         .or_else(|| case_evil_roles.get(&sr.target_pos).cloned())
                         .unwrap_or_default();
                     if !role.is_empty() {
                         current_evil_roles.insert(sr.target_pos, role);
                     }
-                } else if !current_confirmed_good.contains(&sr.target_pos) {
-                    current_confirmed_good.push(sr.target_pos);
+                } else {
+                    if !current_confirmed_good.contains(&sr.target_pos) {
+                        current_confirmed_good.push(sr.target_pos);
+                    }
+                    if let Some(observed) = case_exec_good_corr.get(&sr.target_pos) {
+                        current_good_corr.insert(sr.target_pos, *observed);
+                    }
+                    let role = sr.revealed_role.clone()
+                        .or_else(|| case_exec_good_roles.get(&sr.target_pos).cloned());
+                    if let Some(role) = role {
+                        current_good_roles.insert(sr.target_pos, role);
+                    }
                 }
             }
             current_slayer.push(sr);
@@ -713,6 +723,12 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let pre_exec_evil_roles = current_evil_roles.iter()
         .filter(|(p, _)| nk_set.contains(p) || slayer_killed.contains(p))
         .map(|(&p, r)| (p, r.clone())).collect();
+    let pre_exec_good_corrupted = current_good_corr.iter()
+        .filter(|(p, _)| slayer_killed.contains(p))
+        .map(|(&p, &corrupted)| (p, corrupted)).collect();
+    let pre_exec_good_roles = current_good_roles.iter()
+        .filter(|(p, _)| slayer_killed.contains(p))
+        .map(|(&p, role)| (p, role.clone())).collect();
     let max_iterations = 20; // Safety valve
     let initial_branch = ExecutionBranch {
         cards: current_cards,
@@ -720,8 +736,8 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
         confirmed_evil: pre_exec_confirmed_evil,
         confirmed_good: pre_exec_confirmed_good,
         evil_roles: pre_exec_evil_roles,
-        good_corrupted: HashMap::new(),
-        good_roles: HashMap::new(),
+        good_corrupted: pre_exec_good_corrupted,
+        good_roles: pre_exec_good_roles,
         immunity_blocked: HashSet::new(),
         hp,
         total_executions: 0,

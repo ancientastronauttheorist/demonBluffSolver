@@ -128,3 +128,20 @@
 {"method":"tdi5680.m0001","state":"understood","reason":"Native one-based inclusive die range and shared Calculator body identity are documented.","evidence":["ev.helpers.roll-dice-shared.1"]}
 {"method":"tdi5683.m0002","state":"understood","reason":"Calculator.RollDice is preserved as a separate managed identity sharing the audited Helpers.RollDice body.","evidence":["ev.helpers.roll-dice-shared.1"]}
 {"method":"tdi5510.m0000","state":"understood","reason":"Native old-child destruction, fresh Character instantiation, array replacement, and failure paths are documented.","evidence":["ev.characters.pool-recreation.1"]}
+{"method":"tdi5878.m0000","state":"understood","reason":"The current Slayer description literal and its stale self-death claim are documented.","evidence":["ev.role.slayer.surface.1"]}
+{"method":"tdi5878.m0001","state":"understood","reason":"The real-role passive surface returns a fresh empty acted-information record.","evidence":["ev.role.slayer.surface.1"]}
+{"method":"tdi5878.m0002","state":"understood","reason":"The bluff passive surface returns a fresh empty acted-information record.","evidence":["ev.role.slayer.surface.1"]}
+{"method":"tdi5878.m0003","state":"understood","reason":"The Day gate, actor storage, one-target picker setup, and callback subscription order are documented.","evidence":["ev.role.slayer.picker.1"]}
+{"method":"tdi5878.m0004","state":"understood","reason":"Normal Slayer resolution uses registered alignment, separates displayed lying text from the kill decision, and respects the dead-target gate.","evidence":["ev.role.slayer.resolve.1","ev.roles.slayer-wretch.bridge.1"]}
+{"method":"tdi5878.m0005","state":"understood","reason":"Bluff setup uses the raw WorkingAbility status to choose the normal or disabled completion callback.","evidence":["ev.role.slayer.picker.1"]}
+{"method":"tdi5878.m0006","state":"understood","reason":"Cancellation removes both possible completion handlers and the stop handler.","evidence":["ev.role.slayer.picker.1"]}
+{"method":"tdi5878.m0007","state":"understood","reason":"Disabled Slayer resolution reports a failed kill for the first target and performs no kill action.","evidence":["ev.role.slayer.resolve.1"]}
+{"method":"tdi5878.m0008","state":"understood","reason":"Good, Evil, and unsupported alignment result-text behavior is documented.","evidence":["ev.role.slayer.surface.1"]}
+{"method":"tdi5878.m0009","state":"understood","reason":"The compiler-provided Slayer constructor follows only the shared base-role initialization path.","evidence":["ev.role.slayer.surface.1"]}
+{"method":"tdi5905.m0000","state":"understood","reason":"The managed Recluse description's Demon wording is documented as stale relative to Minion selection.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5905.m0001","state":"understood","reason":"The real-role passive surface returns a fresh empty acted-information record.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5905.m0002","state":"understood","reason":"The bluff passive surface returns a fresh empty acted-information record.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5905.m0003","state":"understood","reason":"Wretch's real-role action is an intentional no-op with a shared native body.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5905.m0004","state":"understood","reason":"Wretch's bluff action is a distinct managed no-op sharing the real action's native body.","evidence":["ev.role.wretch.surface.1"]}
+{"method":"tdi5905.m0005","state":"understood","reason":"The exact Minion primary/fallback pools, uniform draw, non-mutation, and failure behavior are documented.","evidence":["ev.role.wretch.registration.1","ev.roles.slayer-wretch.bridge.1"]}
+{"method":"tdi5905.m0006","state":"understood","reason":"The constructor's legacy identifier and chat-list initialization are documented as unused by current selection.","evidence":["ev.role.wretch.surface.1"]}

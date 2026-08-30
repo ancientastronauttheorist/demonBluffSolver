@@ -10,8 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -230,15 +232,23 @@ public class ValidateGdtSignatures extends HeadlessScript {
     }
 
     private List<PreparedTarget> prepareTargets(
-            List<Target> targets, FileDataTypeManager archive) throws Exception {
+        List<Target> targets, FileDataTypeManager archive) throws Exception {
         List<PreparedTarget> prepared = new ArrayList<>();
-        Set<Long> seenRvas = new HashSet<>();
+        Map<Long, String> appliedPrototypeByRva = new HashMap<>();
         Set<String> seenTargetNames = new HashSet<>();
-        Set<String> seenDefinitionPaths = new HashSet<>();
+        Set<String> seenManagedDefinitionPaths = new HashSet<>();
         for (Target target : targets) {
             monitor.checkCancelled();
-            if (!seenRvas.add(target.rva)) {
-                throw new IllegalArgumentException("Duplicate target RVA: " + target.rvaText);
+            String existingAppliedPrototype = appliedPrototypeByRva.putIfAbsent(
+                target.rva, target.appliedPrototypeName
+            );
+            if (existingAppliedPrototype != null && !existingAppliedPrototype.equals(
+                    target.appliedPrototypeName)) {
+                throw new IllegalArgumentException(
+                    "Conflicting applied prototypes at target RVA " + target.rvaText +
+                    ": " + existingAppliedPrototype + " != " +
+                    target.appliedPrototypeName
+                );
             }
             if (!seenTargetNames.add(target.name)) {
                 throw new IllegalArgumentException("Duplicate target name: " + target.name);
@@ -275,10 +285,11 @@ public class ValidateGdtSignatures extends HeadlessScript {
             )
                 ? managedDefinition
                 : uniqueDefinition(archive, target.appliedPrototypeName);
-            String definitionPath = definition.getDataTypePath().toString();
-            if (!seenDefinitionPaths.add(definitionPath)) {
+            String managedDefinitionPath = managedDefinition.getDataTypePath().toString();
+            if (!seenManagedDefinitionPaths.add(managedDefinitionPath)) {
                 throw new IllegalArgumentException(
-                    "FunctionDefinition is reused by multiple targets: " + definitionPath
+                    "Managed FunctionDefinition is reused by multiple targets: " +
+                    managedDefinitionPath
                 );
             }
             prepared.add(

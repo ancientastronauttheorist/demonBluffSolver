@@ -1030,13 +1030,15 @@ def _recommend_slayer(
 ) -> Optional[AbilityRecommendation]:
     """Slayer: pick target with highest evil probability. Not entropy-based."""
     probs = evil_probabilities(state, result)
-    # Filter out Bombardier (auto-lose if Slayer kills Good Bombardier)
-    # and execution-immune roles (Knight can't die)
-    dangerous = set(result.bombardier_positions)
-    immune = {c.position for c in state.cards if c.apparent_role in EXECUTION_IMMUNE_ROLES}
-    candidates = [p for p in range(1, state.n_cards + 1)
-                  if p not in state.executed and p != ability_pos
-                  and p not in dangerous and p not in immune]
+    # Native Slayer checks registered alignment before calling KillAndReveal.
+    # A Good Bombardier or Knight registers Good and survives harmlessly; an
+    # Evil bluffing as either registers Evil, and KillAndReveal bypasses normal
+    # execution-loss and kill-immunity surfaces.
+    candidates = [
+        p
+        for p in range(1, state.n_cards + 1)
+        if p not in state.executed and p != ability_pos
+    ]
     if not candidates:
         return None
 

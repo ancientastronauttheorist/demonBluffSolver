@@ -45,7 +45,111 @@ def _case(n_cards=2):
     }
 
 
+def _slayer_wretch_case():
+    return {
+        "name": "slayer_wretch_incremental_evidence",
+        "n_cards": 3,
+        "n_evil": 1,
+        "deck": {
+            "villagers": ["Slayer", "Hunter"],
+            "outcasts": ["Wretch"],
+            "minions": ["Shaman"],
+            "demons": [],
+        },
+        "cards": [
+            {"position": 1, "apparent_role": "Slayer", "info_parsed": {}},
+            {"position": 2, "apparent_role": "Wretch", "info_parsed": {}},
+            {"position": 3, "apparent_role": "Hunter", "info_parsed": {}},
+        ],
+        "reveal_order": [1, 2, 3],
+        "used_abilities": [1],
+        "slayer_results": [{
+            "slayer_pos": 1,
+            "target_pos": 2,
+            "killed": True,
+            "revealed_role": "Wretch",
+        }],
+        "executed": [2, 3],
+        "confirmed_good": [2],
+        "confirmed_evil": [3],
+        "executed_good_corrupted": {"2": True},
+        "executed_good_roles": {"2": "Wretch"},
+        "executed_evil_roles": {"3": "Shaman"},
+        "true_evil_positions": {"3": "Shaman"},
+        "hp": 5,
+        "wrong_exec_cost": 5,
+    }
+
+
 class IncrementalExecutionEvidenceTests(unittest.TestCase):
+    def test_decision_analysis_applies_wretch_at_ability_and_skips_duplicate_execution(self):
+        seen = []
+
+        def solve(state):
+            seen.append((
+                list(state.executed),
+                list(state.confirmed_good),
+                dict(state.executed_good_roles),
+                dict(state.executed_good_corrupted),
+            ))
+            return _solver_result()
+
+        with (
+            patch.object(decision_analysis, "rust_solve_to_objects", side_effect=solve),
+            patch.object(decision_analysis, "evil_probabilities", return_value={}),
+            patch.object(
+                decision_analysis,
+                "recommend_action",
+                return_value=Action("execute", position=3),
+            ),
+            patch.object(decision_analysis, "_compute_confidence", return_value=1.0),
+            patch.object(decision_analysis, "_actions_match", return_value=True),
+        ):
+            analysis = decision_analysis.analyze_game(_slayer_wretch_case())
+
+        self.assertEqual(analysis.result, "win")
+        self.assertEqual(len(seen), 2)
+        self.assertEqual(seen[0], ([2], [2], {2: "Wretch"}, {2: True}))
+
+    def test_replay_analysis_carries_wretch_evidence_at_slayer_step(self):
+        seen = []
+
+        def solve(state):
+            seen.append((
+                list(state.executed),
+                list(state.confirmed_good),
+                dict(state.executed_good_roles),
+                dict(state.executed_good_corrupted),
+            ))
+            return _solver_result()
+
+        with patch.object(replay_analysis, "quiet_solve", side_effect=solve):
+            replay_analysis.replay_case(_slayer_wretch_case())
+
+        self.assertEqual(seen[0][2:], ({}, {}))
+        self.assertEqual(seen[1], ([2], [2], {2: "Wretch"}, {2: True}))
+        self.assertEqual(len(seen), 3)
+
+    def test_hindsight_preloads_slayer_wretch_public_evidence(self):
+        seen = []
+
+        def solve(state):
+            seen.append((
+                list(state.executed),
+                list(state.confirmed_good),
+                dict(state.executed_good_roles),
+                dict(state.executed_good_corrupted),
+            ))
+            return _solver_result()
+
+        with (
+            patch.object(hindsight, "rust_solve_to_objects", side_effect=solve),
+            patch.object(hindsight, "_pick_target", return_value=3),
+        ):
+            result = hindsight.replay_hindsight(_slayer_wretch_case())
+
+        self.assertTrue(result.won)
+        self.assertEqual(seen[0], ([2], [2], {2: "Wretch"}, {2: True}))
     def test_decision_analysis_adds_role_only_after_its_execution(self):
         seen_roles = []
         seen_provenance = []

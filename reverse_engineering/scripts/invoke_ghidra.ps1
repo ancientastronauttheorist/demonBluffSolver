@@ -885,17 +885,6 @@ function Invoke-TypedRefresh {
         $argumentList.Add($argument)
     }
     Add-ApplyPreScripts -Arguments $argumentList
-    foreach ($targetInfo in $targetInfos) {
-        foreach ($argument in @(
-            '-postScript',
-            'ValidateGdtSignatures.java',
-            $gdtPath,
-            $targetInfo.Path,
-            (Get-ValidateSummaryPath -TargetInfo $targetInfo)
-        )) {
-            $argumentList.Add($argument)
-        }
-    }
     foreach ($argument in @(
         '-max-cpu', $MaxCpu,
         '-log', (Join-Path $typedProjectRoot 'logs\typed-refresh.log'),
@@ -908,7 +897,13 @@ function Invoke-TypedRefresh {
         -Arguments @($argumentList) `
         -Description 'Ghidra typed signature refresh' `
         -LargeHeap
-    Assert-TypedValidationState
+    Assert-TypedImportState
+
+    # Keep signature application and read-only validation in separate
+    # headless commands. Repeating the GDT, target, and summary paths for both
+    # phases in one invocation exceeds cmd.exe's command-line limit as the
+    # checked target inventory grows.
+    Invoke-TypedValidate
 }
 
 function Invoke-BaselineTargetExport {

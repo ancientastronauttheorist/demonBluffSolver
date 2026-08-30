@@ -12,7 +12,13 @@ import time
 from datetime import datetime
 from typing import Optional
 
-from solver import CardInfo, DeckComposition, GameState, SolverResult
+from solver import (
+    CardInfo,
+    DeckComposition,
+    GameState,
+    SolverResult,
+    slayer_revealed_role,
+)
 from rust_solver import rust_solve_to_objects
 from strategy import recommend_action, print_recommendation, evil_probabilities
 
@@ -453,6 +459,17 @@ class DecisionLog:
             f.write(f"### [{DecisionLog._ts()}] Ability used at #{pos}\n\n")
 
     @staticmethod
+    def log_slayer_result(slayer_pos: int, target_pos: int, killed: bool,
+                          revealed_role: Optional[str] = None):
+        with open(DECISION_LOG, "a") as f:
+            outcome = "killed" if killed else "could not kill"
+            role = f" -> {revealed_role}" if revealed_role else ""
+            f.write(
+                f"### [{DecisionLog._ts()}] Slayer #{slayer_pos} {outcome} "
+                f"#{target_pos}{role}\n\n"
+            )
+
+    @staticmethod
     def log_game_over(result: str, hp: int, notes: str = ""):
         """Log game outcome: 'win' or 'loss'."""
         with open(DECISION_LOG, "a") as f:
@@ -489,7 +506,7 @@ class GameSession:
         self.pd_corruption_target: Optional[int] = None
         self.used_abilities: list[int] = []
         self.executed_evil_roles: dict[int, str] = {}  # pos -> evil role name
-        self.slayer_results: list[dict] = []  # [{slayer_pos, target_pos, killed}]
+        self.slayer_results: list[dict] = []  # [{slayer_pos, target_pos, killed, revealed_role?}]
         self.night_kills: list[int] = []  # Positions killed by Lilis night
         self.night_kill_evil_count: int = 0  # How many night kills were evil
         self.hp: int = 10
@@ -680,21 +697,72 @@ class GameSession:
             self.used_abilities.append(pos)
 
     def add_slayer_result(self, slayer_pos: int, target_pos: int, killed: bool,
-                          evil_role: Optional[str] = None):
-        self.slayer_results.append({
+                          revealed_role: Optional[str] = None,
+                          was_corrupted: Optional[bool] = None):
+        """Record the public result of Slayer's native kill-and-reveal path.
+
+        Slayer tests registered alignment, so a real Wretch registers Evil and
+        dies even though its revealed alignment is Good.  Classify the target
+        from the revealed role, never from the fact that Slayer killed it.
+        """
+        from knowledge_base import Alignment, execution_cost_for, get_card
+
+        if any(sr.get("slayer_pos") == slayer_pos for sr in self.slayer_results):
+            raise ValueError(f"Slayer #{slayer_pos} already has a recorded result")
+
+        canonical_role = None
+        role_def = None
+        if killed:
+            if not revealed_role:
+                raise ValueError("Slayer kill requires the revealed role")
+            role_def = get_card(revealed_role)
+            if role_def is None:
+                raise ValueError(f"Unknown Slayer revealed role: {revealed_role}")
+            canonical_role = role_def.name.replace(" ", "_")
+            if role_def.alignment == Alignment.GOOD and role_def.name != "Wretch":
+                raise ValueError(
+                    "Native Slayer can only kill an Evil character or a Good Wretch"
+                )
+        elif revealed_role:
+            raise ValueError("A failed Slayer attempt does not reveal a role")
+        elif was_corrupted is not None:
+            raise ValueError("A failed Slayer attempt does not reveal target status")
+
+        if (role_def is not None and role_def.alignment == Alignment.EVIL
+                and was_corrupted is not None):
+            raise ValueError("Corruption evidence is only recorded for a killed Good Wretch")
+
+        result = {
             "slayer_pos": slayer_pos,
             "target_pos": target_pos,
             "killed": killed,
-        })
+        }
+        if canonical_role:
+            result["revealed_role"] = canonical_role
+        self.slayer_results.append(result)
         self.mark_ability_used(slayer_pos)
-        # Auto-mark killed target as executed (dead)
+
         if killed:
-            if target_pos not in self.executed:
-                self.executed.append(target_pos)
-            if target_pos not in self.confirmed_evil:
-                self.confirmed_evil.append(target_pos)
-            if evil_role:
-                self.executed_evil_roles[target_pos] = evil_role.replace(' ', '_')
+            if role_def.alignment == Alignment.EVIL:
+                self.mark_executed(
+                    target_pos,
+                    was_evil=True,
+                    evil_role=canonical_role,
+                )
+            else:
+                self.mark_executed(
+                    target_pos,
+                    was_evil=False,
+                    was_corrupted=was_corrupted,
+                    true_role=canonical_role,
+                )
+                damage = execution_cost_for(
+                    canonical_role,
+                    apparent_role=canonical_role,
+                    was_killable=True,
+                    default=self.wrong_exec_cost,
+                )
+                self.hp = _clamped_post_damage_hp(self.hp, damage)
 
     # -- Solver --
 
@@ -2236,7 +2304,8 @@ def main():
         print("  next [--plan]                         Solve + auto-execute if safe (definite OR forced-safe). --plan for print-only.")
         print("  auto_next                             Alias for `next` (auto-execute path)")
         print("  ability_used <pos>                    Mark ability as activated")
-        print("  slayer_result <pos> <target> kill/fail [evil_role]  Slayer ability result")
+        print("  slayer_result <pos> <target> kill <role> [clean|corrupted]  Slayer kill")
+        print("  slayer_result <pos> <target> fail                           Slayer miss")
         print("  block <pos>                           Mark position as blocked (Witch)")
         print("  unblock <pos>                         Unblock position (after Witch dies)")
         print("  night_kill <pos1,pos2,...> <n_evil>    Lilis night kills (positions + evil count)")
@@ -3148,18 +3217,65 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "slayer_result":
         slayer_pos = int(args[0])
         target_pos = int(args[1])
-        killed = args[2].lower() in ("kill", "killed", "true", "1", "yes")
-        evil_role = args[3] if len(args) > 3 else None
-        if killed and not evil_role:
-            print(f"  ERROR: Slayer kill requires evil_role! Game reveals the role on kill.")
-            print(f"  Usage: slayer_result {slayer_pos} {target_pos} kill <evil_role>")
+        outcome = args[2].lower()
+        kill_outcomes = ("kill", "killed", "true", "1", "yes")
+        fail_outcomes = ("fail", "failed", "false", "0", "no")
+        if outcome not in kill_outcomes + fail_outcomes:
+            print(f"  ERROR: Unknown Slayer outcome: {args[2]}")
+            print("  Use 'kill' or 'fail'.")
             return None
-        session.add_slayer_result(slayer_pos, target_pos, killed, evil_role=evil_role)
+        killed = outcome in kill_outcomes
+        revealed_role = args[3] if len(args) > 3 else None
+        was_corrupted = None
+        if len(args) > 4:
+            status = args[4].lower()
+            if status in ("corrupted", "true", "1", "yes"):
+                was_corrupted = True
+            elif status in ("clean", "false", "0", "no"):
+                was_corrupted = False
+            else:
+                print(f"  ERROR: Unknown Slayer target status: {args[4]}")
+                print("  Use 'clean' or 'corrupted'.")
+                return None
+        if killed and not revealed_role:
+            print("  ERROR: Slayer kill requires revealed_role! Game reveals the role on kill.")
+            print(f"  Usage: slayer_result {slayer_pos} {target_pos} kill <revealed_role> [clean|corrupted]")
+            return None
+        if not killed and revealed_role:
+            print("  ERROR: Failed Slayer attempts do not reveal a role.")
+            print(f"  Usage: slayer_result {slayer_pos} {target_pos} fail")
+            return None
+        old_hp = session.hp
+        try:
+            session.add_slayer_result(
+                slayer_pos,
+                target_pos,
+                killed,
+                revealed_role=revealed_role,
+                was_corrupted=was_corrupted,
+            )
+        except ValueError as exc:
+            print(f"  ERROR: {exc}")
+            return None
         session.save()
         result_str = f"killed #{target_pos}" if killed else f"couldn't kill #{target_pos}"
-        if evil_role:
-            result_str += f" (revealed: {evil_role})"
+        recorded_role = slayer_revealed_role(session.slayer_results[-1])
+        if recorded_role:
+            result_str += f" (revealed: {recorded_role})"
+        DecisionLog.log_slayer_result(
+            slayer_pos,
+            target_pos,
+            killed,
+            recorded_role,
+        )
         print(f"Slayer #{slayer_pos} {result_str}")
+        if session.hp != old_hp:
+            print(f"  Wrong Slayer kill: HP {old_hp} -> {session.hp}")
+        if (recorded_role == "Wretch" and was_corrupted is None):
+            print("  WARNING: Wretch corruption status was not recorded. If visible, use "
+                  "'clean' or 'corrupted' in the Slayer command.")
+        if recorded_role == "Baa":
+            _baa_post_execute_reveal(session)
         return None
 
     if cmd == "night_kill":

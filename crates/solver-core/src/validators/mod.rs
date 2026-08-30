@@ -942,6 +942,13 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
             if slayer_is_evil && !slayer_is_puppet { return false; }
             if slayer_lies { return false; }
             if !target_is_evil { return false; }
+            if let Some(revealed_role) = result.revealed_role.as_deref() {
+                let role_matches = effective_role_at(target_pos, scenario, state)
+                    .is_some_and(|actual| {
+                        normalize_role(&actual) == normalize_role(revealed_role)
+                    });
+                if !role_matches { return false; }
+            }
         } else {
             let slayer_works = (!slayer_is_evil || slayer_is_puppet) && !slayer_lies;
             if slayer_works && target_is_evil { return false; }
@@ -1445,7 +1452,7 @@ mod tests {
             slayer_pos: 1,
             target_pos: 2,
             killed: true,
-            evil_role: None,
+            revealed_role: None,
         });
         assert!(!validate_slayer_results(&scenario, &slayer_state));
         slayer_state.slayer_results[0].killed = false;
@@ -1470,6 +1477,50 @@ mod tests {
 
         assert!(matches_executed_good_corruption(&scenario, 1, false));
         assert!(!matches_executed_good_corruption(&scenario, 1, true));
+    }
+
+    #[test]
+    fn slayer_revealed_role_pins_native_wretch_and_evil_kills() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Wretch", json!({})),
+            ],
+        );
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Wretch".to_string()),
+        });
+
+        let good_wretch = empty_scenario();
+        assert!(validate_slayer_results(&good_wretch, &state));
+        state.slayer_results[0].revealed_role = Some("Shaman".to_string());
+        assert!(!validate_slayer_results(&good_wretch, &state));
+
+        let mut evil = empty_scenario();
+        evil.evil_positions.insert(2, "Shaman".to_string());
+        assert!(validate_slayer_results(&evil, &state));
+        state.slayer_results[0].revealed_role = Some("Wretch".to_string());
+        assert!(!validate_slayer_results(&evil, &state));
+
+        let mut generated_state = base_state(3, vec![make_card(1, "Slayer", json!({}))]);
+        generated_state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Wretch".to_string()),
+        });
+        let mut generated_wretch = empty_scenario();
+        generated_wretch.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Wretch".to_string(),
+        });
+        generated_wretch.evil_positions.insert(3, "Chancellor".to_string());
+        assert!(validate_slayer_results(&generated_wretch, &generated_state));
     }
 
     #[test]
