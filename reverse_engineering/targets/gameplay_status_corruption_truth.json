@@ -30,6 +30,7 @@
       "name": "Role.CheckIfCanRemoveStatus",
       "metadata_name": "Role$$CheckIfCanRemoveStatus",
       "signature": "bool Role__CheckIfCanRemoveStatus (Role_o* __this, int32_t status, const MethodInfo* method);",
+      "applied_prototype_name": "Role__CheckIfCanBeKilled",
       "rva": "0x3B24C0"
     },
     {

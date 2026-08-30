@@ -198,6 +198,62 @@ class NormalizeIl2CppHeaderTests(unittest.TestCase):
                 self.header, [first, second], self.extraction, self.root / "conflict-output"
             )
 
+    def test_explicit_applied_prototype_canonicalizes_shared_native_body(self) -> None:
+        canonical_signature = "bool Role__CanKill (Role* self, Character* target);"
+        shared_signature = "bool Role__CanRemove (Role* self, int32_t status);"
+        canonical = self.write_targets("canonical.json", [canonical_signature])
+        shared = self.write_targets(
+            "shared.json",
+            [
+                {
+                    "signature": shared_signature,
+                    "applied_prototype_name": "Role__CanKill",
+                }
+            ],
+        )
+
+        result = normalizer.build_outputs(
+            self.header, [shared, canonical], self.extraction, self.root / "output"
+        )
+        prototypes = result["prototype_header"].read_text(encoding="utf-8")
+        manifest = json.loads(result["alignment_manifest"].read_text(encoding="utf-8"))
+
+        self.assertIn(canonical_signature, prototypes)
+        self.assertIn(shared_signature, prototypes)
+        self.assertEqual(manifest["prototype_names"], ["Role__CanKill", "Role__CanRemove"])
+
+    def test_rejects_missing_or_inconsistent_applied_prototype(self) -> None:
+        signature = "bool Shared (int32_t value);"
+        missing = self.write_targets(
+            "missing.json",
+            [{"signature": signature, "applied_prototype_name": "NotSelected"}],
+        )
+        with self.assertRaisesRegex(
+            normalizer.NormalizationError, "not present in the selected target union"
+        ):
+            normalizer.build_outputs(
+                self.header, [missing], self.extraction, self.root / "missing-output"
+            )
+
+        canonical = self.write_targets("canonical.json", ["bool First (int32_t value);"])
+        first = self.write_targets(
+            "first.json",
+            [{"signature": signature, "applied_prototype_name": "First"}],
+        )
+        second = self.write_targets(
+            "second.json",
+            [{"signature": signature, "applied_prototype_name": "Shared"}],
+        )
+        with self.assertRaisesRegex(
+            normalizer.NormalizationError, "Conflicting applied prototype names"
+        ):
+            normalizer.build_outputs(
+                self.header,
+                [canonical, first, second],
+                self.extraction,
+                self.root / "conflict-applied-output",
+            )
+
     def test_rejects_unmanifested_header(self) -> None:
         target = self.write_targets("target.json", ["void Valid (void);"])
         self.header.write_bytes(self.header_bytes + b"/* changed */\n")

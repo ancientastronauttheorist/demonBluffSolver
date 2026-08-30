@@ -92,6 +92,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
             int validated = 0;
             int sevenArgumentTargets = 0;
             int preservedLabels = 0;
+            int canonicalizedSharedBodies = 0;
             int dataTypeCountBefore = currentProgram.getDataTypeManager()
                 .getDataTypeCount(true);
             try (FileDataTypeManager archive = FileDataTypeManager.openFileArchive(
@@ -110,6 +111,13 @@ public class ApplyGdtSignatures extends HeadlessScript {
                 List<PreparedTarget> preparedTargets = prepareTargets(
                     targetSet.targets, archive
                 );
+                for (PreparedTarget prepared : preparedTargets) {
+                    if (!prepared.target.prototypeName.equals(
+                        prepared.target.appliedPrototypeName
+                    )) {
+                        canonicalizedSharedBodies++;
+                    }
+                }
                 monitor.checkCancelled();
 
                 for (PreparedTarget prepared : preparedTargets) {
@@ -153,7 +161,8 @@ public class ApplyGdtSignatures extends HeadlessScript {
                 validated,
                 importedDataTypes,
                 sevenArgumentTargets,
-                preservedLabels
+                preservedLabels,
+                canonicalizedSharedBodies
             );
         }
         catch (Throwable failure) {
@@ -301,7 +310,14 @@ public class ApplyGdtSignatures extends HeadlessScript {
                 );
             }
 
-            FunctionDefinition definition = uniqueDefinition(archive, target.prototypeName);
+            FunctionDefinition managedDefinition = uniqueDefinition(
+                archive, target.prototypeName
+            );
+            FunctionDefinition definition = target.prototypeName.equals(
+                target.appliedPrototypeName
+            )
+                ? managedDefinition
+                : uniqueDefinition(archive, target.appliedPrototypeName);
             // ApplyFunctionSignatureCmd rewrites ParameterDefinition datatypes while resolving
             // dependencies, so never hand it a DB-backed definition from the read-only GDT.
             FunctionDefinition detachedDefinition = new FunctionDefinitionDataType(definition);
@@ -620,6 +636,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
             String metadataName = null;
             String signature = null;
             String prototypeName = null;
+            String appliedPrototypeName = null;
             String rva = null;
             reader.beginObject();
             while (reader.hasNext()) {
@@ -636,6 +653,9 @@ public class ApplyGdtSignatures extends HeadlessScript {
                         break;
                     case "prototype_name":
                         prototypeName = reader.nextString();
+                        break;
+                    case "applied_prototype_name":
+                        appliedPrototypeName = reader.nextString();
                         break;
                     case "rva":
                         rva = reader.nextString();
@@ -659,7 +679,23 @@ public class ApplyGdtSignatures extends HeadlessScript {
                     "Invalid prototype_name " + prototypeName + " in " + targetPath
                 );
             }
-            targets.add(new Target(name, metadataName, signature, prototypeName, rva));
+            if (appliedPrototypeName == null) {
+                appliedPrototypeName = prototypeName;
+            }
+            else if (!C_IDENTIFIER.matcher(appliedPrototypeName).matches()) {
+                throw new IllegalArgumentException(
+                    "Invalid applied_prototype_name " + appliedPrototypeName +
+                    " in " + targetPath
+                );
+            }
+            targets.add(new Target(
+                name,
+                metadataName,
+                signature,
+                prototypeName,
+                appliedPrototypeName,
+                rva
+            ));
         }
         reader.endArray();
     }
@@ -672,7 +708,8 @@ public class ApplyGdtSignatures extends HeadlessScript {
             int validated,
             int importedDataTypes,
             int sevenArgumentTargets,
-            int preservedLabels) throws Exception {
+            int preservedLabels,
+            int canonicalizedSharedBodies) throws Exception {
         Path parent = summaryPath.getParent();
         if (parent != null) {
             Files.createDirectories(parent);
@@ -696,6 +733,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
             writer.name("imported_datatypes").value(importedDataTypes);
             writer.name("seven_argument_targets").value(sevenArgumentTargets);
             writer.name("preserved_labels").value(preservedLabels);
+            writer.name("canonicalized_shared_bodies").value(canonicalizedSharedBodies);
             writer.name("calling_convention").value(WINDOWS_X64_CALLING_CONVENTION);
             writer.name("cancelled").value(false);
             writer.endObject();
@@ -735,6 +773,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
         private final String metadataName;
         private final String signature;
         private final String prototypeName;
+        private final String appliedPrototypeName;
         private final String rvaText;
         private final long rva;
 
@@ -743,11 +782,13 @@ public class ApplyGdtSignatures extends HeadlessScript {
                 String metadataName,
                 String signature,
                 String prototypeName,
+                String appliedPrototypeName,
                 String rvaText) {
             this.name = name;
             this.metadataName = metadataName;
             this.signature = signature;
             this.prototypeName = prototypeName;
+            this.appliedPrototypeName = appliedPrototypeName;
             this.rvaText = rvaText;
             this.rva = Long.decode(rvaText);
             if (rva <= 0) {

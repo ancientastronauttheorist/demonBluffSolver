@@ -413,6 +413,7 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
         String buildId = null;
         Map<String, Target> byName = new TreeMap<>();
         Map<String, String> prototypeNamesBySignature = new TreeMap<>();
+        Map<Long, String> appliedPrototypeNamesByRva = new TreeMap<>();
         for (Path path : paths) {
             TargetSet targetSet = readTargets(path);
             if (buildId == null) {
@@ -431,6 +432,17 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                         ": " + previousName + " != " + target.prototypeName
                     );
                 }
+                String previousAppliedName = appliedPrototypeNamesByRva.putIfAbsent(
+                    target.rva, target.appliedPrototypeName
+                );
+                if (previousAppliedName != null &&
+                    !previousAppliedName.equals(target.appliedPrototypeName)) {
+                    throw new IllegalArgumentException(
+                        "Conflicting applied prototypes at RVA 0x" +
+                        Long.toUnsignedString(target.rva, 16) + ": " +
+                        previousAppliedName + " != " + target.appliedPrototypeName
+                    );
+                }
                 Target previous = byName.putIfAbsent(target.prototypeName, target);
                 if (previous != null && !previous.signature.equals(target.signature)) {
                     throw new IllegalArgumentException(
@@ -438,10 +450,26 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                         previous.signature + " != " + target.signature
                     );
                 }
+                if (previous != null &&
+                    !previous.appliedPrototypeName.equals(target.appliedPrototypeName)) {
+                    throw new IllegalArgumentException(
+                        "Conflicting applied prototypes for " + target.prototypeName + ": " +
+                        previous.appliedPrototypeName + " != " +
+                        target.appliedPrototypeName
+                    );
+                }
             }
         }
         if (buildId == null || byName.isEmpty()) {
             throw new IllegalArgumentException("No target functions were supplied");
+        }
+        for (Target target : byName.values()) {
+            if (!byName.containsKey(target.appliedPrototypeName)) {
+                throw new IllegalArgumentException(
+                    "Applied prototype is not present in the selected target union: " +
+                    target.appliedPrototypeName
+                );
+            }
         }
         return new TargetSet(buildId, new ArrayList<>(byName.values()));
     }
@@ -462,6 +490,8 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                     while (reader.hasNext()) {
                         String signature = null;
                         String prototypeName = null;
+                        String appliedPrototypeName = null;
+                        String rvaText = null;
                         reader.beginObject();
                         while (reader.hasNext()) {
                             String targetField = reader.nextName();
@@ -471,15 +501,25 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                             else if (targetField.equals("prototype_name")) {
                                 prototypeName = reader.nextString();
                             }
+                            else if (targetField.equals("applied_prototype_name")) {
+                                appliedPrototypeName = reader.nextString();
+                            }
+                            else if (targetField.equals("rva")) {
+                                rvaText = reader.nextString();
+                            }
                             else {
                                 reader.skipValue();
                             }
                         }
                         reader.endObject();
-                        if (signature == null) {
-                            throw new IllegalArgumentException("Target has no signature: " + path);
+                        if (signature == null || rvaText == null) {
+                            throw new IllegalArgumentException(
+                                "Target has no signature or RVA: " + path
+                            );
                         }
-                        targets.add(parseTarget(signature, prototypeName));
+                        targets.add(parseTarget(
+                            signature, prototypeName, appliedPrototypeName, rvaText
+                        ));
                     }
                     reader.endArray();
                 }
@@ -495,7 +535,11 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
         return new TargetSet(buildId, targets);
     }
 
-    private Target parseTarget(String signature, String explicitPrototypeName) {
+    private Target parseTarget(
+            String signature,
+            String explicitPrototypeName,
+            String explicitAppliedPrototypeName,
+            String rvaText) {
         Matcher matcher = FUNCTION_NAME_PATTERN.matcher(signature);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Cannot identify function in: " + signature);
@@ -507,12 +551,33 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                 "Invalid prototype_name " + name + " for signature: " + signature
             );
         }
+        String appliedName = explicitAppliedPrototypeName == null
+            ? name
+            : explicitAppliedPrototypeName;
+        if (!C_IDENTIFIER_PATTERN.matcher(appliedName).matches()) {
+            throw new IllegalArgumentException(
+                "Invalid applied_prototype_name " + appliedName +
+                " for signature: " + signature
+            );
+        }
+        long rva;
+        try {
+            rva = Long.decode(rvaText);
+        }
+        catch (NumberFormatException exception) {
+            throw new IllegalArgumentException("Invalid target RVA: " + rvaText, exception);
+        }
+        if (rva <= 0) {
+            throw new IllegalArgumentException("Target RVA must be positive: " + rvaText);
+        }
         String returnType = sourceTypeKey(signature.substring(0, matcher.start(1)));
         int open = signature.indexOf('(', matcher.start(1) + declaredName.length());
         int close = matchingParenthesis(signature, open);
         String parameters = signature.substring(open + 1, close).trim();
         List<ParameterExpectation> expectations = parseParameters(parameters, signature);
-        return new Target(name, signature.trim(), returnType, expectations);
+        return new Target(
+            name, appliedName, signature.trim(), returnType, expectations, rva
+        );
     }
 
     private int matchingParenthesis(String value, int open) {
@@ -644,9 +709,11 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
 
     private record Target(
         String prototypeName,
+        String appliedPrototypeName,
         String signature,
         String returnType,
-        List<ParameterExpectation> parameters
+        List<ParameterExpectation> parameters,
+        long rva
     ) {}
 
     private record TargetSet(String buildId, List<Target> targets) {

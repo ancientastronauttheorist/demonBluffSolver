@@ -188,6 +188,8 @@ def generate_prototypes(
 ) -> tuple[str, list[str]]:
     signatures_by_name: dict[str, str] = {}
     prototype_names_by_signature: dict[str, str] = {}
+    applied_names_by_signature: dict[str, str] = {}
+    applied_prototype_names: set[str] = set()
     for set_index, targets in enumerate(target_sets):
         if targets.get("build_id") != build_id:
             raise NormalizationError(
@@ -226,6 +228,18 @@ def generate_prototypes(
             else:
                 prototype_name = declared_name
 
+            if "applied_prototype_name" in target:
+                applied_prototype_name = target["applied_prototype_name"]
+                if not isinstance(
+                    applied_prototype_name, str
+                ) or not C_IDENTIFIER_RE.fullmatch(applied_prototype_name):
+                    raise NormalizationError(
+                        f"Target function {set_index}:{function_index} has an invalid "
+                        "applied_prototype_name"
+                    )
+            else:
+                applied_prototype_name = prototype_name
+
             previous_name = prototype_names_by_signature.get(signature)
             if previous_name is not None and previous_name != prototype_name:
                 raise NormalizationError(
@@ -233,6 +247,17 @@ def generate_prototypes(
                     f"{previous_name!r} != {prototype_name!r}"
                 )
             prototype_names_by_signature[signature] = prototype_name
+            previous_applied_name = applied_names_by_signature.get(signature)
+            if (
+                previous_applied_name is not None
+                and previous_applied_name != applied_prototype_name
+            ):
+                raise NormalizationError(
+                    f"Conflicting applied prototype names for signature {signature!r}: "
+                    f"{previous_applied_name!r} != {applied_prototype_name!r}"
+                )
+            applied_names_by_signature[signature] = applied_prototype_name
+            applied_prototype_names.add(applied_prototype_name)
 
             prototype_signature = (
                 signature[: match.start(1)]
@@ -246,6 +271,13 @@ def generate_prototypes(
                     f"{previous!r} != {prototype_signature!r}"
                 )
             signatures_by_name[prototype_name] = prototype_signature
+
+    missing_applied_prototypes = sorted(applied_prototype_names - signatures_by_name.keys())
+    if missing_applied_prototypes:
+        raise NormalizationError(
+            "Applied prototypes are not present in the selected target union: "
+            + ", ".join(missing_applied_prototypes)
+        )
 
     names = sorted(signatures_by_name)
     signatures = [signatures_by_name[name] for name in names]

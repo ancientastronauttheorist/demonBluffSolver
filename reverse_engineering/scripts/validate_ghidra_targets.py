@@ -44,6 +44,7 @@ def main() -> int:
     seen_file_names: set[str] = set()
     prototype_signatures: dict[str, str] = {}
     prototype_names_by_signature: dict[str, str] = {}
+    applied_names_by_signature: dict[str, str] = {}
     errors: list[str] = []
     shared_targets: list[tuple[str, int]] = []
     for target in targets["functions"]:
@@ -69,6 +70,27 @@ def main() -> int:
             ):
                 errors.append(f"{name}: invalid prototype_name {prototype_name!r}")
             else:
+                applied_prototype_name = target.get(
+                    "applied_prototype_name", prototype_name
+                )
+                if not isinstance(
+                    applied_prototype_name, str
+                ) or not C_IDENTIFIER_RE.fullmatch(applied_prototype_name):
+                    errors.append(
+                        f"{name}: invalid applied_prototype_name "
+                        f"{applied_prototype_name!r}"
+                    )
+                else:
+                    previous_applied_name = applied_names_by_signature.get(signature)
+                    if (
+                        previous_applied_name is not None
+                        and previous_applied_name != applied_prototype_name
+                    ):
+                        errors.append(
+                            f"{name}: signature is mapped to both applied prototypes "
+                            f"{previous_applied_name!r} and {applied_prototype_name!r}"
+                        )
+                    applied_names_by_signature[signature] = applied_prototype_name
                 previous_name = prototype_names_by_signature.get(signature)
                 if previous_name is not None and previous_name != prototype_name:
                     errors.append(

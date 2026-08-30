@@ -111,6 +111,8 @@ $targetInfos = @()
 $targetByName = [Collections.Generic.Dictionary[string, object]]::new([StringComparer]::Ordinal)
 $expectedPrototypeSignatures = [Collections.Generic.Dictionary[string, string]]::new([StringComparer]::Ordinal)
 $expectedPrototypeNameBySignature = [Collections.Generic.Dictionary[string, string]]::new([StringComparer]::Ordinal)
+$expectedAppliedPrototypeByRva = [Collections.Generic.Dictionary[string, string]]::new([StringComparer]::Ordinal)
+$appliedPrototypeReferences = [Collections.Generic.List[object]]::new()
 $expectedPrototypeNames = @()
 
 function Assert-AnalysisSummary {
@@ -307,6 +309,7 @@ if ($needsTargetInventory) {
 
         $parameterCount = 0
         $sevenArgumentCount = 0
+        $canonicalizedSharedBodyCount = 0
         foreach ($targetFunction in $targetFunctions) {
             $signature = [string]$targetFunction.signature
             $signatureMatch = [regex]::Match(
@@ -348,6 +351,48 @@ if ($needsTargetInventory) {
                 $expectedPrototypeSignatures.Add($prototypeName, $prototypeSignature)
             }
             $signatureParameterCount = Get-SignatureParameterCount -Signature $signature
+            $appliedPrototypeNameProperty = $targetFunction.PSObject.Properties['applied_prototype_name']
+            if ($null -ne $appliedPrototypeNameProperty) {
+                $appliedPrototypeName = [string]$appliedPrototypeNameProperty.Value
+                if ($appliedPrototypeName -cnotmatch '^[A-Za-z_][A-Za-z0-9_]*$') {
+                    throw "Invalid applied_prototype_name '$appliedPrototypeName' in $targetPath"
+                }
+            }
+            else {
+                $appliedPrototypeName = $prototypeName
+            }
+            if ($appliedPrototypeName -cne $prototypeName) {
+                $canonicalizedSharedBodyCount++
+            }
+            $rvaText = [string]$targetFunction.rva
+            $rvaMatch = [regex]::Match($rvaText, '^0[xX]([0-9A-Fa-f]+)$')
+            if (-not $rvaMatch.Success) {
+                throw "Invalid target RVA '$rvaText' in $targetPath"
+            }
+            try {
+                $rvaKey = '{0:X16}' -f [Convert]::ToUInt64(
+                    $rvaMatch.Groups[1].Value,
+                    16
+                )
+            }
+            catch {
+                throw "Invalid target RVA '$rvaText' in ${targetPath}: $($_.Exception.Message)"
+            }
+            if ($expectedAppliedPrototypeByRva.ContainsKey($rvaKey)) {
+                if ($expectedAppliedPrototypeByRva[$rvaKey] -cne $appliedPrototypeName) {
+                    throw "Conflicting applied prototypes at RVA ${rvaText}: $($expectedAppliedPrototypeByRva[$rvaKey]) != $appliedPrototypeName"
+                }
+            }
+            else {
+                $expectedAppliedPrototypeByRva.Add($rvaKey, $appliedPrototypeName)
+            }
+            $appliedPrototypeReferences.Add([pscustomobject]@{
+                Name = [string]$targetFunction.name
+                TargetPath = $targetPath
+                PrototypeName = $prototypeName
+                AppliedPrototypeName = $appliedPrototypeName
+                ParameterCount = $signatureParameterCount
+            })
             $parameterCount += $signatureParameterCount
             if ($signatureParameterCount -eq 7) {
                 $sevenArgumentCount++
@@ -369,10 +414,22 @@ if ($needsTargetInventory) {
             FunctionCount = $targetFunctions.Count
             ParameterCount = $parameterCount
             SevenArgumentCount = $sevenArgumentCount
+            CanonicalizedSharedBodyCount = $canonicalizedSharedBodyCount
             Sha256 = Get-Sha256Lower -Path $targetPath
         }
         $targetInfos += $targetInfo
         $targetByName.Add($targetBaseName, $targetInfo)
+    }
+
+    foreach ($reference in $appliedPrototypeReferences) {
+        if (-not $expectedPrototypeSignatures.ContainsKey($reference.AppliedPrototypeName)) {
+            throw "Applied prototype '$($reference.AppliedPrototypeName)' for $($reference.Name) is not present in the selected target union"
+        }
+        $appliedParameterCount = Get-SignatureParameterCount `
+            -Signature $expectedPrototypeSignatures[$reference.AppliedPrototypeName]
+        if ($appliedParameterCount -ne $reference.ParameterCount) {
+            throw "Applied prototype '$($reference.AppliedPrototypeName)' for $($reference.Name) has an incompatible parameter count"
+        }
     }
 
     $prototypeNameList = [Collections.Generic.List[string]]::new()
@@ -514,6 +571,7 @@ function Assert-ApplySummary {
         [int]$summary.validated -ne $TargetInfo.FunctionCount -or
         [int]$summary.unique_function_definitions -ne $TargetInfo.FunctionCount -or
         [int]$summary.seven_argument_targets -ne $TargetInfo.SevenArgumentCount -or
+        [int]$summary.canonicalized_shared_bodies -ne $TargetInfo.CanonicalizedSharedBodyCount -or
         [int]$summary.imported_datatypes -lt 0 -or
         [int]$summary.preserved_labels -lt $TargetInfo.FunctionCount -or
         [string]$summary.calling_convention -cne '__fastcall' -or
@@ -564,6 +622,7 @@ function Assert-ValidateSummary {
         [int]$summary.verified_metadata_labels -ne $TargetInfo.FunctionCount -or
         [int]$summary.validated_parameter_storages -ne $TargetInfo.ParameterCount -or
         [int]$summary.seven_argument_targets -ne $TargetInfo.SevenArgumentCount -or
+        [int]$summary.canonicalized_shared_bodies -ne $TargetInfo.CanonicalizedSharedBodyCount -or
         [string]$summary.calling_convention -cne '__fastcall' -or
         [int]$summary.program_mutations -ne 0 -or
         -not [bool]$summary.read_only -or

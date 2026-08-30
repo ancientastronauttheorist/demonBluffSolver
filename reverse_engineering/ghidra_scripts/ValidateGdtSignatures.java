@@ -267,7 +267,14 @@ public class ValidateGdtSignatures extends HeadlessScript {
             }
 
             LabelEvidence labels = validateLabels(target, address, function);
-            FunctionDefinition definition = uniqueDefinition(archive, target.prototypeName);
+            FunctionDefinition managedDefinition = uniqueDefinition(
+                archive, target.prototypeName
+            );
+            FunctionDefinition definition = target.prototypeName.equals(
+                target.appliedPrototypeName
+            )
+                ? managedDefinition
+                : uniqueDefinition(archive, target.appliedPrototypeName);
             String definitionPath = definition.getDataTypePath().toString();
             if (!seenDefinitionPaths.add(definitionPath)) {
                 throw new IllegalArgumentException(
@@ -451,6 +458,11 @@ public class ValidateGdtSignatures extends HeadlessScript {
         }
         counts.preservedLabels += prepared.labels.symbolCount;
         counts.verifiedMetadataLabels++;
+        if (!prepared.target.prototypeName.equals(
+            prepared.target.appliedPrototypeName
+        )) {
+            counts.canonicalizedSharedBodies++;
+        }
     }
 
     private void validateDynamicStorage(
@@ -575,6 +587,7 @@ public class ValidateGdtSignatures extends HeadlessScript {
             String metadataName = null;
             String signature = null;
             String prototypeName = null;
+            String appliedPrototypeName = null;
             String rva = null;
             reader.beginObject();
             while (reader.hasNext()) {
@@ -591,6 +604,9 @@ public class ValidateGdtSignatures extends HeadlessScript {
                         break;
                     case "prototype_name":
                         prototypeName = reader.nextString();
+                        break;
+                    case "applied_prototype_name":
+                        appliedPrototypeName = reader.nextString();
                         break;
                     case "rva":
                         rva = reader.nextString();
@@ -614,7 +630,23 @@ public class ValidateGdtSignatures extends HeadlessScript {
                     "Invalid prototype_name " + prototypeName + " in " + targetPath
                 );
             }
-            targets.add(new Target(name, metadataName, signature, prototypeName, rva));
+            if (appliedPrototypeName == null) {
+                appliedPrototypeName = prototypeName;
+            }
+            else if (!C_IDENTIFIER.matcher(appliedPrototypeName).matches()) {
+                throw new IllegalArgumentException(
+                    "Invalid applied_prototype_name " + appliedPrototypeName +
+                    " in " + targetPath
+                );
+            }
+            targets.add(new Target(
+                name,
+                metadataName,
+                signature,
+                prototypeName,
+                appliedPrototypeName,
+                rva
+            ));
         }
         reader.endArray();
     }
@@ -648,6 +680,8 @@ public class ValidateGdtSignatures extends HeadlessScript {
             writer.name("validated_parameter_storages")
                 .value(counts.validatedParameterStorages);
             writer.name("seven_argument_targets").value(counts.sevenArgumentTargets);
+            writer.name("canonicalized_shared_bodies")
+                .value(counts.canonicalizedSharedBodies);
             writer.name("calling_convention").value(WINDOWS_X64_CALLING_CONVENTION);
             writer.name("program_mutations").value(0);
             writer.name("read_only").value(true);
@@ -678,6 +712,7 @@ public class ValidateGdtSignatures extends HeadlessScript {
         private int verifiedMetadataLabels;
         private int validatedParameterStorages;
         private int sevenArgumentTargets;
+        private int canonicalizedSharedBodies;
     }
 
     private static class LabelEvidence {
@@ -703,6 +738,7 @@ public class ValidateGdtSignatures extends HeadlessScript {
         private final String metadataName;
         private final String signature;
         private final String prototypeName;
+        private final String appliedPrototypeName;
         private final String rvaText;
         private final long rva;
 
@@ -711,11 +747,13 @@ public class ValidateGdtSignatures extends HeadlessScript {
                 String metadataName,
                 String signature,
                 String prototypeName,
+                String appliedPrototypeName,
                 String rvaText) {
             this.name = name;
             this.metadataName = metadataName;
             this.signature = signature;
             this.prototypeName = prototypeName;
+            this.appliedPrototypeName = appliedPrototypeName;
             this.rvaText = rvaText;
             this.rva = Long.decode(rvaText);
             if (rva <= 0) {
