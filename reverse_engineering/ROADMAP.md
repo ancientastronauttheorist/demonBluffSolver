@@ -155,6 +155,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   cancellation, ResetAfterNight history, and the both-Evil achievement; expand
   the typed union to 21 target sets and 479 memberships and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Bombardier to exact managed `Saint`; native-audit all
+  five role methods plus 18 dispatch, ordinary/forced/Demon death,
+  bookkeeping, and terminal helpers; close the broader non-Demon-death rule,
+  current-`dataRef` managed-type identity, Shaman/Chancellor replacement
+  composition, ordinary-bluff and Drunk/Doppel non-composition,
+  `SaintVillager` exclusion, and automatic-loss precedence; expand the typed
+  union to 22 target sets and 502 memberships and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

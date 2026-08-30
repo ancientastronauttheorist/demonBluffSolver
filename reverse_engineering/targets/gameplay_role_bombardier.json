@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Bombardier role implementation bound to managed Saint, including its no-information passive surface, inherited dispatch and execution defaults, ordinary and forced death paths, demon-kill exemption, and automatic terminal-loss resolution",
+  "functions": [
+    {
+      "name": "Bombardier.get_Description",
+      "metadata_name": "Saint$$get_Description",
+      "signature": "System_String_o* Saint__get_Description (Saint_o* __this, const MethodInfo* method);",
+      "rva": "0x3EA910"
+    },
+    {
+      "name": "Bombardier.GetInfo",
+      "metadata_name": "Saint$$GetInfo",
+      "signature": "ActedInfo_o* Saint__GetInfo (Saint_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EA8B0"
+    },
+    {
+      "name": "Bombardier.GetBluffInfo",
+      "metadata_name": "Saint$$GetBluffInfo",
+      "signature": "ActedInfo_o* Saint__GetBluffInfo (Saint_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EA850"
+    },
+    {
+      "name": "Bombardier.Act",
+      "metadata_name": "Saint$$Act",
+      "signature": "void Saint__Act (Saint_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Recluse__Act",
+      "rva": "0x33ED50"
+    },
+    {
+      "name": "Bombardier.ctor",
+      "metadata_name": "Saint$$.ctor",
+      "signature": "void Saint___ctor (Saint_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Role.GetDamageToYou",
+      "metadata_name": "Role$$GetDamageToYou",
+      "signature": "int32_t Role__GetDamageToYou (Role_o* __this, const MethodInfo* method);",
+      "rva": "0x3C4CD0"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "Role.CheckIfCanBeKilled",
+      "metadata_name": "Role$$CheckIfCanBeKilled",
+      "signature": "bool Role__CheckIfCanBeKilled (Role_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B24C0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.Kill",
+      "metadata_name": "Character$$Kill",
+      "signature": "void Character__Kill (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366130"
+    },
+    {
+      "name": "Character.KillByDemon",
+      "metadata_name": "Character$$KillByDemon",
+      "signature": "void Character__KillByDemon (Character_o* __this, Character_o* evilRef, const MethodInfo* method);",
+      "rva": "0x365FB0"
+    },
+    {
+      "name": "Character.DelayedDemonKill.MoveNext",
+      "metadata_name": "Character.<DelayedDemonKill>d__103$$MoveNext",
+      "signature": "bool Character__DelayedDemonKill_d__103__MoveNext (Character__DelayedDemonKill_d__103_o* __this, const MethodInfo* method);",
+      "rva": "0x3757F0"
+    },
+    {
+      "name": "Character.ExecuteAndReveal",
+      "metadata_name": "Character$$ExecuteAndReveal",
+      "signature": "void Character__ExecuteAndReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364B50"
+    },
+    {
+      "name": "Character.KillAndReveal",
+      "metadata_name": "Character$$KillAndReveal",
+      "signature": "void Character__KillAndReveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365F10"
+    },
+    {
+      "name": "Gameplay.ManageKilledCharacter",
+      "metadata_name": "Gameplay$$ManageKilledCharacter",
+      "signature": "void Gameplay__ManageKilledCharacter (Gameplay_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x37EBD0"
+    },
+    {
+      "name": "WinConditions.CheckEndGameConditions",
+      "metadata_name": "WinConditions$$CheckEndGameConditions",
+      "signature": "void WinConditions__CheckEndGameConditions (WinConditions_o* __this, const MethodInfo* method);",
+      "rva": "0x3ADEA0"
+    },
+    {
+      "name": "WinConditions.DelayedCheckCondition.MoveNext",
+      "metadata_name": "WinConditions.<DelayedCheckCondition>d__21$$MoveNext",
+      "signature": "bool WinConditions__DelayedCheckCondition_d__21__MoveNext (WinConditions__DelayedCheckCondition_d__21_o* __this, const MethodInfo* method);",
+      "rva": "0x3A9480"
+    },
+    {
+      "name": "WinConditions.AutoLose",
+      "metadata_name": "WinConditions$$AutoLose",
+      "signature": "void WinConditions__AutoLose (WinConditions_o* __this, const MethodInfo* method);",
+      "rva": "0x3ADE00"
+    },
+    {
+      "name": "WinConditions.Lose",
+      "metadata_name": "WinConditions$$Lose",
+      "signature": "void WinConditions__Lose (WinConditions_o* __this, const MethodInfo* method);",
+      "rva": "0x3ADFC0"
+    }
+  ]
+}

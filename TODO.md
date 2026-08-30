@@ -37,7 +37,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Slayer — no issues
 - [x] Witness — current-status truth semantics and Chancellor interaction
   native-audited with focused regressions
-- [x] Bombardier — no issues
+- [x] Bombardier — full managed `Saint` boundary native-audited; any
+  non-Demon death whose current `dataRef.role` is exact `Saint` auto-loses,
+  including genuine Shaman/Chancellor identity replacement despite preserved
+  Evil alignment, while ordinary bluff, Drunk/Doppel display copies, and
+  managed `SaintVillager` do not qualify
 - [x] Doppelganger — no issues
 - [x] Drunk — Knight HP edge case
 - [x] Plague Doctor — 154 active observations plus focused native callback tests

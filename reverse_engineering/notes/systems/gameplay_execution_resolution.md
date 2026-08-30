@@ -102,6 +102,7 @@ after the store even when the effective value did not change.
 | --- | ---: |
 | `WinConditions.CheckEndGameConditions` | `0x3ADEA0` |
 | `WinConditions.DelayedCheckCondition.MoveNext` | `0x3A9480` |
+| `WinConditions.AutoLose` | `0x3ADE00` |
 | `WinConditions.Win` | `0x3AF320` |
 | `WinConditions.Lose` | `0x3ADFC0` |
 | `WinConditions.ChangeGameplayState.MoveNext` | `0x3A9100` |
@@ -110,8 +111,8 @@ after the store even when the effective value did not change.
 called; it does not coalesce requests or guard against an existing terminal
 state. After a scaled 0.1-second delay, the iterator applies this precedence:
 
-1. if any dead real-role Saint was not killed by a demon, activate the automatic
-   loss panel and lose;
+1. if any dead card whose current `dataRef.role` is exact managed `Saint` was
+   not killed by a demon, activate the automatic loss panel and lose;
 2. otherwise, if signed player HP is at most zero, activate the ordinary loss
    panel and lose;
 3. otherwise, if the number of Evil-aligned dead-list entries is at least the
@@ -119,10 +120,18 @@ state. After a scaled 0.1-second delay, the iterator applies this precedence:
 4. otherwise, do nothing.
 
 The two Evil counts are independent raw-list scans with no identity matching or
-deduplication. Saint detection ignores demon-killed Saints and checks the real
-role object, not displayed alignment or statuses. As a result, duplicate dead
-entries can satisfy the win comparison early, and empty current/dead lists win
-when HP is positive and no qualifying Saint exists.
+deduplication. Saint detection follows the dead card's current `dataRef` and
+tests that CharacterData's exact managed role type. It does not use a stable
+original identity, the cloned `Character.role`, bluff/display data,
+`registerAs`, alignment, or statuses. Thus a genuine current-data replacement
+to public Bombardier is fatal even if the physical card retains runtime Evil
+alignment, while an ordinary bluff or Drunk/Doppel display copy is not.
+Managed `SaintVillager` also does not satisfy the exact `Saint` test.
+
+`AutoLose` only selects the dedicated automatic-loss panel before common
+`Lose` completion. Duplicate dead entries can satisfy the win comparison
+early, and empty current/dead lists win when HP is positive and no qualifying
+Saint exists.
 
 `Win` reveals all characters first. Its final-day Roguelike branch activates
 the last-day panel, updates scores, and schedules Summary without invoking the
