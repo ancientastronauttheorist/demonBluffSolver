@@ -701,16 +701,235 @@ def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bo
 
 
 def _dreamer_effective_role(target: int, scenario: Scenario, state: GameState) -> str:
-    """Best-known role Dreamer2 could name for a selected target."""
+    """Best-known real role the shipped Dreamer could name for a target."""
     role = effective_role_at(target, scenario, state)
     return role.replace("_", " ") if role else "Unknown"
 
 
-def _dreamer_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
-    """Dreamer2: two targets produce an ambiguous role-pair observation."""
-    target_list = targets if isinstance(targets, list) else [targets]
-    roles = sorted(_dreamer_effective_role(t, scenario, state) for t in target_list)
-    return "|".join(roles)
+def _dreamer_role_identity(role: Optional[str]) -> Optional[str]:
+    """Canonicalize the CharacterData identity represented by a role name."""
+    if not role:
+        return None
+    display = " ".join(role.replace("_", " ").split())
+    card_def = get_card(display)
+    return card_def.name if card_def else display
+
+
+def _dreamer_real_role(
+    position: int,
+    scenario: Scenario,
+    state: GameState,
+) -> str:
+    """Return the scenario's real CharacterData role, not registerAs."""
+    return _dreamer_role_identity(
+        _dreamer_effective_role(position, scenario, state)
+    ) or "Unknown"
+
+
+def _dreamer_known_bluff(
+    position: int,
+    scenario: Scenario,
+    state: GameState,
+) -> Optional[str]:
+    """Project a live bluff pointer when the scenario abstraction proves one.
+
+    ``Scenario`` has no generic bluff field.  Its Evil, Puppet, Drunk, and
+    Doppelganger placements are the cases where a differing visible role is a
+    live bluff.  A differing generated-role trace is deliberately not treated
+    as one: Dreamer reads ``dataRef``/``bluff`` and ignores ``registerAs``.
+    """
+    card = get_card_at(position, state)
+    if card is None:
+        return None
+
+    real = _dreamer_real_role(position, scenario, state)
+    apparent = _dreamer_role_identity(card.apparent_role)
+    if apparent is None or apparent == real:
+        return None
+
+    has_modeled_bluff = (
+        scenario_is_evil(position, scenario)
+        or position == scenario.doppelganger_position
+        or position == scenario.drunk_position
+        or position in state.executed_evil_roles
+    )
+    return apparent if has_modeled_bluff else None
+
+
+def _dreamer_observation(roles: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    """Canonical unordered role options; native randomizes display order."""
+    return tuple(sorted(roles, key=lambda role: (role.casefold(), role)))
+
+
+def _dreamer_board_entries(
+    scenario: Scenario,
+    state: GameState,
+) -> list[tuple[str, Optional[str]]]:
+    """Return current board entries as their real and known bluff identities."""
+    return [
+        (
+            _dreamer_real_role(position, scenario, state),
+            _dreamer_known_bluff(position, scenario, state),
+        )
+        for position in range(1, state.n_cards + 1)
+    ]
+
+
+def _dreamer_add_probability(
+    likelihoods: dict[tuple[str, ...], float],
+    roles: list[str] | tuple[str, ...],
+    probability: float,
+) -> None:
+    observation = _dreamer_observation(roles)
+    likelihoods[observation] = likelihoods.get(observation, 0.0) + probability
+
+
+def _dreamer_honest_likelihoods(
+    targets: list[int] | tuple[int, int],
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple[str, ...], float]:
+    """Exact current-build P(role options | scenario) for truthful Dreamer."""
+    if len(targets) != 2:
+        raise ValueError("Dreamer requires exactly two targets")
+
+    target_positions = list(targets)
+    target_roles = [
+        _dreamer_real_role(position, scenario, state)
+        for position in target_positions
+    ]
+    if any(role.casefold() == "wretch" for role in target_roles):
+        return {("Cabbage",): 1.0}
+
+    likelihoods: dict[tuple[str, ...], float] = {}
+    board_entries = _dreamer_board_entries(scenario, state)
+    if any(real == "Unknown" for real, _ in board_entries):
+        # The scenario abstraction cannot reconstruct an unflipped/blocked
+        # card's CharacterData identity. Do not invent a native observation or
+        # information score from that incomplete projection.
+        return {}
+
+    # Native chooses either selected character as the truthful anchor uniformly.
+    for anchor_index, anchor_role in enumerate(target_roles):
+        other_position = target_positions[1 - anchor_index]
+        other_bluff = _dreamer_known_bluff(other_position, scenario, state)
+        if other_bluff is not None and other_bluff != anchor_role:
+            _dreamer_add_probability(
+                likelihoods, (anchor_role, other_bluff), 0.5
+            )
+            continue
+
+        # The authored usuallyDisguised pool is empty in the pinned build.  The
+        # fallback samples board entries, not unique role identities, and only
+        # excludes entries whose dataRef or bluff matches the anchor.  In
+        # particular, the other selected target remains eligible.
+        eligible_roles = [
+            real
+            for real, bluff in board_entries
+            if real != anchor_role and bluff != anchor_role
+        ]
+        if not eligible_roles:
+            # Native indexes the candidate list without a null fallback. A
+            # valid shipped board supplies an entry; an incomplete synthetic
+            # projection must not fabricate a one-role result.
+            return {}
+
+        branch_probability = 0.5 / len(eligible_roles)
+        for fallback_role in eligible_roles:
+            _dreamer_add_probability(
+                likelihoods,
+                (anchor_role, fallback_role),
+                branch_probability,
+            )
+
+    return likelihoods
+
+
+def _dreamer_liar_likelihoods(
+    targets: list[int] | tuple[int, int],
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple[str, ...], float]:
+    """Exact current-build P(role options | scenario) for lying Dreamer."""
+    if len(targets) != 2:
+        raise ValueError("Dreamer requires exactly two targets")
+
+    target_positions = list(targets)
+    target_reals = [
+        _dreamer_real_role(position, scenario, state)
+        for position in target_positions
+    ]
+    target_bluffs = [
+        _dreamer_known_bluff(position, scenario, state)
+        for position in target_positions
+    ]
+
+    # CharacterPickedDrunk accepts selected bluffs before applying exclusions.
+    # This intentionally permits a selected bluff to equal the other target's
+    # real identity.  Only duplicate bluff identities are collapsed.
+    initial_options: list[str] = []
+    for bluff in target_bluffs:
+        if bluff is not None and bluff not in initial_options:
+            initial_options.append(bluff)
+
+    entries = _dreamer_board_entries(scenario, state)
+    if any(real == "Unknown" for real, _ in entries):
+        return {}
+    identity_pool: list[str] = []
+    for identity in [real for real, _ in entries] + [
+        bluff for _, bluff in entries if bluff is not None
+    ]:
+        if identity not in identity_pool:
+            identity_pool.append(identity)
+
+    selected_identities = set(target_reals)
+    selected_identities.update(
+        bluff for bluff in target_bluffs if bluff is not None
+    )
+    likelihoods: dict[tuple[str, ...], float] = {}
+    available_identity_count = sum(
+        identity not in selected_identities for identity in identity_pool
+    )
+    if available_identity_count < 2 - len(initial_options):
+        # Native would fault while indexing an empty helper pool. Avoid
+        # manufacturing a partial role-pair observation for synthetic states.
+        return {}
+
+    def fill(options: list[str], probability: float) -> None:
+        if len(options) >= 2:
+            _dreamer_add_probability(likelihoods, options[:2], probability)
+            return
+
+        # The shipped roster has no usuallyDisguised-authored candidates, so
+        # every missing option comes from the unique real-then-bluff identity
+        # pool.  Recompute after each draw for uniform sampling without
+        # replacement.
+        candidates = [
+            identity
+            for identity in identity_pool
+            if identity not in selected_identities and identity not in options
+        ]
+        if not candidates:
+            return
+
+        branch_probability = probability / len(candidates)
+        for identity in candidates:
+            fill(options + [identity], branch_probability)
+
+    fill(initial_options, 1.0)
+    return likelihoods
+
+
+def _dreamer_observation_likelihoods(
+    targets: list[int] | tuple[int, int],
+    ability_pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple[str, ...], float]:
+    """Return the native Dreamer observation likelihood for one scenario."""
+    if truth_status(ability_pos, scenario, state) == TruthStatus.TRUTHFUL:
+        return _dreamer_honest_likelihoods(targets, scenario, state)
+    return _dreamer_liar_likelihoods(targets, scenario, state)
 
 
 def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
@@ -958,6 +1177,135 @@ def _recommend_count_ability(
     )
 
 
+def _dreamer_information_for_targets(
+    targets: list[int] | tuple[int, int],
+    ability_pos: int,
+    state: GameState,
+    scenarios: list[Scenario],
+) -> tuple[float, float, int]:
+    """Return (mutual information, expected posterior entropy, outcomes)."""
+    scenario_count = len(scenarios)
+    if scenario_count == 0:
+        return (0.0, 0.0, 0)
+
+    likelihoods: list[dict[tuple[str, ...], float]] = []
+    for scenario in scenarios:
+        distribution = _dreamer_observation_likelihoods(
+            targets, ability_pos, scenario, state
+        )
+        total = sum(distribution.values())
+        if total <= 0:
+            return (0.0, math.log2(scenario_count), 0)
+        # The native models above are normalized.  Renormalizing here makes
+        # posterior arithmetic robust to floating-point accumulation.
+        likelihoods.append({
+            observation: probability / total
+            for observation, probability in distribution.items()
+        })
+
+    marginal_weights: dict[tuple[str, ...], float] = {}
+    for distribution in likelihoods:
+        for observation, probability in distribution.items():
+            marginal_weights[observation] = (
+                marginal_weights.get(observation, 0.0) + probability
+            )
+
+    expected_posterior_entropy = 0.0
+    for observation, likelihood_sum in marginal_weights.items():
+        if likelihood_sum <= 0:
+            continue
+        posterior_entropy = 0.0
+        for distribution in likelihoods:
+            posterior = distribution.get(observation, 0.0) / likelihood_sum
+            if posterior > 0:
+                posterior_entropy -= posterior * math.log2(posterior)
+        observation_probability = likelihood_sum / scenario_count
+        expected_posterior_entropy += observation_probability * posterior_entropy
+
+    prior_entropy = math.log2(scenario_count)
+    mutual_information = max(
+        0.0,
+        min(prior_entropy, prior_entropy - expected_posterior_entropy),
+    )
+    return (
+        mutual_information,
+        expected_posterior_entropy,
+        len(marginal_weights),
+    )
+
+
+def _recommend_dreamer_ability(
+    ability_pos: int,
+    candidate_targets: list[list[int]],
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend a Dreamer pair using its stochastic native likelihood."""
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_targets:
+        return None
+
+    best_targets: Optional[tuple[int, int]] = None
+    best_information = -1.0
+    best_expected_entropy = float("inf")
+    best_outcome_count = 0
+
+    for targets in candidate_targets:
+        target_key = tuple(sorted(targets))
+        if len(target_key) != 2:
+            continue
+        information, expected_entropy, outcome_count = (
+            _dreamer_information_for_targets(
+                target_key, ability_pos, state, scenarios
+            )
+        )
+        if outcome_count == 0:
+            continue
+        if (
+            best_targets is None
+            or information > best_information + 1e-12
+            or (
+                math.isclose(
+                    information,
+                    best_information,
+                    rel_tol=0.0,
+                    abs_tol=1e-12,
+                )
+                and target_key < best_targets
+            )
+        ):
+            best_targets = target_key
+            best_information = information
+            best_expected_entropy = expected_entropy
+            best_outcome_count = outcome_count
+
+    if best_targets is None:
+        return None
+
+    liar_probability = sum(
+        truth_status(ability_pos, scenario, state) == TruthStatus.LYING
+        for scenario in scenarios
+    ) / len(scenarios)
+    warnings = []
+    if liar_probability > 0:
+        warnings.append(
+            f"Lying Dreamer path: {liar_probability:.0%} -- included in native likelihood"
+        )
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Dreamer",
+        targets=list(best_targets),
+        score=best_information,
+        reasoning=(
+            f"Mutual information {best_information:.3f} bits; "
+            f"expected posterior entropy {best_expected_entropy:.3f} bits "
+            f"across {best_outcome_count} native role-pair observations"
+        ),
+        warnings=warnings,
+    )
+
+
 def _recommend_partition_ability(
     ability_name: str,
     ability_pos: int,
@@ -1153,9 +1501,7 @@ def recommend_abilities(
 
         elif role == "Dreamer" and len(others) >= 2:
             candidates = [list(c) for c in combinations(others, 2)]
-            rec = _recommend_partition_ability(
-                "Dreamer", pos,
-                _dreamer_ground_truth, candidates, state, result)
+            rec = _recommend_dreamer_ability(pos, candidates, state, result)
             _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Druid" and len(others) >= 3:
