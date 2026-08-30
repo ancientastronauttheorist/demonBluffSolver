@@ -200,13 +200,15 @@ Memory reader notes:
 - Baa hides an Outcast in deck view, and when Baa dies the hidden card should
   reveal. In asc82_v2, executing Baa revealed the hidden deck card as Drunk.
   `game_loop.py` has `_baa_post_execute_reveal()` to detect this.
-- Dreamer2 picks two characters and produces an ambiguous result like
-  `Among #X, #Y there is: RoleA or RoleB`. Some older notes mention a role
-  picker; in the 2026-05-05 live build, the result appeared immediately after
-  the second character pick. The Rust validator can match any role type, not
-  only evil roles. Solver recommendations for Dreamer must include two targets;
-  if only one target is printed, stop and fix the strategy before firing the
-  ability. Watch live outputs to confirm `Gravedigger` no longer appears.
+- The public Dreamer asset binds managed `Dreamer`, not the unbound alternate
+  `Dreamer2`. It picks exactly two characters and immediately produces either
+  `Among #X, #Y there is: RoleA or RoleB` or the truthful Wretch/Cabbage clue;
+  there is no role picker. Native current-build fallback can truthfully name
+  both selected roles, and a lying clue can collide with one selected real role
+  through the other target's bluff. Validate exact native output support rather
+  than enforcing authored one-match/zero-match counts. Solver recommendations
+  must include two targets; if only one is printed, stop and fix the strategy.
+  Do not infer that a role such as Gravedigger was removed from a few outputs.
 - Rambler was redesigned. Old solver code modeled "picked by a liar silences
   Rambler"; that rule is obsolete. New rule: adjacent truthful characters tell
   Rambler to shut up instead of sharing their own info. `auto_card` should record

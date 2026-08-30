@@ -99,24 +99,90 @@ def card_shut_up(pos: int, role: str, target: int) -> CardInfo:
     """A Rambler-redesign clue: this card said "#target shut up!"."""
     return CardInfo(pos, _normalize_role_name(role), info_parsed={"shut_up_target": target})
 
-def card_dreamer(pos: int, target: int, evil_role: str) -> CardInfo:
-    return CardInfo(pos, "Dreamer", info_parsed={"target": target, "evil_role": evil_role})
+def card_dreamer(
+    pos: int,
+    target: int,
+    evil_role: str,
+    info_text: str = "",
+) -> CardInfo:
+    return CardInfo(
+        pos,
+        "Dreamer",
+        info_text=info_text,
+        info_parsed={"target": target, "evil_role": evil_role},
+    )
 
 
-def card_dreamer_ambiguous(pos: int, targets: list[int], evil_role_options: list[str]) -> CardInfo:
-    """Dreamer2 post-patch output: "Among #X, #Y there is: R1 or R2".
+def _validate_dreamer_targets(targets) -> list[int]:
+    try:
+        normalized = list(targets)
+    except TypeError as exc:
+        raise ValueError("Dreamer requires exactly 2 integer targets") from exc
+    if len(normalized) != 2 or any(type(target) is not int for target in normalized):
+        raise ValueError("Dreamer requires exactly 2 integer targets")
+    return normalized
 
-    The Rust solver handles this shape in validators/mod.rs (Shape 2 ambiguous
-    Dreamer): {targets, evil_role_options}. One of the named roles is at one
-    of the listed positions, but the mapping is unknown.
 
-    Also fires for corrupted Dreamer1 (Drunk-as-Dreamer in asc74_v7) which
-    the game renders in the same ambiguous form.
+def _validate_dreamer_role_options(role_options) -> list[str]:
+    try:
+        normalized = [
+            option.strip() if isinstance(option, str) else option
+            for option in role_options
+        ]
+    except TypeError as exc:
+        raise ValueError("Dreamer requires exactly 2 nonempty distinct role options") from exc
+    if (
+        len(normalized) != 2
+        or any(not isinstance(option, str) or not option for option in normalized)
+        or _dreamer_role_key(normalized[0]) == _dreamer_role_key(normalized[1])
+    ):
+        raise ValueError("Dreamer requires exactly 2 nonempty distinct role options")
+    return normalized
+
+
+def card_dreamer_ambiguous(
+    pos: int,
+    targets: list[int],
+    evil_role_options: list[str],
+    info_text: str = "",
+) -> CardInfo:
+    """Public Dreamer output: "Among #X, #Y there is: R1 or R2".
+
+    The Rust solver handles this shape as `{targets, evil_role_options}` and
+    tests the observation against the actor's truthful or lying native output
+    support. Role order does not map to target order.
     """
-    return CardInfo(pos, "Dreamer", info_parsed={
-        "targets": list(targets),
-        "evil_role_options": list(evil_role_options),
-    })
+    normalized_targets = _validate_dreamer_targets(targets)
+    normalized_options = _validate_dreamer_role_options(evil_role_options)
+    return CardInfo(
+        pos,
+        "Dreamer",
+        info_text=info_text,
+        info_parsed={
+            "targets": normalized_targets,
+            "evil_role_options": normalized_options,
+        },
+    )
+
+
+def card_dreamer_cabbage(
+    pos: int,
+    targets: list[int],
+    info_text: str = "",
+) -> CardInfo:
+    """Public Dreamer's Wretch clue: one selected target is a Cabbage."""
+    normalized_targets = _validate_dreamer_targets(targets)
+    return CardInfo(
+        pos,
+        "Dreamer",
+        info_text=info_text,
+        info_parsed={"targets": normalized_targets, "cabbage": True},
+    )
+
+
+def _dreamer_role_key(role: str) -> str:
+    """Canonical comparison key for the two native role-name options."""
+    return "".join(character for character in role.casefold() if character.isalnum())
 
 
 def _has_active_clue_result(card: CardInfo) -> bool:
@@ -141,15 +207,46 @@ def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], lis
     if not clue:
         return None
     import re
-    m = re.search(
-        r'Among\s+((?:#\d+(?:\s*,\s*)?)+)\s+there\s+is\s*:?\s*([\w\s]+?)\s+or\s+([\w\s]+?)\s*\.?\s*$',
-        clue, re.IGNORECASE | re.DOTALL
+    m = re.fullmatch(
+        r'\s*Among\s+#\s*(\d+)\s*,\s*#\s*(\d+)\s+'
+        r'there\s+is\s*:?\s*'
+        r"([A-Za-z][A-Za-z _'-]*?)\s+or\s+"
+        r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
+        clue,
+        re.IGNORECASE | re.DOTALL,
     )
     if not m:
         return None
-    targets = [int(x) for x in re.findall(r'#(\d+)', m.group(1))]
-    options = [m.group(2).strip(), m.group(3).strip()]
-    return (targets, options)
+    targets = [int(m.group(1)), int(m.group(2))]
+    options = [m.group(3).strip(), m.group(4).strip()]
+    if any(re.search(r'\bor\b', option, re.IGNORECASE) for option in options):
+        return None
+    try:
+        return (
+            _validate_dreamer_targets(targets),
+            _validate_dreamer_role_options(options),
+        )
+    except ValueError:
+        return None
+
+
+def _parse_cabbage_between(clue: Optional[str]) -> Optional[list[int]]:
+    """Parse "Between #X, #Y there is: a Cabbage" into two target IDs."""
+    if not clue:
+        return None
+    import re
+    m = re.fullmatch(
+        r'\s*Between\s+#\s*(\d+)\s*,\s*#\s*(\d+)\s+'
+        r'there\s+is\s*:\s*a\s+Cabbage\s*[.!]?\s*',
+        clue,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if not m:
+        return None
+    try:
+        return _validate_dreamer_targets([int(m.group(1)), int(m.group(2))])
+    except ValueError:
+        return None
 
 def card_judge(pos: int, target: int, is_lying: bool) -> CardInfo:
     return CardInfo(pos, "Judge", info_parsed={"target": target, "is_lying": is_lying})
@@ -1782,19 +1879,42 @@ def _parse_clue_from_memory(card: dict) -> Optional[CardInfo]:
         is_lying = 'lying' in clue.lower() or 'liar' in clue.lower()
         return card_judge(pos, targets[0], is_lying)
 
-    # --- Dreamer: target + evil role from clue ---
+    # --- Dreamer: public two-target role pair/Cabbage, then legacy one-target ---
     if role_lower == 'dreamer':
-        # Dreamer2 post-patch: "Among #X, #Y there is: R1 or R2" — try ambiguous form first.
+        # Public shipped Dreamer: IDs serialized in the clue are authoritative.
         ambiguous = _parse_ambiguous_among(clue)
         if ambiguous:
             amb_targets, options = ambiguous
-            return card_dreamer_ambiguous(pos, amb_targets or targets, options)
-        # Old Dreamer1 form: "#N could be: <Role>" or "#N is <Role>"
-        if targets:
-            m = re.search(r'(?:could be|is)\s*:?\s*(\w[\w\s]*)', clue, re.IGNORECASE)
-            if m:
-                evil_role = m.group(1).strip()
-                return card_dreamer(pos, targets[0], evil_role)
+            return card_dreamer_ambiguous(
+                pos,
+                amb_targets,
+                options,
+                info_text=clue,
+            )
+        cabbage_targets = _parse_cabbage_between(clue)
+        if cabbage_targets:
+            return card_dreamer_cabbage(
+                pos,
+                cabbage_targets,
+                info_text=clue,
+            )
+
+        # Old Dreamer1 form. Anchor the complete clue and capture its own ID;
+        # otherwise Dreamer2's "None of them is <type>" sentence can be
+        # mistaken for a one-target role clue.
+        m = re.fullmatch(
+            r"\s*#\s*(\d+)\s+(?:could\s+be|is)\s*:?\s*"
+            r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            return card_dreamer(
+                pos,
+                int(m.group(1)),
+                m.group(2).strip(),
+                info_text=clue,
+            )
 
     # --- Druid: "Among #A, #B, #C there is: <Outcast>" or no outcasts ---
     if role_lower == 'druid' and targets:
@@ -1927,7 +2047,7 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     """Parse CLI args for a card builder call.
 
     Format: <role> <pos> [args...]
-    Role aliases: fortune_teller, plague_doctor, no_info
+    Role aliases: fortune_teller, plague_doctor, dreamer_old, no_info
     """
     role = args[0].lower()
     pos = int(args[1])
@@ -1994,12 +2114,15 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role in ("shut_up", "shutup"):
         # card shut_up <pos> <apparent_role> <target>
         return card_shut_up(pos, args[2], int(args[3]))
-    elif role == "dreamer":
-        return card_dreamer(pos, int(args[2]), args[3])
-    elif role in ("dreamer2", "dreamer_ambiguous"):
+    elif role in ("dreamer", "dreamer2", "dreamer_ambiguous"):
         targets = [int(x) for x in args[2].split(",")]
-        roles = [x.strip().replace("_", " ") for x in args[3].split(",") if x.strip()]
+        roles = [x.strip().replace("_", " ") for x in args[3].split(",")]
         return card_dreamer_ambiguous(pos, targets, roles)
+    elif role in ("dreamer_old", "dreamer1"):
+        return card_dreamer(pos, int(args[2]), args[3].replace("_", " "))
+    elif role == "dreamer_cabbage":
+        targets = [int(x) for x in args[2].split(",")]
+        return card_dreamer_cabbage(pos, targets)
     elif role == "judge":
         is_lying = args[3].lower() in ("lying", "true", "1", "yes")
         return card_judge(pos, int(args[2]), is_lying)
@@ -2322,6 +2445,9 @@ def main():
         print("  card oracle 5 2,6 Shaman")
         print("  card bishop 7 4,7,9 Outcast,Minion,Villager")
         print("  card jester 7 1,3,5 1")
+        print("  card dreamer 5 3,9 Puppeteer,Lover")
+        print("  card dreamer_cabbage 5 3,9")
+        print("  card dreamer_old 5 3 Pooka")
         print("  card poet 5 knitter 0       (Poet gave Knitter-style clue)")
         print("  card poet 3 lover 2         (Poet gave Lover-style clue)")
         print("  card poet 4 bard 1          (Poet gave Bard-style clue)")

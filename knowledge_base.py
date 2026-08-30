@@ -116,7 +116,7 @@ VILLAGERS = [
          "If I am Evil or Corrupted: 'I am dizzy'",
          lies=False, disguises=False, cant_lie=True),
     Card("Dreamer", Role.VILLAGER, Alignment.GOOD,
-         "Pick 1 character: Learn an Evil role. If Evil picked, Learn its info.",
+         "Pick 2 characters. Learn 2 roles; at least one is among them. Wretch yields Cabbage.",
          lies=False, disguises=False, activated_ability=True),
     Card("Druid", Role.VILLAGER, Alignment.GOOD,
          "Pick 3 characters. Learn 1 random Outcast among them (if any).",

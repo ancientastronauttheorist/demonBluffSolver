@@ -1,13 +1,12 @@
-"""Unit tests for the corrupted/lying Dreamer "Among ... there is: A or B" parser.
+"""Unit tests for the public Dreamer "Among ... there is: A or B" parser.
 
 Covers:
   - _parse_ambiguous_among helper (pure regex)
   - card_dreamer_ambiguous constructor (CardInfo shape)
   - _parse_clue_from_memory integration (new branch + fallback to standard form)
 
-Real game strings captured (see tests/cases_v2/asc74_v2.json, asc74_v7.json):
-  asc74_v7 (Drunk-as-Dreamer #7): "Among\\n#4, #9\\nthere is:\\nPooka or Rambler"
-  asc74_v2 (corrupted Dreamer #9): "Among\\n#1, #8\\nthere is:\\nLilis or Knitter"
+The strings below preserve historical fixtures; the exact shipped public
+native shape is pinned independently by the reverse-engineering audit.
 """
 
 import unittest
@@ -62,17 +61,11 @@ class TestParseAmbiguousAmong(unittest.TestCase):
 
     def test_three_targets(self):
         clue = "Among #1, #4, #9 there is: Pooka or Rambler"
-        self.assertEqual(
-            _parse_ambiguous_among(clue),
-            ([1, 4, 9], ["Pooka", "Rambler"]),
-        )
+        self.assertIsNone(_parse_ambiguous_among(clue))
 
     def test_single_target(self):
         clue = "Among #4 there is: Pooka or Rambler"
-        self.assertEqual(
-            _parse_ambiguous_among(clue),
-            ([4], ["Pooka", "Rambler"]),
-        )
+        self.assertIsNone(_parse_ambiguous_among(clue))
 
     def test_role_names_with_spaces(self):
         clue = "Among #4, #9 there is: Plague Doctor or Twin Minion"
@@ -187,7 +180,7 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
         self.assertEqual(ci.info_parsed["evil_role_options"], ["Pooka", "Rambler"])
 
 
-class TestDreamer2Strategy(unittest.TestCase):
+class TestPublicDreamerStrategy(unittest.TestCase):
     def test_dreamer_recommendation_uses_two_targets(self):
         state = GameState(
             n_cards=3,
@@ -227,7 +220,7 @@ class TestDreamer2Strategy(unittest.TestCase):
 
 
 class TestManualActiveAbilityBookkeeping(unittest.TestCase):
-    def test_manual_dreamer2_entry_marks_ability_used(self):
+    def test_manual_dreamer_entry_marks_ability_used(self):
         session = GameSession(3, 1)
         session.add_card(card_dreamer_ambiguous(1, [2, 3], ["Minion", "Bard"]))
         self.assertIn(1, session.used_abilities)
