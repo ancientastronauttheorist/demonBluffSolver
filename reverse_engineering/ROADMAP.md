@@ -146,6 +146,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   guarantee, failure mutations, and register-as/HUD separation; expand the
   typed union to 20 target sets and 454 memberships and publish its combined
   baseline-versus-typed quality report.
+- [x] Asset-bind public Fortune Teller to managed `FortuneTeller`;
+  native-audit all 11 role methods, all six compiler-generated helpers, and
+  eight dispatch, registered-alignment, click, picker, and acted-record
+  helpers; close unrestricted two-target legality, exact-reference toggle and
+  `OnPicked` ordering, truthful registered-Evil OR and deterministic lying
+  complement, discarded RNG consumption, ascending-ID speech/reference shape,
+  cancellation, ResetAfterNight history, and the both-Evil achievement; expand
+  the typed union to 21 target sets and 479 memberships and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

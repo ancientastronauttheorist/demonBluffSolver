@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Fortune Teller role implementation with its two-target picker, registered-alignment truth and bluff callbacks, exact clue/reference shape, and compiler-generated ordering helpers",
+  "functions": [
+    {
+      "name": "FortuneTeller.CompilerGenerated.cctor",
+      "metadata_name": "FortuneTeller.<>c$$.cctor",
+      "signature": "void FortuneTeller___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F0A20"
+    },
+    {
+      "name": "FortuneTeller.CompilerGenerated.ctor",
+      "metadata_name": "FortuneTeller.<>c$$.ctor",
+      "signature": "void FortuneTeller___c___ctor (FortuneTeller___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "FortuneTeller.CompilerGenerated.CharacterPickedSortId",
+      "metadata_name": "FortuneTeller.<>c$$<CharacterPicked>b__6_0",
+      "signature": "int32_t FortuneTeller___c___CharacterPicked_b__6_0 (FortuneTeller___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "FortuneTeller.CompilerGenerated.CharacterPickedTieBreak",
+      "metadata_name": "FortuneTeller.<>c$$<CharacterPicked>b__6_1",
+      "signature": "float FortuneTeller___c___CharacterPicked_b__6_1 (FortuneTeller___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "FortuneTeller.CompilerGenerated.CharacterPickedDrunkSortId",
+      "metadata_name": "FortuneTeller.<>c$$<CharacterPickedDrunk>b__8_0",
+      "signature": "int32_t FortuneTeller___c___CharacterPickedDrunk_b__8_0 (FortuneTeller___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "applied_prototype_name": "FortuneTeller___c___CharacterPicked_b__6_0",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "FortuneTeller.CompilerGenerated.CharacterPickedDrunkTieBreak",
+      "metadata_name": "FortuneTeller.<>c$$<CharacterPickedDrunk>b__8_1",
+      "signature": "float FortuneTeller___c___CharacterPickedDrunk_b__8_1 (FortuneTeller___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "FortuneTeller.get_Description",
+      "metadata_name": "FortuneTeller$$get_Description",
+      "signature": "System_String_o* FortuneTeller__get_Description (FortuneTeller_o* __this, const MethodInfo* method);",
+      "rva": "0x3DBDE0"
+    },
+    {
+      "name": "FortuneTeller.GetInfo",
+      "metadata_name": "FortuneTeller$$GetInfo",
+      "signature": "ActedInfo_o* FortuneTeller__GetInfo (FortuneTeller_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DBA70"
+    },
+    {
+      "name": "FortuneTeller.GetBluffInfo",
+      "metadata_name": "FortuneTeller$$GetBluffInfo",
+      "signature": "ActedInfo_o* FortuneTeller__GetBluffInfo (FortuneTeller_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DBA10"
+    },
+    {
+      "name": "FortuneTeller.Act",
+      "metadata_name": "FortuneTeller$$Act",
+      "signature": "void FortuneTeller__Act (FortuneTeller_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DA600"
+    },
+    {
+      "name": "FortuneTeller.StopPick",
+      "metadata_name": "FortuneTeller$$StopPick",
+      "signature": "void FortuneTeller__StopPick (FortuneTeller_o* __this, const MethodInfo* method);",
+      "rva": "0x3DBAD0"
+    },
+    {
+      "name": "FortuneTeller.CharacterPicked",
+      "metadata_name": "FortuneTeller$$CharacterPicked",
+      "signature": "void FortuneTeller__CharacterPicked (FortuneTeller_o* __this, const MethodInfo* method);",
+      "rva": "0x3DB180"
+    },
+    {
+      "name": "FortuneTeller.BluffAct",
+      "metadata_name": "FortuneTeller$$BluffAct",
+      "signature": "void FortuneTeller__BluffAct (FortuneTeller_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DA870"
+    },
+    {
+      "name": "FortuneTeller.CharacterPickedDrunk",
+      "metadata_name": "FortuneTeller$$CharacterPickedDrunk",
+      "signature": "void FortuneTeller__CharacterPickedDrunk (FortuneTeller_o* __this, const MethodInfo* method);",
+      "rva": "0x3DAAE0"
+    },
+    {
+      "name": "FortuneTeller.ConjourInfo",
+      "metadata_name": "FortuneTeller$$ConjourInfo",
+      "signature": "System_String_o* FortuneTeller__ConjourInfo (FortuneTeller_o* __this, int32_t id, int32_t id2, bool isEvil, const MethodInfo* method);",
+      "rva": "0x3DB950"
+    },
+    {
+      "name": "FortuneTeller.CheckAchievementsAndUnlockIfAble",
+      "metadata_name": "FortuneTeller$$CheckAchievementsAndUnlockIfAble",
+      "signature": "void FortuneTeller__CheckAchievementsAndUnlockIfAble (FortuneTeller_o* __this, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x3DB8A0"
+    },
+    {
+      "name": "FortuneTeller.ctor",
+      "metadata_name": "FortuneTeller$$.ctor",
+      "signature": "void FortuneTeller___ctor (FortuneTeller_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterPicker.CancelPick",
+      "metadata_name": "CharacterPicker$$CancelPick",
+      "signature": "void CharacterPicker__CancelPick (CharacterPicker_o* __this, const MethodInfo* method);",
+      "rva": "0x378CC0"
+    },
+    {
+      "name": "CharacterPicker.StartPickCharacters",
+      "metadata_name": "CharacterPicker$$StartPickCharacters",
+      "signature": "void CharacterPicker__StartPickCharacters (CharacterPicker_o* __this, int32_t howMany, Character_o* picker, const MethodInfo* method);",
+      "rva": "0x379260"
+    },
+    {
+      "name": "CharacterPicker.ClickedCharacter",
+      "metadata_name": "CharacterPicker$$ClickedCharacter",
+      "signature": "void CharacterPicker__ClickedCharacter (Character_o* ch, const MethodInfo* method);",
+      "rva": "0x378DB0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    }
+  ]
+}

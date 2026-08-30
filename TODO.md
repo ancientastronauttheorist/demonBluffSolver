@@ -17,7 +17,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Druid — no issues
 - [x] Empress — self-pointing constraint (low priority)
 - [x] Enlightened — no issues
-- [x] Fortune Teller — no issues
+- [x] Fortune Teller — full managed `FortuneTeller` boundary native-audited;
+  unrestricted two-target picker, exact registered-alignment truth and lying
+  complement, ascending speech/reference order, ResetAfterNight history,
+  discarded RNG draw, and both-Evil achievement closed
 - [x] Gemcrafter — self-pointing constraint (medium priority)
 - [x] Hunter — Wretch bug (critical)
 - [x] Jester — no issues
@@ -173,6 +176,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] **Judge**: Full managed `Judge2` boundary audited; strict speech/reference
   shape, self/dead/hidden/unused-active targeting, truth-appearance queries,
   deterministic corrupted-actor inversion, and multi-night history covered.
+- [x] **Fortune Teller**: Full managed `FortuneTeller` boundary audited;
+  self/dead/hidden/unused-active targets, exact two-reference ordering,
+  Wretch/Drunk registered-alignment edges, deterministic corrupted-actor
+  inversion, ResetAfterNight history, and truthful both-Evil achievement
+  documented against all 95 parsed v2 results.
 - [x] **Witch**: Full managed `Cipher` boundary audited; exact one-quota Start,
   no stored blocked target, self-block, killed-hidden exclusion, picker/execute
   bypasses, unused-active flip consequence, ordinary/Slayer/Lilis cleanup, and
