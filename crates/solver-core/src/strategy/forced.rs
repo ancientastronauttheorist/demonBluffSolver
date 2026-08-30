@@ -145,7 +145,8 @@ pub fn find_forced_execution(
             .then(a.cmp(b))
     });
 
-    let executed_set: HashSet<u8> = state.executed.iter().copied().collect();
+    let executed_set: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
     let all_indices: Vec<usize> = (0..scenarios.len()).collect();
 
     // Memoization table
@@ -316,6 +317,39 @@ mod tests {
             chancellor_trace: None,
             chancellor_conversion: None,
         }
+    }
+
+    #[test]
+    fn forced_search_treats_night_killed_evil_as_terminally_dead() {
+        let state = GameState {
+            n_cards: 1,
+            night_kills: vec![1],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![make_scenario(&[(1, "Witch")])], reasoning: vec![],
+        };
+        assert_eq!(find_forced_execution(&state, &result, &[1]), None);
+    }
+
+    #[test]
+    fn forced_search_never_selects_night_killed_candidate() {
+        let state = GameState {
+            n_cards: 2,
+            night_kills: vec![1],
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![make_scenario(&[
+                (1, "Pooka"), (2, "Witch"),
+            ])],
+            reasoning: vec![],
+        };
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2]), Some(2));
     }
 
     #[test]

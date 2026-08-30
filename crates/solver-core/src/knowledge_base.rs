@@ -86,7 +86,7 @@ pub static ALL_CARDS: &[Card] = &[
 
     // ── Minions (Evil) ── 8 cards
     Card { name: "Chancellor",     faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
-    Card { name: "Witch",          faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
+    Card { name: "Witch",          faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Minion",         faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
     Card { name: "Poisoner",       faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: true },
     Card { name: "Twin Minion",    faction: Faction::Minion,   alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
@@ -190,5 +190,8 @@ mod tests {
         let wretch = get_card("Wretch").unwrap();
         assert_eq!(wretch.alignment, Alignment::Good);
         assert_eq!(wretch.faction, Faction::Outcast);
+
+        let witch = get_card("Witch").unwrap();
+        assert!(witch.game_start_ability);
     }
 }

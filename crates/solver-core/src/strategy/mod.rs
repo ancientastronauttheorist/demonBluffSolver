@@ -41,9 +41,10 @@ pub fn evil_probabilities(state: &GameState, result: &SolverResult) -> HashMap<u
         return HashMap::new();
     }
     let mut probs = HashMap::new();
-    let executed: HashSet<u8> = state.executed.iter().copied().collect();
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
     for pos in 1..=state.n_cards {
-        if executed.contains(&pos) {
+        if dead.contains(&pos) {
             continue;
         }
         let count = result.surviving_scenarios.iter()
@@ -60,13 +61,14 @@ pub fn remaining_evil_bounds(state: &GameState, result: &SolverResult) -> (usize
     if result.surviving_scenarios.is_empty() {
         return (0, 0);
     }
-    let executed: HashSet<u8> = state.executed.iter().copied().collect();
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
     let counts: Vec<usize> = result.surviving_scenarios.iter().map(|s| {
         let mut count = s.evil_positions.keys()
-            .filter(|p| !executed.contains(p))
+            .filter(|p| !dead.contains(p))
             .count();
         if let Some(pp) = s.puppet_position {
-            if !executed.contains(&pp) {
+            if !dead.contains(&pp) {
                 count += 1;
             }
         }
@@ -96,10 +98,11 @@ pub fn corruption_risk(pos: u8, state: &GameState, result: &SolverResult) -> f64
 /// Check if Witch could be alive in any surviving scenario.
 /// Ported from strategy.py:170-176.
 pub fn witch_might_be_alive(state: &GameState, result: &SolverResult) -> bool {
-    let executed: HashSet<u8> = state.executed.iter().copied().collect();
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
     result.surviving_scenarios.iter().any(|s| {
         s.evil_positions.iter().any(|(pos, role)| {
-            role == "Witch" && !executed.contains(pos)
+            normalize_role(role) == "witch" && !dead.contains(pos)
         })
     })
 }
@@ -314,6 +317,22 @@ mod tests {
     }
 
     #[test]
+    fn evil_probabilities_omit_night_killed_positions() {
+        let state = GameState {
+            n_cards: 3, night_kills: vec![2], ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![make_scenario(&[(2, "Witch"), (3, "Pooka")])],
+            reasoning: vec![],
+        };
+        let probs = evil_probabilities(&state, &result);
+        assert!(!probs.contains_key(&2));
+        assert_eq!(probs[&3], 1.0);
+    }
+
+    #[test]
     fn test_remaining_evil_bounds() {
         let state = GameState {
             n_cards: 5,
@@ -335,6 +354,51 @@ mod tests {
         let (min, max) = remaining_evil_bounds(&state, &result);
         assert_eq!(min, 1);
         assert_eq!(max, 2);
+    }
+
+    #[test]
+    fn remaining_evil_bounds_excludes_executed_and_night_killed_evils() {
+        let state = GameState {
+            n_cards: 4,
+            executed: vec![1],
+            night_kills: vec![3],
+            ..GameState::default()
+        };
+        let mut scenario = make_scenario(&[(1, "Pooka"), (3, "Witch")]);
+        scenario.puppet_position = Some(4);
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![scenario], reasoning: vec![],
+        };
+
+        assert_eq!(remaining_evil_bounds(&state, &result), (1, 1));
+        let state = GameState { night_kills: vec![3, 4], ..state };
+        assert_eq!(remaining_evil_bounds(&state, &result), (0, 0));
+    }
+
+    #[test]
+    fn witch_liveness_tracks_each_named_witch_across_death_surfaces() {
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![make_scenario(&[(2, "Witch"), (4, "Witch")])],
+            reasoning: vec![],
+        };
+        let one_executed = GameState {
+            n_cards: 4, executed: vec![2], ..GameState::default()
+        };
+        assert!(witch_might_be_alive(&one_executed, &result));
+
+        let split_deaths = GameState {
+            night_kills: vec![4], ..one_executed.clone()
+        };
+        assert!(!witch_might_be_alive(&split_deaths, &result));
+
+        let both_night_killed = GameState {
+            executed: vec![], night_kills: vec![2, 4], ..one_executed
+        };
+        assert!(!witch_might_be_alive(&both_night_killed, &result));
     }
 
     #[test]

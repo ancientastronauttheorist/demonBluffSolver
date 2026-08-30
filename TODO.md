@@ -42,7 +42,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Puppeteer — no issues
 - [x] Shaman — guaranteed duplicate not enforced
 - [x] Twin Minion — no issues
-- [x] Witch — no issues
+- [x] Witch — full managed `Cipher` boundary native-audited; global quota,
+  last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues
 - [x] Lilis — Knight immunity + Good-priority constraints
 - [x] Pooka — no issues
@@ -139,3 +140,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] **Judge**: Full managed `Judge2` boundary audited; strict speech/reference
   shape, self/dead/hidden/unused-active targeting, truth-appearance queries,
   deterministic corrupted-actor inversion, and multi-night history covered.
+- [x] **Witch**: Full managed `Cipher` boundary audited; exact one-quota Start,
+  no stored blocked target, self-block, killed-hidden exclusion, picker/execute
+  bypasses, unused-active flip consequence, ordinary/Slayer/Lilis cleanup, and
+  between-village reset documented against 67 v2 Witch-deck fixtures.

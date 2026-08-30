@@ -75,7 +75,7 @@ class GameStateMachine:
         dead = set(self.session.executed) | set(self.session.night_kills)
         all_positions = set(range(1, self.session.n_cards + 1))
         flipped = set(self.session.reveal_order)
-        blocked = set(self.session.blocked_positions)
+        blocked = self._active_blocked_positions()
         unrevealed = all_positions - flipped - dead - blocked
 
         if unrevealed and not flipped:
@@ -106,7 +106,7 @@ class GameStateMachine:
             entered = {c.position for c in self.session.cards}
             flipped = set(self.session.reveal_order)
             dead = set(self.session.executed) | set(self.session.night_kills)
-            needs_entry = flipped - dead - entered - set(self.session.blocked_positions)
+            needs_entry = flipped - dead - entered - self._active_blocked_positions()
             if not needs_entry:
                 self.phase = GamePhase.SOLVING
             else:
@@ -346,15 +346,12 @@ class GameStateMachine:
         print(f"\n  [auto] Phase: FLIPPING")
 
         if self.session.is_lilis_alive():
+            before_batch_index = self.session.lilis_batch_index
             dispatch("flip", ["--lilis"], self.session)
-            # Check if Lilis night triggered (batch was full 4 cards)
-            if self.session.lilis_batch_index > 0:
-                remaining = self._unrevealed_positions()
-                if remaining:
-                    # Night phase needed before next batch
-                    self.phase = GamePhase.LILIS_NIGHT
-                    return
-                # No more to flip — might still need night resolve
+            # Only this call's four verified reveals can open a fresh night.
+            if self.session.lilis_batch_index > before_batch_index:
+                self.phase = GamePhase.LILIS_NIGHT
+                return
             remaining = self._unrevealed_positions()
             if remaining:
                 return  # stay in FLIPPING for next batch
@@ -378,7 +375,7 @@ class GameStateMachine:
         entered = {c.position for c in self.session.cards}
         flipped = set(self.session.reveal_order)
         dead = set(self.session.executed) | set(self.session.night_kills)
-        blocked = set(self.session.blocked_positions)
+        blocked = self._active_blocked_positions()
         needs_entry = sorted(flipped - dead - entered - blocked)
 
         if needs_entry:
@@ -478,12 +475,6 @@ class GameStateMachine:
                 print(f"  [auto] Execution blocked on #{pos}: confirmed Knight immunity")
             elif exec_result["was_evil"]:
                 print(f"  [auto] Executed #{pos}: {exec_result['evil_role']} (EVIL)")
-                # Check if we just killed the Witch — unblock any blocked position
-                if exec_result['evil_role'] and 'Witch' in exec_result['evil_role']:
-                    if self.session.blocked_positions:
-                        blocked_pos = self.session.blocked_positions[0]
-                        print(f"  [auto] Witch killed! Unblocking #{blocked_pos}")
-                        # Will be handled by next solve -> reveal recommendation
             else:
                 print(f"  [auto] WRONG EXECUTION on #{pos}! HP now {self.session.hp}")
                 if self.session.hp <= 0:
@@ -512,7 +503,12 @@ class GameStateMachine:
         import time
         from game_utils import all_game_card_coords
         import template_match as _tm
-        from game_loop import _parse_clue_from_memory, DecisionLog
+        from game_loop import (
+            DecisionLog,
+            _apply_flip_verification,
+            _parse_clue_from_memory,
+            _verify_flips,
+        )
 
         pos = self._pending_reveal[0]
         print(f"\n  [auto] Phase: REVEALING #{pos}")
@@ -533,8 +529,10 @@ class GameStateMachine:
             return
 
         if pos in blocked:
-            self._pause(f"#{pos} is Witch-blocked — execute Witch first")
-            return
+            print(
+                f"  [auto] Re-probing previously blocked #{pos}; memory "
+                "verification will either clear or restore the marker."
+            )
 
         # Check for unused active ability at this position
         if self._has_active_ability(pos):
@@ -554,10 +552,6 @@ class GameStateMachine:
         else:
             _tm.fast_click_at(x, y, f"reveal_card{pos}")
 
-        # Record reveal order
-        if pos not in self.session.reveal_order:
-            self.session.reveal_order.append(pos)
-
         # Wait for flip via memory reader
         if self.monitor and self.monitor.is_healthy():
             def _card_flipped(board):
@@ -571,11 +565,31 @@ class GameStateMachine:
                 print(f"  [auto] Card #{pos} didn't flip — retrying...")
                 _tm.safe_click_at(x, y, f"reveal_card{pos}_retry")
                 flipped = self.monitor.wait_for(_card_flipped, timeout=3, min_delay=0.3)
-                if not flipped:
-                    self._pause(f"Card #{pos} failed to flip after retry — game focused?")
-                    return
+            board = self.monitor.get_board()
+            if not board:
+                self._pause(
+                    f"Card #{pos} click could not be verified from memory; "
+                    "session state was not changed"
+                )
+                return
+            verify = _verify_flips(board, [pos], self.session)
+            _apply_flip_verification(self.session, [pos], verify)
+            if pos in verify["blocked"]:
+                print(f"  [auto] #{pos} is blocked by the active Witch quota")
+                self._snapshot_counts()
+                self.phase = GamePhase.SOLVING
+                return
+            if pos in verify["failed"] or pos not in verify["flipped"]:
+                self._pause(
+                    f"Card #{pos} failed verified reveal after retry — game focused?"
+                )
+                return
         else:
-            time.sleep(1.5)
+            self._pause(
+                f"No healthy memory monitor to verify reveal #{pos}; "
+                "session state was not changed"
+            )
+            return
 
         # Check Lilis night trigger (every 4th reveal)
         if self.session.is_lilis_alive():
@@ -837,13 +851,10 @@ class GameStateMachine:
             # Record kills
             self.session.night_kills.extend(killed)
             self.session.night_kill_evil_count += n_evil
-            for p in killed:
-                if p not in self.session.executed:
-                    self.session.executed.append(p)
-                # Remove from blocked if Witch-blocked (Issue #8)
-                if p in self.session.blocked_positions:
-                    self.session.blocked_positions.remove(p)
-                    print(f"  [auto] Removed #{p} from blocked_positions (killed by Lilis)")
+            if n_evil > 0:
+                self.session.release_witch_blocks(
+                    "an evil Lilis victim may have been Witch; public re-probe required"
+                )
             if n_evil == len(killed) and n_evil > 0:
                 for p in killed:
                     if p not in self.session.confirmed_evil:
@@ -919,10 +930,24 @@ class GameStateMachine:
         self._last_exec_count = len(self.session.executed)
         self._last_ability_count = len(self.session.used_abilities)
 
+    def _active_blocked_positions(self):
+        """Current markers, ignoring the ordinary quota after any Witch death."""
+        if (
+            hasattr(self.session, "is_witch_known_dead")
+            and self.session.is_witch_known_dead()
+        ):
+            return set()
+        return set(self.session.blocked_positions)
+
     def _unrevealed_positions(self):
         """Get positions that still need flipping."""
         all_positions = set(range(1, self.session.n_cards + 1))
-        done = set(self.session.reveal_order) | set(self.session.night_kills) | set(self.session.executed)
+        done = (
+            set(self.session.reveal_order)
+            | set(self.session.night_kills)
+            | set(self.session.executed)
+            | self._active_blocked_positions()
+        )
         return sorted(all_positions - done)
 
 

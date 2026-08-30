@@ -188,6 +188,15 @@ exact one-reference result, deterministic normal/bluff inversion, and
 `ResetAfterNight` history. A corrupted Good Judge takes `BluffAct` and
 deterministically negates target lying appearance; it is not an unconstrained
 result.
+The following [`Witch`](notes/roles/gameplay_role_witch.md) boundary
+asset-binds the public card to managed `Cipher`. All five Cipher methods plus
+14 exact Start, inherited-dispatch, player-value, click, reset, and ordinary/
+night-death helpers establish a global scalar reveal quota rather than a stored
+target: the ordinary transition is allowed exactly while block count is less
+than the number of current Hidden states, killed-hidden cards are excluded once
+Dead, picker and execution paths bypass the gate, and exact real Witch death
+reduces the quota. Inherited `Role.BluffAct` forwards the Evil Witch's Start
+back to concrete `Cipher.Act`, closing the apparent lying-dispatch ambiguity.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -225,14 +234,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_bluff_acquisition
+  -TargetSet gameplay_role_witch
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,304
-datatypes. Its fourteen-set inventory contains 239 target memberships, 205
-distinct selected FunctionDefinitions, and 196 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,318
+datatypes. Its fifteen-set inventory contains 258 target memberships, 217
+distinct selected FunctionDefinitions, and 207 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -246,18 +255,19 @@ and then performs the same exact validations in a separate read-only headless
 pass. Splitting those phases keeps the growing target inventory below Windows'
 command-line limit.
 
-The preserved fully analyzed typed project now covers all fourteen target sets
-after a no-analysis refresh. Thirty-four memberships are exact overlaps between
-boundaries. Folded/shared bodies make the 205 selected definitions exceed the
-196 unique native RVAs by nine; each canonical native prototype is explicit
+The preserved fully analyzed typed project now covers all fifteen target sets
+after a no-analysis refresh. Forty-one memberships are exact overlaps between
+boundaries. Folded/shared bodies make the 217 selected definitions exceed the
+207 unique native RVAs by ten; each canonical native prototype is explicit
 while all exact managed definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
-seconds without a timeout. Subsequent refreshes imported 109 additional
+seconds without a timeout. Subsequent refreshes imported 121 additional
 reachable datatypes, including 40 for the public Dreamer boundary, six for
-Baa, eight for Plague Doctor, and six for Judge; the latest refresh reapplied
-and validated all 239 memberships without rerunning auto-analysis. The final
-read-only pass validated all 239 memberships (205 exact definitions) and 693
-membership-level parameter-storage locations with zero program mutations.
+Baa, eight for Plague Doctor, six for Judge, and 12 for Witch; the latest
+refresh reapplied and validated all 258 memberships without rerunning
+auto-analysis. The final read-only pass validated all 258 memberships (217
+exact definitions) and 744 membership-level parameter-storage locations with
+zero program mutations.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -278,16 +288,18 @@ to 140 in `gameplay_lifecycle`, from 38 to 34 in
 `gameplay_bluff_acquisition`. The role boundaries fell from 70 to 51 for
 Slayer, from 14 to 5 for Wretch, from 105 to 80 for Dreamer2, and from 190 to
 92 for the public Dreamer, from 25 to 17 for Baa, from 95 to 18 for Shaman,
-from 190 to 123 for Plague Doctor, and from 146 to 80 for Judge.
+from 190 to 123 for Plague Doctor, from 146 to 80 for Judge, and from 119 to 30
+for Witch.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
 for Wretch, from 167 to 156 for Dreamer2, from 370 to 186 for the public
 Dreamer, from 33 to 28 for Baa, from 144 to 21 for Shaman, from 329 to 223
-for Plague Doctor, and from 268 to 175 for Judge. Error-marker
-counts did not increase;
+for Plague Doctor, from 268 to 175 for Judge, and from 241 to 89 for Witch.
+Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
-while all eight role reports retained their baseline warning counts. The original typed import is
+eight role reports retained their baseline warning counts, and Witch gained one
+nonfatal warning marker. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -306,14 +318,16 @@ The Plague Doctor comparison is in the
 [`Plague Doctor typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_plague_doctor.json).
 The Judge comparison is in the
 [`Judge typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_judge.json).
+The Witch comparison is in the
+[`Witch typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_witch.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 208 classifications backed by
-86 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 220 classifications backed by
+93 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

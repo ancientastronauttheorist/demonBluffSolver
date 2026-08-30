@@ -695,6 +695,30 @@ class GameSession:
             for r in self.executed_evil_roles.values()
         )
 
+    def is_witch_known_dead(self) -> bool:
+        """Whether any known Witch death released the ordinary shared quota."""
+        return self.has_role_in_deck("Witch") and any(
+            _normalize_role_name(role) == "Witch"
+            for role in self.executed_evil_roles.values()
+        )
+
+    def release_witch_blocks(self, reason: str) -> list[int]:
+        """Drop current block markers after a death may have released the quota.
+
+        Cipher owns a global hidden-card quota, not a status on a particular
+        character. Clearing these markers never reveals a card or asserts the
+        hidden Witch's identity; it only permits a verified public click probe.
+        """
+        released = list(dict.fromkeys(self.blocked_positions))
+        if released:
+            self.blocked_positions.clear()
+            print(
+                "  [Witch] Released current block marker(s) "
+                f"{['#' + str(position) for position in released]} ({reason}); "
+                "the card still needs a verified reveal click."
+            )
+        return released
+
     def set_deck(self, villagers: list[str], outcasts: list[str],
                  minions: list[str], demons: list[str]):
         self.villagers = villagers
@@ -795,6 +819,8 @@ class GameSession:
             self.confirmed_good.append(pos)
         if evil_role:
             self.executed_evil_roles[pos] = evil_role.replace(' ', '_')
+            if _normalize_role_name(evil_role) == "Witch":
+                self.release_witch_blocks(f"known Witch death at #{pos}")
         # Execution bookkeeping exposes Drunk as clean even when its active
         # Corrupted status drove role effects such as Knight's +4 damage.
         if was_evil is False and was_corrupted is not None:
@@ -1783,41 +1809,96 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session) -> di
     Returns:
         {
             "flipped": [positions that successfully flipped],
-            "blocked": [positions likely Witch-blocked (last card, Witch in deck)],
+            "blocked": [positions likely blocked by the global Witch quota],
             "failed": [positions that failed to flip (click didn't register)],
-            "success": bool (True if no failures),
+            "dead": [positions resolved dead/hidden, never counted as reveals],
+            "success": bool (True only when every expected card was verified revealed),
         }
     """
     import re
+    expected = list(dict.fromkeys(expected_positions))
     still_hidden = []
+    missing = []
+    all_hidden = []
+    dead = []
 
     if isinstance(cards_or_output, list):
         # New path: card dicts from read_board()
+        cards_by_position = {
+            card.get('position'): card
+            for card in cards_or_output
+            if card.get('position') is not None
+        }
+        all_hidden = [
+            position
+            for position, card in cards_by_position.items()
+            if card.get('state') == 'Hidden' and not card.get('killed_hidden')
+        ]
+        missing = [position for position in expected if position not in cards_by_position]
+        dead = [
+            position
+            for position in expected
+            if position in cards_by_position
+            and (
+                cards_by_position[position].get('killed_hidden')
+                or cards_by_position[position].get('state') == 'Dead'
+            )
+        ]
         for card in cards_or_output:
             pos = card.get('position')
-            if pos in expected_positions and card.get('state') == 'Hidden' and not card.get('killed_hidden'):
+            if pos in expected and card.get('state') == 'Hidden' and not card.get('killed_hidden'):
                 still_hidden.append(pos)
     else:
         # Legacy path: parse stdout text
+        observed = set()
         for line in cards_or_output.splitlines():
             m = re.match(r'^\s*#\s*(\d+)', line)
             if not m:
                 continue
             pos = int(m.group(1))
-            if pos in expected_positions and 'Hidden' in line and 'Dead' not in line:
-                still_hidden.append(pos)
+            observed.add(pos)
+            if 'Dead' in line:
+                if pos in expected:
+                    dead.append(pos)
+            elif 'Hidden' in line:
+                all_hidden.append(pos)
+                if pos in expected:
+                    still_hidden.append(pos)
+        missing = [position for position in expected if position not in observed]
 
-    flipped = [p for p in expected_positions if p not in still_hidden]
+    failed = list(missing)
+    flipped = [
+        position
+        for position in expected
+        if position not in still_hidden
+        and position not in failed
+        and position not in dead
+    ]
     blocked = []
-    failed = []
 
     if still_hidden:
         has_witch = session.has_role_in_deck("Witch")
-        # If Witch in deck and only the last expected position is hidden, likely Witch block
-        if has_witch and len(still_hidden) == 1 and still_hidden[0] == max(expected_positions):
-            blocked = still_hidden
+        witch_known_dead = (
+            session.is_witch_known_dead()
+            if hasattr(session, "is_witch_known_dead")
+            else any(
+                _normalize_role_name(role) == "Witch"
+                for role in getattr(session, "executed_evil_roles", {}).values()
+            )
+        )
+        # Cipher is a global quota. Ordinary duplicate Witch cards contribute
+        # only one Start increment, and either real Witch death releases that
+        # quota. Until such a death, any sole hidden seat can be blocked,
+        # regardless of its position or identity.
+        if (
+            has_witch
+            and not witch_known_dead
+            and len(still_hidden) == 1
+            and len(all_hidden) == 1
+        ):
+            blocked = list(still_hidden)
         else:
-            failed = still_hidden
+            failed.extend(still_hidden)
 
         print()
         print("!" * 60)
@@ -1829,18 +1910,65 @@ def _verify_flips(cards_or_output, expected_positions: list[int], session) -> di
             print("  DO NOT mark as blocked. Re-run: python game_loop.py flip")
         else:
             if blocked:
-                print(f"  Witch IS in deck -- #{blocked[0]} is likely Witch-blocked (last card).")
+                print(
+                    f"  Witch IS in deck -- #{blocked[0]} is the sole hidden card "
+                    "and is likely blocked by the global Witch quota."
+                )
+            elif witch_known_dead:
+                print("  Witch is already known dead -- this is a click failure, not a block.")
             else:
                 print("  Witch IS in deck but multiple cards hidden. Likely click failures.")
                 print("  Re-run: python game_loop.py flip")
         print("!" * 60)
 
+    if missing:
+        print(f"  Memory verification did not return positions {missing}; treating them as failed.")
+
     return {
         "flipped": flipped,
         "blocked": blocked,
-        "failed": failed,
-        "success": len(failed) == 0 and len(blocked) == 0,
+        "failed": list(dict.fromkeys(failed)),
+        "dead": list(dict.fromkeys(dead)),
+        "success": len(failed) == 0 and len(blocked) == 0 and len(dead) == 0,
     }
+
+
+def _apply_flip_verification(session, expected_positions: list[int], verify: dict) -> bool:
+    """Atomically project one verified click batch into session reveal state.
+
+    Only memory-confirmed flips enter Baker reveal order. Both click failures
+    and Witch-blocked attempts are removed. A confirmed successful retry drops
+    that seat's transient block marker; a newly observed block persists it.
+    """
+    expected = list(dict.fromkeys(expected_positions))
+    flipped = set(verify.get("flipped", []))
+    blocked = set(verify.get("blocked", []))
+    failed = set(verify.get("failed", []))
+    dead = set(verify.get("dead", []))
+    before_order = list(session.reveal_order)
+    before_blocked = list(session.blocked_positions)
+
+    for position in expected:
+        if position in flipped:
+            if position not in session.reveal_order:
+                session.reveal_order.append(position)
+            while position in session.blocked_positions:
+                session.blocked_positions.remove(position)
+            continue
+
+        if position in blocked or position in failed or position in dead:
+            while position in session.reveal_order:
+                session.reveal_order.remove(position)
+        if position in blocked and position not in session.blocked_positions:
+            session.blocked_positions.append(position)
+
+    changed = (
+        before_order != session.reveal_order
+        or before_blocked != session.blocked_positions
+    )
+    if changed:
+        session.save()
+    return changed
 
 
 # ============================================================
@@ -3229,21 +3357,37 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if single_pos not in coords:
                 print(f"ERROR: Position {single_pos} not valid for {session.n_cards}-card game")
                 return None
-            x, y = coords[single_pos]
-            print(f"Flipping #{single_pos} at ({x},{y})")
-            _tm.safe_click_at(x, y, f"card{single_pos}")
-            print(f"Flipped #{single_pos}")
-            # Record reveal order
-            if single_pos not in session.reveal_order:
-                session.reveal_order.append(single_pos)
-            # Remove from blocked if it was Witch-blocked
-            if single_pos in session.blocked_positions:
-                session.blocked_positions.remove(single_pos)
-                print(f"  (unblocked #{single_pos})")
+            was_revealed = single_pos in session.reveal_order
+            print(f"Flipping #{single_pos} with memory verification")
+            _click_flip_card(single_pos, coords, f"card{single_pos}", verified=True)
+            cards = _read_board_once_for_flip()
+            if not cards:
+                print(
+                    "  WARNING: Could not verify the single-card click in memory; "
+                    "session reveal/block state was not changed."
+                )
+                return None
+            verify = _verify_flips(cards, [single_pos], session)
+            _apply_flip_verification(session, [single_pos], verify)
+            if single_pos in verify["blocked"]:
+                print(f"  #{single_pos} remains hidden under the Witch quota.")
+                return None
+            if single_pos in verify["failed"]:
+                print(f"  #{single_pos} did not reveal; session state was left unrevealed.")
+                return None
+            if single_pos not in verify["flipped"]:
+                print(
+                    f"  #{single_pos} resolved dead/hidden; it was not counted "
+                    "as a reveal."
+                )
+                return None
+            print(f"  Verified reveal of #{single_pos}")
             # Lilis night check for single flips
-            if session.is_lilis_alive():
+            if not was_revealed and session.is_lilis_alive():
                 total_reveals = len(session.reveal_order)
                 if total_reveals % 4 == 0:
+                    session.lilis_batch_index += 1
+                    session.save()
                     print()
                     print("!" * 60)
                     print(f"  LILIS NIGHT PHASE TRIGGERED (reveal #{total_reveals})")
@@ -3254,6 +3398,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         from memory_reader import get_monitor as _get_mon
                         _mon = _get_mon()
                         if _mon.is_healthy():
+                            already_done = (
+                                set(session.reveal_order)
+                                | set(session.night_kills)
+                                | set(session.executed)
+                            )
                             def _night_resolved(board):
                                 if not board:
                                     return False
@@ -3267,10 +3416,14 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     print(f"  Night phase complete.")
                     print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
                     print(f"  (HP auto-deducted by night_kill/night_no_kill commands)")
-            session.save()
             return None
 
-        already_done = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
+        already_done = (
+            set(session.reveal_order)
+            | set(session.night_kills)
+            | set(session.executed)
+            | set(session.blocked_positions)
+        )
         positions = [p for p in sorted(coords.keys()) if p not in already_done]
         if not positions:
             print("All cards already flipped/dead. Nothing to flip.")
@@ -3284,41 +3437,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 _click_flip_card(pos, coords, f"card{pos}", verified=(idx == 0))
                 time.sleep(0.2)
             print(f"Batch complete: {['#'+str(p) for p in batch]}")
-            # Record reveal order for this batch
-            for p in batch:
-                if p not in session.reveal_order:
-                    session.reveal_order.append(p)
-            session.lilis_batch_index += 1
             remaining = positions[batch_size:]
-            # Lilis night triggers every batch (batch_index tracks explicitly)
-            if len(batch) == batch_size:
-                print(f"\n  --- Lilis night phase (waiting for kill animation) ---")
-                print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
-                try:
-                    from memory_reader import get_monitor as _get_mon
-                    _mon = _get_mon()
-                    if _mon.is_healthy():
-                        _already = set(session.reveal_order) | set(session.night_kills) | set(session.executed)
-                        def _night_kill_check(board):
-                            if not board:
-                                return False
-                            return any(c.get('killed_hidden') for c in board
-                                       if c['position'] not in _already)
-                        _mon.wait_for(_night_kill_check, timeout=8, min_delay=2.0)
-                    else:
-                        time.sleep(5)
-                except Exception:
-                    time.sleep(5)
-                print(f"  Night phase complete. Take screenshot to check for kills before continuing.")
-                print(f"  Run: python screenshot.py night_check && python memory_reader.py")
-                if remaining:
-                    print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
-                else:
-                    print(f"  No more cards to flip. Check for night kill/damage.")
-                print(f"  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
-                print(f"  (HP auto-deducted by night_kill/night_no_kill commands)")
-            elif remaining:
-                print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
             expected_positions = positions
             print(f"Flipping all {len(positions)} cards: #1 -> #{positions[-1]}")
@@ -3326,12 +3445,6 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 _click_flip_card(pos, coords, f"card{pos}", verified=(idx == 0))
                 time.sleep(0.2)
             print(f"All {len(positions)} cards flipped in order #1->#{positions[-1]}")
-            # Record reveal order
-            for p in positions:
-                if p not in session.reveal_order:
-                    session.reveal_order.append(p)
-
-        session.save()
         print("\n--- Parking mouse & reading memory ---")
         _mouse.move(1280, 690)
 
@@ -3344,7 +3457,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 def _flips_done(board):
                     if not board:
                         return False
-                    for p in positions:
+                    for p in expected_positions:
                         card = next((c for c in board if c['position'] == p), None)
                         if card and card['state'] == 'Hidden' and not card.get('killed_hidden'):
                             return False  # still waiting
@@ -3367,24 +3480,72 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         if cards:
             _print_board(cards)
             verify = _verify_flips(cards, expected_positions, session)
-            # Flake-failed clicks never actually revealed — strip them from
-            # reveal_order so a subsequent `flip <pos>` retry lands them at
-            # the true reveal index. Critical for Baker-chain validation:
-            # wrong reveal_order corrupts the chain seed and can collapse
-            # the scenario space to 0 after an unrelated wrong exec
-            # (asc78_v6 halt, 2026-04-21).
-            failed = verify.get("failed", [])
-            if failed:
-                removed = False
-                for p in failed:
-                    if p in session.reveal_order:
-                        session.reveal_order.remove(p)
-                        removed = True
-                if removed:
-                    print(f"  [reveal_order] Removed failed positions {failed} from reveal_order; retry via `flip {failed[0]}` will re-append at true index.")
-                    session.save()
+            _apply_flip_verification(session, expected_positions, verify)
+            lilis_night_triggered = (
+                lilis
+                and len(expected_positions) == 4
+                and len(verify["flipped"]) == 4
+                and not verify["blocked"]
+                and not verify["failed"]
+            )
+            if lilis_night_triggered:
+                session.lilis_batch_index += 1
+                session.save()
+            if verify["blocked"]:
+                print(
+                    "  [reveal_order] Witch-blocked attempts were kept out of "
+                    f"reveal order: {verify['blocked']}"
+                )
+            if verify["failed"]:
+                print(
+                    "  [reveal_order] Failed attempts were kept out of reveal "
+                    f"order: {verify['failed']}"
+                )
+            if lilis_night_triggered:
+                print(f"\n  --- Lilis night phase (4 verified reveals; waiting for kill animation) ---")
+                print(f"  Lilis deals 2 HP. HP: {session.hp} -> {session.hp - 2}")
+                try:
+                    from memory_reader import get_monitor as _get_mon
+                    _mon = _get_mon()
+                    if _mon.is_healthy():
+                        _already = (
+                            set(session.reveal_order)
+                            | set(session.night_kills)
+                            | set(session.executed)
+                        )
+                        def _night_kill_check(board):
+                            if not board:
+                                return False
+                            return any(
+                                card.get('killed_hidden')
+                                for card in board
+                                if card['position'] not in _already
+                            )
+                        _mon.wait_for(_night_kill_check, timeout=8, min_delay=2.0)
+                    else:
+                        time.sleep(5)
+                except Exception:
+                    time.sleep(5)
+                print("  Night phase complete. Take screenshot to check for kills before continuing.")
+                print("  Run: python screenshot.py night_check && python memory_reader.py")
+                if remaining:
+                    print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
+                else:
+                    print("  No more cards to flip. Check for night kill/damage.")
+                print("  Run: night_kill <pos> <n_evil>  OR  night_no_kill")
+                print("  (HP auto-deducted by night_kill/night_no_kill commands)")
+            elif lilis and len(expected_positions) == 4:
+                print(
+                    "  Lilis night did not trigger: fewer than 4 reveals were "
+                    "memory-verified. Retry failed clicks or resolve the Witch block."
+                )
+            elif lilis and remaining:
+                print(f"  Remaining to flip: {['#'+str(p) for p in remaining]}")
         else:
-            print("  WARNING: memory_reader returned no cards")
+            print(
+                "  WARNING: memory_reader returned no cards; session reveal/block "
+                "state was not changed"
+            )
         print("\nNow screenshot and enter card info in order #1->#{}.".format(expected_positions[-1]))
         return None
 
@@ -3739,6 +3900,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         pos = int(args[0])
         if pos not in session.blocked_positions:
             session.blocked_positions.append(pos)
+        if pos in session.reveal_order:
+            session.reveal_order.remove(pos)
         session.save()
         print(f"#{pos} force-blocked (override -- no Witch check)")
         return None
@@ -3897,11 +4060,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.night_kills.extend(positions)
         session.night_kill_evil_count += n_evil_among_killed
         n_evil = n_evil_among_killed  # alias for existing code below
-        for p in positions:
-            # Issue #8: Remove killed positions from blocked_positions (Witch+Lilis interaction)
-            if p in session.blocked_positions:
-                session.blocked_positions.remove(p)
-                print(f"  (removed #{p} from blocked_positions — killed by Lilis)")
+        if n_evil > 0:
+            session.release_witch_blocks(
+                "an evil Lilis victim may have been Witch; public re-probe required"
+            )
         if n_evil == len(positions) and n_evil > 0:
             for p in positions:
                 if p not in session.confirmed_evil:

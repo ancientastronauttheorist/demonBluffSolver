@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Witch role implementation, managed internally as Cipher, with its ordered Start, player block storage, reveal guard, reset, and death-cleanup boundary",
+  "functions": [
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "Character.GetHiddenCardsAmount",
+      "metadata_name": "Character$$GetHiddenCardsAmount",
+      "signature": "int32_t Character__GetHiddenCardsAmount (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364EC0"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.Kill",
+      "metadata_name": "Character$$Kill",
+      "signature": "void Character__Kill (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366130"
+    },
+    {
+      "name": "Character.DelayedDemonKill.MoveNext",
+      "metadata_name": "Character.<DelayedDemonKill>d__103$$MoveNext",
+      "signature": "bool Character__DelayedDemonKill_d__103__MoveNext (Character__DelayedDemonKill_d__103_o* __this, const MethodInfo* method);",
+      "rva": "0x3757F0"
+    },
+    {
+      "name": "Gameplay.ResetPlayerInfo",
+      "metadata_name": "Gameplay$$ResetPlayerInfo",
+      "signature": "void Gameplay__ResetPlayerInfo (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37FC90"
+    },
+    {
+      "name": "SimpleValue.Add",
+      "metadata_name": "SimpleValue$$Add",
+      "signature": "void SimpleValue__Add (SimpleValue_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x38A780"
+    },
+    {
+      "name": "SimpleValue.GetValue",
+      "metadata_name": "SimpleValue$$GetValue",
+      "signature": "int32_t SimpleValue__GetValue (SimpleValue_o* __this, const MethodInfo* method);",
+      "rva": "0x38A7A0"
+    },
+    {
+      "name": "SimpleValue.Reduce",
+      "metadata_name": "SimpleValue$$Reduce",
+      "signature": "void SimpleValue__Reduce (SimpleValue_o* __this, int32_t value, const MethodInfo* method);",
+      "rva": "0x38A7B0"
+    },
+    {
+      "name": "SimpleValue.Reset",
+      "metadata_name": "SimpleValue$$Reset",
+      "signature": "void SimpleValue__Reset (SimpleValue_o* __this, const MethodInfo* method);",
+      "rva": "0x38A7E0"
+    },
+    {
+      "name": "Cipher.get_Description",
+      "metadata_name": "Cipher$$get_Description",
+      "signature": "System_String_o* Cipher__get_Description (Cipher_o* __this, const MethodInfo* method);",
+      "rva": "0x3D65A0"
+    },
+    {
+      "name": "Cipher.GetInfo",
+      "metadata_name": "Cipher$$GetInfo",
+      "signature": "ActedInfo_o* Cipher__GetInfo (Cipher_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6540"
+    },
+    {
+      "name": "Cipher.Act",
+      "metadata_name": "Cipher$$Act",
+      "signature": "void Cipher__Act (Cipher_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D64C0"
+    },
+    {
+      "name": "Cipher.ActOnDied",
+      "metadata_name": "Cipher$$ActOnDied",
+      "signature": "void Cipher__ActOnDied (Cipher_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6450"
+    },
+    {
+      "name": "Cipher.ctor",
+      "metadata_name": "Cipher$$.ctor",
+      "signature": "void Cipher___ctor (Cipher_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    }
+  ]
+}

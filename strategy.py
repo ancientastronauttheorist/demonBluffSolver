@@ -94,8 +94,9 @@ def evil_probabilities(state: GameState, result: SolverResult) -> dict[int, floa
     if result.n_surviving == 0:
         return {}
     probs = {}
+    dead = set(state.executed) | set(state.night_kills)
     for pos in range(1, state.n_cards + 1):
-        if pos in state.executed:
+        if pos in dead:
             continue
         count = sum(1 for s in result.surviving_scenarios
                     if scenario_is_evil(pos, s))
@@ -112,11 +113,12 @@ def _unrevealed_positions(state: GameState) -> list[int]:
 
 
 def _revealed_fraction(state: GameState) -> float:
-    """Fraction of non-executed cards that have been revealed."""
-    total = state.n_cards - len(state.executed)
+    """Fraction of living cards that have been revealed."""
+    dead = set(state.executed) | set(state.night_kills)
+    total = state.n_cards - len(dead)
     if total <= 0:
         return 1.0
-    revealed = len([c for c in state.cards if c.position not in state.executed])
+    revealed = len([c for c in state.cards if c.position not in dead])
     return revealed / total
 
 
@@ -157,11 +159,11 @@ def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int,
     if not result.surviving_scenarios:
         return (0, 0)
 
-    executed_set = set(state.executed)
+    dead = set(state.executed) | set(state.night_kills)
     counts = []
     for scenario in result.surviving_scenarios:
-        count = sum(1 for p in scenario.evil_positions if p not in executed_set)
-        if scenario.puppet_position and scenario.puppet_position not in executed_set:
+        count = sum(1 for p in scenario.evil_positions if p not in dead)
+        if scenario.puppet_position and scenario.puppet_position not in dead:
             count += 1
         counts.append(count)
 
@@ -169,12 +171,58 @@ def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int,
 
 
 def _witch_might_be_alive(state: GameState, result: SolverResult) -> bool:
-    """Check if Witch could be alive (non-executed) in any surviving scenario."""
+    """Check if Witch could be alive in any surviving scenario."""
+    dead = set(state.executed) | set(state.night_kills)
     for s in result.surviving_scenarios:
         for pos, role in s.evil_positions.items():
-            if role == "Witch" and pos not in state.executed:
+            if role == "Witch" and pos not in dead:
                 return True
     return False
+
+
+def _witch_quota_might_be_active(
+    state: GameState,
+    result: SolverResult,
+) -> bool:
+    """Whether the ordinary shared Cipher reveal quota can remain active.
+
+    Duplicate ordinary Witch cards produce one successful Start increment,
+    while the death of either real Witch decrements that shared scalar. Thus a
+    surviving duplicate does not preserve the ordinary quota after a Witch
+    death. Independently repeated Starts can stack, but GameState does not
+    represent that history and must not infer it merely from duplicate roles.
+    """
+    dead = set(state.executed) | set(state.night_kills)
+    if any(
+        role.lower().replace(" ", "_") == "witch"
+        for role in state.executed_evil_roles.values()
+    ):
+        return False
+
+    for scenario in result.surviving_scenarios:
+        witch_positions = {
+            pos for pos, role in scenario.evil_positions.items()
+            if role == "Witch"
+        }
+        if witch_positions and not (witch_positions & dead):
+            return True
+    return False
+
+
+def _active_witch_blocked_positions(
+    state: GameState,
+    result: SolverResult,
+) -> set[int]:
+    """Return markers backed by a possibly active ordinary Witch quota.
+
+    Historical v2/session snapshots can retain a marker after Witch died or
+    after its card was later revealed. Such markers are useful provenance but
+    must not suppress a legal reveal or appear as a current block.
+    """
+    if not _witch_quota_might_be_active(state, result):
+        return set()
+    unrevealed = set(_unrevealed_positions(state))
+    return set(getattr(state, "blocked_positions", [])) & unrevealed
 
 
 def _corruption_risk(pos: int, result: SolverResult, state: GameState) -> float:
@@ -301,6 +349,7 @@ def _find_forced_execution(
         return None
 
     probs = evil_probabilities(state, result)
+    already_dead = set(state.executed) | set(state.night_kills)
     ordered_candidates = sorted(
         candidate_positions,
         key=lambda p: (-probs.get(p, 0.0), p in result.bombardier_positions, p),
@@ -312,7 +361,7 @@ def _find_forced_execution(
         for idx in indices:
             scenario = scenarios[idx]
             for pos in all_positions:
-                if pos in state.executed or pos in executed_now:
+                if pos in already_dead or pos in executed_now:
                     continue
                 if scenario_is_evil(pos, scenario):
                     return False
@@ -336,7 +385,7 @@ def _find_forced_execution(
 
         available = [
             pos for pos in ordered_candidates
-            if pos not in executed_now and pos not in state.executed
+            if pos not in executed_now and pos not in already_dead
         ]
         if not available:
             memo[key] = (False, None)
@@ -501,7 +550,7 @@ def _shallow_lookahead(
         return None
 
     unrevealed = _unrevealed_positions(state)
-    blocked = set(getattr(state, 'blocked_positions', []))
+    blocked = _active_witch_blocked_positions(state, result)
     unrevealed = [p for p in unrevealed if p not in blocked]
     if not unrevealed:
         return None
@@ -643,8 +692,9 @@ def _ambiguity_score(prob: float) -> float:
 
 def _has_unused_followup(state: GameState, used_abilities: list[int]) -> bool:
     """Check whether Judge or Slayer can still follow an FT result."""
+    dead = set(state.executed) | set(state.night_kills)
     for card in state.cards:
-        if card.position in state.executed or card.position in used_abilities:
+        if card.position in dead or card.position in used_abilities:
             continue
         role = card.apparent_role.replace("_", " ")
         if role in {"Judge", "Slayer"}:
@@ -1469,10 +1519,11 @@ def _recommend_slayer(
     # A Good Bombardier or Knight registers Good and survives harmlessly; an
     # Evil bluffing as either registers Evil, and KillAndReveal bypasses normal
     # execution-loss and kill-immunity surfaces.
+    dead = set(state.executed) | set(state.night_kills)
     candidates = [
         p
         for p in range(1, state.n_cards + 1)
-        if p not in state.executed and p != ability_pos
+        if p not in dead and p != ability_pos
     ]
     if not candidates:
         return None
@@ -1756,15 +1807,13 @@ def recommend_reveal(
     where observations vary the most (highest entropy) give the most info.
     """
     unrevealed = _unrevealed_positions(state)
-    # Filter out blocked positions (Witch)
-    blocked = set(getattr(state, 'blocked_positions', []))
+    # A current marker suppresses that public click. Without a marker, probing
+    # the final hidden seat is safe and informative even if Witch is possible:
+    # the verified miss becomes the observation that establishes the block.
+    blocked = _active_witch_blocked_positions(state, result)
     unrevealed = [p for p in unrevealed if p not in blocked]
     if not unrevealed:
         return None
-
-    # Witch edge case: can't reveal last card
-    if len(unrevealed) == 1 and _witch_might_be_alive(state, result):
-        return None  # Blocked by Witch
 
     probs = evil_probabilities(state, result)
     best = None
@@ -1834,6 +1883,7 @@ def recommend_action(
     """
     # Pre-compute evil probabilities (used in knight check, witch fallback, etc.)
     probs = evil_probabilities(state, result)
+    dead_positions = set(state.executed) | set(state.night_kills)
 
     # 1. Error
     if result.n_surviving == 0:
@@ -1848,7 +1898,7 @@ def recommend_action(
     # Note: Knights are NOT blanket-immune -- see "Knight free check" below.
     # Executing an uncertain Knight is a free check (0 HP) when uncorrupted.
     safe_executions = [p for p in result.definite_evil
-                       if p not in state.executed
+                       if p not in dead_positions
                        and p not in result.bombardier_positions]
     if safe_executions:
         pos = safe_executions[0]
@@ -1871,13 +1921,13 @@ def recommend_action(
     _KNIGHT_CHECK_THRESHOLD = 0.65
     non_knight_positions = {c.position for c in state.cards
                            if c.apparent_role not in EXECUTION_IMMUNE_ROLES
-                           and c.position not in state.executed}
+                           and c.position not in dead_positions}
     best_non_knight_prob = max((probs.get(p, 0) for p in non_knight_positions), default=0)
 
     knight_checks = []
     for card in state.cards:
         if (card.apparent_role in EXECUTION_IMMUNE_ROLES
-                and card.position not in state.executed
+                and card.position not in dead_positions
                 and card.position not in result.definite_good
                 and card.position not in result.definite_evil):
             corr_risk = _corruption_risk(card.position, result, state)
@@ -1953,10 +2003,10 @@ def recommend_action(
 
     if reveal_rec:
         warnings = []
-        if _witch_might_be_alive(state, result):
+        if _witch_quota_might_be_active(state, result):
             n_unrevealed = len(_unrevealed_positions(state))
             if n_unrevealed <= 2:
-                warnings.append("Witch may be alive -- be cautious about revealing")
+                warnings.append("Witch reveal quota may still be active -- verify the click")
         return _with_ability_recs(Action(
             "reveal", position=reveal_rec.position,
             reasoning=reveal_rec.reasoning,
@@ -1970,7 +2020,7 @@ def recommend_action(
             and best_ability.score < LOW_ABILITY_SCORE_THRESHOLD
             and result.definite_evil):
             candidate_positions = [p for p in result.definite_evil
-                                   if p not in state.executed]
+                                   if p not in dead_positions]
             if candidate_positions:
                 # Run forced-exec lookahead to verify survivability
                 forced_pos = _find_forced_execution(state, result, candidate_positions)
@@ -1997,7 +2047,7 @@ def recommend_action(
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
 
     all_uncertain = [p for p, prob in probs.items()
-                     if prob > 0.0 and p not in state.executed]
+                     if prob > 0.0 and p not in dead_positions]
 
     if all_uncertain:
         # 5.5a: Direct forced execution (1-step lookahead)
@@ -2033,7 +2083,7 @@ def recommend_action(
     # 6b. Probabilistic execution
     # Bombardier candidates excluded from normal probability selection
     bombardier_candidates = {p: probs.get(p, 0) for p in result.bombardier_positions
-                            if p not in state.executed and probs.get(p, 0) > 0.0}
+                            if p not in dead_positions and probs.get(p, 0) > 0.0}
     # Exclude Bombardier (instant loss) and Wretch (always wrong exec —
     # abilities see Wretch as evil, inflating evil_probability, but executing
     # Wretch is guaranteed wrong exec penalty with zero upside).
@@ -2041,7 +2091,7 @@ def recommend_action(
                         if c.apparent_role == "Wretch"
                         and c.position not in result.definite_evil}
     active_probs = {p: prob for p, prob in probs.items()
-                    if p not in state.executed
+                    if p not in dead_positions
                     and p not in result.bombardier_positions
                     and p not in wretch_positions}
     if active_probs:
@@ -2073,8 +2123,8 @@ def recommend_action(
 
         # If Witch is blocking reveals, prefer executing the most likely Witch
         # position -- killing the Witch unblocks the last card reveal
-        witch_blocked = (not reveal_rec and _witch_might_be_alive(state, result)
-                         and len(_unrevealed_positions(state)) > 0)
+        active_witch_blocks = _active_witch_blocked_positions(state, result)
+        witch_blocked = bool(active_witch_blocks)
         if witch_blocked:
             witch_probs = {}
             for p in active_probs:
@@ -2151,7 +2201,7 @@ def recommend_action(
     if bombardier_candidates:
         # Include Wretch — wrong exec on Wretch = HP cost, not game loss
         safety_probs = {p: prob for p, prob in probs.items()
-                       if p not in state.executed
+                       if p not in dead_positions
                        and p not in result.bombardier_positions
                        and prob > 0.0}
         if safety_probs:
@@ -2227,7 +2277,7 @@ def print_recommendation(state: GameState, result: SolverResult,
     if action.action_type in ("reveal", "use_ability", "execute"):
         probs = evil_probabilities(state, result)
         unrevealed = _unrevealed_positions(state)
-        blocked = set(getattr(state, 'blocked_positions', []))
+        blocked = _active_witch_blocked_positions(state, result)
         if unrevealed:
             # Compute fingerprint entropy for each unrevealed position
             reveal_scores: list[tuple[int, float, float, int]] = []  # (pos, entropy, p_evil, n_outcomes)

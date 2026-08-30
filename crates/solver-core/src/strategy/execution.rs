@@ -6,12 +6,13 @@
 
 use std::cmp::Ordering;
 use std::collections::HashSet;
+use crate::knowledge_base::normalize_role;
 use crate::types::{GameState, SolverResult};
 #[allow(unused_imports)]
 use super::{
     ExecutionPick, ExecutionReason,
     evil_probabilities, remaining_evil_bounds, corruption_risk,
-    witch_might_be_alive, unrevealed_positions, tiebreak_score,
+    unrevealed_positions, tiebreak_score,
     execution_terminal_outcome, get_card_role, ExecutionTerminalOutcome,
     EXECUTION_IMMUNE_ROLES,
 };
@@ -39,6 +40,32 @@ fn compare_active_candidates(
         .then_with(|| tb.2.total_cmp(&ta.2))
         .then_with(|| tb.3.total_cmp(&ta.3))
         .then_with(|| a.0.cmp(&b.0))
+}
+
+fn has_active_witch_block_evidence(state: &GameState, result: &SolverResult) -> bool {
+    if state.executed_evil_roles.values()
+        .any(|role| normalize_role(role) == "witch")
+    {
+        return false;
+    }
+    let unrevealed: HashSet<u8> = unrevealed_positions(state).into_iter().collect();
+    if !state.blocked_positions.iter().any(|position| unrevealed.contains(position)) {
+        return false;
+    }
+
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
+    result.surviving_scenarios.iter().any(|scenario| {
+        let witch_positions: Vec<u8> = scenario.evil_positions.iter()
+            .filter_map(|(&position, role)| {
+                (normalize_role(role) == "witch").then_some(position)
+            }).collect();
+        let has_live = witch_positions.iter().any(|position| !dead.contains(position));
+        let has_dead = witch_positions.iter().any(|position| dead.contains(position));
+        // The shipped first-match Start adds one scalar block. Any real Witch
+        // death reduces it, even if an ordinary duplicate Witch remains alive.
+        has_live && !has_dead
+    })
 }
 
 /// Pick the next execution target given solver results.
@@ -238,14 +265,9 @@ pub fn pick_execution_target(
             }
         }
 
-        // Witch hunting: prefer executing likely-Witch when reveals are blocked
-        let reveal_rec_empty = unrevealed_positions(state).is_empty()
-            || (unrevealed_positions(state).len() <= state.blocked_positions.len());
-        let witch_blocked = reveal_rec_empty
-            && witch_might_be_alive(state, result)
-            && !unrevealed_positions(state).is_empty();
-
-        if witch_blocked {
+        // Witch hunting needs an unresolved current marker, not stale marker
+        // list length retained by a historical fixture.
+        if has_active_witch_block_evidence(state, result) {
             let mut best_witch: Option<(u8, f64)> = None;
             for &(p, _) in &active_probs {
                 let witch_count = result.surviving_scenarios.iter()
@@ -329,6 +351,63 @@ mod tests {
             chancellor_trace: None,
             chancellor_conversion: None,
         }
+    }
+
+    #[test]
+    fn witch_hunting_uses_only_unresolved_current_block_evidence() {
+        let result = SolverResult {
+            definite_evil: vec![], definite_good: vec![], bombardier_positions: vec![],
+            n_scenarios: 1, n_surviving: 1,
+            surviving_scenarios: vec![make_scenario(&[(2, "Witch")])], reasoning: vec![],
+        };
+        let active = GameState {
+            n_cards: 3,
+            cards: vec![
+                CardInfo { position: 1, ..CardInfo::default() },
+                CardInfo { position: 2, ..CardInfo::default() },
+            ],
+            blocked_positions: vec![3],
+            ..GameState::default()
+        };
+        assert!(has_active_witch_block_evidence(&active, &result));
+
+        let duplicate_result = SolverResult {
+            surviving_scenarios: vec![make_scenario(&[(1, "Witch"), (2, "Witch")])],
+            ..result.clone()
+        };
+        assert!(has_active_witch_block_evidence(&active, &duplicate_result));
+        let one_duplicate_dead = GameState { executed: vec![2], ..active.clone() };
+        assert!(!has_active_witch_block_evidence(
+            &one_duplicate_dead,
+            &duplicate_result,
+        ));
+
+        // Exact public death evidence wins even if a collapsed scenario keeps
+        // only a different live Witch identity and omits the dead one.
+        let public_known_death = GameState {
+            executed: vec![1],
+            executed_evil_roles: HashMap::from([(1, "Witch".to_string())]),
+            ..active.clone()
+        };
+        assert!(!has_active_witch_block_evidence(
+            &public_known_death,
+            &result,
+        ));
+
+        let already_revealed_marker = GameState {
+            cards: vec![
+                active.cards[0].clone(), active.cards[1].clone(),
+                CardInfo { position: 3, ..CardInfo::default() },
+            ],
+            ..active.clone()
+        };
+        assert!(!has_active_witch_block_evidence(&already_revealed_marker, &result));
+
+        let no_observed_block = GameState { blocked_positions: vec![], ..active.clone() };
+        assert!(!has_active_witch_block_evidence(&no_observed_block, &result));
+
+        let dead_witch = GameState { night_kills: vec![2], ..active };
+        assert!(!has_active_witch_block_evidence(&dead_witch, &result));
     }
 
     #[test]

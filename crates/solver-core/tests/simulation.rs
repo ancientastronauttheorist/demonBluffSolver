@@ -265,6 +265,8 @@ fn distinct_good_execution_observations(
 #[derive(Debug, Clone, Default)]
 struct ExecutionBranch {
     cards: Vec<serde_json::Value>,
+    blocked_positions: Vec<u8>,
+    reveal_order: Vec<u8>,
     executed: Vec<u8>,
     confirmed_evil: Vec<u8>,
     confirmed_good: Vec<u8>,
@@ -292,6 +294,8 @@ impl ExecutionBranch {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct ExecutionBranchKey {
     card_positions: Vec<u8>,
+    blocked_positions: Vec<u8>,
+    reveal_order: Vec<u8>,
     executed: Vec<u8>,
     confirmed_evil: Vec<u8>,
     confirmed_good: Vec<u8>,
@@ -307,6 +311,62 @@ fn sorted_positions(positions: impl IntoIterator<Item = u8>) -> Vec<u8> {
     positions.sort_unstable();
     positions.dedup();
     positions
+}
+
+fn json_card_position(card: &serde_json::Value) -> Option<u8> {
+    card.get("position").and_then(|value| value.as_u64())
+        .map(|position| position as u8)
+}
+
+fn initialize_execution_block_state(
+    cards: Vec<serde_json::Value>,
+    reveal_order: Vec<u8>,
+    fixture_blocked_positions: &[u8],
+    pre_execution_dead: &HashSet<u8>,
+    pre_execution_witch_deaths: usize,
+) -> (Vec<serde_json::Value>, Vec<u8>, Vec<u8>) {
+    let mut unique_markers = Vec::new();
+    for &position in fixture_blocked_positions {
+        if !unique_markers.contains(&position) { unique_markers.push(position); }
+    }
+
+    // The shipped first-match Start creates one scalar block even if ordinary
+    // duplicate Witch records exist. Any prior Slayer/night Witch death calls
+    // Reduce(1), clearing that scalar before the execution phase.
+    let blocked_positions: Vec<u8> = if pre_execution_witch_deaths == 0 {
+        unique_markers.into_iter()
+            .filter(|position| !pre_execution_dead.contains(position))
+            .take(1).collect()
+    } else {
+        Vec::new()
+    };
+    let blocked: HashSet<u8> = blocked_positions.iter().copied().collect();
+
+    // Some final fixtures include a card revealed after the recorded day-Witch
+    // death. Rewind that observation together with its reveal-order entry.
+    let cards = cards.into_iter().filter(|card| {
+        json_card_position(card).map_or(true, |position| !blocked.contains(&position))
+    }).collect();
+    let reveal_order = reveal_order.into_iter()
+        .filter(|position| !blocked.contains(position)).collect();
+    (cards, blocked_positions, reveal_order)
+}
+
+fn release_one_witch_block(
+    branch: &mut ExecutionBranch,
+    card_by_pos: &HashMap<u8, &serde_json::Value>,
+) -> Option<u8> {
+    let position = branch.blocked_positions.first().copied()?;
+    branch.blocked_positions.remove(0);
+    if branch.cards.iter().all(|card| json_card_position(card) != Some(position)) {
+        if let Some(card) = card_by_pos.get(&position) {
+            branch.cards.push((*card).clone());
+            if !branch.reveal_order.contains(&position) {
+                branch.reveal_order.push(position);
+            }
+        }
+    }
+    Some(position)
 }
 
 fn execution_branch_key(branch: &ExecutionBranch) -> ExecutionBranchKey {
@@ -330,11 +390,9 @@ fn execution_branch_key(branch: &ExecutionBranch) -> ExecutionBranchKey {
     good_roles.sort_unstable();
 
     ExecutionBranchKey {
-        card_positions: sorted_positions(branch.cards.iter().filter_map(|card| {
-            card.get("position")
-                .and_then(|value| value.as_u64())
-                .map(|position| position as u8)
-        })),
+        card_positions: sorted_positions(branch.cards.iter().filter_map(json_card_position)),
+        blocked_positions: branch.blocked_positions.clone(),
+        reveal_order: branch.reveal_order.clone(),
         executed: sorted_positions(branch.executed.iter().copied()),
         confirmed_evil: sorted_positions(branch.confirmed_evil.iter().copied()),
         confirmed_good: sorted_positions(branch.confirmed_good.iter().copied()),
@@ -729,9 +787,23 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let pre_exec_good_roles = current_good_roles.iter()
         .filter(|(p, _)| slayer_killed.contains(p))
         .map(|(&p, role)| (p, role.clone())).collect();
+    let pre_exec_dead: HashSet<u8> = pre_exec_executed.iter().copied().collect();
+    // Simulation-only truth resolves the native death hook for Lilis/Slayer
+    // kills. Hidden roles are never copied into the live solver GameState.
+    let pre_exec_witch_deaths = pre_exec_executed.iter().filter(|position| {
+        true_evil_positions.get(position)
+            .is_some_and(|role| normalize_role(role) == "witch")
+    }).count();
+    let (initial_cards, initial_blocked_positions, initial_reveal_order) =
+        initialize_execution_block_state(
+            current_cards, current_reveal_order, &state.blocked_positions,
+            &pre_exec_dead, pre_exec_witch_deaths,
+        );
     let max_iterations = 20; // Safety valve
     let initial_branch = ExecutionBranch {
-        cards: current_cards,
+        cards: initial_cards,
+        blocked_positions: initial_blocked_positions,
+        reveal_order: initial_reveal_order,
         executed: pre_exec_executed,
         confirmed_evil: pre_exec_confirmed_evil,
         confirmed_good: pre_exec_confirmed_good,
@@ -760,8 +832,9 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             &branch.good_roles,
             &current_slayer, &current_pd,
             &current_night_kills, current_nk_evil_count,
-            &current_reveal_order);
+            &branch.reveal_order);
         let mut state_with_hp = state;
+        state_with_hp.blocked_positions = branch.blocked_positions.clone();
         state_with_hp.hp = branch.hp;
         state_with_hp.wrong_exec_cost = wrong_exec_cost;
 
@@ -846,16 +919,10 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             }
             next.evil_roles.insert(pos, evil_role.clone());
 
-            // Witch unblock
-            if evil_role == "Witch" {
-                let blocked = std::mem::take(&mut state_with_hp.blocked_positions);
-                for &bp in &blocked {
-                    if state_with_hp.cards.iter().all(|c| c.position != bp) {
-                        if let Some(card_val) = card_by_pos.get(&bp) {
-                            next.cards.push((*card_val).clone());
-                        }
-                    }
-                }
+            // Any real Cipher death clears the represented shipped scalar.
+            // Persist that release so later solves cannot reload stale data.
+            if normalize_role(evil_role) == "witch" {
+                release_one_witch_block(&mut next, &card_by_pos);
             }
 
             next.immunity_blocked.clear();
@@ -1238,6 +1305,61 @@ fn execution_branches_ordinary_and_drunk_damage_with_revealed_roles() {
         execution_branch_key(&continuations[0]),
         execution_branch_key(&continuations[1]),
     );
+}
+
+#[test]
+fn witch_block_branch_rewinds_and_clears_scalar_persistently() {
+    let fixture_cards = vec![
+        serde_json::json!({"position": 1, "apparent_role": "Baker"}),
+        serde_json::json!({"position": 8, "apparent_role": "Scout"}),
+    ];
+    let card_by_pos: HashMap<u8, &serde_json::Value> = fixture_cards.iter()
+        .filter_map(|card| Some((json_card_position(card)?, card))).collect();
+    let (cards, blocked_positions, reveal_order) = initialize_execution_block_state(
+        fixture_cards.clone(), vec![1, 8], &[8], &HashSet::new(), 0,
+    );
+    assert_eq!(cards.iter().filter_map(json_card_position).collect::<Vec<_>>(), vec![1]);
+    assert_eq!(blocked_positions, vec![8]);
+    assert_eq!(reveal_order, vec![1]);
+
+    let mut branch = ExecutionBranch {
+        cards, blocked_positions, reveal_order, ..ExecutionBranch::default()
+    };
+    let before = execution_branch_key(&branch);
+
+    assert_eq!(release_one_witch_block(&mut branch, &card_by_pos), Some(8));
+    assert!(branch.blocked_positions.is_empty());
+    assert_eq!(branch.reveal_order, vec![1, 8]);
+    assert!(branch.cards.iter().any(|card| json_card_position(card) == Some(8)));
+    assert_ne!(execution_branch_key(&branch), before);
+    assert_eq!(release_one_witch_block(&mut branch, &card_by_pos), None);
+
+    let mut different_reveal_history = branch.clone();
+    different_reveal_history.reveal_order.swap(0, 1);
+    assert_ne!(
+        execution_branch_key(&branch),
+        execution_branch_key(&different_reveal_history),
+    );
+}
+
+#[test]
+fn any_pre_execution_witch_death_clears_shipped_scalar_block() {
+    let fixture_cards = vec![serde_json::json!({
+        "position": 8, "apparent_role": "Scout"
+    })];
+    let (cards, blocked_positions, reveal_order) = initialize_execution_block_state(
+        fixture_cards, vec![8], &[8], &HashSet::from([2]), 1,
+    );
+    assert!(blocked_positions.is_empty());
+    assert_eq!(cards.len(), 1);
+    assert_eq!(reveal_order.len(), 1);
+
+    // Even malformed/hand-built duplicate markers cannot manufacture stacked
+    // ordinary Start calls in represented GameState.
+    let (_, blocked_positions, _) = initialize_execution_block_state(
+        vec![], vec![], &[8, 9], &HashSet::new(), 0,
+    );
+    assert_eq!(blocked_positions, vec![8]);
 }
 
 #[test]

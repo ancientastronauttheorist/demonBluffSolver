@@ -99,6 +99,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   exact one-reference output, and ResetAfterNight history, expand the typed
   union to fourteen target sets and 239 memberships, and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Witch to managed `Cipher`; native-audit all five role
+  methods plus 14 ordered-Start, inherited-dispatch, global-value, hidden-count,
+  click, reset, and ordinary/night-death helpers, close the exact last-card
+  predicate, lack of blocked identity, killed-hidden membership, self-block,
+  stacking/duplicate behavior, and death cleanup, expand the typed union to 15
+  target sets and 258 memberships, and publish its baseline-versus-typed
+  quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

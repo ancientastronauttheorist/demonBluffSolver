@@ -1,80 +1,227 @@
-"""Unit test for reveal_order cleanup after flake-failed flip clicks.
-
-Regression for asc78_v6 halt (2026-04-21): a fresh `flip` appended all
-click-attempted positions to reveal_order without verifying they actually
-revealed. When #1 failed to register, reveal_order still recorded [1..N],
-corrupting the Baker-chain validator's seed. After a subsequent wrong
-execute, the scenario space collapsed to 0 with the bad ordering.
-
-The fix: after the in-memory verification step, strip failed positions from
-session.reveal_order so the subsequent `flip <pos>` retry lands them at
-their true reveal index.
-"""
+"""Focused regression tests for memory-verified reveal bookkeeping."""
 
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
+from unittest.mock import Mock, patch
+
+from game_loop import (
+    GameSession,
+    _apply_flip_verification,
+    _verify_flips,
+    dispatch,
+)
+
+
+def _board(n_cards: int, hidden: set[int]) -> list[dict]:
+    return [
+        {
+            "position": position,
+            "state": "Hidden" if position in hidden else "Alive",
+            "killed_hidden": False,
+        }
+        for position in range(1, n_cards + 1)
+    ]
 
 
 class _FakeSession:
-    def __init__(self, reveal_order):
+    def __init__(
+        self,
+        reveal_order,
+        *,
+        blocked_positions=None,
+        has_witch=True,
+        witch_dead=False,
+    ):
         self.reveal_order = list(reveal_order)
-        self._saved = False
+        self.blocked_positions = list(blocked_positions or [])
+        self._has_witch = has_witch
+        self._witch_dead = witch_dead
+        self.save = Mock()
 
-    def save(self):
-        self._saved = True
+    def has_role_in_deck(self, role):
+        return role == "Witch" and self._has_witch
 
-
-def _apply_fix(session, verify_result):
-    """Exact behaviour of the edited block in _cmd_flip — extracted so the
-    logic is testable without spinning up the game or monkeypatching."""
-    failed = verify_result.get("failed", [])
-    if not failed:
-        return False
-    removed = False
-    for p in failed:
-        if p in session.reveal_order:
-            session.reveal_order.remove(p)
-            removed = True
-    if removed:
-        session.save()
-    return removed
+    def is_witch_known_dead(self):
+        return self._witch_dead
 
 
-class TestRevealOrderCleanup(unittest.TestCase):
-    def test_asc78_v6_shape_single_flake(self):
-        """#1 flake: flip appended [1..8], verification fails #1 only."""
-        session = _FakeSession([1, 2, 3, 4, 5, 6, 7, 8])
-        _apply_fix(session, {"flipped": [2, 3, 4, 5, 6, 7, 8], "failed": [1], "blocked": []})
+class RevealVerificationTests(unittest.TestCase):
+    def test_batch_persists_arbitrary_non_max_block_and_true_reveal_order(self):
+        session = _FakeSession(range(1, 9))
+
+        verified = _verify_flips(_board(8, {1}), list(range(1, 9)), session)
+        _apply_flip_verification(session, list(range(1, 9)), verified)
+
+        self.assertEqual(verified["blocked"], [1])
+        self.assertEqual(verified["failed"], [])
         self.assertEqual(session.reveal_order, [2, 3, 4, 5, 6, 7, 8])
-        self.assertTrue(session._saved)
+        self.assertEqual(session.blocked_positions, [1])
+        session.save.assert_called_once_with()
 
-    def test_multiple_flakes(self):
-        session = _FakeSession([1, 2, 3, 4, 5, 6, 7, 8])
-        _apply_fix(session, {"flipped": [2, 3, 5, 6, 7, 8], "failed": [1, 4], "blocked": []})
-        self.assertEqual(session.reveal_order, [2, 3, 5, 6, 7, 8])
+    def test_block_is_global_and_has_no_target_identity_relation(self):
+        # The verifier is intentionally given no target identity. The sole
+        # hidden seat is legal block evidence even when it is Witch itself.
+        session = _FakeSession([2, 3], blocked_positions=[])
 
-    def test_clean_flip_is_noop(self):
-        session = _FakeSession([1, 2, 3, 4, 5, 6, 7, 8])
-        _apply_fix(session, {"flipped": [1, 2, 3, 4, 5, 6, 7, 8], "failed": [], "blocked": []})
-        self.assertEqual(session.reveal_order, [1, 2, 3, 4, 5, 6, 7, 8])
-        self.assertFalse(session._saved)
+        verified = _verify_flips(_board(3, {1}), [1], session)
+        _apply_flip_verification(session, [1], verified)
 
-    def test_witch_block_not_treated_as_flake(self):
-        """Verify stores Witch-blocked positions under 'blocked', not 'failed'.
-        The fix must not strip blocked positions (they're tracked separately
-        via session.blocked_positions)."""
-        session = _FakeSession([1, 2, 3, 4, 5, 6, 7])
-        _apply_fix(session, {"flipped": [1, 2, 3, 4, 5, 6], "failed": [], "blocked": [7]})
-        self.assertEqual(session.reveal_order, [1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual(verified["blocked"], [1])
+        self.assertEqual(session.blocked_positions, [1])
+        self.assertNotIn(1, session.reveal_order)
 
-    def test_retry_appends_at_true_index(self):
-        """After cleanup, a subsequent flip <pos> retry appends at end —
-        reflecting the true reveal index (last, not first)."""
-        session = _FakeSession([1, 2, 3, 4, 5, 6, 7, 8])
-        _apply_fix(session, {"flipped": [2, 3, 4, 5, 6, 7, 8], "failed": [1], "blocked": []})
-        # Simulate the retry's "append if not in reveal_order" logic:
-        if 1 not in session.reveal_order:
-            session.reveal_order.append(1)
-        self.assertEqual(session.reveal_order, [2, 3, 4, 5, 6, 7, 8, 1])
+    def test_multiple_hidden_cards_are_click_failures_not_witch_blocks(self):
+        session = _FakeSession([1, 2, 3, 4])
+
+        verified = _verify_flips(_board(4, {1, 4}), [1, 2, 3, 4], session)
+        _apply_flip_verification(session, [1, 2, 3, 4], verified)
+
+        self.assertEqual(verified["blocked"], [])
+        self.assertEqual(verified["failed"], [1, 4])
+        self.assertEqual(session.reveal_order, [2, 3])
+
+    def test_known_dead_witch_cannot_explain_a_hidden_click(self):
+        session = _FakeSession([1, 2, 3], witch_dead=True)
+
+        verified = _verify_flips(_board(3, {1}), [1], session)
+        _apply_flip_verification(session, [1], verified)
+
+        self.assertEqual(verified["blocked"], [])
+        self.assertEqual(verified["failed"], [1])
+        self.assertNotIn(1, session.reveal_order)
+
+    def test_verified_single_retry_clears_marker_and_appends_at_true_index(self):
+        session = _FakeSession([2, 3], blocked_positions=[1])
+
+        verified = _verify_flips(_board(3, set()), [1], session)
+        _apply_flip_verification(session, [1], verified)
+
+        self.assertEqual(verified["flipped"], [1])
+        self.assertEqual(session.reveal_order, [2, 3, 1])
+        self.assertEqual(session.blocked_positions, [])
+        session.save.assert_called_once_with()
+
+    def test_missing_memory_position_never_enters_reveal_order(self):
+        session = _FakeSession([1, 2, 3])
+        incomplete_board = _board(3, set())[:-1]
+
+        verified = _verify_flips(incomplete_board, [3], session)
+        _apply_flip_verification(session, [3], verified)
+
+        self.assertEqual(verified["failed"], [3])
+        self.assertNotIn(3, session.reveal_order)
+
+    def test_killed_hidden_target_is_resolved_but_never_a_reveal(self):
+        session = _FakeSession([1, 2, 3, 4])
+        board = _board(4, set())
+        board[3].update(state="Hidden", killed_hidden=True)
+
+        verified = _verify_flips(board, [1, 2, 3, 4], session)
+        _apply_flip_verification(session, [1, 2, 3, 4], verified)
+
+        self.assertEqual(verified["flipped"], [1, 2, 3])
+        self.assertEqual(verified["dead"], [4])
+        self.assertNotIn(4, session.reveal_order)
+
+    def test_dispatch_single_retry_mutates_only_from_final_memory_board(self):
+        session = GameSession(3, 1)
+        session.minions = ["Witch"]
+        session.reveal_order = [2, 3]
+        session.blocked_positions = [1]
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={1: (100, 100)}),
+            patch("game_loop._click_flip_card"),
+            patch("game_loop._read_board_once_for_flip", return_value=_board(3, set())),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()),
+        ):
+            dispatch("flip", ["1"], session)
+
+        self.assertEqual(session.reveal_order, [2, 3, 1])
+        self.assertEqual(session.blocked_positions, [])
+
+    def test_dispatch_single_killed_hidden_never_counts_as_reveal_or_night(self):
+        session = GameSession(5, 1)
+        session.demons = ["Lilis"]
+        session.reveal_order = [1, 2, 3, 4]
+        board = _board(5, set())
+        board[4].update(state="Hidden", killed_hidden=True)
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={5: (500, 100)}),
+            patch("game_loop._click_flip_card"),
+            patch("game_loop._read_board_once_for_flip", return_value=board),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            dispatch("flip", ["5"], session)
+
+        self.assertEqual(session.reveal_order, [1, 2, 3, 4])
+        self.assertEqual(session.lilis_batch_index, 0)
+        self.assertIn("resolved dead/hidden", output.getvalue())
+        self.assertNotIn("Verified reveal", output.getvalue())
+        self.assertNotIn("LILIS NIGHT", output.getvalue())
+
+    def test_lilis_fourth_block_does_not_create_false_night_boundary(self):
+        session = GameSession(4, 1)
+        session.minions = ["Witch"]
+        session.demons = ["Lilis"]
+
+        class Monitor:
+            def __init__(self):
+                self.wait_for = Mock(return_value=False)
+
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def get_board():
+                return _board(4, {4})
+
+        monitor = Monitor()
+        with (
+            patch("game_utils.all_game_card_coords", return_value={
+                1: (100, 100), 2: (200, 100), 3: (300, 100), 4: (400, 100)
+            }),
+            patch("game_loop._click_flip_card"),
+            patch("memory_reader.get_monitor", return_value=monitor),
+            patch("memory_reader.print_board"),
+            patch("mouse.move"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            dispatch("flip", ["--lilis"], session)
+
+        self.assertEqual(session.reveal_order, [1, 2, 3])
+        self.assertEqual(session.blocked_positions, [4])
+        self.assertEqual(session.lilis_batch_index, 0)
+        self.assertEqual(monitor.wait_for.call_count, 1)
+        self.assertIn("Lilis night did not trigger", output.getvalue())
+        self.assertNotIn("Lilis deals 2 HP", output.getvalue())
+
+    def test_manual_verified_fourth_reveal_increments_lilis_round(self):
+        session = GameSession(4, 1)
+        session.demons = ["Lilis"]
+        session.reveal_order = [1, 2, 3]
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={4: (400, 100)}),
+            patch("game_loop._click_flip_card"),
+            patch("game_loop._read_board_once_for_flip", return_value=_board(4, set())),
+            patch("memory_reader.get_monitor") as get_monitor,
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            redirect_stdout(StringIO()),
+        ):
+            get_monitor.return_value.is_healthy.return_value = False
+            dispatch("flip", ["4"], session)
+
+        self.assertEqual(session.reveal_order, [1, 2, 3, 4])
+        self.assertEqual(session.lilis_batch_index, 1)
 
 
 if __name__ == "__main__":

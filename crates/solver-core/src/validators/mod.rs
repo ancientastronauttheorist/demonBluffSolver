@@ -84,6 +84,12 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
         }
     }
 
+    // Shipped Cipher/Witch contributes one global hidden-card block. A blocked
+    // seat is whichever hidden card the player happened to click once that
+    // quota was reached; its position does not identify the Witch. Historical
+    // fixtures retain that marker after a Witch death.
+    if !validate_witch_block_evidence(scenario, state) { return false; }
+
     // Structural: role counts
     if !validate_role_counts(scenario, state) { return false; }
 
@@ -144,6 +150,48 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     }
 
     true
+}
+
+fn validate_witch_block_evidence(scenario: &Scenario, state: &GameState) -> bool {
+    let blocked_count = state.blocked_positions.iter().copied()
+        .collect::<HashSet<_>>().len();
+    if blocked_count == 0 { return true; }
+    // ManageCharacters stops after the first ordinary asset match. Duplicate
+    // Witch records therefore do not stack Start increments in represented
+    // GameState; independent successful Cipher.Start calls are not modeled.
+    if blocked_count > 1 { return false; }
+
+    let dead: HashSet<u8> = state.executed.iter()
+        .chain(state.night_kills.iter()).copied().collect();
+    let named_witch_positions: Vec<u8> = scenario.evil_positions.iter()
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "witch").then_some(position)
+        }).collect();
+    let live_named_witches = named_witch_positions.iter()
+        .filter(|position| !dead.contains(position)).count();
+    let dead_named_witches = named_witch_positions.len() - live_named_witches;
+
+    // An executed confirmed Evil may have no observed role. Scenario
+    // generation represents that seat as `Unknown` after removing one role
+    // identity from the deck, so preserve the possibility that the missing
+    // identity was Witch. This is historical evidence only: an Unknown live
+    // seat never supplies current Witch quota.
+    let dead_unknown_slots = scenario.evil_positions.iter()
+        .filter(|(position, role)| {
+            dead.contains(position) && normalize_role(role) == "unknown"
+        }).count();
+    let deck_witch_count = state.deck.minions.iter()
+        .filter(|role| normalize_role(role) == "witch").count();
+    let unrepresented_witch_count = deck_witch_count
+        .saturating_sub(named_witch_positions.len());
+    let possible_unknown_dead_witches = dead_unknown_slots
+        .min(unrepresented_witch_count);
+    let has_historical_witch = dead_named_witches > 0 || possible_unknown_dead_witches > 0;
+
+    // A live named Witch explains a current scalar block. Any real Witch death
+    // calls Reduce(1), including either member of an ordinary duplicate pair,
+    // so a marker alongside a dead Witch is historical rather than stacked.
+    live_named_witches > 0 || has_historical_witch
 }
 
 // ── Individual validators ──
@@ -1816,6 +1864,79 @@ mod tests {
         s.n_cards = n_cards;
         s.cards = cards;
         s
+    }
+
+    #[test]
+    fn witch_block_marker_is_arbitrary_and_allows_self_block() {
+        let mut state = base_state(7, vec![]);
+        state.blocked_positions = vec![1];
+
+        let mut witch_elsewhere = empty_scenario();
+        witch_elsewhere.evil_positions.insert(7, "Witch".to_string());
+        assert!(validate_witch_block_evidence(&witch_elsewhere, &state));
+
+        let mut witch_on_blocked_seat = empty_scenario();
+        witch_on_blocked_seat.evil_positions.insert(1, "Witch".to_string());
+        assert!(validate_witch_block_evidence(&witch_on_blocked_seat, &state));
+    }
+
+    #[test]
+    fn current_witch_block_marker_rejects_no_witch_scenario() {
+        let mut state = base_state(3, vec![]);
+        state.blocked_positions = vec![1];
+        assert!(!validate_witch_block_evidence(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn retained_witch_marker_is_historical_after_execution_or_night_death() {
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Witch".to_string());
+
+        let mut executed = base_state(3, vec![]);
+        executed.blocked_positions = vec![1];
+        executed.executed = vec![3];
+        assert!(validate_witch_block_evidence(&scenario, &executed));
+
+        let mut night_killed = base_state(3, vec![]);
+        night_killed.blocked_positions = vec![1];
+        night_killed.night_kills = vec![3];
+        assert!(validate_witch_block_evidence(&scenario, &night_killed));
+    }
+
+    #[test]
+    fn unknown_executed_evil_can_preserve_historical_witch_identity() {
+        let mut state = base_state(3, vec![]);
+        state.blocked_positions = vec![1];
+        state.executed = vec![3];
+        state.confirmed_evil = vec![3];
+        state.deck.minions = vec!["Witch".to_string(), "Minion".to_string()];
+
+        let mut unknown_executed = empty_scenario();
+        unknown_executed.evil_positions.insert(3, "Unknown".to_string());
+        assert!(validate_witch_block_evidence(&unknown_executed, &state));
+
+        state.deck.minions = vec!["Minion".to_string()];
+        assert!(!validate_witch_block_evidence(&unknown_executed, &state));
+    }
+
+    #[test]
+    fn witch_block_is_scalar_even_with_duplicate_witch_records() {
+        let mut state = base_state(6, vec![]);
+        state.blocked_positions = vec![1, 2];
+
+        let mut two_witches = empty_scenario();
+        two_witches.evil_positions.insert(6, "Witch".to_string());
+        two_witches.evil_positions.insert(5, "Witch".to_string());
+        assert!(!validate_witch_block_evidence(&two_witches, &state));
+
+        state.blocked_positions = vec![1];
+        assert!(validate_witch_block_evidence(&two_witches, &state));
+
+        state.executed = vec![5];
+        assert!(validate_witch_block_evidence(&two_witches, &state));
+
+        state.night_kills = vec![6];
+        assert!(validate_witch_block_evidence(&two_witches, &state));
     }
 
     #[test]
