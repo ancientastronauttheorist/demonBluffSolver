@@ -281,6 +281,16 @@ still succeeds. On a two-card board the sole other card is processed twice. A
 board with fewer than two cards reaches the native failure path after the actor
 is removed because index zero is read without a count guard.
 
+The separate private `PoisonClosestNeighbours` body is not this shipped path.
+It would select one random real-Villager occurrence from the circular adjacent
+pair and add only Corrupted, but a native executable-xref scan finds no caller;
+its only absolute reference is the ordinary IL2CPP method-registration pointer.
+`Pooka.Act` instead has the sole executable edge to
+`PoisonNeighboursIfAble`. The complete public asset binding, direct-xref
+evidence, dormant-helper classification, duplicate lifecycle, and solver
+consequences are closed in the dedicated
+[`Pooka` role audit](../roles/gameplay_role_pooka.md).
+
 ### Poisoner Start adjacent corruption
 
 `Poisoner.Act` does work only at `Start`. It obtains the circular adjacent pair,

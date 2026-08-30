@@ -163,6 +163,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   `SaintVillager` exclusion, and automatic-loss precedence; expand the typed
   union to 22 target sets and 502 memberships and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Pooka to exact managed `Pooka`; native-audit all five
+  declared role methods plus four status, real-type, adjacency, and rotation
+  helpers; close Start-only Evil dispatch, deterministic two-neighbour current-
+  real-Villager eligibility, independent Corrupted/MessedUpByEvil attempts,
+  ordinary duplicate and small-board behavior, and the native-xref proof that
+  private random-one-neighbour `PoisonClosestNeighbours` is unreachable in the
+  shipped flow; expand the typed union to 23 target sets and 511 memberships
+  and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

@@ -61,7 +61,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Baa — no issues
 - [x] Lilis — full managed `Striga` boundary native-audited; hard Good-first
   selection, repeated Nights, protected no-kill, and duplicate behavior closed
-- [x] Pooka — no issues
+- [x] Pooka — full managed `Pooka` boundary native-audited; deterministic
+  two-real-Villager-neighbour Start corruption, independent paired statuses,
+  highest-ID duplicate and small-board behavior closed, and the private random
+  one-neighbour helper proven unreachable in the shipped flow by native xrefs
 
 ---
 

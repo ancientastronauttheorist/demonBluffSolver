@@ -279,6 +279,16 @@ Bombardier is fatal even with preserved Evil alignment, while ordinary bluff
 and Drunk/Doppel display copies are not. Exact managed `SaintVillager` is also
 distinct. Successful forced kills and ordinary `Character.Kill` qualify;
 Demon deaths are exempt only through the stored `killedByDemon` flag.
+The following [`Pooka`](notes/roles/gameplay_role_pooka.md) boundary
+asset-binds the public Evil Demon to exact managed `Pooka`, covers all five
+declared role methods plus four status and ordering helpers, and distinguishes
+the shipped deterministic Start path from a dormant older helper. The active
+path visits both circular neighbours, qualifies each by current real Villager
+type, and independently attempts Corrupted then MessedUpByEvil. A native xref
+scan finds no executable caller for private `PoisonClosestNeighbours`; its
+random-one-neighbour, Corrupted-only body has only the ordinary IL2CPP method
+registration pointer. Ordinary duplicate Pookas run only the highest-ID match,
+and the role owns no clue, picker, reset history, or achievement action.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -316,14 +326,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_bombardier
+  -TargetSet gameplay_role_pooka
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,434
-datatypes. Its twenty-two-set inventory contains 502 target memberships, 330
-distinct selected FunctionDefinitions, and 303 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,444
+datatypes. Its twenty-three-set inventory contains 511 target memberships, 333
+distinct selected FunctionDefinitions, and 305 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -337,13 +347,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current twenty-two-set run used three batches for each phase. Ghidra
+sets; the current twenty-three-set run used three batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all twenty-two target
-sets after a no-analysis refresh. One hundred seventy-two memberships are exact
-overlaps between boundaries. Folded/shared bodies make the 330 selected
-definitions exceed the 303 unique native RVAs by twenty-seven; each canonical native prototype is explicit
+The preserved fully analyzed typed project now covers all twenty-three target
+sets after a no-analysis refresh. One hundred seventy-eight memberships are
+exact overlaps between boundaries. Folded/shared bodies make the 333 selected
+definitions exceed the 305 unique native RVAs by twenty-eight; each canonical native prototype is explicit
 while all exact managed definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
 seconds without a timeout. Subsequent refreshes imported 121 additional
@@ -354,9 +364,10 @@ imported 212 more. The Rambler refresh imported 36 more, and the first Baker
 refresh imported 18 more. The first Doppelganger/Drunk refresh required no new
 reachable datatypes. The Fortune Teller refresh imported 26 additional
 reachable datatypes. The Bombardier refresh imported six additional reachable
-datatypes. The three-batch refresh reapplied and validated all 502 memberships
-without rerunning auto-analysis. The final read-only pass validated all 502
-memberships (330 exact definitions) and 1,460
+datatypes. The Pooka refresh required no new reachable datatype import. The
+three-batch refresh reapplied and validated all 511 memberships without
+rerunning auto-analysis. The final read-only pass validated all 511
+memberships (333 exact definitions) and 1,489
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -390,7 +401,8 @@ from 190 to 123 for Plague Doctor, from 146 to 80 for Judge, from 119 to 30 for
 Witch, from 237 to 105 for Chancellor/Witness, and from 387 to 154 for the
 combined Lilis/Knight boundary. Rambler fell from 405 to 103, and Baker fell
 from 261 to 71. The combined Doppelganger/Drunk boundary fell from 216 to 72.
-Fortune Teller fell from 171 to 67, and Bombardier fell from 134 to 39.
+Fortune Teller fell from 171 to 67, Bombardier fell from 134 to 39, and Pooka
+fell from 53 to 31.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -400,7 +412,8 @@ for Plague Doctor, from 268 to 175 for Judge, and from 241 to 89 for Witch.
 The Chancellor/Witness boundary fell from 294 raw field-offset accesses to
 102, Lilis/Knight fell from 581 to 203, Rambler fell from 699 to 95, and Baker
 fell from 396 to 85. Doppelganger/Drunk fell from 266 to 54.
-Fortune Teller fell from 286 to 194, and Bombardier fell from 245 to 98.
+Fortune Teller fell from 286 to 194, Bombardier fell from 245 to 98, and Pooka
+fell from 42 to 28.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -418,7 +431,9 @@ retained zero error markers and 43 warning markers, reduced placeholder
 parameters from 163 to zero, and reduced indirect-call patterns from 15 to
 five. Bombardier retained three error markers and 21 warning markers, reduced
 placeholder parameters from 172 to zero, and reduced indirect-call patterns
-from 27 to 11. The original typed import is
+from 27 to 11. Pooka retained zero error markers and 11 warning markers,
+reduced placeholder parameters from 49 to zero, and retained zero
+indirect-call patterns. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -453,14 +468,16 @@ The current Fortune Teller comparison is in the
 [`Fortune Teller typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_fortune_teller.json).
 The current Bombardier comparison is in the
 [`Bombardier typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_bombardier.json).
+The current Pooka comparison is in the
+[`Pooka typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_pooka.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 332 classifications backed by
-137 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 335 classifications backed by
+141 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

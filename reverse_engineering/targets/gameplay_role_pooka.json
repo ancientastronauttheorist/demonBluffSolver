@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Pooka role boundary, including every declared managed method, its active deterministic Start neighbour-corruption helper, the dormant random closest-neighbour helper, and the exact status, circular-neighbour, real-type, and rotation helpers needed to distinguish those paths",
+  "functions": [
+    {
+      "name": "Pooka.GetRules",
+      "metadata_name": "Pooka$$GetRules",
+      "signature": "System_Collections_Generic_List_SpecialRule__o* Pooka__GetRules (Pooka_o* __this, const MethodInfo* method);",
+      "rva": "0x3E6720"
+    },
+    {
+      "name": "Pooka.Act",
+      "metadata_name": "Pooka$$Act",
+      "signature": "void Pooka__Act (Pooka_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6700"
+    },
+    {
+      "name": "Pooka.PoisonClosestNeighbours",
+      "metadata_name": "Pooka$$PoisonClosestNeighbours",
+      "signature": "void Pooka__PoisonClosestNeighbours (Pooka_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6780"
+    },
+    {
+      "name": "Pooka.PoisonNeighboursIfAble",
+      "metadata_name": "Pooka$$PoisonNeighboursIfAble",
+      "signature": "void Pooka__PoisonNeighboursIfAble (Pooka_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6870"
+    },
+    {
+      "name": "Pooka.ctor",
+      "metadata_name": "Pooka$$.ctor",
+      "signature": "void Pooka___ctor (Pooka_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "Characters.GetAdjacentCharacters",
+      "metadata_name": "Characters$$GetAdjacentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C2E0"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.Character",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "prototype_name": "Characters__FilterRealCharacterType_Character",
+      "rva": "0x36BB40"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    }
+  ]
+}
