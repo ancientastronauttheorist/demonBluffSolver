@@ -176,15 +176,24 @@ real-or-bluff presentation. It is not the player's face-down-card flip and does
 not change the card state, update reveal order, or invoke the public
 `onReveal` callback.
 
-The copied role's own behavior remains a separate per-role boundary. One
-important composition is Baker: Shaman does not synthesize
-`BakerRuntimeData`, so a direct Baker clone retains whatever runtime data the
-destination had. Later Baker-created descendants, rather than Shaman itself,
-record the identity they replace. A solver trace should preserve Shaman's
-ordered source, destination, copied data, and viable erased-role identity class
-instead of representing the effect only as an unconstrained extra-role
-allowance. Exact runtime-data provenance remains a separate composition
-problem for roles such as Baker.
+The copied role's own behavior remains a separate per-role boundary. The
+dedicated [Baker audit](gameplay_role_baker.md#truth-dispatch-status-composition-and-chain-reachability)
+now closes its important composition. Shaman does not synthesize
+`BakerRuntimeData` and adds only `MessedUpByEvil`, not
+`AlteredCharacter`. A clean copied Baker with null preserved runtime data says
+`I am the original Baker` and can create a descendant. Preserved
+`BakerRuntimeData` supplies its saved name, while a non-null incompatible
+subtype such as `AlchemistRuntimeData` or `EnlightenedRuntimeData` reaches the
+ordinary Baker invalid-cast path before output or conversion. A Corrupted
+destination dispatches the lying Baker path and does not extend the chain in
+current setup because no audited producer gives it `WorkingAbility`.
+Later Baker-created descendants, rather than Shaman itself, write the real
+identity they replace into fresh Baker runtime data.
+
+A solver trace should preserve Shaman's ordered source, destination, copied
+data, viable erased-role identity class, and destination runtime/status
+composition instead of representing the effect only as an unconstrained
+extra-role allowance.
 
 ## Passive and construction surfaces
 
@@ -224,5 +233,8 @@ at least one member reverses to a valid initial multiset. A possible hidden
 endpoint is admitted only when the natural-Outcast budget can make it a
 Villager, and that endpoint assumption is inserted into the earlier corruption
 target pools before Start simulation. The former unconstrained `+1` duplicate
-and Villager-header allowances are no longer used. Copied Baker behavior stays
-opaque until Baker runtime-data composition receives its own native audit.
+and Villager-header allowances are no longer used. Copied Baker behavior now
+follows the linked Baker audit: null runtime means original, compatible Baker
+runtime preserves its named history, incompatible non-null runtime can
+invalidate the Day surface, and current Corrupted copies do not create
+descendants without status 38.

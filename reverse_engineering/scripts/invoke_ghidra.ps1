@@ -706,8 +706,11 @@ function Invoke-BuildTypes {
 }
 
 function Add-ApplyPreScripts {
-    param([Parameter(Mandatory = $true)][Collections.Generic.List[object]]$Arguments)
-    foreach ($targetInfo in $targetInfos) {
+    param(
+        [Parameter(Mandatory = $true)][Collections.Generic.List[object]]$Arguments,
+        [object[]]$SelectedTargets = $targetInfos
+    )
+    foreach ($targetInfo in $SelectedTargets) {
         $Arguments.Add('-preScript')
         $Arguments.Add('ApplyGdtSignatures.java')
         $Arguments.Add($gdtPath)
@@ -826,40 +829,48 @@ function Invoke-TypedValidate {
     Assert-AnalysisSummary -Path $typedAnalysisSummaryPath
     Remove-TypedValidationSummaries
 
-    $argumentList = [Collections.Generic.List[object]]::new()
-    foreach ($argument in @(
-        $typedProjectDirectory,
-        $typedProjectName,
-        '-process', $programName,
-        '-readOnly',
-        '-noanalysis',
-        '-scriptPath', $ghidraScripts
-    )) {
-        $argumentList.Add($argument)
-    }
-    foreach ($targetInfo in $targetInfos) {
+    $targetBatchSize = 8
+    for ($batchStart = 0; $batchStart -lt $targetInfos.Count; $batchStart += $targetBatchSize) {
+        $batchEnd = [Math]::Min($batchStart + $targetBatchSize, $targetInfos.Count)
+        $batchInfos = @($targetInfos[$batchStart..($batchEnd - 1)])
+        $batchNumber = [int]($batchStart / $targetBatchSize) + 1
+        $batchLabel = '{0:D2}' -f $batchNumber
+
+        $argumentList = [Collections.Generic.List[object]]::new()
         foreach ($argument in @(
-            '-postScript',
-            'ValidateGdtSignatures.java',
-            $gdtPath,
-            $targetInfo.Path,
-            (Get-ValidateSummaryPath -TargetInfo $targetInfo)
+            $typedProjectDirectory,
+            $typedProjectName,
+            '-process', $programName,
+            '-readOnly',
+            '-noanalysis',
+            '-scriptPath', $ghidraScripts
         )) {
             $argumentList.Add($argument)
         }
-    }
-    foreach ($argument in @(
-        '-max-cpu', $MaxCpu,
-        '-log', (Join-Path $typedProjectRoot 'logs\typed-validate.log'),
-        '-scriptlog', (Join-Path $typedProjectRoot 'logs\typed-validate-script.log')
-    )) {
-        $argumentList.Add($argument)
-    }
+        foreach ($targetInfo in $batchInfos) {
+            foreach ($argument in @(
+                '-postScript',
+                'ValidateGdtSignatures.java',
+                $gdtPath,
+                $targetInfo.Path,
+                (Get-ValidateSummaryPath -TargetInfo $targetInfo)
+            )) {
+                $argumentList.Add($argument)
+            }
+        }
+        foreach ($argument in @(
+            '-max-cpu', $MaxCpu,
+            '-log', (Join-Path $typedProjectRoot "logs\typed-validate-$batchLabel.log"),
+            '-scriptlog', (Join-Path $typedProjectRoot "logs\typed-validate-$batchLabel-script.log")
+        )) {
+            $argumentList.Add($argument)
+        }
 
-    Invoke-HeadlessWithChecks `
-        -Arguments @($argumentList) `
-        -Description 'Ghidra typed signature validation' `
-        -LargeHeap
+        Invoke-HeadlessWithChecks `
+            -Arguments @($argumentList) `
+            -Description "Ghidra typed signature validation batch $batchLabel" `
+            -LargeHeap
+    }
     Assert-TypedValidationState
 }
 
@@ -874,29 +885,37 @@ function Invoke-TypedRefresh {
     Remove-TypedApplySummaries
     Remove-TypedValidationSummaries
 
-    $argumentList = [Collections.Generic.List[object]]::new()
-    foreach ($argument in @(
-        $typedProjectDirectory,
-        $typedProjectName,
-        '-process', $programName,
-        '-noanalysis',
-        '-scriptPath', $ghidraScripts
-    )) {
-        $argumentList.Add($argument)
-    }
-    Add-ApplyPreScripts -Arguments $argumentList
-    foreach ($argument in @(
-        '-max-cpu', $MaxCpu,
-        '-log', (Join-Path $typedProjectRoot 'logs\typed-refresh.log'),
-        '-scriptlog', (Join-Path $typedProjectRoot 'logs\typed-refresh-script.log')
-    )) {
-        $argumentList.Add($argument)
-    }
+    $targetBatchSize = 8
+    for ($batchStart = 0; $batchStart -lt $targetInfos.Count; $batchStart += $targetBatchSize) {
+        $batchEnd = [Math]::Min($batchStart + $targetBatchSize, $targetInfos.Count)
+        $batchInfos = @($targetInfos[$batchStart..($batchEnd - 1)])
+        $batchNumber = [int]($batchStart / $targetBatchSize) + 1
+        $batchLabel = '{0:D2}' -f $batchNumber
 
-    Invoke-HeadlessWithChecks `
-        -Arguments @($argumentList) `
-        -Description 'Ghidra typed signature refresh' `
-        -LargeHeap
+        $argumentList = [Collections.Generic.List[object]]::new()
+        foreach ($argument in @(
+            $typedProjectDirectory,
+            $typedProjectName,
+            '-process', $programName,
+            '-noanalysis',
+            '-scriptPath', $ghidraScripts
+        )) {
+            $argumentList.Add($argument)
+        }
+        Add-ApplyPreScripts -Arguments $argumentList -SelectedTargets $batchInfos
+        foreach ($argument in @(
+            '-max-cpu', $MaxCpu,
+            '-log', (Join-Path $typedProjectRoot "logs\typed-refresh-$batchLabel.log"),
+            '-scriptlog', (Join-Path $typedProjectRoot "logs\typed-refresh-$batchLabel-script.log")
+        )) {
+            $argumentList.Add($argument)
+        }
+
+        Invoke-HeadlessWithChecks `
+            -Arguments @($argumentList) `
+            -Description "Ghidra typed signature refresh batch $batchLabel" `
+            -LargeHeap
+    }
     Assert-TypedImportState
 
     # Keep signature application and read-only validation in separate

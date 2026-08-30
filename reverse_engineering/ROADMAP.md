@@ -129,6 +129,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   adjacency, immediate versus pre-append history, and constraint-free Day
   quotes with exact references; expand the typed union to 18 target sets and
   379 memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Baker to managed `Baker`; native-audit all 11 role
+  methods, Baker runtime history, all three achievement-helper methods, and 21
+  click, reveal, dispatch, filter, replacement, lookup, and acted-history
+  helpers; close synchronous Day-only chain timing, exact real/lying role-name
+  pools, runtime-cast and status composition, registered candidate eligibility,
+  physical order/duplicates, small boards, and achievement ordering; expand
+  the typed union to 19 target sets and 415 memberships and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

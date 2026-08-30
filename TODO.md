@@ -7,7 +7,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 ### Audit Checklist
 - [x] Alchemist — no issues
 - [x] Architect — no issues
-- [x] Baker — wiki-vs-game discrepancy on "original" (documented, no fix needed)
+- [x] Baker — full managed `Baker` boundary native-audited; synchronous Day
+  conversion, saved runtime identity, exact real/lying clues, candidate filters,
+  status composition, small boards, and achievement bookkeeping closed
 - [x] Bard — no issues
 - [x] Bishop — Wretch type bug + lying constraint gap
 - [x] Confessor — no issues
@@ -114,7 +116,14 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Chancellor +1 outcast count** — FIXED. When Chancellor is in the deck, allow +1 on board_outcast_count in role count validation, _must_be_villager, and hidden outcast presence checks. Lost asc17_v2 to this — solver rejected true scenario with 2 Good Outcasts when header said O=1.
 
-- [x] **Baker reveal_order validation** — DROPPED. Live asc77_v6 proved Baker chains are pre-seeded at game start and a converted Baker may reveal before the original.
+- [x] **Baker reveal_order validation** — NATIVE-CORRECTED. Baker conversion
+  occurs only during a reached Day/user-reveal action; there is no Start
+  preseed. A successful click changes Hidden to Alive and synchronously
+  completes Baker conversion before the next click. `asc77_v6` predates the
+  verified-first-click fix and recorded click attempts rather than actual
+  state transitions; a flaked #1 followed by actual order
+  `[2,3,4,5,6,7,8,9,10,1]` explains #6 Baker -> #9 Empress -> #1 Judge
+  without any preseed.
 
 - [x] **Baa hidden Outcast in deck view** — NATIVE-VERIFIED. Baa obscures one existing Outcast identity; it does not add a role. `game_loop.py deck` preserves the HUD `no=` value and explains the eye-symbol mismatch.
 
