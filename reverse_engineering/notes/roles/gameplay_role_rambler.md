@@ -211,11 +211,22 @@ captured closure instead.
 
 ## User reveal and the constraint-free Day quote
 
-On an ordinary allowed user flip, `RevealCard.Reveal` calls
-`Character.Act(Day)` (`ETriggerPhase == 30`) before `Character.OnReveal`.
-`Rambler2.Act(30)` and `Rambler2.BluffAct(30)` are identical: both choose one
-of 34 fixed flavor quotes uniformly, store it in the misspelled `savedQote`
-field, and emit it through `Role.OnActed`.
+On an ordinary allowed user click, `Character.OnClick` first changes the
+character from Hidden to Alive and invokes its state callback. The resulting
+`RevealCard.Reveal` call dispatches `Character.Act(Day)`
+(`ETriggerPhase == 30`) before `Character.OnReveal`. `Rambler2.Act(30)` and
+`Rambler2.BluffAct(30)` are identical: both choose one of 34 fixed flavor
+quotes uniformly, store it in the misspelled `savedQote` field, and pass it to
+`Role.OnActed`.
+
+`Role.OnActed` has an important narrow gate. When the trigger is not
+`OnPicked` (`70`) and both `killedByDemon` and `killedHidden` are false, it
+invokes the registered acted delegate regardless of character state, using a
+previously saved `ActedInfo` when one exists and otherwise the current record.
+Only the `OnPicked`-or-killed branch checks for Hidden and defers the current
+record into `savedActInfo`. An ordinary Rambler reveal is already Alive, has no
+prior saved role record, and has neither killed flag, so its newly chosen Day
+quote is emitted before `Character.OnReveal` performs reveal accounting.
 
 The quote's `ActedInfo` references are **not empty**. They are the exact current
 `GetAdjacentCharacters(source)` result: predecessor then successor, including
