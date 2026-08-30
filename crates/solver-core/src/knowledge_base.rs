@@ -95,7 +95,7 @@ pub static ALL_CARDS: &[Card] = &[
     Card { name: "Puppet",         faction: Faction::Minion,   alignment: Alignment::Evil, lies: false, disguises: true,  cant_lie: true,  game_start_ability: false, activated_ability: false, corrupted_note: false },
 
     // ── Demons (Evil) ── 3 cards
-    Card { name: "Baa",            faction: Faction::Demon,    alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
+    Card { name: "Baa",            faction: Faction::Demon,    alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: false },
     Card { name: "Pooka",          faction: Faction::Demon,    alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: true,  activated_ability: false, corrupted_note: true },
     Card { name: "Lilis",          faction: Faction::Demon,    alignment: Alignment::Evil, lies: true,  disguises: true,  cant_lie: false, game_start_ability: false, activated_ability: false, corrupted_note: false },
 ];

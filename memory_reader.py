@@ -141,8 +141,9 @@ DISPLAY_NAMES = {
     'BountyHunter': 'Hunter',
     'Immortal': 'Knight',
     'Recluse': 'Wretch',
-    'Skinwalker': 'Baa',
-    'Imp': 'Chancellor',
+    'Skinwalker': 'Mutant',
+    'Imp': 'Baa',
+    'Baron': 'Chancellor',
     'Marionette': 'Twin Minion',
     'Illuzionist': 'Witch',
     'Spy': 'Plague Doctor',
@@ -168,7 +169,6 @@ DISPLAY_NAMES = {
     'Scout': 'Scout',
     'Knitter': 'Knitter',
     'Witness': 'Witness',
-    'Baron': 'Baron',
     'Puppet': 'Puppet',
 }
 

@@ -173,3 +173,8 @@
 {"method":"tdi5875.m0008","state":"understood","reason":"The helper's exclusion, unique CharacterData candidate construction, uniform draw, and empty-pool failure are documented.","evidence":["ev.role.dreamer.resolve.1"]}
 {"method":"tdi5875.m0009","state":"understood","reason":"Ascending target IDs, randomized role-name order, and exact multiline formatting are documented.","evidence":["ev.role.dreamer.resolve.1","ev.role.dreamer.generated.1"]}
 {"method":"tdi5875.m0010","state":"understood","reason":"The compiler-provided Dreamer constructor follows only the heavily folded base-role initialization path.","evidence":["ev.role.dreamer.surface.1"]}
+{"method":"tdi5744.m0000","state":"understood","reason":"The deck-view helper appends the exact selected CharacterData object to the static obscured-entry list.","evidence":["ev.role.baa.deck-view.1"]}
+{"method":"tdi5744.m0001","state":"understood","reason":"The deck-view helper removes the exact object and dispatches the deck refresh event without mutating board state.","evidence":["ev.role.baa.deck-view.1"]}
+{"method":"tdi5920.m0000","state":"understood","reason":"Baa's managed rule surface returns a fresh empty SpecialRule list.","evidence":["ev.role.baa.surface.1"]}
+{"method":"tdi5920.m0001","state":"understood","reason":"Baa's exact Start selection, usually-disguised priority, empty-pool behavior, stored object, and OnDied cleanup are documented.","evidence":["ev.role.baa.asset-binding.1","ev.role.baa.lifecycle.1","ev.role.baa.deck-view.1"]}
+{"method":"tdi5920.m0002","state":"understood","reason":"The compiler-provided Imp constructor follows only the folded base-role initialization path.","evidence":["ev.role.baa.surface.1"]}

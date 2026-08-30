@@ -197,9 +197,11 @@ Memory reader notes:
   cure. This is represented as `corrupted_count`; legacy `cured_count` exists
   only for historical cases. Live wording may be `There was N Corruption around
   me`, not only `N Corrupted around me`.
-- Baa hides an Outcast in deck view, and when Baa dies the hidden card should
-  reveal. In asc82_v2, executing Baa revealed the hidden deck card as Drunk.
-  `game_loop.py` has `_baa_post_execute_reveal()` to detect this.
+- Baa is managed internally as `Imp`. At Start it selects one existing Outcast
+  and adds that exact record to `DeckView.ObscuredCharacters`; current assets
+  make the selection uniform because every `usuallyDisguised` flag is false.
+  On any Baa death it removes that record and refreshes the deck view. This
+  reveals only the hidden deck-strip identity, not a board card.
 - The public Dreamer asset binds managed `Dreamer`, not the unbound alternate
   `Dreamer2`. It picks exactly two characters and immediately produces either
   `Among #X, #Y there is: RoleA or RoleB` or the truthful Wretch/Cabbage clue;
@@ -227,8 +229,8 @@ Memory reader notes:
 - In the 2026-05-05 live build, Drunk still lies and wrong-exec costs 2 HP.
   Drunk counts as Corrupted for status clues such as Bard, but Plague Doctor
   reports Drunk as `Not Corrupted`. Keep those two rule surfaces separate.
-- Baa warning applies to deck-view outcast count, not HUD. HUD counts Baa as a
-  Demon. If reading `no=` from HUD, do not subtract 1.
+- Baa's eye-symbol mismatch applies only to deck view, not HUD. HUD counts Baa
+  as a Demon. If reading `no=` from HUD, do not subtract 1.
 - `next` can auto-execute by default. Use `next --plan` or `--dry` when you need
   inspection only.
 - Wrong-executing Drunk has special HP behavior. Keep HP in sync with `set_hp`.

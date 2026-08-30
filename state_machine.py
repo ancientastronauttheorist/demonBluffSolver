@@ -283,11 +283,11 @@ class GameStateMachine:
         elif pool_good > n_good:
             # Pool > board (Asc10+) — need header counts
             # For now, NEEDS_HUMAN to enter nv/no from screenshot
-            # Check if Baa is in deck (adds fake outcast to header)
+            # Baa obscures one existing Outcast only in the deck-pool view.
             has_baa = any(d == "Baa" for d in demons)
             print(f"  [auto] Pool ({pool_good}) > board good ({n_good}) — need header counts")
             if has_baa:
-                print(f"  [auto] NOTE: Baa in deck — displayed outcast count includes 1 fake")
+                print("  [auto] NOTE: Baa hides one existing Outcast in deck view; HUD no= is unchanged")
             self._pause(
                 f"Enter board counts: set_hp 10 5, then deck ... nv=N no=N. "
                 f"Pool has {len(villagers)}V + {len(outcasts)}O for {n_good} good slots."

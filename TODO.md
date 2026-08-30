@@ -99,9 +99,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [ ] **Baker reveal_order validation** — `reveal_order` is tracked but unused in Baker validator. Converted Baker must be revealed after original. Could narrow scenarios in Baker-heavy games.
 
-- [x] **Baa fake Outcast in deck view** — FIXED. `game_loop.py deck` prints a warning when Baa is in the demon list, reminding to subtract 1 from the displayed outcast count for the `no=` value.
+- [x] **Baa hidden Outcast in deck view** — NATIVE-VERIFIED. Baa obscures one existing Outcast identity; it does not add a role. `game_loop.py deck` preserves the HUD `no=` value and explains the eye-symbol mismatch.
 
-- [ ] **Endless mode +1 fake Outcast in deck view** — Endless mode automatically adds a fake Outcast to deck view every round (confirmed by dev on Steam). Same fix needed: subtract 1 from displayed outcast count.
+- [ ] **Endless mode +1 fake Outcast in deck view** — Reportedly added every round (confirmed by dev on Steam), independently of Baa. Native-verify whether this changes gameplay/HUD counts or only deck presentation before adjusting `no=`.
 
 - [x] **Puppeteer targets Villagers only when possible** — FIXED. Placement generator restricts Puppet candidates to Villager (+ unrevealed) positions when a known Villager is adjacent to Puppeteer. Outcasts only eligible when no Villagers are adjacent.
 

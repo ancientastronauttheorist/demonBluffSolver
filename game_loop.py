@@ -5,6 +5,7 @@ Card builder functions, session tracking, CLI interface.
 
 from __future__ import annotations
 import atexit
+from collections import Counter
 import json
 import os
 import sys
@@ -2223,73 +2224,40 @@ _DECK_OUTCAST_ROLES = frozenset({
 })
 
 
-def _baa_hides_outcast(only_cv: set, only_mr: set, mr_set: set, cv_unclassified: int) -> bool:
-    """Baa in the deck renders one outcast as a face-down eye-symbol in the pool view.
+def _baa_hides_outcast(
+    only_cv: Counter[str],
+    only_mr: Counter[str],
+    mr_counts: Counter[str],
+    cv_unclassified: int,
+) -> bool:
+    """Baa obscures one existing Outcast as an eye-symbol in the deck view.
 
     That produces: exactly one outcast role in only_mr, zero only_cv, and at
-    least one unclassified CV box. Confirmed asc78 (Doppelganger hidden).
+    least one unclassified CV box. Native Imp.Act selects an exact Outcast
+    CharacterData entry; it does not add a role to the gameplay pool.
     """
-    if "baa" not in mr_set:
+    if mr_counts["baa"] < 1:
         return False
-    if only_cv or len(only_mr) != 1 or cv_unclassified < 1:
+    if only_cv or sum(only_mr.values()) != 1 or cv_unclassified < 1:
         return False
     return next(iter(only_mr)) in _DECK_OUTCAST_ROLES
 
 
-def _baa_post_execute_reveal(session) -> None:
-    """When Baa dies, the game auto-reveals the Outcast it was hiding on the board.
-    Detect that position via memory reader and add it to reveal_order so the
-    user can immediately enter its info via auto_card / card.
+def _baa_post_death_deck_refresh(_session) -> None:
+    """Report Baa's native OnDied deck-view refresh.
+
+    Managed Imp.Act removes the stored Outcast from
+    DeckView.ObscuredCharacters. It does not reveal or mutate a board card, so
+    this hook must never infer a newly flipped position from process memory.
     """
-    from memory_reader import MemoryReader, get_monitor
-    already = set(session.reveal_order) | set(session.executed) | set(session.night_kills)
-    blocked = set(session.blocked_positions)
-    cards = None
-    try:
-        mon = get_monitor()
-        if mon and mon.is_healthy():
-            def _revealed(board):
-                if not board:
-                    return False
-                for c in board:
-                    p = c.get('position')
-                    if p in already or p in blocked:
-                        continue
-                    if c.get('state') in ('Alive', 'Revealed'):
-                        return True
-                return False
-            time.sleep(0.5)
-            mon.wait_for(_revealed, timeout=4, min_delay=0.5)
-            cards = mon.get_board()
-    except Exception:
-        cards = None
-    if cards is None:
-        time.sleep(1.5)
-        reader = MemoryReader()
-        if reader.open():
-            try:
-                cards = reader.read_board()
-            finally:
-                reader.close()
-    if not cards:
-        print("  [Baa] Could not read memory — flip the newly-revealed card manually.")
-        return
-    newly = []
-    for c in cards:
-        p = c.get('position')
-        if p in already or p in blocked:
-            continue
-        if c.get('state') in ('Alive', 'Revealed'):
-            newly.append(c)
-    if not newly:
-        print("  [Baa] No newly-revealed position detected (Witch may have blocked it).")
-        return
-    for c in newly:
-        p = c['position']
-        session.reveal_order.append(p)
-        role = c.get('disguise') or c.get('true_role') or '?'
-        print(f"  [Baa] Revealed #{p} -> {role}. Run: auto_card  (or: card {role.lower()} {p} ...)")
-    session.save()
+    print("  [Baa] Hidden Outcast is now visible in the deck view; no board card was flipped.")
+
+
+def _print_baa_deck_count_note(demons: list[str]) -> None:
+    """Keep Baa's presentation-only effect out of HUD-count bookkeeping."""
+    if any(demon.lower() == "baa" for demon in demons):
+        print("  NOTE: BAA hides one existing Outcast identity in the deck view. "
+              "Use the HUD no= exactly as shown; do not subtract.")
 
 
 def _cmd_read_deck(screenshot_path: str):
@@ -2356,18 +2324,18 @@ def _cmd_read_deck(screenshot_path: str):
         print(f"  ERROR: memory_reader failed: {mr_result.stderr[:200]}")
 
     # Cross-check
-    cv_set = set(r.lower().replace(" ", "_") for r in cv_roles)
-    mr_set = set(mr_roles)
+    cv_counts = Counter(r.lower().replace(" ", "_") for r in cv_roles)
+    mr_counts = Counter(mr_roles)
 
-    if cv_set and mr_set:
-        if cv_set == mr_set:
-            print(f"\n  MATCH: Both pipelines agree ({len(cv_set)} roles)")
+    if cv_counts and mr_counts:
+        if cv_counts == mr_counts:
+            print(f"\n  MATCH: Both pipelines agree ({sum(cv_counts.values())} roles)")
         else:
-            only_cv = cv_set - mr_set
-            only_mr = mr_set - cv_set
-            if _baa_hides_outcast(only_cv, only_mr, mr_set, cv_unclassified):
+            only_cv = cv_counts - mr_counts
+            only_mr = mr_counts - cv_counts
+            if _baa_hides_outcast(only_cv, only_mr, mr_counts, cv_unclassified):
                 role = next(iter(only_mr))
-                print(f"\n  MATCH (Baa hides outcast): CV={len(cv_set)} classified"
+                print(f"\n  MATCH (Baa hides outcast): CV={sum(cv_counts.values())} classified"
                       f" + '{role}' face-down in deck view (Baa effect)")
             else:
                 print(f"\n  MISMATCH!")
@@ -2376,10 +2344,11 @@ def _cmd_read_deck(screenshot_path: str):
                 if only_mr:
                     print(f"    Only in memory_reader: {only_mr}")
                 print(f"    STOP AND FIX before proceeding!")
-    elif not cv_set and not mr_set:
+    elif not cv_counts and not mr_counts:
         print("\n  WARNING: Both pipelines returned empty results")
     else:
-        print(f"\n  WARNING: Only one pipeline returned results (cv={len(cv_set)}, mr={len(mr_set)})")
+        print("\n  WARNING: Only one pipeline returned results "
+              f"(cv={sum(cv_counts.values())}, mr={sum(mr_counts.values())})")
 
 
 def _save_and_run_test(name: str, true_evils: dict[int, str], notes: str = ""):
@@ -2705,9 +2674,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
         session.save()
         DecisionLog.start_game(n_cards, n_evil, session.hp, session.wrong_exec_cost)
         DecisionLog.log_deck(pool["villagers"], pool["outcasts"], pool["minions"], pool["demons"])
-        if any(d.lower() == "baa" for d in pool["demons"]):
-            print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
-                  "Subtract only if no= came from deck view; do not adjust HUD no=.")
+        _print_baa_deck_count_note(pool["demons"])
         print(f"Village started: {n_cards} cards, {n_evil} evil, HP={session.hp}")
         print(f"  V={pool['villagers']}")
         print(f"  O={pool['outcasts']}")
@@ -2756,9 +2723,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             session.board_villager_count = parsed_nv
             session.board_outcast_count = parsed_no
             session.board_count_provenance = "trusted_pre_start"
-        if any(d.lower() == "baa" for d in demons):
-            print("  WARNING: BAA in deck -- deck view shows +1 fake Outcast. "
-                  "Subtract only if no= came from deck view; do not adjust HUD no=.")
+        _print_baa_deck_count_note(demons)
         pool_size = len(villagers) + len(outcasts) + len(minions) + len(demons)
         if pool_size > session.n_cards and session.board_villager_count is None:
             board_good = session.n_cards - session.n_evil
@@ -3200,9 +3165,9 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             else:
                 print(f"  REMINDER: Update HP with 'set_hp <current_hp>' after checking result")
 
-            # Baa death reveals the previously-hidden Outcast on the board.
+            # Any Baa death refreshes its previously obscured deck-view entry.
             if evil_role and evil_role.lower().replace(' ', '_') == "baa":
-                _baa_post_execute_reveal(session)
+                _baa_post_death_deck_refresh(session)
         return None
 
     if cmd == "pd_target":
@@ -3406,7 +3371,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             print("  WARNING: Wretch corruption status was not recorded. If visible, use "
                   "'clean' or 'corrupted' in the Slayer command.")
         if recorded_role == "Baa":
-            _baa_post_execute_reveal(session)
+            _baa_post_death_deck_refresh(session)
         return None
 
     if cmd == "night_kill":

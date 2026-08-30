@@ -98,18 +98,18 @@ class SlayerBookkeepingTests(unittest.TestCase):
         self.assertEqual(session.executed, [])
         self.assertEqual(session.hp, 10)
 
-    def test_slayer_killed_baa_runs_hidden_outcast_reveal_hook(self):
+    def test_slayer_killed_baa_runs_deck_refresh_hook(self):
         session = GameSession(3, 1)
 
         with (
             patch.object(session, "save"),
             patch.object(DecisionLog, "log_slayer_result"),
-            patch("game_loop._baa_post_execute_reveal") as reveal_baa,
+            patch("game_loop._baa_post_death_deck_refresh") as refresh_baa,
             redirect_stdout(StringIO()),
         ):
             dispatch("slayer_result", ["1", "2", "kill", "Baa"], session)
 
-        reveal_baa.assert_called_once_with(session)
+        refresh_baa.assert_called_once_with(session)
         self.assertEqual(session.executed_evil_roles, {2: "Baa"})
 
 

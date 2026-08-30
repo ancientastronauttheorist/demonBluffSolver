@@ -103,7 +103,7 @@ MENU_NAV --> DECK_READ --> SESSION_INIT --> FLIPPING
 - nv/no header counts: screenshot parse until memory offset found
 - Cross-check memory vs card_vision; mismatch = NEEDS_HUMAN
 - Guard: wait for `game_connected` before reading (prevents stale deck from previous village)
-- Guard: auto-detect Baa fake outcast and adjust count
+- Guard: recognize Baa's one obscured existing Outcast in deck view; never adjust HUD `no=`
 
 #### SESSION_INIT
 - Derive n_cards from `len(board)` via memory reader

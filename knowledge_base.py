@@ -231,8 +231,8 @@ MINIONS = [
 # ============================================================
 DEMONS = [
     Card("Baa", Role.DEMON, Alignment.EVIL,
-         "One fake Outcast is added to the Deck view. I Lie and Disguise.",
-         lies=True, disguises=True),
+         "Game Start: Hide one existing Outcast identity in the Deck view. I Lie and Disguise.",
+         lies=True, disguises=True, game_start_ability=True),
     Card("Pooka", Role.DEMON, Alignment.EVIL,
          "Game Start: Villagers adjacent to me are Corrupted (if possible). I Lie and Disguise.",
          lies=True, disguises=True, game_start_ability=True, corrupted_note=True),

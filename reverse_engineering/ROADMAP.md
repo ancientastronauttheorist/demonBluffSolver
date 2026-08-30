@@ -81,6 +81,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   including its Cabbage branch and exact current-build role-pair weighting.
 - [x] Implement and regression-test the public Dreamer parser, native-support
   validator, and weighted role-pair recommendation model.
+- [x] Asset-bind public Baa to managed `Imp`; native-audit its complete role
+  class plus deck-view add/remove helpers, and remove the false board-reveal
+  inference from the live wrapper.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

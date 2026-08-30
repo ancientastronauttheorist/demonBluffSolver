@@ -78,6 +78,20 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         self.assertEqual(_clamped_post_damage_hp(3, 9), 0)
         self.assertEqual(_clamped_post_damage_hp(10, 6), 4)
 
+    def test_normal_baa_execution_runs_deck_refresh_hook(self):
+        session = GameSession(1, 1)
+
+        with (
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            patch("game_loop._baa_post_death_deck_refresh") as refresh_baa,
+            redirect_stdout(StringIO()),
+        ):
+            dispatch("execute", ["1", "Baa"], session)
+
+        refresh_baa.assert_called_once_with(session)
+        self.assertEqual(session.executed_evil_roles, {1: "Baa"})
+
     def test_record_blocked_persists_good_without_marking_executed(self):
         session = GameSession(1, 0)
         with (
