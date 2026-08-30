@@ -87,8 +87,8 @@ local/private.
 
 The generated coverage ledger accounts for all 4,207 managed methods using
 4,158 native bindings and 3,066 unique native bodies. It identifies 107 shared-
-body groups containing 1,199 bindings. The first 77 reviewed methods have
-authored classifications backed by 33 evidence records; every missing overlay
+body groups containing 1,199 bindings. The first 90 reviewed methods have
+authored classifications backed by 36 evidence records; every missing overlay
 row remains explicitly `unresolved/not-reviewed`.
 
 ## First missing-offset candidates

@@ -130,7 +130,9 @@ identities from earlier boundaries. Its `Characters.FilterRealCharacterType`
 overload uses the optional `prototype_name` field to give Ghidra's C datatype
 parser a unique definition name while preserving the exact metadata signature
 in `signature`; target validation still checks that unmodified signature and
-RVA against `script.json`.
+RVA against `script.json`. The first 16-method status-storage, selection, and
+truth/appearance slice now has native-static coverage in the
+[`status/corruption/truth audit`](notes/systems/gameplay_status_corruption_truth.md).
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:

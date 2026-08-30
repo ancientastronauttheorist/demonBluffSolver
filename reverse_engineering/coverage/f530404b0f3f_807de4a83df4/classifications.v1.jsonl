@@ -75,3 +75,16 @@
 {"method":"tdi5505.m0036","state":"understood","reason":"Native exact-Hidden filter semantics, order, and multiplicity preservation are documented.","evidence":["ev.characters.selection-filters.1"]}
 {"method":"tdi5505.m0028","state":"understood","reason":"Native active-status absence filter semantics and null paths are documented.","evidence":["ev.characters.selection-filters.1"]}
 {"method":"tdi5505.m0022","state":"understood","reason":"Native single-draw index selection, multiplicity weighting, and empty-list failure are documented.","evidence":["ev.characters.selection-filters.1"]}
+{"method":"tdi5488.m0001","state":"understood","reason":"Native exact resistance insertion, duplicate suppression, and ignored character arguments are documented.","evidence":["ev.character.status-cure.1"]}
+{"method":"tdi5488.m0002","state":"understood","reason":"Native shared-target role veto, Corrupted removal, and return behavior are documented.","evidence":["ev.character.status-cure.1"]}
+{"method":"tdi5488.m0003","state":"understood","reason":"Native exact active-status membership behavior is documented.","evidence":["ev.character.status-cure.1"]}
+{"method":"tdi5853.m0014","state":"understood","reason":"The native default status-removal predicate is documented.","evidence":["ev.character.status-cure.1"]}
+{"method":"tdi5904.m0004","state":"understood","reason":"The native Drunk Corrupted-removal veto is documented.","evidence":["ev.character.status-cure.1"]}
+{"method":"tdi5505.m0029","state":"understood","reason":"Native resistance-absence filtering, order, multiplicity, and null behavior are documented.","evidence":["ev.characters.corruption-selection.1"]}
+{"method":"tdi5505.m0024","state":"understood","reason":"Native register-as-first apparent-type filtering is documented.","evidence":["ev.characters.corruption-selection.1"]}
+{"method":"tdi5505.m0025","state":"understood","reason":"Native real-data type filtering and register-as exclusion are documented.","evidence":["ev.characters.corruption-selection.1"]}
+{"method":"tdi5505.m0021","state":"understood","reason":"Native circular adjacency, duplicate-neighbor, and missing-target behavior are documented.","evidence":["ev.characters.corruption-selection.1"]}
+{"method":"tdi5686.m0001","state":"understood","reason":"Native rotation behavior and its global-current-character dependency are documented.","evidence":["ev.characters.corruption-selection.1"]}
+{"method":"tdi5687.m0000","state":"understood","reason":"Native single-condition truth-appearance result and ignored input parameter are documented.","evidence":["ev.character.truth-appearance.1"]}
+{"method":"tdi5687.m0002","state":"understood","reason":"Native apparent-lying precedence across appearance, corruption, HealthyBluff, alignment, and bluff state is documented.","evidence":["ev.character.truth-appearance.1"]}
+{"method":"tdi5687.m0003","state":"understood","reason":"Native bluff-role baseline and ordered disguise-status overrides are documented.","evidence":["ev.character.truth-appearance.1"]}

@@ -51,6 +51,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Map and baseline-export the 40-method status, corruption, truth/lie, and
   bluff-orchestration boundary, including explicit C prototype aliases for
   overloaded managed methods.
+- [x] Native-audit the first 16 status-storage, cure-gating, selection, and
+  truth/appearance methods in that boundary.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.
