@@ -567,6 +567,7 @@ mod tests {
             original_positions: vec![1],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
         assert!(scenario.corrupted.is_empty());
         let result = SolverResult {

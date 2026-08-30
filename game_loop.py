@@ -2218,7 +2218,12 @@ def _parse_clue_from_memory(
     clue = card.get('clue_text') or ''
     infos = card.get('acted_infos', [])
     rd = card.get('runtime_data')
-    targets = infos[0]['targets'] if infos else []
+    first_info = (
+        infos[0]
+        if isinstance(infos, list) and infos and isinstance(infos[0], dict)
+        else {}
+    )
+    targets = first_info.get('targets', [])
     role_lower = role.lower().replace(' ', '_')
     ability_used = card.get('ability_used', False)
 
@@ -2349,9 +2354,50 @@ def _parse_clue_from_memory(
     if role_lower == 'empress' and targets:
         return card_empress(pos, targets)
 
-    # --- Witness: single target ---
-    if role_lower == 'witness' and targets:
-        return card_witness(pos, targets[0])
+    # --- Witness: one marked/unmarked target, or exact native NO result ---
+    if role_lower == 'witness':
+        if not isinstance(targets, list):
+            return None
+        # ActedInfo.desc is the authoritative fallback when savedAct could not
+        # be read. This matters for the native NO branch because it has no refs.
+        witness_clue = clue or first_info.get('desc') or ''
+        if not isinstance(witness_clue, str):
+            return None
+        positive = re.fullmatch(
+            r'\s*#\s*(\d+)\s+was\s+affected\s+by\s+an\s+Evil\s*',
+            witness_clue,
+            re.IGNORECASE,
+        )
+        nobody = re.fullmatch(
+            r'\s*NO\s+character\s+was\s+affected\s+by\s+an\s+Evil\s*',
+            witness_clue,
+            re.IGNORECASE,
+        )
+
+        # Native positive ActedInfo always references exactly the displayed
+        # card.  Preserve the historical target-only fallback when savedAct is
+        # unavailable, but reject contradictory or malformed evidence.
+        if len(targets) == 1:
+            target = targets[0]
+            if not isinstance(target, int) or isinstance(target, bool):
+                return None
+            if target <= 0 or (n_cards is not None and target > n_cards):
+                return None
+            if nobody is not None:
+                return None
+            if positive is not None and int(positive.group(1)) != target:
+                return None
+            if positive is None and witness_clue.strip():
+                return None
+            return card_witness(pos, target)
+
+        if targets:
+            return None
+        if nobody is not None:
+            return card_witness(pos, 0)
+        # A positive string without its required native reference is unsafe to
+        # auto-enter; leave it for manual recovery.
+        return None
 
     # --- Gemcrafter: single target ---
     if role_lower == 'gemcrafter' and targets:

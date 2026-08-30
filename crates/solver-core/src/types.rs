@@ -345,12 +345,19 @@ fn parse_string_array(
 /// scenario multiplicity: every listed original Chancellor seat produces the
 /// same represented runtime outcome. The final Chancellor position is derived
 /// from `Scenario::evil_positions`.
+///
+/// `affected_anchor_positions` likewise groups native histories that converge
+/// to the same complete represented state. These are the real-Outcast anchors
+/// Chancellor attempted to mark; `Scenario::messed_up_by_evil` is the
+/// authoritative set of statuses that survived all later Start actions.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChancellorTrace {
     #[serde(default)]
     pub original_positions: Vec<u8>,
     pub added_outcast_position: u8,
     pub added_outcast_role: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub affected_anchor_positions: Vec<u8>,
 }
 
 /// Native Shaman/Illuzionist Start history for one copied Villager identity.
@@ -429,6 +436,43 @@ impl Scenario {
         self.chancellor_trace
             .as_ref()
             .map(|trace| trace.added_outcast_role.as_str())
+    }
+
+    /// Candidate physical cards selected as Chancellor's first, real-Villager
+    /// target. The target's former role is erased, while the generated Outcast
+    /// identity can move during Chancellor's later neighbour swap. For each
+    /// grouped original Chancellor seat `c`, native identity flow gives
+    /// `v = f` when `c == a`, otherwise `v = a`.
+    pub fn chancellor_original_villager_positions(&self) -> Vec<u8> {
+        let Some(trace) = self.chancellor_trace.as_ref() else {
+            return Vec::new();
+        };
+        let mut final_chancellors = self
+            .evil_positions
+            .iter()
+            .filter(|(_, role)| role.eq_ignore_ascii_case("Chancellor"))
+            .map(|(&position, _)| position);
+        let Some(final_chancellor_position) = final_chancellors.next() else {
+            return Vec::new();
+        };
+        if final_chancellors.next().is_some() {
+            return Vec::new();
+        }
+
+        let mut positions: Vec<u8> = trace
+            .original_positions
+            .iter()
+            .map(|&original_position| {
+                if original_position == trace.added_outcast_position {
+                    final_chancellor_position
+                } else {
+                    trace.added_outcast_position
+                }
+            })
+            .collect();
+        positions.sort_unstable();
+        positions.dedup();
+        positions
     }
 }
 
@@ -603,6 +647,7 @@ mod tests {
                 original_positions: vec![1, 6],
                 added_outcast_position: 2,
                 added_outcast_role: "Plague Doctor".to_string(),
+                affected_anchor_positions: vec![4],
             }),
             chancellor_conversion: Some(2),
         };
@@ -622,6 +667,10 @@ mod tests {
         assert_eq!(json["chancellor_trace"]["original_positions"], serde_json::json!([1, 6]));
         assert_eq!(json["chancellor_trace"]["added_outcast_position"], 2);
         assert_eq!(json["chancellor_trace"]["added_outcast_role"], "Plague Doctor");
+        assert_eq!(
+            json["chancellor_trace"]["affected_anchor_positions"],
+            serde_json::json!([4])
+        );
         // Round-trip
         let back: Scenario = serde_json::from_value(json).unwrap();
         assert_eq!(back.evil_positions.get(&3), Some(&"Pooka".to_string()));
@@ -639,6 +688,62 @@ mod tests {
         );
         assert_eq!(back.chancellor_added_outcast_position(), Some(2));
         assert_eq!(back.chancellor_added_outcast_role(), Some("Plague Doctor"));
+        assert_eq!(
+            back.chancellor_trace
+                .as_ref()
+                .unwrap()
+                .affected_anchor_positions,
+            vec![4]
+        );
+    }
+
+    #[test]
+    fn chancellor_first_villager_candidates_follow_native_identity_flow() {
+        let mut scenario = Scenario::default();
+        scenario
+            .evil_positions
+            .insert(4, "Chancellor".to_string());
+        scenario.chancellor_trace = Some(ChancellorTrace {
+            // c=2 equals a, so v=f=4. c=1 does not, so v=a=2.
+            original_positions: vec![1, 2],
+            added_outcast_position: 2,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![3],
+        });
+
+        assert_eq!(
+            scenario.chancellor_original_villager_positions(),
+            vec![2, 4]
+        );
+    }
+
+    #[test]
+    fn pre_anchor_chancellor_trace_deserializes_with_empty_history_candidates() {
+        let json = serde_json::json!({
+            "evil_positions": {"4": "Chancellor"},
+            "puppet_position": null,
+            "corrupted": [],
+            "pd_corrupted": null,
+            "doppelganger_position": null,
+            "drunk_position": null,
+            "alchemist_cures": {},
+            "chancellor_trace": {
+                "original_positions": [1],
+                "added_outcast_position": 2,
+                "added_outcast_role": "Bombardier"
+            },
+            "chancellor_conversion": 2
+        });
+
+        let scenario: Scenario = serde_json::from_value(json).unwrap();
+
+        assert!(scenario
+            .chancellor_trace
+            .as_ref()
+            .unwrap()
+            .affected_anchor_positions
+            .is_empty());
+        assert_eq!(scenario.chancellor_original_villager_positions(), vec![2]);
     }
 
     #[test]

@@ -564,14 +564,23 @@ fn validate_witness(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
     let truth = truth_status(card.position, scenario, state);
 
     // `MessedUpByEvil` is its own persistent native status. Alchemist can cure
-    // Corrupted without removing this marker, and Chancellor adds it to the
-    // selected Outcast anchor without adding Corrupted at all.
+    // Corrupted without removing this marker. Chancellor attempts it only on
+    // the later real-Outcast anchor; reinitializing the first Villager target
+    // does not mark that card.
     let mut affected = scenario.messed_up_by_evil.clone();
+    // In this fingerprint every successful delayed demon kill installs status
+    // 50. The only shipped resistance producer is Alchemist.OnInit, which
+    // resists Corrupted (40), so no current night-kill history can reject 50.
     for &nk in &state.night_kills { affected.insert(nk); }
 
     if claimed_pos == 0 {
-        if truth == TruthStatus::Truthful { affected.is_empty() }
-        else { !affected.is_empty() }
+        let marked_count = (1..=state.n_cards)
+            .filter(|position| affected.contains(position))
+            .count();
+        if truth == TruthStatus::Truthful { marked_count == 0 }
+        else { marked_count == state.n_cards as usize }
+    } else if claimed_pos > state.n_cards {
+        false
     } else {
         let actually_affected = affected.contains(&claimed_pos);
         if truth == TruthStatus::Truthful { actually_affected }
@@ -2168,6 +2177,87 @@ mod tests {
     }
 
     #[test]
+    fn witness_uses_chancellor_anchor_not_first_villager_target() {
+        let anchor_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 2}),
+        );
+        let first_target_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 3}),
+        );
+        let state = base_state(5, vec![anchor_claim.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Chancellor".to_string());
+        scenario.messed_up_by_evil.insert(2);
+        scenario.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![1],
+            added_outcast_position: 3,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![2],
+        });
+
+        assert_eq!(scenario.chancellor_original_villager_positions(), vec![3]);
+        assert!(validate_witness(&anchor_claim, &scenario, &state));
+        assert!(!validate_witness(&first_target_claim, &scenario, &state));
+    }
+
+    #[test]
+    fn witness_no_claim_uses_truthful_empty_and_lying_full_marker_sets() {
+        let no_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 0}),
+        );
+        let state = base_state(3, vec![no_claim.clone()]);
+
+        assert!(validate_witness(&no_claim, &empty_scenario(), &state));
+
+        let mut partial = empty_scenario();
+        partial.messed_up_by_evil.insert(2);
+        assert!(!validate_witness(&no_claim, &partial, &state));
+
+        partial.corrupted.insert(1);
+        assert!(!validate_witness(&no_claim, &partial, &state));
+
+        partial.messed_up_by_evil.extend([1, 3]);
+        assert!(validate_witness(&no_claim, &partial, &state));
+
+        let invalid_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 4}),
+        );
+        assert!(!validate_witness(&invalid_claim, &partial, &state));
+    }
+
+    #[test]
+    fn witness_positive_lie_chooses_unmarked_and_dead_markers_remain_visible() {
+        let marked_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 2}),
+        );
+        let unmarked_claim = make_card(
+            1,
+            "Witness",
+            json!({"affected_position": 3}),
+        );
+        let mut state = base_state(3, vec![marked_claim.clone()]);
+        state.executed.push(2);
+
+        let mut scenario = empty_scenario();
+        scenario.messed_up_by_evil.insert(2);
+        assert!(validate_witness(&marked_claim, &scenario, &state));
+
+        scenario.corrupted.insert(1);
+        assert!(!validate_witness(&marked_claim, &scenario, &state));
+        assert!(validate_witness(&unmarked_claim, &scenario, &state));
+    }
+
+    #[test]
     fn non_silenced_jester_still_validates_evil_count() {
         // With evil_count present, validator must do real work.
         let jester = make_card(
@@ -2665,6 +2755,7 @@ mod tests {
             original_positions: vec![3],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
         scenario.evil_positions.insert(2, "Pooka".to_string());
         assert!(scenario.corrupted.is_empty());
@@ -2740,6 +2831,7 @@ mod tests {
             original_positions: vec![3],
             added_outcast_position: 2,
             added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![],
         });
         generated_wretch.evil_positions.insert(3, "Chancellor".to_string());
         assert!(validate_slayer_results(&generated_wretch, &generated_state));
@@ -2759,6 +2851,7 @@ mod tests {
             original_positions: vec![2],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
         assert!(validate_pd_ability(&drunk, &state));
         state.pd_ability_results[0].is_corrupted = true;
@@ -2901,6 +2994,7 @@ mod tests {
             original_positions: vec![1],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
         assert!(check_scenario(&generated_drunk, &state));
     }
@@ -2919,6 +3013,7 @@ mod tests {
             original_positions: vec![2],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
 
         assert!(!validate_role_counts(&generated_drunk, &state));
@@ -3015,6 +3110,7 @@ mod tests {
             original_positions: vec![3],
             added_outcast_position: 2,
             added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![],
         });
 
         assert_eq!(
@@ -3046,6 +3142,7 @@ mod tests {
             original_positions: vec![3],
             added_outcast_position: 2,
             added_outcast_role: "Plague_Doctor".to_string(),
+            affected_anchor_positions: vec![],
         });
         assert!(validate_druid(&pd_druid, &generated_pd, &state));
 
@@ -3095,6 +3192,7 @@ mod tests {
                 original_positions: vec![3],
                 added_outcast_position: 2,
                 added_outcast_role: role.to_string(),
+                affected_anchor_positions: vec![],
             });
             scenario
         };

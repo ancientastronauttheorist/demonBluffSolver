@@ -1064,6 +1064,7 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         original_positions: vec![2],
         added_outcast_position: 1,
         added_outcast_role: "Drunk".to_string(),
+        affected_anchor_positions: vec![],
     });
     let resistant_drunk_as_knight = serde_json::json!({
         "hp": 8,
@@ -1264,6 +1265,95 @@ fn truth_worlds_include_exact_evil_role_assignments() {
 }
 
 #[test]
+fn chancellor_witness_trace_distinguishes_anchor_from_first_villager_target() {
+    let anchor_claim = CardInfo {
+        position: 1,
+        apparent_role: "Witness".to_string(),
+        info_parsed: serde_json::json!({"affected_position": 5})
+            .as_object()
+            .unwrap()
+            .clone(),
+        ..CardInfo::default()
+    };
+    let first_target_claim = CardInfo {
+        info_parsed: serde_json::json!({"affected_position": 3})
+            .as_object()
+            .unwrap()
+            .clone(),
+        ..anchor_claim.clone()
+    };
+    let mut state = GameState::default();
+    state.n_cards = 6;
+    state.cards = vec![anchor_claim.clone()];
+    // Witness scans current physical statuses without filtering dead cards.
+    state.executed = vec![5];
+
+    let mut scenario = Scenario::default();
+    scenario
+        .evil_positions
+        .insert(4, "Chancellor".to_string());
+    scenario.messed_up_by_evil.insert(5);
+    scenario.chancellor_trace = Some(ChancellorTrace {
+        original_positions: vec![2],
+        added_outcast_position: 3,
+        added_outcast_role: "Bombardier".to_string(),
+        affected_anchor_positions: vec![5],
+    });
+
+    assert_eq!(scenario.chancellor_original_villager_positions(), vec![3]);
+    assert!(solver_core::validators::validate_card(
+        &anchor_claim,
+        &scenario,
+        &state,
+    ));
+    assert!(!solver_core::validators::validate_card(
+        &first_target_claim,
+        &scenario,
+        &state,
+    ));
+}
+
+#[test]
+fn chancellor_witness_v2_observations_parse_as_positive_targets() {
+    // These are the four 426-case v2 observations whose shipped pools contain
+    // both Chancellor and Witness. Keep their public positive clues pinned as
+    // corpus evidence without treating the hidden first replacement as truth.
+    for (case_name, expected_target) in [
+        ("asc41_v7", 6),
+        ("asc72_v2", 2),
+        ("asc74_v7", 3),
+        ("asc79_v4", 4),
+    ] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).unwrap();
+        let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+        let state = GameState::from_json(&value).unwrap();
+        assert!(state
+            .deck
+            .minions
+            .iter()
+            .any(|role| normalize_role(role) == "chancellor"));
+        assert!(state
+            .deck
+            .villagers
+            .iter()
+            .any(|role| normalize_role(role) == "witness"));
+        let witness = state
+            .cards
+            .iter()
+            .find(|card| normalize_role(&card.apparent_role) == "witness")
+            .expect("fixture must retain its Witness observation");
+        assert_eq!(
+            witness
+                .info_parsed
+                .get("affected_position")
+                .and_then(serde_json::Value::as_u64),
+            Some(expected_target)
+        );
+    }
+}
+
+#[test]
 fn execution_branches_ordinary_and_drunk_damage_with_revealed_roles() {
     let ordinary = Scenario::default();
     let mut drunk = Scenario::default();
@@ -1396,6 +1486,7 @@ fn execution_branches_protected_knight_and_drunk_kill_continuations() {
         original_positions: vec![2],
         added_outcast_position: 1,
         added_outcast_role: "Drunk".to_string(),
+        affected_anchor_positions: vec![],
     });
     let observations = distinct_good_execution_observations(
         &[&ordinary, &drunk, &resistant_drunk],

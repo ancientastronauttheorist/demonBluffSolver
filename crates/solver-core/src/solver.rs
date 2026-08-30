@@ -142,6 +142,7 @@ mod tests {
             original_positions: vec![2],
             added_outcast_position: 1,
             added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![],
         });
         let mut evil = Scenario::default();
         evil.evil_positions.insert(1, "Lilis".to_string());

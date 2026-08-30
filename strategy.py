@@ -1676,6 +1676,29 @@ def recommend_abilities(
 # Reveal Recommendation
 # ============================================================
 
+def _witness_observation_support(
+    pos: int, scenario: Scenario, state: GameState,
+) -> tuple[int, ...]:
+    """Return every native Witness result possible in this scenario.
+
+    Witness scans current physical cards without filtering dead or revealed
+    cards.  A truthful Witness samples marked cards; a liar samples their exact
+    board complement.  The public ``0``/NO result occurs only when the relevant
+    sample set is empty.  Chancellor trace anchors are deliberately excluded:
+    only a marker that survived into ``messed_up_by_evil`` is observable.
+    """
+    board_positions = set(range(1, state.n_cards + 1))
+    affected = set(scenario.messed_up_by_evil) | set(state.night_kills)
+    affected &= board_positions
+
+    if truth_status(pos, scenario, state) == TruthStatus.TRUTHFUL:
+        support = affected
+    else:
+        support = board_positions - affected
+
+    return tuple(sorted(support)) if support else (0,)
+
+
 def _compute_position_fingerprint(
     pos: int, scenario: Scenario, state: GameState,
 ) -> tuple:
@@ -1688,7 +1711,8 @@ def _compute_position_fingerprint(
 
     Includes: evil/good status, evil role (if evil), corruption status,
     Hunter distance, Enlightened direction, Lover adjacent count,
-    Knitter evil pairs (global), Architect side (global), Bard corruption distance.
+    Knitter evil pairs (global), Architect side (global), Bard corruption distance,
+    and Witness's exact marked/complement result support.
     """
     n = state.n_cards
 
@@ -1716,6 +1740,18 @@ def _compute_position_fingerprint(
     # Active corruption can change copied Confessor/Bard clue surfaces even
     # when the underlying Drunk identity itself remains hidden.
     is_corrupted = pos in scenario.corrupted
+    # Do not split worlds on a clue surface that cannot appear in this deck.
+    # This preserves the existing hidden Drunk/Doppelganger projection when
+    # Witness is absent, while still modeling copied/disguised Witness cards
+    # whenever its CharacterData is present.
+    witness_in_deck = any(
+        role.lower().replace(" ", "").replace("_", "") == "witness"
+        for role in state.deck.villagers
+    )
+    witness_support = (
+        _witness_observation_support(pos, scenario, state)
+        if witness_in_deck else ()
+    )
 
     # Build set of effective-evil positions (Wretch counts)
     evil_set = []
@@ -1725,7 +1761,7 @@ def _compute_position_fingerprint(
 
     if not evil_set:
         return (is_evil, evil_role, generated_role, is_corrupted,
-                -1, "None", 0, 0, "Equal", -1)
+                -1, "None", 0, 0, "Equal", -1, witness_support)
 
     # Hunter: distance to nearest evil
     dist_nearest = min(circle_distance(pos, ep, n) for ep in evil_set)
@@ -1793,7 +1829,7 @@ def _compute_position_fingerprint(
         dist_corrupted = -1  # no corrupted
 
     return (is_evil, evil_role, generated_role, is_corrupted, dist_nearest, direction,
-            adj_evil, pairs, arch_side, dist_corrupted)
+            adj_evil, pairs, arch_side, dist_corrupted, witness_support)
 
 
 def recommend_reveal(

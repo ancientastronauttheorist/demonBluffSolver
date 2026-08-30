@@ -369,6 +369,10 @@ def rust_solve_to_objects(state, summary_only: bool = False):
                 original_positions=list(raw_trace.get("original_positions", [])),
                 added_outcast_position=int(raw_trace["added_outcast_position"]),
                 added_outcast_role=str(raw_trace["added_outcast_role"]),
+                affected_anchor_positions=sorted({
+                    int(position)
+                    for position in raw_trace.get("affected_anchor_positions", [])
+                }),
             )
         scenarios.append(Scenario(
             evil_positions={int(k): v for k, v in s["evil_positions"].items()},

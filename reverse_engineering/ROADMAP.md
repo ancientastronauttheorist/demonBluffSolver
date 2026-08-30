@@ -106,6 +106,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   stacking/duplicate behavior, and death cleanup, expand the typed union to 15
   target sets and 258 memberships, and publish its baseline-versus-typed
   quality report.
+- [x] Asset-bind public Chancellor to managed `Baron`; native-audit all five
+  role methods, all eight Witness methods, and 18 ordered-Start, selection,
+  status, identity-mutation, and death helpers; close anywhere-Villager
+  eligibility, exact anchor/neighbour order, `c/v/o/f/a` identity equations,
+  duplicate and resistance behavior, current-status Witness truth/bluff
+  semantics, and death persistence; expand the typed union to 16 target sets
+  and 289 memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

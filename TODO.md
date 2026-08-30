@@ -64,12 +64,13 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [x] **Witness + Lilis kills** — FIXED. Added `night_kills` to `actually_affected` check.
 
-- [x] **Witness "no one affected" (position=0)** — FIXED. `affected_position=0` means "nobody affected," not position 0. Also excluded PD/Drunk corruption from "affected by Evil" set — only Poisoner/Pooka/Puppeteer/Lilis count.
+- [x] **Witness "no one affected" (position=0)** — FIXED. `affected_position=0` means "nobody affected," not position 0. Plague Doctor observations and Drunk self-corruption do not create Witness evidence; native Witness reads active `MessedUpByEvil` markers plus successful night-kill markers.
 
-- [ ] **Witness + Chancellor trace** — the first Villager target should count as
-  "affected by evil ability." The existing legacy field now tracks the final
-  home of the added Outcast identity; derive the original target from the full
-  Chancellor swap trace instead of treating those positions as identical.
+- [x] **Witness + Chancellor trace** — native audit disproved the first-target
+  hypothesis. Chancellor reinitializes that Villager without marking it, then
+  separately attempts `MessedUpByEvil` on a real-Outcast anchor. Witness reads
+  only surviving current markers; grouped trace anchors preserve provenance but
+  never create a Witness constraint by themselves.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 
@@ -133,7 +134,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### Test Coverage Gaps
 
-- [x] **Witness**: 2 test cases now (asc11_g3_live, asc23_v2). Fixed validator for "no one affected" (position=0) and PD/Drunk corruption exclusion. Still no coverage for Chancellor conversion tracking (see P0).
+- [x] **Witness**: current-status truth/bluff handling, Lilis death markers, and
+  Chancellor's separately selected affected anchor now have focused coverage.
+  Native audit disproved treating the first Villager replacement as an
+  automatic Witness candidate.
 - [x] **Plague Doctor**: Full managed `Puzzlemaster` boundary audited; strict
   active-result shape, self/dead targeting, Wretch alignment, ordinary Drunk
   status, random truth/bluff reveal support, and legacy `evil_pos` covered.
@@ -144,3 +148,7 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   no stored blocked target, self-block, killed-hidden exclusion, picker/execute
   bypasses, unused-active flip consequence, ordinary/Slayer/Lilis cleanup, and
   between-village reset documented against 67 v2 Witch-deck fixtures.
+- [x] **Chancellor + Witness**: Full managed `Baron` and `Witness` boundaries
+  audited; ordered anywhere-Villager replacement, independent Outcast anchor,
+  exact identity-home equations, duplicate/death persistence, and current-only
+  affected-status truth/bluff semantics have focused regressions.

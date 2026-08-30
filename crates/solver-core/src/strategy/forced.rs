@@ -598,6 +598,7 @@ mod tests {
             original_positions: vec![2],
             added_outcast_position: 1,
             added_outcast_role: "Drunk".to_string(),
+            affected_anchor_positions: vec![],
         });
 
         assert_eq!(

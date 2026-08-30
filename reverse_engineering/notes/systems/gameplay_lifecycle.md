@@ -144,7 +144,9 @@ order, but did not dynamically rule out a mode or addressable replacing it.
 
 The display role Chancellor is implemented by managed type `Baron`. Its Start
 action performs two distinct transformations; it is not an adjacent in-place
-Villager conversion.
+Villager conversion. The complete five-method role and eight-method Witness
+boundary is in the
+[`Chancellor/Baron and Witness role audit`](../roles/gameplay_role_chancellor.md).
 
 First, Baron selects a real Outcast `CharacterData` absent from the current
 script when that pool is nonempty, with an all-ascension real-Outcast fallback.
@@ -157,13 +159,15 @@ a playable no-conversion outcome.
 
 Second, Baron selects an Outcast through `FilterCharacterType`. At this ordered
 pre-Reveal slot the relevant `registerAs` values are clear, so the selection is
-the current real Outcast identity. It adds `MessedUpByEvil` to that anchor,
+the current real Outcast identity. It attempts `MessedUpByEvil` on that anchor,
 chooses one of its non-Dead circular neighbours, and swaps that neighbour's
 `CharacterData` with Baron's by two `Character.Init(..., -100)` calls. The
 Chancellor identity and Evil alignment therefore move to the neighbour; the
 original Chancellor card receives the neighbour's former role. The anchor is
 not itself a lie source: `MessedUpByEvil` is absent from the actual
-`CheckLying` predicate documented in the status boundary.
+`CheckLying` predicate documented in the status boundary. `AddStatus` stores no
+source provenance, and no shipped path produces the exact status-50 resistance
+that could reject this marker under the current build.
 
 For the one-Chancellor Standard pool, define:
 
@@ -186,6 +190,14 @@ with `o != c` and `o != f`. `o` may equal `a` except on the `a == c` path.
 Self-swap (`c == f`) is legal. When `v == f`, the selected Villager becomes
 Chancellor while the original Chancellor card becomes the added Outcast.
 
+Baron does **not** mark the first Villager merely because it replaced that
+card. It marks the independently selected physical anchor `o`; Witness scans
+only surviving current `MessedUpByEvil` status across all physical cards. The
+first target `v` is a Chancellor-attributable Witness candidate only when the
+new Outcast is itself selected as the anchor (`v == o`), or when another Evil
+effect later marks the same card. This native result disproves the older
+first-target-history hypothesis suggested by Witness's authored hint.
+
 `Character.Init` clears active statuses, bluff, register-as, and runtime data,
 but preserves the physical card's resistance collection. This makes role data
 and resistance provenance intentionally diverge. For example, if `f` held an
@@ -202,6 +214,11 @@ At real-data level the first transformation is Villager minus one and Outcast
 plus one, while the later swap preserves the multiset. A solver trace therefore
 needs at least `c`, `a`, and `r`; one position called "Chancellor conversion"
 cannot encode the native lifecycle.
+
+Same-public-asset Chancellor duplicates still receive one ordinary ordered
+Start action, from the highest-ID/reverse-scan physical match. Baron has no
+fields or death override: later death does not undo the added script role,
+identity replacement, swap, or surviving anchor marker.
 
 ## Per-card initialization and internal reveal
 

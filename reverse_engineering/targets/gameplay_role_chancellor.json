@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Chancellor role implementation, managed internally as Baron, with ordered Start, role-data relocation, affected-status, Witness observation, and death persistence boundary",
+  "functions": [
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "Role.BluffAct",
+      "metadata_name": "Role$$BluffAct",
+      "signature": "void Role__BluffAct (Role_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C4CA0"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Character.Kill",
+      "metadata_name": "Character$$Kill",
+      "signature": "void Character__Kill (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366130"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "Characters.GetAdjacentAliveCharacters",
+      "metadata_name": "Characters$$GetAdjacentAliveCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentAliveCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C050"
+    },
+    {
+      "name": "Characters.FilterCharacterType.Character",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36AC30"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.Character",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "prototype_name": "Characters__FilterRealCharacterType_Character",
+      "rva": "0x36BB40"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.CharacterData",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36B9C0"
+    },
+    {
+      "name": "Characters.FilterNotInDeckCharactersUnique",
+      "metadata_name": "Characters$$FilterNotInDeckCharactersUnique",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterNotInDeckCharactersUnique (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* allCharacters, const MethodInfo* method);",
+      "rva": "0x36B1A0"
+    },
+    {
+      "name": "Characters.FilterAliveCharacters",
+      "metadata_name": "Characters$$FilterAliveCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAliveCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, const MethodInfo* method);",
+      "rva": "0x36A240"
+    },
+    {
+      "name": "Gameplay.AddScriptCharacter",
+      "metadata_name": "Gameplay$$AddScriptCharacter",
+      "signature": "void Gameplay__AddScriptCharacter (Gameplay_o* __this, int32_t type, CharacterData_o* data, const MethodInfo* method);",
+      "rva": "0x37B480"
+    },
+    {
+      "name": "Gameplay.GetAscensionAllStartingCharacters",
+      "metadata_name": "Gameplay$$GetAscensionAllStartingCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetAscensionAllStartingCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37C3F0"
+    },
+    {
+      "name": "Gameplay.GetAllAscensionCharacters",
+      "metadata_name": "Gameplay$$GetAllAscensionCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetAllAscensionCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37C1A0"
+    },
+    {
+      "name": "Baron.get_Description",
+      "metadata_name": "Baron$$get_Description",
+      "signature": "System_String_o* Baron__get_Description (Baron_o* __this, const MethodInfo* method);",
+      "rva": "0x3D41F0"
+    },
+    {
+      "name": "Baron.GetInfo",
+      "metadata_name": "Baron$$GetInfo",
+      "signature": "ActedInfo_o* Baron__GetInfo (Baron_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D3FC0"
+    },
+    {
+      "name": "Baron.Act",
+      "metadata_name": "Baron$$Act",
+      "signature": "void Baron__Act (Baron_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D3C80"
+    },
+    {
+      "name": "Baron.SitNextToOutsider",
+      "metadata_name": "Baron$$SitNextToOutsider",
+      "signature": "void Baron__SitNextToOutsider (Baron_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D4020"
+    },
+    {
+      "name": "Baron.ctor",
+      "metadata_name": "Baron$$.ctor",
+      "signature": "void Baron___ctor (Baron_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Witness.get_Description",
+      "metadata_name": "Witness$$get_Description",
+      "signature": "System_String_o* Witness__get_Description (Witness_o* __this, const MethodInfo* method);",
+      "rva": "0x3CFAC0"
+    },
+    {
+      "name": "Witness.ConjourInfo",
+      "metadata_name": "Witness$$ConjourInfo",
+      "signature": "System_String_o* Witness__ConjourInfo (Witness_o* __this, Character_o* messedCharacter, const MethodInfo* method);",
+      "rva": "0x3CF2B0"
+    },
+    {
+      "name": "Witness.GetInfo",
+      "metadata_name": "Witness$$GetInfo",
+      "signature": "ActedInfo_o* Witness__GetInfo (Witness_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CF750"
+    },
+    {
+      "name": "Witness.Act",
+      "metadata_name": "Witness$$Act",
+      "signature": "void Witness__Act (Witness_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Witness.BluffAct",
+      "metadata_name": "Witness$$BluffAct",
+      "signature": "void Witness__BluffAct (Witness_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Witness.GetBluffInfo",
+      "metadata_name": "Witness$$GetBluffInfo",
+      "signature": "ActedInfo_o* Witness__GetBluffInfo (Witness_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CF380"
+    },
+    {
+      "name": "Witness.GetMessedCharacters",
+      "metadata_name": "Witness$$GetMessedCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Witness__GetMessedCharacters (Witness_o* __this, const MethodInfo* method);",
+      "rva": "0x3CF8C0"
+    },
+    {
+      "name": "Witness.ctor",
+      "metadata_name": "Witness$$.ctor",
+      "signature": "void Witness___ctor (Witness_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    }
+  ]
+}

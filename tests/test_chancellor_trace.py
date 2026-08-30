@@ -60,6 +60,7 @@ class ChancellorTraceTests(unittest.TestCase):
                         "original_positions": [1, 3, 4],
                         "added_outcast_position": 2,
                         "added_outcast_role": "Plague Doctor",
+                        "affected_anchor_positions": [4, 2, 4],
                     },
                     "chancellor_conversion": 2,
                 }
@@ -81,6 +82,7 @@ class ChancellorTraceTests(unittest.TestCase):
                 original_positions=[1, 3, 4],
                 added_outcast_position=2,
                 added_outcast_role="Plague Doctor",
+                affected_anchor_positions=[2, 4],
             ),
         )
 
@@ -137,6 +139,31 @@ class ChancellorTraceTests(unittest.TestCase):
         self.assertEqual(positional.chancellor_conversion, 3)
         self.assertEqual(positional.messed_up_by_evil, set())
         self.assertIsNone(positional.chancellor_trace)
+
+        legacy_trace = ChancellorTrace([3], 2, "Wretch")
+        self.assertEqual(legacy_trace.affected_anchor_positions, [])
+
+    def test_original_villager_candidates_derive_from_grouped_identity_flow(self):
+        scenario = Scenario(
+            evil_positions={3: "chancellor"},
+            chancellor_trace=ChancellorTrace(
+                original_positions=[1, 2, 2],
+                added_outcast_position=2,
+                added_outcast_role="Wretch",
+                affected_anchor_positions=[4],
+            ),
+        )
+
+        # c=1 gives v=a=2; c=a=2 gives v=f=3. Neither first target is
+        # automatically a surviving MessedUpByEvil marker.
+        self.assertEqual(
+            scenario.chancellor_original_villager_positions(),
+            [2, 3],
+        )
+        self.assertEqual(scenario.messed_up_by_evil, set())
+
+        scenario.evil_positions[4] = "Chancellor"
+        self.assertEqual(scenario.chancellor_original_villager_positions(), [])
 
     def test_generated_wretch_projects_alignment_druid_and_slayer_risk(self):
         state = GameState(

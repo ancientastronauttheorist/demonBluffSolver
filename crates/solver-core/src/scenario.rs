@@ -15,6 +15,16 @@ struct RawChancellorTrace {
     anchor_position: u8,
 }
 
+impl RawChancellorTrace {
+    fn original_villager_position(&self, final_chancellor_position: u8) -> u8 {
+        if self.original_position == self.added_outcast_position {
+            final_chancellor_position
+        } else {
+            self.added_outcast_position
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct ScenarioSemanticKey {
     corrupted: Vec<u8>,
@@ -52,6 +62,16 @@ struct PendingStartContext {
     added_outcast_position: Option<u8>,
     added_outcast_role: Option<String>,
     original_positions: Vec<u8>,
+    affected_anchor_positions: Vec<u8>,
+}
+
+fn merge_position_candidates(target: &mut Vec<u8>, candidates: &[u8]) {
+    for &position in candidates {
+        if !target.contains(&position) {
+            target.push(position);
+        }
+    }
+    target.sort_unstable();
 }
 
 /// Prefer the serialized pool's faction over the current knowledge base.
@@ -380,17 +400,15 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                                 };
                                 if let Some(&index) = pending_seen.get(&key) {
                                     if let Some(trace) = raw_trace.as_ref() {
-                                        if !pending_contexts[index]
-                                            .original_positions
-                                            .contains(&trace.original_position)
-                                        {
-                                            pending_contexts[index]
-                                                .original_positions
-                                                .push(trace.original_position);
-                                            pending_contexts[index]
-                                                .original_positions
-                                                .sort_unstable();
-                                        }
+                                        merge_position_candidates(
+                                            &mut pending_contexts[index].original_positions,
+                                            &[trace.original_position],
+                                        );
+                                        merge_position_candidates(
+                                            &mut pending_contexts[index]
+                                                .affected_anchor_positions,
+                                            &[trace.anchor_position],
+                                        );
                                     }
                                     continue;
                                 }
@@ -407,6 +425,10 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                                     original_positions: raw_trace
                                         .as_ref()
                                         .map(|trace| vec![trace.original_position])
+                                        .unwrap_or_default(),
+                                    affected_anchor_positions: raw_trace
+                                        .as_ref()
+                                        .map(|trace| vec![trace.anchor_position])
                                         .unwrap_or_default(),
                                 });
                                 pending_seen.insert(key, index);
@@ -465,12 +487,14 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                             if let Some(trace) =
                                 placement_scenarios[index].chancellor_trace.as_mut()
                             {
-                                for original in &pending.original_positions {
-                                    if !trace.original_positions.contains(original) {
-                                        trace.original_positions.push(*original);
-                                    }
-                                }
-                                trace.original_positions.sort_unstable();
+                                merge_position_candidates(
+                                    &mut trace.original_positions,
+                                    &pending.original_positions,
+                                );
+                                merge_position_candidates(
+                                    &mut trace.affected_anchor_positions,
+                                    &pending.affected_anchor_positions,
+                                );
                             }
                             continue;
                         }
@@ -483,6 +507,9 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                                     original_positions: pending.original_positions.clone(),
                                     added_outcast_position,
                                     added_outcast_role,
+                                    affected_anchor_positions: pending
+                                        .affected_anchor_positions
+                                        .clone(),
                                 }
                             });
                         let chancellor_conversion = pending.added_outcast_position;
@@ -1057,11 +1084,7 @@ fn build_chancellor_start_context_variants(
     let mut contexts = Vec::new();
     let mut seen = HashSet::new();
     for initial_alchemists in initial_alchemist_variants {
-        let replaced_villager = if trace.original_position == trace.added_outcast_position {
-            final_chancellor_position
-        } else {
-            trace.added_outcast_position
-        };
+        let replaced_villager = trace.original_villager_position(final_chancellor_position);
 
         let mut alchemists_before_puppet = HashSet::new();
         for &initial_position in &initial_alchemists {
@@ -1157,11 +1180,7 @@ fn enumerate_initial_alchemist_positions(
         .filter(|role| normalize_role(role) == "alchemist")
         .count();
 
-    let replaced_villager = if trace.original_position == trace.added_outcast_position {
-        final_chancellor_position
-    } else {
-        trace.added_outcast_position
-    };
+    let replaced_villager = trace.original_villager_position(final_chancellor_position);
     let mut required = Vec::new();
     let mut maybe = Vec::new();
     for position in 1..=state.n_cards {
@@ -3173,11 +3192,28 @@ mod tests {
             .iter()
             .all(|scenario| scenario.pd_corrupted.is_none()));
         for scenario in worlds {
+            assert_eq!(scenario.chancellor_original_villager_positions(), vec![2]);
             let trace = scenario.chancellor_trace.expect("new worlds carry a trace");
             assert_eq!(trace.original_positions, vec![1, 3, 4]);
             assert_eq!(trace.added_outcast_role, "Plague Doctor");
+            assert_eq!(trace.affected_anchor_positions, vec![2]);
             assert_eq!(scenario.chancellor_conversion, Some(2));
         }
+    }
+
+    #[test]
+    fn converged_chancellor_histories_merge_sorted_anchor_candidates() {
+        let mut original_positions = vec![4, 2];
+        let mut affected_anchor_positions = vec![5, 3];
+
+        // These helpers run only after complete scenario semantic keys collide:
+        // source provenance is not stored by status 50, so equivalent histories
+        // stay one solver world rather than gaining probability mass.
+        merge_position_candidates(&mut original_positions, &[2, 1]);
+        merge_position_candidates(&mut affected_anchor_positions, &[5, 4, 3]);
+
+        assert_eq!(original_positions, vec![1, 2, 4]);
+        assert_eq!(affected_anchor_positions, vec![3, 4, 5]);
     }
 
     #[test]

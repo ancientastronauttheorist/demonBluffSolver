@@ -223,10 +223,19 @@ def slayer_revealed_role(result: dict) -> Optional[str]:
 
 @dataclass
 class ChancellorTrace:
-    """Probability-safe projection of Chancellor's native Start relocation."""
+    """Probability-safe projection of Chancellor's native Start relocation.
+
+    ``original_positions`` and ``affected_anchor_positions`` are grouped native
+    history alternatives that converge to one represented final board.  Anchor
+    positions are provenance only: ``Scenario.messed_up_by_evil`` is the
+    authoritative set of markers that survived resistance and later Start
+    actions.
+    """
     original_positions: list[int] = field(default_factory=list)
     added_outcast_position: int = 0
     added_outcast_role: str = ""
+    # Appended to preserve the positional constructor used by older callers.
+    affected_anchor_positions: list[int] = field(default_factory=list)
 
 
 @dataclass
@@ -243,6 +252,34 @@ class Scenario:
     chancellor_conversion: Optional[int] = None
     messed_up_by_evil: set[int] = field(default_factory=set)
     chancellor_trace: Optional[ChancellorTrace] = None
+
+    def chancellor_original_villager_positions(self) -> list[int]:
+        """Return possible physical seats of Chancellor's erased Villager.
+
+        Native does not retain or mark this first target.  For each grouped
+        original Chancellor seat ``c``, identity flow gives ``v = f`` when
+        ``c == a`` and ``v = a`` otherwise, where ``a`` is the generated
+        Outcast's final home and ``f`` is the final Chancellor seat.
+        """
+        trace = self.chancellor_trace
+        if trace is None:
+            return []
+
+        final_chancellors = [
+            position
+            for position, role in self.evil_positions.items()
+            if role.lower() == "chancellor"
+        ]
+        if len(final_chancellors) != 1:
+            return []
+
+        final_chancellor_position = final_chancellors[0]
+        return sorted({
+            final_chancellor_position
+            if original_position == trace.added_outcast_position
+            else trace.added_outcast_position
+            for original_position in trace.original_positions
+        })
 
 
 @dataclass
