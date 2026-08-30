@@ -130,10 +130,17 @@ identities from earlier boundaries. Its `Characters.FilterRealCharacterType`
 overload uses the optional `prototype_name` field to give Ghidra's C datatype
 parser a unique definition name while preserving the exact metadata signature
 in `signature`; target validation still checks that unmodified signature and
-RVA against `script.json`. The first 27 status-storage, selection,
-truth/appearance, corruption-producer, and Alchemist methods now have
+RVA against `script.json`. All 40 status-storage, selection, truth/appearance,
+corruption-producer, Alchemist, and bluff-orchestration methods now have
 native-static coverage in the
 [`status/corruption/truth audit`](notes/systems/gameplay_status_corruption_truth.md).
+The subsequent `gameplay_bluff_acquisition` boundary adds 20 checked methods
+covering common assignment, Demon/Minion/Spy/Mutant selection, bluff pools,
+script registration, and fresh-card creation. Two entries are exact overlaps
+with earlier sets; CharacterData overloads receive explicit typed prototype
+aliases, and the Helpers/Calculator `RollDice` shared native body retains both
+managed identities. All 20 are documented in the
+[`bluff-acquisition audit`](notes/systems/gameplay_bluff_acquisition.md).
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -171,13 +178,15 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_roster_helpers
+  -TargetSet gameplay_bluff_acquisition
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
-rewrites and 6,159 explicit alignments, and currently builds a 151,197-datatype
-GDT containing 109 selected FunctionDefinitions across five target sets. The
-typed project is separate from the baseline project. It applies only datatype
+rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
+the union of every checked target set. The six-set inventory contains 137
+target memberships, 127 distinct selected FunctionDefinitions, and 126 unique
+native RVAs. The typed project is separate from the baseline project. It
+applies only datatype
 graphs reachable from the checked-in function signatures and validates exact
 entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
 completion before writing success summaries. `typed-analyze` and `typed-all`
@@ -187,16 +196,19 @@ requires their fresh success summaries and opens the project read-only.
 signature: it reopens the preserved project with analysis disabled, reapplies
 all target sets, saves, and then performs the same exact validations.
 
-The current fully analyzed typed project covers all five target sets: 117
-target memberships resolve to 109 exact FunctionDefinitions and 108 unique
-native RVAs. Eight memberships are exact overlaps between boundaries; the one
-remaining shared RVA has incompatible managed identities and is explicitly
-canonicalized for the native program while both exact definitions remain in
-the GDT. The full import cumulatively added 2,032 reachable datatypes, and the
-project completed its analysis pass in 2,781 seconds without a timeout. The
-subsequent no-analysis refresh reapplied all 109 exact signatures across 117
-memberships. An independent read-only pass then validated all 117 memberships
-and 342 parameter storage locations with zero program mutations.
+The last published fully analyzed typed project covers the earlier five target
+sets: 117 target memberships resolve to 109 exact FunctionDefinitions and 108
+unique native RVAs. Eight memberships are exact overlaps between boundaries;
+the one remaining shared RVA has incompatible managed identities and is
+explicitly canonicalized for the native program while both exact definitions
+remain in the GDT. The full import cumulatively added 2,032 reachable datatypes,
+and the project completed its analysis pass in 2,781 seconds without a timeout.
+The subsequent no-analysis refresh reapplied all 109 exact signatures across
+117 memberships. An independent read-only pass then validated all 117
+memberships and 342 parameter storage locations with zero program mutations.
+Adding the sixth target intentionally makes those typed summaries stale;
+`build-types` followed by `typed-refresh` is the bounded path that will add its
+18 new exact signatures without rerunning auto-analysis.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:
@@ -225,7 +237,8 @@ and artifact observations are recorded in
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 130 classifications backed by
+52 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

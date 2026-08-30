@@ -58,11 +58,19 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Native-audit the final 13 bluff storage, Puppet/Puppeteer,
   Doppelganger, Confessor, Reveal, and shared orchestration methods; close the
   40-method status/corruption/truth boundary.
+- [x] Map and native-audit the 20-method bluff-acquisition boundary, including
+  common assignment, Demon/Minion/Spy/Mutant selectors, pool mutations,
+  shared-body identity, and stale-role lifecycle reachability.
+- [x] Add bluff acquisition to deterministic checked-target discovery and the
+  six-set typed-header/refresh union with exact overload aliases.
+- [ ] Refresh the preserved typed project and publish the bluff-acquisition
+  baseline-versus-typed quality report.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.
 - [ ] Recover deck/board construction and ascension rules.
-- [ ] Recover status, corruption, truth/lie, and clue-generation pipelines.
+- [x] Recover status, corruption, truth/lie, and bluff-acquisition pipelines.
+- [ ] Recover clue-generation pipelines.
 - [x] Recover execution, damage, protection, and night-resolution pipelines.
 - [ ] Recover and validate every role implementation.
 - [ ] Extract an authored clean-room behavioral core with differential tests.

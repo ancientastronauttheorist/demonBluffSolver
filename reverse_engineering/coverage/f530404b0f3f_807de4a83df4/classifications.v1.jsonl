@@ -11,7 +11,7 @@
 {"method":"tdi5604.m0036","state":"understood","reason":"Native faction order, target counts, and candidate movement are documented.","evidence":["ev.gameplay.standard-roster.1"]}
 {"method":"tdi5604.m0041","state":"understood","reason":"Native roster orchestration, quotas, refill points, and shuffle are documented.","evidence":["ev.gameplay.random-roster.1"]}
 {"method":"tdi5838.m0000","state":"understood","reason":"Native stores confirm all constructor arguments and field offsets.","evidence":["ev.characters-count.constructor.1"]}
-{"method":"tdi5505.m0031","state":"understood","reason":"Native filtering preserves order and duplicates while selecting the exact CharacterData faction type.","evidence":["ev.gameplay.empty-roster-refill.1"]}
+{"method":"tdi5505.m0031","state":"understood","reason":"Native filtering preserves order and duplicates while selecting the exact CharacterData faction type.","evidence":["ev.gameplay.empty-roster-refill.1","ev.characters.bluff-selection-pools.1"]}
 {"method":"tdi5505.m0040","state":"understood","reason":"Native filtering clones the input and removes one occurrence for each in-play dataRef.","evidence":["ev.gameplay.empty-roster-refill.1"]}
 {"method":"tdi5604.m0039","state":"understood","reason":"Native floating-point probability and disguised-role routing are documented.","evidence":["ev.gameplay.always-in-deck.1"]}
 {"method":"tdi5604.m0040","state":"understood","reason":"Native faction dispatch and append behavior are documented.","evidence":["ev.gameplay.roster-insertion.1"]}
@@ -102,10 +102,29 @@
 {"method":"tdi5913.m0002","state":"understood","reason":"Native Chancellor/Baron Start role addition, anywhere-Villager replacement, and relocation dispatch are documented.","evidence":["ev.chancellor.start-relocation.1"]}
 {"method":"tdi5913.m0003","state":"understood","reason":"Native real-Outcast anchor selection, neighbour choice, status insertion, and role-data swap are documented.","evidence":["ev.chancellor.start-relocation.1"]}
 {"method":"tdi5487.m0013","state":"understood","reason":"Native bluff-versus-real fallback gates and Unity object semantics are documented.","evidence":["ev.character.bluff-storage-query.1"]}
-{"method":"tdi5487.m0016","state":"understood","reason":"Native bluff storage, role cloning, and stale bluff-role behavior are documented.","evidence":["ev.character.bluff-storage-query.1"]}
+{"method":"tdi5487.m0016","state":"understood","reason":"Native bluff storage, role cloning, and stale bluff-role behavior are documented.","evidence":["ev.character.bluff-storage-query.1","ev.character.bluff-acquisition.1"]}
 {"method":"tdi5853.m0018","state":"understood","reason":"The native base bluff selector's constant-null result is documented under its exact managed identity.","evidence":["ev.character.bluff-storage-query.1"]}
 {"method":"tdi5916.m0003","state":"understood","reason":"Native Puppet Start-only status insertion order and independent resistance behavior are documented.","evidence":["ev.puppet.bluff-start.1"]}
 {"method":"tdi5916.m0005","state":"understood","reason":"Native Puppet bluff pool construction, filters, random selection, and failure behavior are documented.","evidence":["ev.puppet.bluff-start.1"]}
 {"method":"tdi5917.m0002","state":"understood","reason":"Native Puppeteer neighbour eligibility, first-SaintVillager removal, mandatory selection, conversion, saved bluff, and status order are documented.","evidence":["ev.puppeteer.conversion.1"]}
 {"method":"tdi5894.m0002","state":"understood","reason":"Native Confessor apparent-truth status insertion and failure behavior are documented.","evidence":["ev.confessor.appearance.1"]}
 {"method":"tdi5908.m0003","state":"understood","reason":"Native clean and Corrupted Doppelganger source filters, returned identity surfaces, and Reveal-Start relationship are documented.","evidence":["ev.doppelganger.bluff-reveal.1"]}
+{"method":"tdi5487.m0042","state":"understood","reason":"Native ordinary and trailer bluff selection, storage dispatch, and failure paths are documented.","evidence":["ev.character.bluff-acquisition.1"]}
+{"method":"tdi5487.m0014","state":"understood","reason":"Native guarded real-versus-copied-role selection and Unity fake-null behavior are documented.","evidence":["ev.character.bluff-acquisition.1"]}
+{"method":"tdi5919.m0006","state":"understood","reason":"Native Demon unique-Villager selection and pre-return script registration are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5910.m0004","state":"understood","reason":"Native Minion 40/60 duplicate-versus-unique draw and registration difference are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5911.m0003","state":"understood","reason":"Native Spy existing-bluff shortcut, live cache, Villager sampling, and failure paths are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5911.m0004","state":"understood","reason":"Native Spy register-as cache and Villager sampling shared with bluff selection are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5903.m0004","state":"understood","reason":"Native Mutant Good/bluffable filtering, Mad-before-draw ordering, and failure behavior are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5505.m0010","state":"understood","reason":"Native must-include-first unique Villager selection, fallback filtering, and random-draw behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0011","state":"understood","reason":"Native must-include-first general unique selection and non-removing fallback behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0012","state":"understood","reason":"Native duplicate-pool random selection and empty-list failure behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0008","state":"understood","reason":"Native Villager-hardcoded must-include filtering, optional removal, and empty-result behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0009","state":"understood","reason":"Native general must-include selection, optional removal, and empty-result behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0023","state":"understood","reason":"Native CharacterData type filtering preserves order and multiplicity and rejects null inputs or elements.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0037","state":"understood","reason":"Native CharacterData alignment filtering preserves order and multiplicity and reads exact alignment.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5505.m0038","state":"understood","reason":"Native CharacterData bluffable filtering preserves order and multiplicity and reads the exact flag.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5604.m0046","state":"understood","reason":"Native faction-list routing, duplicate suppression, unsupported-type no-op, and null-list failure are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
+{"method":"tdi5680.m0001","state":"understood","reason":"Native one-based inclusive die range and shared Calculator body identity are documented.","evidence":["ev.helpers.roll-dice-shared.1"]}
+{"method":"tdi5683.m0002","state":"understood","reason":"Calculator.RollDice is preserved as a separate managed identity sharing the audited Helpers.RollDice body.","evidence":["ev.helpers.roll-dice-shared.1"]}
+{"method":"tdi5510.m0000","state":"understood","reason":"Native old-child destruction, fresh Character instantiation, array replacement, and failure paths are documented.","evidence":["ev.characters.pool-recreation.1"]}
