@@ -44,6 +44,9 @@ public class ApplyGdtSignatures extends HeadlessScript {
     private static final Pattern DECLARED_IDENTIFIER = Pattern.compile(
         "([A-Za-z_][A-Za-z0-9_]*)\\s*$"
     );
+    private static final Pattern C_IDENTIFIER = Pattern.compile(
+        "[A-Za-z_][A-Za-z0-9_]*"
+    );
     private static final String[] WINDOWS_X64_ARGUMENT_REGISTERS = {
         "RCX", "RDX", "R8", "R9"
     };
@@ -298,8 +301,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
                 );
             }
 
-            String definitionName = declaredIdentifier(target.signature);
-            FunctionDefinition definition = uniqueDefinition(archive, definitionName);
+            FunctionDefinition definition = uniqueDefinition(archive, target.prototypeName);
             // ApplyFunctionSignatureCmd rewrites ParameterDefinition datatypes while resolving
             // dependencies, so never hand it a DB-backed definition from the read-only GDT.
             FunctionDefinition detachedDefinition = new FunctionDefinitionDataType(definition);
@@ -617,6 +619,7 @@ public class ApplyGdtSignatures extends HeadlessScript {
             String name = null;
             String metadataName = null;
             String signature = null;
+            String prototypeName = null;
             String rva = null;
             reader.beginObject();
             while (reader.hasNext()) {
@@ -630,6 +633,9 @@ public class ApplyGdtSignatures extends HeadlessScript {
                         break;
                     case "signature":
                         signature = reader.nextString();
+                        break;
+                    case "prototype_name":
+                        prototypeName = reader.nextString();
                         break;
                     case "rva":
                         rva = reader.nextString();
@@ -645,7 +651,15 @@ public class ApplyGdtSignatures extends HeadlessScript {
                     "Incomplete function target in " + targetPath
                 );
             }
-            targets.add(new Target(name, metadataName, signature, rva));
+            if (prototypeName == null) {
+                prototypeName = declaredIdentifier(signature);
+            }
+            else if (!C_IDENTIFIER.matcher(prototypeName).matches()) {
+                throw new IllegalArgumentException(
+                    "Invalid prototype_name " + prototypeName + " in " + targetPath
+                );
+            }
+            targets.add(new Target(name, metadataName, signature, prototypeName, rva));
         }
         reader.endArray();
     }
@@ -720,13 +734,20 @@ public class ApplyGdtSignatures extends HeadlessScript {
         private final String name;
         private final String metadataName;
         private final String signature;
+        private final String prototypeName;
         private final String rvaText;
         private final long rva;
 
-        Target(String name, String metadataName, String signature, String rvaText) {
+        Target(
+                String name,
+                String metadataName,
+                String signature,
+                String prototypeName,
+                String rvaText) {
             this.name = name;
             this.metadataName = metadataName;
             this.signature = signature;
+            this.prototypeName = prototypeName;
             this.rvaText = rvaText;
             this.rva = Long.decode(rvaText);
             if (rva <= 0) {

@@ -40,6 +40,8 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
         Pattern.compile("[0-9a-f]{12}_[0-9a-f]{12}");
     private static final Pattern FUNCTION_NAME_PATTERN =
         Pattern.compile("\\b([A-Za-z_][A-Za-z0-9_]*)\\s*\\(");
+    private static final Pattern C_IDENTIFIER_PATTERN =
+        Pattern.compile("[A-Za-z_][A-Za-z0-9_]*");
 
     @Override
     protected void run() throws Exception {
@@ -410,6 +412,7 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
     private TargetSet readAndMergeTargets(List<Path> paths) throws Exception {
         String buildId = null;
         Map<String, Target> byName = new TreeMap<>();
+        Map<String, String> prototypeNamesBySignature = new TreeMap<>();
         for (Path path : paths) {
             TargetSet targetSet = readTargets(path);
             if (buildId == null) {
@@ -419,6 +422,15 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                 requireEqual("target build_id", buildId, targetSet.buildId);
             }
             for (Target target : targetSet.targets) {
+                String previousName = prototypeNamesBySignature.putIfAbsent(
+                    target.signature, target.prototypeName
+                );
+                if (previousName != null && !previousName.equals(target.prototypeName)) {
+                    throw new IllegalArgumentException(
+                        "Conflicting prototype names for signature " + target.signature +
+                        ": " + previousName + " != " + target.prototypeName
+                    );
+                }
                 Target previous = byName.putIfAbsent(target.prototypeName, target);
                 if (previous != null && !previous.signature.equals(target.signature)) {
                     throw new IllegalArgumentException(
@@ -449,11 +461,15 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                     reader.beginArray();
                     while (reader.hasNext()) {
                         String signature = null;
+                        String prototypeName = null;
                         reader.beginObject();
                         while (reader.hasNext()) {
                             String targetField = reader.nextName();
                             if (targetField.equals("signature")) {
                                 signature = reader.nextString();
+                            }
+                            else if (targetField.equals("prototype_name")) {
+                                prototypeName = reader.nextString();
                             }
                             else {
                                 reader.skipValue();
@@ -463,7 +479,7 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
                         if (signature == null) {
                             throw new IllegalArgumentException("Target has no signature: " + path);
                         }
-                        targets.add(parseTarget(signature));
+                        targets.add(parseTarget(signature, prototypeName));
                     }
                     reader.endArray();
                 }
@@ -479,14 +495,20 @@ public class BuildIl2CppTypeArchive extends HeadlessScript {
         return new TargetSet(buildId, targets);
     }
 
-    private Target parseTarget(String signature) {
+    private Target parseTarget(String signature, String explicitPrototypeName) {
         Matcher matcher = FUNCTION_NAME_PATTERN.matcher(signature);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Cannot identify function in: " + signature);
         }
-        String name = matcher.group(1);
+        String declaredName = matcher.group(1);
+        String name = explicitPrototypeName == null ? declaredName : explicitPrototypeName;
+        if (!C_IDENTIFIER_PATTERN.matcher(name).matches()) {
+            throw new IllegalArgumentException(
+                "Invalid prototype_name " + name + " for signature: " + signature
+            );
+        }
         String returnType = sourceTypeKey(signature.substring(0, matcher.start(1)));
-        int open = signature.indexOf('(', matcher.start(1) + name.length());
+        int open = signature.indexOf('(', matcher.start(1) + declaredName.length());
         int close = matchingParenthesis(signature, open);
         String parameters = signature.substring(open + 1, close).trim();
         List<ParameterExpectation> expectations = parseParameters(parameters, signature);

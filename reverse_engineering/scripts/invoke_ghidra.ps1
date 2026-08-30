@@ -110,6 +110,7 @@ $typedAnalysisSummaryPath = Join-Path $typedProjectRoot 'logs\analysis-summary.j
 $targetInfos = @()
 $targetByName = [Collections.Generic.Dictionary[string, object]]::new([StringComparer]::Ordinal)
 $expectedPrototypeSignatures = [Collections.Generic.Dictionary[string, string]]::new([StringComparer]::Ordinal)
+$expectedPrototypeNameBySignature = [Collections.Generic.Dictionary[string, string]]::new([StringComparer]::Ordinal)
 $expectedPrototypeNames = @()
 
 function Assert-AnalysisSummary {
@@ -315,14 +316,36 @@ if ($needsTargetInventory) {
             if (-not $signatureMatch.Success) {
                 throw "Could not recover a prototype identifier from '$signature' in $targetPath"
             }
-            $prototypeName = $signatureMatch.Groups[1].Value
+            $declaredPrototypeName = $signatureMatch.Groups[1].Value
+            $prototypeNameProperty = $targetFunction.PSObject.Properties['prototype_name']
+            if ($null -ne $prototypeNameProperty) {
+                $prototypeName = [string]$prototypeNameProperty.Value
+                if ($prototypeName -cnotmatch '^[A-Za-z_][A-Za-z0-9_]*$') {
+                    throw "Invalid prototype_name '$prototypeName' in $targetPath"
+                }
+            }
+            else {
+                $prototypeName = $declaredPrototypeName
+            }
+            if ($expectedPrototypeNameBySignature.ContainsKey($signature)) {
+                if ($expectedPrototypeNameBySignature[$signature] -cne $prototypeName) {
+                    throw "Conflicting prototype names for target signature '$signature'"
+                }
+            }
+            else {
+                $expectedPrototypeNameBySignature.Add($signature, $prototypeName)
+            }
+            $identifierGroup = $signatureMatch.Groups[1]
+            $prototypeSignature = $signature.Substring(0, $identifierGroup.Index) +
+                $prototypeName +
+                $signature.Substring($identifierGroup.Index + $identifierGroup.Length)
             if ($expectedPrototypeSignatures.ContainsKey($prototypeName)) {
-                if ($expectedPrototypeSignatures[$prototypeName] -cne $signature) {
+                if ($expectedPrototypeSignatures[$prototypeName] -cne $prototypeSignature) {
                     throw "Conflicting target signatures for prototype $prototypeName"
                 }
             }
             else {
-                $expectedPrototypeSignatures.Add($prototypeName, $signature)
+                $expectedPrototypeSignatures.Add($prototypeName, $prototypeSignature)
             }
             $signatureParameterCount = Get-SignatureParameterCount -Signature $signature
             $parameterCount += $signatureParameterCount

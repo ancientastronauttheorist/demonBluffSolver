@@ -65,6 +65,7 @@ ALIGN_DECL_RE = re.compile(
 )
 ALIGN_USE_RE = re.compile(r"__declspec\(align\((?P<value>[0-9]+)\)\)")
 FUNCTION_NAME_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
+C_IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 BUILD_ID_RE = re.compile(r"^[0-9a-f]{12}_[0-9a-f]{12}$")
 
 
@@ -186,6 +187,7 @@ def generate_prototypes(
     target_sets: Sequence[dict[str, Any]], build_id: str
 ) -> tuple[str, list[str]]:
     signatures_by_name: dict[str, str] = {}
+    prototype_names_by_signature: dict[str, str] = {}
     for set_index, targets in enumerate(target_sets):
         if targets.get("build_id") != build_id:
             raise NormalizationError(
@@ -211,14 +213,39 @@ def generate_prototypes(
             match = FUNCTION_NAME_RE.search(signature)
             if match is None:
                 raise NormalizationError(f"Cannot identify function name in {signature!r}")
-            name = match.group(1)
-            previous = signatures_by_name.get(name)
-            if previous is not None and previous != signature:
+            declared_name = match.group(1)
+            if "prototype_name" in target:
+                prototype_name = target["prototype_name"]
+                if not isinstance(prototype_name, str) or not C_IDENTIFIER_RE.fullmatch(
+                    prototype_name
+                ):
+                    raise NormalizationError(
+                        f"Target function {set_index}:{function_index} has an invalid "
+                        "prototype_name"
+                    )
+            else:
+                prototype_name = declared_name
+
+            previous_name = prototype_names_by_signature.get(signature)
+            if previous_name is not None and previous_name != prototype_name:
                 raise NormalizationError(
-                    f"Conflicting signatures for prototype {name}: "
-                    f"{previous!r} != {signature!r}"
+                    f"Conflicting prototype names for signature {signature!r}: "
+                    f"{previous_name!r} != {prototype_name!r}"
                 )
-            signatures_by_name[name] = signature
+            prototype_names_by_signature[signature] = prototype_name
+
+            prototype_signature = (
+                signature[: match.start(1)]
+                + prototype_name
+                + signature[match.end(1) :]
+            )
+            previous = signatures_by_name.get(prototype_name)
+            if previous is not None and previous != prototype_signature:
+                raise NormalizationError(
+                    f"Conflicting signatures for prototype {prototype_name}: "
+                    f"{previous!r} != {prototype_signature!r}"
+                )
+            signatures_by_name[prototype_name] = prototype_signature
 
     names = sorted(signatures_by_name)
     signatures = [signatures_by_name[name] for name in names]

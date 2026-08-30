@@ -48,6 +48,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Expand the isolated typed project to all 77 methods across the four
   reviewed target sets; pass post-save ABI validation and body-free quality
   checks for every set.
+- [x] Map and baseline-export the 40-method status, corruption, truth/lie, and
+  bluff-orchestration boundary, including explicit C prototype aliases for
+  overloaded managed methods.
 - [ ] Add a versioned offset registry and migrate `memory_reader.py` to it.
 - [ ] Live-validate HP, gameplay-state, and board-count pointer chains.
 - [x] Recover the gameplay lifecycle and its call graph.

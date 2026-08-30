@@ -53,17 +53,22 @@ class NormalizeIl2CppHeaderTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temporary.cleanup()
 
-    def write_targets(self, name: str, signatures: list[str]) -> Path:
+    def write_targets(self, name: str, signatures: list[str | dict[str, str]]) -> Path:
         path = self.root / name
+        functions = []
+        for index, value in enumerate(signatures):
+            function = {"name": f"target-{index}"}
+            if isinstance(value, str):
+                function["signature"] = value
+            else:
+                function.update(value)
+            functions.append(function)
         path.write_text(
             json.dumps(
                 {
                     "schema_version": 1,
                     "build_id": BUILD_ID,
-                    "functions": [
-                        {"name": f"target-{index}", "signature": signature}
-                        for index, signature in enumerate(signatures)
-                    ],
+                    "functions": functions,
                 }
             ),
             encoding="utf-8",
@@ -126,6 +131,71 @@ class NormalizeIl2CppHeaderTests(unittest.TestCase):
         with self.assertRaisesRegex(normalizer.NormalizationError, "Conflicting signatures"):
             normalizer.build_outputs(
                 self.header, [first, second], self.extraction, self.root / "output"
+            )
+
+    def test_explicit_prototype_name_disambiguates_overloads(self) -> None:
+        character_data_signature = (
+            "CharacterDataList* Characters__FilterRealCharacterType "
+            "(Characters* self, CharacterDataList* values, int32_t type);"
+        )
+        character_signature = (
+            "CharacterList* Characters__FilterRealCharacterType "
+            "(Characters* self, CharacterList* values, int32_t type);"
+        )
+        first = self.write_targets("a.json", [character_data_signature])
+        second = self.write_targets(
+            "b.json",
+            [
+                {
+                    "signature": character_signature,
+                    "prototype_name": "Characters__FilterRealCharacterType_Character",
+                }
+            ],
+        )
+
+        result = normalizer.build_outputs(
+            self.header, [second, first], self.extraction, self.root / "output"
+        )
+        prototypes = result["prototype_header"].read_text(encoding="utf-8")
+        manifest = json.loads(result["alignment_manifest"].read_text(encoding="utf-8"))
+
+        self.assertIn(character_data_signature, prototypes)
+        self.assertIn(
+            character_signature.replace(
+                "Characters__FilterRealCharacterType",
+                "Characters__FilterRealCharacterType_Character",
+                1,
+            ),
+            prototypes,
+        )
+        self.assertEqual(
+            manifest["prototype_names"],
+            [
+                "Characters__FilterRealCharacterType",
+                "Characters__FilterRealCharacterType_Character",
+            ],
+        )
+
+    def test_rejects_invalid_or_inconsistent_prototype_names(self) -> None:
+        signature = "void Shared (int32_t value);"
+        invalid = self.write_targets(
+            "invalid.json",
+            [{"signature": signature, "prototype_name": "not valid"}],
+        )
+        with self.assertRaisesRegex(normalizer.NormalizationError, "invalid prototype_name"):
+            normalizer.build_outputs(
+                self.header, [invalid], self.extraction, self.root / "invalid-output"
+            )
+
+        first = self.write_targets(
+            "first.json", [{"signature": signature, "prototype_name": "Shared_First"}]
+        )
+        second = self.write_targets(
+            "second.json", [{"signature": signature, "prototype_name": "Shared_Second"}]
+        )
+        with self.assertRaisesRegex(normalizer.NormalizationError, "Conflicting prototype names"):
+            normalizer.build_outputs(
+                self.header, [first, second], self.extraction, self.root / "conflict-output"
             )
 
     def test_rejects_unmanifested_header(self) -> None:

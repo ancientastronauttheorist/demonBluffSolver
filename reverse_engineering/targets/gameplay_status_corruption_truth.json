@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "functions": [
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "CharacterStatuses.AddResistance",
+      "metadata_name": "CharacterStatuses$$AddResistance",
+      "signature": "void CharacterStatuses__AddResistance (CharacterStatuses_o* __this, int32_t newResistance, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x3639D0"
+    },
+    {
+      "name": "CharacterStatuses.CheckIfCanCurePoisonAndCure",
+      "metadata_name": "CharacterStatuses$$CheckIfCanCurePoisonAndCure",
+      "signature": "bool CharacterStatuses__CheckIfCanCurePoisonAndCure (CharacterStatuses_o* __this, const MethodInfo* method);",
+      "rva": "0x363B60"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "Role.CheckIfCanRemoveStatus",
+      "metadata_name": "Role$$CheckIfCanRemoveStatus",
+      "signature": "bool Role__CheckIfCanRemoveStatus (Role_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x3B24C0"
+    },
+    {
+      "name": "Drunk.CheckIfCanRemoveStatus",
+      "metadata_name": "Drunk$$CheckIfCanRemoveStatus",
+      "signature": "bool Drunk__CheckIfCanRemoveStatus (Drunk_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x3DA410"
+    },
+    {
+      "name": "Characters.FilterCharacterMissingStatus",
+      "metadata_name": "Characters$$FilterCharacterMissingStatus",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterMissingStatus (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36A8C0"
+    },
+    {
+      "name": "Characters.FilterCharactersWithoutResistance.Character",
+      "metadata_name": "Characters$$FilterCharactersWithoutResistance",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharactersWithoutResistance (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t status, const MethodInfo* method);",
+      "rva": "0x36AE50"
+    },
+    {
+      "name": "Characters.FilterCharacterType.Character",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36AC30"
+    },
+    {
+      "name": "Characters.FilterRealCharacterType.Character",
+      "metadata_name": "Characters$$FilterRealCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "prototype_name": "Characters__FilterRealCharacterType_Character",
+      "rva": "0x36BB40"
+    },
+    {
+      "name": "Characters.GetAdjacentCharacters",
+      "metadata_name": "Characters$$GetAdjacentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C2E0"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    },
+    {
+      "name": "CharacterHelper.GetCharacterConditions",
+      "metadata_name": "CharacterHelper$$GetCharacterConditions",
+      "signature": "System_Collections_Generic_List_ECharacterCondition__o* CharacterHelper__GetCharacterConditions (int32_t condition, Character_o* c, const MethodInfo* method);",
+      "rva": "0x397830"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "CharacterHelper.CheckLyingAppearance",
+      "metadata_name": "CharacterHelper$$CheckLyingAppearance",
+      "signature": "bool CharacterHelper__CheckLyingAppearance (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397630"
+    },
+    {
+      "name": "CharacterHelper.CheckIfDisguisedAppearance",
+      "metadata_name": "CharacterHelper$$CheckIfDisguisedAppearance",
+      "signature": "bool CharacterHelper__CheckIfDisguisedAppearance (Character_o* c, const MethodInfo* method);",
+      "rva": "0x3974F0"
+    },
+    {
+      "name": "Pooka.Act",
+      "metadata_name": "Pooka$$Act",
+      "signature": "void Pooka__Act (Pooka_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6700"
+    },
+    {
+      "name": "Pooka.PoisonNeighboursIfAble",
+      "metadata_name": "Pooka$$PoisonNeighboursIfAble",
+      "signature": "void Pooka__PoisonNeighboursIfAble (Pooka_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6870"
+    },
+    {
+      "name": "Poisoner.Act",
+      "metadata_name": "Poisoner$$Act",
+      "signature": "void Poisoner__Act (Poisoner_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E64F0"
+    },
+    {
+      "name": "Puzzlemaster.Act",
+      "metadata_name": "Puzzlemaster$$Act",
+      "signature": "void Puzzlemaster__Act (Puzzlemaster_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6D90"
+    },
+    {
+      "name": "Drunk.Act",
+      "metadata_name": "Drunk$$Act",
+      "signature": "void Drunk__Act (Drunk_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DA3D0"
+    },
+    {
+      "name": "Drunk.GetBluffIfAble",
+      "metadata_name": "Drunk$$GetBluffIfAble",
+      "signature": "CharacterData_o* Drunk__GetBluffIfAble (Drunk_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DA420"
+    },
+    {
+      "name": "Alchemist.OnInit",
+      "metadata_name": "Alchemist$$OnInit",
+      "signature": "void Alchemist__OnInit (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B05F0"
+    },
+    {
+      "name": "Alchemist.Act",
+      "metadata_name": "Alchemist$$Act",
+      "signature": "void Alchemist__Act (Alchemist_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3AFDD0"
+    },
+    {
+      "name": "Alchemist.BluffAct",
+      "metadata_name": "Alchemist$$BluffAct",
+      "signature": "void Alchemist__BluffAct (Alchemist_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3AFE90"
+    },
+    {
+      "name": "Alchemist.CurePoisons",
+      "metadata_name": "Alchemist$$CurePoisons",
+      "signature": "void Alchemist__CurePoisons (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B0040"
+    },
+    {
+      "name": "Alchemist.GetPoisonedCharactersAroundMe",
+      "metadata_name": "Alchemist$$GetPoisonedCharactersAroundMe",
+      "signature": "System_Collections_Generic_List_Character__o* Alchemist__GetPoisonedCharactersAroundMe (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B03B0"
+    },
+    {
+      "name": "Puppet.Act",
+      "metadata_name": "Puppet$$Act",
+      "signature": "void Puppet__Act (Puppet_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6A80"
+    },
+    {
+      "name": "Puppet.GetBluffIfAble",
+      "metadata_name": "Puppet$$GetBluffIfAble",
+      "signature": "CharacterData_o* Puppet__GetBluffIfAble (Puppet_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E6BA0"
+    },
+    {
+      "name": "Mezepheles.Act",
+      "metadata_name": "Mezepheles$$Act",
+      "signature": "void Mezepheles__Act (Mezepheles_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E4470"
+    },
+    {
+      "name": "Confessor.OnInit",
+      "metadata_name": "Confessor$$OnInit",
+      "signature": "void Confessor__OnInit (Confessor_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6A50"
+    },
+    {
+      "name": "Doppleganger.GetBluffIfAble",
+      "metadata_name": "Doppleganger$$GetBluffIfAble",
+      "signature": "CharacterData_o* Doppleganger__GetBluffIfAble (Doppleganger_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D7160"
+    },
+    {
+      "name": "Character.Reveal",
+      "metadata_name": "Character$$Reveal",
+      "signature": "void Character__Reveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368410"
+    },
+    {
+      "name": "Character.GiveBluff",
+      "metadata_name": "Character$$GiveBluff",
+      "signature": "void Character__GiveBluff (Character_o* __this, CharacterData_o* cd, const MethodInfo* method);",
+      "rva": "0x365160"
+    },
+    {
+      "name": "Character.GetCharacterBluffIfAble",
+      "metadata_name": "Character$$GetCharacterBluffIfAble",
+      "signature": "CharacterData_o* Character__GetCharacterBluffIfAble (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364C40"
+    },
+    {
+      "name": "Role.GetBluffIfAble",
+      "metadata_name": "Role$$GetBluffIfAble",
+      "signature": "CharacterData_o* Role__GetBluffIfAble (Role_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3712B0"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    }
+  ]
+}

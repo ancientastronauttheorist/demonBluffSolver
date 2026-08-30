@@ -123,7 +123,14 @@ The subsequent `gameplay_execution_resolution` boundary baseline-exports 30 of
 first 16-method slice now has native-static coverage for action/lying dispatch,
 wrong-execution damage, Knight and Doppelganger protection, and terminal result
 selection. The remaining 14-method status-insertion and Striga night slice is
-also native-audited, closing all 30 selected methods.
+also native-audited, closing all 30 selected methods. The next
+`gameplay_status_corruption_truth` boundary maps 40 methods and
+baseline-exports all 40 without failure. Eight entries deliberately reuse exact
+identities from earlier boundaries. Its `Characters.FilterRealCharacterType`
+overload uses the optional `prototype_name` field to give Ghidra's C datatype
+parser a unique definition name while preserving the exact metadata signature
+in `signature`; target validation still checks that unmodified signature and
+RVA against `script.json`.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -158,17 +165,20 @@ powershell -ExecutionPolicy Bypass -File `
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
-rewrites and 6,159 explicit alignments, and builds a 151,157-datatype GDT. The
+rewrites and 6,159 explicit alignments, and currently builds a 151,197-datatype
+GDT containing 109 selected FunctionDefinitions across five target sets. The
 typed project is separate from the baseline project. It applies only datatype
 graphs reachable from the checked-in function signatures and validates exact
 entry points, labels, prototypes, dynamic Windows x64 storage, and transaction
 completion before writing success summaries. `typed-analyze` and `typed-all`
 also reopen the saved program read-only and repeat those checks; `typed-export`
 requires their fresh success summaries and opens the project read-only. The
-four checked target sets cover 77 methods and cumulatively import 1,979
-reachable datatypes. All 77 signatures survived the complete 2,870-second
-analysis pass with 209 parameter-storage locations validated and no mutations
-during the post-save read-only checks.
+most recent fully analyzed typed project covers the earlier four target sets
+and 77 methods, cumulatively importing 1,979 reachable datatypes. All 77
+signatures survived the complete 2,870-second analysis pass with 209
+parameter-storage locations validated and no mutations during the post-save
+read-only checks. Typed import and analysis of the new status boundary remain a
+separate validation gate.
 
 Compare private baseline and typed exports without putting decompiled bodies or
 private paths in the public report:

@@ -10,6 +10,10 @@ from collections import defaultdict
 from pathlib import Path
 
 
+C_IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+FUNCTION_NAME_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--targets", required=True, type=Path)
@@ -38,6 +42,8 @@ def main() -> int:
 
     seen_names: set[str] = set()
     seen_file_names: set[str] = set()
+    prototype_signatures: dict[str, str] = {}
+    prototype_names_by_signature: dict[str, str] = {}
     errors: list[str] = []
     shared_targets: list[tuple[str, int]] = []
     for target in targets["functions"]:
@@ -52,6 +58,38 @@ def main() -> int:
         if file_name in seen_file_names:
             errors.append(f"duplicate sanitized filename: {file_name}")
         seen_file_names.add(file_name)
+        signature_match = FUNCTION_NAME_RE.search(signature)
+        if signature_match is None:
+            errors.append(f"{name}: cannot identify C function name in signature")
+        else:
+            declared_name = signature_match.group(1)
+            prototype_name = target.get("prototype_name", declared_name)
+            if not isinstance(prototype_name, str) or not C_IDENTIFIER_RE.fullmatch(
+                prototype_name
+            ):
+                errors.append(f"{name}: invalid prototype_name {prototype_name!r}")
+            else:
+                previous_name = prototype_names_by_signature.get(signature)
+                if previous_name is not None and previous_name != prototype_name:
+                    errors.append(
+                        f"{name}: signature is mapped to both {previous_name!r} "
+                        f"and {prototype_name!r}"
+                    )
+                prototype_names_by_signature[signature] = prototype_name
+                prototype_signature = (
+                    signature[: signature_match.start(1)]
+                    + prototype_name
+                    + signature[signature_match.end(1) :]
+                )
+                previous_signature = prototype_signatures.get(prototype_name)
+                if (
+                    previous_signature is not None
+                    and previous_signature != prototype_signature
+                ):
+                    errors.append(
+                        f"{name}: conflicting signatures for prototype {prototype_name}"
+                    )
+                prototype_signatures[prototype_name] = prototype_signature
         matching_methods = [
             method
             for method in methods_by_name.get(metadata_name, [])
