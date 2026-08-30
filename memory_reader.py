@@ -483,11 +483,22 @@ class MemoryReader:
         list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
         if not items_array or not list_size or list_size <= 0:
             return []
+        # A real game cannot approach this ceiling. Reject the whole list if a
+        # stale offset/pointer produces a runaway size; never truncate a valid
+        # chronological history because savedAct corresponds to its last item.
+        if list_size > 4096:
+            return []
         results = []
-        for i in range(min(list_size, 10)):  # cap to prevent runaway
+        # Native actedInfos is append-only and ResetAfterNight roles can exceed
+        # ten uses. Preserve the entire chronological List order so index -1
+        # remains the event that produced savedAct.
+        for i in range(list_size):
             info_ptr = self._read_ptr(items_array + ARRAY_FIRST_ELEMENT_OFFSET + i * 8)
             if not info_ptr or info_ptr < 0x10000:
-                continue
+                # List<T> slots below _size are populated. Silently skipping a
+                # bad pointer would splice the chronology and could preserve a
+                # plausible newest savedAct while dropping earlier evidence.
+                return []
             # Read desc string
             desc_ptr = self._read_ptr(info_ptr + ACTED_INFO_DESC_OFFSET)
             desc = self._read_string(desc_ptr) if desc_ptr else None

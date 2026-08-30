@@ -266,6 +266,96 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         self.assertNotIn(2, session.used_abilities)
         self.assertEqual(session.cards[0].info_parsed, {})
 
+    def test_prior_same_target_fails_before_click_when_pre_history_is_unreadable(self):
+        session = GameSession(4, 1)
+        session.add_card(CardInfo(
+            2,
+            "Judge",
+            info_text="#3 is\nsaying Truth",
+            info_parsed={"target": 3, "is_lying": False},
+        ))
+        session.reset_after_night_abilities()
+        stale = _memory_card("#3 is\nsaying Truth", [3])
+        unreadable = _memory_card("#3 is\nsaying Truth", [3], infos=0)
+
+        class Reader:
+            def __init__(self):
+                self.reads = 0
+
+            def open(self):
+                return True
+
+            def read_board(self):
+                self.reads += 1
+                return [unreadable if self.reads == 1 else stale]
+
+            def close(self):
+                return None
+
+        reader = Reader()
+        with (
+            patch("template_match.safe_click_at") as click,
+            patch("memory_reader.MemoryReader", return_value=reader),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, [3], "Judge")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("prior active evidence", result["error"])
+        self.assertIn("no readable newest", result["error"])
+        click.assert_not_called()
+        self.assertEqual(reader.reads, 1)
+        self.assertNotIn(2, session.used_abilities)
+
+    def test_prior_same_target_fails_before_click_on_stale_shorter_history(self):
+        session = GameSession(4, 1)
+        prior = CardInfo(
+            1,
+            "Judge",
+            info_parsed={"target": 3, "is_lying": False},
+        )
+        session.add_card(prior)
+        session.reset_after_night_abilities()
+        session.add_card(CardInfo(
+            1,
+            "Judge",
+            info_parsed={"target": 3, "is_lying": False},
+        ))
+        session.reset_after_night_abilities()
+        clue = "#3 is\nsaying Truth"
+        stale_short = _memory_card(clue, [3], position=1, infos=1)
+        recovered_old = _memory_card(clue, [3], position=1, infos=2)
+
+        class Reader:
+            def __init__(self):
+                self.reads = 0
+
+            def open(self):
+                return True
+
+            def read_board(self):
+                self.reads += 1
+                return [stale_short if self.reads == 1 else recovered_old]
+
+            def close(self):
+                return None
+
+        reader = Reader()
+        with (
+            patch("template_match.safe_click_at") as click,
+            patch("memory_reader.MemoryReader", return_value=reader),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 1, [3], "Judge")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("shorter than the local minimum", result["error"])
+        click.assert_not_called()
+        self.assertEqual(reader.reads, 1)
+        self.assertNotIn(1, session.used_abilities)
+
     def test_resettable_judge_accepts_changed_latest_event(self):
         session = GameSession(4, 1)
         session.cards.append(CardInfo(2, "Judge"))

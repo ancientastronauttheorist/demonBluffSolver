@@ -273,6 +273,7 @@ def replay_hindsight(case: dict) -> HindsightResult:
             ],
             baker_rule_version=case.get("baker_rule_version"),
             doppel_drunk_rule_version=case.get("doppel_drunk_rule_version"),
+            fortune_teller_rule_version=case.get("fortune_teller_rule_version"),
             reveal_order=list(case.get("reveal_order", [])),
             executed_good_corrupted=dict(exec_good_corrupted),
             executed_good_roles=dict(exec_good_roles),

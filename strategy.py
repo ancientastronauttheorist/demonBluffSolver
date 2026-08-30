@@ -1639,8 +1639,11 @@ def recommend_abilities(
         # Build candidate target lists (exclude self and executed)
         others = [p for p in available if p != pos]
 
-        if role == "Fortune Teller" and len(others) >= 2:
-            candidates = [list(c) for c in combinations(others, 2)]
+        if role == "Fortune Teller" and state.n_cards >= 2:
+            # The shared picker runs before ordinary state/use checks. Every
+            # board Character is legal, including self and dead/hidden cards.
+            fortune_targets = list(range(1, state.n_cards + 1))
+            candidates = [list(c) for c in combinations(fortune_targets, 2)]
             rec = _recommend_boolean_ability(
                 "Fortune Teller", pos,
                 _ft_ground_truth, candidates, state, result,

@@ -11,6 +11,7 @@ from knowledge_base import get_card, Role, Alignment, CARDS_BY_NAME
 RAMBLER_RULE_VERSION = "rambler2_shut_up"
 BAKER_RULE_VERSION = "baker_day_reveal_v1"
 DOPPEL_DRUNK_RULE_VERSION = "doppel_drunk_reveal_v1"
+FORTUNE_TELLER_RULE_VERSION = "fortune_teller_native_v1"
 
 
 # ============================================================
@@ -159,6 +160,9 @@ class GameState:
     # Missing means an archived pre-audit Doppelganger/Drunk fixture/session.
     # Fresh live sessions opt into the shipped delayed-Reveal source rules.
     doppel_drunk_rule_version: Optional[str] = None
+    # Missing means an archived pre-audit Fortune Teller fixture/session.
+    # Fresh live sessions retain the exact native speech/reference history.
+    fortune_teller_rule_version: Optional[str] = None
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -196,6 +200,8 @@ class GameState:
             data["baker_rule_version"] = self.baker_rule_version
         if self.doppel_drunk_rule_version is not None:
             data["doppel_drunk_rule_version"] = self.doppel_drunk_rule_version
+        if self.fortune_teller_rule_version is not None:
+            data["fortune_teller_rule_version"] = self.fortune_teller_rule_version
         if nest_deck:
             data["deck"] = self.deck.to_dict()
         else:
@@ -248,6 +254,7 @@ class GameState:
             ],
             baker_rule_version=data.get("baker_rule_version"),
             doppel_drunk_rule_version=data.get("doppel_drunk_rule_version"),
+            fortune_teller_rule_version=data.get("fortune_teller_rule_version"),
         )
 
 

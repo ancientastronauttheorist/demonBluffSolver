@@ -229,6 +229,12 @@ pub struct GameState {
     #[serde(default)]
     pub doppel_drunk_rule_version: Option<String>,
 
+    /// Exact current-build Fortune Teller picker/output/history provenance.
+    /// Missing/null preserves archived scalar fixtures whose references or
+    /// speech were not captured from one coherent native event.
+    #[serde(default)]
+    pub fortune_teller_rule_version: Option<String>,
+
     #[serde(
         default,
         serialize_with = "serialize_int_key_map",
@@ -299,6 +305,7 @@ impl Default for GameState {
             reveal_order: vec![],
             baker_rule_version: None,
             doppel_drunk_rule_version: None,
+            fortune_teller_rule_version: None,
             executed_good_corrupted: HashMap::new(),
             executed_good_roles: HashMap::new(),
             used_abilities: vec![],
@@ -593,7 +600,33 @@ mod tests {
         assert!(state.rambler_rule_version.is_none());
         assert!(state.baker_rule_version.is_none());
         assert!(state.doppel_drunk_rule_version.is_none());
+        assert!(state.fortune_teller_rule_version.is_none());
         assert!(state.rambler_shut_up_observations.is_empty());
+    }
+
+    #[test]
+    fn fortune_teller_rule_version_defaults_legacy_and_round_trips_current_marker() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 2,
+            "deck": {"villagers": ["Fortune Teller"], "outcasts": [], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.fortune_teller_rule_version.is_none());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 2,
+            "deck": {"villagers": ["Fortune Teller"], "outcasts": [], "minions": [], "demons": []},
+            "fortune_teller_rule_version": "fortune_teller_native_v1"
+        }))
+        .unwrap();
+        assert_eq!(
+            current.fortune_teller_rule_version.as_deref(),
+            Some("fortune_teller_native_v1"),
+        );
+        assert_eq!(
+            serde_json::to_value(current).unwrap()["fortune_teller_rule_version"],
+            serde_json::json!("fortune_teller_native_v1"),
+        );
     }
 
     #[test]

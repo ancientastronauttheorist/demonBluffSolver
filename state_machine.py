@@ -688,6 +688,7 @@ class GameStateMachine:
                 mc,
                 n_cards=self.session.n_cards,
                 baker_rule_version=self.session.baker_rule_version,
+                fortune_teller_rule_version=self.session.fortune_teller_rule_version,
             )
 
         parsed = _parse_from_board(self.monitor.get_board())
@@ -746,10 +747,16 @@ class GameStateMachine:
             )
             return
 
-        # Reuse the strict session path for Plague Doctor and resettable Judge
-        # so autonomous play gets the same target checks, event-freshness
-        # boundary, and recovery semantics as `next`/`auto_next`.
-        if ability_name in ("Plague Doctor", "Plague_Doctor", "Judge"):
+        # Reuse the strict session path for Plague Doctor and the resettable
+        # Judge/Fortune Teller abilities so autonomous play gets the same
+        # native target checks, event-freshness boundary, and recovery
+        # semantics as `next`/`auto_next`.
+        if ability_name in (
+            "Plague Doctor",
+            "Plague_Doctor",
+            "Judge",
+            "Fortune Teller",
+        ):
             from strategy import Action
 
             strict_action = Action(
@@ -764,13 +771,21 @@ class GameStateMachine:
             )
             if not exec_result["success"]:
                 display_name = ability_name.replace("_", " ")
-                recovery = (
-                    "Read the public speech bubble and enter it with pd_check, "
-                    "then 'resume'."
-                    if display_name == "Plague Doctor"
-                    else "Read the public speech bubble, enter it manually, "
-                    "then 'resume'."
-                )
+                if display_name == "Plague Doctor":
+                    recovery = (
+                        "Read the public speech bubble and enter it with "
+                        "pd_check, then 'resume'."
+                    )
+                elif display_name == "Fortune Teller":
+                    recovery = (
+                        "Read the public speech bubble and enter it with "
+                        "card fortune_teller, then 'resume'."
+                    )
+                else:
+                    recovery = (
+                        "Read the public speech bubble, enter it manually, "
+                        "then 'resume'."
+                    )
                 self._pause(
                     f"{display_name} ability on #{pos} could not be recorded: "
                     f"{exec_result['error']}. {recovery}"
@@ -861,6 +876,7 @@ class GameStateMachine:
                         mc,
                         n_cards=self.session.n_cards,
                         baker_rule_version=self.session.baker_rule_version,
+                        fortune_teller_rule_version=self.session.fortune_teller_rule_version,
                     )
                     if parsed:
                         self.session.add_card(parsed)

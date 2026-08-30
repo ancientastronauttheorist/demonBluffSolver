@@ -547,7 +547,117 @@ fn validate_bard(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
     else { claimed != actual }
 }
 
+const FORTUNE_TELLER_CURRENT_RULE: &str = "fortune_teller_native_v1";
+
+fn fortune_teller_claim_matches(
+    actor: u8,
+    targets: [u8; 2],
+    claimed_evil: bool,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let actual_evil = targets.iter().any(|&target| {
+        effective_alignment(target, scenario, state) == EffectiveAlignment::Evil
+    });
+    let truthful_claim = truth_status(actor, scenario, state) == TruthStatus::Truthful;
+    claimed_evil == (actual_evil == truthful_claim)
+}
+
+fn fortune_teller_native_targets(
+    info: &serde_json::Map<String, serde_json::Value>,
+    state: &GameState,
+) -> Option<[u8; 2]> {
+    let values = info.get("targets")?.as_array()?;
+    if values.len() != 2 { return None; }
+    let first = u8::try_from(values[0].as_u64()?).ok()?;
+    let second = u8::try_from(values[1].as_u64()?).ok()?;
+    if first == 0 || second > state.n_cards || first >= second { return None; }
+    Some([first, second])
+}
+
+fn fortune_teller_native_observation_matches(
+    actor: u8,
+    observation: &serde_json::Map<String, serde_json::Value>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let Some(targets) = fortune_teller_native_targets(observation, state) else {
+        return false;
+    };
+    let Some(claimed_evil) = observation.get("has_evil").and_then(|value| value.as_bool()) else {
+        return false;
+    };
+    let expected_text = format!(
+        "Is #{} or #{} Evil?: {}",
+        targets[0], targets[1], if claimed_evil { "True" } else { "False" },
+    );
+    if observation.get("text").and_then(|value| value.as_str()) != Some(expected_text.as_str()) {
+        return false;
+    }
+    fortune_teller_claim_matches(actor, targets, claimed_evil, scenario, state)
+}
+
 fn validate_fortune_teller(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    if state.fortune_teller_rule_version.as_deref() == Some(FORTUNE_TELLER_CURRENT_RULE) {
+        let has_targets = card.info_parsed.contains_key("targets");
+        let has_result = card.info_parsed.contains_key("has_evil");
+        if has_targets != has_result || card.position == 0 || card.position > state.n_cards {
+            return false;
+        }
+
+        let interruption = match card.info_parsed.get("shut_up_target") {
+            None => false,
+            Some(value) => {
+                let Some(position) = value.as_u64() else { return false; };
+                if position == 0 || position > u64::from(state.n_cards) { return false; }
+                true
+            }
+        };
+        if interruption && has_targets { return false; }
+
+        let Some(observation_value) = card.info_parsed.get("observations") else {
+            // A current unused active card carries no result fields. Any
+            // current scalar result or interruption must have an explicit
+            // chronological ledger, even when that ledger is empty.
+            return !has_targets && !interruption;
+        };
+        let Some(observations) = observation_value.as_array() else { return false; };
+        if observations.is_empty() { return interruption && !has_targets; }
+
+        if !observations.iter().all(|value| {
+            value.as_object().is_some_and(|observation| {
+                fortune_teller_native_observation_matches(
+                    card.position, observation, scenario, state,
+                )
+            })
+        }) {
+            return false;
+        }
+
+        if has_targets {
+            let Some(latest) = observations.last().and_then(|value| value.as_object()) else {
+                return false;
+            };
+            let Some(alias_targets) = fortune_teller_native_targets(&card.info_parsed, state) else {
+                return false;
+            };
+            let Some(latest_targets) = fortune_teller_native_targets(latest, state) else {
+                return false;
+            };
+            let alias_result = card.info_parsed.get("has_evil").and_then(|value| value.as_bool());
+            let latest_result = latest.get("has_evil").and_then(|value| value.as_bool());
+            let latest_text = latest.get("text").and_then(|value| value.as_str());
+            return alias_targets == latest_targets
+                && alias_result == latest_result
+                && latest_text == Some(card.info_text.as_str());
+        }
+
+        return interruption;
+    }
+
+    // Archived fixtures contain only the scalar Boolean/pair and may preserve
+    // click order rather than native ascending reference order. Keep that
+    // historical predicate unchanged, including its conservative shape.
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -4327,6 +4437,160 @@ mod tests {
         assert!(validate_fortune_teller(&fortune_teller, &scenario, &state));
         assert!(validate_oracle(&oracle, &scenario, &state));
         assert!(validate_dreamer(&dreamer, &scenario, &state));
+    }
+
+    fn current_fortune_teller(
+        info: serde_json::Value,
+        info_text: &str,
+        n_cards: u8,
+    ) -> (CardInfo, GameState) {
+        let mut card = make_card(1, "Fortune Teller", info);
+        card.info_text = info_text.to_string();
+        let mut state = base_state(n_cards, vec![card.clone()]);
+        state.fortune_teller_rule_version = Some(FORTUNE_TELLER_CURRENT_RULE.to_string());
+        (card, state)
+    }
+
+    #[test]
+    fn current_fortune_teller_validates_every_observation_and_latest_alias() {
+        let (card, state) = current_fortune_teller(
+            json!({
+                "targets": [4, 5],
+                "has_evil": false,
+                "observations": [
+                    {"targets": [2, 3], "has_evil": true,
+                     "text": "Is #2 or #3 Evil?: True"},
+                    {"targets": [4, 5], "has_evil": false,
+                     "text": "Is #4 or #5 Evil?: False"}
+                ]
+            }),
+            "Is #4 or #5 Evil?: False",
+            5,
+        );
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_fortune_teller(&card, &scenario, &state));
+
+        scenario.evil_positions.insert(4, "Minion".to_string());
+        assert!(!validate_fortune_teller(&card, &scenario, &state));
+    }
+
+    #[test]
+    fn current_fortune_teller_registered_alignment_and_lie_complement_are_exact() {
+        let (card, state) = current_fortune_teller(
+            json!({
+                "targets": [2, 3], "has_evil": true,
+                "observations": [{
+                    "targets": [2, 3], "has_evil": true,
+                    "text": "Is #2 or #3 Evil?: True"
+                }]
+            }),
+            "Is #2 or #3 Evil?: True",
+            3,
+        );
+
+        let mut wretch = empty_scenario();
+        wretch.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 2,
+            added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        assert!(validate_fortune_teller(&card, &wretch, &state));
+
+        let mut ordinary_drunk = empty_scenario();
+        ordinary_drunk.drunk_position = Some(2);
+        ordinary_drunk.corrupted.insert(2);
+        assert!(!validate_fortune_teller(&card, &ordinary_drunk, &state));
+
+        let mut lying_actor = empty_scenario();
+        lying_actor.corrupted.insert(1);
+        assert!(validate_fortune_teller(&card, &lying_actor, &state));
+    }
+
+    #[test]
+    fn current_fortune_teller_rejects_malformed_native_shapes() {
+        for (targets, n_cards) in [
+            (json!([2]), 3),
+            (json!([2, 2]), 3),
+            (json!([3, 2]), 3),
+            (json!([2, 4]), 3),
+        ] {
+            let (card, state) = current_fortune_teller(
+                json!({
+                    "targets": targets, "has_evil": false,
+                    "observations": [{
+                        "targets": targets, "has_evil": false,
+                        "text": "Is #2 or #3 Evil?: False"
+                    }]
+                }),
+                "Is #2 or #3 Evil?: False",
+                n_cards,
+            );
+            assert!(!validate_fortune_teller(&card, &empty_scenario(), &state));
+        }
+
+        for info in [
+            json!({"targets": [2, 3], "has_evil": false}),
+            json!({"targets": [2, 3], "has_evil": false, "observations": []}),
+            json!({
+                "targets": [2, 3], "has_evil": false,
+                "observations": [{
+                    "targets": [2, 3], "has_evil": false,
+                    "text": "is #2 or #3 Evil?: False"
+                }]
+            }),
+            json!({
+                "targets": [2, 3], "has_evil": false,
+                "observations": [{
+                    "targets": [2, 3], "has_evil": true,
+                    "text": "Is #2 or #3 Evil?: True"
+                }]
+            }),
+            json!({"shut_up_target": "3"}),
+            json!({"shut_up_target": 0}),
+            json!({"shut_up_target": 4}),
+        ] {
+            let (card, state) = current_fortune_teller(
+                info,
+                "Is #2 or #3 Evil?: False",
+                3,
+            );
+            assert!(!validate_fortune_teller(&card, &empty_scenario(), &state));
+        }
+    }
+
+    #[test]
+    fn current_fortune_teller_allows_prior_history_when_latest_use_was_interrupted() {
+        let (card, state) = current_fortune_teller(
+            json!({
+                "shut_up_target": 3,
+                "observations": [{
+                    "targets": [2, 3], "has_evil": false,
+                    "text": "Is #2 or #3 Evil?: False"
+                }]
+            }),
+            "#3 shut up!",
+            3,
+        );
+        assert!(validate_fortune_teller(&card, &empty_scenario(), &state));
+
+        let mut contradiction = empty_scenario();
+        contradiction.evil_positions.insert(2, "Pooka".to_string());
+        assert!(!validate_fortune_teller(&card, &contradiction, &state));
+    }
+
+    #[test]
+    fn legacy_fortune_teller_preserves_reverse_order_and_scalar_shape() {
+        let card = make_card(
+            1,
+            "Fortune Teller",
+            json!({"targets": [5, 1], "has_evil": true}),
+        );
+        let state = base_state(5, vec![card.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+        assert!(validate_fortune_teller(&card, &scenario, &state));
     }
 
     #[test]

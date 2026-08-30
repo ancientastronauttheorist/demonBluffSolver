@@ -20,6 +20,7 @@ from solver import (
     CardInfo,
     DeckComposition,
     DOPPEL_DRUNK_RULE_VERSION,
+    FORTUNE_TELLER_RULE_VERSION,
     GameState,
     RAMBLER_RULE_VERSION,
     SolverResult,
@@ -58,8 +59,23 @@ def card_bard(pos: int, corruption_distance: int) -> CardInfo:
         corruption_distance = -1
     return CardInfo(pos, "Bard", info_parsed={"corruption_distance": corruption_distance})
 
-def card_fortune_teller(pos: int, targets: list[int], has_evil: bool) -> CardInfo:
-    return CardInfo(pos, "Fortune Teller", info_parsed={"targets": targets, "has_evil": has_evil})
+def card_fortune_teller(
+    pos: int,
+    targets: list[int],
+    has_evil: bool,
+    *,
+    info_text: str = "",
+    observations: Optional[list[dict]] = None,
+) -> CardInfo:
+    info = {"targets": list(targets), "has_evil": has_evil}
+    if observations is not None:
+        info["observations"] = [dict(observation) for observation in observations]
+    return CardInfo(
+        pos,
+        "Fortune Teller",
+        info_text=info_text,
+        info_parsed=info,
+    )
 
 def card_oracle(pos: int, targets: list[int], minion_role: str) -> CardInfo:
     return CardInfo(pos, "Oracle", info_parsed={"targets": targets, "minion_role": minion_role})
@@ -241,6 +257,220 @@ def _has_active_clue_result(card: CardInfo) -> bool:
     return False
 
 
+def _fortune_teller_native_text(targets: list[int], has_evil: bool) -> str:
+    """Return the exact current-build Fortune Teller result sentence."""
+    return (
+        f"Is #{targets[0]} or #{targets[1]} Evil?: "
+        f"{'True' if has_evil else 'False'}"
+    )
+
+
+def _fortune_teller_targets(
+    value,
+    *,
+    label: str,
+    n_cards: Optional[int],
+    require_ascending: bool,
+) -> list[int]:
+    if not isinstance(value, list) or len(value) != 2:
+        raise ValueError(f"{label} must contain exactly two targets")
+    if any(type(target) is not int for target in value):
+        raise ValueError(f"{label} targets must be integers")
+    targets = list(value)
+    if targets[0] == targets[1]:
+        raise ValueError(f"{label} targets must be distinct")
+    if any(
+        target <= 0 or (n_cards is not None and target > n_cards)
+        for target in targets
+    ):
+        suffix = f"1..{n_cards}" if n_cards is not None else "positive"
+        raise ValueError(f"{label} targets must be within {suffix}")
+    if require_ascending and targets[0] >= targets[1]:
+        raise ValueError(f"{label} targets must be stored in ascending ID order")
+    return targets
+
+
+def _fortune_teller_observation_history(
+    info: dict,
+    *,
+    n_cards: Optional[int] = None,
+    strict_native: bool,
+) -> list[dict]:
+    """Validate and return chronological normal Fortune Teller observations."""
+    if not isinstance(info, dict):
+        raise ValueError("Fortune Teller info_parsed must be an object")
+
+    def validate_observation(
+        observation,
+        label: str,
+        *,
+        require_text: bool,
+    ) -> dict:
+        if not isinstance(observation, dict):
+            raise ValueError(f"{label} must be an object")
+        if "targets" not in observation or "has_evil" not in observation:
+            raise ValueError(
+                f"{label} must contain both targets and has_evil"
+            )
+        targets = _fortune_teller_targets(
+            observation["targets"],
+            label=label,
+            n_cards=n_cards,
+            require_ascending=strict_native,
+        )
+        has_evil = observation["has_evil"]
+        if type(has_evil) is not bool:
+            raise ValueError(f"{label}.has_evil must be a boolean")
+        normalized = {"targets": targets, "has_evil": has_evil}
+        if strict_native and require_text:
+            text = observation.get("text")
+            if not isinstance(text, str):
+                raise ValueError(f"{label}.text must be a string")
+            expected = _fortune_teller_native_text(targets, has_evil)
+            if text != expected:
+                raise ValueError(
+                    f"{label}.text must exactly equal {expected!r}"
+                )
+            normalized["text"] = text
+        elif isinstance(observation.get("text"), str):
+            normalized["text"] = observation["text"]
+        return normalized
+
+    has_targets = "targets" in info
+    has_result = "has_evil" in info
+    top_level = None
+    if has_targets != has_result:
+        raise ValueError(
+            "Fortune Teller info_parsed must contain both targets and "
+            "has_evil, or neither"
+        )
+    if has_targets:
+        top_level = validate_observation(
+            info,
+            "Fortune Teller top-level observation",
+            require_text=False,
+        )
+
+    if "observations" in info:
+        raw_observations = info["observations"]
+        if not isinstance(raw_observations, list):
+            raise ValueError("Fortune Teller observations must be an array")
+        observations = [
+            validate_observation(
+                observation,
+                f"Fortune Teller observations[{index}]",
+                require_text=strict_native,
+            )
+            for index, observation in enumerate(raw_observations)
+        ]
+        if observations:
+            if top_level is not None:
+                latest = observations[-1]
+                if (
+                    top_level["targets"] != latest["targets"]
+                    or top_level["has_evil"] != latest["has_evil"]
+                ):
+                    raise ValueError(
+                        "Fortune Teller latest-value alias must match the "
+                        "last chronological observation"
+                    )
+            return observations
+        if strict_native and top_level is not None:
+            raise ValueError(
+                "Current Fortune Teller latest-value alias cannot use an "
+                "explicitly empty observations array"
+            )
+        if (
+            strict_native
+            and top_level is None
+            and type(info.get("shut_up_target")) is not int
+        ):
+            raise ValueError(
+                "Current Fortune Teller empty observations require a newest "
+                "Rambler interruption"
+            )
+
+    return [top_level] if top_level is not None else []
+
+
+def _prepare_current_fortune_teller_card(
+    card: CardInfo,
+    *,
+    n_cards: int,
+) -> list[dict]:
+    """Normalize manual input, then enforce current native evidence shape."""
+    info = card.info_parsed
+    if not isinstance(info, dict):
+        raise ValueError("Fortune Teller info_parsed must be an object")
+
+    has_targets = "targets" in info
+    has_result = "has_evil" in info
+    if has_targets != has_result:
+        raise ValueError(
+            "Fortune Teller info_parsed must contain both targets and "
+            "has_evil, or neither"
+        )
+    if has_targets and "shut_up_target" in info:
+        raise ValueError(
+            "Current Fortune Teller evidence cannot combine a normal result "
+            "with a Rambler interruption"
+        )
+
+    # The manual CLI supplies the public Boolean rather than raw memory. Give
+    # that current-session input the exact native sorted alias/history shape.
+    if has_targets and "observations" not in info:
+        targets = _fortune_teller_targets(
+            info["targets"],
+            label="Fortune Teller manual result",
+            n_cards=n_cards,
+            require_ascending=False,
+        )
+        has_evil = info["has_evil"]
+        if type(has_evil) is not bool:
+            raise ValueError("Fortune Teller has_evil must be a boolean")
+        targets.sort()
+        text = _fortune_teller_native_text(targets, has_evil)
+        if card.info_text and card.info_text != text:
+            raise ValueError(
+                "Fortune Teller info_text does not match the native result: "
+                f"{card.info_text!r} != {text!r}"
+            )
+        card.info_text = text
+        info["targets"] = targets
+        info["observations"] = [
+            {"targets": list(targets), "has_evil": has_evil, "text": text}
+        ]
+
+    history = _fortune_teller_observation_history(
+        info,
+        n_cards=n_cards,
+        strict_native=True,
+    )
+    top_level_present = "targets" in info and "has_evil" in info
+    interrupted = type(info.get("shut_up_target")) is int
+    if history:
+        if top_level_present:
+            latest = history[-1]
+            if card.info_text != latest["text"]:
+                raise ValueError(
+                    "Fortune Teller info_text must match the newest normal "
+                    "observation"
+                )
+        elif not interrupted:
+            raise ValueError(
+                "Fortune Teller history without a latest-value alias is only "
+                "valid when Rambler interrupted the newest use"
+            )
+    elif top_level_present:
+        raise ValueError(
+            "Fortune Teller latest-value alias requires a chronological "
+            "observation"
+        )
+    elif interrupted:
+        info.setdefault("observations", [])
+    return history
+
+
 def _judge_observation_history(
     info: dict,
     *,
@@ -318,6 +548,101 @@ def _latest_acted_event_fingerprint(card: Optional[dict]):
     except (TypeError, ValueError):
         newest = repr(infos[-1])
     return len(infos), newest
+
+
+def _local_repeatable_event_expectation(
+    card: CardInfo,
+    *,
+    n_cards: int,
+    rambler_observations: list[dict],
+    fortune_teller_rule_version: Optional[str],
+) -> Optional[tuple[int, str]]:
+    """Return minimum native history size and expected newest-event payload.
+
+    ResetAfterNight memory is append-only, while the session retains normal
+    observations plus Rambler replacements in a separate ledger.  Reconcile
+    those two local surfaces before clicking so a stale-shorter pre-snapshot
+    cannot make an old recovered event look new.
+    """
+    role_key = card.apparent_role.lower().replace(" ", "_")
+    if role_key not in {"fortune_teller", "judge"}:
+        return None
+    info = card.info_parsed
+    if not isinstance(info, dict):
+        raise ValueError("local repeatable evidence must be an object")
+
+    if role_key == "fortune_teller":
+        normal_history = _fortune_teller_observation_history(
+            info,
+            n_cards=n_cards,
+            strict_native=(
+                fortune_teller_rule_version
+                == FORTUNE_TELLER_RULE_VERSION
+            ),
+        )
+    else:
+        normal_history = _judge_observation_history(
+            info,
+            n_cards=n_cards,
+        )
+
+    interruption_count = 0
+    for observation in rambler_observations:
+        if (
+            isinstance(observation, dict)
+            and observation.get("speaker_position") == card.position
+        ):
+            target = observation.get("shut_up_target")
+            if type(target) is not int or not 1 <= target <= n_cards:
+                raise ValueError(
+                    "local Rambler interruption history is malformed"
+                )
+            interruption_count += 1
+
+    interrupted = "shut_up_target" in info
+    if interrupted:
+        target = info.get("shut_up_target")
+        if type(target) is not int or not 1 <= target <= n_cards:
+            raise ValueError("local Rambler interruption target is malformed")
+        expected_desc = f"#{target} shut up!"
+        expected_targets = [target]
+        # Older imported states may carry the latest interruption on the card
+        # without its parallel ledger entry. The card still proves one event.
+        interruption_count = max(interruption_count, 1)
+    elif normal_history:
+        latest = normal_history[-1]
+        if role_key == "fortune_teller":
+            expected_targets = list(latest["targets"])
+            expected_desc = _fortune_teller_native_text(
+                expected_targets,
+                latest["has_evil"],
+            )
+        else:
+            expected_targets = [latest["target"]]
+            expected_desc = (
+                f"#{latest['target']} is\n"
+                f"{'Lying' if latest['is_lying'] else 'saying Truth'}"
+            )
+    else:
+        if card.info_text:
+            raise ValueError(
+                "local repeatable clue text has no structured event history"
+            )
+        return None
+
+    if card.info_text and card.info_text != expected_desc:
+        raise ValueError(
+            "local repeatable clue text disagrees with structured evidence"
+        )
+
+    minimum_count = len(normal_history) + interruption_count
+    expected = _latest_acted_event_fingerprint({
+        "acted_infos": [{
+            "desc": expected_desc,
+            "targets": expected_targets,
+        }],
+    })
+    return minimum_count, expected[1]
 
 
 def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
@@ -773,6 +1098,7 @@ class GameSession:
         self.rambler_shut_up_observations: list[dict] = []
         self.baker_rule_version: Optional[str] = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version: Optional[str] = DOPPEL_DRUNK_RULE_VERSION
+        self.fortune_teller_rule_version: Optional[str] = FORTUNE_TELLER_RULE_VERSION
         self.reveal_order: list[int] = []  # Order positions were flipped (for Baker)
         self.lilis_batch_index: int = 0  # Explicit Lilis batch counter (don't derive from reveal_order)
         # Trigger/result synchronization is live-session bookkeeping only.
@@ -832,6 +1158,7 @@ class GameSession:
         self.rambler_shut_up_observations.clear()
         self.baker_rule_version = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version = DOPPEL_DRUNK_RULE_VERSION
+        self.fortune_teller_rule_version = FORTUNE_TELLER_RULE_VERSION
         self.reveal_order.clear()
         self.lilis_batch_index = 0
         self.lilis_nights_resolved = 0
@@ -950,6 +1277,27 @@ class GameSession:
                     f"is outside 1..{self.n_cards}"
                 )
 
+        # Current Fortune Teller evidence is exact and chronological. Promote
+        # manual scalar input to that shape before mutating any session state;
+        # archived unmarked sessions retain their historical scalar behavior.
+        current_fortune_history: list[dict] = []
+        prior_fortune_history: list[dict] = []
+        current_fortune_rules = (
+            self.fortune_teller_rule_version
+            == FORTUNE_TELLER_RULE_VERSION
+        )
+        if role_key == "fortune_teller" and current_fortune_rules:
+            current_fortune_history = _prepare_current_fortune_teller_card(
+                card,
+                n_cards=self.n_cards,
+            )
+            if existing is not None and existing_role_key == "fortune_teller":
+                prior_fortune_history = _fortune_teller_observation_history(
+                    existing.info_parsed,
+                    n_cards=self.n_cards,
+                    strict_native=True,
+                )
+
         # Validate Judge evidence before mutating reveal order or any session
         # list, so a malformed history is rejected atomically.
         current_judge_history: list[dict] = []
@@ -1002,12 +1350,29 @@ class GameSession:
             and existing_role_key == "judge"
             and card.position not in self.used_abilities
         )
+        fortune_event_observed = (
+            current_fortune_rules
+            and role_key == "fortune_teller"
+            and _has_active_clue_result(card)
+        )
+        same_fortune_event = (
+            fortune_event_observed
+            and existing is not None
+            and existing_role_key == "fortune_teller"
+            and card.position in self.used_abilities
+        )
+        reset_fortune_event = (
+            fortune_event_observed
+            and existing is not None
+            and existing_role_key == "fortune_teller"
+            and card.position not in self.used_abilities
+        )
         existing_shut_up_target = (
             existing.info_parsed.get("shut_up_target")
             if existing is not None else None
         )
 
-        def merge_judge_history(
+        def merge_reset_history(
             older: list[dict],
             incoming: list[dict],
         ) -> list[dict]:
@@ -1037,7 +1402,7 @@ class GameSession:
                 observations = (
                     list(older_rounds)
                     if incoming_is_shut_up
-                    else merge_judge_history(
+                    else merge_reset_history(
                         list(older_rounds),
                         current_judge_history,
                     )
@@ -1046,7 +1411,7 @@ class GameSession:
                 observations = (
                     list(prior_judge_history)
                     if incoming_is_shut_up
-                    else merge_judge_history(
+                    else merge_reset_history(
                         prior_judge_history,
                         current_judge_history,
                     )
@@ -1061,13 +1426,58 @@ class GameSession:
             else:
                 card.info_parsed.pop("observations", None)
 
+        if (
+            fortune_event_observed
+            and existing is not None
+            and existing_role_key == "fortune_teller"
+        ):
+            incoming_is_shut_up = type(incoming_shut_up_target) is int
+            existing_is_shut_up = type(existing_shut_up_target) is int
+
+            if same_fortune_event:
+                older_rounds = (
+                    prior_fortune_history
+                    if existing_is_shut_up
+                    else prior_fortune_history[:-1]
+                )
+                observations = (
+                    list(older_rounds)
+                    if incoming_is_shut_up
+                    else merge_reset_history(
+                        list(older_rounds),
+                        current_fortune_history,
+                    )
+                )
+            elif reset_fortune_event:
+                observations = (
+                    list(prior_fortune_history)
+                    if incoming_is_shut_up
+                    else merge_reset_history(
+                        prior_fortune_history,
+                        current_fortune_history,
+                    )
+                )
+            else:
+                observations = list(current_fortune_history)
+
+            # Current Fortune Teller always carries an explicit normal-result
+            # ledger, including an empty/older-only ledger when the newest use
+            # was replaced by Rambler.
+            card.info_parsed["observations"] = observations
+
         # The ledger is chronological public-event state, not an audit log of
         # parser corrections. Editing a non-reset event replaces/removes its
         # current record in place, preserving global event order. A later
-        # ResetAfterNight Judge event appends a new record even if identical.
+        # ResetAfterNight Judge/Fortune Teller events append new records even
+        # when the public result is identical.
         incoming_is_shut_up = type(incoming_shut_up_target) is int
         existing_is_shut_up = type(existing_shut_up_target) is int
-        incoming_is_event = role_key != "judge" or judge_event_observed
+        incoming_is_event = (
+            role_key not in {"fortune_teller", "judge"}
+            or judge_event_observed
+            or fortune_event_observed
+        )
+        reset_reusable_event = reset_judge_event or reset_fortune_event
 
         if incoming_is_event:
             new_record = (
@@ -1077,7 +1487,7 @@ class GameSession:
                 }
                 if incoming_is_shut_up else None
             )
-            if existing is None or reset_judge_event:
+            if existing is None or reset_reusable_event:
                 if new_record is not None:
                     self.rambler_shut_up_observations.append(new_record)
             else:
@@ -1218,9 +1628,9 @@ class GameSession:
     def reset_after_night_abilities(self) -> list[int]:
         """Apply shipped ResetAfterNight usage to the session model.
 
-        The current public roster audit has proven this usage mode for Judge.
-        Keep its accumulated clue evidence, but make each apparent Judge
-        available to the recommender again after a completed night.
+        The current public roster audit has proven this usage mode for Judge
+        and Fortune Teller. Keep accumulated clue evidence, but make each
+        apparent resettable actor available again after a completed night.
         """
         from knowledge_base import get_card
 
@@ -1524,6 +1934,7 @@ class GameSession:
             ],
             baker_rule_version=self.baker_rule_version,
             doppel_drunk_rule_version=self.doppel_drunk_rule_version,
+            fortune_teller_rule_version=self.fortune_teller_rule_version,
             reveal_order=list(self.reveal_order),
             executed_good_corrupted=dict(self.executed_good_corrupted),
             executed_good_roles=dict(self.executed_good_roles),
@@ -1564,6 +1975,7 @@ class GameSession:
         ]
         session.baker_rule_version = state.baker_rule_version
         session.doppel_drunk_rule_version = state.doppel_drunk_rule_version
+        session.fortune_teller_rule_version = state.fortune_teller_rule_version
         session.reveal_order = list(state.reveal_order)
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
@@ -1864,13 +2276,23 @@ class GameSession:
         if ability_name == "dreamer" and len(targets) != 2:
             return {"success": False, "info_parsed": None,
                     "error": f"Dreamer requires exactly 2 targets, got {targets}"}
+        if (
+            ability_name == "fortune_teller"
+            and (
+                len(targets) != 2
+                or any(type(target) is not int for target in targets)
+                or targets[0] == targets[1]
+            )
+        ):
+            return {"success": False, "info_parsed": None,
+                    "error": f"Fortune Teller requires exactly 2 distinct integer targets, got {targets}"}
         if ability_name == "judge" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Judge requires exactly 1 target, got {targets}"}
         if ability_name == "plague_doctor" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Plague Doctor requires exactly 1 target, got {targets}"}
-        if ability_name in {"judge", "plague_doctor"}:
+        if ability_name in {"fortune_teller", "judge", "plague_doctor"}:
             actor = next((card for card in self.cards if card.position == pos), None)
             actor_role = (
                 actor.apparent_role.lower().replace(" ", "_")
@@ -1880,6 +2302,7 @@ class GameSession:
                 shown = actor.apparent_role if actor is not None else "unrevealed"
                 display_name = (
                     "Plague Doctor" if ability_name == "plague_doctor"
+                    else "Fortune Teller" if ability_name == "fortune_teller"
                     else "Judge"
                 )
                 return {
@@ -1906,9 +2329,10 @@ class GameSession:
 
         from knowledge_base import get_card
         for t in targets:
-            # Judge's picker-first OnClick branch accepts every board card,
-            # including self and targets with their own unused active ability.
-            if ability_name == "judge":
+            # Judge and Fortune Teller use picker-first OnClick routing, so
+            # every board card is selectable, including self and a target
+            # with its own unused active ability.
+            if ability_name in {"fortune_teller", "judge"}:
                 continue
             # Native PD explicitly supports self-targeting. Once its picker is
             # active, the repeated card click is routed to that picker.
@@ -1924,11 +2348,15 @@ class GameSession:
                 return {"success": False, "info_parsed": None,
                         "error": f"#{t} ({target_card_entry.apparent_role}) has unused active ability; clicking it would activate the card instead of selecting it. Use ability_used {t} first or handle this ability manually."}
 
-        # Judge is ResetAfterNight, so an old acted-info list is expected on
-        # later uses. Snapshot the latest event before any click and accept
-        # only a newly appended or mutated current event afterward.
-        judge_pre_event = None
-        if ability_name == "judge":
+        # ResetAfterNight roles keep their acted-info lists. Snapshot the
+        # newest chronological event before clicking and require a fresh or
+        # changed last item afterward, rather than accepting stale history.
+        repeatable_event_ability = ability_name in {"fortune_teller", "judge"}
+        pre_event = None
+        if repeatable_event_ability:
+            display_name = (
+                "Fortune Teller" if ability_name == "fortune_teller" else "Judge"
+            )
             before_board = None
             if monitor and monitor.is_healthy():
                 before_board = monitor.get_board()
@@ -1940,7 +2368,7 @@ class GameSession:
                         "success": False,
                         "info_parsed": None,
                         "error": (
-                            "Cannot open memory reader for pre-click Judge "
+                            f"Cannot open memory reader for pre-click {display_name} "
                             "event snapshot"
                         ),
                     }
@@ -1952,7 +2380,7 @@ class GameSession:
                 return {
                     "success": False,
                     "info_parsed": None,
-                    "error": "Cannot read board for pre-click Judge event snapshot",
+                    "error": f"Cannot read board for pre-click {display_name} event snapshot",
                 }
             before_card = next(
                 (card for card in before_board if card.get('position') == pos),
@@ -1962,9 +2390,77 @@ class GameSession:
                 return {
                     "success": False,
                     "info_parsed": None,
-                    "error": f"Judge #{pos} missing from pre-click memory snapshot",
+                    "error": f"{display_name} #{pos} missing from pre-click memory snapshot",
                 }
-            judge_pre_event = _latest_acted_event_fingerprint(before_card)
+            pre_event = _latest_acted_event_fingerprint(before_card)
+            session_has_prior_event = (
+                actor is not None
+                and (
+                    _has_active_clue_result(actor)
+                    or bool(actor.info_text)
+                )
+            )
+            try:
+                local_expectation = _local_repeatable_event_expectation(
+                    actor,
+                    n_cards=self.n_cards,
+                    rambler_observations=self.rambler_shut_up_observations,
+                    fortune_teller_rule_version=(
+                        self.fortune_teller_rule_version
+                    ),
+                )
+            except ValueError as exc:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: "
+                        f"{exc}"
+                    ),
+                }
+            if session_has_prior_event and local_expectation is None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: "
+                        "the session has prior active evidence that cannot be "
+                        "reconciled with repeatable event history"
+                    ),
+                }
+            if pre_event is None and local_expectation is not None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: the "
+                        "session has prior active evidence, but the pre-click "
+                        "memory snapshot has no readable newest acted-info event"
+                    ),
+                }
+            if local_expectation is not None:
+                minimum_count, expected_latest = local_expectation
+                if pre_event[0] < minimum_count:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate {display_name} #{pos}: "
+                            "the pre-click acted-info history is shorter than "
+                            f"the local minimum ({pre_event[0]} < "
+                            f"{minimum_count})"
+                        ),
+                    }
+                if pre_event[1] != expected_latest:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate {display_name} #{pos}: "
+                            "the pre-click newest acted-info event disagrees "
+                            "with locally stored repeatable evidence"
+                        ),
+                    }
 
         # Step 1: Click active card to enter target-selection mode
         x, y = coords[pos]
@@ -1998,9 +2494,9 @@ class GameSession:
             card = next((c for c in board if c['position'] == pos), None)
             if not card:
                 return False
-            if ability_name == "judge":
+            if repeatable_event_ability:
                 latest = _latest_acted_event_fingerprint(card)
-                return latest is not None and latest != judge_pre_event
+                return latest is not None and latest != pre_event
             return (
                 card.get('uses', 0) > 0
                 or bool(card.get('acted_infos'))
@@ -2034,11 +2530,11 @@ class GameSession:
         if not target_card_data:
             return {"success": False, "info_parsed": None,
                     "error": f"Position #{pos} not found in memory reader after activation"}
-        if ability_name == "judge":
-            latest_judge_event = _latest_acted_event_fingerprint(target_card_data)
+        if repeatable_event_ability:
+            latest_repeatable_event = _latest_acted_event_fingerprint(target_card_data)
             has_recorded_result = (
-                latest_judge_event is not None
-                and latest_judge_event != judge_pre_event
+                latest_repeatable_event is not None
+                and latest_repeatable_event != pre_event
             )
         else:
             has_recorded_result = (
@@ -2047,12 +2543,17 @@ class GameSession:
                 or bool(target_card_data.get('ability_used') and target_card_data.get('clue_text'))
             )
         if not has_recorded_result:
-            if ability_name == "judge":
+            if repeatable_event_ability:
+                display_name = (
+                    "Fortune Teller"
+                    if ability_name == "fortune_teller"
+                    else "Judge"
+                )
                 return {
                     "success": False,
                     "info_parsed": None,
                     "error": (
-                        "Judge result did not produce a new or changed latest "
+                        f"{display_name} result did not produce a new or changed latest "
                         "acted-info event — click may have missed"
                     ),
                 }
@@ -2111,7 +2612,23 @@ class GameSession:
             )
             return {"success": True, "info_parsed": pd_result, "error": None}
 
-        # Step 4b: Judge has a strict one-target public result boundary.
+        # Step 4b: current Fortune Teller has an exact two-reference history.
+        if (
+            parsed is None
+            and ability_name == "fortune_teller"
+            and self.fortune_teller_rule_version
+            == FORTUNE_TELLER_RULE_VERSION
+        ):
+            parsed, parse_error = _parse_fortune_teller_result_from_memory(
+                target_card_data,
+                expected_targets=targets,
+                n_cards=self.n_cards,
+            )
+            if parse_error:
+                return {"success": False, "info_parsed": None,
+                        "error": parse_error}
+
+        # Step 4c: Judge has a strict one-target public result boundary.
         if parsed is None and ability_name == "judge":
             parsed, parse_error = _parse_judge_result_from_memory(
                 target_card_data,
@@ -2127,6 +2644,7 @@ class GameSession:
                 target_card_data,
                 n_cards=self.n_cards,
                 baker_rule_version=self.baker_rule_version,
+                fortune_teller_rule_version=self.fortune_teller_rule_version,
             )
         if parsed is None:
             return {"success": False, "info_parsed": None,
@@ -2744,6 +3262,120 @@ def _parse_pd_ability_result_from_memory(
     return None, f"Unrecognized Plague Doctor result text: {clue!r}"
 
 
+def _parse_fortune_teller_result_from_memory(
+    card: dict,
+    *,
+    n_cards: int,
+    expected_targets: Optional[list[int]] = None,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Parse every current-build Fortune Teller result coherently.
+
+    Native ``actedInfos`` is append-only and chronological. Each normal event
+    stores two ascending references and the exact matching sentence; savedAct
+    is the newest event. Rambler replacement events are not Fortune Teller
+    observations and are skipped exactly as they are for Judge history.
+    """
+    position = card.get("position")
+    if type(position) is not int or not 1 <= position <= n_cards:
+        return None, (
+            f"Fortune Teller position {position!r} is outside 1..{n_cards}"
+        )
+
+    clue = card.get("clue_text")
+    if not isinstance(clue, str) or not clue:
+        return None, "Fortune Teller result has no exact savedAct text"
+
+    raw_infos = card.get("acted_infos")
+    if not isinstance(raw_infos, list):
+        return None, "Fortune Teller acted_infos must be an array"
+    if not raw_infos:
+        return None, "Fortune Teller result has no acted-info record"
+
+    observations: list[dict] = []
+    latest_was_interruption = False
+    for index, info in enumerate(raw_infos):
+        if not isinstance(info, dict):
+            return None, f"Fortune Teller acted_infos[{index}] must be an object"
+        desc = info.get("desc")
+        if not isinstance(desc, str):
+            return None, (
+                f"Fortune Teller acted_infos[{index}].desc must be a string"
+            )
+        shut_up_target = _parse_shut_up_target_text(desc, n_cards=n_cards)
+        if shut_up_target is not None:
+            latest_was_interruption = index == len(raw_infos) - 1
+            continue
+
+        try:
+            targets = _fortune_teller_targets(
+                info.get("targets"),
+                label=f"Fortune Teller acted_infos[{index}]",
+                n_cards=n_cards,
+                require_ascending=True,
+            )
+        except ValueError as exc:
+            return None, str(exc)
+
+        match = re.fullmatch(
+            r"Is #(\d+) or #(\d+) Evil\?: (False|True)",
+            desc,
+        )
+        if match is None:
+            return None, f"Unrecognized Fortune Teller acted-info text: {desc!r}"
+        speech_targets = [int(match.group(1)), int(match.group(2))]
+        if speech_targets != targets:
+            return None, (
+                f"Fortune Teller history entry {index} target mismatch: "
+                f"speech named {speech_targets}, references were {targets}"
+            )
+        has_evil = match.group(3) == "True"
+        observations.append(
+            {"targets": targets, "has_evil": has_evil, "text": desc}
+        )
+
+    latest = raw_infos[-1]
+    latest_desc = latest.get("desc") if isinstance(latest, dict) else None
+    if clue != latest_desc:
+        return None, (
+            "Fortune Teller savedAct does not match the newest acted-info "
+            f"text: {clue!r} != {latest_desc!r}"
+        )
+    if latest_was_interruption:
+        return None, (
+            "Newest Fortune Teller event was replaced by Rambler; parse the "
+            "interruption surface instead"
+        )
+    if not observations:
+        return None, "Fortune Teller history has no normal result"
+
+    latest_observation = observations[-1]
+    if expected_targets is not None:
+        try:
+            clicked_targets = _fortune_teller_targets(
+                list(expected_targets),
+                label="Fortune Teller clicked pair",
+                n_cards=n_cards,
+                require_ascending=False,
+            )
+        except (TypeError, ValueError) as exc:
+            return None, str(exc)
+        clicked_targets.sort()
+        if latest_observation["targets"] != clicked_targets:
+            return None, (
+                "Fortune Teller clicked/reference mismatch: clicked "
+                f"{clicked_targets}, newest references were "
+                f"{latest_observation['targets']}"
+            )
+
+    return card_fortune_teller(
+        position,
+        latest_observation["targets"],
+        latest_observation["has_evil"],
+        info_text=latest_observation["text"],
+        observations=observations,
+    ), None
+
+
 def _parse_judge_result_from_memory(
     card: dict,
     *,
@@ -3180,6 +3812,7 @@ def _parse_clue_from_memory(
     *,
     n_cards: Optional[int] = None,
     baker_rule_version: Optional[str] = None,
+    fortune_teller_rule_version: Optional[str] = None,
 ) -> Optional[CardInfo]:
     """Parse memory reader card data into a CardInfo, or None if unparseable.
 
@@ -3236,6 +3869,22 @@ def _parse_clue_from_memory(
         return None
     if baker_surface is not None:
         return baker_surface
+
+    if (
+        role_lower == 'fortune_teller'
+        and fortune_teller_rule_version == FORTUNE_TELLER_RULE_VERSION
+    ):
+        if n_cards is None:
+            return None
+        fortune_surface, fortune_error = (
+            _parse_fortune_teller_result_from_memory(
+                card,
+                n_cards=n_cards,
+            )
+        )
+        if fortune_error is not None:
+            return None
+        return fortune_surface
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
@@ -4668,9 +5317,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 mc,
                 n_cards=session.n_cards,
                 baker_rule_version=session.baker_rule_version,
+                fortune_teller_rule_version=session.fortune_teller_rule_version,
             )
             rambler_capture_error = None
             baker_capture_error = None
+            fortune_capture_error = None
             if parsed is None:
                 _, rambler_capture_error = _card_from_rambler_surface(
                     mc,
@@ -4680,6 +5331,22 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     _, baker_capture_error = _card_from_baker_surface(
                         mc,
                         baker_rule_version=session.baker_rule_version,
+                    )
+                role_key = (
+                    mc.get('disguise') or mc.get('true_role', '')
+                ).lower().replace(' ', '_')
+                if (
+                    rambler_capture_error is None
+                    and baker_capture_error is None
+                    and role_key == "fortune_teller"
+                    and session.fortune_teller_rule_version
+                    == FORTUNE_TELLER_RULE_VERSION
+                ):
+                    _, fortune_capture_error = (
+                        _parse_fortune_teller_result_from_memory(
+                            mc,
+                            n_cards=session.n_cards,
+                        )
                     )
             if parsed:
                 existing = entered.get(pos)
@@ -4736,7 +5403,11 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 entered[pos] = parsed
                 auto_count += 1
             else:
-                capture_error = rambler_capture_error or baker_capture_error
+                capture_error = (
+                    rambler_capture_error
+                    or baker_capture_error
+                    or fortune_capture_error
+                )
                 if capture_error is not None:
                     role = mc.get('disguise') or mc.get('true_role', '?')
                     manual_needed.append(
