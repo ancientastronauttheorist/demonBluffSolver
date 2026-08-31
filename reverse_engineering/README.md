@@ -370,6 +370,16 @@ with a persisted raw bluff and falls back to self only when none exist. Both
 paths preserve one selected reference and exact two-line `real`/Drunk
 `actually` wording; direct and Poet observations share the strict current
 schema while unmarked historical fixtures retain their legacy path.
+The newest [`Knitter`](notes/roles/gameplay_role_knitter.md) boundary asset-binds
+the public role to managed `Knitter`, covers all eight declared methods plus
+registered-alignment, acted-record, count-removal, and integer-RNG helpers, and
+closes both direct and Poet use. Truth counts circular physical neighbour pairs
+through register-as-first alignment, retaining the singleton self-edge and both
+directional edges on two-card boards. Bluff removes truth from
+`[0, max(authored Demons + Minions, 2))` before one retained-index draw. Exact
+current observations use one shared hidden-state search, including delayed
+Baker-to-Spy registration chronology, while unmarked fixtures retain their
+legacy path.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -598,14 +608,16 @@ The current Bounty Hunter comparison is in the
 [`Bounty Hunter typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_bounty_hunter.json).
 The current Medium comparison is in the
 [`Medium typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_medium.json).
+The current Knitter comparison is in the
+[`Knitter typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_knitter.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 419 classifications backed by
-185 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 426 classifications backed by
+192 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

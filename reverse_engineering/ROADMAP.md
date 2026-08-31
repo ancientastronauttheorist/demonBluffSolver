@@ -228,6 +228,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   pool, raw-bluff-holder fallback, exact one-reference two-line clue, and
   conditional execution achievement; expand the typed union to 31 target sets
   and 654 memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Knitter to managed `Knitter`; native-audit all eight
+  declared methods plus registered-alignment, acted-record, count-removal, and
+  integer-RNG helpers; close circular registered-Evil pair counting, exact
+  small-board occurrence geometry, truth text, the authored false-count domain,
+  direct/Poet parity, and Baker-to-Spy registration chronology; expand the
+  typed union to 32 target sets, 666 memberships, 426 selected managed methods,
+  and 365 unique native RVAs, then publish its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
