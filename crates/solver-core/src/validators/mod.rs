@@ -927,9 +927,12 @@ fn current_enlightened_direction(
         if position == actor || position == 0 || position > n_cards {
             continue;
         }
-        let cw = (i16::from(position) - i16::from(actor))
+        // Native Shugenja names the forward CurrentCharacters scan
+        // Counter-clockwise and the reverse scan Clockwise. Solver position
+        // IDs increase in forward order, so public CW uses decreasing IDs.
+        let cw = (i16::from(actor) - i16::from(position))
             .rem_euclid(i16::from(n_cards)) as u8;
-        let ccw = (i16::from(actor) - i16::from(position))
+        let ccw = (i16::from(position) - i16::from(actor))
             .rem_euclid(i16::from(n_cards)) as u8;
         clockwise = Some(clockwise.map_or(cw, |known: u8| known.min(cw)));
         counterclockwise = Some(counterclockwise.map_or(ccw, |known: u8| known.min(ccw)));
@@ -5897,8 +5900,8 @@ mod tests {
             assert!(!validate_enlightened(&malformed, &scenario, &state));
         }
 
-        let poet_truth = current_poet("Enlightened", json!({"direction": "CCW"}));
-        let poet_false = current_poet("Enlightened", json!({"direction": "CW"}));
+        let poet_truth = current_poet("Enlightened", json!({"direction": "CW"}));
+        let poet_false = current_poet("Enlightened", json!({"direction": "CCW"}));
         let poet_state = base_state(5, vec![poet_truth.clone()]);
         let mut poet_world = empty_scenario();
         poet_world.evil_positions.insert(5, "Pooka".to_string());
@@ -5922,11 +5925,11 @@ mod tests {
     fn current_enlightened_uses_full_circle_registered_geometry_and_all_lifecycle_seats() {
         assert_eq!(
             current_enlightened_direction(1, 5, &HashSet::from([2])),
-            Direction::CW,
+            Direction::CCW,
         );
         assert_eq!(
             current_enlightened_direction(1, 5, &HashSet::from([5])),
-            Direction::CCW,
+            Direction::CW,
         );
         assert_eq!(
             current_enlightened_direction(1, 6, &HashSet::from([3, 5])),
@@ -5949,6 +5952,14 @@ mod tests {
             Direction::Equidistant,
         );
 
+        // Archived clean truth asc27_v1: #6 is the nearest true Evil to
+        // Enlightened #7, one decreasing-ID step, so the public answer is CW.
+        let asc27 = current_enlightened(7, json!("CW"));
+        let asc27_state = base_state(7, vec![asc27.clone()]);
+        let mut asc27_world = empty_scenario();
+        asc27_world.evil_positions.insert(6, "Pooka".to_string());
+        assert!(validate_enlightened(&asc27, &asc27_world, &asc27_state));
+
         let equidistant = current_enlightened(1, json!("Equidistant"));
         let mut lifecycle_state = base_state(7, vec![equidistant.clone()]);
         lifecycle_state.executed = vec![2];
@@ -5965,7 +5976,7 @@ mod tests {
         let spy_state = base_state(
             5,
             vec![
-                current_enlightened(1, json!("CCW")),
+                current_enlightened(1, json!("CW")),
                 make_card(2, "Spy", json!({})),
             ],
         );
@@ -5973,12 +5984,12 @@ mod tests {
         spy.evil_positions.insert(2, "Spy".to_string());
         spy.evil_positions.insert(4, "Pooka".to_string());
         assert!(validate_enlightened(
-            &current_enlightened(1, json!("CCW")),
+            &current_enlightened(1, json!("CW")),
             &spy,
             &spy_state,
         ));
         assert!(!validate_enlightened(
-            &current_enlightened(1, json!("CW")),
+            &current_enlightened(1, json!("CCW")),
             &spy,
             &spy_state,
         ));
@@ -5987,22 +5998,22 @@ mod tests {
     #[test]
     fn current_enlightened_bluff_supports_each_and_only_false_direction() {
         let state = base_state(5, vec![]);
-        let mut clockwise = empty_scenario();
-        clockwise.corrupted.insert(1);
-        clockwise.evil_positions.insert(2, "Pooka".to_string());
+        let mut counterclockwise = empty_scenario();
+        counterclockwise.corrupted.insert(1);
+        counterclockwise.evil_positions.insert(2, "Pooka".to_string());
         assert!(!validate_enlightened(
-            &current_enlightened(1, json!("CW")),
-            &clockwise,
+            &current_enlightened(1, json!("CCW")),
+            &counterclockwise,
             &state,
         ));
         assert!(validate_enlightened(
-            &current_enlightened(1, json!("CCW")),
-            &clockwise,
+            &current_enlightened(1, json!("CW")),
+            &counterclockwise,
             &state,
         ));
         assert!(validate_enlightened(
             &current_enlightened(1, json!("Equidistant")),
-            &clockwise,
+            &counterclockwise,
             &state,
         ));
 
@@ -6027,7 +6038,7 @@ mod tests {
 
     #[test]
     fn current_enlightened_shares_one_anonymous_wretch_world() {
-        let enlightened = current_enlightened(1, json!("CW"));
+        let enlightened = current_enlightened(1, json!("CCW"));
         let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 7}));
         bounty.position = 2;
         let mut state = base_state(8, vec![enlightened.clone(), bounty.clone()]);
@@ -6054,8 +6065,8 @@ mod tests {
 
     #[test]
     fn current_enlightened_observations_share_one_monotonic_baker_spy_timeline() {
-        let first = current_enlightened(3, json!("CW"));
-        let second = current_enlightened(5, json!("CW"));
+        let first = current_enlightened(3, json!("CCW"));
+        let second = current_enlightened(5, json!("CCW"));
         let mut state = base_state(
             8,
             vec![
