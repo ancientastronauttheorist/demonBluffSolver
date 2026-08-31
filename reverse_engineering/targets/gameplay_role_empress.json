@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Empress information boundary, managed as Noble, including truthful and bluff selection, exact clue construction, compiler-generated ordering helpers, achievement and lifecycle behavior, and required semantic callees",
+  "functions": [
+    {
+      "name": "Noble.CompilerGenerated.cctor",
+      "metadata_name": "Noble.<>c$$.cctor",
+      "signature": "void Noble___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F08D0"
+    },
+    {
+      "name": "Noble.CompilerGenerated.ctor",
+      "metadata_name": "Noble.<>c$$.ctor",
+      "signature": "void Noble___c___ctor (Noble___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Noble.CompilerGenerated.GetInfoSortId",
+      "metadata_name": "Noble.<>c$$<GetInfo>b__2_0",
+      "signature": "int32_t Noble___c___GetInfo_b__2_0 (Noble___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "applied_prototype_name": "FortuneTeller___c___CharacterPicked_b__6_0",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "Noble.CompilerGenerated.GetInfoTieBreak",
+      "metadata_name": "Noble.<>c$$<GetInfo>b__2_1",
+      "signature": "float Noble___c___GetInfo_b__2_1 (Noble___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Noble.CompilerGenerated.GetBluffInfoSortId",
+      "metadata_name": "Noble.<>c$$<GetBluffInfo>b__5_0",
+      "signature": "int32_t Noble___c___GetBluffInfo_b__5_0 (Noble___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "applied_prototype_name": "FortuneTeller___c___CharacterPicked_b__6_0",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "Noble.CompilerGenerated.GetBluffInfoTieBreak",
+      "metadata_name": "Noble.<>c$$<GetBluffInfo>b__5_1",
+      "signature": "float Noble___c___GetBluffInfo_b__5_1 (Noble___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Noble.get_Description",
+      "metadata_name": "Noble$$get_Description",
+      "signature": "System_String_o* Noble__get_Description (Noble_o* __this, const MethodInfo* method);",
+      "rva": "0x3E6190"
+    },
+    {
+      "name": "Noble.GetInfo",
+      "metadata_name": "Noble$$GetInfo",
+      "signature": "ActedInfo_o* Noble__GetInfo (Noble_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E5B90"
+    },
+    {
+      "name": "Noble.Act",
+      "metadata_name": "Noble$$Act",
+      "signature": "void Noble__Act (Noble_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E53A0"
+    },
+    {
+      "name": "Noble.BluffAct",
+      "metadata_name": "Noble$$BluffAct",
+      "signature": "void Noble__BluffAct (Noble_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E5450"
+    },
+    {
+      "name": "Noble.GetBluffInfo",
+      "metadata_name": "Noble$$GetBluffInfo",
+      "signature": "ActedInfo_o* Noble__GetBluffInfo (Noble_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E55F0"
+    },
+    {
+      "name": "Noble.ConjourInfo",
+      "metadata_name": "Noble$$ConjourInfo",
+      "signature": "System_String_o* Noble__ConjourInfo (Noble_o* __this, int32_t id, int32_t id2, int32_t id3, const MethodInfo* method);",
+      "rva": "0x3E5540"
+    },
+    {
+      "name": "Noble.CheckAchievementsAndUnlockIfAble",
+      "metadata_name": "Noble$$CheckAchievementsAndUnlockIfAble",
+      "signature": "void Noble__CheckAchievementsAndUnlockIfAble (Noble_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E5500"
+    },
+    {
+      "name": "Noble.ctor",
+      "metadata_name": "Noble$$.ctor",
+      "signature": "void Noble___ctor (Noble_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Characters.FilterAlignmentCharacters.Character",
+      "metadata_name": "Characters$$FilterAlignmentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAlignmentCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t alignment, const MethodInfo* method);",
+      "rva": "0x36A030"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "UnityEngine.Random.get_value",
+      "metadata_name": "UnityEngine.Random$$get_value",
+      "signature": "float UnityEngine_Random__get_value (const MethodInfo* method);",
+      "rva": "0x1C86710"
+    }
+  ]
+}
