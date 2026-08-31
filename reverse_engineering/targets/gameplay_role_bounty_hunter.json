@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Bounty Hunter gameplay boundary, managed as BountyHunter, including Start alignment mutation, truthful and bluff clue generation, zero-reference ActedInfo construction, registered-alignment filtering, and integer RNG selection",
+  "functions": [
+    {
+      "name": "BountyHunter.get_Description",
+      "metadata_name": "BountyHunter$$get_Description",
+      "signature": "System_String_o* BountyHunter__get_Description (BountyHunter_o* __this, const MethodInfo* method);",
+      "rva": "0x3B3930"
+    },
+    {
+      "name": "BountyHunter.GetInfo",
+      "metadata_name": "BountyHunter$$GetInfo",
+      "signature": "ActedInfo_o* BountyHunter__GetInfo (BountyHunter_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B3780"
+    },
+    {
+      "name": "BountyHunter.Act",
+      "metadata_name": "BountyHunter$$Act",
+      "signature": "void BountyHunter__Act (BountyHunter_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B3270"
+    },
+    {
+      "name": "BountyHunter.CreateNewEvil",
+      "metadata_name": "BountyHunter$$CreateNewEvil",
+      "signature": "void BountyHunter__CreateNewEvil (BountyHunter_o* __this, const MethodInfo* method);",
+      "rva": "0x3B34B0"
+    },
+    {
+      "name": "BountyHunter.BluffAct",
+      "metadata_name": "BountyHunter$$BluffAct",
+      "signature": "void BountyHunter__BluffAct (BountyHunter_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "BountyHunter.GetBluffInfo",
+      "metadata_name": "BountyHunter$$GetBluffInfo",
+      "signature": "ActedInfo_o* BountyHunter__GetBluffInfo (BountyHunter_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B35D0"
+    },
+    {
+      "name": "BountyHunter.ConjourInfo",
+      "metadata_name": "BountyHunter$$ConjourInfo",
+      "signature": "System_String_o* BountyHunter__ConjourInfo (BountyHunter_o* __this, Character_o* evilCharacter, const MethodInfo* method);",
+      "rva": "0x3B3440"
+    },
+    {
+      "name": "BountyHunter.ctor",
+      "metadata_name": "BountyHunter$$.ctor",
+      "signature": "void BountyHunter___ctor (BountyHunter_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Characters.FilterAlignmentCharacters.Character",
+      "metadata_name": "Characters$$FilterAlignmentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterAlignmentCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t alignment, const MethodInfo* method);",
+      "rva": "0x36A030"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    }
+  ]
+}
