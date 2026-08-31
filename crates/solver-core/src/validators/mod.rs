@@ -666,6 +666,7 @@ const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
 const MEDIUM_CURRENT_VARIANT_FIELD: &str = "medium_variant";
 const KNITTER_CURRENT_VARIANT_FIELD: &str = "knitter_variant";
 const ENLIGHTENED_CURRENT_VARIANT_FIELD: &str = "enlightened_variant";
+const EMPRESS_CURRENT_VARIANT_FIELD: &str = "empress_variant";
 const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -696,6 +697,7 @@ fn current_passive_payload_source(
                 && !card
                     .info_parsed
                     .contains_key(ENLIGHTENED_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(EMPRESS_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(BISHOP_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
@@ -3485,7 +3487,193 @@ fn architect_sides(n: u8) -> (HashSet<u8>, HashSet<u8>, HashSet<u8>) {
     (left, right, both)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentEmpressSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_empress_claim_text(targets: &[u8]) -> Option<String> {
+    let [first, second, third] = targets else {
+        return None;
+    };
+    Some(format!(
+        "One is Evil:\n#{first}, #{second} or #{third}"
+    ))
+}
+
+fn parse_current_empress_targets(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<Vec<u8>> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Empress" {
+                return None;
+            }
+            (EMPRESS_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Empress")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    let targets = poet_targets(info, state.n_cards, 3, 3)?;
+    if targets.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return None;
+    }
+    if current_empress_claim_text(&targets).as_deref() != Some(card.info_text.as_str()) {
+        return None;
+    }
+    Some(targets)
+}
+
+fn current_empress_has_unresolved_start_identity(
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    (1..=state.n_cards).any(|position| {
+        stable_evil_origin_role_at(position, scenario, state)
+            .is_some_and(|role| normalize_role(role) == "unknown")
+    })
+}
+
+fn current_empress_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentEmpressSupport> {
+    let Some(targets) = parse_current_empress_targets(card, source, state) else {
+        return Vec::new();
+    };
+    // An untyped executed Evil could have been Spy, Chancellor, Twin, Shaman,
+    // or Puppeteer and therefore could have changed the Start state observed
+    // by Empress. Scenario.evil_positions is the authority for the replay that
+    // built this world; a later state-map role overlay cannot retroactively
+    // repair an `Unknown` Start history.
+    if current_empress_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+
+    let truth = truth_status(card.position, scenario, state);
+    let anonymous_wretches: HashSet<u8> = anonymous_natural_wretch_candidates(scenario, state)
+        .into_iter()
+        .collect();
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+
+        let mut known_evil = HashSet::new();
+        let mut optional_wretches = Vec::new();
+        let mut complete = true;
+        for &target in &targets {
+            let Some(alignment) = registered_alignment_at_observation(
+                target,
+                card.position,
+                &timeline,
+                scenario,
+                state,
+            ) else {
+                complete = false;
+                break;
+            };
+            if alignment == EffectiveAlignment::Evil {
+                known_evil.insert(target);
+            } else if anonymous_wretches.contains(&target) {
+                optional_wretches.push(target);
+            }
+        }
+        if !complete {
+            continue;
+        }
+
+        for mask in 0..(1usize << optional_wretches.len()) {
+            let mut required = HashSet::new();
+            let mut forbidden = HashSet::new();
+            for (index, &position) in optional_wretches.iter().enumerate() {
+                if mask & (1usize << index) == 0 {
+                    forbidden.insert(position);
+                } else {
+                    required.insert(position);
+                }
+            }
+            let evil_count = known_evil.len() + required.len();
+            let actor_is_selected_evil = known_evil.contains(&card.position)
+                || required.contains(&card.position);
+            let native_selection = match truth {
+                // Truth chooses two registered-Good characters after removing
+                // charRef exactly, then independently one registered Evil.
+                TruthStatus::Truthful => {
+                    evil_count == 1
+                        && (!targets.contains(&card.position) || actor_is_selected_evil)
+                }
+                // Bluff chooses three registered-Good characters from that
+                // same actor-excluded pool.
+                TruthStatus::Lying => {
+                    evil_count == 0 && !targets.contains(&card.position)
+                }
+            };
+            if !native_selection
+                || !anonymous_wretch_assignment_possible(
+                    &required,
+                    &forbidden,
+                    scenario,
+                    state,
+                )
+            {
+                continue;
+            }
+            let support = CurrentEmpressSupport {
+                anonymous_wretches: AnonymousWretchConstraints {
+                    required,
+                    forbidden,
+                },
+                baker_spy_timeline: timeline.clone(),
+            };
+            if !supports.contains(&support) {
+                supports.push(support);
+            }
+        }
+    }
+    supports
+}
+
+fn validate_current_empress(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_empress_supports(card, scenario, state, source).is_empty()
+}
+
 fn validate_empress(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, EMPRESS_CURRENT_VARIANT_FIELD, "Empress") {
+        Ok(Some(source)) => return validate_current_empress(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
+    // Preserve unmarked archived observations on the legacy scalar predicate.
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -5057,6 +5245,19 @@ fn validate_current_hidden_surface_consistency(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
+    let has_current_empress = state.cards.iter().any(|card| {
+        card.info_parsed.contains_key(EMPRESS_CURRENT_VARIANT_FIELD)
+            || (card.info_parsed.contains_key("poet_variant")
+                && card
+                    .info_parsed
+                    .get("copied_role")
+                    .and_then(serde_json::Value::as_str)
+                    == Some("Empress"))
+    });
+    if has_current_empress && current_empress_has_unresolved_start_identity(scenario, state) {
+        return false;
+    }
+
     let mut observations: Vec<Vec<CurrentHiddenSurfaceSupport>> = Vec::new();
     for card in &state.cards {
         if state.executed.contains(&card.position)
@@ -5157,6 +5358,29 @@ fn validate_current_hidden_surface_consistency(
             ) {
                 Ok(Some(source)) => Some(
                     current_enlightened_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "empress"
+            || (apparent == "poet" && copied == Some("Empress"))
+        {
+            match current_passive_payload_source(
+                card,
+                EMPRESS_CURRENT_VARIANT_FIELD,
+                "Empress",
+            ) {
+                Ok(Some(source)) => Some(
+                    current_empress_supports(card, scenario, state, source)
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
@@ -5555,10 +5779,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state,
         )
         .is_some(),
-        "Empress" => {
-            poet_has_exact_fields(info, &["targets"])
-                && poet_targets(info, state.n_cards, 3, 3).is_some()
-        }
+        "Empress" => parse_current_empress_targets(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         "Bishop" => parse_current_bishop_claim(
             card,
             CurrentPassivePayloadSource::Poet,
@@ -6429,6 +6655,20 @@ mod tests {
                 })
                 .map(current_enlightened_claim_text)
                 .map(str::to_string),
+            "Empress" => payload
+                .get("targets")
+                .and_then(serde_json::Value::as_array)
+                .and_then(|targets| {
+                    targets
+                        .iter()
+                        .map(|target| {
+                            target
+                                .as_u64()
+                                .and_then(|target| u8::try_from(target).ok())
+                        })
+                        .collect::<Option<Vec<_>>>()
+                })
+                .and_then(|targets| current_empress_claim_text(&targets)),
             "Bishop" => payload
                 .get("targets")
                 .and_then(serde_json::Value::as_array)
@@ -6579,6 +6819,20 @@ mod tests {
             json!({
                 "enlightened_variant": "public_current",
                 "direction": direction,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_empress(pos: u8, targets: Vec<u8>) -> CardInfo {
+        let info_text = current_empress_claim_text(&targets).unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Empress",
+            json!({
+                "empress_variant": "public_current",
+                "targets": targets,
             }),
         );
         card.info_text = info_text;
@@ -6933,6 +7187,258 @@ mod tests {
         assert!(validate_current_hidden_surface_consistency(
             &scenario, &state,
         ));
+    }
+
+    #[test]
+    fn current_empress_schema_poet_parity_and_legacy_are_marker_gated() {
+        let direct = current_empress(1, vec![2, 3, 4]);
+        let mut poet = current_poet("Empress", json!({"targets": [2, 3, 4]}));
+        poet.position = 1;
+        let mut state = base_state(5, vec![direct.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        assert_eq!(direct.info_text, "One is Evil:\n#2, #3 or #4");
+        assert_eq!(poet.info_text, direct.info_text);
+        assert_eq!(
+            parse_current_empress_targets(
+                &direct,
+                CurrentPassivePayloadSource::Direct,
+                &state,
+            ),
+            Some(vec![2, 3, 4]),
+        );
+        assert!(validate_empress(&direct, &scenario, &state));
+        state.cards[0] = poet.clone();
+        assert!(validate_current_poet_payload(&poet, &state, "Empress"));
+        assert!(validate_poet(&poet, &scenario, &state));
+
+        for payload in [
+            json!({"empress_variant": "public_current", "targets": [2, 3]}),
+            json!({"empress_variant": "public_current", "targets": [2, 2, 4]}),
+            json!({"empress_variant": "public_current", "targets": [3, 2, 4]}),
+            json!({"empress_variant": "public_current", "targets": [0, 2, 4]}),
+            json!({"empress_variant": "public_current", "targets": [2, 3, 6]}),
+            json!({"empress_variant": "public_current", "targets": [2, true, 4]}),
+            json!({"empress_variant": "future", "targets": [2, 3, 4]}),
+            json!({"empress_variant": "public_current", "targets": [2, 3, 4], "extra": true}),
+            json!({"empress_variant": "public_current", "poet_variant": "public_current", "targets": [2, 3, 4]}),
+        ] {
+            let malformed = make_card(1, "Empress", payload);
+            assert!(!validate_empress(&malformed, &scenario, &state));
+        }
+        for text in [
+            "One is Evil: #2, #3 or #4",
+            "One is Evil:\n#2, #3, #4",
+            "One is Evil:\n#2, #3 or #4.",
+            "One is Evil:\n#2, #4 or #3",
+            "One is Evil:\n#2, #3 or #4 ",
+        ] {
+            let mut wrong_text = direct.clone();
+            wrong_text.info_text = text.to_string();
+            assert!(!validate_empress(&wrong_text, &scenario, &state));
+        }
+        poet.info_text.push(' ');
+        state.cards[0] = poet.clone();
+        assert!(!validate_current_poet_payload(&poet, &state, "Empress"));
+        assert!(!validate_poet(&poet, &scenario, &state));
+
+        let legacy_two = make_card(1, "Empress", json!({"targets": [2, 4]}));
+        assert!(validate_empress(&legacy_two, &scenario, &state));
+        assert!(validate_empress(
+            &make_card(1, "Empress", json!({})),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_empress_builds_native_truth_and_bluff_pools_with_actor_removal() {
+        let truth = current_empress(1, vec![2, 3, 4]);
+        let mut state = base_state(4, vec![truth.clone()]);
+        let mut one_evil = empty_scenario();
+        one_evil.evil_positions.insert(4, "Pooka".to_string());
+        state.executed = vec![4];
+        state.night_kills = vec![2];
+        assert!(validate_empress(&truth, &one_evil, &state));
+
+        let good_actor_self = current_empress(1, vec![1, 2, 4]);
+        assert!(!validate_empress(&good_actor_self, &one_evil, &state));
+
+        let puppet_self = current_empress(1, vec![1, 2, 3]);
+        let mut truthful_puppet = empty_scenario();
+        truthful_puppet.puppet_position = Some(1);
+        assert!(validate_empress(&puppet_self, &truthful_puppet, &state));
+
+        let bluff = current_empress(1, vec![2, 3, 4]);
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        assert!(validate_empress(&bluff, &lying, &state));
+        lying.evil_positions.insert(4, "Pooka".to_string());
+        assert!(!validate_empress(&bluff, &lying, &state));
+        assert!(!validate_empress(
+            &current_empress(1, vec![1, 2, 3]),
+            &lying,
+            &state,
+        ));
+
+        let three = base_state(3, vec![]);
+        let mut small_truth = empty_scenario();
+        small_truth.evil_positions.insert(3, "Pooka".to_string());
+        assert!(!validate_empress(
+            &current_empress(1, vec![1, 2, 3]),
+            &small_truth,
+            &three,
+        ));
+        let mut small_bluff = empty_scenario();
+        small_bluff.corrupted.insert(1);
+        assert!(!validate_empress(
+            &current_empress(1, vec![1, 2, 3]),
+            &small_bluff,
+            &three,
+        ));
+        small_truth = empty_scenario();
+        small_truth.puppet_position = Some(1);
+        assert!(validate_empress(
+            &current_empress(1, vec![1, 2, 3]),
+            &small_truth,
+            &three,
+        ));
+    }
+
+    #[test]
+    fn current_empress_self_selection_has_direct_and_poet_charref_parity() {
+        let direct_self = current_empress(1, vec![1, 2, 3]);
+        let mut poet_self = current_poet("Empress", json!({"targets": [1, 2, 3]}));
+        poet_self.position = 1;
+
+        // A physical Spy can display Empress as its bluff. Its Villager
+        // registerAs overrides runtime Evil, but native bluff selection still
+        // removes charRef from the registered-Good pool, so self is invalid.
+        let mut stable_spy = empty_scenario();
+        stable_spy.evil_positions.insert(1, "Spy".to_string());
+        let direct_state = base_state(3, vec![direct_self.clone()]);
+        let poet_state = base_state(3, vec![poet_self.clone()]);
+        assert!(!validate_empress(&direct_self, &stable_spy, &direct_state));
+        assert!(!validate_poet(&poet_self, &stable_spy, &poet_state));
+
+        // Clean Puppet's HealthyBluff makes the provider truthful, and its
+        // registered-Evil charRef remains eligible for the independent Evil
+        // draw. Corruption overrides HealthyBluff and makes the same self-ref
+        // impossible for both direct and Poet bluff paths.
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(validate_empress(&direct_self, &puppet, &direct_state));
+        assert!(validate_poet(&poet_self, &puppet, &poet_state));
+        puppet.corrupted.insert(1);
+        assert!(!validate_empress(&direct_self, &puppet, &direct_state));
+        assert!(!validate_poet(&poet_self, &puppet, &poet_state));
+    }
+
+    #[test]
+    fn current_empress_shares_anonymous_wretch_and_baker_spy_worlds() {
+        let empress = current_empress(1, vec![2, 3, 4]);
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        bounty.position = 5;
+        let mut state = base_state(
+            6,
+            vec![
+                empress.clone(),
+                make_card(4, "Pooka", json!({})),
+                bounty.clone(),
+            ],
+        );
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+        assert!(validate_empress(&empress, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+        bounty.info_parsed.insert("evil_position".to_string(), json!(6));
+        bounty.info_text = "#6\nis Evil".to_string();
+        state.cards[2] = bounty;
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let mut stale_bounty = current_poet("Bounty Hunter", json!({"evil_position": 4}));
+        stale_bounty.position = 3;
+        let reset_empress = current_empress(5, vec![2, 4, 6]);
+        let mut timeline_state = base_state(
+            8,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Scout", json!({})),
+                stale_bounty.clone(),
+                make_card(4, "Baker", json!({"original_role": "Spy"})),
+                reset_empress.clone(),
+                make_card(6, "Scout", json!({})),
+                make_card(7, "Bard", json!({})),
+                make_card(8, "Pooka", json!({})),
+            ],
+        );
+        timeline_state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Scout".to_string(),
+            "Poet".to_string(),
+            "Empress".to_string(),
+            "Scout".to_string(),
+            "Bard".to_string(),
+        ];
+        timeline_state.deck.minions = vec!["Spy".to_string()];
+        timeline_state.deck.demons = vec!["Pooka".to_string()];
+        timeline_state.n_evil = 2;
+        timeline_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        let mut timeline = empty_scenario();
+        timeline.evil_positions.insert(4, "Spy".to_string());
+        timeline.evil_positions.insert(8, "Pooka".to_string());
+        timeline.corrupted.insert(3);
+        // A filler reveal after the converting Baker lets Empress choose an
+        // early reset, while the later Bounty clue can independently choose a
+        // late reset. No single monotonic boundary supports both witnesses.
+        timeline_state.reveal_order = vec![1, 2, 5, 3, 6, 7, 4, 8];
+        assert!(validate_empress(
+            &reset_empress,
+            &timeline,
+            &timeline_state,
+        ));
+        assert!(validate_poet(
+            &stale_bounty,
+            &timeline,
+            &timeline_state,
+        ));
+        assert!(!validate_current_hidden_surface_consistency(
+            &timeline,
+            &timeline_state,
+        ));
+        timeline_state.reveal_order = vec![1, 3, 2, 5, 6, 7, 4, 8];
+        assert!(validate_current_hidden_surface_consistency(
+            &timeline,
+            &timeline_state,
+        ));
+    }
+
+    #[test]
+    fn current_empress_fails_closed_on_unreplayed_unknown_start_identity() {
+        let empress = current_empress(1, vec![2, 3, 4]);
+        let mut state = base_state(4, vec![empress.clone()]);
+        let mut unknown = empty_scenario();
+        unknown.evil_positions.insert(4, "Unknown".to_string());
+        assert!(!validate_empress(&empress, &unknown, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &unknown, &state,
+        ));
+
+        state.executed_evil_roles.insert(4, "Pooka".to_string());
+        assert!(!validate_empress(&empress, &unknown, &state));
+
+        unknown.evil_positions.insert(4, "Pooka".to_string());
+        assert!(validate_empress(&empress, &unknown, &state));
     }
 
     #[test]
