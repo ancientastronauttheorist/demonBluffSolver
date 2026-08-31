@@ -528,6 +528,7 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
                             shaman_trace: outcome.shaman_trace,
                             chancellor_trace,
                             chancellor_conversion,
+                            twin_trace: None,
                         };
                         let index = placement_scenarios.len();
                         placement_scenarios.push(scenario);

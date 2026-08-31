@@ -1165,6 +1165,7 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         shaman_trace: None,
         chancellor_trace: None,
         chancellor_conversion: None,
+        twin_trace: None,
     };
     knight_scenario.corrupted.insert(1);
     let corrupted_knight = serde_json::json!({
@@ -1296,6 +1297,7 @@ fn hp_reconstruction_uses_composite_knight_damage() {
         shaman_trace: None,
         chancellor_trace: None,
         chancellor_conversion: None,
+        twin_trace: None,
     };
     let corrupted_scout = serde_json::json!({
         "hp": 5,

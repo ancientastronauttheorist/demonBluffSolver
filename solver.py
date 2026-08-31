@@ -321,6 +321,80 @@ class ShamanTrace:
     target_previous_roles: list[str] = field(default_factory=list)
 
 
+class TwinNeighborSide(str, Enum):
+    """Exact occurrence selected from native ``[previous, next]``."""
+
+    PREVIOUS = "previous"
+    NEXT = "next"
+
+
+class TwinStartKind(str, Enum):
+    """Serialized Rust variant tag for one exact Twin Start outcome."""
+
+    NO_DEMON = "no_demon"
+    SWAP = "swap"
+
+
+@dataclass(frozen=True)
+class TwinStartOutcome:
+    """One exact native Twin Start outcome returned by the Rust solver."""
+
+    kind: TwinStartKind
+    demon_occurrence_index: Optional[int] = None
+    demon_anchor_position: Optional[int] = None
+    neighbor_side: Optional[TwinNeighborSide] = None
+    neighbor_position: Optional[int] = None
+    neighbor_pre_swap_role: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "kind", TwinStartKind(self.kind))
+        if self.neighbor_side is not None:
+            object.__setattr__(
+                self,
+                "neighbor_side",
+                TwinNeighborSide(self.neighbor_side),
+            )
+
+        swap_fields = (
+            self.demon_occurrence_index,
+            self.demon_anchor_position,
+            self.neighbor_side,
+            self.neighbor_position,
+            self.neighbor_pre_swap_role,
+        )
+        if self.kind is TwinStartKind.NO_DEMON:
+            if any(value is not None for value in swap_fields):
+                raise ValueError("no_demon Twin outcome cannot carry swap fields")
+        elif any(value is None for value in swap_fields):
+            raise ValueError("swap Twin outcome requires every swap field")
+
+    def to_dict(self) -> dict:
+        result = {"kind": self.kind.value}
+        if self.kind is TwinStartKind.SWAP:
+            result.update({
+                "demon_occurrence_index": self.demon_occurrence_index,
+                "demon_anchor_position": self.demon_anchor_position,
+                "neighbor_side": self.neighbor_side.value,
+                "neighbor_position": self.neighbor_position,
+                "neighbor_pre_swap_role": self.neighbor_pre_swap_role,
+            })
+        return result
+
+
+@dataclass(frozen=True)
+class TwinTrace:
+    """Generated ordered Twin current-data history for one scenario."""
+
+    actor_position: int
+    outcome: TwinStartOutcome
+
+    def to_dict(self) -> dict:
+        return {
+            "actor_position": self.actor_position,
+            "outcome": self.outcome.to_dict(),
+        }
+
+
 @dataclass
 class Scenario:
     """A hypothetical assignment of evil roles to positions."""
@@ -337,6 +411,8 @@ class Scenario:
     chancellor_trace: Optional[ChancellorTrace] = None
     # Appended to preserve every historical positional Scenario constructor.
     shaman_trace: Optional[ShamanTrace] = None
+    # Generated solver output only; legacy scenarios intentionally omit it.
+    twin_trace: Optional[TwinTrace] = None
 
     def chancellor_original_villager_positions(self) -> list[int]:
         """Return possible physical seats of Chancellor's erased Villager.

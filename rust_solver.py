@@ -335,6 +335,125 @@ def rust_solve(state_dict: dict, summary_only: bool = False) -> Optional[dict]:
     return _oneshot_solve(state_dict, summary_only=summary_only)
 
 
+def _require_exact_dict(value, name: str, expected_keys: set[str]) -> dict:
+    if type(value) is not dict:
+        raise TypeError(f"{name} must be an exact dict")
+    actual_keys = set(value)
+    if actual_keys != expected_keys:
+        missing = sorted(expected_keys - actual_keys)
+        extra = sorted(actual_keys - expected_keys)
+        raise ValueError(
+            f"{name} has invalid keys (missing={missing}, extra={extra})"
+        )
+    return value
+
+
+def _require_u8(value, name: str, *, minimum: int = 0, maximum: int = 255) -> int:
+    if type(value) is not int:
+        raise TypeError(f"{name} must be an exact int")
+    if not minimum <= value <= maximum:
+        raise ValueError(f"{name} must be in [{minimum}, {maximum}]")
+    return value
+
+
+def _require_board_position(value, name: str, n_cards: int) -> int:
+    return _require_u8(value, name, minimum=1, maximum=n_cards)
+
+
+def _require_exact_string(value, name: str) -> str:
+    if type(value) is not str:
+        raise TypeError(f"{name} must be an exact str")
+    return value
+
+
+def _parse_twin_trace(raw_trace, n_cards: int):
+    """Parse the tagged Rust Twin trace, preserving legacy absence."""
+    if raw_trace is None:
+        return None
+
+    from solver import (
+        TwinNeighborSide,
+        TwinStartKind,
+        TwinStartOutcome,
+        TwinTrace,
+    )
+
+    n_cards = _require_u8(n_cards, "n_cards", minimum=1)
+    raw_trace = _require_exact_dict(
+        raw_trace,
+        "twin_trace",
+        {"actor_position", "outcome"},
+    )
+    actor_position = _require_board_position(
+        raw_trace["actor_position"],
+        "twin_trace.actor_position",
+        n_cards,
+    )
+    raw_outcome = _require_exact_dict(
+        raw_trace["outcome"],
+        "twin_trace.outcome",
+        {"kind"}
+        if type(raw_trace["outcome"]) is dict
+        and raw_trace["outcome"].get("kind") == "no_demon"
+        else {
+            "kind",
+            "demon_occurrence_index",
+            "demon_anchor_position",
+            "neighbor_side",
+            "neighbor_position",
+            "neighbor_pre_swap_role",
+        },
+    )
+    raw_kind = _require_exact_string(
+        raw_outcome["kind"],
+        "twin_trace.outcome.kind",
+    )
+    try:
+        kind = TwinStartKind(raw_kind)
+    except ValueError as exc:
+        raise ValueError(f"unknown Twin outcome kind: {raw_kind!r}") from exc
+    if kind is TwinStartKind.NO_DEMON:
+        outcome = TwinStartOutcome(kind=kind)
+    else:
+        raw_side = _require_exact_string(
+            raw_outcome["neighbor_side"],
+            "twin_trace.outcome.neighbor_side",
+        )
+        try:
+            neighbor_side = TwinNeighborSide(raw_side)
+        except ValueError as exc:
+            raise ValueError(f"unknown Twin neighbor side: {raw_side!r}") from exc
+        neighbor_pre_swap_role = _require_exact_string(
+            raw_outcome["neighbor_pre_swap_role"],
+            "twin_trace.outcome.neighbor_pre_swap_role",
+        )
+        if not neighbor_pre_swap_role.strip():
+            raise ValueError("Twin neighbor pre-swap role must be nonempty")
+        outcome = TwinStartOutcome(
+            kind=kind,
+            demon_occurrence_index=_require_u8(
+                raw_outcome["demon_occurrence_index"],
+                "twin_trace.outcome.demon_occurrence_index",
+            ),
+            demon_anchor_position=_require_board_position(
+                raw_outcome["demon_anchor_position"],
+                "twin_trace.outcome.demon_anchor_position",
+                n_cards,
+            ),
+            neighbor_side=neighbor_side,
+            neighbor_position=_require_board_position(
+                raw_outcome["neighbor_position"],
+                "twin_trace.outcome.neighbor_position",
+                n_cards,
+            ),
+            neighbor_pre_swap_role=neighbor_pre_swap_role,
+        )
+    return TwinTrace(
+        actor_position=actor_position,
+        outcome=outcome,
+    )
+
+
 def rust_solve_to_objects(state, summary_only: bool = False):
     """Call the Rust solver and return Python SolverResult + Scenario objects.
 
@@ -386,6 +505,10 @@ def rust_solve_to_objects(state, summary_only: bool = False):
                     for role in raw_shaman_trace.get("target_previous_roles", [])
                 ],
             )
+        twin_trace = _parse_twin_trace(
+            s.get("twin_trace"),
+            state_dict.get("n_cards"),
+        )
         scenarios.append(Scenario(
             evil_positions={int(k): v for k, v in s["evil_positions"].items()},
             puppet_position=s.get("puppet_position"),
@@ -398,6 +521,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             chancellor_trace=trace,
             chancellor_conversion=s.get("chancellor_conversion"),
             shaman_trace=shaman_trace,
+            twin_trace=twin_trace,
         ))
 
     result_obj = SolverResult(

@@ -209,6 +209,7 @@ mod truth_status_tests {
             shaman_trace: None,
             chancellor_trace: None,
             chancellor_conversion: None,
+            twin_trace: None,
         }
     }
 

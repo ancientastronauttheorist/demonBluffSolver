@@ -524,6 +524,10 @@ pub struct Scenario {
     /// later role swap passes through that card.
     #[serde(default)]
     pub chancellor_conversion: Option<u8>,
+    /// Exact generated Twin Minion Start history. This remains absent on
+    /// legacy scenarios and until ordered scenario generation supplies it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub twin_trace: Option<TwinTrace>,
 }
 
 impl Scenario {
@@ -949,7 +953,11 @@ mod tests {
     #[test]
     fn test_scenario_serialization_roundtrip() {
         let scenario = Scenario {
-            evil_positions: HashMap::from([(3, "Pooka".to_string()), (7, "Chancellor".to_string())]),
+            evil_positions: HashMap::from([
+                (3, "Pooka".to_string()),
+                (6, "Twin Minion".to_string()),
+                (7, "Chancellor".to_string()),
+            ]),
             puppet_position: None,
             corrupted: HashSet::from([2, 4]),
             pd_corrupted: Some(2),
@@ -970,6 +978,16 @@ mod tests {
                 affected_anchor_positions: vec![4],
             }),
             chancellor_conversion: Some(2),
+            twin_trace: Some(TwinTrace {
+                actor_position: 6,
+                outcome: TwinStartOutcome::Swap {
+                    demon_occurrence_index: 0,
+                    demon_anchor_position: 3,
+                    neighbor_side: TwinNeighborSide::Next,
+                    neighbor_position: 4,
+                    neighbor_pre_swap_role: "Witness".to_string(),
+                },
+            }),
         };
         let json = serde_json::to_value(&scenario).unwrap();
         // Keys must be strings in JSON
@@ -990,6 +1008,12 @@ mod tests {
         assert_eq!(
             json["chancellor_trace"]["affected_anchor_positions"],
             serde_json::json!([4])
+        );
+        assert_eq!(json["twin_trace"]["actor_position"], 6);
+        assert_eq!(json["twin_trace"]["outcome"]["kind"], "swap");
+        assert_eq!(
+            json["twin_trace"]["outcome"]["neighbor_pre_swap_role"],
+            "Witness"
         );
         // Round-trip
         let back: Scenario = serde_json::from_value(json).unwrap();
@@ -1015,6 +1039,30 @@ mod tests {
                 .affected_anchor_positions,
             vec![4]
         );
+        assert_eq!(back.twin_trace, scenario.twin_trace);
+    }
+
+    #[test]
+    fn legacy_missing_twin_trace_is_none_and_no_demon_round_trips() {
+        let legacy_json = serde_json::to_value(Scenario::default()).unwrap();
+        assert!(legacy_json.get("twin_trace").is_none());
+        let legacy: Scenario = serde_json::from_value(legacy_json).unwrap();
+        assert!(legacy.twin_trace.is_none());
+
+        let exact_no_demon = Scenario {
+            twin_trace: Some(TwinTrace {
+                actor_position: 2,
+                outcome: TwinStartOutcome::NoDemon,
+            }),
+            ..Scenario::default()
+        };
+        let exact_json = serde_json::to_value(&exact_no_demon).unwrap();
+        assert_eq!(
+            exact_json["twin_trace"]["outcome"]["kind"],
+            "no_demon"
+        );
+        let exact_back: Scenario = serde_json::from_value(exact_json).unwrap();
+        assert_eq!(exact_back.twin_trace, exact_no_demon.twin_trace);
     }
 
     #[test]
