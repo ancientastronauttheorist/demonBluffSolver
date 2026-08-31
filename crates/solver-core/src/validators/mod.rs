@@ -13,7 +13,7 @@ use baker::{
 use disguisers::validate_clean_doppel_source_support;
 
 use std::collections::{HashMap, HashSet};
-use crate::geometry::{circle_distance, circle_direction, adjacent_positions};
+use crate::geometry::{circle_distance, circle_direction, adjacent_positions, Direction};
 use crate::knowledge_base::{self, get_card, normalize_role, Faction};
 use crate::types::{CardInfo, GameState, Scenario};
 
@@ -526,6 +526,16 @@ fn validate_witch_block_evidence(scenario: &Scenario, state: &GameState) -> bool
 // ── Individual validators ──
 
 fn validate_enlightened(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(
+        card,
+        ENLIGHTENED_CURRENT_VARIANT_FIELD,
+        "Enlightened",
+    ) {
+        Ok(Some(source)) => return validate_current_enlightened(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let raw = match info_str(&card.info_parsed, "direction") {
         Some(s) => s,
         None => return true,
@@ -655,6 +665,7 @@ const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
 const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
 const MEDIUM_CURRENT_VARIANT_FIELD: &str = "medium_variant";
 const KNITTER_CURRENT_VARIANT_FIELD: &str = "knitter_variant";
+const ENLIGHTENED_CURRENT_VARIANT_FIELD: &str = "enlightened_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -680,7 +691,10 @@ fn current_passive_payload_source(
                 && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(MEDIUM_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(KNITTER_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(KNITTER_CURRENT_VARIANT_FIELD)
+                && !card
+                    .info_parsed
+                    .contains_key(ENLIGHTENED_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -837,6 +851,242 @@ fn registered_alignment_at_observation(
             }
         }
     }
+}
+
+fn current_enlightened_claim_text(direction: Direction) -> &'static str {
+    match direction {
+        Direction::CW => "Closest Evil is:\nClockwise",
+        Direction::CCW => "Closest Evil is:\nCounter-clockwise",
+        Direction::Equidistant => "Closest Evil is equidistant",
+    }
+}
+
+fn parse_current_enlightened_claim(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<Direction> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Enlightened" {
+                return None;
+            }
+            (ENLIGHTENED_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Enlightened")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+
+    let claimed = match info.get("direction")?.as_str()? {
+        "CW" => Direction::CW,
+        "CCW" => Direction::CCW,
+        "Equidistant" => Direction::Equidistant,
+        _ => return None,
+    };
+    (card.info_text == current_enlightened_claim_text(claimed)).then_some(claimed)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentEnlightenedSupport {
+    actual: Direction,
+    anonymous_wretches: AnonymousWretchConstraints,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+/// Native Shugenja orders every current character after the actor in each
+/// direction, then compares the first registered-Evil distance. The actor is
+/// never a candidate; equal distances and two exhausted scans are Either.
+fn current_enlightened_direction(
+    actor: u8,
+    n_cards: u8,
+    registered_evil: &HashSet<u8>,
+) -> Direction {
+    if n_cards == 0 {
+        return Direction::Equidistant;
+    }
+    let mut clockwise = None;
+    let mut counterclockwise = None;
+    for &position in registered_evil {
+        if position == actor || position == 0 || position > n_cards {
+            continue;
+        }
+        let cw = (i16::from(position) - i16::from(actor))
+            .rem_euclid(i16::from(n_cards)) as u8;
+        let ccw = (i16::from(actor) - i16::from(position))
+            .rem_euclid(i16::from(n_cards)) as u8;
+        clockwise = Some(clockwise.map_or(cw, |known: u8| known.min(cw)));
+        counterclockwise = Some(counterclockwise.map_or(ccw, |known: u8| known.min(ccw)));
+    }
+
+    match (clockwise, counterclockwise) {
+        (Some(cw), Some(ccw)) => match cw.cmp(&ccw) {
+            std::cmp::Ordering::Less => Direction::CW,
+            std::cmp::Ordering::Greater => Direction::CCW,
+            std::cmp::Ordering::Equal => Direction::Equidistant,
+        },
+        _ => Direction::Equidistant,
+    }
+}
+
+fn current_enlightened_worlds(
+    observation: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentEnlightenedSupport> {
+    let candidates = anonymous_natural_wretch_candidates(scenario, state);
+    let mut worlds = Vec::new();
+
+    fn enumerate(
+        index: usize,
+        candidates: &[u8],
+        required: &mut HashSet<u8>,
+        forbidden: &mut HashSet<u8>,
+        known_evil: &HashSet<u8>,
+        observation: u8,
+        baker_spy_timeline: &BakerSpyTimeline,
+        scenario: &Scenario,
+        state: &GameState,
+        worlds: &mut Vec<CurrentEnlightenedSupport>,
+    ) {
+        if index == candidates.len() {
+            if !anonymous_wretch_assignment_possible(required, forbidden, scenario, state) {
+                return;
+            }
+            let mut registered_evil = known_evil.clone();
+            registered_evil.extend(required.iter().copied());
+            worlds.push(CurrentEnlightenedSupport {
+                actual: current_enlightened_direction(
+                    observation,
+                    state.n_cards,
+                    &registered_evil,
+                ),
+                anonymous_wretches: AnonymousWretchConstraints {
+                    required: required.clone(),
+                    forbidden: forbidden.clone(),
+                },
+                baker_spy_timeline: baker_spy_timeline.clone(),
+            });
+            return;
+        }
+
+        let position = candidates[index];
+        forbidden.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            observation,
+            baker_spy_timeline,
+            scenario,
+            state,
+            worlds,
+        );
+        forbidden.remove(&position);
+
+        required.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            observation,
+            baker_spy_timeline,
+            scenario,
+            state,
+            worlds,
+        );
+        required.remove(&position);
+    }
+
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(observation, state) {
+            continue;
+        }
+        let mut known_evil = HashSet::new();
+        let mut complete = true;
+        for position in 1..=state.n_cards {
+            let Some(alignment) = registered_alignment_at_observation(
+                position,
+                observation,
+                &timeline,
+                scenario,
+                state,
+            ) else {
+                complete = false;
+                break;
+            };
+            if alignment == EffectiveAlignment::Evil {
+                known_evil.insert(position);
+            }
+        }
+        if !complete {
+            continue;
+        }
+        enumerate(
+            0,
+            &candidates,
+            &mut HashSet::new(),
+            &mut HashSet::new(),
+            &known_evil,
+            observation,
+            &timeline,
+            scenario,
+            state,
+            &mut worlds,
+        );
+    }
+    worlds
+}
+
+fn current_enlightened_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentEnlightenedSupport> {
+    let Some(claimed) = parse_current_enlightened_claim(card, source, state) else {
+        return Vec::new();
+    };
+    let worlds = current_enlightened_worlds(card.position, scenario, state);
+    match truth_status(card.position, scenario, state) {
+        TruthStatus::Truthful => worlds
+            .into_iter()
+            .filter(|world| world.actual == claimed)
+            .collect(),
+        TruthStatus::Lying => worlds
+            .into_iter()
+            .filter(|world| world.actual != claimed)
+            .collect(),
+    }
+}
+
+fn validate_current_enlightened(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_enlightened_supports(card, scenario, state, source).is_empty()
 }
 
 fn current_lover_actual_supports(
@@ -4202,6 +4452,28 @@ fn validate_current_hidden_surface_consistency(
                 Ok(None) => None,
                 Err(()) => Some(Vec::new()),
             }
+        } else if apparent == "enlightened"
+            || (apparent == "poet" && copied == Some("Enlightened"))
+        {
+            match current_passive_payload_source(
+                card,
+                ENLIGHTENED_CURRENT_VARIANT_FIELD,
+                "Enlightened",
+            ) {
+                Ok(Some(source)) => Some(
+                    current_enlightened_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
         } else if apparent == "medium"
             || (apparent == "poet" && copied == Some("Medium"))
         {
@@ -4530,13 +4802,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state.n_cards,
         )
         .is_some(),
-        "Enlightened" => {
-            poet_has_exact_fields(info, &["direction"])
-                && info
-                    .get("direction")
-                    .and_then(serde_json::Value::as_str)
-                    .is_some_and(|direction| matches!(direction, "CW" | "CCW" | "Equidistant"))
-        }
+        "Enlightened" => parse_current_enlightened_claim(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         "Empress" => {
             poet_has_exact_fields(info, &["targets"])
                 && poet_targets(info, state.n_cards, 3, 3).is_some()
@@ -5411,6 +5682,17 @@ mod tests {
                 .get("evil_pairs")
                 .and_then(serde_json::Value::as_i64)
                 .and_then(current_knitter_claim_text),
+            "Enlightened" => payload
+                .get("direction")
+                .and_then(serde_json::Value::as_str)
+                .and_then(|direction| match direction {
+                    "CW" => Some(Direction::CW),
+                    "CCW" => Some(Direction::CCW),
+                    "Equidistant" => Some(Direction::Equidistant),
+                    _ => None,
+                })
+                .map(current_enlightened_claim_text)
+                .map(str::to_string),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -5514,6 +5796,310 @@ mod tests {
         );
         card.info_text = info_text;
         card
+    }
+
+    fn current_enlightened(pos: u8, direction: serde_json::Value) -> CardInfo {
+        let info_text = direction
+            .as_str()
+            .and_then(|direction| match direction {
+                "CW" => Some(Direction::CW),
+                "CCW" => Some(Direction::CCW),
+                "Equidistant" => Some(Direction::Equidistant),
+                _ => None,
+            })
+            .map(current_enlightened_claim_text)
+            .unwrap_or_default()
+            .to_string();
+        let mut card = make_card(
+            pos,
+            "Enlightened",
+            json!({
+                "enlightened_variant": "public_current",
+                "direction": direction,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    #[test]
+    fn current_enlightened_schema_text_poet_and_legacy_are_exact() {
+        let state = base_state(5, vec![]);
+        let scenario = empty_scenario();
+        for (name, direction, text) in [
+            ("CW", Direction::CW, "Closest Evil is:\nClockwise"),
+            (
+                "CCW",
+                Direction::CCW,
+                "Closest Evil is:\nCounter-clockwise",
+            ),
+            (
+                "Equidistant",
+                Direction::Equidistant,
+                "Closest Evil is equidistant",
+            ),
+        ] {
+            let direct = current_enlightened(1, json!(name));
+            assert_eq!(direct.info_text, text);
+            assert_eq!(
+                parse_current_enlightened_claim(
+                    &direct,
+                    CurrentPassivePayloadSource::Direct,
+                    &state,
+                ),
+                Some(direction),
+            );
+            let poet = current_poet("Enlightened", json!({"direction": name}));
+            assert_eq!(poet.info_text, text);
+            assert!(validate_current_poet_payload(
+                &poet,
+                &state,
+                "Enlightened",
+            ));
+        }
+
+        for direction in [json!("cw"), json!("Clockwise"), json!("Equal"), json!(10)] {
+            assert!(!validate_enlightened(
+                &current_enlightened(1, direction),
+                &scenario,
+                &state,
+            ));
+        }
+        let mut wrong_text = current_enlightened(1, json!("Equidistant"));
+        wrong_text.info_text = "Closest Evil is: Equidistant".to_string();
+        assert!(!validate_enlightened(&wrong_text, &scenario, &state));
+
+        let mut extra = current_enlightened(1, json!("Equidistant"));
+        extra.info_parsed.insert("targets".to_string(), json!([]));
+        assert!(!validate_enlightened(&extra, &scenario, &state));
+        let mut noncanonical = current_enlightened(1, json!("Equidistant"));
+        noncanonical.apparent_role = "enlightened".to_string();
+        assert!(!validate_enlightened(&noncanonical, &scenario, &state));
+        for position in [0, 6] {
+            assert!(!validate_enlightened(
+                &current_enlightened(position, json!("Equidistant")),
+                &scenario,
+                &state,
+            ));
+        }
+        for info in [
+            json!({"enlightened_variant": "future", "direction": "Equidistant"}),
+            json!({"enlightened_variant": 7, "direction": "Equidistant"}),
+            json!({
+                "enlightened_variant": "public_current",
+                "poet_variant": "public_current",
+                "direction": "Equidistant",
+            }),
+            json!({"knitter_variant": "public_current", "direction": "Equidistant"}),
+        ] {
+            let mut malformed = make_card(1, "Enlightened", info);
+            malformed.info_text = current_enlightened_claim_text(Direction::Equidistant).to_string();
+            assert!(!validate_enlightened(&malformed, &scenario, &state));
+        }
+
+        let poet_truth = current_poet("Enlightened", json!({"direction": "CCW"}));
+        let poet_false = current_poet("Enlightened", json!({"direction": "CW"}));
+        let poet_state = base_state(5, vec![poet_truth.clone()]);
+        let mut poet_world = empty_scenario();
+        poet_world.evil_positions.insert(5, "Pooka".to_string());
+        assert!(validate_poet(&poet_truth, &poet_world, &poet_state));
+        assert!(!validate_poet(&poet_false, &poet_world, &poet_state));
+        poet_world.corrupted.insert(1);
+        assert!(!validate_poet(&poet_truth, &poet_world, &poet_state));
+        assert!(validate_poet(&poet_false, &poet_world, &poet_state));
+
+        let legacy_direct = make_card(1, "Enlightened", json!({"direction": "cw"}));
+        let legacy_poet = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Enlightened", "direction": "equal"}),
+        );
+        assert!(validate_enlightened(&legacy_direct, &scenario, &state));
+        assert!(validate_poet(&legacy_poet, &scenario, &state));
+    }
+
+    #[test]
+    fn current_enlightened_uses_full_circle_registered_geometry_and_all_lifecycle_seats() {
+        assert_eq!(
+            current_enlightened_direction(1, 5, &HashSet::from([2])),
+            Direction::CW,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 5, &HashSet::from([5])),
+            Direction::CCW,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 6, &HashSet::from([3, 5])),
+            Direction::Equidistant,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 4, &HashSet::from([3])),
+            Direction::Equidistant,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 1, &HashSet::from([1])),
+            Direction::Equidistant,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 2, &HashSet::from([2])),
+            Direction::Equidistant,
+        );
+        assert_eq!(
+            current_enlightened_direction(1, 5, &HashSet::from([1])),
+            Direction::Equidistant,
+        );
+
+        let equidistant = current_enlightened(1, json!("Equidistant"));
+        let mut lifecycle_state = base_state(7, vec![equidistant.clone()]);
+        lifecycle_state.executed = vec![2];
+        lifecycle_state.night_kills = vec![7];
+        let mut lifecycle = empty_scenario();
+        lifecycle.evil_positions.insert(2, "Witch".to_string());
+        lifecycle.evil_positions.insert(7, "Pooka".to_string());
+        assert!(validate_enlightened(
+            &equidistant,
+            &lifecycle,
+            &lifecycle_state,
+        ));
+
+        let spy_state = base_state(
+            5,
+            vec![
+                current_enlightened(1, json!("CCW")),
+                make_card(2, "Spy", json!({})),
+            ],
+        );
+        let mut spy = empty_scenario();
+        spy.evil_positions.insert(2, "Spy".to_string());
+        spy.evil_positions.insert(4, "Pooka".to_string());
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("CCW")),
+            &spy,
+            &spy_state,
+        ));
+        assert!(!validate_enlightened(
+            &current_enlightened(1, json!("CW")),
+            &spy,
+            &spy_state,
+        ));
+    }
+
+    #[test]
+    fn current_enlightened_bluff_supports_each_and_only_false_direction() {
+        let state = base_state(5, vec![]);
+        let mut clockwise = empty_scenario();
+        clockwise.corrupted.insert(1);
+        clockwise.evil_positions.insert(2, "Pooka".to_string());
+        assert!(!validate_enlightened(
+            &current_enlightened(1, json!("CW")),
+            &clockwise,
+            &state,
+        ));
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("CCW")),
+            &clockwise,
+            &state,
+        ));
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("Equidistant")),
+            &clockwise,
+            &state,
+        ));
+
+        let mut no_evil = empty_scenario();
+        no_evil.corrupted.insert(1);
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("CW")),
+            &no_evil,
+            &state,
+        ));
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("CCW")),
+            &no_evil,
+            &state,
+        ));
+        assert!(!validate_enlightened(
+            &current_enlightened(1, json!("Equidistant")),
+            &no_evil,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_enlightened_shares_one_anonymous_wretch_world() {
+        let enlightened = current_enlightened(1, json!("CW"));
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 7}));
+        bounty.position = 2;
+        let mut state = base_state(8, vec![enlightened.clone(), bounty.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+
+        assert!(validate_enlightened(&enlightened, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let mut compatible = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        compatible.position = 2;
+        state.cards[1] = compatible.clone();
+        assert!(validate_poet(&compatible, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_enlightened_observations_share_one_monotonic_baker_spy_timeline() {
+        let first = current_enlightened(3, json!("CW"));
+        let second = current_enlightened(5, json!("CW"));
+        let mut state = base_state(
+            8,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Scout", json!({})),
+                first.clone(),
+                make_card(4, "Baker", json!({"original_role": "Spy"})),
+                second.clone(),
+                make_card(6, "Lover", json!({})),
+                make_card(7, "Bard", json!({})),
+                make_card(8, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Scout".to_string(),
+            "Enlightened".to_string(),
+            "Enlightened".to_string(),
+            "Lover".to_string(),
+            "Bard".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.n_evil = 2;
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Spy".to_string());
+        scenario.evil_positions.insert(8, "Pooka".to_string());
+
+        // #3 says the converted Spy has reset to registered Evil. Later #5
+        // says it still has stale Good registerAs. Each clue is independently
+        // reachable, but the delayed reset cannot move backwards.
+        state.reveal_order = vec![1, 3, 2, 5, 6, 7, 4, 8];
+        assert!(validate_enlightened(&first, &scenario, &state));
+        assert!(validate_enlightened(&second, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // Stale Good first, then registered Evil, has one monotonic boundary.
+        state.reveal_order = vec![1, 5, 2, 3, 6, 7, 4, 8];
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
     }
 
     #[test]
