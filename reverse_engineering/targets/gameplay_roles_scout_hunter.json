@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "functions": [
+    {
+      "name": "Scout.get_Description",
+      "metadata_name": "Scout$$get_Description",
+      "signature": "System_String_o* Scout__get_Description (Scout_o* __this, const MethodInfo* method);",
+      "rva": "0x3C6190"
+    },
+    {
+      "name": "Scout.GetDreamerClue",
+      "metadata_name": "Scout$$GetDreamerClue",
+      "signature": "System_String_o* Scout__GetDreamerClue (Scout_o* __this, const MethodInfo* method);",
+      "rva": "0x3C5F90"
+    },
+    {
+      "name": "Scout.GetInfo",
+      "metadata_name": "Scout$$GetInfo",
+      "signature": "ActedInfo_o* Scout__GetInfo (Scout_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C5FC0"
+    },
+    {
+      "name": "Scout.Act",
+      "metadata_name": "Scout$$Act",
+      "signature": "void Scout__Act (Scout_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Scout.BluffAct",
+      "metadata_name": "Scout$$BluffAct",
+      "signature": "void Scout__BluffAct (Scout_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Scout.GetBluffInfo",
+      "metadata_name": "Scout$$GetBluffInfo",
+      "signature": "ActedInfo_o* Scout__GetBluffInfo (Scout_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3C5C10"
+    },
+    {
+      "name": "Scout.GetClosestEvilToEvil",
+      "metadata_name": "Scout$$GetClosestEvilToEvil",
+      "signature": "int32_t Scout__GetClosestEvilToEvil (Scout_o* __this, Character_o* pickedEvil, Character_o* chRef, const MethodInfo* method);",
+      "rva": "0x3C5E00"
+    },
+    {
+      "name": "Scout.ConjourInfo",
+      "metadata_name": "Scout$$ConjourInfo",
+      "signature": "System_String_o* Scout__ConjourInfo (Scout_o* __this, System_String_o* charName, int32_t steps, const MethodInfo* method);",
+      "rva": "0x3C5B50"
+    },
+    {
+      "name": "Scout.ctor",
+      "metadata_name": "Scout$$.ctor",
+      "signature": "void Scout___ctor (Scout_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Tracker.get_Description",
+      "metadata_name": "Tracker$$get_Description",
+      "signature": "System_String_o* Tracker__get_Description (Tracker_o* __this, const MethodInfo* method);",
+      "rva": "0x3EF220"
+    },
+    {
+      "name": "Tracker.GetInfo",
+      "metadata_name": "Tracker$$GetInfo",
+      "signature": "ActedInfo_o* Tracker__GetInfo (Tracker_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EF150"
+    },
+    {
+      "name": "Tracker.Act",
+      "metadata_name": "Tracker$$Act",
+      "signature": "void Tracker__Act (Tracker_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Tracker.BluffAct",
+      "metadata_name": "Tracker$$BluffAct",
+      "signature": "void Tracker__BluffAct (Tracker_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Tracker.GetBluffInfo",
+      "metadata_name": "Tracker$$GetBluffInfo",
+      "signature": "ActedInfo_o* Tracker__GetBluffInfo (Tracker_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EE960"
+    },
+    {
+      "name": "Tracker.GetDistanceToEvil",
+      "metadata_name": "Tracker$$GetDistanceToEvil",
+      "signature": "int32_t Tracker__GetDistanceToEvil (Tracker_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EEBB0"
+    },
+    {
+      "name": "Tracker.ConjourInfo",
+      "metadata_name": "Tracker$$ConjourInfo",
+      "signature": "System_String_o* Tracker__ConjourInfo (Tracker_o* __this, int32_t distance, const MethodInfo* method);",
+      "rva": "0x3EE8C0"
+    },
+    {
+      "name": "Tracker.ctor",
+      "metadata_name": "Tracker$$.ctor",
+      "signature": "void Tracker___ctor (Tracker_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    }
+  ]
+}
