@@ -616,6 +616,17 @@ fn validate_confessor(card: &CardInfo, scenario: &Scenario, state: &GameState) -
 }
 
 fn validate_gemcrafter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(
+        card,
+        GEMCRAFTER_CURRENT_VARIANT_FIELD,
+        "Gemcrafter",
+    ) {
+        Ok(Some(source)) => return validate_current_gemcrafter(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
+    // Preserve unmarked archived observations on the legacy scalar predicate.
     let claimed_pos = match info_pos(&card.info_parsed, "good_position") {
         Some(v) => v,
         None => return true,
@@ -668,6 +679,7 @@ const KNITTER_CURRENT_VARIANT_FIELD: &str = "knitter_variant";
 const ENLIGHTENED_CURRENT_VARIANT_FIELD: &str = "enlightened_variant";
 const EMPRESS_CURRENT_VARIANT_FIELD: &str = "empress_variant";
 const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
+const GEMCRAFTER_CURRENT_VARIANT_FIELD: &str = "gemcrafter_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -698,7 +710,10 @@ fn current_passive_payload_source(
                     .info_parsed
                     .contains_key(ENLIGHTENED_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(EMPRESS_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(BISHOP_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(BISHOP_CURRENT_VARIANT_FIELD)
+                && !card
+                    .info_parsed
+                    .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -721,6 +736,209 @@ fn current_passive_payload_source(
         }
         _ => Err(()),
     }
+}
+
+fn current_gemcrafter_claim_text(target: u8) -> String {
+    format!("#{target} is Good")
+}
+
+fn parse_current_gemcrafter_target(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<u8> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Gemcrafter" {
+                return None;
+            }
+            (GEMCRAFTER_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Gemcrafter")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    let target = poet_position_value(info.get("good_position"), state.n_cards)?;
+    (card.info_text == current_gemcrafter_claim_text(target)).then_some(target)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentGemcrafterSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_gemcrafter_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentGemcrafterSupport> {
+    let Some(target) = parse_current_gemcrafter_target(card, source, state) else {
+        return Vec::new();
+    };
+    // An untyped executed Evil may have run any Start writer. A late role
+    // overlay cannot reconstruct the registered-alignment surface Archivist
+    // sampled synchronously at this observation.
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+
+    let truth = truth_status(card.position, scenario, state);
+    let candidates = anonymous_natural_wretch_candidates(scenario, state);
+    let mut supports = Vec::new();
+
+    fn enumerate(
+        index: usize,
+        candidates: &[u8],
+        required: &mut HashSet<u8>,
+        forbidden: &mut HashSet<u8>,
+        known_evil: &HashSet<u8>,
+        target: u8,
+        actor: u8,
+        truth: TruthStatus,
+        timeline: &BakerSpyTimeline,
+        scenario: &Scenario,
+        state: &GameState,
+        supports: &mut Vec<CurrentGemcrafterSupport>,
+    ) {
+        if index == candidates.len() {
+            if !anonymous_wretch_assignment_possible(required, forbidden, scenario, state) {
+                return;
+            }
+            let mut registered_evil = known_evil.clone();
+            registered_evil.extend(required.iter().copied());
+            let selects_evil = truth == TruthStatus::Lying;
+            let target_is_evil = registered_evil.contains(&target);
+            if target_is_evil != selects_evil {
+                return;
+            }
+
+            // Native builds the whole selected-alignment pool first. It calls
+            // Remove(charRef) only when that original pool has more than one
+            // occurrence. Consequently a self target survives exactly when it
+            // is the sole member of the selected pool.
+            let selected_pool_count = (1..=state.n_cards)
+                .filter(|position| registered_evil.contains(position) == selects_evil)
+                .count();
+            if target == actor && selected_pool_count > 1 {
+                return;
+            }
+
+            let support = CurrentGemcrafterSupport {
+                anonymous_wretches: AnonymousWretchConstraints {
+                    required: required.clone(),
+                    forbidden: forbidden.clone(),
+                },
+                baker_spy_timeline: timeline.clone(),
+            };
+            if !supports.contains(&support) {
+                supports.push(support);
+            }
+            return;
+        }
+
+        let position = candidates[index];
+        forbidden.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            target,
+            actor,
+            truth,
+            timeline,
+            scenario,
+            state,
+            supports,
+        );
+        forbidden.remove(&position);
+
+        required.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            target,
+            actor,
+            truth,
+            timeline,
+            scenario,
+            state,
+            supports,
+        );
+        required.remove(&position);
+    }
+
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+        let mut known_evil = HashSet::new();
+        let mut complete = true;
+        for position in 1..=state.n_cards {
+            let Some(alignment) = registered_alignment_at_observation(
+                position,
+                card.position,
+                &timeline,
+                scenario,
+                state,
+            ) else {
+                complete = false;
+                break;
+            };
+            if alignment == EffectiveAlignment::Evil {
+                known_evil.insert(position);
+            }
+        }
+        if !complete {
+            continue;
+        }
+        enumerate(
+            0,
+            &candidates,
+            &mut HashSet::new(),
+            &mut HashSet::new(),
+            &known_evil,
+            target,
+            card.position,
+            truth,
+            &timeline,
+            scenario,
+            state,
+            &mut supports,
+        );
+    }
+    supports
+}
+
+fn validate_current_gemcrafter(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_gemcrafter_supports(card, scenario, state, source).is_empty()
 }
 
 fn current_lover_claim_text(claimed: i64) -> Option<&'static str> {
@@ -3544,7 +3762,7 @@ fn parse_current_empress_targets(
     Some(targets)
 }
 
-fn current_empress_has_unresolved_start_identity(
+fn current_has_unresolved_start_identity(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
@@ -3568,7 +3786,7 @@ fn current_empress_supports(
     // by Empress. Scenario.evil_positions is the authority for the replay that
     // built this world; a later state-map role overlay cannot retroactively
     // repair an `Unknown` Start history.
-    if current_empress_has_unresolved_start_identity(scenario, state) {
+    if current_has_unresolved_start_identity(scenario, state) {
         return Vec::new();
     }
 
@@ -5245,16 +5463,19 @@ fn validate_current_hidden_surface_consistency(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    let has_current_empress = state.cards.iter().any(|card| {
+    let has_current_full_pool_provider = state.cards.iter().any(|card| {
         card.info_parsed.contains_key(EMPRESS_CURRENT_VARIANT_FIELD)
+            || card
+                .info_parsed
+                .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD)
             || (card.info_parsed.contains_key("poet_variant")
                 && card
                     .info_parsed
                     .get("copied_role")
                     .and_then(serde_json::Value::as_str)
-                    == Some("Empress"))
+                    .is_some_and(|role| matches!(role, "Empress" | "Gemcrafter")))
     });
-    if has_current_empress && current_empress_has_unresolved_start_identity(scenario, state) {
+    if has_current_full_pool_provider && current_has_unresolved_start_identity(scenario, state) {
         return false;
     }
 
@@ -5381,6 +5602,29 @@ fn validate_current_hidden_surface_consistency(
             ) {
                 Ok(Some(source)) => Some(
                     current_empress_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "gemcrafter"
+            || (apparent == "poet" && copied == Some("Gemcrafter"))
+        {
+            match current_passive_payload_source(
+                card,
+                GEMCRAFTER_CURRENT_VARIANT_FIELD,
+                "Gemcrafter",
+            ) {
+                Ok(Some(source)) => Some(
+                    current_gemcrafter_supports(card, scenario, state, source)
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
@@ -5791,10 +6035,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state,
         )
         .is_some(),
-        "Gemcrafter" => {
-            poet_has_exact_fields(info, &["good_position"])
-                && poet_position_value(info.get("good_position"), state.n_cards).is_some()
-        }
+        "Gemcrafter" => parse_current_gemcrafter_target(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         "Bard" => {
             poet_has_exact_fields(info, &["corruption_distance"])
                 && poet_integer_in_range(info, "corruption_distance", -1, n)
@@ -6669,6 +6915,11 @@ mod tests {
                         .collect::<Option<Vec<_>>>()
                 })
                 .and_then(|targets| current_empress_claim_text(&targets)),
+            "Gemcrafter" => payload
+                .get("good_position")
+                .and_then(serde_json::Value::as_u64)
+                .and_then(|target| u8::try_from(target).ok())
+                .map(current_gemcrafter_claim_text),
             "Bishop" => payload
                 .get("targets")
                 .and_then(serde_json::Value::as_array)
@@ -6833,6 +7084,24 @@ mod tests {
             json!({
                 "empress_variant": "public_current",
                 "targets": targets,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_gemcrafter(pos: u8, target: serde_json::Value) -> CardInfo {
+        let info_text = target
+            .as_u64()
+            .and_then(|target| u8::try_from(target).ok())
+            .map(current_gemcrafter_claim_text)
+            .unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Gemcrafter",
+            json!({
+                "gemcrafter_variant": "public_current",
+                "good_position": target,
             }),
         );
         card.info_text = info_text;
@@ -7439,6 +7708,427 @@ mod tests {
 
         unknown.evil_positions.insert(4, "Pooka".to_string());
         assert!(validate_empress(&empress, &unknown, &state));
+    }
+
+    #[test]
+    fn current_gemcrafter_schema_text_poet_and_legacy_are_exact() {
+        let direct = current_gemcrafter(1, json!(2));
+        let mut poet = current_poet("Gemcrafter", json!({"good_position": 2}));
+        poet.position = 1;
+        let mut state = base_state(4, vec![direct.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        assert_eq!(direct.info_text, "#2 is Good");
+        assert_eq!(poet.info_text, direct.info_text);
+        assert_eq!(
+            parse_current_gemcrafter_target(
+                &direct,
+                CurrentPassivePayloadSource::Direct,
+                &state,
+            ),
+            Some(2),
+        );
+        assert!(validate_gemcrafter(&direct, &scenario, &state));
+        state.cards[0] = poet.clone();
+        assert!(validate_current_poet_payload(
+            &poet,
+            &state,
+            "Gemcrafter",
+        ));
+        assert!(validate_poet(&poet, &scenario, &state));
+
+        for target in [json!(0), json!(-1), json!(5), json!(256), json!(true), json!("2")] {
+            assert!(!validate_gemcrafter(
+                &current_gemcrafter(1, target),
+                &scenario,
+                &state,
+            ));
+        }
+        for position in [0, 5] {
+            assert!(!validate_gemcrafter(
+                &current_gemcrafter(position, json!(2)),
+                &scenario,
+                &state,
+            ));
+        }
+        for payload in [
+            json!({"gemcrafter_variant": "future", "good_position": 2}),
+            json!({"gemcrafter_variant": 1, "good_position": 2}),
+            json!({"gemcrafter_variant": "public_current", "good_position": 2, "extra": true}),
+            json!({
+                "gemcrafter_variant": "public_current",
+                "poet_variant": "public_current",
+                "good_position": 2,
+            }),
+            json!({"empress_variant": "public_current", "good_position": 2}),
+        ] {
+            let mut malformed = make_card(1, "Gemcrafter", payload);
+            malformed.info_text = "#2 is Good".to_string();
+            assert!(!validate_gemcrafter(&malformed, &scenario, &state));
+        }
+        let mut noncanonical = direct.clone();
+        noncanonical.apparent_role = "gemcrafter".to_string();
+        assert!(!validate_gemcrafter(&noncanonical, &scenario, &state));
+        for text in [
+            "#2 is good",
+            "#2\nis Good",
+            "#2 is Good.",
+            "#3 is Good",
+            "#2 is Good ",
+        ] {
+            let mut wrong = direct.clone();
+            wrong.info_text = text.to_string();
+            assert!(!validate_gemcrafter(&wrong, &scenario, &state));
+        }
+        poet.info_text.push(' ');
+        state.cards[0] = poet.clone();
+        assert!(!validate_current_poet_payload(
+            &poet,
+            &state,
+            "Gemcrafter",
+        ));
+        assert!(!validate_poet(&poet, &scenario, &state));
+
+        // Missing provenance retains the frozen scalar behavior, including a
+        // Rambler-replaced clue and unmarked Poet delegation.
+        assert!(validate_gemcrafter(
+            &make_card(1, "Gemcrafter", json!({})),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_gemcrafter(
+            &make_card(1, "Gemcrafter", json!({"shut_up_target": 3})),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_gemcrafter(
+            &make_card(1, "Gemcrafter", json!({"good_position": 2})),
+            &scenario,
+            &state,
+        ));
+        let legacy_poet = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Gemcrafter", "good_position": 2}),
+        );
+        assert!(validate_poet(&legacy_poet, &scenario, &state));
+    }
+
+    #[test]
+    fn current_gemcrafter_applies_native_pool_wide_conditional_self_removal() {
+        let direct_self = current_gemcrafter(1, json!(1));
+        let mut poet_self = current_poet("Gemcrafter", json!({"good_position": 1}));
+        poet_self.position = 1;
+        let direct_state = base_state(3, vec![direct_self.clone()]);
+        let poet_state = base_state(3, vec![poet_self.clone()]);
+
+        let mut sole_good = empty_scenario();
+        sole_good.evil_positions.insert(2, "Witch".to_string());
+        sole_good.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_gemcrafter(
+            &direct_self,
+            &sole_good,
+            &direct_state,
+        ));
+        assert!(validate_poet(&poet_self, &sole_good, &poet_state));
+        sole_good.evil_positions.remove(&2);
+        assert!(!validate_gemcrafter(
+            &direct_self,
+            &sole_good,
+            &direct_state,
+        ));
+        assert!(!validate_poet(&poet_self, &sole_good, &poet_state));
+
+        let mut sole_evil = empty_scenario();
+        sole_evil.evil_positions.insert(1, "Pooka".to_string());
+        assert!(validate_gemcrafter(
+            &direct_self,
+            &sole_evil,
+            &direct_state,
+        ));
+        assert!(validate_poet(&poet_self, &sole_evil, &poet_state));
+        sole_evil.evil_positions.insert(2, "Witch".to_string());
+        assert!(!validate_gemcrafter(
+            &direct_self,
+            &sole_evil,
+            &direct_state,
+        ));
+        assert!(!validate_poet(&poet_self, &sole_evil, &poet_state));
+
+        let target_evil = current_gemcrafter(1, json!(3));
+        let mut poet_target_evil = current_poet("Gemcrafter", json!({"good_position": 3}));
+        poet_target_evil.position = 1;
+        let mut corrupted_good = empty_scenario();
+        corrupted_good.corrupted.insert(1);
+        corrupted_good.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_gemcrafter(
+            &target_evil,
+            &corrupted_good,
+            &direct_state,
+        ));
+        assert!(validate_poet(
+            &poet_target_evil,
+            &corrupted_good,
+            &poet_state,
+        ));
+        assert!(!validate_gemcrafter(
+            &direct_self,
+            &corrupted_good,
+            &direct_state,
+        ));
+        assert!(!validate_poet(
+            &poet_self,
+            &corrupted_good,
+            &poet_state,
+        ));
+
+        // Clean Puppet is runtime/registered Evil but HealthyBluff makes its
+        // Gemcrafter provider truthful. It can select a Good occurrence and
+        // cannot select its Evil self from that truth pool.
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &puppet,
+            &direct_state,
+        ));
+        let mut poet_target_good = current_poet("Gemcrafter", json!({"good_position": 2}));
+        poet_target_good.position = 1;
+        assert!(validate_poet(&poet_target_good, &puppet, &poet_state));
+        assert!(!validate_gemcrafter(
+            &direct_self,
+            &puppet,
+            &direct_state,
+        ));
+        assert!(!validate_poet(&poet_self, &puppet, &poet_state));
+    }
+
+    #[test]
+    fn current_gemcrafter_uses_all_lifecycle_seats_and_current_identity_writers() {
+        let mut state = base_state(4, vec![current_gemcrafter(1, json!(2))]);
+        state.executed = vec![2];
+        state.night_kills = vec![3];
+        state.blocked_positions = vec![4];
+        let scenario = empty_scenario();
+        for target in [2, 3, 4] {
+            assert!(validate_gemcrafter(
+                &current_gemcrafter(1, json!(target)),
+                &scenario,
+                &state,
+            ));
+        }
+
+        let spy_state = base_state(
+            3,
+            vec![
+                current_gemcrafter(1, json!(2)),
+                make_card(2, "Spy", json!({})),
+            ],
+        );
+        let mut stable_spy = empty_scenario();
+        stable_spy.evil_positions.insert(2, "Spy".to_string());
+        stable_spy.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &stable_spy,
+            &spy_state,
+        ));
+        stable_spy.corrupted.insert(1);
+        assert!(!validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &stable_spy,
+            &spy_state,
+        ));
+
+        let mut explicit_state = base_state(
+            4,
+            vec![
+                current_gemcrafter(1, json!(2)),
+                make_card(2, "Wretch", json!({})),
+            ],
+        );
+        explicit_state.deck.outcasts = vec!["Wretch".to_string()];
+        assert!(!validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &scenario,
+            &explicit_state,
+        ));
+        let mut lying = scenario.clone();
+        lying.corrupted.insert(1);
+        assert!(validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &lying,
+            &explicit_state,
+        ));
+
+        let mut moved_state = base_state(
+            4,
+            vec![
+                current_gemcrafter(1, json!(3)),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Wretch", json!({})),
+            ],
+        );
+        moved_state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut moved = empty_scenario();
+        moved.evil_positions.insert(2, "Twin Minion".to_string());
+        moved.evil_positions.insert(4, "Pooka".to_string());
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 2,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 4,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 3,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+        // Wretch data moved onto physical Evil #2 remains registered Evil;
+        // physical Good #3 now carrying Twin data remains registered Good.
+        assert!(validate_gemcrafter(
+            &current_gemcrafter(1, json!(3)),
+            &moved,
+            &moved_state,
+        ));
+        assert!(!validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &moved,
+            &moved_state,
+        ));
+
+        let mut copied_state = base_state(
+            4,
+            vec![
+                current_gemcrafter(1, json!(2)),
+                make_card(2, "Scout", json!({})),
+            ],
+        );
+        copied_state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut copied = empty_scenario();
+        copied.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Wretch".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(!validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &copied,
+            &copied_state,
+        ));
+        copied.corrupted.insert(1);
+        assert!(validate_gemcrafter(
+            &current_gemcrafter(1, json!(2)),
+            &copied,
+            &copied_state,
+        ));
+    }
+
+    #[test]
+    fn current_gemcrafter_shares_anonymous_wretch_and_baker_spy_worlds() {
+        let gemcrafter = current_gemcrafter(1, json!(2));
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        bounty.position = 4;
+        let mut state = base_state(5, vec![gemcrafter.clone(), bounty.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+        assert!(validate_gemcrafter(&gemcrafter, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        bounty.info_parsed.insert("evil_position".to_string(), json!(3));
+        bounty.info_text = "#3\nis Evil".to_string();
+        state.cards[1] = bounty;
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let mut reset_bounty = current_poet("Bounty Hunter", json!({"evil_position": 4}));
+        reset_bounty.position = 3;
+        let stale_gemcrafter = current_gemcrafter(5, json!(4));
+        let mut timeline_state = base_state(
+            8,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Scout", json!({})),
+                reset_bounty.clone(),
+                make_card(4, "Baker", json!({"original_role": "Spy"})),
+                stale_gemcrafter.clone(),
+                make_card(6, "Scout", json!({})),
+                make_card(7, "Bard", json!({})),
+                make_card(8, "Pooka", json!({})),
+            ],
+        );
+        timeline_state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Scout".to_string(),
+            "Poet".to_string(),
+            "Gemcrafter".to_string(),
+            "Scout".to_string(),
+            "Bard".to_string(),
+        ];
+        timeline_state.deck.minions = vec!["Spy".to_string()];
+        timeline_state.deck.demons = vec!["Pooka".to_string()];
+        timeline_state.n_evil = 2;
+        timeline_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        let mut timeline = empty_scenario();
+        timeline.evil_positions.insert(4, "Spy".to_string());
+        timeline.evil_positions.insert(8, "Pooka".to_string());
+
+        // Bounty can independently choose an early delayed reset while the
+        // later Gemcrafter can independently choose stale Spy registerAs, but
+        // no one monotonic native reset boundary supports that ordering.
+        timeline_state.reveal_order = vec![1, 2, 3, 5, 6, 7, 4, 8];
+        assert!(validate_poet(
+            &reset_bounty,
+            &timeline,
+            &timeline_state,
+        ));
+        assert!(validate_gemcrafter(
+            &stale_gemcrafter,
+            &timeline,
+            &timeline_state,
+        ));
+        assert!(!validate_current_hidden_surface_consistency(
+            &timeline,
+            &timeline_state,
+        ));
+
+        timeline_state.reveal_order = vec![1, 2, 5, 3, 6, 7, 4, 8];
+        assert!(validate_current_hidden_surface_consistency(
+            &timeline,
+            &timeline_state,
+        ));
+    }
+
+    #[test]
+    fn current_gemcrafter_fails_closed_on_unreplayed_unknown_start_identity() {
+        let direct = current_gemcrafter(1, json!(2));
+        let mut poet = current_poet("Gemcrafter", json!({"good_position": 2}));
+        poet.position = 1;
+        let mut state = base_state(3, vec![direct.clone(), poet.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Unknown".to_string());
+        assert!(!validate_gemcrafter(&direct, &scenario, &state));
+        assert!(!validate_poet(&poet, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // A late public execution role cannot replay an opaque Start history.
+        state.executed_evil_roles.insert(3, "Pooka".to_string());
+        assert!(!validate_gemcrafter(&direct, &scenario, &state));
+
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_gemcrafter(&direct, &scenario, &state));
+        assert!(validate_poet(&poet, &scenario, &state));
     }
 
     #[test]
