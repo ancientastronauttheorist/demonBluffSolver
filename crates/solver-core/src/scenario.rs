@@ -8,7 +8,10 @@ use crate::knowledge_base::{
     get_card, normalize_role, shaman_erased_role_class,
     BakerPreservedRuntimeClass, Faction,
 };
-use crate::types::{BoardCountProvenance, ChancellorTrace, GameState, Scenario, ShamanTrace};
+use crate::twin::enumerate_twin_traces;
+use crate::types::{
+    BoardCountProvenance, ChancellorTrace, GameState, Scenario, ShamanTrace, TwinTrace,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct RawChancellorTrace {
@@ -540,7 +543,185 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
         scenarios.extend(placement_scenarios);
     }
 
-    scenarios
+    populate_safe_twin_traces(state, scenarios)
+}
+
+/// Populate exact initial Twin swap events only where their pre-swap identities
+/// have structural provenance independent of post-Start presentation.
+///
+/// This is deliberately an atomic postprocessing step. Every already-deduped
+/// base scenario must provide the same number of complete native outcomes; one
+/// incomplete or unsafe world leaves the entire vector unchanged. Consequently
+/// validators still see uniform clones of their prior worlds and no incomplete
+/// event is mistaken for a generated no-op. Presence is not yet a capability
+/// signal for later Start effects, validators, or live play.
+fn populate_safe_twin_traces(state: &GameState, scenarios: Vec<Scenario>) -> Vec<Scenario> {
+    if scenarios.is_empty()
+        || state.n_cards == 0
+        || !state
+            .deck
+            .minions
+            .iter()
+            .any(|role| normalize_role(role) == "twinminion")
+        || state.deck.minions.iter().any(|role| {
+            matches!(
+                normalize_role(role).as_str(),
+                "puppeteer" | "puppet" | "shaman" | "chancellor"
+            )
+        })
+        || state
+            .deck
+            .outcasts
+            .iter()
+            .any(|role| {
+                matches!(
+                    normalize_role(role).as_str(),
+                    "plaguedoctor" | "doppelganger" | "drunk"
+                )
+            })
+        || state
+            .deck
+            .villagers
+            .iter()
+            .any(|role| normalize_role(role) == "alchemist")
+        || scenarios.iter().any(|scenario| scenario.twin_trace.is_some())
+    {
+        return scenarios;
+    }
+
+    // Initial ManageCharacters construction and the ordinary Start scanner use
+    // descending displayed-ID order. At Start every physical card is alive, so
+    // the alive circular ring has the same order even when this saved state now
+    // contains later deaths.
+    let current_order: Vec<u8> = (1..=state.n_cards).rev().collect();
+    let alive_order = &current_order;
+    let mut all_traces: Vec<Vec<TwinTrace>> = Vec::with_capacity(scenarios.len());
+    let mut common_width = None;
+
+    for scenario in &scenarios {
+        let Some(current_roles) = exact_pre_twin_structural_roles(state, scenario) else {
+            return scenarios;
+        };
+        if !current_roles
+            .values()
+            .any(|role| normalize_role(role) == "twinminion")
+        {
+            return scenarios;
+        }
+
+        let demon_positions: Vec<u8> = current_order
+            .iter()
+            .copied()
+            .filter(|position| {
+                current_roles
+                    .get(position)
+                    .and_then(|role| role_faction_in_state(role, state))
+                    == Some(Faction::Demon)
+            })
+            .collect();
+
+        // The pure enumerator intentionally skips malformed/missing neighbor
+        // paths. Check structural completeness first so such a skip can never
+        // turn a partial set into a serialized exact trace set.
+        for demon_position in &demon_positions {
+            let anchor_index = current_order
+                .iter()
+                .position(|position| position == demon_position)
+                .expect("Demon position came from current_order");
+            let previous = current_order
+                [(anchor_index + current_order.len() - 1) % current_order.len()];
+            let next = current_order[(anchor_index + 1) % current_order.len()];
+            if !current_roles.contains_key(&previous) || !current_roles.contains_key(&next) {
+                return scenarios;
+            }
+        }
+
+        let traces = enumerate_twin_traces(&current_roles, &current_order, alive_order);
+        let expected_width = if demon_positions.is_empty() {
+            1
+        } else {
+            demon_positions.len() * 2
+        };
+        if traces.is_empty() || traces.len() != expected_width {
+            return scenarios;
+        }
+        if common_width.is_some_and(|width| width != traces.len()) {
+            return scenarios;
+        }
+        common_width = Some(traces.len());
+        all_traces.push(traces);
+    }
+
+    let width = common_width.expect("nonempty scenarios produced a trace width");
+    let mut expanded = Vec::with_capacity(scenarios.len() * width);
+    for (scenario, traces) in scenarios.into_iter().zip(all_traces) {
+        for twin_trace in traces {
+            let mut traced = scenario.clone();
+            traced.twin_trace = Some(twin_trace);
+            expanded.push(traced);
+        }
+    }
+    expanded
+}
+
+/// Exact structural current-role facts at Twin's ordered Start slot.
+///
+/// Final apparent card roles are intentionally excluded: on Twin boards they
+/// can be post-swap bluffs or presentations and cannot identify the former
+/// neighbor data. This first slice therefore admits only exact, non-Unknown
+/// `evil_positions`; generated/hidden Good identities remain presentation-
+/// derived in the existing scenario builder and are rejected wholesale.
+fn exact_pre_twin_structural_roles(
+    state: &GameState,
+    scenario: &Scenario,
+) -> Option<HashMap<u8, String>> {
+    let unsafe_role = |role: &str| {
+        matches!(
+            normalize_role(role).as_str(),
+            "unknown"
+                | "none"
+                | "?"
+                | "puppeteer"
+                | "puppet"
+                | "shaman"
+                | "chancellor"
+                | "doppelganger"
+                | "drunk"
+        )
+    };
+    if scenario.puppet_position.is_some()
+        || scenario.shaman_trace.is_some()
+        || scenario.pd_corrupted.is_some()
+        || !scenario.alchemist_cures.is_empty()
+        || scenario.chancellor_trace.is_some()
+        || scenario.chancellor_conversion.is_some()
+        || scenario.doppelganger_position.is_some()
+        || scenario.drunk_position.is_some()
+    {
+        return None;
+    }
+
+    let mut roles: HashMap<u8, String> = HashMap::new();
+    let mut insert = |position: u8, role: &str| -> bool {
+        if position == 0 || position > state.n_cards || role.trim().is_empty() || unsafe_role(role) {
+            return false;
+        }
+        match roles.get(&position) {
+            Some(existing) => normalize_role(existing) == normalize_role(role),
+            None => {
+                roles.insert(position, role.to_string());
+                true
+            }
+        }
+    };
+
+    for (&position, role) in &scenario.evil_positions {
+        if !insert(position, role) {
+            return None;
+        }
+    }
+
+    Some(roles)
 }
 
 /// Enumerate native Chancellor histories. `c` and the selected Outcast anchor
@@ -2677,7 +2858,7 @@ fn permutations_of(roles: &[String]) -> Vec<Vec<String>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::CardInfo;
+    use crate::types::{CardInfo, TwinNeighborSide, TwinStartOutcome};
 
     fn card(position: u8, apparent_role: &str) -> CardInfo {
         CardInfo {
@@ -2697,6 +2878,218 @@ mod tests {
             added_outcast_position: added_position,
             added_outcast_role: added_role.to_string(),
             anchor_position,
+        }
+    }
+
+    fn safe_twin_state() -> GameState {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.minions = vec!["Twin Minion".to_string(), "Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state
+    }
+
+    fn structurally_complete_twin_scenario() -> Scenario {
+        Scenario {
+            evil_positions: HashMap::from([
+                (1, "Twin Minion".to_string()),
+                (2, "Witch".to_string()),
+                (3, "Pooka".to_string()),
+            ]),
+            ..Scenario::default()
+        }
+    }
+
+    fn scenario_without_twin_trace(scenario: &Scenario) -> serde_json::Value {
+        let mut scenario = scenario.clone();
+        scenario.twin_trace = None;
+        serde_json::to_value(scenario).unwrap()
+    }
+
+    #[test]
+    fn safe_twin_postprocessing_expands_every_base_world_uniformly() {
+        let state = safe_twin_state();
+        let first = structurally_complete_twin_scenario();
+        let mut second = first.clone();
+        second.corrupted.insert(2);
+        let originals = vec![first, second];
+
+        let expanded = populate_safe_twin_traces(&state, originals.clone());
+
+        assert_eq!(expanded.len(), 4);
+        for (base_index, pair) in expanded.chunks_exact(2).enumerate() {
+            assert_eq!(
+                scenario_without_twin_trace(&pair[0]),
+                scenario_without_twin_trace(&originals[base_index])
+            );
+            assert_eq!(
+                scenario_without_twin_trace(&pair[1]),
+                scenario_without_twin_trace(&originals[base_index])
+            );
+            assert!(matches!(
+                pair[0].twin_trace.as_ref().map(|trace| &trace.outcome),
+                Some(TwinStartOutcome::Swap {
+                    demon_occurrence_index: 0,
+                    demon_anchor_position: 3,
+                    neighbor_side: TwinNeighborSide::Previous,
+                    neighbor_position: 1,
+                    neighbor_pre_swap_role,
+                }) if neighbor_pre_swap_role == "Twin Minion"
+            ));
+            assert!(matches!(
+                pair[1].twin_trace.as_ref().map(|trace| &trace.outcome),
+                Some(TwinStartOutcome::Swap {
+                    demon_occurrence_index: 0,
+                    demon_anchor_position: 3,
+                    neighbor_side: TwinNeighborSide::Next,
+                    neighbor_position: 2,
+                    neighbor_pre_swap_role,
+                }) if neighbor_pre_swap_role == "Witch"
+            ));
+        }
+    }
+
+    #[test]
+    fn one_unknown_endpoint_keeps_every_base_world_untraced_and_ignores_appearance() {
+        let mut state = safe_twin_state();
+        state.cards = vec![card(2, "Witch")];
+        let complete = structurally_complete_twin_scenario();
+        let mut incomplete = complete.clone();
+        incomplete.evil_positions.remove(&2);
+
+        let structural = exact_pre_twin_structural_roles(&state, &incomplete).unwrap();
+        assert!(!structural.contains_key(&2));
+
+        let originals = vec![complete, incomplete];
+        let unchanged = populate_safe_twin_traces(&state, originals.clone());
+        assert_eq!(unchanged.len(), originals.len());
+        assert!(unchanged.iter().all(|scenario| scenario.twin_trace.is_none()));
+        assert_eq!(
+            unchanged
+                .iter()
+                .map(scenario_without_twin_trace)
+                .collect::<Vec<_>>(),
+            originals
+                .iter()
+                .map(scenario_without_twin_trace)
+                .collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn all_structural_multi_demon_world_preserves_pool_indices() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.deck.minions = vec![
+            "Twin Minion".to_string(),
+            "Witch".to_string(),
+            "Poisoner".to_string(),
+        ];
+        state.deck.demons = vec!["Pooka".to_string(), "Lilis".to_string()];
+        let scenario = Scenario {
+            evil_positions: HashMap::from([
+                (1, "Twin Minion".to_string()),
+                (2, "Witch".to_string()),
+                (3, "Pooka".to_string()),
+                (4, "Poisoner".to_string()),
+                (5, "Lilis".to_string()),
+            ]),
+            ..Scenario::default()
+        };
+
+        let expanded = populate_safe_twin_traces(&state, vec![scenario]);
+        assert_eq!(expanded.len(), 4);
+        let indices: Vec<u8> = expanded
+            .iter()
+            .map(|scenario| match &scenario.twin_trace.as_ref().unwrap().outcome {
+                TwinStartOutcome::Swap {
+                    demon_occurrence_index,
+                    ..
+                } => *demon_occurrence_index,
+                TwinStartOutcome::NoDemon => unreachable!(),
+            })
+            .collect();
+        assert_eq!(indices, vec![0, 0, 1, 1]);
+        assert!(expanded.iter().any(|scenario| matches!(
+            scenario.twin_trace.as_ref().map(|trace| &trace.outcome),
+            Some(TwinStartOutcome::Swap {
+                neighbor_position: 4,
+                neighbor_pre_swap_role,
+                ..
+            }) if neighbor_pre_swap_role == "Poisoner"
+        )));
+    }
+
+    #[test]
+    fn later_identity_mutators_or_unknown_evil_keep_the_atomic_slice_untraced() {
+        let base_state = safe_twin_state();
+        let base_scenario = structurally_complete_twin_scenario();
+
+        let mut unsafe_states = Vec::new();
+        let mut puppeteer = base_state.clone();
+        puppeteer.deck.minions.push("Puppeteer".to_string());
+        unsafe_states.push(puppeteer);
+        let mut shaman = base_state.clone();
+        shaman.deck.minions.push("Shaman".to_string());
+        unsafe_states.push(shaman);
+        let mut chancellor = base_state.clone();
+        chancellor.deck.minions.push("Chancellor".to_string());
+        unsafe_states.push(chancellor);
+        let mut plague_doctor = base_state.clone();
+        plague_doctor
+            .deck
+            .outcasts
+            .push("Plague Doctor".to_string());
+        unsafe_states.push(plague_doctor);
+        let mut alchemist = base_state.clone();
+        alchemist.deck.villagers.push("Alchemist".to_string());
+        unsafe_states.push(alchemist);
+        let mut doppelganger = base_state.clone();
+        doppelganger.deck.outcasts.push("Doppelganger".to_string());
+        unsafe_states.push(doppelganger);
+        let mut drunk = base_state.clone();
+        drunk.deck.outcasts.push("Drunk".to_string());
+        unsafe_states.push(drunk);
+
+        for state in unsafe_states {
+            let result = populate_safe_twin_traces(&state, vec![base_scenario.clone()]);
+            assert_eq!(result.len(), 1);
+            assert!(result[0].twin_trace.is_none());
+        }
+
+        let mut unknown = base_scenario;
+        unknown.evil_positions.insert(2, "Unknown".to_string());
+        let result = populate_safe_twin_traces(&base_state, vec![unknown]);
+        assert_eq!(result.len(), 1);
+        assert!(result[0].twin_trace.is_none());
+    }
+
+    #[test]
+    fn presentation_derived_identity_fields_are_rejected_without_pool_hints() {
+        let state = safe_twin_state();
+        let base = structurally_complete_twin_scenario();
+
+        let mut variants = Vec::new();
+        let mut doppelganger = base.clone();
+        doppelganger.doppelganger_position = Some(2);
+        variants.push(doppelganger);
+        let mut drunk = base.clone();
+        drunk.drunk_position = Some(2);
+        variants.push(drunk);
+        let mut chancellor = base;
+        chancellor.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![2],
+            added_outcast_position: 2,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![1],
+        });
+        chancellor.chancellor_conversion = Some(2);
+        variants.push(chancellor);
+
+        for scenario in variants {
+            let result = populate_safe_twin_traces(&state, vec![scenario]);
+            assert_eq!(result.len(), 1);
+            assert!(result[0].twin_trace.is_none());
         }
     }
 
