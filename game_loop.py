@@ -402,8 +402,71 @@ def card_architect(pos: int, side: str) -> CardInfo:
     """side: 'Left', 'Right', or 'Equal'"""
     return CardInfo(pos, "Architect", info_parsed={"side": side})
 
-def card_empress(pos: int, targets: list[int]) -> CardInfo:
-    return CardInfo(pos, "Empress", info_parsed={"targets": targets})
+def _validate_current_empress_targets(targets) -> list[int]:
+    """Validate Empress's sorted three-reference current-build payload."""
+    if (
+        not isinstance(targets, list)
+        or len(targets) != 3
+        or any(type(target) is not int or target <= 0 for target in targets)
+        or len(set(targets)) != len(targets)
+        or targets != sorted(targets)
+    ):
+        raise ValueError(
+            "Current Empress targets must be three ascending unique positions"
+        )
+    return list(targets)
+
+
+def _empress_native_text(targets: list[int]) -> str:
+    """Return Empress's exact shipped public sentence."""
+    targets = _validate_current_empress_targets(targets)
+    return (
+        f"One is Evil:\n#{targets[0]}, #{targets[1]} or #{targets[2]}"
+    )
+
+
+def _parse_empress_native_text(info_text) -> Optional[list[int]]:
+    """Parse only one exact current Empress sentence."""
+    if not isinstance(info_text, str):
+        return None
+    match = re.fullmatch(
+        r"One is Evil:\n#([1-9]\d*), #([1-9]\d*) or #([1-9]\d*)",
+        info_text,
+    )
+    if match is None:
+        return None
+    targets = [int(match.group(index)) for index in range(1, 4)]
+    try:
+        expected = _empress_native_text(targets)
+    except ValueError:
+        return None
+    return targets if info_text == expected else None
+
+
+def card_empress(
+    pos: int,
+    targets: list[int],
+    *,
+    info_text: str = "",
+    empress_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build an Empress observation while preserving unmarked legacy data."""
+    info = {"targets": targets}
+    if empress_variant is not None:
+        if empress_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Empress variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Empress position must be positive")
+        if not isinstance(info_text, str):
+            raise ValueError("Current Empress text must be a string")
+        current_targets = _validate_current_empress_targets(targets)
+        expected_text = _empress_native_text(current_targets)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Empress text must match its targets")
+        info["targets"] = current_targets
+        info["empress_variant"] = empress_variant
+        info_text = expected_text
+    return CardInfo(pos, "Empress", info_text=info_text, info_parsed=info)
 
 def card_witness(pos: int, affected_position: int) -> CardInfo:
     return CardInfo(pos, "Witness", info_parsed={"affected_position": affected_position})
@@ -1375,8 +1438,19 @@ def card_poet_with_info(
             info_text=_enlightened_native_text(direction),
         )
     elif canonical_provider == "Empress":
+        if n_cards is None:
+            raise ValueError(
+                "Current Empress Poet entry requires session board size"
+            )
         require_args(1)
-        payload = {"targets": positions(0, 3)}
+        empress_targets = sorted(positions(0, 3))
+        empress_targets = _validate_current_empress_targets(empress_targets)
+        return _card_current_poet(
+            pos,
+            "Empress",
+            {"targets": empress_targets},
+            info_text=_empress_native_text(empress_targets),
+        )
     elif canonical_provider == "Bishop":
         if n_cards is None:
             raise ValueError(
@@ -5183,9 +5257,25 @@ def _parse_clue_from_memory(
         if 'equal' in cl:
             return card_architect(pos, 'Equal')
 
-    # --- Empress: targets from actedInfos ---
-    if role_lower == 'empress' and targets:
-        return card_empress(pos, targets)
+    # --- Empress/Noble: exact text + identical newest ordered refs. ---
+    if role_lower in {'empress', 'noble'}:
+        empress_targets = _parse_empress_native_text(clue)
+        if (
+            empress_targets is None
+            or type(n_cards) is not int
+            or n_cards <= 0
+            or type(pos) is not int
+            or not 1 <= pos <= n_cards
+            or any(target > n_cards for target in empress_targets)
+            or current_event_refs() != empress_targets
+        ):
+            return None
+        return card_empress(
+            pos,
+            empress_targets,
+            info_text=clue,
+            empress_variant=_PUBLIC_CURRENT_VARIANT,
+        )
 
     # --- Witness: one marked/unmarked target, or exact native NO result ---
     if role_lower == 'witness':
@@ -5542,6 +5632,26 @@ def _parse_clue_from_memory(
                 )
             return None
 
+        # Empress has no RuntimeData. Authenticate its exact text and refs
+        # before the Shugenja-only stale-runtime guard below.
+        empress_targets = _parse_empress_native_text(clue)
+        if empress_targets is not None:
+            if (
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
+                and all(target <= n_cards for target in empress_targets)
+                and poet_refs_match(empress_targets)
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Empress",
+                    {"targets": empress_targets},
+                    info_text=clue,
+                )
+            return None
+
         # Shugenja stores its claimed enum on the Poet and emits no refs.
         # RuntimeData is strong corroboration when readable; the exact public
         # event remains sufficient when the runtime object is unavailable.
@@ -5625,26 +5735,6 @@ def _parse_clue_from_memory(
                         "targets": oracle_targets,
                         "minion_role": minion.name,
                     },
-                    info_text=clue,
-                )
-
-        # Empress: exact three-reference public sentence.
-        m = re.fullmatch(
-            r'\s*One\s+is\s+Evil\s*:\s*#\s*(\d+)\s*,\s*'
-            r'#\s*(\d+)\s+or\s+#\s*(\d+)\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m:
-            empress_targets = [int(m.group(i)) for i in range(1, 4)]
-            if (
-                valid_displayed_targets(empress_targets)
-                and poet_refs_match(empress_targets)
-            ):
-                return _card_current_poet(
-                    pos,
-                    "Empress",
-                    {"targets": empress_targets},
                     info_text=clue,
                 )
 
@@ -5845,6 +5935,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         raise ValueError("Knitter entry requires exactly one pair count")
     if role == "enlightened" and len(args) != 3:
         raise ValueError("Enlightened entry requires exactly one direction")
+    if role == "empress" and len(args) != 3:
+        raise ValueError("Empress entry requires exactly three targets")
     if role == "bishop" and len(args) != 4:
         raise ValueError("Bishop entry requires targets and matching types")
     pos = int(args[1])
@@ -6019,8 +6111,29 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "architect":
         return card_architect(pos, args[2])  # Left/Right/Equal
     elif role == "empress":
-        targets = [int(x) for x in args[2].split(",")]
-        return card_empress(pos, targets)
+        if session is None:
+            raise ValueError("Current Empress entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Empress position is outside the current board")
+        try:
+            targets = sorted(int(value.strip()) for value in args[2].split(","))
+        except ValueError as exc:
+            raise ValueError(
+                "Empress targets must be comma-separated integers"
+            ) from exc
+        try:
+            targets = _validate_current_empress_targets(targets)
+        except ValueError as exc:
+            raise ValueError(
+                "Empress requires three distinct current-board targets"
+            ) from exc
+        if any(target > session.n_cards for target in targets):
+            raise ValueError("Empress target is outside the current board")
+        return card_empress(
+            pos,
+            targets,
+            empress_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "witness":
         return card_witness(pos, int(args[2]))
     elif role == "jester":
