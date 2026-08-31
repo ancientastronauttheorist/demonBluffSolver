@@ -41,7 +41,10 @@ pub fn stable_evil_origin_role_at<'a>(
         }
     }
     // Check confirmed evil that have been executed (role unknown)
-    if state.confirmed_evil.contains(&pos) && state.executed.contains(&pos) {
+    if scenario.puppet_position != Some(pos)
+        && state.confirmed_evil.contains(&pos)
+        && state.executed.contains(&pos)
+    {
         return Some("Unknown");
     }
     None
@@ -560,6 +563,8 @@ mod truth_status_tests {
         );
 
         let mut executed_state = state.clone();
+        executed_state.executed.push(1);
+        executed_state.confirmed_evil.push(1);
         executed_state
             .executed_evil_roles
             .insert(1, "Puppet".to_string());
@@ -572,6 +577,14 @@ mod truth_status_tests {
         assert_eq!(
             known_evil_role(1, &executed_only, &executed_state),
             Some("Puppet")
+        );
+        assert_eq!(
+            current_data_role_at(1, &executed_only, &executed_state).as_deref(),
+            Some("Puppet")
+        );
+        assert_eq!(
+            truth_status(1, &executed_only, &executed_state),
+            TruthStatus::Truthful
         );
     }
 

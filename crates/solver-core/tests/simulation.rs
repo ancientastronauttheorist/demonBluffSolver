@@ -957,7 +957,8 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             return SimResult::ConstraintFailure {
                 phase: format!("exec_step_{}", branch.total_executions),
                 detail: format!(
-                    "{case_name}: truth eliminated during simulation ({} surviving) [branch {}]",
+                    "{case_name}: truth eliminated during simulation ({} generated, {} surviving) [branch {}]",
+                    result.n_scenarios,
                     result.n_surviving,
                     branch.context(),
                 ),
@@ -2292,6 +2293,34 @@ fn debug_asc68_v3() {
         }
         _ => {} // Win, SimLoss, or insufficient truth are acceptable here.
     }
+}
+
+#[test]
+fn generated_puppet_execution_regressions_preserve_truth() {
+    let mut failures = Vec::new();
+    for case_name in [
+        "asc45_v6",
+        "asc63_v7",
+        "asc64_v2",
+        "asc68_v4",
+        "asc74_v5",
+        "asc77_v5",
+    ] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(&path).expect("read regression fixture");
+        let value: serde_json::Value =
+            serde_json::from_str(&content).expect("parse regression fixture");
+
+        match simulate_game(&value) {
+            SimResult::ConstraintFailure { phase, detail } => {
+                failures.push(format!(
+                    "{case_name} eliminated truth at {phase}: {detail}"
+                ));
+            }
+            result => eprintln!("{case_name}: {result:?}"),
+        }
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
 }
 
 /// Regression: asc71_v6 Bishop's [V,O,M] claim stays valid even when Chancellor@6
