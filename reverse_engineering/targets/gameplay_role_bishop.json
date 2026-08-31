@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Bishop information boundary, managed as Bishop, including truthful and bluff selection, exact clue construction, compiler-generated sorting and random-key helpers, the role-reference projection, both Unity and System RNG surfaces, the second ListHelper shuffle, and Day dispatch",
+  "functions": [
+    {
+      "name": "Bishop.CompilerGenerated.cctor",
+      "metadata_name": "Bishop.<>c$$.cctor",
+      "signature": "void Bishop___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F07F0"
+    },
+    {
+      "name": "Bishop.CompilerGenerated.ctor",
+      "metadata_name": "Bishop.<>c$$.ctor",
+      "signature": "void Bishop___c___ctor (Bishop___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Bishop.CompilerGenerated.GetInfoSortId",
+      "metadata_name": "Bishop.<>c$$<GetInfo>b__2_0",
+      "signature": "int32_t Bishop___c___GetInfo_b__2_0 (Bishop___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "applied_prototype_name": "FortuneTeller___c___CharacterPicked_b__6_0",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "Bishop.CompilerGenerated.GetInfoTieBreak",
+      "metadata_name": "Bishop.<>c$$<GetInfo>b__2_1",
+      "signature": "float Bishop___c___GetInfo_b__2_1 (Bishop___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Bishop.CompilerGenerated.GetBluffInfoSortId",
+      "metadata_name": "Bishop.<>c$$<GetBluffInfo>b__5_0",
+      "signature": "int32_t Bishop___c___GetBluffInfo_b__5_0 (Bishop___c_o* __this, Character_o* c, const MethodInfo* method);",
+      "applied_prototype_name": "FortuneTeller___c___CharacterPicked_b__6_0",
+      "rva": "0x3F0790"
+    },
+    {
+      "name": "Bishop.CompilerGenerated.GetBluffInfoTieBreak",
+      "metadata_name": "Bishop.<>c$$<GetBluffInfo>b__5_1",
+      "signature": "float Bishop___c___GetBluffInfo_b__5_1 (Bishop___c_o* __this, Character_o* __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Bishop.GetInfoRandomKeyClosure.ctor",
+      "metadata_name": "Bishop.<>c__DisplayClass2_0$$.ctor",
+      "signature": "void Bishop___c__DisplayClass2_0___ctor (Bishop___c__DisplayClass2_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Bishop.GetInfoRandomKeyClosure.Next",
+      "metadata_name": "Bishop.<>c__DisplayClass2_0$$<GetInfo>b__2",
+      "signature": "int32_t Bishop___c__DisplayClass2_0___GetInfo_b__2 (Bishop___c__DisplayClass2_0_o* __this, Character_o* x, const MethodInfo* method);",
+      "rva": "0x3F07C0"
+    },
+    {
+      "name": "Bishop.GetBluffInfoRandomKeyClosure.ctor",
+      "metadata_name": "Bishop.<>c__DisplayClass5_0$$.ctor",
+      "signature": "void Bishop___c__DisplayClass5_0___ctor (Bishop___c__DisplayClass5_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Bishop.GetBluffInfoRandomKeyClosure.Next",
+      "metadata_name": "Bishop.<>c__DisplayClass5_0$$<GetBluffInfo>b__2",
+      "signature": "int32_t Bishop___c__DisplayClass5_0___GetBluffInfo_b__2 (Bishop___c__DisplayClass5_0_o* __this, int32_t x, const MethodInfo* method);",
+      "applied_prototype_name": "Bishop___c__DisplayClass2_0___GetInfo_b__2",
+      "rva": "0x3F07C0"
+    },
+    {
+      "name": "Bishop.get_Description",
+      "metadata_name": "Bishop$$get_Description",
+      "signature": "System_String_o* Bishop__get_Description (Bishop_o* __this, const MethodInfo* method);",
+      "rva": "0x3D5E80"
+    },
+    {
+      "name": "Bishop.GetInfo",
+      "metadata_name": "Bishop$$GetInfo",
+      "signature": "ActedInfo_o* Bishop__GetInfo (Bishop_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D5320"
+    },
+    {
+      "name": "Bishop.Act",
+      "metadata_name": "Bishop$$Act",
+      "signature": "void Bishop__Act (Bishop_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Bishop.BluffAct",
+      "metadata_name": "Bishop$$BluffAct",
+      "signature": "void Bishop__BluffAct (Bishop_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Bishop.GetBluffInfo",
+      "metadata_name": "Bishop$$GetBluffInfo",
+      "signature": "ActedInfo_o* Bishop__GetBluffInfo (Bishop_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D4730"
+    },
+    {
+      "name": "Bishop.ConjourInfo",
+      "metadata_name": "Bishop$$ConjourInfo",
+      "signature": "System_String_o* Bishop__ConjourInfo (Bishop_o* __this, System_Collections_Generic_List_int__o* ids, System_Collections_Generic_List_ECharacterType__o* characters, const MethodInfo* method);",
+      "rva": "0x3D4220"
+    },
+    {
+      "name": "Bishop.ctor",
+      "metadata_name": "Bishop$$.ctor",
+      "signature": "void Bishop___ctor (Bishop_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Character.GetCharacterData",
+      "metadata_name": "Character$$GetCharacterData",
+      "signature": "CharacterData_o* Character__GetCharacterData (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364D60"
+    },
+    {
+      "name": "Characters.FilterCharacterType.Character",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "rva": "0x36AC30"
+    },
+    {
+      "name": "ListHelper.ShuffleList.object",
+      "metadata_name": "ListHelper$$ShuffleList<object>",
+      "signature": "System_Collections_Generic_List_T__o* ListHelper__ShuffleList_object_ (System_Collections_Generic_List_T__o* list, const MethodInfo_65C470* method);",
+      "rva": "0x65C470"
+    },
+    {
+      "name": "System.Random.ctor.Default",
+      "metadata_name": "System.Random$$.ctor",
+      "signature": "void System_Random___ctor (System_Random_o* __this, const MethodInfo* method);",
+      "rva": "0x1135300"
+    },
+    {
+      "name": "System.Random.Next.Default",
+      "metadata_name": "System.Random$$Next",
+      "signature": "int32_t System_Random__Next (System_Random_o* __this, const MethodInfo* method);",
+      "rva": "0x1135240"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "UnityEngine.Random.get_value",
+      "metadata_name": "UnityEngine.Random$$get_value",
+      "signature": "float UnityEngine_Random__get_value (const MethodInfo* method);",
+      "rva": "0x1C86710"
+    }
+  ]
+}
