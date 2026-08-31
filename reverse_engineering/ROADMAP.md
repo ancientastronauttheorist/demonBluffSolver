@@ -281,6 +281,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   chronology, and archive compatibility; expand the typed union to 37 target
   sets, 750 memberships, 482 selected managed definitions, and 401 unique
   native RVAs, then publish its typed-quality report.
+- [x] Asset-bind public Confessor to managed `Confessor`; native-audit all nine
+  declared methods plus acted-record, status, registered-alignment, animated-
+  art, and exact-membership helpers; close exact direct text and native-null
+  reference provenance, truth-identical Corrupted/registered-Evil behavior,
+  current-Spy override, Poet absence, real/raw callback ordering, raw-bluff and
+  register-as identity, identity movers, Baker-to-Spy chronology, and archive
+  compatibility; expand the typed union to 38 target sets, 764 memberships,
+  492 selected managed definitions, and 410 unique native RVAs, then publish
+  its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

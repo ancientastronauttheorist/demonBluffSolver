@@ -436,6 +436,17 @@ and forward-then-reverse range endpoints, preserving duplicate opposite seats
 and empty oversized ranges. Strict current observations also preserve native
 real-role/bluff-role callback order and join raw-bluff identity plus Baker/Spy
 chronology globally, while unmarked fixtures retain their legacy path.
+The newest
+[`Confessor`](notes/roles/gameplay_role_confessor.md) boundary asset-binds the
+public role to managed `Confessor`, covers all nine declared methods plus acted-
+record, status, registered-alignment, animated-art, and exact-membership
+helpers, and closes direct use while proving current Poet absence. Truth and
+bluff deterministically emit the same exact Good/dizzy result from direct
+Corruption or registered-Evil alignment, except current Spy data always forces
+Good. The result has a native-null reference list, no runtime data, and zero
+RNG. Strict observations preserve that null provenance and join current data,
+raw bluff/register-as identity, callback order, anonymous Wretch, and
+Baker/Spy chronology globally; unmarked fixtures retain their legacy path.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -473,14 +484,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_bard
+  -TargetSet gameplay_role_confessor
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,612
-datatypes. Its thirty-seven-set inventory contains 750 target memberships, 482
-distinct selected FunctionDefinitions, and 401 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,623
+datatypes. Its thirty-eight-set inventory contains 764 target memberships, 492
+distinct selected FunctionDefinitions, and 410 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -494,13 +505,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current thirty-seven-set run used five batches for each phase. Ghidra
+sets; the current thirty-eight-set run used five batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all thirty-seven target
-sets after a no-analysis refresh. Two hundred sixty-eight memberships are exact
+The preserved fully analyzed typed project now covers all thirty-eight target
+sets after a no-analysis refresh. Two hundred seventy-two memberships are exact
 FunctionDefinition overlaps between boundaries. Folded/shared bodies make the
-482 selected definitions exceed the 401 unique native RVAs by eighty-one;
+492 selected definitions exceed the 410 unique native RVAs by eighty-two;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -523,11 +534,11 @@ reachable datatypes. The first Medium application imported six additional
 reachable datatypes. The Knitter refresh imported six additional datatypes,
 the Enlightened refresh imported 12, the Bishop refresh imported 38, and the
 Empress refresh imported six additional reachable datatypes, the Gemcrafter
-refresh imported six more, and the Bard refresh imported six more. The five-
-batch refresh reapplied and validated all 750 memberships without rerunning
-auto-analysis. The final read-only pass validated all 750 memberships (482
-exact definitions) and 2,198 membership-level parameter-storage locations
-with zero program mutations.
+refresh imported six more, the Bard refresh imported six more, and the
+Confessor refresh imported three more. The five-batch refresh reapplied and
+validated all 764 memberships without rerunning auto-analysis. The final read-
+only pass validated all 764 memberships (492 exact definitions) and 2,242
+membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
 register families from the parameter datatype: integer and pointer parameters
@@ -566,7 +577,8 @@ fell from 53 to 31. Poisoner fell from 104 to 46, Twin Minion fell from 168 to
 from 116 to 78, Lover fell from 92 to 38, Bounty Hunter fell from 68 to 32,
 Medium fell from 87 to 30, Knitter fell from 55 to nine, and Enlightened fell
 from 97 to 24. Bishop fell from 187 to 98, Empress fell from 102 to 45,
-Gemcrafter fell from 67 to 27, and Bard fell from 62 to 18.
+Gemcrafter fell from 67 to 27, Bard fell from 62 to 18, and Confessor fell
+from 51 to four.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -582,7 +594,8 @@ fell from 42 to 28. Poisoner fell from 105 to 26, Twin Minion fell from 211 to
 from 139 to 101, Lover fell from 59 to 24, Bounty Hunter fell from 48 to 22,
 Medium fell from 72 to 18, Knitter fell from 43 to 26, and Enlightened fell
 from 60 to 38. Bishop fell from 251 to 156, Empress fell from 122 to 92,
-Gemcrafter fell from 53 to 14, and Bard fell from 47 to 25.
+Gemcrafter fell from 53 to 14, Bard fell from 47 to 25, and Confessor fell
+from 55 to three.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -631,8 +644,10 @@ indirect-call patterns from four to zero. Gemcrafter retained three error and
 15 warning markers, reduced placeholder parameters from 58 to zero, and
 reduced indirect-call patterns from four to zero. Bard retained three error
 and 16 warning markers, reduced placeholder parameters from 91 to zero, and
-reduced indirect-call patterns from four to zero. The original typed import is
-recorded in
+reduced indirect-call patterns from four to zero. Confessor retained four
+error and 15 warning markers, reduced placeholder parameters from 113 to zero,
+and reduced indirect-call patterns from six to zero. The original typed import
+is recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
 [`Slayer typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_slayer.json)
@@ -696,14 +711,16 @@ The current Gemcrafter comparison is in the
 [`Gemcrafter typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_gemcrafter.json).
 The current Bard comparison is in the
 [`Bard typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_bard.json).
+The current Confessor comparison is in the
+[`Confessor typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_confessor.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 481 classifications backed by
-243 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 489 classifications backed by
+251 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

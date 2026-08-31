@@ -447,3 +447,55 @@ The checked overlay totals are 489 terminal classifications and 251 evidence
 records. All nine Confessor declarations are terminal: seven are understood,
 the two zero-caller declared helpers are unreachable, and no Confessor method
 remains unclassified.
+
+## Implementation regression gates
+
+The matching reader, bridge, and solver checkpoint passed these focused and
+aggregate gates:
+
+- `python -m py_compile memory_reader.py game_loop.py
+  tests/test_confessor_native.py tests/test_poet_native.py` completed cleanly.
+  The combined Confessor/Poet focused suite passed 41/41 tests, and the full
+  Python discovery suite passed 628/628.
+- `cargo test -p solver-core current_confessor --lib -- --nocapture` passed
+  7/7 focused tests. They cover exact schema/text/provenance, native-null
+  references at the bridge, Corrupted and registered-alignment results, the
+  current-Spy override, Puppet/Drunk/Doppelganger/Wretch worlds, Twin/Shaman
+  current data, Baker-to-Spy clearing, proven raw-callback overwrite order,
+  global raw/register-as identity joins, current Poet rejection, unresolved
+  Start identities, and unmarked archive compatibility.
+- `cargo test --release -p solver-core --lib` passed 374/374. Both
+  `cargo check --all-targets` and `cargo build --release` completed cleanly.
+- `cargo test --release --test simulation -- --nocapture` passed 31/31 in
+  829.08 seconds. Its 426 active-v2 fixtures produced 303 wins, seven expected
+  losses, 21 expected constraint issues, zero unexpected constraint failures,
+  six known unexpected simulation losses, 15 hidden-Outcast truth gaps, and 74
+  fixtures awaiting ordered Twin traces. Those aggregate counts are unchanged
+  from the preceding Bard checkpoint.
+
+The reader now preserves native null acted references distinctly from an
+allocated empty list, authenticates only the newest exact Confessor event, and
+leaves hidden status/alignment fields out of public ingestion. Manual entries
+canonicalize explicit operator tokens into exact current text, while auto-card
+may replace only an empty same-role placeholder. The Rust validator separately
+reconstructs current data, registered alignment, raw bluff/register-as labels,
+and Baker chronology. When a later raw callback is proven, it must also be
+Confessor because any other provider would overwrite the observed event;
+merely possible raw-pointer presence remains conservative.
+
+## Remaining uncertainty
+
+- The scenario model does not expose Confessor's resisted `AppearTruthfull`
+  insertion. Judge/Rambler appearance logic therefore still assumes the status
+  lands on a displayed Confessor; the actual Confessor clue predicate does not
+  make that assumption.
+- Dynamic animated-art frame timing and generic skin-unlock machinery were not
+  live-forced. They do not feed the clue, references, runtime data, or RNG.
+- When raw-bluff presence is only `Possible`, the hidden-state model cannot
+  distinguish an absent pointer from an unobserved one. Proven pointers are
+  constrained exactly and Baker's synchronous clear remains authoritative.
+- The archived observations are textless and unversioned. They protect their
+  historical Boolean predicate but cannot prove current text, null references,
+  callback provenance, or the current-Spy exception.
+- This is a build-specific Confessor checkpoint, not evidence that every role
+  or the whole game has been fully decompiled.
