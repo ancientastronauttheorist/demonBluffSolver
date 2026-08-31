@@ -243,6 +243,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   registration chronology; expand the typed union to 33 target sets, 680
   memberships, 435 selected managed methods, and 372 unique native RVAs, then
   publish its typed-quality report.
+- [x] Asset-bind public Bishop to managed `Bishop`; native-audit all 17 declared
+  role/compiler-generated methods plus registered-data, type-filter, acted-
+  record, list-shuffle, and RNG helpers; close exact truth category precedence,
+  authored-count bluff construction, live register-as-first references,
+  separate ID/type/reference ordering, direct/Poet parity, joint anonymous-
+  Wretch worlds, identity movers, and Baker-to-Spy chronology; expand the typed
+  union to 34 target sets, 705 memberships, 455 selected managed methods, and
+  382 unique native RVAs, then publish its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
