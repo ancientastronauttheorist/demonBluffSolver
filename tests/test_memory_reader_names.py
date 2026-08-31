@@ -45,6 +45,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Investigator_86420": "Oracle",
             "Tracker_24680": "Hunter",
             "BountyHunter_97531": "Bounty Hunter",
+            "Bounty Hunter_39284184": "Bounty Hunter",
             "Empath_91302708": "Lover",
         }
 

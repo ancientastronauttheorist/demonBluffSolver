@@ -263,6 +263,7 @@ class PoetManualIngestionTests(unittest.TestCase):
 
     def test_bounty_hunter_builder_is_current_and_validates_target(self):
         card = card_bounty_hunter(1, 4)
+        self.assertEqual(card.info_text, "#4\nis Evil")
         self.assertEqual(
             card.info_parsed,
             {
@@ -274,6 +275,14 @@ class PoetManualIngestionTests(unittest.TestCase):
         for invalid in (0, -1, True, "4"):
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 card_bounty_hunter(1, invalid)
+
+        manual = card_poet_with_info(
+            1,
+            "bounty_hunter",
+            ["4"],
+            n_cards=6,
+        )
+        self.assertEqual(manual.info_text, "#4\nis Evil")
 
     def test_obsolete_and_unknown_manual_providers_are_rejected(self):
         for provider in (
@@ -539,6 +548,50 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                     _parse_clue_from_memory(card, n_cards=6)
                 )
 
+    def test_bounty_hunter_rejects_non_native_text_and_out_of_board_ids(self):
+        for clue in (
+            "#4 is Evil",
+            "#4\nis evil",
+            "#4\nIs Evil",
+            " #4\nis Evil",
+            "# 4\nis Evil",
+            "#04\nis Evil",
+            "#4\nis  Evil",
+            "#4\nis Evil.",
+            "#4\r\nis Evil",
+        ):
+            with self.subTest(clue=clue):
+                self.assertIsNone(
+                    _parse_clue_from_memory(
+                        _memory_poet(clue, []),
+                        n_cards=6,
+                    )
+                )
+
+        for actor, target, n_cards in (
+            (0, 4, 6),
+            (7, 4, 6),
+            (True, 4, 6),
+            ("1", 4, 6),
+            (None, 4, 6),
+            (1, 0, 6),
+            (1, 7, 6),
+        ):
+            clue = f"#{target}\nis Evil"
+            with self.subTest(actor=actor, target=target, n_cards=n_cards):
+                card = _memory_poet(clue, [])
+                card["position"] = actor
+                self.assertIsNone(
+                    _parse_clue_from_memory(card, n_cards=n_cards)
+                )
+
+        self.assertIsNone(
+            _parse_clue_from_memory(
+                _memory_poet("#4\nis Evil", []),
+                n_cards=None,
+            )
+        )
+
     def test_bishop_refs_are_a_set_and_types_are_a_multiset(self):
         clue = (
             "Between\n#2, #3, #4\nthere is:\n"
@@ -637,7 +690,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         self.assertNotIn("poet_variant", shut_up.info_parsed)
 
     def test_auto_card_replaces_only_an_empty_poet_placeholder(self):
-        clue = "#4 is Evil"
+        clue = "#4\nis Evil"
         memory = _memory_poet(clue, [])
         memory["state"] = "Revealed"
 

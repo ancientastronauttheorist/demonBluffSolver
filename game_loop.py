@@ -905,15 +905,22 @@ def _card_current_poet(
     return CardInfo(pos, "Poet", info_text=info_text, info_parsed=info)
 
 
+def _bounty_hunter_native_text(evil_position: int) -> str:
+    """Return Bounty Hunter's exact shipped public clue text."""
+    return f"#{evil_position}\nis Evil"
+
+
 def card_bounty_hunter(
     pos: int,
     evil_position: int,
     *,
-    info_text: str = "",
+    info_text: Optional[str] = None,
 ) -> CardInfo:
     """Poet's retained Bounty Hunter direct-evil provider."""
     if type(evil_position) is not int or evil_position <= 0:
         raise ValueError("Bounty Hunter Poet clue requires a positive position")
+    if info_text is None:
+        info_text = _bounty_hunter_native_text(evil_position)
     return _card_current_poet(
         pos,
         "Bounty Hunter",
@@ -5219,18 +5226,19 @@ def _parse_clue_from_memory(
             return None
 
         # Bounty Hunter (retained Poet provider, distinct from Hunter).
-        m = re.fullmatch(
-            r'\s*#\s*(\d+)\s+is\s+Evil\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
+        m = re.fullmatch(r'#([1-9]\d*)\nis Evil', clue)
         if m:
             evil_position = int(m.group(1))
             # Native Bounty Hunter text carries no Character references.  The
             # latest ActedInfo still owns the exact sentence, so requiring its
             # empty ref list distinguishes it from stale/ambiguous events.
             if (
-                valid_displayed_targets([evil_position])
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
+                and valid_displayed_targets([evil_position])
+                and clue == _bounty_hunter_native_text(evil_position)
                 and poet_refs_match([])
             ):
                 return card_bounty_hunter(
