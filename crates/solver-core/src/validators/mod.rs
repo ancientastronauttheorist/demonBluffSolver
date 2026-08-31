@@ -182,6 +182,10 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // data must all admit one stable Minion draw.
     if !validate_current_register_as_consistency(scenario, state) { return false; }
 
+    // Current Poet/Bounty Hunter observations must share one physical
+    // assignment for every still-anonymous natural Wretch identity.
+    if !validate_current_bounty_hunter_wretch_consistency(scenario, state) { return false; }
+
     // Card info validators
     for card in &state.cards {
         if state.executed.contains(&card.position) {
@@ -2683,7 +2687,133 @@ fn validate_bishop(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     if truth == TruthStatus::Truthful { has_evil } else { true }
 }
 
+fn parse_current_bounty_hunter_target(card: &CardInfo, state: &GameState) -> Option<u8> {
+    let info = &card.info_parsed;
+    if !roles_equal(&card.apparent_role, "Poet")
+        || !poet_has_exact_fields(info, &["evil_position"])
+        || info
+            .get("poet_variant")
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+        || info
+            .get("copied_role")
+            .and_then(serde_json::Value::as_str)
+            != Some("Bounty Hunter")
+    {
+        return None;
+    }
+    let target = poet_position_value(info.get("evil_position"), state.n_cards)?;
+    (card.position > 0
+        && card.position <= state.n_cards
+        && card.info_text == format!("#{target}\nis Evil"))
+    .then_some(target)
+}
+
+fn validate_current_bounty_hunter(
+    actor: u8,
+    target: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let known_alignment = registered_alignment_at(target, scenario, state);
+    let anonymous_wretch_candidate =
+        anonymous_natural_wretch_candidates(scenario, state).contains(&target);
+
+    match truth_status(actor, scenario, state) {
+        TruthStatus::Truthful => {
+            if known_alignment == EffectiveAlignment::Evil {
+                return true;
+            }
+            anonymous_wretch_candidate
+                && anonymous_wretch_assignment_possible(
+                    &HashSet::from([target]),
+                    &HashSet::new(),
+                    scenario,
+                    state,
+                )
+        }
+        TruthStatus::Lying => {
+            if known_alignment == EffectiveAlignment::Evil {
+                return false;
+            }
+            !anonymous_wretch_candidate
+                || anonymous_wretch_assignment_possible(
+                    &HashSet::new(),
+                    &HashSet::from([target]),
+                    scenario,
+                    state,
+                )
+        }
+    }
+}
+
+fn validate_current_bounty_hunter_wretch_consistency(
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let anonymous_wretches: HashSet<u8> =
+        anonymous_natural_wretch_candidates(scenario, state)
+            .into_iter()
+            .collect();
+    let mut required = HashSet::new();
+    let mut forbidden = HashSet::new();
+
+    for card in &state.cards {
+        if state.executed.contains(&card.position)
+            && state.confirmed_evil.contains(&card.position)
+            && !state.executed_evil_roles.contains_key(&card.position)
+        {
+            continue;
+        }
+        if card
+            .info_parsed
+            .get("poet_variant")
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+            || card
+                .info_parsed
+                .get("copied_role")
+                .and_then(serde_json::Value::as_str)
+                != Some("Bounty Hunter")
+        {
+            continue;
+        }
+        let Some(target) = parse_current_bounty_hunter_target(card, state) else {
+            // Individual schema validation remains fail-closed in the card
+            // pass below; malformed or dormant direct-role payloads do not
+            // contribute hidden-identity constraints here.
+            continue;
+        };
+        if registered_alignment_at(target, scenario, state) == EffectiveAlignment::Evil
+            || !anonymous_wretches.contains(&target)
+        {
+            continue;
+        }
+        match truth_status(card.position, scenario, state) {
+            TruthStatus::Truthful => {
+                required.insert(target);
+            }
+            TruthStatus::Lying => {
+                forbidden.insert(target);
+            }
+        }
+    }
+
+    (required.is_empty() && forbidden.is_empty())
+        || anonymous_wretch_assignment_possible(&required, &forbidden, scenario, state)
+}
+
 fn validate_bounty_hunter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    if card.info_parsed.contains_key("poet_variant") {
+        let Some(target) = parse_current_bounty_hunter_target(card, state) else {
+            return false;
+        };
+        return validate_current_bounty_hunter(card.position, target, scenario, state);
+    }
+
+    // Preserve every unmarked historical Poet/Bounty Hunter observation on
+    // its legacy scalar predicate. Current schema and generation reachability
+    // are marker-gated above.
     let evil_pos = match info_pos(&card.info_parsed, "evil_position") {
         Some(v) => v,
         None => return true,
@@ -2838,10 +2968,7 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state.n_cards,
         )
         .is_some(),
-        "Bounty Hunter" => {
-            poet_has_exact_fields(info, &["evil_position"])
-                && poet_position_value(info.get("evil_position"), state.n_cards).is_some()
-        }
+        "Bounty Hunter" => parse_current_bounty_hunter_target(card, state).is_some(),
         "Medium" => {
             poet_has_exact_fields(info, &["good_position", "good_role"])
                 && poet_position_value(info.get("good_position"), state.n_cards).is_some()
@@ -3725,6 +3852,10 @@ mod tests {
                 .and_then(current_lover_claim_text)
                 .map(str::to_string),
             "Oracle" => Some(current_oracle_text(&payload)),
+            "Bounty Hunter" => payload
+                .get("evil_position")
+                .and_then(serde_json::Value::as_u64)
+                .map(|target| format!("#{target}\nis Evil")),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -4177,15 +4308,7 @@ mod tests {
 
     #[test]
     fn current_poet_provider_still_delegates_truth_and_inverse() {
-        let poet = make_card(
-            1,
-            "Poet",
-            json!({
-                "poet_variant": "public_current",
-                "copied_role": "Bounty Hunter",
-                "evil_position": 2,
-            }),
-        );
+        let poet = current_poet("Bounty Hunter", json!({"evil_position": 2}));
         let state = base_state(3, vec![poet.clone()]);
         let mut matching = empty_scenario();
         matching.evil_positions.insert(2, "Pooka".to_string());
@@ -4200,6 +4323,235 @@ mod tests {
             .evil_positions
             .insert(2, "Pooka".to_string());
         assert!(!validate_poet(&poet, &lying_matching, &state));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_schema_is_exact_text_bound_and_fail_closed() {
+        let valid = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        let state = base_state(3, vec![valid.clone()]);
+        let scenario = empty_scenario();
+
+        assert_eq!(valid.info_text, "#2\nis Evil");
+        assert_eq!(
+            parse_current_bounty_hunter_target(&valid, &state),
+            Some(2),
+        );
+        assert!(validate_current_poet_payload(
+            &valid,
+            &state,
+            "Bounty Hunter",
+        ));
+
+        for text in ["", "#2 is Evil", "#2\nis evil", "#2\nis Evil!"] {
+            let mut malformed = valid.clone();
+            malformed.info_text = text.to_string();
+            assert!(parse_current_bounty_hunter_target(&malformed, &state).is_none());
+            assert!(!validate_poet(&malformed, &scenario, &state));
+        }
+
+        let mut extra = valid.clone();
+        extra.info_parsed.insert("future".to_string(), json!(true));
+        assert!(!validate_poet(&extra, &scenario, &state));
+
+        let mut wrong_type = valid.clone();
+        wrong_type
+            .info_parsed
+            .insert("evil_position".to_string(), json!(true));
+        assert!(!validate_poet(&wrong_type, &scenario, &state));
+
+        let mut future = valid.clone();
+        future
+            .info_parsed
+            .insert("poet_variant".to_string(), json!("future"));
+        assert!(!validate_poet(&future, &scenario, &state));
+
+        let mut dormant_direct = valid;
+        dormant_direct.apparent_role = "Bounty Hunter".to_string();
+        assert!(!validate_bounty_hunter(
+            &dormant_direct,
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_uses_explicit_wretch_registration() {
+        let poet = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        let mut state = base_state(
+            3,
+            vec![poet.clone(), make_card(2, "Wretch", json!({}))],
+        );
+        let truthful = empty_scenario();
+
+        assert!(validate_poet(&poet, &truthful, &state));
+        let mut lying = truthful.clone();
+        lying.corrupted.insert(1);
+        assert!(!validate_poet(&poet, &lying, &state));
+
+        state.cards[1] = make_card(2, "Scout", json!({}));
+        assert!(!validate_poet(&poet, &truthful, &state));
+        assert!(validate_poet(&poet, &lying, &state));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_resolves_anonymous_wretch_at_named_target() {
+        let poet = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        let mut state = base_state(
+            5,
+            vec![poet.clone(), make_card(2, "Scout", json!({}))],
+        );
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut truthful = empty_scenario();
+        truthful.evil_positions.insert(5, "Pooka".to_string());
+        let mut lying = truthful.clone();
+        lying.corrupted.insert(1);
+
+        // With anonymous seats #3 and #4, the one Wretch can either make the
+        // named target registered Evil or leave it registered Good.
+        assert!(validate_poet(&poet, &truthful, &state));
+        assert!(validate_poet(&poet, &lying, &state));
+
+        // Once #4 has known Good data, the Wretch is forced onto #3. Truth
+        // remains reachable, while the bluff cannot select that target.
+        state.cards.push(make_card(4, "Scout", json!({})));
+        assert!(validate_poet(&poet, &truthful, &state));
+        assert!(!validate_poet(&poet, &lying, &state));
+
+        state.board_outcast_count = Some(0);
+        assert!(!validate_poet(&poet, &truthful, &state));
+        assert!(validate_poet(&poet, &lying, &state));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_rejects_two_truths_consuming_one_wretch() {
+        let first = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        let mut second = current_poet("Bounty Hunter", json!({"evil_position": 4}));
+        second.position = 2;
+        let mut state = base_state(5, vec![first.clone(), second.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+
+        assert!(validate_poet(&first, &scenario, &state));
+        assert!(validate_poet(&second, &scenario, &state));
+        assert!(!validate_current_bounty_hunter_wretch_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_rejects_truth_and_lie_on_same_anonymous_wretch() {
+        let first = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        let mut second = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        second.position = 2;
+        let mut state = base_state(5, vec![first.clone(), second.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+        scenario.corrupted.insert(2);
+
+        assert!(validate_poet(&first, &scenario, &state));
+        assert!(validate_poet(&second, &scenario, &state));
+        assert!(!validate_current_bounty_hunter_wretch_consistency(
+            &scenario,
+            &state,
+        ));
+
+        state.executed.push(2);
+        state.confirmed_evil.push(2);
+        assert!(validate_current_bounty_hunter_wretch_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_accepts_one_joint_wretch_assignment() {
+        let first = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        let mut second = current_poet("Bounty Hunter", json!({"evil_position": 4}));
+        second.position = 2;
+        let mut state = base_state(5, vec![first.clone(), second.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+        scenario.corrupted.insert(2);
+
+        assert!(validate_poet(&first, &scenario, &state));
+        assert!(validate_poet(&second, &scenario, &state));
+        assert!(validate_current_bounty_hunter_wretch_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_poet_bounty_hunter_allows_self_puppet_and_dead_targets() {
+        let self_claim = current_poet("Bounty Hunter", json!({"evil_position": 1}));
+        let singleton = base_state(1, vec![self_claim.clone()]);
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+
+        assert!(validate_poet(&self_claim, &puppet, &singleton));
+        puppet.corrupted.insert(1);
+        assert!(!validate_poet(&self_claim, &puppet, &singleton));
+
+        let mut lying_good_self = empty_scenario();
+        lying_good_self.corrupted.insert(1);
+        assert!(validate_poet(
+            &self_claim,
+            &lying_good_self,
+            &singleton,
+        ));
+
+        let dead_claim = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        let mut dead_state = base_state(3, vec![dead_claim.clone()]);
+        dead_state.executed.push(2);
+        let mut dead_evil = empty_scenario();
+        dead_evil.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_poet(&dead_claim, &dead_evil, &dead_state));
+    }
+
+    #[test]
+    fn unmarked_poet_bounty_hunter_preserves_legacy_predicate() {
+        let legacy = make_card(
+            1,
+            "Poet",
+            json!({
+                "copied_role": "Bounty Hunter",
+                "evil_position": 2,
+            }),
+        );
+        let state = base_state(3, vec![legacy.clone()]);
+        let mut evil_target = empty_scenario();
+        evil_target.evil_positions.insert(2, "Pooka".to_string());
+
+        assert!(legacy.info_text.is_empty());
+        assert!(validate_poet(&legacy, &evil_target, &state));
+        assert!(!validate_poet(&legacy, &empty_scenario(), &state));
+
+        let mut lying_good = empty_scenario();
+        lying_good.corrupted.insert(1);
+        assert!(validate_poet(&legacy, &lying_good, &state));
+        lying_good
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!validate_poet(&legacy, &lying_good, &state));
+
+        let missing_claim = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Bounty Hunter"}),
+        );
+        assert!(validate_poet(&missing_claim, &empty_scenario(), &state));
     }
 
     #[test]
