@@ -312,6 +312,17 @@ and ID. Existing reveal coroutines are not cancelled, a same-card branch still
 performs both reinitializations, and the private duplicate helper has no
 executable caller. This disproves stable Twin/Demon adjacency and exposes an
 explicit solver/live identity-trace parity gap.
+The latest [`Poet`](notes/roles/gameplay_role_poet.md) boundary asset-binds the
+public Good Villager to exact managed `Gossip`, covers all six declared Gossip
+methods, the twelve exact provider constructors, and generic Character action
+dispatch, and closes the shipped selector. Every real or bluff result makes
+one fresh `Random.Range(0, Count)` provider draw and delegates to that
+provider's corresponding virtual information method. The constructor pool is
+exactly Lover, Scout, Oracle, Bounty Hunter, Medium, Knitter, Hunter,
+Enlightened, Empress, Bishop, Gemcrafter, and Bard in that order. Current live
+payloads now carry a strict provenance marker while unmarked historical
+fixtures retain legacy compatibility; individual provider clue-generation
+bodies remain a later boundary.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -349,14 +360,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_twin_minion
+  -TargetSet gameplay_role_poet
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,448
-datatypes. Its twenty-five-set inventory contains 548 target memberships, 342
-distinct selected FunctionDefinitions, and 312 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,484
+datatypes. Its twenty-six-set inventory contains 568 target memberships, 360
+distinct selected FunctionDefinitions, and 316 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -370,14 +381,15 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current twenty-five-set run used four batches for each phase. Ghidra
+sets; the current twenty-six-set run used four batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all twenty-five target
-sets after a no-analysis refresh. Two hundred six memberships are exact
-overlaps between boundaries. Folded/shared bodies make the 342 selected
-definitions exceed the 312 unique native RVAs by thirty; each canonical native prototype is explicit
-while all exact managed definitions remain in the GDT. The original full
+The preserved fully analyzed typed project now covers all twenty-six target
+sets after a no-analysis refresh. Two hundred eight memberships are exact
+overlaps between boundaries. Folded/shared bodies make the 360 selected
+definitions exceed the 316 unique native RVAs by forty-four; each canonical
+native prototype is explicit while all exact managed definitions remain in the
+GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
 seconds without a timeout. Subsequent refreshes imported 121 additional
 reachable datatypes, including 40 for the public Dreamer boundary, six for
@@ -389,10 +401,10 @@ reachable datatypes. The Fortune Teller refresh imported 26 additional
 reachable datatypes. The Bombardier refresh imported six additional reachable
 datatypes. The Pooka refresh required no new reachable datatype import. The
 Poisoner refresh also required no new reachable datatype import. The Twin
-Minion refresh imported six additional reachable datatypes. The four-batch
-refresh reapplied and validated all 548 memberships without rerunning auto-
-analysis. The final read-only pass validated all 548 memberships (342 exact
-definitions) and 1,608
+Minion refresh imported six additional reachable datatypes. The Poet refresh
+imported 17 additional reachable datatypes. The four-batch refresh reapplied
+and validated all 568 memberships without rerunning auto-analysis. The final
+read-only pass validated all 568 memberships (360 exact definitions) and 1,658
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -427,8 +439,8 @@ Witch, from 237 to 105 for Chancellor/Witness, and from 387 to 154 for the
 combined Lilis/Knight boundary. Rambler fell from 405 to 103, and Baker fell
 from 261 to 71. The combined Doppelganger/Drunk boundary fell from 216 to 72.
 Fortune Teller fell from 171 to 67, Bombardier fell from 134 to 39, and Pooka
-fell from 53 to 31. Poisoner fell from 104 to 46, and Twin Minion fell from
-168 to 45.
+fell from 53 to 31. Poisoner fell from 104 to 46, Twin Minion fell from 168 to
+45, and Poet fell from 74 to 9.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -439,8 +451,8 @@ The Chancellor/Witness boundary fell from 294 raw field-offset accesses to
 102, Lilis/Knight fell from 581 to 203, Rambler fell from 699 to 95, and Baker
 fell from 396 to 85. Doppelganger/Drunk fell from 266 to 54.
 Fortune Teller fell from 286 to 194, Bombardier fell from 245 to 98, and Pooka
-fell from 42 to 28. Poisoner fell from 105 to 26, and Twin Minion fell from
-211 to 39.
+fell from 42 to 28. Poisoner fell from 105 to 26, Twin Minion fell from 211 to
+39, and Poet fell from 144 to 21.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -465,7 +477,9 @@ nonfatal warning marker, reduced placeholder parameters from 141 to zero, and
 reduced indirect-call patterns from five to zero. Twin Minion retained two
 error markers, gained one nonfatal warning marker, reduced placeholder
 parameters from 218 to zero, and reduced indirect-call patterns from 11 to
-zero. The original typed import is
+zero. Poet retained three error markers and twelve warning markers, reduced
+placeholder parameters from 98 to zero, and reduced indirect-call patterns
+from eight to one. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -506,14 +520,16 @@ The current Poisoner comparison is in the
 [`Poisoner typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_poisoner.json).
 The current Twin Minion comparison is in the
 [`Twin Minion typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_twin_minion.json).
+The current Poet comparison is in the
+[`Poet typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_poet.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 343 classifications backed by
-150 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 361 classifications backed by
+155 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

@@ -32,8 +32,13 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Lover — no issues
 - [x] Medium — lying target constraint gap
 - [x] Oracle — Wretch bug + lying constraint gap
-- [x] Poet — copied_role whitelist (low priority)
-- [x] Scout — no issues
+- [x] Poet — public asset bound to managed `Gossip`; exact ordered twelve-role
+  provider selector, fresh truthful/bluff draws, Character dispatch, strict
+  current provenance schema, legacy compatibility, and Scout truth inversion
+  are native-audited and covered
+- [x] Scout — definite absent-role and positive-distance one-Evil truth
+  inversion fixed; archived direct-Scout `distance: 0` remains the one-Evil
+  sentinel
 - [x] Slayer — no issues
 - [x] Witness — current-status truth semantics and Chancellor interaction
   native-audited with focused regressions
@@ -156,7 +161,12 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### P3: Low Priority
 
-- [ ] **Poet copied_role whitelist** — Validate that entered `copied_role` is one of the 13 valid Villager abilities (+ Bounty Hunter). Catches data entry errors.
+- [x] **Poet copied_role whitelist** — FIXED. Current Poet payloads accept only
+  the native twelve-provider pool (Lover, Scout, Oracle, Bounty Hunter, Medium,
+  Knitter, Hunter, Enlightened, Empress, Bishop, Gemcrafter, and Bard), enforce
+  provider-specific schema and board bounds, and carry explicit
+  `poet_variant: public_current` provenance. Unmarked archived payloads retain
+  their historical interpretation byte-for-byte.
 
 - [x] **Witness + Shaman tracking** — FIXED. `Scenario.messed_up_by_evil` carries each resistance-aware Shaman marker attempt through the ordered Start pass.
 
@@ -213,3 +223,8 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   persistent callbacks, immediate versus pre-append history, exact one-source
   shut-up references, duplicate/small-board behavior, and constraint-free quote
   references are documented against focused regressions.
+- [x] **Poet**: Full managed `Gossip` selector boundary audited; twenty focused
+  Python tests (including 150 provider/parser subtests) and eight Rust tests
+  cover the exact provider pool, strict current schemas, malformed provenance,
+  board bounds, positive-distance sentinels, auto-card placeholder safety,
+  unmarked legacy compatibility, and Scout truth/lying inversion.

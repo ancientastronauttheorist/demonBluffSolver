@@ -186,6 +186,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   preservation, duplicate/small-board behavior, pending-coroutine multiplicity,
   and dormant-helper reachability; expand the typed union to 25 target sets and
   548 memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Poet to exact managed `Gossip`; native-audit all six
+  declared role methods, the twelve exact provider constructors, and generic
+  Character real/bluff dispatch; close the ordered provider pool, fresh
+  per-invocation real/bluff draw, Day-only callback routing, and strict current
+  provenance schema while preserving unmarked legacy fixtures; expand the typed
+  union to 26 target sets and 568 memberships and publish its
+  baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
