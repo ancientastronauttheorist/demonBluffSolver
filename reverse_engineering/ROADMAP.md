@@ -290,6 +290,17 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   compatibility; expand the typed union to 38 target sets, 764 memberships,
   492 selected managed definitions, and 410 unique native RVAs, then publish
   its typed-quality report.
+- [x] Asset-bind public Druid to managed `Librarian`; native-audit all ten
+  declared role methods, all six compiler-generated ordering helpers, and 20
+  picker, acted-record, registered-data, pool-filter, lifecycle, and RNG
+  helpers; close exact three-target selection, click-order references versus
+  sorted display IDs, registered-Outcast truth, the complementary authored
+  false-role ladder, full lifecycle eligibility, ResetAfterNight history,
+  managed-name ingestion, Poet absence, identity movers, anonymous Outcast and
+  Wretch worlds, raw callback ordering, Baker-to-Spy chronology, and archive
+  compatibility; expand the typed union to 39 target sets, 800 memberships,
+  512 selected managed definitions, and 424 unique native RVAs, then publish
+  its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

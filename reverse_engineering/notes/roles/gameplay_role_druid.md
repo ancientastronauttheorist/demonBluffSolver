@@ -515,6 +515,22 @@ The rebuilt Assembly-CSharp ledger retains its 4,207-method census. The Druid
 rows bring the classification ledger to 505 records and the evidence ledger to
 259 records, with terminal native evidence for all 16 Druid-owned declarations.
 
+The clean-room implementation gates also pass:
+
+- `python -m unittest discover -s tests`: 648/648;
+- the focused Druid/Bard/Poet/Rambler parser suite: 95/95;
+- `cargo test --release -p solver-core current_druid -- --nocapture`: 7/7;
+- `cargo test --release -p solver-core --lib`: 381/381;
+- `cargo check --release -p solver-core --all-targets` and
+  `cargo build --release`: pass; and
+- `cargo test --release --test simulation -- --nocapture`: 31/31 in 850.09
+  seconds.
+
+That full simulation run recorded 303 wins, seven expected losses, 21 expected
+constraint issues, and zero unexpected constraint failures. Its existing
+backlog remained unchanged at six known simulation losses, 15 hidden-Outcast
+gaps, and 74 ordered-Twin gaps.
+
 ## Required implementation regressions
 
 A solver/reader bridge that claims current Druid support should pin at least:
