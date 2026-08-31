@@ -41,9 +41,79 @@ from strategy import (
 # Card Builder Functions
 # ============================================================
 
-def card_enlightened(pos: int, direction: str) -> CardInfo:
-    """direction: 'CW', 'CCW', or 'Equidistant'"""
-    return CardInfo(pos, "Enlightened", info_parsed={"direction": direction})
+def _enlightened_native_text(direction: str) -> str:
+    """Return Shugenja's exact shipped public clue text."""
+    try:
+        return {
+            "CW": "Closest Evil is:\nClockwise",
+            "CCW": "Closest Evil is:\nCounter-clockwise",
+            "Equidistant": "Closest Evil is equidistant",
+        }[direction]
+    except (KeyError, TypeError) as exc:
+        raise ValueError(
+            "Enlightened direction must be CW, CCW, or Equidistant"
+        ) from exc
+
+
+def _parse_enlightened_native_text(info_text: str) -> Optional[str]:
+    """Parse only one exact current Shugenja sentence."""
+    if not isinstance(info_text, str):
+        return None
+    for direction in ("CW", "CCW", "Equidistant"):
+        if info_text == _enlightened_native_text(direction):
+            return direction
+    return None
+
+
+def _enlightened_runtime_matches(runtime_data, direction: str) -> bool:
+    """Validate native runtime provenance, allowing an unreadable object."""
+    if runtime_data is None:
+        return True
+    return (
+        isinstance(runtime_data, dict)
+        and runtime_data.get("type") == "direction"
+        and runtime_data.get("direction") == direction
+    )
+
+
+def _canonical_enlightened_direction(direction: str) -> str:
+    """Canonicalize the supported manual direction spellings."""
+    if not isinstance(direction, str):
+        raise ValueError(
+            "Enlightened direction must be CW, CCW, or Equidistant"
+        )
+    key = direction.strip().casefold()
+    canonical = {
+        "cw": "CW",
+        "clockwise": "CW",
+        "ccw": "CCW",
+        "counter-clockwise": "CCW",
+        "counterclockwise": "CCW",
+        "equidistant": "Equidistant",
+    }.get(key)
+    if canonical is None:
+        raise ValueError(
+            "Enlightened direction must be CW, CCW, or Equidistant"
+        )
+    return canonical
+
+
+def card_enlightened(
+    pos: int,
+    direction: str,
+    *,
+    info_text: str = "",
+    enlightened_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build an Enlightened observation while preserving legacy callers."""
+    info = {"direction": direction}
+    if enlightened_variant is not None:
+        info["enlightened_variant"] = enlightened_variant
+        expected_text = _enlightened_native_text(direction)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Enlightened text must match its direction")
+        info_text = expected_text
+    return CardInfo(pos, "Enlightened", info_text=info_text, info_parsed=info)
 
 def _knitter_native_text(evil_pairs: int) -> str:
     """Return Knitter's exact shipped public clue text."""
@@ -1193,20 +1263,18 @@ def card_poet_with_info(
             raise ValueError("Hunter Poet distance is outside the native range")
         payload = {"distance": distance}
     elif canonical_provider == "Enlightened":
-        require_args(1)
-        direction_key = re.sub(r"[^a-z]", "", copied_args[0].casefold())
-        direction = {
-            "cw": "CW",
-            "clockwise": "CW",
-            "ccw": "CCW",
-            "counterclockwise": "CCW",
-            "equidistant": "Equidistant",
-        }.get(direction_key)
-        if direction is None:
+        if n_cards is None:
             raise ValueError(
-                "Enlightened Poet direction must be CW, CCW, or Equidistant"
+                "Current Enlightened Poet entry requires session board size"
             )
-        payload = {"direction": direction}
+        require_args(1)
+        direction = _canonical_enlightened_direction(copied_args[0])
+        return _card_current_poet(
+            pos,
+            "Enlightened",
+            {"direction": direction},
+            info_text=_enlightened_native_text(direction),
+        )
     elif canonical_provider == "Empress":
         require_args(1)
         payload = {"targets": positions(0, 3)}
@@ -4881,13 +4949,25 @@ def _parse_clue_from_memory(
             return None
         return fortune_surface
 
-    # --- RuntimeData: Enlightened direction (always reliable) ---
-    if rd and rd.get('type') == 'direction':
-        if role_lower != 'poet':
-            return card_enlightened(pos, rd['direction'])
-        # Gossip/Poet stores the selected provider's RuntimeData on its own
-        # CharacterData.  Defer it to the Poet event boundary below so the
-        # newest public ActedInfo must still agree with savedAct.
+    # --- Enlightened/Shugenja: exact text, zero refs, matching RuntimeData. ---
+    if role_lower in {'enlightened', 'shugenja'}:
+        direction = _parse_enlightened_native_text(clue)
+        if (
+            direction is not None
+            and type(n_cards) is int
+            and n_cards > 0
+            and type(pos) is int
+            and 1 <= pos <= n_cards
+            and current_event_refs() == []
+            and _enlightened_runtime_matches(rd, direction)
+        ):
+            return card_enlightened(
+                pos,
+                direction,
+                info_text=clue,
+                enlightened_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        return None
 
     # --- Alchemist: prefer clue_text (works for Drunk-as-Alchemist too) ---
     # Post-patch clue is "# Corruption/Corrupted around me [Range 2] at
@@ -5309,42 +5389,29 @@ def _parse_clue_from_memory(
                 )
             )
 
-        def enlightened_direction_from_text() -> Optional[str]:
-            match = re.fullmatch(
-                r'\s*Closest\s+Evil\s+is\s*:\s*'
-                r'(Counter-clockwise|Clockwise)\s*[.!]?\s*',
-                clue,
-                re.IGNORECASE | re.DOTALL,
-            )
-            if match:
-                return (
-                    'CCW'
-                    if match.group(1).casefold().startswith('counter')
-                    else 'CW'
-                )
-            if re.fullmatch(
-                r'\s*Closest\s+Evil\s+is\s+equidistant\s*[.!]?\s*',
-                clue,
-                re.IGNORECASE | re.DOTALL,
-            ):
-                return 'Equidistant'
-            return None
-
-        # Enlightened RuntimeData is authoritative for the direction, but it
-        # is not permission to consume a stale result from another event.
-        if rd and rd.get('type') == 'direction':
-            direction = rd.get('direction')
+        # Shugenja stores its claimed enum on the Poet and emits no refs.
+        # RuntimeData is strong corroboration when readable; the exact public
+        # event remains sufficient when the runtime object is unavailable.
+        enlightened_direction = _parse_enlightened_native_text(clue)
+        if enlightened_direction is not None:
             if (
-                direction in {'CW', 'CCW', 'Equidistant'}
-                and enlightened_direction_from_text() == direction
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
                 and poet_refs_match([])
+                and _enlightened_runtime_matches(rd, enlightened_direction)
             ):
                 return _card_current_poet(
                     pos,
                     "Enlightened",
-                    {"direction": direction},
+                    {"direction": enlightened_direction},
                     info_text=clue,
                 )
+            return None
+        if isinstance(rd, dict) and rd.get('type') == 'direction':
+            # A readable Shugenja runtime object cannot authenticate a stale,
+            # malformed, or non-Shugenja newest public event.
             return None
 
         # Bounty Hunter (retained Poet provider, distinct from Hunter).
@@ -5627,17 +5694,6 @@ def _parse_clue_from_memory(
                     info_text=clue,
                 )
 
-        # Enlightened exact native direction/equidistant sentences. RuntimeData
-        # normally resolves this above; text remains a safe fallback when the
-        # runtime object is unavailable.
-        direction = enlightened_direction_from_text()
-        if direction is not None and poet_refs_match([]):
-            return _card_current_poet(
-                pos,
-                "Enlightened",
-                {"direction": direction},
-                info_text=clue,
-            )
         # Medium exact normal and Drunk-reveal forms.  Both carry exactly one
         # matching reference and require a live in-board Poet actor.
         medium_result = _parse_medium_native_text(clue)
@@ -5685,10 +5741,21 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     role = args[0].lower()
     if role == "knitter" and len(args) != 3:
         raise ValueError("Knitter entry requires exactly one pair count")
+    if role == "enlightened" and len(args) != 3:
+        raise ValueError("Enlightened entry requires exactly one direction")
     pos = int(args[1])
 
     if role == "enlightened":
-        return card_enlightened(pos, args[2])  # CW/CCW/Equidistant
+        if session is None:
+            raise ValueError("Current Enlightened entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Enlightened position is outside the current board")
+        direction = _canonical_enlightened_direction(args[2])
+        return card_enlightened(
+            pos,
+            direction,
+            enlightened_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "knitter":
         if session is None:
             raise ValueError("Current Knitter entry requires session board size")
