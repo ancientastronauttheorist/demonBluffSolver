@@ -193,6 +193,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   provenance schema while preserving unmarked legacy fixtures; expand the typed
   union to 26 target sets and 568 memberships and publish its
   baseline-versus-typed quality report.
+- [x] Asset-bind public Scout to managed `Scout` and public Hunter to managed
+  `Tracker`; native-audit all 17 declared role methods plus nine exact runtime-
+  alignment, registration, circular-distance, range-reference, calculator,
+  and RNG helpers; close Scout's occurrence-weighted target identity,
+  one-Evil sentinel, strict 1-through-3 bluff domain, Hunter's exact `N - 1`
+  exhaustion value and half-circle bluff domain, and ordered duplicate-preserving
+  acted references; expand the typed union to 27 target sets and 594
+  memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

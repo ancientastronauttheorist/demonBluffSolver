@@ -22,7 +22,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   complement, ascending speech/reference order, ResetAfterNight history,
   discarded RNG draw, and both-Evil achievement closed
 - [x] Gemcrafter — self-pointing constraint (medium priority)
-- [x] Hunter — Wretch bug (critical)
+- [x] Hunter — public asset bound to managed `Tracker`; exact registered-Evil
+  circle distance, `N - 1` exhaustion value, half-circle bluff domain, and
+  ordered duplicate-preserving acted references are native-audited and covered
 - [x] Jester — no issues
 - [x] Judge — full managed `Judge2` boundary native-audited; corrupted-actor
   inversion and ResetAfterNight history fixed
@@ -34,11 +36,12 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Oracle — Wretch bug + lying constraint gap
 - [x] Poet — public asset bound to managed `Gossip`; exact ordered twelve-role
   provider selector, fresh truthful/bluff draws, Character dispatch, strict
-  current provenance schema, legacy compatibility, and Scout truth inversion
-  are native-audited and covered
-- [x] Scout — definite absent-role and positive-distance one-Evil truth
-  inversion fixed; archived direct-Scout `distance: 0` remains the one-Evil
-  sentinel
+  current provenance schema, legacy compatibility, and exact Scout/Hunter
+  provider payloads are native-audited and covered
+- [x] Scout — complete managed role boundary native-audited; runtime-Evil
+  occurrence selection, register-as/dataRef naming split, duplicate-role
+  ambiguity, explicit one-Evil sentence, and strict 1-through-3 bluff domain
+  are covered while the archived distance-zero sentinel remains compatible
 - [x] Slayer — no issues
 - [x] Witness — current-status truth semantics and Chancellor interaction
   native-audited with focused regressions
@@ -228,3 +231,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   cover the exact provider pool, strict current schemas, malformed provenance,
   board bounds, positive-distance sentinels, auto-card placeholder safety,
   unmarked legacy compatibility, and Scout truth/lying inversion.
+- [x] **Scout + Hunter**: Full managed `Scout` and `Tracker` boundaries audited;
+  current direct and Poet ingestion verify exact text, board bounds, provenance,
+  and native reference shape, while Rust validation preserves unmarked legacy
+  fixtures, reuses the exact hidden-Outcast allocator for Wretch distance
+  support, joins explicit Wretch register-as draws, and enforces
+  occurrence-aware Scout and exact Hunter semantics.
