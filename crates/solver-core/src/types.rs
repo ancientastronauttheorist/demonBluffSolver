@@ -446,6 +446,45 @@ pub struct ShamanTrace {
     pub target_previous_roles: Vec<String>,
 }
 
+/// Which occurrence from Twin Minion's native `[previous, next]` adjacency
+/// pair was selected. The distinction remains meaningful when both entries
+/// reference the same physical card on a two-card board.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TwinNeighborSide {
+    Previous,
+    Next,
+}
+
+/// Native result of the shipped Twin Minion Start action.
+///
+/// `demon_occurrence_index` is the selected index in the registered-or-real
+/// Demon pool, not a board position. Keeping it prevents identical repeated
+/// Character references from losing their probability weight during later
+/// scenario deduplication.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum TwinStartOutcome {
+    NoDemon,
+    Swap {
+        demon_occurrence_index: u8,
+        demon_anchor_position: u8,
+        neighbor_side: TwinNeighborSide,
+        neighbor_position: u8,
+        neighbor_pre_swap_role: String,
+    },
+}
+
+/// Exact current-data mutation made by the one ordinary Twin Minion Start
+/// dispatch. Physical runtime alignment, statuses, resistance, and runtime
+/// data are intentionally absent because native `InitWithNoReset` preserves
+/// them on their original physical cards.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct TwinTrace {
+    pub actor_position: u8,
+    pub outcome: TwinStartOutcome,
+}
+
 /// A hypothetical assignment of evil roles to positions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Scenario {
