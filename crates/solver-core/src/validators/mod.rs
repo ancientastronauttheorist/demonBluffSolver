@@ -794,6 +794,20 @@ fn current_lover_possible_actual_counts(
     possible_counts
 }
 
+fn current_lover_authored_evil_slots(
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<u8> {
+    // The HUD objective counts the generated Puppet, while Empath.BluffAct's
+    // CurrentScript Minion+Demon domain does not. A registered-Evil Wretch is
+    // runtime Good and therefore needs no corresponding adjustment here.
+    // Do not derive this from deck lists: those are role pools and may contain
+    // undealt Evil identities.
+    state
+        .n_evil
+        .checked_sub(u8::from(scenario.puppet_position.is_some()))
+}
+
 fn validate_current_lover(
     card: &CardInfo,
     scenario: &Scenario,
@@ -808,12 +822,12 @@ fn validate_current_lover(
     match truth_status(card.position, scenario, state) {
         TruthStatus::Truthful => possible_actuals.contains(&claimed),
         TruthStatus::Lying => {
-            let scripted_evil_count = state
-                .deck
-                .minions
-                .len()
-                .saturating_add(state.deck.demons.len());
-            claimed <= scripted_evil_count.min(2) as i64
+            let Some(authored_evil_slots) =
+                current_lover_authored_evil_slots(scenario, state)
+            else {
+                return false;
+            };
+            claimed <= i64::from(authored_evil_slots.min(2))
                 && possible_actuals.iter().any(|actual| *actual != claimed)
         }
     }
@@ -4277,6 +4291,7 @@ mod tests {
     #[test]
     fn current_lover_truth_and_bluff_use_exact_authored_domain() {
         let mut state = base_state(5, vec![]);
+        state.n_evil = 2;
         state.deck.minions = vec!["Witch".to_string()];
         state.deck.demons = vec!["Pooka".to_string()];
         let mut scenario = empty_scenario();
@@ -4315,24 +4330,24 @@ mod tests {
             &state,
         ));
 
-        state.deck.demons.clear();
-        assert!(!validate_lover(
-            &current_lover(1, json!(2)),
-            &scenario,
-            &state,
-        ));
-
-        state.deck.minions.clear();
+        let mut no_authored_slots = base_state(
+            5,
+            vec![make_card(2, "Wretch", json!({}))],
+        );
+        no_authored_slots.deck.outcasts = vec!["Wretch".to_string()];
+        let mut registered_evil_only = empty_scenario();
+        registered_evil_only.corrupted.insert(1);
         assert!(validate_lover(
             &current_lover(1, json!(0)),
-            &scenario,
-            &state,
+            &registered_evil_only,
+            &no_authored_slots,
         ));
-        scenario.evil_positions.clear();
+        no_authored_slots.cards.clear();
+        no_authored_slots.deck.outcasts.clear();
         assert!(!validate_lover(
             &current_lover(1, json!(0)),
-            &scenario,
-            &state,
+            &registered_evil_only,
+            &no_authored_slots,
         ));
     }
 
@@ -4340,6 +4355,7 @@ mod tests {
     fn current_poet_lover_delegates_to_exact_truth_and_inverse() {
         let poet = current_poet("Lover", json!({"evil_adjacent": 1}));
         let mut state = base_state(4, vec![poet.clone()]);
+        state.n_evil = 1;
         state.deck.demons = vec!["Pooka".to_string()];
         let mut scenario = empty_scenario();
         scenario.evil_positions.insert(2, "Pooka".to_string());
@@ -4415,7 +4431,34 @@ mod tests {
     }
 
     #[test]
-    fn current_lover_puppet_does_not_expand_authored_bluff_domain() {
+    fn current_lover_undealt_evil_roles_do_not_expand_authored_bluff_domain() {
+        let mut state = base_state(5, vec![]);
+        state.n_evil = 1;
+        state.deck.minions = vec!["Witch".to_string(), "Poisoner".to_string()];
+        state.deck.demons = vec!["Pooka".to_string(), "Lilis".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.corrupted.insert(1);
+
+        assert!(validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_lover_generated_puppet_is_subtracted_from_hud_authored_slots() {
         let mut state = base_state(5, vec![]);
         state.n_evil = 2;
         state.deck.minions = vec!["Puppeteer".to_string()];
@@ -4441,6 +4484,42 @@ mod tests {
         ));
 
         state.deck.demons.push("Pooka".to_string());
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_lover_wretch_does_not_reduce_hud_authored_slots() {
+        let mut state = base_state(
+            6,
+            vec![make_card(2, "Wretch", json!({}))],
+        );
+        state.n_evil = 2;
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Witch".to_string());
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+        scenario.corrupted.insert(1);
+
+        assert_eq!(
+            current_lover_possible_actual_counts(1, &scenario, &state),
+            vec![1],
+        );
+        assert!(validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
         assert!(validate_lover(
             &current_lover(1, json!(2)),
             &scenario,
