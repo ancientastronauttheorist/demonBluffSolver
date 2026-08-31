@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Enlightened gameplay boundary, managed as Shugenja, including circular nearest registered-Evil direction, exact truth and bluff clue construction, stored direction runtime data, zero-reference ActedInfo results, Day dispatch, float RNG selection, and the declared marking helper",
+  "functions": [
+    {
+      "name": "Shugenja.get_Description",
+      "metadata_name": "Shugenja$$get_Description",
+      "signature": "System_String_o* Shugenja__get_Description (Shugenja_o* __this, const MethodInfo* method);",
+      "rva": "0x3EBAC0"
+    },
+    {
+      "name": "Shugenja.GetInfo",
+      "metadata_name": "Shugenja$$GetInfo",
+      "signature": "ActedInfo_o* Shugenja__GetInfo (Shugenja_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EB650"
+    },
+    {
+      "name": "Shugenja.Act",
+      "metadata_name": "Shugenja$$Act",
+      "signature": "void Shugenja__Act (Shugenja_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Shugenja.BluffAct",
+      "metadata_name": "Shugenja$$BluffAct",
+      "signature": "void Shugenja__BluffAct (Shugenja_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Shugenja.GetBluffInfo",
+      "metadata_name": "Shugenja$$GetBluffInfo",
+      "signature": "ActedInfo_o* Shugenja__GetBluffInfo (Shugenja_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EAF50"
+    },
+    {
+      "name": "Shugenja.GetDirectionToEvil",
+      "metadata_name": "Shugenja$$GetDirectionToEvil",
+      "signature": "int32_t Shugenja__GetDirectionToEvil (Shugenja_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EB090"
+    },
+    {
+      "name": "Shugenja.GetMarkedCharacters",
+      "metadata_name": "Shugenja$$GetMarkedCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Shugenja__GetMarkedCharacters (Shugenja_o* __this, int32_t direction, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3EB720"
+    },
+    {
+      "name": "Shugenja.ConjourInfo",
+      "metadata_name": "Shugenja$$ConjourInfo",
+      "signature": "System_String_o* Shugenja__ConjourInfo (Shugenja_o* __this, int32_t direction, const MethodInfo* method);",
+      "rva": "0x3EAEA0"
+    },
+    {
+      "name": "Shugenja.ctor",
+      "metadata_name": "Shugenja$$.ctor",
+      "signature": "void Shugenja___ctor (Shugenja_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "EnlightenedRuntimeData.ctor",
+      "metadata_name": "EnlightenedRuntimeData$$.ctor",
+      "signature": "void EnlightenedRuntimeData___ctor (EnlightenedRuntimeData_o* __this, int32_t direction, const MethodInfo* method);",
+      "rva": "0x357700"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Single",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "float UnityEngine_Random__Range (float minInclusive, float maxInclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Single",
+      "rva": "0x1C86640"
+    }
+  ]
+}
