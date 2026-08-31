@@ -643,12 +643,36 @@ fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     let target_pos = (1..=n).find(|&p| {
         known_evil_role(p, scenario, state).map_or(false, |r| roles_equal(r, evil_role))
     });
-    let target_pos = match target_pos { Some(p) => p, None => return true };
+    let target_pos = match target_pos {
+        Some(p) => p,
+        None => {
+            // A historical executed Evil can retain an Unknown origin role,
+            // so its authored identity may still be the named role. Without
+            // such an unresolved seat, absence is a definite false statement:
+            // truthful Scout rejects it and a lying Scout accepts it.
+            let unresolved_evil_role = (1..=n).any(|p| {
+                known_evil_role(p, scenario, state)
+                    .is_some_and(|role| normalize_role(role) == "unknown")
+            });
+            return unresolved_evil_role || truth == TruthStatus::Lying;
+        }
+    };
 
     let other_evil: Vec<u8> = (1..=n)
         .filter(|&p| p != target_pos && effective_alignment(p, scenario, state) == EffectiveAlignment::Evil)
         .collect();
-    if other_evil.is_empty() { return true; }
+    if other_evil.is_empty() {
+        // Historical direct-Scout captures used distance zero for the native
+        // one-Evil sentinel. Current provenance-marked Poet payloads require a
+        // positive distance, so only that legacy encoding is true here; an
+        // actual positive-distance sentence remains false and is inverted for
+        // a lying source.
+        return if claimed_dist == 0 {
+            truth == TruthStatus::Truthful
+        } else {
+            truth == TruthStatus::Lying
+        };
+    }
 
     let actual = other_evil.iter().map(|&ep| circle_distance(target_pos, ep, n) as i64).min().unwrap();
 
@@ -1744,11 +1768,184 @@ fn validate_baker(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     }
 }
 
+const POET_CURRENT_VARIANT: &str = "public_current";
+
+fn poet_has_exact_fields(
+    info: &serde_json::Map<String, serde_json::Value>,
+    provider_fields: &[&str],
+) -> bool {
+    info.len() == provider_fields.len() + 2
+        && info.contains_key("poet_variant")
+        && info.contains_key("copied_role")
+        && provider_fields.iter().all(|field| info.contains_key(*field))
+}
+
+fn poet_position_value(
+    value: Option<&serde_json::Value>,
+    n_cards: u8,
+) -> Option<u8> {
+    value?
+        .as_u64()
+        .and_then(|position| u8::try_from(position).ok())
+        .filter(|position| *position > 0 && *position <= n_cards)
+}
+
+fn poet_integer_in_range(
+    info: &serde_json::Map<String, serde_json::Value>,
+    field: &str,
+    minimum: i64,
+    maximum: i64,
+) -> bool {
+    info.get(field)
+        .and_then(serde_json::Value::as_i64)
+        .is_some_and(|value| (minimum..=maximum).contains(&value))
+}
+
+fn poet_targets(
+    info: &serde_json::Map<String, serde_json::Value>,
+    n_cards: u8,
+    minimum: usize,
+    maximum: usize,
+) -> Option<Vec<u8>> {
+    let values = info.get("targets")?.as_array()?;
+    if !(minimum..=maximum).contains(&values.len()) {
+        return None;
+    }
+    let targets: Option<Vec<u8>> = values
+        .iter()
+        .map(|value| poet_position_value(Some(value), n_cards))
+        .collect();
+    let targets = targets?;
+    (targets.iter().copied().collect::<HashSet<_>>().len() == targets.len())
+        .then_some(targets)
+}
+
+fn poet_canonical_role<'a>(
+    info: &'a serde_json::Map<String, serde_json::Value>,
+    field: &str,
+) -> Option<&'a str> {
+    let role = info.get(field)?.as_str()?;
+    get_card(role)
+        .is_some_and(|card| card.name == role)
+        .then_some(role)
+}
+
+/// Validate the exact bridge-owned payload for the audited public Gossip
+/// selector. Native sentinel/no-info surfaces are intentionally unmarked and
+/// never represented by a partial `public_current` payload.
+fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role: &str) -> bool {
+    if card.position == 0 || card.position > state.n_cards {
+        return false;
+    }
+    let info = &card.info_parsed;
+    if info
+        .get("poet_variant")
+        .and_then(serde_json::Value::as_str)
+        != Some(POET_CURRENT_VARIANT)
+        || info
+            .get("copied_role")
+            .and_then(serde_json::Value::as_str)
+            != Some(copied_role)
+    {
+        return false;
+    }
+    let n = i64::from(state.n_cards);
+
+    match copied_role {
+        "Lover" => {
+            poet_has_exact_fields(info, &["evil_adjacent"])
+                && poet_integer_in_range(info, "evil_adjacent", 0, 2)
+        }
+        "Scout" => {
+            poet_has_exact_fields(info, &["evil_role", "distance"])
+                && poet_canonical_role(info, "evil_role")
+                    .and_then(get_card)
+                    .is_some_and(|card| {
+                        matches!(card.faction, Faction::Minion | Faction::Demon)
+                    })
+                && poet_integer_in_range(info, "distance", 1, n)
+        }
+        "Oracle" => {
+            poet_has_exact_fields(info, &["targets", "minion_role"])
+                && poet_targets(info, state.n_cards, 2, 2).is_some()
+                && poet_canonical_role(info, "minion_role")
+                    .and_then(get_card)
+                    .is_some_and(|card| card.faction == Faction::Minion)
+        }
+        "Bounty Hunter" => {
+            poet_has_exact_fields(info, &["evil_position"])
+                && poet_position_value(info.get("evil_position"), state.n_cards).is_some()
+        }
+        "Medium" => {
+            poet_has_exact_fields(info, &["good_position", "good_role"])
+                && poet_position_value(info.get("good_position"), state.n_cards).is_some()
+                && poet_canonical_role(info, "good_role").is_some()
+        }
+        "Knitter" => {
+            poet_has_exact_fields(info, &["evil_pairs"])
+                && poet_integer_in_range(info, "evil_pairs", 0, n)
+        }
+        "Hunter" => {
+            poet_has_exact_fields(info, &["distance"])
+                && poet_integer_in_range(info, "distance", 1, n)
+        }
+        "Enlightened" => {
+            poet_has_exact_fields(info, &["direction"])
+                && info
+                    .get("direction")
+                    .and_then(serde_json::Value::as_str)
+                    .is_some_and(|direction| matches!(direction, "CW" | "CCW" | "Equidistant"))
+        }
+        "Empress" => {
+            poet_has_exact_fields(info, &["targets"])
+                && poet_targets(info, state.n_cards, 3, 3).is_some()
+        }
+        "Bishop" => {
+            if !poet_has_exact_fields(info, &["targets", "types"]) {
+                return false;
+            }
+            let Some(targets) = poet_targets(info, state.n_cards, 1, 3) else {
+                return false;
+            };
+            let Some(types) = info.get("types").and_then(serde_json::Value::as_array) else {
+                return false;
+            };
+            types.len() == targets.len()
+                && types.iter().all(|value| {
+                    value.as_str().is_some_and(|role_type| {
+                        matches!(role_type, "Villager" | "Outcast" | "Minion" | "Demon")
+                    })
+                })
+        }
+        "Gemcrafter" => {
+            poet_has_exact_fields(info, &["good_position"])
+                && poet_position_value(info.get("good_position"), state.n_cards).is_some()
+        }
+        "Bard" => {
+            poet_has_exact_fields(info, &["corruption_distance"])
+                && poet_integer_in_range(info, "corruption_distance", -1, n)
+                && info
+                    .get("corruption_distance")
+                    .and_then(serde_json::Value::as_i64)
+                    != Some(0)
+        }
+        _ => false,
+    }
+}
+
 fn validate_poet(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    let current_build = match card.info_parsed.get("poet_variant") {
+        None => false,
+        Some(serde_json::Value::String(variant)) if variant == POET_CURRENT_VARIANT => true,
+        Some(_) => return false,
+    };
     let copied_role = match info_str(&card.info_parsed, "copied_role") {
         Some(s) => s,
-        None => return true,
+        None => return !current_build,
     };
+    if current_build && !validate_current_poet_payload(card, state, copied_role) {
+        return false;
+    }
     let norm = normalize_role(copied_role);
     // Delegate to the copied role's validator
     match norm.as_str() {
@@ -2529,6 +2726,455 @@ mod tests {
         s.n_cards = n_cards;
         s.cards = cards;
         s
+    }
+
+    fn current_poet(provider: &str, payload: serde_json::Value) -> CardInfo {
+        let mut info = payload.as_object().unwrap().clone();
+        info.insert(
+            "poet_variant".to_string(),
+            serde_json::Value::String("public_current".to_string()),
+        );
+        info.insert(
+            "copied_role".to_string(),
+            serde_json::Value::String(provider.to_string()),
+        );
+        make_card(1, "Poet", serde_json::Value::Object(info))
+    }
+
+    #[test]
+    fn current_poet_schema_accepts_every_complete_native_provider_payload() {
+        let state = base_state(6, vec![]);
+        for (provider, payload) in [
+            ("Lover", json!({"evil_adjacent": 1})),
+            ("Scout", json!({"evil_role": "Pooka", "distance": 2})),
+            (
+                "Oracle",
+                json!({"targets": [2, 3], "minion_role": "Witch"}),
+            ),
+            ("Bounty Hunter", json!({"evil_position": 4})),
+            (
+                "Medium",
+                json!({"good_position": 2, "good_role": "Scout"}),
+            ),
+            ("Knitter", json!({"evil_pairs": 1})),
+            ("Hunter", json!({"distance": 2})),
+            ("Enlightened", json!({"direction": "CCW"})),
+            ("Empress", json!({"targets": [2, 3, 4]})),
+            (
+                "Bishop",
+                json!({
+                    "targets": [2, 3, 4],
+                    "types": ["Villager", "Villager", "Minion"],
+                }),
+            ),
+            ("Gemcrafter", json!({"good_position": 2})),
+            ("Bard", json!({"corruption_distance": -1})),
+        ] {
+            let poet = current_poet(provider, payload);
+            assert!(
+                validate_current_poet_payload(&poet, &state, provider),
+                "current Poet provider {provider} must have a complete schema"
+            );
+        }
+    }
+
+    #[test]
+    fn current_poet_schema_requires_exact_keys_and_canonical_provider_names() {
+        let state = base_state(6, vec![]);
+        let valid = [
+            ("Lover", json!({"evil_adjacent": 1}), vec!["evil_adjacent"]),
+            (
+                "Scout",
+                json!({"evil_role": "Pooka", "distance": 2}),
+                vec!["evil_role", "distance"],
+            ),
+            (
+                "Oracle",
+                json!({"targets": [2, 3], "minion_role": "Witch"}),
+                vec!["targets", "minion_role"],
+            ),
+            (
+                "Bounty Hunter",
+                json!({"evil_position": 4}),
+                vec!["evil_position"],
+            ),
+            (
+                "Medium",
+                json!({"good_position": 2, "good_role": "Scout"}),
+                vec!["good_position", "good_role"],
+            ),
+            ("Knitter", json!({"evil_pairs": 1}), vec!["evil_pairs"]),
+            ("Hunter", json!({"distance": 2}), vec!["distance"]),
+            (
+                "Enlightened",
+                json!({"direction": "CCW"}),
+                vec!["direction"],
+            ),
+            (
+                "Empress",
+                json!({"targets": [2, 3, 4]}),
+                vec!["targets"],
+            ),
+            (
+                "Bishop",
+                json!({
+                    "targets": [2, 3, 4],
+                    "types": ["Villager", "Outcast", "Minion"],
+                }),
+                vec!["targets", "types"],
+            ),
+            (
+                "Gemcrafter",
+                json!({"good_position": 2}),
+                vec!["good_position"],
+            ),
+            (
+                "Bard",
+                json!({"corruption_distance": -1}),
+                vec!["corruption_distance"],
+            ),
+        ];
+
+        for (provider, payload, required_fields) in valid {
+            for field in required_fields {
+                let mut missing = current_poet(provider, payload.clone());
+                missing.info_parsed.remove(field);
+                assert!(
+                    !validate_current_poet_payload(&missing, &state, provider),
+                    "{provider} must require {field}"
+                );
+            }
+
+            let mut extra = current_poet(provider, payload);
+            extra.info_parsed.insert("unexpected".to_string(), json!(true));
+            assert!(
+                !validate_current_poet_payload(&extra, &state, provider),
+                "{provider} must reject extra payload keys"
+            );
+        }
+
+        for (provider, payload) in [
+            ("lover", json!({"evil_adjacent": 1})),
+            ("SCOUT", json!({"evil_role": "Pooka", "distance": 2})),
+            ("Bounty_Hunter", json!({"evil_position": 4})),
+            ("Gem Crafter", json!({"good_position": 2})),
+        ] {
+            let poet = current_poet(provider, payload);
+            assert!(!validate_poet(&poet, &empty_scenario(), &state));
+        }
+    }
+
+    #[test]
+    fn current_poet_schema_rejects_wrapping_or_malformed_positions_and_targets() {
+        let state = base_state(6, vec![]);
+
+        for position in [0, 7] {
+            let mut poet = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+            poet.position = position;
+            assert!(!validate_current_poet_payload(
+                &poet,
+                &state,
+                "Bounty Hunter"
+            ));
+        }
+
+        for value in [json!(0), json!(-1), json!(7), json!(256), json!(true), json!("2")] {
+            for (provider, field) in [
+                ("Bounty Hunter", "evil_position"),
+                ("Gemcrafter", "good_position"),
+            ] {
+                let mut payload = serde_json::Map::new();
+                payload.insert(field.to_string(), value.clone());
+                let poet = current_poet(provider, serde_json::Value::Object(payload));
+                assert!(
+                    !validate_current_poet_payload(&poet, &state, provider),
+                    "{provider} must reject {field}={value}"
+                );
+            }
+        }
+
+        for targets in [
+            json!([2]),
+            json!([2, 2]),
+            json!([0, 2]),
+            json!([2, 7]),
+            json!([2, -1]),
+            json!([2, true]),
+            json!([2, "3"]),
+            json!([2, 3, 4]),
+        ] {
+            let oracle = current_poet(
+                "Oracle",
+                json!({"targets": targets, "minion_role": "Witch"}),
+            );
+            assert!(!validate_current_poet_payload(&oracle, &state, "Oracle"));
+        }
+
+        for targets in [json!([2, 3]), json!([2, 2, 4]), json!([2, 3, 7])] {
+            let empress = current_poet("Empress", json!({"targets": targets}));
+            assert!(!validate_current_poet_payload(&empress, &state, "Empress"));
+        }
+
+        for payload in [
+            json!({"targets": [], "types": []}),
+            json!({"targets": [2, 2], "types": ["Villager", "Minion"]}),
+            json!({"targets": [2, 3], "types": ["Villager"]}),
+            json!({"targets": [2, 3, 4, 5], "types": ["Villager", "Outcast", "Minion", "Demon"]}),
+            json!({"targets": [2, true], "types": ["Villager", "Minion"]}),
+        ] {
+            let bishop = current_poet("Bishop", payload);
+            assert!(!validate_current_poet_payload(&bishop, &state, "Bishop"));
+        }
+    }
+
+    #[test]
+    fn current_poet_schema_rejects_noncanonical_roles_types_and_scalar_ranges() {
+        let state = base_state(6, vec![]);
+        for payload in [
+            json!({"evil_role": "pooka", "distance": 2}),
+            json!({"evil_role": "Scout", "distance": 2}),
+            json!({"evil_role": "Future Demon", "distance": 2}),
+            json!({"evil_role": 7, "distance": 2}),
+            json!({"evil_role": "Pooka", "distance": 0}),
+            json!({"evil_role": "Pooka", "distance": -1}),
+            json!({"evil_role": "Pooka", "distance": 7}),
+            json!({"evil_role": "Pooka", "distance": true}),
+        ] {
+            let scout = current_poet("Scout", payload);
+            assert!(!validate_current_poet_payload(&scout, &state, "Scout"));
+        }
+
+        for minion_role in [json!("witch"), json!("Pooka"), json!("Future Minion"), json!(7)] {
+            let oracle = current_poet(
+                "Oracle",
+                json!({"targets": [2, 3], "minion_role": minion_role}),
+            );
+            assert!(!validate_current_poet_payload(&oracle, &state, "Oracle"));
+        }
+
+        for good_role in [json!("scout"), json!("Future Villager"), json!(7)] {
+            let medium = current_poet(
+                "Medium",
+                json!({"good_position": 2, "good_role": good_role}),
+            );
+            assert!(!validate_current_poet_payload(&medium, &state, "Medium"));
+        }
+
+        for direction in [json!("cw"), json!("Clockwise"), json!("Equal"), json!(7)] {
+            let enlightened = current_poet("Enlightened", json!({"direction": direction}));
+            assert!(!validate_current_poet_payload(
+                &enlightened,
+                &state,
+                "Enlightened"
+            ));
+        }
+
+        for role_types in [
+            json!(["villager"]),
+            json!(["Good"]),
+            json!(["Villager", 7]),
+        ] {
+            let targets = if role_types.as_array().unwrap().len() == 1 {
+                json!([2])
+            } else {
+                json!([2, 3])
+            };
+            let bishop = current_poet(
+                "Bishop",
+                json!({"targets": targets, "types": role_types}),
+            );
+            assert!(!validate_current_poet_payload(&bishop, &state, "Bishop"));
+        }
+
+        for (provider, field, value) in [
+            ("Lover", "evil_adjacent", json!(-1)),
+            ("Lover", "evil_adjacent", json!(3)),
+            ("Knitter", "evil_pairs", json!(-1)),
+            ("Knitter", "evil_pairs", json!(7)),
+            ("Hunter", "distance", json!(0)),
+            ("Hunter", "distance", json!(-1)),
+            ("Hunter", "distance", json!(7)),
+            ("Bard", "corruption_distance", json!(-2)),
+            ("Bard", "corruption_distance", json!(0)),
+            ("Bard", "corruption_distance", json!(7)),
+        ] {
+            let mut payload = serde_json::Map::new();
+            payload.insert(field.to_string(), value);
+            let poet = current_poet(provider, serde_json::Value::Object(payload));
+            assert!(!validate_current_poet_payload(&poet, &state, provider));
+        }
+    }
+
+    #[test]
+    fn current_poet_rejects_obsolete_unknown_and_malformed_provenance() {
+        let state = base_state(3, vec![]);
+        let scenario = empty_scenario();
+
+        for provider in [
+            "Architect",
+            "Fortune Teller",
+            "Baker",
+            "Confessor",
+            "Future Oracle",
+        ] {
+            let poet = make_card(
+                1,
+                "Poet",
+                json!({
+                    "poet_variant": "public_current",
+                    "copied_role": provider,
+                }),
+            );
+            assert!(
+                !validate_poet(&poet, &scenario, &state),
+                "current Poet provider {provider} must be rejected"
+            );
+        }
+
+        for info in [
+            json!({"poet_variant": "public_current"}),
+            json!({"poet_variant": "public_current", "copied_role": 7}),
+            json!({"poet_variant": "legacy", "copied_role": "Scout"}),
+            json!({"poet_variant": "future", "copied_role": "Scout"}),
+            json!({"poet_variant": 1, "copied_role": "Scout"}),
+        ] {
+            let poet = make_card(1, "Poet", info);
+            assert!(!validate_poet(&poet, &scenario, &state));
+        }
+    }
+
+    #[test]
+    fn unmarked_poet_preserves_archived_provider_and_empty_fallbacks() {
+        let state = base_state(3, vec![]);
+        let scenario = empty_scenario();
+        let archived = [
+            json!({"copied_role": "Architect", "side": "Equal"}),
+            json!({
+                "copied_role": "Fortune Teller",
+                "targets": [2, 3],
+                "has_evil": false,
+            }),
+            json!({"copied_role": "Future Oracle"}),
+            json!({
+                "copied_role": "Oracle",
+                "sentinel": "There are NO Minions",
+            }),
+            json!({
+                "copied_role": "Hunter",
+                "sentinel": "There is only 1 Evil",
+            }),
+            json!({"shut_up_target": 2}),
+            json!({"no_info": true}),
+            json!({}),
+        ];
+
+        for info in archived {
+            let poet = make_card(1, "Poet", info);
+            assert!(validate_poet(&poet, &scenario, &state));
+        }
+
+        for info in [
+            json!({
+                "poet_variant": "public_current",
+                "copied_role": "Oracle",
+                "sentinel": "There are NO Minions",
+            }),
+            json!({
+                "poet_variant": "public_current",
+                "copied_role": "Hunter",
+                "sentinel": "There is only 1 Evil",
+            }),
+        ] {
+            let poet = make_card(1, "Poet", info);
+            assert!(!validate_poet(&poet, &scenario, &state));
+        }
+    }
+
+    #[test]
+    fn current_poet_provider_still_delegates_truth_and_inverse() {
+        let poet = make_card(
+            1,
+            "Poet",
+            json!({
+                "poet_variant": "public_current",
+                "copied_role": "Bounty Hunter",
+                "evil_position": 2,
+            }),
+        );
+        let state = base_state(3, vec![poet.clone()]);
+        let mut matching = empty_scenario();
+        matching.evil_positions.insert(2, "Pooka".to_string());
+
+        assert!(validate_poet(&poet, &matching, &state));
+        assert!(!validate_poet(&poet, &empty_scenario(), &state));
+
+        let mut lying_matching = empty_scenario();
+        lying_matching.corrupted.insert(1);
+        assert!(validate_poet(&poet, &lying_matching, &state));
+        lying_matching
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!validate_poet(&poet, &lying_matching, &state));
+    }
+
+    #[test]
+    fn current_poet_scout_false_surfaces_obey_truth_inversion() {
+        let poet = current_poet(
+            "Scout",
+            json!({"evil_role": "Pooka", "distance": 2}),
+        );
+        let state = base_state(5, vec![poet.clone()]);
+
+        let mut named_role_absent = empty_scenario();
+        named_role_absent
+            .evil_positions
+            .insert(4, "Witch".to_string());
+        assert!(!validate_poet(&poet, &named_role_absent, &state));
+        named_role_absent.corrupted.insert(1);
+        assert!(validate_poet(&poet, &named_role_absent, &state));
+
+        let mut only_named_evil = empty_scenario();
+        only_named_evil
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!validate_poet(&poet, &only_named_evil, &state));
+        only_named_evil.corrupted.insert(1);
+        assert!(validate_poet(&poet, &only_named_evil, &state));
+
+        let mut exact_distance = empty_scenario();
+        exact_distance
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        exact_distance
+            .evil_positions
+            .insert(4, "Witch".to_string());
+        assert!(validate_poet(&poet, &exact_distance, &state));
+        exact_distance.corrupted.insert(1);
+        assert!(!validate_poet(&poet, &exact_distance, &state));
+
+        let mut unresolved_role = empty_scenario();
+        unresolved_role
+            .evil_positions
+            .insert(3, "Unknown".to_string());
+        assert!(validate_poet(&poet, &unresolved_role, &state));
+        unresolved_role.corrupted.insert(1);
+        assert!(validate_poet(&poet, &unresolved_role, &state));
+    }
+
+    #[test]
+    fn legacy_scout_zero_distance_preserves_the_one_evil_sentinel() {
+        let scout = make_card(
+            4,
+            "Scout",
+            json!({"evil_role": "Pooka", "distance": 0}),
+        );
+        let state = base_state(7, vec![scout.clone()]);
+        let mut one_evil = empty_scenario();
+        one_evil.evil_positions.insert(2, "Pooka".to_string());
+
+        assert!(validate_scout(&scout, &one_evil, &state));
+        one_evil.corrupted.insert(4);
+        assert!(!validate_scout(&scout, &one_evil, &state));
     }
 
     #[test]

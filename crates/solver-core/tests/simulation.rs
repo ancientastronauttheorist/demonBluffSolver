@@ -2323,6 +2323,18 @@ fn generated_puppet_execution_regressions_preserve_truth() {
     assert!(failures.is_empty(), "{}", failures.join("\n"));
 }
 
+#[test]
+fn regression_asc41_v4_preserves_legacy_scout_one_evil_sentinel() {
+    let path = v2_dir().join("asc41_v4.json");
+    let content = std::fs::read_to_string(path).expect("read asc41_v4 fixture");
+    let value: serde_json::Value =
+        serde_json::from_str(&content).expect("parse asc41_v4 fixture");
+
+    if let SimResult::ConstraintFailure { detail, .. } = simulate_game(&value) {
+        panic!("asc41_v4 legacy Scout distance-zero sentinel eliminated truth: {detail}");
+    }
+}
+
 /// Regression: asc71_v6 Bishop's [V,O,M] claim stays valid even when Chancellor@6
 /// converts the Villager adjacent (#7 Empress). Root cause: Bishop's clue captures
 /// types at game-start independent of Chancellor's conversion — we accept both

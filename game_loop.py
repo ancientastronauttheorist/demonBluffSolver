@@ -22,6 +22,8 @@ from solver import (
     DOPPEL_DRUNK_RULE_VERSION,
     FORTUNE_TELLER_RULE_VERSION,
     GameState,
+    POET_PROVIDER_ROLES,
+    POET_VARIANT,
     RAMBLER_RULE_VERSION,
     SolverResult,
     slayer_revealed_role,
@@ -718,36 +720,245 @@ def card_bishop(pos: int, targets: list[int], types: list[str] = None) -> CardIn
         info["types"] = types
     return CardInfo(pos, "Bishop", info_parsed=info)
 
-def card_bounty_hunter(pos: int, evil_position: int) -> CardInfo:
-    """Pseudo-clue used for Poet's direct evil-call variant."""
-    return CardInfo(pos, "Poet", info_parsed={
-        "copied_role": "Bounty Hunter",
-        "evil_position": evil_position,
-    })
+def _canonical_poet_provider(provider: str) -> str:
+    """Return one exact current-build Poet provider in canonical public form."""
+    if not isinstance(provider, str):
+        raise ValueError("Poet copied role must be a provider name")
+    key = re.sub(r"[^a-z0-9]", "", provider.casefold())
+    for canonical in POET_PROVIDER_ROLES:
+        if key == re.sub(r"[^a-z0-9]", "", canonical.casefold()):
+            return canonical
+    raise ValueError(
+        f"Unsupported current Poet provider {provider!r}; expected one of "
+        + ", ".join(POET_PROVIDER_ROLES)
+    )
 
 
-def card_poet_with_info(pos: int, copied_role: str, copied_args: list[str]) -> CardInfo:
+def _card_current_poet(
+    pos: int,
+    provider: str,
+    info_parsed: dict,
+    *,
+    info_text: str = "",
+) -> CardInfo:
+    """Build a provenance-marked current Poet observation."""
+    info = dict(info_parsed)
+    info["copied_role"] = _canonical_poet_provider(provider)
+    info["poet_variant"] = POET_VARIANT
+    return CardInfo(pos, "Poet", info_text=info_text, info_parsed=info)
+
+
+def card_bounty_hunter(
+    pos: int,
+    evil_position: int,
+    *,
+    info_text: str = "",
+) -> CardInfo:
+    """Poet's retained Bounty Hunter direct-evil provider."""
+    if type(evil_position) is not int or evil_position <= 0:
+        raise ValueError("Bounty Hunter Poet clue requires a positive position")
+    return _card_current_poet(
+        pos,
+        "Bounty Hunter",
+        {"evil_position": evil_position},
+        info_text=info_text,
+    )
+
+
+def card_poet_with_info(
+    pos: int,
+    copied_role: str,
+    copied_args: list[str],
+    *,
+    n_cards: Optional[int] = None,
+) -> CardInfo:
     """Poet clue parser.
 
     Usage: card poet <pos> <copied_role> <copied_role_args...>
     Examples:
         card poet 5 knitter 0          (Poet gave Knitter-style clue)
         card poet 3 lover 2            (Poet gave Lover-style clue)
-        card poet 7 architect left     (Poet gave Architect-style clue)
         card poet 2 gemcrafter 5       (Poet gave Gemcrafter-style clue)
         card poet 4 bard 1             (Poet gave Bard-style clue)
         card poet 1 bounty_hunter 6    (Poet directly named #6 as Evil)
     """
-    copied_key = copied_role.lower().replace(" ", "_")
-    if copied_key in ("bounty_hunter", "bountyhunter", "evil"):
-        return card_bounty_hunter(pos, int(copied_args[0]))
+    canonical_provider = _canonical_poet_provider(copied_role)
+    if n_cards is not None:
+        if type(n_cards) is not int or n_cards <= 0:
+            raise ValueError("Poet board size must be a positive integer")
+        if type(pos) is not int or not 1 <= pos <= n_cards:
+            raise ValueError("Poet position is outside the current board")
 
-    # Build the copied role's info_parsed by delegating to _parse_card_cli
-    fake_args = [copied_role, str(pos)] + copied_args
-    copied_card = _parse_card_cli(fake_args)
-    info = copied_card.info_parsed.copy()
-    info["copied_role"] = copied_card.apparent_role  # Clue type, not necessarily in play
-    return CardInfo(pos, "Poet", info_parsed=info)
+    def require_args(count: int) -> None:
+        if len(copied_args) != count:
+            raise ValueError(
+                f"{canonical_provider} Poet clue requires exactly {count} "
+                f"argument{'s' if count != 1 else ''}"
+            )
+
+    def integer(index: int, field: str) -> int:
+        try:
+            return int(copied_args[index])
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"{canonical_provider} Poet {field} must be an integer"
+            ) from exc
+
+    def position(index: int, field: str) -> int:
+        value = integer(index, field)
+        if value <= 0 or (n_cards is not None and value > n_cards):
+            raise ValueError(
+                f"{canonical_provider} Poet {field} must be a current-board position"
+            )
+        return value
+
+    def positions(index: int, count: int) -> list[int]:
+        try:
+            values = [int(value.strip()) for value in copied_args[index].split(',')]
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise ValueError(
+                f"{canonical_provider} Poet targets must be comma-separated positions"
+            ) from exc
+        if len(values) != count or any(
+            value <= 0 or (n_cards is not None and value > n_cards)
+            for value in values
+        ):
+            raise ValueError(
+                f"{canonical_provider} Poet clue requires exactly {count} current-board "
+                f"target{'s' if count != 1 else ''}"
+            )
+        if len(set(values)) != len(values):
+            raise ValueError(f"{canonical_provider} Poet targets must be distinct")
+        return values
+
+    def canonical_role(
+        index: int,
+        field: str,
+        *,
+        factions: Optional[set[str]] = None,
+    ) -> str:
+        role = get_card(copied_args[index])
+        if role is None or (factions is not None and role.role.value not in factions):
+            allowed = (
+                ""
+                if factions is None
+                else " " + "/".join(sorted(factions))
+            )
+            raise ValueError(
+                f"{canonical_provider} Poet {field} must be a canonical{allowed} role"
+            )
+        return role.name
+
+    if canonical_provider == "Lover":
+        require_args(1)
+        evil_adjacent = integer(0, "evil count")
+        if evil_adjacent not in {0, 1, 2}:
+            raise ValueError("Lover Poet evil count must be 0, 1, or 2")
+        payload = {"evil_adjacent": evil_adjacent}
+    elif canonical_provider == "Scout":
+        require_args(2)
+        distance = integer(1, "distance")
+        if distance <= 0 or (n_cards is not None and distance > n_cards):
+            raise ValueError("Scout Poet distance must be positive and within the board")
+        payload = {
+            "evil_role": canonical_role(
+                0,
+                "evil role",
+                factions={"Minion", "Demon"},
+            ),
+            "distance": distance,
+        }
+    elif canonical_provider == "Oracle":
+        require_args(2)
+        payload = {
+            "targets": positions(0, 2),
+            "minion_role": canonical_role(
+                1,
+                "minion role",
+                factions={"Minion"},
+            ),
+        }
+    elif canonical_provider == "Bounty Hunter":
+        require_args(1)
+        return card_bounty_hunter(pos, position(0, "evil target"))
+    elif canonical_provider == "Medium":
+        require_args(2)
+        payload = {
+            "good_position": position(0, "good target"),
+            "good_role": canonical_role(1, "good role"),
+        }
+    elif canonical_provider == "Knitter":
+        require_args(1)
+        evil_pairs = integer(0, "pair count")
+        if evil_pairs < 0 or (n_cards is not None and evil_pairs > n_cards):
+            raise ValueError("Knitter Poet pair count is outside the current board")
+        payload = {"evil_pairs": evil_pairs}
+    elif canonical_provider == "Hunter":
+        require_args(1)
+        distance = integer(0, "distance")
+        if distance <= 0 or (n_cards is not None and distance > n_cards):
+            raise ValueError("Hunter Poet distance must be positive and within the board")
+        payload = {"distance": distance}
+    elif canonical_provider == "Enlightened":
+        require_args(1)
+        direction_key = re.sub(r"[^a-z]", "", copied_args[0].casefold())
+        direction = {
+            "cw": "CW",
+            "clockwise": "CW",
+            "ccw": "CCW",
+            "counterclockwise": "CCW",
+            "equidistant": "Equidistant",
+        }.get(direction_key)
+        if direction is None:
+            raise ValueError(
+                "Enlightened Poet direction must be CW, CCW, or Equidistant"
+            )
+        payload = {"direction": direction}
+    elif canonical_provider == "Empress":
+        require_args(1)
+        payload = {"targets": positions(0, 3)}
+    elif canonical_provider == "Bishop":
+        require_args(2)
+        target_values = [value.strip() for value in copied_args[0].split(',')]
+        if not 1 <= len(target_values) <= 3:
+            raise ValueError("Bishop Poet clue requires one to three targets")
+        target_count = len(target_values)
+        target_positions = positions(0, target_count)
+        type_values = [value.strip().casefold() for value in copied_args[1].split(',')]
+        type_names = {
+            "villager": "Villager",
+            "outcast": "Outcast",
+            "minion": "Minion",
+            "demon": "Demon",
+        }
+        if len(type_values) != target_count or any(
+            value not in type_names for value in type_values
+        ):
+            raise ValueError(
+                "Bishop Poet types must match its targets and be Villager, "
+                "Outcast, Minion, or Demon"
+            )
+        payload = {
+            "targets": target_positions,
+            "types": [type_names[value] for value in type_values],
+        }
+    elif canonical_provider == "Gemcrafter":
+        require_args(1)
+        payload = {"good_position": position(0, "good target")}
+    else:
+        # Bard is the only remaining audited current provider.  Manual zero
+        # retains the existing CLI convention for "no Corrupted characters".
+        require_args(1)
+        distance = integer(0, "corruption distance")
+        if distance < -1 or (
+            n_cards is not None and distance > n_cards
+        ):
+            raise ValueError("Bard Poet distance is outside the current board")
+        payload = {
+            "corruption_distance": -1 if distance in {-1, 0} else distance,
+        }
+
+    return _card_current_poet(pos, canonical_provider, payload)
 
 
 def _canonical_baker_original_role(original_role: str) -> str:
@@ -4360,7 +4571,11 @@ def _parse_clue_from_memory(
 
     # --- RuntimeData: Enlightened direction (always reliable) ---
     if rd and rd.get('type') == 'direction':
-        return card_enlightened(pos, rd['direction'])
+        if role_lower != 'poet':
+            return card_enlightened(pos, rd['direction'])
+        # Gossip/Poet stores the selected provider's RuntimeData on its own
+        # CharacterData.  Defer it to the Poet event boundary below so the
+        # newest public ActedInfo must still agree with savedAct.
 
     # --- Alchemist: prefer clue_text (works for Drunk-as-Alchemist too) ---
     # Post-patch clue is "# Corruption/Corrupted around me [Range 2] at
@@ -4601,76 +4816,405 @@ def _parse_clue_from_memory(
             good_role = m.group(1).strip()
             return card_medium(pos, targets[0], good_role)
 
-    # --- Poet: copies a random villager ability. Try to detect which one. ---
+    # --- Poet: exact current Gossip provider list. ---
     if role_lower == 'poet' and clue:
-        cl = clue.lower()
-        # Bard pattern
-        if 'corrupted' in cl and ('card' in cl or 'no corrupted' in cl):
-            if 'no corrupted' in cl or 'are not corrupted' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"corruption_distance": -1, "copied_role": "Bard"})
-            m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
-            if m:
-                return CardInfo(pos, "Poet", info_parsed={"corruption_distance": int(m.group(1)), "copied_role": "Bard"})
-        # Knitter pattern
-        if 'pair' in cl or 'not adjacent' in cl:
-            if 'not adjacent' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"evil_pairs": 0, "copied_role": "Knitter"})
-            m = re.search(r'(\d+)\s+(?:evil\s+)?pair', clue, re.IGNORECASE)
-            if m:
-                return CardInfo(pos, "Poet", info_parsed={"evil_pairs": int(m.group(1)), "copied_role": "Knitter"})
-        # Lover pattern
-        if 'neighbor' in cl:
-            m = re.search(r'(\d+)', clue)
-            if m:
-                return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": int(m.group(1)), "copied_role": "Lover"})
-            return CardInfo(pos, "Poet", info_parsed={"evil_adjacent": 0, "copied_role": "Lover"})
-        # Scout pattern: "<EvilRole> is N cards away from closest Evil"
-        # Must come before Hunter ("I am N cards away..."): both contain "closest evil".
-        m_scout = re.search(r'^\s*([A-Z][\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
-        if m_scout and 'away' in cl and ('nearest evil' in cl or 'closest evil' in cl):
-            candidate = m_scout.group(1).strip()
-            if candidate.lower() not in ('i', 'i am'):
-                return CardInfo(pos, "Poet", info_parsed={
-                    "evil_role": candidate,
-                    "distance": int(m_scout.group(2)),
-                    "copied_role": "Scout",
-                })
-        # Hunter pattern
-        if ('nearest evil' in cl or 'closest evil' in cl) and 'away' in cl:
-            m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
-            if m:
-                return CardInfo(pos, "Poet", info_parsed={"distance": int(m.group(1)), "copied_role": "Hunter"})
-        # Enlightened pattern
-        if 'clockwise' in cl or 'equidistant' in cl:
-            if 'counter' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"direction": "CCW", "copied_role": "Enlightened"})
-            elif 'equidistant' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"direction": "Equidistant", "copied_role": "Enlightened"})
-            else:
-                return CardInfo(pos, "Poet", info_parsed={"direction": "CW", "copied_role": "Enlightened"})
-        # Architect pattern
-        if cl.strip().startswith('left') or cl.strip().startswith('right') or cl.strip().startswith('equal'):
-            if 'left' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"side": "Left", "copied_role": "Architect"})
-            elif 'right' in cl:
-                return CardInfo(pos, "Poet", info_parsed={"side": "Right", "copied_role": "Architect"})
-            else:
-                return CardInfo(pos, "Poet", info_parsed={"side": "Equal", "copied_role": "Architect"})
-        # Confessor pattern
-        if 'dizzy' in cl or 'feeling good' in cl:
-            dizzy = 'dizzy' in cl
-            return CardInfo(pos, "Poet", info_parsed={"dizzy": dizzy, "copied_role": "Confessor"})
-        # Medium pattern: "#N is a real <Role>"
-        m = re.search(r'is\s+a\s+real\s+(\w[\w\s]*)', clue, re.IGNORECASE)
-        if m and targets:
-            good_role = m.group(1).strip()
-            return CardInfo(pos, "Poet", info_parsed={"good_position": targets[0], "good_role": good_role, "copied_role": "Medium"})
-        # Baker pattern
-        m = re.search(r'I was (?:a |an )?(.+)', clue, re.IGNORECASE)
+        # Gossip appends one ActedInfo for each result.  Structured providers
+        # below must agree with the newest event, never a stale first event.
+        latest_poet_info = (
+            infos[-1]
+            if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+            else None
+        )
+        latest_poet_desc = (
+            latest_poet_info.get('desc')
+            if latest_poet_info is not None
+            else None
+        )
+        latest_poet_targets = (
+            latest_poet_info.get('targets')
+            if latest_poet_info is not None
+            else None
+        )
+
+        def poet_refs_match(
+            displayed: list[int],
+            *,
+            order_sensitive: bool = True,
+        ) -> bool:
+            """Require one exact newest native event and its public refs."""
+            if latest_poet_desc != clue or not isinstance(latest_poet_targets, list):
+                return False
+            if any(type(target) is not int for target in latest_poet_targets):
+                return False
+            if any(
+                target <= 0 or (n_cards is not None and target > n_cards)
+                for target in latest_poet_targets
+            ):
+                return False
+            if order_sensitive:
+                return latest_poet_targets == displayed
+            return (
+                len(latest_poet_targets) == len(displayed)
+                and len(set(latest_poet_targets)) == len(latest_poet_targets)
+                and set(latest_poet_targets) == set(displayed)
+            )
+
+        def valid_displayed_targets(
+            displayed: list[int],
+            *,
+            require_sorted: bool = True,
+        ) -> bool:
+            return (
+                bool(displayed)
+                and len(set(displayed)) == len(displayed)
+                and (not require_sorted or displayed == sorted(displayed))
+                and all(
+                    target > 0 and (n_cards is None or target <= n_cards)
+                    for target in displayed
+                )
+            )
+
+        def enlightened_direction_from_text() -> Optional[str]:
+            match = re.fullmatch(
+                r'\s*Closest\s+Evil\s+is\s*:\s*'
+                r'(Counter-clockwise|Clockwise)\s*[.!]?\s*',
+                clue,
+                re.IGNORECASE | re.DOTALL,
+            )
+            if match:
+                return (
+                    'CCW'
+                    if match.group(1).casefold().startswith('counter')
+                    else 'CW'
+                )
+            if re.fullmatch(
+                r'\s*Closest\s+Evil\s+is\s+equidistant\s*[.!]?\s*',
+                clue,
+                re.IGNORECASE | re.DOTALL,
+            ):
+                return 'Equidistant'
+            return None
+
+        # Enlightened RuntimeData is authoritative for the direction, but it
+        # is not permission to consume a stale result from another event.
+        if rd and rd.get('type') == 'direction':
+            direction = rd.get('direction')
+            if (
+                direction in {'CW', 'CCW', 'Equidistant'}
+                and enlightened_direction_from_text() == direction
+                and poet_refs_match([])
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Enlightened",
+                    {"direction": direction},
+                    info_text=clue,
+                )
+            return None
+
+        # Bounty Hunter (retained Poet provider, distinct from Hunter).
+        m = re.fullmatch(
+            r'\s*#\s*(\d+)\s+is\s+Evil\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
         if m:
-            claimed = m.group(1).strip()
-            # "I was a Baker" = converted from Baker (keep as 'Baker', not 'original')
-            return CardInfo(pos, "Poet", info_parsed={"original_role": claimed, "copied_role": "Baker"})
+            evil_position = int(m.group(1))
+            # Native Bounty Hunter text carries no Character references.  The
+            # latest ActedInfo still owns the exact sentence, so requiring its
+            # empty ref list distinguishes it from stale/ambiguous events.
+            if (
+                valid_displayed_targets([evil_position])
+                and poet_refs_match([])
+            ):
+                return card_bounty_hunter(
+                    pos,
+                    evil_position,
+                    info_text=clue,
+                )
+
+        # Oracle: two public references and one canonical Minion role.
+        m = re.fullmatch(
+            r'\s*#\s*(\d+)\s+or\s+#\s*(\d+)\s+is\s+a\s+'
+            r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            oracle_targets = [int(m.group(1)), int(m.group(2))]
+            minion = get_card(m.group(3).strip())
+            if (
+                valid_displayed_targets(oracle_targets)
+                and poet_refs_match(oracle_targets)
+                and minion is not None
+                and minion.role.value == "Minion"
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Oracle",
+                    {
+                        "targets": oracle_targets,
+                        "minion_role": minion.name,
+                    },
+                    info_text=clue,
+                )
+
+        # Empress: exact three-reference public sentence.
+        m = re.fullmatch(
+            r'\s*One\s+is\s+Evil\s*:\s*#\s*(\d+)\s*,\s*'
+            r'#\s*(\d+)\s+or\s+#\s*(\d+)\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            empress_targets = [int(m.group(i)) for i in range(1, 4)]
+            if (
+                valid_displayed_targets(empress_targets)
+                and poet_refs_match(empress_targets)
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Empress",
+                    {"targets": empress_targets},
+                    info_text=clue,
+                )
+
+        # Gemcrafter: exact Good call and matching native reference.
+        m = re.fullmatch(
+            r'\s*#\s*(\d+)\s+is\s+Good\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            good_position = int(m.group(1))
+            if (
+                valid_displayed_targets([good_position])
+                and poet_refs_match([good_position])
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Gemcrafter",
+                    {"good_position": good_position},
+                    info_text=clue,
+                )
+
+        # Bishop: public IDs are sorted in the sentence, but the native refs
+        # are shuffled independently.  Types form a multiset over the selected
+        # seats; neither list is a positional ID-to-type mapping.
+        type_pattern = r'(?:Villager|Outcast|Minion|Demon)'
+        m = re.fullmatch(
+            rf'\s*#\s*(\d+)\s+is\s+a\s+({type_pattern})\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            bishop_targets = [int(m.group(1))]
+            bishop_types = [m.group(2).capitalize()]
+            if (
+                valid_displayed_targets(bishop_targets)
+                and poet_refs_match(bishop_targets, order_sensitive=False)
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Bishop",
+                    {"targets": bishop_targets, "types": bishop_types},
+                    info_text=clue,
+                )
+        m = re.fullmatch(
+            rf'\s*Between\s+'
+            rf'(?P<ids>#\s*\d+(?:\s*,\s*#\s*\d+){{1,2}})\s+'
+            rf'there\s+is\s*:\s*'
+            rf'(?P<types>{type_pattern}(?:\s*,\s*{type_pattern})*'
+            rf'(?:\s+and\s+{type_pattern})?)\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            bishop_targets = [
+                int(value) for value in re.findall(r'#\s*(\d+)', m.group('ids'))
+            ]
+            bishop_types = [
+                value.capitalize()
+                for value in re.findall(type_pattern, m.group('types'), re.IGNORECASE)
+            ]
+            if (
+                len(bishop_targets) == len(bishop_types)
+                and valid_displayed_targets(bishop_targets)
+                and poet_refs_match(bishop_targets, order_sensitive=False)
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Bishop",
+                    {"targets": bishop_targets, "types": bishop_types},
+                    info_text=clue,
+                )
+
+        # Bard exact native forms.
+        if re.fullmatch(
+            r'\s*There\s+are\s+no\s+Corrupted\s+characters\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        ) and poet_refs_match([]):
+            return _card_current_poet(
+                pos,
+                "Bard",
+                {"corruption_distance": -1},
+                info_text=clue,
+            )
+        m = re.fullmatch(
+            r'\s*I\s+am\s+(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
+            r'away\s+from\s+'
+            r'Corrupted\s+character\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m and poet_refs_match([]):
+            distance = int(m.group(1) or m.group(2))
+            if n_cards is None or distance <= n_cards:
+                return _card_current_poet(
+                    pos,
+                    "Bard",
+                    {"corruption_distance": distance},
+                    info_text=clue,
+                )
+
+        # Knitter exact native forms.
+        if re.fullmatch(
+            r'\s*Evils\s+are\s+not\s+adjacent\s+to\s+eachother\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        ) and poet_refs_match([]):
+            return _card_current_poet(
+                pos,
+                "Knitter",
+                {"evil_pairs": 0},
+                info_text=clue,
+            )
+        if re.fullmatch(
+            r'\s*There\s+is\s+only\s+1\s+pair\s+of\s+Evil\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        ) and poet_refs_match([]):
+            return _card_current_poet(
+                pos,
+                "Knitter",
+                {"evil_pairs": 1},
+                info_text=clue,
+            )
+        m = re.fullmatch(
+            r'\s*There\s+are\s+(\d+)\s+pairs\s+of\s+Evil\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m and poet_refs_match([]):
+            evil_pairs = int(m.group(1))
+            if evil_pairs > 1 and (n_cards is None or evil_pairs <= n_cards):
+                return _card_current_poet(
+                    pos,
+                    "Knitter",
+                    {"evil_pairs": evil_pairs},
+                    info_text=clue,
+                )
+        # Lover exact native forms: "NO Evils\nadjacent to me" or
+        # "N Evil(s)\nadjacent to me".
+        m = re.fullmatch(
+            r'\s*(?:(NO)\s+Evils|(1)\s+Evil|(2)\s+Evils)\s+'
+            r'adjacent\s+to\s+me\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m and poet_refs_match([]):
+            evil_adjacent = (
+                0 if m.group(1) else (1 if m.group(2) else 2)
+            )
+            return _card_current_poet(
+                pos,
+                "Lover",
+                {"evil_adjacent": evil_adjacent},
+                info_text=clue,
+            )
+        # Scout exact native singular/plural sentence. The named asset must be
+        # an authored Evil-class role; the one-Evil sentinel has no such name
+        # and intentionally remains manual.
+        m_scout = re.fullmatch(
+            r'\s*([A-Za-z][A-Za-z _\'-]*?)\s+is\s+'
+            r'(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
+            r'away\s+from\s+closest\s+Evil\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m_scout and poet_refs_match([]):
+            candidate = get_card(m_scout.group(1).strip())
+            distance = int(m_scout.group(2) or m_scout.group(3))
+            if (
+                candidate is not None
+                and candidate.role.value in {'Minion', 'Demon'}
+                and (n_cards is None or distance <= n_cards)
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Scout",
+                    {
+                        "evil_role": candidate.name,
+                        "distance": distance,
+                    },
+                    info_text=clue,
+                )
+
+        # Hunter exact native singular/plural sentence.
+        m = re.fullmatch(
+            r'\s*I\s+am\s+(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
+            r'away\s+from\s+'
+            r'closest\s+Evil\s*[.!]?\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m and poet_refs_match([]):
+            distance = int(m.group(1) or m.group(2))
+            if n_cards is None or distance <= n_cards:
+                return _card_current_poet(
+                    pos,
+                    "Hunter",
+                    {"distance": distance},
+                    info_text=clue,
+                )
+
+        # Enlightened exact native direction/equidistant sentences. RuntimeData
+        # normally resolves this above; text remains a safe fallback when the
+        # runtime object is unavailable.
+        direction = enlightened_direction_from_text()
+        if direction is not None and poet_refs_match([]):
+            return _card_current_poet(
+                pos,
+                "Enlightened",
+                {"direction": direction},
+                info_text=clue,
+            )
+        # Medium exact normal and Drunk-reveal forms.  Both carry one matching
+        # reference; role text is canonicalized before entering solver state.
+        m = re.fullmatch(
+            r'\s*#\s*(\d+)\s+is\s+(?:a\s+real|actually\s+a)\s+'
+            r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if m:
+            good_position = int(m.group(1))
+            good_role = get_card(m.group(2).strip())
+            if (
+                good_role is not None
+                and valid_displayed_targets([good_position])
+                and poet_refs_match([good_position])
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Medium",
+                    {
+                        "good_position": good_position,
+                        "good_role": good_role.name,
+                    },
+                    info_text=clue,
+                )
 
     # --- No-info roles: these roles NEVER have passive speech bubbles ---
     # Any clue_text is evil fabrication or stale data — ignore it.
@@ -4813,11 +5357,21 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "poet":
         if len(args) > 2:
             # Poet clue variant: poet <pos> <clue_type> <args...>
-            return card_poet_with_info(pos, args[2], args[3:])
+            return card_poet_with_info(
+                pos,
+                args[2],
+                args[3:],
+                n_cards=session.n_cards if session is not None else None,
+            )
         else:
             return card_no_info(pos, "Poet")  # No info identified
     elif role in ("bounty_hunter", "bountyhunter"):
-        return card_bounty_hunter(pos, int(args[2]))
+        return card_poet_with_info(
+            pos,
+            "Bounty Hunter",
+            [args[2]],
+            n_cards=session.n_cards if session is not None else None,
+        )
     elif role == "no_info":
         return card_no_info(pos, args[2])  # actual role name
     else:
@@ -6025,11 +6579,24 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and _execution_role_key(parsed.apparent_role) == "baker"
                         and "original_role" in parsed.info_parsed
                     )
+                    # Gossip's Day callback can settle after an initial
+                    # no-info snapshot. Replace only that empty placeholder
+                    # with a fully provenance-marked current payload; a
+                    # nonempty legacy/manual Poet observation remains owned by
+                    # the operator and is never silently rewritten.
+                    poet_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role) == "poet"
+                        and existing.info_parsed == {}
+                        and parsed.info_parsed.get("poet_variant") == POET_VARIANT
+                    )
                     if not (
                         active_update
                         or shut_up_update
                         or quote_update
                         or baker_update
+                        or poet_update
                     ):
                         continue
                 session.add_card(parsed)

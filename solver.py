@@ -12,6 +12,25 @@ RAMBLER_RULE_VERSION = "rambler2_shut_up"
 BAKER_RULE_VERSION = "baker_day_reveal_v1"
 DOPPEL_DRUNK_RULE_VERSION = "doppel_drunk_reveal_v1"
 FORTUNE_TELLER_RULE_VERSION = "fortune_teller_native_v1"
+POET_VARIANT = "public_current"
+
+# Native Gossip constructor order.  These are canonical public clue-provider
+# names, not a list of every Villager whose text happens to resemble a Poet
+# result.  Bounty Hunter is a retained provider distinct from current Hunter.
+POET_PROVIDER_ROLES = (
+    "Lover",
+    "Scout",
+    "Oracle",
+    "Bounty Hunter",
+    "Medium",
+    "Knitter",
+    "Hunter",
+    "Enlightened",
+    "Empress",
+    "Bishop",
+    "Gemcrafter",
+    "Bard",
+)
 
 
 # ============================================================
