@@ -251,6 +251,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   Wretch worlds, identity movers, and Baker-to-Spy chronology; expand the typed
   union to 34 target sets, 705 memberships, 455 selected managed methods, and
   382 unique native RVAs, then publish its typed-quality report.
+- [ ] Preserve removed executed-evil role-to-position assignments during
+  scenario construction, branch them before Start, and replay their complete
+  ordered mutation histories so `Unknown` seats can be resolved without
+  validator-local faction guesses.
+- [ ] Asset-bind public Empress to managed `Noble`; native-audit its declared
+  role/compiler-generated methods and shared selection helpers, then close its
+  direct/Poet three-reference schema, truth/bluff pools, lifecycle eligibility,
+  identity-mover behavior, exact text/reference ordering, and RNG chronology.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

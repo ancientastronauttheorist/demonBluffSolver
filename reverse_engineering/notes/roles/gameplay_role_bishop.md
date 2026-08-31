@@ -441,3 +441,54 @@ FunctionDefinitions, 250 exact-definition overlap memberships, and 382 unique
 native RVAs. The 4,207-method Assembly-CSharp coverage ledger retains its
 audited census while adding terminal evidence for the 17 declared Bishop
 methods and the generic shuffle helper boundary.
+
+## Clean-room implementation validation
+
+The current Python bridge stamps direct observations with
+`bishop_variant: public_current`, stamps Poet observations only with the shared
+`poet_variant`, preserves the independently ordered target/type arrays, and
+requires the exact native one-, two-, or three-entry clue text. Unmarked
+archived observations continue through the legacy compatibility path.
+
+The Rust validator now closes the current marker schema, exact text, truthful
+category precedence, authored bluff domain, live Villager reference pool,
+register-as-first projection, identity movers, Baker-to-Spy chronology, and
+joint anonymous Villager/Outcast/Wretch assignment. In particular, a physical
+Spy remains projected Villager even after current-data movement or when exact
+public death evidence refines a grouped `Unknown` evil seat. An undealt Minion
+candidate cannot make the authored bluff domain report Minion.
+
+The final 2026-08-31 validation gates were:
+
+- `python -m unittest tests.test_bishop_native tests.test_poet_native`: 44/44;
+- `python -m unittest discover -s tests -p "test_*.py"`: 556/556;
+- `cargo test -p solver-core current_bishop --lib -- --nocapture`: 6/6;
+- `cargo test --release -p solver-core --lib`: 349/349;
+- `cargo check --workspace --all-targets`: pass;
+- `cargo build --release`: pass; and
+- `cargo test --release --test simulation -- --nocapture`: 31/31 in 789.06
+  seconds, including all 426 active v2 fixtures.
+
+The all-v2 aggregate remains 303 wins, seven expected losses, 21 expected
+constraint issues, zero unexpected constraint failures, six known unexpected
+simulation losses, 15 cases missing hidden-Outcast truth, and 74 fixtures that
+still require an ordered Twin trace. Those debt buckets predate and remain
+separate from the Bishop checkpoint; this gate proves the stricter Bishop
+model introduced no new corpus constraint failure.
+
+## Remaining uncertainty
+
+- Scenario construction can still retain an untyped executed evil as
+  `Unknown`. Its missing role may have changed the entire Start history through
+  Spy, Shaman, Chancellor, Twin, Puppeteer, or another mutator. A current marked
+  Bishop observation therefore fails closed when it depends on that unresolved
+  seat. The exact future fix is to preserve removed role-to-position
+  assignments, branch them before Start, and replay the full ordered history;
+  a validator-local Minion/Demon guess is not sound.
+- The native call chronology and ownership of the two `System.Random`
+  instances are documented, but no claim is made that their streams are
+  statistically independent or that their seeds have been reconstructed.
+- The archived records are textless, unversioned compatibility evidence. They
+  do not independently validate the current exact clue strings or RNG path.
+- This is a build-specific Bishop checkpoint, not evidence that every role or
+  the whole game has been fully decompiled.
