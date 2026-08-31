@@ -7,7 +7,7 @@ pub use helpers::*;
 
 use baker::{
     baker_history_can_erase_role, medium_uses_baker_history,
-    validate_baker_history,
+    validate_baker_history, BAKER_CURRENT_RULE,
 };
 use disguisers::validate_clean_doppel_source_support;
 
@@ -185,6 +185,14 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // Current Poet/Bounty Hunter observations must share one physical
     // assignment for every still-anonymous natural Wretch identity.
     if !validate_current_bounty_hunter_wretch_consistency(scenario, state) { return false; }
+
+    // Current direct and Poet Medium observations share the same hidden
+    // ordinary-Outcast identities, Spy register-as cache, and persistent raw
+    // bluff pointers. Per-card existential checks must not choose mutually
+    // incompatible worlds for those stored surfaces.
+    if !validate_current_medium_consistency(scenario, state) {
+        return false;
+    }
 
     // Card info validators
     for card in &state.cards {
@@ -646,6 +654,7 @@ const LOVER_CURRENT_VARIANT_FIELD: &str = "lover_variant";
 const SCOUT_CURRENT_VARIANT_FIELD: &str = "scout_variant";
 const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
 const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
+const MEDIUM_CURRENT_VARIANT_FIELD: &str = "medium_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -669,7 +678,8 @@ fn current_passive_payload_source(
             if !card.info_parsed.contains_key(LOVER_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(MEDIUM_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -1758,7 +1768,495 @@ fn validate_oracle(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     }
 }
 
+fn current_medium_text(target: u8, role: &str) -> String {
+    if roles_equal(role, "Drunk") {
+        format!("#{target} is actually a\nDrunk")
+    } else {
+        format!("#{target} is a real\n{role}")
+    }
+}
+
+fn parse_current_medium_claim<'a>(
+    card: &'a CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<(u8, &'a str)> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => (MEDIUM_CURRENT_VARIANT_FIELD, 1),
+        CurrentPassivePayloadSource::Poet => ("poet_variant", 2),
+    };
+    if info.len() != fixed_fields + 2
+        || info.get(variant_field).and_then(serde_json::Value::as_str) != Some(POET_CURRENT_VARIANT)
+        || (source == CurrentPassivePayloadSource::Poet
+            && info.get("copied_role").and_then(serde_json::Value::as_str) != Some("Medium"))
+    {
+        return None;
+    }
+    let target = poet_position_value(info.get("good_position"), state.n_cards)?;
+    let role = poet_canonical_role(info, "good_role")?;
+    (card.info_text == current_medium_text(target, role)).then_some((target, role))
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentMediumRawBluffHolder {
+    Impossible,
+    Possible,
+    Proven,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentMediumSupport {
+    required_anonymous_wretches: HashSet<u8>,
+    forbidden_anonymous_wretches: HashSet<u8>,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+}
+
+fn empty_current_medium_support() -> CurrentMediumSupport {
+    CurrentMediumSupport {
+        required_anonymous_wretches: HashSet::new(),
+        forbidden_anonymous_wretches: HashSet::new(),
+        register_as: None,
+        raw_bluff: None,
+    }
+}
+
+fn current_medium_spy_surface_at(position: u8, scenario: &Scenario, state: &GameState) -> bool {
+    stable_evil_origin_role_at(position, scenario, state)
+        .is_some_and(|role| normalize_role(role) == "spy")
+        || current_data_role_at(position, scenario, state)
+            .is_some_and(|role| normalize_role(&role) == "spy")
+}
+
+fn current_medium_spy_register_as_label_allowed(role: &str, state: &GameState) -> bool {
+    get_card(role).is_some_and(|card| {
+        card.name == role
+            && card.faction == Faction::Villager
+            && state
+                .deck
+                .villagers
+                .iter()
+                .any(|authored| roles_equal(authored, role))
+    })
+}
+
+fn current_medium_mover_history_possible_at(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let twin = scenario.twin_trace.as_ref().is_some_and(|trace| {
+        if trace.actor_position == position {
+            return true;
+        }
+        matches!(
+            &trace.outcome,
+            crate::types::TwinStartOutcome::Swap {
+                neighbor_position,
+                ..
+            } if *neighbor_position == position
+        )
+    });
+    let shaman = scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        trace.source_position == position || trace.target_position == position
+    });
+    let chancellor = scenario.chancellor_added_outcast_position() == Some(position)
+        || scenario
+            .chancellor_original_villager_positions()
+            .contains(&position);
+    let baker = current_data_role_at(position, scenario, state)
+        .is_some_and(|role| roles_equal(&role, "Baker"))
+        && medium_uses_baker_history(position, scenario, state);
+    twin || shaman || chancellor || baker
+}
+
+fn current_medium_known_role_matches(
+    target: u8,
+    data_role: &str,
+    claimed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    roles_equal(data_role, claimed_role)
+        || (roles_equal(data_role, "Baker")
+            && medium_uses_baker_history(target, scenario, state)
+            && validate_baker_history(scenario, state))
+}
+
+fn current_medium_anonymous_role_possible(
+    target: u8,
+    claimed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let Some(card) = get_card(claimed_role) else {
+        return false;
+    };
+    match card.faction {
+        Faction::Villager => state
+            .deck
+            .villagers
+            .iter()
+            .any(|authored| roles_equal(authored, claimed_role)),
+        Faction::Outcast if !roles_equal(claimed_role, "Wretch") => {
+            crate::scenario::scenario_allows_anonymous_natural_outcast_role_at(
+                target,
+                claimed_role,
+                scenario,
+                state,
+            )
+        }
+        Faction::Minion | Faction::Demon => {
+            current_medium_mover_history_possible_at(target, scenario, state)
+        }
+        Faction::Outcast => false,
+    }
+}
+
+fn current_medium_truth_target_support(
+    target: u8,
+    claimed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentMediumSupport> {
+    let mut support = empty_current_medium_support();
+
+    // Spy is the important register-as-first exception to the shared helper's
+    // runtime-Evil shortcut. A stable Spy keeps its physical cache; a represented
+    // seat whose current provider is Spy can execute Spy Start and cache its own
+    // Villager (for example Shaman's immediate copied Start). This is not a
+    // generic claim that Twin moves another Character's physical registerAs.
+    if current_medium_spy_surface_at(target, scenario, state) {
+        if !current_medium_spy_register_as_label_allowed(claimed_role, state) {
+            return None;
+        }
+        support.register_as = Some((target, normalize_role(claimed_role)));
+        return Some(support);
+    }
+
+    if is_runtime_evil_at(target, scenario, state) {
+        return None;
+    }
+    match current_data_role_at(target, scenario, state) {
+        Some(data_role) if roles_equal(&data_role, "Wretch") => None,
+        Some(data_role) => {
+            current_medium_known_role_matches(target, &data_role, claimed_role, scenario, state)
+                .then_some(support)
+        }
+        None => {
+            if !current_medium_anonymous_role_possible(target, claimed_role, scenario, state) {
+                return None;
+            }
+            support.forbidden_anonymous_wretches.insert(target);
+            Some(support)
+        }
+    }
+}
+
+fn current_medium_require_registered_evil(
+    position: u8,
+    support: &mut CurrentMediumSupport,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if current_medium_spy_surface_at(position, scenario, state) {
+        return false;
+    }
+    if is_runtime_evil_at(position, scenario, state) {
+        return true;
+    }
+    match current_data_role_at(position, scenario, state) {
+        Some(role) => roles_equal(&role, "Wretch"),
+        None => {
+            support.required_anonymous_wretches.insert(position);
+            true
+        }
+    }
+}
+
+fn current_medium_raw_bluff_holder_at(
+    position: u8,
+    actor: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> CurrentMediumRawBluffHolder {
+    let acquisition_surface = if is_runtime_evil_at(position, scenario, state)
+        || scenario.puppet_position == Some(position)
+        || scenario.drunk_position == Some(position)
+        || scenario.doppelganger_position == Some(position)
+        || current_medium_spy_surface_at(position, scenario, state)
+    {
+        CurrentMediumRawBluffHolder::Proven
+    } else if current_data_role_at(position, scenario, state)
+        .as_deref()
+        .is_some_and(|role| {
+        matches!(
+            normalize_role(role).as_str(),
+            "drunk" | "doppelganger" | "mutant"
+        ) || get_card(role)
+            .is_some_and(|card| matches!(card.faction, Faction::Minion | Faction::Demon))
+    }) {
+        CurrentMediumRawBluffHolder::Proven
+    } else if current_medium_mover_history_possible_at(position, scenario, state)
+        || current_data_role_at(position, scenario, state).is_none()
+    {
+        // Raw bluff acquisition happens on delayed Reveal and persists across
+        // later data movement. Scenario deliberately does not encode that
+        // pointer or the exact continuation ordering, so these are genuine
+        // possible holders rather than known-null ordinary Good roles.
+        CurrentMediumRawBluffHolder::Possible
+    } else {
+        CurrentMediumRawBluffHolder::Impossible
+    };
+
+    if acquisition_surface == CurrentMediumRawBluffHolder::Impossible || position == actor {
+        return acquisition_surface;
+    }
+
+    // A non-self raw bluff must already have been acquired when the Medium's
+    // own Reveal reaches BluffAct. Current live states certify their complete
+    // click order with the same provenance used by Baker chronology. Archived
+    // and manually entered orders remain conservative because they cannot
+    // prove which acquisition ran first.
+    if state.baker_rule_version.as_deref() == Some(BAKER_CURRENT_RULE) {
+        let actor_index = state.reveal_order.iter().position(|seen| *seen == actor);
+        let holder_index = state
+            .reveal_order
+            .iter()
+            .position(|seen| *seen == position);
+        match (actor_index, holder_index) {
+            (Some(actor_index), Some(holder_index)) if holder_index < actor_index => {
+                return acquisition_surface;
+            }
+            (Some(_), Some(_) | None) => return CurrentMediumRawBluffHolder::Impossible,
+            (None, _) => {}
+        }
+    }
+    acquisition_surface
+}
+
+fn current_medium_truth_supports(
+    actor: u8,
+    target: u8,
+    claimed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentMediumSupport> {
+    let Some(mut support) =
+        current_medium_truth_target_support(target, claimed_role, scenario, state)
+    else {
+        return Vec::new();
+    };
+
+    // Native removes the actor exactly once only when the fresh registered-
+    // Good pool contains more than one occurrence. A self result therefore
+    // proves that every other physical occurrence registered Evil in the same
+    // hidden-Outcast assignment.
+    if target == actor {
+        for position in 1..=state.n_cards {
+            if position != actor
+                && !current_medium_require_registered_evil(position, &mut support, scenario, state)
+            {
+                return Vec::new();
+            }
+        }
+    }
+
+    if !support
+        .required_anonymous_wretches
+        .is_disjoint(&support.forbidden_anonymous_wretches)
+        || !anonymous_wretch_assignment_possible(
+            &support.required_anonymous_wretches,
+            &support.forbidden_anonymous_wretches,
+            scenario,
+            state,
+        )
+    {
+        return Vec::new();
+    }
+    vec![support]
+}
+
+fn current_medium_bluff_supports(
+    actor: u8,
+    target: u8,
+    claimed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentMediumSupport> {
+    if current_medium_raw_bluff_holder_at(target, actor, scenario, state)
+        == CurrentMediumRawBluffHolder::Impossible
+    {
+        return Vec::new();
+    }
+
+    // Bluff first builds the raw non-null-holder pool without the actor. It
+    // falls back to the full holder pool only when that first pool is empty.
+    // Because an unrepresented raw pointer is a real possibility, self is
+    // sound only when every other seat is proved base-null with no mover or
+    // reveal-history ambiguity.
+    if target == actor
+        && (1..=state.n_cards).any(|position| {
+            position != actor
+                && current_medium_raw_bluff_holder_at(position, actor, scenario, state)
+                    != CurrentMediumRawBluffHolder::Impossible
+        })
+    {
+        return Vec::new();
+    }
+
+    let mut support = empty_current_medium_support();
+    let normalized = normalize_role(claimed_role);
+    // Scenario has neither the persistent Character.bluff pointer nor its value.
+    // Once a holder surface is supported, every canonical raw CharacterData label
+    // remains possible; deck/faction narrowing would invent certainty across
+    // delayed Reveal, Twin/Shaman writes, and stale persisted bluff compositions.
+    support.raw_bluff = Some((target, normalized.clone()));
+    if current_medium_spy_surface_at(target, scenario, state) {
+        if !current_medium_spy_register_as_label_allowed(claimed_role, state) {
+            return Vec::new();
+        }
+        // Spy's raw bluff and register-as use the same cached Villager record.
+        support.register_as = Some((target, normalized));
+    }
+    vec![support]
+}
+
+fn current_medium_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentMediumSupport> {
+    let Some((target, claimed_role)) = parse_current_medium_claim(card, source, state) else {
+        return Vec::new();
+    };
+    match truth_status(card.position, scenario, state) {
+        TruthStatus::Truthful => {
+            current_medium_truth_supports(card.position, target, claimed_role, scenario, state)
+        }
+        TruthStatus::Lying => {
+            current_medium_bluff_supports(card.position, target, claimed_role, scenario, state)
+        }
+    }
+}
+
+fn validate_current_medium(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_medium_supports(card, scenario, state, source).is_empty()
+}
+
+fn validate_current_medium_consistency(scenario: &Scenario, state: &GameState) -> bool {
+    let mut observations = Vec::new();
+    for card in &state.cards {
+        if state.executed.contains(&card.position)
+            && state.confirmed_evil.contains(&card.position)
+            && !state.executed_evil_roles.contains_key(&card.position)
+        {
+            continue;
+        }
+        let Ok(Some(source)) =
+            current_passive_payload_source(card, MEDIUM_CURRENT_VARIANT_FIELD, "Medium")
+        else {
+            continue;
+        };
+        let supports = current_medium_supports(card, scenario, state, source);
+        if supports.is_empty() {
+            return false;
+        }
+        observations.push(supports);
+    }
+    if observations.len() <= 1 {
+        return true;
+    }
+
+    fn search(
+        index: usize,
+        observations: &[Vec<CurrentMediumSupport>],
+        required_wretches: &HashSet<u8>,
+        forbidden_wretches: &HashSet<u8>,
+        register_as: &HashMap<u8, String>,
+        raw_bluffs: &HashMap<u8, String>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == observations.len() {
+            return true;
+        }
+        for support in &observations[index] {
+            let mut required = required_wretches.clone();
+            required.extend(&support.required_anonymous_wretches);
+            let mut forbidden = forbidden_wretches.clone();
+            forbidden.extend(&support.forbidden_anonymous_wretches);
+            if !required.is_disjoint(&forbidden)
+                || !anonymous_wretch_assignment_possible(&required, &forbidden, scenario, state)
+            {
+                continue;
+            }
+
+            let mut selected_register_as = register_as.clone();
+            if let Some((position, role)) = support.register_as.as_ref() {
+                if selected_register_as
+                    .get(position)
+                    .is_some_and(|selected| selected != role)
+                {
+                    continue;
+                }
+                selected_register_as.insert(*position, role.clone());
+            }
+            let mut selected_raw_bluffs = raw_bluffs.clone();
+            if let Some((position, role)) = support.raw_bluff.as_ref() {
+                if selected_raw_bluffs
+                    .get(position)
+                    .is_some_and(|selected| selected != role)
+                {
+                    continue;
+                }
+                selected_raw_bluffs.insert(*position, role.clone());
+            }
+            if search(
+                index + 1,
+                observations,
+                &required,
+                &forbidden,
+                &selected_register_as,
+                &selected_raw_bluffs,
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+        }
+        false
+    }
+
+    search(
+        0,
+        &observations,
+        &HashSet::new(),
+        &HashSet::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        scenario,
+        state,
+    )
+}
+
 fn validate_medium(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, MEDIUM_CURRENT_VARIANT_FIELD, "Medium") {
+        Ok(Some(source)) => return validate_current_medium(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let claimed_pos = match info_pos(&card.info_parsed, "good_position") {
         Some(v) => v,
         None => return true,
@@ -2970,9 +3468,7 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
         .is_some(),
         "Bounty Hunter" => parse_current_bounty_hunter_target(card, state).is_some(),
         "Medium" => {
-            poet_has_exact_fields(info, &["good_position", "good_role"])
-                && poet_position_value(info.get("good_position"), state.n_cards).is_some()
-                && poet_canonical_role(info, "good_role").is_some()
+            parse_current_medium_claim(card, CurrentPassivePayloadSource::Poet, state).is_some()
         }
         "Knitter" => {
             poet_has_exact_fields(info, &["evil_pairs"])
@@ -3856,6 +4352,11 @@ mod tests {
                 .get("evil_position")
                 .and_then(serde_json::Value::as_u64)
                 .map(|target| format!("#{target}\nis Evil")),
+            "Medium" => payload
+                .get("good_position")
+                .and_then(serde_json::Value::as_u64)
+                .zip(payload.get("good_role").and_then(serde_json::Value::as_str))
+                .map(|(target, role)| current_medium_text(target as u8, role)),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -3920,6 +4421,26 @@ mod tests {
             serde_json::Value::String(POET_CURRENT_VARIANT.to_string()),
         );
         let mut card = make_card(pos, "Oracle", serde_json::Value::Object(info));
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_medium(pos: u8, target: serde_json::Value, role: serde_json::Value) -> CardInfo {
+        let info_text = target
+            .as_u64()
+            .and_then(|target| u8::try_from(target).ok())
+            .zip(role.as_str())
+            .map(|(target, role)| current_medium_text(target, role))
+            .unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Medium",
+            json!({
+                "medium_variant": "public_current",
+                "good_position": target,
+                "good_role": role,
+            }),
+        );
         card.info_text = info_text;
         card
     }
@@ -4323,6 +4844,329 @@ mod tests {
             .evil_positions
             .insert(2, "Pooka".to_string());
         assert!(!validate_poet(&poet, &lying_matching, &state));
+    }
+
+    #[test]
+    fn current_medium_schema_text_and_source_are_exact_and_fail_closed() {
+        let direct = current_medium(1, json!(2), json!("Scout"));
+        let poet = current_poet("Medium", json!({"good_position": 2, "good_role": "Scout"}));
+        let target = make_card(2, "Scout", json!({}));
+        let mut direct_state = base_state(2, vec![direct.clone(), target.clone()]);
+        direct_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        let mut poet_state = base_state(2, vec![poet.clone(), target]);
+        poet_state.deck.villagers = vec!["Poet".to_string(), "Scout".to_string()];
+
+        assert_eq!(direct.info_text, "#2 is a real\nScout");
+        assert_eq!(
+            parse_current_medium_claim(&direct, CurrentPassivePayloadSource::Direct, &direct_state,),
+            Some((2, "Scout")),
+        );
+        assert!(validate_medium(&direct, &empty_scenario(), &direct_state,));
+        assert!(validate_poet(&poet, &empty_scenario(), &poet_state));
+
+        let drunk = current_medium(1, json!(2), json!("Drunk"));
+        assert_eq!(drunk.info_text, "#2 is actually a\nDrunk");
+        for text in [
+            "",
+            "#2 is a real Scout",
+            "#2 is a real\nscout",
+            "#2 is a real\nScout.",
+            "#2 is actually a\nScout",
+        ] {
+            let mut malformed = direct.clone();
+            malformed.info_text = text.to_string();
+            assert!(!validate_medium(
+                &malformed,
+                &empty_scenario(),
+                &direct_state,
+            ));
+        }
+        let mut wrong_drunk_text = drunk;
+        wrong_drunk_text.info_text = "#2 is a real\nDrunk".to_string();
+        assert!(!validate_medium(
+            &wrong_drunk_text,
+            &empty_scenario(),
+            &direct_state,
+        ));
+
+        for value in [
+            json!(0),
+            json!(-1),
+            json!(3),
+            json!(256),
+            json!(true),
+            json!("2"),
+        ] {
+            let malformed = current_medium(1, value, json!("Scout"));
+            assert!(!validate_medium(
+                &malformed,
+                &empty_scenario(),
+                &direct_state,
+            ));
+        }
+        for role in [json!("scout"), json!("Future Villager"), json!(7)] {
+            let malformed = current_medium(1, json!(2), role);
+            assert!(!validate_medium(
+                &malformed,
+                &empty_scenario(),
+                &direct_state,
+            ));
+        }
+        let mut extra = direct.clone();
+        extra.info_parsed.insert("future".to_string(), json!(true));
+        assert!(!validate_medium(&extra, &empty_scenario(), &direct_state));
+        let future = make_card(
+            1,
+            "Medium",
+            json!({
+                "medium_variant": "future",
+                "good_position": 2,
+                "good_role": "Scout",
+            }),
+        );
+        assert!(!validate_medium(&future, &empty_scenario(), &direct_state,));
+    }
+
+    #[test]
+    fn current_medium_truth_removes_actor_except_for_sole_good_fallback() {
+        let self_claim = current_medium(1, json!(1), json!("Medium"));
+        let scout = make_card(2, "Scout", json!({}));
+        let mut state = base_state(2, vec![self_claim.clone(), scout]);
+        state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        assert!(!validate_medium(&self_claim, &empty_scenario(), &state,));
+
+        let mut sole_good = empty_scenario();
+        sole_good.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_medium(&self_claim, &sole_good, &state));
+
+        let other_claim = current_medium(1, json!(2), json!("Scout"));
+        state.cards[0] = other_claim.clone();
+        assert!(validate_medium(&other_claim, &empty_scenario(), &state,));
+    }
+
+    #[test]
+    fn current_medium_direct_and_poet_use_identical_provider_semantics() {
+        let direct = current_medium(1, json!(2), json!("Scout"));
+        let poet = current_poet("Medium", json!({"good_position": 2, "good_role": "Scout"}));
+        let target = make_card(2, "Scout", json!({}));
+        let mut direct_state = base_state(2, vec![direct.clone(), target.clone()]);
+        direct_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        let mut poet_state = base_state(2, vec![poet.clone(), target]);
+        poet_state.deck.villagers = vec!["Poet".to_string(), "Scout".to_string()];
+
+        assert!(validate_medium(&direct, &empty_scenario(), &direct_state));
+        assert!(validate_poet(&poet, &empty_scenario(), &poet_state));
+
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        assert!(!validate_medium(&direct, &lying, &direct_state));
+        assert!(!validate_poet(&poet, &lying, &poet_state));
+        lying.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_medium(&direct, &lying, &direct_state));
+        assert!(validate_poet(&poet, &lying, &poet_state));
+    }
+
+    #[test]
+    fn current_medium_truth_uses_spy_register_as_and_moved_current_data() {
+        let spy_claim = current_medium(1, json!(2), json!("Scout"));
+        let spy_display = make_card(2, "Judge", json!({}));
+        let mut spy_state = base_state(2, vec![spy_claim.clone(), spy_display]);
+        spy_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        spy_state.deck.minions = vec!["Spy".to_string()];
+        let mut spy = empty_scenario();
+        spy.evil_positions.insert(2, "Spy".to_string());
+        assert!(validate_medium(&spy_claim, &spy, &spy_state));
+
+        let wrong_spy_label = current_medium(1, json!(2), json!("Pooka"));
+        assert!(!validate_medium(&wrong_spy_label, &spy, &spy_state,));
+
+        let moved_claim = current_medium(1, json!(3), json!("Twin Minion"));
+        let twin = make_card(2, "Twin Minion", json!({}));
+        let moved_target = make_card(3, "Scout", json!({}));
+        let mut moved_state = base_state(3, vec![moved_claim.clone(), twin, moved_target]);
+        moved_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        moved_state.deck.minions = vec!["Twin Minion".to_string()];
+        moved_state.deck.demons = vec!["Pooka".to_string()];
+        let mut moved = empty_scenario();
+        moved.evil_positions.insert(2, "Twin Minion".to_string());
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 2,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 1,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 3,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+        assert!(validate_medium(&moved_claim, &moved, &moved_state));
+
+        let copied_spy_claim = current_medium(1, json!(3), json!("Scout"));
+        let mut copied_spy_state = base_state(
+            3,
+            vec![
+                copied_spy_claim.clone(),
+                make_card(2, "Judge", json!({})),
+                make_card(3, "Scout", json!({})),
+            ],
+        );
+        copied_spy_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        let mut copied_spy = empty_scenario();
+        copied_spy.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 3,
+            copied_role: "Spy".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(validate_medium(&copied_spy_claim, &copied_spy, &copied_spy_state));
+
+        let wretch_claim = current_medium(1, json!(2), json!("Wretch"));
+        let mut wretch_state = base_state(2, vec![wretch_claim.clone(), make_card(2, "Wretch", json!({}))]);
+        wretch_state.deck.villagers = vec!["Medium".to_string()];
+        wretch_state.deck.outcasts = vec!["Wretch".to_string()];
+        assert!(!validate_medium(&wretch_claim, &empty_scenario(), &wretch_state));
+    }
+
+    #[test]
+    fn current_medium_truth_observations_share_one_anonymous_wretch_world() {
+        let self_claim = current_medium(1, json!(1), json!("Medium"));
+        let mut poet_claim =
+            current_poet("Medium", json!({"good_position": 2, "good_role": "Scout"}));
+        poet_claim.position = 3;
+        let mut state = base_state(3, vec![self_claim.clone(), poet_claim.clone()]);
+        state.deck.villagers = vec![
+            "Medium".to_string(),
+            "Poet".to_string(),
+            "Scout".to_string(),
+        ];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.puppet_position = Some(3);
+
+        assert!(validate_medium(&self_claim, &scenario, &state));
+        assert!(validate_poet(&poet_claim, &scenario, &state));
+        assert!(!validate_current_medium_consistency(&scenario, &state));
+    }
+
+    #[test]
+    fn current_medium_bluff_respects_nonself_priority_and_self_fallback() {
+        let self_claim = current_medium(1, json!(1), json!("Scout"));
+        let mut state = base_state(1, vec![self_claim.clone()]);
+        state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(validate_medium(&self_claim, &drunk, &state));
+
+        state.n_cards = 2;
+        state.cards.push(make_card(2, "Scout", json!({})));
+        let mut other_holder = drunk.clone();
+        other_holder.evil_positions.insert(2, "Pooka".to_string());
+        assert!(!validate_medium(&self_claim, &other_holder, &state));
+
+        state.reveal_order = vec![1, 2];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        assert!(validate_medium(&self_claim, &other_holder, &state));
+
+        let nonself = current_medium(1, json!(2), json!("Judge"));
+        state.cards[0] = nonself.clone();
+        assert!(!validate_medium(&nonself, &other_holder, &state));
+        state.reveal_order = vec![2, 1];
+        assert!(validate_medium(&nonself, &other_holder, &state));
+        state.cards.truncate(1);
+        state.reveal_order = vec![1];
+        assert!(!validate_medium(&nonself, &other_holder, &state));
+    }
+
+    #[test]
+    fn current_medium_bluff_keeps_unmodeled_mover_surfaces_conservative() {
+        let claim = current_medium(1, json!(2), json!("Judge"));
+        let target = make_card(2, "Scout", json!({}));
+        let third = make_card(3, "Scout", json!({}));
+        let mut state = base_state(3, vec![claim.clone(), target, third]);
+        state.deck.villagers = vec![
+            "Medium".to_string(),
+            "Scout".to_string(),
+            "Judge".to_string(),
+        ];
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        assert!(!validate_medium(&claim, &lying, &state));
+
+        lying.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 3,
+            copied_role: "Scout".to_string(),
+            target_previous_roles: vec!["Judge".to_string()],
+        });
+        assert!(validate_medium(&claim, &lying, &state));
+    }
+
+    #[test]
+    fn current_medium_baker_history_compares_exact_claim_for_direct_and_poet() {
+        let baker_one = make_card(1, "Baker", json!({"original_role": "Knight"}));
+        let baker_two = make_card(2, "Baker", json!({"original_role": "original"}));
+        let direct = current_medium(3, json!(1), json!("Baker"));
+        let mut direct_state = base_state(3, vec![baker_one.clone(), baker_two.clone(), direct]);
+        direct_state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Knight".to_string(),
+            "Medium".to_string(),
+        ];
+        direct_state.reveal_order = vec![2, 3, 1];
+        direct_state.baker_rule_version = Some("baker_day_reveal_v1".to_string());
+        assert!(validate_baker_history(&empty_scenario(), &direct_state));
+        assert!(check_scenario(&empty_scenario(), &direct_state));
+
+        direct_state.cards[2] = current_medium(3, json!(1), json!("Knight"));
+        assert!(!validate_baker_history(&empty_scenario(), &direct_state));
+        assert!(!check_scenario(&empty_scenario(), &direct_state));
+        direct_state.reveal_order = vec![3, 2, 1];
+        assert!(validate_baker_history(&empty_scenario(), &direct_state));
+
+        let mut poet = current_poet("Medium", json!({"good_position": 1, "good_role": "Baker"}));
+        poet.position = 3;
+        let mut poet_state = base_state(3, vec![baker_one, baker_two, poet]);
+        poet_state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Knight".to_string(),
+            "Poet".to_string(),
+        ];
+        poet_state.reveal_order = vec![2, 3, 1];
+        poet_state.baker_rule_version = Some("baker_day_reveal_v1".to_string());
+        assert!(validate_baker_history(&empty_scenario(), &poet_state));
+        assert!(check_scenario(&empty_scenario(), &poet_state));
+
+        let mut wrong_poet =
+            current_poet("Medium", json!({"good_position": 1, "good_role": "Knight"}));
+        wrong_poet.position = 3;
+        poet_state.cards[2] = wrong_poet;
+        assert!(!validate_baker_history(&empty_scenario(), &poet_state));
+        assert!(!check_scenario(&empty_scenario(), &poet_state));
+
+        let mut impossible_poet =
+            current_poet("Medium", json!({"good_position": 1, "good_role": "Pooka"}));
+        impossible_poet.position = 3;
+        poet_state.cards[2] = impossible_poet;
+        poet_state.reveal_order.clear();
+        poet_state.baker_rule_version = None;
+        assert!(!validate_baker_history(&empty_scenario(), &poet_state));
+    }
+
+    #[test]
+    fn unmarked_medium_keeps_legacy_missing_and_textless_behavior() {
+        let missing = make_card(1, "Medium", json!({}));
+        let target = make_card(2, "Scout", json!({}));
+        let state = base_state(2, vec![missing.clone(), target.clone()]);
+        assert!(validate_medium(&missing, &empty_scenario(), &state));
+
+        let historical = make_card(
+            1,
+            "Medium",
+            json!({"good_position": 2, "good_role": "Scout"}),
+        );
+        let state = base_state(2, vec![historical.clone(), target]);
+        assert!(historical.info_text.is_empty());
+        assert!(validate_medium(&historical, &empty_scenario(), &state,));
     }
 
     #[test]

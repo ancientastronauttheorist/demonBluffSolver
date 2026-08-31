@@ -538,6 +538,14 @@ fn process_baker(problem: &Problem<'_>, search: &SearchState, card: &CardInfo) -
     conversion_states(problem, &ready, card.position)
 }
 
+fn is_current_poet_medium(card: &CardInfo) -> bool {
+    normalize_role(&card.apparent_role) == "poet"
+        && card.info_parsed.get("poet_variant").and_then(serde_json::Value::as_str)
+            == Some("public_current")
+        && card.info_parsed.get("copied_role").and_then(serde_json::Value::as_str)
+            == Some("Medium")
+}
+
 fn process_medium(
     problem: &Problem<'_>,
     search: &SearchState,
@@ -574,7 +582,17 @@ fn process_medium(
         RuntimeState::Baker(role) => Some(role),
         _ => None,
     };
-    if current == claimed_role || predecessor == Some(claimed_role) {
+    let current_contract = match normalize_role(&card.apparent_role).as_str() {
+        "medium" => {
+            card.info_parsed
+                .get("medium_variant")
+                .and_then(serde_json::Value::as_str)
+                == Some("public_current")
+        }
+        "poet" => is_current_poet_medium(card),
+        _ => false,
+    };
+    if current == claimed_role || (!current_contract && predecessor == Some(claimed_role)) {
         vec![search.clone()]
     } else {
         Vec::new()
@@ -590,6 +608,9 @@ fn process_reveal(problem: &Problem<'_>, search: &SearchState, position: u8) -> 
     match normalize_role(&card.apparent_role).as_str() {
         "baker" => process_baker(problem, &revealed, card),
         "medium" => process_medium(problem, &revealed, card),
+        "poet" if is_current_poet_medium(card) => {
+            process_medium(problem, &revealed, card)
+        }
         _ => vec![revealed],
     }
 }
@@ -977,7 +998,7 @@ fn history_exists_with_pre_day_role(
                         .iter()
                         .filter(|card| {
                             let role = normalize_role(&card.apparent_role);
-                            role == "baker" || role == "medium"
+                            role == "baker" || role == "medium" || is_current_poet_medium(card)
                         })
                         .map(|card| card.position)
                         .collect();
