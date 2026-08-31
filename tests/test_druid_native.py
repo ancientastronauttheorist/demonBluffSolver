@@ -553,6 +553,17 @@ class DruidStrategyTests(unittest.TestCase):
             {("none",): 1.0},
         )
 
+        doppelganger = Scenario({}, doppelganger_position=6)
+        self.assertEqual(
+            _druid_observation_likelihoods(
+                [1, 4, 6],
+                1,
+                doppelganger,
+                state,
+            ),
+            {("outcast", "Doppelganger"): 1.0},
+        )
+
     def test_bluff_complement_and_false_ladder_multiplicity(self):
         state = self._state(
             outcasts=["Drunk", "Drunk", "Wretch", "Bombardier"]

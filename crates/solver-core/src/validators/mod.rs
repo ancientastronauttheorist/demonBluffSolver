@@ -16269,6 +16269,16 @@ mod tests {
             &scenario,
             &state,
         ));
+
+        // Ordinary Doppelganger has no explicit register-as override, so the
+        // fallback is its real Outcast data rather than its visible bluff.
+        let mut doppelganger = empty_scenario();
+        doppelganger.doppelganger_position = Some(6);
+        assert!(validate_druid(
+            &current_druid(1, [4, 5, 6], Some("Doppelganger")),
+            &doppelganger,
+            &state,
+        ));
     }
 
     #[test]
