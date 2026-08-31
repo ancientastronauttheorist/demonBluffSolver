@@ -2,8 +2,10 @@
 //!
 //! The shipped build does not compute one immutable corruption snapshot. Its
 //! serialized Start order mutates the live status lists in this order:
-//! Pooka, every Poisoner, Drunk, Puppeteer conversion, every Plague Doctor,
-//! Shaman, then every Alchemist. This module keeps those mutations together so
+//! Pooka, every Poisoner, Drunk, then (after the Witch/Twin boundary)
+//! Puppeteer conversion, every Plague Doctor, Shaman, and every Alchemist.
+//! Witch has no status mutation represented here; Twin mutates current role
+//! data between the two phases. This module keeps status mutations ordered so
 //! target eligibility and later Alchemist clues observe the correct prior state.
 
 use std::collections::{HashMap, HashSet};
@@ -53,6 +55,88 @@ pub struct StartCorruptionContext {
     pub shaman_trace: Option<ShamanTrace>,
 }
 
+/// Facts consumed by the serialized Start slots before Twin Minion acts.
+///
+/// This is deliberately independent from [`PostTwinCorruptionContext`]. A
+/// later checkpoint can branch current role data at the Twin slot without
+/// replaying Pooka, Poisoner, or Drunk.
+#[derive(Debug, Clone, Default)]
+pub(crate) struct PreTwinCorruptionContext {
+    /// Real Villager data visible to Pooka and Poisoner before Twin and
+    /// Puppeteer mutate current role data.
+    pub real_villagers_at_pre_twin: HashSet<u8>,
+
+    /// Positions whose Init hook installed exact Corrupted resistance.
+    pub corruption_resistant_at_init: HashSet<u8>,
+
+    /// Positions whose Init hook installed exact `MessedUpByEvil`
+    /// resistance.
+    pub messed_up_resistant_at_init: HashSet<u8>,
+
+    /// Markers already present when Pooka begins, normally from Chancellor.
+    pub initial_messed_up_by_evil: HashSet<u8>,
+
+    /// The physical Drunk actor dispatched in the pre-Twin Start slot.
+    pub drunk_actor_position: Option<u8>,
+}
+
+/// Live status state at the boundary immediately after the pre-Twin Start
+/// producers have run.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) struct PreTwinCorruptionOutcome {
+    pub corrupted: HashSet<u8>,
+    pub messed_up_by_evil: HashSet<u8>,
+}
+
+/// Facts consumed by Start slots after Twin Minion acts.
+#[derive(Debug, Clone, Default)]
+pub(crate) struct PostTwinCorruptionContext {
+    /// Positions satisfying Plague Doctor's registered/current Villager
+    /// predicate at its ordered Start slot.
+    pub registered_villagers_at_pd_call: HashSet<u8>,
+
+    pub corruption_resistant_at_init: HashSet<u8>,
+    pub messed_up_resistant_at_init: HashSet<u8>,
+
+    /// Alchemist actors that own current Alchemist data at the global
+    /// Alchemist Start slot.
+    pub true_alchemist_positions: Vec<u8>,
+
+    /// Compatibility-only cure veto inherited from the original monolithic
+    /// model. Exact Twin modeling must derive this from post-Twin current data
+    /// before relying on it.
+    pub legacy_drunk_cure_veto_position: Option<u8>,
+
+    pub puppet_position: Option<u8>,
+    pub plague_doctor_acts: bool,
+    pub shaman_trace: Option<ShamanTrace>,
+}
+
+impl StartCorruptionContext {
+    fn pre_twin_context(&self) -> PreTwinCorruptionContext {
+        PreTwinCorruptionContext {
+            real_villagers_at_pre_twin: self.real_villagers_before_puppet.clone(),
+            corruption_resistant_at_init: self.corruption_resistant_at_init.clone(),
+            messed_up_resistant_at_init: self.messed_up_resistant_at_init.clone(),
+            initial_messed_up_by_evil: self.initial_messed_up_by_evil.clone(),
+            drunk_actor_position: self.drunk_position,
+        }
+    }
+
+    fn post_twin_context(&self) -> PostTwinCorruptionContext {
+        PostTwinCorruptionContext {
+            registered_villagers_at_pd_call: self.registered_villagers_at_pd_call.clone(),
+            corruption_resistant_at_init: self.corruption_resistant_at_init.clone(),
+            messed_up_resistant_at_init: self.messed_up_resistant_at_init.clone(),
+            true_alchemist_positions: self.true_alchemist_positions.clone(),
+            legacy_drunk_cure_veto_position: self.drunk_position,
+            puppet_position: self.puppet_position,
+            plague_doctor_acts: self.plague_doctor_acts,
+            shaman_trace: self.shaman_trace.clone(),
+        }
+    }
+}
+
 /// One observable outcome of Start-phase random target selection.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StartCorruptionOutcome {
@@ -79,6 +163,31 @@ pub fn enumerate_start_corruption(
     context: &StartCorruptionContext,
     known_pd_target: Option<u8>,
 ) -> Vec<StartCorruptionOutcome> {
+    let pre_twin_context = context.pre_twin_context();
+    let post_twin_context = context.post_twin_context();
+    let mut outcomes = Vec::new();
+
+    for pre_twin_outcome in enumerate_pre_twin_corruption(n_cards, full_evil, &pre_twin_context) {
+        outcomes.extend(enumerate_post_twin_corruption(
+            n_cards,
+            &pre_twin_outcome,
+            &post_twin_context,
+            known_pd_target,
+        ));
+    }
+
+    // Preserve the monolithic API's global logical-outcome deduplication,
+    // including duplicates that converge from distinct pre-Twin branches.
+    dedup_outcomes(outcomes)
+}
+
+/// Enumerate the Start corruption producers serialized before Twin Minion:
+/// Pooka, every Poisoner, and Drunk.
+pub(crate) fn enumerate_pre_twin_corruption(
+    n_cards: u8,
+    pre_twin_current_roles: &HashMap<u8, String>,
+    context: &PreTwinCorruptionContext,
+) -> Vec<PreTwinCorruptionOutcome> {
     let mut corrupted = HashSet::new();
     let mut messed_up_by_evil: HashSet<u8> = context
         .initial_messed_up_by_evil
@@ -89,14 +198,14 @@ pub fn enumerate_start_corruption(
 
     // Ordinary Start roles stop after the first match in CurrentCharacters,
     // whose construction order is highest displayed ID first.
-    if let Some(pooka_position) = full_evil
+    if let Some(pooka_position) = pre_twin_current_roles
         .iter()
         .filter(|(_, role)| role.as_str() == "Pooka")
         .map(|(&position, _)| position)
         .max()
     {
         for target in adjacent_positions(pooka_position, n_cards) {
-            if context.real_villagers_before_puppet.contains(&target) {
+            if context.real_villagers_at_pre_twin.contains(&target) {
                 if !context.corruption_resistant_at_init.contains(&target) {
                     corrupted.insert(target);
                 }
@@ -111,7 +220,7 @@ pub fn enumerate_start_corruption(
 
     // Poisoner is an explicit all-matches exception. Each later Poisoner sees
     // the mutations left by the earlier, higher-ID actor.
-    let mut poisoner_positions: Vec<u8> = full_evil
+    let mut poisoner_positions: Vec<u8> = pre_twin_current_roles
         .iter()
         .filter(|(_, role)| role.as_str() == "Poisoner")
         .map(|(&position, _)| position)
@@ -125,7 +234,7 @@ pub fn enumerate_start_corruption(
             let mut candidates: Vec<u8> = adjacent_positions(poisoner_position, n_cards)
                 .into_iter()
                 .filter(|target| {
-                    context.real_villagers_before_puppet.contains(target)
+                    context.real_villagers_at_pre_twin.contains(target)
                         && !branch.contains(target)
                         && !context.corruption_resistant_at_init.contains(target)
                 })
@@ -153,35 +262,60 @@ pub fn enumerate_start_corruption(
         corruption_branches = dedup_status_sets(next_branches);
     }
 
+    corruption_branches
+        .into_iter()
+        .map(|(mut corrupted, messed_up_by_evil)| {
+            // Drunk acts after Poisoner and writes a self-targeted Corrupted status.
+            if let Some(drunk_position) = context.drunk_actor_position {
+                if !context
+                    .corruption_resistant_at_init
+                    .contains(&drunk_position)
+                {
+                    corrupted.insert(drunk_position);
+                }
+            }
+
+            PreTwinCorruptionOutcome {
+                corrupted,
+                messed_up_by_evil,
+            }
+        })
+        .collect()
+}
+
+/// Continue one pre-Twin status branch through Puppeteer conversion, Plague
+/// Doctor, Shaman, and the global Alchemist pass.
+pub(crate) fn enumerate_post_twin_corruption(
+    n_cards: u8,
+    pre_twin_outcome: &PreTwinCorruptionOutcome,
+    context: &PostTwinCorruptionContext,
+    known_pd_target: Option<u8>,
+) -> Vec<StartCorruptionOutcome> {
+    let mut branch = pre_twin_outcome.corrupted.clone();
+    let mut affected = pre_twin_outcome.messed_up_by_evil.clone();
+
+    // Puppeteer conversion calls Character.Init again, clearing active
+    // statuses before Plague Doctor and Alchemist act.
+    if let Some(puppet_position) = context.puppet_position {
+        branch.remove(&puppet_position);
+        affected.remove(&puppet_position);
+        // Puppeteer initializes the replacement Puppet, which clears the
+        // former role's statuses and immediately marks the new Puppet as
+        // MessedUpByEvil for Witness.
+        if !context
+            .messed_up_resistant_at_init
+            .contains(&puppet_position)
+        {
+            affected.insert(puppet_position);
+        }
+    }
+
     let mut pd_branches: Vec<(HashSet<u8>, HashSet<u8>, Option<u8>)> = Vec::new();
-    for (mut branch, mut affected) in corruption_branches {
-        // Drunk acts after Poisoner and writes a self-targeted Corrupted status.
-        if let Some(drunk_position) = context.drunk_position {
-            if !context.corruption_resistant_at_init.contains(&drunk_position) {
-                branch.insert(drunk_position);
-            }
+    if !context.plague_doctor_acts {
+        if known_pd_target.is_none() {
+            pd_branches.push((branch, affected, None));
         }
-
-        // Puppeteer conversion calls Character.Init again, clearing active
-        // statuses before Plague Doctor and Alchemist act.
-        if let Some(puppet_position) = context.puppet_position {
-            branch.remove(&puppet_position);
-            affected.remove(&puppet_position);
-            // Puppeteer initializes the replacement Puppet, which clears the
-            // former role's statuses and immediately marks the new Puppet as
-            // MessedUpByEvil for Witness.
-            if !context.messed_up_resistant_at_init.contains(&puppet_position) {
-                affected.insert(puppet_position);
-            }
-        }
-
-        if !context.plague_doctor_acts {
-            if known_pd_target.is_none() {
-                pd_branches.push((branch, affected, None));
-            }
-            continue;
-        }
-
+    } else {
         let mut candidates: Vec<u8> = context
             .registered_villagers_at_pd_call
             .iter()
@@ -232,8 +366,12 @@ pub fn enumerate_start_corruption(
                     // records/reset state at zero and does not cure.
                     alchemist_counts.insert(target, 0);
                 } else {
-                    let count =
-                        apply_alchemist(target, n_cards, context.drunk_position, &mut branch);
+                    let count = apply_alchemist(
+                        target,
+                        n_cards,
+                        context.legacy_drunk_cure_veto_position,
+                        &mut branch,
+                    );
                     alchemist_counts.insert(target, count);
                 }
             }
@@ -252,7 +390,7 @@ pub fn enumerate_start_corruption(
         let global_alchemist_counts = apply_alchemists(
             n_cards,
             &context.true_alchemist_positions,
-            context.drunk_position,
+            context.legacy_drunk_cure_veto_position,
             &mut branch,
         );
         for (position, count) in global_alchemist_counts {
@@ -272,7 +410,7 @@ pub fn enumerate_start_corruption(
 fn apply_alchemists(
     n_cards: u8,
     positions: &[u8],
-    drunk_position: Option<u8>,
+    legacy_drunk_cure_veto_position: Option<u8>,
     corrupted: &mut HashSet<u8>,
 ) -> HashMap<u8, u8> {
     let mut actors = positions.to_vec();
@@ -281,7 +419,7 @@ fn apply_alchemists(
 
     let mut counts = HashMap::new();
     for actor in actors {
-        let count = apply_alchemist(actor, n_cards, drunk_position, corrupted);
+        let count = apply_alchemist(actor, n_cards, legacy_drunk_cure_veto_position, corrupted);
         counts.insert(actor, count);
     }
     counts
@@ -290,7 +428,7 @@ fn apply_alchemists(
 fn apply_alchemist(
     actor: u8,
     n_cards: u8,
-    drunk_position: Option<u8>,
+    legacy_drunk_cure_veto_position: Option<u8>,
     corrupted: &mut HashSet<u8>,
 ) -> u8 {
     // The native helper builds this list from live status at call time and
@@ -304,7 +442,7 @@ fn apply_alchemist(
     // CurePoisons increments before every attempt and ignores the return
     // value. Drunk's role veto leaves its self-targeted status in place.
     for target in poisoned_scan {
-        if Some(target) != drunk_position {
+        if Some(target) != legacy_drunk_cure_veto_position {
             corrupted.remove(&target);
         }
     }
@@ -346,9 +484,7 @@ fn sorted_count_key(values: &HashMap<u8, u8>) -> Vec<(u8, u8)> {
     key
 }
 
-fn dedup_status_sets(
-    values: Vec<(HashSet<u8>, HashSet<u8>)>,
-) -> Vec<(HashSet<u8>, HashSet<u8>)> {
+fn dedup_status_sets(values: Vec<(HashSet<u8>, HashSet<u8>)>) -> Vec<(HashSet<u8>, HashSet<u8>)> {
     let mut seen = HashSet::new();
     values
         .into_iter()
@@ -593,6 +729,62 @@ mod tests {
         assert_eq!(outcomes[0].alchemist_counts.get(&4), Some(&0));
         assert_eq!(outcomes[0].alchemist_counts.get(&1), Some(&0));
         assert_eq!(outcomes[0].corrupted, HashSet::from([4]));
+    }
+
+    #[test]
+    fn wrapper_matches_explicit_pre_and_post_twin_split() {
+        let full_evil = roles(&[(1, "Pooka"), (4, "Poisoner")]);
+        let legacy_context = StartCorruptionContext {
+            real_villagers_before_puppet: HashSet::from([2, 3, 5, 6, 7, 8, 9]),
+            registered_villagers_at_pd_call: HashSet::from([3, 5, 6, 7, 8, 9]),
+            corruption_resistant_at_init: HashSet::from([5]),
+            messed_up_resistant_at_init: HashSet::new(),
+            true_alchemist_positions: vec![5],
+            initial_messed_up_by_evil: HashSet::new(),
+            drunk_position: Some(3),
+            puppet_position: Some(2),
+            plague_doctor_acts: true,
+            shaman_trace: Some(shaman_trace(5, 7, "Alchemist")),
+        };
+        let pre_twin_context = PreTwinCorruptionContext {
+            real_villagers_at_pre_twin: legacy_context.real_villagers_before_puppet.clone(),
+            corruption_resistant_at_init: legacy_context.corruption_resistant_at_init.clone(),
+            messed_up_resistant_at_init: legacy_context.messed_up_resistant_at_init.clone(),
+            initial_messed_up_by_evil: legacy_context.initial_messed_up_by_evil.clone(),
+            drunk_actor_position: legacy_context.drunk_position,
+        };
+        let post_twin_context = PostTwinCorruptionContext {
+            registered_villagers_at_pd_call: legacy_context.registered_villagers_at_pd_call.clone(),
+            corruption_resistant_at_init: legacy_context.corruption_resistant_at_init.clone(),
+            messed_up_resistant_at_init: legacy_context.messed_up_resistant_at_init.clone(),
+            true_alchemist_positions: legacy_context.true_alchemist_positions.clone(),
+            legacy_drunk_cure_veto_position: legacy_context.drunk_position,
+            puppet_position: legacy_context.puppet_position,
+            plague_doctor_acts: legacy_context.plague_doctor_acts,
+            shaman_trace: legacy_context.shaman_trace.clone(),
+        };
+
+        let wrapped = enumerate_start_corruption(9, &full_evil, &legacy_context, Some(6));
+        let pre_twin_outcomes = enumerate_pre_twin_corruption(9, &full_evil, &pre_twin_context);
+        assert_eq!(pre_twin_outcomes.len(), 1);
+        assert_eq!(pre_twin_outcomes[0].corrupted, HashSet::from([2, 3, 9]));
+
+        let explicit_split = dedup_outcomes(
+            pre_twin_outcomes
+                .iter()
+                .flat_map(|outcome| {
+                    enumerate_post_twin_corruption(9, outcome, &post_twin_context, Some(6))
+                })
+                .collect(),
+        );
+
+        assert_eq!(wrapped, explicit_split);
+        assert_eq!(wrapped.len(), 1);
+        assert_eq!(wrapped[0].pd_target, Some(6));
+        assert_eq!(wrapped[0].alchemist_counts.get(&7), Some(&2));
+        assert_eq!(wrapped[0].alchemist_counts.get(&5), Some(&1));
+        assert_eq!(wrapped[0].corrupted, HashSet::from([3]));
+        assert_eq!(wrapped[0].messed_up_by_evil, HashSet::from([2, 3, 5, 7, 9]));
     }
 
     #[test]
