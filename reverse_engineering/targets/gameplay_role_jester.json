@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Jester boundary, managed as Juggler, including its exact-three picker, registered-alignment truth count, false-count construction, exact clue/reference construction, compiler-generated ordering helpers, lifecycle behavior, and required semantic callees",
+  "functions": [
+    {
+      "name": "Juggler.CompilerGenerated.cctor",
+      "metadata_name": "Juggler.<>c$$.cctor",
+      "signature": "void Juggler___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F09B0"
+    },
+    {
+      "name": "Juggler.CompilerGenerated.ctor",
+      "metadata_name": "Juggler.<>c$$.ctor",
+      "signature": "void Juggler___c___ctor (Juggler___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Juggler.CompilerGenerated.CharacterPickedSortId",
+      "metadata_name": "Juggler.<>c$$<CharacterPicked>b__6_0",
+      "signature": "int32_t Juggler___c___CharacterPicked_b__6_0 (Juggler___c_o* __this, int32_t c, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_0",
+      "rva": "0x3F07B0"
+    },
+    {
+      "name": "Juggler.CompilerGenerated.CharacterPickedTieBreak",
+      "metadata_name": "Juggler.<>c$$<CharacterPicked>b__6_1",
+      "signature": "float Juggler___c___CharacterPicked_b__6_1 (Juggler___c_o* __this, int32_t __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Juggler.CompilerGenerated.CharacterPickedDrunkSortId",
+      "metadata_name": "Juggler.<>c$$<CharacterPickedDrunk>b__8_0",
+      "signature": "int32_t Juggler___c___CharacterPickedDrunk_b__8_0 (Juggler___c_o* __this, int32_t c, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_0",
+      "rva": "0x3F07B0"
+    },
+    {
+      "name": "Juggler.CompilerGenerated.CharacterPickedDrunkTieBreak",
+      "metadata_name": "Juggler.<>c$$<CharacterPickedDrunk>b__8_1",
+      "signature": "float Juggler___c___CharacterPickedDrunk_b__8_1 (Juggler___c_o* __this, int32_t __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Juggler.get_Description",
+      "metadata_name": "Juggler$$get_Description",
+      "signature": "System_String_o* Juggler__get_Description (Juggler_o* __this, const MethodInfo* method);",
+      "rva": "0x3E14F0"
+    },
+    {
+      "name": "Juggler.GetInfo",
+      "metadata_name": "Juggler$$GetInfo",
+      "signature": "ActedInfo_o* Juggler__GetInfo (Juggler_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E1180"
+    },
+    {
+      "name": "Juggler.GetBluffInfo",
+      "metadata_name": "Juggler$$GetBluffInfo",
+      "signature": "ActedInfo_o* Juggler__GetBluffInfo (Juggler_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E1120"
+    },
+    {
+      "name": "Juggler.Act",
+      "metadata_name": "Juggler$$Act",
+      "signature": "void Juggler__Act (Juggler_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DFA30"
+    },
+    {
+      "name": "Juggler.StopPick",
+      "metadata_name": "Juggler$$StopPick",
+      "signature": "void Juggler__StopPick (Juggler_o* __this, const MethodInfo* method);",
+      "rva": "0x3E11E0"
+    },
+    {
+      "name": "Juggler.CharacterPicked",
+      "metadata_name": "Juggler$$CharacterPicked",
+      "signature": "void Juggler__CharacterPicked (Juggler_o* __this, const MethodInfo* method);",
+      "rva": "0x3E0620"
+    },
+    {
+      "name": "Juggler.BluffAct",
+      "metadata_name": "Juggler$$BluffAct",
+      "signature": "void Juggler__BluffAct (Juggler_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3DFCA0"
+    },
+    {
+      "name": "Juggler.CharacterPickedDrunk",
+      "metadata_name": "Juggler$$CharacterPickedDrunk",
+      "signature": "void Juggler__CharacterPickedDrunk (Juggler_o* __this, const MethodInfo* method);",
+      "rva": "0x3DFF10"
+    },
+    {
+      "name": "Juggler.ConjourInfo",
+      "metadata_name": "Juggler$$ConjourInfo",
+      "signature": "System_String_o* Juggler__ConjourInfo (Juggler_o* __this, int32_t id1, int32_t id2, int32_t id3, int32_t evilsAmount, const MethodInfo* method);",
+      "rva": "0x3E0D20"
+    },
+    {
+      "name": "Juggler.ctor",
+      "metadata_name": "Juggler$$.ctor",
+      "signature": "void Juggler___ctor (Juggler_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "Character.RefreshCharacter",
+      "metadata_name": "Character$$RefreshCharacter",
+      "signature": "void Character__RefreshCharacter (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367970"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "Character.RoleActCallback.ctor",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$.ctor",
+      "signature": "void Character___c__DisplayClass125_0___ctor (Character___c__DisplayClass125_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Character.RoleActCallback.Invoke",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$<RoleAct>b__0",
+      "signature": "void Character___c__DisplayClass125_0___RoleAct_b__0 (Character___c__DisplayClass125_0_o* __this, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x377120"
+    },
+    {
+      "name": "Character.ShowActedDelayed",
+      "metadata_name": "Character$$ShowActedDelayed",
+      "signature": "System_Collections_IEnumerator_o* Character__ShowActedDelayed (Character_o* __this, float delay, ActedInfo_o* info, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x368A50"
+    },
+    {
+      "name": "Character.ShowActedDelayed.MoveNext",
+      "metadata_name": "Character.<ShowActedDelayed>d__133$$MoveNext",
+      "signature": "bool Character__ShowActedDelayed_d__133__MoveNext (Character__ShowActedDelayed_d__133_o* __this, const MethodInfo* method);",
+      "rva": "0x375FE0"
+    },
+    {
+      "name": "CharacterPicker.CancelPick",
+      "metadata_name": "CharacterPicker$$CancelPick",
+      "signature": "void CharacterPicker__CancelPick (CharacterPicker_o* __this, const MethodInfo* method);",
+      "rva": "0x378CC0"
+    },
+    {
+      "name": "CharacterPicker.StartPickCharacters",
+      "metadata_name": "CharacterPicker$$StartPickCharacters",
+      "signature": "void CharacterPicker__StartPickCharacters (CharacterPicker_o* __this, int32_t howMany, Character_o* picker, const MethodInfo* method);",
+      "rva": "0x379260"
+    },
+    {
+      "name": "CharacterPicker.ClickedCharacter",
+      "metadata_name": "CharacterPicker$$ClickedCharacter",
+      "signature": "void CharacterPicker__ClickedCharacter (Character_o* ch, const MethodInfo* method);",
+      "rva": "0x378DB0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Calculator.RemoveNumberAndGetRandomNumberFromList",
+      "metadata_name": "Calculator$$RemoveNumberAndGetRandomNumberFromList",
+      "signature": "int32_t Calculator__RemoveNumberAndGetRandomNumberFromList (int32_t removalNumber, int32_t minNumberInclusive, int32_t maxNumberExclusive, const MethodInfo* method);",
+      "rva": "0x396490"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "UnityEngine.Random.get_value",
+      "metadata_name": "UnityEngine.Random$$get_value",
+      "signature": "float UnityEngine_Random__get_value (const MethodInfo* method);",
+      "rva": "0x1C86710"
+    }
+  ]
+}
