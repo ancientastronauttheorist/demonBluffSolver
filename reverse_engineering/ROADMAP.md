@@ -255,10 +255,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   scenario construction, branch them before Start, and replay their complete
   ordered mutation histories so `Unknown` seats can be resolved without
   validator-local faction guesses.
-- [ ] Asset-bind public Empress to managed `Noble`; native-audit its declared
-  role/compiler-generated methods and shared selection helpers, then close its
-  direct/Poet three-reference schema, truth/bluff pools, lifecycle eligibility,
-  identity-mover behavior, exact text/reference ordering, and RNG chronology.
+- [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
+  role/compiler-generated methods plus registered-alignment, acted-record,
+  pool-filter, and RNG helpers; close its direct/Poet three-reference schema,
+  exact truth/bluff registered-alignment pools, lifecycle eligibility, actor-
+  self parity, identity-mover behavior, text/reference ordering, anonymous-
+  Wretch and Baker-to-Spy worlds, and RNG chronology; expand the typed union to
+  35 target sets, 724 memberships, 468 selected managed definitions, and 390
+  unique native RVAs, then publish its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

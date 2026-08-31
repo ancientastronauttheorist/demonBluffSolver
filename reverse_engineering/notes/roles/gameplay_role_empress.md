@@ -387,6 +387,36 @@ The 4,207-method Assembly-CSharp ledger retains its exact census while adding
 terminal evidence for the 13 previously unclassified Noble/closure methods and
 strengthening the already classified Noble constructor.
 
+## Implementation regression gates
+
+The matching bridge and solver checkpoint passed these focused and aggregate
+gates:
+
+- Python compilation completed cleanly. The combined Empress/Poet focused suite
+  passed 43/43 tests, and the complete Python suite passed 573/573.
+- `cargo test -p solver-core current_empress --lib -- --nocapture` passed 5/5
+  focused tests. Those tests cover the closed direct/Poet schema, exact text and
+  acted-reference parity, truth/bluff pools, actor-self parity for Spy and
+  Puppet projections, one shared anonymous-Wretch and Baker-to-Spy world,
+  insufficient pools, legacy marker isolation, and fail-closed unresolved Start
+  identities.
+- `cargo test --release -p solver-core --lib` passed 354/354. Both
+  `cargo check --all-targets` and `cargo build --release` completed cleanly.
+- `cargo test --release --test simulation -- --nocapture` passed 31/31 in
+  797.90 seconds. Its 426 active-v2 fixtures produced 303 wins, seven expected
+  losses, 21 expected constraint issues, zero unexpected constraint failures,
+  six known unexpected simulation losses, 15 hidden-Outcast truth gaps, and 74
+  fixtures awaiting ordered Twin traces. Those aggregate counts are unchanged
+  from the preceding Bishop checkpoint.
+
+The bridge accepts managed `Noble`, canonicalizes manual current observations,
+requires the exact current three-reference payload, and leaves unmarked archive
+records on the legacy path. The Rust validator independently enforces the
+registered-alignment contract within the solver's existing ordered identity
+history. A scenario whose Start identity is only `Unknown` still fails closed:
+a later execution-role overlay cannot reconstruct its earlier registration or
+identity-mover effects.
+
 ## Remaining uncertainty
 
 - The role target proves which registered-alignment pools and RNG calls are
