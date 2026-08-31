@@ -263,6 +263,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   Wretch and Baker-to-Spy worlds, and RNG chronology; expand the typed union to
   35 target sets, 724 memberships, 468 selected managed definitions, and 390
   unique native RVAs, then publish its typed-quality report.
+- [x] Asset-bind public Gemcrafter to managed `Archivist`; native-audit all
+  seven declared methods plus registered-alignment, acted-record, pool-filter,
+  and integer-RNG helpers; close exact direct/Poet text and reference parity,
+  registered-Good truth and registered-Evil bluff pools, conditional actor
+  removal and sole-pool self support, full lifecycle eligibility, managed-name
+  ingestion, identity movers, anonymous-Wretch and Baker-to-Spy worlds, and
+  RNG chronology; expand the typed union to 36 target sets, 735 memberships,
+  474 selected managed definitions, and 394 unique native RVAs, then publish
+  its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

@@ -374,6 +374,40 @@ The rebuilt Assembly-CSharp ledger retains its 4,207-method census while adding
 terminal evidence for the six previously unclassified Archivist methods and
 strengthening the constructor's existing Poet-provider classification.
 
+## Implementation regression gates
+
+The matching reader, bridge, and solver checkpoint passed these focused and
+aggregate gates:
+
+- `python -m py_compile memory_reader.py game_loop.py
+  tests/test_gemcrafter_native.py tests/test_poet_native.py` completed cleanly.
+  The combined Gemcrafter/Poet focused suite passed 47/47 tests, and the full
+  Python discovery suite passed 594/594.
+- `cargo test -p solver-core current_gemcrafter --lib -- --nocapture` passed
+  5/5 focused tests. They cover exact direct/Poet schema and text, malformed
+  and mixed provenance, native pool-wide actor removal, sole-pool self support,
+  corrupted-Good bluffing, truthful Puppet, all lifecycle seats, Twin/Shaman
+  identity movement, one shared anonymous-Wretch assignment, Baker-to-Spy
+  chronology, unmarked Rambler/archive compatibility, and unresolved Start
+  identities.
+- `cargo test --release -p solver-core --lib` passed 359/359. Both
+  `cargo check --all-targets` and `cargo build --release` completed cleanly.
+- `cargo test --release --test simulation -- --nocapture` passed 31/31 in
+  852.55 seconds. Its 426 active-v2 fixtures produced 303 wins, seven expected
+  losses, 21 expected constraint issues, zero unexpected constraint failures,
+  six known unexpected simulation losses, 15 hidden-Outcast truth gaps, and 74
+  fixtures awaiting ordered Twin traces. Those aggregate counts are unchanged
+  from the preceding Empress checkpoint.
+
+The memory reader now maps current managed `Archivist` to public Gemcrafter
+while retaining the historical `Gambler` alias. Current direct and Poet
+ingestion require the newest coherent exact text/reference event and stamp
+source-specific provenance; unrelated stale runtime data is ignored because
+Archivist writes none. The Rust validator independently reconstructs the full
+registered-alignment pool and joins its support to the existing global hidden-
+state search. Unmarked archive clues, the Rambler interruption, and Baker's
+reported original identity remain on their legacy paths.
+
 ## Remaining uncertainty
 
 - The target proves which candidate pool and RNG operation are requested, but
