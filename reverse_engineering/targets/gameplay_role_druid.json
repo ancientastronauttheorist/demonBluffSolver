@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Druid boundary, managed as Librarian, including its three-target picker, truth and bluff Outcast-role selection, exact clue/reference construction, compiler-generated ordering helpers, lifecycle behavior, and required semantic callees",
+  "functions": [
+    {
+      "name": "Librarian.CompilerGenerated.cctor",
+      "metadata_name": "Librarian.<>c$$.cctor",
+      "signature": "void Librarian___c___cctor (const MethodInfo* method);",
+      "rva": "0x3F0860"
+    },
+    {
+      "name": "Librarian.CompilerGenerated.ctor",
+      "metadata_name": "Librarian.<>c$$.ctor",
+      "signature": "void Librarian___c___ctor (Librarian___c_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Librarian.CompilerGenerated.CharacterPickedSortId",
+      "metadata_name": "Librarian.<>c$$<CharacterPicked>b__7_0",
+      "signature": "int32_t Librarian___c___CharacterPicked_b__7_0 (Librarian___c_o* __this, int32_t c, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_0",
+      "rva": "0x3F07B0"
+    },
+    {
+      "name": "Librarian.CompilerGenerated.CharacterPickedTieBreak",
+      "metadata_name": "Librarian.<>c$$<CharacterPicked>b__7_1",
+      "signature": "float Librarian___c___CharacterPicked_b__7_1 (Librarian___c_o* __this, int32_t __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Librarian.CompilerGenerated.CharacterPickedDrunkSortId",
+      "metadata_name": "Librarian.<>c$$<CharacterPickedDrunk>b__9_0",
+      "signature": "int32_t Librarian___c___CharacterPickedDrunk_b__9_0 (Librarian___c_o* __this, int32_t c, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_0",
+      "rva": "0x3F07B0"
+    },
+    {
+      "name": "Librarian.CompilerGenerated.CharacterPickedDrunkTieBreak",
+      "metadata_name": "Librarian.<>c$$<CharacterPickedDrunk>b__9_1",
+      "signature": "float Librarian___c___CharacterPickedDrunk_b__9_1 (Librarian___c_o* __this, int32_t __, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___c___ConjourInfo_b__10_1",
+      "rva": "0x392D50"
+    },
+    {
+      "name": "Librarian.get_Description",
+      "metadata_name": "Librarian$$get_Description",
+      "signature": "System_String_o* Librarian__get_Description (Librarian_o* __this, const MethodInfo* method);",
+      "rva": "0x3E36E0"
+    },
+    {
+      "name": "Librarian.GetInfo",
+      "metadata_name": "Librarian$$GetInfo",
+      "signature": "ActedInfo_o* Librarian__GetInfo (Librarian_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E3320"
+    },
+    {
+      "name": "Librarian.GetBluffInfo",
+      "metadata_name": "Librarian$$GetBluffInfo",
+      "signature": "ActedInfo_o* Librarian__GetBluffInfo (Librarian_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E32C0"
+    },
+    {
+      "name": "Librarian.Act",
+      "metadata_name": "Librarian$$Act",
+      "signature": "void Librarian__Act (Librarian_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E1520"
+    },
+    {
+      "name": "Librarian.StopPick",
+      "metadata_name": "Librarian$$StopPick",
+      "signature": "void Librarian__StopPick (Librarian_o* __this, const MethodInfo* method);",
+      "rva": "0x3E3380"
+    },
+    {
+      "name": "Librarian.CharacterPicked",
+      "metadata_name": "Librarian$$CharacterPicked",
+      "signature": "void Librarian__CharacterPicked (Librarian_o* __this, const MethodInfo* method);",
+      "rva": "0x3E2770"
+    },
+    {
+      "name": "Librarian.BluffAct",
+      "metadata_name": "Librarian$$BluffAct",
+      "signature": "void Librarian__BluffAct (Librarian_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3E1790"
+    },
+    {
+      "name": "Librarian.CharacterPickedDrunk",
+      "metadata_name": "Librarian$$CharacterPickedDrunk",
+      "signature": "void Librarian__CharacterPickedDrunk (Librarian_o* __this, const MethodInfo* method);",
+      "rva": "0x3E1A00"
+    },
+    {
+      "name": "Librarian.ConjourInfo",
+      "metadata_name": "Librarian$$ConjourInfo",
+      "signature": "System_String_o* Librarian__ConjourInfo (Librarian_o* __this, int32_t id1, int32_t id2, int32_t id3, CharacterData_o* cd, const MethodInfo* method);",
+      "rva": "0x3E2FE0"
+    },
+    {
+      "name": "Librarian.ctor",
+      "metadata_name": "Librarian$$.ctor",
+      "signature": "void Librarian___ctor (Librarian_o* __this, const MethodInfo* method);",
+      "rva": "0x3E3690"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.OnClick",
+      "metadata_name": "Character$$OnClick",
+      "signature": "void Character__OnClick (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x366270"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "Character.RefreshCharacter",
+      "metadata_name": "Character$$RefreshCharacter",
+      "signature": "void Character__RefreshCharacter (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367970"
+    },
+    {
+      "name": "Character.GetRegisterAs",
+      "metadata_name": "Character$$GetRegisterAs",
+      "signature": "CharacterData_o* Character__GetRegisterAs (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x3650C0"
+    },
+    {
+      "name": "Character.GetCharacterData",
+      "metadata_name": "Character$$GetCharacterData",
+      "signature": "CharacterData_o* Character__GetCharacterData (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x364D60"
+    },
+    {
+      "name": "Character.RoleActCallback.ctor",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$.ctor",
+      "signature": "void Character___c__DisplayClass125_0___ctor (Character___c__DisplayClass125_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Character.RoleActCallback.Invoke",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$<RoleAct>b__0",
+      "signature": "void Character___c__DisplayClass125_0___RoleAct_b__0 (Character___c__DisplayClass125_0_o* __this, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x377120"
+    },
+    {
+      "name": "Character.ShowActedDelayed",
+      "metadata_name": "Character$$ShowActedDelayed",
+      "signature": "System_Collections_IEnumerator_o* Character__ShowActedDelayed (Character_o* __this, float delay, ActedInfo_o* info, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x368A50"
+    },
+    {
+      "name": "Character.ShowActedDelayed.MoveNext",
+      "metadata_name": "Character.<ShowActedDelayed>d__133$$MoveNext",
+      "signature": "bool Character__ShowActedDelayed_d__133__MoveNext (Character__ShowActedDelayed_d__133_o* __this, const MethodInfo* method);",
+      "rva": "0x375FE0"
+    },
+    {
+      "name": "CharacterPicker.CancelPick",
+      "metadata_name": "CharacterPicker$$CancelPick",
+      "signature": "void CharacterPicker__CancelPick (CharacterPicker_o* __this, const MethodInfo* method);",
+      "rva": "0x378CC0"
+    },
+    {
+      "name": "CharacterPicker.StartPickCharacters",
+      "metadata_name": "CharacterPicker$$StartPickCharacters",
+      "signature": "void CharacterPicker__StartPickCharacters (CharacterPicker_o* __this, int32_t howMany, Character_o* picker, const MethodInfo* method);",
+      "rva": "0x379260"
+    },
+    {
+      "name": "CharacterPicker.ClickedCharacter",
+      "metadata_name": "CharacterPicker$$ClickedCharacter",
+      "signature": "void CharacterPicker__ClickedCharacter (Character_o* ch, const MethodInfo* method);",
+      "rva": "0x378DB0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Characters.FilterCharacterType.CharacterData",
+      "metadata_name": "Characters$$FilterCharacterType",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Characters__FilterCharacterType (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* inpuCharacters, int32_t type, const MethodInfo* method);",
+      "prototype_name": "Characters__FilterCharacterType_CharacterData",
+      "rva": "0x36AAB0"
+    },
+    {
+      "name": "Gameplay.GetScriptCharacters",
+      "metadata_name": "Gameplay$$GetScriptCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetScriptCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37DC00"
+    },
+    {
+      "name": "Gameplay.GetAllAscensionCharacters",
+      "metadata_name": "Gameplay$$GetAllAscensionCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* Gameplay__GetAllAscensionCharacters (Gameplay_o* __this, const MethodInfo* method);",
+      "rva": "0x37C1A0"
+    },
+    {
+      "name": "GameData.GetCharacterDataOfId",
+      "metadata_name": "GameData$$GetCharacterDataOfId",
+      "signature": "CharacterData_o* GameData__GetCharacterDataOfId (GameData_o* __this, System_String_o* id, const MethodInfo* method);",
+      "rva": "0x3DC2F0"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "UnityEngine.Random.get_value",
+      "metadata_name": "UnityEngine.Random$$get_value",
+      "signature": "float UnityEngine_Random__get_value (const MethodInfo* method);",
+      "rva": "0x1C86710"
+    }
+  ]
+}
