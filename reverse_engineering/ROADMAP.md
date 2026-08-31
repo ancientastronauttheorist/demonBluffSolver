@@ -222,6 +222,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   active Poet truth/bluff pools, exact zero-reference clue, and joint anonymous-
   Wretch constraints; expand the typed union to 30 target sets and 640
   memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Medium to managed `Lookout`; native-audit all eight
+  declared methods plus registered-alignment, live-identity, raw-status,
+  acted-record, and integer-RNG helpers; close its actor-sensitive truthful
+  pool, raw-bluff-holder fallback, exact one-reference two-line clue, and
+  conditional execution achievement; expand the typed union to 31 target sets
+  and 654 memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
