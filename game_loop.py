@@ -1294,8 +1294,127 @@ def card_alchemist(pos: int, corrupted_count: int) -> CardInfo:
     """Post-patch: clue is # Corrupted around me [Range 2] at start of Round (before Cure)."""
     return CardInfo(pos, "Alchemist", info_parsed={"corrupted_count": corrupted_count})
 
-def card_druid(pos: int, targets: list[int], found_outcast: Optional[str] = None) -> CardInfo:
-    return CardInfo(pos, "Druid", info_parsed={"targets": targets, "found_outcast": found_outcast})
+def _validate_current_druid_targets(
+    targets,
+    *,
+    n_cards: Optional[int] = None,
+) -> list[int]:
+    """Validate Druid's three original-click-order Character references."""
+    if (
+        not isinstance(targets, list)
+        or len(targets) != 3
+        or any(type(target) is not int or target <= 0 for target in targets)
+        or len(set(targets)) != 3
+        or (
+            n_cards is not None
+            and (
+                type(n_cards) is not int
+                or n_cards <= 0
+                or any(target > n_cards for target in targets)
+            )
+        )
+    ):
+        raise ValueError(
+            "Current Druid targets must be three distinct current-board positions"
+        )
+    return list(targets)
+
+
+def _canonical_druid_outcast(found_outcast) -> Optional[str]:
+    """Return the solver's canonical token for one public Outcast name."""
+    if found_outcast is None:
+        return None
+    if not isinstance(found_outcast, str) or not found_outcast:
+        raise ValueError("Druid result must be none or a canonical Outcast role")
+    role = get_card(found_outcast)
+    if role is None or role.role.value != "Outcast":
+        raise ValueError("Druid result must be none or a canonical Outcast role")
+    return role.name.replace(" ", "_")
+
+
+def _druid_native_text(
+    targets: list[int],
+    found_outcast: Optional[str],
+) -> str:
+    """Return Librarian's exact result, sorting IDs but not stored references."""
+    click_order = _validate_current_druid_targets(targets)
+    displayed = sorted(click_order)
+    prefix = f"Among #{displayed[0]}, #{displayed[1]}, #{displayed[2]}\n"
+    canonical = _canonical_druid_outcast(found_outcast)
+    if canonical is None:
+        return prefix + "there are NO Outcasts"
+    public_name = get_card(canonical).name
+    return prefix + f"there is: {public_name}"
+
+
+def _parse_druid_native_text(info_text) -> Optional[tuple[list[int], Optional[str]]]:
+    """Parse only one exact current Druid result sentence."""
+    if not isinstance(info_text, str):
+        return None
+    none_match = re.fullmatch(
+        r"Among #([1-9]\d*), #([1-9]\d*), #([1-9]\d*)\n"
+        r"there are NO Outcasts",
+        info_text,
+    )
+    positive_match = re.fullmatch(
+        r"Among #([1-9]\d*), #([1-9]\d*), #([1-9]\d*)\n"
+        r"there is: ([^\r\n]+)",
+        info_text,
+    )
+    match = none_match or positive_match
+    if match is None:
+        return None
+    try:
+        displayed = [int(match.group(index)) for index in range(1, 4)]
+        displayed = _validate_current_druid_targets(displayed)
+        found_outcast = (
+            None
+            if none_match is not None
+            else _canonical_druid_outcast(match.group(4))
+        )
+    except (ValueError, TypeError):
+        return None
+    if displayed != sorted(displayed):
+        return None
+    try:
+        expected = _druid_native_text(displayed, found_outcast)
+    except ValueError:
+        return None
+    return (displayed, found_outcast) if info_text == expected else None
+
+
+def card_druid(
+    pos: int,
+    targets: list[int],
+    found_outcast: Optional[str] = None,
+    *,
+    info_text: str = "",
+    druid_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Druid observation while preserving unmarked archive payloads."""
+    info = {
+        "targets": list(targets) if isinstance(targets, list) else targets,
+        "found_outcast": found_outcast,
+    }
+    if druid_variant is not None:
+        if druid_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Druid variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Druid position must be positive")
+        current_targets = _validate_current_druid_targets(targets)
+        current_outcast = _canonical_druid_outcast(found_outcast)
+        if not isinstance(info_text, str):
+            raise ValueError("Current Druid text must be a string")
+        expected_text = _druid_native_text(current_targets, current_outcast)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Druid text must match its targets and result")
+        info = {
+            "targets": current_targets,
+            "found_outcast": current_outcast,
+            "druid_variant": druid_variant,
+        }
+        info_text = expected_text
+    return CardInfo(pos, "Druid", info_text=info_text, info_parsed=info)
 
 _BISHOP_PUBLIC_TYPES = ("Villager", "Outcast", "Minion", "Demon")
 
@@ -5059,7 +5178,10 @@ def _card_from_rambler_interruption(
     if role_key in {'archivist', 'gambler'}:
         role = 'Gemcrafter'
         role_key = 'gemcrafter'
-    elif role_key in {'acrobat2', 'rangedempath', 'athlete'}:
+    elif role_key in {'librarian', 'rangedempath'}:
+        role = 'Druid'
+        role_key = 'druid'
+    elif role_key in {'acrobat2', 'acrobat', 'athlete'}:
         role = 'Bard'
         role_key = 'bard'
     if role_key == 'jester':
@@ -5299,9 +5421,14 @@ def _parse_clue_from_memory(
         # after choosing disguise > current_role > true_role above.
         role = 'Gemcrafter'
         role_lower = 'gemcrafter'
-    elif role_lower in {'acrobat2', 'rangedempath', 'athlete'}:
-        # Current public Bard binds managed Acrobat2. The two older managed
-        # aliases remain valid reader inputs; Acrobat is a distinct role.
+    elif role_lower in {'librarian', 'rangedempath'}:
+        # Current public Druid binds managed Librarian. RangedEmpath is the
+        # older unbound Druid-like implementation, not a Bard implementation.
+        role = 'Druid'
+        role_lower = 'druid'
+    elif role_lower in {'acrobat2', 'acrobat', 'athlete'}:
+        # Current public Bard binds managed Acrobat2. Acrobat and Athlete remain
+        # historical reader aliases; RangedEmpath belongs to Druid instead.
         role = 'Bard'
         role_lower = 'bard'
     ability_used = card.get('ability_used', False)
@@ -5339,21 +5466,26 @@ def _parse_clue_from_memory(
             and latest.get('targets') is None
         )
 
-    # --- Guard: active-ability-only roles with unused abilities ---
-    # These roles have NO passive speech bubble. If ability hasn't been used,
-    # any clue_text/acted_infos is stale from a previous village — ignore it.
-    # Prefer `uses`, but public Dreamer currently sets ability_used=True while leaving
-    # uses at 0 after a real fire. PD is stricter because its game-start setup
-    # can set the act flag before the active check ability is used.
+    # Active-only roles normally cannot authenticate any carried public event
+    # until their current-village fire state is visible. Druid is the narrow
+    # exception: its native callback can append the completed event before the
+    # uses/act fields settle, and its exact branch below validates that event.
     ACTIVE_ONLY_ROLES = {
         'dreamer', 'druid', 'fortune_teller', 'jester', 'judge',
         'slayer', 'plague_doctor',
     }
     uses_count = card.get('uses', 0)
     active_fired = uses_count > 0 or (ability_used and role_lower != 'plague_doctor')
-    if role_lower in ACTIVE_ONLY_ROLES and not active_fired:
+    if (
+        role_lower in ACTIVE_ONLY_ROLES
+        and role_lower != 'druid'
+        and not active_fired
+    ):
         return card_no_info(pos, role)
 
+    # Rambler replacement text owns the public event even when an active
+    # speaker's uses/act fields have settled. Druid is the only role whose
+    # exact callback event is allowed to precede those fields.
     rambler_surface, rambler_error = _card_from_rambler_surface(
         card,
         n_cards=n_cards,
@@ -5373,6 +5505,56 @@ def _parse_clue_from_memory(
         return None
     if baker_surface is not None:
         return baker_surface
+
+    # --- Druid/Librarian: exact newest event, preserving click-order refs. ---
+    # Druid resets after Night. Its callback can append the exact result before
+    # uses/act settles, so coherent public evidence takes precedence over the
+    # generic active-only guard below. The role writes no RuntimeData.
+    if role_lower == 'druid':
+        druid_result = _parse_druid_native_text(clue)
+        if druid_result is not None:
+            displayed_targets, found_outcast = druid_result
+            refs = current_event_refs()
+            if (
+                type(n_cards) is not int
+                or n_cards <= 0
+                or type(pos) is not int
+                or not 1 <= pos <= n_cards
+                or any(target > n_cards for target in displayed_targets)
+                or refs is None
+            ):
+                return None
+            try:
+                click_order = _validate_current_druid_targets(
+                    refs,
+                    n_cards=n_cards,
+                )
+            except ValueError:
+                return None
+            if sorted(click_order) != displayed_targets:
+                return None
+            return card_druid(
+                pos,
+                click_order,
+                found_outcast,
+                info_text=clue,
+                druid_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+
+        latest = (
+            infos[-1]
+            if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+            else None
+        )
+        passive_empty = (
+            latest is not None
+            and (latest.get('desc') is None or latest.get('desc') == '')
+            and 'targets' in latest
+            and latest.get('targets') is None
+        )
+        if not clue and (not infos or passive_empty):
+            return card_no_info(pos, role)
+        return None
 
     # --- Gemcrafter/Archivist: exact text + identical newest one-card ref. ---
     # Archivist writes no RuntimeData, so unrelated data preserved by an
@@ -5742,16 +5924,6 @@ def _parse_clue_from_memory(
                 m.group(2).strip(),
                 info_text=clue,
             )
-
-    # --- Druid: "Among #A, #B, #C there is: <Outcast>" or no outcasts ---
-    if role_lower == 'druid' and targets:
-        cl = clue.lower()
-        if 'no outcast' in cl or 'none' in cl:
-            return card_druid(pos, targets, None)
-        m = re.search(r'there\s+(?:is|was)\s*:?\s*([A-Za-z][A-Za-z ]*)', clue, re.IGNORECASE)
-        if m:
-            found = m.group(1).strip().rstrip('.!').replace(' ', '_')
-            return card_druid(pos, targets, found)
 
     # --- Oracle: exact current Investigator positive/sentinel surfaces. ---
     if role_lower == 'oracle':
@@ -6253,6 +6425,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         raise ValueError("Bard entry requires exactly one corruption distance")
     if role == "confessor" and len(args) != 3:
         raise ValueError("Confessor entry requires exactly one Good/dizzy result")
+    if role == "druid" and len(args) != 4:
+        raise ValueError("Druid entry requires exactly three targets and one result")
     pos = int(args[1])
 
     if role == "enlightened":
@@ -6544,9 +6718,31 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "alchemist":
         return card_alchemist(pos, int(args[2]))
     elif role == "druid":
-        targets = [int(x) for x in args[2].split(",")]
-        found = args[3] if len(args) > 3 and args[3].lower() != "none" else None
-        return card_druid(pos, targets, found)
+        if session is None:
+            raise ValueError("Current Druid entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Druid position is outside the current board")
+        try:
+            targets = [int(value.strip()) for value in args[2].split(",")]
+        except ValueError as exc:
+            raise ValueError(
+                "Druid targets must be comma-separated integers"
+            ) from exc
+        targets = _validate_current_druid_targets(
+            targets,
+            n_cards=session.n_cards,
+        )
+        found = (
+            None
+            if args[3].strip().casefold() == "none"
+            else _canonical_druid_outcast(args[3])
+        )
+        return card_druid(
+            pos,
+            targets,
+            found,
+            druid_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "bishop":
         if session is None:
             raise ValueError("Current Bishop entry requires session board size")
@@ -7107,8 +7303,8 @@ def main():
         print("  card poet 4 bard 1          (Poet gave Bard-style clue)")
         print("  card poet 2 gemcrafter 6    (Poet gave Gemcrafter-style clue)")
         print("  card poet 1 bounty_hunter 6 (Poet directly named #6 as Evil)")
-        print("  card druid 5 1,2,3 none      (Druid checked 1,2,3: no outcasts)")
-        print("  card druid 5 1,2,3 Bombardier (Druid found Bombardier among 1,2,3)")
+        print("  card druid 5 1,2,3 none       (Druid found no Outcasts)")
+        print("  card druid 5 1,2,3 Bombardier (Druid named an Outcast)")
         print("  card no_info 2 Slayer")
         return
 
@@ -7797,6 +7993,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and same_role
                         and changed
                         and _has_active_clue_result(parsed)
+                        and _execution_role_key(parsed.apparent_role) != "druid"
                     )
                     # Passive reveal callbacks can settle after an initial
                     # memory read. Never let an earlier ordinary/no-info entry
@@ -7858,6 +8055,18 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and parsed.info_parsed.get("confessor_variant")
                         == _PUBLIC_CURRENT_VARIANT
                     )
+                    druid_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role) == "druid"
+                        and parsed.info_parsed.get("druid_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                        and (
+                            existing.info_parsed == {}
+                            or existing.info_parsed.get("druid_variant")
+                            == _PUBLIC_CURRENT_VARIANT
+                        )
+                    )
                     if not (
                         active_update
                         or shut_up_update
@@ -7867,6 +8076,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or gemcrafter_update
                         or bard_update
                         or confessor_update
+                        or druid_update
                     ):
                         continue
                 session.add_card(parsed)

@@ -139,7 +139,10 @@ DISPLAY_NAMES = {
     'Striga': 'Lilis',
     'Doppleganger': 'Doppelganger',
     'Empath': 'Lover',
-    'RangedEmpath': 'Bard',
+    # Public current Druid binds managed Librarian. RangedEmpath is the older
+    # unbound Druid-like implementation retained only as a reader compatibility
+    # alias; it is not a Bard implementation.
+    'RangedEmpath': 'Druid',
     'BountyHunter': 'Bounty Hunter',
     'Immortal': 'Knight',
     'Recluse': 'Wretch',
@@ -150,10 +153,10 @@ DISPLAY_NAMES = {
     'Illuzionist': 'Shaman',
     'Mezepheles': 'Puppeteer',
     'Athlete': 'Bard',
-    # The shipped public Bard CharacterData binds managed Acrobat2. Acrobat is
-    # a separate role and must not be conflated with it.
+    # The shipped public Bard CharacterData binds managed Acrobat2.
     'Acrobat2': 'Bard',
-    'Acrobat': 'Acrobat',
+    # Acrobat is Bard's obsolete predecessor; current public Bard is Acrobat2.
+    'Acrobat': 'Bard',
     # The shipped public Judge CharacterData binds Judge2. Arbiter is a
     # separate unbound implementation and must not be conflated with it.
     'Judge2': 'Judge',
@@ -168,7 +171,7 @@ DISPLAY_NAMES = {
     'Shugenja': 'Shugenja',
     'Tracker': 'Hunter',
     'Investigator': 'Oracle',
-    'Librarian': 'Librarian',
+    'Librarian': 'Druid',
     'Mutant': 'Mutant',
     'Puzzlemaster': 'Plague Doctor',
     'Cipher': 'Witch',

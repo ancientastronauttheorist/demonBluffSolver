@@ -735,6 +735,8 @@ class PoetMemoryIngestionTests(unittest.TestCase):
             ("Left", []),
             ("I am Good", []),
             ("I am dizzy", []),
+            ("Among #1, #2, #3\nthere is: Bombardier", [3, 1, 2]),
+            ("Among #1, #2, #3\nthere are NO Outcasts", [1, 2, 3]),
             ("I was a Baker", []),
             ("Is #2 or #3 Evil?: True", [2, 3]),
         ]

@@ -1238,7 +1238,7 @@ def _dreamer_observation_likelihoods(
 
 
 def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> str:
-    """Druid: find outcast among targets, or 'none'."""
+    """Legacy deterministic Druid projection retained for archived callers."""
     for t in targets:
         if scenario_is_evil(t, scenario):
             continue
@@ -1249,6 +1249,141 @@ def _druid_ground_truth(targets: list[int], scenario: Scenario, state: GameState
             if card_def and card_def.role == Role.OUTCAST and role_key != "wretch":
                 return role.replace("_", " ")
     return "none"
+
+
+_DRUID_NON_BLUFFABLE_OUTCASTS: tuple[str, ...] = (
+    "Doppelganger",
+    "Drunk",
+    "Wretch",
+)
+
+
+def _druid_bluff_false_outcasts(state: GameState) -> tuple[str, ...]:
+    """Project Librarian's authored false-role ladder with multiplicity."""
+    allowed = {
+        role.casefold().replace(" ", "").replace("_", "")
+        for role in _DRUID_NON_BLUFFABLE_OUTCASTS
+    }
+    current_script: list[str] = []
+    for authored_role in state.deck.outcasts:
+        role = _dreamer_role_identity(authored_role)
+        if role is None:
+            continue
+        key = role.casefold().replace(" ", "").replace("_", "")
+        if key in allowed:
+            # Native filters authored CharacterData occurrences without
+            # deduplication, so duplicate script entries remain weighted.
+            current_script.append(role)
+    if current_script:
+        return tuple(current_script)
+
+    # Every pinned ascension-wide authored pool contains all three exact
+    # non-bluffable Outcasts. The later all-Outcast and Drunk-only fallbacks are
+    # therefore unreachable for a valid current Standard game.
+    return _DRUID_NON_BLUFFABLE_OUTCASTS
+
+
+def _druid_registered_outcast_candidate(
+    position: int,
+    scenario: Scenario,
+    state: GameState,
+) -> tuple[bool, Optional[str]]:
+    """Return (projection complete, public name if registerAs is Outcast).
+
+    Librarian tests ``GetRegisterAs`` but names the selected Character's
+    current CharacterData. The Python Scenario intentionally has no arbitrary
+    registerAs pointer, so use only identities it represents or the public
+    apparent role. Unknown/mover-opaque seats fail closed instead of borrowing
+    hidden memory truth.
+    """
+    current_role = _dreamer_real_role(position, scenario, state)
+    current_key = current_role.casefold().replace(" ", "").replace("_", "")
+    if current_key == "unknown":
+        return (False, None)
+
+    # These two roles install non-Outcast registerAs identities explicitly.
+    if current_key in {"wretch", "spy"}:
+        return (True, None)
+
+    if (
+        scenario.shaman_trace is not None
+        and position in {
+            scenario.shaman_trace.source_position,
+            scenario.shaman_trace.target_position,
+        }
+    ):
+        # Scenario records current-data flow but not the surviving registerAs
+        # pointer. Do not manufacture one for strategy scoring.
+        return (False, None)
+
+    registered_role = current_role
+    if scenario_is_evil(position, scenario):
+        public_card = get_card_at(position, state)
+        if public_card is None:
+            return (False, None)
+        registered_role = _dreamer_role_identity(public_card.apparent_role)
+        if registered_role is None:
+            return (False, None)
+
+    registered_key = (
+        registered_role.casefold().replace(" ", "").replace("_", "")
+    )
+    if registered_key in {"wretch", "spy"}:
+        return (True, None)
+    registered_card = get_card(registered_role)
+    if registered_card is None:
+        return (False, None)
+    if registered_card.role != Role.OUTCAST:
+        return (True, None)
+    return (True, registered_role)
+
+
+def _druid_observation_likelihoods(
+    targets: list[int] | tuple[int, int, int],
+    ability_pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple[str, ...], float]:
+    """Return current Librarian visible-result likelihood for one scenario."""
+    if len(targets) != 3 or len(set(targets)) != 3:
+        raise ValueError("Druid requires exactly three distinct targets")
+
+    candidates: list[str] = []
+    for position in targets:
+        complete, candidate = _druid_registered_outcast_candidate(
+            position,
+            scenario,
+            state,
+        )
+        if not complete:
+            return {}
+        if candidate is not None:
+            candidates.append(candidate)
+
+    truthful = truth_status(ability_pos, scenario, state) == TruthStatus.TRUTHFUL
+    if truthful:
+        if not candidates:
+            return {("none",): 1.0}
+        probability = 1.0 / len(candidates)
+        likelihoods: dict[tuple[str, ...], float] = {}
+        for role in candidates:
+            observation = ("outcast", role)
+            likelihoods[observation] = (
+                likelihoods.get(observation, 0.0) + probability
+            )
+        return likelihoods
+
+    # Bluff is the exact complement at the predicate boundary: any selected
+    # registered Outcast deterministically yields the none sentence.
+    if candidates:
+        return {("none",): 1.0}
+    false_outcasts = _druid_bluff_false_outcasts(state)
+    probability = 1.0 / len(false_outcasts)
+    likelihoods: dict[tuple[str, ...], float] = {}
+    for role in false_outcasts:
+        observation = ("outcast", role)
+        likelihoods[observation] = likelihoods.get(observation, 0.0) + probability
+    return likelihoods
 
 
 def _slayer_ground_truth(target: int, scenario: Scenario) -> bool:
@@ -1627,6 +1762,98 @@ def _recommend_dreamer_ability(
     )
 
 
+def _druid_information_for_targets(
+    targets: list[int] | tuple[int, int, int],
+    ability_pos: int,
+    state: GameState,
+    scenarios: list[Scenario],
+) -> tuple[float, float, int]:
+    """Return native Druid mutual information for one selectable triple."""
+    return _information_from_observation_likelihoods([
+        _druid_observation_likelihoods(
+            targets,
+            ability_pos,
+            scenario,
+            state,
+        )
+        for scenario in scenarios
+    ])
+
+
+def _recommend_druid_ability(
+    ability_pos: int,
+    candidate_targets: list[list[int]],
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend a Druid triple using current stochastic visible outputs."""
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_targets:
+        return None
+
+    best_targets: Optional[tuple[int, int, int]] = None
+    best_information = -1.0
+    best_expected_entropy = float("inf")
+    best_outcome_count = 0
+    for targets in candidate_targets:
+        target_key = tuple(sorted(targets))
+        if len(target_key) != 3 or len(set(target_key)) != 3:
+            continue
+        information, expected_entropy, outcome_count = (
+            _druid_information_for_targets(
+                target_key,
+                ability_pos,
+                state,
+                scenarios,
+            )
+        )
+        if outcome_count == 0:
+            continue
+        if (
+            best_targets is None
+            or information > best_information + 1e-12
+            or (
+                math.isclose(
+                    information,
+                    best_information,
+                    rel_tol=0.0,
+                    abs_tol=1e-12,
+                )
+                and target_key < best_targets
+            )
+        ):
+            best_targets = target_key
+            best_information = information
+            best_expected_entropy = expected_entropy
+            best_outcome_count = outcome_count
+
+    if best_targets is None:
+        return None
+
+    liar_probability = sum(
+        truth_status(ability_pos, scenario, state) == TruthStatus.LYING
+        for scenario in scenarios
+    ) / len(scenarios)
+    warnings = []
+    if liar_probability > 0:
+        warnings.append(
+            f"Lying Druid path: {liar_probability:.0%} -- included in native likelihood"
+        )
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Druid",
+        targets=list(best_targets),
+        score=best_information,
+        reasoning=(
+            f"Mutual information {best_information:.3f} bits; "
+            f"expected posterior entropy {best_expected_entropy:.3f} bits "
+            f"across {best_outcome_count} native Druid observations"
+        ),
+        warnings=warnings,
+    )
+
+
 def _pd_information_for_target(
     target: int,
     ability_pos: int,
@@ -1920,11 +2147,14 @@ def recommend_abilities(
             rec = _recommend_dreamer_ability(pos, candidates, state, result)
             _apply_timing(rec, timing, state, recommendations)
 
-        elif role == "Druid" and len(others) >= 3:
-            candidates = [list(c) for c in combinations(others, 3)]
-            rec = _recommend_partition_ability(
-                "Druid", pos,
-                _druid_ground_truth, candidates, state, result)
+        elif role == "Druid" and state.n_cards >= 3:
+            # Librarian's generic picker accepts every physical Character:
+            # self, dead/night-killed, hidden, unrevealed, and unused-active.
+            # Semantics depend on the selected set, so one deterministic click
+            # order per three-seat combination is sufficient for strategy.
+            druid_targets = list(range(1, state.n_cards + 1))
+            candidates = [list(c) for c in combinations(druid_targets, 3)]
+            rec = _recommend_druid_ability(pos, candidates, state, result)
             _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Slayer":

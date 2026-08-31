@@ -194,12 +194,13 @@ class BardConstructorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             card_bard(1, 1, info_text=None, bard_variant="public_current")
 
-    def test_reader_maps_all_bard_managed_names_but_not_acrobat(self):
+    def test_reader_separates_bard_and_druid_managed_predecessors(self):
         self.assertEqual(clean_name("Acrobat2"), "Bard")
         self.assertEqual(clean_name("Acrobat2_12345"), "Bard")
-        self.assertEqual(clean_name("RangedEmpath"), "Bard")
         self.assertEqual(clean_name("Athlete"), "Bard")
-        self.assertEqual(clean_name("Acrobat"), "Acrobat")
+        self.assertEqual(clean_name("Acrobat"), "Bard")
+        self.assertEqual(clean_name("Librarian"), "Druid")
+        self.assertEqual(clean_name("RangedEmpath"), "Druid")
 
 
 class BardManualIngestionTests(unittest.TestCase):
@@ -314,13 +315,13 @@ class BardMemoryIngestionTests(unittest.TestCase):
                 },
             )
 
-    def test_direct_accepts_public_current_and_legacy_managed_aliases(self):
+    def test_direct_accepts_public_current_and_defensible_managed_aliases(self):
         clue = _bard_native_text(1)
         refs = _current_bard_refs(1, 1, 6)
         cards = (
             _memory_card("Bard", clue, refs),
             _memory_card("Acrobat2", clue, refs),
-            _memory_card("RangedEmpath", clue, refs),
+            _memory_card("Acrobat", clue, refs),
             _memory_card("Athlete", clue, refs),
             _memory_card("Pooka", clue, refs, current_role="Acrobat2"),
             _memory_card(
@@ -339,7 +340,7 @@ class BardMemoryIngestionTests(unittest.TestCase):
                     poet=False,
                 )
 
-    def test_disguise_current_true_precedence_and_acrobat_distinction(self):
+    def test_disguise_current_true_precedence_and_druid_distinction(self):
         clue = _bard_native_text(1)
         refs = _current_bard_refs(1, 1, 6)
         rejected = (
@@ -351,14 +352,8 @@ class BardMemoryIngestionTests(unittest.TestCase):
                 disguise="Pooka",
             ),
             _memory_card("Acrobat2", clue, refs, current_role="Pooka"),
-            _memory_card("Acrobat", clue, refs),
-            _memory_card(
-                "Acrobat2",
-                clue,
-                refs,
-                current_role="Acrobat2",
-                disguise="Acrobat",
-            ),
+            _memory_card("RangedEmpath", clue, refs),
+            _memory_card("Librarian", clue, refs),
         )
         for card in rejected:
             with self.subTest(card=card):
