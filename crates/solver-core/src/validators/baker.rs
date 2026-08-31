@@ -12,7 +12,9 @@ use crate::knowledge_base::{
 };
 use crate::types::{BoardCountProvenance, CardInfo, GameState, Scenario};
 
-use super::{info_pos, info_str, known_evil_role, truth_status, TruthStatus};
+use super::{
+    info_pos, info_str, known_evil_role, stable_evil_origin_role_at, truth_status, TruthStatus,
+};
 
 pub(super) const BAKER_CURRENT_RULE: &str = "baker_day_reveal_v1";
 
@@ -35,6 +37,7 @@ enum FinalProjection {
 struct SeatSpec {
     definite_villager: bool,
     optional_villager: bool,
+    stable_spy_baker_target: bool,
     final_projection: FinalProjection,
 }
 
@@ -51,7 +54,68 @@ struct SearchState {
     seats: Vec<SeatState>,
     initial_counts: Vec<u8>,
     revealed: Vec<bool>,
+    spy_converted_at: Vec<Option<usize>>,
     erased_roles: u32,
+}
+
+/// One complete exact Baker history's stable-Spy registerAs chronology.
+/// Event indices refer to the verified `reveal_order`. The internal Reveal
+/// waits about 0.3 seconds while batch clicks may be only 0.2 seconds apart,
+/// so each history expands to every monotonic clear boundary after conversion.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
+pub(super) struct BakerSpyTimeline {
+    converted_at: Vec<(u8, usize)>,
+    clears_before: Vec<(u8, usize)>,
+}
+
+impl BakerSpyTimeline {
+    pub(super) fn supports_observation(&self, observation: u8, state: &GameState) -> bool {
+        self.converted_at.is_empty() || state.reveal_order.contains(&observation)
+    }
+
+    pub(super) fn contains_position(&self, position: u8) -> bool {
+        self.converted_at
+            .iter()
+            .any(|(candidate, _)| *candidate == position)
+    }
+
+    pub(super) fn converted_at_observation(
+        &self,
+        position: u8,
+        observation: u8,
+        state: &GameState,
+    ) -> Option<bool> {
+        let conversion_event = self
+            .converted_at
+            .iter()
+            .find_map(|(candidate, event)| (*candidate == position).then_some(*event))?;
+        let observation_event = state
+            .reveal_order
+            .iter()
+            .position(|candidate| *candidate == observation)?;
+        // InitWithNoReset completes synchronously inside the converting Baker
+        // Day action. A same-event consumer therefore sees Baker current data
+        // and a cleared raw bluff, while registerAs remains stale until the
+        // delayed internal Reveal resumes.
+        Some(conversion_event <= observation_event)
+    }
+
+    pub(super) fn registered_evil_at_observation(
+        &self,
+        position: u8,
+        observation: u8,
+        state: &GameState,
+    ) -> Option<bool> {
+        let clear_event = self
+            .clears_before
+            .iter()
+            .find_map(|(candidate, event)| (*candidate == position).then_some(*event))?;
+        let observation_event = state
+            .reveal_order
+            .iter()
+            .position(|candidate| *candidate == observation)?;
+        Some(clear_event <= observation_event)
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -70,7 +134,9 @@ struct Problem<'a> {
     role_names: Vec<String>,
     role_indices: HashMap<String, u8>,
     role_caps: Vec<u8>,
+    villager_role_count: usize,
     baker_role: Option<u8>,
+    spy_role: Option<u8>,
     specs: Vec<SeatSpec>,
     required_optional_villagers: Option<usize>,
     anonymous_erased_villagers: usize,
@@ -135,7 +201,10 @@ impl<'a> Problem<'a> {
         };
         // Prefer the serialized pool faction so archived roles whose public
         // faction later changed keep their historical Baker semantics.
-        if !role_is_state_villager(claimed, self.state) {
+        let saved_stable_spy = self.exact
+            && normalized == "spy"
+            && self.spy_role == Some(role);
+        if !role_is_state_villager(claimed, self.state) && !saved_stable_spy {
             return if self.exact {
                 Observation::Invalid
             } else {
@@ -179,20 +248,25 @@ impl<'a> Problem<'a> {
         }
 
         let remaining_pool = |claimed: Option<u8>| -> bool {
+            let is_villager_asset = |role: u8| usize::from(role) < self.villager_role_count;
             match runtime {
                 RuntimeState::Incompatible | RuntimeState::NotBaker => false,
                 RuntimeState::Null => claimed.map_or_else(
-                    || self.role_caps.iter().any(|count| *count > 0),
-                    |role| self.role_caps[usize::from(role)] > 0,
+                    || self.role_caps[..self.villager_role_count].iter().any(|count| *count > 0),
+                    |role| is_villager_asset(role) && self.role_caps[usize::from(role)] > 0,
                 ),
                 RuntimeState::Baker(original) => claimed.map_or_else(
                     || {
                         self.role_caps
                             .iter()
+                            .take(self.villager_role_count)
                             .enumerate()
                             .any(|(index, count)| *count > u8::from(index == usize::from(original)))
                     },
-                    |role| self.role_caps[usize::from(role)] > u8::from(role == original),
+                    |role| {
+                        is_villager_asset(role)
+                            && self.role_caps[usize::from(role)] > u8::from(role == original)
+                    },
                 ),
             }
         };
@@ -279,6 +353,7 @@ fn initialize_for_shaman_previous(
             .collect(),
         initial_counts: vec![0; problem.role_caps.len()],
         revealed: vec![false; usize::from(problem.state.n_cards) + 1],
+        spy_converted_at: vec![None; usize::from(problem.state.n_cards) + 1],
         erased_roles: 0,
     };
 
@@ -307,6 +382,16 @@ fn initialize_for_shaman_previous(
 
     for position in 1..=problem.state.n_cards {
         let index = usize::from(position);
+        if problem.specs[index].stable_spy_baker_target {
+            let spy = problem.spy_role?;
+            if !add_initial_role(problem, &mut search, spy) {
+                return None;
+            }
+            search.seats[index].initial_role = Some(spy);
+            search.seats[index].current_role = Some(spy);
+            search.seats[index].runtime = RuntimeState::NotBaker;
+            continue;
+        }
         if !problem.specs[index].definite_villager {
             continue;
         }
@@ -432,7 +517,9 @@ fn ensure_baker_actor(
     position: u8,
 ) -> Option<SearchState> {
     let index = usize::from(position);
-    if !search.seats[index].physical_villager {
+    if !search.seats[index].physical_villager
+        && !problem.specs[index].stable_spy_baker_target
+    {
         return Some(search.clone());
     }
     let baker = problem.baker_role?;
@@ -443,9 +530,11 @@ fn ensure_baker_actor(
     }
 }
 
-fn actor_runtime(search: &SearchState, position: u8) -> RuntimeState {
+fn actor_runtime(problem: &Problem<'_>, search: &SearchState, position: u8) -> RuntimeState {
     let seat = &search.seats[usize::from(position)];
-    if seat.physical_villager {
+    if seat.physical_villager
+        || problem.specs[usize::from(position)].stable_spy_baker_target
+    {
         seat.runtime
     } else {
         // Puppet, Drunk, Doppelganger, and ordinary Evil Baker appearances
@@ -458,6 +547,7 @@ fn conversion_states(
     problem: &Problem<'_>,
     search: &SearchState,
     source_position: u8,
+    event_index: usize,
 ) -> Vec<SearchState> {
     let mut definite_pool_exists = false;
     let mut allowed_targets = Vec::new();
@@ -469,7 +559,7 @@ fn conversion_states(
         let index = usize::from(position);
         let seat = &search.seats[index];
         let spec = problem.specs[index];
-        if seat.physical_villager {
+        if seat.physical_villager || spec.stable_spy_baker_target {
             definite_pool_exists = true;
             if !matches!(spec.final_projection, FinalProjection::Other(_)) {
                 allowed_targets.push(position);
@@ -510,6 +600,9 @@ fn conversion_states(
             };
             next.seats[index].current_role = Some(baker);
             next.seats[index].runtime = RuntimeState::Baker(previous);
+            if problem.specs[index].stable_spy_baker_target {
+                next.spy_converted_at[index] = Some(event_index);
+            }
             results.push(next);
         }
     }
@@ -517,25 +610,44 @@ fn conversion_states(
     results
 }
 
-fn process_baker(problem: &Problem<'_>, search: &SearchState, card: &CardInfo) -> Vec<SearchState> {
+fn process_baker(
+    problem: &Problem<'_>,
+    search: &SearchState,
+    card: &CardInfo,
+    event_index: usize,
+) -> Vec<SearchState> {
     let Some(ready) = ensure_baker_actor(problem, search, card.position) else {
         return Vec::new();
     };
-    let runtime = actor_runtime(&ready, card.position);
+    let runtime = actor_runtime(problem, &ready, card.position);
     let truth = truth_status(card.position, problem.scenario, problem.state);
     let puppet = problem.scenario.puppet_position == Some(card.position);
     let observation = problem.observation(card);
-    if !problem.output_possible(runtime, truth, puppet, observation) {
+    // A converted stable Spy remains runtime Evil. Native Character.Act always
+    // invokes a lying runtime-Evil body's real current-role Act, so Baker's
+    // saved BakerRuntimeData can emit Spy and extend the chain. Any surviving
+    // stale bluffRole only controls the later copied-role bluff action; it is
+    // not the reason the real Baker Act runs. This is an existential captured
+    // Baker-output surface, not a waiver for arbitrary Evil disguises.
+    let stable_spy_real_action = problem.specs[usize::from(card.position)]
+        .stable_spy_baker_target
+        && matches!(runtime, RuntimeState::Baker(_));
+    let output_truth = if stable_spy_real_action {
+        TruthStatus::Truthful
+    } else {
+        truth
+    };
+    if !problem.output_possible(runtime, output_truth, puppet, observation) {
         return Vec::new();
     }
 
-    let working_conversion = truth == TruthStatus::Truthful
+    let working_conversion = (truth == TruthStatus::Truthful || stable_spy_real_action)
         && !puppet
         && !matches!(runtime, RuntimeState::Incompatible | RuntimeState::NotBaker);
     if !working_conversion {
         return vec![ready];
     }
-    conversion_states(problem, &ready, card.position)
+    conversion_states(problem, &ready, card.position, event_index)
 }
 
 fn is_current_poet_medium(card: &CardInfo) -> bool {
@@ -599,14 +711,19 @@ fn process_medium(
     }
 }
 
-fn process_reveal(problem: &Problem<'_>, search: &SearchState, position: u8) -> Vec<SearchState> {
+fn process_reveal(
+    problem: &Problem<'_>,
+    search: &SearchState,
+    position: u8,
+    event_index: usize,
+) -> Vec<SearchState> {
     let mut revealed = search.clone();
     revealed.revealed[usize::from(position)] = true;
     let Some(card) = problem.card(position) else {
         return vec![revealed];
     };
     match normalize_role(&card.apparent_role).as_str() {
-        "baker" => process_baker(problem, &revealed, card),
+        "baker" => process_baker(problem, &revealed, card, event_index),
         "medium" => process_medium(problem, &revealed, card),
         "poet" if is_current_poet_medium(card) => {
             process_medium(problem, &revealed, card)
@@ -629,7 +746,9 @@ fn final_state_valid(problem: &Problem<'_>, search: &SearchState) -> bool {
 
     for position in 1..=problem.state.n_cards {
         let index = usize::from(position);
-        if !search.seats[index].physical_villager {
+        if !search.seats[index].physical_villager
+            && !problem.specs[index].stable_spy_baker_target
+        {
             continue;
         }
         match problem.specs[index].final_projection {
@@ -651,7 +770,9 @@ fn final_state_valid(problem: &Problem<'_>, search: &SearchState) -> bool {
                 None | Some(_) => return false,
             },
             FinalProjection::Unknown => {
-                if search.seats[index].initial_role.is_none() {
+                if search.seats[index].physical_villager
+                    && search.seats[index].initial_role.is_none()
+                {
                     unassigned_villagers += 1;
                 }
             }
@@ -660,6 +781,7 @@ fn final_state_valid(problem: &Problem<'_>, search: &SearchState) -> bool {
     let remaining_capacity: usize = problem
         .role_caps
         .iter()
+        .take(problem.villager_role_count)
         .zip(completed_counts.iter())
         .map(|(capacity, used)| usize::from(capacity.saturating_sub(*used)))
         .sum();
@@ -682,9 +804,85 @@ fn exact_search(
     if !seen.insert((index, search.clone())) {
         return false;
     }
-    process_reveal(problem, &search, order[index])
+    process_reveal(problem, &search, order[index], index)
         .into_iter()
         .any(|next| exact_search(problem, order, index + 1, next, seen))
+}
+
+fn exact_search_collect_spy_timelines(
+    problem: &Problem<'_>,
+    order: &[u8],
+    index: usize,
+    search: SearchState,
+    seen: &mut HashSet<(usize, SearchState)>,
+    timelines: &mut HashSet<BakerSpyTimeline>,
+) {
+    if index == order.len() {
+        if final_state_valid(problem, &search) {
+            let conversions: Vec<(u8, usize)> = problem
+                .specs
+                .iter()
+                .enumerate()
+                .skip(1)
+                .filter(|(_, spec)| spec.stable_spy_baker_target)
+                .filter_map(|(position, _)| {
+                    search.spy_converted_at[position]
+                        .map(|event| (position as u8, event))
+                })
+                .collect();
+            fn expand_clear_boundaries(
+                conversions: &[(u8, usize)],
+                order_len: usize,
+                index: usize,
+                current: &mut Vec<(u8, usize)>,
+                timelines: &mut HashSet<BakerSpyTimeline>,
+            ) {
+                if index == conversions.len() {
+                    timelines.insert(BakerSpyTimeline {
+                        converted_at: conversions.to_vec(),
+                        clears_before: current.clone(),
+                    });
+                    return;
+                }
+                let (position, conversion_event) = conversions[index];
+                // `order_len` represents a delayed Reveal that has not resumed
+                // before any later captured Day observation. All observation
+                // indices are strictly less than `order_len`.
+                for clear_before in conversion_event + 1..=order_len {
+                    current.push((position, clear_before));
+                    expand_clear_boundaries(
+                        conversions,
+                        order_len,
+                        index + 1,
+                        current,
+                        timelines,
+                    );
+                    current.pop();
+                }
+            }
+            expand_clear_boundaries(
+                &conversions,
+                order.len(),
+                0,
+                &mut Vec::new(),
+                timelines,
+            );
+        }
+        return;
+    }
+    if !seen.insert((index, search.clone())) {
+        return;
+    }
+    for next in process_reveal(problem, &search, order[index], index) {
+        exact_search_collect_spy_timelines(
+            problem,
+            order,
+            index + 1,
+            next,
+            seen,
+            timelines,
+        );
+    }
 }
 
 fn legacy_search(
@@ -703,10 +901,40 @@ fn legacy_search(
     events.iter().enumerate().any(|(event_index, position)| {
         let bit = 1u16 << event_index;
         remaining & bit != 0
-            && process_reveal(problem, &search, *position)
+            && process_reveal(problem, &search, *position, event_index)
                 .into_iter()
                 .any(|next| legacy_search(problem, events, remaining ^ bit, next, seen))
     })
+}
+
+fn stable_spy_baker_target_at(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if state.baker_rule_version.as_deref() != Some(BAKER_CURRENT_RULE)
+        || !stable_evil_origin_role_at(position, scenario, state)
+            .is_some_and(|role| normalize_role(role) == "spy")
+        || !observed_final_role(position, state)
+            .is_some_and(|role| normalize_role(role) == "baker")
+    {
+        return false;
+    }
+
+    let twin_touched = scenario.twin_trace.as_ref().is_some_and(|trace| {
+        trace.actor_position == position
+            || matches!(
+                &trace.outcome,
+                crate::types::TwinStartOutcome::Swap {
+                    neighbor_position,
+                    ..
+                } if *neighbor_position == position
+            )
+    });
+    let shaman_touched = scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        trace.source_position == position || trace.target_position == position
+    });
+    !twin_touched && !shaman_touched && scenario.puppet_position != Some(position)
 }
 
 fn build_problem<'a>(
@@ -714,6 +942,10 @@ fn build_problem<'a>(
     state: &'a GameState,
     required_erased_role: Option<&str>,
 ) -> Option<Problem<'a>> {
+    let exact = state.baker_rule_version.as_deref() == Some(BAKER_CURRENT_RULE);
+    let stable_spy_baker_targets: HashSet<u8> = (1..=state.n_cards)
+        .filter(|position| stable_spy_baker_target_at(*position, scenario, state))
+        .collect();
     let mut role_names = Vec::new();
     let mut role_indices = HashMap::new();
     let mut role_caps = Vec::new();
@@ -728,19 +960,37 @@ fn build_problem<'a>(
             role_caps.push(1);
         }
     }
+    let villager_role_count = role_names.len();
+    let spy_role = if stable_spy_baker_targets.is_empty() {
+        None
+    } else if let Some(index) = role_indices.get("spy").copied() {
+        Some(index)
+    } else {
+        let index = u8::try_from(role_names.len()).ok()?;
+        let authored_spies = state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "spy")
+            .count();
+        role_indices.insert("spy".to_string(), index);
+        role_names.push("spy".to_string());
+        role_caps.push(u8::try_from(authored_spies).ok()?);
+        Some(index)
+    };
     let baker_role = role_indices.get("baker").copied();
     let required_erased_role =
         required_erased_role.and_then(|role| role_indices.get(&normalize_role(role)).copied());
     if required_erased_role.is_some_and(|role| role >= 32) {
         return None;
     }
-    let exact = state.baker_rule_version.as_deref() == Some(BAKER_CURRENT_RULE);
     let generated = scenario.chancellor_added_outcast_position();
 
     let mut specs = vec![
         SeatSpec {
             definite_villager: false,
             optional_villager: false,
+            stable_spy_baker_target: false,
             final_projection: FinalProjection::Unknown,
         };
         usize::from(state.n_cards) + 1
@@ -752,6 +1002,15 @@ fn build_problem<'a>(
 
     for position in 1..=state.n_cards {
         let index = usize::from(position);
+        if stable_spy_baker_targets.contains(&position) {
+            specs[index] = SeatSpec {
+                definite_villager: false,
+                optional_villager: false,
+                stable_spy_baker_target: true,
+                final_projection: FinalProjection::Baker,
+            };
+            continue;
+        }
         if excluded_from_good_villagers(position, scenario, state) {
             continue;
         }
@@ -782,6 +1041,7 @@ fn build_problem<'a>(
         specs[index] = SeatSpec {
             definite_villager: definite,
             optional_villager: optional,
+            stable_spy_baker_target: false,
             final_projection,
         };
     }
@@ -846,7 +1106,9 @@ fn build_problem<'a>(
         role_names,
         role_indices,
         role_caps,
+        villager_role_count,
         baker_role,
+        spy_role,
         specs,
         required_optional_villagers,
         anonymous_erased_villagers,
@@ -1044,6 +1306,70 @@ pub(super) fn validate_baker_history(scenario: &Scenario, state: &GameState) -> 
     history_exists(scenario, state, None)
 }
 
+/// Enumerate complete current Baker histories only when a stable physical Spy
+/// is proven to finish as Baker. Each returned timeline keeps the exact source
+/// reveal at which the Spy's stale Villager registerAs will be replaced by
+/// Baker's null registerAs on the internal delayed Reveal. Ordinary states use
+/// one empty timeline, preserving their pre-existing Knitter projection.
+pub(super) fn baker_spy_conversion_timelines(
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<BakerSpyTimeline> {
+    let has_stable_spy_target = (1..=state.n_cards)
+        .any(|position| stable_spy_baker_target_at(position, scenario, state));
+    if !has_stable_spy_target {
+        return vec![BakerSpyTimeline::default()];
+    }
+
+    let Some(problem) = build_problem(scenario, state, None) else {
+        return Vec::new();
+    };
+    if !problem.exact || problem.baker_role.is_none() || !coherent_exact_order(&problem) {
+        return Vec::new();
+    }
+
+    let previous_roles: Vec<Option<u8>> = if let Some(trace) = scenario.shaman_trace.as_ref() {
+        trace
+            .target_previous_roles
+            .iter()
+            .filter_map(|role| problem.role_index(role).map(Some))
+            .collect()
+    } else {
+        vec![None]
+    };
+    let mut timelines = HashSet::new();
+    for previous in previous_roles {
+        let Some(initial) = initialize_for_shaman_previous(&problem, previous) else {
+            continue;
+        };
+        for mut initial in initial_villager_assignments(&problem, initial) {
+            for &position in &state.night_kills {
+                if position > 0 && position <= state.n_cards {
+                    initial.revealed[usize::from(position)] = true;
+                }
+            }
+            let order_set: HashSet<u8> = state.reveal_order.iter().copied().collect();
+            for &position in &state.executed {
+                if position > 0
+                    && position <= state.n_cards
+                    && !order_set.contains(&position)
+                {
+                    initial.revealed[usize::from(position)] = true;
+                }
+            }
+            exact_search_collect_spy_timelines(
+                &problem,
+                &state.reveal_order,
+                0,
+                initial,
+                &mut HashSet::new(),
+                &mut timelines,
+            );
+        }
+    }
+    timelines.into_iter().collect()
+}
+
 pub(super) fn baker_history_can_erase_role(
     scenario: &Scenario,
     state: &GameState,
@@ -1121,6 +1447,39 @@ mod tests {
 
         state.reveal_order = vec![1, 2, 3];
         assert!(!validate_baker_history(&Scenario::default(), &state));
+    }
+
+    #[test]
+    fn hidden_stable_spy_can_become_baker_and_preserve_its_real_name() {
+        let mut state = state(
+            &["Baker"],
+            vec![
+                card(1, "Baker", json!({"original_role": "original"})),
+                card(2, "Baker", json!({"original_role": "Spy"})),
+            ],
+            &[1, 2],
+        );
+        state.deck.minions = vec!["Spy".to_string()];
+        let mut scenario = Scenario::default();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+
+        assert!(validate_baker_history(&scenario, &state));
+        let timelines = baker_spy_conversion_timelines(&scenario, &state);
+        assert!(timelines.iter().any(|timeline| {
+            timeline.registered_evil_at_observation(2, 2, &state) == Some(true)
+        }));
+        assert!(timelines.iter().any(|timeline| {
+            timeline.registered_evil_at_observation(2, 2, &state) == Some(false)
+        }));
+
+        state.reveal_order = vec![2, 1];
+        assert!(!validate_baker_history(&scenario, &state));
+        assert!(baker_spy_conversion_timelines(&scenario, &state).is_empty());
+
+        state.reveal_order = vec![1, 2];
+        state.deck.minions = vec!["Pooka".to_string()];
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+        assert!(!validate_baker_history(&scenario, &state));
     }
 
     #[test]

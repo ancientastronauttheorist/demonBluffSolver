@@ -6,8 +6,9 @@ mod helpers;
 pub use helpers::*;
 
 use baker::{
-    baker_history_can_erase_role, medium_uses_baker_history,
-    validate_baker_history, BAKER_CURRENT_RULE,
+    baker_history_can_erase_role, baker_spy_conversion_timelines,
+    medium_uses_baker_history, validate_baker_history, BakerSpyTimeline,
+    BAKER_CURRENT_RULE,
 };
 use disguisers::validate_clean_doppel_source_support;
 
@@ -177,20 +178,12 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // "#R shut up!" instead of giving their own clue.
     if !validate_rambler_shut_ups(scenario, state) { return false; }
 
-    // Wretch's register-as draw is stored on the physical Character. Current
-    // Scout and Oracle observations that selected the same explicit Wretch
-    // data must all admit one stable Minion draw.
-    if !validate_current_register_as_consistency(scenario, state) { return false; }
-
-    // Current Poet/Bounty Hunter observations must share one physical
-    // assignment for every still-anonymous natural Wretch identity.
-    if !validate_current_bounty_hunter_wretch_consistency(scenario, state) { return false; }
-
-    // Current direct and Poet Medium observations share the same hidden
-    // ordinary-Outcast identities, Spy register-as cache, and persistent raw
-    // bluff pointers. Per-card existential checks must not choose mutually
-    // incompatible worlds for those stored surfaces.
-    if !validate_current_medium_consistency(scenario, state) {
+    // Every audited native-current registered-alignment provider observes one
+    // physical natural-Wretch assignment. The same joint search also retains
+    // explicit Wretch registerAs labels, Medium's stored Spy/raw-bluff surfaces,
+    // and the shared Baker/Spy chronology instead of solving those dimensions
+    // independently.
+    if !validate_current_hidden_surface_consistency(scenario, state) {
         return false;
     }
 
@@ -571,6 +564,12 @@ fn validate_enlightened(card: &CardInfo, scenario: &Scenario, state: &GameState)
 }
 
 fn validate_knitter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, KNITTER_CURRENT_VARIANT_FIELD, "Knitter") {
+        Ok(Some(source)) => return validate_current_knitter(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let claimed = match info_i64(&card.info_parsed, "evil_pairs") {
         Some(v) => v,
         None => return true,
@@ -655,6 +654,7 @@ const SCOUT_CURRENT_VARIANT_FIELD: &str = "scout_variant";
 const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
 const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
 const MEDIUM_CURRENT_VARIANT_FIELD: &str = "medium_variant";
+const KNITTER_CURRENT_VARIANT_FIELD: &str = "knitter_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -679,7 +679,8 @@ fn current_passive_payload_source(
                 && !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(MEDIUM_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(MEDIUM_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(KNITTER_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -750,18 +751,126 @@ fn parse_current_lover_claim(
     (card.info_text == expected_text).then_some(claimed)
 }
 
-fn current_lover_possible_actual_counts(
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentLoverSupport {
+    actual: i64,
+    anonymous_wretches: AnonymousWretchConstraints,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum BakerSpyObservationPhase {
+    Unaffected,
+    BeforeConversion,
+    PendingRegisterAsReset,
+    Reset,
+}
+
+fn baker_spy_observation_phase(
+    position: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    state: &GameState,
+) -> Option<BakerSpyObservationPhase> {
+    if !timeline.contains_position(position) {
+        return Some(BakerSpyObservationPhase::Unaffected);
+    }
+    if !timeline.converted_at_observation(position, observation, state)? {
+        return Some(BakerSpyObservationPhase::BeforeConversion);
+    }
+    if timeline.registered_evil_at_observation(position, observation, state)? {
+        Some(BakerSpyObservationPhase::Reset)
+    } else {
+        Some(BakerSpyObservationPhase::PendingRegisterAsReset)
+    }
+}
+
+fn current_data_role_at_observation(
+    position: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<String> {
+    match baker_spy_observation_phase(position, observation, timeline, state)? {
+        BakerSpyObservationPhase::BeforeConversion => Some("Spy".to_string()),
+        BakerSpyObservationPhase::PendingRegisterAsReset | BakerSpyObservationPhase::Reset => {
+            Some("Baker".to_string())
+        }
+        BakerSpyObservationPhase::Unaffected => current_data_role_at(position, scenario, state),
+    }
+}
+
+fn current_spy_register_as_surface_at_observation(
+    position: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<bool> {
+    match baker_spy_observation_phase(position, observation, timeline, state)? {
+        BakerSpyObservationPhase::BeforeConversion
+        | BakerSpyObservationPhase::PendingRegisterAsReset => Some(true),
+        BakerSpyObservationPhase::Reset => Some(false),
+        BakerSpyObservationPhase::Unaffected => {
+            Some(current_spy_register_as_surface_at(position, scenario, state))
+        }
+    }
+}
+
+fn registered_alignment_at_observation(
+    position: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<EffectiveAlignment> {
+    match baker_spy_observation_phase(position, observation, timeline, state)? {
+        BakerSpyObservationPhase::BeforeConversion
+        | BakerSpyObservationPhase::PendingRegisterAsReset => Some(EffectiveAlignment::Good),
+        BakerSpyObservationPhase::Reset => Some(EffectiveAlignment::Evil),
+        BakerSpyObservationPhase::Unaffected => {
+            if current_spy_register_as_surface_at(position, scenario, state) {
+                Some(EffectiveAlignment::Good)
+            } else {
+                Some(registered_alignment_at(position, scenario, state))
+            }
+        }
+    }
+}
+
+fn current_lover_actual_supports(
     actor: u8,
     scenario: &Scenario,
     state: &GameState,
-) -> Vec<i64> {
-    let adjacent = adjacent_positions(actor, state.n_cards);
-    let known_count = adjacent
-        .iter()
-        .filter(|&&position| {
-            registered_alignment_at(position, scenario, state) == EffectiveAlignment::Evil
+) -> Vec<CurrentLoverSupport> {
+    baker_spy_conversion_timelines(scenario, state)
+        .into_iter()
+        .flat_map(|timeline| {
+            current_lover_actual_supports_for_timeline(actor, scenario, state, &timeline)
         })
-        .count() as i64;
+        .collect()
+}
+
+fn current_lover_actual_supports_for_timeline(
+    actor: u8,
+    scenario: &Scenario,
+    state: &GameState,
+    timeline: &BakerSpyTimeline,
+) -> Vec<CurrentLoverSupport> {
+    if !timeline.supports_observation(actor, state) {
+        return Vec::new();
+    }
+    let adjacent = adjacent_positions(actor, state.n_cards);
+    let mut known_count = 0;
+    for &position in &adjacent {
+        let Some(alignment) =
+            registered_alignment_at_observation(position, actor, timeline, scenario, state)
+        else {
+            return Vec::new();
+        };
+        known_count += i64::from(alignment == EffectiveAlignment::Evil);
+    }
     let anonymous_wretches: HashSet<u8> = anonymous_natural_wretch_candidates(scenario, state)
         .into_iter()
         .collect();
@@ -774,10 +883,14 @@ fn current_lover_possible_actual_counts(
     adjacent_candidates.dedup();
 
     if adjacent_candidates.is_empty() {
-        return vec![known_count];
+        return vec![CurrentLoverSupport {
+            actual: known_count,
+            anonymous_wretches: AnonymousWretchConstraints::empty(),
+            baker_spy_timeline: timeline.clone(),
+        }];
     }
 
-    let mut possible_counts = Vec::new();
+    let mut supports = Vec::new();
     for mask in 0..(1usize << adjacent_candidates.len()) {
         let mut required = HashSet::new();
         let mut forbidden = HashSet::new();
@@ -801,20 +914,45 @@ fn current_lover_possible_actual_counts(
                 .iter()
                 .filter(|position| required.contains(position))
                 .count() as i64;
-        if !possible_counts.contains(&actual) {
-            possible_counts.push(actual);
+        let support = CurrentLoverSupport {
+            actual,
+            anonymous_wretches: AnonymousWretchConstraints {
+                required,
+                forbidden,
+            },
+            baker_spy_timeline: timeline.clone(),
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
         }
     }
-    possible_counts
+    supports
 }
 
-fn current_lover_authored_evil_slots(
+#[cfg(test)]
+fn current_lover_possible_actual_counts(
+    actor: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<i64> {
+    let mut counts = Vec::new();
+    for support in current_lover_actual_supports(actor, scenario, state) {
+        if !counts.contains(&support.actual) {
+            counts.push(support.actual);
+        }
+    }
+    counts
+}
+
+fn current_authored_evil_slots(
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<u8> {
-    // The HUD objective counts the generated Puppet, while Empath.BluffAct's
-    // CurrentScript Minion+Demon domain does not. A registered-Evil Wretch is
-    // runtime Good and therefore needs no corresponding adjustment here.
+    // The HUD objective counts the generated Puppet, while native passive
+    // bluff domains based on CurrentScript Minion+Demon do not. A registered-
+    // Evil Wretch is runtime Good and therefore needs no corresponding
+    // adjustment here. GameState does not retain the two CurrentScript lists,
+    // so the HUD minus the represented Puppet is their closest exact surface.
     // Do not derive this from deck lists: those are role pools and may contain
     // undealt Evil identities.
     state
@@ -828,23 +966,340 @@ fn validate_current_lover(
     state: &GameState,
     source: CurrentPassivePayloadSource,
 ) -> bool {
+    !current_lover_supports(card, scenario, state, source).is_empty()
+}
+
+fn current_lover_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentLoverSupport> {
     let Some(claimed) = parse_current_lover_claim(card, source, state) else {
-        return false;
+        return Vec::new();
     };
-    let possible_actuals = current_lover_possible_actual_counts(card.position, scenario, state);
+    let supports = current_lover_actual_supports(card.position, scenario, state);
 
     match truth_status(card.position, scenario, state) {
-        TruthStatus::Truthful => possible_actuals.contains(&claimed),
+        TruthStatus::Truthful => supports
+            .into_iter()
+            .filter(|support| support.actual == claimed)
+            .collect(),
         TruthStatus::Lying => {
             let Some(authored_evil_slots) =
-                current_lover_authored_evil_slots(scenario, state)
+                current_authored_evil_slots(scenario, state)
             else {
-                return false;
+                return Vec::new();
             };
-            claimed <= i64::from(authored_evil_slots.min(2))
-                && possible_actuals.iter().any(|actual| *actual != claimed)
+            if claimed > i64::from(authored_evil_slots.min(2)) {
+                return Vec::new();
+            }
+            supports
+                .into_iter()
+                .filter(|support| support.actual != claimed)
+                .collect()
         }
     }
+}
+
+fn current_knitter_claim_text(claimed: i64) -> Option<String> {
+    match claimed {
+        0 => Some("Evils are not adjacent to eachother".to_string()),
+        1 => Some("There is only 1 pair of Evil".to_string()),
+        value if value >= 2 => Some(format!("There are {value} pairs of Evil")),
+        _ => None,
+    }
+}
+
+fn parse_current_knitter_claim(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<i64> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Knitter" {
+                return None;
+            }
+            (KNITTER_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str) != Some("Knitter")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str) != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+
+    let claimed = info.get("evil_pairs")?.as_i64()?;
+    if !(0..=i64::from(state.n_cards)).contains(&claimed) {
+        return None;
+    }
+    let expected_text = current_knitter_claim_text(claimed)?;
+    (card.info_text == expected_text).then_some(claimed)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentKnitterSupport {
+    actual: i64,
+    required_anonymous_wretches: HashSet<u8>,
+    forbidden_anonymous_wretches: HashSet<u8>,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+/// Native GetRegisterAlignment is registerAs-first. Spy's stored Villager
+/// registerAs therefore overrides a runtime-Evil body; absent that cache,
+/// runtime Evil remains registered Evil. Wretch supplies a Minion registerAs
+/// on a runtime-Good body. A missing current identity is the grouped ordinary-
+/// Good surface on which a natural Wretch may still be hiding.
+fn current_knitter_known_registered_evil_at(
+    position: u8,
+    observation: u8,
+    baker_spy_timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<bool> {
+    registered_alignment_at_observation(
+        position,
+        observation,
+        baker_spy_timeline,
+        scenario,
+        state,
+    )
+    .map(|alignment| alignment == EffectiveAlignment::Evil)
+}
+
+fn current_knitter_pair_count(n_cards: u8, registered_evil: &HashSet<u8>) -> i64 {
+    if n_cards == 0 {
+        return 0;
+    }
+    (1..=n_cards)
+        .filter(|position| {
+            let next = if *position == n_cards {
+                1
+            } else {
+                *position + 1
+            };
+            registered_evil.contains(position) && registered_evil.contains(&next)
+        })
+        .count() as i64
+}
+
+fn current_knitter_worlds(
+    observation: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentKnitterSupport> {
+    let candidates = anonymous_natural_wretch_candidates(scenario, state);
+    let mut worlds = Vec::new();
+
+    fn enumerate(
+        index: usize,
+        candidates: &[u8],
+        required: &mut HashSet<u8>,
+        forbidden: &mut HashSet<u8>,
+        known_evil: &HashSet<u8>,
+        baker_spy_timeline: &BakerSpyTimeline,
+        scenario: &Scenario,
+        state: &GameState,
+        worlds: &mut Vec<CurrentKnitterSupport>,
+    ) {
+        if index == candidates.len() {
+            if !anonymous_wretch_assignment_possible(required, forbidden, scenario, state) {
+                return;
+            }
+            let mut registered_evil = known_evil.clone();
+            registered_evil.extend(required.iter().copied());
+            worlds.push(CurrentKnitterSupport {
+                actual: current_knitter_pair_count(state.n_cards, &registered_evil),
+                required_anonymous_wretches: required.clone(),
+                forbidden_anonymous_wretches: forbidden.clone(),
+                baker_spy_timeline: baker_spy_timeline.clone(),
+            });
+            return;
+        }
+
+        let position = candidates[index];
+        forbidden.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            baker_spy_timeline,
+            scenario,
+            state,
+            worlds,
+        );
+        forbidden.remove(&position);
+
+        required.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            required,
+            forbidden,
+            known_evil,
+            baker_spy_timeline,
+            scenario,
+            state,
+            worlds,
+        );
+        required.remove(&position);
+    }
+
+    for baker_spy_timeline in baker_spy_conversion_timelines(scenario, state) {
+        let mut known_evil = HashSet::new();
+        for position in 1..=state.n_cards {
+            if current_knitter_known_registered_evil_at(
+                position,
+                observation,
+                &baker_spy_timeline,
+                scenario,
+                state,
+            ) == Some(true)
+            {
+                known_evil.insert(position);
+            }
+        }
+        enumerate(
+            0,
+            &candidates,
+            &mut HashSet::new(),
+            &mut HashSet::new(),
+            &known_evil,
+            &baker_spy_timeline,
+            scenario,
+            state,
+            &mut worlds,
+        );
+    }
+    worlds
+}
+
+fn current_knitter_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentKnitterSupport> {
+    let Some(claimed) = parse_current_knitter_claim(card, source, state) else {
+        return Vec::new();
+    };
+    let worlds = current_knitter_worlds(card.position, scenario, state);
+    match truth_status(card.position, scenario, state) {
+        TruthStatus::Truthful => worlds
+            .into_iter()
+            .filter(|world| world.actual == claimed)
+            .collect(),
+        TruthStatus::Lying => {
+            let Some(authored_evil_slots) = current_authored_evil_slots(scenario, state) else {
+                return Vec::new();
+            };
+            let native_upper_exclusive = i64::from(authored_evil_slots.max(2));
+            worlds
+                .into_iter()
+                .filter(|world| claimed < native_upper_exclusive && claimed != world.actual)
+                .collect()
+        }
+    }
+}
+
+fn validate_current_knitter(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_knitter_supports(card, scenario, state, source).is_empty()
+}
+
+#[cfg(test)]
+fn validate_current_knitter_consistency(scenario: &Scenario, state: &GameState) -> bool {
+    let mut observations = Vec::new();
+    for card in &state.cards {
+        if state.executed.contains(&card.position)
+            && state.confirmed_evil.contains(&card.position)
+            && !state.executed_evil_roles.contains_key(&card.position)
+        {
+            continue;
+        }
+        let Ok(Some(source)) =
+            current_passive_payload_source(card, KNITTER_CURRENT_VARIANT_FIELD, "Knitter")
+        else {
+            continue;
+        };
+        let supports = current_knitter_supports(card, scenario, state, source);
+        if supports.is_empty() {
+            return false;
+        }
+        observations.push(supports);
+    }
+
+    fn search(
+        index: usize,
+        observations: &[Vec<CurrentKnitterSupport>],
+        required_wretches: &HashSet<u8>,
+        forbidden_wretches: &HashSet<u8>,
+        baker_spy_timeline: Option<&BakerSpyTimeline>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == observations.len() {
+            return true;
+        }
+        for support in &observations[index] {
+            if baker_spy_timeline
+                .is_some_and(|selected| selected != &support.baker_spy_timeline)
+            {
+                continue;
+            }
+            let mut required = required_wretches.clone();
+            required.extend(&support.required_anonymous_wretches);
+            let mut forbidden = forbidden_wretches.clone();
+            forbidden.extend(&support.forbidden_anonymous_wretches);
+            if !required.is_disjoint(&forbidden)
+                || !anonymous_wretch_assignment_possible(&required, &forbidden, scenario, state)
+            {
+                continue;
+            }
+            if search(
+                index + 1,
+                observations,
+                &required,
+                &forbidden,
+                Some(&support.baker_spy_timeline),
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+        }
+        false
+    }
+
+    search(
+        0,
+        &observations,
+        &HashSet::new(),
+        &HashSet::new(),
+        None,
+        scenario,
+        state,
+    )
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -897,12 +1352,29 @@ fn parse_current_scout_claim<'a>(
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum CurrentScoutLabelSupport {
     Direct,
-    WretchRegisterAs(String),
+    RegisterAs(String),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct AnonymousWretchConstraints {
+    required: HashSet<u8>,
+    forbidden: HashSet<u8>,
+}
+
+impl AnonymousWretchConstraints {
+    fn empty() -> Self {
+        Self {
+            required: HashSet::new(),
+            forbidden: HashSet::new(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct CurrentRegisterAsSupport {
     register_as: Option<(u8, String)>,
+    anonymous_wretches: AnonymousWretchConstraints,
+    baker_spy_timeline: BakerSpyTimeline,
 }
 
 fn canonical_minion_role(role: &str) -> bool {
@@ -922,14 +1394,31 @@ fn current_wretch_register_as_label_allowed(role: &str, state: &GameState) -> bo
 
 fn current_scout_label_support(
     target: u8,
+    observation: u8,
     claimed_role: &str,
     truth: TruthStatus,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<CurrentScoutLabelSupport> {
-    let Some(data_role) = current_data_role_at(target, scenario, state) else {
+    let Some(data_role) =
+        current_data_role_at_observation(target, observation, timeline, scenario, state)
+    else {
         return None;
     };
+
+    if truth == TruthStatus::Truthful
+        && current_spy_register_as_surface_at_observation(
+            target,
+            observation,
+            timeline,
+            scenario,
+            state,
+        )?
+    {
+        return current_medium_spy_register_as_label_allowed(claimed_role, state)
+            .then(|| CurrentScoutLabelSupport::RegisterAs(normalize_role(claimed_role)));
+    }
 
     // Truthful Scout names Character.GetRegisterAs(). Wretch is the one
     // modeled current data identity whose register-as role differs: it samples
@@ -938,7 +1427,7 @@ fn current_scout_label_support(
     // fallback with any canonical Minion. Bluff Scout names dataRef directly.
     if truth == TruthStatus::Truthful && roles_equal(&data_role, "Wretch") {
         return current_wretch_register_as_label_allowed(claimed_role, state)
-            .then(|| CurrentScoutLabelSupport::WretchRegisterAs(normalize_role(claimed_role)));
+            .then(|| CurrentScoutLabelSupport::RegisterAs(normalize_role(claimed_role)));
     }
 
     roles_equal(&data_role, claimed_role).then_some(CurrentScoutLabelSupport::Direct)
@@ -946,17 +1435,29 @@ fn current_scout_label_support(
 
 fn current_known_registered_distance(
     anchor: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
-) -> Option<i64> {
-    (1..=state.n_cards)
-        .filter(|&position| {
-            position != anchor
-                && registered_alignment_at(position, scenario, state)
-                    == EffectiveAlignment::Evil
-        })
-        .map(|position| i64::from(circle_distance(anchor, position, state.n_cards)))
-        .min()
+) -> Option<Option<i64>> {
+    let mut distance = None;
+    for position in 1..=state.n_cards {
+        if position == anchor {
+            continue;
+        }
+        if registered_alignment_at_observation(
+            position,
+            observation,
+            timeline,
+            scenario,
+            state,
+        )? == EffectiveAlignment::Evil
+        {
+            let candidate = i64::from(circle_distance(anchor, position, state.n_cards));
+            distance = Some(distance.map_or(candidate, |known: i64| known.min(candidate)));
+        }
+    }
+    Some(distance)
 }
 
 fn anonymous_natural_wretch_candidates(scenario: &Scenario, state: &GameState) -> Vec<u8> {
@@ -990,16 +1491,16 @@ fn anonymous_wretch_assignment_possible(
     )
 }
 
-fn registered_distance_can_equal_with_anonymous_wretch(
+fn registered_distance_equal_anonymous_wretch_supports(
     anchor: u8,
     claimed: i64,
     known_distance: Option<i64>,
     anonymous_wretch_candidates: &[u8],
     scenario: &Scenario,
     state: &GameState,
-) -> bool {
+) -> Vec<AnonymousWretchConstraints> {
     if known_distance.is_some_and(|distance| distance < claimed) {
-        return false;
+        return Vec::new();
     }
 
     let forbidden_closer: HashSet<u8> = anonymous_wretch_candidates
@@ -1009,71 +1510,81 @@ fn registered_distance_can_equal_with_anonymous_wretch(
         .collect();
     if known_distance == Some(claimed) {
         return anonymous_wretch_assignment_possible(
-            &HashSet::new(),
-            &forbidden_closer,
-            scenario,
-            state,
-        );
+            &HashSet::new(), &forbidden_closer, scenario, state,
+        )
+        .then_some(AnonymousWretchConstraints {
+            required: HashSet::new(),
+            forbidden: forbidden_closer,
+        })
+        .into_iter()
+        .collect();
     }
 
     anonymous_wretch_candidates
         .iter()
         .copied()
         .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) == claimed)
-        .any(|position| {
+        .filter_map(|position| {
+            let required = HashSet::from([position]);
             anonymous_wretch_assignment_possible(
-                &HashSet::from([position]),
-                &forbidden_closer,
-                scenario,
-                state,
+                &required, &forbidden_closer, scenario, state,
             )
+            .then(|| AnonymousWretchConstraints {
+                required,
+                forbidden: forbidden_closer.clone(),
+            })
         })
+        .collect()
 }
 
-fn registered_distance_can_differ_with_anonymous_wretch(
+fn registered_distance_different_anonymous_wretch_supports(
     anchor: u8,
     claimed: i64,
     known_distance: Option<i64>,
     anonymous_wretch_candidates: &[u8],
     scenario: &Scenario,
     state: &GameState,
-) -> bool {
+) -> Vec<AnonymousWretchConstraints> {
     if known_distance.is_some_and(|distance| distance < claimed) {
-        return true;
+        return vec![AnonymousWretchConstraints::empty()];
     }
 
     // A closer Wretch makes the native nearest distance false even if another
     // Wretch is simultaneously forced at the claimed distance.
-    if anonymous_wretch_candidates
+    let mut supports: Vec<AnonymousWretchConstraints> = anonymous_wretch_candidates
         .iter()
         .copied()
         .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) < claimed)
-        .any(|position| {
+        .filter_map(|position| {
+            let required = HashSet::from([position]);
             anonymous_wretch_assignment_possible(
-                &HashSet::from([position]),
-                &HashSet::new(),
-                scenario,
-                state,
+                &required, &HashSet::new(), scenario, state,
             )
+            .then(|| AnonymousWretchConstraints {
+                required,
+                forbidden: HashSet::new(),
+            })
         })
-    {
-        return true;
-    }
-
-    if known_distance == Some(claimed) {
-        return false;
-    }
-    let forbidden_equal: HashSet<u8> = anonymous_wretch_candidates
-        .iter()
-        .copied()
-        .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) == claimed)
         .collect();
-    anonymous_wretch_assignment_possible(
-        &HashSet::new(),
-        &forbidden_equal,
-        scenario,
-        state,
-    )
+
+    if known_distance != Some(claimed) {
+        let forbidden_equal: HashSet<u8> = anonymous_wretch_candidates
+            .iter()
+            .copied()
+            .filter(|position| {
+                i64::from(circle_distance(anchor, *position, state.n_cards)) == claimed
+            })
+            .collect();
+        if anonymous_wretch_assignment_possible(
+            &HashSet::new(), &forbidden_equal, scenario, state,
+        ) {
+            supports.push(AnonymousWretchConstraints {
+                required: HashSet::new(),
+                forbidden: forbidden_equal,
+            });
+        }
+    }
+    supports
 }
 
 fn current_scout_supports(
@@ -1090,81 +1601,113 @@ fn current_scout_supports(
     };
     let truth = truth_status(card.position, scenario, state);
     let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
-
-    match claim {
-        CurrentScoutClaim::OneEvil => {
-            if truth == TruthStatus::Lying {
-                return Vec::new();
-            }
-            let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
-            let supported = (1..=state.n_cards)
-                .filter(|&target| is_runtime_evil_at(target, scenario, state))
-                .any(|target| {
-                    current_known_registered_distance(target, scenario, state).is_none()
-                        && anonymous_wretch_assignment_possible(
-                            &HashSet::new(),
-                            &forbidden,
+    let mut all_supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+        match claim {
+            CurrentScoutClaim::OneEvil => {
+                if truth == TruthStatus::Lying {
+                    continue;
+                }
+                let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
+                let supported = (1..=state.n_cards)
+                    .filter(|&target| is_runtime_evil_at(target, scenario, state))
+                    .any(|target| {
+                        current_known_registered_distance(
+                            target,
+                            card.position,
+                            &timeline,
                             scenario,
                             state,
-                        )
-                });
-            supported
-                .then_some(CurrentRegisterAsSupport { register_as: None })
-                .into_iter()
-                .collect()
-        }
-        CurrentScoutClaim::Numeric { evil_role, distance } => {
-            if truth == TruthStatus::Lying && !(1..=3).contains(&distance) {
-                return Vec::new();
-            }
-
-            let mut supports = Vec::new();
-            for target in (1..=state.n_cards)
-                .filter(|&target| is_runtime_evil_at(target, scenario, state))
-            {
-                let Some(label_support) = current_scout_label_support(
-                    target,
-                    evil_role,
-                    truth,
-                    scenario,
-                    state,
-                ) else {
-                    continue;
-                };
-                let known_distance = current_known_registered_distance(target, scenario, state);
-                let distance_supported = match truth {
-                    TruthStatus::Truthful => registered_distance_can_equal_with_anonymous_wretch(
-                        target,
-                        distance,
-                        known_distance,
-                        &anonymous_wretches,
-                        scenario,
-                        state,
-                    ),
-                    TruthStatus::Lying => registered_distance_can_differ_with_anonymous_wretch(
-                        target,
-                        distance,
-                        known_distance,
-                        &anonymous_wretches,
-                        scenario,
-                        state,
-                    ),
-                };
-                if !distance_supported {
-                    continue;
-                }
-                let register_as = match label_support {
-                    CurrentScoutLabelSupport::Direct => None,
-                    CurrentScoutLabelSupport::WretchRegisterAs(role) => Some((target, role)),
-                };
-                let support = CurrentRegisterAsSupport { register_as };
-                if !supports.contains(&support) {
-                    supports.push(support);
+                        ) == Some(None)
+                            && anonymous_wretch_assignment_possible(
+                                &HashSet::new(),
+                                &forbidden,
+                                scenario,
+                                state,
+                            )
+                    });
+                if supported {
+                    all_supports.push(CurrentRegisterAsSupport {
+                        register_as: None,
+                        anonymous_wretches: AnonymousWretchConstraints {
+                            required: HashSet::new(),
+                            forbidden,
+                        },
+                        baker_spy_timeline: timeline,
+                    });
                 }
             }
-            supports
+            CurrentScoutClaim::Numeric { evil_role, distance } => {
+                if truth == TruthStatus::Lying && !(1..=3).contains(&distance) {
+                    continue;
+                }
+                for target in (1..=state.n_cards)
+                    .filter(|&target| is_runtime_evil_at(target, scenario, state))
+                {
+                    let Some(label_support) = current_scout_label_support(
+                        target,
+                        card.position,
+                        evil_role,
+                        truth,
+                        &timeline,
+                        scenario,
+                        state,
+                    ) else {
+                        continue;
+                    };
+                    let Some(known_distance) = current_known_registered_distance(
+                        target,
+                        card.position,
+                        &timeline,
+                        scenario,
+                        state,
+                    ) else {
+                        continue;
+                    };
+                    let wretch_supports = match truth {
+                        TruthStatus::Truthful => {
+                            registered_distance_equal_anonymous_wretch_supports(
+                                target,
+                                distance,
+                                known_distance,
+                                &anonymous_wretches,
+                                scenario,
+                                state,
+                            )
+                        }
+                        TruthStatus::Lying => {
+                            registered_distance_different_anonymous_wretch_supports(
+                                target,
+                                distance,
+                                known_distance,
+                                &anonymous_wretches,
+                                scenario,
+                                state,
+                            )
+                        }
+                    };
+                    let register_as = match label_support {
+                        CurrentScoutLabelSupport::Direct => None,
+                        CurrentScoutLabelSupport::RegisterAs(role) => Some((target, role)),
+                    };
+                    for anonymous_wretches in wretch_supports {
+                        let support = CurrentRegisterAsSupport {
+                            register_as: register_as.clone(),
+                            anonymous_wretches,
+                            baker_spy_timeline: timeline.clone(),
+                        };
+                        if !all_supports.contains(&support) {
+                            all_supports.push(support);
+                        }
+                    }
+                }
+            }
         }
     }
+    all_supports
 }
 
 fn validate_current_scout(
@@ -1246,11 +1789,22 @@ struct CurrentOracleMinionSupport {
 
 fn current_oracle_minion_target_support(
     target: u8,
+    observation: u8,
     minion_role: &str,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<CurrentOracleMinionSupport> {
-    match current_data_role_at(target, scenario, state) {
+    if current_spy_register_as_surface_at_observation(
+        target,
+        observation,
+        timeline,
+        scenario,
+        state,
+    )? {
+        return None;
+    }
+    match current_data_role_at_observation(target, observation, timeline, scenario, state) {
         Some(data_role) if roles_equal(&data_role, "Wretch") => {
             current_wretch_register_as_label_allowed(minion_role, state).then(|| {
                 CurrentOracleMinionSupport {
@@ -1272,7 +1826,7 @@ fn current_oracle_minion_target_support(
         None => current_wretch_register_as_label_allowed(minion_role, state).then_some(
             CurrentOracleMinionSupport {
                 required_anonymous_wretch: Some(target),
-                register_as: None,
+                register_as: Some((target, normalize_role(minion_role))),
             },
         ),
     }
@@ -1282,11 +1836,19 @@ fn current_oracle_minion_target_support(
 /// or `None` when this is already a modeled registered-Good target.
 fn current_oracle_good_target_forbidden_wretch(
     target: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<Option<u8>> {
-    let data_role = current_data_role_at(target, scenario, state);
-    if registered_alignment_at(target, scenario, state) != EffectiveAlignment::Good
+    let data_role = current_data_role_at_observation(target, observation, timeline, scenario, state);
+    if registered_alignment_at_observation(
+        target,
+        observation,
+        timeline,
+        scenario,
+        state,
+    )? != EffectiveAlignment::Good
         || data_role.as_deref().is_some_and(|role| roles_equal(role, "Wretch"))
     {
         return None;
@@ -1308,113 +1870,175 @@ fn current_oracle_supports(
     };
     let truth = truth_status(card.position, scenario, state);
     let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
-
-    match claim {
-        CurrentOracleClaim::NoMinions => {
-            if truth == TruthStatus::Lying {
-                return Vec::new();
-            }
-            let known_current_minion = (1..=state.n_cards).any(|position| {
-                current_data_role_at(position, scenario, state).is_some_and(|role| {
-                    roles_equal(&role, "Wretch")
-                        || get_card(&role).is_some_and(|card| card.faction == Faction::Minion)
-                })
-            });
-            if known_current_minion {
-                return Vec::new();
-            }
-            let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
-            anonymous_wretch_assignment_possible(
-                &HashSet::new(),
-                &forbidden,
-                scenario,
-                state,
-            )
-            .then_some(CurrentRegisterAsSupport { register_as: None })
-            .into_iter()
-            .collect()
+    let mut all_supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
         }
-        CurrentOracleClaim::Positive {
-            targets,
-            minion_role,
-        } if truth == TruthStatus::Lying => {
-            if targets[0] == targets[1]
-                || !current_wretch_register_as_label_allowed(minion_role, state)
-            {
-                return Vec::new();
-            }
-            let mut forbidden = HashSet::new();
-            for target in targets {
-                let Some(anonymous_forbidden) = current_oracle_good_target_forbidden_wretch(
-                    target,
-                    scenario,
-                    state,
-                ) else {
-                    return Vec::new();
-                };
-                if let Some(position) = anonymous_forbidden {
-                    forbidden.insert(position);
+        match claim {
+            CurrentOracleClaim::NoMinions => {
+                if truth == TruthStatus::Lying {
+                    continue;
                 }
-            }
-            anonymous_wretch_assignment_possible(
-                &HashSet::new(),
-                &forbidden,
-                scenario,
-                state,
-            )
-            .then_some(CurrentRegisterAsSupport { register_as: None })
-            .into_iter()
-            .collect()
-        }
-        CurrentOracleClaim::Positive {
-            targets,
-            minion_role,
-        } => {
-            let orientations = if targets[0] == targets[1] {
-                vec![(targets[0], targets[1])]
-            } else {
-                vec![(targets[0], targets[1]), (targets[1], targets[0])]
-            };
-            let mut supports = Vec::new();
-            for (minion_target, good_target) in orientations {
-                let Some(minion_support) = current_oracle_minion_target_support(
-                    minion_target,
-                    minion_role,
-                    scenario,
-                    state,
-                ) else {
+                let mut known_current_minion = false;
+                let mut coherent = true;
+                for position in 1..=state.n_cards {
+                    let spy_register_as = current_spy_register_as_surface_at_observation(
+                        position,
+                        card.position,
+                        &timeline,
+                        scenario,
+                        state,
+                    );
+                    let Some(spy_register_as) = spy_register_as else {
+                        coherent = false;
+                        break;
+                    };
+                    if spy_register_as {
+                        continue;
+                    }
+                    if current_data_role_at_observation(
+                        position,
+                        card.position,
+                        &timeline,
+                        scenario,
+                        state,
+                    )
+                    .is_some_and(|role| {
+                        roles_equal(&role, "Wretch")
+                            || get_card(&role)
+                                .is_some_and(|card| card.faction == Faction::Minion)
+                    }) {
+                        known_current_minion = true;
+                        break;
+                    }
+                }
+                if !coherent || known_current_minion {
                     continue;
-                };
-                let Some(anonymous_good_forbidden) = current_oracle_good_target_forbidden_wretch(
-                    good_target,
-                    scenario,
-                    state,
-                ) else {
-                    continue;
-                };
-                let required: HashSet<u8> = minion_support
-                    .required_anonymous_wretch
-                    .into_iter()
-                    .collect();
-                let forbidden: HashSet<u8> = anonymous_good_forbidden.into_iter().collect();
-                if !anonymous_wretch_assignment_possible(
-                    &required,
+                }
+                let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
+                if anonymous_wretch_assignment_possible(
+                    &HashSet::new(),
                     &forbidden,
                     scenario,
                     state,
                 ) {
-                    continue;
-                }
-                let support = CurrentRegisterAsSupport {
-                    register_as: minion_support.register_as,
-                };
-                if !supports.contains(&support) {
-                    supports.push(support);
+                    all_supports.push(CurrentRegisterAsSupport {
+                        register_as: None,
+                        anonymous_wretches: AnonymousWretchConstraints {
+                            required: HashSet::new(),
+                            forbidden,
+                        },
+                        baker_spy_timeline: timeline,
+                    });
                 }
             }
-            supports
+            CurrentOracleClaim::Positive {
+                targets,
+                minion_role,
+            } if truth == TruthStatus::Lying => {
+                if targets[0] == targets[1]
+                    || !current_wretch_register_as_label_allowed(minion_role, state)
+                {
+                    continue;
+                }
+                let mut forbidden = HashSet::new();
+                let mut supported = true;
+                for target in targets {
+                    let Some(anonymous_forbidden) =
+                        current_oracle_good_target_forbidden_wretch(
+                            target,
+                            card.position,
+                            &timeline,
+                            scenario,
+                            state,
+                        )
+                    else {
+                        supported = false;
+                        break;
+                    };
+                    if let Some(position) = anonymous_forbidden {
+                        forbidden.insert(position);
+                    }
+                }
+                if supported
+                    && anonymous_wretch_assignment_possible(
+                        &HashSet::new(),
+                        &forbidden,
+                        scenario,
+                        state,
+                    )
+                {
+                    all_supports.push(CurrentRegisterAsSupport {
+                        register_as: None,
+                        anonymous_wretches: AnonymousWretchConstraints {
+                            required: HashSet::new(),
+                            forbidden,
+                        },
+                        baker_spy_timeline: timeline,
+                    });
+                }
+            }
+            CurrentOracleClaim::Positive {
+                targets,
+                minion_role,
+            } => {
+                let orientations = if targets[0] == targets[1] {
+                    vec![(targets[0], targets[1])]
+                } else {
+                    vec![(targets[0], targets[1]), (targets[1], targets[0])]
+                };
+                for (minion_target, good_target) in orientations {
+                    let Some(minion_support) = current_oracle_minion_target_support(
+                        minion_target,
+                        card.position,
+                        minion_role,
+                        &timeline,
+                        scenario,
+                        state,
+                    ) else {
+                        continue;
+                    };
+                    let Some(anonymous_good_forbidden) =
+                        current_oracle_good_target_forbidden_wretch(
+                            good_target,
+                            card.position,
+                            &timeline,
+                            scenario,
+                            state,
+                        )
+                    else {
+                        continue;
+                    };
+                    let required: HashSet<u8> = minion_support
+                        .required_anonymous_wretch
+                        .into_iter()
+                        .collect();
+                    let forbidden: HashSet<u8> = anonymous_good_forbidden.into_iter().collect();
+                    if !anonymous_wretch_assignment_possible(
+                        &required,
+                        &forbidden,
+                        scenario,
+                        state,
+                    ) {
+                        continue;
+                    }
+                    let support = CurrentRegisterAsSupport {
+                        register_as: minion_support.register_as,
+                        anonymous_wretches: AnonymousWretchConstraints {
+                            required,
+                            forbidden,
+                        },
+                        baker_spy_timeline: timeline.clone(),
+                    };
+                    if !all_supports.contains(&support) {
+                        all_supports.push(support);
+                    }
+                }
+            }
         }
     }
+    all_supports
 }
 
 fn validate_current_oracle(
@@ -1426,6 +2050,7 @@ fn validate_current_oracle(
     !current_oracle_supports(card, scenario, state, source).is_empty()
 }
 
+#[cfg(test)]
 fn validate_current_register_as_consistency(
     scenario: &Scenario,
     state: &GameState,
@@ -1506,12 +2131,10 @@ fn validate_current_register_as_consistency(
         false
     }
 
-    // Anonymous natural Wretch seats remain intentionally grouped inside a
-    // Scenario and have no persisted physical assignment to join across
-    // separate observations. Each observation is nevertheless checked against
-    // one exact required/forbidden placement. Only explicit current-data
-    // Wretches have a stable identity surface that Scout and Oracle can join
-    // here without inventing hidden state.
+    // This focused helper is retained for explicit-label unit isolation.
+    // check_scenario joins both labels and anonymous natural-Wretch seats
+    // across all current passive providers in
+    // validate_current_hidden_surface_consistency.
     search(0, &observations, &mut HashMap::new())
 }
 
@@ -1814,18 +2437,24 @@ struct CurrentMediumSupport {
     forbidden_anonymous_wretches: HashSet<u8>,
     register_as: Option<(u8, String)>,
     raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: BakerSpyTimeline,
 }
 
-fn empty_current_medium_support() -> CurrentMediumSupport {
+fn empty_current_medium_support(timeline: &BakerSpyTimeline) -> CurrentMediumSupport {
     CurrentMediumSupport {
         required_anonymous_wretches: HashSet::new(),
         forbidden_anonymous_wretches: HashSet::new(),
         register_as: None,
         raw_bluff: None,
+        baker_spy_timeline: timeline.clone(),
     }
 }
 
-fn current_medium_spy_surface_at(position: u8, scenario: &Scenario, state: &GameState) -> bool {
+fn current_spy_register_as_surface_at(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
     stable_evil_origin_role_at(position, scenario, state)
         .is_some_and(|role| normalize_role(role) == "spy")
         || current_data_role_at(position, scenario, state)
@@ -1919,18 +2548,26 @@ fn current_medium_anonymous_role_possible(
 
 fn current_medium_truth_target_support(
     target: u8,
+    observation: u8,
     claimed_role: &str,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<CurrentMediumSupport> {
-    let mut support = empty_current_medium_support();
+    let mut support = empty_current_medium_support(timeline);
 
     // Spy is the important register-as-first exception to the shared helper's
     // runtime-Evil shortcut. A stable Spy keeps its physical cache; a represented
     // seat whose current provider is Spy can execute Spy Start and cache its own
     // Villager (for example Shaman's immediate copied Start). This is not a
     // generic claim that Twin moves another Character's physical registerAs.
-    if current_medium_spy_surface_at(target, scenario, state) {
+    if current_spy_register_as_surface_at_observation(
+        target,
+        observation,
+        timeline,
+        scenario,
+        state,
+    )? {
         if !current_medium_spy_register_as_label_allowed(claimed_role, state) {
             return None;
         }
@@ -1941,7 +2578,7 @@ fn current_medium_truth_target_support(
     if is_runtime_evil_at(target, scenario, state) {
         return None;
     }
-    match current_data_role_at(target, scenario, state) {
+    match current_data_role_at_observation(target, observation, timeline, scenario, state) {
         Some(data_role) if roles_equal(&data_role, "Wretch") => None,
         Some(data_role) => {
             current_medium_known_role_matches(target, &data_role, claimed_role, scenario, state)
@@ -1959,17 +2596,28 @@ fn current_medium_truth_target_support(
 
 fn current_medium_require_registered_evil(
     position: u8,
+    observation: u8,
     support: &mut CurrentMediumSupport,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    if current_medium_spy_surface_at(position, scenario, state) {
+    let Some(spy_register_as) = current_spy_register_as_surface_at_observation(
+        position,
+        observation,
+        timeline,
+        scenario,
+        state,
+    ) else {
+        return false;
+    };
+    if spy_register_as {
         return false;
     }
     if is_runtime_evil_at(position, scenario, state) {
         return true;
     }
-    match current_data_role_at(position, scenario, state) {
+    match current_data_role_at_observation(position, observation, timeline, scenario, state) {
         Some(role) => roles_equal(&role, "Wretch"),
         None => {
             support.required_anonymous_wretches.insert(position);
@@ -1981,36 +2629,51 @@ fn current_medium_require_registered_evil(
 fn current_medium_raw_bluff_holder_at(
     position: u8,
     actor: u8,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> CurrentMediumRawBluffHolder {
-    let acquisition_surface = if is_runtime_evil_at(position, scenario, state)
-        || scenario.puppet_position == Some(position)
-        || scenario.drunk_position == Some(position)
-        || scenario.doppelganger_position == Some(position)
-        || current_medium_spy_surface_at(position, scenario, state)
-    {
-        CurrentMediumRawBluffHolder::Proven
-    } else if current_data_role_at(position, scenario, state)
-        .as_deref()
-        .is_some_and(|role| {
-        matches!(
-            normalize_role(role).as_str(),
-            "drunk" | "doppelganger" | "mutant"
-        ) || get_card(role)
-            .is_some_and(|card| matches!(card.faction, Faction::Minion | Faction::Demon))
-    }) {
-        CurrentMediumRawBluffHolder::Proven
-    } else if current_medium_mover_history_possible_at(position, scenario, state)
-        || current_data_role_at(position, scenario, state).is_none()
-    {
-        // Raw bluff acquisition happens on delayed Reveal and persists across
-        // later data movement. Scenario deliberately does not encode that
-        // pointer or the exact continuation ordering, so these are genuine
-        // possible holders rather than known-null ordinary Good roles.
-        CurrentMediumRawBluffHolder::Possible
-    } else {
-        CurrentMediumRawBluffHolder::Impossible
+    let acquisition_surface = match baker_spy_observation_phase(position, actor, timeline, state) {
+        Some(BakerSpyObservationPhase::BeforeConversion) => {
+            CurrentMediumRawBluffHolder::Proven
+        }
+        Some(
+            BakerSpyObservationPhase::PendingRegisterAsReset | BakerSpyObservationPhase::Reset,
+        ) => {
+            // Baker's synchronous InitWithNoReset clears Character.bluff. The
+            // later internal Reveal cannot repopulate it because Baker's base
+            // selector is null; stale registerAs/bluffRole do not change that.
+            return CurrentMediumRawBluffHolder::Impossible;
+        }
+        Some(BakerSpyObservationPhase::Unaffected) => {
+            if is_runtime_evil_at(position, scenario, state)
+                || scenario.puppet_position == Some(position)
+                || scenario.drunk_position == Some(position)
+                || scenario.doppelganger_position == Some(position)
+                || current_spy_register_as_surface_at(position, scenario, state)
+            {
+                CurrentMediumRawBluffHolder::Proven
+            } else if current_data_role_at(position, scenario, state)
+                .as_deref()
+                .is_some_and(|role| {
+                    matches!(
+                        normalize_role(role).as_str(),
+                        "drunk" | "doppelganger" | "mutant"
+                    ) || get_card(role).is_some_and(|card| {
+                        matches!(card.faction, Faction::Minion | Faction::Demon)
+                    })
+                })
+            {
+                CurrentMediumRawBluffHolder::Proven
+            } else if current_medium_mover_history_possible_at(position, scenario, state)
+                || current_data_role_at(position, scenario, state).is_none()
+            {
+                CurrentMediumRawBluffHolder::Possible
+            } else {
+                CurrentMediumRawBluffHolder::Impossible
+            }
+        }
+        None => return CurrentMediumRawBluffHolder::Impossible,
     };
 
     if acquisition_surface == CurrentMediumRawBluffHolder::Impossible || position == actor {
@@ -2043,11 +2706,18 @@ fn current_medium_truth_supports(
     actor: u8,
     target: u8,
     claimed_role: &str,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Vec<CurrentMediumSupport> {
-    let Some(mut support) =
-        current_medium_truth_target_support(target, claimed_role, scenario, state)
+    let Some(mut support) = current_medium_truth_target_support(
+        target,
+        actor,
+        claimed_role,
+        timeline,
+        scenario,
+        state,
+    )
     else {
         return Vec::new();
     };
@@ -2059,7 +2729,14 @@ fn current_medium_truth_supports(
     if target == actor {
         for position in 1..=state.n_cards {
             if position != actor
-                && !current_medium_require_registered_evil(position, &mut support, scenario, state)
+                && !current_medium_require_registered_evil(
+                    position,
+                    actor,
+                    &mut support,
+                    timeline,
+                    scenario,
+                    state,
+                )
             {
                 return Vec::new();
             }
@@ -2085,10 +2762,11 @@ fn current_medium_bluff_supports(
     actor: u8,
     target: u8,
     claimed_role: &str,
+    timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Vec<CurrentMediumSupport> {
-    if current_medium_raw_bluff_holder_at(target, actor, scenario, state)
+    if current_medium_raw_bluff_holder_at(target, actor, timeline, scenario, state)
         == CurrentMediumRawBluffHolder::Impossible
     {
         return Vec::new();
@@ -2102,21 +2780,50 @@ fn current_medium_bluff_supports(
     if target == actor
         && (1..=state.n_cards).any(|position| {
             position != actor
-                && current_medium_raw_bluff_holder_at(position, actor, scenario, state)
+                && current_medium_raw_bluff_holder_at(
+                    position,
+                    actor,
+                    timeline,
+                    scenario,
+                    state,
+                )
                     != CurrentMediumRawBluffHolder::Impossible
         })
     {
         return Vec::new();
     }
 
-    let mut support = empty_current_medium_support();
+    let mut support = empty_current_medium_support(timeline);
+    if current_data_role_at_observation(target, actor, timeline, scenario, state).is_none()
+        && !current_medium_mover_history_possible_at(target, scenario, state)
+    {
+        // An anonymous natural Wretch has base-null bluff data. Without a
+        // represented mover/reveal history that could preserve an earlier raw
+        // pointer, selecting this anonymous holder proves it is not Wretch.
+        support.forbidden_anonymous_wretches.insert(target);
+        if !anonymous_wretch_assignment_possible(
+            &support.required_anonymous_wretches,
+            &support.forbidden_anonymous_wretches,
+            scenario,
+            state,
+        ) {
+            return Vec::new();
+        }
+    }
     let normalized = normalize_role(claimed_role);
     // Scenario has neither the persistent Character.bluff pointer nor its value.
     // Once a holder surface is supported, every canonical raw CharacterData label
     // remains possible; deck/faction narrowing would invent certainty across
     // delayed Reveal, Twin/Shaman writes, and stale persisted bluff compositions.
     support.raw_bluff = Some((target, normalized.clone()));
-    if current_medium_spy_surface_at(target, scenario, state) {
+    if current_spy_register_as_surface_at_observation(
+        target,
+        actor,
+        timeline,
+        scenario,
+        state,
+    ) == Some(true)
+    {
         if !current_medium_spy_register_as_label_allowed(claimed_role, state) {
             return Vec::new();
         }
@@ -2135,14 +2842,32 @@ fn current_medium_supports(
     let Some((target, claimed_role)) = parse_current_medium_claim(card, source, state) else {
         return Vec::new();
     };
-    match truth_status(card.position, scenario, state) {
-        TruthStatus::Truthful => {
-            current_medium_truth_supports(card.position, target, claimed_role, scenario, state)
+    let truth = truth_status(card.position, scenario, state);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
         }
-        TruthStatus::Lying => {
-            current_medium_bluff_supports(card.position, target, claimed_role, scenario, state)
-        }
+        supports.extend(match truth {
+            TruthStatus::Truthful => current_medium_truth_supports(
+                card.position,
+                target,
+                claimed_role,
+                &timeline,
+                scenario,
+                state,
+            ),
+            TruthStatus::Lying => current_medium_bluff_supports(
+                card.position,
+                target,
+                claimed_role,
+                &timeline,
+                scenario,
+                state,
+            ),
+        });
     }
+    supports
 }
 
 fn validate_current_medium(
@@ -2154,6 +2879,7 @@ fn validate_current_medium(
     !current_medium_supports(card, scenario, state, source).is_empty()
 }
 
+#[cfg(test)]
 fn validate_current_medium_consistency(scenario: &Scenario, state: &GameState) -> bool {
     let mut observations = Vec::new();
     for card in &state.cards {
@@ -2346,31 +3072,55 @@ fn validate_current_hunter(
     state: &GameState,
     source: CurrentPassivePayloadSource,
 ) -> bool {
+    !current_hunter_supports(card, scenario, state, source).is_empty()
+}
+
+fn current_hunter_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentRegisterAsSupport> {
     if card.position == 0 || card.position > state.n_cards {
-        return false;
+        return Vec::new();
     }
     let Some(claimed) = parse_current_hunter_distance(&card.info_parsed, source, state.n_cards)
     else {
-        return false;
+        return Vec::new();
     };
 
-    let known_distance = current_known_registered_distance(card.position, scenario, state)
-        .or(Some(i64::from(state.n_cards - 1)));
     let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
-
-    match truth_status(card.position, scenario, state) {
-        TruthStatus::Truthful => registered_distance_can_equal_with_anonymous_wretch(
+    let truth = truth_status(card.position, scenario, state);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+        let Some(known_distance) = current_known_registered_distance(
             card.position,
-            claimed,
-            known_distance,
-            &anonymous_wretches,
+            card.position,
+            &timeline,
             scenario,
             state,
-        ),
-        TruthStatus::Lying => {
-            let maximum_bluff = i64::from(state.n_cards / 2);
-            (1..=maximum_bluff).contains(&claimed)
-                && registered_distance_can_differ_with_anonymous_wretch(
+        ) else {
+            continue;
+        };
+        let known_distance = known_distance.or(Some(i64::from(state.n_cards - 1)));
+        let wretch_supports = match truth {
+            TruthStatus::Truthful => registered_distance_equal_anonymous_wretch_supports(
+                card.position,
+                claimed,
+                known_distance,
+                &anonymous_wretches,
+                scenario,
+                state,
+            ),
+            TruthStatus::Lying => {
+                let maximum_bluff = i64::from(state.n_cards / 2);
+                if !(1..=maximum_bluff).contains(&claimed) {
+                    continue;
+                }
+                registered_distance_different_anonymous_wretch_supports(
                     card.position,
                     claimed,
                     known_distance,
@@ -2378,8 +3128,17 @@ fn validate_current_hunter(
                     scenario,
                     state,
                 )
-        }
+            }
+        };
+        supports.extend(wretch_supports.into_iter().map(|anonymous_wretches| {
+            CurrentRegisterAsSupport {
+                register_as: None,
+                anonymous_wretches,
+                baker_spy_timeline: timeline.clone(),
+            }
+        }));
     }
+    supports
 }
 
 fn validate_hunter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -3213,38 +3972,10 @@ fn validate_current_bounty_hunter(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    let known_alignment = registered_alignment_at(target, scenario, state);
-    let anonymous_wretch_candidate =
-        anonymous_natural_wretch_candidates(scenario, state).contains(&target);
-
-    match truth_status(actor, scenario, state) {
-        TruthStatus::Truthful => {
-            if known_alignment == EffectiveAlignment::Evil {
-                return true;
-            }
-            anonymous_wretch_candidate
-                && anonymous_wretch_assignment_possible(
-                    &HashSet::from([target]),
-                    &HashSet::new(),
-                    scenario,
-                    state,
-                )
-        }
-        TruthStatus::Lying => {
-            if known_alignment == EffectiveAlignment::Evil {
-                return false;
-            }
-            !anonymous_wretch_candidate
-                || anonymous_wretch_assignment_possible(
-                    &HashSet::new(),
-                    &HashSet::from([target]),
-                    scenario,
-                    state,
-                )
-        }
-    }
+    !current_bounty_hunter_hidden_supports_for_target(actor, target, scenario, state).is_empty()
 }
 
+#[cfg(test)]
 fn validate_current_bounty_hunter_wretch_consistency(
     scenario: &Scenario,
     state: &GameState,
@@ -3299,6 +4030,326 @@ fn validate_current_bounty_hunter_wretch_consistency(
 
     (required.is_empty() && forbidden.is_empty())
         || anonymous_wretch_assignment_possible(&required, &forbidden, scenario, state)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentHiddenSurfaceSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: Option<BakerSpyTimeline>,
+}
+
+fn current_bounty_hunter_hidden_supports_for_target(
+    actor: u8,
+    target: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentHiddenSurfaceSupport> {
+    let anonymous_wretch_candidate =
+        anonymous_natural_wretch_candidates(scenario, state).contains(&target);
+    let truth = truth_status(actor, scenario, state);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(actor, state) {
+            continue;
+        }
+        let Some(known_alignment) = registered_alignment_at_observation(
+            target,
+            actor,
+            &timeline,
+            scenario,
+            state,
+        ) else {
+            continue;
+        };
+        let anonymous_wretches = match truth {
+            TruthStatus::Truthful if known_alignment == EffectiveAlignment::Evil => {
+                AnonymousWretchConstraints::empty()
+            }
+            TruthStatus::Truthful if anonymous_wretch_candidate => AnonymousWretchConstraints {
+                required: HashSet::from([target]),
+                forbidden: HashSet::new(),
+            },
+            TruthStatus::Truthful => continue,
+            TruthStatus::Lying if known_alignment == EffectiveAlignment::Evil => continue,
+            TruthStatus::Lying if anonymous_wretch_candidate => AnonymousWretchConstraints {
+                required: HashSet::new(),
+                forbidden: HashSet::from([target]),
+            },
+            TruthStatus::Lying => AnonymousWretchConstraints::empty(),
+        };
+        if anonymous_wretch_assignment_possible(
+            &anonymous_wretches.required,
+            &anonymous_wretches.forbidden,
+            scenario,
+            state,
+        ) {
+            supports.push(CurrentHiddenSurfaceSupport {
+                anonymous_wretches,
+                register_as: None,
+                raw_bluff: None,
+                baker_spy_timeline: Some(timeline),
+            });
+        }
+    }
+    supports
+}
+
+fn current_bounty_hunter_hidden_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentHiddenSurfaceSupport> {
+    let Some(target) = parse_current_bounty_hunter_target(card, state) else {
+        return Vec::new();
+    };
+    current_bounty_hunter_hidden_supports_for_target(
+        card.position,
+        target,
+        scenario,
+        state,
+    )
+}
+
+fn validate_current_hidden_surface_consistency(
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let mut observations: Vec<Vec<CurrentHiddenSurfaceSupport>> = Vec::new();
+    for card in &state.cards {
+        if state.executed.contains(&card.position)
+            && state.confirmed_evil.contains(&card.position)
+            && !state.executed_evil_roles.contains_key(&card.position)
+        {
+            continue;
+        }
+
+        let apparent = normalize_role(&card.apparent_role);
+        let copied = card
+            .info_parsed
+            .get("copied_role")
+            .and_then(serde_json::Value::as_str);
+        let supports = if apparent == "lover"
+            || (apparent == "poet" && copied == Some("Lover"))
+        {
+            match current_passive_payload_source(card, LOVER_CURRENT_VARIANT_FIELD, "Lover") {
+                Ok(Some(source)) => Some(
+                    current_lover_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "scout"
+            || (apparent == "poet" && copied == Some("Scout"))
+        {
+            match current_passive_payload_source(card, SCOUT_CURRENT_VARIANT_FIELD, "Scout") {
+                Ok(Some(source)) => Some(
+                    current_scout_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            register_as: support.register_as,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "oracle"
+            || (apparent == "poet" && copied == Some("Oracle"))
+        {
+            match current_passive_payload_source(card, ORACLE_CURRENT_VARIANT_FIELD, "Oracle") {
+                Ok(Some(source)) => Some(
+                    current_oracle_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            register_as: support.register_as,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "hunter"
+            || (apparent == "poet" && copied == Some("Hunter"))
+        {
+            match current_passive_payload_source(card, HUNTER_CURRENT_VARIANT_FIELD, "Hunter") {
+                Ok(Some(source)) => Some(
+                    current_hunter_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "medium"
+            || (apparent == "poet" && copied == Some("Medium"))
+        {
+            match current_passive_payload_source(card, MEDIUM_CURRENT_VARIANT_FIELD, "Medium") {
+                Ok(Some(source)) => Some(
+                    current_medium_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: AnonymousWretchConstraints {
+                                required: support.required_anonymous_wretches,
+                                forbidden: support.forbidden_anonymous_wretches,
+                            },
+                            register_as: support.register_as,
+                            raw_bluff: support.raw_bluff,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "knitter"
+            || (apparent == "poet" && copied == Some("Knitter"))
+        {
+            match current_passive_payload_source(card, KNITTER_CURRENT_VARIANT_FIELD, "Knitter") {
+                Ok(Some(source)) => Some(
+                    current_knitter_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: AnonymousWretchConstraints {
+                                required: support.required_anonymous_wretches,
+                                forbidden: support.forbidden_anonymous_wretches,
+                            },
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "poet" && copied == Some("Bounty Hunter") {
+            (card
+                .info_parsed
+                .get("poet_variant")
+                .and_then(serde_json::Value::as_str)
+                == Some(POET_CURRENT_VARIANT))
+            .then(|| current_bounty_hunter_hidden_supports(card, scenario, state))
+        } else {
+            None
+        };
+
+        if let Some(supports) = supports {
+            if supports.is_empty() {
+                return false;
+            }
+            observations.push(supports);
+        }
+    }
+
+    fn search(
+        index: usize,
+        observations: &[Vec<CurrentHiddenSurfaceSupport>],
+        required: &HashSet<u8>,
+        forbidden: &HashSet<u8>,
+        register_as: &HashMap<u8, String>,
+        raw_bluffs: &HashMap<u8, String>,
+        baker_spy_timeline: Option<&BakerSpyTimeline>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == observations.len() {
+            return true;
+        }
+        for support in &observations[index] {
+            let mut next_required = required.clone();
+            next_required.extend(&support.anonymous_wretches.required);
+            let mut next_forbidden = forbidden.clone();
+            next_forbidden.extend(&support.anonymous_wretches.forbidden);
+            if !next_required.is_disjoint(&next_forbidden)
+                || !anonymous_wretch_assignment_possible(
+                    &next_required,
+                    &next_forbidden,
+                    scenario,
+                    state,
+                )
+            {
+                continue;
+            }
+
+            let mut next_register_as = register_as.clone();
+            if let Some((position, role)) = support.register_as.as_ref() {
+                if next_register_as
+                    .get(position)
+                    .is_some_and(|selected| selected != role)
+                {
+                    continue;
+                }
+                next_register_as.insert(*position, role.clone());
+            }
+            let mut next_raw_bluffs = raw_bluffs.clone();
+            if let Some((position, role)) = support.raw_bluff.as_ref() {
+                if next_raw_bluffs
+                    .get(position)
+                    .is_some_and(|selected| selected != role)
+                {
+                    continue;
+                }
+                next_raw_bluffs.insert(*position, role.clone());
+            }
+            if let Some(timeline) = support.baker_spy_timeline.as_ref() {
+                if baker_spy_timeline.is_some_and(|selected| selected != timeline) {
+                    continue;
+                }
+            }
+            let next_timeline = support
+                .baker_spy_timeline
+                .as_ref()
+                .or(baker_spy_timeline);
+            if search(
+                index + 1,
+                observations,
+                &next_required,
+                &next_forbidden,
+                &next_register_as,
+                &next_raw_bluffs,
+                next_timeline,
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+        }
+        false
+    }
+
+    search(
+        0,
+        &observations,
+        &HashSet::new(),
+        &HashSet::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        None,
+        scenario,
+        state,
+    )
 }
 
 fn validate_bounty_hunter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -3471,8 +4522,7 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             parse_current_medium_claim(card, CurrentPassivePayloadSource::Poet, state).is_some()
         }
         "Knitter" => {
-            poet_has_exact_fields(info, &["evil_pairs"])
-                && poet_integer_in_range(info, "evil_pairs", 0, n)
+            parse_current_knitter_claim(card, CurrentPassivePayloadSource::Poet, state).is_some()
         }
         "Hunter" => parse_current_hunter_distance(
             info,
@@ -4357,6 +5407,10 @@ mod tests {
                 .and_then(serde_json::Value::as_u64)
                 .zip(payload.get("good_role").and_then(serde_json::Value::as_str))
                 .map(|(target, role)| current_medium_text(target as u8, role)),
+            "Knitter" => payload
+                .get("evil_pairs")
+                .and_then(serde_json::Value::as_i64)
+                .and_then(current_knitter_claim_text),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -4439,6 +5493,23 @@ mod tests {
                 "medium_variant": "public_current",
                 "good_position": target,
                 "good_role": role,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_knitter(pos: u8, claimed: serde_json::Value) -> CardInfo {
+        let info_text = claimed
+            .as_i64()
+            .and_then(current_knitter_claim_text)
+            .unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Knitter",
+            json!({
+                "knitter_variant": "public_current",
+                "evil_pairs": claimed,
             }),
         );
         card.info_text = info_text;
@@ -5772,6 +6843,643 @@ mod tests {
     }
 
     #[test]
+    fn current_knitter_schema_is_closed_text_bound_and_fail_closed() {
+        let state = base_state(3, vec![]);
+        let scenario = empty_scenario();
+
+        for (claimed, text) in [
+            (0, "Evils are not adjacent to eachother"),
+            (1, "There is only 1 pair of Evil"),
+            (2, "There are 2 pairs of Evil"),
+            (3, "There are 3 pairs of Evil"),
+        ] {
+            let direct = current_knitter(1, json!(claimed));
+            assert_eq!(direct.info_text, text);
+            assert_eq!(
+                parse_current_knitter_claim(&direct, CurrentPassivePayloadSource::Direct, &state),
+                Some(claimed),
+            );
+
+            let poet = current_poet("Knitter", json!({"evil_pairs": claimed}));
+            assert_eq!(poet.info_text, text);
+            assert!(validate_current_poet_payload(&poet, &state, "Knitter"));
+        }
+
+        for text in [
+            "Evil are not adjacent to eachother",
+            "Evils are not adjacent to each other",
+            "There is only one pair of Evil",
+            "There are 2 pairs of evil",
+            "",
+        ] {
+            let mut wrong_text = current_knitter(1, json!(0));
+            wrong_text.info_text = text.to_string();
+            assert!(!validate_knitter(&wrong_text, &scenario, &state));
+        }
+
+        for claimed in [json!(-1), json!(4), json!(true), json!("1"), json!(1.5)] {
+            assert!(!validate_knitter(
+                &current_knitter(1, claimed),
+                &scenario,
+                &state,
+            ));
+        }
+
+        let mut extra = current_knitter(1, json!(0));
+        extra.info_parsed.insert("targets".to_string(), json!([]));
+        assert!(!validate_knitter(&extra, &scenario, &state));
+
+        for position in [0, 4] {
+            assert!(!validate_knitter(
+                &current_knitter(position, json!(0)),
+                &scenario,
+                &state,
+            ));
+        }
+
+        let mut noncanonical = current_knitter(1, json!(0));
+        noncanonical.apparent_role = "knitter".to_string();
+        assert!(!validate_knitter(&noncanonical, &scenario, &state));
+
+        for info in [
+            json!({"knitter_variant": "future", "evil_pairs": 0}),
+            json!({"knitter_variant": 7, "evil_pairs": 0}),
+            json!({
+                "knitter_variant": "public_current",
+                "poet_variant": "public_current",
+                "evil_pairs": 0,
+            }),
+            json!({"medium_variant": "public_current", "evil_pairs": 0}),
+        ] {
+            let mut malformed = make_card(1, "Knitter", info);
+            malformed.info_text = current_knitter_claim_text(0).unwrap();
+            assert!(!validate_knitter(&malformed, &scenario, &state));
+        }
+    }
+
+    #[test]
+    fn current_knitter_uses_native_singleton_double_edge_and_circle_geometry() {
+        assert_eq!(current_knitter_pair_count(1, &HashSet::new()), 0);
+        assert_eq!(current_knitter_pair_count(1, &HashSet::from([1])), 1);
+        assert_eq!(current_knitter_pair_count(2, &HashSet::from([1])), 0);
+        assert_eq!(current_knitter_pair_count(2, &HashSet::from([1, 2])), 2);
+        assert_eq!(current_knitter_pair_count(3, &HashSet::from([1, 2])), 1);
+        assert_eq!(current_knitter_pair_count(3, &HashSet::from([1, 3])), 1);
+        assert_eq!(current_knitter_pair_count(3, &HashSet::from([1, 2, 3])), 3);
+        assert_eq!(current_knitter_pair_count(4, &HashSet::from([1, 2, 3])), 2);
+
+        let singleton = base_state(1, vec![]);
+        let mut singleton_puppet = empty_scenario();
+        singleton_puppet.puppet_position = Some(1);
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &singleton_puppet,
+            &singleton,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(0)),
+            &singleton_puppet,
+            &singleton,
+        ));
+
+        let two = base_state(2, vec![]);
+        let mut two_evil = empty_scenario();
+        two_evil.puppet_position = Some(1);
+        two_evil.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_knitter(
+            &current_knitter(1, json!(2)),
+            &two_evil,
+            &two,
+        ));
+
+        let three = base_state(3, vec![]);
+        let mut adjacent = empty_scenario();
+        adjacent.evil_positions.insert(2, "Witch".to_string());
+        adjacent.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &adjacent,
+            &three,
+        ));
+    }
+
+    #[test]
+    fn current_knitter_includes_actor_dead_hidden_executed_and_register_as_surfaces() {
+        let mut state = base_state(4, vec![]);
+        state.executed = vec![2];
+        state.night_kills = vec![3];
+        let mut hidden_dead = empty_scenario();
+        hidden_dead.evil_positions.insert(2, "Witch".to_string());
+        hidden_dead.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &hidden_dead,
+            &state,
+        ));
+
+        let mut spy = empty_scenario();
+        spy.evil_positions.insert(2, "Spy".to_string());
+        spy.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_knitter(
+            &current_knitter(1, json!(0)),
+            &spy,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(1)),
+            &spy,
+            &state,
+        ));
+
+        state.cards = vec![make_card(2, "Wretch", json!({}))];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut explicit_wretch = empty_scenario();
+        explicit_wretch
+            .evil_positions
+            .insert(3, "Pooka".to_string());
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &explicit_wretch,
+            &state,
+        ));
+
+        let mut moved_state = base_state(
+            4,
+            vec![
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Wretch", json!({})),
+            ],
+        );
+        moved_state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut moved_wretch = empty_scenario();
+        moved_wretch
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        moved_wretch
+            .evil_positions
+            .insert(4, "Pooka".to_string());
+        moved_wretch.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 2,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 4,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 3,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+        assert!(validate_knitter(
+            &current_knitter(1, json!(0)),
+            &moved_wretch,
+            &moved_state,
+        ));
+
+        state.cards = vec![make_card(2, "Scout", json!({}))];
+        let mut copied_wretch = explicit_wretch.clone();
+        copied_wretch.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Wretch".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(validate_knitter(
+            &current_knitter(1, json!(2)),
+            &copied_wretch,
+            &state,
+        ));
+
+        let mut copied_spy = hidden_dead;
+        copied_spy.evil_positions.remove(&2);
+        copied_spy.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Spy".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(validate_knitter(
+            &current_knitter(1, json!(0)),
+            &copied_spy,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_knitter_projects_baker_spy_reset_at_each_observation() {
+        let mut immediate_poet = current_poet("Knitter", json!({"evil_pairs": 0}));
+        immediate_poet.position = 5;
+        let mut state = base_state(
+            6,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+                current_knitter(4, json!(0)),
+                immediate_poet,
+                current_knitter(6, json!(1)),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Knitter".to_string(),
+            "Poet".to_string(),
+            "Knitter".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.n_evil = 2;
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![4, 1, 5, 6, 2, 3];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+
+        // #4 is before conversion. The immediately following Poet at #5 may
+        // still see Spy's stale Good registerAs at +0.2s, while #6 can see the
+        // delayed Baker-null reset. One monotonic reset boundary supports all.
+        assert!(check_scenario(&scenario, &state));
+
+        // A reset cannot reverse: post-reset Evil at #5 followed by stale Good
+        // at #6 has no single Baker timing witness.
+        state.cards[4] = {
+            let mut poet = current_poet("Knitter", json!({"evil_pairs": 1}));
+            poet.position = 5;
+            poet
+        };
+        state.cards[5] = current_knitter(6, json!(0));
+        assert!(!check_scenario(&scenario, &state));
+    }
+
+    #[test]
+    fn baker_spy_same_event_has_baker_data_stale_register_as_and_no_raw_bluff() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Baker".to_string(), "Scout".to_string()];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+
+        let timelines = baker_spy_conversion_timelines(&scenario, &state);
+        assert!(!timelines.is_empty());
+        for timeline in timelines {
+            assert_eq!(
+                baker_spy_observation_phase(2, 1, &timeline, &state),
+                Some(BakerSpyObservationPhase::PendingRegisterAsReset)
+            );
+            assert_eq!(
+                current_data_role_at_observation(2, 1, &timeline, &scenario, &state).as_deref(),
+                Some("Baker")
+            );
+            assert_eq!(
+                registered_alignment_at_observation(2, 1, &timeline, &scenario, &state),
+                Some(EffectiveAlignment::Good)
+            );
+            assert_eq!(
+                current_medium_raw_bluff_holder_at(2, 1, &timeline, &scenario, &state),
+                CurrentMediumRawBluffHolder::Impossible
+            );
+        }
+    }
+
+    #[test]
+    fn current_medium_cannot_select_a_baker_cleared_spy_raw_bluff() {
+        let medium = current_medium(2, json!(3), json!("Scout"));
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                medium.clone(),
+                make_card(3, "Baker", json!({"original_role": "Spy"})),
+                make_card(4, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Medium".to_string(),
+            "Scout".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Spy".to_string());
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+        scenario.corrupted.insert(2);
+
+        assert!(validate_baker_history(&scenario, &state));
+        assert!(!validate_medium(&medium, &scenario, &state));
+    }
+
+    #[test]
+    fn lover_and_bounty_hunter_share_one_monotonic_baker_spy_reset() {
+        let lover = current_lover(5, json!(1));
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 4}));
+        bounty.position = 3;
+        let mut state = base_state(
+            8,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Scout", json!({})),
+                bounty.clone(),
+                make_card(4, "Baker", json!({"original_role": "Spy"})),
+                lover.clone(),
+                make_card(8, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Scout".to_string(),
+            "Poet".to_string(),
+            "Lover".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.n_evil = 2;
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Spy".to_string());
+        scenario.evil_positions.insert(8, "Pooka".to_string());
+        scenario.corrupted.insert(3);
+
+        // Each clue is independently reachable: Lover can choose an early
+        // reset, while lying Bounty Hunter can choose a late reset. In this
+        // order those witnesses contradict because stale registerAs cannot
+        // return after Lover already counted the Spy as Evil.
+        state.reveal_order = vec![1, 5, 2, 3, 4, 8];
+        assert!(validate_lover(&lover, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state
+        ));
+
+        // Observing the stale-Good Bounty target first and the reset-Evil
+        // Lover adjacency later has one monotonic boundary.
+        state.reveal_order = vec![1, 3, 2, 5, 4, 8];
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state
+        ));
+    }
+
+    #[test]
+    fn current_knitter_bluff_uses_authored_slots_native_endpoints_and_collision_removal() {
+        let mut state = base_state(5, vec![]);
+        state.n_evil = 3;
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        lying.evil_positions.insert(2, "Witch".to_string());
+        lying.evil_positions.insert(3, "Pooka".to_string());
+
+        assert!(validate_knitter(
+            &current_knitter(1, json!(0)),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(1)),
+            &lying,
+            &state,
+        ));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(2)),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(3)),
+            &lying,
+            &state,
+        ));
+
+        state.n_evil = 2;
+        state.cards = vec![make_card(4, "Wretch", json!({}))];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        assert!(validate_knitter(
+            &current_knitter(1, json!(0)),
+            &lying,
+            &state,
+        ));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(2)),
+            &lying,
+            &state,
+        ));
+
+        state.n_evil = 3;
+        state.cards.clear();
+        state.deck.outcasts.clear();
+        state.deck.minions = vec!["Witch".to_string(), "Poisoner".to_string()];
+        state.deck.demons = vec!["Pooka".to_string(), "Lilis".to_string()];
+        let mut generated_puppet = empty_scenario();
+        generated_puppet.corrupted.insert(1);
+        generated_puppet.puppet_position = Some(5);
+        assert_eq!(current_authored_evil_slots(&generated_puppet, &state), Some(2));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &generated_puppet,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(2)),
+            &generated_puppet,
+            &state,
+        ));
+
+        generated_puppet.puppet_position = None;
+        state.n_evil = 1;
+        assert_eq!(current_authored_evil_slots(&generated_puppet, &state), Some(1));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &generated_puppet,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(2)),
+            &generated_puppet,
+            &state,
+        ));
+
+        state.n_evil = 0;
+        let mut zero_authored_slots = empty_scenario();
+        zero_authored_slots.corrupted.insert(1);
+        assert_eq!(current_authored_evil_slots(&zero_authored_slots, &state), Some(0));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(0)),
+            &zero_authored_slots,
+            &state,
+        ));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(1)),
+            &zero_authored_slots,
+            &state,
+        ));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(2)),
+            &zero_authored_slots,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_knitter_anonymous_wretch_worlds_are_exact_and_joint() {
+        let direct = current_knitter(1, json!(0));
+        let mut poet = current_poet("Knitter", json!({"evil_pairs": 1}));
+        poet.position = 3;
+        let mut state = base_state(3, vec![direct.clone(), poet.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.puppet_position = Some(3);
+
+        assert_eq!(anonymous_natural_wretch_candidates(&scenario, &state), vec![2]);
+        assert!(validate_knitter(&direct, &scenario, &state));
+        assert!(validate_poet(&poet, &scenario, &state));
+        assert!(!validate_current_knitter_consistency(&scenario, &state));
+
+        poet.info_parsed.insert("evil_pairs".to_string(), json!(0));
+        poet.info_text = current_knitter_claim_text(0).unwrap();
+        state.cards[1] = poet.clone();
+        assert!(validate_poet(&poet, &scenario, &state));
+        assert!(validate_current_knitter_consistency(&scenario, &state));
+    }
+
+    #[test]
+    fn current_hidden_surfaces_share_one_anonymous_wretch_world_across_providers() {
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        bounty.position = 2;
+        let knitter = current_knitter(1, json!(0));
+        let mut state = base_state(3, vec![knitter.clone(), bounty.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.puppet_position = Some(2);
+
+        assert!(validate_knitter(&knitter, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+
+        state.cards[0] = current_knitter(1, json!(1));
+        assert!(validate_current_hidden_surface_consistency(&scenario, &state));
+
+        let scout = current_scout(1, json!({"one_evil": true}));
+        state.cards[0] = scout.clone();
+        assert!(validate_scout(&scout, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+
+        let medium = current_medium(1, json!(3), json!("Scout"));
+        scenario.corrupted.insert(1);
+        state.cards[0] = medium.clone();
+        assert!(validate_medium(&medium, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+
+        let mut hunter_bounty = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        hunter_bounty.position = 3;
+        let hunter = current_hunter(1, json!(2));
+        state = base_state(
+            4,
+            vec![
+                hunter.clone(),
+                hunter_bounty.clone(),
+                make_card(4, "Scout", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        scenario = empty_scenario();
+        scenario.puppet_position = Some(3);
+        assert!(validate_hunter(&hunter, &scenario, &state));
+        assert!(validate_poet(&hunter_bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+
+        let lover = current_lover(1, json!(0));
+        state.cards[0] = lover.clone();
+        assert!(validate_lover(&lover, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+    }
+
+    #[test]
+    fn current_oracles_share_the_anonymous_wretch_register_as_draw() {
+        let direct = current_oracle(
+            1,
+            json!({"targets": [3, 4], "minion_role": "Witch"}),
+        );
+        let mut poet = current_poet(
+            "Oracle",
+            json!({"targets": [3, 4], "minion_role": "Twin Minion"}),
+        );
+        poet.position = 2;
+        let mut state = base_state(
+            4,
+            vec![direct.clone(), poet.clone(), make_card(4, "Scout", json!({}))],
+        );
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Witch".to_string(), "Twin Minion".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.puppet_position = Some(2);
+
+        assert!(validate_oracle(&direct, &scenario, &state));
+        assert!(validate_poet(&poet, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(&scenario, &state));
+
+        poet = current_poet(
+            "Oracle",
+            json!({"targets": [3, 4], "minion_role": "Witch"}),
+        );
+        poet.position = 2;
+        state.cards[1] = poet;
+        assert!(validate_current_hidden_surface_consistency(&scenario, &state));
+    }
+
+    #[test]
+    fn current_knitter_direct_poet_parity_and_unmarked_legacy_preservation() {
+        let direct = current_knitter(1, json!(1));
+        let poet = current_poet("Knitter", json!({"evil_pairs": 1}));
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Witch".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        let mut state = base_state(4, vec![direct.clone()]);
+        state.n_evil = 2;
+
+        assert!(validate_knitter(&direct, &scenario, &state));
+        assert!(validate_poet(&poet, &scenario, &state));
+
+        scenario.corrupted.insert(1);
+        let direct_lie = current_knitter(1, json!(0));
+        let poet_lie = current_poet("Knitter", json!({"evil_pairs": 0}));
+        assert!(validate_knitter(&direct_lie, &scenario, &state));
+        assert!(validate_poet(&poet_lie, &scenario, &state));
+        assert!(!validate_knitter(&direct, &scenario, &state));
+        assert!(!validate_poet(&poet, &scenario, &state));
+
+        scenario.corrupted.clear();
+        let legacy_direct = make_card(1, "Knitter", json!({"evil_pairs": 1}));
+        let legacy_poet = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Knitter", "evil_pairs": 1}),
+        );
+        assert!(legacy_direct.info_text.is_empty());
+        assert!(validate_knitter(&legacy_direct, &scenario, &state));
+        assert!(validate_poet(&legacy_poet, &scenario, &state));
+        assert!(validate_knitter(
+            &make_card(1, "Knitter", json!({})),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
     fn current_poet_scout_requires_a_selectable_named_target() {
         let poet = current_poet(
             "Scout",
@@ -6292,6 +8000,31 @@ mod tests {
 
         assert!(validate_scout(&scout, &scenario, &state));
         assert!(validate_hunter(&hunter, &scenario, &state));
+        // Scout needs the sole Wretch at #3/#5 while Hunter needs it at
+        // #6/#8. Each clue is reachable alone, but no physical assignment
+        // supports both observations.
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+
+        let compatible_hunter = current_hunter(2, json!(1));
+        let mut compatible_state = base_state(8, vec![scout.clone(), compatible_hunter.clone()]);
+        compatible_state.deck.outcasts = vec!["Wretch".to_string()];
+        compatible_state.board_outcast_count = Some(1);
+        compatible_state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        assert!(validate_hunter(
+            &compatible_hunter,
+            &scenario,
+            &compatible_state,
+        ));
+        // Both providers can share the one Wretch at #3.
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &compatible_state,
+        ));
+
         let sentinel = current_scout(1, json!({"one_evil": true}));
         assert!(!validate_scout(&sentinel, &scenario, &state));
 
@@ -6299,6 +8032,72 @@ mod tests {
         assert!(!validate_scout(&scout, &scenario, &state));
         assert!(!validate_hunter(&hunter, &scenario, &state));
         assert!(validate_scout(&sentinel, &scenario, &state));
+    }
+
+    #[test]
+    fn current_lover_and_bounty_hunter_share_one_anonymous_wretch_assignment() {
+        let lover = current_lover(1, json!(1));
+        let mut bounty_hunter = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        bounty_hunter.position = 2;
+        let mut state = base_state(5, vec![lover.clone(), bounty_hunter.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        // Lover's only anonymous adjacent seat is #5, while Bounty Hunter
+        // requires the named anonymous target #3 to be the same sole Wretch.
+        assert!(validate_lover(&lover, &scenario, &state));
+        assert!(validate_poet(&bounty_hunter, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+
+        bounty_hunter.info_parsed.insert(
+            "evil_position".to_string(),
+            serde_json::Value::from(5),
+        );
+        bounty_hunter.info_text = "#5\nis Evil".to_string();
+        state.cards[1] = bounty_hunter;
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_medium_raw_bluff_and_bounty_hunter_join_wretch_identity() {
+        let bounty_hunter = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        let medium = current_medium(2, json!(3), json!("Judge"));
+        let mut state = base_state(5, vec![bounty_hunter.clone(), medium.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(5, "Pooka".to_string());
+        scenario.corrupted.insert(2);
+
+        // Bounty Hunter truth requires anonymous #3 to be Wretch. A lying
+        // Medium may independently select #3 as an unmodeled raw-bluff holder
+        // only in a world where base-null natural Wretch is forbidden there.
+        assert!(validate_poet(&bounty_hunter, &scenario, &state));
+        assert!(validate_medium(&medium, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+
+        let compatible_medium = current_medium(2, json!(4), json!("Judge"));
+        state.cards[1] = compatible_medium.clone();
+        assert!(validate_medium(&compatible_medium, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
     }
 
     #[test]
