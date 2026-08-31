@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Poet selector and dispatch boundary, managed internally as Gossip, including its exact twelve-provider constructor list and truth-versus-bluff delegation",
+  "functions": [
+    {
+      "name": "Gossip.get_Description",
+      "metadata_name": "Gossip$$get_Description",
+      "signature": "System_String_o* Gossip__get_Description (Gossip_o* __this, const MethodInfo* method);",
+      "rva": "0x3BB490"
+    },
+    {
+      "name": "Gossip.GetInfo",
+      "metadata_name": "Gossip$$GetInfo",
+      "signature": "ActedInfo_o* Gossip__GetInfo (Gossip_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BAD30"
+    },
+    {
+      "name": "Gossip.Act",
+      "metadata_name": "Gossip$$Act",
+      "signature": "void Gossip__Act (Gossip_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Gossip.BluffAct",
+      "metadata_name": "Gossip$$BluffAct",
+      "signature": "void Gossip__BluffAct (Gossip_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Gossip.GetBluffInfo",
+      "metadata_name": "Gossip$$GetBluffInfo",
+      "signature": "ActedInfo_o* Gossip__GetBluffInfo (Gossip_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3BAC00"
+    },
+    {
+      "name": "Gossip.ctor",
+      "metadata_name": "Gossip$$.ctor",
+      "signature": "void Gossip___ctor (Gossip_o* __this, const MethodInfo* method);",
+      "rva": "0x3BADC0"
+    },
+    {
+      "name": "Empath.ctor",
+      "metadata_name": "Empath$$.ctor",
+      "signature": "void Empath___ctor (Empath_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Scout.ctor",
+      "metadata_name": "Scout$$.ctor",
+      "signature": "void Scout___ctor (Scout_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Investigator.ctor",
+      "metadata_name": "Investigator$$.ctor",
+      "signature": "void Investigator___ctor (Investigator_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "BountyHunter.ctor",
+      "metadata_name": "BountyHunter$$.ctor",
+      "signature": "void BountyHunter___ctor (BountyHunter_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Lookout.ctor",
+      "metadata_name": "Lookout$$.ctor",
+      "signature": "void Lookout___ctor (Lookout_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Knitter.ctor",
+      "metadata_name": "Knitter$$.ctor",
+      "signature": "void Knitter___ctor (Knitter_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Tracker.ctor",
+      "metadata_name": "Tracker$$.ctor",
+      "signature": "void Tracker___ctor (Tracker_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Shugenja.ctor",
+      "metadata_name": "Shugenja$$.ctor",
+      "signature": "void Shugenja___ctor (Shugenja_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Noble.ctor",
+      "metadata_name": "Noble$$.ctor",
+      "signature": "void Noble___ctor (Noble_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Bishop.ctor",
+      "metadata_name": "Bishop$$.ctor",
+      "signature": "void Bishop___ctor (Bishop_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Archivist.ctor",
+      "metadata_name": "Archivist$$.ctor",
+      "signature": "void Archivist___ctor (Archivist_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Acrobat2.ctor",
+      "metadata_name": "Acrobat2$$.ctor",
+      "signature": "void Acrobat2___ctor (Acrobat2_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    }
+  ]
+}
