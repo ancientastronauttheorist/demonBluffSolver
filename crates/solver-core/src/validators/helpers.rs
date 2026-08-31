@@ -1,6 +1,7 @@
 /// Shared helper functions used by all validators.
 
 use crate::knowledge_base::{get_card, normalize_role};
+use crate::twin::current_data_after_twin_at;
 use crate::types::{GameState, Scenario};
 
 /// Compare two role names ignoring case, spaces, and underscores.
@@ -16,20 +17,28 @@ pub enum TruthStatus {
     Lying,
 }
 
-/// Get the evil role name at a position, or None if the position is good.
-/// Checks: scenario.evil_positions, puppet_position, executed_evil_roles, confirmed_evil.
-pub fn known_evil_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) -> Option<&'a str> {
+/// Stable runtime-Evil origin role at one physical position, before the later
+/// generated-Puppet overlay.
+///
+/// Twin and Shaman current-data writes never change this layer. Puppeteer's
+/// later full Init is modeled separately because it changes both runtime
+/// alignment and current data after Twin.
+pub fn stable_evil_origin_role_at<'a>(
+    pos: u8,
+    scenario: &'a Scenario,
+    state: &'a GameState,
+) -> Option<&'a str> {
     // Check scenario evil positions
     if let Some(role) = scenario.evil_positions.get(&pos) {
-        return Some(role.as_str());
-    }
-    // Check puppet
-    if scenario.puppet_position == Some(pos) {
-        return Some("Puppet");
+        if scenario.puppet_position != Some(pos) || normalize_role(role) != "puppet" {
+            return Some(role.as_str());
+        }
     }
     // Check executed evil roles
     if let Some(role) = state.executed_evil_roles.get(&pos) {
-        return Some(role.as_str());
+        if scenario.puppet_position != Some(pos) || normalize_role(role) != "puppet" {
+            return Some(role.as_str());
+        }
     }
     // Check confirmed evil that have been executed (role unknown)
     if state.confirmed_evil.contains(&pos) && state.executed.contains(&pos) {
@@ -38,21 +47,77 @@ pub fn known_evil_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState
     None
 }
 
-/// Is this position evil in the current board state?
-pub fn is_evil_in_board_state(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
-    known_evil_role(pos, scenario, state).is_some()
+/// Compatibility name preserving the historical stable-role-plus-Puppet view.
+pub fn known_evil_role<'a>(
+    pos: u8,
+    scenario: &'a Scenario,
+    state: &'a GameState,
+) -> Option<&'a str> {
+    stable_evil_origin_role_at(pos, scenario, state)
+        .or_else(|| (scenario.puppet_position == Some(pos)).then_some("Puppet"))
 }
 
-/// True underlying role at a position, considering evil placements,
-/// outcast placements, and apparent_role for undisguised good cards.
+/// Whether the physical Character remains runtime Evil.
+pub fn is_runtime_evil_at(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
+    stable_evil_origin_role_at(pos, scenario, state).is_some()
+        || scenario.puppet_position == Some(pos)
+}
+
+/// Compatibility name for physical runtime alignment.
+pub fn is_evil_in_board_state(pos: u8, scenario: &Scenario, state: &GameState) -> bool {
+    is_runtime_evil_at(pos, scenario, state)
+}
+
+/// Modeled current CharacterData before Twin's ordered Start dispatch.
 ///
-/// Used by public Dreamer role-pair validation, which can name any role.
-pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Option<String> {
-    // Shaman's later InitWithNoReset changes the current role data at both
-    // endpoints without clearing the destination's runtime alignment. Current
-    // role consumers must therefore prefer the trace over the original Evil,
-    // Drunk, or Doppelganger identity; alignment consumers still use
-    // `known_evil_role` / `effective_alignment` below.
+/// Generated Puppet is deliberately absent: Puppeteer performs its full Init
+/// after Twin and therefore belongs to the later writer below.
+fn pre_twin_current_data_role_at(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<String> {
+    if scenario.puppet_position != Some(pos) {
+        if let Some(role) = stable_evil_origin_role_at(pos, scenario, state) {
+            return Some(role.to_string());
+        }
+    }
+    if scenario.chancellor_added_outcast_position() == Some(pos) {
+        if let Some(role) = scenario.chancellor_added_outcast_role() {
+            return Some(role.to_string());
+        }
+    }
+    if scenario.doppelganger_position == Some(pos) {
+        return Some("Doppelganger".to_string());
+    }
+    if scenario.drunk_position == Some(pos) {
+        return Some("Drunk".to_string());
+    }
+    state.card_at(pos).map(|card| card.apparent_role.clone())
+}
+
+/// Current CharacterData role at a physical position after modeled Start
+/// writers, independently of physical runtime alignment.
+///
+/// Native writer order is the pre-Twin baseline, exact Twin swap, generated
+/// Puppet full Init, then Shaman's later copied-role InitWithNoReset. CardInfo
+/// presentation is only a baseline fallback and never overrides an exact Twin,
+/// Puppet, or Shaman writer.
+pub fn current_data_role_at(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<String> {
+    let mut current = pre_twin_current_data_role_at(pos, scenario, state);
+
+    if let Some(trace) = scenario.twin_trace.as_ref() {
+        current = current_data_after_twin_at(pos, current.as_deref(), trace);
+    }
+
+    if scenario.puppet_position == Some(pos) {
+        current = Some("Puppet".to_string());
+    }
+
     if let Some(trace) = scenario.shaman_trace.as_ref() {
         if trace.source_position == pos || trace.target_position == pos {
             if state
@@ -67,40 +132,38 @@ pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Opt
             return Some(trace.copied_role.clone());
         }
     }
-    if let Some(role) = known_evil_role(pos, scenario, state) {
-        return Some(role.to_string());
-    }
-    if scenario.chancellor_added_outcast_position() == Some(pos) {
-        if let Some(role) = scenario.chancellor_added_outcast_role() {
-            return Some(role.to_string());
-        }
-    }
-    if scenario.doppelganger_position == Some(pos) {
-        return Some("Doppelganger".to_string());
-    }
-    if scenario.drunk_position == Some(pos) {
-        return Some("Drunk".to_string());
-    }
-    if let Some(card) = state.card_at(pos) {
-        return Some(card.apparent_role.clone());
-    }
-    None
+
+    current
 }
 
-/// Effective alignment as seen by abilities.
-/// Wretch registers as Evil to abilities (but is actually Good).
-pub fn effective_alignment(pos: u8, scenario: &Scenario, state: &GameState) -> EffectiveAlignment {
-    if is_evil_in_board_state(pos, scenario, state) {
+/// Compatibility name for the modeled current CharacterData role.
+pub fn effective_role_at(pos: u8, scenario: &Scenario, state: &GameState) -> Option<String> {
+    current_data_role_at(pos, scenario, state)
+}
+
+/// Registered alignment as seen by abilities.
+/// Wretch current data registers as Evil even on a runtime-Good body.
+pub fn registered_alignment_at(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> EffectiveAlignment {
+    if is_runtime_evil_at(pos, scenario, state) {
         return EffectiveAlignment::Evil;
     }
     // Wretch registers as Evil, including a Chancellor-generated Wretch whose
     // apparent Villager identity does not expose that role.
-    if effective_role_at(pos, scenario, state)
+    if current_data_role_at(pos, scenario, state)
         .is_some_and(|role| roles_equal(&role, "Wretch"))
     {
         return EffectiveAlignment::Evil;
     }
     EffectiveAlignment::Good
+}
+
+/// Compatibility name for registered alignment.
+pub fn effective_alignment(pos: u8, scenario: &Scenario, state: &GameState) -> EffectiveAlignment {
+    registered_alignment_at(pos, scenario, state)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -132,9 +195,10 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
 
     // Puppet applies HealthyBluff during Start. A clean Doppelganger applies it
     // while acquiring its good bluff. Corrupted variants were handled above.
-    let modeled_healthy_bluff = evil_role
-        .map(|role| roles_equal(role, "Puppet"))
-        .unwrap_or(false)
+    let modeled_healthy_bluff = scenario.puppet_position == Some(pos)
+        || evil_role
+            .map(|role| roles_equal(role, "Puppet"))
+            .unwrap_or(false)
         || scenario.doppelganger_position == Some(pos)
         || effective_role
             .as_deref()
@@ -182,7 +246,9 @@ pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) 
 #[cfg(test)]
 mod truth_status_tests {
     use super::*;
-    use crate::types::{CardInfo, ChancellorTrace, ShamanTrace};
+    use crate::types::{
+        CardInfo, ChancellorTrace, ShamanTrace, TwinNeighborSide, TwinStartOutcome, TwinTrace,
+    };
     use std::collections::{HashMap, HashSet};
 
     fn state_with_apparent_role(role: &str) -> GameState {
@@ -229,6 +295,26 @@ mod truth_status_tests {
         scenario.puppet_position = Some(1);
         scenario.corrupted.insert(1);
 
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
+    }
+
+    #[test]
+    fn generated_puppet_over_stable_twin_uses_puppet_healthy_bluff() {
+        let state = state_with_apparent_role("Scout");
+        let mut scenario = scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.puppet_position = Some(1);
+
+        assert_eq!(known_evil_role(1, &scenario, &state), Some("Twin Minion"));
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Puppet")
+        );
+        assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Truthful);
+
+        scenario.corrupted.insert(1);
         assert_eq!(truth_status(1, &scenario, &state), TruthStatus::Lying);
     }
 
@@ -337,45 +423,230 @@ mod truth_status_tests {
 
         assert_eq!(truth_status(1, &scenario(), &state), TruthStatus::Truthful);
     }
+
+    #[test]
+    fn twin_current_data_moves_without_runtime_alignment_or_presentation() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.cards.push(CardInfo {
+            position: 2,
+            apparent_role: "Knight".to_string(),
+            ..CardInfo::default()
+        });
+        let mut scenario = scenario();
+        scenario.evil_positions = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (3, "Pooka".to_string()),
+        ]);
+        scenario.twin_trace = Some(TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+
+        assert_eq!(stable_evil_origin_role_at(1, &scenario, &state), Some("Twin Minion"));
+        assert_eq!(stable_evil_origin_role_at(2, &scenario, &state), None);
+        assert!(is_runtime_evil_at(1, &scenario, &state));
+        assert!(!is_runtime_evil_at(2, &scenario, &state));
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Scout")
+        );
+        assert_eq!(
+            current_data_role_at(2, &scenario, &state).as_deref(),
+            Some("Twin Minion")
+        );
+        assert_eq!(
+            registered_alignment_at(1, &scenario, &state),
+            EffectiveAlignment::Evil
+        );
+        assert_eq!(
+            registered_alignment_at(2, &scenario, &state),
+            EffectiveAlignment::Good
+        );
+    }
+
+    #[test]
+    fn current_data_writers_apply_twin_then_puppet_then_shaman_baker() {
+        let mut state = state_with_apparent_role("Scout");
+        state.n_cards = 3;
+        let mut scenario = scenario();
+        scenario.evil_positions = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (3, "Pooka".to_string()),
+        ]);
+        scenario.twin_trace = Some(TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+        scenario.puppet_position = Some(1);
+
+        assert_eq!(stable_evil_origin_role_at(1, &scenario, &state), Some("Twin Minion"));
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Puppet")
+        );
+
+        scenario.shaman_trace = Some(ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Knight".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Knight")
+        );
+        assert!(is_runtime_evil_at(1, &scenario, &state));
+
+        state.cards[0].apparent_role = "Baker".to_string();
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Baker")
+        );
+    }
+
+    #[test]
+    fn generated_puppet_is_not_part_of_the_pre_twin_baseline() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        let mut scenario = scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Puppet".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.puppet_position = Some(1);
+        scenario.twin_trace = Some(TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+
+        assert_eq!(stable_evil_origin_role_at(1, &scenario, &state), None);
+        assert_eq!(known_evil_role(1, &scenario, &state), Some("Puppet"));
+        assert!(is_runtime_evil_at(1, &scenario, &state));
+        assert_eq!(pre_twin_current_data_role_at(1, &scenario, &state), None);
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Puppet")
+        );
+
+        let mut unmarked_legacy = scenario.clone();
+        unmarked_legacy.puppet_position = None;
+        unmarked_legacy.twin_trace = None;
+        assert_eq!(
+            stable_evil_origin_role_at(1, &unmarked_legacy, &state),
+            Some("Puppet")
+        );
+        assert_eq!(
+            current_data_role_at(1, &unmarked_legacy, &state).as_deref(),
+            Some("Puppet")
+        );
+
+        let mut executed_state = state.clone();
+        executed_state
+            .executed_evil_roles
+            .insert(1, "Puppet".to_string());
+        let mut executed_only = Scenario::default();
+        executed_only.puppet_position = Some(1);
+        assert_eq!(
+            stable_evil_origin_role_at(1, &executed_only, &executed_state),
+            None
+        );
+        assert_eq!(
+            known_evil_role(1, &executed_only, &executed_state),
+            Some("Puppet")
+        );
+    }
+
+    #[test]
+    fn current_wretch_registration_does_not_change_runtime_alignment() {
+        let mut state = state_with_apparent_role("Wretch");
+        state.n_cards = 2;
+        let scenario = scenario();
+
+        assert!(!is_runtime_evil_at(1, &scenario, &state));
+        assert_eq!(
+            registered_alignment_at(1, &scenario, &state),
+            EffectiveAlignment::Evil
+        );
+        assert_eq!(known_evil_role(1, &scenario, &state), None);
+        assert_eq!(
+            effective_role_at(1, &scenario, &state),
+            current_data_role_at(1, &scenario, &state)
+        );
+        assert_eq!(
+            is_evil_in_board_state(1, &scenario, &state),
+            is_runtime_evil_at(1, &scenario, &state)
+        );
+        assert_eq!(
+            effective_alignment(1, &scenario, &state),
+            registered_alignment_at(1, &scenario, &state)
+        );
+    }
+
+    #[test]
+    fn trace_none_current_data_preserves_legacy_role_precedence() {
+        let mut state = GameState::default();
+        state.n_cards = 7;
+        state.cards.push(CardInfo {
+            position: 6,
+            apparent_role: "Scout".to_string(),
+            ..CardInfo::default()
+        });
+        let mut scenario = scenario();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+        scenario.puppet_position = Some(2);
+        scenario.chancellor_trace = Some(ChancellorTrace {
+            original_positions: vec![1],
+            added_outcast_position: 3,
+            added_outcast_role: "Bombardier".to_string(),
+            affected_anchor_positions: vec![],
+        });
+        scenario.doppelganger_position = Some(4);
+        scenario.drunk_position = Some(5);
+
+        let expected = [
+            (1, Some("Pooka")),
+            (2, Some("Puppet")),
+            (3, Some("Bombardier")),
+            (4, Some("Doppelganger")),
+            (5, Some("Drunk")),
+            (6, Some("Scout")),
+            (7, None),
+        ];
+        for (position, role) in expected {
+            assert_eq!(
+                current_data_role_at(position, &scenario, &state).as_deref(),
+                role
+            );
+            assert_eq!(
+                effective_role_at(position, &scenario, &state).as_deref(),
+                role
+            );
+        }
+    }
 }
 
-/// Get the "real" role at a position, accounting for Doppelganger/Drunk disguise.
-pub fn get_real_role<'a>(pos: u8, scenario: &'a Scenario, state: &'a GameState) -> &'a str {
-    if let Some(trace) = scenario.shaman_trace.as_ref() {
-        if trace.source_position == pos || trace.target_position == pos {
-            if state
-                .executed_good_roles
-                .get(&pos)
-                .map(String::as_str)
-                .or_else(|| state.card_at(pos).map(|card| card.apparent_role.as_str()))
-                .is_some_and(|role| normalize_role(role) == "baker")
-            {
-                return "Baker";
-            }
-            return &trace.copied_role;
-        }
-    }
-    // Check evil role first
-    if let Some(role) = known_evil_role(pos, scenario, state) {
-        return role;
-    }
-    if scenario.chancellor_added_outcast_position() == Some(pos) {
-        if let Some(role) = scenario.chancellor_added_outcast_role() {
-            return role;
-        }
-    }
-    // Hidden outcasts
-    if scenario.doppelganger_position == Some(pos) {
-        return "Doppelganger";
-    }
-    if scenario.drunk_position == Some(pos) {
-        return "Drunk";
-    }
-    // Card's apparent role
-    if let Some(card) = state.card_at(pos) {
-        return &card.apparent_role;
-    }
-    "Unknown"
+/// Compatibility helper for validators that require an owned fallback role.
+pub fn get_real_role(pos: u8, scenario: &Scenario, state: &GameState) -> String {
+    current_data_role_at(pos, scenario, state).unwrap_or_else(|| "Unknown".to_string())
 }
 
 /// Get the type category of a position for Bishop validator.

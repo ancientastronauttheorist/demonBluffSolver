@@ -105,36 +105,50 @@ pub fn enumerate_twin_traces(
     traces
 }
 
-/// Return the current role at `position` after replaying one Twin trace.
+/// Apply one exact Twin event to a single pre-Twin current-data role.
 ///
-/// The role map remains the source of the exact Twin data name written onto the
-/// neighbor. A self-swap performs both native reinitializations but leaves the
-/// role mapping unchanged.
-pub fn role_after_twin(
+/// A distinct actor receives the stored former neighbor data and the neighbor
+/// receives Twin data. Those endpoint results are exact even when presentation
+/// cannot supply `before`. Self-swap still performs both native Init calls but
+/// leaves the data mapping unchanged.
+pub fn current_data_after_twin_at(
     position: u8,
-    current_roles: &HashMap<u8, String>,
+    before: Option<&str>,
     trace: &TwinTrace,
 ) -> Option<String> {
-    let original_role = current_roles.get(&position)?.clone();
     let TwinStartOutcome::Swap {
         neighbor_position,
         neighbor_pre_swap_role,
         ..
     } = &trace.outcome
     else {
-        return Some(original_role);
+        return before.map(str::to_string);
     };
 
     if trace.actor_position == *neighbor_position {
-        return Some(original_role);
+        return before.map(str::to_string);
     }
     if position == trace.actor_position {
         return Some(neighbor_pre_swap_role.clone());
     }
     if position == *neighbor_position {
-        return current_roles.get(&trace.actor_position).cloned();
+        return Some("Twin Minion".to_string());
     }
-    Some(original_role)
+    before.map(str::to_string)
+}
+
+/// Return the current role at `position` after replaying one Twin trace over an
+/// explicit complete pre-Twin role map.
+pub fn role_after_twin(
+    position: u8,
+    current_roles: &HashMap<u8, String>,
+    trace: &TwinTrace,
+) -> Option<String> {
+    current_data_after_twin_at(
+        position,
+        current_roles.get(&position).map(String::as_str),
+        trace,
+    )
 }
 
 #[cfg(test)]
@@ -315,6 +329,58 @@ mod tests {
                 ..
             }
         )));
+    }
+
+    #[test]
+    fn exact_swap_endpoints_do_not_require_presentation_baselines() {
+        let trace = TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        };
+
+        assert_eq!(
+            current_data_after_twin_at(1, None, &trace).as_deref(),
+            Some("Scout")
+        );
+        assert_eq!(
+            current_data_after_twin_at(2, None, &trace).as_deref(),
+            Some("Twin Minion")
+        );
+        assert_eq!(current_data_after_twin_at(4, None, &trace), None);
+    }
+
+    #[test]
+    fn no_demon_and_self_swap_preserve_the_supplied_baseline() {
+        let no_demon = TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::NoDemon,
+        };
+        assert_eq!(
+            current_data_after_twin_at(1, Some("Twin Minion"), &no_demon).as_deref(),
+            Some("Twin Minion")
+        );
+
+        let self_swap = TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 2,
+                neighbor_side: TwinNeighborSide::Previous,
+                neighbor_position: 1,
+                neighbor_pre_swap_role: "Twin Minion".to_string(),
+            },
+        };
+        assert_eq!(
+            current_data_after_twin_at(1, Some("Twin Minion"), &self_swap).as_deref(),
+            Some("Twin Minion")
+        );
+        assert_eq!(current_data_after_twin_at(1, None, &self_swap), None);
     }
 
     #[test]
