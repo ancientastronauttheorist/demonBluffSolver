@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public and managed Confessor boundary, including apparent-truth initialization, truth-identical bluffing, Corrupted/Evil/Spy dizziness semantics, exact clue construction, animated-art side effects, Day dispatch, and lifecycle behavior",
+  "functions": [
+    {
+      "name": "Confessor.get_Description",
+      "metadata_name": "Confessor$$get_Description",
+      "signature": "System_String_o* Confessor__get_Description (Confessor_o* __this, const MethodInfo* method);",
+      "rva": "0x3D6A90"
+    },
+    {
+      "name": "Confessor.GetInfo",
+      "metadata_name": "Confessor$$GetInfo",
+      "signature": "ActedInfo_o* Confessor__GetInfo (Confessor_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D68A0"
+    },
+    {
+      "name": "Confessor.OnInit",
+      "metadata_name": "Confessor$$OnInit",
+      "signature": "void Confessor__OnInit (Confessor_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6A50"
+    },
+    {
+      "name": "Confessor.Act",
+      "metadata_name": "Confessor$$Act",
+      "signature": "void Confessor__Act (Confessor_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D65D0"
+    },
+    {
+      "name": "Confessor.BluffAct",
+      "metadata_name": "Confessor$$BluffAct",
+      "signature": "void Confessor__BluffAct (Confessor_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6650"
+    },
+    {
+      "name": "Confessor.GetBluffInfo",
+      "metadata_name": "Confessor$$GetBluffInfo",
+      "signature": "ActedInfo_o* Confessor__GetBluffInfo (Confessor_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3D6720"
+    },
+    {
+      "name": "Confessor.ManageArt",
+      "metadata_name": "Confessor$$ManageArt",
+      "signature": "void Confessor__ManageArt (Confessor_o* __this, Character_o* charRef, bool dizzy, const MethodInfo* method);",
+      "rva": "0x3D6A20"
+    },
+    {
+      "name": "Confessor.ConjourInfo",
+      "metadata_name": "Confessor$$ConjourInfo",
+      "signature": "System_String_o* Confessor__ConjourInfo (Confessor_o* __this, bool dizzy, const MethodInfo* method);",
+      "rva": "0x3D66D0"
+    },
+    {
+      "name": "Confessor.ctor",
+      "metadata_name": "Confessor$$.ctor",
+      "signature": "void Confessor___ctor (Confessor_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "Character.ShowAnimatedArt",
+      "metadata_name": "Character$$ShowAnimatedArt",
+      "signature": "void Character__ShowAnimatedArt (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368B40"
+    },
+    {
+      "name": "System.Collections.Generic.List<Int32Enum>.Contains",
+      "metadata_name": "System.Collections.Generic.List<Int32Enum>$$Contains",
+      "signature": "bool System_Collections_Generic_List_Int32Enum___Contains (System_Collections_Generic_List_T__o* __this, int32_t item, const MethodInfo_B45070* method);",
+      "rva": "0xB45070"
+    }
+  ]
+}
