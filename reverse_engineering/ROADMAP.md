@@ -235,6 +235,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   direct/Poet parity, and Baker-to-Spy registration chronology; expand the
   typed union to 32 target sets, 666 memberships, 426 selected managed methods,
   and 365 unique native RVAs, then publish its typed-quality report.
+- [x] Asset-bind public Enlightened to managed `Shugenja`; native-audit all
+  nine declared methods plus registered-alignment, acted-record, physical-list,
+  runtime-data, and float-RNG helpers; close exact direction text, public circle
+  orientation, no-Evil and small-board ties, always-false bluff support,
+  direct/Poet parity, joint anonymous-Wretch worlds, and Baker-to-Spy
+  registration chronology; expand the typed union to 33 target sets, 680
+  memberships, 435 selected managed methods, and 372 unique native RVAs, then
+  publish its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

@@ -380,6 +380,18 @@ directional edges on two-card boards. Bluff removes truth from
 current observations use one shared hidden-state search, including delayed
 Baker-to-Spy registration chronology, while unmarked fixtures retain their
 legacy path.
+The newest
+[`Enlightened`](notes/roles/gameplay_role_enlightened.md) boundary asset-binds
+the public role to managed `Shugenja`, covers all nine declared role methods
+plus exact registered-alignment, acted-record, circle-rotation, runtime-data,
+and float-RNG helpers, and closes both direct and Poet use. Truth scans the
+complete physical circle for the nearest registered Evil, with increasing
+public IDs named Counter-clockwise and decreasing IDs named Clockwise; ties,
+double exhaustion, and every two-card board are Equidistant. Bluff makes one
+float draw and emits one of the two false directions. Current observations
+enforce exact text, zero references, runtime-data agreement, joint anonymous-
+Wretch assignments, and delayed Baker-to-Spy registration chronology while
+unmarked fixtures retain their legacy path.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -417,14 +429,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_medium
+  -TargetSet gameplay_role_enlightened
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,544
-datatypes. Its thirty-one-set inventory contains 654 target memberships, 419
-distinct selected FunctionDefinitions, and 360 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,561
+datatypes. Its thirty-three-set inventory contains 680 target memberships, 435
+distinct selected FunctionDefinitions, and 372 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -438,13 +450,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current thirty-one-set run used four batches for each phase. Ghidra
+sets; the current thirty-three-set run used five batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all thirty-one target
-sets after a no-analysis refresh. Two hundred thirty-five memberships are exact
+The preserved fully analyzed typed project now covers all thirty-three target
+sets after a no-analysis refresh. Two hundred forty-five memberships are exact
 FunctionDefinition overlaps between boundaries. Folded/shared bodies make the
-419 selected definitions exceed the 360 unique native RVAs by fifty-nine;
+435 selected definitions exceed the 372 unique native RVAs by sixty-three;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -464,9 +476,10 @@ five additional reachable datatypes. The Oracle refresh imported six additional
 reachable datatypes. The Lover refresh imported 12 additional reachable
 datatypes. The first Bounty Hunter application imported six additional
 reachable datatypes. The first Medium application imported six additional
-reachable datatypes. The four-batch refresh reapplied and validated all 654
-memberships without rerunning auto-analysis. The final read-only pass validated
-all 654 memberships (419 exact definitions) and 1,916
+reachable datatypes. The Knitter refresh imported six additional datatypes,
+and the Enlightened refresh imported 12. The five-batch refresh reapplied and
+validated all 680 memberships without rerunning auto-analysis. The final
+read-only pass validated all 680 memberships (435 exact definitions) and 1,995
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -504,7 +517,8 @@ Fortune Teller fell from 171 to 67, Bombardier fell from 134 to 39, and Pooka
 fell from 53 to 31. Poisoner fell from 104 to 46, Twin Minion fell from 168 to
 45, Poet fell from 74 to 9, Scout/Hunter fell from 148 to 56, Oracle fell
 from 116 to 78, Lover fell from 92 to 38, Bounty Hunter fell from 68 to 32,
-and Medium fell from 87 to 30.
+Medium fell from 87 to 30, Knitter fell from 55 to nine, and Enlightened fell
+from 97 to 24.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -518,7 +532,8 @@ Fortune Teller fell from 286 to 194, Bombardier fell from 245 to 98, and Pooka
 fell from 42 to 28. Poisoner fell from 105 to 26, Twin Minion fell from 211 to
 39, Poet fell from 144 to 21, Scout/Hunter fell from 98 to 55, Oracle fell
 from 139 to 101, Lover fell from 59 to 24, Bounty Hunter fell from 48 to 22,
-and Medium fell from 72 to 18.
+Medium fell from 72 to 18, Knitter fell from 43 to 26, and Enlightened fell
+from 60 to 38.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -555,7 +570,11 @@ patterns from four to zero. Bounty Hunter retained three error and 18 warning
 markers, reduced placeholder parameters from 54 to zero, and reduced indirect-
 call patterns from four to zero. Medium retained three error and 21 warning
 markers, reduced placeholder parameters from 79 to zero, and reduced indirect-
-call patterns from four to zero. The original typed import is
+call patterns from four to zero. Knitter retained three error and 13 warning
+markers, reduced placeholder parameters from 67 to zero, and reduced indirect-
+call patterns from four to zero. Enlightened retained three error and 20
+warning markers, reduced placeholder parameters from 87 to zero, and reduced
+indirect-call patterns from four to zero. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
 with the new role comparisons in the
@@ -610,14 +629,16 @@ The current Medium comparison is in the
 [`Medium typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_medium.json).
 The current Knitter comparison is in the
 [`Knitter typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_knitter.json).
+The current Enlightened comparison is in the
+[`Enlightened typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_enlightened.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 426 classifications backed by
-192 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 435 classifications backed by
+201 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
