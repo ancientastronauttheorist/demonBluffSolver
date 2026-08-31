@@ -216,6 +216,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   Minion-plus-Demon bluff domain, and truth-only achievement subscriptions for
   both direct and Poet observations; expand the typed union to 29 target sets
   and 628 memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Bounty Hunter to managed `BountyHunter`; native-audit
+  all eight declared methods plus registered-alignment, board-filter, acted-
+  record, and integer-RNG helpers; close its dormant direct Start mutation,
+  active Poet truth/bluff pools, exact zero-reference clue, and joint anonymous-
+  Wretch constraints; expand the typed union to 30 target sets and 640
+  memberships and publish its baseline-versus-typed quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
