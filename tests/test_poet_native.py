@@ -47,6 +47,15 @@ def _hunter_refs(position: int, distance: int, n_cards: int) -> list[int]:
     ]
 
 
+def _bard_refs(position: int, distance: int, n_cards: int) -> list[int]:
+    if distance == -1 or distance > n_cards - 1:
+        return []
+    return [
+        ((position - 1 + distance) % n_cards) + 1,
+        ((position - 1 - distance) % n_cards) + 1,
+    ]
+
+
 def _lover_refs(position: int, n_cards: int) -> list[int]:
     return [
         ((position - 2) % n_cards) + 1,
@@ -335,7 +344,11 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                 "Bishop",
             ),
             ("#2 is Good", [2], "Gemcrafter"),
-            ("I am 1 card away from Corrupted character", [], "Bard"),
+            (
+                "I am 1 card away from Corrupted character",
+                _bard_refs(1, 1, 6),
+                "Bard",
+            ),
         ]
 
         for clue, targets, provider in cases:
@@ -493,7 +506,13 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         ]
         for clue, provider, field, expected in cases:
             with self.subTest(clue=clue):
-                refs = _lover_refs(1, 6) if provider == "Lover" else []
+                refs = (
+                    _lover_refs(1, 6)
+                    if provider == "Lover"
+                    else _bard_refs(1, expected, 6)
+                    if provider == "Bard"
+                    else []
+                )
                 parsed = _parse_clue_from_memory(
                     _memory_poet(clue, refs),
                     n_cards=6,

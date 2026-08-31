@@ -150,6 +150,9 @@ DISPLAY_NAMES = {
     'Illuzionist': 'Shaman',
     'Mezepheles': 'Puppeteer',
     'Athlete': 'Bard',
+    # The shipped public Bard CharacterData binds managed Acrobat2. Acrobat is
+    # a separate role and must not be conflated with it.
+    'Acrobat2': 'Bard',
     'Acrobat': 'Acrobat',
     # The shipped public Judge CharacterData binds Judge2. Arbiter is a
     # separate unbound implementation and must not be conflated with it.

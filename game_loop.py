@@ -301,11 +301,117 @@ def _card_scout_one_evil(
         info["scout_variant"] = scout_variant
     return CardInfo(pos, "Scout", info_text=info_text, info_parsed=info)
 
-def card_bard(pos: int, corruption_distance: int) -> CardInfo:
-    # 0 means "no corrupted characters exist" — map to -1 sentinel
+def _bard_native_text(corruption_distance: int) -> str:
+    """Return Acrobat2.ConjourInfo's exact shipped public sentence.
+
+    Current payloads normalize native distance zero to ``-1`` so it remains
+    distinct from historical numeric-zero observations.
+    """
+    if type(corruption_distance) is not int:
+        raise ValueError("Bard corruption distance must be an integer")
+    if corruption_distance == -1:
+        return "There are no Corrupted characters"
+    if corruption_distance == 1:
+        return "I am 1 card away from Corrupted character"
+    if corruption_distance >= 2:
+        return (
+            f"I am {corruption_distance} cards away from Corrupted character"
+        )
+    raise ValueError("Bard corruption distance must be -1 or positive")
+
+
+def _parse_bard_native_text(info_text) -> Optional[int]:
+    """Parse only one exact current Acrobat2 sentence."""
+    if not isinstance(info_text, str):
+        return None
+    if info_text == _bard_native_text(-1):
+        return -1
+    if info_text == _bard_native_text(1):
+        return 1
+    match = re.fullmatch(
+        r"I am ([1-9]\d*) cards away from Corrupted character",
+        info_text,
+    )
+    if match is None:
+        return None
+    try:
+        corruption_distance = int(match.group(1))
+    except ValueError:
+        # Python caps pathological decimal conversions. Treat malformed memory
+        # text as untrusted input and fail closed.
+        return None
+    return (
+        corruption_distance
+        if info_text == _bard_native_text(corruption_distance)
+        else None
+    )
+
+
+def _valid_current_bard_distance(
+    corruption_distance: int,
+    n_cards: Optional[int],
+) -> bool:
+    """Whether a normalized Bard claim can be emitted in the current build."""
+    if type(corruption_distance) is not int:
+        return False
+    if corruption_distance == -1:
+        return True
+    if type(n_cards) is not int or n_cards <= 0:
+        return False
+    # Truth can report the half-circle distance. Bluff draws from the fixed
+    # public domain 0..3, so 1..3 remains possible even on a tiny board.
+    return 1 <= corruption_distance <= max(3, n_cards // 2)
+
+
+def _current_bard_refs(
+    pos: int,
+    corruption_distance: int,
+    n_cards: int,
+) -> list[int]:
+    """Return Acrobat2.GetCharactersAtRange order, preserving duplicates."""
+    if corruption_distance in {-1, 0} or corruption_distance > n_cards - 1:
+        return []
+    forward = ((pos - 1 + corruption_distance) % n_cards) + 1
+    backward = ((pos - 1 - corruption_distance) % n_cards) + 1
+    return [forward, backward]
+
+
+def card_bard(
+    pos: int,
+    corruption_distance: int,
+    *,
+    info_text: str = "",
+    bard_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Bard observation while preserving unmarked archive callers."""
+    if bard_variant is not None and type(corruption_distance) is not int:
+        raise ValueError("Current Bard distance must be an integer")
+    # Existing manual/archive convention: zero means no Corrupted characters.
     if corruption_distance == 0:
         corruption_distance = -1
-    return CardInfo(pos, "Bard", info_parsed={"corruption_distance": corruption_distance})
+    info = {"corruption_distance": corruption_distance}
+    if bard_variant is not None:
+        if bard_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Bard variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Bard position must be positive")
+        # The builder owns scalar/current schema safety; board-specific upper
+        # bounds are enforced by manual and memory ingestion.
+        if corruption_distance != -1 and corruption_distance < 1:
+            raise ValueError("Current Bard distance must be -1 or positive")
+        if not isinstance(info_text, str):
+            raise ValueError("Current Bard text must be a string")
+        expected_text = _bard_native_text(corruption_distance)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Bard text must match its distance")
+        info["bard_variant"] = bard_variant
+        info_text = expected_text
+    return CardInfo(
+        pos,
+        "Bard",
+        info_text=info_text,
+        info_parsed=info,
+    )
 
 def card_fortune_teller(
     pos: int,
@@ -1548,18 +1654,23 @@ def card_poet_with_info(
             {"good_position": good_position},
             info_text=_gemcrafter_native_text(good_position),
         )
-    else:
-        # Bard is the only remaining audited current provider.  Manual zero
-        # retains the existing CLI convention for "no Corrupted characters".
+    elif canonical_provider == "Bard":
+        if n_cards is None:
+            raise ValueError("Current Bard Poet entry requires session board size")
         require_args(1)
-        distance = integer(0, "corruption distance")
-        if distance < -1 or (
-            n_cards is not None and distance > n_cards
-        ):
-            raise ValueError("Bard Poet distance is outside the current board")
-        payload = {
-            "corruption_distance": -1 if distance in {-1, 0} else distance,
-        }
+        corruption_distance = integer(0, "corruption distance")
+        if corruption_distance == 0:
+            corruption_distance = -1
+        if not _valid_current_bard_distance(corruption_distance, n_cards):
+            raise ValueError("Bard Poet distance is outside the native range")
+        return _card_current_poet(
+            pos,
+            "Bard",
+            {"corruption_distance": corruption_distance},
+            info_text=_bard_native_text(corruption_distance),
+        )
+    else:
+        raise ValueError(f"Unsupported current Poet provider {canonical_provider!r}")
 
     return _card_current_poet(pos, canonical_provider, payload)
 
@@ -4891,6 +5002,9 @@ def _card_from_rambler_interruption(
     if role_key in {'archivist', 'gambler'}:
         role = 'Gemcrafter'
         role_key = 'gemcrafter'
+    elif role_key in {'acrobat2', 'rangedempath', 'athlete'}:
+        role = 'Bard'
+        role_key = 'bard'
     if role_key == 'jester':
         return card_jester_silenced(
             position,
@@ -5128,6 +5242,11 @@ def _parse_clue_from_memory(
         # after choosing disguise > current_role > true_role above.
         role = 'Gemcrafter'
         role_lower = 'gemcrafter'
+    elif role_lower in {'acrobat2', 'rangedempath', 'athlete'}:
+        # Current public Bard binds managed Acrobat2. The two older managed
+        # aliases remain valid reader inputs; Acrobat is a distinct role.
+        role = 'Bard'
+        role_lower = 'bard'
     ability_used = card.get('ability_used', False)
 
     def current_event_refs() -> Optional[list[int]]:
@@ -5290,13 +5409,28 @@ def _parse_clue_from_memory(
         if 'good' in clue.lower() or 'clean' in clue.lower():
             return card_confessor(pos, False)
 
-    # --- Bard: "no Corrupted" or "X card(s) away from Corrupted" ---
+    # --- Bard/Acrobat2: exact text + native range-reference geometry. ---
+    # Acrobat2 writes no RuntimeData, so unrelated data preserved through an
+    # identity move is deliberately ignored here.
     if role_lower == 'bard':
-        if 'no corrupted' in clue.lower() or 'are not corrupted' in clue.lower():
-            return card_bard(pos, -1)
-        m = re.search(r'(\d+)\s+card', clue, re.IGNORECASE)
-        if m:
-            return card_bard(pos, int(m.group(1)))
+        corruption_distance = _parse_bard_native_text(clue)
+        if (
+            corruption_distance is None
+            or type(n_cards) is not int
+            or n_cards <= 0
+            or type(pos) is not int
+            or not 1 <= pos <= n_cards
+            or not _valid_current_bard_distance(corruption_distance, n_cards)
+            or current_event_refs()
+            != _current_bard_refs(pos, corruption_distance, n_cards)
+        ):
+            return None
+        return card_bard(
+            pos,
+            corruption_distance,
+            info_text=clue,
+            bard_variant=_PUBLIC_CURRENT_VARIANT,
+        )
 
     # --- Lover: exact Empath text + previous/next Character references. ---
     if role_lower == 'lover':
@@ -5761,6 +5895,29 @@ def _parse_clue_from_memory(
                 )
             return None
 
+        # Acrobat2 has no RuntimeData. Authenticate Bard before the
+        # Shugenja-only stale-runtime guard so an identity move cannot make a
+        # coherent Bard event look like Shugenja.
+        bard_distance = _parse_bard_native_text(clue)
+        if bard_distance is not None:
+            if (
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
+                and _valid_current_bard_distance(bard_distance, n_cards)
+                and poet_refs_match(
+                    _current_bard_refs(pos, bard_distance, n_cards)
+                )
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Bard",
+                    {"corruption_distance": bard_distance},
+                    info_text=clue,
+                )
+            return None
+
         # Shugenja stores its claimed enum on the Poet and emits no refs.
         # RuntimeData is strong corroboration when readable; the exact public
         # event remains sufficient when the runtime object is unavailable.
@@ -5844,35 +6001,6 @@ def _parse_clue_from_memory(
                         "targets": oracle_targets,
                         "minion_role": minion.name,
                     },
-                    info_text=clue,
-                )
-
-        # Bard exact native forms.
-        if re.fullmatch(
-            r'\s*There\s+are\s+no\s+Corrupted\s+characters\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        ) and poet_refs_match([]):
-            return _card_current_poet(
-                pos,
-                "Bard",
-                {"corruption_distance": -1},
-                info_text=clue,
-            )
-        m = re.fullmatch(
-            r'\s*I\s+am\s+(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
-            r'away\s+from\s+'
-            r'Corrupted\s+character\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m and poet_refs_match([]):
-            distance = int(m.group(1) or m.group(2))
-            if n_cards is None or distance <= n_cards:
-                return _card_current_poet(
-                    pos,
-                    "Bard",
-                    {"corruption_distance": distance},
                     info_text=clue,
                 )
 
@@ -6031,6 +6159,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         raise ValueError("Empress entry requires exactly three targets")
     if role == "bishop" and len(args) != 4:
         raise ValueError("Bishop entry requires targets and matching types")
+    if role == "bard" and len(args) != 3:
+        raise ValueError("Bard entry requires exactly one corruption distance")
     pos = int(args[1])
 
     if role == "enlightened":
@@ -6125,7 +6255,26 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
             scout_variant=_PUBLIC_CURRENT_VARIANT,
         )
     elif role == "bard":
-        return card_bard(pos, int(args[2]))
+        if session is None:
+            raise ValueError("Current Bard entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Bard position is outside the current board")
+        try:
+            corruption_distance = int(args[2])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Bard corruption distance must be an integer") from exc
+        if corruption_distance == 0:
+            corruption_distance = -1
+        if not _valid_current_bard_distance(
+            corruption_distance,
+            session.n_cards,
+        ):
+            raise ValueError("Bard corruption distance is outside the native range")
+        return card_bard(
+            pos,
+            corruption_distance,
+            bard_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role in ("fortune_teller", "ft"):
         targets = [int(x) for x in args[2].split(",")]
         has_evil = args[3].lower() in ("yes", "true", "1")
@@ -7592,6 +7741,14 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and parsed.info_parsed.get("gemcrafter_variant")
                         == _PUBLIC_CURRENT_VARIANT
                     )
+                    bard_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role) == "bard"
+                        and existing.info_parsed == {}
+                        and parsed.info_parsed.get("bard_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                    )
                     if not (
                         active_update
                         or shut_up_update
@@ -7599,6 +7756,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or baker_update
                         or poet_update
                         or gemcrafter_update
+                        or bard_update
                     ):
                         continue
                 session.add_card(parsed)
