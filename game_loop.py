@@ -45,8 +45,48 @@ def card_enlightened(pos: int, direction: str) -> CardInfo:
     """direction: 'CW', 'CCW', or 'Equidistant'"""
     return CardInfo(pos, "Enlightened", info_parsed={"direction": direction})
 
-def card_knitter(pos: int, evil_pairs: int) -> CardInfo:
-    return CardInfo(pos, "Knitter", info_parsed={"evil_pairs": evil_pairs})
+def _knitter_native_text(evil_pairs: int) -> str:
+    """Return Knitter's exact shipped public clue text."""
+    if type(evil_pairs) is not int or evil_pairs < 0:
+        raise ValueError("Knitter pair count must be a non-negative integer")
+    if evil_pairs == 0:
+        return "Evils are not adjacent to eachother"
+    if evil_pairs == 1:
+        return "There is only 1 pair of Evil"
+    return f"There are {evil_pairs} pairs of Evil"
+
+
+def _parse_knitter_native_text(info_text: str) -> Optional[int]:
+    """Parse one exact current Knitter sentence into its pair count."""
+    if not isinstance(info_text, str):
+        return None
+    if info_text == _knitter_native_text(0):
+        return 0
+    if info_text == _knitter_native_text(1):
+        return 1
+    match = re.fullmatch(r"There are ([1-9]\d*) pairs of Evil", info_text)
+    if match is None:
+        return None
+    evil_pairs = int(match.group(1))
+    if evil_pairs < 2 or info_text != _knitter_native_text(evil_pairs):
+        return None
+    return evil_pairs
+
+
+def card_knitter(
+    pos: int,
+    evil_pairs: int,
+    *,
+    info_text: str = "",
+    knitter_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Knitter observation while preserving unmarked legacy callers."""
+    info = {"evil_pairs": evil_pairs}
+    if knitter_variant is not None:
+        info["knitter_variant"] = knitter_variant
+        if not info_text:
+            info_text = _knitter_native_text(evil_pairs)
+    return CardInfo(pos, "Knitter", info_text=info_text, info_parsed=info)
 
 def card_confessor(pos: int, dizzy: bool) -> CardInfo:
     return CardInfo(pos, "Confessor", info_parsed={"dizzy": dizzy})
@@ -1134,11 +1174,18 @@ def card_poet_with_info(
             info_text=_medium_native_text(good_position, good_role),
         )
     elif canonical_provider == "Knitter":
+        if n_cards is None:
+            raise ValueError("Current Knitter Poet entry requires session board size")
         require_args(1)
         evil_pairs = integer(0, "pair count")
-        if evil_pairs < 0 or (n_cards is not None and evil_pairs > n_cards):
+        if evil_pairs < 0 or evil_pairs > n_cards:
             raise ValueError("Knitter Poet pair count is outside the current board")
-        payload = {"evil_pairs": evil_pairs}
+        return _card_current_poet(
+            pos,
+            "Knitter",
+            {"evil_pairs": evil_pairs},
+            info_text=_knitter_native_text(evil_pairs),
+        )
     elif canonical_provider == "Hunter":
         require_args(1)
         distance = integer(0, "distance")
@@ -4863,13 +4910,25 @@ def _parse_clue_from_memory(
             val = rd.get('corrupted_around') if rd.get('type') == 'corrupted_around' else rd.get('cures')
             return card_alchemist(pos, val or 0)
 
-    # --- Knitter: "X evil pair(s)" / "X pairs of Evil" / "Evils are not adjacent" ---
+    # --- Knitter: exact current sentence and newest zero-reference event. ---
     if role_lower == 'knitter':
-        if 'not adjacent' in clue.lower() or 'no evil' in clue.lower():
-            return card_knitter(pos, 0)
-        m = re.search(r'(\d+)\s+(?:evil\s+)?pair', clue, re.IGNORECASE)
-        if m:
-            return card_knitter(pos, int(m.group(1)))
+        evil_pairs = _parse_knitter_native_text(clue)
+        if (
+            evil_pairs is not None
+            and type(n_cards) is int
+            and n_cards > 0
+            and type(pos) is int
+            and 1 <= pos <= n_cards
+            and evil_pairs <= n_cards
+            and current_event_refs() == []
+        ):
+            return card_knitter(
+                pos,
+                evil_pairs,
+                info_text=clue,
+                knitter_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        return None
 
     # --- Confessor: "dizzy" or "feeling good" ---
     if role_lower == 'confessor':
@@ -5468,43 +5527,24 @@ def _parse_clue_from_memory(
                     info_text=clue,
                 )
 
-        # Knitter exact native forms.
-        if re.fullmatch(
-            r'\s*Evils\s+are\s+not\s+adjacent\s+to\s+eachother\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        ) and poet_refs_match([]):
+        # Knitter emits one exact sentence and no references.  Its provider
+        # ignores the Character forwarded by Poet.
+        evil_pairs = _parse_knitter_native_text(clue)
+        if (
+            evil_pairs is not None
+            and type(n_cards) is int
+            and n_cards > 0
+            and type(pos) is int
+            and 1 <= pos <= n_cards
+            and evil_pairs <= n_cards
+            and poet_refs_match([])
+        ):
             return _card_current_poet(
                 pos,
                 "Knitter",
-                {"evil_pairs": 0},
+                {"evil_pairs": evil_pairs},
                 info_text=clue,
             )
-        if re.fullmatch(
-            r'\s*There\s+is\s+only\s+1\s+pair\s+of\s+Evil\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        ) and poet_refs_match([]):
-            return _card_current_poet(
-                pos,
-                "Knitter",
-                {"evil_pairs": 1},
-                info_text=clue,
-            )
-        m = re.fullmatch(
-            r'\s*There\s+are\s+(\d+)\s+pairs\s+of\s+Evil\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m and poet_refs_match([]):
-            evil_pairs = int(m.group(1))
-            if evil_pairs > 1 and (n_cards is None or evil_pairs <= n_cards):
-                return _card_current_poet(
-                    pos,
-                    "Knitter",
-                    {"evil_pairs": evil_pairs},
-                    info_text=clue,
-                )
         # Lover/Empath stores the copied Poet's physical previous/next
         # neighbors, including duplicate Character references on tiny boards.
         evil_adjacent = _parse_lover_native_text(clue)
@@ -5643,12 +5683,28 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     Role aliases: fortune_teller, plague_doctor, dreamer_old, no_info
     """
     role = args[0].lower()
+    if role == "knitter" and len(args) != 3:
+        raise ValueError("Knitter entry requires exactly one pair count")
     pos = int(args[1])
 
     if role == "enlightened":
         return card_enlightened(pos, args[2])  # CW/CCW/Equidistant
     elif role == "knitter":
-        return card_knitter(pos, int(args[2]))
+        if session is None:
+            raise ValueError("Current Knitter entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Knitter position is outside the current board")
+        try:
+            evil_pairs = int(args[2])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Knitter pair count must be an integer") from exc
+        if not 0 <= evil_pairs <= session.n_cards:
+            raise ValueError("Knitter pair count is outside the current board")
+        return card_knitter(
+            pos,
+            evil_pairs,
+            knitter_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "confessor":
         dizzy = args[2].lower() in ("dizzy", "dirty", "true", "1", "yes")
         return card_confessor(pos, dizzy)

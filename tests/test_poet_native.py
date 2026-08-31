@@ -92,7 +92,7 @@ class PoetManualIngestionTests(unittest.TestCase):
 
         for provider, args, canonical in cases:
             with self.subTest(provider=provider):
-                card = card_poet_with_info(1, provider, args)
+                card = card_poet_with_info(1, provider, args, n_cards=6)
                 self.assertEqual(card.apparent_role, "Poet")
                 self.assertEqual(card.info_parsed["copied_role"], canonical)
                 self.assertEqual(card.info_parsed["poet_variant"], POET_VARIANT)
@@ -134,7 +134,7 @@ class PoetManualIngestionTests(unittest.TestCase):
 
         for provider, args, expected in cases:
             with self.subTest(provider=provider):
-                card = card_poet_with_info(1, provider, args)
+                card = card_poet_with_info(1, provider, args, n_cards=6)
                 expected = dict(expected)
                 expected["copied_role"] = card.info_parsed["copied_role"]
                 expected["poet_variant"] = POET_VARIANT
