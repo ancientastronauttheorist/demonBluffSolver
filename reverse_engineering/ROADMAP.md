@@ -272,6 +272,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   RNG chronology; expand the typed union to 36 target sets, 735 memberships,
   474 selected managed definitions, and 394 unique native RVAs, then publish
   its typed-quality report.
+- [x] Asset-bind public Bard to managed `Acrobat2`; native-audit all nine
+  declared methods plus acted-record, circular-order, range-reference, false-
+  number, and integer-RNG helpers; close exact direct/Poet text and ordered
+  reference geometry, actor-self exclusion, full-lifecycle Corruption scans,
+  fixed non-board-clamped bluff domain, managed-name ingestion, native real/bluff
+  callback ordering, raw-bluff identity, identity movers, Baker-to-Spy
+  chronology, and archive compatibility; expand the typed union to 37 target
+  sets, 750 memberships, 482 selected managed definitions, and 401 unique
+  native RVAs, then publish its typed-quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

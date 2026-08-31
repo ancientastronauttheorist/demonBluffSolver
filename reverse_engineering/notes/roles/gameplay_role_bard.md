@@ -415,6 +415,40 @@ eight previously unclassified `Acrobat2` methods and strengthening the
 constructor's existing Poet-provider classification. The checked totals are
 481 classifications and 243 evidence records.
 
+## Implementation regression gates
+
+The matching reader, bridge, and solver checkpoint passed these focused and
+aggregate gates:
+
+- `python -m py_compile memory_reader.py game_loop.py
+  tests/test_bard_native.py tests/test_poet_native.py` completed cleanly. The
+  combined Bard/Poet focused suite passed 45/45 tests, and the full Python
+  discovery suite passed 613/613.
+- `cargo test -p solver-core current_bard --lib -- --nocapture` passed 8/8
+  focused tests. They cover exact direct/Poet schema and text, circular
+  references including duplicate opposite seats and oversized empty ranges,
+  actor-self exclusion, truthful and lying dispatch, callback overwrite order,
+  all physical lifecycle seats, Twin/Shaman movement, one shared anonymous-
+  Wretch assignment, Baker-to-Spy chronology, unresolved Start identities, and
+  unmarked archive compatibility.
+- `cargo test --release -p solver-core --lib` passed 367/367. Both
+  `cargo check --all-targets` and `cargo build --release` completed cleanly.
+- `cargo test --release --test simulation -- --nocapture` passed 31/31 in
+  866.93 seconds. Its 426 active-v2 fixtures produced 303 wins, seven expected
+  losses, 21 expected constraint issues, zero unexpected constraint failures,
+  six known unexpected simulation losses, 15 hidden-Outcast truth gaps, and 74
+  fixtures awaiting ordered Twin traces. Those aggregate counts are unchanged
+  from the preceding Gemcrafter checkpoint.
+
+The reader and bridge now map current managed `Acrobat2` to public Bard,
+require the newest coherent exact text/reference event, and retain historical
+aliases and unmarked observations on their legacy paths. The strict Rust path
+models the native real-role callback before the later raw-bluff callback and
+joins both positive and negative raw-bluff labels through the global hidden-
+surface search. That ordering matters when the later bluff clue overwrites an
+earlier truthful clue; it is covered by a moved-Bard regression rather than
+being inferred from the archive's textless scalar clues.
+
 ## Remaining uncertainty
 
 - The target proves the candidate occurrence domain and requested Unity RNG
