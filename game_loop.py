@@ -6,6 +6,7 @@ Card builder functions, session tracking, CLI interface.
 from __future__ import annotations
 import atexit
 from collections import Counter
+import copy
 import json
 import os
 import re
@@ -1140,6 +1141,25 @@ def _latest_acted_event_fingerprint(card: Optional[dict]):
     return len(infos), newest
 
 
+def _acted_history_fingerprint(card: Optional[dict]):
+    """Stable fingerprint of an actor's complete native callback list."""
+    if not isinstance(card, dict):
+        return None
+    infos = card.get("acted_infos")
+    if not isinstance(infos, list):
+        return None
+    try:
+        encoded = json.dumps(
+            infos,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=repr,
+        )
+    except (TypeError, ValueError):
+        encoded = repr(infos)
+    return len(infos), encoded
+
+
 def _local_repeatable_event_expectation(
     card: CardInfo,
     *,
@@ -1415,6 +1435,655 @@ def card_druid(
         }
         info_text = expected_text
     return CardInfo(pos, "Druid", info_text=info_text, info_parsed=info)
+
+
+def _druid_shut_up_text(target: int) -> str:
+    """Return the exact native Rambler replacement shown by Druid."""
+    if type(target) is not int or target <= 0:
+        raise ValueError("Druid Rambler target must be a positive integer")
+    return f"#{target}\nshut up!"
+
+
+def _card_current_druid_interruption(
+    pos: int,
+    target: int,
+    *,
+    n_cards: Optional[int] = None,
+) -> CardInfo:
+    """Build one provenance-marked current Druid interruption surface."""
+    if type(pos) is not int or pos <= 0:
+        raise ValueError("Current Druid position must be positive")
+    if type(target) is not int or target <= 0:
+        raise ValueError("Druid Rambler target must be a positive integer")
+    if n_cards is not None and (pos > n_cards or target > n_cards):
+        raise ValueError("Current Druid interruption is outside the board")
+    return CardInfo(
+        pos,
+        "Druid",
+        info_text=_druid_shut_up_text(target),
+        info_parsed={
+            "shut_up_target": target,
+            "druid_variant": _PUBLIC_CURRENT_VARIANT,
+        },
+    )
+
+
+_ORDERED_CALLBACK_LEDGER_VARIANT = "ordered_callbacks_v1"
+_CALLBACK_COMMON_FIELDS = {
+    "activation_id",
+    "activation_evidence",
+    "callback_index",
+    "dispatch_path",
+    "event_kind",
+    "reset_generation",
+    "text",
+    "references",
+    "settled_reveal_count",
+}
+_CALLBACK_ACTIVATION_EVIDENCE = {
+    "single_callback_suffix",
+    "auto_use_click",
+    "session_reset_generation",
+    "same_activation_extension",
+}
+_DRUID_RESULT_CALLBACK_FIELDS = _CALLBACK_COMMON_FIELDS | {
+    "targets",
+    "found_outcast",
+}
+_DRUID_INTERRUPTION_CALLBACK_FIELDS = _CALLBACK_COMMON_FIELDS | {
+    "shut_up_target",
+}
+
+
+def _validate_callback_references(
+    references,
+    *,
+    n_cards: int,
+    label: str,
+):
+    """Validate the public ActedInfo reference surface for one callback."""
+    if references is None:
+        return None
+    if (
+        not isinstance(references, list)
+        or any(
+            type(reference) is not int
+            or not 1 <= reference <= n_cards
+            for reference in references
+        )
+    ):
+        raise ValueError(
+            f"{label}.references must be null or current-board positions"
+        )
+    return list(references)
+
+
+def _druid_scalar_callback(info: dict, *, n_cards: int) -> dict:
+    """Validate one pre-ledger current result and return its raw callback."""
+    if not isinstance(info, dict):
+        raise ValueError("Druid info_parsed must be an object")
+    if info.get("druid_variant") != _PUBLIC_CURRENT_VARIANT:
+        raise ValueError("Current Druid evidence requires public_current provenance")
+    if "observations" in info:
+        raise ValueError(
+            "Legacy marked Druid observations cannot be safely resumed; "
+            "restart the village from verified reveal history"
+        )
+    if "targets" in info or "found_outcast" in info:
+        if set(info) != {"druid_variant", "targets", "found_outcast"}:
+            raise ValueError("Current scalar Druid result has unsupported fields")
+        targets = _validate_current_druid_targets(
+            info.get("targets"),
+            n_cards=n_cards,
+        )
+        found_outcast = _canonical_druid_outcast(info.get("found_outcast"))
+        if info.get("found_outcast") != found_outcast:
+            raise ValueError("Current Druid found_outcast must be canonical")
+        return {
+            "event_kind": "druid_result",
+            "text": _druid_native_text(targets, found_outcast),
+            "references": list(targets),
+            "targets": list(targets),
+            "found_outcast": found_outcast,
+        }
+    if "shut_up_target" in info:
+        raise ValueError(
+            "A current Druid interruption cannot be persisted from manual "
+            "scalar input; recover its authenticated raw callback history"
+        )
+    raise ValueError("Current scalar Druid evidence has no callback result")
+
+
+def _validate_ordered_callback_groups(
+    events,
+    *,
+    actor_position: int,
+    n_cards: int,
+    reveal_order: Optional[list[int]] = None,
+    baker_rule_version: Optional[str] = None,
+) -> list[dict]:
+    """Validate role-agnostic activation grouping and public boundaries."""
+    if not isinstance(events, list) or not events:
+        raise ValueError("Current callback_events must be a nonempty array")
+    if reveal_order is not None:
+        if baker_rule_version != BAKER_RULE_VERSION:
+            raise ValueError(
+                "Current callback history requires verified reveal_order/Baker "
+                "provenance"
+            )
+        if (
+            len(reveal_order) > n_cards
+            or any(
+                type(position) is not int
+                or not 1 <= position <= n_cards
+                for position in reveal_order
+            )
+            or len(set(reveal_order)) != len(reveal_order)
+        ):
+            raise ValueError("Verified reveal_order is malformed")
+
+    normalized = []
+    groups: list[list[dict]] = []
+    previous_activation = 0
+    previous_boundary = 0
+    previous_reset_generation = -1
+    for index, raw_event in enumerate(events):
+        label = f"Druid callback_events[{index}]"
+        if not isinstance(raw_event, dict):
+            raise ValueError(f"{label} must be an object")
+        event = copy.deepcopy(raw_event)
+        activation_id = event.get("activation_id")
+        callback_index = event.get("callback_index")
+        activation_evidence = event.get("activation_evidence")
+        dispatch_path = event.get("dispatch_path")
+        reset_generation = event.get("reset_generation")
+        settled = event.get("settled_reveal_count")
+        if type(activation_id) is not int or activation_id <= 0:
+            raise ValueError(f"{label}.activation_id must be positive")
+        if type(callback_index) is not int or callback_index < 0:
+            raise ValueError(f"{label}.callback_index must be nonnegative")
+        if dispatch_path not in {"either", "real", "raw"}:
+            raise ValueError(f"{label}.dispatch_path is unsupported")
+        if activation_evidence not in _CALLBACK_ACTIVATION_EVIDENCE:
+            raise ValueError(f"{label}.activation_evidence is unsupported")
+        if type(reset_generation) is not int or reset_generation < 0:
+            raise ValueError(f"{label}.reset_generation must be nonnegative")
+        if (
+            type(settled) is not int
+            or settled < 1
+            or settled > n_cards
+        ):
+            raise ValueError(
+                f"{label}.settled_reveal_count must be within 1..{n_cards}"
+            )
+        if reveal_order is not None:
+            if settled > len(reveal_order):
+                raise ValueError(
+                    f"{label}.settled_reveal_count exceeds verified reveals"
+                )
+            if actor_position not in reveal_order[:settled]:
+                raise ValueError(
+                    f"Druid actor #{actor_position} is absent from the "
+                    f"verified reveal prefix for {label}"
+                )
+        event["references"] = _validate_callback_references(
+            event.get("references"),
+            n_cards=n_cards,
+            label=label,
+        )
+        if activation_id != previous_activation:
+            if activation_id != previous_activation + 1 or callback_index != 0:
+                raise ValueError(
+                    "Druid activation IDs and callback indices must be "
+                    "contiguous from activation 1"
+                )
+            if settled < previous_boundary:
+                raise ValueError(
+                    "Druid settled reveal boundaries must be nondecreasing"
+                )
+            if reset_generation <= previous_reset_generation:
+                raise ValueError(
+                    "Druid reset generations must increase between activations"
+                )
+            groups.append([])
+            previous_activation = activation_id
+            previous_boundary = settled
+            previous_reset_generation = reset_generation
+        else:
+            if not groups or callback_index != len(groups[-1]):
+                raise ValueError(
+                    "Druid callback indices must be contiguous within an activation"
+                )
+            if settled != previous_boundary:
+                raise ValueError(
+                    "Every callback in one Druid activation must share one "
+                    "settled reveal boundary"
+                )
+            if reset_generation != previous_reset_generation:
+                raise ValueError(
+                    "Every callback in one Druid activation must share one "
+                    "reset generation"
+                )
+            if activation_evidence != groups[-1][0]["activation_evidence"]:
+                raise ValueError(
+                    "Every callback in one Druid activation must share one "
+                    "activation evidence value"
+                )
+        groups[-1].append(event)
+        normalized.append(event)
+
+    for activation_id, group in enumerate(groups, start=1):
+        paths = [event["dispatch_path"] for event in group]
+        activation_evidence = group[0]["activation_evidence"]
+        if len(group) == 1:
+            if paths != ["either"]:
+                raise ValueError(
+                    f"Druid activation {activation_id} single callback must "
+                    "use dispatch_path either"
+                )
+            if activation_evidence == "same_activation_extension":
+                raise ValueError(
+                    f"Druid activation {activation_id} cannot use "
+                    "same_activation_extension for one callback"
+                )
+        elif len(group) == 2:
+            if paths != ["real", "raw"]:
+                raise ValueError(
+                    f"Druid activation {activation_id} must dispatch real then raw"
+                )
+            if activation_evidence == "single_callback_suffix":
+                raise ValueError(
+                    f"Druid activation {activation_id} cannot use "
+                    "single_callback_suffix for two callbacks"
+                )
+        else:
+            raise ValueError(
+                f"Druid activation {activation_id} has more than two callbacks"
+            )
+    return normalized
+
+
+def _validate_druid_callback_event(
+    event: dict,
+    *,
+    n_cards: int,
+    label: str,
+) -> dict:
+    """Validate one kind-specific callback after common group validation."""
+    kind = event.get("event_kind")
+    if kind == "druid_result":
+        if set(event) != _DRUID_RESULT_CALLBACK_FIELDS:
+            raise ValueError(f"{label} has unsupported Druid-result fields")
+        targets = _validate_current_druid_targets(
+            event.get("targets"),
+            n_cards=n_cards,
+        )
+        found_outcast = _canonical_druid_outcast(event.get("found_outcast"))
+        if event.get("found_outcast") != found_outcast:
+            raise ValueError(f"{label}.found_outcast must be canonical")
+        expected_text = _druid_native_text(targets, found_outcast)
+        if event.get("text") != expected_text:
+            raise ValueError(f"{label}.text must exactly equal {expected_text!r}")
+        if event.get("references") != targets:
+            raise ValueError(f"{label}.references must equal click-order targets")
+        event["targets"] = targets
+        event["found_outcast"] = found_outcast
+        return event
+    if kind == "rambler_interruption":
+        if set(event) != _DRUID_INTERRUPTION_CALLBACK_FIELDS:
+            raise ValueError(f"{label} has unsupported interruption fields")
+        target = event.get("shut_up_target")
+        if type(target) is not int or not 1 <= target <= n_cards:
+            raise ValueError(f"{label}.shut_up_target is outside the board")
+        if event.get("text") != _druid_shut_up_text(target):
+            raise ValueError(f"{label}.text is not the exact interruption text")
+        if event.get("references") != [target]:
+            raise ValueError(f"{label}.references must be [{target}]")
+        return event
+    if kind == "opaque_real":
+        if set(event) != _CALLBACK_COMMON_FIELDS:
+            raise ValueError(f"{label} has unsupported opaque callback fields")
+        if not isinstance(event.get("text"), str) or not event["text"]:
+            raise ValueError(f"{label}.text must preserve a nonempty callback")
+        return event
+    raise ValueError(f"{label}.event_kind is unsupported")
+
+
+def _druid_callback_ledger(
+    info: dict,
+    *,
+    actor_position: int,
+    n_cards: int,
+    reveal_order: Optional[list[int]] = None,
+    baker_rule_version: Optional[str] = None,
+) -> list[dict]:
+    """Validate the strict ordered current-Druid callback ledger."""
+    if not isinstance(info, dict):
+        raise ValueError("Druid info_parsed must be an object")
+    if info.get("druid_variant") != _PUBLIC_CURRENT_VARIANT:
+        raise ValueError("Current Druid ledger requires public_current provenance")
+    if info.get("callback_ledger_variant") != _ORDERED_CALLBACK_LEDGER_VARIANT:
+        if "observations" in info:
+            raise ValueError(
+                "Legacy marked Druid observations cannot be safely resumed; "
+                "restart the village from verified reveal history"
+            )
+        raise ValueError(
+            "Scalar-only current Druid evidence cannot be safely resumed; "
+            "restart the village from verified reveal history"
+        )
+    events = _validate_ordered_callback_groups(
+        info.get("callback_events"),
+        actor_position=actor_position,
+        n_cards=n_cards,
+        reveal_order=reveal_order,
+        baker_rule_version=baker_rule_version,
+    )
+    events = [
+        _validate_druid_callback_event(
+            event,
+            n_cards=n_cards,
+            label=f"Druid callback_events[{index}]",
+        )
+        for index, event in enumerate(events)
+    ]
+    for group_id in range(1, events[-1]["activation_id"] + 1):
+        group = [event for event in events if event["activation_id"] == group_id]
+        if group[0]["event_kind"] == "opaque_real" and (
+            len(group) != 2
+            or group[0]["dispatch_path"] != "real"
+            or group[1]["dispatch_path"] != "raw"
+            or group[1]["event_kind"] == "opaque_real"
+        ):
+            raise ValueError(
+                "An opaque real callback must be followed by one raw public "
+                "Druid callback in the same activation"
+            )
+        if group[-1]["event_kind"] == "opaque_real":
+            raise ValueError("A Druid activation cannot end with an opaque callback")
+        if len(group) == 2:
+            interruption_flags = [
+                event["event_kind"] == "rambler_interruption"
+                for event in group
+            ]
+            if interruption_flags[0] != interruption_flags[1]:
+                raise ValueError(
+                    "Both callbacks in one Druid activation must either be "
+                    "Rambler interruptions or both remain non-interruptions"
+                )
+            if all(interruption_flags) and (
+                group[0]["shut_up_target"] != group[1]["shut_up_target"]
+            ):
+                raise ValueError(
+                    "Both Rambler callbacks in one Druid activation must name "
+                    "the same physical target"
+                )
+            if all(
+                event["event_kind"] == "druid_result" for event in group
+            ) and group[0]["targets"] != group[1]["targets"]:
+                raise ValueError(
+                    "Both Druid-result callbacks in one activation must share "
+                    "the same click-order targets"
+                )
+
+    latest = events[-1]
+    common_fields = {
+        "druid_variant",
+        "callback_ledger_variant",
+        "callback_events",
+    }
+    if latest["event_kind"] == "druid_result":
+        if set(info) != common_fields | {"targets", "found_outcast"}:
+            raise ValueError("Current Druid latest normal alias is malformed")
+        if (
+            info.get("targets") != latest["targets"]
+            or info.get("found_outcast") != latest["found_outcast"]
+        ):
+            raise ValueError(
+                "Current Druid latest alias must match the final callback"
+            )
+    else:
+        if set(info) != common_fields | {"shut_up_target"}:
+            raise ValueError("Current Druid latest interruption alias is malformed")
+        if info.get("shut_up_target") != latest["shut_up_target"]:
+            raise ValueError(
+                "Current Druid interruption alias must match the final callback"
+            )
+    return events
+
+
+def _stamp_druid_callback_group(
+    callbacks: list[dict],
+    *,
+    activation_id: int,
+    activation_evidence: str,
+    reset_generation: int,
+    settled_reveal_count: int,
+) -> list[dict]:
+    """Stamp one provable one- or two-dispatch activation."""
+    if not 1 <= len(callbacks) <= 2:
+        raise ValueError(
+            "A newly captured Druid activation must have one or two callbacks"
+        )
+    if callbacks[-1].get("event_kind") == "opaque_real":
+        raise ValueError("A Druid activation is still awaiting its public callback")
+    if activation_evidence not in _CALLBACK_ACTIVATION_EVIDENCE:
+        raise ValueError("Druid activation evidence is unsupported")
+    if (
+        activation_evidence == "single_callback_suffix"
+        and len(callbacks) != 1
+    ):
+        raise ValueError(
+            "single_callback_suffix can authenticate only one callback"
+        )
+    if (
+        activation_evidence == "same_activation_extension"
+        and len(callbacks) != 2
+    ):
+        raise ValueError(
+            "same_activation_extension requires exactly two callbacks"
+        )
+    if type(reset_generation) is not int or reset_generation < 0:
+        raise ValueError("Druid reset generation must be nonnegative")
+    stamped = []
+    for callback_index, callback in enumerate(callbacks):
+        event = copy.deepcopy(callback)
+        event.update({
+            "activation_id": activation_id,
+            "activation_evidence": activation_evidence,
+            "callback_index": callback_index,
+            "dispatch_path": (
+                "either"
+                if len(callbacks) == 1
+                else "real" if callback_index == 0 else "raw"
+            ),
+            "reset_generation": reset_generation,
+            "settled_reveal_count": settled_reveal_count,
+        })
+        stamped.append(event)
+    if stamped[0]["event_kind"] == "opaque_real" and len(stamped) != 2:
+        raise ValueError("Opaque real callback has no matching raw Druid callback")
+    return stamped
+
+
+def _druid_callback_signature(event: dict) -> dict:
+    """Return exactly the two public fields present in raw ActedInfo."""
+    return {
+        "desc": event["text"],
+        "targets": copy.deepcopy(event["references"]),
+    }
+
+
+def _druid_interruption_records(
+    events: list[dict],
+    *,
+    speaker_position: int,
+) -> list[dict]:
+    """Project every ordered Druid interruption into global Rambler shape."""
+    return [
+        {
+            "speaker_position": speaker_position,
+            "shut_up_target": event["shut_up_target"],
+        }
+        for event in events
+        if event.get("event_kind") == "rambler_interruption"
+    ]
+
+
+def _validate_druid_rambler_sync(
+    events: list[dict],
+    *,
+    speaker_position: int,
+    rambler_observations,
+) -> None:
+    """Require exact per-speaker parity with the global Rambler ledger."""
+    if not isinstance(rambler_observations, list):
+        raise ValueError("Global Rambler evidence must be an array")
+    expected = _druid_interruption_records(
+        events,
+        speaker_position=speaker_position,
+    )
+    actual = []
+    for observation in rambler_observations:
+        if (
+            isinstance(observation, dict)
+            and observation.get("speaker_position") == speaker_position
+        ):
+            if set(observation) != {"speaker_position", "shut_up_target"}:
+                raise ValueError(
+                    "Same-speaker global Druid/Rambler evidence has unsupported "
+                    "fields"
+                )
+            actual.append(dict(observation))
+    if actual != expected:
+        raise ValueError(
+            "Persisted Druid interruptions disagree with the exact same-speaker "
+            "global Rambler evidence"
+        )
+
+
+def _apply_druid_callback_ledger(card: CardInfo, events: list[dict]) -> None:
+    """Install one validated ledger and its exact latest-value alias."""
+    latest = events[-1]
+    info = {
+        "druid_variant": _PUBLIC_CURRENT_VARIANT,
+        "callback_ledger_variant": _ORDERED_CALLBACK_LEDGER_VARIANT,
+        "callback_events": copy.deepcopy(events),
+    }
+    if latest["event_kind"] == "druid_result":
+        info["targets"] = list(latest["targets"])
+        info["found_outcast"] = latest["found_outcast"]
+    elif latest["event_kind"] == "rambler_interruption":
+        info["shut_up_target"] = latest["shut_up_target"]
+    else:
+        raise ValueError("Current Druid latest callback is not publicly usable")
+    card.info_parsed = info
+    card.info_text = latest["text"]
+
+
+_DRUID_RAW_RESULT_FIELDS = {
+    "event_kind", "text", "references", "targets", "found_outcast",
+}
+_DRUID_RAW_INTERRUPTION_FIELDS = {
+    "event_kind", "text", "references", "shut_up_target",
+}
+_DRUID_RAW_OPAQUE_FIELDS = {"event_kind", "text", "references"}
+_DRUID_PENDING_FIELDS = {
+    "activation_id",
+    "expected_targets",
+    "prior_callback_count",
+    "reset_generation",
+    "settled_reveal_count",
+}
+
+
+def _validate_raw_druid_callbacks(callbacks, *, n_cards: int) -> list[dict]:
+    """Revalidate transient callbacks before trusting a session join."""
+    if not isinstance(callbacks, list) or not callbacks:
+        raise ValueError("Druid raw callback history must be a nonempty array")
+    normalized = []
+    for index, raw_callback in enumerate(callbacks):
+        label = f"Druid raw callback[{index}]"
+        if not isinstance(raw_callback, dict):
+            raise ValueError(f"{label} must be an object")
+        callback = copy.deepcopy(raw_callback)
+        kind = callback.get("event_kind")
+        if kind == "druid_result":
+            if set(callback) != _DRUID_RAW_RESULT_FIELDS:
+                raise ValueError(f"{label} has unsupported result fields")
+            targets = _validate_current_druid_targets(
+                callback.get("targets"),
+                n_cards=n_cards,
+            )
+            found = _canonical_druid_outcast(callback.get("found_outcast"))
+            if callback.get("found_outcast") != found:
+                raise ValueError(f"{label}.found_outcast must be canonical")
+            if callback.get("references") != targets:
+                raise ValueError(f"{label}.references must equal click order")
+            if callback.get("text") != _druid_native_text(targets, found):
+                raise ValueError(f"{label}.text is not exact")
+            callback["targets"] = targets
+        elif kind == "rambler_interruption":
+            if set(callback) != _DRUID_RAW_INTERRUPTION_FIELDS:
+                raise ValueError(f"{label} has unsupported interruption fields")
+            target = callback.get("shut_up_target")
+            if type(target) is not int or not 1 <= target <= n_cards:
+                raise ValueError(f"{label}.shut_up_target is outside the board")
+            if callback.get("references") != [target]:
+                raise ValueError(f"{label}.references must equal [{target}]")
+            if callback.get("text") != _druid_shut_up_text(target):
+                raise ValueError(f"{label}.text is not exact")
+        elif kind == "opaque_real":
+            if set(callback) != _DRUID_RAW_OPAQUE_FIELDS:
+                raise ValueError(f"{label} has unsupported opaque fields")
+            if not isinstance(callback.get("text"), str) or not callback["text"]:
+                raise ValueError(f"{label}.text must be nonempty")
+            callback["references"] = _validate_callback_references(
+                callback.get("references"),
+                n_cards=n_cards,
+                label=label,
+            )
+        else:
+            raise ValueError(f"{label}.event_kind is unsupported")
+        normalized.append(callback)
+    if normalized[-1]["event_kind"] == "opaque_real":
+        raise ValueError("Druid raw history is still awaiting its raw callback")
+    return normalized
+
+
+def _validate_druid_pending_token(
+    token,
+    *,
+    actor_position: int,
+    n_cards: int,
+    reveal_order: list[int],
+    reset_generation: int,
+    prior_callback_count: int,
+    next_activation_id: int,
+) -> dict:
+    """Validate a persisted automated-click token without mutating it."""
+    if not isinstance(token, dict) or set(token) != _DRUID_PENDING_FIELDS:
+        raise ValueError("Pending Druid auto-use token is malformed")
+    settled = token.get("settled_reveal_count")
+    if (
+        type(settled) is not int
+        or not 1 <= settled <= len(reveal_order)
+        or actor_position not in reveal_order[:settled]
+    ):
+        raise ValueError("Pending Druid auto-use reveal boundary is invalid")
+    if token.get("reset_generation") != reset_generation:
+        raise ValueError("Pending Druid auto-use reset generation is stale")
+    if token.get("prior_callback_count") != prior_callback_count:
+        raise ValueError("Pending Druid auto-use callback prefix is stale")
+    if token.get("activation_id") != next_activation_id:
+        raise ValueError("Pending Druid auto-use activation ID is stale")
+    targets = _validate_current_druid_targets(
+        token.get("expected_targets"),
+        n_cards=n_cards,
+    )
+    normalized = copy.deepcopy(token)
+    normalized["expected_targets"] = targets
+    return normalized
 
 _BISHOP_PUBLIC_TYPES = ("Villager", "Outcast", "Minion", "Demon")
 
@@ -2274,6 +2943,13 @@ class GameSession:
         self.baker_rule_version: Optional[str] = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version: Optional[str] = DOPPEL_DRUNK_RULE_VERSION
         self.fortune_teller_rule_version: Optional[str] = FORTUNE_TELLER_RULE_VERSION
+        # Session-only provenance for ResetAfterNight Druid activations. The
+        # generation advances once per completed Night while the actor is
+        # known, even if its prior use bit was already clear. Pending tokens
+        # are persisted before an automated click so a crash cannot orphan the
+        # strongest available grouping evidence.
+        self.druid_reset_generations: dict[int, int] = {}
+        self.druid_pending_activations: dict[int, dict] = {}
         self.terminal_loss_role: Optional[str] = None
         self.executed_current_roles: dict[int, str] = {}
         self.revealed_night_current_roles: dict[int, str] = {}
@@ -2409,6 +3085,8 @@ class GameSession:
         self.baker_rule_version = BAKER_RULE_VERSION
         self.doppel_drunk_rule_version = DOPPEL_DRUNK_RULE_VERSION
         self.fortune_teller_rule_version = FORTUNE_TELLER_RULE_VERSION
+        self.druid_reset_generations.clear()
+        self.druid_pending_activations.clear()
         self.terminal_loss_role = None
         self.executed_current_roles.clear()
         self.revealed_night_current_roles.clear()
@@ -2529,6 +3207,31 @@ class GameSession:
 
     def add_card(self, card: CardInfo):
         role_key = card.apparent_role.lower().replace(" ", "_")
+        if (
+            role_key == "druid"
+            and isinstance(card.info_parsed, dict)
+            and card.info_parsed.get("druid_variant")
+            == _PUBLIC_CURRENT_VARIANT
+        ):
+            # Normalize current Druid evidence on a private copy. A later
+            # chronology/reveal-boundary rejection must leave the caller's
+            # CardInfo byte-for-byte unchanged for recovery and diagnostics.
+            source_card = card
+            card = CardInfo(
+                source_card.position,
+                source_card.apparent_role,
+                source_card.info_text,
+                copy.deepcopy(source_card.info_parsed),
+            )
+            for attribute in (
+                "_druid_raw_callbacks",
+            ):
+                if hasattr(source_card, attribute):
+                    setattr(
+                        card,
+                        attribute,
+                        copy.deepcopy(getattr(source_card, attribute)),
+                    )
         existing = next(
             (previous for previous in self.cards if previous.position == card.position),
             None,
@@ -2606,6 +3309,313 @@ class GameSession:
                     strict_native=True,
                 )
 
+        # Current Druid raw callbacks are reconciled against an immutable
+        # persisted prefix before any session field is changed. Manual scalar
+        # input remains explicit compatibility evidence and is intentionally
+        # non-resumable: it cannot certify an old reveal boundary or native
+        # real/raw grouping.
+        current_druid_rules = (
+            role_key == "druid"
+            and isinstance(card.info_parsed, dict)
+            and card.info_parsed.get("druid_variant")
+            == _PUBLIC_CURRENT_VARIANT
+        )
+        druid_event_observed = False
+        reset_druid_event = False
+        druid_raw_capture = False
+        druid_generation_to_store = None
+        druid_consume_pending = False
+        druid_new_rambler_records: list[dict] = []
+        if current_druid_rules:
+            existing_current_druid = (
+                existing is not None
+                and existing_role_key == "druid"
+                and isinstance(existing.info_parsed, dict)
+                and existing.info_parsed.get("druid_variant")
+                == _PUBLIC_CURRENT_VARIANT
+            )
+            raw_callbacks_value = getattr(card, "_druid_raw_callbacks", None)
+            has_explicit_ledger = (
+                card.info_parsed.get("callback_ledger_variant")
+                is not None
+                or "callback_events" in card.info_parsed
+            )
+            if raw_callbacks_value is None:
+                if has_explicit_ledger:
+                    incoming_events = _druid_callback_ledger(
+                        card.info_parsed,
+                        actor_position=card.position,
+                        n_cards=self.n_cards,
+                        reveal_order=self.reveal_order,
+                        baker_rule_version=self.baker_rule_version,
+                    )
+                    if not existing_current_druid:
+                        raise ValueError(
+                            "An ordered Druid ledger requires authenticated raw "
+                            "callback provenance"
+                        )
+                    persisted_events = _druid_callback_ledger(
+                        existing.info_parsed,
+                        actor_position=card.position,
+                        n_cards=self.n_cards,
+                        reveal_order=self.reveal_order,
+                        baker_rule_version=self.baker_rule_version,
+                    )
+                    _validate_druid_rambler_sync(
+                        persisted_events,
+                        speaker_position=card.position,
+                        rambler_observations=(
+                            self.rambler_shut_up_observations
+                        ),
+                    )
+                    if incoming_events != persisted_events:
+                        raise ValueError(
+                            "An ordered Druid ledger cannot be replaced without "
+                            "authenticated appended callbacks"
+                        )
+                    return
+
+                scalar_callback = _druid_scalar_callback(
+                    card.info_parsed,
+                    n_cards=self.n_cards,
+                )
+                if card.info_text != scalar_callback["text"]:
+                    raise ValueError(
+                        "Current scalar Druid text must exactly match its payload"
+                    )
+                if (
+                    existing_current_druid
+                    and existing.info_parsed.get("callback_ledger_variant")
+                    == _ORDERED_CALLBACK_LEDGER_VARIANT
+                ):
+                    raise ValueError(
+                        "A strict Druid callback ledger cannot be replaced by "
+                        "non-resumable scalar compatibility evidence"
+                    )
+                druid_event_observed = True
+            else:
+                druid_raw_capture = True
+                if self.baker_rule_version != BAKER_RULE_VERSION:
+                    raise ValueError(
+                        "Current Druid callback capture requires verified "
+                        "reveal_order/Baker provenance"
+                    )
+                if (
+                    not self.reveal_order
+                    or len(self.reveal_order) > self.n_cards
+                    or len(set(self.reveal_order)) != len(self.reveal_order)
+                    or any(
+                        type(position) is not int
+                        or not 1 <= position <= self.n_cards
+                        for position in self.reveal_order
+                    )
+                    or card.position not in self.reveal_order
+                ):
+                    raise ValueError(
+                        "Current Druid actor must be in the verified reveal prefix"
+                    )
+
+                raw_callbacks = _validate_raw_druid_callbacks(
+                    raw_callbacks_value,
+                    n_cards=self.n_cards,
+                )
+                prior_events: list[dict] = []
+                if existing_current_druid:
+                    prior_events = _druid_callback_ledger(
+                        existing.info_parsed,
+                        actor_position=card.position,
+                        n_cards=self.n_cards,
+                        reveal_order=self.reveal_order,
+                        baker_rule_version=self.baker_rule_version,
+                    )
+                elif existing is not None and (
+                    existing_role_key != "druid"
+                    or bool(existing.info_text)
+                    or bool(existing.info_parsed)
+                ):
+                    raise ValueError(
+                        "Authenticated current Druid callbacks may replace only "
+                        "an empty same-role placeholder"
+                    )
+
+                prior_signatures = [
+                    _druid_callback_signature(event) for event in prior_events
+                ]
+                raw_signatures = [
+                    _druid_callback_signature(event) for event in raw_callbacks
+                ]
+                if (
+                    len(raw_signatures) < len(prior_signatures)
+                    or raw_signatures[:len(prior_signatures)] != prior_signatures
+                ):
+                    raise ValueError(
+                        "Raw Druid callback history does not preserve the "
+                        "persisted prefix"
+                    )
+                if raw_signatures == prior_signatures:
+                    _validate_druid_rambler_sync(
+                        prior_events,
+                        speaker_position=card.position,
+                        rambler_observations=(
+                            self.rambler_shut_up_observations
+                        ),
+                    )
+                    return
+                suffix = raw_callbacks[len(prior_events):]
+                if len(suffix) > 2:
+                    raise ValueError(
+                        "New Druid callback suffix cannot be grouped into one "
+                        "provable activation"
+                    )
+
+                has_generation = card.position in self.druid_reset_generations
+                if prior_events and not has_generation:
+                    raise ValueError(
+                        "Persisted Druid callback history has no matching "
+                        "session reset-generation provenance"
+                    )
+                session_generation = self.druid_reset_generations.get(
+                    card.position,
+                    self.lilis_nights_resolved,
+                )
+                if prior_events and (
+                    prior_events[-1]["reset_generation"] > session_generation
+                ):
+                    raise ValueError(
+                        "Persisted Druid reset generation exceeds session history"
+                    )
+                next_activation_id = (
+                    prior_events[-1]["activation_id"] + 1
+                    if prior_events else 1
+                )
+                pending = self.druid_pending_activations.get(card.position)
+                new_group: list[dict]
+                if pending is not None:
+                    token = _validate_druid_pending_token(
+                        pending,
+                        actor_position=card.position,
+                        n_cards=self.n_cards,
+                        reveal_order=self.reveal_order,
+                        reset_generation=session_generation,
+                        prior_callback_count=len(prior_events),
+                        next_activation_id=next_activation_id,
+                    )
+                    if len(suffix) > 2:
+                        raise ValueError(
+                            "Automated Druid activation emitted too many callbacks"
+                        )
+                    if any(
+                        callback["event_kind"] == "druid_result"
+                        and callback["targets"] != token["expected_targets"]
+                        for callback in suffix
+                    ):
+                        raise ValueError(
+                            "Druid raw callback targets disagree with the "
+                            "persisted auto-use click token"
+                        )
+                    new_group = _stamp_druid_callback_group(
+                        suffix,
+                        activation_id=next_activation_id,
+                        activation_evidence="auto_use_click",
+                        reset_generation=session_generation,
+                        settled_reveal_count=token["settled_reveal_count"],
+                    )
+                    merged_events = prior_events + new_group
+                    druid_consume_pending = True
+                else:
+                    final_group = (
+                        [
+                            event for event in prior_events
+                            if event["activation_id"]
+                            == prior_events[-1]["activation_id"]
+                        ]
+                        if prior_events else []
+                    )
+                    delayed_extension = (
+                        len(suffix) == 1
+                        and len(final_group) == 1
+                        and final_group[0]["dispatch_path"] == "either"
+                        and final_group[0]["reset_generation"]
+                        == session_generation
+                        and card.position in self.used_abilities
+                    )
+                    if delayed_extension:
+                        group_start = len(prior_events) - 1
+                        extended_raw = raw_callbacks[group_start:]
+                        if len(extended_raw) != 2:
+                            raise ValueError(
+                                "Delayed Druid callback extension is not exactly "
+                                "the persisted event plus one appended callback"
+                            )
+                        new_group = _stamp_druid_callback_group(
+                            extended_raw,
+                            activation_id=final_group[0]["activation_id"],
+                            activation_evidence="same_activation_extension",
+                            reset_generation=session_generation,
+                            settled_reveal_count=final_group[0][
+                                "settled_reveal_count"
+                            ],
+                        )
+                        merged_events = prior_events[:-1] + new_group
+                    else:
+                        last_generation = (
+                            prior_events[-1]["reset_generation"]
+                            if prior_events else -1
+                        )
+                        if session_generation <= last_generation:
+                            raise ValueError(
+                                "New Druid callback suffix has no unconsumed "
+                                "reset generation"
+                            )
+                        if not prior_events and len(raw_callbacks) != 1:
+                            raise ValueError(
+                                "An initial Druid ledger attachment must contain "
+                                "exactly one raw callback"
+                            )
+                        generation_gap = session_generation - last_generation
+                        if len(suffix) == 2 and generation_gap > 1:
+                            raise ValueError(
+                                "A two-callback Druid suffix after skipped reset "
+                                "generations is ambiguous"
+                            )
+                        if not prior_events and session_generation == 0:
+                            if len(suffix) != 1:
+                                raise ValueError(
+                                    "Initial Druid history cannot prove a "
+                                    "multi-callback activation"
+                                )
+                            activation_evidence = "single_callback_suffix"
+                        else:
+                            activation_evidence = "session_reset_generation"
+                        new_group = _stamp_druid_callback_group(
+                            suffix,
+                            activation_id=next_activation_id,
+                            activation_evidence=activation_evidence,
+                            reset_generation=session_generation,
+                            settled_reveal_count=len(self.reveal_order),
+                        )
+                        merged_events = prior_events + new_group
+
+                _apply_druid_callback_ledger(card, merged_events)
+                validated_events = _druid_callback_ledger(
+                    card.info_parsed,
+                    actor_position=card.position,
+                    n_cards=self.n_cards,
+                    reveal_order=self.reveal_order,
+                    baker_rule_version=self.baker_rule_version,
+                )
+                _validate_druid_rambler_sync(
+                    prior_events,
+                    speaker_position=card.position,
+                    rambler_observations=self.rambler_shut_up_observations,
+                )
+                druid_new_rambler_records = _druid_interruption_records(
+                    validated_events[len(prior_events):],
+                    speaker_position=card.position,
+                )
+                druid_generation_to_store = session_generation
+                druid_event_observed = True
+                delattr(card, "_druid_raw_callbacks")
         # Validate Judge evidence before mutating reveal order or any session
         # list, so a malformed history is rejected atomically.
         current_judge_history: list[dict] = []
@@ -2776,16 +3786,35 @@ class GameSession:
         # The ledger is chronological public-event state, not an audit log of
         # parser corrections. Editing a non-reset event replaces/removes its
         # current record in place, preserving global event order. A later
-        # ResetAfterNight Judge/Fortune Teller events append new records even
+        # ResetAfterNight Judge/Fortune Teller/Druid events append new records even
         # when the public result is identical.
         incoming_is_shut_up = type(incoming_shut_up_target) is int
         existing_is_shut_up = type(existing_shut_up_target) is int
         incoming_is_event = (
-            role_key not in {"fortune_teller", "judge"}
+            (role_key != "druid" or not druid_raw_capture)
+            and (
+            role_key not in {"druid", "fortune_teller", "judge"}
             or judge_event_observed
             or fortune_event_observed
+            or druid_event_observed
+            )
         )
-        reset_reusable_event = reset_judge_event or reset_fortune_event
+        reset_reusable_event = (
+            reset_judge_event
+            or reset_fortune_event
+            or reset_druid_event
+        )
+
+        if druid_generation_to_store is not None:
+            self.druid_reset_generations[card.position] = (
+                druid_generation_to_store
+            )
+        if druid_consume_pending:
+            self.druid_pending_activations.pop(card.position, None)
+        if druid_new_rambler_records:
+            self.rambler_shut_up_observations.extend(
+                druid_new_rambler_records
+            )
 
         if incoming_is_event:
             new_record = (
@@ -2984,13 +4013,39 @@ class GameSession:
         if pos not in self.used_abilities:
             self.used_abilities.append(pos)
 
-    def reset_after_night_abilities(self) -> list[int]:
+    def _require_no_pending_druid_activation(self, operation: str) -> None:
+        """Block Night/reset mutation while a persisted click is unresolved."""
+        if not self.druid_pending_activations:
+            return
+        positions = ", ".join(
+            f"#{position}"
+            for position in sorted(
+                self.druid_pending_activations,
+                key=lambda value: str(value),
+            )
+        )
+        raise ValueError(
+            f"Cannot {operation} while Druid auto-use callback recovery is "
+            f"pending at {positions}; run auto_card before Night/reset"
+        )
+
+    def reset_after_night_abilities(
+        self,
+        *,
+        completed_nights: int = 1,
+    ) -> list[int]:
         """Apply shipped ResetAfterNight usage to the session model.
 
-        The current public roster audit has proven this usage mode for Judge
-        and Fortune Teller. Keep accumulated clue evidence, but make each
+        The current public roster audit has proven this usage mode for Judge,
+        Fortune Teller, and Druid. Keep accumulated clue evidence, but make each
         apparent resettable actor available again after a completed night.
         """
+        if type(completed_nights) is not int or completed_nights <= 0:
+            raise ValueError("completed_nights must be a positive integer")
+        self._require_no_pending_druid_activation(
+            "reset ResetAfterNight abilities"
+        )
+
         from knowledge_base import get_card
 
         resettable = set()
@@ -2998,6 +4053,14 @@ class GameSession:
             card_def = get_card(card.apparent_role)
             if card_def and card_def.ability_resets_after_night:
                 resettable.add(card.position)
+            if _execution_role_key(card.apparent_role) == "druid":
+                self.druid_reset_generations[card.position] = (
+                    max(
+                        self.druid_reset_generations.get(card.position, 0)
+                        + completed_nights,
+                        self.lilis_nights_resolved,
+                    )
+                )
         reset = sorted(resettable.intersection(self.used_abilities))
         if reset:
             self.used_abilities = [
@@ -3019,6 +4082,7 @@ class GameSession:
         list records one no-kill night. Every resolved night deals 2 HP whether
         its victim died, was protected, or did not exist.
         """
+        self._require_no_pending_druid_activation("record a Lilis Night")
         if self.has_duplicate_lilis():
             raise ValueError(
                 "duplicate Lilis live nights are unsupported: multiple actors "
@@ -3100,7 +4164,9 @@ class GameSession:
                 if position not in self.confirmed_evil:
                     self.confirmed_evil.append(position)
 
-        reset_abilities = self.reset_after_night_abilities()
+        reset_abilities = self.reset_after_night_abilities(
+            completed_nights=resolved_events,
+        )
         self.pending_lilis_nights -= resolved_events
         return {
             "positions": positions,
@@ -3120,6 +4186,9 @@ class GameSession:
         2 HP damage. The Night transition still resets ResetAfterNight
         abilities and must be persisted before reveal automation continues.
         """
+        self._require_no_pending_druid_activation(
+            "record a post-death Lilis Night"
+        )
         if self.has_duplicate_lilis():
             raise ValueError(
                 "duplicate Lilis live nights are unsupported: actor liveness "
@@ -3357,6 +4426,8 @@ class GameSession:
                         lilis_batch_index: int = 0,
                         lilis_nights_resolved: Optional[int] = None,
                         pending_lilis_nights: int = 0,
+                        druid_reset_generations: Optional[dict] = None,
+                        druid_pending_activations: Optional[dict] = None,
                         ) -> "GameSession":
         session = cls(state.n_cards, state.n_evil)
         session.villagers = list(state.deck.villagers)
@@ -3400,6 +4471,34 @@ class GameSession:
         session.executed_good_corrupted = dict(getattr(state, 'executed_good_corrupted', {}))
         session.executed_good_roles = dict(getattr(state, 'executed_good_roles', {}))
         session.used_abilities = list(used_abilities or [])
+        for raw_position, generation in (
+            druid_reset_generations or {}
+        ).items():
+            try:
+                position = int(raw_position)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    "Druid reset-generation position must be an integer"
+                ) from exc
+            if (
+                type(generation) is not int
+                or generation < 0
+                or not 1 <= position <= state.n_cards
+            ):
+                raise ValueError("Persisted Druid reset generation is malformed")
+            session.druid_reset_generations[position] = generation
+        for raw_position, token in (
+            druid_pending_activations or {}
+        ).items():
+            try:
+                position = int(raw_position)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    "Pending Druid activation position must be an integer"
+                ) from exc
+            if not 1 <= position <= state.n_cards or not isinstance(token, dict):
+                raise ValueError("Persisted pending Druid activation is malformed")
+            session.druid_pending_activations[position] = copy.deepcopy(token)
         if lilis_nights_resolved is None:
             # Legacy saves retain successful victims but omit no-kill history.
             # Infer only provable successful resolutions; never invent old
@@ -3838,13 +4937,23 @@ class GameSession:
         ):
             return {"success": False, "info_parsed": None,
                     "error": f"Fortune Teller requires exactly 2 distinct integer targets, got {targets}"}
+        if (
+            ability_name == "druid"
+            and (
+                len(targets) != 3
+                or any(type(target) is not int for target in targets)
+                or len(set(targets)) != 3
+            )
+        ):
+            return {"success": False, "info_parsed": None,
+                    "error": f"Druid requires exactly 3 distinct integer targets, got {targets}"}
         if ability_name == "judge" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Judge requires exactly 1 target, got {targets}"}
         if ability_name == "plague_doctor" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Plague Doctor requires exactly 1 target, got {targets}"}
-        if ability_name in {"fortune_teller", "judge", "plague_doctor"}:
+        if ability_name in {"druid", "fortune_teller", "judge", "plague_doctor"}:
             actor = next((card for card in self.cards if card.position == pos), None)
             actor_role = (
                 actor.apparent_role.lower().replace(" ", "_")
@@ -3855,6 +4964,7 @@ class GameSession:
                 display_name = (
                     "Plague Doctor" if ability_name == "plague_doctor"
                     else "Fortune Teller" if ability_name == "fortune_teller"
+                    else "Druid" if ability_name == "druid"
                     else "Judge"
                 )
                 return {
@@ -3863,6 +4973,112 @@ class GameSession:
                     "error": (
                         f"Position #{pos} is {shown}, not an apparent "
                         f"{display_name}"
+                    ),
+                }
+
+        druid_pre_events: list[dict] = []
+        druid_session_generation = None
+        if ability_name == "druid":
+            if (
+                self.baker_rule_version != BAKER_RULE_VERSION
+                or not self.reveal_order
+                or len(self.reveal_order) > self.n_cards
+                or len(set(self.reveal_order)) != len(self.reveal_order)
+                or any(
+                    type(position) is not int
+                    or not 1 <= position <= self.n_cards
+                    for position in self.reveal_order
+                )
+                or pos not in self.reveal_order
+            ):
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Druid #{pos}: verified "
+                        "reveal_order/Baker provenance including the actor is "
+                        "required"
+                    ),
+                }
+            if (
+                isinstance(actor.info_parsed, dict)
+                and actor.info_parsed.get("druid_variant")
+                == _PUBLIC_CURRENT_VARIANT
+            ):
+                if (
+                    actor.info_parsed.get("callback_ledger_variant")
+                    != _ORDERED_CALLBACK_LEDGER_VARIANT
+                ):
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: scalar-only "
+                            "current evidence cannot be resumed; restart the "
+                            "village from verified reveal history"
+                        ),
+                    }
+                try:
+                    druid_pre_events = _druid_callback_ledger(
+                        actor.info_parsed,
+                        actor_position=pos,
+                        n_cards=self.n_cards,
+                        reveal_order=self.reveal_order,
+                        baker_rule_version=self.baker_rule_version,
+                    )
+                except ValueError as exc:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: malformed "
+                            f"persisted callback ledger ({exc})"
+                        ),
+                    }
+                if pos not in self.druid_reset_generations:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: persisted "
+                            "callback history has no session reset-generation "
+                            "provenance; restart the village"
+                        ),
+                    }
+            elif actor.info_parsed or actor.info_text:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Druid #{pos}: unversioned "
+                        "active evidence cannot be joined to an ordered "
+                        "current callback ledger; restart the village"
+                    ),
+                }
+            druid_session_generation = self.druid_reset_generations.get(
+                pos,
+                self.lilis_nights_resolved,
+            )
+            if pos in self.druid_pending_activations:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Druid #{pos}: a persisted "
+                        "auto-use click is awaiting callback recovery; run "
+                        "auto_card before clicking again"
+                    ),
+                }
+            if druid_pre_events and (
+                druid_session_generation
+                <= druid_pre_events[-1]["reset_generation"]
+            ):
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Druid #{pos}: no unconsumed "
+                        "reset generation proves another activation"
                     ),
                 }
 
@@ -3881,10 +5097,10 @@ class GameSession:
 
         from knowledge_base import get_card
         for t in targets:
-            # Judge and Fortune Teller use picker-first OnClick routing, so
+            # Druid, Judge, and Fortune Teller use picker-first OnClick routing, so
             # every board card is selectable, including self and a target
             # with its own unused active ability.
-            if ability_name in {"fortune_teller", "judge"}:
+            if ability_name in {"druid", "fortune_teller", "judge"}:
                 continue
             # Native PD explicitly supports self-targeting. Once its picker is
             # active, the repeated card click is routed to that picker.
@@ -3903,11 +5119,16 @@ class GameSession:
         # ResetAfterNight roles keep their acted-info lists. Snapshot the
         # newest chronological event before clicking and require a fresh or
         # changed last item afterward, rather than accepting stale history.
-        repeatable_event_ability = ability_name in {"fortune_teller", "judge"}
+        repeatable_event_ability = ability_name in {
+            "druid", "fortune_teller", "judge",
+        }
         pre_event = None
+        pre_druid_history_fingerprint = None
         if repeatable_event_ability:
             display_name = (
-                "Fortune Teller" if ability_name == "fortune_teller" else "Judge"
+                "Fortune Teller" if ability_name == "fortune_teller"
+                else "Druid" if ability_name == "druid"
+                else "Judge"
             )
             before_board = None
             if monitor and monitor.is_healthy():
@@ -3945,6 +5166,10 @@ class GameSession:
                     "error": f"{display_name} #{pos} missing from pre-click memory snapshot",
                 }
             pre_event = _latest_acted_event_fingerprint(before_card)
+            if ability_name == "druid":
+                pre_druid_history_fingerprint = _acted_history_fingerprint(
+                    before_card
+                )
             session_has_prior_event = (
                 actor is not None
                 and (
@@ -3952,14 +5177,81 @@ class GameSession:
                     or bool(actor.info_text)
                 )
             )
+            if ability_name == "druid":
+                parsed_before, druid_before_error = (
+                    _parse_druid_result_from_memory(
+                        before_card,
+                        n_cards=self.n_cards,
+                    )
+                )
+                if druid_before_error is not None:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: "
+                            + druid_before_error
+                        ),
+                    }
+                if parsed_before is None:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: pre-click "
+                            "history ends in an incomplete opaque real callback"
+                        ),
+                    }
+                raw_before = getattr(parsed_before, "_druid_raw_callbacks", [])
+                if [
+                    _druid_callback_signature(event)
+                    for event in raw_before
+                ] != [
+                    _druid_callback_signature(event)
+                    for event in druid_pre_events
+                ]:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: pre-click "
+                            "callback history disagrees with the persisted "
+                            "ordered ledger"
+                        ),
+                    }
+                try:
+                    _validate_druid_rambler_sync(
+                        druid_pre_events,
+                        speaker_position=pos,
+                        rambler_observations=(
+                            self.rambler_shut_up_observations
+                        ),
+                    )
+                except ValueError as exc:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Druid #{pos}: {exc}"
+                        ),
+                    }
             try:
-                local_expectation = _local_repeatable_event_expectation(
-                    actor,
-                    n_cards=self.n_cards,
-                    rambler_observations=self.rambler_shut_up_observations,
-                    fortune_teller_rule_version=(
-                        self.fortune_teller_rule_version
-                    ),
+                local_expectation = (
+                    (
+                        pre_event[0],
+                        pre_event[1],
+                    )
+                    if ability_name == "druid" and pre_event is not None
+                    else _local_repeatable_event_expectation(
+                        actor,
+                        n_cards=self.n_cards,
+                        rambler_observations=(
+                            self.rambler_shut_up_observations
+                        ),
+                        fortune_teller_rule_version=(
+                            self.fortune_teller_rule_version
+                        ),
+                    )
                 )
             except ValueError as exc:
                 return {
@@ -4014,12 +5306,52 @@ class GameSession:
                         ),
                     }
 
+        # Persist the Druid click intent before touching the UI. Native
+        # remaining-pickableUses is not cumulative and cannot prove callback
+        # grouping; this token plus the verified raw prefix is the strongest
+        # available activation provenance.
+        if ability_name == "druid":
+            generation_was_present = pos in self.druid_reset_generations
+            previous_generation = self.druid_reset_generations.get(pos)
+            self.druid_reset_generations[pos] = druid_session_generation
+            self.druid_pending_activations[pos] = {
+                "activation_id": (
+                    druid_pre_events[-1]["activation_id"] + 1
+                    if druid_pre_events else 1
+                ),
+                "expected_targets": list(targets),
+                "prior_callback_count": len(druid_pre_events),
+                "reset_generation": druid_session_generation,
+                "settled_reveal_count": len(self.reveal_order),
+            }
+            try:
+                self.save()
+            except Exception as exc:
+                self.druid_pending_activations.pop(pos, None)
+                if generation_was_present:
+                    self.druid_reset_generations[pos] = previous_generation
+                else:
+                    self.druid_reset_generations.pop(pos, None)
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot persist Druid #{pos} auto-use provenance: {exc}"
+                    ),
+                }
+
         # Step 1: Click active card to enter target-selection mode
         x, y = coords[pos]
         print(f"  [auto_ability] Activating {action.ability_name} at #{pos} ({x},{y})...")
         try:
             _tm.safe_click_at(x, y, f"activate_card{pos}")
         except Exception as e:
+            if ability_name == "druid":
+                self.druid_pending_activations.pop(pos, None)
+                try:
+                    self.save()
+                except Exception:
+                    pass
             return {"success": False, "info_parsed": None,
                     "error": f"Failed to click active card: {e}"}
         time.sleep(0.4)  # Let target-selection mode engage
@@ -4047,6 +5379,23 @@ class GameSession:
             if not card:
                 return False
             if repeatable_event_ability:
+                if ability_name == "druid":
+                    parsed_druid, parse_error = (
+                        _parse_druid_result_from_memory(
+                            card,
+                            n_cards=self.n_cards,
+                            expected_targets=targets,
+                        )
+                    )
+                    raw_callbacks = (
+                        getattr(parsed_druid, "_druid_raw_callbacks", None)
+                        if parsed_druid is not None else None
+                    )
+                    return (
+                        parse_error is None
+                        and raw_callbacks is not None
+                        and len(raw_callbacks) > len(druid_pre_events)
+                    )
                 latest = _latest_acted_event_fingerprint(card)
                 return latest is not None and latest != pre_event
             return (
@@ -4055,11 +5404,42 @@ class GameSession:
                 or bool(card.get('ability_used') and card.get('clue_text'))
             )
 
+        # Native RoleAct dispatches real/raw synchronously and both callbacks
+        # enter ShowActedDelayed(0.0, ...); see
+        # reverse_engineering/notes/systems/gameplay_execution_resolution.md.
+        # Thus two stable 0.15s reads are a quiescence check, not a guessed
+        # animation bound. A one-record result can still occur when the memory
+        # reader races those zero-delay coroutines, so the persisted click
+        # provenance emits an ``either`` group; a later raw-history read then
+        # atomically upgrades the preserved pair to same_activation_extension.
         if monitor and monitor.is_healthy():
             resolved = monitor.wait_for(_ability_resolved, timeout=6, min_delay=0.8)
-            if resolved:
-                board = monitor.get_board()
-                target_card_data = next((c for c in board if c['position'] == pos), None) if board else None
+            board = monitor.get_board()
+            target_card_data = next(
+                (c for c in board if c['position'] == pos),
+                None,
+            ) if board else None
+            if resolved and ability_name == "druid" and target_card_data:
+                last_history = _acted_history_fingerprint(target_card_data)
+                stable_reads = 0
+                for _ in range(4):
+                    time.sleep(0.15)
+                    board = monitor.get_board()
+                    newer = next(
+                        (c for c in board if c['position'] == pos),
+                        None,
+                    ) if board else None
+                    if newer is None:
+                        continue
+                    target_card_data = newer
+                    fingerprint = _acted_history_fingerprint(newer)
+                    if fingerprint == last_history:
+                        stable_reads += 1
+                    else:
+                        last_history = fingerprint
+                        stable_reads = 0
+                    if stable_reads >= 2 and _ability_resolved(board):
+                        break
         else:
             time.sleep(1.5)  # initial animation delay
             from memory_reader import MemoryReader
@@ -4068,13 +5448,26 @@ class GameSession:
                 return {"success": False, "info_parsed": None,
                         "error": "Cannot open memory reader for ability verification"}
             try:
-                for attempt in range(5):
+                last_history = None
+                stable_reads = 0
+                for attempt in range(6):
                     cards = reader.read_board()
                     if cards:
                         target_card_data = next((c for c in cards if c['position'] == pos), None)
                         if target_card_data and _ability_resolved(cards):
-                            break
-                    if attempt < 4:
+                            if ability_name != "druid":
+                                break
+                            fingerprint = _acted_history_fingerprint(
+                                target_card_data
+                            )
+                            if fingerprint == last_history:
+                                stable_reads += 1
+                            else:
+                                last_history = fingerprint
+                                stable_reads = 0
+                            if stable_reads >= 2:
+                                break
+                    if attempt < 5:
                         time.sleep(0.7)
             finally:
                 reader.close()
@@ -4099,6 +5492,7 @@ class GameSession:
                 display_name = (
                     "Fortune Teller"
                     if ability_name == "fortune_teller"
+                    else "Druid" if ability_name == "druid"
                     else "Judge"
                 )
                 return {
@@ -4112,19 +5506,32 @@ class GameSession:
             return {"success": False, "info_parsed": None,
                     "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
 
-        # Rambler2 replaces an adjacent actor's normal result surface.  Handle
-        # that before role-specific strict parsers: the emitted references now
-        # name the Rambler, not the target(s) the active role originally chose.
-        parsed, interruption_error = _card_from_rambler_interruption(
-            target_card_data,
-            n_cards=self.n_cards,
-        )
-        if interruption_error is not None:
-            return {
-                "success": False,
-                "info_parsed": None,
-                "error": interruption_error,
-            }
+        # Druid's strict parser owns its complete reset history, including a
+        # newest Rambler replacement. Other roles retain the shared newest-
+        # interruption path.
+        if ability_name == "druid":
+            parsed, druid_parse_error = _parse_druid_result_from_memory(
+                target_card_data,
+                expected_targets=targets,
+                n_cards=self.n_cards,
+            )
+            if druid_parse_error is not None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": druid_parse_error,
+                }
+        else:
+            parsed, interruption_error = _card_from_rambler_interruption(
+                target_card_data,
+                n_cards=self.n_cards,
+            )
+            if interruption_error is not None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": interruption_error,
+                }
 
         # Step 4a: PD has a distinct result object unless Rambler replaced it.
         if parsed is None and ability_name == "plague_doctor":
@@ -4206,14 +5613,33 @@ class GameSession:
                     "error": f"Parser returned empty info_parsed for {action.ability_name}"}
 
         # Step 5: Update session
-        self.add_card(parsed)
+        try:
+            self.add_card(parsed)
+        except ValueError as exc:
+            if ability_name == "druid":
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": f"Cannot safely record Druid #{pos}: {exc}",
+                }
+            raise
         self.mark_ability_used(pos)
+        recorded = next(
+            card for card in self.cards if card.position == parsed.position
+        )
         self.save()
-        DecisionLog.log_card(parsed)
+        DecisionLog.log_card(recorded)
         DecisionLog.log_ability_used(pos)
 
-        print(f"  [auto_ability] {action.ability_name} #{pos} -> {targets}: {parsed.info_parsed}")
-        return {"success": True, "info_parsed": parsed.info_parsed, "error": None}
+        print(
+            f"  [auto_ability] {action.ability_name} #{pos} -> {targets}: "
+            f"{recorded.info_parsed}"
+        )
+        return {
+            "success": True,
+            "info_parsed": recorded.info_parsed,
+            "error": None,
+        }
 
     def auto_next(self):
         """Solve + auto-execute for definite-evil OR lookahead-forced-safe picks.
@@ -4421,6 +5847,14 @@ class GameSession:
             data["lilis_batch_index"] = self.lilis_batch_index
             data["lilis_nights_resolved"] = self.lilis_nights_resolved
             data["pending_lilis_nights"] = self.pending_lilis_nights
+            data["druid_reset_generations"] = {
+                str(position): generation
+                for position, generation in self.druid_reset_generations.items()
+            }
+            data["druid_pending_activations"] = {
+                str(position): copy.deepcopy(token)
+                for position, token in self.druid_pending_activations.items()
+            }
 
             tmp_path = f"{path}.tmp.{os.getpid()}"
             with open(tmp_path, "w") as f:
@@ -4445,6 +5879,14 @@ class GameSession:
                 lilis_batch_index=data.get("lilis_batch_index", 0),
                 lilis_nights_resolved=data.get("lilis_nights_resolved"),
                 pending_lilis_nights=data.get("pending_lilis_nights", 0),
+                druid_reset_generations=data.get(
+                    "druid_reset_generations",
+                    {},
+                ),
+                druid_pending_activations=data.get(
+                    "druid_pending_activations",
+                    {},
+                ),
             )
             print(f"[load] Session loaded from {path}")
             return session
@@ -4833,6 +6275,272 @@ def _parse_pd_ability_result_from_memory(
         }, None
 
     return None, f"Unrecognized Plague Doctor result text: {clue!r}"
+
+
+def _parse_druid_result_from_memory(
+    card: dict,
+    *,
+    n_cards: int,
+    expected_targets: Optional[list[int]] = None,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Validate and preserve the complete append-only Librarian callback list.
+
+    The native list can contain one initial passive empty record, public Druid
+    results, exact Rambler replacements, and a foreign real-path callback
+    immediately before the public raw Druid callback. Raw memory proves public
+    callback order, but never activation grouping or reveal boundaries; those
+    are certified by ``GameSession.add_card``.
+    """
+    position = card.get("position")
+    if type(position) is not int or not 1 <= position <= n_cards:
+        return None, f"Druid position {position!r} is outside 1..{n_cards}"
+
+    raw_clue = card.get("clue_text")
+    if raw_clue is None:
+        clue = ""
+    elif isinstance(raw_clue, str):
+        clue = raw_clue
+    else:
+        return None, "Druid savedAct text must be a string or null"
+
+    raw_infos = card.get("acted_infos")
+    if raw_infos is None:
+        raw_infos = []
+    if not isinstance(raw_infos, list):
+        return None, "Druid acted_infos must be an array"
+    if not raw_infos:
+        if clue:
+            return None, "Druid result has no acted-info record"
+        return card_no_info(position, "Druid"), None
+
+    callbacks: list[dict] = []
+    passive_count = 0
+    saw_action_event = False
+    for index, event in enumerate(raw_infos):
+        if not isinstance(event, dict):
+            return None, f"Druid acted_infos[{index}] must be an object"
+        desc = event.get("desc")
+        refs = event.get("targets")
+
+        if (desc is None or desc == "") and refs is None:
+            if saw_action_event or passive_count:
+                return None, (
+                    "Druid passive empty event must occur at most once and "
+                    "before every action result"
+                )
+            passive_count += 1
+            continue
+        if not isinstance(desc, str):
+            return None, f"Druid acted_infos[{index}].desc must be a string"
+        if not desc:
+            return None, f"Druid acted_infos[{index}] has an empty action text"
+        try:
+            public_refs = _validate_callback_references(
+                refs,
+                n_cards=n_cards,
+                label=f"Druid acted_infos[{index}]",
+            )
+        except ValueError as exc:
+            return None, str(exc)
+
+        shut_up_target = _parse_shut_up_target_text(desc, n_cards=n_cards)
+        if shut_up_target is not None:
+            expected_desc = _druid_shut_up_text(shut_up_target)
+            if desc != expected_desc or public_refs != [shut_up_target]:
+                return None, (
+                    "Druid Rambler event must use the exact public text and "
+                    f"single matching reference {expected_desc!r}"
+                )
+            saw_action_event = True
+            callbacks.append({
+                "event_kind": "rambler_interruption",
+                "text": desc,
+                "references": [shut_up_target],
+                "shut_up_target": shut_up_target,
+            })
+            continue
+        if _looks_like_shut_up_text(desc):
+            return None, (
+                "Druid Rambler event must use exact '#R\\nshut up!' text"
+            )
+
+        parsed = _parse_druid_native_text(desc)
+        if parsed is not None:
+            displayed_targets, found_outcast = parsed
+            try:
+                click_order = _validate_current_druid_targets(
+                    public_refs,
+                    n_cards=n_cards,
+                )
+            except ValueError as exc:
+                return None, str(exc)
+            if sorted(click_order) != displayed_targets:
+                return None, (
+                    f"Druid history entry {index} target mismatch: speech named "
+                    f"{displayed_targets}, references were {click_order}"
+                )
+            callbacks.append({
+                "event_kind": "druid_result",
+                "text": desc,
+                "references": click_order,
+                "targets": click_order,
+                "found_outcast": found_outcast,
+            })
+            saw_action_event = True
+            continue
+
+        # A real-path callback can belong to a different apparent role before
+        # raw Librarian emits the second record. Preserve it opaquely; text in
+        # either Druid/Rambler family is malformed rather than foreign.
+        druid_sentence_prefix = re.match(
+            r"\s*Among\s+#",
+            desc,
+            re.IGNORECASE,
+        ) is not None
+        displayed_ids = re.findall(r"#\s*\d+", desc)
+        druid_result_clause = (
+            re.search(
+                r"\bthere\s+(?:is|was)\s*:",
+                desc,
+                re.IGNORECASE,
+            )
+            or re.search(
+                r"\bthere\s+(?:are|were)\b[\s\S]*\bOutcasts?\b",
+                desc,
+                re.IGNORECASE,
+            )
+        )
+        if (
+            (
+                druid_sentence_prefix
+                and len(displayed_ids) == 3
+                and druid_result_clause
+            )
+            or re.match(r"\s*#\s*\d+.*\bshut\b", desc, re.IGNORECASE)
+        ):
+            return None, f"Unrecognized Druid acted-info text: {desc!r}"
+        callbacks.append({
+            "event_kind": "opaque_real",
+            "text": desc,
+            "references": public_refs,
+        })
+        saw_action_event = True
+
+    latest = raw_infos[-1]
+    latest_desc = latest.get("desc") if isinstance(latest, dict) else None
+    expected_saved_act = latest_desc or ""
+    if clue != expected_saved_act:
+        return None, (
+            "Druid savedAct does not match the newest acted-info text: "
+            f"{clue!r} != {expected_saved_act!r}"
+        )
+
+    if not callbacks:
+        return card_no_info(position, "Druid"), None
+
+    latest_callback = callbacks[-1]
+    if latest_callback["event_kind"] == "opaque_real":
+        # Native real dispatch has settled, but the raw callback may append in
+        # the next read. There is no public Druid alias to publish yet.
+        return None, None
+    if latest_callback["event_kind"] == "rambler_interruption":
+        result = _card_current_druid_interruption(
+            position,
+            latest_callback["shut_up_target"],
+            n_cards=n_cards,
+        )
+    elif latest_callback["event_kind"] == "druid_result":
+        if expected_targets is not None:
+            try:
+                clicked = _validate_current_druid_targets(
+                    list(expected_targets),
+                    n_cards=n_cards,
+                )
+            except (TypeError, ValueError) as exc:
+                return None, str(exc)
+            if clicked != latest_callback["targets"]:
+                return None, (
+                    "Druid clicked/reference mismatch: clicked "
+                    f"{clicked}, newest references were "
+                    f"{latest_callback['targets']}"
+                )
+        result = card_druid(
+            position,
+            latest_callback["targets"],
+            latest_callback["found_outcast"],
+            info_text=latest_callback["text"],
+            druid_variant=_PUBLIC_CURRENT_VARIANT,
+        )
+    else:
+        return None, "Druid history has no coherent current result"
+
+    # Transient provenance for the session join. CardInfo serialization ignores
+    # this attribute, and add_card removes it after reconciliation.
+    result._druid_raw_callbacks = copy.deepcopy(callbacks)
+    return result, None
+
+
+def _classify_druid_auto_capture(
+    existing: Optional[CardInfo],
+    parsed: CardInfo,
+    *,
+    n_cards: int,
+    reveal_order: list[int],
+    baker_rule_version: Optional[str],
+    rambler_observations: list[dict],
+) -> tuple[str, Optional[str]]:
+    """Classify one validated raw Druid capture as stale, update, or error.
+
+    ResetAfterNight keeps native acted history append-only. ``auto_card`` may
+    therefore see the same last result after the session has reset the use bit;
+    that is a wait/no-op, not another Druid observation. Reveal counts remain
+    trusted only from the persisted session history.
+    """
+    if (
+        existing is None
+        or not isinstance(existing.info_parsed, dict)
+        or existing.info_parsed.get("druid_variant")
+        != _PUBLIC_CURRENT_VARIANT
+    ):
+        return "update", None
+
+    try:
+        persisted = _druid_callback_ledger(
+            existing.info_parsed,
+            actor_position=existing.position,
+            n_cards=n_cards,
+            reveal_order=reveal_order,
+            baker_rule_version=baker_rule_version,
+        )
+    except ValueError as exc:
+        return "error", f"Persisted Druid history is malformed: {exc}"
+    try:
+        _validate_druid_rambler_sync(
+            persisted,
+            speaker_position=existing.position,
+            rambler_observations=rambler_observations,
+        )
+    except ValueError as exc:
+        return "error", str(exc)
+
+    raw_callbacks = getattr(parsed, "_druid_raw_callbacks", None)
+    if raw_callbacks is None:
+        return "error", "Druid capture has no authenticated raw history"
+    raw_signatures = [_druid_callback_signature(event) for event in raw_callbacks]
+    persisted_signatures = [
+        _druid_callback_signature(event) for event in persisted
+    ]
+    if raw_signatures == persisted_signatures:
+        return "stale", None
+    if (
+        len(raw_signatures) < len(persisted_signatures)
+        or raw_signatures[:len(persisted_signatures)] != persisted_signatures
+    ):
+        return (
+            "error",
+            "Raw Druid callback history does not preserve the persisted prefix",
+        )
+    return "update", None
 
 
 def _parse_fortune_teller_result_from_memory(
@@ -5483,6 +7191,19 @@ def _parse_clue_from_memory(
     ):
         return card_no_info(pos, role)
 
+    # --- Druid/Librarian: validate its complete append-only reset history. ---
+    # Librarian can publish its exact callback before uses/act settles, so its
+    # coherent event is authoritative. The dedicated parser also owns Rambler
+    # precedence because an interruption replaces the newest Druid refs.
+    if role_lower == 'druid':
+        if type(n_cards) is not int or n_cards <= 0:
+            return None
+        druid_surface, druid_error = _parse_druid_result_from_memory(
+            card,
+            n_cards=n_cards,
+        )
+        return druid_surface if druid_error is None else None
+
     # Rambler replacement text owns the public event even when an active
     # speaker's uses/act fields have settled. Druid is the only role whose
     # exact callback event is allowed to precede those fields.
@@ -5505,56 +7226,6 @@ def _parse_clue_from_memory(
         return None
     if baker_surface is not None:
         return baker_surface
-
-    # --- Druid/Librarian: exact newest event, preserving click-order refs. ---
-    # Druid resets after Night. Its callback can append the exact result before
-    # uses/act settles, so coherent public evidence takes precedence over the
-    # generic active-only guard below. The role writes no RuntimeData.
-    if role_lower == 'druid':
-        druid_result = _parse_druid_native_text(clue)
-        if druid_result is not None:
-            displayed_targets, found_outcast = druid_result
-            refs = current_event_refs()
-            if (
-                type(n_cards) is not int
-                or n_cards <= 0
-                or type(pos) is not int
-                or not 1 <= pos <= n_cards
-                or any(target > n_cards for target in displayed_targets)
-                or refs is None
-            ):
-                return None
-            try:
-                click_order = _validate_current_druid_targets(
-                    refs,
-                    n_cards=n_cards,
-                )
-            except ValueError:
-                return None
-            if sorted(click_order) != displayed_targets:
-                return None
-            return card_druid(
-                pos,
-                click_order,
-                found_outcast,
-                info_text=clue,
-                druid_variant=_PUBLIC_CURRENT_VARIANT,
-            )
-
-        latest = (
-            infos[-1]
-            if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
-            else None
-        )
-        passive_empty = (
-            latest is not None
-            and (latest.get('desc') is None or latest.get('desc') == '')
-            and 'targets' in latest
-            and latest.get('targets') is None
-        )
-        if not clue and (not infos or passive_empty):
-            return card_no_info(pos, role)
-        return None
 
     # --- Gemcrafter/Archivist: exact text + identical newest one-card ref. ---
     # Archivist writes no RuntimeData, so unrelated data preserved by an
@@ -6426,7 +8097,13 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     if role == "confessor" and len(args) != 3:
         raise ValueError("Confessor entry requires exactly one Good/dizzy result")
     if role == "druid" and len(args) != 4:
-        raise ValueError("Druid entry requires exactly three targets and one result")
+        raise ValueError(
+            "Druid entry requires three targets and one normal result"
+        )
+    if role in {"shut_up", "shutup"} and len(args) != 4:
+        raise ValueError(
+            "shut_up entry requires an apparent role and one Rambler target"
+        )
     pos = int(args[1])
 
     if role == "enlightened":
@@ -6697,12 +8374,18 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role in ("shut_up", "shutup"):
         # card shut_up <pos> <apparent_role> <target>
         target = int(args[3])
+        apparent_role = _normalize_role_name(args[2])
+        if apparent_role == "Druid":
+            raise ValueError(
+                "Current Druid interruptions require authenticated raw "
+                "callback history and cannot be entered manually"
+            )
         if session is not None and target > session.n_cards:
             raise ValueError(
                 f"Rambler shut-up target #{target} is outside "
                 f"1..{session.n_cards}"
             )
-        return card_shut_up(pos, args[2], target)
+        return card_shut_up(pos, apparent_role, target)
     elif role in ("dreamer", "dreamer2", "dreamer_ambiguous"):
         targets = [int(x) for x in args[2].split(",")]
         roles = [x.strip().replace("_", " ") for x in args[3].split(",")]
@@ -6722,6 +8405,11 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
             raise ValueError("Current Druid entry requires session board size")
         if not 1 <= pos <= session.n_cards:
             raise ValueError("Druid position is outside the current board")
+        if args[2].strip().casefold() in {"shut_up", "shutup"}:
+            raise ValueError(
+                "Current Druid interruptions require authenticated raw "
+                "callback history and cannot be entered manually"
+            )
         try:
             targets = [int(value.strip()) for value in args[2].split(",")]
         except ValueError as exc:
@@ -7305,6 +8993,7 @@ def main():
         print("  card poet 1 bounty_hunter 6 (Poet directly named #6 as Evil)")
         print("  card druid 5 1,2,3 none       (Druid found no Outcasts)")
         print("  card druid 5 1,2,3 Bombardier (Druid named an Outcast)")
+        print("  Druid shut-up results require authenticated auto_card memory")
         print("  card no_info 2 Slayer")
         return
 
@@ -7942,6 +9631,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             if state not in ('Alive', 'Revealed'):
                 continue  # Hidden/Dead — skip
 
+            memory_role_key = (
+                mc.get('disguise') or _observed_current_role(mc) or ''
+            ).lower().replace(' ', '_')
+            is_druid_memory_role = memory_role_key in {
+                "druid",
+                "librarian",
+                "rangedempath",
+            }
+
             parsed = _parse_clue_from_memory(
                 mc,
                 n_cards=session.n_cards,
@@ -7951,7 +9649,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             rambler_capture_error = None
             baker_capture_error = None
             fortune_capture_error = None
+            druid_capture_error = None
             if parsed is None:
+                if is_druid_memory_role:
+                    _, druid_capture_error = _parse_druid_result_from_memory(
+                        mc,
+                        n_cards=session.n_cards,
+                    )
                 _, rambler_capture_error = _card_from_rambler_surface(
                     mc,
                     n_cards=session.n_cards,
@@ -7961,13 +9665,10 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         mc,
                         baker_rule_version=session.baker_rule_version,
                     )
-                role_key = (
-                    mc.get('disguise') or _observed_current_role(mc) or ''
-                ).lower().replace(' ', '_')
                 if (
                     rambler_capture_error is None
                     and baker_capture_error is None
-                    and role_key == "fortune_teller"
+                    and memory_role_key == "fortune_teller"
                     and session.fortune_teller_rule_version
                     == FORTUNE_TELLER_RULE_VERSION
                 ):
@@ -7979,6 +9680,38 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     )
             if parsed:
                 existing = entered.get(pos)
+                current_druid_capture = (
+                    _execution_role_key(parsed.apparent_role) == "druid"
+                    and isinstance(parsed.info_parsed, dict)
+                    and parsed.info_parsed.get("druid_variant")
+                    == _PUBLIC_CURRENT_VARIANT
+                )
+                if current_druid_capture:
+                    capture_status, capture_status_error = (
+                        _classify_druid_auto_capture(
+                            existing,
+                            parsed,
+                            n_cards=session.n_cards,
+                            reveal_order=session.reveal_order,
+                            baker_rule_version=session.baker_rule_version,
+                            rambler_observations=(
+                                session.rambler_shut_up_observations
+                            ),
+                        )
+                    )
+                    if capture_status_error is not None:
+                        role = (
+                            mc.get('disguise')
+                            or _observed_current_role(mc)
+                            or '?'
+                        )
+                        manual_needed.append(
+                            f"  #{pos} {role}: [RECOVERY] "
+                            f"{capture_status_error}"
+                        )
+                        continue
+                    if capture_status == "stale":
+                        continue
                 if existing:
                     same_role = (
                         _execution_role_key(existing.apparent_role)
@@ -8079,17 +9812,39 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or druid_update
                     ):
                         continue
-                session.add_card(parsed)
-                DecisionLog.log_card(parsed)
+                try:
+                    session.add_card(parsed)
+                except ValueError as exc:
+                    if current_druid_capture:
+                        role = (
+                            mc.get('disguise')
+                            or _observed_current_role(mc)
+                            or '?'
+                        )
+                        manual_needed.append(
+                            f"  #{pos} {role}: [RECOVERY] {exc}"
+                        )
+                        continue
+                    raise
+                recorded = next(
+                    card
+                    for card in session.cards
+                    if card.position == parsed.position
+                )
+                DecisionLog.log_card(recorded)
                 if (mc.get('uses', 0) > 0 or mc.get('ability_used', False)) and _has_active_clue_result(parsed):
                     session.mark_ability_used(parsed.position)
                 verb = "updated" if pos in entered else "entered"
-                print(f"  [auto] {verb} #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
-                entered[pos] = parsed
+                print(
+                    f"  [auto] {verb} #{recorded.position} "
+                    f"{recorded.apparent_role}: {recorded.info_parsed}"
+                )
+                entered[pos] = recorded
                 auto_count += 1
             else:
                 capture_error = (
-                    rambler_capture_error
+                    druid_capture_error
+                    or rambler_capture_error
                     or baker_capture_error
                     or fortune_capture_error
                 )
@@ -8120,9 +9875,17 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
     if cmd == "card":
         card = _parse_card_cli(args, session=session)
         session.add_card(card)
+        recorded = next(
+            stored
+            for stored in session.cards
+            if stored.position == card.position
+        )
         session.save()
-        DecisionLog.log_card(card)
-        print(f"Added #{card.position} {card.apparent_role}: {card.info_parsed}")
+        DecisionLog.log_card(recorded)
+        print(
+            f"Added #{recorded.position} {recorded.apparent_role}: "
+            f"{recorded.info_parsed}"
+        )
         return None
 
     if cmd == "execute":

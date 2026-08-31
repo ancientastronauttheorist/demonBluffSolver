@@ -1,24 +1,30 @@
 """Current-build public Druid / managed Librarian bridge regressions."""
 
 from contextlib import redirect_stdout
+import copy
 from io import StringIO
 import json
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
 from game_loop import (
     DecisionLog,
     GameSession,
+    _ORDERED_CALLBACK_LEDGER_VARIANT,
     _canonical_druid_outcast,
+    _druid_callback_ledger,
     _druid_native_text,
     _parse_card_cli,
     _parse_clue_from_memory,
+    _parse_druid_result_from_memory,
     _parse_druid_native_text,
     _validate_current_druid_targets,
     card_druid,
     dispatch,
 )
+from knowledge_base import get_card
 from memory_reader import clean_name
 from solver import (
     BAKER_RULE_VERSION,
@@ -28,7 +34,9 @@ from solver import (
     Scenario,
     SolverResult,
 )
+from state_machine import GamePhase, GameStateMachine
 from strategy import (
+    Action,
     _druid_bluff_false_outcasts,
     _druid_observation_likelihoods,
     recommend_abilities,
@@ -67,6 +75,64 @@ def _memory_druid(
     if disguise is not _ABSENT:
         card["disguise"] = disguise
     return card
+
+
+def _druid_event(refs, found=None):
+    return {
+        "desc": _druid_native_text(list(refs), found),
+        "targets": list(refs),
+    }
+
+
+def _memory_druid_history(events, *, position=2, role="Librarian", **extra):
+    events = [copy.deepcopy(event) for event in events]
+    clue = events[-1]["desc"] if events else ""
+    return {
+        "position": position,
+        "true_role": role,
+        "clue_text": clue,
+        "acted_infos": [{"desc": "", "targets": None}] + events,
+        "runtime_data": None,
+        "ability_used": bool(events),
+        "uses": 0,
+        **extra,
+    }
+
+
+def _strict_session(*, reveals=(1, 2, 3), nights=0):
+    session = GameSession(6, 1)
+    session.reveal_order = list(reveals)
+    session.lilis_nights_resolved = nights
+    return session
+
+
+def _parse_and_add(session, memory, *, expected_targets=None):
+    parsed, error = _parse_druid_result_from_memory(
+        memory,
+        n_cards=session.n_cards,
+        expected_targets=expected_targets,
+    )
+    if error is not None:
+        raise AssertionError(error)
+    if parsed is None:
+        raise AssertionError("Druid callback is still pending")
+    session.add_card(parsed)
+    return next(card for card in session.cards if card.position == parsed.position)
+
+
+def _session_snapshot(session):
+    return json.dumps(
+        {
+            "state": session.to_game_state().to_dict(),
+            "used_abilities": list(session.used_abilities),
+            "lilis_batch_index": session.lilis_batch_index,
+            "lilis_nights_resolved": session.lilis_nights_resolved,
+            "pending_lilis_nights": session.pending_lilis_nights,
+            "druid_reset_generations": session.druid_reset_generations,
+            "druid_pending_activations": session.druid_pending_activations,
+        },
+        sort_keys=True,
+    )
 
 
 class DruidNativeTextTests(unittest.TestCase):
@@ -342,12 +408,28 @@ class DruidMemoryIngestionTests(unittest.TestCase):
 
     def test_rambler_and_baker_surfaces_keep_precedence(self):
         shut_up = _parse_clue_from_memory(
-            _memory_druid("#3 shut up!", [3]),
+            _memory_druid("#3\nshut up!", [3]),
             n_cards=6,
         )
         self.assertEqual(shut_up.apparent_role, "Druid")
-        self.assertEqual(shut_up.info_parsed, {"shut_up_target": 3})
-        self.assertNotIn("druid_variant", shut_up.info_parsed)
+        self.assertEqual(
+            shut_up.info_parsed,
+            {
+                "shut_up_target": 3,
+                "druid_variant": "public_current",
+            },
+        )
+        for mutation in (
+            "#3 shut up!",
+            "#3\nShut up!",
+            "#3\nshut up",
+            "#3\r\nshut up!",
+        ):
+            with self.subTest(mutation=mutation):
+                self.assertIsNone(_parse_clue_from_memory(
+                    _memory_druid(mutation, [3]),
+                    n_cards=6,
+                ))
 
         baker = {
             "position": 2,
@@ -394,6 +476,46 @@ class DruidManualAndCaptureTests(unittest.TestCase):
         self.assertEqual(none.info_parsed["targets"], [2, 5, 6])
         self.assertIsNone(none.info_parsed["found_outcast"])
 
+    def test_manual_interruption_is_rejected_without_raw_provenance(self):
+        for args in (
+            ["druid", "2", "shut_up", "5"],
+            ["shut_up", "2", "Druid", "5"],
+        ):
+            with self.subTest(args=args), self.assertRaisesRegex(
+                ValueError,
+                "authenticated raw",
+            ):
+                _parse_card_cli(args, self.session)
+
+        scalar = CardInfo(
+            2,
+            "Druid",
+            info_text="#5\nshut up!",
+            info_parsed={
+                "shut_up_target": 5,
+                "druid_variant": "public_current",
+            },
+        )
+        with self.assertRaisesRegex(ValueError, "authenticated raw"):
+            self.session.add_card(scalar)
+        self.assertEqual(self.session.cards, [])
+        self.assertEqual(self.session.rambler_shut_up_observations, [])
+        self.assertEqual(self.session.reveal_order, [])
+
+    def test_manual_compatibility_reveal_never_invents_a_ledger_boundary(self):
+        self.assertEqual(self.session.reveal_order, [])
+        self.assertIsNotNone(self.session.baker_rule_version)
+        card = _parse_card_cli(
+            ["druid", "2", "4,2,1", "none"],
+            self.session,
+        )
+        self.session.add_card(card)
+        stored = self.session.cards[0]
+        self.assertEqual(stored.info_parsed, card.info_parsed)
+        self.assertNotIn("callback_events", stored.info_parsed)
+        self.assertEqual(self.session.reveal_order, [2])
+        self.assertIsNone(self.session.baker_rule_version)
+
     def test_manual_rejects_missing_context_arity_bounds_duplicates_and_roles(self):
         invalid = (
             (["druid", "2", "1,2,3", "none"], None),
@@ -426,54 +548,790 @@ class DruidManualAndCaptureTests(unittest.TestCase):
             def close(self):
                 return None
 
+        output = StringIO()
         with (
             patch("memory_reader.MemoryReader", return_value=Reader()),
             patch("memory_reader.print_board"),
             patch.object(session, "save"),
             patch.object(DecisionLog, "log_card"),
-            redirect_stdout(StringIO()),
+            redirect_stdout(output),
         ):
             dispatch("auto_card", [], session)
+        return output.getvalue()
 
-    def test_auto_card_replaces_empty_or_prior_current_but_not_unmarked_result(self):
-        first_refs = [3, 1, 2]
-        first = _memory_druid(_druid_native_text(first_refs, None), first_refs)
+    def test_auto_card_builds_ledger_for_empty_placeholder_but_preserves_legacy(self):
+        refs = [3, 1, 2]
+        memory = _memory_druid(_druid_native_text(refs, None), refs)
 
-        empty = GameSession(6, 1)
-        empty.add_card(CardInfo(2, "Druid"))
-        self._run_auto_card(empty, first)
-        self.assertEqual(empty.cards[0].info_parsed["targets"], first_refs)
+        current = _strict_session()
+        current.cards = [CardInfo(2, "Druid")]
+        output = self._run_auto_card(current, memory)
+        self.assertIn("updated #2 Druid", output)
+        stored = current.cards[0]
         self.assertEqual(
-            empty.cards[0].info_parsed["druid_variant"],
-            "public_current",
+            stored.info_parsed["callback_ledger_variant"],
+            _ORDERED_CALLBACK_LEDGER_VARIANT,
         )
+        self.assertEqual(stored.info_parsed["targets"], refs)
 
-        reset = GameSession(6, 1)
-        reset.add_card(
-            card_druid(
-                2,
-                first_refs,
-                None,
-                druid_variant="public_current",
-            )
-        )
-        second_refs = [6, 2, 4]
-        second = _memory_druid(
-            _druid_native_text(second_refs, "Wretch"),
-            second_refs,
-        )
-        self._run_auto_card(reset, second)
-        self.assertEqual(reset.cards[0].info_parsed["targets"], second_refs)
-        self.assertEqual(reset.cards[0].info_parsed["found_outcast"], "Wretch")
-
-        legacy = GameSession(6, 1)
-        legacy.add_card(card_druid(2, [1, 2, 3], "Bombardier"))
-        self._run_auto_card(legacy, first)
+        legacy = _strict_session()
+        legacy.cards = [card_druid(2, [1, 2, 3], "Bombardier")]
+        self._run_auto_card(legacy, memory)
         self.assertEqual(
             legacy.cards[0].info_parsed,
             {"targets": [1, 2, 3], "found_outcast": "Bombardier"},
         )
 
+    def test_auto_card_surfaces_malformed_druid_as_recovery(self):
+        session = _strict_session()
+        session.cards = [CardInfo(2, "Druid")]
+        malformed = _memory_druid(
+            "Among #1, #2, #3\nthere are no Outcasts",
+            [3, 1, 2],
+        )
+        output = self._run_auto_card(session, malformed)
+        self.assertIn("[RECOVERY]", output)
+        self.assertIn("Unrecognized Druid acted-info text", output)
+        self.assertEqual(session.cards[0].info_parsed, {})
+
+    def test_auto_card_stale_after_reset_waits_then_appended_suffix_updates(self):
+        session = _strict_session()
+        session.cards = [CardInfo(2, "Druid")]
+        first = _druid_event([3, 1, 2], None)
+        self._run_auto_card(session, _memory_druid_history([first]))
+        first_info = copy.deepcopy(session.cards[0].info_parsed)
+
+        session.reset_after_night_abilities()
+        stale_output = self._run_auto_card(
+            session,
+            _memory_druid_history([first]),
+        )
+        self.assertIn("Entered 0 cards", stale_output)
+        self.assertEqual(session.cards[0].info_parsed, first_info)
+        self.assertNotIn(2, session.used_abilities)
+
+        session.reveal_order.append(4)
+        second = _druid_event([4, 1, 2], "Wretch")
+        appended_output = self._run_auto_card(
+            session,
+            _memory_druid_history([first, second]),
+        )
+        self.assertIn("updated #2 Druid", appended_output)
+        events = session.cards[0].info_parsed["callback_events"]
+        self.assertEqual([event["activation_id"] for event in events], [1, 2])
+        self.assertEqual(
+            [event["settled_reveal_count"] for event in events],
+            [3, 4],
+        )
+        self.assertEqual(events[-1]["reset_generation"], 1)
+        self.assertEqual(
+            events[-1]["activation_evidence"],
+            "session_reset_generation",
+        )
+
+
+class DruidOrderedCallbackLedgerTests(unittest.TestCase):
+    @staticmethod
+    def _pending_session(expected_targets=(3, 1, 2), *, boundary=3):
+        session = _strict_session(reveals=tuple(range(1, boundary + 1)))
+        session.cards = [CardInfo(2, "Druid")]
+        session.druid_reset_generations[2] = 0
+        session.druid_pending_activations[2] = {
+            "activation_id": 1,
+            "expected_targets": list(expected_targets),
+            "prior_callback_count": 0,
+            "reset_generation": 0,
+            "settled_reveal_count": boundary,
+        }
+        return session
+
+    def test_metadata_initial_single_callback_and_exact_fields(self):
+        definition = get_card("Druid")
+        self.assertTrue(definition.activated_ability)
+        self.assertTrue(definition.ability_resets_after_night)
+
+        session = _strict_session()
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([_druid_event([3, 1, 2], None)]),
+        )
+        self.assertEqual(
+            set(stored.info_parsed),
+            {
+                "druid_variant",
+                "callback_ledger_variant",
+                "callback_events",
+                "targets",
+                "found_outcast",
+            },
+        )
+        event = stored.info_parsed["callback_events"][0]
+        self.assertEqual(
+            event,
+            {
+                "activation_id": 1,
+                "activation_evidence": "single_callback_suffix",
+                "callback_index": 0,
+                "dispatch_path": "either",
+                "event_kind": "druid_result",
+                "reset_generation": 0,
+                "settled_reveal_count": 3,
+                "text": _druid_native_text([3, 1, 2], None),
+                "references": [3, 1, 2],
+                "targets": [3, 1, 2],
+                "found_outcast": None,
+            },
+        )
+
+    def test_discovery_after_prior_nights_uses_global_generation_not_zero(self):
+        session = _strict_session(nights=3)
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([_druid_event([3, 1, 2], "Drunk")]),
+        )
+        event = stored.info_parsed["callback_events"][0]
+        self.assertEqual(event["reset_generation"], 3)
+        self.assertEqual(
+            event["activation_evidence"],
+            "session_reset_generation",
+        )
+        self.assertEqual(session.druid_reset_generations, {2: 3})
+
+        ambiguous = _strict_session(nights=3)
+        with self.assertRaisesRegex(ValueError, "exactly one raw callback"):
+            _parse_and_add(
+                ambiguous,
+                _memory_druid_history([
+                    _druid_event([3, 1, 2], None),
+                    _druid_event([3, 1, 2], "Wretch"),
+                ]),
+            )
+
+        night_mapped = _strict_session()
+        night_mapped.cards = [CardInfo(2, "Druid")]
+        night_mapped.reset_after_night_abilities()
+        self.assertEqual(night_mapped.druid_reset_generations, {2: 1})
+        with self.assertRaisesRegex(ValueError, "exactly one raw callback"):
+            _parse_and_add(
+                night_mapped,
+                _memory_druid_history([
+                    _druid_event([3, 1, 2], None),
+                    _druid_event([3, 1, 2], "Wretch"),
+                ]),
+            )
+
+    def test_foreign_real_callbacks_are_opaque_including_outcast_and_among(self):
+        foreign_events = (
+            {"desc": "#4 is Outcast", "targets": [4]},
+            {
+                "desc": "Among #1, #2 there is: Lover or Scout",
+                "targets": [1, 2],
+            },
+            {
+                "desc": "Among #1, #2, #3 there are 2 Evils",
+                "targets": [1, 2, 3],
+            },
+        )
+        for foreign in foreign_events:
+            with self.subTest(foreign=foreign):
+                session = self._pending_session()
+                stored = _parse_and_add(
+                    session,
+                    _memory_druid_history([
+                        foreign,
+                        _druid_event([3, 1, 2], "Wretch"),
+                    ]),
+                    expected_targets=[3, 1, 2],
+                )
+                events = stored.info_parsed["callback_events"]
+                self.assertEqual(
+                    [event["event_kind"] for event in events],
+                    ["opaque_real", "druid_result"],
+                )
+                self.assertEqual(
+                    [event["dispatch_path"] for event in events],
+                    ["real", "raw"],
+                )
+                self.assertTrue(all(
+                    event["activation_evidence"] == "auto_use_click"
+                    for event in events
+                ))
+
+    def test_true_druid_family_near_misses_are_not_opaque(self):
+        for text in (
+            "Among #1, #2, #3 there was: Wretch",
+            "Among #1, #2, #3 there were zero Outcasts",
+        ):
+            with self.subTest(text=text):
+                _, error = _parse_druid_result_from_memory(
+                    _memory_druid_history([
+                        {"desc": text, "targets": [1, 2, 3]},
+                        _druid_event([3, 1, 2], None),
+                    ]),
+                    n_cards=6,
+                )
+                self.assertIn("Unrecognized Druid", error)
+
+    def test_dual_druid_results_share_targets_and_boundary(self):
+        session = self._pending_session()
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([
+                _druid_event([3, 1, 2], None),
+                _druid_event([3, 1, 2], "Wretch"),
+            ]),
+            expected_targets=[3, 1, 2],
+        )
+        events = stored.info_parsed["callback_events"]
+        self.assertEqual([event["callback_index"] for event in events], [0, 1])
+        self.assertEqual(
+            [event["settled_reveal_count"] for event in events],
+            [3, 3],
+        )
+        self.assertEqual(
+            [event["dispatch_path"] for event in events],
+            ["real", "raw"],
+        )
+
+    def test_dual_interruption_rewrites_both_and_global_evidence_has_both(self):
+        interruption = {"desc": "#5\nshut up!", "targets": [5]}
+        session = self._pending_session()
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([interruption, interruption]),
+        )
+        events = stored.info_parsed["callback_events"]
+        self.assertEqual(
+            [event["event_kind"] for event in events],
+            ["rambler_interruption", "rambler_interruption"],
+        )
+        self.assertEqual(stored.info_parsed["shut_up_target"], 5)
+        self.assertEqual(
+            session.rambler_shut_up_observations,
+            [
+                {"speaker_position": 2, "shut_up_target": 5},
+                {"speaker_position": 2, "shut_up_target": 5},
+            ],
+        )
+
+        parsed, error = _parse_druid_result_from_memory(
+            _memory_druid_history([interruption, interruption]),
+            n_cards=6,
+        )
+        self.assertIsNone(error)
+        status, status_error = __import__("game_loop")._classify_druid_auto_capture(
+            stored,
+            parsed,
+            n_cards=6,
+            reveal_order=session.reveal_order,
+            baker_rule_version=session.baker_rule_version,
+            rambler_observations=session.rambler_shut_up_observations,
+        )
+        self.assertEqual((status, status_error), ("stale", None))
+
+    def test_stale_capture_rejects_missing_or_extra_global_rambler_rows(self):
+        normal_session = _strict_session()
+        normal_memory = _memory_druid_history([
+            _druid_event([3, 1, 2], None),
+        ])
+        normal = _parse_and_add(normal_session, normal_memory)
+        normal_session.rambler_shut_up_observations.append({
+            "speaker_position": 2,
+            "shut_up_target": 5,
+        })
+        parsed, error = _parse_druid_result_from_memory(
+            normal_memory,
+            n_cards=6,
+        )
+        self.assertIsNone(error)
+        status, status_error = __import__(
+            "game_loop"
+        )._classify_druid_auto_capture(
+            normal,
+            parsed,
+            n_cards=6,
+            reveal_order=normal_session.reveal_order,
+            baker_rule_version=normal_session.baker_rule_version,
+            rambler_observations=(
+                normal_session.rambler_shut_up_observations
+            ),
+        )
+        self.assertEqual(status, "error")
+        self.assertIn("exact same-speaker", status_error)
+        with self.assertRaisesRegex(ValueError, "exact same-speaker"):
+            normal_session.add_card(parsed)
+
+        interrupted_session = _strict_session()
+        interrupted_memory = _memory_druid_history([
+            {"desc": "#5\nshut up!", "targets": [5]},
+        ])
+        interrupted = _parse_and_add(
+            interrupted_session,
+            interrupted_memory,
+        )
+        interrupted_session.rambler_shut_up_observations.clear()
+        parsed, error = _parse_druid_result_from_memory(
+            interrupted_memory,
+            n_cards=6,
+        )
+        self.assertIsNone(error)
+        status, status_error = __import__(
+            "game_loop"
+        )._classify_druid_auto_capture(
+            interrupted,
+            parsed,
+            n_cards=6,
+            reveal_order=interrupted_session.reveal_order,
+            baker_rule_version=interrupted_session.baker_rule_version,
+            rambler_observations=(
+                interrupted_session.rambler_shut_up_observations
+            ),
+        )
+        self.assertEqual(status, "error")
+        self.assertIn("exact same-speaker", status_error)
+
+        identical = CardInfo(
+            2,
+            "Druid",
+            info_text=interrupted.info_text,
+            info_parsed=copy.deepcopy(interrupted.info_parsed),
+        )
+        with self.assertRaisesRegex(ValueError, "exact same-speaker"):
+            interrupted_session.add_card(identical)
+
+    def test_mixed_rambler_dual_dispatch_fails_closed(self):
+        normal = _druid_event([3, 1, 2], None)
+        interruption = {"desc": "#5\nshut up!", "targets": [5]}
+        for events in ([normal, interruption], [interruption, normal]):
+            with self.subTest(events=events):
+                session = self._pending_session()
+                before = (
+                    copy.deepcopy(session.cards),
+                    copy.deepcopy(session.rambler_shut_up_observations),
+                    copy.deepcopy(session.druid_pending_activations),
+                    copy.deepcopy(session.druid_reset_generations),
+                )
+                parsed, error = _parse_druid_result_from_memory(
+                    _memory_druid_history(events),
+                    n_cards=6,
+                )
+                self.assertIsNone(error)
+                with self.assertRaisesRegex(ValueError, "Both callbacks"):
+                    session.add_card(parsed)
+                self.assertEqual(session.cards, before[0])
+                self.assertEqual(
+                    session.rambler_shut_up_observations,
+                    before[1],
+                )
+                self.assertEqual(session.druid_pending_activations, before[2])
+                self.assertEqual(session.druid_reset_generations, before[3])
+
+    def test_delayed_second_callback_upgrades_entire_activation(self):
+        session = _strict_session()
+        first = _druid_event([3, 1, 2], None)
+        _parse_and_add(session, _memory_druid_history([first]))
+        self.assertIn(2, session.used_abilities)
+
+        second = _druid_event([3, 1, 2], "Wretch")
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([first, second]),
+        )
+        events = stored.info_parsed["callback_events"]
+        self.assertEqual(
+            [event["activation_evidence"] for event in events],
+            ["same_activation_extension", "same_activation_extension"],
+        )
+        self.assertEqual(
+            [event["dispatch_path"] for event in events],
+            ["real", "raw"],
+        )
+        self.assertEqual(
+            [event["settled_reveal_count"] for event in events],
+            [3, 3],
+        )
+
+    def test_interruption_after_older_normal_has_own_settled_boundary(self):
+        session = _strict_session()
+        first = _druid_event([3, 1, 2], None)
+        _parse_and_add(session, _memory_druid_history([first]))
+        session.reset_after_night_abilities()
+        session.reveal_order.append(4)
+
+        interrupted = {"desc": "#5\nshut up!", "targets": [5]}
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([first, interrupted]),
+        )
+        events = stored.info_parsed["callback_events"]
+        self.assertEqual([event["activation_id"] for event in events], [1, 2])
+        self.assertEqual(
+            [event["settled_reveal_count"] for event in events],
+            [3, 4],
+        )
+        self.assertEqual(stored.info_parsed["shut_up_target"], 5)
+        self.assertEqual(
+            session.rambler_shut_up_observations,
+            [{"speaker_position": 2, "shut_up_target": 5}],
+        )
+
+    def test_skipped_unused_generations_allow_one_callback_but_not_two(self):
+        first = _druid_event([3, 1, 2], None)
+        second = _druid_event([3, 1, 2], "Wretch")
+
+        single = _strict_session()
+        _parse_and_add(single, _memory_druid_history([first]))
+        for _ in range(3):
+            single.reset_after_night_abilities()
+        stored = _parse_and_add(
+            single,
+            _memory_druid_history([first, second]),
+        )
+        events = stored.info_parsed["callback_events"]
+        self.assertEqual(events[-1]["reset_generation"], 3)
+        self.assertEqual(events[-1]["activation_id"], 2)
+
+        ambiguous = _strict_session()
+        _parse_and_add(ambiguous, _memory_druid_history([first]))
+        for _ in range(3):
+            ambiguous.reset_after_night_abilities()
+        with self.assertRaisesRegex(ValueError, "two-callback.*ambiguous"):
+            _parse_and_add(
+                ambiguous,
+                _memory_druid_history([
+                    first,
+                    second,
+                    _druid_event([3, 1, 2], "Drunk"),
+                ]),
+            )
+
+    def test_clicked_trio_validates_every_normal_callback_atomically(self):
+        session = self._pending_session()
+        memory = _memory_druid_history([
+            _druid_event([4, 1, 2], None),
+            _druid_event([3, 1, 2], "Wretch"),
+        ])
+        parsed, error = _parse_druid_result_from_memory(
+            memory,
+            n_cards=6,
+            expected_targets=[3, 1, 2],
+        )
+        self.assertIsNone(error)
+        caller_before = parsed.to_dict()
+        session_before = {
+            "cards": [card.to_dict() for card in session.cards],
+            "rambler": copy.deepcopy(session.rambler_shut_up_observations),
+            "pending": copy.deepcopy(session.druid_pending_activations),
+            "generation": copy.deepcopy(session.druid_reset_generations),
+            "used": list(session.used_abilities),
+            "reveals": list(session.reveal_order),
+        }
+        with self.assertRaisesRegex(ValueError, "click token"):
+            session.add_card(parsed)
+        self.assertEqual(parsed.to_dict(), caller_before)
+        self.assertEqual(
+            [card.to_dict() for card in session.cards],
+            session_before["cards"],
+        )
+        self.assertEqual(
+            session.rambler_shut_up_observations,
+            session_before["rambler"],
+        )
+        self.assertEqual(
+            session.druid_pending_activations,
+            session_before["pending"],
+        )
+        self.assertEqual(
+            session.druid_reset_generations,
+            session_before["generation"],
+        )
+        self.assertEqual(session.used_abilities, session_before["used"])
+        self.assertEqual(session.reveal_order, session_before["reveals"])
+
+    def test_impossible_boundaries_generations_and_actor_prefix_reject(self):
+        session = _strict_session()
+        stored = _parse_and_add(
+            session,
+            _memory_druid_history([_druid_event([3, 1, 2], None)]),
+        )
+        base = stored.info_parsed
+        malformed = []
+
+        zero = copy.deepcopy(base)
+        zero["callback_events"][0]["settled_reveal_count"] = 0
+        malformed.append((zero, "settled_reveal_count"))
+
+        actor_absent = copy.deepcopy(base)
+        actor_absent["callback_events"][0]["settled_reveal_count"] = 1
+        malformed.append((actor_absent, "absent"))
+
+        for info, message in malformed:
+            with self.subTest(message=message), self.assertRaisesRegex(
+                ValueError,
+                message,
+            ):
+                _druid_callback_ledger(
+                    info,
+                    actor_position=2,
+                    n_cards=6,
+                    reveal_order=[1, 2, 3],
+                    baker_rule_version=BAKER_RULE_VERSION,
+                )
+
+        session.reset_after_night_abilities()
+        second = _parse_and_add(
+            session,
+            _memory_druid_history([
+                _druid_event([3, 1, 2], None),
+                _druid_event([3, 1, 2], "Wretch"),
+            ]),
+        )
+        duplicate_generation = copy.deepcopy(second.info_parsed)
+        duplicate_generation["callback_events"][1]["reset_generation"] = 0
+        with self.assertRaisesRegex(ValueError, "increase"):
+            _druid_callback_ledger(
+                duplicate_generation,
+                actor_position=2,
+                n_cards=6,
+                reveal_order=[1, 2, 3],
+                baker_rule_version=BAKER_RULE_VERSION,
+            )
+
+    def test_reset_generation_persists_and_advances_for_every_completed_night(self):
+        session = _strict_session()
+        session.cards = [CardInfo(2, "Druid")]
+        self.assertEqual(
+            session.reset_after_night_abilities(completed_nights=2),
+            [],
+        )
+        self.assertEqual(session.druid_reset_generations, {2: 2})
+
+        session.druid_pending_activations[2] = {
+            "activation_id": 1,
+            "expected_targets": [3, 1, 2],
+            "prior_callback_count": 0,
+            "reset_generation": 2,
+            "settled_reveal_count": 3,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = str(Path(directory) / "session.json")
+            with redirect_stdout(StringIO()):
+                session.save(path)
+                loaded = GameSession.load(path)
+        self.assertEqual(loaded.druid_reset_generations, {2: 2})
+        self.assertEqual(
+            loaded.druid_pending_activations,
+            session.druid_pending_activations,
+        )
+
+    def test_pending_click_blocks_direct_and_production_nights_atomically(self):
+        def with_pending():
+            session = _strict_session()
+            session.cards = [CardInfo(2, "Druid")]
+            session.used_abilities = [2]
+            session.druid_reset_generations = {2: 0}
+            session.druid_pending_activations = {
+                2: {
+                    "activation_id": 1,
+                    "expected_targets": [3, 1, 2],
+                    "prior_callback_count": 0,
+                    "reset_generation": 0,
+                    "settled_reveal_count": 3,
+                },
+            }
+            return session
+
+        direct = with_pending()
+        before = _session_snapshot(direct)
+        with self.assertRaisesRegex(ValueError, "run auto_card"):
+            direct.reset_after_night_abilities()
+        self.assertEqual(_session_snapshot(direct), before)
+
+        live_lilis = with_pending()
+        live_lilis.demons = ["Lilis"]
+        live_lilis.pending_lilis_nights = 1
+        before = _session_snapshot(live_lilis)
+        with self.assertRaisesRegex(ValueError, "run auto_card"):
+            live_lilis.record_lilis_night_result([], 0)
+        self.assertEqual(_session_snapshot(live_lilis), before)
+
+        dead_lilis = with_pending()
+        dead_lilis.demons = ["Lilis"]
+        dead_lilis.executed = [6]
+        dead_lilis.executed_current_roles = {6: "Lilis"}
+        dead_lilis.pending_lilis_nights = 1
+        before = _session_snapshot(dead_lilis)
+        with self.assertRaisesRegex(ValueError, "run auto_card"):
+            dead_lilis.record_lilis_post_death_night()
+        self.assertEqual(_session_snapshot(dead_lilis), before)
+
+    def test_production_night_generation_honors_global_floor(self):
+        session = _strict_session(nights=3)
+        session.cards = [CardInfo(2, "Druid")]
+        session.demons = ["Lilis"]
+        session.pending_lilis_nights = 1
+        result = session.record_lilis_night_result([], 0)
+        self.assertEqual(result["resolved_events"], 1)
+        self.assertEqual(session.lilis_nights_resolved, 4)
+        self.assertEqual(session.druid_reset_generations, {2: 4})
+
+        direct = _strict_session()
+        direct.cards = [CardInfo(2, "Druid")]
+        direct.druid_reset_generations = {2: 2}
+        direct.reset_after_night_abilities(completed_nights=3)
+        self.assertEqual(direct.druid_reset_generations, {2: 5})
+
+
+class DruidRepeatableAutomationTests(unittest.TestCase):
+    class Reader:
+        def __init__(self, snapshots):
+            self.snapshots = list(snapshots)
+            self.index = 0
+
+        def open(self):
+            return True
+
+        def read_board(self):
+            snapshot = self.snapshots[min(
+                self.index,
+                len(self.snapshots) - 1,
+            )]
+            self.index += 1
+            return [copy.deepcopy(snapshot)]
+
+        def close(self):
+            return None
+
+    def test_auto_use_quiesces_and_groups_real_then_raw_with_click_token(self):
+        session = _strict_session()
+        session.cards = [CardInfo(2, "Druid")]
+        targets = [3, 1, 2]
+        passive = _memory_druid_history([])
+        first = _memory_druid_history([_druid_event(targets, None)])
+        dual = _memory_druid_history([
+            _druid_event(targets, None),
+            _druid_event(targets, "Wretch"),
+        ])
+        reader = self.Reader([passive, first, dual, dual, dual])
+
+        with (
+            patch("template_match.safe_click_at") as safe_click,
+            patch("game_loop.time.sleep"),
+            patch("memory_reader.MemoryReader", return_value=reader),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_card"),
+            patch.object(DecisionLog, "log_ability_used"),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, targets, "Druid")
+            )
+
+        self.assertTrue(result["success"], result["error"])
+        self.assertGreaterEqual(safe_click.call_count, 4)
+        events = session.cards[0].info_parsed["callback_events"]
+        self.assertEqual(len(events), 2)
+        self.assertTrue(all(
+            event["activation_evidence"] == "auto_use_click"
+            for event in events
+        ))
+        self.assertNotIn(2, session.druid_pending_activations)
+
+    def test_callback_visible_after_stable_window_is_reconciled_as_read_race(self):
+        session = _strict_session()
+        session.cards = [CardInfo(2, "Druid")]
+        targets = [3, 1, 2]
+        passive = _memory_druid_history([])
+        first = _memory_druid_history([_druid_event(targets, None)])
+        reader = self.Reader([passive, first, first, first, first, first])
+
+        # Native real/raw dispatch is synchronous and both callbacks use
+        # ShowActedDelayed(0.0). This deliberately simulates only a memory-read
+        # visibility race that outlives the two stable 0.15s reads, not a native
+        # delayed callback. The later complete raw history must remain safely
+        # recoverable before the next solve.
+        with (
+            patch("template_match.safe_click_at"),
+            patch("game_loop.time.sleep"),
+            patch("memory_reader.MemoryReader", return_value=reader),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_card"),
+            patch.object(DecisionLog, "log_ability_used"),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, targets, "Druid")
+            )
+
+        self.assertTrue(result["success"], result["error"])
+        initial = session.cards[0].info_parsed["callback_events"]
+        self.assertEqual(len(initial), 1)
+        self.assertEqual(initial[0]["dispatch_path"], "either")
+        self.assertEqual(initial[0]["activation_evidence"], "auto_use_click")
+
+        dual = _memory_druid_history([
+            _druid_event(targets, None),
+            _druid_event(targets, "Wretch"),
+        ])
+        output = DruidManualAndCaptureTests._run_auto_card(session, dual)
+        self.assertIn("updated #2 Druid", output)
+        events = session.cards[0].info_parsed["callback_events"]
+        self.assertEqual(
+            [event["activation_evidence"] for event in events],
+            ["same_activation_extension", "same_activation_extension"],
+        )
+        self.assertEqual(
+            [event["dispatch_path"] for event in events],
+            ["real", "raw"],
+        )
+        self.assertEqual(
+            [event["settled_reveal_count"] for event in events],
+            [3, 3],
+        )
+
+    def test_scalar_resume_stops_before_reader_or_click_with_honest_restart(self):
+        session = _strict_session()
+        session.cards = [card_druid(
+            2,
+            [3, 1, 2],
+            None,
+            druid_variant="public_current",
+        )]
+        with (
+            patch("template_match.safe_click_at") as safe_click,
+            patch("memory_reader.MemoryReader") as memory_reader,
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, [3, 1, 2], "Druid")
+            )
+        self.assertFalse(result["success"])
+        self.assertIn("cannot be resumed", result["error"])
+        self.assertIn("restart", result["error"])
+        safe_click.assert_not_called()
+        memory_reader.assert_not_called()
+
+    def test_state_machine_recovery_does_not_claim_manual_resume_is_safe(self):
+        session = _strict_session()
+        machine = GameStateMachine(session=session, monitor=None)
+        machine.phase = GamePhase.ABILITY_USE
+        machine._pending_ability = (2, [3, 1, 2], "Druid", None)
+        with (
+            patch.object(
+                session,
+                "auto_use_ability",
+                return_value={
+                    "success": False,
+                    "info_parsed": None,
+                    "error": "test mismatch",
+                },
+            ),
+            patch.object(machine, "_pause") as pause,
+        ):
+            machine._do_ability_use()
+        message = pause.call_args.args[0]
+        self.assertIn("card druid <actor>", message)
+        self.assertIn("cannot resume ResetAfterNight history", message)
+        self.assertIn("cannot be entered manually", message)
+        self.assertIn("restart", message)
+        self.assertNotIn("then 'resume'", message)
 
 class DruidArchiveCompatibilityTests(unittest.TestCase):
     def test_all_archived_direct_shapes_remain_unmarked_and_counted(self):

@@ -844,12 +844,13 @@ class GameStateMachine:
             return
 
         # Reuse the strict session path for Plague Doctor and the resettable
-        # Judge/Fortune Teller abilities so autonomous play gets the same
+        # Druid/Judge/Fortune Teller abilities so autonomous play gets the same
         # native target checks, event-freshness boundary, and recovery
         # semantics as `next`/`auto_next`.
         if ability_name in (
             "Plague Doctor",
             "Plague_Doctor",
+            "Druid",
             "Judge",
             "Fortune Teller",
         ):
@@ -876,6 +877,15 @@ class GameStateMachine:
                     recovery = (
                         "Read the public speech bubble and enter it with "
                         "card fortune_teller, then 'resume'."
+                    )
+                elif display_name == "Druid":
+                    recovery = (
+                        "For a normal result use card druid <actor> "
+                        "<a,b,c> <Outcast|none> only to preserve the visible "
+                        "scalar surface; it cannot resume ResetAfterNight "
+                        "history. A Druid interruption cannot be entered "
+                        "manually—recover authenticated acted-info memory or "
+                        "restart."
                     )
                 else:
                     recovery = (
