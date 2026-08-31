@@ -733,6 +733,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
     def test_obsolete_and_fortune_surfaces_are_not_current_poet_results(self):
         cases = [
             ("Left", []),
+            ("I am Good", []),
             ("I am dizzy", []),
             ("I was a Baker", []),
             ("Is #2 or #3 Evil?: True", [2, 3]),
@@ -744,6 +745,16 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                         _memory_poet(clue, targets),
                         n_cards=6,
                     )
+                )
+
+        # Confessor's direct current ActedInfo uses a null Character list, but
+        # Confessor is not in Gossip's shipped provider constructor pool.
+        for clue in ("I am Good", "I am dizzy"):
+            with self.subTest(clue=clue, refs="native-null"):
+                poet = _memory_poet(clue)
+                poet["acted_infos"] = [{"desc": clue, "targets": None}]
+                self.assertIsNone(
+                    _parse_clue_from_memory(poet, n_cards=6)
                 )
 
     def test_no_info_and_shut_up_observations_remain_unmarked(self):

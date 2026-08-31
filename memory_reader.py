@@ -508,8 +508,17 @@ class MemoryReader:
             desc = self._read_string(desc_ptr) if desc_ptr else None
             # Read referenced character positions
             char_list_ptr = self._read_ptr(info_ptr + ACTED_INFO_CHARS_OFFSET)
-            targets = []
+            if char_list_ptr is None:
+                # A failed pointer read is not evidence of native null. Drop
+                # the history so strict consumers cannot authenticate it.
+                return []
+            # Preserve native null separately from a populated empty List. A
+            # few role contracts (notably current Confessor) intentionally
+            # return ActedInfo(desc, null), while most zero-reference roles
+            # allocate an empty list. Collapsing both to [] loses provenance.
+            targets = None
             if char_list_ptr and char_list_ptr > 0x10000:
+                targets = []
                 ref_items = self._read_ptr(char_list_ptr + LIST_ITEMS_OFFSET)
                 ref_size = self._read_i32(char_list_ptr + LIST_SIZE_OFFSET)
                 if ref_items and ref_size and 0 < ref_size <= 20:
@@ -519,6 +528,10 @@ class MemoryReader:
                             ref_id = self._read_i32(ref_char + CHAR_ID_OFFSET)
                             if ref_id is not None:
                                 targets.append(ref_id)
+            elif char_list_ptr:
+                # A non-null invalid pointer is not the native null contract.
+                # Keep it distinguishable from null so strict ingestion fails.
+                targets = []
             results.append({'desc': desc, 'targets': targets})
         return results
 

@@ -158,8 +158,65 @@ def card_knitter(
             info_text = _knitter_native_text(evil_pairs)
     return CardInfo(pos, "Knitter", info_text=info_text, info_parsed=info)
 
-def card_confessor(pos: int, dizzy: bool) -> CardInfo:
-    return CardInfo(pos, "Confessor", info_parsed={"dizzy": dizzy})
+def _confessor_native_text(dizzy: bool) -> str:
+    """Return Confessor.ConjourInfo's exact shipped public sentence."""
+    if type(dizzy) is not bool:
+        raise ValueError("Confessor dizzy claim must be a boolean")
+    return "I am dizzy" if dizzy else "I am Good"
+
+
+def _parse_confessor_native_text(info_text) -> Optional[bool]:
+    """Parse only one exact current Confessor sentence."""
+    if not isinstance(info_text, str):
+        return None
+    if info_text == _confessor_native_text(False):
+        return False
+    if info_text == _confessor_native_text(True):
+        return True
+    return None
+
+
+def _canonical_confessor_claim(value: str) -> bool:
+    """Canonicalize one explicit manual Confessor result token."""
+    if not isinstance(value, str):
+        raise ValueError("Confessor result must be Good or dizzy")
+    key = value.strip().casefold()
+    if key in {"dizzy", "dirty", "true", "1", "yes"}:
+        return True
+    if key in {"good", "clean", "false", "0", "no"}:
+        return False
+    raise ValueError("Confessor result must be Good or dizzy")
+
+
+def card_confessor(
+    pos: int,
+    dizzy: bool,
+    *,
+    info_text: str = "",
+    confessor_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Confessor observation while preserving unmarked archives."""
+    info = {"dizzy": dizzy}
+    if confessor_variant is not None:
+        if confessor_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Confessor variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Confessor position must be positive")
+        if type(dizzy) is not bool:
+            raise ValueError("Current Confessor dizzy claim must be a boolean")
+        if not isinstance(info_text, str):
+            raise ValueError("Current Confessor text must be a string")
+        expected_text = _confessor_native_text(dizzy)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Confessor text must match its claim")
+        info["confessor_variant"] = confessor_variant
+        info_text = expected_text
+    return CardInfo(
+        pos,
+        "Confessor",
+        info_text=info_text,
+        info_parsed=info,
+    )
 
 def _gemcrafter_native_text(good_position: int) -> str:
     """Return Archivist.ConjourInfo's exact shipped public sentence."""
@@ -5268,6 +5325,20 @@ def _parse_clue_from_memory(
             return None
         return refs
 
+    def current_event_has_null_refs() -> bool:
+        """Whether the newest coherent event owns a native null ref list."""
+        latest = (
+            infos[-1]
+            if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+            else None
+        )
+        return (
+            latest is not None
+            and latest.get('desc') == clue
+            and 'targets' in latest
+            and latest.get('targets') is None
+        )
+
     # --- Guard: active-ability-only roles with unused abilities ---
     # These roles have NO passive speech bubble. If ability hasn't been used,
     # any clue_text/acted_infos is stale from a previous village — ignore it.
@@ -5402,12 +5473,31 @@ def _parse_clue_from_memory(
             )
         return None
 
-    # --- Confessor: "dizzy" or "feeling good" ---
+    # --- Confessor: exact public sentence + native null reference list. ---
+    # Confessor writes no RuntimeData and does not inspect its actor ID or the
+    # board. Hidden alignment/status fields must never manufacture this public
+    # evidence; only the newest exact ActedInfo event is authenticated here.
     if role_lower == 'confessor':
-        if 'dizzy' in clue.lower() or 'dirty' in clue.lower():
-            return card_confessor(pos, True)
-        if 'good' in clue.lower() or 'clean' in clue.lower():
-            return card_confessor(pos, False)
+        if not clue and not infos:
+            # A pre-callback read remains an unmarked placeholder that a later
+            # coherent current event may safely replace in auto_card.
+            return card_no_info(pos, role)
+        dizzy = _parse_confessor_native_text(clue)
+        if (
+            dizzy is None
+            or type(n_cards) is not int
+            or n_cards <= 0
+            or type(pos) is not int
+            or not 1 <= pos <= n_cards
+            or not current_event_has_null_refs()
+        ):
+            return None
+        return card_confessor(
+            pos,
+            dizzy,
+            info_text=clue,
+            confessor_variant=_PUBLIC_CURRENT_VARIANT,
+        )
 
     # --- Bard/Acrobat2: exact text + native range-reference geometry. ---
     # Acrobat2 writes no RuntimeData, so unrelated data preserved through an
@@ -6161,6 +6251,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         raise ValueError("Bishop entry requires targets and matching types")
     if role == "bard" and len(args) != 3:
         raise ValueError("Bard entry requires exactly one corruption distance")
+    if role == "confessor" and len(args) != 3:
+        raise ValueError("Confessor entry requires exactly one Good/dizzy result")
     pos = int(args[1])
 
     if role == "enlightened":
@@ -6191,8 +6283,16 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
             knitter_variant=_PUBLIC_CURRENT_VARIANT,
         )
     elif role == "confessor":
-        dizzy = args[2].lower() in ("dizzy", "dirty", "true", "1", "yes")
-        return card_confessor(pos, dizzy)
+        if session is None:
+            raise ValueError("Current Confessor entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Confessor position is outside the current board")
+        dizzy = _canonical_confessor_claim(args[2])
+        return card_confessor(
+            pos,
+            dizzy,
+            confessor_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "gemcrafter":
         if session is None:
             raise ValueError("Current Gemcrafter entry requires session board size")
@@ -6993,7 +7093,7 @@ def main():
         print()
         print("Card examples:")
         print("  card enlightened 3 CW")
-        print("  card confessor 1 clean")
+        print("  card confessor 1 <Good|dizzy>")
         print("  card knitter 2 2")
         print("  card fortune_teller 4 1,3 yes")
         print("  card oracle 5 2,6 Shaman          (or: card oracle 5 no_minions)")
@@ -7749,6 +7849,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and parsed.info_parsed.get("bard_variant")
                         == _PUBLIC_CURRENT_VARIANT
                     )
+                    confessor_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role)
+                        == "confessor"
+                        and existing.info_parsed == {}
+                        and parsed.info_parsed.get("confessor_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                    )
                     if not (
                         active_update
                         or shut_up_update
@@ -7757,6 +7866,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or poet_update
                         or gemcrafter_update
                         or bard_update
+                        or confessor_update
                     ):
                         continue
                 session.add_card(parsed)
