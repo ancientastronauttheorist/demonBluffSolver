@@ -20,6 +20,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Tracker": "Hunter",
             "BountyHunter": "Bounty Hunter",
             "Empath": "Lover",
+            "Lookout": "Medium",
             # Spy is a distinct native Minion implementation, not the managed
             # class bound by the public Plague Doctor CharacterData.
             "Spy": "Spy",
@@ -47,6 +48,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "BountyHunter_97531": "Bounty Hunter",
             "Bounty Hunter_39284184": "Bounty Hunter",
             "Empath_91302708": "Lover",
+            "Lookout_39284184": "Medium",
         }
 
         for native_name, display_name in expected.items():

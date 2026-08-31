@@ -197,8 +197,46 @@ def _card_oracle_no_minions(
         info["oracle_variant"] = oracle_variant
     return CardInfo(pos, "Oracle", info_text=info_text, info_parsed=info)
 
-def card_medium(pos: int, good_position: int, good_role: str) -> CardInfo:
-    return CardInfo(pos, "Medium", info_parsed={"good_position": good_position, "good_role": good_role})
+def _medium_native_text(good_position: int, good_role: str) -> str:
+    """Return Lookout's exact shipped public clue text."""
+    qualifier = "actually a" if good_role == "Drunk" else "a real"
+    return f"#{good_position} is {qualifier}\n{good_role}"
+
+
+def _parse_medium_native_text(info_text: str) -> Optional[tuple[int, str]]:
+    """Parse one exact current Lookout result into canonical public values."""
+    if not isinstance(info_text, str):
+        return None
+    match = re.fullmatch(
+        r"#([1-9]\d*) is (?:a real|actually a)\n([^\r\n]+)",
+        info_text,
+    )
+    if match is None:
+        return None
+    good_position = int(match.group(1))
+    good_role = get_card(match.group(2))
+    if good_role is None:
+        return None
+    if info_text != _medium_native_text(good_position, good_role.name):
+        return None
+    return good_position, good_role.name
+
+
+def card_medium(
+    pos: int,
+    good_position: int,
+    good_role: str,
+    *,
+    info_text: str = "",
+    medium_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Medium observation while preserving unmarked legacy callers."""
+    info = {"good_position": good_position, "good_role": good_role}
+    if medium_variant is not None:
+        info["medium_variant"] = medium_variant
+        if not info_text:
+            info_text = _medium_native_text(good_position, good_role)
+    return CardInfo(pos, "Medium", info_text=info_text, info_parsed=info)
 
 def card_hunter(
     pos: int,
@@ -1084,10 +1122,17 @@ def card_poet_with_info(
         return card_bounty_hunter(pos, position(0, "evil target"))
     elif canonical_provider == "Medium":
         require_args(2)
-        payload = {
-            "good_position": position(0, "good target"),
-            "good_role": canonical_role(1, "good role"),
-        }
+        good_position = position(0, "good target")
+        good_role = canonical_role(1, "good role")
+        return _card_current_poet(
+            pos,
+            "Medium",
+            {
+                "good_position": good_position,
+                "good_role": good_role,
+            },
+            info_text=_medium_native_text(good_position, good_role),
+        )
     elif canonical_provider == "Knitter":
         require_args(1)
         evil_pairs = integer(0, "pair count")
@@ -5118,12 +5163,30 @@ def _parse_clue_from_memory(
                 )
         return None
 
-    # --- Medium: "#N is a real <Role>" ---
-    if role_lower == 'medium' and targets:
-        m = re.search(r'is\s+a\s+real\s+(\w[\w\s]*)', clue, re.IGNORECASE)
-        if m:
-            good_role = m.group(1).strip()
-            return card_medium(pos, targets[0], good_role)
+    # --- Medium: exact current Lookout result and newest one-target event. ---
+    if role_lower == 'medium':
+        medium_result = _parse_medium_native_text(clue)
+        medium_refs = current_event_refs()
+        if (
+            medium_result is not None
+            and type(n_cards) is int
+            and n_cards > 0
+            and type(pos) is int
+            and 1 <= pos <= n_cards
+        ):
+            good_position, good_role = medium_result
+            if (
+                1 <= good_position <= n_cards
+                and medium_refs == [good_position]
+            ):
+                return card_medium(
+                    pos,
+                    good_position,
+                    good_role,
+                    info_text=clue,
+                    medium_variant=_PUBLIC_CURRENT_VARIANT,
+                )
+        return None
 
     # --- Poet: exact current Gossip provider list. ---
     if role_lower == 'poet' and clue:
@@ -5535,20 +5598,19 @@ def _parse_clue_from_memory(
                 {"direction": direction},
                 info_text=clue,
             )
-        # Medium exact normal and Drunk-reveal forms.  Both carry one matching
-        # reference; role text is canonicalized before entering solver state.
-        m = re.fullmatch(
-            r'\s*#\s*(\d+)\s+is\s+(?:a\s+real|actually\s+a)\s+'
-            r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m:
-            good_position = int(m.group(1))
-            good_role = get_card(m.group(2).strip())
+        # Medium exact normal and Drunk-reveal forms.  Both carry exactly one
+        # matching reference and require a live in-board Poet actor.
+        medium_result = _parse_medium_native_text(clue)
+        if (
+            medium_result is not None
+            and type(n_cards) is int
+            and n_cards > 0
+            and type(pos) is int
+            and 1 <= pos <= n_cards
+        ):
+            good_position, good_role = medium_result
             if (
-                good_role is not None
-                and valid_displayed_targets([good_position])
+                valid_displayed_targets([good_position])
                 and poet_refs_match([good_position])
             ):
                 return _card_current_poet(
@@ -5556,7 +5618,7 @@ def _parse_clue_from_memory(
                     "Medium",
                     {
                         "good_position": good_position,
-                        "good_role": good_role.name,
+                        "good_role": good_role,
                     },
                     info_text=clue,
                 )
@@ -5682,21 +5744,36 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
             oracle_variant=_PUBLIC_CURRENT_VARIANT,
         )
     elif role == "medium":
+        if session is None:
+            raise ValueError("Current Medium entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Medium position is outside the current board")
+        if len(args) != 4:
+            raise ValueError("Medium entry requires exactly one target and role")
         target_pos = int(args[2])
+        if not 1 <= target_pos <= session.n_cards:
+            raise ValueError("Medium target is outside the current board")
         claimed_role = args[3]
         # "real" means target IS their displayed role — resolve to actual role name
         if claimed_role.lower() == "real":
-            if session is None:
-                print(f"  ERROR: 'real' keyword requires session context — enter role name instead")
-                claimed_role = args[3]
-            else:
-                target_card = next((c for c in session.cards if c.position == target_pos), None)
-                if target_card:
-                    claimed_role = target_card.apparent_role
-                    print(f"  [medium] Resolved 'real' -> '{claimed_role}' (target #{target_pos} apparent role)")
-                else:
-                    print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
-        return card_medium(pos, target_pos, claimed_role)
+            target_card = next(
+                (c for c in session.cards if c.position == target_pos),
+                None,
+            )
+            if target_card is None:
+                raise ValueError(
+                    f"Medium 'real' target #{target_pos} has no current card entry"
+                )
+            claimed_role = target_card.apparent_role
+        canonical_role = get_card(claimed_role)
+        if canonical_role is None:
+            raise ValueError("Medium named role must be canonical")
+        return card_medium(
+            pos,
+            target_pos,
+            canonical_role.name,
+            medium_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "hunter":
         if session is None:
             raise ValueError("Current Hunter entry requires session board size")

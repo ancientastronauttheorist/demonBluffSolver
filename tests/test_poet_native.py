@@ -140,6 +140,23 @@ class PoetManualIngestionTests(unittest.TestCase):
                 expected["poet_variant"] = POET_VARIANT
                 self.assertEqual(card.info_parsed, expected)
 
+    def test_manual_medium_synthesizes_exact_native_text(self):
+        scout = card_poet_with_info(
+            1,
+            "medium",
+            ["2", "scout"],
+            n_cards=6,
+        )
+        drunk = card_poet_with_info(
+            1,
+            "medium",
+            ["2", "drunk"],
+            n_cards=6,
+        )
+
+        self.assertEqual(scout.info_text, "#2 is a real\nScout")
+        self.assertEqual(drunk.info_text, "#2 is actually a\nDrunk")
+
     def test_manual_current_payloads_fail_early_when_not_schema_safe(self):
         cases = [
             ("lover", ["3"]),
@@ -303,7 +320,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
             ("Pooka is 2 cards away from closest Evil", [], "Scout"),
             ("#2 or #3 is a Witch", [2, 3], "Oracle"),
             ("#4\nis Evil", [], "Bounty Hunter"),
-            ("#2 is a real Scout", [2], "Medium"),
+            ("#2 is a real\nScout", [2], "Medium"),
             ("There is only 1 pair of Evil", [], "Knitter"),
             (
                 "I am 2 cards away from closest Evil",
@@ -633,7 +650,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
 
     def test_medium_exact_normal_and_drunk_reveal_forms(self):
         for clue, role in (
-            ("#2 is a real Scout", "Scout"),
+            ("#2 is a real\nScout", "Scout"),
             ("#2 is actually a\nDrunk", "Drunk"),
         ):
             with self.subTest(clue=clue):
@@ -644,19 +661,55 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                 self.assertEqual(parsed.info_parsed["copied_role"], "Medium")
                 self.assertEqual(parsed.info_parsed["good_position"], 2)
                 self.assertEqual(parsed.info_parsed["good_role"], role)
+                self.assertEqual(parsed.info_text, clue)
 
-        for clue, refs in (
-            ("#2 is a real Scout trailing text", [2]),
-            ("#2 is actually a Drunk", [3]),
-            ("#2 is actually a Future Role", [2]),
+        for clue in (
+            "#2 is a real Scout",
+            "#2 is a real\r\nScout",
+            "#2 is a real\nscout",
+            "#2 is a real\nScout!",
+            " #2 is a real\nScout",
+            "# 2 is a real\nScout",
+            "#02 is a real\nScout",
+            "#2 Is a real\nScout",
+            "#2 is a real\nDrunk",
+            "#2 is actually a\nScout",
+            "#2 is actually a\nFuture Role",
         ):
-            with self.subTest(clue=clue, refs=refs):
+            with self.subTest(clue=clue):
                 self.assertIsNone(
                     _parse_clue_from_memory(
-                        _memory_poet(clue, refs),
+                        _memory_poet(clue, [2]),
                         n_cards=6,
                     )
                 )
+
+    def test_medium_requires_current_actor_and_newest_exact_one_ref_event(self):
+        clue = "#2 is a real\nScout"
+        malformed = (
+            _memory_poet(clue, None),
+            _memory_poet(clue, []),
+            _memory_poet(clue, [3]),
+            _memory_poet(clue, [2, 3]),
+            {
+                **_memory_poet(clue, [2]),
+                "acted_infos": [
+                    {"desc": clue, "targets": [2]},
+                    {"desc": "stale result", "targets": [2]},
+                ],
+            },
+            {**_memory_poet(clue, [2]), "position": 0},
+            {**_memory_poet(clue, [2]), "position": 7},
+        )
+        for card in malformed:
+            with self.subTest(card=card):
+                self.assertIsNone(
+                    _parse_clue_from_memory(card, n_cards=6)
+                )
+
+        self.assertIsNone(
+            _parse_clue_from_memory(_memory_poet(clue, [2]), n_cards=None)
+        )
 
     def test_obsolete_and_fortune_surfaces_are_not_current_poet_results(self):
         cases = [
@@ -743,7 +796,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
             ("#2 or #3 is a Witch", [2]),
             ("One is Evil: #2, #3 or #4", [2, 4, 3]),
             ("#2 is Good", [3]),
-            ("#2 is a real Scout", [3]),
+            ("#2 is a real\nScout", [3]),
         ]
         for clue, targets in mismatches:
             with self.subTest(clue=clue, targets=targets):
