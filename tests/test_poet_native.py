@@ -140,7 +140,7 @@ class PoetManualIngestionTests(unittest.TestCase):
             ("scout", ["not_a_role", "2"]),
             ("scout", ["pooka", "0"]),
             ("scout", ["pooka", "-1"]),
-            ("oracle", ["2,2", "witch"]),
+            ("oracle", ["3,2", "witch"]),
             ("oracle", ["2,3", "pooka"]),
             ("bounty_hunter", ["0"]),
             ("medium", ["2", "not_a_role"]),
@@ -194,6 +194,40 @@ class PoetManualIngestionTests(unittest.TestCase):
                 "poet_variant": POET_VARIANT,
             },
         )
+
+    def test_oracle_accepts_native_duplicate_refs_and_no_minions_sentinel(self):
+        duplicate = card_poet_with_info(
+            1,
+            "oracle",
+            ["2,2", "witch"],
+            n_cards=6,
+        )
+        self.assertEqual(
+            duplicate.info_parsed,
+            {
+                "targets": [2, 2],
+                "minion_role": "Witch",
+                "copied_role": "Oracle",
+                "poet_variant": POET_VARIANT,
+            },
+        )
+        self.assertEqual(duplicate.info_text, "#2 or #2 is a Witch")
+
+        sentinel = card_poet_with_info(
+            1,
+            "oracle",
+            ["no_minions"],
+            n_cards=6,
+        )
+        self.assertEqual(
+            sentinel.info_parsed,
+            {
+                "no_minions": True,
+                "copied_role": "Oracle",
+                "poet_variant": POET_VARIANT,
+            },
+        )
+        self.assertEqual(sentinel.info_text, "There are no minions")
 
     def test_manual_current_payloads_use_live_board_bounds(self):
         cases = [

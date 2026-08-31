@@ -16,6 +16,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Puzzlemaster": "Plague Doctor",
             "Skinwalker": "Mutant",
             "Gossip": "Poet",
+            "Investigator": "Oracle",
             "Tracker": "Hunter",
             "BountyHunter": "Bounty Hunter",
             # Spy is a distinct native Minion implementation, not the managed
@@ -40,6 +41,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Shaman_26945607": "Shaman",
             "Witch_25286521": "Witch",
             "Gossip_13579": "Poet",
+            "Investigator_86420": "Oracle",
             "Tracker_24680": "Hunter",
             "BountyHunter_97531": "Bounty Hunter",
         }

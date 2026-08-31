@@ -116,8 +116,39 @@ def card_fortune_teller(
         info_parsed=info,
     )
 
-def card_oracle(pos: int, targets: list[int], minion_role: str) -> CardInfo:
-    return CardInfo(pos, "Oracle", info_parsed={"targets": targets, "minion_role": minion_role})
+def _oracle_native_text(targets: list[int], minion_role: str) -> str:
+    """Return Investigator's exact positive public sentence."""
+    return f"#{targets[0]} or #{targets[1]} is a {minion_role}"
+
+
+def card_oracle(
+    pos: int,
+    targets: list[int],
+    minion_role: str,
+    *,
+    info_text: str = "",
+    oracle_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build an Oracle observation while preserving unmarked legacy callers."""
+    info = {"targets": list(targets), "minion_role": minion_role}
+    if oracle_variant is not None:
+        info["oracle_variant"] = oracle_variant
+        if not info_text:
+            info_text = _oracle_native_text(targets, minion_role)
+    return CardInfo(pos, "Oracle", info_text=info_text, info_parsed=info)
+
+
+def _card_oracle_no_minions(
+    pos: int,
+    *,
+    info_text: str = "There are no minions",
+    oracle_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build Investigator's exact truthful empty-Minions sentinel."""
+    info = {"no_minions": True}
+    if oracle_variant is not None:
+        info["oracle_variant"] = oracle_variant
+    return CardInfo(pos, "Oracle", info_text=info_text, info_parsed=info)
 
 def card_medium(pos: int, good_position: int, good_role: str) -> CardInfo:
     return CardInfo(pos, "Medium", info_parsed={"good_position": good_position, "good_role": good_role})
@@ -891,7 +922,12 @@ def card_poet_with_info(
             )
         return value
 
-    def positions(index: int, count: int) -> list[int]:
+    def positions(
+        index: int,
+        count: int,
+        *,
+        allow_duplicates: bool = False,
+    ) -> list[int]:
         try:
             values = [int(value.strip()) for value in copied_args[index].split(',')]
         except (AttributeError, TypeError, ValueError) as exc:
@@ -906,7 +942,7 @@ def card_poet_with_info(
                 f"{canonical_provider} Poet clue requires exactly {count} current-board "
                 f"target{'s' if count != 1 else ''}"
             )
-        if len(set(values)) != len(values):
+        if not allow_duplicates and len(set(values)) != len(values):
             raise ValueError(f"{canonical_provider} Poet targets must be distinct")
         return values
 
@@ -954,15 +990,36 @@ def card_poet_with_info(
                 "distance": distance,
             }
     elif canonical_provider == "Oracle":
+        sentinel_key = re.sub(
+            r"[^a-z0-9]",
+            "",
+            " ".join(copied_args).casefold(),
+        )
+        if sentinel_key in {"nominions", "therearenominions"}:
+            return _card_current_poet(
+                pos,
+                "Oracle",
+                {"no_minions": True},
+                info_text="There are no minions",
+            )
         require_args(2)
-        payload = {
-            "targets": positions(0, 2),
-            "minion_role": canonical_role(
-                1,
-                "minion role",
-                factions={"Minion"},
-            ),
-        }
+        oracle_targets = positions(0, 2, allow_duplicates=True)
+        if oracle_targets != sorted(oracle_targets):
+            raise ValueError("Oracle Poet targets must be in ascending ID order")
+        minion_role = canonical_role(
+            1,
+            "minion role",
+            factions={"Minion"},
+        )
+        return _card_current_poet(
+            pos,
+            "Oracle",
+            {
+                "targets": oracle_targets,
+                "minion_role": minion_role,
+            },
+            info_text=_oracle_native_text(oracle_targets, minion_role),
+        )
     elif canonical_provider == "Bounty Hunter":
         require_args(1)
         return card_bounty_hunter(pos, position(0, "evil target"))
@@ -4916,13 +4973,42 @@ def _parse_clue_from_memory(
             found = m.group(1).strip().rstrip('.!').replace(' ', '_')
             return card_druid(pos, targets, found)
 
-    # --- Oracle: targets + minion role ---
-    if role_lower == 'oracle' and targets:
-        # Look for a role name in the clue
-        m = re.search(r'is\s+(?:a\s+)?(\w[\w\s]*)', clue, re.IGNORECASE)
+    # --- Oracle: exact current Investigator positive/sentinel surfaces. ---
+    if role_lower == 'oracle':
+        if n_cards is None or not 1 <= pos <= n_cards:
+            return None
+        refs = current_event_refs()
+        if clue == "There are no minions":
+            if refs == []:
+                return _card_oracle_no_minions(
+                    pos,
+                    info_text=clue,
+                    oracle_variant=_PUBLIC_CURRENT_VARIANT,
+                )
+            return None
+        m = re.fullmatch(
+            r'#(\d+) or #(\d+) is a ([A-Za-z][A-Za-z _\'-]*)',
+            clue,
+        )
         if m:
-            minion_role = m.group(1).strip().replace(' ', '_')
-            return card_oracle(pos, targets, minion_role)
+            oracle_targets = [int(m.group(1)), int(m.group(2))]
+            minion = get_card(m.group(3))
+            if (
+                oracle_targets == sorted(oracle_targets)
+                and all(1 <= target <= n_cards for target in oracle_targets)
+                and refs == oracle_targets
+                and minion is not None
+                and minion.role.value == "Minion"
+                and clue == _oracle_native_text(oracle_targets, minion.name)
+            ):
+                return card_oracle(
+                    pos,
+                    oracle_targets,
+                    minion.name,
+                    info_text=clue,
+                    oracle_variant=_PUBLIC_CURRENT_VARIANT,
+                )
+        return None
 
     # --- Scout: exact current native numeric/sentinel forms, always no refs. ---
     if role_lower == 'scout':
@@ -5018,10 +5104,14 @@ def _parse_clue_from_memory(
             displayed: list[int],
             *,
             require_sorted: bool = True,
+            require_distinct: bool = True,
         ) -> bool:
             return (
                 bool(displayed)
-                and len(set(displayed)) == len(displayed)
+                and (
+                    not require_distinct
+                    or len(set(displayed)) == len(displayed)
+                )
                 and (not require_sorted or displayed == sorted(displayed))
                 and all(
                     target > 0 and (n_cards is None or target <= n_cards)
@@ -5088,21 +5178,34 @@ def _parse_clue_from_memory(
                     info_text=clue,
                 )
 
-        # Oracle: two public references and one canonical Minion role.
+        # Oracle: exact truthful no-Minions sentinel.
+        if clue == "There are no minions" and poet_refs_match([]):
+            return _card_current_poet(
+                pos,
+                "Oracle",
+                {"no_minions": True},
+                info_text=clue,
+            )
+
+        # Oracle: two public references and one canonical Minion role. Truth
+        # selects its registered-Minion and registered-Good pools
+        # independently, so a moved Twin identity can repeat one physical ID.
         m = re.fullmatch(
-            r'\s*#\s*(\d+)\s+or\s+#\s*(\d+)\s+is\s+a\s+'
-            r"([A-Za-z][A-Za-z _'-]*?)\s*[.!]?\s*",
+            r'#(\d+) or #(\d+) is a ([A-Za-z][A-Za-z _\'-]*)',
             clue,
-            re.IGNORECASE | re.DOTALL,
         )
         if m:
             oracle_targets = [int(m.group(1)), int(m.group(2))]
-            minion = get_card(m.group(3).strip())
+            minion = get_card(m.group(3))
             if (
-                valid_displayed_targets(oracle_targets)
+                valid_displayed_targets(
+                    oracle_targets,
+                    require_distinct=False,
+                )
                 and poet_refs_match(oracle_targets)
                 and minion is not None
                 and minion.role.value == "Minion"
+                and clue == _oracle_native_text(oracle_targets, minion.name)
             ):
                 return _card_current_poet(
                     pos,
@@ -5461,8 +5564,43 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         has_evil = args[3].lower() in ("yes", "true", "1")
         return card_fortune_teller(pos, targets, has_evil)
     elif role == "oracle":
-        targets = [int(x) for x in args[2].split(",")]
-        return card_oracle(pos, targets, args[3])
+        if session is None:
+            raise ValueError("Current Oracle entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Oracle position is outside the current board")
+        sentinel_key = re.sub(
+            r"[^a-z0-9]",
+            "",
+            " ".join(args[2:]).casefold(),
+        )
+        if sentinel_key in {"nominions", "therearenominions"}:
+            return _card_oracle_no_minions(
+                pos,
+                oracle_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        if len(args) != 4:
+            raise ValueError("Oracle entry requires two targets and a Minion role")
+        try:
+            oracle_targets = [int(value.strip()) for value in args[2].split(",")]
+        except ValueError as exc:
+            raise ValueError("Oracle targets must be comma-separated integers") from exc
+        if (
+            len(oracle_targets) != 2
+            or oracle_targets != sorted(oracle_targets)
+            or any(not 1 <= target <= session.n_cards for target in oracle_targets)
+        ):
+            raise ValueError(
+                "Oracle requires two current-board targets in ascending ID order"
+            )
+        minion = get_card(args[3])
+        if minion is None or minion.role.value != "Minion":
+            raise ValueError("Oracle named role must be a canonical Minion")
+        return card_oracle(
+            pos,
+            oracle_targets,
+            minion.name,
+            oracle_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "medium":
         target_pos = int(args[2])
         claimed_role = args[3]
@@ -6071,7 +6209,7 @@ def main():
         print("  card confessor 1 clean")
         print("  card knitter 2 2")
         print("  card fortune_teller 4 1,3 yes")
-        print("  card oracle 5 2,6 Shaman")
+        print("  card oracle 5 2,6 Shaman          (or: card oracle 5 no_minions)")
         print("  card bishop 7 4,7,9 Outcast,Minion,Villager")
         print("  card jester 7 1,3,5 1")
         print("  card dreamer 5 3,9 Puppeteer,Lover")

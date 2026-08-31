@@ -162,7 +162,7 @@ DISPLAY_NAMES = {
     'Archivist': 'Archivist',
     'Shugenja': 'Shugenja',
     'Tracker': 'Hunter',
-    'Investigator': 'Investigator',
+    'Investigator': 'Oracle',
     'Librarian': 'Librarian',
     'Mutant': 'Mutant',
     'Puzzlemaster': 'Plague Doctor',

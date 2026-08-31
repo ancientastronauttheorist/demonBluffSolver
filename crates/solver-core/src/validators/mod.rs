@@ -178,9 +178,9 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     if !validate_rambler_shut_ups(scenario, state) { return false; }
 
     // Wretch's register-as draw is stored on the physical Character. Current
-    // Scout observations that selected the same explicit Wretch data must all
-    // admit one stable Minion draw.
-    if !validate_current_scout_register_as_consistency(scenario, state) { return false; }
+    // Scout and Oracle observations that selected the same explicit Wretch
+    // data must all admit one stable Minion draw.
+    if !validate_current_register_as_consistency(scenario, state) { return false; }
 
     // Card info validators
     for card in &state.cards {
@@ -634,6 +634,7 @@ fn validate_lover(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
 
 const SCOUT_CURRENT_VARIANT_FIELD: &str = "scout_variant";
 const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
+const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -655,7 +656,8 @@ fn current_passive_payload_source(
     match (direct_variant, poet_variant) {
         (None, None)
             if !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -734,8 +736,23 @@ enum CurrentScoutLabelSupport {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-struct CurrentScoutSupport {
+struct CurrentRegisterAsSupport {
     register_as: Option<(u8, String)>,
+}
+
+fn canonical_minion_role(role: &str) -> bool {
+    get_card(role).is_some_and(|card| card.faction == Faction::Minion && card.name == role)
+}
+
+fn current_wretch_register_as_label_allowed(role: &str, state: &GameState) -> bool {
+    if !canonical_minion_role(role) {
+        return false;
+    }
+    state.deck.minions.is_empty()
+        || state.deck.minions.iter().any(|authored| {
+            get_card(authored).is_some_and(|card| card.faction == Faction::Minion)
+                && roles_equal(authored, role)
+        })
 }
 
 fn current_scout_label_support(
@@ -751,16 +768,10 @@ fn current_scout_label_support(
 
     // Truthful Scout names Character.GetRegisterAs(). Wretch is the one
     // modeled current data identity whose register-as role differs: it samples
-    // a canonical authored Minion. Bluff Scout names dataRef directly.
+    // a canonical authored Minion (or the all-ascension pool when the bridge
+    // lacks deck metadata). Bluff Scout names dataRef directly.
     if truth == TruthStatus::Truthful && roles_equal(&data_role, "Wretch") {
-        return state
-            .deck
-            .minions
-            .iter()
-            .any(|role| {
-                get_card(role).is_some_and(|card| card.faction == Faction::Minion)
-                    && roles_equal(role, claimed_role)
-            })
+        return current_wretch_register_as_label_allowed(claimed_role, state)
             .then(|| CurrentScoutLabelSupport::WretchRegisterAs(normalize_role(claimed_role)));
     }
 
@@ -904,7 +915,7 @@ fn current_scout_supports(
     scenario: &Scenario,
     state: &GameState,
     source: CurrentPassivePayloadSource,
-) -> Vec<CurrentScoutSupport> {
+) -> Vec<CurrentRegisterAsSupport> {
     if card.position == 0 || card.position > state.n_cards {
         return Vec::new();
     }
@@ -932,7 +943,7 @@ fn current_scout_supports(
                         )
                 });
             supported
-                .then_some(CurrentScoutSupport { register_as: None })
+                .then_some(CurrentRegisterAsSupport { register_as: None })
                 .into_iter()
                 .collect()
         }
@@ -980,7 +991,7 @@ fn current_scout_supports(
                     CurrentScoutLabelSupport::Direct => None,
                     CurrentScoutLabelSupport::WretchRegisterAs(role) => Some((target, role)),
                 };
-                let support = CurrentScoutSupport { register_as };
+                let support = CurrentRegisterAsSupport { register_as };
                 if !supports.contains(&support) {
                     supports.push(support);
                 }
@@ -999,7 +1010,257 @@ fn validate_current_scout(
     !current_scout_supports(card, scenario, state, source).is_empty()
 }
 
-fn validate_current_scout_register_as_consistency(
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentOracleClaim<'a> {
+    Positive {
+        targets: [u8; 2],
+        minion_role: &'a str,
+    },
+    NoMinions,
+}
+
+fn parse_current_oracle_claim<'a>(
+    card: &'a CardInfo,
+    source: CurrentPassivePayloadSource,
+    n_cards: u8,
+) -> Option<CurrentOracleClaim<'a>> {
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => (ORACLE_CURRENT_VARIANT_FIELD, 1),
+        CurrentPassivePayloadSource::Poet => ("poet_variant", 2),
+    };
+    if info.get(variant_field).and_then(serde_json::Value::as_str)
+        != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    if source == CurrentPassivePayloadSource::Poet
+        && info.get("copied_role").and_then(serde_json::Value::as_str) != Some("Oracle")
+    {
+        return None;
+    }
+
+    if info.len() == fixed_fields + 1
+        && info.get("no_minions").and_then(serde_json::Value::as_bool) == Some(true)
+        && card.info_text == "There are no minions"
+    {
+        return Some(CurrentOracleClaim::NoMinions);
+    }
+    if info.len() != fixed_fields + 2 {
+        return None;
+    }
+
+    let values = info.get("targets")?.as_array()?;
+    if values.len() != 2 {
+        return None;
+    }
+    let first = poet_position_value(values.first(), n_cards)?;
+    let second = poet_position_value(values.get(1), n_cards)?;
+    if first > second {
+        return None;
+    }
+    let minion_role = poet_canonical_role(info, "minion_role")?;
+    if !canonical_minion_role(minion_role)
+        || card.info_text != format!("#{first} or #{second} is a {minion_role}")
+    {
+        return None;
+    }
+
+    Some(CurrentOracleClaim::Positive {
+        targets: [first, second],
+        minion_role,
+    })
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentOracleMinionSupport {
+    required_anonymous_wretch: Option<u8>,
+    register_as: Option<(u8, String)>,
+}
+
+fn current_oracle_minion_target_support(
+    target: u8,
+    minion_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentOracleMinionSupport> {
+    match current_data_role_at(target, scenario, state) {
+        Some(data_role) if roles_equal(&data_role, "Wretch") => {
+            current_wretch_register_as_label_allowed(minion_role, state).then(|| {
+                CurrentOracleMinionSupport {
+                    required_anonymous_wretch: None,
+                    register_as: Some((target, normalize_role(minion_role))),
+                }
+            })
+        }
+        Some(data_role)
+            if get_card(&data_role).is_some_and(|card| card.faction == Faction::Minion)
+                && roles_equal(&data_role, minion_role) =>
+        {
+            Some(CurrentOracleMinionSupport {
+                required_anonymous_wretch: None,
+                register_as: None,
+            })
+        }
+        Some(_) => None,
+        None => current_wretch_register_as_label_allowed(minion_role, state).then_some(
+            CurrentOracleMinionSupport {
+                required_anonymous_wretch: Some(target),
+                register_as: None,
+            },
+        ),
+    }
+}
+
+/// Return the anonymous seat that must be forbidden from holding Wretch data,
+/// or `None` when this is already a modeled registered-Good target.
+fn current_oracle_good_target_forbidden_wretch(
+    target: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<Option<u8>> {
+    let data_role = current_data_role_at(target, scenario, state);
+    if registered_alignment_at(target, scenario, state) != EffectiveAlignment::Good
+        || data_role.as_deref().is_some_and(|role| roles_equal(role, "Wretch"))
+    {
+        return None;
+    }
+    Some(data_role.is_none().then_some(target))
+}
+
+fn current_oracle_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentRegisterAsSupport> {
+    if card.position == 0 || card.position > state.n_cards {
+        return Vec::new();
+    }
+    let Some(claim) = parse_current_oracle_claim(card, source, state.n_cards) else {
+        return Vec::new();
+    };
+    let truth = truth_status(card.position, scenario, state);
+    let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
+
+    match claim {
+        CurrentOracleClaim::NoMinions => {
+            if truth == TruthStatus::Lying {
+                return Vec::new();
+            }
+            let known_current_minion = (1..=state.n_cards).any(|position| {
+                current_data_role_at(position, scenario, state).is_some_and(|role| {
+                    roles_equal(&role, "Wretch")
+                        || get_card(&role).is_some_and(|card| card.faction == Faction::Minion)
+                })
+            });
+            if known_current_minion {
+                return Vec::new();
+            }
+            let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
+            anonymous_wretch_assignment_possible(
+                &HashSet::new(),
+                &forbidden,
+                scenario,
+                state,
+            )
+            .then_some(CurrentRegisterAsSupport { register_as: None })
+            .into_iter()
+            .collect()
+        }
+        CurrentOracleClaim::Positive {
+            targets,
+            minion_role,
+        } if truth == TruthStatus::Lying => {
+            if targets[0] == targets[1]
+                || !current_wretch_register_as_label_allowed(minion_role, state)
+            {
+                return Vec::new();
+            }
+            let mut forbidden = HashSet::new();
+            for target in targets {
+                let Some(anonymous_forbidden) = current_oracle_good_target_forbidden_wretch(
+                    target,
+                    scenario,
+                    state,
+                ) else {
+                    return Vec::new();
+                };
+                if let Some(position) = anonymous_forbidden {
+                    forbidden.insert(position);
+                }
+            }
+            anonymous_wretch_assignment_possible(
+                &HashSet::new(),
+                &forbidden,
+                scenario,
+                state,
+            )
+            .then_some(CurrentRegisterAsSupport { register_as: None })
+            .into_iter()
+            .collect()
+        }
+        CurrentOracleClaim::Positive {
+            targets,
+            minion_role,
+        } => {
+            let orientations = if targets[0] == targets[1] {
+                vec![(targets[0], targets[1])]
+            } else {
+                vec![(targets[0], targets[1]), (targets[1], targets[0])]
+            };
+            let mut supports = Vec::new();
+            for (minion_target, good_target) in orientations {
+                let Some(minion_support) = current_oracle_minion_target_support(
+                    minion_target,
+                    minion_role,
+                    scenario,
+                    state,
+                ) else {
+                    continue;
+                };
+                let Some(anonymous_good_forbidden) = current_oracle_good_target_forbidden_wretch(
+                    good_target,
+                    scenario,
+                    state,
+                ) else {
+                    continue;
+                };
+                let required: HashSet<u8> = minion_support
+                    .required_anonymous_wretch
+                    .into_iter()
+                    .collect();
+                let forbidden: HashSet<u8> = anonymous_good_forbidden.into_iter().collect();
+                if !anonymous_wretch_assignment_possible(
+                    &required,
+                    &forbidden,
+                    scenario,
+                    state,
+                ) {
+                    continue;
+                }
+                let support = CurrentRegisterAsSupport {
+                    register_as: minion_support.register_as,
+                };
+                if !supports.contains(&support) {
+                    supports.push(support);
+                }
+            }
+            supports
+        }
+    }
+}
+
+fn validate_current_oracle(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_oracle_supports(card, scenario, state, source).is_empty()
+}
+
+fn validate_current_register_as_consistency(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
@@ -1016,20 +1277,31 @@ fn validate_current_scout_register_as_consistency(
             SCOUT_CURRENT_VARIANT_FIELD,
             "Scout",
         ) else {
+            if let Ok(Some(source)) = current_passive_payload_source(
+                card,
+                ORACLE_CURRENT_VARIANT_FIELD,
+                "Oracle",
+            ) {
+                current_cards.push((card, source, true));
+            }
             continue;
         };
-        current_cards.push((card, source));
+        current_cards.push((card, source, false));
     }
     // One observation cannot disagree with itself, and its ordinary validator
     // owns all schema, candidate, and distance checks. Avoid replaying the
-    // anonymous-Outcast allocator on the common one-Scout path.
+    // anonymous-Outcast allocator on the common one-observation path.
     if current_cards.len() <= 1 {
         return true;
     }
 
     let mut observations = Vec::new();
-    for (card, source) in current_cards {
-        let supports = current_scout_supports(card, scenario, state, source);
+    for (card, source, is_oracle) in current_cards {
+        let supports = if is_oracle {
+            current_oracle_supports(card, scenario, state, source)
+        } else {
+            current_scout_supports(card, scenario, state, source)
+        };
         if supports.is_empty() {
             return false;
         }
@@ -1038,7 +1310,7 @@ fn validate_current_scout_register_as_consistency(
 
     fn search(
         index: usize,
-        observations: &[Vec<CurrentScoutSupport>],
+        observations: &[Vec<CurrentRegisterAsSupport>],
         selected_register_as: &mut HashMap<u8, String>,
     ) -> bool {
         if index == observations.len() {
@@ -1072,8 +1344,8 @@ fn validate_current_scout_register_as_consistency(
     // Scenario and have no persisted physical assignment to join across
     // separate observations. Each observation is nevertheless checked against
     // one exact required/forbidden placement. Only explicit current-data
-    // Wretches have a stable identity surface that can be joined here without
-    // inventing hidden state.
+    // Wretches have a stable identity surface that Scout and Oracle can join
+    // here without inventing hidden state.
     search(0, &observations, &mut HashMap::new())
 }
 
@@ -1287,6 +1559,12 @@ fn validate_fortune_teller(card: &CardInfo, scenario: &Scenario, state: &GameSta
 }
 
 fn validate_oracle(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, ORACLE_CURRENT_VARIANT_FIELD, "Oracle") {
+        Ok(Some(source)) => return validate_current_oracle(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -2400,13 +2678,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state.n_cards,
         )
         .is_some(),
-        "Oracle" => {
-            poet_has_exact_fields(info, &["targets", "minion_role"])
-                && poet_targets(info, state.n_cards, 2, 2).is_some()
-                && poet_canonical_role(info, "minion_role")
-                    .and_then(get_card)
-                    .is_some_and(|card| card.faction == Faction::Minion)
-        }
+        "Oracle" => parse_current_oracle_claim(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state.n_cards,
+        )
+        .is_some(),
         "Bounty Hunter" => {
             poet_has_exact_fields(info, &["evil_position"])
                 && poet_position_value(info.get("evil_position"), state.n_cards).is_some()
@@ -3265,7 +3542,29 @@ mod tests {
         s
     }
 
+    fn current_oracle_text(payload: &serde_json::Value) -> String {
+        if payload.get("no_minions").and_then(serde_json::Value::as_bool) == Some(true) {
+            return "There are no minions".to_string();
+        }
+        let Some(targets) = payload.get("targets").and_then(serde_json::Value::as_array) else {
+            return String::new();
+        };
+        let Some([first, second]) = targets
+            .iter()
+            .map(serde_json::Value::as_u64)
+            .collect::<Option<Vec<_>>>()
+            .and_then(|targets| <[u64; 2]>::try_from(targets).ok())
+        else {
+            return String::new();
+        };
+        let Some(role) = payload.get("minion_role").and_then(serde_json::Value::as_str) else {
+            return String::new();
+        };
+        format!("#{first} or #{second} is a {role}")
+    }
+
     fn current_poet(provider: &str, payload: serde_json::Value) -> CardInfo {
+        let info_text = (provider == "Oracle").then(|| current_oracle_text(&payload));
         let mut info = payload.as_object().unwrap().clone();
         info.insert(
             "poet_variant".to_string(),
@@ -3275,7 +3574,11 @@ mod tests {
             "copied_role".to_string(),
             serde_json::Value::String(provider.to_string()),
         );
-        make_card(1, "Poet", serde_json::Value::Object(info))
+        let mut card = make_card(1, "Poet", serde_json::Value::Object(info));
+        if let Some(info_text) = info_text {
+            card.info_text = info_text;
+        }
+        card
     }
 
     fn current_scout(pos: u8, payload: serde_json::Value) -> CardInfo {
@@ -3296,6 +3599,18 @@ mod tests {
                 "distance": distance,
             }),
         )
+    }
+
+    fn current_oracle(pos: u8, payload: serde_json::Value) -> CardInfo {
+        let info_text = current_oracle_text(&payload);
+        let mut info = payload.as_object().unwrap().clone();
+        info.insert(
+            ORACLE_CURRENT_VARIANT_FIELD.to_string(),
+            serde_json::Value::String(POET_CURRENT_VARIANT.to_string()),
+        );
+        let mut card = make_card(pos, "Oracle", serde_json::Value::Object(info));
+        card.info_text = info_text;
+        card
     }
 
     #[test]
@@ -3356,6 +3671,16 @@ mod tests {
             &hunter_no_other_evil,
             &state,
             "Hunter",
+        ));
+
+        let duplicate_oracle = current_poet(
+            "Oracle",
+            json!({"targets": [2, 2], "minion_role": "Twin Minion"}),
+        );
+        assert!(validate_current_poet_payload(
+            &duplicate_oracle,
+            &state,
+            "Oracle",
         ));
     }
 
@@ -3476,7 +3801,6 @@ mod tests {
 
         for targets in [
             json!([2]),
-            json!([2, 2]),
             json!([0, 2]),
             json!([2, 7]),
             json!([2, -1]),
@@ -4259,7 +4583,7 @@ mod tests {
 
         assert!(validate_scout(&direct, &scenario, &state));
         assert!(validate_poet(&poet, &scenario, &state));
-        assert!(!validate_current_scout_register_as_consistency(
+        assert!(!validate_current_register_as_consistency(
             &scenario,
             &state,
         ));
@@ -4270,7 +4594,7 @@ mod tests {
         );
         matching_poet.position = 2;
         state.cards[1] = matching_poet;
-        assert!(validate_current_scout_register_as_consistency(
+        assert!(validate_current_register_as_consistency(
             &scenario,
             &state,
         ));
@@ -4284,7 +4608,7 @@ mod tests {
         state.confirmed_evil = vec![1];
         let scenario = empty_scenario();
 
-        assert!(validate_current_scout_register_as_consistency(
+        assert!(validate_current_register_as_consistency(
             &scenario,
             &state,
         ));
@@ -4294,11 +4618,343 @@ mod tests {
             .insert(1, "Pooka".to_string());
         // A singleton has no cross-observation register-as conflict; its
         // ordinary validator still owns and rejects the malformed schema.
-        assert!(validate_current_scout_register_as_consistency(
+        assert!(validate_current_register_as_consistency(
             &scenario,
             &state,
         ));
         assert!(!validate_scout(&state.cards[0], &scenario, &state));
+    }
+
+    #[test]
+    fn current_oracle_schema_is_exact_text_bound_and_non_decreasing() {
+        let state = base_state(6, vec![]);
+        let positive = current_oracle(
+            1,
+            json!({"targets": [2, 3], "minion_role": "Witch"}),
+        );
+        assert!(matches!(
+            parse_current_oracle_claim(
+                &positive,
+                CurrentPassivePayloadSource::Direct,
+                state.n_cards,
+            ),
+            Some(CurrentOracleClaim::Positive {
+                targets: [2, 3],
+                minion_role: "Witch",
+            })
+        ));
+
+        let duplicate = current_oracle(
+            1,
+            json!({"targets": [2, 2], "minion_role": "Twin Minion"}),
+        );
+        assert!(parse_current_oracle_claim(
+            &duplicate,
+            CurrentPassivePayloadSource::Direct,
+            state.n_cards,
+        )
+        .is_some());
+
+        let sentinel = current_oracle(1, json!({"no_minions": true}));
+        assert_eq!(
+            parse_current_oracle_claim(
+                &sentinel,
+                CurrentPassivePayloadSource::Direct,
+                state.n_cards,
+            ),
+            Some(CurrentOracleClaim::NoMinions),
+        );
+
+        let mut wrong_text = positive.clone();
+        wrong_text.info_text = "#2 or #3 is Witch".to_string();
+        assert!(parse_current_oracle_claim(
+            &wrong_text,
+            CurrentPassivePayloadSource::Direct,
+            state.n_cards,
+        )
+        .is_none());
+
+        let mut wrong_sentinel_text = sentinel.clone();
+        wrong_sentinel_text.info_text = "There are no Minions".to_string();
+        assert!(parse_current_oracle_claim(
+            &wrong_sentinel_text,
+            CurrentPassivePayloadSource::Direct,
+            state.n_cards,
+        )
+        .is_none());
+
+        let mut extra = positive.clone();
+        extra.info_parsed.insert("unexpected".to_string(), json!(true));
+        assert!(parse_current_oracle_claim(
+            &extra,
+            CurrentPassivePayloadSource::Direct,
+            state.n_cards,
+        )
+        .is_none());
+
+        for payload in [
+            json!({"targets": [3, 2], "minion_role": "Witch"}),
+            json!({"targets": [2], "minion_role": "Witch"}),
+            json!({"targets": [2, 3, 4], "minion_role": "Witch"}),
+            json!({"targets": [0, 2], "minion_role": "Witch"}),
+            json!({"targets": [2, 7], "minion_role": "Witch"}),
+            json!({"targets": [2, 256], "minion_role": "Witch"}),
+            json!({"targets": [2, -1], "minion_role": "Witch"}),
+            json!({"targets": [2, true], "minion_role": "Witch"}),
+            json!({"targets": [2, "3"], "minion_role": "Witch"}),
+            json!({"targets": [2, 3], "minion_role": "witch"}),
+            json!({"targets": [2, 3], "minion_role": "Pooka"}),
+            json!({"no_minions": false}),
+            json!({"no_minions": true, "targets": [2, 3]}),
+        ] {
+            let malformed = current_oracle(1, payload);
+            assert!(
+                parse_current_oracle_claim(
+                    &malformed,
+                    CurrentPassivePayloadSource::Direct,
+                    state.n_cards,
+                )
+                .is_none(),
+                "malformed current Oracle payload unexpectedly parsed: {:?}",
+                malformed.info_parsed,
+            );
+        }
+
+        for position in [0, 7] {
+            let mut wrapped = positive.clone();
+            wrapped.position = position;
+            assert!(!validate_current_oracle(
+                &wrapped,
+                &empty_scenario(),
+                &state,
+                CurrentPassivePayloadSource::Direct,
+            ));
+        }
+    }
+
+    #[test]
+    fn current_oracle_truth_supports_self_orientation_and_only_truth_duplicates() {
+        let oracle = current_oracle(
+            1,
+            json!({"targets": [1, 3], "minion_role": "Witch"}),
+        );
+        let wretch = make_card(3, "Wretch", json!({}));
+        let mut state = base_state(3, vec![oracle.clone(), wretch]);
+        state.deck.minions = vec!["Witch".to_string()];
+        let scenario = empty_scenario();
+
+        assert_eq!(
+            registered_alignment_at(3, &scenario, &state),
+            EffectiveAlignment::Evil,
+        );
+        assert!(validate_oracle(&oracle, &scenario, &state));
+        let duplicate_wretch = current_oracle(
+            1,
+            json!({"targets": [3, 3], "minion_role": "Witch"}),
+        );
+        assert!(!validate_oracle(&duplicate_wretch, &scenario, &state));
+
+        let duplicate_twin = current_oracle(
+            1,
+            json!({"targets": [5, 5], "minion_role": "Twin Minion"}),
+        );
+        let known_good = make_card(6, "Scout", json!({}));
+        let mut twin_state = base_state(8, vec![duplicate_twin.clone(), known_good]);
+        twin_state.deck.minions = vec!["Twin_Minion".to_string()];
+        let mut twin = empty_scenario();
+        twin.evil_positions = HashMap::from([
+            (4, "Twin Minion".to_string()),
+            (8, "Pooka".to_string()),
+        ]);
+        twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 4,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 8,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 5,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+
+        assert_eq!(
+            registered_alignment_at(5, &twin, &twin_state),
+            EffectiveAlignment::Good,
+        );
+        assert!(validate_oracle(&duplicate_twin, &twin, &twin_state));
+
+        twin.corrupted.insert(1);
+        assert!(!validate_oracle(&duplicate_twin, &twin, &twin_state));
+        let true_sentence_from_bluff_generation = current_oracle(
+            1,
+            json!({"targets": [5, 6], "minion_role": "Twin Minion"}),
+        );
+        assert!(validate_oracle(
+            &true_sentence_from_bluff_generation,
+            &twin,
+            &twin_state,
+        ));
+    }
+
+    #[test]
+    fn current_oracle_wretch_and_bluff_labels_use_authored_pool_or_fallback() {
+        let direct = current_oracle(
+            1,
+            json!({"targets": [2, 3], "minion_role": "Twin Minion"}),
+        );
+        let good = make_card(2, "Scout", json!({}));
+        let wretch = make_card(3, "Wretch", json!({}));
+        let mut state = base_state(4, vec![direct.clone(), good.clone(), wretch.clone()]);
+        state.deck.minions = vec!["Twin_Minion".to_string()];
+        let scenario = empty_scenario();
+        assert!(validate_oracle(&direct, &scenario, &state));
+
+        let wrong_authored_label = current_oracle(
+            1,
+            json!({"targets": [2, 3], "minion_role": "Witch"}),
+        );
+        assert!(!validate_oracle(
+            &wrong_authored_label,
+            &scenario,
+            &state,
+        ));
+
+        let poet = current_poet(
+            "Oracle",
+            json!({"targets": [2, 3], "minion_role": "Twin Minion"}),
+        );
+        let poet_state = base_state(4, vec![poet.clone(), good.clone(), wretch.clone()]);
+        let poet_state = GameState {
+            deck: state.deck.clone(),
+            ..poet_state
+        };
+        assert_eq!(
+            validate_oracle(&direct, &scenario, &state),
+            validate_poet(&poet, &scenario, &poet_state),
+        );
+
+        state.deck.minions.clear();
+        let fallback = current_oracle(
+            1,
+            json!({"targets": [2, 3], "minion_role": "Witch"}),
+        );
+        assert!(validate_oracle(&fallback, &scenario, &state));
+
+        let bluff = current_oracle(
+            1,
+            json!({"targets": [2, 4], "minion_role": "Twin Minion"}),
+        );
+        let other_good = make_card(4, "Hunter", json!({}));
+        let mut bluff_state = base_state(4, vec![bluff.clone(), good, wretch, other_good]);
+        bluff_state.deck.minions = vec!["Twin_Minion".to_string()];
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        assert!(validate_oracle(&bluff, &lying, &bluff_state));
+        assert!(!validate_oracle(
+            &current_oracle(
+                1,
+                json!({"targets": [2, 4], "minion_role": "Witch"}),
+            ),
+            &lying,
+            &bluff_state,
+        ));
+        assert!(!validate_oracle(
+            &current_oracle(
+                1,
+                json!({"targets": [2, 3], "minion_role": "Twin Minion"}),
+            ),
+            &lying,
+            &bluff_state,
+        ));
+        bluff_state.deck.minions.clear();
+        assert!(validate_oracle(
+            &current_oracle(
+                1,
+                json!({"targets": [2, 4], "minion_role": "Witch"}),
+            ),
+            &lying,
+            &bluff_state,
+        ));
+    }
+
+    #[test]
+    fn current_oracle_uses_exact_anonymous_wretch_and_sentinel_assignments() {
+        let positive = current_oracle(
+            1,
+            json!({"targets": [2, 3], "minion_role": "Witch"}),
+        );
+        let known_good = make_card(2, "Scout", json!({}));
+        let mut state = base_state(4, vec![positive.clone(), known_good]);
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+        let sentinel = current_oracle(1, json!({"no_minions": true}));
+
+        assert!(validate_oracle(&positive, &scenario, &state));
+        assert!(!validate_oracle(&sentinel, &scenario, &state));
+
+        let mut lying = scenario.clone();
+        lying.corrupted.insert(1);
+        assert!(!validate_oracle(&positive, &lying, &state));
+        assert!(!validate_oracle(&sentinel, &lying, &state));
+
+        state.board_outcast_count = Some(0);
+        assert!(!validate_oracle(&positive, &scenario, &state));
+        assert!(validate_oracle(&sentinel, &scenario, &state));
+        assert!(validate_oracle(&positive, &lying, &state));
+
+        let known_minion = make_card(3, "Twin Minion", json!({}));
+        state.cards.push(known_minion);
+        assert!(!validate_oracle(&sentinel, &scenario, &state));
+    }
+
+    #[test]
+    fn current_scout_and_oracle_share_one_explicit_wretch_register_as_draw() {
+        let scout = current_scout(
+            1,
+            json!({"evil_role": "Witch", "distance": 4}),
+        );
+        let oracle = current_oracle(
+            2,
+            json!({"targets": [4, 5], "minion_role": "Twin Minion"}),
+        );
+        let mut state = base_state(8, vec![scout.clone(), oracle.clone()]);
+        state.deck.minions = vec!["Witch".to_string(), "Twin_Minion".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions = HashMap::from([
+            (4, "Twin Minion".to_string()),
+            (8, "Pooka".to_string()),
+        ]);
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 4,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 8,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 5,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+
+        assert!(validate_scout(&scout, &scenario, &state));
+        assert!(validate_oracle(&oracle, &scenario, &state));
+        assert!(!validate_current_register_as_consistency(
+            &scenario,
+            &state,
+        ));
+
+        let matching_oracle = current_oracle(
+            2,
+            json!({"targets": [4, 5], "minion_role": "Witch"}),
+        );
+        state.cards[1] = matching_oracle;
+        assert!(validate_current_register_as_consistency(
+            &scenario,
+            &state,
+        ));
     }
 
     #[test]
