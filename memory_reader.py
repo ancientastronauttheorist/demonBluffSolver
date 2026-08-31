@@ -1,7 +1,8 @@
 """
 Demon Bluff Memory Reader
 Reads live game state directly from process memory.
-Extracts true roles, disguises, alignment, and state for all cards.
+Extracts current CharacterData roles, disguises, alignment, and state for all
+cards. Current role can differ from a physical card's stable origin.
 
 Usage:
     python memory_reader.py          # dump current board
@@ -68,7 +69,7 @@ LIST_SIZE_OFFSET = 0x18
 ARRAY_FIRST_ELEMENT_OFFSET = 0x20
 
 # Character class field offsets
-CHAR_DATAREF_OFFSET = 0x50       # CharacterData* (true role)
+CHAR_DATAREF_OFFSET = 0x50       # current CharacterData* (not stable origin)
 CHAR_BLUFF_OFFSET = 0x58         # CharacterData* (disguise)
 CHAR_REGISTERAS_OFFSET = 0x60    # CharacterData* (registers as)
 CHAR_STATE_OFFSET = 0xE4         # ECharacterState (int32)
@@ -331,7 +332,7 @@ class MemoryReader:
         return None
 
     def _read_native_name(self, cd_ptr):
-        """Read the true role name from a CharacterData's Unity native object.
+        """Read the current role name from a CharacterData Unity object.
 
         The managed characterId field (0x18) is stale in multi-village.
         The native ScriptableObject stores the correct name at m_CachedPtr+0x48.
@@ -581,9 +582,11 @@ class MemoryReader:
             if not char_ptr:
                 continue
 
-            # Read true role (prefer native name for multi-village correctness)
+            # Read current CharacterData (prefer its native object name for
+            # multi-village correctness). ``true_role`` remains a compatibility
+            # alias for older callers; it does not mean stable physical origin.
             data_ref = self._read_ptr(char_ptr + CHAR_DATAREF_OFFSET)
-            true_role = self._read_cd_name(data_ref) if data_ref else '?'
+            current_role = self._read_cd_name(data_ref) if data_ref else '?'
 
             # Read bluff/disguise
             bluff_ptr = self._read_ptr(char_ptr + CHAR_BLUFF_OFFSET)
@@ -613,7 +616,7 @@ class MemoryReader:
             # non-empty, or the act flag is set). Plague Doctor is stricter
             # because game-start setup can set the act flag before the active
             # check ability is used.
-            display_role_lower = (disguise or true_role or '').lower().replace('_', ' ')
+            display_role_lower = (disguise or current_role or '').lower().replace('_', ' ')
             is_active_unused = (
                 ability_state['uses'] == 0
                 and not acted_infos
@@ -626,7 +629,8 @@ class MemoryReader:
 
             cards.append({
                 'position': card_id,
-                'true_role': true_role,
+                'current_role': current_role,
+                'true_role': current_role,
                 'disguise': disguise,
                 'alignment': ALIGNMENT.get(alignment, f'?{alignment}'),
                 'is_evil': alignment == 20,
@@ -957,10 +961,11 @@ def print_board(cards):
         return
 
     print()
-    print(f"{'POS':>3}  {'TRUE ROLE':<18} {'SHOWS AS':<18} {'ALIGN':>5}  {'STATE':<8} {'FLIP':>4}  FLAGS")
+    print(f"{'POS':>3}  {'CURRENT ROLE':<18} {'SHOWS AS':<18} {'ALIGN':>5}  {'STATE':<8} {'FLIP':>4}  FLAGS")
     print("-" * 85)
     for c in cards:
-        shows_as = c['disguise'] if c['disguise'] else c['true_role']
+        current_role = c.get('current_role') or c.get('true_role', '?')
+        shows_as = c['disguise'] if c['disguise'] else current_role
         evil_marker = '*' if c['is_evil'] else ' '
         flipped = 'YES' if c.get('state') in ('Alive', 'Dead', 'Revealed') else 'NO'
         flags = []
@@ -974,16 +979,17 @@ def print_board(cards):
             flags.append('BLOCKED')
         flags_str = ', '.join(flags) if flags else ''
         print(
-            f"#{c['position']:>2}{evil_marker} {c['true_role']:<18} "
+            f"#{c['position']:>2}{evil_marker} {current_role:<18} "
             f"{shows_as:<18} {c['alignment']:>5}  {c['state']:<8} {flipped:>4}  {flags_str}"
         )
 
     evils = [c for c in cards if c['is_evil']]
     print()
-    print(f"Evil cards ({len(evils)}):")
+    print(f"Evil cards ({len(evils)}; CURRENT ROLE shown):")
     for c in evils:
+        current_role = c.get('current_role') or c.get('true_role', '?')
         disguise_info = f" (disguised as {c['disguise']})" if c['disguise'] else ""
-        print(f"  #{c['position']} {c['true_role']}{disguise_info}")
+        print(f"  #{c['position']} CURRENT ROLE={current_role}{disguise_info}")
 
     # Show clue data for flipped cards
     clue_cards = [c for c in cards if c.get('clue_text') or c.get('acted_infos') or c.get('runtime_data')]
@@ -991,7 +997,8 @@ def print_board(cards):
         print()
         print("Clue data:")
         for c in clue_cards:
-            parts = [f"  #{c['position']} {c['true_role']}:"]
+            current_role = c.get('current_role') or c.get('true_role', '?')
+            parts = [f"  #{c['position']} CURRENT ROLE={current_role}:"]
             if c.get('clue_text'):
                 parts.append(f"clue=\"{c['clue_text']}\"")
             if c.get('runtime_data'):

@@ -104,8 +104,21 @@ fn make_state(
 enum SimResult {
     Win { executions: usize, wrong_execs: usize },
     ConstraintFailure { phase: String, detail: String },
+    TerminalLoss { reason: String, executions: usize },
     SimLoss { reason: String, executions: usize },
     InsufficientTruth { detail: String },
+    UnsupportedTwinTrace { detail: String },
+}
+
+fn requires_ordered_twin_trace(state: &GameState) -> bool {
+    // Scenario does not yet carry Twin's ordered Start trace. Even without an
+    // authored Bombardier, later role effects can consume the swapped current
+    // data, so Phase 3 cannot claim a sound execution win for any Twin deck.
+    state
+        .deck
+        .all_roles()
+        .iter()
+        .any(|role| normalize_role(role) == "twinminion")
 }
 
 // ── Retain every scenario compatible with recorded evil ground truth ──
@@ -780,7 +793,7 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
     let result = solve(&state);
 
     if has_terminal_role_loss(&state, &result) {
-        return SimResult::SimLoss {
+        return SimResult::TerminalLoss {
             reason: format!(
                 "{case_name}: current-role Bombardier died before post-reveal constraint validation"
             ),
@@ -831,6 +844,15 @@ fn simulate_game(value: &serde_json::Value) -> SimResult {
             };
         }
     };
+
+    if requires_ordered_twin_trace(&state) {
+        return SimResult::UnsupportedTwinTrace {
+            detail: format!(
+                "{case_name}: Phase 3 requires the ordered Twin Start trace"
+            ),
+        };
+    }
+
     let wrong_exec_cost = state.wrong_exec_cost;
 
     // Strip recorded executions — simulation drives its own
@@ -1928,7 +1950,7 @@ fn slayer_bombardier_terminal_precedes_zero_world_constraint_failure() {
     });
 
     match simulate_game(&value) {
-        SimResult::SimLoss { reason, .. } => {
+        SimResult::TerminalLoss { reason, .. } => {
             assert!(reason.contains("Bombardier"), "{reason}");
         }
         other => panic!(
@@ -1947,7 +1969,7 @@ fn regression_terminal_bombardier_corpus_boundaries() {
     let terminal_result = solve(&terminal_state);
     assert!(has_terminal_role_loss(&terminal_state, &terminal_result));
     match simulate_game(&terminal_value) {
-        SimResult::SimLoss { reason, .. } => {
+        SimResult::TerminalLoss { reason, .. } | SimResult::SimLoss { reason, .. } => {
             assert!(
                 reason.contains("Bombardier") || reason.contains("HP exhausted"),
                 "asc77_v7 must remain an explicitly classified loss: {reason}",
@@ -1968,6 +1990,33 @@ fn regression_terminal_bombardier_corpus_boundaries() {
             "{name} has only a Night-killed Bombardier and must remain playable",
         );
     }
+}
+
+#[test]
+fn phase3_stops_only_for_authored_twin_without_ordered_trace() {
+    let twin_value: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string(v2_dir().join("asc33_v6.json")).unwrap(),
+    )
+    .unwrap();
+    assert!(requires_ordered_twin_trace(
+        &GameState::from_json(&twin_value).unwrap()
+    ));
+    assert!(matches!(
+        simulate_game(&twin_value),
+        SimResult::UnsupportedTwinTrace { .. }
+    ));
+
+    let non_twin_value: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string(v2_dir().join("asc30_v1.json")).unwrap(),
+    )
+    .unwrap();
+    assert!(!requires_ordered_twin_trace(
+        &GameState::from_json(&non_twin_value).unwrap()
+    ));
+    assert!(!matches!(
+        simulate_game(&non_twin_value),
+        SimResult::UnsupportedTwinTrace { .. }
+    ));
 }
 
 // ── Test entry point ──
@@ -2043,23 +2092,47 @@ fn simulate_all_v2() {
     let mut unexpected_losses: Vec<String> = Vec::new();
     let mut unexpected_constraint_fails: Vec<String> = Vec::new();
     let mut insufficient_truth: Vec<String> = Vec::new();
+    let mut unsupported_twin_trace: Vec<String> = Vec::new();
+    let mut unexpected_unsupported_twin_trace: Vec<String> = Vec::new();
+    let mut authored_twin_cases: HashSet<String> = HashSet::new();
+    let mut twin_terminal_cases: HashSet<String> = HashSet::new();
+    let mut twin_constraint_cases: HashSet<String> = HashSet::new();
+    let mut twin_insufficient_truth_cases: HashSet<String> = HashSet::new();
+    let mut twin_unsupported_cases: HashSet<String> = HashSet::new();
 
     for path in &files {
         let name = path.file_name().unwrap().to_str().unwrap();
         let case_name = name.trim_end_matches(".json");
         let content = std::fs::read_to_string(path).unwrap();
         let value: serde_json::Value = serde_json::from_str(&content).unwrap();
+        let authored_twin = requires_ordered_twin_trace(&GameState::from_json(&value).unwrap());
+        if authored_twin {
+            authored_twin_cases.insert(case_name.to_string());
+        }
 
         match simulate_game(&value) {
             SimResult::Win { .. } => {
                 wins += 1;
             }
             SimResult::ConstraintFailure { detail, .. } => {
+                if authored_twin {
+                    twin_constraint_cases.insert(case_name.to_string());
+                }
                 if known_constraint_issues.contains(case_name) {
                     expected_constraint_issues += 1;
                 } else {
                     constraint_failures += 1;
                     unexpected_constraint_fails.push(format!("{case_name}: {detail}"));
+                }
+            }
+            SimResult::TerminalLoss { reason, .. } => {
+                if authored_twin {
+                    twin_terminal_cases.insert(case_name.to_string());
+                }
+                if known_losses.contains(case_name) || known_constraint_issues.contains(case_name) {
+                    expected_losses += 1;
+                } else {
+                    unexpected_losses.push(reason);
                 }
             }
             SimResult::SimLoss { reason, .. } => {
@@ -2070,7 +2143,18 @@ fn simulate_all_v2() {
                 }
             }
             SimResult::InsufficientTruth { detail } => {
+                if authored_twin {
+                    twin_insufficient_truth_cases.insert(case_name.to_string());
+                }
                 insufficient_truth.push(detail);
+            }
+            SimResult::UnsupportedTwinTrace { detail } => {
+                if authored_twin {
+                    twin_unsupported_cases.insert(case_name.to_string());
+                    unsupported_twin_trace.push(detail);
+                } else {
+                    unexpected_unsupported_twin_trace.push(detail);
+                }
             }
         }
     }
@@ -2083,6 +2167,7 @@ fn simulate_all_v2() {
     println!("  Unexpected constraint failures: {constraint_failures}");
     println!("  Unexpected simulation losses: {}", unexpected_losses.len());
     println!("  Cases missing hidden-Outcast truth: {}", insufficient_truth.len());
+    println!("  Unsupported ordered Twin traces: {}", unsupported_twin_trace.len());
     println!("  Total: {total}");
 
     if !unexpected_constraint_fails.is_empty() {
@@ -2104,9 +2189,52 @@ fn simulate_all_v2() {
         }
     }
 
+    if !unsupported_twin_trace.is_empty() {
+        println!("\nCases awaiting ordered Twin trace:");
+        for detail in &unsupported_twin_trace {
+            println!("  - {detail}");
+        }
+    }
+
     // Constraint failures are always real bugs
     assert_eq!(constraint_failures, 0,
         "{constraint_failures} unexpected constraint failures: {unexpected_constraint_fails:?}");
+
+    // The corpus currently contains 79 authored Twin fixtures. Partition them
+    // by the exclusive pre-Phase-3 result: terminal, constraint, insufficient
+    // ground truth, or the dedicated unsupported-trace stop. Equality with the
+    // authored set proves that no Twin fixture entered strategy simulation.
+    assert_eq!(authored_twin_cases.len(), 79, "authored Twin corpus boundary changed");
+    assert!(unexpected_unsupported_twin_trace.is_empty(),
+        "non-Twin fixtures entered UnsupportedTwinTrace: {unexpected_unsupported_twin_trace:?}");
+    assert_eq!(unsupported_twin_trace.len(), twin_unsupported_cases.len());
+    let twin_partition_size = twin_terminal_cases.len()
+        + twin_constraint_cases.len()
+        + twin_insufficient_truth_cases.len()
+        + twin_unsupported_cases.len();
+    let classified_twin_cases: HashSet<String> = twin_terminal_cases
+        .iter()
+        .chain(&twin_constraint_cases)
+        .chain(&twin_insufficient_truth_cases)
+        .chain(&twin_unsupported_cases)
+        .cloned()
+        .collect();
+    assert_eq!(classified_twin_cases.len(), twin_partition_size,
+        "Twin outcome subsets must be pairwise disjoint");
+    assert_eq!(classified_twin_cases, authored_twin_cases,
+        "every authored Twin fixture must stop before strategy simulation");
+
+    let accounted_outcomes = wins
+        + expected_losses
+        + expected_constraint_issues
+        + constraint_failures
+        + unexpected_losses.len()
+        + insufficient_truth.len()
+        + unsupported_twin_trace.len()
+        + unexpected_unsupported_twin_trace.len();
+    assert_eq!(total, 426, "v2 corpus boundary changed");
+    assert_eq!(accounted_outcomes, total,
+        "every corpus fixture must have exactly one reported outcome");
 
     // Simulation losses: allow some tolerance for probabilistic games
     // but flag if too many
@@ -2292,7 +2420,11 @@ fn regression_legacy_header_count_does_not_invent_a_second_outcast() {
     let path = v2_dir().join("asc57_v5.json");
     let content = std::fs::read_to_string(path).unwrap();
     let value: serde_json::Value = serde_json::from_str(&content).unwrap();
-    assert!(matches!(simulate_game(&value), SimResult::Win { .. }));
+    let legacy_result = simulate_game(&value);
+    assert!(
+        !matches!(&legacy_result, SimResult::ConstraintFailure { .. }),
+        "legacy untrusted header must preserve the recorded truth: {legacy_result:?}",
+    );
 
     let mut falsely_trusted = value;
     falsely_trusted["board_count_provenance"] = serde_json::json!("trusted_pre_start");

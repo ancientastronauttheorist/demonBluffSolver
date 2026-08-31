@@ -150,12 +150,6 @@ def _reconstruct_starting_hp(case: dict) -> int:
                      if c["position"] == pos), None)
         apparent_role = card.get("apparent_role", "") if card else None
         execution_role = exec_good_roles.get(pos, apparent_role)
-        public_current_role = exec_current_roles.get(
-            pos, exec_good_roles.get(pos)
-        )
-        if _is_terminal_loss_role(public_current_role):
-            # The stored HP is already the native pre-terminal snapshot.
-            continue
         recorded_corrupted = exec_good_corrupted.get(
             str(pos), exec_good_corrupted.get(pos, False)
         )
@@ -434,22 +428,24 @@ def replay_hindsight(case: dict) -> HindsightResult:
                 exec_good_roles,
                 exec_current_roles,
             )
-            if _public_terminal_loss_position(public_death_state) is not None:
-                # Native OnDied terminal resolution precedes ordinary
-                # wrong-kill damage, so preserve the pre-death HP snapshot.
-                hp_cost = 0
+            terminal_death = (
+                _public_terminal_loss_position(public_death_state) is not None
+            )
+            hp_cost = execution_cost_for(
+                execution_role,
+                apparent_role=apparent,
+                # Drunk=false is observed-clean evidence, so this remains a
+                # conservative base-cost fallback in historical replays.
+                was_corrupted=bool(recorded_corrupted),
+                was_killable=True,
+                default=wrong_exec_cost,
+            )
+            hp -= hp_cost
+            # Character.Kill resource handling precedes Bombardier's delayed
+            # terminal callback. NoDamage is not persisted in historical case
+            # data, so a recorded ordinary Good Bomb death pays the base cost.
+            if terminal_death:
                 terminal_loss = True
-            else:
-                hp_cost = execution_cost_for(
-                    execution_role,
-                    apparent_role=apparent,
-                    # Drunk=false is observed-clean evidence, so this remains a
-                    # conservative base-cost fallback in historical replays.
-                    was_corrupted=bool(recorded_corrupted),
-                    was_killable=True,
-                    default=wrong_exec_cost,
-                )
-                hp -= hp_cost
 
         # Run solver again to get scenarios_after
         state_after = make_state(executed, confirmed_evil, confirmed_good,
@@ -526,7 +522,11 @@ def print_result(r: HindsightResult):
             action = f"Execute #{s.position}"
             prob_str = f"{s.prob_evil*100:.0f}%"
             if s.terminal_loss:
-                result_str = "TERMINAL (Bomb)"
+                if s.hp_cost:
+                    result_str = f"TERMINAL (Bomb -{s.hp_cost})"
+                    running_hp -= s.hp_cost
+                else:
+                    result_str = "TERMINAL (Bomb)"
             elif s.was_evil:
                 result_str = f"Evil ({s.evil_role})"
             elif s.evil_role == "Drunk":

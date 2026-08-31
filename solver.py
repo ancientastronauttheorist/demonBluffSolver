@@ -145,7 +145,7 @@ class GameState:
     board_demon_count: Optional[int] = None     # Actual demons on board (when pool > board)
     reveal_order: list[int] = field(default_factory=list)  # Order positions were flipped (for Baker)
     executed_good_corrupted: dict[int, bool] = field(default_factory=dict)  # Corruption status of executed good cards
-    executed_good_roles: dict[int, str] = field(default_factory=dict)  # Revealed true roles of executed good cards
+    executed_good_roles: dict[int, str] = field(default_factory=dict)  # Public current roles of executed good cards
     board_count_provenance: str = "legacy_unknown"  # Appended for positional ABI compatibility
     # Missing means an archived pre-audit fixture.  Fresh live sessions opt in
     # explicitly so absence of a shut-up observation can constrain Rambler2.
@@ -171,6 +171,9 @@ class GameState:
     # executions. Appended for positional ABI compatibility; original Evil
     # identity remains in executed_evil_roles.
     executed_current_roles: dict[int, str] = field(default_factory=dict)
+    # Exact public current role later revealed for a hidden night victim (for
+    # example by Medium). Kept separate from ordinary-execution evidence.
+    revealed_night_current_roles: dict[int, str] = field(default_factory=dict)
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -199,6 +202,10 @@ class GameState:
             "executed_good_roles": {str(k): v for k, v in self.executed_good_roles.items()},
             "executed_current_roles": {
                 str(k): v for k, v in self.executed_current_roles.items()
+            },
+            "revealed_night_current_roles": {
+                str(k): v
+                for k, v in self.revealed_night_current_roles.items()
             },
             "rambler_shut_up_observations": [
                 dict(observation)
@@ -272,6 +279,12 @@ class GameState:
             executed_current_roles={
                 int(k): v
                 for k, v in data.get("executed_current_roles", {}).items()
+            },
+            revealed_night_current_roles={
+                int(k): v
+                for k, v in data.get(
+                    "revealed_night_current_roles", {}
+                ).items()
             },
         )
 

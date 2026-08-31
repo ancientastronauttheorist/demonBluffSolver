@@ -2,8 +2,16 @@
 
 import unittest
 
-from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult
-from strategy import _find_forced_execution
+from solver import (
+    CardInfo,
+    ChancellorTrace,
+    DeckComposition,
+    GameState,
+    Scenario,
+    ShamanTrace,
+    SolverResult,
+)
+from strategy import _find_forced_execution, _shallow_lookahead
 
 
 def _state(*, hp: int, n_cards: int = 2) -> GameState:
@@ -73,6 +81,116 @@ class ForcedExecutionTests(unittest.TestCase):
         # Both #1 outcomes look exactly like a protected Knight. Keeping the
         # scenarios joined leaves #2/#3 ambiguous and either wrong pick fatal.
         self.assertIsNone(_find_forced_execution(state, result, [1, 2, 3]))
+
+    def test_generated_bomb_candidate_is_recovered_only_after_branch_pruning(self):
+        state = GameState(
+            n_cards=2,
+            deck=DeckComposition([], ["Bombardier"], [], ["Pooka"]),
+            cards=[CardInfo(1, "Hunter"), CardInfo(2, "Hunter")],
+            n_evil=1,
+            hp=6,
+            wrong_exec_cost=5,
+        )
+        result = _result(
+            Scenario(
+                evil_positions={1: "Pooka"},
+                chancellor_trace=ChancellorTrace(
+                    original_positions=[1],
+                    added_outcast_position=2,
+                    added_outcast_role="Bombardier",
+                ),
+            ),
+            Scenario(evil_positions={2: "Pooka"}),
+        )
+        result.bombardier_positions = [2]
+
+        # #2 is illegal at the root. Executing #1 distinguishes the worlds:
+        # the Bomb world is already won, while the other branch proves #2 is
+        # current Pooka and can safely finish the game.
+        self.assertIsNone(_find_forced_execution(state, result, [2]))
+        self.assertEqual(_find_forced_execution(state, result, [1, 2]), 1)
+
+    def test_shaman_current_bomb_is_a_branch_local_role(self):
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition([], ["Bombardier"], ["Shaman"], ["Pooka"]),
+            cards=[
+                CardInfo(1, "Hunter"),
+                CardInfo(2, "Hunter"),
+                CardInfo(3, "Scout"),
+            ],
+            n_evil=1,
+            hp=6,
+            wrong_exec_cost=5,
+        )
+        result = _result(
+            Scenario(
+                evil_positions={1: "Pooka"},
+                shaman_trace=ShamanTrace(3, 2, "Bombardier"),
+            ),
+            Scenario(evil_positions={2: "Pooka"}),
+        )
+        result.bombardier_positions = [2, 3]
+
+        self.assertEqual(_find_forced_execution(state, result, [1, 2]), 1)
+
+    def test_shallow_reveal_can_remove_a_modeled_bomb_world(self):
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition([], ["Bombardier"], [], ["Pooka"]),
+            cards=[CardInfo(1, "Hunter"), CardInfo(2, "Hunter")],
+            n_evil=1,
+            hp=6,
+            wrong_exec_cost=5,
+        )
+        result = _result(
+            Scenario(
+                evil_positions={1: "Pooka"},
+                corrupted={3},
+                chancellor_trace=ChancellorTrace(
+                    original_positions=[1],
+                    added_outcast_position=2,
+                    added_outcast_role="Bombardier",
+                ),
+            ),
+            Scenario(evil_positions={2: "Pooka"}),
+        )
+        result.bombardier_positions = [2]
+
+        action = _shallow_lookahead(state, result, [1, 2])
+
+        self.assertIsNotNone(action)
+        self.assertEqual(action.action_type, "reveal")
+        self.assertEqual(action.position, 3)
+
+    def test_stable_twin_overlap_stays_opaque_after_modeled_bomb_prunes(self):
+        state = GameState(
+            n_cards=2,
+            deck=DeckComposition(
+                [], ["Bombardier"], ["Twin Minion"], ["Pooka"],
+            ),
+            cards=[CardInfo(1, "Hunter"), CardInfo(2, "Hunter")],
+            n_evil=1,
+            hp=6,
+            wrong_exec_cost=5,
+        )
+        result = _result(
+            Scenario(evil_positions={2: "Twin Minion"}),
+            Scenario(
+                evil_positions={1: "Pooka"},
+                chancellor_trace=ChancellorTrace(
+                    original_positions=[1],
+                    added_outcast_position=2,
+                    added_outcast_role="Bombardier",
+                ),
+            ),
+        )
+        result.bombardier_positions = [2]
+
+        # The second world models current Bomb at #2, but the first world also
+        # carries the pre-trace stable-Twin risk at that same seat. Executing
+        # #1 must not make the opaque Twin path disappear.
+        self.assertIsNone(_find_forced_execution(state, result, [1, 2]))
 
 
 if __name__ == "__main__":

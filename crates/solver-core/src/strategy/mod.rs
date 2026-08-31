@@ -762,6 +762,7 @@ mod tests {
                 target_pos: 1,
                 killed: true,
                 revealed_role: Some("Bombardier".to_string()),
+                was_evil: None,
             }],
             ..GameState::default()
         };
@@ -813,6 +814,7 @@ mod tests {
                 target_pos: 1,
                 killed: true,
                 revealed_role: Some("Saint".to_string()),
+                was_evil: None,
             }],
             ..public_good.clone()
         };

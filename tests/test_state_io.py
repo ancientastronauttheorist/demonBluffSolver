@@ -11,7 +11,7 @@ class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-10:],
+            names[-11:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
@@ -23,6 +23,7 @@ class TestGameStateIO(unittest.TestCase):
                 "fortune_teller_rule_version",
                 "terminal_loss_role",
                 "executed_current_roles",
+                "revealed_night_current_roles",
             ],
         )
 
@@ -40,6 +41,13 @@ class TestGameStateIO(unittest.TestCase):
             executed=[4],
             confirmed_evil=[4],
             executed_evil_roles={4: "Minion"},
+            slayer_results=[{
+                "slayer_pos": 2,
+                "target_pos": 3,
+                "killed": True,
+                "revealed_role": "Wretch",
+                "was_evil": False,
+            }],
             hp=7,
             wrong_exec_cost=5,
             reveal_order=[2, 4],
@@ -47,6 +55,7 @@ class TestGameStateIO(unittest.TestCase):
             executed_good_roles={3: "Plague_Doctor"},
             terminal_loss_role="Bombardier",
             executed_current_roles={4: "Bombardier"},
+            revealed_night_current_roles={3: "Witch"},
         )
 
         data = state.to_dict()
@@ -79,6 +88,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertIsNone(loaded.fortune_teller_rule_version)
         self.assertIsNone(loaded.terminal_loss_role)
         self.assertEqual(loaded.executed_current_roles, {})
+        self.assertEqual(loaded.revealed_night_current_roles, {})
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -97,6 +107,14 @@ class TestGameStateIO(unittest.TestCase):
         session.executed_good_roles = {1: "Plague_Doctor"}
         session.terminal_loss_role = "Bombardier"
         session.executed_current_roles = {1: "Plague_Doctor"}
+        session.revealed_night_current_roles = {5: "Witch"}
+        session.slayer_results = [{
+            "slayer_pos": 2,
+            "target_pos": 5,
+            "killed": True,
+            "revealed_role": "Knight",
+            "was_evil": True,
+        }]
         session.rambler_shut_up_observations = [
             {"speaker_position": 2, "shut_up_target": 5},
         ]
@@ -140,6 +158,8 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.executed_good_roles, {1: "Plague_Doctor"})
         self.assertEqual(loaded.terminal_loss_role, "Bombardier")
         self.assertEqual(loaded.executed_current_roles, {1: "Plague_Doctor"})
+        self.assertEqual(loaded.revealed_night_current_roles, {5: "Witch"})
+        self.assertEqual(loaded.slayer_results, session.slayer_results)
 
     def test_fresh_session_emits_current_rule_markers_but_legacy_state_does_not(self):
         current = GameSession(4, 1).to_game_state().to_dict()

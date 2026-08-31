@@ -64,6 +64,19 @@ class KnightObservationTests(unittest.TestCase):
             )
         )
 
+    def test_mover_deck_survival_is_never_alignment_evidence(self):
+        observed = _observed_card(
+            true_role="Doppelganger",
+            disguise="Knight",
+            statuses=["HealthyBluff"],
+        )
+        self.assertFalse(
+            _observed_knight_immunity(
+                observed,
+                current_identity_may_have_moved=True,
+            )
+        )
+
     def test_dead_or_evil_card_is_not_a_confirmed_good_block(self):
         self.assertFalse(
             _observed_knight_immunity(_observed_card(state="Dead"))
@@ -148,6 +161,99 @@ class ExecutionBookkeepingTests(unittest.TestCase):
         save.assert_called_once_with()
         log_custom.assert_called_once()
         self.assertNotIn("Doppelganger", str(log_custom.call_args))
+
+    def test_auto_mover_survival_refuses_without_good_deduction(self):
+        session = GameSession(2, 1)
+        session.minions = ["Twin Minion"]
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+        result = SimpleNamespace(bombardier_positions=[])
+
+        class FakeMonitor:
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def wait_for(_predicate, timeout, min_delay):
+                return False
+
+            @staticmethod
+            def get_board():
+                return [_observed_card(
+                    true_role="Doppelganger",
+                    disguise="Knight",
+                    statuses=["HealthyBluff"],
+                )]
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={1: (100, 100)}),
+            patch("template_match.safe_click_at"),
+            patch("mouse.click"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save") as save,
+            patch.object(DecisionLog, "log_custom") as log_custom,
+            patch.object(DecisionLog, "log_execution") as log_execution,
+        ):
+            observed = session.auto_execute(1, result, monitor=FakeMonitor())
+
+        self.assertFalse(observed["success"])
+        self.assertFalse(observed["blocked"])
+        self.assertIn("does not establish physical alignment", observed["error"])
+        self.assertEqual(session.confirmed_good, [])
+        self.assertEqual(session.confirmed_evil, [])
+        self.assertEqual(session.executed, [])
+        save.assert_not_called()
+        log_custom.assert_not_called()
+        log_execution.assert_not_called()
+
+    def test_manual_mover_survival_refuses_without_good_deduction(self):
+        session = GameSession(2, 1)
+        session.minions = ["Twin Minion"]
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+        survived = _observed_card(
+            true_role="Doppelganger",
+            disguise="Knight",
+            statuses=["HealthyBluff"],
+        )
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save") as save,
+            patch.object(DecisionLog, "log_custom") as log_custom,
+            patch.object(DecisionLog, "log_execution") as log_execution,
+            redirect_stdout(StringIO()) as output,
+        ):
+            reader_type.return_value.open.return_value = True
+            reader_type.return_value.read_board.return_value = [survived]
+            dispatch("execute", ["1", "good", "blocked"], session)
+
+        self.assertIn("Survival is alignment-neutral", output.getvalue())
+        self.assertEqual(session.confirmed_good, [])
+        self.assertEqual(session.confirmed_evil, [])
+        self.assertEqual(session.executed, [])
+        save.assert_not_called()
+        log_custom.assert_not_called()
+        log_execution.assert_not_called()
+
+    def test_manual_non_mover_knight_survival_still_confirms_good(self):
+        session = GameSession(1, 0)
+        session.cards = [CardInfo(1, "Knight", info_parsed={})]
+        survived = _observed_card()
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save") as save,
+            patch.object(DecisionLog, "log_custom") as log_custom,
+            redirect_stdout(StringIO()),
+        ):
+            reader_type.return_value.open.return_value = True
+            reader_type.return_value.read_board.return_value = [survived]
+            dispatch("execute", ["1", "good", "blocked"], session)
+
+        self.assertEqual(session.confirmed_good, [1])
+        self.assertEqual(session.executed, [])
+        save.assert_called_once_with()
+        log_custom.assert_called_once()
 
     def test_auto_corrupted_knight_damage_is_stored_with_zero_clamp(self):
         session = GameSession(1, 1)

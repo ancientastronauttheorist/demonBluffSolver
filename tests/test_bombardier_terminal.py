@@ -31,6 +31,8 @@ from strategy import (
     _public_terminal_loss_position,
     _recommend_slayer,
     _scenario_terminal_loss_position,
+    _shallow_lookahead,
+    ordinary_execution_bombardier_positions,
     recommend_action,
 )
 
@@ -120,6 +122,107 @@ class BombardierPlanningTests(unittest.TestCase):
             action.action_type == "execute" and action.position == 1,
             action,
         )
+
+    def test_opaque_aggregate_bomb_remains_unsafe_in_all_lookahead(self):
+        state = _state(
+            n_cards=2,
+            cards=[CardInfo(1, "Minion")],
+        )
+        result = _result(Scenario(evil_positions={1: "Minion"}))
+        # The aggregate collector is deliberately authoritative here even
+        # though this reduced world lacks the ordered mover trace that made
+        # the seat a possible current-data Bombardier.
+        result.bombardier_positions = [1]
+
+        self.assertIsNone(_find_forced_execution(state, result, [1]))
+        self.assertIsNone(_shallow_lookahead(state, result, [1]))
+
+        # With the other card also revealed, recommend_action reaches its
+        # forced-execution candidate construction. It must still refuse #1,
+        # rather than reviving the stale "confirmed safe Bombardier" path.
+        state.cards.append(CardInfo(2, "Scout"))
+        action = recommend_action(state, result, [])
+        self.assertFalse(
+            action.action_type == "execute" and action.position == 1,
+            action,
+        )
+
+    def test_hidden_natural_good_bomb_is_root_unsafe_but_branch_local(self):
+        state = GameState(
+            n_cards=2,
+            n_evil=1,
+            deck=DeckComposition(
+                ["Scout"], ["Bombardier"], ["Witch"], [],
+            ),
+            cards=[CardInfo(2, "Scout")],
+            blocked_positions=[1],
+            hp=10,
+            wrong_exec_cost=5,
+        )
+        worlds = [
+            Scenario(evil_positions={1: "Witch"}),
+            Scenario(evil_positions={2: "Witch"}),
+        ]
+        result = _result(*worlds)
+        # Rust now aggregates this anonymous natural-Outcast possibility. Keep
+        # the regression valid for both the old empty collector and the new
+        # precise collector, and prove neither form becomes permanently opaque.
+        result.bombardier_positions = [1]
+
+        self.assertEqual(
+            ordinary_execution_bombardier_positions(state, result), {1}
+        )
+        self.assertEqual(_find_forced_execution(state, result, [1, 2]), 2)
+
+        action = recommend_action(state, result, [])
+        self.assertEqual((action.action_type, action.position), ("execute", 2))
+        self.assertTrue(action.forced_safe)
+
+        # After the #2-Good branch, #1 is runtime Evil in every surviving
+        # world. A fresh aggregate no longer contains #1 because the absent
+        # natural Good identity is then impossible.
+        narrowed = _result(worlds[0])
+        self.assertEqual(_find_forced_execution(state, narrowed, [1]), 1)
+
+    def test_public_role_rules_out_anonymous_natural_bomb(self):
+        state = GameState(
+            n_cards=2,
+            n_evil=1,
+            deck=DeckComposition(
+                ["Scout", "Hunter"], ["Bombardier"], ["Witch"], [],
+            ),
+            cards=[CardInfo(1, "Hunter"), CardInfo(2, "Scout")],
+        )
+        result = _result(
+            Scenario(evil_positions={1: "Witch"}),
+            Scenario(evil_positions={2: "Witch"}),
+        )
+
+        self.assertEqual(
+            ordinary_execution_bombardier_positions(state, result), set()
+        )
+
+    def test_hidden_natural_good_bomb_remains_safe_for_slayer(self):
+        state = GameState(
+            n_cards=3,
+            n_evil=1,
+            deck=DeckComposition(
+                ["Slayer", "Scout"], ["Bombardier"], ["Witch"], [],
+            ),
+            cards=[CardInfo(1, "Slayer"), CardInfo(3, "Scout")],
+            blocked_positions=[2],
+        )
+        result = _result(
+            Scenario(evil_positions={2: "Witch"}),
+            Scenario(evil_positions={3: "Witch"}),
+        )
+
+        self.assertEqual(
+            ordinary_execution_bombardier_positions(state, result), {2}
+        )
+        recommendation = _recommend_slayer(1, state, result)
+        self.assertIsNotNone(recommendation)
+        self.assertEqual(recommendation.targets, [2])
 
     def test_bluff_drunk_doppel_and_public_saint_are_not_terminal_roles(self):
         state = _state(cards=[CardInfo(2, "Bombardier")])
@@ -287,6 +390,19 @@ class BombardierPlanningTests(unittest.TestCase):
         )
         self.assertIsNone(_recommend_slayer(1, state, _result(world)))
 
+    def test_slayer_planner_honors_aggregate_moved_bombardier_collector(self):
+        state = _state(
+            n_cards=2,
+            cards=[CardInfo(1, "Slayer"), CardInfo(2, "Twin Minion")],
+        )
+        result = _result(Scenario(evil_positions={2: "Twin Minion"}))
+        result.bombardier_positions = [2]
+
+        # The reduced exact world lacks the earlier current-data trace, so its
+        # local effective role is non-Bomb. The aggregate collector remains
+        # authoritative and must suppress the Slayer top pick itself.
+        self.assertIsNone(_recommend_slayer(1, state, result))
+
 
 class BombardierLiveTests(unittest.TestCase):
     def test_session_marker_round_trips_and_slayer_sets_it_before_alignment(self):
@@ -319,7 +435,9 @@ class BombardierLiveTests(unittest.TestCase):
             was_corrupted=False,
         )
         self.assertEqual(good_session.terminal_loss_role, "Bombardier")
-        self.assertEqual(good_session.hp, 7)
+        # Explicit Good represents a visible positive HP delta. Native resource
+        # handling happens before Bombardier's delayed terminal callback.
+        self.assertEqual(good_session.hp, 2)
 
     def test_slayer_cli_accepts_terminal_bomb_without_runtime_alignment(self):
         session = GameSession(3, 1)
@@ -420,6 +538,7 @@ class BombardierLiveTests(unittest.TestCase):
 
     def test_auto_execution_uses_world_for_original_evil_and_memory_for_current(self):
         session = GameSession(3, 1)
+        session.hp = 7
         session.cards = [CardInfo(2, "Minion")]
         world = Scenario(
             evil_positions={2: "Minion"},
@@ -464,6 +583,8 @@ class BombardierLiveTests(unittest.TestCase):
         self.assertEqual(session.executed_evil_roles, {2: "Minion"})
         self.assertEqual(session.executed_current_roles, {2: "Bombardier"})
         self.assertEqual(session.terminal_loss_role, "Bombardier")
+        self.assertEqual(session.hp, 7)
+        self.assertTrue(observed["was_evil"])
 
     def test_auto_public_saint_never_sets_terminal(self):
         session = GameSession(1, 1)
@@ -506,7 +627,7 @@ class BombardierLiveTests(unittest.TestCase):
         self.assertIsNone(session.terminal_loss_role)
         self.assertEqual(session.executed_current_roles, {1: "Saint"})
 
-    def test_auto_good_bombardier_terminal_preserves_pre_loss_hp(self):
+    def test_auto_good_bombardier_pays_base_cost_before_terminal(self):
         session = GameSession(1, 0)
         session.hp = 7
         session.cards = [CardInfo(1, "Bombardier")]
@@ -546,7 +667,76 @@ class BombardierLiveTests(unittest.TestCase):
 
         self.assertTrue(observed["success"])
         self.assertEqual(session.terminal_loss_role, "Bombardier")
+        self.assertFalse(observed["was_evil"])
+        self.assertEqual(session.hp, 2)
+
+    def test_auto_good_bombardier_no_damage_suppresses_cost_before_terminal(self):
+        session = GameSession(1, 0)
+        session.hp = 7
+        session.cards = [CardInfo(1, "Bombardier")]
+        result = _result(Scenario(evil_positions={}))
+        dead = {
+            "position": 1,
+            "current_role": "Bombardier",
+            "true_role": "Bombardier",
+            "disguise": None,
+            "is_evil": False,
+            "state": "Dead",
+            "statuses": ["NoDamage"],
+        }
+
+        class Monitor:
+            @staticmethod
+            def is_healthy():
+                return True
+
+            @staticmethod
+            def wait_for(_predicate, timeout, min_delay):
+                return True
+
+            @staticmethod
+            def get_board():
+                return [dead]
+
+        with (
+            patch("game_utils.all_game_card_coords", return_value={1: (100, 100)}),
+            patch("template_match.safe_click_at"),
+            patch("mouse.click"),
+            patch("game_loop.time.sleep"),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()),
+        ):
+            observed = session.auto_execute(1, result, monitor=Monitor())
+
+        self.assertTrue(observed["success"])
+        self.assertFalse(observed["was_evil"])
+        self.assertEqual(session.terminal_loss_role, "Bombardier")
         self.assertEqual(session.hp, 7)
+
+    def test_manual_offline_good_bombardier_requires_hp_sync(self):
+        session = GameSession(1, 0)
+        session.hp = 7
+        session.cards = [CardInfo(1, "Bombardier")]
+
+        with (
+            patch("memory_reader.MemoryReader") as reader_type,
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_execution"),
+            redirect_stdout(StringIO()) as output,
+        ):
+            reader_type.return_value.open.return_value = False
+            dispatch(
+                "execute",
+                ["1", "good", "clean", "current=Bombardier"],
+                session,
+            )
+
+        self.assertEqual(session.terminal_loss_role, "Bombardier")
+        self.assertEqual(session.confirmed_good, [1])
+        self.assertEqual(session.hp, 7)
+        self.assertIn("HP outcome unresolved", output.getvalue())
+        self.assertIn("set_hp <current_hp>", output.getvalue())
 
     def test_auto_execution_refuses_definite_evil_current_bombardier(self):
         session = GameSession(2, 1)
@@ -564,6 +754,65 @@ class BombardierLiveTests(unittest.TestCase):
         self.assertIn("Bombardier protection", observed["error"])
         click.assert_not_called()
         click_at.assert_not_called()
+
+    def test_live_paths_refuse_hidden_anonymous_natural_bomb(self):
+        session = GameSession(2, 1)
+        session.villagers = ["Scout"]
+        session.outcasts = ["Bombardier"]
+        session.minions = ["Witch"]
+        session.cards = [CardInfo(2, "Scout")]
+        session.blocked_positions = [1]
+        result = _result(
+            Scenario(evil_positions={1: "Witch"}),
+            Scenario(evil_positions={2: "Witch"}),
+        )
+        # Exercise the Python fallback independently of the Rust aggregate.
+        self.assertEqual(result.bombardier_positions, [])
+
+        with (
+            patch("mouse.click") as click,
+            patch("template_match.safe_click_at") as click_at,
+        ):
+            observed = session.auto_execute(1, result, forced_safe=True)
+
+        self.assertFalse(observed["success"])
+        self.assertIn("Bombardier protection", observed["error"])
+        click.assert_not_called()
+        click_at.assert_not_called()
+        self.assertEqual(session.executed, [])
+
+        stale_action = Action(
+            "execute",
+            position=1,
+            reasoning="stale forced proof",
+            forced_safe=True,
+        )
+        stale_action.confidence = 1.0
+        with (
+            patch.object(session, "_solve", return_value=result),
+            patch("game_loop.print_recommendation", return_value=stale_action),
+            patch.object(session, "auto_execute") as auto_execute,
+            patch.object(DecisionLog, "log_solver_output"),
+            patch.object(DecisionLog, "log_recommendation"),
+            redirect_stdout(StringIO()),
+        ):
+            _, _, execution = session.auto_next()
+
+        self.assertIsNone(execution)
+        auto_execute.assert_not_called()
+
+        machine = GameStateMachine(session=session)
+        machine.phase = GamePhase.SOLVING
+        with (
+            patch.object(session, "_solve", return_value=result),
+            patch("strategy.recommend_action", return_value=stale_action),
+            redirect_stdout(StringIO()),
+        ):
+            machine._do_solving()
+
+        self.assertEqual(machine.phase, GamePhase.NEEDS_HUMAN)
+        self.assertIsNone(machine._pending_exec)
+        self.assertEqual(session.executed, [])
 
     def test_forced_safe_cannot_bypass_auto_or_state_machine_guards(self):
         session = GameSession(2, 1)
@@ -1041,14 +1290,16 @@ class BombardierAnalysisBridgeTests(unittest.TestCase):
 
         self.assertFalse(analysis.won)
 
-    def test_hindsight_good_bomb_terminal_preserves_pre_damage_hp(self):
+    def test_hindsight_good_bomb_pays_base_cost_before_terminal(self):
         import hindsight
 
         case = {
             "name": "hindsight_good_bomb_hp",
             "n_cards": 2,
             "n_evil": 1,
-            "hp": 7,
+            # Saved post-action HP: native resource handling paid 5 before
+            # Bombardier's delayed terminal callback.
+            "hp": 2,
             "wrong_exec_cost": 5,
             "deck": {
                 "villagers": ["Bombardier"],
@@ -1075,16 +1326,15 @@ class BombardierAnalysisBridgeTests(unittest.TestCase):
 
         self.assertFalse(analysis.won)
         self.assertEqual(analysis.hp_start, 7)
-        self.assertEqual(analysis.hp_end, 7)
-        self.assertEqual(analysis.steps[-1].hp_cost, 0)
+        self.assertEqual(analysis.hp_end, 2)
+        self.assertEqual(analysis.steps[-1].hp_cost, 5)
 
         output = StringIO()
         with redirect_stdout(output):
             hindsight.print_result(analysis)
         rendered = output.getvalue()
-        self.assertIn("HP: 7->7", rendered)
-        self.assertIn("TERMINAL (Bomb)", rendered)
-        self.assertNotIn("WRONG (-5)", rendered)
+        self.assertIn("HP: 7->2", rendered)
+        self.assertIn("TERMINAL (Bomb -5)", rendered)
 
     def test_hindsight_preapplied_slayer_bomb_precedes_last_evil_win(self):
         import hindsight

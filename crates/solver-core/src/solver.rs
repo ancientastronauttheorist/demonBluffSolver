@@ -2,20 +2,83 @@
 
 use rayon::prelude::*;
 use crate::knowledge_base::normalize_role;
-use crate::scenario::build_scenarios;
+use crate::scenario::{
+    build_scenarios, scenario_allows_anonymous_natural_outcast_role_at,
+};
 use crate::types::{GameState, Scenario, SolverResult};
-use crate::validators::effective_role_at;
+use crate::validators::{
+    effective_role_at, known_evil_role, twin_may_have_replaced_current_data_at,
+};
+
+pub(crate) fn twin_origin_may_hold_bombardier(
+    twin_origin: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if !known_evil_role(twin_origin, scenario, state)
+        .is_some_and(|role| normalize_role(role) == "twinminion")
+    {
+        return false;
+    }
+
+    // Twin receives the old current data from the selected Demon's adjacent
+    // occurrence, never from its own runtime body. The endpoint's final role
+    // cannot identify that old data: after the swap it carries Twin and may
+    // reveal an unrelated Minion bluff. Until TwinTrace records the swap, any
+    // geometrically feasible endpoint could have supplied authored Bombardier
+    // data.
+    (1..=state.n_cards)
+        .filter(|&source| source != twin_origin)
+        .any(|source| twin_may_have_replaced_current_data_at(source, scenario, state))
+}
+
+pub(crate) fn hidden_ordinary_good_may_hold_bombardier(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let hidden_and_alive = !state.cards.iter().any(|card| card.position == position)
+        && !state.executed.contains(&position)
+        && !state.night_kills.contains(&position);
+
+    hidden_and_alive
+        && scenario_allows_anonymous_natural_outcast_role_at(
+            position,
+            "Bombardier",
+            scenario,
+            state,
+        )
+}
 
 fn collect_bombardier_positions(
     state: &GameState,
     surviving: &[Scenario],
 ) -> Vec<u8> {
+    let authored_roles = state.deck.all_roles();
+    let authored_twin_and_bombardier = ["twinminion", "bombardier"]
+        .iter()
+        .all(|expected| {
+            authored_roles
+                .iter()
+                .any(|role| normalize_role(role) == *expected)
+        });
+
     (1..=state.n_cards)
         .filter(|&position| {
-            surviving.iter().any(|scenario| {
+            let modeled_current_bombardier = surviving.iter().any(|scenario| {
                 effective_role_at(position, scenario, state)
                     .is_some_and(|role| normalize_role(&role) == "bombardier")
-            })
+            });
+            let hidden_ordinary_good_may_be_bombardier = surviving.iter().any(|scenario| {
+                hidden_ordinary_good_may_hold_bombardier(position, scenario, state)
+            });
+            let pre_trace_twin_may_hold_bombardier = authored_twin_and_bombardier
+                && surviving
+                    .iter()
+                    .any(|scenario| twin_origin_may_hold_bombardier(position, scenario, state));
+            modeled_current_bombardier
+                || hidden_ordinary_good_may_be_bombardier
+                || pre_trace_twin_may_hold_bombardier
         })
         .collect()
 }
@@ -68,8 +131,10 @@ pub fn solve(state: &GameState) -> SolverResult {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::strategy::execution::pick_execution_target;
     use crate::types::{CardInfo, ChancellorTrace, GameState, Scenario, ShamanTrace};
     use serde_json::json;
+    use std::collections::HashSet;
 
     #[test]
     fn asc84_v5_keeps_drunk_bard_corruption_scenario() {
@@ -176,5 +241,134 @@ mod tests {
         let mut doppel_display = Scenario::default();
         doppel_display.doppelganger_position = Some(1);
         assert!(collect_bombardier_positions(&state, &[doppel_display]).is_empty());
+    }
+
+    #[test]
+    fn hidden_good_bombardier_is_collected_without_a_scenario_role() {
+        let state = GameState {
+            n_cards: 2,
+            n_evil: 1,
+            cards: vec![CardInfo {
+                position: 2,
+                apparent_role: "Scout".to_string(),
+                ..CardInfo::default()
+            }],
+            blocked_positions: vec![1],
+            deck: crate::types::DeckComposition {
+                villagers: vec!["Scout".to_string()],
+                outcasts: vec!["Bombardier".to_string()],
+                minions: vec!["Witch".to_string()],
+                ..crate::types::DeckComposition::default()
+            },
+            ..GameState::default()
+        };
+
+        let result = solve(&state);
+        assert!(result.surviving_scenarios.iter().any(|scenario| {
+            scenario.evil_positions.get(&1)
+                .is_some_and(|role| normalize_role(role) == "witch")
+        }));
+        assert!(result.surviving_scenarios.iter().any(|scenario| {
+            scenario.evil_positions.get(&2)
+                .is_some_and(|role| normalize_role(role) == "witch")
+                && effective_role_at(1, scenario, &state).is_none()
+        }));
+        assert_eq!(result.bombardier_positions, vec![1]);
+    }
+
+    #[test]
+    fn pre_trace_twin_origin_is_a_possible_current_bombardier_target() {
+        let mut state = GameState {
+            n_cards: 3,
+            cards: vec![CardInfo {
+                position: 3,
+                apparent_role: "Bombardier".to_string(),
+                ..CardInfo::default()
+            }],
+            ..GameState::default()
+        };
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+
+        let mut stable_twin = Scenario::default();
+        stable_twin
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        stable_twin
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+
+        let possible_bombardiers =
+            collect_bombardier_positions(&state, &[stable_twin.clone()]);
+        assert_eq!(possible_bombardiers, vec![1, 3]);
+
+        let result = SolverResult {
+            definite_evil: vec![1, 2],
+            definite_good: vec![3],
+            bombardier_positions: possible_bombardiers,
+            n_scenarios: 1,
+            n_surviving: 1,
+            surviving_scenarios: vec![stable_twin.clone()],
+            reasoning: vec![],
+        };
+        assert_eq!(
+            pick_execution_target(&state, &result, &HashSet::new())
+                .map(|pick| pick.position),
+            Some(2),
+        );
+
+        state.deck.outcasts.clear();
+        assert_eq!(
+            collect_bombardier_positions(&state, &[stable_twin.clone()]),
+            vec![3],
+        );
+
+        state.deck.outcasts.push("Bombardier".to_string());
+        state.deck.minions.clear();
+        assert_eq!(
+            collect_bombardier_positions(&state, &[stable_twin]),
+            vec![3],
+        );
+    }
+
+    #[test]
+    fn revealed_twin_neighbor_role_cannot_disprove_former_bombardier_data() {
+        let mut state = GameState {
+            n_cards: 4,
+            cards: vec![
+                CardInfo {
+                    position: 1,
+                    apparent_role: "Bombardier".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 2,
+                    apparent_role: "Knight".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 3,
+                    apparent_role: "Dreamer".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 4,
+                    apparent_role: "Medium".to_string(),
+                    ..CardInfo::default()
+                },
+            ],
+            ..GameState::default()
+        };
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+
+        let mut scenario = Scenario::default();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+
+        assert_eq!(collect_bombardier_positions(&state, &[scenario]), vec![1]);
     }
 }

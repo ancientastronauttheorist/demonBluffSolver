@@ -89,7 +89,10 @@ class WitchDeathLifecycleTests(unittest.TestCase):
         session.minions = ["Witch"]
         session.blocked_positions = [1]
         session.reveal_order = [2, 3]
-        result = SimpleNamespace(bombardier_positions=[])
+        result = SimpleNamespace(
+            bombardier_positions=[],
+            surviving_scenarios=[Scenario(evil_positions={1: "Witch"})],
+        )
 
         class Monitor:
             @staticmethod
@@ -165,7 +168,7 @@ class WitchNightLifecycleTests(unittest.TestCase):
         self.assertEqual(session.night_kills, [2])
         self.assertEqual(session.executed, [])
 
-    def test_state_machine_evil_night_kill_does_not_pollute_executed(self):
+    def test_state_machine_hidden_evil_alignment_is_not_imported(self):
         session = self._night_session()
 
         class Monitor:
@@ -187,12 +190,14 @@ class WitchNightLifecycleTests(unittest.TestCase):
 
         machine = GameStateMachine(session=session, monitor=Monitor())
         machine.phase = GamePhase.NIGHT_RESOLVE
-        with patch.object(session, "save"), redirect_stdout(StringIO()):
+        with patch.object(session, "save") as save, redirect_stdout(StringIO()):
             machine._do_night_resolve()
 
-        self.assertEqual(session.blocked_positions, [])
-        self.assertEqual(session.night_kills, [2])
+        self.assertEqual(machine.phase, GamePhase.NEEDS_HUMAN)
+        self.assertEqual(session.blocked_positions, [1])
+        self.assertEqual(session.night_kills, [])
         self.assertEqual(session.executed, [])
+        save.assert_not_called()
 
     def test_state_machine_good_night_kill_keeps_marker(self):
         session = self._night_session()

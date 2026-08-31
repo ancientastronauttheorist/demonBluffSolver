@@ -25,6 +25,7 @@ class SlayerBookkeepingTests(unittest.TestCase):
             "target_pos": 2,
             "killed": True,
             "revealed_role": "Shaman",
+            "was_evil": True,
         }])
         self.assertEqual(session.executed, [2])
         self.assertEqual(session.confirmed_evil, [2])
@@ -163,16 +164,31 @@ class SlayerBookkeepingTests(unittest.TestCase):
                 self.assertEqual(session.confirmed_good, [2])
                 self.assertEqual(session.hp, 5)
 
-    def test_cli_requires_public_hp_alignment_before_good_role_mutation(self):
+    def test_cli_keeps_zero_delta_moved_kill_alignment_unknown(self):
         session = _session()
+        session.minions = ["Twin Minion"]
 
-        with redirect_stdout(StringIO()) as output:
+        with (
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_slayer_result"),
+            redirect_stdout(StringIO()),
+        ):
             dispatch("slayer_result", ["1", "2", "kill", "Knight"], session)
 
-        self.assertIn("Use the public HP result", output.getvalue())
-        self.assertEqual(session.slayer_results, [])
-        self.assertEqual(session.executed, [])
-        self.assertEqual(session.used_abilities, [])
+        # No HP delta cannot distinguish runtime Evil from runtime Good with a
+        # preserved NoDamage status after InitWithNoReset.
+        self.assertEqual(session.slayer_results, [{
+            "slayer_pos": 1,
+            "target_pos": 2,
+            "killed": True,
+            "revealed_role": "Knight",
+        }])
+        self.assertEqual(session.executed, [2])
+        self.assertEqual(session.confirmed_good, [])
+        self.assertEqual(session.confirmed_evil, [])
+        self.assertEqual(session.executed_good_roles, {})
+        self.assertEqual(session.executed_evil_roles, {})
+        self.assertEqual(session.hp, 10)
 
     def test_slayer_killed_baa_runs_deck_refresh_hook(self):
         session = _session()

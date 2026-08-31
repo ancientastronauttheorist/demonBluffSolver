@@ -224,7 +224,7 @@ class ChancellorTraceTests(unittest.TestCase):
             _compute_position_fingerprint(2, trace("Drunk"), state),
         )
 
-    def test_slayer_can_target_probable_evil_showing_as_bombardier(self):
+    def test_slayer_skips_aggregate_possible_bombardier_target(self):
         state = GameState(
             n_cards=3,
             deck=DeckComposition([], ["Bombardier"], ["Chancellor"], []),
@@ -236,7 +236,9 @@ class ChancellorTraceTests(unittest.TestCase):
         result = SolverResult([], [], [2], 5, 5, scenarios)
         recommendation = _recommend_slayer(1, state, result)
         self.assertIsNotNone(recommendation)
-        self.assertEqual(recommendation.targets, [2])
+        # The aggregate collector is authoritative even when this reduced
+        # scenario set makes #2 look like the stronger ordinary Evil target.
+        self.assertEqual(recommendation.targets, [3])
 
     def test_slayer_can_target_probable_evil_showing_as_knight(self):
         state = GameState(

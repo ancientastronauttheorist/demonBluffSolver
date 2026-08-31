@@ -122,6 +122,12 @@ pub struct SlayerResult {
     /// called this `evil_role`, before Wretch kills were modeled correctly.
     #[serde(default, alias = "evil_role")]
     pub revealed_role: Option<String>,
+    /// Public physical runtime alignment inferred from the visible HP/objective
+    /// outcome after a successful kill. This is independent of the registered
+    /// alignment that made Slayer's kill branch succeed. Historical results
+    /// omitted it and therefore retain unknown physical alignment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub was_evil: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -848,10 +854,26 @@ mod tests {
         }))
         .unwrap();
         assert_eq!(legacy.revealed_role.as_deref(), Some("Shaman"));
+        assert_eq!(legacy.was_evil, None);
 
         let value = serde_json::to_value(&legacy).unwrap();
         assert_eq!(value["revealed_role"], "Shaman");
         assert!(value.get("evil_role").is_none());
+        assert!(value.get("was_evil").is_none());
+
+        let physical_good: SlayerResult = serde_json::from_value(serde_json::json!({
+            "slayer_pos": 1,
+            "target_pos": 2,
+            "killed": true,
+            "revealed_role": "Wretch",
+            "was_evil": false
+        }))
+        .unwrap();
+        assert_eq!(physical_good.was_evil, Some(false));
+        assert_eq!(
+            serde_json::to_value(&physical_good).unwrap()["was_evil"],
+            false,
+        );
     }
 
     #[test]

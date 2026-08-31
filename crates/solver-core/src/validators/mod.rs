@@ -73,9 +73,45 @@ fn matches_executed_good_role(
     pos: u8,
     observed_role: &str,
 ) -> bool {
-    effective_role_at(pos, scenario, state)
+    let exact_match = effective_role_at(pos, scenario, state)
         .as_deref()
-        .is_some_and(|role| roles_equal(role, observed_role))
+        .is_some_and(|role| roles_equal(role, observed_role));
+    exact_match || twin_can_explain_current_role_mismatch(pos, observed_role, scenario, state)
+}
+
+fn twin_can_explain_current_role_mismatch(
+    pos: u8,
+    observed_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let authored_roles = state.deck.all_roles();
+    let deck_has = |expected: &str| {
+        authored_roles
+            .iter()
+            .any(|role| normalize_role(role) == expected)
+    };
+    if !deck_has("twinminion") {
+        return false;
+    }
+
+    if normalize_role(observed_role) == "twinminion" {
+        return true;
+    }
+
+    let stable_twin = known_evil_role(pos, scenario, state)
+        .is_some_and(|role| normalize_role(role) == "twinminion");
+    if !stable_twin {
+        return false;
+    }
+
+    // The original Twin can receive any authored current CharacterData from
+    // its selected neighbor. Later start actions can overwrite that received
+    // data with another authored role (Shaman), or with generated Puppet data
+    // when Puppeteer is authored. Do not admit arbitrary roles absent from
+    // those pre-trace current-data surfaces.
+    let observed = normalize_role(observed_role);
+    deck_has(&observed) || (observed == "puppet" && deck_has("puppeteer"))
 }
 
 fn valid_executed_current_role_entry(
@@ -219,6 +255,7 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
         .filter(|position| {
             effective_role_at(**position, scenario, state)
                 .is_some_and(|role| normalize_role(&role) == "lilis")
+                && !twin_may_have_replaced_current_data_at(**position, scenario, state)
         })
         .count();
     if named_lilis_victims > 0 && named_lilis_victims >= possible_physical_lilis {
@@ -244,6 +281,8 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
 
     for &position in &state.night_kills {
         let role = effective_role_at(position, scenario, state);
+        let twin_may_have_replaced_current_data =
+            twin_may_have_replaced_current_data_at(position, scenario, state);
 
         if scenario.is_evil(position) {
             // Runtime-Evil Knight and every ordinary Evil role are killable;
@@ -254,6 +293,7 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
         let corrupted = scenario.corrupted.contains(&position);
         if role.as_deref().is_some_and(|role| normalize_role(role) == "knight")
             && !corrupted
+            && !twin_may_have_replaced_current_data
         {
             // Delayed demon death asks the current real role for protection.
             // A clean Good Knight aborts the death and produces no night_kill.
@@ -265,7 +305,11 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
         let effective_doppelganger = role.as_deref().is_some_and(|role| {
             matches!(normalize_role(role).as_str(), "doppelganger" | "doppleganger")
         });
-        if effective_doppelganger && apparent_knight && !corrupted {
+        if effective_doppelganger
+            && apparent_knight
+            && !corrupted
+            && !twin_may_have_replaced_current_data
+        {
             // A clean ordinary or Chancellor-generated Doppelganger acquired
             // HealthyBluff and delegates protection to its Knight bluff.
             return false;
@@ -315,6 +359,62 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
     }
 
     true
+}
+
+pub(crate) fn twin_may_have_replaced_current_data_at(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if state.n_cards < 2
+        || !state
+            .deck
+            .minions
+            .iter()
+            .any(|role| normalize_role(role) == "twinminion")
+    {
+        return false;
+    }
+
+    // The unmodeled endpoint `n` cannot be Twin's own runtime body `m`.
+    // Historical deaths can leave an untyped Evil origin, so retain it as a
+    // possible Twin without allowing the same unknown seat to also supply the
+    // distinct Demon anchor below.
+    let possible_twin_origins: Vec<u8> = (1..=state.n_cards)
+        .filter(|candidate| *candidate != position)
+        .filter(|candidate| {
+            known_evil_role(*candidate, scenario, state).is_some_and(|role| {
+                matches!(normalize_role(role).as_str(), "twinminion" | "unknown")
+            })
+        })
+        .collect();
+    if possible_twin_origins.is_empty() {
+        return false;
+    }
+
+    let authored_demon_exists = !state.deck.demons.is_empty();
+    let chancellor_may_have_relocated_demon_data = authored_demon_exists
+        && (scenario.chancellor_trace.is_some() || scenario.chancellor_conversion.is_some());
+
+    adjacent_positions(position, state.n_cards)
+        .into_iter()
+        .filter(|anchor| *anchor != position)
+        .any(|anchor| {
+            let modeled_registered_or_real_demon = effective_role_at(anchor, scenario, state)
+                .as_deref()
+                .and_then(get_card)
+                .is_some_and(|card| card.faction == Faction::Demon);
+            let unknown_evil_could_be_demon = authored_demon_exists
+                && known_evil_role(anchor, scenario, state)
+                    .is_some_and(|role| normalize_role(role) == "unknown");
+            let possible_demon_anchor = modeled_registered_or_real_demon
+                || unknown_evil_could_be_demon
+                || chancellor_may_have_relocated_demon_data;
+            possible_demon_anchor
+                && possible_twin_origins
+                    .iter()
+                    .any(|twin_origin| *twin_origin != anchor)
+        })
 }
 
 fn untyped_historical_evil_may_be_start_eraser(
@@ -2059,8 +2159,9 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
         if normalize_role(&actor.apparent_role) != "slayer" {
             return false;
         }
-        if !killed && result.revealed_role.is_some() {
-            // The disabled/failure callback reports only the selected target.
+        if !killed && (result.revealed_role.is_some() || result.was_evil.is_some()) {
+            // The disabled/failure callback reports only the selected target;
+            // neither current role nor physical runtime alignment is public.
             return false;
         }
 
@@ -2068,22 +2169,66 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
         let slayer_is_evil = slayer_evil_role.is_some();
         let slayer_is_puppet = slayer_evil_role == Some("Puppet");
         let slayer_lies = truth_status(slayer_pos, scenario, state) == TruthStatus::Lying;
-        let target_is_evil = effective_alignment(target_pos, scenario, state) == EffectiveAlignment::Evil;
+        let target_is_physically_evil = is_evil_in_board_state(target_pos, scenario, state);
+        if result
+            .was_evil
+            .is_some_and(|observed| observed != target_is_physically_evil)
+        {
+            return false;
+        }
+
+        // Slayer's target predicate is registered alignment, not the physical
+        // runtime alignment used by HP/objective bookkeeping. Native
+        // GetRegisterAlignment prefers a live role override (public Wretch)
+        // and otherwise falls back to physical runtime alignment. In
+        // particular, authored Evil alignment on current Twin data is not a
+        // register override and cannot make a runtime-Good body killable.
+        let modeled_registered_evil =
+            effective_alignment(target_pos, scenario, state) == EffectiveAlignment::Evil;
+        let target_is_registered_evil = result
+            .revealed_role
+            .as_deref()
+            .map(|role| target_is_physically_evil || normalize_role(role) == "wretch")
+            .unwrap_or(modeled_registered_evil);
 
         if killed {
             if slayer_is_evil && !slayer_is_puppet { return false; }
             if slayer_lies { return false; }
-            if !target_is_evil { return false; }
+            if !target_is_registered_evil { return false; }
             if let Some(revealed_role) = result.revealed_role.as_deref() {
                 let role_matches = effective_role_at(target_pos, scenario, state)
                     .is_some_and(|actual| {
                         normalize_role(&actual) == normalize_role(revealed_role)
                     });
-                if !role_matches { return false; }
+                // Until Scenario carries Twin's exact two-seat data swap, the
+                // only defensible mismatch is one where current Twin data is
+                // observed at the recipient, or the stable Twin actor reveals
+                // the role received in exchange. Other mismatches still prune.
+                let twin_can_explain_mismatch = twin_can_explain_current_role_mismatch(
+                    target_pos,
+                    revealed_role,
+                    scenario,
+                    state,
+                );
+                if !role_matches && !twin_can_explain_mismatch { return false; }
             }
         } else {
             let slayer_works = (!slayer_is_evil || slayer_is_puppet) && !slayer_lies;
-            if slayer_works && target_is_evil { return false; }
+            // A failed result has no current-role reveal, so retain only the
+            // registered-alignment contradiction the existing model can
+            // represent. A reachable runtime-Good Wretch endpoint is the one
+            // pre-TwinTrace exception: Wretch data can move to the Evil Twin,
+            // leaving current Twin/base registration on the Good Wretch body.
+            let modeled_good_wretch_can_receive_twin = !target_is_physically_evil
+                && effective_role_at(target_pos, scenario, state)
+                    .is_some_and(|role| normalize_role(&role) == "wretch")
+                && twin_may_have_replaced_current_data_at(target_pos, scenario, state);
+            if slayer_works
+                && modeled_registered_evil
+                && !modeled_good_wretch_can_receive_twin
+            {
+                return false;
+            }
         }
     }
     true
@@ -3736,6 +3881,7 @@ mod tests {
             target_pos: 2,
             killed: true,
             revealed_role: None,
+            was_evil: None,
         });
         assert!(!validate_slayer_results(&scenario, &slayer_state));
         slayer_state.slayer_results[0].killed = false;
@@ -3778,6 +3924,7 @@ mod tests {
             target_pos: 2,
             killed: true,
             revealed_role: Some("Wretch".to_string()),
+            was_evil: None,
         });
 
         let good_wretch = empty_scenario();
@@ -3797,6 +3944,7 @@ mod tests {
             target_pos: 2,
             killed: true,
             revealed_role: Some("Wretch".to_string()),
+            was_evil: None,
         });
         let mut generated_wretch = empty_scenario();
         generated_wretch.chancellor_trace = Some(crate::types::ChancellorTrace {
@@ -3823,6 +3971,7 @@ mod tests {
             target_pos: 2,
             killed: false,
             revealed_role: None,
+            was_evil: None,
         });
 
         let clean_knight = empty_scenario();
@@ -3839,6 +3988,222 @@ mod tests {
         evil_disguise.evil_positions.insert(2, "Shaman".to_string());
         state.slayer_results[0].revealed_role = Some("Shaman".to_string());
         assert!(validate_slayer_results(&evil_disguise, &state));
+    }
+
+    #[test]
+    fn slayer_runtime_alignment_evidence_is_independent_of_registered_alignment() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Wretch", json!({})),
+            ],
+        );
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Wretch".to_string()),
+            was_evil: Some(false),
+        });
+
+        // Wretch is physically Good but registered Evil, so the kill and the
+        // public Good HP outcome are jointly consistent.
+        assert!(validate_slayer_results(&empty_scenario(), &state));
+        state.slayer_results[0].was_evil = Some(true);
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+
+        let mut physical_evil = empty_scenario();
+        physical_evil.evil_positions.insert(2, "Shaman".to_string());
+        state.slayer_results[0].revealed_role = Some("Shaman".to_string());
+        assert!(validate_slayer_results(&physical_evil, &state));
+        state.slayer_results[0].was_evil = Some(false);
+        assert!(!validate_slayer_results(&physical_evil, &state));
+    }
+
+    #[test]
+    fn slayer_unknown_runtime_alignment_keeps_each_registered_kill_branch() {
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Wretch", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Wretch".to_string()),
+            was_evil: None,
+        });
+
+        // A no-damage public outcome does not distinguish a runtime-Good
+        // Wretch from a runtime-Evil Twin body holding current Wretch data.
+        assert!(validate_slayer_results(&empty_scenario(), &state));
+        let mut stable_twin = empty_scenario();
+        stable_twin
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        assert!(validate_slayer_results(&stable_twin, &state));
+
+        // The same unknown alignment preserves a stable runtime-Evil Twin
+        // carrying an ordinary authored Good role.
+        state.slayer_results[0].revealed_role = Some("Baker".to_string());
+        assert!(validate_slayer_results(&stable_twin, &state));
+
+        // Current Twin data itself supplies no registered-Evil override. A
+        // runtime-Good recipient cannot produce a kill, while a runtime-Evil
+        // recipient remains a possible registered-Evil branch.
+        state.slayer_results[0].revealed_role = Some("Twin Minion".to_string());
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+        let mut runtime_evil_recipient = empty_scenario();
+        runtime_evil_recipient
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(validate_slayer_results(&runtime_evil_recipient, &state));
+    }
+
+    #[test]
+    fn slayer_twin_role_mismatches_preserve_physical_registration_boundary() {
+        let mut state = base_state(
+            3,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Baker", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Twin Minion".to_string()),
+            was_evil: Some(false),
+        });
+
+        // A runtime-Good recipient can hold current Twin data, but Twin has no
+        // register override. Authored Evil alignment on the current data does
+        // not make the physical Good body killable.
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+
+        let mut runtime_evil_neighbor = empty_scenario();
+        runtime_evil_neighbor
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        state.slayer_results[0].was_evil = Some(true);
+        assert!(validate_slayer_results(&runtime_evil_neighbor, &state));
+
+        let mut stable_twin = empty_scenario();
+        stable_twin
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        state.slayer_results[0].revealed_role = Some("Baker".to_string());
+        state.slayer_results[0].was_evil = Some(true);
+        assert!(validate_slayer_results(&stable_twin, &state));
+
+        // Merely having Twin in the deck must not waive an unrelated current
+        // role mismatch on a non-Twin stable Evil.
+        let mut unrelated_evil = empty_scenario();
+        unrelated_evil.evil_positions.insert(2, "Pooka".to_string());
+        state.slayer_results[0].revealed_role = Some("Shaman".to_string());
+        assert!(!validate_slayer_results(&unrelated_evil, &state));
+
+        // Without authored Twin support, a Good Baker cannot reveal Twin or
+        // enter Slayer's registered-Evil kill branch.
+        state.deck.minions.clear();
+        state.slayer_results[0].revealed_role = Some("Twin Minion".to_string());
+        state.slayer_results[0].was_evil = Some(false);
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn failed_slayer_results_expose_neither_role_nor_runtime_alignment() {
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Knight", json!({})),
+            ],
+        );
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: false,
+            revealed_role: None,
+            was_evil: Some(false),
+        });
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+
+        state.slayer_results[0].was_evil = None;
+        // A runtime-Good recipient holding current Twin data still registers
+        // Good, so the failed branch remains possible before TwinTrace exists.
+        assert!(validate_slayer_results(&empty_scenario(), &state));
+
+        // Conversely, the stable runtime-Evil Twin body remains registered
+        // Evil even while carrying a received Good current role.
+        let mut stable_twin = empty_scenario();
+        stable_twin
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        stable_twin.evil_positions.insert(3, "Pooka".to_string());
+        assert!(!validate_slayer_results(&stable_twin, &state));
+
+        state.cards[1].apparent_role = "Wretch".to_string();
+        assert!(!validate_slayer_results(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn failed_slayer_allows_only_a_reachable_good_wretch_twin_recipient() {
+        let mut state = base_state(
+            5,
+            vec![
+                make_card(1, "Slayer", json!({})),
+                make_card(2, "Wretch", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 1,
+            target_pos: 2,
+            killed: false,
+            revealed_role: None,
+            was_evil: None,
+        });
+
+        let mut reachable = empty_scenario();
+        reachable.evil_positions.insert(3, "Pooka".to_string());
+        reachable
+            .evil_positions
+            .insert(5, "Twin Minion".to_string());
+        assert!(twin_may_have_replaced_current_data_at(2, &reachable, &state));
+        assert!(validate_slayer_results(&reachable, &state));
+
+        // With no registered/real Demon adjacent to #2, its Wretch data cannot
+        // have moved away and the working Slayer failure is contradictory.
+        let mut unreachable = empty_scenario();
+        unreachable.evil_positions.insert(4, "Pooka".to_string());
+        unreachable
+            .evil_positions
+            .insert(5, "Twin Minion".to_string());
+        assert!(!twin_may_have_replaced_current_data_at(2, &unreachable, &state));
+        assert!(!validate_slayer_results(&unreachable, &state));
+
+        // Physical runtime Evil remains registered Evil regardless of the
+        // unmodeled current-data swap and can never take the failure branch.
+        let mut physical_evil = reachable;
+        physical_evil
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!validate_slayer_results(&physical_evil, &state));
     }
 
     #[test]
@@ -3880,6 +4245,7 @@ mod tests {
             target_pos: 2,
             killed: true,
             revealed_role: Some("Knight".to_string()),
+            was_evil: None,
         });
         assert!(validate_slayer_results(&copied_knight, &state));
         state.slayer_results[0].revealed_role = Some("Pooka".to_string());
@@ -3900,6 +4266,7 @@ mod tests {
             target_pos: 2,
             killed: false,
             revealed_role: Some("Knight".to_string()),
+            was_evil: None,
         });
         assert!(!validate_slayer_results(&empty_scenario(), &state));
 
@@ -4127,6 +4494,103 @@ mod tests {
         state.executed = vec![2];
         state.confirmed_evil = vec![2];
         assert!(validate_lilis_night_kills(&one_physical_lilis, &state));
+    }
+
+    #[test]
+    fn lilis_twin_waiver_requires_a_reachable_demon_neighbor_endpoint() {
+        let mut state = base_state(4, vec![]);
+        state.n_evil = 3;
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Lilis".to_string(), "Pooka".to_string()];
+        state.night_kills = vec![2];
+        state.night_kill_evil_count = 1;
+
+        let mut reachable = empty_scenario();
+        reachable
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        reachable.evil_positions.insert(2, "Lilis".to_string());
+        reachable.evil_positions.insert(3, "Pooka".to_string());
+
+        // Pooka #3 can select adjacent #2 as Twin's recipient endpoint. Lilis
+        // data and its later self-protection move to the original Twin body,
+        // leaving stable-Lilis #2 as killable current Twin data.
+        assert!(twin_may_have_replaced_current_data_at(2, &reachable, &state));
+        assert!(validate_lilis_night_kills(&reachable, &state));
+
+        let mut untyped_twin_origin = reachable.clone();
+        untyped_twin_origin
+            .evil_positions
+            .insert(1, "Unknown".to_string());
+        assert!(twin_may_have_replaced_current_data_at(
+            2,
+            &untyped_twin_origin,
+            &state,
+        ));
+
+        let mut one_untyped_seat = empty_scenario();
+        one_untyped_seat
+            .evil_positions
+            .insert(3, "Unknown".to_string());
+        assert!(!twin_may_have_replaced_current_data_at(
+            2,
+            &one_untyped_seat,
+            &state,
+        ));
+
+        let mut unreachable = reachable.clone();
+        unreachable.evil_positions.remove(&3);
+        unreachable.evil_positions.insert(4, "Pooka".to_string());
+        assert!(!twin_may_have_replaced_current_data_at(2, &unreachable, &state));
+        assert!(!validate_lilis_night_kills(&unreachable, &state));
+
+        // A lone Lilis cannot choose itself as its own adjacent endpoint. On a
+        // two-card Twin/Lilis board both previous/next occurrences are Twin.
+        state.n_cards = 2;
+        state.n_evil = 2;
+        state.deck.demons = vec!["Lilis".to_string()];
+        let mut twin_and_lilis = empty_scenario();
+        twin_and_lilis
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        twin_and_lilis
+            .evil_positions
+            .insert(2, "Lilis".to_string());
+        assert!(!twin_may_have_replaced_current_data_at(
+            2,
+            &twin_and_lilis,
+            &state,
+        ));
+        assert!(!validate_lilis_night_kills(&twin_and_lilis, &state));
+    }
+
+    #[test]
+    fn lilis_twin_waiver_applies_to_current_role_knight_protection_only() {
+        let mut state = base_state(4, vec![make_card(2, "Knight", json!({}))]);
+        state.n_evil = 3;
+        state.deck.villagers = vec!["Knight".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Lilis".to_string(), "Pooka".to_string()];
+        state.night_kills = vec![2];
+
+        let mut reachable = empty_scenario();
+        reachable
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        reachable.evil_positions.insert(3, "Pooka".to_string());
+        reachable.evil_positions.insert(4, "Lilis".to_string());
+        assert!(validate_lilis_night_kills(&reachable, &state));
+
+        // Moving the non-Twin Demon away makes #2 unreachable, so its stable
+        // clean Knight protection must still reject the observed death.
+        let mut unreachable = reachable.clone();
+        unreachable.evil_positions.remove(&3);
+        assert!(!validate_lilis_night_kills(&unreachable, &state));
+
+        // The same endpoint rule applies to HealthyBluff Doppel-as-Knight.
+        let mut doppel = reachable;
+        doppel.doppelganger_position = Some(2);
+        assert!(validate_lilis_night_kills(&doppel, &state));
     }
 
     #[test]
@@ -4709,6 +5173,76 @@ mod tests {
     }
 
     #[test]
+    fn twin_current_role_waiver_covers_only_the_two_unmodeled_swap_endpoints() {
+        let mut state = base_state(3, vec![make_card(2, "Baker", json!({}))]);
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+
+        // A physical Good recipient can publicly reveal the current Twin data
+        // that the pre-trace role model still sees as its stable Good role.
+        assert!(matches_executed_good_role(
+            &empty_scenario(),
+            &state,
+            2,
+            "Twin Minion",
+        ));
+
+        // Conversely, the stable Twin actor can publicly reveal the role it
+        // received from the selected neighbor.
+        let mut stable_twin = empty_scenario();
+        stable_twin
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        assert!(matches_executed_good_role(
+            &stable_twin,
+            &state,
+            2,
+            "Baker",
+        ));
+
+        // An arbitrary role absent from every authored/post-Twin generation
+        // surface is not a valid endpoint just because this is the Twin seat.
+        assert!(!matches_executed_good_role(
+            &stable_twin,
+            &state,
+            2,
+            "Shaman",
+        ));
+
+        // Puppeteer acts after Twin and can replace a received Villager with
+        // generated Puppet data on the original runtime-Evil Twin body.
+        state.deck.minions.push("Puppeteer".to_string());
+        assert!(matches_executed_good_role(
+            &stable_twin,
+            &state,
+            2,
+            "Puppet",
+        ));
+
+        // Twin's presence does not waive a mismatch at an unrelated stable
+        // Evil seat when neither endpoint surface names Twin.
+        let mut unrelated_evil = empty_scenario();
+        unrelated_evil
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!matches_executed_good_role(
+            &unrelated_evil,
+            &state,
+            2,
+            "Shaman",
+        ));
+
+        // An observed Twin mismatch needs an authored Twin in the pool.
+        state.deck.minions.clear();
+        assert!(!matches_executed_good_role(
+            &empty_scenario(),
+            &state,
+            2,
+            "Twin Minion",
+        ));
+    }
+
+    #[test]
     fn observed_evil_current_role_prunes_incompatible_shaman_trace() {
         let mut state = base_state(3, vec![]);
         state.n_evil = 1;
@@ -4767,6 +5301,7 @@ mod tests {
             target_pos: 2,
             killed: true,
             revealed_role: Some("Scout".to_string()),
+            was_evil: None,
         });
         assert!(!valid_executed_current_role_entry(&state, 2, "Scout"));
 

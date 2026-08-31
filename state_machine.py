@@ -333,7 +333,7 @@ class GameStateMachine:
             print(
                 "  [auto] GAME LOST — "
                 f"{terminal_loss_role} died outside Night "
-                f"(HP retained at {self.session.hp})"
+                f"(HP after native resource handling: {self.session.hp})"
             )
         elif self.session.hp <= 0:
             self._game_result = "loss"
@@ -344,7 +344,7 @@ class GameStateMachine:
             # Never let the final phase overwrite that known loss with a win.
             print(
                 "  [auto] GAME LOST — terminal loss was established "
-                f"during planning (HP retained at {self.session.hp})"
+                f"during planning (recorded HP: {self.session.hp})"
             )
         else:
             self._game_result = "win"
@@ -365,6 +365,15 @@ class GameStateMachine:
         from game_loop import dispatch
         print(f"\n  [auto] Phase: FLIPPING")
 
+        if (
+            self.session.has_lilis_night_rule()
+            and self.session.has_role_in_deck("Shaman")
+        ):
+            self._pause(
+                "Lilis+Shaman reveal automation is unsafe before any click: "
+                "current Lilis actor count can be 0, 1, or 2"
+            )
+            return
         if self.session.has_duplicate_lilis():
             self._pause(
                 "Duplicate Lilis live automation is unsupported: multiple "
@@ -439,6 +448,7 @@ class GameStateMachine:
             _compute_confidence,
             _has_terminal_role_loss,
             evil_probabilities,
+            ordinary_execution_bombardier_positions,
             recommend_action,
         )
         print(f"\n  [auto] Phase: SOLVING")
@@ -449,9 +459,19 @@ class GameStateMachine:
         for line in result.reasoning:
             print(f"  {line}")
 
+        if self.session.twin_live_solver_unsafe():
+            self._pause(
+                "Live Twin Minion solving is paused until the ordered "
+                "current-data trace is modeled; no action was produced"
+            )
+            return
+
         probs = evil_probabilities(state, result)
         action = recommend_action(state, result, self.session.used_abilities)
         action.confidence = _compute_confidence(action, state, result, probs)
+        ordinary_bombardiers = ordinary_execution_bombardier_positions(
+            state, result,
+        )
 
         print(f"\n  [auto] Recommendation: {action.action_type.upper()}", end="")
         if action.position:
@@ -487,7 +507,7 @@ class GameStateMachine:
 
         elif action.action_type == "execute":
             is_definite = action.position in result.definite_evil
-            is_bombardier = action.position in result.bombardier_positions
+            is_bombardier = action.position in ordinary_bombardiers
             is_forced_safe = getattr(action, 'forced_safe', False)
 
             if is_bombardier:
@@ -502,6 +522,18 @@ class GameStateMachine:
                 self._pause(f"Execute #{action.position}? ({action.confidence:.0%} confident) — not definite evil, needs manual decision")
 
         elif action.action_type == "use_ability":
+            ability_key = (action.ability_name or "").lower().replace(" ", "_")
+            risky_slayer_targets = sorted(
+                set(action.targets or []).intersection(
+                    result.bombardier_positions
+                )
+            )
+            if ability_key == "slayer" and risky_slayer_targets:
+                self._pause(
+                    "Refusing Slayer into possible moved Bombardier data at "
+                    f"{['#' + str(pos) for pos in risky_slayer_targets]}"
+                )
+                return
             self._pending_ability = (action.position, action.targets, action.ability_name, result)
             self.phase = GamePhase.ABILITY_USE
 
@@ -533,7 +565,8 @@ class GameStateMachine:
                 self.session.save()
                 print(
                     f"\n  [auto] GAME LOST - {terminal_loss_role} "
-                    f"died outside Night (HP retained at {self.session.hp})"
+                    "died outside Night "
+                    f"(HP after native resource handling: {self.session.hp})"
                 )
                 return
             if exec_result.get("blocked"):
@@ -578,6 +611,15 @@ class GameStateMachine:
         pos = self._pending_reveal[0]
         print(f"\n  [auto] Phase: REVEALING #{pos}")
 
+        if (
+            self.session.has_lilis_night_rule()
+            and self.session.has_role_in_deck("Shaman")
+        ):
+            self._pause(
+                "Lilis+Shaman reveal automation is unsafe before any click: "
+                "current Lilis actor count can be 0, 1, or 2"
+            )
+            return
         if self.session.has_duplicate_lilis():
             self._pause(
                 "Duplicate Lilis live automation is unsupported: refusing a "
@@ -770,7 +812,11 @@ class GameStateMachine:
             return True
         else:
             mc = captured["card"] or {}
-            role = mc.get('disguise') or mc.get('true_role', '?')
+            role = (
+                mc.get('disguise')
+                or mc.get('current_role')
+                or mc.get('true_role', '?')
+            )
             clue = mc.get('clue_text', '')
             print(f"  [auto] #{pos} {role}: couldn't parse clue \"{clue}\" — needs manual entry")
             return False
@@ -933,7 +979,11 @@ class GameStateMachine:
                         DecisionLog.log_card(parsed)
                         print(f"  [auto] Ability result: #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
                     else:
-                        role = mc.get('disguise') or mc.get('true_role', '?')
+                        role = (
+                            mc.get('disguise')
+                            or mc.get('current_role')
+                            or mc.get('true_role', '?')
+                        )
                         clue = mc.get('clue_text', '')
                         self._pause(
                             f"Ability {ability_name} on #{pos}: couldn't parse result "
@@ -953,6 +1003,12 @@ class GameStateMachine:
         """Handle Lilis night phase — wait for animation, transition to resolve."""
         print(f"\n  [auto] Phase: LILIS_NIGHT")
 
+        if self.session.has_role_in_deck("Shaman"):
+            self._pause(
+                "Lilis+Shaman Night automation is unsupported: exact current "
+                "actor multiplicity and 0/2/4 HP outcome require manual recovery"
+            )
+            return
         if self.session.has_duplicate_lilis():
             self._pause(
                 "Duplicate Lilis Night cannot be resolved safely: multiple "
@@ -1003,6 +1059,12 @@ class GameStateMachine:
         """Auto-detect killed positions from memory, deduct HP, record kills."""
         print(f"\n  [auto] Phase: NIGHT_RESOLVE")
 
+        if self.session.has_role_in_deck("Shaman"):
+            self._pause(
+                "Lilis+Shaman Night resolution is unsupported: refusing to "
+                "infer actor multiplicity or HP from hidden deaths"
+            )
+            return
         if self.session.has_duplicate_lilis():
             self._pause(
                 "Duplicate Lilis Night cannot be resolved safely: multiple "
@@ -1022,17 +1084,12 @@ class GameStateMachine:
         # Find newly killed positions (killed_hidden flag set, not already in our records)
         already_dead = set(self.session.night_kills) | set(self.session.executed)
         killed = []
-        n_evil = 0
         for c in board:
             pos = c['position']
             if pos in already_dead:
                 continue
             if c.get('killed_hidden'):
                 killed.append(pos)
-                # Honor rule: we use is_evil for VALIDATION only, not deduction
-                # But we do need the evil count for the solver's night_kill_evil_count
-                if c.get('is_evil'):
-                    n_evil += 1
 
         actor_active = self.session.is_lilis_alive()
         if killed and not actor_active:
@@ -1042,7 +1099,13 @@ class GameStateMachine:
             )
             return
         if killed:
-            print(f"  [auto] Night kills detected: {['#'+str(p) for p in killed]}, {n_evil} evil")
+            positions = ",".join(str(position) for position in killed)
+            self._pause(
+                "Night victim position(s) are public, but hidden memory "
+                "alignment is validation-only. Enter the public aggregate "
+                f"with: night_kill {positions} <n_evil>"
+            )
+            return
         elif actor_active:
             print("  [auto] No kills detected — zero-victim/protected-victim Lilis night")
             print(
@@ -1057,7 +1120,7 @@ class GameStateMachine:
 
         try:
             if actor_active:
-                result = self.session.record_lilis_night_result(killed, n_evil)
+                result = self.session.record_lilis_night_result([], 0)
             else:
                 result = self.session.record_lilis_post_death_night()
         except ValueError as exc:

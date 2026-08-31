@@ -5,6 +5,9 @@
 
 use std::collections::{BTreeSet, HashMap, HashSet};
 use crate::knowledge_base::normalize_role;
+use crate::solver::{
+    hidden_ordinary_good_may_hold_bombardier, twin_origin_may_hold_bombardier,
+};
 use crate::types::{GameState, Scenario, SolverResult};
 use crate::validators::effective_role_at;
 use super::{
@@ -116,6 +119,31 @@ pub fn find_forced_execution(
     let executed_set: HashSet<u8> = state.executed.iter()
         .chain(state.night_kills.iter()).copied().collect();
     let all_indices: Vec<usize> = (0..scenarios.len()).collect();
+    // Exact modeled Bombardier seats are unsafe only while a surviving world
+    // at the current DFS node still places Bombardier there. A prior public
+    // outcome can remove those worlds and make the seat legal later. Opaque
+    // pre-TwinTrace movement has no corresponding Scenario role, so every
+    // aggregate Bomb seat supported by a Twin-origin world stays permanently
+    // unsafe, even if another world models Bombardier at the same seat.
+    let authored_roles = state.deck.all_roles();
+    let authored_twin_and_bombardier = ["twinminion", "bombardier"]
+        .iter()
+        .all(|expected| {
+            authored_roles
+                .iter()
+                .any(|role| normalize_role(role) == *expected)
+        });
+    let permanently_unsafe_bombardier_positions: HashSet<u8> = result
+        .bombardier_positions
+        .iter()
+        .copied()
+        .filter(|position| {
+            authored_twin_and_bombardier
+                && scenarios.iter().any(|scenario| {
+                    twin_origin_may_hold_bombardier(*position, scenario, state)
+                })
+        })
+        .collect();
 
     // Memoization table
     let mut memo: HashMap<(Vec<usize>, BTreeSet<u8>, i32), (bool, Option<u8>)> = HashMap::new();
@@ -126,6 +154,7 @@ pub fn find_forced_execution(
         state.hp,
         &ordered_candidates,
         &executed_set,
+        &permanently_unsafe_bombardier_positions,
         scenarios,
         state,
         &mut memo,
@@ -133,6 +162,20 @@ pub fn find_forced_execution(
     );
 
     if success { pos } else { None }
+}
+
+fn any_scenario_has_bombardier_risk(
+    position: u8,
+    indices: &[usize],
+    scenarios: &[Scenario],
+    state: &GameState,
+) -> bool {
+    indices.iter().any(|&idx| {
+        let scenario = &scenarios[idx];
+        effective_role_at(position, scenario, state)
+            .is_some_and(|role| normalize_role(&role) == "bombardier")
+            || hidden_ordinary_good_may_hold_bombardier(position, scenario, state)
+    })
 }
 
 /// Recursive DFS with memoization. Checks if all evil can be eliminated
@@ -144,6 +187,7 @@ fn can_force(
     hp: i32,
     ordered_candidates: &[u8],
     global_executed: &HashSet<u8>,
+    permanently_unsafe_bombardier_positions: &HashSet<u8>,
     scenarios: &[Scenario],
     state: &GameState,
     memo: &mut HashMap<(Vec<usize>, BTreeSet<u8>, i32), (bool, Option<u8>)>,
@@ -194,7 +238,12 @@ fn can_force(
 
     // Try each candidate position
     let available: Vec<u8> = ordered_candidates.iter()
-        .filter(|&&p| !executed_now.contains(&p) && !global_executed.contains(&p))
+        .filter(|&&p| {
+            !executed_now.contains(&p)
+                && !global_executed.contains(&p)
+                && !permanently_unsafe_bombardier_positions.contains(&p)
+                && !any_scenario_has_bombardier_risk(p, indices, scenarios, state)
+        })
         .copied()
         .collect();
 
@@ -255,6 +304,7 @@ fn can_force(
                 next_hp,
                 ordered_candidates,
                 global_executed,
+                permanently_unsafe_bombardier_positions,
                 scenarios,
                 state,
                 memo,
@@ -282,6 +332,8 @@ fn can_force(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::strategy::execution::pick_execution_target;
+    use crate::strategy::ExecutionReason;
     use crate::types::*;
     use std::collections::HashSet;
 
@@ -417,8 +469,10 @@ mod tests {
     }
 
     #[test]
-    fn test_bombardier_blocks_forced() {
-        // Bombardier at position 2 blocks the path even if it's evil
+    fn scenario_bombardier_can_become_legal_after_branch_pruning() {
+        // #2 is Bombardier in the first world and Pooka in the second. It is
+        // illegal at the root, but executing #1 publicly distinguishes the
+        // worlds; the surviving second-world child may then execute #2.
         let state = GameState {
             n_cards: 3,
             hp: 10,
@@ -442,11 +496,91 @@ mod tests {
             ],
             reasoning: vec![],
         };
-        // Executing 1: branch where evil → win, branch where good → cost 5, then #2 left
-        // Executing 2: branch where evil → win, branch where good Bombardier → instant loss
-        // Position 1 should be chosen (safe) — can force via 1 then 2 in surviving branch
+        // The first move is #1, never the root-possible Bombardier at #2.
         let pos = find_forced_execution(&state, &result, &[1, 2, 3]);
         assert_eq!(pos, Some(1));
+        assert_eq!(find_forced_execution(&state, &result, &[2]), None);
+
+        let pick = pick_execution_target(&state, &result, &HashSet::new())
+            .expect("root strategy should preserve the branch-safe forcing move");
+        assert_eq!(pick.position, 1);
+        assert!(matches!(pick.reason, ExecutionReason::ForcedExecution));
+    }
+
+    #[test]
+    fn hidden_good_bombardier_blocks_root_but_not_proven_evil_child() {
+        // #1 is hidden: it may be ordinary Good Bombardier while #2 is Witch,
+        // although ordinary hidden Good identities have no Scenario role.
+        // Executing revealed #2 first distinguishes the worlds; in the child
+        // where #2 was Good, #1 is proven Witch and becomes safe to execute.
+        let state = GameState {
+            n_cards: 2,
+            hp: 10,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 2, apparent_role: "Scout".to_string(), ..CardInfo::default() },
+            ],
+            blocked_positions: vec![1],
+            deck: DeckComposition {
+                villagers: vec!["Scout".to_string()],
+                outcasts: vec!["Bombardier".to_string()],
+                minions: vec!["Witch".to_string()],
+                ..DeckComposition::default()
+            },
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![1],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Witch")]),
+                make_scenario(&[(2, "Witch")]),
+            ],
+            reasoning: vec![],
+        };
+
+        assert_eq!(find_forced_execution(&state, &result, &[1]), None);
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2]), Some(2));
+    }
+
+    #[test]
+    fn pretrace_twin_bombardier_overlap_remains_permanently_unsafe() {
+        // #2 is exact Bombardier in the first world and a stable Twin origin
+        // in the second. Pruning the exact Bomb world must not clear the
+        // unrepresented possibility that Twin moved Bomb data onto #2.
+        let state = GameState {
+            n_cards: 3,
+            hp: 10,
+            wrong_exec_cost: 5,
+            cards: vec![
+                CardInfo { position: 2, apparent_role: "Bombardier".to_string(), ..CardInfo::default() },
+            ],
+            deck: DeckComposition {
+                outcasts: vec!["Bombardier".to_string()],
+                minions: vec!["Twin Minion".to_string()],
+                demons: vec!["Pooka".to_string()],
+                ..DeckComposition::default()
+            },
+            ..GameState::default()
+        };
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![2],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![
+                make_scenario(&[(1, "Pooka")]),
+                make_scenario(&[(2, "Twin Minion"), (3, "Pooka")]),
+            ],
+            reasoning: vec![],
+        };
+
+        assert_eq!(find_forced_execution(&state, &result, &[1, 2, 3]), None);
+        assert_eq!(find_forced_execution(&state, &result, &[2]), None);
     }
 
     #[test]
@@ -518,6 +652,7 @@ mod tests {
             &BTreeSet::new(),
             0,
             &[],
+            &HashSet::new(),
             &HashSet::new(),
             &scenarios,
             &state,

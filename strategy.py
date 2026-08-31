@@ -432,10 +432,123 @@ def _knight_check_damage_profile(
     )
 
 
+def _scenario_has_current_bombardier(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> bool:
+    """Whether one exact scenario gives ``pos`` current Bombardier data."""
+    return _is_terminal_loss_role(effective_role_at(pos, scenario, state))
+
+
+def _scenario_has_unrepresented_natural_bombardier(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> bool:
+    """Whether an unassigned Good identity at ``pos`` could be Bombardier.
+
+    Scenarios assign runtime Evil, generated Outcast, Drunk, Doppelganger, and
+    Shaman current roles, but an unrevealed ordinary Good card has no role
+    field.  When Bombardier is in the authored pool, ``None`` therefore still
+    includes the terminal natural Bombardier identity.  This risk is
+    branch-local: a later observation may narrow the position to runtime Evil,
+    at which point the ordinary Good identity is impossible.
+    """
+    if not any(_is_terminal_loss_role(role) for role in state.deck.all_roles):
+        return False
+    if scenario_is_evil(pos, scenario):
+        return False
+    return effective_role_at(pos, scenario, state) is None
+
+
+def ordinary_execution_bombardier_positions(
+    state: GameState,
+    result: SolverResult,
+) -> set[int]:
+    """Return every root position unsafe for an ordinary execution.
+
+    The solver aggregate covers represented current-data Bombardiers and
+    conservative mover risks. Add only the missing natural Good Bombardiers
+    whose identity is absent from ``Scenario`` because the card remains
+    unrevealed (commonly a Witch-blocked card). This set is for ordinary
+    execution only: Slayer does not kill the runtime-Good branch.
+    """
+    dead = set(state.executed) | set(state.night_kills)
+    unsafe = set(getattr(result, "bombardier_positions", []) or []) - dead
+    scenarios = list(getattr(result, "surviving_scenarios", []) or [])
+
+    for pos in range(1, state.n_cards + 1):
+        if pos in dead:
+            continue
+        if any(
+            _scenario_has_unrepresented_natural_bombardier(
+                pos, scenario, state,
+            )
+            for scenario in scenarios
+        ):
+            unsafe.add(pos)
+
+    return unsafe
+
+
+def _opaque_bombardier_positions(
+    state: GameState,
+    result: SolverResult,
+) -> set[int]:
+    """Return aggregate Bomb candidates that no represented world explains.
+
+    The Rust result also carries conservative pre-trace Twin candidates. They
+    cannot become safe merely because a recursive branch discarded every
+    modeled Bombardier world: the missing current-data trace is precisely why
+    those seats were added to the aggregate set. Generated Chancellor and
+    copied Shaman Bombardiers are represented by ``effective_role_at`` and are
+    therefore branch-local rather than opaque. An anonymous natural Good
+    Bombardier is represented by a Good scenario with no assigned current
+    role; it is likewise branch-local and disappears once a branch proves the
+    seat runtime Evil.
+    """
+    aggregate = set(result.bombardier_positions)
+    modeled = {
+        pos
+        for pos in aggregate
+        if any(
+            _scenario_has_current_bombardier(pos, scenario, state)
+            or _scenario_has_unrepresented_natural_bombardier(
+                pos, scenario, state,
+            )
+            for scenario in result.surviving_scenarios
+        )
+    }
+    # A stable Twin origin is an additional conservative source of current
+    # Bombardier data until TwinTrace exists.  Keep that risk permanent even
+    # if a different represented world also happens to model Bombardier at the
+    # same seat; pruning the modeled world does not eliminate the opaque Twin
+    # path.
+    conservative_twin = {
+        pos
+        for pos in aggregate
+        if any(
+            any(
+                (role or "").lower().replace(" ", "").replace("_", "")
+                == "twinminion"
+                for role in (
+                    scenario.evil_positions.get(pos),
+                    state.executed_evil_roles.get(pos),
+                )
+            )
+            for scenario in result.surviving_scenarios
+        )
+    }
+    return (aggregate - modeled) | conservative_twin
+
+
 def _find_forced_execution(
     state: GameState,
     result: SolverResult,
     candidate_positions: list[int],
+    *,
+    permanently_unsafe_bombardiers: Optional[set[int]] = None,
 ) -> Optional[int]:
     """Return an execution that guarantees a win across all reveal branches.
 
@@ -445,6 +558,11 @@ def _find_forced_execution(
     under the current HP budget.
     """
     scenarios = result.surviving_scenarios
+    opaque_bombardiers = (
+        set(permanently_unsafe_bombardiers)
+        if permanently_unsafe_bombardiers is not None
+        else _opaque_bombardier_positions(state, result)
+    )
     if not scenarios or not candidate_positions:
         return None
 
@@ -452,10 +570,28 @@ def _find_forced_execution(
     already_dead = set(state.executed) | set(state.night_kills)
     ordered_candidates = sorted(
         candidate_positions,
-        key=lambda p: (-probs.get(p, 0.0), p in result.bombardier_positions, p),
+        key=lambda p: (-probs.get(p, 0.0), p),
     )
     all_positions = tuple(range(1, state.n_cards + 1))
     memo: dict[tuple[tuple[int, ...], tuple[int, ...], int], tuple[bool, Optional[int]]] = {}
+    bomb_safety_cache: dict[tuple[int, tuple[int, ...]], bool] = {}
+
+    def branch_can_execute(pos: int, indices: tuple[int, ...]) -> bool:
+        """Require this branch to rule out every terminal execution path."""
+        if pos in opaque_bombardiers:
+            return False
+        key = (pos, indices)
+        if key not in bomb_safety_cache:
+            bomb_safety_cache[key] = all(
+                not _scenario_has_current_bombardier(
+                    pos, scenarios[idx], state,
+                )
+                and not _scenario_has_unrepresented_natural_bombardier(
+                    pos, scenarios[idx], state,
+                )
+                for idx in indices
+            )
+        return bomb_safety_cache[key]
 
     def all_evils_gone(indices: tuple[int, ...], executed_now: frozenset[int]) -> bool:
         for idx in indices:
@@ -498,6 +634,7 @@ def _find_forced_execution(
         available = [
             pos for pos in ordered_candidates
             if pos not in executed_now and pos not in already_dead
+            and branch_can_execute(pos, indices)
         ]
         if not available:
             memo[key] = (False, None)
@@ -668,6 +805,7 @@ def _shallow_lookahead(
         return None
 
     scenarios = result.surviving_scenarios
+    opaque_bombardiers = _opaque_bombardier_positions(state, result)
     start_time = time.perf_counter()
     timeout_sec = _SHALLOW_LOOKAHEAD_TIMEOUT_MS / 1000.0
 
@@ -702,7 +840,12 @@ def _shallow_lookahead(
                 reasoning=[],
             )
 
-            forced_pos = _find_forced_execution(state, sub_result, candidate_positions)
+            forced_pos = _find_forced_execution(
+                state,
+                sub_result,
+                candidate_positions,
+                permanently_unsafe_bombardiers=opaque_bombardiers,
+            )
             if forced_pos is not None:
                 forced_exec_per_partition[fp_key] = forced_pos
             else:
@@ -1650,10 +1793,15 @@ def _recommend_slayer(
     # runtime-Evil Shaman destination whose *current* role is Bombardier invokes
     # the terminal death hook after KillAndReveal.
     dead = set(state.executed) | set(state.night_kills)
+    possible_bombardiers = set(result.bombardier_positions)
     candidates = [
         p
         for p in range(1, state.n_cards + 1)
-        if p not in dead and p != ability_pos
+        if (
+            p not in dead
+            and p != ability_pos
+            and p not in possible_bombardiers
+        )
     ]
     if not candidates:
         return None
@@ -2071,6 +2219,10 @@ def recommend_action(
     if result.n_surviving == 0:
         return Action("error", reasoning="No surviving scenarios -- check input data")
 
+    ordinary_bombardiers = ordinary_execution_bombardier_positions(
+        state, result,
+    )
+
     # Win check
     _, max_remaining = _remaining_evil_bounds(state, result)
     if max_remaining == 0:
@@ -2081,7 +2233,7 @@ def recommend_action(
     # Executing an uncertain Knight is a free check (0 HP) when uncorrupted.
     safe_executions = [p for p in result.definite_evil
                        if p not in dead_positions
-                       and p not in result.bombardier_positions]
+                       and p not in ordinary_bombardiers]
     if safe_executions:
         pos = safe_executions[0]
         roles = set()
@@ -2110,7 +2262,7 @@ def recommend_action(
     for card in state.cards:
         if (card.apparent_role in EXECUTION_IMMUNE_ROLES
                 and card.position not in dead_positions
-                and card.position not in result.bombardier_positions
+                and card.position not in ordinary_bombardiers
                 and card.position not in result.definite_good
                 and card.position not in result.definite_evil):
             damage_risk, expected_damage, worst_damage = (
@@ -2241,8 +2393,15 @@ def recommend_action(
     # are detected before uncertain probabilistic execution (step 6b).
     wrong_exec_budget = state.hp // state.wrong_exec_cost if state.wrong_exec_cost > 0 else 99
 
+    # Keep aggregate Bomb candidates in the planner universe. They are not
+    # legal root actions, but an earlier public observation can eliminate all
+    # represented current-Bomb worlds and make a later branch execution safe.
+    # The DFS still rejects opaque pre-trace candidates at every depth, while
+    # every actual/root execution path below excludes the full ordinary-
+    # execution safety set (including anonymous natural Good Bombardiers).
     all_uncertain = [p for p, prob in probs.items()
-                     if prob > 0.0 and p not in dead_positions]
+                     if prob > 0.0
+                     and p not in dead_positions]
 
     if all_uncertain:
         # 5.5a: Direct forced execution (1-step lookahead)
@@ -2250,9 +2409,6 @@ def recommend_action(
         if forced_pos is not None:
             warnings = []
             forced_prob = probs.get(forced_pos, 0.0)
-            if forced_pos in result.bombardier_positions:
-                warnings.append(
-                    "Bombardier targeted by lookahead — confirmed safe across all branches")
             if forced_prob < 1.0:
                 warnings.append(
                     f"Execution lookahead override -- immediate hit chance is {forced_prob:.0%}, "
@@ -2277,7 +2433,7 @@ def recommend_action(
 
     # 6b. Probabilistic execution
     # Bombardier candidates excluded from normal probability selection
-    bombardier_candidates = {p: probs.get(p, 0) for p in result.bombardier_positions
+    bombardier_candidates = {p: probs.get(p, 0) for p in ordinary_bombardiers
                             if p not in dead_positions
                             and p not in result.definite_evil
                             and probs.get(p, 0) > 0.0}
@@ -2290,7 +2446,7 @@ def recommend_action(
                         and c.position not in result.definite_evil}
     active_probs = {p: prob for p, prob in probs.items()
                     if p not in dead_positions
-                    and p not in result.bombardier_positions
+                    and p not in ordinary_bombardiers
                     and p not in wretch_positions}
     if active_probs:
         # E4: Sort candidates by (p_evil, tiebreak_score) for stable 50/50 resolution
@@ -2389,7 +2545,7 @@ def recommend_action(
         # Include Wretch — wrong exec on Wretch = HP cost, not game loss
         safety_probs = {p: prob for p, prob in probs.items()
                        if p not in dead_positions
-                       and p not in result.bombardier_positions
+                       and p not in ordinary_bombardiers
                        and prob > 0.0}
         if safety_probs:
             safe_pos = max(safety_probs, key=safety_probs.get)

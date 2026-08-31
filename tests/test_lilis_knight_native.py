@@ -177,7 +177,7 @@ class LilisNightBookkeepingTests(unittest.TestCase):
             legacy_machine.start()
         self.assertNotEqual(legacy_machine.phase, GamePhase.LILIS_NIGHT)
 
-    def test_manual_and_state_machine_kill_resolution_match(self):
+    def test_state_machine_pauses_for_public_count_then_manual_resolution_matches(self):
         manual = _night_session(n_cards=3, hp=7)
         automatic = _night_session(n_cards=3, hp=7)
 
@@ -204,8 +204,14 @@ class LilisNightBookkeepingTests(unittest.TestCase):
 
         machine = GameStateMachine(session=automatic, monitor=Monitor())
         machine.phase = GamePhase.NIGHT_RESOLVE
-        with patch.object(automatic, "save"), redirect_stdout(StringIO()):
+        with patch.object(automatic, "save") as auto_save, redirect_stdout(StringIO()):
             machine._do_night_resolve()
+
+        self.assertEqual(machine.phase, GamePhase.NEEDS_HUMAN)
+        self.assertEqual(automatic.night_kills, [])
+        auto_save.assert_not_called()
+        with patch.object(automatic, "save"), redirect_stdout(StringIO()):
+            dispatch("night_kill", ["2", "1"], automatic)
 
         self.assertEqual(automatic.night_kills, manual.night_kills)
         self.assertEqual(
@@ -422,8 +428,14 @@ class LilisNightBookkeepingTests(unittest.TestCase):
         self.assertEqual(loaded.pending_lilis_nights, 1)
 
         machine.phase = GamePhase.NIGHT_RESOLVE
-        with patch.object(loaded, "save"), redirect_stdout(StringIO()):
+        with patch.object(loaded, "save") as save, redirect_stdout(StringIO()):
             machine._do_night_resolve()
+
+        self.assertEqual(machine.phase, GamePhase.NEEDS_HUMAN)
+        self.assertEqual(loaded.night_kills, [])
+        save.assert_not_called()
+        with patch.object(loaded, "save"), redirect_stdout(StringIO()):
+            dispatch("night_kill", ["2", "0"], loaded)
 
         self.assertEqual(loaded.night_kills, [2])
         self.assertEqual(loaded.pending_lilis_nights, 0)

@@ -490,7 +490,11 @@ def cross_validate_with_memory(predictions: list[CardPrediction],
         # Simple approach: use the prediction index as position guess
         # More robust: use seat detection
         for pos, mc in mem_by_pos.items():
-            expected = mc.get('disguise') or mc.get('true_role', '')
+            expected = (
+                mc.get('disguise')
+                or mc.get('current_role')
+                or mc.get('true_role', '')
+            )
             if not expected:
                 continue
             # Normalize names for comparison
