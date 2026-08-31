@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Alchemist boundary, including every declared role/localization/runtime-data method and the lifecycle, status, acted-record, circular-range, truth-routing, and RNG helpers required to freeze its current executable behavior",
+  "functions": [
+    {
+      "name": "AlchemistRuntimeData.ctor",
+      "metadata_name": "AlchemistRuntimeData$$.ctor",
+      "signature": "void AlchemistRuntimeData___ctor (AlchemistRuntimeData_o* __this, int32_t cures, const MethodInfo* method);",
+      "applied_prototype_name": "EnlightenedRuntimeData___ctor",
+      "rva": "0x357700"
+    },
+    {
+      "name": "AlchemistLoc.LocPL",
+      "metadata_name": "AlchemistLoc$$LocPL",
+      "signature": "System_String_o* AlchemistLoc__LocPL (AlchemistLoc_o* __this, System_Collections_Generic_List_object__o* args, const MethodInfo* method);",
+      "rva": "0x395810"
+    },
+    {
+      "name": "AlchemistLoc.ctor",
+      "metadata_name": "AlchemistLoc$$.ctor",
+      "signature": "void AlchemistLoc___ctor (AlchemistLoc_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Alchemist.get_Description",
+      "metadata_name": "Alchemist$$get_Description",
+      "signature": "System_String_o* Alchemist__get_Description (Alchemist_o* __this, const MethodInfo* method);",
+      "rva": "0x3B0630"
+    },
+    {
+      "name": "Alchemist.OnInit",
+      "metadata_name": "Alchemist$$OnInit",
+      "signature": "void Alchemist__OnInit (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B05F0"
+    },
+    {
+      "name": "Alchemist.GetInfo",
+      "metadata_name": "Alchemist$$GetInfo",
+      "signature": "ActedInfo_o* Alchemist__GetInfo (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B02A0"
+    },
+    {
+      "name": "Alchemist.CurePoisons",
+      "metadata_name": "Alchemist$$CurePoisons",
+      "signature": "void Alchemist__CurePoisons (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B0040"
+    },
+    {
+      "name": "Alchemist.GetPoisonedCharactersAroundMe",
+      "metadata_name": "Alchemist$$GetPoisonedCharactersAroundMe",
+      "signature": "System_Collections_Generic_List_Character__o* Alchemist__GetPoisonedCharactersAroundMe (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B03B0"
+    },
+    {
+      "name": "Alchemist.Act",
+      "metadata_name": "Alchemist$$Act",
+      "signature": "void Alchemist__Act (Alchemist_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3AFDD0"
+    },
+    {
+      "name": "Alchemist.BluffAct",
+      "metadata_name": "Alchemist$$BluffAct",
+      "signature": "void Alchemist__BluffAct (Alchemist_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3AFE90"
+    },
+    {
+      "name": "Alchemist.GetBluffInfo",
+      "metadata_name": "Alchemist$$GetBluffInfo",
+      "signature": "ActedInfo_o* Alchemist__GetBluffInfo (Alchemist_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B0170"
+    },
+    {
+      "name": "Alchemist.ConjourInfo",
+      "metadata_name": "Alchemist$$ConjourInfo",
+      "signature": "System_String_o* Alchemist__ConjourInfo (Alchemist_o* __this, int32_t howManyCorruptions, const MethodInfo* method);",
+      "rva": "0x3AFF90"
+    },
+    {
+      "name": "Alchemist.ctor",
+      "metadata_name": "Alchemist$$.ctor",
+      "signature": "void Alchemist___ctor (Alchemist_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Character.InitWithNoReset",
+      "metadata_name": "Character$$InitWithNoReset",
+      "signature": "void Character__InitWithNoReset (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365720"
+    },
+    {
+      "name": "Character.Act",
+      "metadata_name": "Character$$Act",
+      "signature": "void Character__Act (Character_o* __this, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3645C0"
+    },
+    {
+      "name": "Character.RoleAct",
+      "metadata_name": "Character$$RoleAct",
+      "signature": "void Character__RoleAct (Character_o* __this, Role_o* r, int32_t trigger, int32_t eCase, const MethodInfo* method);",
+      "rva": "0x368790"
+    },
+    {
+      "name": "Character.RefreshCharacter",
+      "metadata_name": "Character$$RefreshCharacter",
+      "signature": "void Character__RefreshCharacter (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x367970"
+    },
+    {
+      "name": "Character.RoleActCallback.ctor",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$.ctor",
+      "signature": "void Character___c__DisplayClass125_0___ctor (Character___c__DisplayClass125_0_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Character.RoleActCallback.Invoke",
+      "metadata_name": "Character.<>c__DisplayClass125_0$$<RoleAct>b__0",
+      "signature": "void Character___c__DisplayClass125_0___RoleAct_b__0 (Character___c__DisplayClass125_0_o* __this, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x377120"
+    },
+    {
+      "name": "Character.ShowActedDelayed",
+      "metadata_name": "Character$$ShowActedDelayed",
+      "signature": "System_Collections_IEnumerator_o* Character__ShowActedDelayed (Character_o* __this, float delay, ActedInfo_o* info, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x368A50"
+    },
+    {
+      "name": "Character.DelayReveal.MoveNext",
+      "metadata_name": "Character.<DelayReveal>d__84$$MoveNext",
+      "signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "rva": "0x3756B0"
+    },
+    {
+      "name": "Character.ShowActedDelayed.MoveNext",
+      "metadata_name": "Character.<ShowActedDelayed>d__133$$MoveNext",
+      "signature": "bool Character__ShowActedDelayed_d__133__MoveNext (Character__ShowActedDelayed_d__133_o* __this, const MethodInfo* method);",
+      "rva": "0x375FE0"
+    },
+    {
+      "name": "CharacterHelper.CheckLying",
+      "metadata_name": "CharacterHelper$$CheckLying",
+      "signature": "bool CharacterHelper__CheckLying (Character_o* c, const MethodInfo* method);",
+      "rva": "0x397750"
+    },
+    {
+      "name": "CharacterStatuses.AddStatus",
+      "metadata_name": "CharacterStatuses$$AddStatus",
+      "signature": "void CharacterStatuses__AddStatus (CharacterStatuses_o* __this, int32_t newStatus, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x363AA0"
+    },
+    {
+      "name": "CharacterStatuses.AddResistance",
+      "metadata_name": "CharacterStatuses$$AddResistance",
+      "signature": "void CharacterStatuses__AddResistance (CharacterStatuses_o* __this, int32_t newResistance, Character_o* sourceRef, Character_o* targetRef, const MethodInfo* method);",
+      "rva": "0x3639D0"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "CharacterStatuses.CheckIfCanCurePoisonAndCure",
+      "metadata_name": "CharacterStatuses$$CheckIfCanCurePoisonAndCure",
+      "signature": "bool CharacterStatuses__CheckIfCanCurePoisonAndCure (CharacterStatuses_o* __this, const MethodInfo* method);",
+      "rva": "0x363B60"
+    },
+    {
+      "name": "Role.CheckIfCanRemoveStatus",
+      "metadata_name": "Role$$CheckIfCanRemoveStatus",
+      "signature": "bool Role__CheckIfCanRemoveStatus (Role_o* __this, int32_t status, const MethodInfo* method);",
+      "applied_prototype_name": "Role__CheckIfCanBeKilled",
+      "rva": "0x3B24C0"
+    },
+    {
+      "name": "Drunk.CheckIfCanRemoveStatus",
+      "metadata_name": "Drunk$$CheckIfCanRemoveStatus",
+      "signature": "bool Drunk__CheckIfCanRemoveStatus (Drunk_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x3DA410"
+    },
+    {
+      "name": "Characters.GetCharactersAtRange",
+      "metadata_name": "Characters$$GetCharactersAtRange",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetCharactersAtRange (Characters_o* __this, int32_t range, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x36C590"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "Calculator.RemoveNumberAndGetRandomNumberFromList",
+      "metadata_name": "Calculator$$RemoveNumberAndGetRandomNumberFromList",
+      "signature": "int32_t Calculator__RemoveNumberAndGetRandomNumberFromList (int32_t removalNumber, int32_t minNumberInclusive, int32_t maxNumberExclusive, const MethodInfo* method);",
+      "rva": "0x396490"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "Gossip.ctor",
+      "metadata_name": "Gossip$$.ctor",
+      "signature": "void Gossip___ctor (Gossip_o* __this, const MethodInfo* method);",
+      "rva": "0x3BADC0"
+    }
+  ]
+}
