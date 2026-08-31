@@ -666,6 +666,7 @@ const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
 const MEDIUM_CURRENT_VARIANT_FIELD: &str = "medium_variant";
 const KNITTER_CURRENT_VARIANT_FIELD: &str = "knitter_variant";
 const ENLIGHTENED_CURRENT_VARIANT_FIELD: &str = "enlightened_variant";
+const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -694,7 +695,8 @@ fn current_passive_payload_source(
                 && !card.info_parsed.contains_key(KNITTER_CURRENT_VARIANT_FIELD)
                 && !card
                     .info_parsed
-                    .contains_key(ENLIGHTENED_CURRENT_VARIANT_FIELD) =>
+                    .contains_key(ENLIGHTENED_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(BISHOP_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -2708,7 +2710,17 @@ fn current_spy_register_as_surface_at(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    stable_evil_origin_role_at(position, scenario, state)
+    let exact_executed_spy_overlay = scenario
+        .evil_positions
+        .get(&position)
+        .is_some_and(|role| normalize_role(role) == "unknown")
+        && state
+            .executed_evil_roles
+            .get(&position)
+            .is_some_and(|role| normalize_role(role) == "spy");
+
+    exact_executed_spy_overlay
+        || stable_evil_origin_role_at(position, scenario, state)
         .is_some_and(|role| normalize_role(role) == "spy")
         || current_data_role_at(position, scenario, state)
             .is_some_and(|role| normalize_role(&role) == "spy")
@@ -4154,7 +4166,681 @@ fn validate_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+enum BishopType {
+    Villager,
+    Outcast,
+    Minion,
+    Demon,
+}
+
+impl BishopType {
+    fn parse(value: &str) -> Option<Self> {
+        match value {
+            "Villager" => Some(Self::Villager),
+            "Outcast" => Some(Self::Outcast),
+            "Minion" => Some(Self::Minion),
+            "Demon" => Some(Self::Demon),
+            _ => None,
+        }
+    }
+
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::Villager => "Villager",
+            Self::Outcast => "Outcast",
+            Self::Minion => "Minion",
+            Self::Demon => "Demon",
+        }
+    }
+
+    fn bit(self) -> u8 {
+        match self {
+            Self::Villager => 1,
+            Self::Outcast => 2,
+            Self::Minion => 4,
+            Self::Demon => 8,
+        }
+    }
+}
+
+const BISHOP_ANONYMOUS_GOOD_TYPES: u8 = 1 | 2 | 4;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentBishopClaim {
+    targets: Vec<u8>,
+    types: Vec<BishopType>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentBishopTypeSurface {
+    Known(BishopType),
+    AnonymousGood,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentBishopSupport {
+    anonymous_type_options: HashMap<u8, u8>,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_bishop_claim_text(targets: &[u8], types: &[BishopType]) -> Option<String> {
+    if !(1..=3).contains(&targets.len())
+        || targets.len() != types.len()
+        || targets.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return None;
+    }
+
+    match targets.len() {
+        1 => Some(format!("#{} is a {}", targets[0], types[0].as_str())),
+        2 => Some(format!(
+            "Between\n#{}, #{}\nthere is:\n{} and {}",
+            targets[0],
+            targets[1],
+            types[0].as_str(),
+            types[1].as_str(),
+        )),
+        3 => Some(format!(
+            "Between\n#{}, #{}, #{}\nthere is:\n{}, {} and {}",
+            targets[0],
+            targets[1],
+            targets[2],
+            types[0].as_str(),
+            types[1].as_str(),
+            types[2].as_str(),
+        )),
+        _ => None,
+    }
+}
+
+fn parse_current_bishop_claim(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<CurrentBishopClaim> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Bishop" {
+                return None;
+            }
+            (BISHOP_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Bishop")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 2
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+
+    let targets = poet_targets(info, state.n_cards, 1, 3)?;
+    if targets.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return None;
+    }
+    let types: Option<Vec<BishopType>> = info
+        .get("types")?
+        .as_array()?
+        .iter()
+        .map(|value| BishopType::parse(value.as_str()?))
+        .collect();
+    let types = types?;
+    if types.len() != targets.len() {
+        return None;
+    }
+    let expected_text = current_bishop_claim_text(&targets, &types)?;
+    (card.info_text == expected_text).then_some(CurrentBishopClaim { targets, types })
+}
+
+fn current_bishop_type_surface_at_observation(
+    position: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentBishopTypeSurface> {
+    if current_spy_register_as_surface_at_observation(
+        position,
+        observation,
+        timeline,
+        scenario,
+        state,
+    )? {
+        return Some(CurrentBishopTypeSurface::Known(BishopType::Villager));
+    }
+    let role = current_data_role_at_observation(
+        position,
+        observation,
+        timeline,
+        scenario,
+        state,
+    );
+    let role = match role {
+        // Scenario construction currently groups an untyped executed Evil as
+        // `Unknown`. Its missing identity could have changed Start history
+        // (Spy, Chancellor, Twin, Shaman, Puppeteer, ...), so Bishop cannot
+        // safely resolve that world from a validator-local faction guess.
+        None if scenario.is_evil(position) => return None,
+        None => return Some(CurrentBishopTypeSurface::AnonymousGood),
+        Some(role) => role,
+    };
+    let role = if normalize_role(&role) == "unknown" {
+        match state.executed_evil_roles.get(&position) {
+            Some(exact) if normalize_role(exact) != "unknown" => exact.clone(),
+            _ if scenario.is_evil(position) => return None,
+            _ => role,
+        }
+    } else {
+        role
+    };
+
+    // GetCharacterData is register-as first. Spy's live registered Villager
+    // and Wretch's registered Minion therefore override their real types.
+    if roles_equal(&role, "Wretch") {
+        return Some(CurrentBishopTypeSurface::Known(BishopType::Minion));
+    }
+    let in_minion_pool = state
+        .deck
+        .minions
+        .iter()
+        .any(|candidate| roles_equal(candidate, &role));
+    let in_demon_pool = state
+        .deck
+        .demons
+        .iter()
+        .any(|candidate| roles_equal(candidate, &role));
+    let role_type = match (in_minion_pool, in_demon_pool) {
+        (true, false) => BishopType::Minion,
+        (false, true) => BishopType::Demon,
+        (true, true) => return None,
+        (false, false) => match get_card(&role)?.faction {
+            Faction::Villager => BishopType::Villager,
+            Faction::Outcast => BishopType::Outcast,
+            Faction::Minion => BishopType::Minion,
+            Faction::Demon => BishopType::Demon,
+        },
+    };
+    Some(CurrentBishopTypeSurface::Known(role_type))
+}
+
+fn current_bishop_anonymous_assignment_possible(
+    type_options: &HashMap<u8, u8>,
+    required_wretches: &HashSet<u8>,
+    forbidden_wretches: &HashSet<u8>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if type_options.is_empty() {
+        return anonymous_wretch_assignment_possible(
+            required_wretches,
+            forbidden_wretches,
+            scenario,
+            state,
+        );
+    }
+
+    let mut candidates: Vec<(u8, u8)> = type_options
+        .iter()
+        .map(|(&position, &options)| {
+            let mut options = options & BISHOP_ANONYMOUS_GOOD_TYPES;
+            if required_wretches.contains(&position) {
+                options &= BishopType::Minion.bit();
+            }
+            if forbidden_wretches.contains(&position) {
+                options &= !BishopType::Minion.bit();
+            }
+            (position, options)
+        })
+        .collect();
+    candidates.sort_unstable_by_key(|(_, options)| options.count_ones());
+    if candidates.iter().any(|(_, options)| *options == 0) {
+        return false;
+    }
+    let good_positions: HashSet<u8> = candidates.iter().map(|(position, _)| *position).collect();
+    if required_wretches
+        .iter()
+        .any(|position| !good_positions.contains(position))
+        || forbidden_wretches
+            .iter()
+            .any(|position| !good_positions.contains(position))
+    {
+        return false;
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn search(
+        index: usize,
+        candidates: &[(u8, u8)],
+        villagers: &mut HashSet<u8>,
+        outcasts: &mut HashSet<u8>,
+        wretches: &mut HashSet<u8>,
+        required_wretches: &HashSet<u8>,
+        forbidden_wretches: &HashSet<u8>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == candidates.len() {
+            let good_possible = if candidates.is_empty() {
+                anonymous_wretch_assignment_possible(
+                    required_wretches,
+                    forbidden_wretches,
+                    scenario,
+                    state,
+                )
+            } else {
+                crate::scenario::scenario_allows_anonymous_good_type_assignment(
+                    villagers,
+                    outcasts,
+                    wretches,
+                    scenario,
+                    state,
+                )
+            };
+            return good_possible;
+        }
+        let (position, options) = candidates[index];
+        for role_type in [
+            BishopType::Villager,
+            BishopType::Outcast,
+            BishopType::Minion,
+        ] {
+            if options & role_type.bit() == 0 {
+                continue;
+            }
+            match role_type {
+                BishopType::Villager => {
+                    villagers.insert(position);
+                }
+                BishopType::Outcast => {
+                    outcasts.insert(position);
+                }
+                BishopType::Minion => {
+                    wretches.insert(position);
+                }
+                BishopType::Demon => unreachable!(),
+            }
+            if search(
+                index + 1,
+                candidates,
+                villagers,
+                outcasts,
+                wretches,
+                required_wretches,
+                forbidden_wretches,
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+            match role_type {
+                BishopType::Villager => {
+                    villagers.remove(&position);
+                }
+                BishopType::Outcast => {
+                    outcasts.remove(&position);
+                }
+                BishopType::Minion => {
+                    wretches.remove(&position);
+                }
+                BishopType::Demon => unreachable!(),
+            }
+        }
+        false
+    }
+
+    search(
+        0,
+        &candidates,
+        &mut HashSet::new(),
+        &mut HashSet::new(),
+        &mut HashSet::new(),
+        required_wretches,
+        forbidden_wretches,
+        scenario,
+        state,
+    )
+}
+
+fn current_bishop_type_permutations(types: &[BishopType]) -> Vec<Vec<BishopType>> {
+    fn enumerate(
+        index: usize,
+        values: &mut Vec<BishopType>,
+        permutations: &mut Vec<Vec<BishopType>>,
+    ) {
+        if index == values.len() {
+            if !permutations.contains(values) {
+                permutations.push(values.clone());
+            }
+            return;
+        }
+        for swap in index..values.len() {
+            values.swap(index, swap);
+            enumerate(index + 1, values, permutations);
+            values.swap(index, swap);
+        }
+    }
+
+    let mut values = types.to_vec();
+    let mut permutations = Vec::new();
+    enumerate(0, &mut values, &mut permutations);
+    permutations
+}
+
+fn current_bishop_surfaces_for_timeline(
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<(HashMap<u8, CurrentBishopTypeSurface>, HashMap<u8, u8>)> {
+    if !timeline.supports_observation(observation, state) {
+        return None;
+    }
+    let mut surfaces = HashMap::new();
+    let mut anonymous = HashMap::new();
+    for position in 1..=state.n_cards {
+        let surface = current_bishop_type_surface_at_observation(
+            position,
+            observation,
+            timeline,
+            scenario,
+            state,
+        )?;
+        match surface {
+            CurrentBishopTypeSurface::AnonymousGood => {
+                anonymous.insert(position, BISHOP_ANONYMOUS_GOOD_TYPES);
+            }
+            CurrentBishopTypeSurface::Known(_) => {}
+        }
+        surfaces.insert(position, surface);
+    }
+    Some((surfaces, anonymous))
+}
+
+fn current_bishop_truth_supports_for_timeline(
+    claim: &CurrentBishopClaim,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentBishopSupport> {
+    let mut distinct = claim.types.clone();
+    distinct.sort_unstable();
+    distinct.dedup();
+    if distinct.len() != claim.types.len() {
+        return Vec::new();
+    }
+    let has_villager = distinct.contains(&BishopType::Villager);
+    let has_outcast = distinct.contains(&BishopType::Outcast);
+    let has_minion = distinct.contains(&BishopType::Minion);
+    let has_demon = distinct.contains(&BishopType::Demon);
+    if has_minion == has_demon {
+        return Vec::new();
+    }
+
+    let Some((surfaces, mut base_options)) = current_bishop_surfaces_for_timeline(
+        observation,
+        timeline,
+        scenario,
+        state,
+    ) else {
+        return Vec::new();
+    };
+    for surface in surfaces.values() {
+        let CurrentBishopTypeSurface::Known(role_type) = surface else {
+            continue;
+        };
+        if (*role_type == BishopType::Villager && !has_villager)
+            || (*role_type == BishopType::Outcast && !has_outcast)
+            || (*role_type == BishopType::Minion && has_demon)
+        {
+            return Vec::new();
+        }
+    }
+    let allowed_anonymous = u8::from(has_villager) * BishopType::Villager.bit()
+        | u8::from(has_outcast) * BishopType::Outcast.bit()
+        | u8::from(has_minion) * BishopType::Minion.bit()
+        | u8::from(has_demon) * BishopType::Demon.bit();
+    for options in base_options.values_mut() {
+        *options &= allowed_anonymous;
+        if *options == 0 {
+            return Vec::new();
+        }
+    }
+
+    let mut supports = Vec::new();
+    for permutation in current_bishop_type_permutations(&claim.types) {
+        let mut anonymous_type_options = base_options.clone();
+        let mut compatible = true;
+        for (&target, &claimed_type) in claim.targets.iter().zip(permutation.iter()) {
+            match surfaces.get(&target) {
+                Some(CurrentBishopTypeSurface::Known(actual)) => {
+                    compatible &= *actual == claimed_type;
+                }
+                Some(CurrentBishopTypeSurface::AnonymousGood) => {
+                    anonymous_type_options.insert(target, claimed_type.bit());
+                }
+                None => compatible = false,
+            }
+        }
+        if !compatible
+            || !current_bishop_anonymous_assignment_possible(
+                &anonymous_type_options,
+                &HashSet::new(),
+                &HashSet::new(),
+                scenario,
+                state,
+            )
+        {
+            continue;
+        }
+        let support = CurrentBishopSupport {
+            anonymous_type_options,
+            baker_spy_timeline: timeline.clone(),
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+    supports
+}
+
+fn current_bishop_authored_bluff_good_types(state: &GameState) -> Option<(bool, bool)> {
+    if state.board_count_provenance
+        != crate::types::BoardCountProvenance::TrustedPreStart
+    {
+        return None;
+    }
+    let has_town = state.board_villager_count? > 0;
+    let has_outcast = state.board_outcast_count? > 0;
+    Some((has_town, has_outcast))
+}
+
+fn current_bishop_authored_minion_present(
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<bool> {
+    if state.board_count_provenance
+        == crate::types::BoardCountProvenance::TrustedPreStart
+    {
+        if let Some(count) = state.board_minion_count {
+            return Some(count > 0);
+        }
+    }
+
+    let mut represented = scenario.evil_positions.clone();
+    for (&position, role) in &state.executed_evil_roles {
+        represented
+            .entry(position)
+            .and_modify(|known| {
+                if normalize_role(known) == "unknown" {
+                    *known = role.clone();
+                }
+            })
+            .or_insert_with(|| role.clone());
+    }
+
+    let mut has_minion = false;
+    for role in represented.values() {
+        let normalized = normalize_role(role);
+        if normalized == "unknown" {
+            return None;
+        }
+        // Puppet is generated at Start and is absent from CurrentScript's
+        // authored Minion list.
+        if normalized == "puppet" {
+            continue;
+        }
+        let in_minion_pool = state
+            .deck
+            .minions
+            .iter()
+            .any(|candidate| roles_equal(candidate, role));
+        let in_demon_pool = state
+            .deck
+            .demons
+            .iter()
+            .any(|candidate| roles_equal(candidate, role));
+        match (in_minion_pool, in_demon_pool) {
+            (true, false) => has_minion = true,
+            (false, true) => {}
+            (true, true) => return None,
+            (false, false) => match get_card(role).map(|card| card.faction) {
+                Some(Faction::Minion) => has_minion = true,
+                Some(Faction::Demon | Faction::Villager | Faction::Outcast) => {}
+                None => return None,
+            },
+        }
+    }
+    Some(has_minion)
+}
+
+fn current_bishop_bluff_supports_for_timeline(
+    claim: &CurrentBishopClaim,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentBishopSupport> {
+    let Some((has_town, has_outcast)) = current_bishop_authored_bluff_good_types(state) else {
+        return Vec::new();
+    };
+    let has_minion = claim.types.contains(&BishopType::Minion);
+    let has_demon = claim.types.contains(&BishopType::Demon);
+    if has_minion == has_demon
+        || current_bishop_authored_minion_present(scenario, state) != Some(has_minion)
+    {
+        return Vec::new();
+    }
+    let expected_targets = if has_outcast { 3 } else { 2 };
+    let mut authored_types = vec![if has_minion {
+        BishopType::Minion
+    } else {
+        BishopType::Demon
+    }];
+    if has_outcast {
+        authored_types.push(BishopType::Outcast);
+    }
+    if has_town {
+        authored_types.push(BishopType::Villager);
+    }
+    let mut claimed_types = claim.types.clone();
+    authored_types.sort_unstable();
+    claimed_types.sort_unstable();
+    if claim.targets.len() != expected_targets || claimed_types != authored_types {
+        return Vec::new();
+    }
+
+    let Some((surfaces, mut anonymous_type_options)) = current_bishop_surfaces_for_timeline(
+        observation,
+        timeline,
+        scenario,
+        state,
+    ) else {
+        return Vec::new();
+    };
+    for &target in &claim.targets {
+        match surfaces.get(&target) {
+            Some(CurrentBishopTypeSurface::Known(BishopType::Villager)) => {}
+            Some(CurrentBishopTypeSurface::AnonymousGood) => {
+                anonymous_type_options.insert(target, BishopType::Villager.bit());
+            }
+            _ => return Vec::new(),
+        }
+    }
+    if !current_bishop_anonymous_assignment_possible(
+        &anonymous_type_options,
+        &HashSet::new(),
+        &HashSet::new(),
+        scenario,
+        state,
+    ) {
+        return Vec::new();
+    }
+    vec![CurrentBishopSupport {
+        anonymous_type_options,
+        baker_spy_timeline: timeline.clone(),
+    }]
+}
+
+fn current_bishop_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentBishopSupport> {
+    let Some(claim) = parse_current_bishop_claim(card, source, state) else {
+        return Vec::new();
+    };
+    baker_spy_conversion_timelines(scenario, state)
+        .into_iter()
+        .flat_map(|timeline| match truth_status(card.position, scenario, state) {
+            TruthStatus::Truthful => current_bishop_truth_supports_for_timeline(
+                &claim,
+                card.position,
+                &timeline,
+                scenario,
+                state,
+            ),
+            TruthStatus::Lying => current_bishop_bluff_supports_for_timeline(
+                &claim,
+                card.position,
+                &timeline,
+                scenario,
+                state,
+            ),
+        })
+        .collect()
+}
+
+fn validate_current_bishop(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_bishop_supports(card, scenario, state, source).is_empty()
+}
+
 fn validate_bishop(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, BISHOP_CURRENT_VARIANT_FIELD, "Bishop") {
+        Ok(Some(source)) => return validate_current_bishop(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -4288,6 +4974,7 @@ fn validate_current_bounty_hunter_wretch_consistency(
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct CurrentHiddenSurfaceSupport {
     anonymous_wretches: AnonymousWretchConstraints,
+    bishop_type_options: HashMap<u8, u8>,
     register_as: Option<(u8, String)>,
     raw_bluff: Option<(u8, String)>,
     baker_spy_timeline: Option<BakerSpyTimeline>,
@@ -4340,6 +5027,7 @@ fn current_bounty_hunter_hidden_supports_for_target(
         ) {
             supports.push(CurrentHiddenSurfaceSupport {
                 anonymous_wretches,
+                bishop_type_options: HashMap::new(),
                 register_as: None,
                 raw_bluff: None,
                 baker_spy_timeline: Some(timeline),
@@ -4392,6 +5080,7 @@ fn validate_current_hidden_surface_consistency(
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4410,6 +5099,7 @@ fn validate_current_hidden_surface_consistency(
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4428,6 +5118,7 @@ fn validate_current_hidden_surface_consistency(
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4446,6 +5137,7 @@ fn validate_current_hidden_surface_consistency(
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4468,6 +5160,26 @@ fn validate_current_hidden_surface_consistency(
                         .into_iter()
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
+                            register_as: None,
+                            raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "bishop"
+            || (apparent == "poet" && copied == Some("Bishop"))
+        {
+            match current_passive_payload_source(card, BISHOP_CURRENT_VARIANT_FIELD, "Bishop") {
+                Ok(Some(source)) => Some(
+                    current_bishop_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: AnonymousWretchConstraints::empty(),
+                            bishop_type_options: support.anonymous_type_options,
                             register_as: None,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4489,6 +5201,7 @@ fn validate_current_hidden_surface_consistency(
                                 required: support.required_anonymous_wretches,
                                 forbidden: support.forbidden_anonymous_wretches,
                             },
+                            bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: support.raw_bluff,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4510,6 +5223,7 @@ fn validate_current_hidden_surface_consistency(
                                 required: support.required_anonymous_wretches,
                                 forbidden: support.forbidden_anonymous_wretches,
                             },
+                            bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
@@ -4543,6 +5257,7 @@ fn validate_current_hidden_surface_consistency(
         observations: &[Vec<CurrentHiddenSurfaceSupport>],
         required: &HashSet<u8>,
         forbidden: &HashSet<u8>,
+        bishop_type_options: &HashMap<u8, u8>,
         register_as: &HashMap<u8, String>,
         raw_bluffs: &HashMap<u8, String>,
         baker_spy_timeline: Option<&BakerSpyTimeline>,
@@ -4557,14 +5272,41 @@ fn validate_current_hidden_surface_consistency(
             next_required.extend(&support.anonymous_wretches.required);
             let mut next_forbidden = forbidden.clone();
             next_forbidden.extend(&support.anonymous_wretches.forbidden);
-            if !next_required.is_disjoint(&next_forbidden)
-                || !anonymous_wretch_assignment_possible(
+            if !next_required.is_disjoint(&next_forbidden) {
+                continue;
+            }
+
+            let mut next_bishop_type_options = bishop_type_options.clone();
+            let mut bishop_types_compatible = true;
+            for (&position, &options) in &support.bishop_type_options {
+                if let Some(selected) = next_bishop_type_options.get_mut(&position) {
+                    *selected &= options;
+                    bishop_types_compatible &= *selected != 0;
+                } else {
+                    next_bishop_type_options.insert(position, options);
+                    bishop_types_compatible &= options != 0;
+                }
+            }
+            if !bishop_types_compatible {
+                continue;
+            }
+            let anonymous_assignment_possible = if next_bishop_type_options.is_empty() {
+                anonymous_wretch_assignment_possible(
                     &next_required,
                     &next_forbidden,
                     scenario,
                     state,
                 )
-            {
+            } else {
+                current_bishop_anonymous_assignment_possible(
+                    &next_bishop_type_options,
+                    &next_required,
+                    &next_forbidden,
+                    scenario,
+                    state,
+                )
+            };
+            if !anonymous_assignment_possible {
                 continue;
             }
 
@@ -4602,6 +5344,7 @@ fn validate_current_hidden_surface_consistency(
                 observations,
                 &next_required,
                 &next_forbidden,
+                &next_bishop_type_options,
                 &next_register_as,
                 &next_raw_bluffs,
                 next_timeline,
@@ -4619,6 +5362,7 @@ fn validate_current_hidden_surface_consistency(
         &observations,
         &HashSet::new(),
         &HashSet::new(),
+        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         None,
@@ -4815,23 +5559,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             poet_has_exact_fields(info, &["targets"])
                 && poet_targets(info, state.n_cards, 3, 3).is_some()
         }
-        "Bishop" => {
-            if !poet_has_exact_fields(info, &["targets", "types"]) {
-                return false;
-            }
-            let Some(targets) = poet_targets(info, state.n_cards, 1, 3) else {
-                return false;
-            };
-            let Some(types) = info.get("types").and_then(serde_json::Value::as_array) else {
-                return false;
-            };
-            types.len() == targets.len()
-                && types.iter().all(|value| {
-                    value.as_str().is_some_and(|role_type| {
-                        matches!(role_type, "Villager" | "Outcast" | "Minion" | "Demon")
-                    })
-                })
-        }
+        "Bishop" => parse_current_bishop_claim(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         "Gemcrafter" => {
             poet_has_exact_fields(info, &["good_position"])
                 && poet_position_value(info.get("good_position"), state.n_cards).is_some()
@@ -5696,6 +6429,33 @@ mod tests {
                 })
                 .map(current_enlightened_claim_text)
                 .map(str::to_string),
+            "Bishop" => payload
+                .get("targets")
+                .and_then(serde_json::Value::as_array)
+                .and_then(|targets| {
+                    targets
+                        .iter()
+                        .map(|target| {
+                            target
+                                .as_u64()
+                                .and_then(|target| u8::try_from(target).ok())
+                        })
+                        .collect::<Option<Vec<_>>>()
+                })
+                .zip(
+                    payload
+                        .get("types")
+                        .and_then(serde_json::Value::as_array)
+                        .and_then(|types| {
+                            types
+                                .iter()
+                                .map(|role_type| {
+                                    role_type.as_str().and_then(BishopType::parse)
+                                })
+                                .collect::<Option<Vec<_>>>()
+                        }),
+                )
+                .and_then(|(targets, types)| current_bishop_claim_text(&targets, &types)),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -5823,6 +6583,32 @@ mod tests {
         );
         card.info_text = info_text;
         card
+    }
+
+    fn current_bishop(pos: u8, targets: Vec<u8>, types: Vec<&str>) -> CardInfo {
+        let parsed_types: Vec<BishopType> = types
+            .iter()
+            .filter_map(|role_type| BishopType::parse(role_type))
+            .collect();
+        let info_text = current_bishop_claim_text(&targets, &parsed_types).unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Bishop",
+            json!({
+                "bishop_variant": "public_current",
+                "targets": targets,
+                "types": types,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn set_current_bishop_authored_good_counts(state: &mut GameState, town: u8, outs: u8) {
+        state.board_villager_count = Some(town);
+        state.board_outcast_count = Some(outs);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
     }
 
     #[test]
@@ -6147,6 +6933,502 @@ mod tests {
         assert!(validate_current_hidden_surface_consistency(
             &scenario, &state,
         ));
+    }
+
+    #[test]
+    fn current_bishop_schema_text_poet_and_legacy_are_exact() {
+        let state = base_state(6, vec![]);
+        let scenario = empty_scenario();
+        for (targets, types, text) in [
+            (vec![2], vec!["Minion"], "#2 is a Minion"),
+            (
+                vec![2, 4],
+                vec!["Villager", "Demon"],
+                "Between\n#2, #4\nthere is:\nVillager and Demon",
+            ),
+            (
+                vec![2, 4, 6],
+                vec!["Minion", "Outcast", "Villager"],
+                "Between\n#2, #4, #6\nthere is:\nMinion, Outcast and Villager",
+            ),
+        ] {
+            let direct = current_bishop(1, targets.clone(), types.clone());
+            assert_eq!(direct.info_text, text);
+            assert!(parse_current_bishop_claim(
+                &direct,
+                CurrentPassivePayloadSource::Direct,
+                &state,
+            )
+            .is_some());
+            let poet = current_poet(
+                "Bishop",
+                json!({"targets": targets, "types": types}),
+            );
+            assert_eq!(poet.info_text, text);
+            assert!(validate_current_poet_payload(&poet, &state, "Bishop"));
+        }
+
+        for payload in [
+            json!({"bishop_variant": "public_current", "targets": [3, 2], "types": ["Villager", "Minion"]}),
+            json!({"bishop_variant": "public_current", "targets": [2, 2], "types": ["Villager", "Minion"]}),
+            json!({"bishop_variant": "public_current", "targets": [-1], "types": ["Villager"]}),
+            json!({"bishop_variant": "public_current", "targets": [256], "types": ["Villager"]}),
+            json!({"bishop_variant": "public_current", "targets": [2], "types": ["villager"]}),
+            json!({"bishop_variant": "public_current", "targets": [2], "types": ["Villager"], "extra": true}),
+            json!({"bishop_variant": "future", "targets": [2], "types": ["Villager"]}),
+            json!({"bishop_variant": "public_current", "poet_variant": "public_current", "targets": [2], "types": ["Villager"]}),
+        ] {
+            let mut malformed = make_card(1, "Bishop", payload);
+            malformed.info_text = "#2 is a Villager".to_string();
+            assert!(!validate_bishop(&malformed, &scenario, &state));
+        }
+        let mut wrong_text = current_bishop(1, vec![2, 4], vec!["Villager", "Demon"]);
+        wrong_text.info_text = "Between #2, #4 there is: Villager and Demon".to_string();
+        assert!(!validate_bishop(&wrong_text, &scenario, &state));
+        let mut wrong_actor = current_bishop(0, vec![2], vec!["Villager"]);
+        assert!(!validate_bishop(&wrong_actor, &scenario, &state));
+        wrong_actor.position = 7;
+        assert!(!validate_bishop(&wrong_actor, &scenario, &state));
+
+        let legacy_missing = make_card(1, "Bishop", json!({}));
+        assert!(validate_bishop(&legacy_missing, &scenario, &state));
+        let legacy_poet = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Bishop", "targets": [2]}),
+        );
+        let mut legacy_scenario = scenario.clone();
+        legacy_scenario.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_poet(&legacy_poet, &legacy_scenario, &state));
+    }
+
+    #[test]
+    fn current_bishop_truth_selects_each_available_category_and_prefers_minion() {
+        let truth = current_bishop(
+            1,
+            vec![1, 3, 4],
+            vec!["Minion", "Villager", "Outcast"],
+        );
+        let state = base_state(
+            4,
+            vec![
+                truth.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Bombardier", json!({})),
+                make_card(4, "Witch", json!({})),
+            ],
+        );
+        let mut minion = empty_scenario();
+        minion.evil_positions.insert(4, "Witch".to_string());
+        assert!(validate_bishop(&truth, &minion, &state));
+
+        let missing_outcast = current_bishop(1, vec![1, 4], vec!["Villager", "Minion"]);
+        assert!(!validate_bishop(&missing_outcast, &minion, &state));
+        let demon_while_minion_exists =
+            current_bishop(1, vec![1, 4], vec!["Villager", "Demon"]);
+        assert!(!validate_bishop(
+            &demon_while_minion_exists,
+            &minion,
+            &state,
+        ));
+        let duplicate_category = current_bishop(
+            1,
+            vec![1, 2, 4],
+            vec!["Villager", "Villager", "Minion"],
+        );
+        assert!(!validate_bishop(&duplicate_category, &minion, &state));
+
+        let demon_truth = current_bishop(
+            1,
+            vec![1, 3, 4],
+            vec!["Demon", "Villager", "Outcast"],
+        );
+        let mut demon = empty_scenario();
+        demon.evil_positions.insert(4, "Pooka".to_string());
+        assert!(validate_bishop(&demon_truth, &demon, &state));
+    }
+
+    #[test]
+    fn current_bishop_includes_self_dead_hidden_and_tiny_board_occurrences() {
+        let self_claim = current_bishop(1, vec![1], vec!["Minion"]);
+        let singleton = base_state(1, vec![self_claim.clone()]);
+        let mut healthy_puppet = empty_scenario();
+        healthy_puppet.puppet_position = Some(1);
+        assert!(validate_bishop(
+            &self_claim,
+            &healthy_puppet,
+            &singleton,
+        ));
+
+        let dead_claim = current_bishop(1, vec![1, 2], vec!["Villager", "Demon"]);
+        let mut dead_state = base_state(
+            2,
+            vec![dead_claim.clone(), make_card(2, "Pooka", json!({}))],
+        );
+        dead_state.executed = vec![2];
+        let mut dead_demon = empty_scenario();
+        dead_demon.evil_positions.insert(2, "Pooka".to_string());
+        assert!(validate_bishop(&dead_claim, &dead_demon, &dead_state));
+        dead_state.executed.clear();
+        dead_state.night_kills = vec![2];
+        assert!(validate_bishop(&dead_claim, &dead_demon, &dead_state));
+
+        let hidden_claim = current_bishop(1, vec![1, 2], vec!["Villager", "Minion"]);
+        let mut hidden_state = base_state(
+            3,
+            vec![hidden_claim.clone(), make_card(3, "Pooka", json!({}))],
+        );
+        hidden_state.deck.villagers = vec!["Bishop".to_string()];
+        hidden_state.deck.outcasts = vec!["Wretch".to_string()];
+        hidden_state.deck.demons = vec!["Pooka".to_string()];
+        set_current_bishop_authored_good_counts(&mut hidden_state, 1, 1);
+        let mut hidden_wretch = empty_scenario();
+        hidden_wretch
+            .evil_positions
+            .insert(3, "Pooka".to_string());
+        assert!(validate_bishop(
+            &hidden_claim,
+            &hidden_wretch,
+            &hidden_state,
+        ));
+        let wrong_fallback = current_bishop(1, vec![1, 3], vec!["Villager", "Demon"]);
+        assert!(!validate_bishop(
+            &wrong_fallback,
+            &hidden_wretch,
+            &hidden_state,
+        ));
+    }
+
+    #[test]
+    fn current_bishop_bluff_uses_authored_domain_and_only_live_villager_refs() {
+        let bluff = current_bishop(1, vec![2, 3], vec!["Villager", "Minion"]);
+        let mut state = base_state(
+            5,
+            vec![
+                bluff.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Lover", json!({})),
+                make_card(4, "Oracle", json!({})),
+                make_card(5, "Witch", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Bishop".to_string(),
+            "Scout".to_string(),
+            "Lover".to_string(),
+            "Oracle".to_string(),
+        ];
+        state.deck.minions = vec!["Witch".to_string()];
+        set_current_bishop_authored_good_counts(&mut state, 4, 0);
+        let mut minion = empty_scenario();
+        minion.corrupted.insert(1);
+        minion.evil_positions.insert(5, "Witch".to_string());
+        assert!(validate_bishop(&bluff, &minion, &state));
+        let wrong_evil_token = current_bishop(1, vec![2, 3], vec!["Villager", "Demon"]);
+        assert!(!validate_bishop(&wrong_evil_token, &minion, &state));
+        let evil_ref = current_bishop(1, vec![2, 5], vec!["Villager", "Minion"]);
+        assert!(!validate_bishop(&evil_ref, &minion, &state));
+
+        state.cards.push(make_card(6, "Bombardier", json!({})));
+        state.n_cards = 6;
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        set_current_bishop_authored_good_counts(&mut state, 4, 1);
+        let three_refs = current_bishop(
+            1,
+            vec![1, 2, 3],
+            vec!["Outcast", "Villager", "Minion"],
+        );
+        assert!(validate_bishop(&three_refs, &minion, &state));
+        assert!(!validate_bishop(&bluff, &minion, &state));
+
+        let mut demon = minion.clone();
+        demon.evil_positions.insert(5, "Pooka".to_string());
+        state.deck.demons = vec!["Pooka".to_string()];
+        let demon_types = current_bishop(
+            1,
+            vec![1, 2, 3],
+            vec!["Villager", "Demon", "Outcast"],
+        );
+        assert!(validate_bishop(&demon_types, &demon, &state));
+        let candidate_pool_minion = current_bishop(
+            1,
+            vec![1, 2, 3],
+            vec!["Villager", "Minion", "Outcast"],
+        );
+        assert!(!validate_bishop(
+            &candidate_pool_minion,
+            &demon,
+            &state,
+        ));
+
+        let mut trusted_minion_state = state.clone();
+        trusted_minion_state.board_minion_count = Some(1);
+        let mut trusted_minion_world = demon.clone();
+        trusted_minion_world
+            .evil_positions
+            .insert(4, "Witch".to_string());
+        assert!(validate_bishop(
+            &candidate_pool_minion,
+            &trusted_minion_world,
+            &trusted_minion_state,
+        ));
+        assert!(!validate_bishop(
+            &demon_types,
+            &trusted_minion_world,
+            &trusted_minion_state,
+        ));
+
+        let mut untyped = demon.clone();
+        untyped.evil_positions.insert(5, "Unknown".to_string());
+        // An untyped executed Evil is not merely an unknown Minion/Demon
+        // label: its missing role may have changed Start history. Until
+        // scenario construction replays each concrete identity, current
+        // Bishop must fail closed instead of branching locally.
+        assert!(!validate_bishop(&demon_types, &untyped, &state));
+        assert!(!validate_bishop(&candidate_pool_minion, &untyped, &state));
+        let mut typed_death_state = state.clone();
+        typed_death_state
+            .executed_evil_roles
+            .insert(5, "Pooka".to_string());
+        assert!(validate_bishop(
+            &demon_types,
+            &untyped,
+            &typed_death_state,
+        ));
+        assert!(!validate_bishop(
+            &candidate_pool_minion,
+            &untyped,
+            &typed_death_state,
+        ));
+
+        let mut spy_state = state.clone();
+        spy_state.deck.minions = vec!["Witch".to_string(), "Spy".to_string()];
+        let mut dealt_spy = demon.clone();
+        dealt_spy.evil_positions.insert(5, "Spy".to_string());
+        assert!(validate_bishop(
+            &candidate_pool_minion,
+            &dealt_spy,
+            &spy_state,
+        ));
+    }
+
+    #[test]
+    fn current_bishop_projects_spy_puppet_twin_and_shaman_current_data() {
+        let spy_claim = current_bishop(1, vec![2, 3], vec!["Villager", "Demon"]);
+        let spy_state = base_state(
+            3,
+            vec![
+                spy_claim.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        let mut spy = empty_scenario();
+        spy.evil_positions.insert(2, "Spy".to_string());
+        spy.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_bishop(&spy_claim, &spy, &spy_state));
+
+        // Public typed-death evidence can refine the scenario builder's
+        // grouped Unknown evil seat. Physical Spy registration still takes
+        // precedence over its Minion current-data type in that overlay shape.
+        let mut typed_spy_state = spy_state.clone();
+        typed_spy_state.executed.push(2);
+        typed_spy_state
+            .executed_evil_roles
+            .insert(2, "Spy".to_string());
+        let mut typed_spy = spy.clone();
+        typed_spy
+            .evil_positions
+            .insert(2, "Unknown".to_string());
+        assert!(validate_bishop(
+            &spy_claim,
+            &typed_spy,
+            &typed_spy_state,
+        ));
+
+        let puppet_claim = current_bishop(1, vec![1, 2], vec!["Villager", "Minion"]);
+        let puppet_state = base_state(
+            3,
+            vec![
+                puppet_claim.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(2);
+        puppet.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_bishop(&puppet_claim, &puppet, &puppet_state));
+
+        let twin_claim = current_bishop(4, vec![1, 2], vec!["Villager", "Minion"]);
+        let mut twin_state = base_state(
+            4,
+            vec![
+                make_card(1, "Scout", json!({})),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+                twin_claim.clone(),
+            ],
+        );
+        twin_state.deck.villagers = vec!["Scout".to_string(), "Bishop".to_string()];
+        twin_state.deck.minions = vec!["Twin Minion".to_string()];
+        twin_state.deck.demons = vec!["Pooka".to_string()];
+        let mut twin = empty_scenario();
+        twin.evil_positions.insert(1, "Twin Minion".to_string());
+        twin.evil_positions.insert(3, "Pooka".to_string());
+        twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+        assert!(validate_bishop(&twin_claim, &twin, &twin_state));
+
+        // InitWithNoReset preserves the physical Spy's live Villager
+        // registerAs even after Twin moves Twin data onto that body. Bishop's
+        // GetCharacterData projection must consult that cache before current
+        // data for both truthful category selection and bluff target choice.
+        let cached_spy_truth = current_bishop(4, vec![2, 3], vec!["Villager", "Demon"]);
+        let mut cached_spy_state = base_state(
+            4,
+            vec![
+                make_card(1, "Spy", json!({})),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+                cached_spy_truth.clone(),
+            ],
+        );
+        cached_spy_state.deck.villagers = vec!["Bishop".to_string()];
+        cached_spy_state.deck.minions =
+            vec!["Twin Minion".to_string(), "Spy".to_string()];
+        cached_spy_state.deck.demons = vec!["Pooka".to_string()];
+        set_current_bishop_authored_good_counts(&mut cached_spy_state, 1, 0);
+        let mut cached_spy = empty_scenario();
+        cached_spy
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        cached_spy.evil_positions.insert(2, "Spy".to_string());
+        cached_spy.evil_positions.insert(3, "Pooka".to_string());
+        cached_spy.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Spy".to_string(),
+            },
+        });
+        assert!(validate_bishop(
+            &cached_spy_truth,
+            &cached_spy,
+            &cached_spy_state,
+        ));
+
+        let cached_spy_bluff = current_bishop(4, vec![1, 2], vec!["Villager", "Minion"]);
+        cached_spy_state.cards[3] = cached_spy_bluff.clone();
+        cached_spy.corrupted.insert(4);
+        assert!(validate_bishop(
+            &cached_spy_bluff,
+            &cached_spy,
+            &cached_spy_state,
+        ));
+
+        let shaman_claim = current_bishop(1, vec![2, 4], vec!["Villager", "Minion"]);
+        let shaman_state = base_state(
+            4,
+            vec![
+                shaman_claim.clone(),
+                make_card(2, "Baker", json!({})),
+                make_card(3, "Scout", json!({})),
+                make_card(4, "Shaman", json!({})),
+            ],
+        );
+        let mut shaman = empty_scenario();
+        shaman.evil_positions.insert(4, "Shaman".to_string());
+        shaman.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 3,
+            target_position: 2,
+            copied_role: "Scout".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+        assert!(validate_bishop(&shaman_claim, &shaman, &shaman_state));
+    }
+
+    #[test]
+    fn current_bishop_shares_anonymous_wretch_and_baker_spy_worlds() {
+        let bishop = current_bishop(1, vec![2, 5], vec!["Villager", "Minion"]);
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 2}));
+        bounty.position = 4;
+        let mut state = base_state(
+            6,
+            vec![
+                bishop.clone(),
+                make_card(3, "Pooka", json!({})),
+                bounty.clone(),
+                make_card(5, "Witch", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Bishop".to_string(), "Scout".to_string()];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        set_current_bishop_authored_good_counts(&mut state, 2, 1);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.evil_positions.insert(5, "Witch".to_string());
+        assert!(validate_bishop(&bishop, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        bounty = current_poet("Bounty Hunter", json!({"evil_position": 6}));
+        bounty.position = 4;
+        state.cards[2] = bounty.clone();
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let timeline_claim = current_bishop(3, vec![3, 8], vec!["Villager", "Demon"]);
+        let mut timeline_state = base_state(
+            8,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Scout", json!({})),
+                timeline_claim.clone(),
+                make_card(4, "Baker", json!({"original_role": "Spy"})),
+                make_card(5, "Lover", json!({})),
+                make_card(6, "Oracle", json!({})),
+                make_card(7, "Bard", json!({})),
+                make_card(8, "Pooka", json!({})),
+            ],
+        );
+        timeline_state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Scout".to_string(),
+            "Bishop".to_string(),
+            "Lover".to_string(),
+            "Oracle".to_string(),
+            "Bard".to_string(),
+        ];
+        timeline_state.deck.minions = vec!["Spy".to_string()];
+        timeline_state.deck.demons = vec!["Pooka".to_string()];
+        timeline_state.n_evil = 2;
+        timeline_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        timeline_state.reveal_order = vec![1, 3, 2, 5, 6, 7, 4, 8];
+        set_current_bishop_authored_good_counts(&mut timeline_state, 6, 0);
+        let mut timeline = empty_scenario();
+        timeline.evil_positions.insert(4, "Spy".to_string());
+        timeline.evil_positions.insert(8, "Pooka".to_string());
+        assert!(validate_bishop(&timeline_claim, &timeline, &timeline_state));
+        timeline_state.reveal_order.retain(|position| *position != 3);
+        assert!(!validate_bishop(&timeline_claim, &timeline, &timeline_state));
     }
 
     #[test]

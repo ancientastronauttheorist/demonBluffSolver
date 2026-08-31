@@ -1532,6 +1532,192 @@ pub(crate) fn scenario_allows_anonymous_natural_outcast_role_at(
     )
 }
 
+/// Whether one complete assignment of the still-grouped ordinary Good seats
+/// can expose the requested live Bishop type surfaces simultaneously.
+///
+/// `villagers`, `outcasts`, and `wretches` are disjoint and complete for the
+/// anonymous seats supplied by the caller. Wretch consumes a natural Outcast
+/// identity but projects through its live Minion register-as; `outcasts`
+/// therefore means a natural non-Wretch Outcast. Reuse the scenario builder's
+/// exact multiset/header allocator so several current observations cannot each
+/// spend the same hidden identity independently.
+pub(crate) fn scenario_allows_anonymous_good_type_assignment(
+    villagers: &HashSet<u8>,
+    outcasts: &HashSet<u8>,
+    wretches: &HashSet<u8>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if !villagers.is_disjoint(outcasts)
+        || !villagers.is_disjoint(wretches)
+        || !outcasts.is_disjoint(wretches)
+    {
+        return false;
+    }
+
+    let requested: HashSet<u8> = villagers
+        .iter()
+        .chain(outcasts.iter())
+        .chain(wretches.iter())
+        .copied()
+        .collect();
+    if requested.iter().any(|position| {
+        *position == 0
+            || *position > state.n_cards
+            || state.card_at(*position).is_some()
+            || state.executed_good_roles.contains_key(position)
+            || state.confirmed_evil.contains(position)
+            || scenario.is_evil(*position)
+            || scenario.doppelganger_position == Some(*position)
+            || scenario.drunk_position == Some(*position)
+            || scenario.chancellor_added_outcast_position() == Some(*position)
+            || scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                trace.source_position == *position || trace.target_position == *position
+            })
+    }) {
+        return false;
+    }
+
+    let mut required_outcast_roles: HashMap<u8, String> = wretches
+        .iter()
+        .map(|position| (*position, "Wretch".to_string()))
+        .collect();
+    if let Some(shaman) = scenario.shaman_trace.as_ref() {
+        let source = shaman.source_position;
+        if is_state_outcast_role(&shaman.copied_role, state)
+            && !is_hud_villager_outcast(&shaman.copied_role)
+            && !scenario.is_evil(source)
+            && scenario.doppelganger_position != Some(source)
+            && scenario.drunk_position != Some(source)
+            && scenario.chancellor_added_outcast_position() != Some(source)
+        {
+            required_outcast_roles.insert(source, shaman.copied_role.clone());
+        }
+    }
+
+    let plague_doctor_acts = (state.pd_corruption_target.is_some()
+        || scenario.pd_corrupted.is_some())
+    .then_some(true);
+    let try_trace = |trace: Option<&RawChancellorTrace>| {
+        let generated_position = trace.map(|value| value.added_outcast_position);
+        let excluded = |position: u8| {
+            scenario.evil_positions.contains_key(&position)
+                || scenario.puppet_position == Some(position)
+                || generated_position == Some(position)
+        };
+
+        let mut exact_ordinary_outcasts: HashSet<u8> = outcasts
+            .iter()
+            .chain(wretches.iter())
+            .copied()
+            .collect();
+        for position in 1..=state.n_cards {
+            if excluded(position)
+                || scenario.doppelganger_position == Some(position)
+                || scenario.drunk_position == Some(position)
+            {
+                continue;
+            }
+            let observed = state
+                .executed_good_roles
+                .get(&position)
+                .map(String::as_str)
+                .or_else(|| state.card_at(position).map(|card| card.apparent_role.as_str()));
+            if observed.is_some_and(|role| {
+                is_state_outcast_role(role, state) && !is_hud_villager_outcast(role)
+            }) {
+                exact_ordinary_outcasts.insert(position);
+            }
+        }
+        if let Some(trace) = trace {
+            if trace.anchor_position != trace.added_outcast_position
+                && !excluded(trace.anchor_position)
+                && scenario.doppelganger_position != Some(trace.anchor_position)
+                && scenario.drunk_position != Some(trace.anchor_position)
+            {
+                exact_ordinary_outcasts.insert(trace.anchor_position);
+            }
+        }
+        if let Some(TwinTrace {
+            outcome:
+                crate::types::TwinStartOutcome::Swap {
+                    neighbor_position,
+                    neighbor_pre_swap_role,
+                    ..
+                },
+            ..
+        }) = scenario.twin_trace.as_ref()
+        {
+            if is_state_outcast_role(neighbor_pre_swap_role, state)
+                && !is_hud_villager_outcast(neighbor_pre_swap_role)
+                && !excluded(*neighbor_position)
+                && scenario.doppelganger_position != Some(*neighbor_position)
+                && scenario.drunk_position != Some(*neighbor_position)
+            {
+                exact_ordinary_outcasts.insert(*neighbor_position);
+            }
+        }
+        exact_ordinary_outcasts.extend(required_outcast_roles.keys().copied());
+
+        natural_outcast_hypothesis_allows_with_required_villagers(
+            state,
+            &scenario.evil_positions,
+            scenario.puppet_position,
+            scenario.doppelganger_position,
+            scenario.drunk_position,
+            trace,
+            plague_doctor_acts,
+            villagers,
+            &required_outcast_roles,
+            outcasts,
+            Some("Wretch"),
+            Some(&exact_ordinary_outcasts),
+        )
+    };
+
+    let Some(trace) = scenario.chancellor_trace.as_ref() else {
+        return try_trace(None);
+    };
+    let mut final_chancellors = scenario
+        .evil_positions
+        .iter()
+        .filter(|(_, role)| normalize_role(role) == "chancellor")
+        .map(|(&position, _)| position);
+    let final_chancellor_position = final_chancellors.next().filter(|_| {
+        final_chancellors.next().is_none()
+    });
+    let original_positions = if trace.original_positions.is_empty() {
+        vec![0]
+    } else {
+        trace.original_positions.clone()
+    };
+    let anchor_positions = if trace.affected_anchor_positions.is_empty() {
+        vec![trace.added_outcast_position]
+    } else {
+        trace.affected_anchor_positions.clone()
+    };
+
+    original_positions.iter().any(|&original_position| {
+        anchor_positions.iter().any(|&anchor_position| {
+            let raw = RawChancellorTrace {
+                original_position,
+                added_outcast_position: trace.added_outcast_position,
+                added_outcast_role: trace.added_outcast_role.clone(),
+                anchor_position,
+            };
+            if final_chancellor_position.is_some_and(|final_position| {
+                outcasts
+                    .iter()
+                    .chain(wretches.iter())
+                    .any(|position| *position == raw.original_villager_position(final_position))
+            }) {
+                return false;
+            }
+            try_trace(Some(&raw))
+        })
+    })
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum InitialAlchemistConstraint {
     Never,
