@@ -1019,11 +1019,110 @@ def card_alchemist(pos: int, corrupted_count: int) -> CardInfo:
 def card_druid(pos: int, targets: list[int], found_outcast: Optional[str] = None) -> CardInfo:
     return CardInfo(pos, "Druid", info_parsed={"targets": targets, "found_outcast": found_outcast})
 
-def card_bishop(pos: int, targets: list[int], types: list[str] = None) -> CardInfo:
+_BISHOP_PUBLIC_TYPES = ("Villager", "Outcast", "Minion", "Demon")
+
+
+def _bishop_native_text(targets: list[int], types: list[str]) -> str:
+    """Return Bishop's exact shipped public sentence."""
+    if (
+        not isinstance(targets, list)
+        or not 1 <= len(targets) <= 3
+        or any(type(target) is not int or target <= 0 for target in targets)
+        or len(set(targets)) != len(targets)
+        or targets != sorted(targets)
+    ):
+        raise ValueError(
+            "Current Bishop targets must be one to three ascending unique positions"
+        )
+    if (
+        not isinstance(types, list)
+        or len(types) != len(targets)
+        or any(role_type not in _BISHOP_PUBLIC_TYPES for role_type in types)
+    ):
+        raise ValueError(
+            "Current Bishop types must match its targets and use canonical factions"
+        )
+
+    if len(targets) == 1:
+        return f"#{targets[0]} is a {types[0]}"
+    ids = ", ".join(f"#{target}" for target in targets)
+    if len(types) == 2:
+        type_text = f"{types[0]} and {types[1]}"
+    else:
+        type_text = f"{types[0]}, {types[1]} and {types[2]}"
+    return f"Between\n{ids}\nthere is:\n{type_text}"
+
+
+def _parse_bishop_native_text(
+    info_text: str,
+) -> Optional[tuple[list[int], list[str]]]:
+    """Parse only one exact current Bishop sentence."""
+    if not isinstance(info_text, str):
+        return None
+    type_pattern = "(?:Villager|Outcast|Minion|Demon)"
+    patterns = (
+        rf"#([1-9]\d*) is a ({type_pattern})",
+        rf"Between\n#([1-9]\d*), #([1-9]\d*)\nthere is:\n"
+        rf"({type_pattern}) and ({type_pattern})",
+        rf"Between\n#([1-9]\d*), #([1-9]\d*), #([1-9]\d*)\nthere is:\n"
+        rf"({type_pattern}), ({type_pattern}) and ({type_pattern})",
+    )
+    for count, pattern in enumerate(patterns, start=1):
+        match = re.fullmatch(pattern, info_text)
+        if match is None:
+            continue
+        targets = [int(match.group(index)) for index in range(1, count + 1)]
+        types = [
+            match.group(index)
+            for index in range(count + 1, (count * 2) + 1)
+        ]
+        try:
+            expected = _bishop_native_text(targets, types)
+        except ValueError:
+            return None
+        if info_text == expected:
+            return targets, types
+    return None
+
+
+def _bishop_refs_match(
+    displayed: list[int],
+    refs,
+    *,
+    n_cards: int,
+) -> bool:
+    """Whether native shuffled ActedInfo refs are the displayed ID set."""
+    return (
+        isinstance(refs, list)
+        and len(refs) == len(displayed)
+        and all(
+            type(ref) is int and 1 <= ref <= n_cards
+            for ref in refs
+        )
+        and len(set(refs)) == len(refs)
+        and set(refs) == set(displayed)
+    )
+
+
+def card_bishop(
+    pos: int,
+    targets: list[int],
+    types: list[str] = None,
+    *,
+    info_text: str = "",
+    bishop_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Bishop observation while preserving unmarked legacy callers."""
     info = {"targets": targets}
     if types:
         info["types"] = types
-    return CardInfo(pos, "Bishop", info_parsed=info)
+    if bishop_variant is not None:
+        expected_text = _bishop_native_text(targets, types)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Bishop text must match its targets and types")
+        info["bishop_variant"] = bishop_variant
+        info_text = expected_text
+    return CardInfo(pos, "Bishop", info_text=info_text, info_parsed=info)
 
 def _canonical_poet_provider(provider: str) -> str:
     """Return one exact current-build Poet provider in canonical public form."""
@@ -1279,12 +1378,16 @@ def card_poet_with_info(
         require_args(1)
         payload = {"targets": positions(0, 3)}
     elif canonical_provider == "Bishop":
+        if n_cards is None:
+            raise ValueError(
+                "Current Bishop Poet entry requires session board size"
+            )
         require_args(2)
         target_values = [value.strip() for value in copied_args[0].split(',')]
         if not 1 <= len(target_values) <= 3:
             raise ValueError("Bishop Poet clue requires one to three targets")
         target_count = len(target_values)
-        target_positions = positions(0, target_count)
+        target_positions = sorted(positions(0, target_count))
         type_values = [value.strip().casefold() for value in copied_args[1].split(',')]
         type_names = {
             "villager": "Villager",
@@ -1299,10 +1402,13 @@ def card_poet_with_info(
                 "Bishop Poet types must match its targets and be Villager, "
                 "Outcast, Minion, or Demon"
             )
-        payload = {
-            "targets": target_positions,
-            "types": [type_names[value] for value in type_values],
-        }
+        bishop_types = [type_names[value] for value in type_values]
+        return _card_current_poet(
+            pos,
+            "Bishop",
+            {"targets": target_positions, "types": bishop_types},
+            info_text=_bishop_native_text(target_positions, bishop_types),
+        )
     elif canonical_provider == "Gemcrafter":
         require_args(1)
         payload = {"good_position": position(0, "good target")}
@@ -5144,15 +5250,34 @@ def _parse_clue_from_memory(
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_jester(pos, targets, 0)
 
-    # --- Bishop: targets + types from clue ---
-    if role_lower == 'bishop' and targets:
-        types = []
-        for t in ['Villager', 'Outcast', 'Minion', 'Demon']:
-            if t.lower() in clue.lower():
-                types.append(t)
-        if types:
-            return card_bishop(pos, targets, types)
-        return card_bishop(pos, targets)
+    # --- Bishop: exact current public text + shuffled newest refs. ---
+    if role_lower == 'bishop':
+        bishop_result = _parse_bishop_native_text(clue)
+        if (
+            bishop_result is None
+            or type(n_cards) is not int
+            or n_cards <= 0
+            or type(pos) is not int
+            or not 1 <= pos <= n_cards
+        ):
+            return None
+        bishop_targets, bishop_types = bishop_result
+        if (
+            any(target > n_cards for target in bishop_targets)
+            or not _bishop_refs_match(
+                bishop_targets,
+                current_event_refs(),
+                n_cards=n_cards,
+            )
+        ):
+            return None
+        return card_bishop(
+            pos,
+            bishop_targets,
+            bishop_types,
+            info_text=clue,
+            bishop_variant=_PUBLIC_CURRENT_VARIANT,
+        )
 
     # --- Judge2: exact public sentence + exactly one picked reference ---
     if role_lower == 'judge' and infos:
@@ -5389,6 +5514,34 @@ def _parse_clue_from_memory(
                 )
             )
 
+        # Bishop's native logic ignores the Character forwarded by Poet.  The
+        # live bridge still requires the Poet actor itself to be on this board,
+        # and authenticates the newest exact event.  Native refs are a shuffled
+        # set; the claimed faction types are an independent multiset.
+        bishop_result = _parse_bishop_native_text(clue)
+        if bishop_result is not None:
+            bishop_targets, bishop_types = bishop_result
+            if (
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
+                and all(target <= n_cards for target in bishop_targets)
+                and latest_poet_desc == clue
+                and _bishop_refs_match(
+                    bishop_targets,
+                    latest_poet_targets,
+                    n_cards=n_cards,
+                )
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Bishop",
+                    {"targets": bishop_targets, "types": bishop_types},
+                    info_text=clue,
+                )
+            return None
+
         # Shugenja stores its claimed enum on the Poet and emits no refs.
         # RuntimeData is strong corroboration when readable; the exact public
         # event remains sufficient when the runtime object is unavailable.
@@ -5511,57 +5664,6 @@ def _parse_clue_from_memory(
                     pos,
                     "Gemcrafter",
                     {"good_position": good_position},
-                    info_text=clue,
-                )
-
-        # Bishop: public IDs are sorted in the sentence, but the native refs
-        # are shuffled independently.  Types form a multiset over the selected
-        # seats; neither list is a positional ID-to-type mapping.
-        type_pattern = r'(?:Villager|Outcast|Minion|Demon)'
-        m = re.fullmatch(
-            rf'\s*#\s*(\d+)\s+is\s+a\s+({type_pattern})\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m:
-            bishop_targets = [int(m.group(1))]
-            bishop_types = [m.group(2).capitalize()]
-            if (
-                valid_displayed_targets(bishop_targets)
-                and poet_refs_match(bishop_targets, order_sensitive=False)
-            ):
-                return _card_current_poet(
-                    pos,
-                    "Bishop",
-                    {"targets": bishop_targets, "types": bishop_types},
-                    info_text=clue,
-                )
-        m = re.fullmatch(
-            rf'\s*Between\s+'
-            rf'(?P<ids>#\s*\d+(?:\s*,\s*#\s*\d+){{1,2}})\s+'
-            rf'there\s+is\s*:\s*'
-            rf'(?P<types>{type_pattern}(?:\s*,\s*{type_pattern})*'
-            rf'(?:\s+and\s+{type_pattern})?)\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m:
-            bishop_targets = [
-                int(value) for value in re.findall(r'#\s*(\d+)', m.group('ids'))
-            ]
-            bishop_types = [
-                value.capitalize()
-                for value in re.findall(type_pattern, m.group('types'), re.IGNORECASE)
-            ]
-            if (
-                len(bishop_targets) == len(bishop_types)
-                and valid_displayed_targets(bishop_targets)
-                and poet_refs_match(bishop_targets, order_sensitive=False)
-            ):
-                return _card_current_poet(
-                    pos,
-                    "Bishop",
-                    {"targets": bishop_targets, "types": bishop_types},
                     info_text=clue,
                 )
 
@@ -5743,6 +5845,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         raise ValueError("Knitter entry requires exactly one pair count")
     if role == "enlightened" and len(args) != 3:
         raise ValueError("Enlightened entry requires exactly one direction")
+    if role == "bishop" and len(args) != 4:
+        raise ValueError("Bishop entry requires targets and matching types")
     pos = int(args[1])
 
     if role == "enlightened":
@@ -5976,11 +6080,46 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         found = args[3] if len(args) > 3 and args[3].lower() != "none" else None
         return card_druid(pos, targets, found)
     elif role == "bishop":
-        targets = [int(x) for x in args[2].split(",")]
-        types = None
-        if len(args) > 3:
-            types = [t.strip().capitalize() for t in args[3].split(",")]
-        return card_bishop(pos, targets, types)
+        if session is None:
+            raise ValueError("Current Bishop entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Bishop position is outside the current board")
+        try:
+            targets = [int(value.strip()) for value in args[2].split(",")]
+        except ValueError as exc:
+            raise ValueError(
+                "Bishop targets must be comma-separated integers"
+            ) from exc
+        if (
+            not 1 <= len(targets) <= 3
+            or len(set(targets)) != len(targets)
+            or any(not 1 <= target <= session.n_cards for target in targets)
+        ):
+            raise ValueError(
+                "Bishop requires one to three distinct current-board targets"
+            )
+        targets.sort()
+        type_names = {
+            "villager": "Villager",
+            "outcast": "Outcast",
+            "minion": "Minion",
+            "demon": "Demon",
+        }
+        type_values = [value.strip().casefold() for value in args[3].split(",")]
+        if len(type_values) != len(targets) or any(
+            value not in type_names for value in type_values
+        ):
+            raise ValueError(
+                "Bishop types must match its targets and be Villager, "
+                "Outcast, Minion, or Demon"
+            )
+        types = [type_names[value] for value in type_values]
+        return card_bishop(
+            pos,
+            targets,
+            types,
+            bishop_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "baker":
         if len(args) > 2:
             # Only the explicit sentinel means "I am the original Baker".

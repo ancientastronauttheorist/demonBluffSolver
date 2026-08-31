@@ -811,7 +811,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         # after sorting the IDs embedded in the public sentence.
         bishop = _parse_clue_from_memory(
             _memory_poet(
-                "Between #2, #3 there is: Villager and Outcast",
+                "Between\n#2, #3\nthere is:\nVillager and Outcast",
                 [3, 2],
             ),
             n_cards=6,
