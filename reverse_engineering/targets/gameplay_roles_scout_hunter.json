@@ -109,6 +109,63 @@
       "signature": "void Tracker___ctor (Tracker_o* __this, const MethodInfo* method);",
       "applied_prototype_name": "Slayer___ctor",
       "rva": "0x3CFFF0"
+    },
+    {
+      "name": "Characters.GetCharactersAtRange",
+      "metadata_name": "Characters$$GetCharactersAtRange",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetCharactersAtRange (Characters_o* __this, int32_t range, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x36C590"
+    },
+    {
+      "name": "Characters.FilterRealAlignmentCharacters",
+      "metadata_name": "Characters$$FilterRealAlignmentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealAlignmentCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, int32_t alignment, const MethodInfo* method);",
+      "rva": "0x36B840"
+    },
+    {
+      "name": "Characters.RemoveCharacterType.Recluse",
+      "metadata_name": "Characters$$RemoveCharacterType<object>",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__RemoveCharacterType_object_ (Characters_o* __this, System_Collections_Generic_List_Character__o* inputCharacters, const MethodInfo_602AA0* method);",
+      "prototype_name": "Characters__RemoveCharacterType_Recluse",
+      "rva": "0x602AA0"
+    },
+    {
+      "name": "Calculator.RemoveNumberAndGetRandomNumberFromList",
+      "metadata_name": "Calculator$$RemoveNumberAndGetRandomNumberFromList",
+      "signature": "int32_t Calculator__RemoveNumberAndGetRandomNumberFromList (int32_t removalNumber, int32_t minNumberInclusive, int32_t maxNumberExclusive, const MethodInfo* method);",
+      "rva": "0x396490"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    },
+    {
+      "name": "Character.GetRegisterAs",
+      "metadata_name": "Character$$GetRegisterAs",
+      "signature": "CharacterData_o* Character__GetRegisterAs (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x3650C0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Single",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "float UnityEngine_Random__Range (float minInclusive, float maxInclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Single",
+      "rva": "0x1C86640"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
     }
   ]
 }
