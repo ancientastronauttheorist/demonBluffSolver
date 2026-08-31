@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Bard information boundary, managed as Acrobat2, including circular Corrupted-distance truth, false-distance selection, exact clue construction and acted references, Day dispatch, execution achievement behavior, helper geometry, RNG behavior, and Poet-provider parity",
+  "functions": [
+    {
+      "name": "Acrobat2.get_Description",
+      "metadata_name": "Acrobat2$$get_Description",
+      "signature": "System_String_o* Acrobat2__get_Description (Acrobat2_o* __this, const MethodInfo* method);",
+      "rva": "0x3D0000"
+    },
+    {
+      "name": "Acrobat2.GetInfo",
+      "metadata_name": "Acrobat2$$GetInfo",
+      "signature": "ActedInfo_o* Acrobat2__GetInfo (Acrobat2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CFF20"
+    },
+    {
+      "name": "Acrobat2.Act",
+      "metadata_name": "Acrobat2$$Act",
+      "signature": "void Acrobat2__Act (Acrobat2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Acrobat2.BluffAct",
+      "metadata_name": "Acrobat2$$BluffAct",
+      "signature": "void Acrobat2__BluffAct (Acrobat2_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CFAF0"
+    },
+    {
+      "name": "Acrobat2.GetBluffInfo",
+      "metadata_name": "Acrobat2$$GetBluffInfo",
+      "signature": "ActedInfo_o* Acrobat2__GetBluffInfo (Acrobat2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CFC90"
+    },
+    {
+      "name": "Acrobat2.GetClosestPoisonedCharacter",
+      "metadata_name": "Acrobat2$$GetClosestPoisonedCharacter",
+      "signature": "int32_t Acrobat2__GetClosestPoisonedCharacter (Acrobat2_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3CFD70"
+    },
+    {
+      "name": "Acrobat2.ConjourInfo",
+      "metadata_name": "Acrobat2$$ConjourInfo",
+      "signature": "System_String_o* Acrobat2__ConjourInfo (Acrobat2_o* __this, int32_t howFar, const MethodInfo* method);",
+      "rva": "0x3CFBE0"
+    },
+    {
+      "name": "Acrobat2.CheckAchievementsAndUnlockIfAble",
+      "metadata_name": "Acrobat2$$CheckAchievementsAndUnlockIfAble",
+      "signature": "void Acrobat2__CheckAchievementsAndUnlockIfAble (Acrobat2_o* __this, const MethodInfo* method);",
+      "rva": "0x3CFBA0"
+    },
+    {
+      "name": "Acrobat2.ctor",
+      "metadata_name": "Acrobat2$$.ctor",
+      "signature": "void Acrobat2___ctor (Acrobat2_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Slayer___ctor",
+      "rva": "0x3CFFF0"
+    },
+    {
+      "name": "ActedInfo.ctor",
+      "metadata_name": "ActedInfo$$.ctor",
+      "signature": "void ActedInfo___ctor (ActedInfo_o* __this, System_String_o* desc, System_Collections_Generic_List_Character__o* characters, const MethodInfo* method);",
+      "rva": "0x35D5D0"
+    },
+    {
+      "name": "CharacterStatuses.Contains",
+      "metadata_name": "CharacterStatuses$$Contains",
+      "signature": "bool CharacterStatuses__Contains (CharacterStatuses_o* __this, int32_t status, const MethodInfo* method);",
+      "rva": "0x363C40"
+    },
+    {
+      "name": "Characters.GetCharactersAtRange",
+      "metadata_name": "Characters$$GetCharactersAtRange",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetCharactersAtRange (Characters_o* __this, int32_t range, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x36C590"
+    },
+    {
+      "name": "CharactersHelper.GetSortedListWithCharacterFirst",
+      "metadata_name": "CharactersHelper$$GetSortedListWithCharacterFirst",
+      "signature": "System_Collections_Generic_List_Character__o* CharactersHelper__GetSortedListWithCharacterFirst (System_Collections_Generic_List_Character__o* characters, Character_o* firstCharacter, const MethodInfo* method);",
+      "rva": "0x398AF0"
+    },
+    {
+      "name": "Calculator.RemoveNumberAndGetRandomNumberFromList",
+      "metadata_name": "Calculator$$RemoveNumberAndGetRandomNumberFromList",
+      "signature": "int32_t Calculator__RemoveNumberAndGetRandomNumberFromList (int32_t removalNumber, int32_t minNumberInclusive, int32_t maxNumberExclusive, const MethodInfo* method);",
+      "rva": "0x396490"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    }
+  ]
+}
