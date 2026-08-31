@@ -1025,6 +1025,7 @@ fn natural_outcast_hypothesis_allows(
         &HashMap::new(),
         &HashSet::new(),
         None,
+        None,
     )
 }
 
@@ -1039,12 +1040,14 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
     plague_doctor_acts: Option<bool>,
     required_villagers: &HashSet<u8>,
     required_outcast_roles: &HashMap<u8, String>,
-    forbidden_rambler_positions: &HashSet<u8>,
+    forbidden_outcast_role_positions: &HashSet<u8>,
+    forbidden_outcast_role: Option<&str>,
     exact_ordinary_outcasts: Option<&HashSet<u8>>,
 ) -> bool {
     let doppelganger_role = normalize_role("Doppelganger");
     let drunk_role = normalize_role("Drunk");
     let pd_role = normalize_role("Plague Doctor");
+    let forbidden_outcast_role = forbidden_outcast_role.map(normalize_role);
 
     // Pf is authoritative and already includes Chancellor's generated role.
     // Subtract exactly that occurrence to recover the natural pre-Chancellor
@@ -1083,7 +1086,8 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
         return false;
     }
     if required_outcast_roles.iter().any(|(position, role)| {
-        normalize_role(role) == "rambler" && forbidden_rambler_positions.contains(position)
+        forbidden_outcast_role.as_deref() == Some(normalize_role(role).as_str())
+            && forbidden_outcast_role_positions.contains(position)
     }) {
         return false;
     }
@@ -1167,7 +1171,9 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
             if required_villagers.contains(&position) {
                 return false;
             }
-            if role == "rambler" && forbidden_rambler_positions.contains(&position) {
+            if forbidden_outcast_role.as_deref() == Some(role.as_str())
+                && forbidden_outcast_role_positions.contains(&position)
+            {
                 return false;
             }
             if !add_fixed_outcast(&mut fixed, position, role) {
@@ -1321,17 +1327,26 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
         return false;
     }
 
-    // Normal adjacent clues under the current Rambler2 capture contract prove
-    // that a matching callback was not installed at the neighboring source.
-    // When ordinary hidden identities are collapsed, the natural Rambler can
-    // still be forced into one of those seats by the exact O header. Preserve
-    // the physical-seat restriction instead of treating the remaining pool as
-    // an unpositioned bag.
-    let rambler_role = normalize_role("Rambler");
-    let available_rambler_fillers = pool.get(&rambler_role).copied().unwrap_or(0);
-    let non_rambler_filler_capacity = filler_capacity - available_rambler_fillers;
-    let minimum_rambler_fillers = filler_needed.saturating_sub(non_rambler_filler_capacity);
-    if minimum_rambler_fillers == 0 {
+    if forbidden_outcast_role_positions.is_empty() {
+        return true;
+    }
+
+    // Public negative evidence can exclude one particular ordinary Outcast
+    // identity from physical seats that remain grouped in the scenario. The
+    // exact O header may still force that role into a filler slot, so preserve
+    // the seat restriction instead of treating the remaining pool as an
+    // unpositioned bag. Rambler callbacks and Scout/Hunter's registered-Wretch
+    // distances share this allocator.
+    let Some(forbidden_outcast_role) = forbidden_outcast_role.as_deref() else {
+        return false;
+    };
+    let available_forbidden_role_fillers = pool
+        .get(forbidden_outcast_role)
+        .copied()
+        .unwrap_or(0);
+    let other_filler_capacity = filler_capacity - available_forbidden_role_fillers;
+    let minimum_forbidden_role_fillers = filler_needed.saturating_sub(other_filler_capacity);
+    if minimum_forbidden_role_fillers == 0 {
         return true;
     }
 
@@ -1339,18 +1354,18 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
         exact
             .iter()
             .filter(|position| !fixed_ordinary_positions.contains(position))
-            .filter(|position| !forbidden_rambler_positions.contains(position))
+            .filter(|position| !forbidden_outcast_role_positions.contains(position))
             .count()
     } else {
         let required_allowed = required_anonymous_positions
             .iter()
-            .filter(|position| !forbidden_rambler_positions.contains(position))
+            .filter(|position| !forbidden_outcast_role_positions.contains(position))
             .count();
         let optional_slots = anonymous_needed - required_anonymous_positions.len();
         let optional_allowed = anonymous_hosts
             .iter()
             .filter(|position| !required_anonymous_positions.contains(position))
-            .filter(|position| !forbidden_rambler_positions.contains(position))
+            .filter(|position| !forbidden_outcast_role_positions.contains(position))
             .count();
         required_allowed + optional_slots.min(optional_allowed)
     };
@@ -1361,7 +1376,7 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
     let allowed_consumed_by_role_only = role_only_count.saturating_sub(selected_forbidden);
     let maximum_allowed_filler_seats =
         maximum_allowed_selected.saturating_sub(allowed_consumed_by_role_only);
-    minimum_rambler_fillers <= maximum_allowed_filler_seats
+    minimum_forbidden_role_fillers <= maximum_allowed_filler_seats
 }
 
 /// Whether one of the ordinary-good identity assignments grouped into a
@@ -1370,21 +1385,29 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
 ///
 /// Scenario generation intentionally collapses Villager/ordinary-Outcast
 /// placements once they have identical represented Start consequences. Public
-/// Rambler interference can nevertheless prove that hidden seats had real
-/// Rambler data. Re-run the same joint multiset/header checks here rather than
-/// validating each existential against the same single pool occurrence.
+/// role evidence can nevertheless require or exclude a particular
+/// hidden identity at specific seats (for example Rambler callbacks or
+/// Scout/Hunter registered-Wretch distances). Re-run the same joint
+/// multiset/header checks here rather than validating each existential against
+/// the same single pool occurrence.
 pub(crate) fn scenario_allows_anonymous_natural_outcast_role_assignments(
     positions: &HashSet<u8>,
     role: &str,
-    forbidden_rambler_positions: &HashSet<u8>,
+    forbidden_role_positions: &HashSet<u8>,
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    if positions.is_empty() && forbidden_rambler_positions.is_empty() {
+    if positions.is_empty() && forbidden_role_positions.is_empty() {
         return true;
     }
     if !is_state_outcast_role(role, state) || is_hud_villager_outcast(role) {
         return positions.is_empty();
+    }
+    if forbidden_role_positions
+        .iter()
+        .any(|position| *position == 0 || *position > state.n_cards)
+    {
+        return false;
     }
     if positions.iter().any(|position| {
         *position == 0
@@ -1441,7 +1464,8 @@ pub(crate) fn scenario_allows_anonymous_natural_outcast_role_assignments(
             plague_doctor_acts,
             &required_villagers,
             &required_outcast_roles,
-            forbidden_rambler_positions,
+            forbidden_role_positions,
+            Some(role),
             None,
         )
     };
@@ -1480,8 +1504,8 @@ pub(crate) fn scenario_allows_anonymous_natural_outcast_role_assignments(
                 anchor_position,
             };
             // The first target was a real Villager before Chancellor replaced
-            // it, so it cannot simultaneously host one of these natural
-            // Rambler identities. Grouped traces remain valid when any other
+            // it, so it cannot simultaneously host one of these required
+            // natural Outcast identities. Grouped traces remain valid when any other
             // retained native history satisfies all requested assignments.
             if final_chancellor_position.is_some_and(|final_position| {
                 positions.contains(&raw.original_villager_position(final_position))
@@ -1975,6 +1999,7 @@ fn hidden_faction_start_context_variants(
                 &required_villagers,
                 &HashMap::new(),
                 &HashSet::new(),
+                None,
                 Some(&exact_outcasts),
             ) {
                 continue;

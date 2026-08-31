@@ -177,6 +177,11 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // "#R shut up!" instead of giving their own clue.
     if !validate_rambler_shut_ups(scenario, state) { return false; }
 
+    // Wretch's register-as draw is stored on the physical Character. Current
+    // Scout observations that selected the same explicit Wretch data must all
+    // admit one stable Minion draw.
+    if !validate_current_scout_register_as_consistency(scenario, state) { return false; }
+
     // Card info validators
     for card in &state.cards {
         if state.executed.contains(&card.position) {
@@ -627,7 +632,458 @@ fn validate_lover(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     else { claimed != actual }
 }
 
+const SCOUT_CURRENT_VARIANT_FIELD: &str = "scout_variant";
+const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentPassivePayloadSource {
+    Direct,
+    Poet,
+}
+
+/// Distinguish frozen, unmarked observations from the exact current bridge
+/// schema. Once either provenance marker is present, malformed, mixed, or
+/// future provenance fails closed instead of falling back to legacy behavior.
+fn current_passive_payload_source(
+    card: &CardInfo,
+    direct_variant_field: &str,
+    copied_role: &str,
+) -> Result<Option<CurrentPassivePayloadSource>, ()> {
+    let direct_variant = card.info_parsed.get(direct_variant_field);
+    let poet_variant = card.info_parsed.get("poet_variant");
+
+    match (direct_variant, poet_variant) {
+        (None, None)
+            if !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD) =>
+        {
+            Ok(None)
+        }
+        (Some(value), None)
+            if value.as_str() == Some(POET_CURRENT_VARIANT)
+                && roles_equal(&card.apparent_role, copied_role) =>
+        {
+            Ok(Some(CurrentPassivePayloadSource::Direct))
+        }
+        (None, Some(value))
+            if value.as_str() == Some(POET_CURRENT_VARIANT)
+                && roles_equal(&card.apparent_role, "Poet")
+                && card
+                    .info_parsed
+                    .get("copied_role")
+                    .and_then(serde_json::Value::as_str)
+                    == Some(copied_role) =>
+        {
+            Ok(Some(CurrentPassivePayloadSource::Poet))
+        }
+        _ => Err(()),
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentScoutClaim<'a> {
+    Numeric { evil_role: &'a str, distance: i64 },
+    OneEvil,
+}
+
+fn current_scout_distance_in_native_union(distance: i64, n_cards: u8) -> bool {
+    // Truthful distance is the shortest circular distance. Bluff distance is
+    // independently sampled from 1..=3, even on a smaller board.
+    distance > 0 && distance <= i64::from((n_cards / 2).max(3))
+}
+
+fn parse_current_scout_claim<'a>(
+    info: &'a serde_json::Map<String, serde_json::Value>,
+    source: CurrentPassivePayloadSource,
+    n_cards: u8,
+) -> Option<CurrentScoutClaim<'a>> {
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => (SCOUT_CURRENT_VARIANT_FIELD, 1),
+        CurrentPassivePayloadSource::Poet => ("poet_variant", 2),
+    };
+    if info.get(variant_field).and_then(serde_json::Value::as_str)
+        != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    if source == CurrentPassivePayloadSource::Poet
+        && info.get("copied_role").and_then(serde_json::Value::as_str) != Some("Scout")
+    {
+        return None;
+    }
+
+    if info.len() == fixed_fields + 1
+        && info.get("one_evil").and_then(serde_json::Value::as_bool) == Some(true)
+    {
+        return Some(CurrentScoutClaim::OneEvil);
+    }
+
+    if info.len() != fixed_fields + 2 {
+        return None;
+    }
+    let evil_role = poet_canonical_role(info, "evil_role")?;
+    let distance = info.get("distance")?.as_i64()?;
+    current_scout_distance_in_native_union(distance, n_cards)
+        .then_some(CurrentScoutClaim::Numeric { evil_role, distance })
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum CurrentScoutLabelSupport {
+    Direct,
+    WretchRegisterAs(String),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentScoutSupport {
+    register_as: Option<(u8, String)>,
+}
+
+fn current_scout_label_support(
+    target: u8,
+    claimed_role: &str,
+    truth: TruthStatus,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentScoutLabelSupport> {
+    let Some(data_role) = current_data_role_at(target, scenario, state) else {
+        return None;
+    };
+
+    // Truthful Scout names Character.GetRegisterAs(). Wretch is the one
+    // modeled current data identity whose register-as role differs: it samples
+    // a canonical authored Minion. Bluff Scout names dataRef directly.
+    if truth == TruthStatus::Truthful && roles_equal(&data_role, "Wretch") {
+        return state
+            .deck
+            .minions
+            .iter()
+            .any(|role| {
+                get_card(role).is_some_and(|card| card.faction == Faction::Minion)
+                    && roles_equal(role, claimed_role)
+            })
+            .then(|| CurrentScoutLabelSupport::WretchRegisterAs(normalize_role(claimed_role)));
+    }
+
+    roles_equal(&data_role, claimed_role).then_some(CurrentScoutLabelSupport::Direct)
+}
+
+fn current_known_registered_distance(
+    anchor: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<i64> {
+    (1..=state.n_cards)
+        .filter(|&position| {
+            position != anchor
+                && registered_alignment_at(position, scenario, state)
+                    == EffectiveAlignment::Evil
+        })
+        .map(|position| i64::from(circle_distance(anchor, position, state.n_cards)))
+        .min()
+}
+
+fn anonymous_natural_wretch_candidates(scenario: &Scenario, state: &GameState) -> Vec<u8> {
+    (1..=state.n_cards)
+        // Exact Twin/Shaman/generated data is already represented by the
+        // ordinary registered-alignment helper, not by this grouped identity.
+        .filter(|&position| current_data_role_at(position, scenario, state).is_none())
+        .filter(|&position| {
+            crate::scenario::scenario_allows_anonymous_natural_outcast_role_at(
+                position,
+                "Wretch",
+                scenario,
+                state,
+            )
+        })
+        .collect()
+}
+
+fn anonymous_wretch_assignment_possible(
+    required: &HashSet<u8>,
+    forbidden: &HashSet<u8>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+        required,
+        "Wretch",
+        forbidden,
+        scenario,
+        state,
+    )
+}
+
+fn registered_distance_can_equal_with_anonymous_wretch(
+    anchor: u8,
+    claimed: i64,
+    known_distance: Option<i64>,
+    anonymous_wretch_candidates: &[u8],
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if known_distance.is_some_and(|distance| distance < claimed) {
+        return false;
+    }
+
+    let forbidden_closer: HashSet<u8> = anonymous_wretch_candidates
+        .iter()
+        .copied()
+        .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) < claimed)
+        .collect();
+    if known_distance == Some(claimed) {
+        return anonymous_wretch_assignment_possible(
+            &HashSet::new(),
+            &forbidden_closer,
+            scenario,
+            state,
+        );
+    }
+
+    anonymous_wretch_candidates
+        .iter()
+        .copied()
+        .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) == claimed)
+        .any(|position| {
+            anonymous_wretch_assignment_possible(
+                &HashSet::from([position]),
+                &forbidden_closer,
+                scenario,
+                state,
+            )
+        })
+}
+
+fn registered_distance_can_differ_with_anonymous_wretch(
+    anchor: u8,
+    claimed: i64,
+    known_distance: Option<i64>,
+    anonymous_wretch_candidates: &[u8],
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if known_distance.is_some_and(|distance| distance < claimed) {
+        return true;
+    }
+
+    // A closer Wretch makes the native nearest distance false even if another
+    // Wretch is simultaneously forced at the claimed distance.
+    if anonymous_wretch_candidates
+        .iter()
+        .copied()
+        .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) < claimed)
+        .any(|position| {
+            anonymous_wretch_assignment_possible(
+                &HashSet::from([position]),
+                &HashSet::new(),
+                scenario,
+                state,
+            )
+        })
+    {
+        return true;
+    }
+
+    if known_distance == Some(claimed) {
+        return false;
+    }
+    let forbidden_equal: HashSet<u8> = anonymous_wretch_candidates
+        .iter()
+        .copied()
+        .filter(|position| i64::from(circle_distance(anchor, *position, state.n_cards)) == claimed)
+        .collect();
+    anonymous_wretch_assignment_possible(
+        &HashSet::new(),
+        &forbidden_equal,
+        scenario,
+        state,
+    )
+}
+
+fn current_scout_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentScoutSupport> {
+    if card.position == 0 || card.position > state.n_cards {
+        return Vec::new();
+    }
+    let Some(claim) = parse_current_scout_claim(&card.info_parsed, source, state.n_cards) else {
+        return Vec::new();
+    };
+    let truth = truth_status(card.position, scenario, state);
+    let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
+
+    match claim {
+        CurrentScoutClaim::OneEvil => {
+            if truth == TruthStatus::Lying {
+                return Vec::new();
+            }
+            let forbidden: HashSet<u8> = anonymous_wretches.iter().copied().collect();
+            let supported = (1..=state.n_cards)
+                .filter(|&target| is_runtime_evil_at(target, scenario, state))
+                .any(|target| {
+                    current_known_registered_distance(target, scenario, state).is_none()
+                        && anonymous_wretch_assignment_possible(
+                            &HashSet::new(),
+                            &forbidden,
+                            scenario,
+                            state,
+                        )
+                });
+            supported
+                .then_some(CurrentScoutSupport { register_as: None })
+                .into_iter()
+                .collect()
+        }
+        CurrentScoutClaim::Numeric { evil_role, distance } => {
+            if truth == TruthStatus::Lying && !(1..=3).contains(&distance) {
+                return Vec::new();
+            }
+
+            let mut supports = Vec::new();
+            for target in (1..=state.n_cards)
+                .filter(|&target| is_runtime_evil_at(target, scenario, state))
+            {
+                let Some(label_support) = current_scout_label_support(
+                    target,
+                    evil_role,
+                    truth,
+                    scenario,
+                    state,
+                ) else {
+                    continue;
+                };
+                let known_distance = current_known_registered_distance(target, scenario, state);
+                let distance_supported = match truth {
+                    TruthStatus::Truthful => registered_distance_can_equal_with_anonymous_wretch(
+                        target,
+                        distance,
+                        known_distance,
+                        &anonymous_wretches,
+                        scenario,
+                        state,
+                    ),
+                    TruthStatus::Lying => registered_distance_can_differ_with_anonymous_wretch(
+                        target,
+                        distance,
+                        known_distance,
+                        &anonymous_wretches,
+                        scenario,
+                        state,
+                    ),
+                };
+                if !distance_supported {
+                    continue;
+                }
+                let register_as = match label_support {
+                    CurrentScoutLabelSupport::Direct => None,
+                    CurrentScoutLabelSupport::WretchRegisterAs(role) => Some((target, role)),
+                };
+                let support = CurrentScoutSupport { register_as };
+                if !supports.contains(&support) {
+                    supports.push(support);
+                }
+            }
+            supports
+        }
+    }
+}
+
+fn validate_current_scout(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_scout_supports(card, scenario, state, source).is_empty()
+}
+
+fn validate_current_scout_register_as_consistency(
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let mut current_cards = Vec::new();
+    for card in &state.cards {
+        if state.executed.contains(&card.position)
+            && state.confirmed_evil.contains(&card.position)
+            && !state.executed_evil_roles.contains_key(&card.position)
+        {
+            continue;
+        }
+        let Ok(Some(source)) = current_passive_payload_source(
+            card,
+            SCOUT_CURRENT_VARIANT_FIELD,
+            "Scout",
+        ) else {
+            continue;
+        };
+        current_cards.push((card, source));
+    }
+    // One observation cannot disagree with itself, and its ordinary validator
+    // owns all schema, candidate, and distance checks. Avoid replaying the
+    // anonymous-Outcast allocator on the common one-Scout path.
+    if current_cards.len() <= 1 {
+        return true;
+    }
+
+    let mut observations = Vec::new();
+    for (card, source) in current_cards {
+        let supports = current_scout_supports(card, scenario, state, source);
+        if supports.is_empty() {
+            return false;
+        }
+        observations.push(supports);
+    }
+
+    fn search(
+        index: usize,
+        observations: &[Vec<CurrentScoutSupport>],
+        selected_register_as: &mut HashMap<u8, String>,
+    ) -> bool {
+        if index == observations.len() {
+            return true;
+        }
+        for support in &observations[index] {
+            let Some((target, role)) = support.register_as.as_ref() else {
+                if search(index + 1, observations, selected_register_as) {
+                    return true;
+                }
+                continue;
+            };
+            if selected_register_as
+                .get(target)
+                .is_some_and(|selected| selected != role)
+            {
+                continue;
+            }
+            let inserted = selected_register_as.insert(*target, role.clone()).is_none();
+            if search(index + 1, observations, selected_register_as) {
+                return true;
+            }
+            if inserted {
+                selected_register_as.remove(target);
+            }
+        }
+        false
+    }
+
+    // Anonymous natural Wretch seats remain intentionally grouped inside a
+    // Scenario and have no persisted physical assignment to join across
+    // separate observations. Each observation is nevertheless checked against
+    // one exact required/forbidden placement. Only explicit current-data
+    // Wretches have a stable identity surface that can be joined here without
+    // inventing hidden state.
+    search(0, &observations, &mut HashMap::new())
+}
+
 fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, SCOUT_CURRENT_VARIANT_FIELD, "Scout") {
+        Ok(Some(source)) => return validate_current_scout(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let evil_role = match info_str(&card.info_parsed, "evil_role") {
         Some(s) => s,
         None => return true,
@@ -918,7 +1374,89 @@ fn validate_medium(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     }
 }
 
+fn current_hunter_distance_in_native_union(distance: i64, n_cards: u8) -> bool {
+    if n_cards == 0 || distance < 0 {
+        return false;
+    }
+    let distance = distance as u64;
+    (n_cards == 1 && distance == 0)
+        || (distance >= 1 && distance <= u64::from(n_cards / 2))
+        || distance == u64::from(n_cards - 1)
+}
+
+fn parse_current_hunter_distance(
+    info: &serde_json::Map<String, serde_json::Value>,
+    source: CurrentPassivePayloadSource,
+    n_cards: u8,
+) -> Option<i64> {
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => (HUNTER_CURRENT_VARIANT_FIELD, 1),
+        CurrentPassivePayloadSource::Poet => ("poet_variant", 2),
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    if source == CurrentPassivePayloadSource::Poet
+        && info.get("copied_role").and_then(serde_json::Value::as_str) != Some("Hunter")
+    {
+        return None;
+    }
+    let distance = info.get("distance")?.as_i64()?;
+    current_hunter_distance_in_native_union(distance, n_cards).then_some(distance)
+}
+
+fn validate_current_hunter(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    if card.position == 0 || card.position > state.n_cards {
+        return false;
+    }
+    let Some(claimed) = parse_current_hunter_distance(&card.info_parsed, source, state.n_cards)
+    else {
+        return false;
+    };
+
+    let known_distance = current_known_registered_distance(card.position, scenario, state)
+        .or(Some(i64::from(state.n_cards - 1)));
+    let anonymous_wretches = anonymous_natural_wretch_candidates(scenario, state);
+
+    match truth_status(card.position, scenario, state) {
+        TruthStatus::Truthful => registered_distance_can_equal_with_anonymous_wretch(
+            card.position,
+            claimed,
+            known_distance,
+            &anonymous_wretches,
+            scenario,
+            state,
+        ),
+        TruthStatus::Lying => {
+            let maximum_bluff = i64::from(state.n_cards / 2);
+            (1..=maximum_bluff).contains(&claimed)
+                && registered_distance_can_differ_with_anonymous_wretch(
+                    card.position,
+                    claimed,
+                    known_distance,
+                    &anonymous_wretches,
+                    scenario,
+                    state,
+                )
+        }
+    }
+}
+
 fn validate_hunter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, HUNTER_CURRENT_VARIANT_FIELD, "Hunter") {
+        Ok(Some(source)) => return validate_current_hunter(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let claimed = match info_i64(&card.info_parsed, "distance") {
         Some(v) => v,
         None => return true,
@@ -1831,8 +2369,8 @@ fn poet_canonical_role<'a>(
 }
 
 /// Validate the exact bridge-owned payload for the audited public Gossip
-/// selector. Native sentinel/no-info surfaces are intentionally unmarked and
-/// never represented by a partial `public_current` payload.
+/// selector. Provider-specific sentinels are accepted only when they have an
+/// explicit exact current schema; partial current payloads always fail closed.
 fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role: &str) -> bool {
     if card.position == 0 || card.position > state.n_cards {
         return false;
@@ -1856,15 +2394,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             poet_has_exact_fields(info, &["evil_adjacent"])
                 && poet_integer_in_range(info, "evil_adjacent", 0, 2)
         }
-        "Scout" => {
-            poet_has_exact_fields(info, &["evil_role", "distance"])
-                && poet_canonical_role(info, "evil_role")
-                    .and_then(get_card)
-                    .is_some_and(|card| {
-                        matches!(card.faction, Faction::Minion | Faction::Demon)
-                    })
-                && poet_integer_in_range(info, "distance", 1, n)
-        }
+        "Scout" => parse_current_scout_claim(
+            info,
+            CurrentPassivePayloadSource::Poet,
+            state.n_cards,
+        )
+        .is_some(),
         "Oracle" => {
             poet_has_exact_fields(info, &["targets", "minion_role"])
                 && poet_targets(info, state.n_cards, 2, 2).is_some()
@@ -1885,10 +2420,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             poet_has_exact_fields(info, &["evil_pairs"])
                 && poet_integer_in_range(info, "evil_pairs", 0, n)
         }
-        "Hunter" => {
-            poet_has_exact_fields(info, &["distance"])
-                && poet_integer_in_range(info, "distance", 1, n)
-        }
+        "Hunter" => parse_current_hunter_distance(
+            info,
+            CurrentPassivePayloadSource::Poet,
+            state.n_cards,
+        )
+        .is_some(),
         "Enlightened" => {
             poet_has_exact_fields(info, &["direction"])
                 && info
@@ -2741,6 +3278,26 @@ mod tests {
         make_card(1, "Poet", serde_json::Value::Object(info))
     }
 
+    fn current_scout(pos: u8, payload: serde_json::Value) -> CardInfo {
+        let mut info = payload.as_object().unwrap().clone();
+        info.insert(
+            SCOUT_CURRENT_VARIANT_FIELD.to_string(),
+            serde_json::Value::String(POET_CURRENT_VARIANT.to_string()),
+        );
+        make_card(pos, "Scout", serde_json::Value::Object(info))
+    }
+
+    fn current_hunter(pos: u8, distance: serde_json::Value) -> CardInfo {
+        make_card(
+            pos,
+            "Hunter",
+            json!({
+                "hunter_variant": "public_current",
+                "distance": distance,
+            }),
+        )
+    }
+
     #[test]
     fn current_poet_schema_accepts_every_complete_native_provider_payload() {
         let state = base_state(6, vec![]);
@@ -2776,6 +3333,30 @@ mod tests {
                 "current Poet provider {provider} must have a complete schema"
             );
         }
+
+        let scout_with_good_current_data = current_poet(
+            "Scout",
+            json!({"evil_role": "Scout", "distance": 2}),
+        );
+        assert!(validate_current_poet_payload(
+            &scout_with_good_current_data,
+            &state,
+            "Scout",
+        ));
+
+        let scout_sentinel = current_poet("Scout", json!({"one_evil": true}));
+        assert!(validate_current_poet_payload(
+            &scout_sentinel,
+            &state,
+            "Scout",
+        ));
+
+        let hunter_no_other_evil = current_poet("Hunter", json!({"distance": 5}));
+        assert!(validate_current_poet_payload(
+            &hunter_no_other_evil,
+            &state,
+            "Hunter",
+        ));
     }
 
     #[test]
@@ -2932,7 +3513,6 @@ mod tests {
         let state = base_state(6, vec![]);
         for payload in [
             json!({"evil_role": "pooka", "distance": 2}),
-            json!({"evil_role": "Scout", "distance": 2}),
             json!({"evil_role": "Future Demon", "distance": 2}),
             json!({"evil_role": 7, "distance": 2}),
             json!({"evil_role": "Pooka", "distance": 0}),
@@ -2993,6 +3573,7 @@ mod tests {
             ("Knitter", "evil_pairs", json!(7)),
             ("Hunter", "distance", json!(0)),
             ("Hunter", "distance", json!(-1)),
+            ("Hunter", "distance", json!(4)),
             ("Hunter", "distance", json!(7)),
             ("Bard", "corruption_distance", json!(-2)),
             ("Bard", "corruption_distance", json!(0)),
@@ -3118,7 +3699,7 @@ mod tests {
     }
 
     #[test]
-    fn current_poet_scout_false_surfaces_obey_truth_inversion() {
+    fn current_poet_scout_requires_a_selectable_named_target() {
         let poet = current_poet(
             "Scout",
             json!({"evil_role": "Pooka", "distance": 2}),
@@ -3131,7 +3712,7 @@ mod tests {
             .insert(4, "Witch".to_string());
         assert!(!validate_poet(&poet, &named_role_absent, &state));
         named_role_absent.corrupted.insert(1);
-        assert!(validate_poet(&poet, &named_role_absent, &state));
+        assert!(!validate_poet(&poet, &named_role_absent, &state));
 
         let mut only_named_evil = empty_scenario();
         only_named_evil
@@ -3156,9 +3737,568 @@ mod tests {
         unresolved_role
             .evil_positions
             .insert(3, "Unknown".to_string());
-        assert!(validate_poet(&poet, &unresolved_role, &state));
+        assert!(!validate_poet(&poet, &unresolved_role, &state));
         unresolved_role.corrupted.insert(1);
-        assert!(validate_poet(&poet, &unresolved_role, &state));
+        assert!(!validate_poet(&poet, &unresolved_role, &state));
+    }
+
+    #[test]
+    fn current_direct_scout_payload_is_exact_and_fail_closed() {
+        let state = base_state(6, vec![]);
+
+        let numeric = current_scout(
+            1,
+            json!({"evil_role": "Scout", "distance": 2}),
+        );
+        assert!(matches!(
+            parse_current_scout_claim(
+                &numeric.info_parsed,
+                CurrentPassivePayloadSource::Direct,
+                state.n_cards,
+            ),
+            Some(CurrentScoutClaim::Numeric {
+                evil_role: "Scout",
+                distance: 2,
+            })
+        ));
+
+        let sentinel = current_scout(1, json!({"one_evil": true}));
+        assert_eq!(
+            parse_current_scout_claim(
+                &sentinel.info_parsed,
+                CurrentPassivePayloadSource::Direct,
+                state.n_cards,
+            ),
+            Some(CurrentScoutClaim::OneEvil),
+        );
+
+        for payload in [
+            json!({"evil_role": "pooka", "distance": 2}),
+            json!({"evil_role": "Pooka", "distance": 0}),
+            json!({"evil_role": "Pooka", "distance": 4}),
+            json!({"one_evil": false}),
+            json!({"one_evil": true, "distance": 1}),
+            json!({"evil_role": "Pooka"}),
+        ] {
+            let malformed = current_scout(1, payload);
+            assert!(parse_current_scout_claim(
+                &malformed.info_parsed,
+                CurrentPassivePayloadSource::Direct,
+                state.n_cards,
+            )
+            .is_none());
+        }
+
+        let scenario = empty_scenario();
+        for info in [
+            json!({
+                "scout_variant": "future",
+                "evil_role": "Pooka",
+                "distance": 2,
+            }),
+            json!({
+                "scout_variant": 7,
+                "evil_role": "Pooka",
+                "distance": 2,
+            }),
+            json!({
+                "scout_variant": "public_current",
+                "poet_variant": "public_current",
+                "evil_role": "Pooka",
+                "distance": 2,
+            }),
+            json!({
+                "hunter_variant": "public_current",
+                "evil_role": "Pooka",
+                "distance": 2,
+            }),
+        ] {
+            assert!(!validate_scout(
+                &make_card(1, "Scout", info),
+                &scenario,
+                &state,
+            ));
+        }
+
+        // Marker absence preserves the archived permissive fallback.
+        assert!(validate_scout(
+            &make_card(1, "Scout", json!({})),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_scout_uses_existential_duplicate_targets_and_registered_distance() {
+        let scout = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 3}),
+        );
+        let state = base_state(10, vec![scout.clone()]);
+        let mut duplicates = empty_scenario();
+        duplicates.evil_positions = HashMap::from([
+            (2, "Pooka".to_string()),
+            (5, "Pooka".to_string()),
+            (6, "Witch".to_string()),
+        ]);
+
+        // #2 has public distance 3 while the duplicate Pooka at #5 has
+        // distance 1. Native random target selection makes the observation
+        // existential across both same-name candidates.
+        assert!(validate_scout(&scout, &duplicates, &state));
+        let no_duplicate_support = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 2}),
+        );
+        assert!(!validate_scout(
+            &no_duplicate_support,
+            &duplicates,
+            &state,
+        ));
+
+        let registered_scout = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 2}),
+        );
+        let mut registered_state = base_state(
+            10,
+            vec![registered_scout.clone(), make_card(4, "Wretch", json!({}))],
+        );
+        registered_state.executed = vec![2];
+        let mut registered = empty_scenario();
+        registered.evil_positions = HashMap::from([
+            (2, "Pooka".to_string()),
+            (8, "Witch".to_string()),
+        ]);
+
+        // The dead runtime-Evil target remains selectable support, and the
+        // runtime-Good Wretch still participates as another registered Evil.
+        assert!(validate_scout(
+            &registered_scout,
+            &registered,
+            &registered_state,
+        ));
+    }
+
+    #[test]
+    fn current_scout_names_moved_data_and_wretch_register_as_by_truth_path() {
+        let moved_scout = current_scout(
+            1,
+            json!({"evil_role": "Scout", "distance": 2}),
+        );
+        let mut moved_state = base_state(6, vec![moved_scout.clone()]);
+        moved_state.executed = vec![2];
+        let mut moved = empty_scenario();
+        moved.evil_positions = HashMap::from([
+            (2, "Twin Minion".to_string()),
+            (6, "Pooka".to_string()),
+        ]);
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 2,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 6,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 3,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+        assert!(validate_scout(&moved_scout, &moved, &moved_state));
+
+        let lying_actor = current_scout(
+            2,
+            json!({"evil_role": "Scout", "distance": 1}),
+        );
+        moved_state.cards = vec![lying_actor.clone()];
+        moved_state.executed.clear();
+        assert!(validate_scout(&lying_actor, &moved, &moved_state));
+
+        let truthful_wretch = current_scout(
+            1,
+            json!({"evil_role": "Witch", "distance": 2}),
+        );
+        let mut wretch_state = base_state(6, vec![truthful_wretch.clone()]);
+        wretch_state.deck.minions = vec!["Witch".to_string(), "Twin_Minion".to_string()];
+        let mut wretch = empty_scenario();
+        wretch.evil_positions = HashMap::from([
+            (2, "Twin Minion".to_string()),
+            (6, "Pooka".to_string()),
+        ]);
+        wretch.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 2,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 6,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 3,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+
+        // Truthful Scout names Wretch's sampled Minion register-as record.
+        assert!(validate_scout(
+            &truthful_wretch,
+            &wretch,
+            &wretch_state,
+        ));
+        let normalized_register_as = current_scout(
+            1,
+            json!({"evil_role": "Twin Minion", "distance": 2}),
+        );
+        assert!(validate_scout(
+            &normalized_register_as,
+            &wretch,
+            &wretch_state,
+        ));
+        let truthful_data_ref_name = current_scout(
+            1,
+            json!({"evil_role": "Wretch", "distance": 2}),
+        );
+        assert!(!validate_scout(
+            &truthful_data_ref_name,
+            &wretch,
+            &wretch_state,
+        ));
+
+        // Bluff Scout instead names the direct current dataRef.
+        wretch.corrupted.insert(1);
+        let lying_data_ref_name = current_scout(
+            1,
+            json!({"evil_role": "Wretch", "distance": 1}),
+        );
+        assert!(validate_scout(
+            &lying_data_ref_name,
+            &wretch,
+            &wretch_state,
+        ));
+        let lying_register_as_name = current_scout(
+            1,
+            json!({"evil_role": "Witch", "distance": 1}),
+        );
+        assert!(!validate_scout(
+            &lying_register_as_name,
+            &wretch,
+            &wretch_state,
+        ));
+    }
+
+    #[test]
+    fn current_scout_sentinel_and_bluff_domain_follow_native_support() {
+        let sentinel = current_scout(1, json!({"one_evil": true}));
+        let mut state = base_state(8, vec![sentinel.clone()]);
+        let mut one_evil = empty_scenario();
+        one_evil.evil_positions.insert(4, "Pooka".to_string());
+        assert!(validate_scout(&sentinel, &one_evil, &state));
+        let poet_sentinel = current_poet("Scout", json!({"one_evil": true}));
+        let poet_state = base_state(8, vec![poet_sentinel.clone()]);
+        assert!(validate_poet(&poet_sentinel, &one_evil, &poet_state));
+
+        state.cards.push(make_card(6, "Wretch", json!({})));
+        assert!(!validate_scout(&sentinel, &one_evil, &state));
+        state.cards.pop();
+
+        one_evil.corrupted.insert(1);
+        assert!(!validate_scout(&sentinel, &one_evil, &state));
+
+        let lying_numeric = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 1}),
+        );
+        assert!(validate_scout(&lying_numeric, &one_evil, &state));
+        let absent_name = current_scout(
+            1,
+            json!({"evil_role": "Witch", "distance": 1}),
+        );
+        assert!(!validate_scout(&absent_name, &one_evil, &state));
+        let outside_bluff_domain = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 4}),
+        );
+        assert!(!validate_scout(
+            &outside_bluff_domain,
+            &one_evil,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_hunter_schema_is_exact_and_matches_native_union() {
+        for (n_cards, accepted, rejected) in [
+            (1, vec![0], vec![1]),
+            (2, vec![1], vec![0, 2]),
+            (5, vec![1, 2, 4], vec![0, 3, 5]),
+            (6, vec![1, 2, 3, 5], vec![0, 4, 6]),
+        ] {
+            let state = base_state(n_cards, vec![]);
+            for distance in accepted {
+                let direct = current_hunter(1, json!(distance));
+                assert_eq!(
+                    parse_current_hunter_distance(
+                        &direct.info_parsed,
+                        CurrentPassivePayloadSource::Direct,
+                        state.n_cards,
+                    ),
+                    Some(distance),
+                );
+                let poet = current_poet("Hunter", json!({"distance": distance}));
+                assert!(validate_current_poet_payload(
+                    &poet,
+                    &state,
+                    "Hunter",
+                ));
+            }
+            for distance in rejected {
+                let direct = current_hunter(1, json!(distance));
+                assert!(parse_current_hunter_distance(
+                    &direct.info_parsed,
+                    CurrentPassivePayloadSource::Direct,
+                    state.n_cards,
+                )
+                .is_none());
+            }
+        }
+
+        let state = base_state(5, vec![]);
+        let mut extra = current_hunter(1, json!(2));
+        extra.info_parsed.insert("unexpected".to_string(), json!(true));
+        assert!(!validate_hunter(&extra, &empty_scenario(), &state));
+        for variant in [json!("future"), json!(7)] {
+            let malformed = make_card(
+                1,
+                "Hunter",
+                json!({"hunter_variant": variant, "distance": 2}),
+            );
+            assert!(!validate_hunter(&malformed, &empty_scenario(), &state));
+        }
+        let wrong_role_marker = make_card(
+            1,
+            "Hunter",
+            json!({"scout_variant": "public_current", "distance": 2}),
+        );
+        assert!(!validate_hunter(
+            &wrong_role_marker,
+            &empty_scenario(),
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_hunter_uses_registered_evil_and_no_candidate_distance() {
+        let hunter = current_hunter(1, json!(2));
+        let state = base_state(
+            7,
+            vec![hunter.clone(), make_card(3, "Wretch", json!({}))],
+        );
+        let mut registered = empty_scenario();
+        registered.evil_positions.insert(5, "Pooka".to_string());
+        assert!(validate_hunter(&hunter, &registered, &state));
+        assert!(!validate_hunter(
+            &current_hunter(1, json!(1)),
+            &registered,
+            &state,
+        ));
+
+        let no_candidate = current_hunter(1, json!(6));
+        let empty_state = base_state(7, vec![no_candidate.clone()]);
+        assert!(validate_hunter(
+            &no_candidate,
+            &empty_scenario(),
+            &empty_state,
+        ));
+        let poet_no_candidate = current_poet("Hunter", json!({"distance": 6}));
+        let poet_state = base_state(7, vec![poet_no_candidate.clone()]);
+        assert!(validate_poet(
+            &poet_no_candidate,
+            &empty_scenario(),
+            &poet_state,
+        ));
+
+        let singleton = current_hunter(1, json!(0));
+        let singleton_state = base_state(1, vec![singleton.clone()]);
+        assert!(validate_hunter(
+            &singleton,
+            &empty_scenario(),
+            &singleton_state,
+        ));
+    }
+
+    #[test]
+    fn current_hunter_bluff_requires_nonempty_native_domain_and_false_value() {
+        let state = base_state(7, vec![]);
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+        lying.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_hunter(
+            &current_hunter(1, json!(1)),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_hunter(
+            &current_hunter(1, json!(2)),
+            &lying,
+            &state,
+        ));
+        assert!(validate_hunter(
+            &current_hunter(1, json!(3)),
+            &lying,
+            &state,
+        ));
+
+        let two_card_state = base_state(2, vec![]);
+        let mut two_card_lying = empty_scenario();
+        two_card_lying.corrupted.insert(1);
+        assert!(!validate_hunter(
+            &current_hunter(1, json!(1)),
+            &two_card_lying,
+            &two_card_state,
+        ));
+        two_card_lying
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(!validate_hunter(
+            &current_hunter(1, json!(1)),
+            &two_card_lying,
+            &two_card_state,
+        ));
+
+        let singleton_state = base_state(1, vec![]);
+        let mut singleton_lying = empty_scenario();
+        singleton_lying.corrupted.insert(1);
+        assert!(!validate_hunter(
+            &current_hunter(1, json!(0)),
+            &singleton_lying,
+            &singleton_state,
+        ));
+    }
+
+    #[test]
+    fn anonymous_wretch_constraints_reuse_exact_outcast_pool_and_header_budget() {
+        let mut state = base_state(4, vec![current_scout(1, json!({"one_evil": true}))]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        assert!(crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+            &HashSet::from([3]),
+            "Wretch",
+            &HashSet::from([2]),
+            &scenario,
+            &state,
+        ));
+        assert!(!crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+            &HashSet::new(),
+            "Wretch",
+            &HashSet::from([2, 3]),
+            &scenario,
+            &state,
+        ));
+        assert!(!crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+            &HashSet::from([3]),
+            "Wretch",
+            &HashSet::from([3]),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_scout_and_hunter_include_exact_anonymous_wretch_distance_support() {
+        let scout = current_scout(
+            1,
+            json!({"evil_role": "Pooka", "distance": 1}),
+        );
+        let hunter = current_hunter(7, json!(1));
+        let mut state = base_state(8, vec![scout.clone(), hunter.clone()]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        assert!(validate_scout(&scout, &scenario, &state));
+        assert!(validate_hunter(&hunter, &scenario, &state));
+        let sentinel = current_scout(1, json!({"one_evil": true}));
+        assert!(!validate_scout(&sentinel, &scenario, &state));
+
+        state.board_outcast_count = Some(0);
+        assert!(!validate_scout(&scout, &scenario, &state));
+        assert!(!validate_hunter(&hunter, &scenario, &state));
+        assert!(validate_scout(&sentinel, &scenario, &state));
+    }
+
+    #[test]
+    fn current_scout_observations_share_one_explicit_wretch_register_as_draw() {
+        let direct = current_scout(
+            1,
+            json!({"evil_role": "Witch", "distance": 4}),
+        );
+        let mut poet = current_poet(
+            "Scout",
+            json!({"evil_role": "Twin Minion", "distance": 4}),
+        );
+        poet.position = 2;
+        let mut state = base_state(8, vec![direct.clone(), poet.clone()]);
+        state.deck.minions = vec!["Witch".to_string(), "Twin_Minion".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions = HashMap::from([
+            (4, "Twin Minion".to_string()),
+            (8, "Pooka".to_string()),
+        ]);
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 4,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 8,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 5,
+                neighbor_pre_swap_role: "Wretch".to_string(),
+            },
+        });
+
+        assert!(validate_scout(&direct, &scenario, &state));
+        assert!(validate_poet(&poet, &scenario, &state));
+        assert!(!validate_current_scout_register_as_consistency(
+            &scenario,
+            &state,
+        ));
+
+        let mut matching_poet = current_poet(
+            "Scout",
+            json!({"evil_role": "Witch", "distance": 4}),
+        );
+        matching_poet.position = 2;
+        state.cards[1] = matching_poet;
+        assert!(validate_current_scout_register_as_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_scout_register_as_consistency_skips_untyped_executed_evils() {
+        let malformed = current_scout(1, json!({"one_evil": false}));
+        let mut state = base_state(4, vec![malformed]);
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        let scenario = empty_scenario();
+
+        assert!(validate_current_scout_register_as_consistency(
+            &scenario,
+            &state,
+        ));
+
+        state
+            .executed_evil_roles
+            .insert(1, "Pooka".to_string());
+        // A singleton has no cross-observation register-as conflict; its
+        // ordinary validator still owns and rejects the malformed schema.
+        assert!(validate_current_scout_register_as_consistency(
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_scout(&state.cards[0], &scenario, &state));
     }
 
     #[test]

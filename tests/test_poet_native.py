@@ -38,6 +38,15 @@ def _memory_poet(
     return card
 
 
+def _hunter_refs(position: int, distance: int, n_cards: int) -> list[int]:
+    if distance == 0:
+        return []
+    return [
+        ((position - 1 + distance) % n_cards) + 1,
+        ((position - 1 - distance) % n_cards) + 1,
+    ]
+
+
 class PoetManualIngestionTests(unittest.TestCase):
     def test_native_provider_whitelist_preserves_constructor_order(self):
         self.assertEqual(
@@ -128,7 +137,7 @@ class PoetManualIngestionTests(unittest.TestCase):
         cases = [
             ("lover", ["3"]),
             ("lover", ["1", "extra"]),
-            ("scout", ["lover", "2"]),
+            ("scout", ["not_a_role", "2"]),
             ("scout", ["pooka", "0"]),
             ("scout", ["pooka", "-1"]),
             ("oracle", ["2,2", "witch"]),
@@ -153,6 +162,38 @@ class PoetManualIngestionTests(unittest.TestCase):
                 ValueError
             ):
                 card_poet_with_info(1, provider, args)
+
+    def test_scout_accepts_current_good_identity_and_one_evil_sentinel(self):
+        moved_identity = card_poet_with_info(
+            1,
+            "scout",
+            ["lover", "3"],
+            n_cards=6,
+        )
+        self.assertEqual(
+            moved_identity.info_parsed,
+            {
+                "evil_role": "Lover",
+                "distance": 3,
+                "copied_role": "Scout",
+                "poet_variant": POET_VARIANT,
+            },
+        )
+
+        sentinel = card_poet_with_info(
+            1,
+            "scout",
+            ["one_evil"],
+            n_cards=6,
+        )
+        self.assertEqual(
+            sentinel.info_parsed,
+            {
+                "one_evil": True,
+                "copied_role": "Scout",
+                "poet_variant": POET_VARIANT,
+            },
+        )
 
     def test_manual_current_payloads_use_live_board_bounds(self):
         cases = [
@@ -214,7 +255,11 @@ class PoetMemoryIngestionTests(unittest.TestCase):
             ("#4\nis Evil", [], "Bounty Hunter"),
             ("#2 is a real Scout", [2], "Medium"),
             ("There is only 1 pair of Evil", [], "Knitter"),
-            ("I am 2 cards away from closest Evil", [], "Hunter"),
+            (
+                "I am 2 cards away from closest Evil",
+                _hunter_refs(1, 2, 6),
+                "Hunter",
+            ),
             ("Closest Evil is:\nCounter-clockwise", [], "Enlightened"),
             ("One is Evil:\n#2, #3 or #4", [2, 3, 4], "Empress"),
             (
@@ -303,7 +348,6 @@ class PoetMemoryIngestionTests(unittest.TestCase):
             ("NO Evils\nadjacent to me", "Lover"),
             ("Pooka is\n2 cards away\nfrom closest Evil", "Scout"),
             ("Evils are not adjacent to eachother", "Knitter"),
-            ("I am 2 cards away from closest Evil", "Hunter"),
             ("Closest Evil is equidistant", "Enlightened"),
             ("There are no Corrupted characters", "Bard"),
         ]
@@ -340,12 +384,38 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                     )
                 )
 
+    def test_hunter_requires_exact_native_range_refs_in_order(self):
+        clue = "I am 2 cards away from closest Evil"
+        expected = _hunter_refs(1, 2, 6)
+        parsed = _parse_clue_from_memory(
+            _memory_poet(clue, expected),
+            n_cards=6,
+        )
+        self.assertEqual(parsed.info_parsed["copied_role"], "Hunter")
+
+        for refs in ([], list(reversed(expected)), expected[:1], expected + [2]):
+            with self.subTest(refs=refs):
+                self.assertIsNone(
+                    _parse_clue_from_memory(
+                        _memory_poet(clue, refs),
+                        n_cards=6,
+                    )
+                )
+
+        opposite = _parse_clue_from_memory(
+            _memory_poet(
+                "I am 3 cards away from closest Evil",
+                [4, 4],
+            ),
+            n_cards=6,
+        )
+        self.assertEqual(opposite.info_parsed["distance"], 3)
+
     def test_remaining_native_singular_plural_variants_are_exact(self):
         cases = [
             ("1 Evil\nadjacent to me", "Lover", "evil_adjacent", 1),
             ("There is only 1 pair of Evil", "Knitter", "evil_pairs", 1),
             ("There are 2 pairs of Evil", "Knitter", "evil_pairs", 2),
-            ("I am 1 card away from closest Evil", "Hunter", "distance", 1),
             ("Pooka is\n1 card away\nfrom closest Evil", "Scout", "distance", 1),
             (
                 "I am 2 cards away from Corrupted character",
@@ -363,6 +433,16 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                 )
                 self.assertEqual(parsed.info_parsed["copied_role"], provider)
                 self.assertEqual(parsed.info_parsed[field], expected)
+
+        hunter = _parse_clue_from_memory(
+            _memory_poet(
+                "I am 1 card away from closest Evil",
+                _hunter_refs(1, 1, 6),
+            ),
+            n_cards=6,
+        )
+        self.assertEqual(hunter.info_parsed["copied_role"], "Hunter")
+        self.assertEqual(hunter.info_parsed["distance"], 1)
 
         malformed_grammar = [
             "1 Evils adjacent to me",
@@ -592,13 +672,12 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         self.assertEqual(bishop.info_parsed["copied_role"], "Bishop")
         self.assertEqual(bishop.info_parsed["targets"], [2, 3])
 
-    def test_anchored_structured_text_and_unsupported_sentinels_stay_manual(self):
+    def test_anchored_structured_text_and_unsupported_surfaces_stay_manual(self):
         cases = [
             ("#2 or #3 is a Witch trailing", [2, 3]),
             ("One is Evil: #2, #3 or #4 trailing", [2, 3, 4]),
             ("#2 is Good trailing", [2]),
             ("There are NO Minions", []),
-            ("There is only 1 Evil", []),
             ("There are 7 pairs of Evil", []),
             ("Pooka is 7 cards away from closest Evil", []),
             ("I am 7 cards away from closest Evil", []),
@@ -612,6 +691,19 @@ class PoetMemoryIngestionTests(unittest.TestCase):
                         n_cards=6,
                     )
                 )
+
+        sentinel = _parse_clue_from_memory(
+            _memory_poet("There is only 1 Evil", []),
+            n_cards=6,
+        )
+        self.assertEqual(
+            sentinel.info_parsed,
+            {
+                "one_evil": True,
+                "copied_role": "Scout",
+                "poet_variant": POET_VARIANT,
+            },
+        )
 
 
 if __name__ == "__main__":

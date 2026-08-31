@@ -57,8 +57,40 @@ def card_gemcrafter(pos: int, good_position: int) -> CardInfo:
 def card_lover(pos: int, evil_adjacent: int) -> CardInfo:
     return CardInfo(pos, "Lover", info_parsed={"evil_adjacent": evil_adjacent})
 
-def card_scout(pos: int, evil_role: str, distance: int) -> CardInfo:
-    return CardInfo(pos, "Scout", info_parsed={"evil_role": evil_role, "distance": distance})
+_PUBLIC_CURRENT_VARIANT = "public_current"
+
+
+def card_scout(
+    pos: int,
+    evil_role: str,
+    distance: int,
+    *,
+    info_text: str = "",
+    scout_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Scout observation.
+
+    The optional provenance marker is deliberately opt-in so archived direct
+    Scout fixtures keep their historical predicate. Live auto/manual entry
+    supplies ``public_current`` after validating the native sentence.
+    """
+    info = {"evil_role": evil_role, "distance": distance}
+    if scout_variant is not None:
+        info["scout_variant"] = scout_variant
+    return CardInfo(pos, "Scout", info_text=info_text, info_parsed=info)
+
+
+def _card_scout_one_evil(
+    pos: int,
+    *,
+    info_text: str = "",
+    scout_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build Scout's exact native one-Evil sentinel observation."""
+    info = {"one_evil": True}
+    if scout_variant is not None:
+        info["scout_variant"] = scout_variant
+    return CardInfo(pos, "Scout", info_text=info_text, info_parsed=info)
 
 def card_bard(pos: int, corruption_distance: int) -> CardInfo:
     # 0 means "no corrupted characters exist" — map to -1 sentinel
@@ -90,8 +122,55 @@ def card_oracle(pos: int, targets: list[int], minion_role: str) -> CardInfo:
 def card_medium(pos: int, good_position: int, good_role: str) -> CardInfo:
     return CardInfo(pos, "Medium", info_parsed={"good_position": good_position, "good_role": good_role})
 
-def card_hunter(pos: int, distance: int) -> CardInfo:
-    return CardInfo(pos, "Hunter", info_parsed={"distance": distance})
+def card_hunter(
+    pos: int,
+    distance: int,
+    *,
+    info_text: str = "",
+    hunter_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Hunter observation, optionally marking current provenance."""
+    info = {"distance": distance}
+    if hunter_variant is not None:
+        info["hunter_variant"] = hunter_variant
+    return CardInfo(pos, "Hunter", info_text=info_text, info_parsed=info)
+
+
+def _valid_current_scout_distance(
+    distance: int,
+    n_cards: Optional[int],
+) -> bool:
+    """Whether a numeric Scout result is reachable in the current build."""
+    if type(distance) is not int or distance < 1:
+        return False
+    if n_cards is None:
+        return True
+    # Truth reaches half the circle. Bluff draws a false zero-based gap from
+    # 0..2 and displays it as 1..3, so the public range is their union.
+    return distance <= max(3, n_cards // 2)
+
+
+def _valid_current_hunter_distance(
+    distance: int,
+    n_cards: Optional[int],
+) -> bool:
+    """Whether a Hunter result is reachable in the current build."""
+    if type(distance) is not int:
+        return False
+    if n_cards is None:
+        return distance >= 1
+    if n_cards == 1:
+        return distance == 0
+    return 1 <= distance <= n_cards // 2 or distance == n_cards - 1
+
+
+def _current_hunter_refs(pos: int, distance: int, n_cards: int) -> list[int]:
+    """Return native GetCharactersAtRange order, preserving duplicates."""
+    if distance == 0:
+        return []
+    forward = ((pos - 1 + distance) % n_cards) + 1
+    backward = ((pos - 1 - distance) % n_cards) + 1
+    return [forward, backward]
 
 def card_architect(pos: int, side: str) -> CardInfo:
     """side: 'Left', 'Right', or 'Equal'"""
@@ -856,18 +935,24 @@ def card_poet_with_info(
             raise ValueError("Lover Poet evil count must be 0, 1, or 2")
         payload = {"evil_adjacent": evil_adjacent}
     elif canonical_provider == "Scout":
-        require_args(2)
-        distance = integer(1, "distance")
-        if distance <= 0 or (n_cards is not None and distance > n_cards):
-            raise ValueError("Scout Poet distance must be positive and within the board")
-        payload = {
-            "evil_role": canonical_role(
-                0,
-                "evil role",
-                factions={"Minion", "Demon"},
-            ),
-            "distance": distance,
-        }
+        sentinel_key = re.sub(
+            r"[^a-z0-9]",
+            "",
+            " ".join(copied_args).casefold(),
+        )
+        if sentinel_key in {"oneevil", "thereisonly1evil"}:
+            payload = {"one_evil": True}
+        else:
+            require_args(2)
+            distance = integer(1, "distance")
+            if not _valid_current_scout_distance(distance, n_cards):
+                raise ValueError("Scout Poet distance is outside the native range")
+            payload = {
+                # Truth names GetRegisterAs(), while bluff names current
+                # dataRef. Either can be a Good role after an identity move.
+                "evil_role": canonical_role(0, "named role"),
+                "distance": distance,
+            }
     elif canonical_provider == "Oracle":
         require_args(2)
         payload = {
@@ -896,8 +981,8 @@ def card_poet_with_info(
     elif canonical_provider == "Hunter":
         require_args(1)
         distance = integer(0, "distance")
-        if distance <= 0 or (n_cards is not None and distance > n_cards):
-            raise ValueError("Hunter Poet distance must be positive and within the board")
+        if not _valid_current_hunter_distance(distance, n_cards):
+            raise ValueError("Hunter Poet distance is outside the native range")
         payload = {"distance": distance}
     elif canonical_provider == "Enlightened":
         require_args(1)
@@ -4518,6 +4603,25 @@ def _parse_clue_from_memory(
     role_lower = role.lower().replace(' ', '_')
     ability_used = card.get('ability_used', False)
 
+    def current_event_refs() -> Optional[list[int]]:
+        """Return refs from the newest coherent native event, if any."""
+        latest = (
+            infos[-1]
+            if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+            else None
+        )
+        if latest is None or latest.get('desc') != clue:
+            return None
+        refs = latest.get('targets')
+        if not isinstance(refs, list) or any(type(ref) is not int for ref in refs):
+            return None
+        if any(
+            ref <= 0 or (n_cards is not None and ref > n_cards)
+            for ref in refs
+        ):
+            return None
+        return refs
+
     # --- Guard: active-ability-only roles with unused abilities ---
     # These roles have NO passive speech bubble. If ability hasn't been used,
     # any clue_text/acted_infos is stale from a previous village — ignore it.
@@ -4629,11 +4733,30 @@ def _parse_clue_from_memory(
         if 'none' in clue.lower() or 'no' in clue.lower():
             return card_lover(pos, 0)
 
-    # --- Hunter: "nearest evil is X away" ---
+    # --- Hunter: exact current native sentence + circular range refs. ---
     if role_lower == 'hunter':
-        m = re.search(r'(\d+)', clue)
+        if n_cards is None or not 1 <= pos <= n_cards:
+            return None
+        m = re.fullmatch(
+            r'\s*I\s+am\s+(?:(1)\s+card|((?:0|[2-9]\d*))\s+cards)\s+'
+            r'away\s+from\s+closest\s+Evil\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
         if m:
-            return card_hunter(pos, int(m.group(1)))
+            distance = int(m.group(1) or m.group(2))
+            expected_refs = _current_hunter_refs(pos, distance, n_cards)
+            if (
+                _valid_current_hunter_distance(distance, n_cards)
+                and current_event_refs() == expected_refs
+            ):
+                return card_hunter(
+                    pos,
+                    distance,
+                    info_text=clue,
+                    hunter_variant=_PUBLIC_CURRENT_VARIANT,
+                )
+        return None
 
     # --- Architect: "Left"/"Right"/"Equal" ---
     if role_lower == 'architect':
@@ -4801,13 +4924,45 @@ def _parse_clue_from_memory(
             minion_role = m.group(1).strip().replace(' ', '_')
             return card_oracle(pos, targets, minion_role)
 
-    # --- Scout: "<Role> is N cards away from closest Evil" ---
+    # --- Scout: exact current native numeric/sentinel forms, always no refs. ---
     if role_lower == 'scout':
-        m = re.search(r'(\w[\w\s]*?)\s+is\s+(\d+)\s+card', clue, re.IGNORECASE)
+        if n_cards is None or not 1 <= pos <= n_cards:
+            return None
+        refs = current_event_refs()
+        if refs != []:
+            return None
+        if re.fullmatch(
+            r'\s*There\s+is\s+only\s+1\s+Evil\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        ):
+            return _card_scout_one_evil(
+                pos,
+                info_text=clue,
+                scout_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        m = re.fullmatch(
+            r'\s*([A-Za-z][A-Za-z _\'-]*?)\s+is\s+'
+            r'(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
+            r'away\s+from\s+closest\s+Evil\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        )
         if m:
-            evil_role = m.group(1).strip()
-            distance = int(m.group(2))
-            return card_scout(pos, evil_role, distance)
+            named_role = get_card(m.group(1).strip())
+            distance = int(m.group(2) or m.group(3))
+            if (
+                named_role is not None
+                and _valid_current_scout_distance(distance, n_cards)
+            ):
+                return card_scout(
+                    pos,
+                    named_role.name,
+                    distance,
+                    info_text=clue,
+                    scout_variant=_PUBLIC_CURRENT_VARIANT,
+                )
+        return None
 
     # --- Medium: "#N is a real <Role>" ---
     if role_lower == 'medium' and targets:
@@ -5133,23 +5288,40 @@ def _parse_clue_from_memory(
                 {"evil_adjacent": evil_adjacent},
                 info_text=clue,
             )
-        # Scout exact native singular/plural sentence. The named asset must be
-        # an authored Evil-class role; the one-Evil sentinel has no such name
-        # and intentionally remains manual.
+        # Scout exact native singular/plural sentence and one-Evil sentinel.
+        if re.fullmatch(
+            r'\s*There\s+is\s+only\s+1\s+Evil\s*',
+            clue,
+            re.IGNORECASE | re.DOTALL,
+        ) and (
+            n_cards is not None
+            and 1 <= pos <= n_cards
+            and poet_refs_match([])
+        ):
+            return _card_current_poet(
+                pos,
+                "Scout",
+                {"one_evil": True},
+                info_text=clue,
+            )
         m_scout = re.fullmatch(
             r'\s*([A-Za-z][A-Za-z _\'-]*?)\s+is\s+'
             r'(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
-            r'away\s+from\s+closest\s+Evil\s*[.!]?\s*',
+            r'away\s+from\s+closest\s+Evil\s*',
             clue,
             re.IGNORECASE | re.DOTALL,
         )
-        if m_scout and poet_refs_match([]):
+        if (
+            m_scout
+            and n_cards is not None
+            and 1 <= pos <= n_cards
+            and poet_refs_match([])
+        ):
             candidate = get_card(m_scout.group(1).strip())
             distance = int(m_scout.group(2) or m_scout.group(3))
             if (
                 candidate is not None
-                and candidate.role.value in {'Minion', 'Demon'}
-                and (n_cards is None or distance <= n_cards)
+                and _valid_current_scout_distance(distance, n_cards)
             ):
                 return _card_current_poet(
                     pos,
@@ -5163,15 +5335,19 @@ def _parse_clue_from_memory(
 
         # Hunter exact native singular/plural sentence.
         m = re.fullmatch(
-            r'\s*I\s+am\s+(?:(1)\s+card|([2-9]\d*)\s+cards)\s+'
+            r'\s*I\s+am\s+(?:(1)\s+card|((?:0|[2-9]\d*))\s+cards)\s+'
             r'away\s+from\s+'
-            r'closest\s+Evil\s*[.!]?\s*',
+            r'closest\s+Evil\s*',
             clue,
             re.IGNORECASE | re.DOTALL,
         )
-        if m and poet_refs_match([]):
+        if m and n_cards is not None and 1 <= pos <= n_cards:
             distance = int(m.group(1) or m.group(2))
-            if n_cards is None or distance <= n_cards:
+            hunter_refs = _current_hunter_refs(pos, distance, n_cards)
+            if (
+                _valid_current_hunter_distance(distance, n_cards)
+                and poet_refs_match(hunter_refs)
+            ):
                 return _card_current_poet(
                     pos,
                     "Hunter",
@@ -5250,7 +5426,34 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "lover":
         return card_lover(pos, int(args[2]))
     elif role == "scout":
-        return card_scout(pos, args[2], int(args[3]))
+        if session is None:
+            raise ValueError("Current Scout entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Scout position is outside the current board")
+        sentinel_key = re.sub(
+            r"[^a-z0-9]",
+            "",
+            " ".join(args[2:]).casefold(),
+        )
+        if sentinel_key in {"oneevil", "thereisonly1evil"}:
+            return _card_scout_one_evil(
+                pos,
+                scout_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        if len(args) != 4:
+            raise ValueError("Scout entry requires a named role and distance")
+        named_role = get_card(args[2])
+        if named_role is None:
+            raise ValueError("Scout named role must be canonical")
+        distance = int(args[3])
+        if not _valid_current_scout_distance(distance, session.n_cards):
+            raise ValueError("Scout distance is outside the native range")
+        return card_scout(
+            pos,
+            named_role.name,
+            distance,
+            scout_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "bard":
         return card_bard(pos, int(args[2]))
     elif role in ("fortune_teller", "ft"):
@@ -5277,7 +5480,20 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
                     print(f"  WARNING: 'real' used but no card entry for #{target_pos} — enter role name instead")
         return card_medium(pos, target_pos, claimed_role)
     elif role == "hunter":
-        return card_hunter(pos, int(args[2]))
+        if session is None:
+            raise ValueError("Current Hunter entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Hunter position is outside the current board")
+        if len(args) != 3:
+            raise ValueError("Hunter entry requires exactly one distance")
+        distance = int(args[2])
+        if not _valid_current_hunter_distance(distance, session.n_cards):
+            raise ValueError("Hunter distance is outside the native range")
+        return card_hunter(
+            pos,
+            distance,
+            hunter_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "architect":
         return card_architect(pos, args[2])  # Left/Right/Equal
     elif role == "empress":
