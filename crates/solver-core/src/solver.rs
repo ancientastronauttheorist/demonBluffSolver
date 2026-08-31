@@ -7,7 +7,7 @@ use crate::scenario::{
 };
 use crate::types::{GameState, Scenario, SolverResult};
 use crate::validators::{
-    effective_role_at, known_evil_role, twin_may_have_replaced_current_data_at,
+    current_data_role_at, known_evil_role, twin_may_have_replaced_current_data_at,
 };
 
 pub(crate) fn twin_origin_may_hold_bombardier(
@@ -15,6 +15,10 @@ pub(crate) fn twin_origin_may_hold_bombardier(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
+    if scenario.twin_trace.is_some() {
+        return false;
+    }
+
     if !known_evil_role(twin_origin, scenario, state)
         .is_some_and(|role| normalize_role(role) == "twinminion")
     {
@@ -26,7 +30,7 @@ pub(crate) fn twin_origin_may_hold_bombardier(
     // cannot identify that old data: after the swap it carries Twin and may
     // reveal an unrelated Minion bluff. Until TwinTrace records the swap, any
     // geometrically feasible endpoint could have supplied authored Bombardier
-    // data.
+    // data. An exact TwinTrace bypasses this coarse quarantine above.
     (1..=state.n_cards)
         .filter(|&source| source != twin_origin)
         .any(|source| twin_may_have_replaced_current_data_at(source, scenario, state))
@@ -37,6 +41,12 @@ pub(crate) fn hidden_ordinary_good_may_hold_bombardier(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
+    if scenario.twin_trace.is_some()
+        && current_data_role_at(position, scenario, state).is_some()
+    {
+        return false;
+    }
+
     let hidden_and_alive = !state.cards.iter().any(|card| card.position == position)
         && !state.executed.contains(&position)
         && !state.night_kills.contains(&position);
@@ -66,7 +76,7 @@ fn collect_bombardier_positions(
     (1..=state.n_cards)
         .filter(|&position| {
             let modeled_current_bombardier = surviving.iter().any(|scenario| {
-                effective_role_at(position, scenario, state)
+                current_data_role_at(position, scenario, state)
                     .is_some_and(|role| normalize_role(&role) == "bombardier")
             });
             let hidden_ordinary_good_may_be_bombardier = surviving.iter().any(|scenario| {
@@ -132,7 +142,10 @@ pub fn solve(state: &GameState) -> SolverResult {
 mod tests {
     use super::*;
     use crate::strategy::execution::pick_execution_target;
-    use crate::types::{CardInfo, ChancellorTrace, GameState, Scenario, ShamanTrace};
+    use crate::types::{
+        CardInfo, ChancellorTrace, GameState, Scenario, ShamanTrace, TwinNeighborSide,
+        TwinStartOutcome, TwinTrace,
+    };
     use serde_json::json;
     use std::collections::HashSet;
 
@@ -271,7 +284,7 @@ mod tests {
         assert!(result.surviving_scenarios.iter().any(|scenario| {
             scenario.evil_positions.get(&2)
                 .is_some_and(|role| normalize_role(role) == "witch")
-                && effective_role_at(1, scenario, &state).is_none()
+                && current_data_role_at(1, scenario, &state).is_none()
         }));
         assert_eq!(result.bombardier_positions, vec![1]);
     }
@@ -369,6 +382,132 @@ mod tests {
             .insert(1, "Twin Minion".to_string());
         scenario.evil_positions.insert(3, "Pooka".to_string());
 
+        assert_eq!(collect_bombardier_positions(&state, &[scenario]), vec![1]);
+    }
+
+    #[test]
+    fn traced_twin_uses_only_exact_current_bombardier_data() {
+        let mut state = GameState {
+            n_cards: 3,
+            cards: vec![
+                CardInfo {
+                    position: 1,
+                    apparent_role: "Scout".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 2,
+                    apparent_role: "Knight".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 3,
+                    apparent_role: "Pooka".to_string(),
+                    ..CardInfo::default()
+                },
+            ],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".to_string(), "Knight".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+
+        let trace = |neighbor_pre_swap_role: &str| TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: neighbor_pre_swap_role.to_string(),
+            },
+        };
+        let mut scenario = Scenario::default();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.twin_trace = Some(trace("Bombardier"));
+
+        assert!(!twin_origin_may_hold_bombardier(1, &scenario, &state));
+        assert_eq!(collect_bombardier_positions(&state, &[scenario.clone()]), vec![1]);
+
+        // Exact current Twin data at a hidden recipient is not an anonymous
+        // natural-Outcast slot. The actor's exact Bombardier data remains the
+        // only lethal current-data seat.
+        state.cards.retain(|card| card.position != 2);
+        assert!(!hidden_ordinary_good_may_hold_bombardier(
+            2, &scenario, &state,
+        ));
+        assert_eq!(collect_bombardier_positions(&state, &[scenario.clone()]), vec![1]);
+
+        // Authored Bombardier alone cannot re-enable the opaque Twin-origin
+        // quarantine once an exact trace says the actor received Scout data.
+        scenario.twin_trace = Some(trace("Scout"));
+        assert!(collect_bombardier_positions(&state, &[scenario.clone()]).is_empty());
+
+        // The same legacy world without a trace retains the conservative
+        // quarantine because its neighbor's former current data is unknown.
+        scenario.twin_trace = None;
+        assert!(twin_origin_may_hold_bombardier(1, &scenario, &state));
+        assert!(hidden_ordinary_good_may_hold_bombardier(
+            2, &scenario, &state,
+        ));
+        assert_eq!(collect_bombardier_positions(&state, &[scenario]), vec![1, 2]);
+    }
+
+    #[test]
+    fn exact_twin_self_swap_does_not_trigger_opaque_bomb_quarantine() {
+        let mut state = GameState {
+            n_cards: 3,
+            cards: vec![
+                CardInfo {
+                    position: 1,
+                    apparent_role: "Scout".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 2,
+                    apparent_role: "Pooka".to_string(),
+                    ..CardInfo::default()
+                },
+                CardInfo {
+                    position: 3,
+                    apparent_role: "Knight".to_string(),
+                    ..CardInfo::default()
+                },
+            ],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".to_string(), "Knight".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+
+        let mut scenario = Scenario::default();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+        scenario.twin_trace = Some(TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 2,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 1,
+                neighbor_pre_swap_role: "Twin Minion".to_string(),
+            },
+        });
+
+        assert!(!twin_origin_may_hold_bombardier(1, &scenario, &state));
+        assert!(collect_bombardier_positions(&state, &[scenario.clone()]).is_empty());
+
+        // Without the exact self-swap, #3 remains a feasible former source of
+        // authored Bombardier data and conservatively quarantines Twin #1.
+        scenario.twin_trace = None;
+        assert!(twin_origin_may_hold_bombardier(1, &scenario, &state));
         assert_eq!(collect_bombardier_positions(&state, &[scenario]), vec![1]);
     }
 }

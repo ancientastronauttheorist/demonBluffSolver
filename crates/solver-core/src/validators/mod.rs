@@ -73,7 +73,7 @@ fn matches_executed_good_role(
     pos: u8,
     observed_role: &str,
 ) -> bool {
-    let exact_match = effective_role_at(pos, scenario, state)
+    let exact_match = current_data_role_at(pos, scenario, state)
         .as_deref()
         .is_some_and(|role| roles_equal(role, observed_role));
     exact_match || twin_can_explain_current_role_mismatch(pos, observed_role, scenario, state)
@@ -85,6 +85,10 @@ fn twin_can_explain_current_role_mismatch(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
+    if scenario.twin_trace.is_some() {
+        return false;
+    }
+
     let authored_roles = state.deck.all_roles();
     let deck_has = |expected: &str| {
         authored_roles
@@ -366,7 +370,8 @@ pub(crate) fn twin_may_have_replaced_current_data_at(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    if state.n_cards < 2
+    if scenario.twin_trace.is_some()
+        || state.n_cards < 2
         || !state
             .deck
             .minions
@@ -400,7 +405,7 @@ pub(crate) fn twin_may_have_replaced_current_data_at(
         .into_iter()
         .filter(|anchor| *anchor != position)
         .any(|anchor| {
-            let modeled_registered_or_real_demon = effective_role_at(anchor, scenario, state)
+            let modeled_registered_or_real_demon = current_data_role_at(anchor, scenario, state)
                 .as_deref()
                 .and_then(get_card)
                 .is_some_and(|card| card.faction == Faction::Demon);
@@ -2196,14 +2201,13 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
             if slayer_lies { return false; }
             if !target_is_registered_evil { return false; }
             if let Some(revealed_role) = result.revealed_role.as_deref() {
-                let role_matches = effective_role_at(target_pos, scenario, state)
+                let role_matches = current_data_role_at(target_pos, scenario, state)
                     .is_some_and(|actual| {
                         normalize_role(&actual) == normalize_role(revealed_role)
                     });
-                // Until Scenario carries Twin's exact two-seat data swap, the
-                // only defensible mismatch is one where current Twin data is
-                // observed at the recipient, or the stable Twin actor reveals
-                // the role received in exchange. Other mismatches still prune.
+                // Trace-less scenarios retain the narrow two-endpoint
+                // compatibility waiver. Exact TwinTrace current data is
+                // authoritative and cannot enter that waiver.
                 let twin_can_explain_mismatch = twin_can_explain_current_role_mismatch(
                     target_pos,
                     revealed_role,
@@ -2217,10 +2221,10 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
             // A failed result has no current-role reveal, so retain only the
             // registered-alignment contradiction the existing model can
             // represent. A reachable runtime-Good Wretch endpoint is the one
-            // pre-TwinTrace exception: Wretch data can move to the Evil Twin,
+            // trace-less exception: Wretch data can move to the Evil Twin,
             // leaving current Twin/base registration on the Good Wretch body.
             let modeled_good_wretch_can_receive_twin = !target_is_physically_evil
-                && effective_role_at(target_pos, scenario, state)
+                && current_data_role_at(target_pos, scenario, state)
                     .is_some_and(|role| normalize_role(&role) == "wretch")
                 && twin_may_have_replaced_current_data_at(target_pos, scenario, state);
             if slayer_works
@@ -4595,6 +4599,51 @@ mod tests {
     }
 
     #[test]
+    fn exact_twin_moves_sole_lilis_protection_to_the_current_data_actor() {
+        let mut state = base_state(3, vec![]);
+        state.n_evil = 3;
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Lilis".to_string(), "Pooka".to_string()];
+        state.night_kills = vec![1];
+        state.night_kill_evil_count = 1;
+
+        let mut scenario = empty_scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(2, "Lilis".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Lilis".to_string(),
+            },
+        });
+
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Lilis"),
+        );
+        assert_eq!(
+            current_data_role_at(2, &scenario, &state).as_deref(),
+            Some("Twin Minion"),
+        );
+
+        // The sole later Lilis actor installs protection on the runtime Twin
+        // body that now owns its data, so a successful death there is invalid.
+        assert!(!validate_lilis_night_kills(&scenario, &state));
+
+        // The former stable-Lilis body now owns Twin data and does not retain
+        // role-based Lilis protection merely because its runtime origin did.
+        state.night_kills = vec![2];
+        assert!(validate_lilis_night_kills(&scenario, &state));
+    }
+
+    #[test]
     fn lilis_death_distinguishes_drunk_and_healthy_bluff_knight_surfaces() {
         let mut hidden_drunk_state = base_state(1, vec![]);
         hidden_drunk_state.deck.villagers = vec!["Knight".to_string()];
@@ -5240,6 +5289,171 @@ mod tests {
             &state,
             2,
             "Twin Minion",
+        ));
+    }
+
+    #[test]
+    fn traced_twin_current_roles_are_exact_and_receive_no_opaque_waiver() {
+        let mut state = base_state(3, vec![]);
+        state.deck.villagers = vec!["Baker".to_string(), "Knight".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+
+        let mut scenario = empty_scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Baker".to_string(),
+            },
+        });
+
+        // The original runtime-Evil Twin body now holds Baker data, while the
+        // runtime-Good neighbor holds Twin data.
+        assert!(matches_executed_good_role(
+            &scenario, &state, 1, "Baker",
+        ));
+        assert!(matches_executed_good_role(
+            &scenario,
+            &state,
+            2,
+            "Twin Minion",
+        ));
+        assert!(!matches_executed_good_role(
+            &scenario, &state, 1, "Knight",
+        ));
+        assert!(!matches_executed_good_role(
+            &scenario, &state, 2, "Baker",
+        ));
+
+        assert!(!twin_can_explain_current_role_mismatch(
+            1, "Knight", &scenario, &state,
+        ));
+        assert!(!twin_can_explain_current_role_mismatch(
+            2, "Baker", &scenario, &state,
+        ));
+        assert!(!twin_may_have_replaced_current_data_at(
+            1, &scenario, &state,
+        ));
+        assert!(!twin_may_have_replaced_current_data_at(
+            2, &scenario, &state,
+        ));
+
+        // Removing the trace restores the pre-trace geometry waiver without
+        // changing the stable role assignment or authored deck.
+        scenario.twin_trace = None;
+        assert!(twin_can_explain_current_role_mismatch(
+            1, "Baker", &scenario, &state,
+        ));
+        assert!(twin_can_explain_current_role_mismatch(
+            2,
+            "Twin Minion",
+            &scenario,
+            &state,
+        ));
+        assert!(twin_may_have_replaced_current_data_at(
+            2, &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn exact_no_demon_and_self_swap_disable_coarse_twin_waivers() {
+        let mut no_demon_state = base_state(3, vec![]);
+        no_demon_state.deck.villagers = vec!["Baker".to_string()];
+        no_demon_state.deck.minions = vec!["Twin Minion".to_string()];
+
+        let mut no_demon = empty_scenario();
+        no_demon
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        no_demon.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::NoDemon,
+        });
+
+        assert!(matches_executed_good_role(
+            &no_demon,
+            &no_demon_state,
+            1,
+            "Twin Minion",
+        ));
+        assert!(!matches_executed_good_role(
+            &no_demon,
+            &no_demon_state,
+            1,
+            "Baker",
+        ));
+        assert!(!twin_can_explain_current_role_mismatch(
+            1,
+            "Baker",
+            &no_demon,
+            &no_demon_state,
+        ));
+
+        let mut self_swap_state = no_demon_state.clone();
+        self_swap_state.deck.demons = vec!["Pooka".to_string()];
+        let mut self_swap = empty_scenario();
+        self_swap
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        self_swap
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        self_swap.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 2,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 1,
+                neighbor_pre_swap_role: "Twin Minion".to_string(),
+            },
+        });
+
+        assert!(matches_executed_good_role(
+            &self_swap,
+            &self_swap_state,
+            1,
+            "Twin Minion",
+        ));
+        assert!(!matches_executed_good_role(
+            &self_swap,
+            &self_swap_state,
+            1,
+            "Baker",
+        ));
+        assert!(!twin_can_explain_current_role_mismatch(
+            1,
+            "Baker",
+            &self_swap,
+            &self_swap_state,
+        ));
+        assert!(!twin_may_have_replaced_current_data_at(
+            3,
+            &self_swap,
+            &self_swap_state,
+        ));
+
+        // The same stable world without its exact self-swap still admits the
+        // coarse alternative where the other adjacent endpoint supplied data.
+        self_swap.twin_trace = None;
+        assert!(twin_can_explain_current_role_mismatch(
+            1,
+            "Baker",
+            &self_swap,
+            &self_swap_state,
+        ));
+        assert!(twin_may_have_replaced_current_data_at(
+            3,
+            &self_swap,
+            &self_swap_state,
         ));
     }
 
