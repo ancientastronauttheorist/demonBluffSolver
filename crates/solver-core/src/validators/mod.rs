@@ -697,6 +697,7 @@ const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
 const GEMCRAFTER_CURRENT_VARIANT_FIELD: &str = "gemcrafter_variant";
 const BARD_CURRENT_VARIANT_FIELD: &str = "bard_variant";
 const CONFESSOR_CURRENT_VARIANT_FIELD: &str = "confessor_variant";
+const DRUID_CURRENT_VARIANT_FIELD: &str = "druid_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -734,7 +735,8 @@ fn current_passive_payload_source(
                 && !card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD)
                 && !card
                     .info_parsed
-                    .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD) =>
+                    .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(DRUID_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -4971,6 +4973,16 @@ fn validate_alchemist(card: &CardInfo, scenario: &Scenario, state: &GameState) -
 }
 
 fn validate_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, DRUID_CURRENT_VARIANT_FIELD, "Druid") {
+        Ok(Some(CurrentPassivePayloadSource::Direct)) => {
+            return validate_current_druid(card, scenario, state);
+        }
+        // Druid is not one of the current Poet providers. Archived unmarked
+        // Poet captures still delegate to the legacy predicate below.
+        Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let targets = match info_targets(&card.info_parsed, "targets") {
         Some(t) => t,
         None => return true,
@@ -5029,6 +5041,529 @@ fn validate_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
             has_outcast || has_unrevealed_good_target
         }
     }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentDruidClaim {
+    targets: [u8; 3],
+    found_outcast: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum CurrentDruidTargetSurface {
+    KnownOutcast(String),
+    KnownNonOutcast,
+    AnonymousGood,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentDruidClueSupport {
+    anonymous_type_options: HashMap<u8, u8>,
+    anonymous_outcast_roles: HashMap<u8, String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentDruidSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    anonymous_type_options: HashMap<u8, u8>,
+    anonymous_outcast_roles: HashMap<u8, String>,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_druid_payload_role_token(display_name: &str) -> String {
+    display_name.replace(' ', "_")
+}
+
+fn current_druid_claim_text(targets: &[u8; 3], found_outcast: Option<&str>) -> String {
+    let mut sorted = *targets;
+    sorted.sort_unstable();
+    match found_outcast {
+        Some(role) => {
+            let display_name = get_card(role).map_or(role, |card| card.name);
+            format!(
+                "Among #{}, #{}, #{}\nthere is: {display_name}",
+                sorted[0], sorted[1], sorted[2]
+            )
+        }
+        None => format!(
+            "Among #{}, #{}, #{}\nthere are NO Outcasts",
+            sorted[0], sorted[1], sorted[2]
+        ),
+    }
+}
+
+fn parse_current_druid_claim(card: &CardInfo, state: &GameState) -> Option<CurrentDruidClaim> {
+    if card.position == 0
+        || card.position > state.n_cards
+        || card.apparent_role != "Druid"
+        || card.info_parsed.len() != 3
+        || card
+            .info_parsed
+            .get(DRUID_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+
+    let targets = card
+        .info_parsed
+        .get("targets")?
+        .as_array()?
+        .iter()
+        .map(|value| u8::try_from(value.as_u64()?).ok())
+        .collect::<Option<Vec<_>>>()?;
+    let targets: [u8; 3] = targets.try_into().ok()?;
+    if targets
+        .iter()
+        .any(|target| *target == 0 || *target > state.n_cards)
+        || targets[0] == targets[1]
+        || targets[0] == targets[2]
+        || targets[1] == targets[2]
+    {
+        return None;
+    }
+
+    let found_outcast = match card.info_parsed.get("found_outcast")? {
+        serde_json::Value::Null => None,
+        serde_json::Value::String(role) => {
+            let role_data = get_card(role)?;
+            if role_data.faction != Faction::Outcast
+                || current_druid_payload_role_token(role_data.name) != *role
+            {
+                return None;
+            }
+            Some(role_data.name.to_string())
+        }
+        _ => return None,
+    };
+    (card.info_text
+        == current_druid_claim_text(&targets, found_outcast.as_deref()))
+    .then_some(CurrentDruidClaim {
+        targets,
+        found_outcast,
+    })
+}
+
+fn current_data_role_at_settled_active(
+    position: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<String> {
+    if timeline.contains_position(position) {
+        // Druid's picker completes after the reveal sequence. A Baker
+        // conversion has therefore finished its synchronous InitWithNoReset,
+        // independently of the delayed register-as boundary used by passive
+        // reveal observations.
+        Some("Baker".to_string())
+    } else {
+        current_data_role_at(position, scenario, state)
+    }
+}
+
+fn current_spy_register_as_surface_at_settled_active(
+    position: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    !timeline.contains_position(position)
+        && current_spy_register_as_surface_at(position, scenario, state)
+}
+
+fn current_raw_bluff_holder_at_settled_active(
+    position: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> CurrentMediumRawBluffHolder {
+    if timeline.contains_position(position) {
+        // Baker's synchronous full reinitialization clears Character.bluff;
+        // its later Reveal has a null selector and cannot repopulate it.
+        CurrentMediumRawBluffHolder::Impossible
+    } else {
+        current_medium_raw_bluff_holder_at(
+            position,
+            position,
+            timeline,
+            scenario,
+            state,
+        )
+    }
+}
+
+fn current_druid_target_surface_at_settled_active(
+    position: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentDruidTargetSurface> {
+    // GetRegisterAs wins over dataRef. Stable/current Spy caches a Villager;
+    // a Baker-converted Spy has completed the delayed reset by active use.
+    if current_spy_register_as_surface_at_settled_active(
+        position, timeline, scenario, state,
+    ) {
+        return Some(CurrentDruidTargetSurface::KnownNonOutcast);
+    }
+
+    let role = match current_data_role_at_settled_active(position, timeline, scenario, state) {
+        Some(role) if normalize_role(&role) == "unknown" => return None,
+        Some(role) => role,
+        None if scenario.is_evil(position) => return None,
+        None => return Some(CurrentDruidTargetSurface::AnonymousGood),
+    };
+    // Wretch's live register-as is a Minion identity, not an Outcast identity.
+    if roles_equal(&role, "Wretch") {
+        return Some(CurrentDruidTargetSurface::KnownNonOutcast);
+    }
+
+    let in_minion_pool = state
+        .deck
+        .minions
+        .iter()
+        .any(|candidate| roles_equal(candidate, &role));
+    let in_demon_pool = state
+        .deck
+        .demons
+        .iter()
+        .any(|candidate| roles_equal(candidate, &role));
+    let faction = match (in_minion_pool, in_demon_pool) {
+        (true, false) => Faction::Minion,
+        (false, true) => Faction::Demon,
+        (true, true) => return None,
+        (false, false) => get_card(&role)?.faction,
+    };
+    if faction == Faction::Outcast {
+        let canonical = get_card(&role)?.name.to_string();
+        Some(CurrentDruidTargetSurface::KnownOutcast(canonical))
+    } else {
+        Some(CurrentDruidTargetSurface::KnownNonOutcast)
+    }
+}
+
+fn current_druid_role_is_non_bluffable_outcast(role: &str) -> bool {
+    matches!(
+        normalize_role(role).as_str(),
+        "drunk" | "wretch" | "doppelganger"
+    )
+}
+
+fn current_druid_false_role_support(state: &GameState) -> HashSet<String> {
+    let canonical_outcasts = |roles: &[String]| {
+        roles
+            .iter()
+            .filter_map(|role| {
+                get_card(role).and_then(|card| {
+                    (card.faction == Faction::Outcast).then(|| card.name.to_string())
+                })
+            })
+            .collect::<HashSet<_>>()
+    };
+
+    // The first native ladder rung is the current script's exact
+    // non-bluffable Outcast records. Preserve set membership here; duplicate
+    // records affect probability, not whether an observed role is possible.
+    let script_non_bluffable = canonical_outcasts(&state.deck.outcasts)
+        .into_iter()
+        .filter(|role| current_druid_role_is_non_bluffable_outcast(role))
+        .collect::<HashSet<_>>();
+    if !script_non_bluffable.is_empty() {
+        return script_non_bluffable;
+    }
+
+    // Current shipped all-ascension non-bluffable Outcasts. This is the exact
+    // public asset set represented by the solver fingerprint; retain the later
+    // ladder rungs explicitly so a future asset-table change fails visibly.
+    let all_ascension_non_bluffable = ["Drunk", "Wretch", "Doppelganger"]
+        .into_iter()
+        .filter(|role| {
+            get_card(role).is_some_and(|card| card.faction == Faction::Outcast)
+        })
+        .map(str::to_string)
+        .collect::<HashSet<_>>();
+    if !all_ascension_non_bluffable.is_empty() {
+        return all_ascension_non_bluffable;
+    }
+
+    let any_script_outcast = canonical_outcasts(&state.deck.outcasts);
+    if !any_script_outcast.is_empty() {
+        any_script_outcast
+    } else {
+        HashSet::from(["Drunk".to_string()])
+    }
+}
+
+fn current_druid_clue_supports(
+    claim: &CurrentDruidClaim,
+    truth: TruthStatus,
+    surfaces: &[CurrentDruidTargetSurface; 3],
+    state: &GameState,
+) -> Vec<CurrentDruidClueSupport> {
+    let known_outcasts: Vec<&str> = surfaces
+        .iter()
+        .filter_map(|surface| match surface {
+            CurrentDruidTargetSurface::KnownOutcast(role) => Some(role.as_str()),
+            CurrentDruidTargetSurface::KnownNonOutcast
+            | CurrentDruidTargetSurface::AnonymousGood => None,
+        })
+        .collect();
+    let anonymous: Vec<u8> = claim
+        .targets
+        .iter()
+        .copied()
+        .zip(surfaces.iter())
+        .filter_map(|(position, surface)| {
+            matches!(surface, CurrentDruidTargetSurface::AnonymousGood)
+                .then_some(position)
+        })
+        .collect();
+
+    let empty = || CurrentDruidClueSupport {
+        anonymous_type_options: HashMap::new(),
+        anonymous_outcast_roles: HashMap::new(),
+    };
+    match (truth, claim.found_outcast.as_deref()) {
+        (TruthStatus::Truthful, Some(claimed)) => {
+            // Wretch's live register-as is Minion, so no physical Wretch
+            // occurrence belongs to Druid's selected Outcast pool.
+            if roles_equal(claimed, "Wretch") {
+                return Vec::new();
+            }
+            let mut supports = Vec::new();
+            if known_outcasts.iter().any(|actual| *actual == claimed) {
+                supports.push(empty());
+            }
+            for position in anonymous {
+                supports.push(CurrentDruidClueSupport {
+                    anonymous_type_options: HashMap::from([(
+                        position,
+                        BishopType::Outcast.bit(),
+                    )]),
+                    anonymous_outcast_roles: HashMap::from([(
+                        position,
+                        claimed.to_string(),
+                    )]),
+                });
+            }
+            supports
+        }
+        (TruthStatus::Truthful, None) => {
+            if !known_outcasts.is_empty() {
+                return Vec::new();
+            }
+            vec![CurrentDruidClueSupport {
+                anonymous_type_options: anonymous
+                    .into_iter()
+                    .map(|position| {
+                        (
+                            position,
+                            BishopType::Villager.bit() | BishopType::Minion.bit(),
+                        )
+                    })
+                    .collect(),
+                anonymous_outcast_roles: HashMap::new(),
+            }]
+        }
+        (TruthStatus::Lying, None) => {
+            if !known_outcasts.is_empty() {
+                return vec![empty()];
+            }
+            anonymous
+                .into_iter()
+                .map(|position| CurrentDruidClueSupport {
+                    anonymous_type_options: HashMap::from([(
+                        position,
+                        BishopType::Outcast.bit(),
+                    )]),
+                    anonymous_outcast_roles: HashMap::new(),
+                })
+                .collect()
+        }
+        (TruthStatus::Lying, Some(claimed)) => {
+            if !known_outcasts.is_empty()
+                || !current_druid_false_role_support(state).contains(claimed)
+            {
+                return Vec::new();
+            }
+            vec![CurrentDruidClueSupport {
+                anonymous_type_options: anonymous
+                    .into_iter()
+                    .map(|position| {
+                        (
+                            position,
+                            BishopType::Villager.bit() | BishopType::Minion.bit(),
+                        )
+                    })
+                    .collect(),
+                anonymous_outcast_roles: HashMap::new(),
+            }]
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn current_druid_append_supports(
+    supports: &mut Vec<CurrentDruidSupport>,
+    claim: &CurrentDruidClaim,
+    truth: TruthStatus,
+    surfaces: &[CurrentDruidTargetSurface; 3],
+    anonymous_wretches: &AnonymousWretchConstraints,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) {
+    for clue in current_druid_clue_supports(claim, truth, surfaces, state) {
+        if !current_hidden_anonymous_assignment_possible(
+            &clue.anonymous_type_options,
+            &clue.anonymous_outcast_roles,
+            &anonymous_wretches.required,
+            &anonymous_wretches.forbidden,
+            scenario,
+            state,
+        ) {
+            continue;
+        }
+        let support = CurrentDruidSupport {
+            anonymous_wretches: anonymous_wretches.clone(),
+            anonymous_type_options: clue.anonymous_type_options,
+            anonymous_outcast_roles: clue.anonymous_outcast_roles,
+            register_as: register_as.clone(),
+            raw_bluff: raw_bluff.clone(),
+            forbidden_raw_bluff: forbidden_raw_bluff.clone(),
+            baker_spy_timeline: timeline.clone(),
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+}
+
+fn current_druid_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentDruidSupport> {
+    let Some(claim) = parse_current_druid_claim(card, state) else {
+        return Vec::new();
+    };
+    // An opaque executed Evil may have been any Start status/data writer.
+    // Active-use sampling cannot reconstruct that world from a later role map.
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+
+    let anonymous_wretch_candidates: HashSet<u8> =
+        anonymous_natural_wretch_candidates(scenario, state)
+            .into_iter()
+            .collect();
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        let surfaces = claim
+            .targets
+            .iter()
+            .map(|position| {
+                current_druid_target_surface_at_settled_active(
+                    *position, &timeline, scenario, state,
+                )
+            })
+            .collect::<Option<Vec<_>>>();
+        let Some(surfaces) = surfaces.and_then(|values| values.try_into().ok()) else {
+            continue;
+        };
+        let current_role = current_data_role_at_settled_active(
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        );
+        let raw_holder = current_raw_bluff_holder_at_settled_active(
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        );
+
+        let runtime_evil_real_truth = is_runtime_evil_at(card.position, scenario, state)
+            && raw_holder != CurrentMediumRawBluffHolder::Impossible;
+        if current_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Druid"))
+        {
+            let truth = if runtime_evil_real_truth {
+                TruthStatus::Truthful
+            } else {
+                truth_status(card.position, scenario, state)
+            };
+            current_druid_append_supports(
+                &mut supports,
+                &claim,
+                truth,
+                &surfaces,
+                &AnonymousWretchConstraints::empty(),
+                None,
+                None,
+                runtime_evil_real_truth
+                    .then(|| (card.position, normalize_role("Druid"))),
+                &timeline,
+                scenario,
+                state,
+            );
+        }
+
+        if raw_holder == CurrentMediumRawBluffHolder::Impossible {
+            continue;
+        }
+        let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+        if anonymous_wretch_candidates.contains(&card.position) {
+            // A natural Wretch has a base-null raw selector. A current Druid
+            // callback at that grouped seat therefore excludes Wretch.
+            anonymous_wretches.forbidden.insert(card.position);
+        }
+        let register_as = if current_spy_register_as_surface_at_settled_active(
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        ) {
+            if !current_medium_spy_register_as_label_allowed("Druid", state) {
+                continue;
+            }
+            Some((card.position, normalize_role("Druid")))
+        } else {
+            None
+        };
+        current_druid_append_supports(
+            &mut supports,
+            &claim,
+            current_bard_raw_provider_truth(
+                card.position,
+                card.position,
+                &timeline,
+                scenario,
+                state,
+            ),
+            &surfaces,
+            &anonymous_wretches,
+            register_as,
+            Some((card.position, normalize_role("Druid"))),
+            None,
+            &timeline,
+            scenario,
+            state,
+        );
+    }
+    supports
+}
+
+fn validate_current_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    !current_druid_supports(card, scenario, state).is_empty()
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -5377,6 +5912,57 @@ fn current_bishop_anonymous_assignment_possible(
         scenario,
         state,
     )
+}
+
+fn current_hidden_anonymous_assignment_possible(
+    type_options: &HashMap<u8, u8>,
+    exact_outcast_roles: &HashMap<u8, String>,
+    required_wretches: &HashSet<u8>,
+    forbidden_wretches: &HashSet<u8>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if !current_bishop_anonymous_assignment_possible(
+        type_options,
+        required_wretches,
+        forbidden_wretches,
+        scenario,
+        state,
+    ) {
+        return false;
+    }
+
+    let mut roles: HashMap<String, (String, HashSet<u8>)> = HashMap::new();
+    for (&position, role) in exact_outcast_roles {
+        if type_options
+            .get(&position)
+            .is_none_or(|options| options & BishopType::Outcast.bit() == 0)
+            || roles_equal(role, "Wretch")
+        {
+            return false;
+        }
+        let Some(card) = get_card(role) else {
+            return false;
+        };
+        if card.faction != Faction::Outcast || card.name != role {
+            return false;
+        }
+        roles
+            .entry(normalize_role(role))
+            .or_insert_with(|| (role.clone(), HashSet::new()))
+            .1
+            .insert(position);
+    }
+
+    roles.into_values().all(|(role, positions)| {
+        crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+            &positions,
+            &role,
+            &HashSet::new(),
+            scenario,
+            state,
+        )
+    })
 }
 
 fn current_bishop_type_permutations(types: &[BishopType]) -> Vec<Vec<BishopType>> {
@@ -5840,6 +6426,7 @@ fn validate_current_bounty_hunter_wretch_consistency(
 struct CurrentHiddenSurfaceSupport {
     anonymous_wretches: AnonymousWretchConstraints,
     bishop_type_options: HashMap<u8, u8>,
+    anonymous_outcast_roles: HashMap<u8, String>,
     register_as: Option<(u8, String)>,
     raw_bluff: Option<(u8, String)>,
     forbidden_raw_bluff: Option<(u8, String)>,
@@ -5894,6 +6481,7 @@ fn current_bounty_hunter_hidden_supports_for_target(
             supports.push(CurrentHiddenSurfaceSupport {
                 anonymous_wretches,
                 bishop_type_options: HashMap::new(),
+                anonymous_outcast_roles: HashMap::new(),
                 register_as: None,
                 raw_bluff: None,
                 forbidden_raw_bluff: None,
@@ -5933,6 +6521,7 @@ fn validate_current_hidden_surface_consistency(
             || card
                 .info_parsed
                 .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD)
+            || card.info_parsed.contains_key(DRUID_CURRENT_VARIANT_FIELD)
             || (card.info_parsed.contains_key("poet_variant")
                 && card
                     .info_parsed
@@ -5968,6 +6557,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -5988,6 +6578,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6008,6 +6599,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6028,6 +6620,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6052,6 +6645,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6076,6 +6670,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6100,6 +6695,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6122,6 +6718,30 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
+                            register_as: support.register_as,
+                            raw_bluff: support.raw_bluff,
+                            forbidden_raw_bluff: support.forbidden_raw_bluff,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => Some(Vec::new()),
+                Ok(None) => None,
+            }
+        } else if apparent == "druid" {
+            match current_passive_payload_source(
+                card,
+                DRUID_CURRENT_VARIANT_FIELD,
+                "Druid",
+            ) {
+                Ok(Some(CurrentPassivePayloadSource::Direct)) => Some(
+                    current_druid_supports(card, scenario, state)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: support.anonymous_type_options,
+                            anonymous_outcast_roles: support.anonymous_outcast_roles,
                             register_as: support.register_as,
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: support.forbidden_raw_bluff,
@@ -6142,6 +6762,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: support.anonymous_wretches,
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: support.forbidden_raw_bluff,
@@ -6162,6 +6783,7 @@ fn validate_current_hidden_surface_consistency(
                         .map(|support| CurrentHiddenSurfaceSupport {
                             anonymous_wretches: AnonymousWretchConstraints::empty(),
                             bishop_type_options: support.anonymous_type_options,
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6185,6 +6807,7 @@ fn validate_current_hidden_surface_consistency(
                                 forbidden: support.forbidden_anonymous_wretches,
                             },
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: None,
@@ -6208,6 +6831,7 @@ fn validate_current_hidden_surface_consistency(
                                 forbidden: support.forbidden_anonymous_wretches,
                             },
                             bishop_type_options: HashMap::new(),
+                            anonymous_outcast_roles: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
@@ -6243,6 +6867,7 @@ fn validate_current_hidden_surface_consistency(
         required: &HashSet<u8>,
         forbidden: &HashSet<u8>,
         bishop_type_options: &HashMap<u8, u8>,
+        anonymous_outcast_roles: &HashMap<u8, String>,
         register_as: &HashMap<u8, String>,
         raw_bluffs: &HashMap<u8, String>,
         forbidden_raw_bluffs: &HashMap<u8, HashSet<String>>,
@@ -6276,23 +6901,29 @@ fn validate_current_hidden_surface_consistency(
             if !bishop_types_compatible {
                 continue;
             }
-            let anonymous_assignment_possible = if next_bishop_type_options.is_empty() {
-                anonymous_wretch_assignment_possible(
-                    &next_required,
-                    &next_forbidden,
-                    scenario,
-                    state,
-                )
-            } else {
-                current_bishop_anonymous_assignment_possible(
+
+            let mut next_anonymous_outcast_roles = anonymous_outcast_roles.clone();
+            let mut outcast_roles_compatible = true;
+            for (&position, role) in &support.anonymous_outcast_roles {
+                if next_anonymous_outcast_roles
+                    .get(&position)
+                    .is_some_and(|selected| selected != role)
+                {
+                    outcast_roles_compatible = false;
+                    break;
+                }
+                next_anonymous_outcast_roles.insert(position, role.clone());
+            }
+            if !outcast_roles_compatible
+                || !current_hidden_anonymous_assignment_possible(
                     &next_bishop_type_options,
+                    &next_anonymous_outcast_roles,
                     &next_required,
                     &next_forbidden,
                     scenario,
                     state,
                 )
-            };
-            if !anonymous_assignment_possible {
+            {
                 continue;
             }
 
@@ -6347,6 +6978,7 @@ fn validate_current_hidden_surface_consistency(
                 &next_required,
                 &next_forbidden,
                 &next_bishop_type_options,
+                &next_anonymous_outcast_roles,
                 &next_register_as,
                 &next_raw_bluffs,
                 &next_forbidden_raw_bluffs,
@@ -6365,6 +6997,7 @@ fn validate_current_hidden_surface_consistency(
         &observations,
         &HashSet::new(),
         &HashSet::new(),
+        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
@@ -7544,6 +8177,24 @@ mod tests {
             }),
         );
         card.info_text = info_text;
+        card
+    }
+
+    fn current_druid(
+        pos: u8,
+        targets: [u8; 3],
+        found_outcast: Option<&str>,
+    ) -> CardInfo {
+        let mut card = make_card(
+            pos,
+            "Druid",
+            json!({
+                "targets": targets,
+                "found_outcast": found_outcast,
+                "druid_variant": "public_current",
+            }),
+        );
+        card.info_text = current_druid_claim_text(&targets, found_outcast);
         card
     }
 
@@ -15492,6 +16143,473 @@ mod tests {
         let mut scenario = empty_scenario();
         scenario.evil_positions.insert(5, "Pooka".to_string());
         assert!(validate_fortune_teller(&card, &scenario, &state));
+    }
+
+    #[test]
+    fn current_druid_schema_text_click_order_and_direct_provenance_are_exact() {
+        let druid = current_druid(2, [4, 2, 3], Some("Bombardier"));
+        let mut state = base_state(
+            4,
+            vec![
+                druid.clone(),
+                make_card(3, "Bombardier", json!({})),
+                make_card(4, "Scout", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        assert_eq!(
+            druid.info_text,
+            "Among #2, #3, #4\nthere is: Bombardier"
+        );
+        assert!(validate_druid(&druid, &empty_scenario(), &state));
+
+        let mut malformed = druid.clone();
+        malformed.info_text.push('.');
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed.info_parsed.insert("extra".to_string(), json!(true));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed.info_parsed.insert("targets".to_string(), json!([2, 2, 3]));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed.info_parsed.insert("targets".to_string(), json!([2, 3, 5]));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        let tiny = current_druid(1, [1, 2, 2], None);
+        assert!(!validate_druid(
+            &tiny,
+            &empty_scenario(),
+            &base_state(2, vec![tiny.clone()]),
+        ));
+        malformed = druid.clone();
+        malformed
+            .info_parsed
+            .insert("found_outcast".to_string(), json!("Plague Doctor"));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed
+            .info_parsed
+            .insert("found_outcast".to_string(), json!("plague_doctor"));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed.info_parsed.insert(
+            DRUID_CURRENT_VARIANT_FIELD.to_string(),
+            json!("future"),
+        );
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = druid.clone();
+        malformed
+            .info_parsed
+            .insert("poet_variant".to_string(), json!(POET_CURRENT_VARIANT));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+
+        let poet = current_poet(
+            "Druid",
+            json!({"targets": [2, 3, 4], "found_outcast": null}),
+        );
+        assert!(!validate_poet(&poet, &empty_scenario(), &state));
+    }
+
+    #[test]
+    fn current_druid_truth_uses_registered_outcast_identity_and_keeps_lifecycle_seats() {
+        let positive = current_druid(1, [2, 3, 4], Some("Bombardier"));
+        let mut state = base_state(
+            6,
+            vec![
+                positive.clone(),
+                make_card(2, "Bombardier", json!({})),
+                make_card(3, "Plague Doctor", json!({})),
+                make_card(4, "Scout", json!({})),
+                make_card(5, "Wretch", json!({})),
+                make_card(6, "Scout", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec![
+            "Bombardier".to_string(),
+            "Plague Doctor".to_string(),
+            "Wretch".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(6, "Spy".to_string());
+
+        assert!(validate_druid(&positive, &scenario, &state));
+        let plague_doctor = current_druid(1, [2, 3, 4], Some("Plague_Doctor"));
+        assert_eq!(
+            plague_doctor.info_text,
+            "Among #2, #3, #4\nthere is: Plague Doctor"
+        );
+        assert!(validate_druid(&plague_doctor, &scenario, &state));
+        assert!(!validate_druid(
+            &current_druid(1, [2, 3, 4], Some("Drunk")),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_druid(
+            &current_druid(1, [2, 3, 4], None),
+            &scenario,
+            &state,
+        ));
+
+        // Death/hidden-state bookkeeping does not remove a physical target
+        // from CurrentCharacters or Druid's active picker result.
+        state.executed = vec![2];
+        state.night_kills = vec![3];
+        assert!(validate_druid(&positive, &scenario, &state));
+
+        // Wretch projects a Minion register-as and Spy a Villager register-as;
+        // neither belongs to the selected Outcast occurrence pool.
+        assert!(validate_druid(
+            &current_druid(1, [4, 5, 6], None),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_druid(
+            &current_druid(1, [4, 5, 6], Some("Wretch")),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_bluff_is_the_exact_complement_and_false_role_ladder() {
+        let mut state = base_state(
+            5,
+            vec![
+                current_druid(1, [2, 3, 4], Some("Drunk")),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Bard", json!({})),
+                make_card(4, "Lover", json!({})),
+                make_card(5, "Bombardier", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec![
+            "Doppelganger".to_string(),
+            "Drunk".to_string(),
+            "Wretch".to_string(),
+            "Bombardier".to_string(),
+        ];
+        let mut lying = empty_scenario();
+        lying.corrupted.insert(1);
+
+        for role in ["Doppelganger", "Drunk", "Wretch"] {
+            assert!(validate_druid(
+                &current_druid(1, [2, 3, 4], Some(role)),
+                &lying,
+                &state,
+            ));
+        }
+        assert!(!validate_druid(
+            &current_druid(1, [2, 3, 4], Some("Bombardier")),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_druid(
+            &current_druid(1, [2, 3, 4], None),
+            &lying,
+            &state,
+        ));
+
+        assert!(validate_druid(
+            &current_druid(1, [3, 4, 5], None),
+            &lying,
+            &state,
+        ));
+        assert!(!validate_druid(
+            &current_druid(1, [3, 4, 5], Some("Drunk")),
+            &lying,
+            &state,
+        ));
+
+        // Drunk reaches the raw Druid BluffAct path; clean Doppelganger's
+        // HealthyBluff reaches the truthful raw Druid Act path.
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(validate_druid(
+            &current_druid(1, [2, 3, 4], Some("Drunk")),
+            &drunk,
+            &state,
+        ));
+        let mut doppel = empty_scenario();
+        doppel.doppelganger_position = Some(1);
+        assert!(validate_druid(
+            &current_druid(1, [3, 4, 5], Some("Bombardier")),
+            &doppel,
+            &state,
+        ));
+
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(validate_druid(
+            &current_druid(1, [3, 4, 5], Some("Bombardier")),
+            &puppet,
+            &state,
+        ));
+        puppet.corrupted.insert(1);
+        assert!(validate_druid(
+            &current_druid(1, [3, 4, 5], None),
+            &puppet,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_projects_twin_shaman_puppet_and_settled_baker_data() {
+        let druid = current_druid(1, [2, 4, 5], Some("Bombardier"));
+        let mut state = base_state(
+            5,
+            vec![
+                druid.clone(),
+                make_card(2, "Bombardier", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Scout", json!({})),
+                make_card(5, "Twin Minion", json!({})),
+            ],
+        );
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut moved = empty_scenario();
+        moved.evil_positions.insert(3, "Pooka".to_string());
+        moved.evil_positions.insert(5, "Twin Minion".to_string());
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 5,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Bombardier".to_string(),
+            },
+        });
+        assert!(validate_druid(&druid, &moved, &state));
+        assert!(!validate_druid(
+            &current_druid(1, [2, 4, 5], None),
+            &moved,
+            &state,
+        ));
+
+        // A Twin actor that received Villager data remains runtime Evil and
+        // can retain an Outcast raw bluff. Shaman sees its current Villager
+        // type, copies that raw Plague Doctor identity, and writes it to #4.
+        let copied_druid = current_druid(1, [2, 3, 4], Some("Plague_Doctor"));
+        let mut copied_state = base_state(
+            5,
+            vec![
+                copied_druid.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Bard", json!({})),
+                make_card(5, "Twin Minion", json!({})),
+            ],
+        );
+        copied_state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Scout".to_string(),
+            "Bard".to_string(),
+        ];
+        copied_state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        copied_state.deck.minions = vec!["Twin Minion".to_string()];
+        copied_state.deck.demons = vec!["Pooka".to_string()];
+        let mut copied = empty_scenario();
+        copied.evil_positions.insert(3, "Pooka".to_string());
+        copied.evil_positions.insert(5, "Twin Minion".to_string());
+        copied.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 5,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        });
+        copied.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 5,
+            target_position: 4,
+            copied_role: "Plague Doctor".to_string(),
+            target_previous_roles: vec!["Bard".to_string()],
+        });
+        assert!(validate_druid(&copied_druid, &copied, &copied_state));
+
+        let puppet_positive = current_druid(1, [2, 4, 5], Some("Bombardier"));
+        let mut puppet_state = base_state(
+            5,
+            vec![
+                puppet_positive.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Puppeteer", json!({})),
+                make_card(4, "Bard", json!({})),
+                // Public presentation can be the generated Puppet's bluff;
+                // exact current data remains Puppet.
+                make_card(5, "Bombardier", json!({})),
+            ],
+        );
+        puppet_state.deck.minions = vec!["Puppeteer".to_string()];
+        puppet_state.deck.outcasts = vec!["Bombardier".to_string()];
+        let mut puppet = empty_scenario();
+        puppet.evil_positions.insert(3, "Puppeteer".to_string());
+        puppet.puppet_position = Some(5);
+        assert!(!validate_druid(
+            &puppet_positive,
+            &puppet,
+            &puppet_state,
+        ));
+        assert!(validate_druid(
+            &current_druid(1, [2, 4, 5], None),
+            &puppet,
+            &puppet_state,
+        ));
+
+        let active = current_druid(4, [2, 3, 4], None);
+        let mut baker_state = base_state(
+            4,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+                active.clone(),
+            ],
+        );
+        baker_state.deck.villagers = vec!["Baker".to_string(), "Druid".to_string()];
+        baker_state.deck.minions = vec!["Spy".to_string()];
+        baker_state.deck.demons = vec!["Pooka".to_string()];
+        baker_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        baker_state.reveal_order = vec![1, 4, 2, 3];
+        let mut baker = empty_scenario();
+        baker.evil_positions.insert(2, "Spy".to_string());
+        baker.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_baker_history(&baker, &baker_state));
+        assert!(validate_druid(&active, &baker, &baker_state));
+        assert!(!validate_druid(
+            &current_druid(2, [1, 2, 4], Some("Drunk")),
+            &baker,
+            &baker_state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_hidden_outcast_occurrences_are_joined_across_observations() {
+        let first = current_druid(1, [3, 4, 5], Some("Bombardier"));
+        let second = current_druid(2, [4, 5, 6], Some("Bombardier"));
+        let mut state = base_state(6, vec![first.clone(), second.clone()]);
+        state.deck.villagers = vec!["Druid".to_string(), "Druid".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.board_villager_count = Some(5);
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let scenario = empty_scenario();
+
+        assert!(validate_druid(&first, &scenario, &state));
+        assert!(validate_druid(&second, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // These disjoint triples require the sole Bombardier at two physical
+        // seats. Each observation is independently possible, but not jointly.
+        let disjoint = current_druid(2, [1, 2, 6], Some("Bombardier"));
+        state.cards[1] = disjoint.clone();
+        assert!(validate_druid(&disjoint, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_joins_wretch_and_raw_callback_labels_globally() {
+        let druid = current_druid(1, [3, 4, 5], Some("Bombardier"));
+        let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 3}));
+        bounty.position = 2;
+        let mut state = base_state(
+            5,
+            vec![
+                druid.clone(),
+                bounty.clone(),
+                make_card(4, "Scout", json!({})),
+                make_card(5, "Bard", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Poet".to_string(),
+            "Scout".to_string(),
+            "Bard".to_string(),
+        ];
+        state.deck.outcasts = vec!["Bombardier".to_string(), "Wretch".to_string()];
+        state.board_villager_count = Some(4);
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        assert!(validate_druid(&druid, &scenario, &state));
+        assert!(validate_poet(&bounty, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+        scenario.corrupted.insert(2);
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let raw_druid = current_druid(1, [2, 3, 4], Some("Drunk"));
+        let mut medium = current_medium(5, json!(1), json!("Judge"));
+        let mut raw_state = base_state(
+            5,
+            vec![
+                raw_druid.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Bard", json!({})),
+                make_card(4, "Lover", json!({})),
+                medium.clone(),
+            ],
+        );
+        raw_state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Medium".to_string(),
+            "Judge".to_string(),
+        ];
+        raw_state.deck.outcasts = vec!["Drunk".to_string()];
+        raw_state.deck.demons = vec!["Pooka".to_string()];
+        let mut raw = empty_scenario();
+        raw.evil_positions.insert(1, "Pooka".to_string());
+        raw.corrupted.insert(5);
+        assert!(validate_druid(&raw_druid, &raw, &raw_state));
+        assert!(validate_medium(&medium, &raw, &raw_state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &raw, &raw_state,
+        ));
+        medium = current_medium(5, json!(1), json!("Druid"));
+        raw_state.cards[4] = medium.clone();
+        assert!(validate_medium(&medium, &raw, &raw_state));
+        assert!(validate_current_hidden_surface_consistency(&raw, &raw_state));
+    }
+
+    #[test]
+    fn current_druid_fails_closed_on_unknown_start_identity_but_legacy_is_unchanged() {
+        let current = current_druid(1, [2, 3, 4], None);
+        let mut state = base_state(4, vec![current.clone()]);
+        state.deck.villagers = vec!["Druid".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Unknown".to_string());
+        assert!(!validate_druid(&current, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let legacy = make_card(
+            1,
+            "Druid",
+            json!({"targets": [2, 3, 4], "found_outcast": null}),
+        );
+        state.cards[0] = legacy.clone();
+        assert!(validate_druid(&legacy, &scenario, &state));
+        assert!(validate_druid(
+            &make_card(1, "Druid", json!({})),
+            &scenario,
+            &state,
+        ));
     }
 
     #[test]
