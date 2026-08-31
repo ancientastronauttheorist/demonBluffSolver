@@ -602,6 +602,21 @@ fn validate_knitter(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
 }
 
 fn validate_confessor(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(
+        card,
+        CONFESSOR_CURRENT_VARIANT_FIELD,
+        "Confessor",
+    ) {
+        Ok(Some(CurrentPassivePayloadSource::Direct)) => {
+            return validate_current_confessor(card, scenario, state);
+        }
+        // Confessor is not one of the twelve providers constructed by current
+        // Poet/Gossip. Keep obsolete unmarked Poet captures on the legacy path,
+        // but never admit a provenance-marked current Poet surface here.
+        Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let claimed_dizzy = info_bool(&card.info_parsed, "dizzy")
         .or_else(|| info_bool(&card.info_parsed, "dirty"));
     let claimed_dizzy = match claimed_dizzy {
@@ -681,6 +696,7 @@ const EMPRESS_CURRENT_VARIANT_FIELD: &str = "empress_variant";
 const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
 const GEMCRAFTER_CURRENT_VARIANT_FIELD: &str = "gemcrafter_variant";
 const BARD_CURRENT_VARIANT_FIELD: &str = "bard_variant";
+const CONFESSOR_CURRENT_VARIANT_FIELD: &str = "confessor_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -715,7 +731,10 @@ fn current_passive_payload_source(
                 && !card
                     .info_parsed
                     .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD)
+                && !card
+                    .info_parsed
+                    .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -738,6 +757,191 @@ fn current_passive_payload_source(
         }
         _ => Err(()),
     }
+}
+
+fn current_confessor_claim_text(dizzy: bool) -> &'static str {
+    if dizzy {
+        "I am dizzy"
+    } else {
+        "I am Good"
+    }
+}
+
+fn parse_current_confessor_claim(card: &CardInfo, state: &GameState) -> Option<bool> {
+    if card.position == 0
+        || card.position > state.n_cards
+        || card.apparent_role != "Confessor"
+        || card.info_parsed.len() != 2
+        || card
+            .info_parsed
+            .get(CONFESSOR_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    let dizzy = card.info_parsed.get("dizzy")?.as_bool()?;
+    (card.info_text == current_confessor_claim_text(dizzy)).then_some(dizzy)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentConfessorSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_confessor_actual_dizzy(
+    actor: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<bool> {
+    let current_role =
+        current_data_role_at_observation(actor, actor, timeline, scenario, state)?;
+    // Confessor checks the current real dataRef role before either corruption
+    // or registered alignment. Native Spy (and a managed role derived from it)
+    // therefore reports Good even when the physical Character is otherwise
+    // Evil or Corrupted. Spy is the only represented member of that native
+    // class family in the public solver model.
+    if roles_equal(&current_role, "Spy") {
+        return Some(false);
+    }
+    if scenario.corrupted.contains(&actor) {
+        return Some(true);
+    }
+    Some(
+        registered_alignment_at_observation(actor, actor, timeline, scenario, state)?
+            == EffectiveAlignment::Evil,
+    )
+}
+
+fn current_confessor_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentConfessorSupport> {
+    let Some(claimed_dizzy) = parse_current_confessor_claim(card, state) else {
+        return Vec::new();
+    };
+    // An untyped Evil may have been a corruption/status writer, identity mover,
+    // or bluff producer. A final role overlay cannot reconstruct the Day-time
+    // charRef surface sampled by Confessor.
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+
+    let anonymous_candidates = anonymous_natural_wretch_candidates(scenario, state);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+        let Some(current_role) = current_data_role_at_observation(
+            card.position,
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        ) else {
+            continue;
+        };
+        if current_confessor_actual_dizzy(card.position, &timeline, scenario, state)
+            != Some(claimed_dizzy)
+        {
+            continue;
+        }
+        let raw_bluff_holder = current_medium_raw_bluff_holder_at(
+            card.position,
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        );
+
+        if roles_equal(&current_role, "Confessor") {
+            // A proven non-null raw pointer dispatches after the real callback.
+            // The newest event can still have Confessor's exact shape only
+            // when that later callback is also Confessor (its real/bluff
+            // methods compute the same predicate). `Possible` must remain
+            // unconstrained here because the current model cannot distinguish
+            // an absent pointer from an unobserved one; the separate raw branch
+            // below represents the positive Confessor assignment.
+            let surviving_raw_bluff = (raw_bluff_holder
+                == CurrentMediumRawBluffHolder::Proven)
+                .then(|| (card.position, normalize_role("Confessor")));
+            let support = CurrentConfessorSupport {
+                anonymous_wretches: AnonymousWretchConstraints::empty(),
+                register_as: None,
+                raw_bluff: surviving_raw_bluff,
+                // Real GetInfo and a later raw-Confessor GetBluffInfo compute
+                // the same charRef predicate and text. The later callback may
+                // overwrite the first, but it cannot contradict this claim.
+                forbidden_raw_bluff: None,
+                baker_spy_timeline: timeline.clone(),
+            };
+            if !supports.contains(&support) {
+                supports.push(support);
+            }
+        }
+
+        if raw_bluff_holder == CurrentMediumRawBluffHolder::Impossible {
+            continue;
+        }
+
+        let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+        if anonymous_candidates.contains(&card.position) {
+            // Natural Wretch has no raw bluff selector. A raw Confessor callback
+            // excludes that grouped identity unless a represented mover already
+            // supplied the non-null pointer.
+            anonymous_wretches.forbidden.insert(card.position);
+            if !anonymous_wretch_assignment_possible(
+                &anonymous_wretches.required,
+                &anonymous_wretches.forbidden,
+                scenario,
+                state,
+            ) {
+                continue;
+            }
+        }
+
+        let register_as = if current_spy_register_as_surface_at_observation(
+            card.position,
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        ) == Some(true)
+        {
+            if !current_medium_spy_register_as_label_allowed("Confessor", state) {
+                continue;
+            }
+            Some((card.position, normalize_role("Confessor")))
+        } else {
+            None
+        };
+        let support = CurrentConfessorSupport {
+            anonymous_wretches,
+            register_as,
+            raw_bluff: Some((card.position, normalize_role("Confessor"))),
+            forbidden_raw_bluff: None,
+            baker_spy_timeline: timeline,
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+    supports
+}
+
+fn validate_current_confessor(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    !current_confessor_supports(card, scenario, state).is_empty()
 }
 
 fn current_gemcrafter_claim_text(target: u8) -> String {
@@ -5726,6 +5930,9 @@ fn validate_current_hidden_surface_consistency(
                 .info_parsed
                 .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD)
             || card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD)
+            || card
+                .info_parsed
+                .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD)
             || (card.info_parsed.contains_key("poet_variant")
                 && card
                     .info_parsed
@@ -5902,6 +6109,28 @@ fn validate_current_hidden_surface_consistency(
                 ),
                 Ok(None) => None,
                 Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "confessor" {
+            match current_passive_payload_source(
+                card,
+                CONFESSOR_CURRENT_VARIANT_FIELD,
+                "Confessor",
+            ) {
+                Ok(Some(CurrentPassivePayloadSource::Direct)) => Some(
+                    current_confessor_supports(card, scenario, state)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
+                            register_as: support.register_as,
+                            raw_bluff: support.raw_bluff,
+                            forbidden_raw_bluff: support.forbidden_raw_bluff,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => Some(Vec::new()),
+                Ok(None) => None,
             }
         } else if apparent == "bard"
             || (apparent == "poet" && copied == Some("Bard"))
@@ -7294,6 +7523,24 @@ mod tests {
             json!({
                 "bard_variant": "public_current",
                 "corruption_distance": claimed,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_confessor(pos: u8, dizzy: serde_json::Value) -> CardInfo {
+        let info_text = dizzy
+            .as_bool()
+            .map(current_confessor_claim_text)
+            .unwrap_or_default()
+            .to_string();
+        let mut card = make_card(
+            pos,
+            "Confessor",
+            json!({
+                "confessor_variant": "public_current",
+                "dizzy": dizzy,
             }),
         );
         card.info_text = info_text;
@@ -8942,6 +9189,353 @@ mod tests {
         assert!(validate_bishop(&timeline_claim, &timeline, &timeline_state));
         timeline_state.reveal_order.retain(|position| *position != 3);
         assert!(!validate_bishop(&timeline_claim, &timeline, &timeline_state));
+    }
+
+    #[test]
+    fn current_confessor_schema_text_provenance_and_archive_fallback_are_exact() {
+        let scenario = empty_scenario();
+        let good = current_confessor(1, json!(false));
+        let state = base_state(3, vec![good.clone()]);
+        assert!(validate_confessor(&good, &scenario, &state));
+
+        let dizzy = current_confessor(1, json!(true));
+        let mut corrupted = empty_scenario();
+        corrupted.corrupted.insert(1);
+        let dizzy_state = base_state(3, vec![dizzy.clone()]);
+        assert!(validate_confessor(&dizzy, &corrupted, &dizzy_state));
+
+        for mutation in [
+            "wrong_text",
+            "extra_ref",
+            "future",
+            "mixed",
+            "wrong_role",
+            "missing",
+        ] {
+            let mut malformed = current_confessor(1, json!(false));
+            match mutation {
+                "wrong_text" => malformed.info_text.push('.'),
+                // Rust CardInfo does not serialize ActedInfo references. Any
+                // bridge attempt to wrap the native null refs is nevertheless
+                // rejected as an extra current-schema field.
+                "extra_ref" => {
+                    malformed
+                        .info_parsed
+                        .insert("targets".to_string(), json!([]));
+                }
+                "future" => {
+                    malformed
+                        .info_parsed
+                        .insert("confessor_variant".to_string(), json!("future"));
+                }
+                "mixed" => {
+                    malformed
+                        .info_parsed
+                        .insert("poet_variant".to_string(), json!("public_current"));
+                }
+                "wrong_role" => malformed.apparent_role = "confessor".to_string(),
+                "missing" => {
+                    malformed.info_parsed.remove("dizzy");
+                }
+                _ => unreachable!(),
+            }
+            let malformed_state = base_state(3, vec![malformed.clone()]);
+            assert!(
+                !validate_confessor(&malformed, &scenario, &malformed_state),
+                "{mutation}"
+            );
+        }
+        for malformed_claim in [json!(0), json!(1), json!("true"), json!(null)] {
+            let malformed = current_confessor(1, malformed_claim);
+            let malformed_state = base_state(3, vec![malformed.clone()]);
+            assert!(!validate_confessor(
+                &malformed,
+                &scenario,
+                &malformed_state,
+            ));
+        }
+        for position in [0, 4] {
+            let malformed = current_confessor(position, json!(false));
+            let malformed_state = base_state(3, vec![malformed.clone()]);
+            assert!(!validate_confessor(
+                &malformed,
+                &scenario,
+                &malformed_state,
+            ));
+        }
+
+        let mut current_poet = make_card(
+            1,
+            "Poet",
+            json!({
+                "poet_variant": "public_current",
+                "copied_role": "Confessor",
+                "dizzy": false,
+            }),
+        );
+        current_poet.info_text = "I am Good".to_string();
+        let current_poet_state = base_state(3, vec![current_poet.clone()]);
+        assert!(!validate_poet(
+            &current_poet,
+            &scenario,
+            &current_poet_state,
+        ));
+
+        // Frozen direct aliases, missing scalars, and obsolete Poet captures
+        // stay byte-for-byte on the prior permissive predicate.
+        let dirty = make_card(1, "Confessor", json!({"dirty": false}));
+        let missing = make_card(1, "Confessor", json!({}));
+        let archived_poet = make_card(
+            1,
+            "Poet",
+            json!({"copied_role": "Confessor", "dizzy": false}),
+        );
+        let legacy_state = base_state(
+            3,
+            vec![dirty.clone(), missing.clone(), archived_poet.clone()],
+        );
+        assert!(validate_confessor(&dirty, &scenario, &legacy_state));
+        assert!(validate_confessor(&missing, &scenario, &legacy_state));
+        assert!(validate_poet(&archived_poet, &scenario, &legacy_state));
+    }
+
+    #[test]
+    fn current_confessor_uses_corruption_registered_alignment_and_spy_exception() {
+        let good = current_confessor(1, json!(false));
+        let dizzy = current_confessor(1, json!(true));
+        let mut state = base_state(3, vec![good.clone()]);
+        state.deck.villagers = vec!["Confessor".to_string()];
+        assert!(validate_confessor(&good, &empty_scenario(), &state));
+        assert!(!validate_confessor(&dizzy, &empty_scenario(), &state));
+
+        let mut corrupted = empty_scenario();
+        corrupted.corrupted.insert(1);
+        state.cards[0] = dizzy.clone();
+        assert!(validate_confessor(&dizzy, &corrupted, &state));
+        state.cards[0] = good.clone();
+        assert!(!validate_confessor(&good, &corrupted, &state));
+
+        let mut runtime_evil = empty_scenario();
+        runtime_evil.evil_positions.insert(1, "Pooka".to_string());
+        state.cards[0] = dizzy.clone();
+        state.deck.demons = vec!["Pooka".to_string()];
+        assert!(validate_confessor(&dizzy, &runtime_evil, &state));
+
+        let mut spy = empty_scenario();
+        spy.evil_positions.insert(1, "Spy".to_string());
+        spy.corrupted.insert(1);
+        state.cards[0] = good.clone();
+        state.deck.minions = vec!["Spy".to_string()];
+        // Current real Spy data wins before both corruption and registered
+        // alignment in Confessor's native predicate.
+        assert!(validate_confessor(&good, &spy, &state));
+        state.cards[0] = dizzy.clone();
+        assert!(!validate_confessor(&dizzy, &spy, &state));
+
+        let mut wretch = empty_scenario();
+        wretch.chancellor_trace = Some(crate::types::ChancellorTrace {
+            original_positions: vec![3],
+            added_outcast_position: 1,
+            added_outcast_role: "Wretch".to_string(),
+            affected_anchor_positions: vec![2],
+        });
+        state.cards[0] = dizzy.clone();
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        // Wretch is runtime Good but its live registerAs is Evil. A represented
+        // mover can preserve the raw Confessor provider while exposing that
+        // registered-alignment surface.
+        assert!(validate_confessor(&dizzy, &wretch, &state));
+    }
+
+    #[test]
+    fn current_confessor_handles_puppet_drunk_and_doppelganger_surfaces() {
+        let good = current_confessor(1, json!(false));
+        let dizzy = current_confessor(1, json!(true));
+        let mut state = base_state(3, vec![dizzy.clone()]);
+        state.deck.villagers = vec!["Confessor".to_string()];
+
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(1);
+        assert!(validate_confessor(&dizzy, &puppet, &state));
+        state.cards[0] = good.clone();
+        assert!(!validate_confessor(&good, &puppet, &state));
+
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(validate_confessor(&good, &drunk, &state));
+        state.cards[0] = dizzy.clone();
+        assert!(!validate_confessor(&dizzy, &drunk, &state));
+        drunk.corrupted.insert(1);
+        assert!(validate_confessor(&dizzy, &drunk, &state));
+
+        let mut doppelganger = empty_scenario();
+        doppelganger.doppelganger_position = Some(1);
+        state.cards[0] = good.clone();
+        assert!(validate_confessor(&good, &doppelganger, &state));
+        doppelganger.corrupted.insert(1);
+        state.cards[0] = dizzy.clone();
+        assert!(validate_confessor(&dizzy, &doppelganger, &state));
+    }
+
+    #[test]
+    fn current_confessor_follows_exact_twin_and_shaman_current_data() {
+        let dizzy = current_confessor(1, json!(true));
+        let mut state = base_state(4, vec![dizzy.clone()]);
+        state.deck.villagers = vec!["Confessor".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut twin = empty_scenario();
+        twin.evil_positions.insert(1, "Twin Minion".to_string());
+        twin.evil_positions.insert(3, "Pooka".to_string());
+        twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Confessor".to_string(),
+            },
+        });
+        assert!(validate_confessor(&dizzy, &twin, &state));
+
+        // The Good neighbour now carries Twin data. A preserved/raw Confessor
+        // callback evaluates the neighbour's Good registered alignment.
+        let good_neighbor = current_confessor(2, json!(false));
+        state.cards = vec![good_neighbor.clone()];
+        assert!(validate_confessor(&good_neighbor, &twin, &state));
+
+        let copied = current_confessor(2, json!(false));
+        state.cards = vec![copied.clone()];
+        let mut shaman = empty_scenario();
+        shaman.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(validate_confessor(&copied, &shaman, &state));
+        shaman.corrupted.insert(2);
+        let copied_dizzy = current_confessor(2, json!(true));
+        state.cards[0] = copied_dizzy.clone();
+        assert!(validate_confessor(&copied_dizzy, &shaman, &state));
+    }
+
+    #[test]
+    fn current_confessor_baker_conversion_clears_spy_raw_provider() {
+        let observation = current_confessor(2, json!(false));
+        let mut before_state = base_state(3, vec![observation.clone()]);
+        before_state.deck.villagers = vec!["Confessor".to_string()];
+        before_state.deck.minions = vec!["Spy".to_string()];
+        let mut before = empty_scenario();
+        before.evil_positions.insert(2, "Spy".to_string());
+        assert!(validate_confessor(&observation, &before, &before_state));
+
+        let mut converted_state = base_state(
+            3,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        converted_state.deck.villagers =
+            vec!["Baker".to_string(), "Confessor".to_string()];
+        converted_state.deck.minions = vec!["Spy".to_string()];
+        converted_state.deck.demons = vec!["Pooka".to_string()];
+        converted_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        converted_state.reveal_order = vec![1, 2, 3];
+        let mut converted = empty_scenario();
+        converted.evil_positions.insert(2, "Spy".to_string());
+        converted.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_baker_history(&converted, &converted_state));
+        assert!(current_confessor_supports(&observation, &converted, &converted_state).is_empty());
+    }
+
+    #[test]
+    fn current_confessor_raw_identity_and_identical_callback_order_join_globally() {
+        let confessor = current_confessor(1, json!(true));
+        let mut medium = current_medium(4, json!(1), json!("Judge"));
+        let mut state = base_state(5, vec![confessor.clone(), medium.clone()]);
+        state.deck.villagers = vec!["Confessor".to_string(), "Medium".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut raw_only = empty_scenario();
+        raw_only.evil_positions.insert(1, "Pooka".to_string());
+        raw_only.corrupted.insert(4);
+        assert!(validate_confessor(&confessor, &raw_only, &state));
+        assert!(validate_medium(&medium, &raw_only, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &raw_only,
+            &state,
+        ));
+        medium = current_medium(4, json!(1), json!("Confessor"));
+        state.cards[1] = medium.clone();
+        assert!(validate_medium(&medium, &raw_only, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &raw_only,
+            &state,
+        ));
+
+        let mut real_and_raw = empty_scenario();
+        real_and_raw
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        real_and_raw.evil_positions.insert(3, "Pooka".to_string());
+        real_and_raw.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Confessor".to_string(),
+            },
+        });
+        real_and_raw.corrupted.insert(4);
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        let supports = current_confessor_supports(&confessor, &real_and_raw, &state);
+        assert!(supports.iter().all(|support| {
+            support
+                .raw_bluff
+                .as_ref()
+                .is_some_and(|(_, role)| role == "confessor")
+        }));
+        assert!(supports
+            .iter()
+            .all(|support| support.forbidden_raw_bluff.is_none()));
+        // The raw callback is proven at this runtime-Evil Twin endpoint. A
+        // different provider would overwrite the real Confessor callback, so
+        // the global assignment must reject a Medium clue pinning Judge here.
+        let pinned_judge = current_medium(4, json!(1), json!("Judge"));
+        state.cards[1] = pinned_judge;
+        assert!(!validate_current_hidden_surface_consistency(
+            &real_and_raw,
+            &state,
+        ));
+
+        // Raw Confessor runs later but computes the identical native predicate,
+        // leaving the exact newest payload unchanged.
+        state.cards[1] = current_medium(4, json!(1), json!("Confessor"));
+        assert!(validate_current_hidden_surface_consistency(
+            &real_and_raw,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_confessor_rejects_unresolved_start_identity() {
+        let direct = current_confessor(1, json!(false));
+        let state = base_state(3, vec![direct.clone()]);
+        let mut unresolved = empty_scenario();
+        unresolved.evil_positions.insert(2, "Unknown".to_string());
+        assert!(!validate_confessor(&direct, &unresolved, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &unresolved,
+            &state,
+        ));
+
+        unresolved.evil_positions.insert(2, "Witch".to_string());
+        assert!(validate_confessor(&direct, &unresolved, &state));
     }
 
     #[test]
