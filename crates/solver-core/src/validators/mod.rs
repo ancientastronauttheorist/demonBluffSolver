@@ -5922,6 +5922,22 @@ mod tests {
     }
 
     #[test]
+    fn current_enlightened_poet_anchors_geometry_on_the_poet_position() {
+        let mut poet_truth = current_poet("Enlightened", json!({"direction": "CW"}));
+        poet_truth.position = 4;
+        let mut poet_false = current_poet("Enlightened", json!({"direction": "CCW"}));
+        poet_false.position = 4;
+        let state = base_state(6, vec![poet_truth.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+
+        // From Poet #4, Evil #3 is one decreasing-ID step: public Clockwise.
+        // Anchoring on the helper's old/default #1 instead would yield CCW.
+        assert!(validate_poet(&poet_truth, &scenario, &state));
+        assert!(!validate_poet(&poet_false, &scenario, &state));
+    }
+
+    #[test]
     fn current_enlightened_uses_full_circle_registered_geometry_and_all_lifecycle_seats() {
         assert_eq!(
             current_enlightened_direction(1, 5, &HashSet::from([2])),
@@ -5998,6 +6014,26 @@ mod tests {
     #[test]
     fn current_enlightened_bluff_supports_each_and_only_false_direction() {
         let state = base_state(5, vec![]);
+
+        let mut clockwise = empty_scenario();
+        clockwise.corrupted.insert(1);
+        clockwise.evil_positions.insert(5, "Pooka".to_string());
+        assert!(!validate_enlightened(
+            &current_enlightened(1, json!("CW")),
+            &clockwise,
+            &state,
+        ));
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("CCW")),
+            &clockwise,
+            &state,
+        ));
+        assert!(validate_enlightened(
+            &current_enlightened(1, json!("Equidistant")),
+            &clockwise,
+            &state,
+        ));
+
         let mut counterclockwise = empty_scenario();
         counterclockwise.corrupted.insert(1);
         counterclockwise.evil_positions.insert(2, "Pooka".to_string());

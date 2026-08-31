@@ -228,6 +228,29 @@ class EnlightenedMemoryIngestionTests(unittest.TestCase):
                         },
                     )
 
+    def test_direct_accepts_current_role_and_disguise_precedence(self):
+        clue = _enlightened_native_text("CW")
+        current_role = _memory_card("Pooka", clue, [])
+        current_role["current_role"] = "Shugenja"
+
+        disguised = _memory_card("Pooka", clue, [])
+        disguised["current_role"] = "Pooka"
+        disguised["disguise"] = "Enlightened"
+
+        for card in (current_role, disguised):
+            with self.subTest(card=card):
+                parsed = _parse_clue_from_memory(card, n_cards=6)
+                self.assertIsNotNone(parsed)
+                self.assertEqual(parsed.apparent_role, "Enlightened")
+                self.assertEqual(parsed.info_text, clue)
+                self.assertEqual(
+                    parsed.info_parsed,
+                    {
+                        "direction": "CW",
+                        "enlightened_variant": "public_current",
+                    },
+                )
+
     def test_direct_runtime_data_must_match_when_available(self):
         for direction, clue in self.EXACT_CASES:
             with self.subTest(direction=direction, mode="matching"):
