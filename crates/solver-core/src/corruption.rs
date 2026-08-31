@@ -113,7 +113,7 @@ pub(crate) struct PostTwinCorruptionContext {
 }
 
 impl StartCorruptionContext {
-    fn pre_twin_context(&self) -> PreTwinCorruptionContext {
+    pub(crate) fn pre_twin_context(&self) -> PreTwinCorruptionContext {
         PreTwinCorruptionContext {
             real_villagers_at_pre_twin: self.real_villagers_before_puppet.clone(),
             corruption_resistant_at_init: self.corruption_resistant_at_init.clone(),
@@ -123,7 +123,7 @@ impl StartCorruptionContext {
         }
     }
 
-    fn post_twin_context(&self) -> PostTwinCorruptionContext {
+    pub(crate) fn post_twin_context(&self) -> PostTwinCorruptionContext {
         PostTwinCorruptionContext {
             registered_villagers_at_pd_call: self.registered_villagers_at_pd_call.clone(),
             corruption_resistant_at_init: self.corruption_resistant_at_init.clone(),
