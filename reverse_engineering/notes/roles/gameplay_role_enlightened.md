@@ -463,7 +463,13 @@ The build-pinned native pipeline completed the following gates:
 - typed export: 14/14, zero failures;
 - typed-quality regression check: passed; and
 - method-ledger write plus byte-for-byte check: 4,207 methods, 3,066 unique
-  native bodies, 435 classifications, and 201 evidence records.
+  native bodies, 435 classifications, and 201 evidence records;
+- current Python bridge regressions: 44/44 focused Enlightened/Poet tests and
+  538/538 tests in the complete Python suite;
+- current Rust solver regressions: 6/6 focused Enlightened tests and 343/343
+  library tests, followed by a warning-clean release build; and
+- full release simulation: 31/31 tests, including all 426 v2 fixtures, in
+  918.52 seconds.
 
 The serialized Ghidra commands were the existing `export-target`,
 `build-types`, `typed-refresh`, and `typed-export` stages. Baseline and typed
