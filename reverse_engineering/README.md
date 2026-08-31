@@ -343,6 +343,15 @@ duplicate reference, and emits exact `There are no minions` text when its
 Minion pool is empty. Bluff draws two distinct registered-Good Characters and
 uses a script Minion label, falling back to the all-ascension Minion pool.
 Direct and Poet observations now share one strict current payload and validator.
+The newest [`Lover`](notes/roles/gameplay_role_lover.md) boundary asset-binds
+the public role to managed `Empath`, covers all nine declared role methods,
+the exact circular-adjacency and registered-alignment helpers, and all four
+achievement-helper methods. Truth counts registered-Evil previous/next
+occurrences without deduplication and stores those exact references. Bluff
+removes truth from the authored Minion-plus-Demon count domain before one
+integer-index draw. Direct and Poet/Lover observations now enforce the same
+exact text, reference shape, and current provenance schema while preserving
+unmarked historical fixtures.
 
 Build the deterministic IL2CPP datatype archive, create the isolated typed
 project, analyze it, and export any checked-in target set with:
@@ -380,14 +389,14 @@ powershell -ExecutionPolicy Bypass -File `
   reverse_engineering/scripts/invoke_ghidra.ps1 `
   -GameRoot 'B:\SteamLibrary\steamapps\common\Demon Bluff Playtest' `
   -Stage typed-export `
-  -TargetSet gameplay_role_oracle
+  -TargetSet gameplay_role_lover
 ```
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,518
-datatypes. Its twenty-eight-set inventory contains 613 target memberships, 393
-distinct selected FunctionDefinitions, and 338 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,530
+datatypes. Its twenty-nine-set inventory contains 628 target memberships, 405
+distinct selected FunctionDefinitions, and 348 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -401,13 +410,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current twenty-eight-set run used four batches for each phase. Ghidra
+sets; the current twenty-nine-set run used four batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all twenty-eight target
-sets after a no-analysis refresh. Two hundred twenty memberships are exact
+The preserved fully analyzed typed project now covers all twenty-nine target
+sets after a no-analysis refresh. Two hundred twenty-three memberships are exact
 FunctionDefinition overlaps between boundaries. Folded/shared bodies make the
-393 selected definitions exceed the 338 unique native RVAs by fifty-five;
+405 selected definitions exceed the 348 unique native RVAs by fifty-seven;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -424,9 +433,10 @@ Poisoner refresh also required no new reachable datatype import. The Twin
 Minion refresh imported six additional reachable datatypes. The Poet refresh
 imported 17 additional reachable datatypes. The Scout/Hunter refresh imported
 five additional reachable datatypes. The Oracle refresh imported six additional
-reachable datatypes. The four-batch refresh reapplied and validated all 613
+reachable datatypes. The Lover refresh imported 12 additional reachable
+datatypes. The four-batch refresh reapplied and validated all 628
 memberships without rerunning auto-analysis. The final read-only pass validated
-all 613 memberships (393 exact definitions) and 1,795
+all 628 memberships (405 exact definitions) and 1,838
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -462,8 +472,8 @@ combined Lilis/Knight boundary. Rambler fell from 405 to 103, and Baker fell
 from 261 to 71. The combined Doppelganger/Drunk boundary fell from 216 to 72.
 Fortune Teller fell from 171 to 67, Bombardier fell from 134 to 39, and Pooka
 fell from 53 to 31. Poisoner fell from 104 to 46, Twin Minion fell from 168 to
-45, Poet fell from 74 to 9, Scout/Hunter fell from 148 to 56, and Oracle fell
-from 116 to 78.
+45, Poet fell from 74 to 9, Scout/Hunter fell from 148 to 56, Oracle fell
+from 116 to 78, and Lover fell from 92 to 38.
 Raw field-offset accesses fell from 237 to 144, from
 243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
@@ -475,8 +485,8 @@ The Chancellor/Witness boundary fell from 294 raw field-offset accesses to
 fell from 396 to 85. Doppelganger/Drunk fell from 266 to 54.
 Fortune Teller fell from 286 to 194, Bombardier fell from 245 to 98, and Pooka
 fell from 42 to 28. Poisoner fell from 105 to 26, Twin Minion fell from 211 to
-39, Poet fell from 144 to 21, Scout/Hunter fell from 98 to 55, and Oracle fell
-from 139 to 101.
+39, Poet fell from 144 to 21, Scout/Hunter fell from 98 to 55, Oracle fell
+from 139 to 101, and Lover fell from 59 to 24.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
 eight role reports retained their baseline warning counts, and Witch and the
@@ -507,6 +517,8 @@ from eight to one. Scout/Hunter retained six error and 35 warning markers,
 reduced placeholder parameters from 142 to zero, and reduced indirect-call
 patterns from eight to zero. Oracle retained two error and 27 warning markers,
 reduced placeholder parameters from 69 to zero, and reduced indirect-call
+patterns from four to zero. Lover retained two error and 23 warning markers,
+reduced placeholder parameters from 82 to zero, and reduced indirect-call
 patterns from four to zero. The original typed import is
 recorded in
 [`reports/f530404b0f3f_807de4a83df4_typed_import.json`](reports/f530404b0f3f_807de4a83df4_typed_import.json),
@@ -554,14 +566,16 @@ The current combined Scout/Hunter comparison is in the
 [`Scout/Hunter typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_roles_scout_hunter.json).
 The current Oracle comparison is in the
 [`Oracle typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_oracle.json).
+The current Lover comparison is in the
+[`Lover typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_lover.json).
 
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 393 classifications backed by
-165 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 405 classifications backed by
+171 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

@@ -71,7 +71,7 @@ The full pipeline:
 - Full constraint-satisfaction over all possible evil placements
 - Handles disguises, lying, corruption, and role-specific validation
 - 30+ role abilities modeled: Slayer, Judge, Plague Doctor, Dreamer, Baker, Druid, Architect, Bard, Confessor, Poet, Knight, Bombardier, Doppelganger, and more
-- Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, native-verified Baa deck-view reveal on death, ordered Shaman/Twin identity traces, public Dreamer two-target automation, the native-current Poet selector, and exact Scout, Oracle, and Hunter clue contracts
+- Current patch support: Rambler adjacent-truthful shut-up behavior, Alchemist corruption-count clues with immunity, native-verified Baa deck-view reveal on death, ordered Shaman/Twin identity traces, public Dreamer two-target automation, the native-current Poet selector, and exact Lover, Scout, Oracle, and Hunter clue contracts
 - Bombardier terminal protection (any qualifying non-Lilis death, including Slayer and current-role overwrites)
 - Execution lookahead with HP-aware decision making
 - Ascension 10+ pool-vs-board role count validation
@@ -96,6 +96,7 @@ The live build as of 2026-05-05 changed several solver-relevant rules:
 - **Poet:** the public asset binds managed `Gossip`, whose exact provider pool is Lover, Scout, Oracle, Bounty Hunter, Medium, Knitter, Hunter, Enlightened, Empress, Bishop, Gemcrafter, and Bard. Every truthful or bluff result makes a fresh provider draw. Current parsing stamps a strict provider-specific provenance payload, while unmarked archived cases keep their legacy interpretation.
 - **Scout / Hunter:** Scout selects an actual runtime-Evil occurrence, reports its nearest other registered Evil, uses an explicit one-Evil sentinel, and can lie only with distance 1–3 while retaining a selected identity. Public Hunter binds managed `Tracker`; truth is the nearest other registered Evil or exactly `N-1`, and lies come from the remaining half-circle distances. Hunter ingestion verifies its ordered two-reference event, including duplicate opposite seats.
 - **Oracle:** public Oracle binds managed `Investigator`. Truth independently samples one current registered Minion and one current registered-Good character, so a moved Twin Minion can produce a duplicate same-card reference; an empty Minion pool emits exactly `There are no minions`. Bluff samples two distinct registered-Good characters and labels them with a Minion from the script pool, falling back to the all-ascension pool. Direct and Poet observations share the same exact current schema.
+- **Lover:** public Lover binds managed `Empath`. Truth counts the previous and next physical occurrences whose registered alignment is Evil and stores those exact references, including duplicate self/other entries on one- and two-card boards. Bluff removes the actual count from the ascending `0..=min(2, authored Minions + Demons)` pool; Puppet, Wretch, and runtime-added Evils can change truth without enlarging that authored domain. Direct and Poet/Lover observations share exact text, reference, and provenance checks.
 - **Deckbuilding mode:** experimental and not the primary supported live loop yet; current automation is focused on Standard ascension play.
 
 ## Game Mechanics
