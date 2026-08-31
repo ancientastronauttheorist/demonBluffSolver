@@ -680,6 +680,7 @@ const ENLIGHTENED_CURRENT_VARIANT_FIELD: &str = "enlightened_variant";
 const EMPRESS_CURRENT_VARIANT_FIELD: &str = "empress_variant";
 const BISHOP_CURRENT_VARIANT_FIELD: &str = "bishop_variant";
 const GEMCRAFTER_CURRENT_VARIANT_FIELD: &str = "gemcrafter_variant";
+const BARD_CURRENT_VARIANT_FIELD: &str = "bard_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -713,7 +714,8 @@ fn current_passive_payload_source(
                 && !card.info_parsed.contains_key(BISHOP_CURRENT_VARIANT_FIELD)
                 && !card
                     .info_parsed
-                    .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD) =>
+                    .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -2673,6 +2675,15 @@ fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
 }
 
 fn validate_bard(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, BARD_CURRENT_VARIANT_FIELD, "Bard") {
+        Ok(Some(source)) => return validate_current_bard(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
+    // Preserve archived observations byte-for-byte on their permissive
+    // scalar predicate. Fresh direct and Poet observations use the closed
+    // native schema and output domain above.
     let claimed = match info_i64(&card.info_parsed, "corruption_distance") {
         Some(v) => v,
         None => return true,
@@ -2694,6 +2705,250 @@ fn validate_bard(card: &CardInfo, scenario: &Scenario, state: &GameState) -> boo
 
     if truth == TruthStatus::Truthful { claimed == actual }
     else { claimed != actual }
+}
+
+fn current_bard_claim_text(internal_distance: i64) -> Option<String> {
+    match internal_distance {
+        0 => Some("There are no Corrupted characters".to_string()),
+        1 => Some("I am 1 card away from Corrupted character".to_string()),
+        distance if distance > 1 => {
+            Some(format!("I am {distance} cards away from Corrupted character"))
+        }
+        _ => None,
+    }
+}
+
+fn parse_current_bard_claim(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<i64> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if card.apparent_role != "Bard" {
+                return None;
+            }
+            (BARD_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if card.apparent_role != "Poet"
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Bard")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+
+    let serialized = info.get("corruption_distance")?.as_i64()?;
+    let internal = match serialized {
+        -1 => 0,
+        distance if distance > 0 => distance,
+        _ => return None,
+    };
+    // Truth can reach half the physical circle. Bluff uses the fixed native
+    // {0,1,2,3} domain even on tiny boards, so current payloads accept the
+    // union rather than deriving their range only from board geometry.
+    let maximum = i64::from(state.n_cards / 2).max(3);
+    if internal > maximum
+        || current_bard_claim_text(internal).as_deref() != Some(card.info_text.as_str())
+    {
+        return None;
+    }
+    Some(internal)
+}
+
+fn current_bard_actual_distance(actor: u8, scenario: &Scenario, state: &GameState) -> i64 {
+    scenario
+        .corrupted
+        .iter()
+        .copied()
+        .filter(|position| *position != actor && *position > 0 && *position <= state.n_cards)
+        .map(|position| i64::from(circle_distance(actor, position, state.n_cards)))
+        .min()
+        .unwrap_or(0)
+}
+
+fn current_bard_claim_supported(claimed: i64, actual: i64, truth: TruthStatus) -> bool {
+    match truth {
+        TruthStatus::Truthful => claimed == actual,
+        TruthStatus::Lying => (0..=3).contains(&claimed) && claimed != actual,
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentBardSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: BakerSpyTimeline,
+}
+
+fn current_bard_raw_provider_truth(
+    actor: u8,
+    observation: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> TruthStatus {
+    if scenario.corrupted.contains(&actor) {
+        return TruthStatus::Lying;
+    }
+    let current_role = current_data_role_at_observation(
+        actor,
+        observation,
+        timeline,
+        scenario,
+        state,
+    );
+    let healthy_bluff = scenario.puppet_position == Some(actor)
+        || scenario.doppelganger_position == Some(actor)
+        || current_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Doppelganger"));
+    if healthy_bluff {
+        TruthStatus::Truthful
+    } else {
+        // Reaching the apparent Bard/Poet through a raw bluff proves the
+        // non-null pointer which makes an otherwise clean runtime-Good body
+        // lie. Runtime Evil also dispatches the bluff role through BluffAct.
+        TruthStatus::Lying
+    }
+}
+
+fn current_bard_supports(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> Vec<CurrentBardSupport> {
+    let Some(claimed) = parse_current_bard_claim(card, source, state) else {
+        return Vec::new();
+    };
+    // An unresolved Evil identity may have been any corruption/status writer
+    // or current-data mover. A later executed-role overlay cannot reconstruct
+    // the Start history which Bard samples synchronously on Day.
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+
+    let actual = current_bard_actual_distance(card.position, scenario, state);
+    let provider_role = match source {
+        CurrentPassivePayloadSource::Direct => "Bard",
+        CurrentPassivePayloadSource::Poet => "Poet",
+    };
+    let anonymous_candidates = anonymous_natural_wretch_candidates(scenario, state);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_observation(card.position, state) {
+            continue;
+        }
+        let current_role = current_data_role_at_observation(
+            card.position,
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        );
+        let raw_bluff_holder = current_medium_raw_bluff_holder_at(
+            card.position,
+            card.position,
+            &timeline,
+            scenario,
+            state,
+        );
+        // Character.Act dispatches a runtime-Evil current role through Act
+        // when a non-null bluff role follows it. The real Bard/Poet callback
+        // is therefore truthful and occurs first. A final Bard-shaped newest
+        // event from that real callback additionally proves the later bluff
+        // role was not Bard/Poet; that exact raw role would run BluffAct and
+        // overwrite it with the lying provider result.
+        let runtime_evil_real_truth = is_runtime_evil_at(card.position, scenario, state)
+            && raw_bluff_holder != CurrentMediumRawBluffHolder::Impossible;
+        let real_provider_truth = if runtime_evil_real_truth {
+            TruthStatus::Truthful
+        } else {
+            truth_status(card.position, scenario, state)
+        };
+        if current_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, provider_role))
+            && current_bard_claim_supported(claimed, actual, real_provider_truth)
+        {
+            let support = CurrentBardSupport {
+                anonymous_wretches: AnonymousWretchConstraints::empty(),
+                raw_bluff: None,
+                forbidden_raw_bluff: runtime_evil_real_truth
+                    .then(|| (card.position, normalize_role(provider_role))),
+                baker_spy_timeline: timeline.clone(),
+            };
+            if !supports.contains(&support) {
+                supports.push(support);
+            }
+        }
+
+        if raw_bluff_holder == CurrentMediumRawBluffHolder::Impossible
+            || !current_bard_claim_supported(
+                claimed,
+                actual,
+                current_bard_raw_provider_truth(
+                    card.position,
+                    card.position,
+                    &timeline,
+                    scenario,
+                    state,
+                ),
+            )
+        {
+            continue;
+        }
+
+        let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+        if anonymous_candidates.contains(&card.position) {
+            // Natural Wretch has a base-null raw bluff. A Bard/Poet bluff
+            // surface at that physical seat therefore excludes that grouped
+            // identity in the same assignment shared by all current providers.
+            anonymous_wretches.forbidden.insert(card.position);
+            if !anonymous_wretch_assignment_possible(
+                &anonymous_wretches.required,
+                &anonymous_wretches.forbidden,
+                scenario,
+                state,
+            ) {
+                continue;
+            }
+        }
+        let support = CurrentBardSupport {
+            anonymous_wretches,
+            raw_bluff: Some((card.position, normalize_role(provider_role))),
+            forbidden_raw_bluff: None,
+            baker_spy_timeline: timeline,
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+    supports
+}
+
+fn validate_current_bard(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    !current_bard_supports(card, scenario, state, source).is_empty()
 }
 
 const FORTUNE_TELLER_CURRENT_RULE: &str = "fortune_teller_native_v1";
@@ -5383,6 +5638,7 @@ struct CurrentHiddenSurfaceSupport {
     bishop_type_options: HashMap<u8, u8>,
     register_as: Option<(u8, String)>,
     raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
     baker_spy_timeline: Option<BakerSpyTimeline>,
 }
 
@@ -5436,6 +5692,7 @@ fn current_bounty_hunter_hidden_supports_for_target(
                 bishop_type_options: HashMap::new(),
                 register_as: None,
                 raw_bluff: None,
+                forbidden_raw_bluff: None,
                 baker_spy_timeline: Some(timeline),
             });
         }
@@ -5468,12 +5725,13 @@ fn validate_current_hidden_surface_consistency(
             || card
                 .info_parsed
                 .contains_key(GEMCRAFTER_CURRENT_VARIANT_FIELD)
+            || card.info_parsed.contains_key(BARD_CURRENT_VARIANT_FIELD)
             || (card.info_parsed.contains_key("poet_variant")
                 && card
                     .info_parsed
                     .get("copied_role")
                     .and_then(serde_json::Value::as_str)
-                    .is_some_and(|role| matches!(role, "Empress" | "Gemcrafter")))
+                    .is_some_and(|role| matches!(role, "Empress" | "Gemcrafter" | "Bard")))
     });
     if has_current_full_pool_provider && current_has_unresolved_start_identity(scenario, state) {
         return false;
@@ -5505,6 +5763,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5524,6 +5783,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5543,6 +5803,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5562,6 +5823,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5585,6 +5847,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5608,6 +5871,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5631,6 +5895,27 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
+                            baker_spy_timeline: Some(support.baker_spy_timeline),
+                        })
+                        .collect(),
+                ),
+                Ok(None) => None,
+                Err(()) => Some(Vec::new()),
+            }
+        } else if apparent == "bard"
+            || (apparent == "poet" && copied == Some("Bard"))
+        {
+            match current_passive_payload_source(card, BARD_CURRENT_VARIANT_FIELD, "Bard") {
+                Ok(Some(source)) => Some(
+                    current_bard_supports(card, scenario, state, source)
+                        .into_iter()
+                        .map(|support| CurrentHiddenSurfaceSupport {
+                            anonymous_wretches: support.anonymous_wretches,
+                            bishop_type_options: HashMap::new(),
+                            register_as: None,
+                            raw_bluff: support.raw_bluff,
+                            forbidden_raw_bluff: support.forbidden_raw_bluff,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5650,6 +5935,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: support.anonymous_type_options,
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5672,6 +5958,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: support.register_as,
                             raw_bluff: support.raw_bluff,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5694,6 +5981,7 @@ fn validate_current_hidden_surface_consistency(
                             bishop_type_options: HashMap::new(),
                             register_as: None,
                             raw_bluff: None,
+                            forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
                         })
                         .collect(),
@@ -5728,6 +6016,7 @@ fn validate_current_hidden_surface_consistency(
         bishop_type_options: &HashMap<u8, u8>,
         register_as: &HashMap<u8, String>,
         raw_bluffs: &HashMap<u8, String>,
+        forbidden_raw_bluffs: &HashMap<u8, HashSet<String>>,
         baker_spy_timeline: Option<&BakerSpyTimeline>,
         scenario: &Scenario,
         state: &GameState,
@@ -5793,10 +6082,26 @@ fn validate_current_hidden_surface_consistency(
                 if next_raw_bluffs
                     .get(position)
                     .is_some_and(|selected| selected != role)
+                    || forbidden_raw_bluffs
+                        .get(position)
+                        .is_some_and(|forbidden| forbidden.contains(role))
                 {
                     continue;
                 }
                 next_raw_bluffs.insert(*position, role.clone());
+            }
+            let mut next_forbidden_raw_bluffs = forbidden_raw_bluffs.clone();
+            if let Some((position, role)) = support.forbidden_raw_bluff.as_ref() {
+                if next_raw_bluffs
+                    .get(position)
+                    .is_some_and(|selected| selected == role)
+                {
+                    continue;
+                }
+                next_forbidden_raw_bluffs
+                    .entry(*position)
+                    .or_default()
+                    .insert(role.clone());
             }
             if let Some(timeline) = support.baker_spy_timeline.as_ref() {
                 if baker_spy_timeline.is_some_and(|selected| selected != timeline) {
@@ -5815,6 +6120,7 @@ fn validate_current_hidden_surface_consistency(
                 &next_bishop_type_options,
                 &next_register_as,
                 &next_raw_bluffs,
+                &next_forbidden_raw_bluffs,
                 next_timeline,
                 scenario,
                 state,
@@ -5830,6 +6136,7 @@ fn validate_current_hidden_surface_consistency(
         &observations,
         &HashSet::new(),
         &HashSet::new(),
+        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
@@ -5924,17 +6231,6 @@ fn poet_position_value(
         .filter(|position| *position > 0 && *position <= n_cards)
 }
 
-fn poet_integer_in_range(
-    info: &serde_json::Map<String, serde_json::Value>,
-    field: &str,
-    minimum: i64,
-    maximum: i64,
-) -> bool {
-    info.get(field)
-        .and_then(serde_json::Value::as_i64)
-        .is_some_and(|value| (minimum..=maximum).contains(&value))
-}
-
 fn poet_targets(
     info: &serde_json::Map<String, serde_json::Value>,
     n_cards: u8,
@@ -5983,8 +6279,6 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
     {
         return false;
     }
-    let n = i64::from(state.n_cards);
-
     match copied_role {
         "Lover" => parse_current_lover_claim(
             card,
@@ -6041,14 +6335,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
             state,
         )
         .is_some(),
-        "Bard" => {
-            poet_has_exact_fields(info, &["corruption_distance"])
-                && poet_integer_in_range(info, "corruption_distance", -1, n)
-                && info
-                    .get("corruption_distance")
-                    .and_then(serde_json::Value::as_i64)
-                    != Some(0)
-        }
+        "Bard" => parse_current_bard_claim(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         _ => false,
     }
 }
@@ -6947,6 +7239,12 @@ mod tests {
                         }),
                 )
                 .and_then(|(targets, types)| current_bishop_claim_text(&targets, &types)),
+            "Bard" => payload
+                .get("corruption_distance")
+                .and_then(serde_json::Value::as_i64)
+                .and_then(|distance| {
+                    current_bard_claim_text(if distance == -1 { 0 } else { distance })
+                }),
             _ => None,
         };
         let mut info = payload.as_object().unwrap().clone();
@@ -6977,6 +7275,25 @@ mod tests {
             json!({
                 "lover_variant": "public_current",
                 "evil_adjacent": claimed,
+            }),
+        );
+        card.info_text = info_text;
+        card
+    }
+
+    fn current_bard(pos: u8, claimed: serde_json::Value) -> CardInfo {
+        let info_text = claimed
+            .as_i64()
+            .and_then(|distance| {
+                current_bard_claim_text(if distance == -1 { 0 } else { distance })
+            })
+            .unwrap_or_default();
+        let mut card = make_card(
+            pos,
+            "Bard",
+            json!({
+                "bard_variant": "public_current",
+                "corruption_distance": claimed,
             }),
         );
         card.info_text = info_text;
@@ -8625,6 +8942,353 @@ mod tests {
         assert!(validate_bishop(&timeline_claim, &timeline, &timeline_state));
         timeline_state.reveal_order.retain(|position| *position != 3);
         assert!(!validate_bishop(&timeline_claim, &timeline, &timeline_state));
+    }
+
+    #[test]
+    fn current_bard_schema_text_source_and_archive_fallback_are_exact() {
+        let scenario = empty_scenario();
+        for claim in [json!(-1), json!(1), json!(2), json!(3)] {
+            let card = current_bard(1, claim);
+            let state = base_state(6, vec![card.clone()]);
+            assert_eq!(
+                validate_bard(&card, &scenario, &state),
+                card.info_parsed["corruption_distance"] == json!(-1),
+            );
+        }
+
+        let mut singular_scenario = empty_scenario();
+        singular_scenario.corrupted.insert(2);
+        let singular = current_bard(1, json!(1));
+        let singular_state = base_state(6, vec![singular.clone()]);
+        assert!(validate_bard(&singular, &singular_scenario, &singular_state));
+
+        let mut plural_scenario = empty_scenario();
+        plural_scenario.corrupted.insert(3);
+        let plural = current_bard(1, json!(2));
+        let plural_state = base_state(6, vec![plural.clone()]);
+        assert!(validate_bard(&plural, &plural_scenario, &plural_state));
+
+        let poet = current_poet("Bard", json!({"corruption_distance": 2}));
+        let poet_state = base_state(6, vec![poet.clone()]);
+        assert!(validate_poet(&poet, &plural_scenario, &poet_state));
+
+        for mutation in ["wrong_text", "extra", "future", "mixed", "wrong_role"] {
+            let mut malformed = current_bard(1, json!(2));
+            match mutation {
+                "wrong_text" => malformed.info_text.push('.'),
+                "extra" => {
+                    malformed.info_parsed.insert("extra".to_string(), json!(true));
+                }
+                "future" => {
+                    malformed
+                        .info_parsed
+                        .insert("bard_variant".to_string(), json!("future"));
+                }
+                "mixed" => {
+                    malformed
+                        .info_parsed
+                        .insert("poet_variant".to_string(), json!("public_current"));
+                }
+                "wrong_role" => malformed.apparent_role = "bard".to_string(),
+                _ => unreachable!(),
+            }
+            let state = base_state(6, vec![malformed.clone()]);
+            assert!(
+                !validate_bard(&malformed, &plural_scenario, &state),
+                "{mutation}"
+            );
+        }
+
+        for claim in [json!(-2), json!(0), json!(4), json!(true), json!("2")] {
+            let malformed = current_bard(1, claim);
+            let state = base_state(6, vec![malformed.clone()]);
+            assert!(!validate_bard(&malformed, &plural_scenario, &state));
+        }
+        for position in [0, 7] {
+            let mut malformed = current_bard(position, json!(-1));
+            malformed.position = position;
+            let state = base_state(6, vec![malformed.clone()]);
+            assert!(!validate_bard(&malformed, &scenario, &state));
+        }
+
+        // Frozen captures retain their original fail-open/mismatch behavior,
+        // including a missing scalar and the old zero encoding.
+        let missing = make_card(1, "Bard", json!({}));
+        let missing_state = base_state(2, vec![missing.clone()]);
+        assert!(validate_bard(&missing, &scenario, &missing_state));
+        let zero = make_card(1, "Bard", json!({"corruption_distance": 0}));
+        let mut legacy_world = empty_scenario();
+        legacy_world.evil_positions.insert(1, "Pooka".to_string());
+        legacy_world.corrupted.insert(2);
+        let zero_state = base_state(2, vec![zero.clone()]);
+        assert!(validate_bard(&zero, &legacy_world, &zero_state));
+    }
+
+    #[test]
+    fn current_bard_truth_uses_other_physical_corruption_and_full_lifecycle() {
+        let far = current_bard(1, json!(4));
+        let mut state = base_state(8, vec![far.clone()]);
+        state.executed = vec![5];
+        state.night_kills = vec![5];
+        state.blocked_positions = vec![5];
+        let mut scenario = empty_scenario();
+        scenario.corrupted.insert(5);
+        assert!(validate_bard(&far, &scenario, &state));
+
+        let tie = current_bard(1, json!(2));
+        state.cards = vec![tie.clone()];
+        scenario.corrupted = HashSet::from([3, 7]);
+        assert!(validate_bard(&tie, &scenario, &state));
+
+        let wrap = current_bard(1, json!(1));
+        state.cards = vec![wrap.clone()];
+        scenario.corrupted = HashSet::from([8]);
+        assert!(validate_bard(&wrap, &scenario, &state));
+
+        // Self is removed from the distance scan, but its Corrupted status
+        // still routes the provider through BluffAct. Native removes truth 0
+        // from its fixed bluff domain.
+        let false_one = current_bard(1, json!(1));
+        state.cards = vec![false_one.clone()];
+        scenario.corrupted = HashSet::from([1]);
+        assert!(validate_bard(&false_one, &scenario, &state));
+        let actual_zero = current_bard(1, json!(-1));
+        state.cards = vec![actual_zero.clone()];
+        assert!(!validate_bard(&actual_zero, &scenario, &state));
+    }
+
+    #[test]
+    fn current_bard_bluff_domain_is_fixed_and_supports_tiny_boards() {
+        let mut far_world = empty_scenario();
+        far_world.corrupted = HashSet::from([1, 5]);
+        for claim in [-1, 1, 2, 3] {
+            let card = current_bard(1, json!(claim));
+            let state = base_state(8, vec![card.clone()]);
+            assert!(validate_bard(&card, &far_world, &state), "claim {claim}");
+        }
+        let truth_value = current_bard(1, json!(4));
+        let truth_value_state = base_state(8, vec![truth_value.clone()]);
+        assert!(!validate_bard(&truth_value, &far_world, &truth_value_state));
+
+        let mut singleton_world = empty_scenario();
+        singleton_world.corrupted.insert(1);
+        for claim in [1, 2, 3] {
+            let card = current_bard(1, json!(claim));
+            let state = base_state(1, vec![card.clone()]);
+            assert!(validate_bard(&card, &singleton_world, &state));
+        }
+        let singleton_truth = current_bard(1, json!(-1));
+        let singleton_state = base_state(1, vec![singleton_truth.clone()]);
+        assert!(!validate_bard(
+            &singleton_truth,
+            &singleton_world,
+            &singleton_state,
+        ));
+
+        let mut pair_world = empty_scenario();
+        pair_world.corrupted = HashSet::from([1, 2]);
+        for claim in [-1, 2, 3] {
+            let card = current_bard(1, json!(claim));
+            let state = base_state(2, vec![card.clone()]);
+            assert!(validate_bard(&card, &pair_world, &state));
+        }
+        let pair_truth = current_bard(1, json!(1));
+        let pair_state = base_state(2, vec![pair_truth.clone()]);
+        assert!(!validate_bard(&pair_truth, &pair_world, &pair_state));
+    }
+
+    #[test]
+    fn current_bard_puppet_and_exact_twin_data_follow_physical_truth_state() {
+        let truthful_puppet = current_bard(2, json!(2));
+        let mut state = base_state(5, vec![truthful_puppet.clone()]);
+        let mut puppet = empty_scenario();
+        puppet.puppet_position = Some(2);
+        puppet.corrupted.insert(5);
+        assert!(validate_bard(&truthful_puppet, &puppet, &state));
+        let false_puppet = current_bard(2, json!(1));
+        state.cards = vec![false_puppet.clone()];
+        assert!(!validate_bard(&false_puppet, &puppet, &state));
+        puppet.corrupted.insert(2);
+        assert!(validate_bard(&false_puppet, &puppet, &state));
+        state.cards = vec![truthful_puppet.clone()];
+        assert!(!validate_bard(&truthful_puppet, &puppet, &state));
+
+        let moved_bard = current_bard(1, json!(1));
+        let moved_state = base_state(4, vec![moved_bard.clone()]);
+        let mut moved = empty_scenario();
+        moved.evil_positions.insert(1, "Twin Minion".to_string());
+        moved.evil_positions.insert(3, "Pooka".to_string());
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Bard".to_string(),
+            },
+        });
+        assert!(validate_bard(&moved_bard, &moved, &moved_state));
+        let real_truth = current_bard(1, json!(-1));
+        let real_truth_state = base_state(4, vec![real_truth.clone()]);
+        assert!(validate_bard(&real_truth, &moved, &real_truth_state));
+
+        let copied_bard = current_bard(2, json!(-1));
+        let copied_state = base_state(4, vec![copied_bard.clone()]);
+        let mut copied = empty_scenario();
+        copied.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Bard".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+        assert!(validate_bard(&copied_bard, &copied, &copied_state));
+    }
+
+    #[test]
+    fn current_bard_runtime_evil_current_data_respects_callback_order() {
+        let truth = current_bard(1, json!(3));
+        let mut medium = current_medium(4, json!(1), json!("Bard"));
+        let mut state = base_state(6, vec![truth.clone(), medium.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Bard".to_string(),
+            },
+        });
+        scenario.corrupted.insert(4);
+
+        // Runtime Evil dispatches the real current-data Bard through Act
+        // first. A later raw Bard would overwrite that truth with BluffAct,
+        // so the truthful newest event proves the raw pointer is not Bard.
+        assert!(validate_bard(&truth, &scenario, &state));
+        assert!(validate_medium(&medium, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+        medium = current_medium(4, json!(1), json!("Judge"));
+        state.cards[1] = medium.clone();
+        assert!(validate_medium(&medium, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+
+        // Conversely, a false Bard result can only be the later raw Bard
+        // BluffAct. It binds that same pointer to Bard in the global world.
+        let lie = current_bard(1, json!(1));
+        state.cards[0] = lie.clone();
+        assert!(validate_bard(&lie, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+        medium = current_medium(4, json!(1), json!("Bard"));
+        state.cards[1] = medium;
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_bard_raw_bluff_identity_joins_medium_support() {
+        let bard = current_bard(1, json!(1));
+        let medium = current_medium(4, json!(1), json!("Judge"));
+        let mut state = base_state(6, vec![bard.clone(), medium.clone()]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+        scenario.corrupted = HashSet::from([3, 4]);
+
+        // Stable Evil #1 reaches the apparent Bard through its non-null raw
+        // bluff. Lying Medium can select the same pointer independently, but
+        // one physical pointer cannot simultaneously be Bard and Judge.
+        assert!(validate_bard(&bard, &scenario, &state));
+        assert!(validate_medium(&medium, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+
+        let matching_medium = current_medium(4, json!(1), json!("Bard"));
+        state.cards[1] = matching_medium.clone();
+        assert!(validate_medium(&matching_medium, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_bard_rejects_baker_cleared_spy_provider_surface() {
+        let bard_observation = current_bard(2, json!(2));
+        let mut before_state = base_state(3, vec![bard_observation.clone()]);
+        before_state.deck.minions = vec!["Spy".to_string()];
+        let mut before = empty_scenario();
+        before.evil_positions.insert(2, "Spy".to_string());
+        before.corrupted.insert(3);
+        // Before any Baker conversion, Spy's acquired Bard raw bluff reaches
+        // Bard.BluffAct and supports the false distance.
+        assert!(validate_bard(&bard_observation, &before, &before_state));
+
+        let mut converted_state = base_state(
+            3,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        converted_state.deck.villagers = vec!["Baker".to_string(), "Bard".to_string()];
+        converted_state.deck.minions = vec!["Spy".to_string()];
+        converted_state.deck.demons = vec!["Pooka".to_string()];
+        converted_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        converted_state.reveal_order = vec![1, 2, 3];
+        let mut converted = empty_scenario();
+        converted.evil_positions.insert(2, "Spy".to_string());
+        converted.evil_positions.insert(3, "Pooka".to_string());
+        converted.corrupted.insert(3);
+        assert!(validate_baker_history(&converted, &converted_state));
+        // The strict observation object is deliberately separate from the
+        // final Baker CardInfo. Every exact history has already synchronously
+        // cleared Spy's raw bluff before #2 can observe Day, so no strict Bard
+        // provider support remains.
+        assert!(current_bard_supports(
+            &bard_observation,
+            &converted,
+            &converted_state,
+            CurrentPassivePayloadSource::Direct,
+        )
+        .is_empty());
+    }
+
+    #[test]
+    fn current_bard_rejects_unresolved_start_identity_direct_and_poet() {
+        let direct = current_bard(1, json!(-1));
+        let mut poet = current_poet("Bard", json!({"corruption_distance": -1}));
+        poet.position = 3;
+        let state = base_state(3, vec![direct.clone(), poet.clone()]);
+        let mut unresolved = empty_scenario();
+        unresolved.evil_positions.insert(2, "Unknown".to_string());
+        assert!(!validate_bard(&direct, &unresolved, &state));
+        assert!(!validate_poet(&poet, &unresolved, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &unresolved,
+            &state,
+        ));
+
+        let mut concrete = unresolved;
+        concrete.evil_positions.insert(2, "Witch".to_string());
+        assert!(validate_bard(&direct, &concrete, &state));
+        assert!(validate_poet(&poet, &concrete, &state));
     }
 
     #[test]
