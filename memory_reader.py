@@ -138,7 +138,7 @@ DISPLAY_NAMES = {
     'Lillith': 'Lilis',
     'Striga': 'Lilis',
     'Doppleganger': 'Doppelganger',
-    'Mathematician': 'Lover',
+    'Empath': 'Lover',
     'RangedEmpath': 'Bard',
     'BountyHunter': 'Bounty Hunter',
     'Immortal': 'Knight',

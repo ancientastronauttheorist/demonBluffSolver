@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete shipped public Lover gameplay clue boundary, managed internally as Empath, including truthful and bluff generation, adjacent-Evil counting, exact clue construction, and achievement dispatch",
+  "functions": [
+    {
+      "name": "Empath.get_Description",
+      "metadata_name": "Empath$$get_Description",
+      "signature": "System_String_o* Empath__get_Description (Empath_o* __this, const MethodInfo* method);",
+      "rva": "0x3B98E0"
+    },
+    {
+      "name": "Empath.Act",
+      "metadata_name": "Empath$$Act",
+      "signature": "void Empath__Act (Empath_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__Act",
+      "rva": "0x3B09F0"
+    },
+    {
+      "name": "Empath.BluffAct",
+      "metadata_name": "Empath$$BluffAct",
+      "signature": "void Empath__BluffAct (Empath_o* __this, int32_t trigger, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Witness__BluffAct",
+      "rva": "0x3B33E0"
+    },
+    {
+      "name": "Empath.GetInfo",
+      "metadata_name": "Empath$$GetInfo",
+      "signature": "ActedInfo_o* Empath__GetInfo (Empath_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B9810"
+    },
+    {
+      "name": "Empath.GetBluffInfo",
+      "metadata_name": "Empath$$GetBluffInfo",
+      "signature": "ActedInfo_o* Empath__GetBluffInfo (Empath_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B9620"
+    },
+    {
+      "name": "Empath.CheckAdjacentEvils",
+      "metadata_name": "Empath$$CheckAdjacentEvils",
+      "signature": "int32_t Empath__CheckAdjacentEvils (Empath_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "rva": "0x3B9290"
+    },
+    {
+      "name": "Empath.ConjourInfo",
+      "metadata_name": "Empath$$ConjourInfo",
+      "signature": "System_String_o* Empath__ConjourInfo (Empath_o* __this, int32_t evils, const MethodInfo* method);",
+      "rva": "0x3B9560"
+    },
+    {
+      "name": "Empath.CheckAchievementsAndUnlockIfAble",
+      "metadata_name": "Empath$$CheckAchievementsAndUnlockIfAble",
+      "signature": "void Empath__CheckAchievementsAndUnlockIfAble (Empath_o* __this, ActedInfo_o* info, const MethodInfo* method);",
+      "rva": "0x3B9140"
+    },
+    {
+      "name": "Empath.ctor",
+      "metadata_name": "Empath$$.ctor",
+      "signature": "void Empath___ctor (Empath_o* __this, const MethodInfo* method);",
+      "applied_prototype_name": "Dreamer___ctor",
+      "rva": "0x357920"
+    },
+    {
+      "name": "Characters.GetAdjacentCharacters",
+      "metadata_name": "Characters$$GetAdjacentCharacters",
+      "signature": "System_Collections_Generic_List_Character__o* Characters__GetAdjacentCharacters (Characters_o* __this, Character_o* ch, const MethodInfo* method);",
+      "rva": "0x36C2E0"
+    },
+    {
+      "name": "Character.GetRegisterAlignment",
+      "metadata_name": "Character$$GetRegisterAlignment",
+      "signature": "int32_t Character__GetRegisterAlignment (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x365030"
+    },
+    {
+      "name": "LoversAchivementHelper.AddCharacter",
+      "metadata_name": "LoversAchivementHelper$$AddCharacter",
+      "signature": "void LoversAchivementHelper__AddCharacter (LoversAchivementHelper_o* __this, Character_o* c, const MethodInfo* method);",
+      "rva": "0x3A2D20"
+    },
+    {
+      "name": "LoversAchivementHelper.CheckTrigger",
+      "metadata_name": "LoversAchivementHelper$$CheckTrigger",
+      "signature": "void LoversAchivementHelper__CheckTrigger (LoversAchivementHelper_o* __this, Character_o* c, int32_t trigger, const MethodInfo* method);",
+      "rva": "0x3A2F10"
+    },
+    {
+      "name": "LoversAchivementHelper.Reset",
+      "metadata_name": "LoversAchivementHelper$$Reset",
+      "signature": "void LoversAchivementHelper__Reset (LoversAchivementHelper_o* __this, const MethodInfo* method);",
+      "rva": "0x3A2F80"
+    },
+    {
+      "name": "LoversAchivementHelper.ctor",
+      "metadata_name": "LoversAchivementHelper$$.ctor",
+      "signature": "void LoversAchivementHelper___ctor (LoversAchivementHelper_o* __this, const MethodInfo* method);",
+      "rva": "0x3A31B0"
+    }
+  ]
+}

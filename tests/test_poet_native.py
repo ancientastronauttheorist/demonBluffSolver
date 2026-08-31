@@ -47,6 +47,13 @@ def _hunter_refs(position: int, distance: int, n_cards: int) -> list[int]:
     ]
 
 
+def _lover_refs(position: int, n_cards: int) -> list[int]:
+    return [
+        ((position - 2) % n_cards) + 1,
+        (position % n_cards) + 1,
+    ]
+
+
 class PoetManualIngestionTests(unittest.TestCase):
     def test_native_provider_whitelist_preserves_constructor_order(self):
         self.assertEqual(
@@ -283,7 +290,7 @@ class PoetManualIngestionTests(unittest.TestCase):
 class PoetMemoryIngestionTests(unittest.TestCase):
     def test_all_unambiguous_native_provider_surfaces_are_stamped(self):
         cases = [
-            ("2 Evils\nadjacent to me", [], "Lover"),
+            ("2 Evils\nadjacent to me", _lover_refs(1, 6), "Lover"),
             ("Pooka is 2 cards away from closest Evil", [], "Scout"),
             ("#2 or #3 is a Witch", [2, 3], "Oracle"),
             ("#4\nis Evil", [], "Bounty Hunter"),
@@ -357,7 +364,7 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         for clue, count in cases:
             with self.subTest(clue=clue):
                 parsed = _parse_clue_from_memory(
-                    _memory_poet(clue, []),
+                    _memory_poet(clue, _lover_refs(1, 6)),
                     n_cards=6,
                 )
                 self.assertEqual(parsed.info_parsed["copied_role"], "Lover")
@@ -379,7 +386,6 @@ class PoetMemoryIngestionTests(unittest.TestCase):
 
     def test_text_only_providers_require_newest_exact_zero_ref_event(self):
         cases = [
-            ("NO Evils\nadjacent to me", "Lover"),
             ("Pooka is\n2 cards away\nfrom closest Evil", "Scout"),
             ("Evils are not adjacent to eachother", "Knitter"),
             ("Closest Evil is equidistant", "Enlightened"),
@@ -461,8 +467,9 @@ class PoetMemoryIngestionTests(unittest.TestCase):
         ]
         for clue, provider, field, expected in cases:
             with self.subTest(clue=clue):
+                refs = _lover_refs(1, 6) if provider == "Lover" else []
                 parsed = _parse_clue_from_memory(
-                    _memory_poet(clue, []),
+                    _memory_poet(clue, refs),
                     n_cards=6,
                 )
                 self.assertEqual(parsed.info_parsed["copied_role"], provider)

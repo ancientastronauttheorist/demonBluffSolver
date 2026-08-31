@@ -19,6 +19,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Investigator": "Oracle",
             "Tracker": "Hunter",
             "BountyHunter": "Bounty Hunter",
+            "Empath": "Lover",
             # Spy is a distinct native Minion implementation, not the managed
             # class bound by the public Plague Doctor CharacterData.
             "Spy": "Spy",
@@ -44,6 +45,7 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
             "Investigator_86420": "Oracle",
             "Tracker_24680": "Hunter",
             "BountyHunter_97531": "Bounty Hunter",
+            "Empath_91302708": "Lover",
         }
 
         for native_name, display_name in expected.items():
@@ -54,6 +56,10 @@ class MemoryReaderDisplayNameTests(unittest.TestCase):
         self.assertEqual(clean_name("Saint"), "Saint")
         self.assertEqual(clean_name("SaintVillager"), "SaintVillager")
         self.assertEqual(clean_name("Saint_12345"), "Saint")
+
+    def test_mathematician_is_not_the_public_lover(self):
+        self.assertEqual(clean_name("Mathematician"), "Mathematician")
+        self.assertEqual(clean_name("Mathematician_12345"), "Mathematician")
 
 
 if __name__ == "__main__":

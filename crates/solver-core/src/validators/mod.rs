@@ -617,6 +617,12 @@ fn validate_gemcrafter(card: &CardInfo, scenario: &Scenario, state: &GameState) 
 }
 
 fn validate_lover(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, LOVER_CURRENT_VARIANT_FIELD, "Lover") {
+        Ok(Some(source)) => return validate_current_lover(card, scenario, state, source),
+        Err(()) => return false,
+        Ok(None) => {}
+    }
+
     let claimed = match info_i64(&card.info_parsed, "evil_adjacent") {
         Some(v) => v,
         None => return true,
@@ -632,6 +638,7 @@ fn validate_lover(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     else { claimed != actual }
 }
 
+const LOVER_CURRENT_VARIANT_FIELD: &str = "lover_variant";
 const SCOUT_CURRENT_VARIANT_FIELD: &str = "scout_variant";
 const HUNTER_CURRENT_VARIANT_FIELD: &str = "hunter_variant";
 const ORACLE_CURRENT_VARIANT_FIELD: &str = "oracle_variant";
@@ -655,7 +662,8 @@ fn current_passive_payload_source(
 
     match (direct_variant, poet_variant) {
         (None, None)
-            if !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
+            if !card.info_parsed.contains_key(LOVER_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(SCOUT_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(HUNTER_CURRENT_VARIANT_FIELD)
                 && !card.info_parsed.contains_key(ORACLE_CURRENT_VARIANT_FIELD) =>
         {
@@ -679,6 +687,135 @@ fn current_passive_payload_source(
             Ok(Some(CurrentPassivePayloadSource::Poet))
         }
         _ => Err(()),
+    }
+}
+
+fn current_lover_claim_text(claimed: i64) -> Option<&'static str> {
+    match claimed {
+        0 => Some("NO Evils\nadjacent to me"),
+        1 => Some("1 Evil\nadjacent to me"),
+        2 => Some("2 Evils\nadjacent to me"),
+        _ => None,
+    }
+}
+
+fn parse_current_lover_claim(
+    card: &CardInfo,
+    source: CurrentPassivePayloadSource,
+    state: &GameState,
+) -> Option<i64> {
+    if card.position == 0 || card.position > state.n_cards {
+        return None;
+    }
+    let info = &card.info_parsed;
+    let (variant_field, fixed_fields) = match source {
+        CurrentPassivePayloadSource::Direct => {
+            if !roles_equal(&card.apparent_role, "Lover") {
+                return None;
+            }
+            (LOVER_CURRENT_VARIANT_FIELD, 1)
+        }
+        CurrentPassivePayloadSource::Poet => {
+            if !roles_equal(&card.apparent_role, "Poet")
+                || info.get("copied_role").and_then(serde_json::Value::as_str)
+                    != Some("Lover")
+            {
+                return None;
+            }
+            ("poet_variant", 2)
+        }
+    };
+    if info.len() != fixed_fields + 1
+        || info.get(variant_field).and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    let claimed = info.get("evil_adjacent")?.as_i64()?;
+    let expected_text = current_lover_claim_text(claimed)?;
+    (card.info_text == expected_text).then_some(claimed)
+}
+
+fn current_lover_possible_actual_counts(
+    actor: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<i64> {
+    let adjacent = adjacent_positions(actor, state.n_cards);
+    let known_count = adjacent
+        .iter()
+        .filter(|&&position| {
+            registered_alignment_at(position, scenario, state) == EffectiveAlignment::Evil
+        })
+        .count() as i64;
+    let anonymous_wretches: HashSet<u8> = anonymous_natural_wretch_candidates(scenario, state)
+        .into_iter()
+        .collect();
+    let mut adjacent_candidates: Vec<u8> = adjacent
+        .iter()
+        .copied()
+        .filter(|position| anonymous_wretches.contains(position))
+        .collect();
+    adjacent_candidates.sort_unstable();
+    adjacent_candidates.dedup();
+
+    if adjacent_candidates.is_empty() {
+        return vec![known_count];
+    }
+
+    let mut possible_counts = Vec::new();
+    for mask in 0..(1usize << adjacent_candidates.len()) {
+        let mut required = HashSet::new();
+        let mut forbidden = HashSet::new();
+        for (index, &position) in adjacent_candidates.iter().enumerate() {
+            if mask & (1usize << index) == 0 {
+                forbidden.insert(position);
+            } else {
+                required.insert(position);
+            }
+        }
+        if !anonymous_wretch_assignment_possible(
+            &required,
+            &forbidden,
+            scenario,
+            state,
+        ) {
+            continue;
+        }
+        let actual = known_count
+            + adjacent
+                .iter()
+                .filter(|position| required.contains(position))
+                .count() as i64;
+        if !possible_counts.contains(&actual) {
+            possible_counts.push(actual);
+        }
+    }
+    possible_counts
+}
+
+fn validate_current_lover(
+    card: &CardInfo,
+    scenario: &Scenario,
+    state: &GameState,
+    source: CurrentPassivePayloadSource,
+) -> bool {
+    let Some(claimed) = parse_current_lover_claim(card, source, state) else {
+        return false;
+    };
+    let possible_actuals = current_lover_possible_actual_counts(card.position, scenario, state);
+
+    match truth_status(card.position, scenario, state) {
+        TruthStatus::Truthful => possible_actuals.contains(&claimed),
+        TruthStatus::Lying => {
+            let scripted_evil_count = state
+                .deck
+                .minions
+                .len()
+                .saturating_add(state.deck.demons.len());
+            claimed <= scripted_evil_count.min(2) as i64
+                && possible_actuals.iter().any(|actual| *actual != claimed)
+        }
     }
 }
 
@@ -2669,10 +2806,12 @@ fn validate_current_poet_payload(card: &CardInfo, state: &GameState, copied_role
     let n = i64::from(state.n_cards);
 
     match copied_role {
-        "Lover" => {
-            poet_has_exact_fields(info, &["evil_adjacent"])
-                && poet_integer_in_range(info, "evil_adjacent", 0, 2)
-        }
+        "Lover" => parse_current_lover_claim(
+            card,
+            CurrentPassivePayloadSource::Poet,
+            state,
+        )
+        .is_some(),
         "Scout" => parse_current_scout_claim(
             info,
             CurrentPassivePayloadSource::Poet,
@@ -3565,7 +3704,15 @@ mod tests {
     }
 
     fn current_poet(provider: &str, payload: serde_json::Value) -> CardInfo {
-        let info_text = (provider == "Oracle").then(|| current_oracle_text(&payload));
+        let info_text = match provider {
+            "Lover" => payload
+                .get("evil_adjacent")
+                .and_then(serde_json::Value::as_i64)
+                .and_then(current_lover_claim_text)
+                .map(str::to_string),
+            "Oracle" => Some(current_oracle_text(&payload)),
+            _ => None,
+        };
         let mut info = payload.as_object().unwrap().clone();
         info.insert(
             "poet_variant".to_string(),
@@ -3579,6 +3726,24 @@ mod tests {
         if let Some(info_text) = info_text {
             card.info_text = info_text;
         }
+        card
+    }
+
+    fn current_lover(pos: u8, claimed: serde_json::Value) -> CardInfo {
+        let info_text = claimed
+            .as_i64()
+            .and_then(current_lover_claim_text)
+            .unwrap_or_default()
+            .to_string();
+        let mut card = make_card(
+            pos,
+            "Lover",
+            json!({
+                "lover_variant": "public_current",
+                "evil_adjacent": claimed,
+            }),
+        );
+        card.info_text = info_text;
         card
     }
 
@@ -4021,6 +4186,314 @@ mod tests {
             .evil_positions
             .insert(2, "Pooka".to_string());
         assert!(!validate_poet(&poet, &lying_matching, &state));
+    }
+
+    #[test]
+    fn current_lover_schema_is_exact_text_bound_and_fail_closed() {
+        let state = base_state(3, vec![]);
+        let scenario = empty_scenario();
+
+        for (claimed, text) in [
+            (0, "NO Evils\nadjacent to me"),
+            (1, "1 Evil\nadjacent to me"),
+            (2, "2 Evils\nadjacent to me"),
+        ] {
+            let direct = current_lover(1, json!(claimed));
+            assert_eq!(direct.info_text, text);
+            assert_eq!(
+                parse_current_lover_claim(
+                    &direct,
+                    CurrentPassivePayloadSource::Direct,
+                    &state,
+                ),
+                Some(claimed),
+            );
+
+            let poet = current_poet("Lover", json!({"evil_adjacent": claimed}));
+            assert_eq!(poet.info_text, text);
+            assert!(validate_current_poet_payload(&poet, &state, "Lover"));
+        }
+
+        for text in [
+            "No Evils\nadjacent to me",
+            "NO Evil\nadjacent to me",
+            "NO Evils adjacent to me",
+            "",
+        ] {
+            let mut wrong_text = current_lover(1, json!(0));
+            wrong_text.info_text = text.to_string();
+            assert!(!validate_lover(&wrong_text, &scenario, &state));
+        }
+
+        for claimed in [json!(-1), json!(3), json!(true), json!("1")] {
+            assert!(!validate_lover(
+                &current_lover(1, claimed),
+                &scenario,
+                &state,
+            ));
+        }
+
+        let mut extra = current_lover(1, json!(0));
+        extra.info_parsed.insert("unexpected".to_string(), json!(true));
+        assert!(!validate_lover(&extra, &scenario, &state));
+
+        for position in [0, 4] {
+            assert!(!validate_lover(
+                &current_lover(position, json!(0)),
+                &scenario,
+                &state,
+            ));
+        }
+
+        for info in [
+            json!({"lover_variant": "future", "evil_adjacent": 0}),
+            json!({"lover_variant": 7, "evil_adjacent": 0}),
+            json!({
+                "lover_variant": "public_current",
+                "poet_variant": "public_current",
+                "evil_adjacent": 0,
+            }),
+            json!({"scout_variant": "public_current", "evil_adjacent": 0}),
+        ] {
+            let mut malformed = make_card(1, "Lover", info);
+            malformed.info_text = "NO Evils\nadjacent to me".to_string();
+            assert!(!validate_lover(&malformed, &scenario, &state));
+        }
+
+        // Marker absence preserves the archived permissive predicate.
+        let archived = make_card(1, "Lover", json!({"evil_adjacent": 1}));
+        let mut one_adjacent_evil = empty_scenario();
+        one_adjacent_evil
+            .evil_positions
+            .insert(2, "Pooka".to_string());
+        assert!(validate_lover(&archived, &one_adjacent_evil, &state));
+        assert!(validate_lover(
+            &make_card(1, "Lover", json!({})),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_lover_truth_and_bluff_use_exact_authored_domain() {
+        let mut state = base_state(5, vec![]);
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+
+        assert!(validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        scenario.corrupted.insert(1);
+        assert!(validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        state.deck.demons.clear();
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        state.deck.minions.clear();
+        assert!(validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        scenario.evil_positions.clear();
+        assert!(!validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_poet_lover_delegates_to_exact_truth_and_inverse() {
+        let poet = current_poet("Lover", json!({"evil_adjacent": 1}));
+        let mut state = base_state(4, vec![poet.clone()]);
+        state.deck.demons = vec!["Pooka".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+
+        assert!(validate_poet(&poet, &scenario, &state));
+        scenario.corrupted.insert(1);
+        assert!(!validate_poet(&poet, &scenario, &state));
+
+        let lying = current_poet("Lover", json!({"evil_adjacent": 0}));
+        state.cards = vec![lying.clone()];
+        assert!(validate_poet(&lying, &scenario, &state));
+
+        let mut wrong_text = lying;
+        wrong_text.info_text = "0 Evils\nadjacent to me".to_string();
+        assert!(!validate_current_poet_payload(
+            &wrong_text,
+            &state,
+            "Lover",
+        ));
+        assert!(!validate_poet(&wrong_text, &scenario, &state));
+    }
+
+    #[test]
+    fn current_lover_resolves_anonymous_wretch_assignments_jointly() {
+        let mut state = base_state(4, vec![current_lover(1, json!(1))]);
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+
+        // The one anonymous Wretch can be adjacent at #2 or non-adjacent at
+        // #3, so this grouped Scenario supports exact native counts 2 and 1.
+        assert!(validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+
+        state.cards.push(make_card(3, "Scout", json!({})));
+        assert!(!validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        state.board_outcast_count = Some(0);
+        assert!(validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_lover_puppet_does_not_expand_authored_bluff_domain() {
+        let mut state = base_state(5, vec![]);
+        state.n_evil = 2;
+        state.deck.minions = vec!["Puppeteer".to_string()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Puppeteer".to_string());
+        scenario.puppet_position = Some(2);
+        scenario.corrupted.insert(1);
+
+        assert!(validate_lover(
+            &current_lover(1, json!(0)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        state.deck.demons.push("Pooka".to_string());
+        assert!(validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_lover_counts_previous_and_next_occurrences_on_tiny_boards() {
+        let state = base_state(2, vec![current_lover(1, json!(2))]);
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Pooka".to_string());
+        assert_eq!(
+            current_lover_possible_actual_counts(1, &scenario, &state),
+            vec![2],
+        );
+        assert!(validate_lover(
+            &current_lover(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+        assert!(!validate_lover(
+            &current_lover(1, json!(1)),
+            &scenario,
+            &state,
+        ));
+
+        let singleton = base_state(1, vec![current_lover(1, json!(0))]);
+        assert_eq!(
+            current_lover_possible_actual_counts(1, &empty_scenario(), &singleton),
+            vec![0],
+        );
+
+        let mut singleton_puppet = empty_scenario();
+        singleton_puppet.puppet_position = Some(1);
+        assert_eq!(
+            current_lover_possible_actual_counts(1, &singleton_puppet, &singleton),
+            vec![2],
+        );
+
+        let mut wretch_state = base_state(2, vec![current_lover(1, json!(2))]);
+        wretch_state.deck.outcasts = vec!["Wretch".to_string()];
+        wretch_state.board_outcast_count = Some(1);
+        wretch_state.board_count_provenance =
+            crate::types::BoardCountProvenance::TrustedPreStart;
+        assert_eq!(
+            current_lover_possible_actual_counts(
+                1,
+                &empty_scenario(),
+                &wretch_state,
+            ),
+            vec![2],
+        );
     }
 
     #[test]

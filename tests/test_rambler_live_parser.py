@@ -79,20 +79,25 @@ class RamblerMemoryParsingTests(unittest.TestCase):
         self.assertIsNone(parsed)
 
     def test_only_newest_acted_info_can_define_current_surface(self):
+        clue = "1 Evil\nadjacent to me"
         parsed = _parse_clue_from_memory(
             _memory_card(
                 5,
                 "Lover",
-                "1 of my neighbors is Evil",
+                clue,
                 acted_infos=[
                     {"desc": "#4 shut up!", "targets": [4]},
-                    {"desc": "1 of my neighbors is Evil", "targets": []},
+                    {"desc": clue, "targets": [4, 6]},
                 ],
             ),
             n_cards=9,
         )
 
-        self.assertEqual(parsed.info_parsed, {"evil_adjacent": 1})
+        self.assertEqual(parsed.info_text, clue)
+        self.assertEqual(
+            parsed.info_parsed,
+            {"evil_adjacent": 1, "lover_variant": "public_current"},
+        )
 
     def test_malformed_or_out_of_range_shut_up_never_falls_through(self):
         for clue in [

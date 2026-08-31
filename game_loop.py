@@ -54,10 +54,57 @@ def card_confessor(pos: int, dizzy: bool) -> CardInfo:
 def card_gemcrafter(pos: int, good_position: int) -> CardInfo:
     return CardInfo(pos, "Gemcrafter", info_parsed={"good_position": good_position})
 
-def card_lover(pos: int, evil_adjacent: int) -> CardInfo:
-    return CardInfo(pos, "Lover", info_parsed={"evil_adjacent": evil_adjacent})
+def card_lover(
+    pos: int,
+    evil_adjacent: int,
+    *,
+    info_text: str = "",
+    lover_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Lover observation.
+
+    Provenance remains opt-in so archived unmarked fixtures preserve their
+    historical predicate. Live auto/manual entry supplies ``public_current``
+    only after validating the native clue and adjacent-character references.
+    """
+    info = {"evil_adjacent": evil_adjacent}
+    if lover_variant is not None:
+        info["lover_variant"] = lover_variant
+    return CardInfo(pos, "Lover", info_text=info_text, info_parsed=info)
 
 _PUBLIC_CURRENT_VARIANT = "public_current"
+
+
+def _lover_native_text(evil_adjacent: int) -> str:
+    """Return Empath.ConjourInfo's exact shipped public sentence."""
+    try:
+        return {
+            0: "NO Evils\nadjacent to me",
+            1: "1 Evil\nadjacent to me",
+            2: "2 Evils\nadjacent to me",
+        }[evil_adjacent]
+    except (KeyError, TypeError) as exc:
+        raise ValueError("Lover evil count must be 0, 1, or 2") from exc
+
+
+def _parse_lover_native_text(clue: str) -> Optional[int]:
+    """Parse only one exact Empath.ConjourInfo output."""
+    for evil_adjacent in range(3):
+        if clue == _lover_native_text(evil_adjacent):
+            return evil_adjacent
+    return None
+
+
+def _current_lover_refs(position: int, n_cards: int) -> list[int]:
+    """Native Characters.GetAdjacentCharacters order: previous, then next."""
+    if type(position) is not int or type(n_cards) is not int:
+        raise ValueError("Lover adjacency requires integer board coordinates")
+    if n_cards <= 0 or not 1 <= position <= n_cards:
+        raise ValueError("Lover position is outside the current board")
+    return [
+        ((position - 2) % n_cards) + 1,
+        (position % n_cards) + 1,
+    ]
 
 
 def card_scout(
@@ -969,7 +1016,12 @@ def card_poet_with_info(
         evil_adjacent = integer(0, "evil count")
         if evil_adjacent not in {0, 1, 2}:
             raise ValueError("Lover Poet evil count must be 0, 1, or 2")
-        payload = {"evil_adjacent": evil_adjacent}
+        return _card_current_poet(
+            pos,
+            "Lover",
+            {"evil_adjacent": evil_adjacent},
+            info_text=_lover_native_text(evil_adjacent),
+        )
     elif canonical_provider == "Scout":
         sentinel_key = re.sub(
             r"[^a-z0-9]",
@@ -4782,13 +4834,22 @@ def _parse_clue_from_memory(
         if m:
             return card_bard(pos, int(m.group(1)))
 
-    # --- Lover: "X of my neighbors are evil" or "none" ---
+    # --- Lover: exact Empath text + previous/next Character references. ---
     if role_lower == 'lover':
-        m = re.search(r'(\d+)', clue)
-        if m:
-            return card_lover(pos, int(m.group(1)))
-        if 'none' in clue.lower() or 'no' in clue.lower():
-            return card_lover(pos, 0)
+        if n_cards is None or not 1 <= pos <= n_cards:
+            return None
+        evil_adjacent = _parse_lover_native_text(clue)
+        if (
+            evil_adjacent is not None
+            and current_event_refs() == _current_lover_refs(pos, n_cards)
+        ):
+            return card_lover(
+                pos,
+                evil_adjacent,
+                info_text=clue,
+                lover_variant=_PUBLIC_CURRENT_VARIANT,
+            )
+        return None
 
     # --- Hunter: exact current native sentence + circular range refs. ---
     if role_lower == 'hunter':
@@ -5373,18 +5434,15 @@ def _parse_clue_from_memory(
                     {"evil_pairs": evil_pairs},
                     info_text=clue,
                 )
-        # Lover exact native forms: "NO Evils\nadjacent to me" or
-        # "N Evil(s)\nadjacent to me".
-        m = re.fullmatch(
-            r'\s*(?:(NO)\s+Evils|(1)\s+Evil|(2)\s+Evils)\s+'
-            r'adjacent\s+to\s+me\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m and poet_refs_match([]):
-            evil_adjacent = (
-                0 if m.group(1) else (1 if m.group(2) else 2)
-            )
+        # Lover/Empath stores the copied Poet's physical previous/next
+        # neighbors, including duplicate Character references on tiny boards.
+        evil_adjacent = _parse_lover_native_text(clue)
+        if (
+            evil_adjacent is not None
+            and n_cards is not None
+            and 1 <= pos <= n_cards
+            and poet_refs_match(_current_lover_refs(pos, n_cards))
+        ):
             return _card_current_poet(
                 pos,
                 "Lover",
@@ -5527,7 +5585,21 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     elif role == "gemcrafter":
         return card_gemcrafter(pos, int(args[2]))
     elif role == "lover":
-        return card_lover(pos, int(args[2]))
+        if session is None:
+            raise ValueError("Current Lover entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Lover position is outside the current board")
+        if len(args) != 3:
+            raise ValueError("Lover entry requires exactly one evil count")
+        evil_adjacent = int(args[2])
+        if evil_adjacent not in {0, 1, 2}:
+            raise ValueError("Lover evil count must be 0, 1, or 2")
+        return card_lover(
+            pos,
+            evil_adjacent,
+            info_text=_lover_native_text(evil_adjacent),
+            lover_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "scout":
         if session is None:
             raise ValueError("Current Scout entry requires session board size")
