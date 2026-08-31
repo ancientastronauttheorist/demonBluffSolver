@@ -200,18 +200,22 @@ newest acted event's description to equal the current public text and checks
 the exact native reference shape; it may replace only an empty same-role Poet
 placeholder, never a nonempty legacy/manual observation.
 
-Unsupported native sentinels remain intentionally unmarked and manual. These
-include Oracle's no-Minion surface and Scout/Hunter one-Evil surfaces. A Poet
-no-info observation or Rambler `shut up!` replacement likewise has no current
-marker. The strict schema accepts only positive Scout/Hunter distances and
-either Bard's `-1` no-corruption sentinel or a positive distance.
+The audited current Scout one-Evil sentence and Oracle no-Minions sentence now
+have exact provenance-marked schemas. Hunter has no one-Evil sentinel: its
+truthful exhaustion result is the numeric distance `N - 1`. A Poet no-info
+observation or Rambler `shut up!` replacement still has no current marker. The
+strict schema accepts Scout's explicit sentinel or a positive 1-through-3
+distance, Oracle's exact zero-reference sentinel or a complete two-reference
+result, Hunter's positive distance, and either Bard's `-1` no-corruption
+sentinel or a positive distance.
 
 Historical fixtures omit `poet_variant`. That missing marker preserves their
 legacy permissive behavior byte-for-byte, including obsolete providers and
 empty observations. The old direct-Scout `distance: 0` encoding remains the
-legacy one-Evil sentinel, while current Poet-Scout payloads require a positive
-distance. An explicit malformed, unknown, or partial current marker is rejected
-rather than falling back to legacy interpretation.
+legacy one-Evil sentinel, while current direct and Poet-Scout payloads use
+`one_evil: true` with the exact native sentence. An explicit malformed,
+unknown, or partial current marker is rejected rather than falling back to
+legacy interpretation.
 
 ## Typed union accounting
 
@@ -258,14 +262,17 @@ Reconstruction, solver, and live tooling should therefore:
 - preserve unmarked historical observations without relabeling them current;
 - treat the newest public acted event and its references as one atomic capture;
   and
-- keep unsupported sentinel wording manual until its exact provider body and
-  public event shape are audited.
+- use only an audited provider's exact sentinel schema; keep all remaining
+  unaudited sentinel wording manual.
 
 The Rust solver now enforces the exact current schema and fixes Scout's definite
 false branches: when a named Evil role is certainly absent, or that role is the
 only Evil while a distance sentence was captured, truthful Poet-Scout rejects
-the world and a lying/corrupted Poet accepts it. A historical executed Evil with
-unknown original role remains conservative rather than being falsely pruned.
+the world and a lying/corrupted Poet accepts it. Current Poet-Oracle additionally
+models the exact truthful Minion/Good draw orientation, possible moved-Twin
+duplicate, no-Minions sentinel, and distinct-Good bluff pair. A historical
+executed Evil with unknown original role remains conservative rather than being
+falsely pruned.
 
 ## Typed analysis corroboration
 
@@ -285,8 +292,9 @@ those folded sites do not establish new managed identity.
 
 ## Remaining uncertainty
 
-- The twelve provider `GetInfo`/`GetBluffInfo` bodies are not all selected here;
-  exact clue-generation pipelines and every sentinel remain a later milestone.
+- Provider `GetInfo`/`GetBluffInfo` bodies other than the separately audited
+  Scout, Oracle, and Hunter boundaries are not selected here; their exact clue-
+  generation pipelines and sentinels remain later milestones.
 - Unity's RNG implementation and statistical relationship between consecutive
   global PRNG draws are outside `GameAssembly.dll`'s selected boundary.
 - The generic `RoleAct` callback closure is not exported, so native append,

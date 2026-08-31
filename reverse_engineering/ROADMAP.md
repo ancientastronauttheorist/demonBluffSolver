@@ -201,6 +201,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   exhaustion value and half-circle bluff domain, and ordered duplicate-preserving
   acted references; expand the typed union to 27 target sets and 594
   memberships and publish its baseline-versus-typed quality report.
+- [x] Asset-bind public Oracle to managed `Investigator`; native-audit all seven
+  declared role methods, all six generated comparer methods, and six exact
+  Character, script-pool, all-ascension-pool, and registration helpers; close
+  the independent truthful Minion/Good draws, moved-Twin duplicate reference,
+  exact no-Minions sentinel, distinct-Good bluff pair, and fallback Minion
+  label pool for both direct and Poet observations; expand the typed union to
+  28 target sets and 613 memberships and publish its baseline-versus-typed
+  quality report.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

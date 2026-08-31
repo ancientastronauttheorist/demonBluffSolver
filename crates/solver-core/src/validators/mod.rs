@@ -768,8 +768,9 @@ fn current_scout_label_support(
 
     // Truthful Scout names Character.GetRegisterAs(). Wretch is the one
     // modeled current data identity whose register-as role differs: it samples
-    // a canonical authored Minion (or the all-ascension pool when the bridge
-    // lacks deck metadata). Bluff Scout names dataRef directly.
+    // a canonical authored Minion. When the bridge lacks current script Minion
+    // metadata, the solver conservatively approximates the native all-ascension
+    // fallback with any canonical Minion. Bluff Scout names dataRef directly.
     if truth == TruthStatus::Truthful && roles_equal(&data_role, "Wretch") {
         return current_wretch_register_as_label_allowed(claimed_role, state)
             .then(|| CurrentScoutLabelSupport::WretchRegisterAs(normalize_role(claimed_role)));
@@ -1391,10 +1392,10 @@ fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
         .collect();
     if other_evil.is_empty() {
         // Historical direct-Scout captures used distance zero for the native
-        // one-Evil sentinel. Current provenance-marked Poet payloads require a
-        // positive distance, so only that legacy encoding is true here; an
-        // actual positive-distance sentence remains false and is inverted for
-        // a lying source.
+        // one-Evil sentinel. Current provenance-marked direct and Poet payloads
+        // take the explicit `one_evil` path before this legacy numeric helper,
+        // so only that legacy encoding is true here; an actual positive-distance
+        // sentence remains false and is inverted for a lying source.
         return if claimed_dist == 0 {
             truth == TruthStatus::Truthful
         } else {
