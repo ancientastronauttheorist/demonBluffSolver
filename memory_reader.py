@@ -159,7 +159,9 @@ DISPLAY_NAMES = {
     'Gambler': 'Gemcrafter',
     'Lookout': 'Medium',
     'Sapper': 'Sapper',
-    'Archivist': 'Archivist',
+    # The shipped public Gemcrafter CharacterData binds managed Archivist.
+    # Keep Gambler above as a compatibility alias for older reader output.
+    'Archivist': 'Gemcrafter',
     'Shugenja': 'Shugenja',
     'Tracker': 'Hunter',
     'Investigator': 'Oracle',

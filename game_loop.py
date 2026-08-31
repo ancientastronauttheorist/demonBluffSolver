@@ -161,8 +161,60 @@ def card_knitter(
 def card_confessor(pos: int, dizzy: bool) -> CardInfo:
     return CardInfo(pos, "Confessor", info_parsed={"dizzy": dizzy})
 
-def card_gemcrafter(pos: int, good_position: int) -> CardInfo:
-    return CardInfo(pos, "Gemcrafter", info_parsed={"good_position": good_position})
+def _gemcrafter_native_text(good_position: int) -> str:
+    """Return Archivist.ConjourInfo's exact shipped public sentence."""
+    if type(good_position) is not int or good_position <= 0:
+        raise ValueError("Gemcrafter target must be a positive integer")
+    return f"#{good_position} is Good"
+
+
+def _parse_gemcrafter_native_text(info_text) -> Optional[int]:
+    """Parse only one exact current Archivist sentence."""
+    if not isinstance(info_text, str):
+        return None
+    match = re.fullmatch(r"#([1-9]\d*) is Good", info_text)
+    if match is None:
+        return None
+    try:
+        good_position = int(match.group(1))
+    except ValueError:
+        # Python caps pathological decimal conversions; malformed memory text
+        # must fail closed rather than escape the live parser.
+        return None
+    return (
+        good_position
+        if info_text == _gemcrafter_native_text(good_position)
+        else None
+    )
+
+
+def card_gemcrafter(
+    pos: int,
+    good_position: int,
+    *,
+    info_text: str = "",
+    gemcrafter_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build a Gemcrafter observation while preserving unmarked legacy data."""
+    info = {"good_position": good_position}
+    if gemcrafter_variant is not None:
+        if gemcrafter_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Gemcrafter variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Gemcrafter position must be positive")
+        if not isinstance(info_text, str):
+            raise ValueError("Current Gemcrafter text must be a string")
+        expected_text = _gemcrafter_native_text(good_position)
+        if info_text and info_text != expected_text:
+            raise ValueError("Current Gemcrafter text must match its target")
+        info["gemcrafter_variant"] = gemcrafter_variant
+        info_text = expected_text
+    return CardInfo(
+        pos,
+        "Gemcrafter",
+        info_text=info_text,
+        info_parsed=info,
+    )
 
 def card_lover(
     pos: int,
@@ -1484,8 +1536,18 @@ def card_poet_with_info(
             info_text=_bishop_native_text(target_positions, bishop_types),
         )
     elif canonical_provider == "Gemcrafter":
+        if n_cards is None:
+            raise ValueError(
+                "Current Gemcrafter Poet entry requires session board size"
+            )
         require_args(1)
-        payload = {"good_position": position(0, "good target")}
+        good_position = position(0, "good target")
+        return _card_current_poet(
+            pos,
+            "Gemcrafter",
+            {"good_position": good_position},
+            info_text=_gemcrafter_native_text(good_position),
+        )
     else:
         # Bard is the only remaining audited current provider.  Manual zero
         # retains the existing CLI convention for "no Corrupted characters".
@@ -4826,6 +4888,9 @@ def _card_from_rambler_interruption(
     position = card['position']
     role = card.get('disguise') or _observed_current_role(card) or ''
     role_key = role.lower().replace(' ', '_')
+    if role_key in {'archivist', 'gambler'}:
+        role = 'Gemcrafter'
+        role_key = 'gemcrafter'
     if role_key == 'jester':
         return card_jester_silenced(
             position,
@@ -5057,6 +5122,12 @@ def _parse_clue_from_memory(
     )
     targets = first_info.get('targets', [])
     role_lower = role.lower().replace(' ', '_')
+    if role_lower in {'archivist', 'gambler'}:
+        # Current public Gemcrafter binds managed Archivist. Gambler remains a
+        # compatibility name from older memory-reader builds. Apply this only
+        # after choosing disguise > current_role > true_role above.
+        role = 'Gemcrafter'
+        role_lower = 'gemcrafter'
     ability_used = card.get('ability_used', False)
 
     def current_event_refs() -> Optional[list[int]]:
@@ -5112,6 +5183,28 @@ def _parse_clue_from_memory(
         return None
     if baker_surface is not None:
         return baker_surface
+
+    # --- Gemcrafter/Archivist: exact text + identical newest one-card ref. ---
+    # Archivist writes no RuntimeData, so unrelated data preserved by an
+    # identity move is deliberately ignored here.
+    if role_lower == 'gemcrafter':
+        good_position = _parse_gemcrafter_native_text(clue)
+        if (
+            good_position is None
+            or type(n_cards) is not int
+            or n_cards <= 0
+            or type(pos) is not int
+            or not 1 <= pos <= n_cards
+            or good_position > n_cards
+            or current_event_refs() != [good_position]
+        ):
+            return None
+        return card_gemcrafter(
+            pos,
+            good_position,
+            info_text=clue,
+            gemcrafter_variant=_PUBLIC_CURRENT_VARIANT,
+        )
 
     if (
         role_lower == 'fortune_teller'
@@ -5321,10 +5414,6 @@ def _parse_clue_from_memory(
         # A positive string without its required native reference is unsafe to
         # auto-enter; leave it for manual recovery.
         return None
-
-    # --- Gemcrafter: single target ---
-    if role_lower == 'gemcrafter' and targets:
-        return card_gemcrafter(pos, targets[0])
 
     # --- Fortune Teller: "Is #X or #Y Evil?: True/False" ---
     if role_lower == 'fortune_teller' and targets:
@@ -5652,6 +5741,26 @@ def _parse_clue_from_memory(
                 )
             return None
 
+        # Archivist has no RuntimeData. Authenticate its exact text and newest
+        # identical one-card ref before the Shugenja-only runtime guard below.
+        gemcrafter_target = _parse_gemcrafter_native_text(clue)
+        if gemcrafter_target is not None:
+            if (
+                type(n_cards) is int
+                and n_cards > 0
+                and type(pos) is int
+                and 1 <= pos <= n_cards
+                and gemcrafter_target <= n_cards
+                and poet_refs_match([gemcrafter_target])
+            ):
+                return _card_current_poet(
+                    pos,
+                    "Gemcrafter",
+                    {"good_position": gemcrafter_target},
+                    info_text=clue,
+                )
+            return None
+
         # Shugenja stores its claimed enum on the Poet and emits no refs.
         # RuntimeData is strong corroboration when readable; the exact public
         # event remains sufficient when the runtime object is unavailable.
@@ -5735,25 +5844,6 @@ def _parse_clue_from_memory(
                         "targets": oracle_targets,
                         "minion_role": minion.name,
                     },
-                    info_text=clue,
-                )
-
-        # Gemcrafter: exact Good call and matching native reference.
-        m = re.fullmatch(
-            r'\s*#\s*(\d+)\s+is\s+Good\s*[.!]?\s*',
-            clue,
-            re.IGNORECASE | re.DOTALL,
-        )
-        if m:
-            good_position = int(m.group(1))
-            if (
-                valid_displayed_targets([good_position])
-                and poet_refs_match([good_position])
-            ):
-                return _card_current_poet(
-                    pos,
-                    "Gemcrafter",
-                    {"good_position": good_position},
                     info_text=clue,
                 )
 
@@ -5933,6 +6023,8 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
     role = args[0].lower()
     if role == "knitter" and len(args) != 3:
         raise ValueError("Knitter entry requires exactly one pair count")
+    if role == "gemcrafter" and len(args) != 3:
+        raise ValueError("Gemcrafter entry requires exactly one Good target")
     if role == "enlightened" and len(args) != 3:
         raise ValueError("Enlightened entry requires exactly one direction")
     if role == "empress" and len(args) != 3:
@@ -5972,7 +6064,21 @@ def _parse_card_cli(args: list[str], session=None) -> CardInfo:
         dizzy = args[2].lower() in ("dizzy", "dirty", "true", "1", "yes")
         return card_confessor(pos, dizzy)
     elif role == "gemcrafter":
-        return card_gemcrafter(pos, int(args[2]))
+        if session is None:
+            raise ValueError("Current Gemcrafter entry requires session board size")
+        if not 1 <= pos <= session.n_cards:
+            raise ValueError("Gemcrafter position is outside the current board")
+        try:
+            good_position = int(args[2])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Gemcrafter Good target must be an integer") from exc
+        if not 1 <= good_position <= session.n_cards:
+            raise ValueError("Gemcrafter Good target is outside the current board")
+        return card_gemcrafter(
+            pos,
+            good_position,
+            gemcrafter_variant=_PUBLIC_CURRENT_VARIANT,
+        )
     elif role == "lover":
         if session is None:
             raise ValueError("Current Lover entry requires session board size")
@@ -7477,12 +7583,22 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and existing.info_parsed == {}
                         and parsed.info_parsed.get("poet_variant") == POET_VARIANT
                     )
+                    gemcrafter_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role)
+                        == "gemcrafter"
+                        and existing.info_parsed == {}
+                        and parsed.info_parsed.get("gemcrafter_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                    )
                     if not (
                         active_update
                         or shut_up_update
                         or quote_update
                         or baker_update
                         or poet_update
+                        or gemcrafter_update
                     ):
                         continue
                 session.add_card(parsed)
