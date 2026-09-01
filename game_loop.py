@@ -5313,9 +5313,10 @@ class GameSession:
     ) -> list[int]:
         """Apply shipped ResetAfterNight usage to the session model.
 
-        The current public roster audit has proven this usage mode for Judge,
-        Fortune Teller, and Druid. Keep accumulated clue evidence, but make each
-        apparent resettable actor available again after a completed night.
+        Keep accumulated clue evidence, but make each apparent reusable active
+        actor available again after a completed night. Some passive roles carry
+        the same serialized asset category without exposing an activated
+        ability, so the category alone must not create a session action.
         """
         if type(completed_nights) is not int or completed_nights <= 0:
             raise ValueError("completed_nights must be a positive integer")
@@ -5328,7 +5329,11 @@ class GameSession:
         resettable = set()
         for card in self.cards:
             card_def = get_card(card.apparent_role)
-            if card_def and card_def.ability_resets_after_night:
+            if (
+                card_def
+                and card_def.activated_ability
+                and card_def.ability_resets_after_night
+            ):
                 resettable.add(card.position)
             if _execution_role_key(card.apparent_role) == "druid":
                 self.druid_reset_generations[card.position] = (

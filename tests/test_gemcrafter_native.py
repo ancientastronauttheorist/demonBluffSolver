@@ -559,6 +559,17 @@ class GemcrafterSessionCaptureTests(unittest.TestCase):
         self.assertEqual(legacy.cards[0].info_text, "")
         self.assertEqual(legacy.cards[0].info_parsed, {"good_position": 3})
 
+    def test_passive_reset_metadata_does_not_reactivate_gemcrafter(self):
+        session = GameSession(6, 1)
+        session.cards.extend([
+            CardInfo(1, "Gemcrafter"),
+            CardInfo(2, "Judge"),
+        ])
+        session.used_abilities = [1, 2]
+
+        self.assertEqual(session.reset_after_night_abilities(), [2])
+        self.assertEqual(session.used_abilities, [1])
+
 
 if __name__ == "__main__":
     unittest.main()
