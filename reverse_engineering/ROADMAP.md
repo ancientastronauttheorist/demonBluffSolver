@@ -255,6 +255,20 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   scenario construction, branch them before Start, and replay their complete
   ordered mutation histories so `Unknown` seats can be resolved without
   validator-local faction guesses.
+  - [x] Stable-origin checkpoint: branch each untyped dead Evil over the exact
+    authored multiset before construction; retain role-to-seat identity in the
+    scenario; enforce trusted Minion/Demon quotas, exact trusted HUD Evil totals
+    with a provenance-gated archival Puppet-count ambiguity, and identity-aware
+    native Puppeteer/Puppet conversion in stable worlds, including an explicit
+    stable-Twin/current-Puppet body overlay and conservative projection of its
+    real Villager source through Start, while retaining conservative mixed-
+    writer branches; and re-enable card and historical validators only for the
+    resulting exact supported worlds.
+  - [ ] Complete the remaining general ordered replay: mixed Twin fallback
+    beyond the represented Puppet overlay, erased Puppet Villager provenance,
+    Shaman copied-Start side effects, duplicate mutators, and probability-exact
+    occurrence weighting. Strict current observations remain fail-closed for
+    inferred incomplete writers.
 - [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
   role/compiler-generated methods plus registered-alignment, acted-record,
   pool-filter, and RNG helpers; close its direct/Poet three-reference schema,

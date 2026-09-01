@@ -15,7 +15,7 @@ use disguisers::validate_clean_doppel_source_support;
 use std::collections::{HashMap, HashSet};
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions, Direction};
 use crate::knowledge_base::{self, get_card, normalize_role, Faction};
-use crate::types::{CardInfo, GameState, Scenario};
+use crate::types::{BoardCountProvenance, CardInfo, GameState, Scenario};
 
 /// Validate a single card's info against a scenario using the appropriate role validator.
 pub fn validate_card(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -80,6 +80,17 @@ fn matches_executed_good_role(
     exact_match || twin_can_explain_current_role_mismatch(pos, observed_role, scenario, state)
 }
 
+fn legacy_current_evil_role_at(
+    pos: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<String> {
+    if scenario.puppet_position == Some(pos) {
+        return current_data_role_at(pos, scenario, state);
+    }
+    known_evil_role(pos, scenario, state).map(str::to_string)
+}
+
 fn twin_can_explain_current_role_mismatch(
     pos: u8,
     observed_role: &str,
@@ -111,12 +122,11 @@ fn twin_can_explain_current_role_mismatch(
     }
 
     // The original Twin can receive any authored current CharacterData from
-    // its selected neighbor. Later start actions can overwrite that received
-    // data with another authored role (Shaman), or with generated Puppet data
-    // when Puppeteer is authored. Do not admit arbitrary roles absent from
-    // those pre-trace current-data surfaces.
+    // its selected neighbor. Later Shaman writes can replace that received
+    // data with another authored role. Generated Puppet is different: it is a
+    // post-Twin full Init and must match the scenario's explicit overlay.
     let observed = normalize_role(observed_role);
-    deck_has(&observed) || (observed == "puppet" && deck_has("puppeteer"))
+    observed != "puppet" && deck_has(&observed)
 }
 
 fn valid_executed_current_role_entry(
@@ -138,6 +148,17 @@ fn valid_executed_current_role_entry(
 
     let normalized = normalize_role(observed_role);
     !matches!(normalized.as_str(), "" | "unknown" | "?" | "none" | "null")
+}
+
+fn executed_evil_origin_is_unresolved(
+    position: u8,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    state.executed.contains(&position)
+        && state.confirmed_evil.contains(&position)
+        && stable_evil_origin_role_at(position, scenario, state)
+            .is_some_and(|role| normalize_role(role) == "unknown")
 }
 
 /// Check if all revealed cards + ability results + structural constraints are consistent.
@@ -189,12 +210,8 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
 
     // Card info validators
     for card in &state.cards {
-        if state.executed.contains(&card.position) {
-            if state.confirmed_evil.contains(&card.position)
-                && !state.executed_evil_roles.contains_key(&card.position)
-            {
-                continue; // Skip unknown executed evils
-            }
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
+            continue; // Skip only a genuinely unresolved executed Evil.
         }
         if !validate_card(card, scenario, state) {
             return false;
@@ -249,9 +266,10 @@ fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
         .collect();
     for &position in &state.confirmed_evil {
         let dead = state.executed.contains(&position) || state.night_kills.contains(&position);
-        let public_role_is_untyped = state.executed_evil_roles.get(&position)
-            .map_or(true, |role| normalize_role(role) == "unknown");
-        if dead && public_role_is_untyped && !named_lilis_positions.contains(&position) {
+        let branch_role_is_untyped = scenario.puppet_position != Some(position)
+            && stable_evil_origin_role_at(position, scenario, state)
+                .is_none_or(|role| normalize_role(role) == "unknown");
+        if dead && branch_role_is_untyped && !named_lilis_positions.contains(&position) {
             untyped_evil_positions.insert(position);
         }
     }
@@ -442,7 +460,8 @@ fn untyped_historical_evil_may_be_start_eraser(
         .collect();
     let has_untyped_historical_evil = state.confirmed_evil.iter().any(|position| {
         dead.contains(position)
-            && state.executed_evil_roles.get(position)
+            && scenario.puppet_position != Some(*position)
+            && stable_evil_origin_role_at(*position, scenario, state)
                 .is_none_or(|role| normalize_role(role) == "unknown")
     });
     if !has_untyped_historical_evil {
@@ -1636,10 +1655,34 @@ fn current_authored_evil_slots(
     // The HUD objective counts the generated Puppet, while native passive
     // bluff domains based on CurrentScript Minion+Demon do not. A registered-
     // Evil Wretch is runtime Good and therefore needs no corresponding
-    // adjustment here. GameState does not retain the two CurrentScript lists,
-    // so the HUD minus the represented Puppet is their closest exact surface.
-    // Do not derive this from deck lists: those are role pools and may contain
-    // undealt Evil identities.
+    // adjustment here. Exact generated scenarios retain every stable authored
+    // role in `evil_positions`; an ordinary Puppet occupies its own map entry,
+    // while a post-Twin Puppet overlay shares the Twin's physical position.
+    // Recover the authored CurrentScript domain directly whenever that physical
+    // union matches an accepted board total. Do not derive it from deck lists:
+    // those are role pools and may contain undealt Evil identities.
+    let separate_puppet = scenario
+        .puppet_position
+        .is_some_and(|position| !scenario.evil_positions.contains_key(&position));
+    let represented_total = scenario.evil_positions.len() + usize::from(separate_puppet);
+    let has_puppeteer = scenario
+        .evil_positions
+        .values()
+        .any(|role| normalize_role(role) == "puppeteer");
+    let exact_trusted_total = represented_total == state.n_evil as usize;
+    let exact_legacy_authored_total =
+        state.board_count_provenance == BoardCountProvenance::LegacyUnknown
+            && scenario.puppet_position.is_some()
+            && has_puppeteer
+            && represented_total == state.n_evil as usize + 1;
+    if exact_trusted_total || exact_legacy_authored_total {
+        let authored = scenario
+            .evil_positions
+            .values()
+            .filter(|role| normalize_role(role) != "puppet")
+            .count();
+        return u8::try_from(authored).ok();
+    }
     state
         .n_evil
         .checked_sub(u8::from(scenario.puppet_position.is_some()))
@@ -1916,10 +1959,7 @@ fn validate_current_knitter(
 fn validate_current_knitter_consistency(scenario: &Scenario, state: &GameState) -> bool {
     let mut observations = Vec::new();
     for card in &state.cards {
-        if state.executed.contains(&card.position)
-            && state.confirmed_evil.contains(&card.position)
-            && !state.executed_evil_roles.contains_key(&card.position)
-        {
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
             continue;
         }
         let Ok(Some(source)) =
@@ -2742,10 +2782,7 @@ fn validate_current_register_as_consistency(
 ) -> bool {
     let mut current_cards = Vec::new();
     for card in &state.cards {
-        if state.executed.contains(&card.position)
-            && state.confirmed_evil.contains(&card.position)
-            && !state.executed_evil_roles.contains_key(&card.position)
-        {
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
             continue;
         }
         let Ok(Some(source)) = current_passive_payload_source(
@@ -2843,7 +2880,8 @@ fn validate_scout(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bo
     let truth = truth_status(pos, scenario, state);
 
     let target_pos = (1..=n).find(|&p| {
-        known_evil_role(p, scenario, state).map_or(false, |r| roles_equal(r, evil_role))
+        legacy_current_evil_role_at(p, scenario, state)
+            .is_some_and(|role| roles_equal(&role, evil_role))
     });
     let target_pos = match target_pos {
         Some(p) => p,
@@ -3303,7 +3341,8 @@ fn validate_oracle(card: &CardInfo, scenario: &Scenario, state: &GameState) -> b
     let truth = truth_status(card.position, scenario, state);
 
     let target_matches_definite = |t: u8| -> bool {
-        known_evil_role(t, scenario, state).map_or(false, |r| roles_equal(r, minion_role))
+        legacy_current_evil_role_at(t, scenario, state)
+            .is_some_and(|role| roles_equal(&role, minion_role))
     };
     let target_matches_possible = |t: u8| -> bool {
         if target_matches_definite(t) { return true; }
@@ -3831,10 +3870,7 @@ fn validate_current_medium(
 fn validate_current_medium_consistency(scenario: &Scenario, state: &GameState) -> bool {
     let mut observations = Vec::new();
     for card in &state.cards {
-        if state.executed.contains(&card.position)
-            && state.confirmed_evil.contains(&card.position)
-            && !state.executed_evil_roles.contains_key(&card.position)
-        {
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
             continue;
         }
         let Ok(Some(source)) =
@@ -4230,8 +4266,37 @@ fn current_has_unresolved_start_identity(
     state: &GameState,
 ) -> bool {
     (1..=state.n_cards).any(|position| {
-        stable_evil_origin_role_at(position, scenario, state)
-            .is_some_and(|role| normalize_role(role) == "unknown")
+        let public_origin_was_unresolved = state.executed.contains(&position)
+            && state.confirmed_evil.contains(&position)
+            && state
+                .executed_evil_roles
+                .get(&position)
+                .is_none_or(|public_role| normalize_role(public_role) == "unknown");
+        if public_origin_was_unresolved && scenario.puppet_position == Some(position) {
+            // Generated Puppet has no stable Evil origin role by definition,
+            // but its erased Villager identity is still missing from the
+            // partial Start model.
+            return true;
+        }
+        let Some(role) = stable_evil_origin_role_at(position, scenario, state) else {
+            return false;
+        };
+        let role = normalize_role(role);
+        if role == "unknown" {
+            return true;
+        }
+
+        public_origin_was_unresolved
+            && match role.as_str() {
+                // The ordered Twin slice proves completeness with an explicit
+                // trace. Legacy fallback must not become trusted merely because
+                // construction inferred the actor's stable role.
+                "twinminion" => scenario.twin_trace.is_none(),
+                // These writers still have deliberately partial general Start
+                // models (erased Puppet identity and copied-Start side effects).
+                "puppeteer" | "shaman" => true,
+                _ => false,
+            }
     })
 }
 
@@ -4852,13 +4917,14 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
         effective_role_at(target, scenario, state).is_some_and(|role| roles_equal(&role, "Wretch"));
 
     // Gather all known evil roles on the board
-    let evil_roles: Vec<&str> = (1..=state.n_cards)
+    let evil_roles: Vec<String> = (1..=state.n_cards)
         .filter_map(|p| {
-            let r = known_evil_role(p, scenario, state)?;
-            if r == "Puppet" || r == "Unknown" {
+            let role = legacy_current_evil_role_at(p, scenario, state)?;
+            let normalized = normalize_role(&role);
+            if matches!(normalized.as_str(), "puppet" | "unknown") {
                 None
             } else {
-                Some(r)
+                Some(role)
             }
         })
         .collect();
@@ -4868,8 +4934,9 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
             return claimed_role.eq_ignore_ascii_case("cabbage");
         }
         if target_is_evil {
-            let actual = known_evil_role(target, scenario, state).unwrap_or("");
-            return roles_equal(claimed_role, actual);
+            let actual = legacy_current_evil_role_at(target, scenario, state)
+                .unwrap_or_default();
+            return roles_equal(claimed_role, &actual);
         }
         evil_roles.iter().any(|r| roles_equal(r, claimed_role))
     } else {
@@ -4877,8 +4944,9 @@ fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
             return !claimed_role.eq_ignore_ascii_case("cabbage");
         }
         if target_is_evil {
-            let actual = known_evil_role(target, scenario, state).unwrap_or("");
-            return !roles_equal(claimed_role, actual);
+            let actual = legacy_current_evil_role_at(target, scenario, state)
+                .unwrap_or_default();
+            return !roles_equal(claimed_role, &actual);
         }
         true
     }
@@ -8704,10 +8772,7 @@ fn validate_current_bounty_hunter_wretch_consistency(
     let mut forbidden = HashSet::new();
 
     for card in &state.cards {
-        if state.executed.contains(&card.position)
-            && state.confirmed_evil.contains(&card.position)
-            && !state.executed_evil_roles.contains_key(&card.position)
-        {
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
             continue;
         }
         if card
@@ -8865,10 +8930,7 @@ fn validate_current_hidden_surface_consistency(
 
     let mut observations: Vec<Vec<CurrentHiddenSurfaceSupport>> = Vec::new();
     for card in &state.cards {
-        if state.executed.contains(&card.position)
-            && state.confirmed_evil.contains(&card.position)
-            && !state.executed_evil_roles.contains_key(&card.position)
-        {
+        if executed_evil_origin_is_unresolved(card.position, scenario, state) {
             continue;
         }
 
@@ -10961,7 +11023,9 @@ fn validate_slayer_results(scenario: &Scenario, state: &GameState) -> bool {
 
         let slayer_evil_role = known_evil_role(slayer_pos, scenario, state);
         let slayer_is_evil = slayer_evil_role.is_some();
-        let slayer_is_puppet = slayer_evil_role == Some("Puppet");
+        let slayer_is_puppet = scenario.puppet_position == Some(slayer_pos)
+            || slayer_evil_role
+                .is_some_and(|role| normalize_role(role) == "puppet");
         let slayer_lies = truth_status(slayer_pos, scenario, state) == TruthStatus::Lying;
         let target_is_physically_evil = is_evil_in_board_state(target_pos, scenario, state);
         if result
@@ -12905,6 +12969,67 @@ mod tests {
         scenario.evil_positions.insert(3, "Pooka".to_string());
         assert!(validate_gemcrafter(&direct, &scenario, &state));
         assert!(validate_poet(&poet, &scenario, &state));
+    }
+
+    #[test]
+    fn executed_evil_card_is_skipped_only_while_scenario_origin_is_unknown() {
+        let card = make_card(1, "Gemcrafter", json!({"good_position": 2}));
+        let mut state = base_state(2, vec![card.clone()]);
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        assert!(state.executed_evil_roles.is_empty());
+
+        let mut unresolved = empty_scenario();
+        unresolved
+            .evil_positions
+            .insert(1, "Unknown".to_string());
+        assert!(executed_evil_origin_is_unresolved(1, &unresolved, &state));
+        assert!(check_scenario(&unresolved, &state));
+
+        let mut exact = unresolved.clone();
+        exact.evil_positions.insert(1, "Pooka".to_string());
+        assert!(!executed_evil_origin_is_unresolved(1, &exact, &state));
+        assert!(!validate_gemcrafter(&card, &exact, &state));
+        assert!(!check_scenario(&exact, &state));
+    }
+
+    #[test]
+    fn inferred_complex_start_writers_remain_fail_closed_until_replayed() {
+        let mut state = base_state(1, vec![]);
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        let mut scenario = empty_scenario();
+
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        assert!(current_has_unresolved_start_identity(&scenario, &state));
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::NoDemon,
+        });
+        assert!(!current_has_unresolved_start_identity(&scenario, &state));
+
+        scenario.twin_trace = None;
+        for role in ["Puppeteer", "Shaman"] {
+            scenario.evil_positions.insert(1, role.to_string());
+            assert!(current_has_unresolved_start_identity(&scenario, &state));
+        }
+
+        scenario.evil_positions.insert(1, "Puppet".to_string());
+        scenario.puppet_position = Some(1);
+        assert!(current_has_unresolved_start_identity(&scenario, &state));
+        state
+            .executed_evil_roles
+            .insert(1, "Unknown".to_string());
+        assert_eq!(stable_evil_origin_role_at(1, &scenario, &state), None);
+        assert_eq!(known_evil_role(1, &scenario, &state), Some("Puppet"));
+        assert!(!executed_evil_origin_is_unresolved(1, &scenario, &state));
+
+        scenario.puppet_position = None;
+        state.executed_evil_roles.clear();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+        assert!(!current_has_unresolved_start_identity(&scenario, &state));
     }
 
     #[test]
@@ -15913,6 +16038,45 @@ mod tests {
             &zero_authored_slots,
             &state,
         ));
+    }
+
+    #[test]
+    fn legacy_generated_puppet_count_restores_current_authored_evil_slots() {
+        let mut state = base_state(5, vec![current_knitter(1, json!(2))]);
+        state.n_evil = 3;
+        state.board_count_provenance = BoardCountProvenance::LegacyUnknown;
+        let mut scenario = empty_scenario();
+        scenario.evil_positions = HashMap::from([
+            (2, "Puppeteer".to_string()),
+            (3, "Pooka".to_string()),
+            (4, "Witch".to_string()),
+            (5, "Puppet".to_string()),
+        ]);
+        scenario.puppet_position = Some(5);
+        scenario.corrupted.insert(1);
+
+        assert_eq!(current_authored_evil_slots(&scenario, &state), Some(3));
+        assert!(validate_knitter(
+            &current_knitter(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        assert_eq!(current_authored_evil_slots(&scenario, &state), Some(2));
+        assert!(!validate_knitter(
+            &current_knitter(1, json!(2)),
+            &scenario,
+            &state,
+        ));
+
+        scenario.evil_positions = HashMap::from([
+            (2, "Puppeteer".to_string()),
+            (3, "Twin Minion".to_string()),
+            (4, "Pooka".to_string()),
+        ]);
+        scenario.puppet_position = Some(3);
+        assert_eq!(current_authored_evil_slots(&scenario, &state), Some(3));
     }
 
     #[test]
@@ -19141,6 +19305,44 @@ mod tests {
         state.slayer_results[0].revealed_role = Some("Twin Minion".to_string());
         state.slayer_results[0].was_evil = Some(false);
         assert!(!validate_slayer_results(&empty_scenario(), &state));
+    }
+
+    #[test]
+    fn slayer_twin_body_puppet_overlay_is_exact_for_actor_and_target() {
+        let stable_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Twin Minion".to_string()),
+            (5, "Pooka".to_string()),
+        ]);
+
+        let mut target_state = base_state(5, vec![make_card(4, "Slayer", json!({}))]);
+        target_state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+        target_state.deck.demons = vec!["Pooka".to_string()];
+        target_state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 4,
+            target_pos: 2,
+            killed: true,
+            revealed_role: Some("Puppet".to_string()),
+            was_evil: Some(true),
+        });
+        let mut no_overlay = empty_scenario();
+        no_overlay.evil_positions = stable_roles.clone();
+        assert!(!validate_slayer_results(&no_overlay, &target_state));
+
+        let mut overlay = no_overlay.clone();
+        overlay.puppet_position = Some(2);
+        assert!(validate_slayer_results(&overlay, &target_state));
+
+        let mut actor_state = base_state(5, vec![make_card(2, "Slayer", json!({}))]);
+        actor_state.deck = target_state.deck.clone();
+        actor_state.slayer_results.push(crate::types::SlayerResult {
+            slayer_pos: 2,
+            target_pos: 5,
+            killed: true,
+            revealed_role: Some("Pooka".to_string()),
+            was_evil: Some(true),
+        });
+        assert!(validate_slayer_results(&overlay, &actor_state));
     }
 
     #[test]
@@ -22648,9 +22850,16 @@ mod tests {
             "Shaman",
         ));
 
-        // Puppeteer acts after Twin and can replace a received Villager with
-        // generated Puppet data on the original runtime-Evil Twin body.
+        // Puppeteer acts after Twin, but that generated full Init is now an
+        // exact overlay rather than part of the coarse swap-endpoint waiver.
         state.deck.minions.push("Puppeteer".to_string());
+        assert!(!matches_executed_good_role(
+            &stable_twin,
+            &state,
+            2,
+            "Puppet",
+        ));
+        stable_twin.puppet_position = Some(2);
         assert!(matches_executed_good_role(
             &stable_twin,
             &state,
@@ -22678,6 +22887,41 @@ mod tests {
             &state,
             2,
             "Twin Minion",
+        ));
+    }
+
+    #[test]
+    fn legacy_role_labels_project_puppet_over_stable_twin() {
+        let mut state = base_state(3, vec![]);
+        state.deck.villagers = vec![
+            "Scout".to_string(),
+            "Oracle".to_string(),
+            "Dreamer".to_string(),
+        ];
+        state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+        let mut scenario = empty_scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Puppeteer".to_string());
+        scenario
+            .evil_positions
+            .insert(2, "Twin Minion".to_string());
+        scenario.puppet_position = Some(2);
+
+        assert!(validate_scout(
+            &make_card(3, "Scout", json!({"evil_role": "Puppet", "distance": 1})),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_oracle(
+            &make_card(3, "Oracle", json!({"targets": [2], "minion_role": "Puppet"})),
+            &scenario,
+            &state,
+        ));
+        assert!(validate_dreamer(
+            &make_card(3, "Dreamer", json!({"target": 2, "evil_role": "Puppet"})),
+            &scenario,
+            &state,
         ));
     }
 

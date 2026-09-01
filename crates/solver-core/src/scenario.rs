@@ -75,6 +75,23 @@ struct PendingStartContext {
     affected_anchor_positions: Vec<u8>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct EvilPlacement {
+    // Ordinary generated Puppets are present in both surfaces. When Twin moved
+    // Villager data onto its stable Evil body before Puppeteer acted, `roles`
+    // retains that Twin origin and `puppet_position` overlays the same seat.
+    roles: HashMap<u8, String>,
+    puppet_position: Option<u8>,
+}
+
+impl std::ops::Deref for EvilPlacement {
+    type Target = HashMap<u8, String>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.roles
+    }
+}
+
 fn merge_position_candidates(target: &mut Vec<u8>, candidates: &[u8]) {
     for &position in candidates {
         if !target.contains(&position) {
@@ -164,14 +181,142 @@ fn is_known_natural_ordinary_outcast(
 
 /// Generate all candidate scenarios for the current game state.
 pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
+    let executed_role_branches = branch_untyped_executed_evil_roles(state);
+    if executed_role_branches.is_empty() {
+        return Vec::new();
+    }
+
     if supports_ordered_twin_start_slice(state) {
-        if let Some(scenarios) = build_scenarios_with_start_mode(state, true) {
-            return scenarios;
+        let mut ordered_scenarios = Vec::new();
+        let mut ordered_complete = true;
+        for executed_evil_roles in &executed_role_branches {
+            let mut branch = state.clone();
+            branch.executed_evil_roles = executed_evil_roles.clone();
+            match build_scenarios_with_start_mode(&branch, true) {
+                Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
+                None => {
+                    ordered_complete = false;
+                    break;
+                }
+            }
+        }
+        if ordered_complete {
+            return ordered_scenarios;
         }
     }
 
-    build_scenarios_with_start_mode(state, false)
-        .expect("legacy one-shot Start generation is infallible")
+    let mut scenarios = Vec::new();
+    for executed_evil_roles in executed_role_branches {
+        let mut branch = state.clone();
+        branch.executed_evil_roles = executed_evil_roles;
+        scenarios.extend(
+            build_scenarios_with_start_mode(&branch, false)
+                .expect("legacy one-shot Start generation is infallible"),
+        );
+    }
+    scenarios
+}
+
+/// Expand private stable-origin hypotheses for dead confirmed Evil seats whose
+/// public execution record did not reveal an original role. The cloned maps
+/// are construction inputs only: validation still receives the original
+/// `GameState`, while each resulting `Scenario` retains its exact branch.
+fn branch_untyped_executed_evil_roles(
+    state: &GameState,
+) -> Vec<HashMap<u8, String>> {
+    let mut untyped_positions: Vec<u8> = state
+        .confirmed_evil
+        .iter()
+        .copied()
+        .filter(|position| state.executed.contains(position))
+        .filter(|position| {
+            state
+                .executed_evil_roles
+                .get(position)
+                .is_none_or(|role| normalize_role(role) == "unknown")
+        })
+        .collect();
+    for (&position, role) in &state.executed_evil_roles {
+        if state.executed.contains(&position)
+            && normalize_role(role) == "unknown"
+            && !untyped_positions.contains(&position)
+        {
+            untyped_positions.push(position);
+        }
+    }
+    untyped_positions.sort_unstable();
+    untyped_positions.dedup();
+
+    let mut remaining_authored = state.deck.evil_roles();
+    let puppeteer_authored = remaining_authored
+        .iter()
+        .any(|role| normalize_role(role) == "puppeteer");
+    // Some historical pools serialized Puppet beside Puppeteer even though
+    // native creates it at Start. Keep at most one generated occurrence.
+    if puppeteer_authored {
+        if let Some(index) = remaining_authored
+            .iter()
+            .position(|role| normalize_role(role) == "puppet")
+        {
+            remaining_authored.remove(index);
+        }
+    }
+    let mut generated_puppet_available = puppeteer_authored;
+
+    for role in state.executed_evil_roles.values() {
+        let normalized = normalize_role(role);
+        if normalized == "unknown" {
+            continue;
+        }
+        if normalized == "puppet" && generated_puppet_available {
+            generated_puppet_available = false;
+            continue;
+        }
+        let Some(index) = remaining_authored
+            .iter()
+            .position(|candidate| normalize_role(candidate) == normalized)
+        else {
+            // Exact stable-origin evidence outside the authored multiset is an
+            // inconsistent state, not permission to invent an extra role.
+            return Vec::new();
+        };
+        remaining_authored.remove(index);
+    }
+    if untyped_positions.is_empty() {
+        return vec![state.executed_evil_roles.clone()];
+    }
+
+    let mut candidates = remaining_authored;
+    if generated_puppet_available {
+        candidates.push("Puppet".to_string());
+    }
+    if untyped_positions.len() > candidates.len() {
+        return Vec::new();
+    }
+
+    let mut branches = Vec::new();
+    let mut seen = HashSet::new();
+    for chosen_indices in combinations_indices(candidates.len(), untyped_positions.len()) {
+        let chosen_roles: Vec<String> = chosen_indices
+            .iter()
+            .map(|index| candidates[*index].clone())
+            .collect();
+        for roles in permutations_of(&chosen_roles) {
+            let mut branch = state.executed_evil_roles.clone();
+            for (&position, role) in untyped_positions.iter().zip(roles) {
+                branch.insert(position, role);
+            }
+            let mut key: Vec<(u8, String)> = branch
+                .iter()
+                .map(|(&position, role)| (position, normalize_role(role)))
+                .collect();
+            key.sort_unstable();
+            if seen.insert(key) {
+                branches.push(branch);
+            }
+        }
+    }
+    branches
 }
 
 /// Build one state atomically in either legacy one-shot mode or the narrowly
@@ -186,20 +331,14 @@ fn build_scenarios_with_start_mode(
     let n = state.n_cards;
     let mut common_twin_trace_width: Option<usize> = None;
 
-    for placement in &placements {
+    for generated_placement in &placements {
+        let placement = &generated_placement.roles;
         if !apply_placement_constraints(placement, state) {
             continue;
         }
 
         // Find Puppet position
-        let mut puppet_pos: Option<u8> = placement.iter()
-            .find(|(_, r)| r.as_str() == "Puppet")
-            .map(|(&p, _)| p);
-        if puppet_pos.is_none() {
-            puppet_pos = state.executed_evil_roles.iter()
-                .find(|(_, r)| r.as_str() == "Puppet")
-                .map(|(&p, _)| p);
-        }
+        let puppet_pos = generated_placement.puppet_position;
 
         // Build full evil set including executed evils
         let mut full_evil: HashMap<u8, String> = placement.clone();
@@ -216,7 +355,7 @@ fn build_scenarios_with_start_mode(
         // Ordered Twin current-data replay remains separate from it;
         // Chancellor's original physical seat is a hidden history variable.
         let final_chancellor_positions: Vec<u8> = full_evil.iter()
-            .filter(|(_, role)| role.as_str() == "Chancellor")
+            .filter(|(_, role)| normalize_role(role) == "chancellor")
             .map(|(&position, _)| position)
             .collect();
         if final_chancellor_positions.len() > 1 {
@@ -416,7 +555,16 @@ fn build_scenarios_with_start_mode(
                                 raw_trace.as_ref(),
                                 plague_doctor_acts,
                                 base_context,
-                            ) {
+                            )
+                            .into_iter()
+                            .filter(|context| {
+                                start_context_matches_native_puppeteer_conversion(
+                                    &full_evil,
+                                    puppet_pos,
+                                    context,
+                                    state,
+                                )
+                            }) {
                                 let chancellor_added = raw_trace.as_ref().map(|trace| {
                                     (
                                         trace.added_outcast_position,
@@ -1725,6 +1873,197 @@ enum InitialAlchemistConstraint {
     Required,
 }
 
+fn puppet_overlays_stable_twin(
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+) -> bool {
+    puppet_position.is_some_and(|position| {
+        full_evil
+            .get(&position)
+            .is_some_and(|role| normalize_role(role) == "twinminion")
+    })
+}
+
+fn exact_twin_puppet_source_positions(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    chancellor_trace: Option<&RawChancellorTrace>,
+) -> Vec<u8> {
+    if !puppet_overlays_stable_twin(full_evil, puppet_position) {
+        return Vec::new();
+    }
+    let generated_outcast = chancellor_trace.map(|trace| trace.added_outcast_position);
+    let eligible = |position: u8| {
+        position > 0
+            && position <= state.n_cards
+            && Some(position) != puppet_position
+            && !full_evil.contains_key(&position)
+            && Some(position) != doppelganger_position
+            && Some(position) != drunk_position
+            && Some(position) != generated_outcast
+    };
+
+    let mut positions: Vec<u8> = state
+        .executed_current_roles
+        .iter()
+        .chain(state.executed_good_roles.iter())
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "twinminion" && eligible(position))
+                .then_some(position)
+        })
+        .collect();
+    positions.extend(state.cards.iter().filter_map(|card| {
+        (normalize_role(&card.apparent_role) == "twinminion" && eligible(card.position))
+            .then_some(card.position)
+    }));
+    positions.extend(state.slayer_results.iter().filter_map(|result| {
+        (result.killed
+            && result.was_evil != Some(true)
+            && result
+                .revealed_role
+                .as_deref()
+                .is_some_and(|role| normalize_role(role) == "twinminion")
+            && eligible(result.target_pos))
+        .then_some(result.target_pos)
+    }));
+    positions.sort_unstable();
+    positions.dedup();
+    positions
+}
+
+#[allow(clippy::too_many_arguments)]
+fn twin_puppet_overlay_start_context_variants(
+    state: &GameState,
+    full_evil: &HashMap<u8, String>,
+    doppelganger_position: Option<u8>,
+    drunk_position: Option<u8>,
+    puppet_position: Option<u8>,
+    chancellor_trace: Option<&RawChancellorTrace>,
+    base: StartCorruptionContext,
+) -> Vec<StartCorruptionContext> {
+    if !puppet_overlays_stable_twin(full_evil, puppet_position) {
+        return vec![base];
+    }
+    if !full_evil.values().any(|role| {
+        role_faction_in_state(role, state) == Some(Faction::Demon)
+    }) {
+        // Twin cannot move Villager data onto its stable body without a Demon
+        // selection, so Puppeteer cannot produce this overlap.
+        return Vec::new();
+    }
+
+    let overlap_position = puppet_position.expect("overlap helper requires Puppet");
+    let exact_sources = exact_twin_puppet_source_positions(
+        state,
+        full_evil,
+        puppet_position,
+        doppelganger_position,
+        drunk_position,
+        chancellor_trace,
+    );
+    let mut sources: Vec<u8> = if exact_sources.is_empty() {
+        base.real_villagers_before_puppet
+            .iter()
+            .copied()
+            .filter(|position| *position != overlap_position)
+            .collect()
+    } else {
+        exact_sources
+    };
+    sources.retain(|position| base.real_villagers_before_puppet.contains(position));
+    sources.sort_unstable();
+    sources.dedup();
+
+    let alchemist_capacity = state
+        .deck
+        .villagers
+        .iter()
+        .filter(|role| normalize_role(role) == "alchemist")
+        .count();
+    let overlay_alchemist = puppet_displayed_alchemist_constraint(overlap_position, state);
+    let mut contexts = Vec::new();
+    let mut seen = HashSet::new();
+    for source_position in sources {
+        let mut context = base.clone();
+
+        // Before Twin, the stable Twin body is a Minion and `source` is
+        // the real Villager whose data will move. After Twin and Puppet,
+        // the body is Puppet while `source` carries Twin data, so neither
+        // participates in Plague Doctor or Shaman's Villager scan.
+        context
+            .real_villagers_before_puppet
+            .remove(&overlap_position);
+        context
+            .real_villagers_before_puppet
+            .insert(source_position);
+        context
+            .registered_villagers_at_pd_call
+            .remove(&overlap_position);
+        context
+            .registered_villagers_at_pd_call
+            .remove(&source_position);
+
+        // Init-time resistance stays on the physical source if it began as
+        // Alchemist. The stable Twin body never ran a Villager Init, and
+        // the source no longer owns Alchemist data at the later global
+        // Alchemist Start slot.
+        context
+            .corruption_resistant_at_init
+            .remove(&overlap_position);
+        context
+            .messed_up_resistant_at_init
+            .remove(&overlap_position);
+        context.true_alchemist_positions.retain(|position| {
+            *position != overlap_position && *position != source_position
+        });
+
+        let source_was_alchemist = context
+            .corruption_resistant_at_init
+            .contains(&source_position);
+        let mut variants = Vec::new();
+        match overlay_alchemist {
+            InitialAlchemistConstraint::Required
+                if source_was_alchemist
+                    || context.corruption_resistant_at_init.len() < alchemist_capacity =>
+            {
+                context
+                    .corruption_resistant_at_init
+                    .insert(source_position);
+                variants.push(context);
+            }
+            InitialAlchemistConstraint::Required => {}
+            InitialAlchemistConstraint::Never if !source_was_alchemist => {
+                variants.push(context);
+            }
+            InitialAlchemistConstraint::Never => {}
+            InitialAlchemistConstraint::Maybe if source_was_alchemist => {
+                variants.push(context);
+            }
+            InitialAlchemistConstraint::Maybe => {
+                let can_assign_alchemist = context.corruption_resistant_at_init.len()
+                    < alchemist_capacity;
+                variants.push(context.clone());
+                if can_assign_alchemist {
+                    context
+                        .corruption_resistant_at_init
+                        .insert(source_position);
+                    variants.push(context);
+                }
+            }
+        }
+        for variant in variants {
+            let key = start_context_key(&variant);
+            if seen.insert(key) {
+                contexts.push(variant);
+            }
+        }
+    }
+    contexts
+}
+
 #[allow(clippy::too_many_arguments)]
 fn build_chancellor_start_context_variants(
     state: &GameState,
@@ -1736,6 +2075,7 @@ fn build_chancellor_start_context_variants(
     trace: &RawChancellorTrace,
     plague_doctor_acts: bool,
 ) -> Vec<StartCorruptionContext> {
+    let twin_puppet_overlap = puppet_overlays_stable_twin(full_evil, puppet_position);
     let initial_alchemist_variants = enumerate_initial_alchemist_positions(
         state,
         full_evil,
@@ -1775,7 +2115,9 @@ fn build_chancellor_start_context_variants(
 
         let mut real_villagers_before_puppet = HashSet::new();
         for position in 1..=state.n_cards {
-            let is_real_villager = if puppet_position == Some(position) {
+            let is_real_villager = if puppet_position == Some(position)
+                && !twin_puppet_overlap
+            {
                 true
             } else if position == final_chancellor_position
                 || position == trace.added_outcast_position
@@ -1917,7 +2259,9 @@ fn initial_alchemist_constraint(
     if position == final_chancellor_position
         && trace.original_position != final_chancellor_position
     {
-        if puppet_position == Some(trace.original_position) {
+        if puppet_position == Some(trace.original_position)
+            && !puppet_overlays_stable_twin(full_evil, puppet_position)
+        {
             return puppet_displayed_alchemist_constraint(
                 trace.original_position,
                 state,
@@ -1933,7 +2277,9 @@ fn initial_alchemist_constraint(
         );
     }
 
-    if puppet_position == Some(position) {
+    if puppet_position == Some(position)
+        && !puppet_overlays_stable_twin(full_evil, puppet_position)
+    {
         return puppet_displayed_alchemist_constraint(position, state);
     }
     final_position_alchemist_constraint(
@@ -2110,6 +2456,14 @@ fn hidden_faction_start_context_variants(
             fixed_villagers.insert(trace.original_position);
         }
     }
+    fixed_villagers.extend(exact_twin_puppet_source_positions(
+        state,
+        full_evil,
+        puppet_position,
+        doppelganger_position,
+        drunk_position,
+        chancellor_trace,
+    ));
 
     if !fixed_outcasts.is_disjoint(&fixed_villagers) {
         return Vec::new();
@@ -2231,6 +2585,20 @@ fn shaman_start_context_variants(
         plague_doctor_acts,
         base,
     );
+    let faction_bases: Vec<StartCorruptionContext> = faction_bases
+        .into_iter()
+        .flat_map(|context| {
+            twin_puppet_overlay_start_context_variants(
+                state,
+                full_evil,
+                doppelganger_position,
+                drunk_position,
+                puppet_position,
+                chancellor_trace,
+                context,
+            )
+        })
+        .collect();
     let shaman_acts = full_evil
         .values()
         .any(|role| normalize_role(role) == "shaman");
@@ -2504,12 +2872,13 @@ fn build_start_corruption_context(
     plague_doctor_acts: bool,
 ) -> StartCorruptionContext {
     let extra_alchemists: HashSet<u8> = extra_true_alchemists.iter().copied().collect();
+    let twin_puppet_overlap = puppet_overlays_stable_twin(full_evil, puppet_position);
     let mut real_villagers_before_puppet = HashSet::new();
 
     for position in 1..=state.n_cards {
         let is_real_villager = if Some(position) == chancellor_conversion {
             false // Chancellor has already replaced this data with an Outcast.
-        } else if Some(position) == puppet_position {
+        } else if Some(position) == puppet_position && !twin_puppet_overlap {
             true // Puppeteer selects a real Villager and replaces it later.
         } else if full_evil.contains_key(&position)
             || Some(position) == doppelganger_position
@@ -2542,7 +2911,9 @@ fn build_start_corruption_context(
 
         // A future Puppet or Chancellor target already ran its original
         // Alchemist Init hook, so resistance survives the role replacement.
-        if !full_evil.contains_key(&card.position) || Some(card.position) == puppet_position {
+        if !full_evil.contains_key(&card.position)
+            || (Some(card.position) == puppet_position && !twin_puppet_overlap)
+        {
             corruption_resistant_at_init.insert(card.position);
         }
         if !full_evil.contains_key(&card.position)
@@ -2616,6 +2987,7 @@ fn night_killed_alchemist_variants(
     puppet_position: Option<u8>,
     chancellor_conversion: Option<u8>,
 ) -> Vec<Vec<u8>> {
+    let twin_puppet_overlap = puppet_overlays_stable_twin(full_evil, puppet_position);
     let deck_alchemists = state.deck.villagers.iter()
         .filter(|role| normalize_role(role) == "alchemist").count();
     if state.night_kills.is_empty() || deck_alchemists == 0 {
@@ -2627,7 +2999,7 @@ fn night_killed_alchemist_variants(
             && Some(card.position) != doppelganger_position
             && Some(card.position) != drunk_position
             && (!full_evil.contains_key(&card.position)
-                || Some(card.position) == puppet_position)
+                || (Some(card.position) == puppet_position && !twin_puppet_overlap))
     }).count();
     let missing_alchemists = deck_alchemists.saturating_sub(known_alchemists);
     if missing_alchemists == 0 { return vec![Vec::new()]; }
@@ -2652,13 +3024,331 @@ fn night_killed_alchemist_variants(
 
 // ── Placement generation ──
 
-fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
+/// Candidate occurrences seen by Puppeteer's native circular-neighbour scan
+/// for one exact pre-Puppet faction branch. The boolean is true when the
+/// observed role proves that the occurrence is a non-Saint Villager. The first
+/// known Saint occurrence is removed exactly once; on a two-card board the
+/// duplicated second occurrence remains convertible.
+fn native_puppeteer_candidate_occurrences(
+    puppeteer_position: u8,
+    real_villagers_before_puppet: &HashSet<u8>,
+    state: &GameState,
+) -> Vec<(u8, bool)> {
+    if state.n_cards <= 1 {
+        return Vec::new();
+    }
+    let mut removed_first_saint = false;
+    let mut candidates = Vec::new();
+    for position in adjacent_positions(puppeteer_position, state.n_cards) {
+        if position == puppeteer_position {
+            continue;
+        }
+        if !real_villagers_before_puppet.contains(&position) {
+            continue;
+        }
+        let observed_role = state
+            .executed_good_roles
+            .get(&position)
+            .map(String::as_str)
+            .or_else(|| {
+                state
+                    .card_at(position)
+                    .map(|card| card.apparent_role.as_str())
+            });
+        if observed_role.is_some_and(|role| !is_state_villager_role(role, state)) {
+            continue;
+        }
+        if observed_role.is_some_and(|role| normalize_role(role) == "saint")
+            && !removed_first_saint
+        {
+            removed_first_saint = true;
+            continue;
+        }
+        candidates.push((position, observed_role.is_some()));
+    }
+    candidates
+}
+
+fn placement_matches_trusted_evil_faction_counts(
+    placement: &HashMap<u8, String>,
+    state: &GameState,
+) -> bool {
+    let (Some(expected_minions), Some(expected_demons)) =
+        (state.board_minion_count, state.board_demon_count)
+    else {
+        return true;
+    };
+    let mut minions = 0usize;
+    let mut demons = 0usize;
+    for role in placement
+        .values()
+        .chain(state.executed_evil_roles.values())
+    {
+        if normalize_role(role) == "puppet" {
+            continue;
+        }
+        match role_faction_in_state(role, state) {
+            Some(Faction::Minion) => minions += 1,
+            Some(Faction::Demon) => demons += 1,
+            _ => return false,
+        }
+    }
+    minions == expected_minions as usize && demons == expected_demons as usize
+}
+
+fn placement_has_valid_puppeteer_structure(
+    placement: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    state: &GameState,
+) -> bool {
+    let mut puppeteers: Vec<u8> = placement
+        .iter()
+        .chain(state.executed_evil_roles.iter())
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "puppeteer").then_some(position)
+        })
+        .collect();
+    puppeteers.sort_unstable();
+    puppeteers.dedup();
+    let mut explicit_puppets: Vec<u8> = placement
+        .iter()
+        .chain(state.executed_evil_roles.iter())
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "puppet").then_some(position)
+        })
+        .collect();
+    explicit_puppets.sort_unstable();
+    explicit_puppets.dedup();
+
+    if puppeteers.len() > 1 || explicit_puppets.len() > 1 {
+        // Duplicate Puppeteer ordering/provenance is not represented yet.
+        return false;
+    }
+
+    let mut exact_dead_twin_puppets: Vec<u8> = placement
+        .iter()
+        .chain(state.executed_evil_roles.iter())
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "twinminion"
+                && state
+                    .executed_current_roles
+                    .get(&position)
+                    .is_some_and(|current| normalize_role(current) == "puppet"))
+            .then_some(position)
+        })
+        .collect();
+    exact_dead_twin_puppets.sort_unstable();
+    exact_dead_twin_puppets.dedup();
+    if exact_dead_twin_puppets.len() > 1
+        || exact_dead_twin_puppets
+            .first()
+            .is_some_and(|&position| puppet_position != Some(position))
+    {
+        return false;
+    }
+
+    let Some(&puppeteer_position) = puppeteers.first() else {
+        return explicit_puppets.is_empty() && puppet_position.is_none();
+    };
+
+    let stable_role_at = |position: u8| {
+        placement
+            .get(&position)
+            .or_else(|| state.executed_evil_roles.get(&position))
+            .map(String::as_str)
+    };
+    let explicit_puppet_position = explicit_puppets.first().copied();
+    match (explicit_puppet_position, puppet_position) {
+        (Some(explicit), Some(represented)) if explicit == represented => {}
+        (Some(_), _) => return false,
+        (None, Some(represented)) => {
+            if represented == puppeteer_position
+                || !stable_role_at(represented)
+                    .is_some_and(|role| normalize_role(role) == "twinminion")
+                || state
+                    .executed_current_roles
+                    .get(&represented)
+                    .is_some_and(|role| normalize_role(role) != "puppet")
+            {
+                return false;
+            }
+        }
+        (None, None) => {}
+    }
+
+    let has_twin = placement
+        .values()
+        .chain(state.executed_evil_roles.values())
+        .any(|role| normalize_role(role) == "twinminion");
+    if has_twin {
+        // Twin acts before Puppeteer and can move its current data. The legacy
+        // mixed-Twin path does not yet retain that post-swap actor position, so
+        // adjacency to the stable origin cannot be enforced soundly here.
+        return true;
+    }
+    puppet_position.is_none_or(|represented| {
+        adjacent_positions(puppeteer_position, state.n_cards).contains(&represented)
+    })
+}
+
+fn start_context_matches_native_puppeteer_conversion(
+    full_evil: &HashMap<u8, String>,
+    puppet_position: Option<u8>,
+    context: &StartCorruptionContext,
+    state: &GameState,
+) -> bool {
+    if full_evil
+        .values()
+        .any(|role| normalize_role(role) == "twinminion")
+    {
+        // The ordered Twin slice deliberately excludes Puppeteer. Its legacy
+        // fallback has no exact post-Twin actor/type map, so retain both
+        // conversion outcomes until the general ordered replay is complete.
+        return true;
+    }
+    let mut puppeteers: Vec<u8> = full_evil
+        .iter()
+        .filter_map(|(&position, role)| {
+            (normalize_role(role) == "puppeteer").then_some(position)
+        })
+        .collect();
+    puppeteers.sort_unstable();
+    puppeteers.dedup();
+    if puppeteers.len() > 1 {
+        return false;
+    }
+    let Some(&puppeteer_position) = puppeteers.first() else {
+        return puppet_position.is_none();
+    };
+    let raw_candidates: Vec<u8> = adjacent_positions(puppeteer_position, state.n_cards)
+        .into_iter()
+        .filter(|position| *position != puppeteer_position)
+        .filter(|position| context.real_villagers_before_puppet.contains(position))
+        .collect();
+    let shaman_unstable = full_evil
+        .values()
+        .any(|role| normalize_role(role) == "shaman");
+    let baker_unstable = !state.cards.is_empty()
+        && state
+            .deck
+            .villagers
+            .iter()
+            .any(|role| normalize_role(role) == "baker");
+    let identity_unstable = shaman_unstable || baker_unstable;
+
+    match puppet_position {
+        Some(position) => {
+            if !raw_candidates.contains(&position) {
+                return false;
+            }
+            let observed_role = state
+                .card_at(position)
+                .map(|card| card.apparent_role.as_str());
+            if observed_role.is_some_and(|role| !is_state_villager_role(role, state)) {
+                return false;
+            }
+            if identity_unstable {
+                return true;
+            }
+            native_puppeteer_candidate_occurrences(
+                puppeteer_position,
+                &context.real_villagers_before_puppet,
+                state,
+            )
+            .iter()
+            .any(|(candidate, _)| *candidate == position)
+        }
+        None => {
+            if raw_candidates.is_empty() {
+                return true;
+            }
+            // Native removes at most one Saint occurrence. Two distinct
+            // neighbours, or the duplicated neighbour on a two-card board,
+            // therefore always leave a mandatory conversion candidate.
+            if raw_candidates.len() >= 2 {
+                return false;
+            }
+            if identity_unstable {
+                // Shaman/Baker can make the final visible Villager role newer
+                // than Puppeteer's scan. A sole candidate may have been Saint.
+                return true;
+            }
+            let position = raw_candidates[0];
+            let observed_role = state
+                .executed_good_roles
+                .get(&position)
+                .map(String::as_str)
+                .or_else(|| {
+                    state
+                        .card_at(position)
+                        .map(|card| card.apparent_role.as_str())
+                });
+            match observed_role {
+                Some(role) if normalize_role(role) == "saint" => true,
+                Some(role) if is_state_villager_role(role, state) => false,
+                Some(_) => false,
+                None => state
+                    .deck
+                    .villagers
+                    .iter()
+                    .any(|role| normalize_role(role) == "saint"),
+            }
+        }
+    }
+}
+
+fn possible_total_evil_counts(state: &GameState, puppeteer_authored: bool) -> Vec<usize> {
+    let mut totals = vec![state.n_evil as usize];
+    // Pre-provenance archives used both count conventions: some saved the
+    // authored Evil total before Puppeteer generated a Puppet, while current
+    // trusted HUD captures include that Puppet. Retain both meanings only for
+    // those ambiguous historical states.
+    if puppeteer_authored && state.board_count_provenance == BoardCountProvenance::LegacyUnknown {
+        totals.push(state.n_evil as usize + 1);
+    }
+    totals.sort_unstable();
+    totals.dedup();
+    totals
+}
+
+fn placement_matches_evil_total_provenance(
+    placement: &HashMap<u8, String>,
+    state: &GameState,
+) -> bool {
+    let total = placement.len() + state.executed_evil_roles.len();
+    if total == state.n_evil as usize {
+        return true;
+    }
+    if state.board_count_provenance != BoardCountProvenance::LegacyUnknown
+        || total != state.n_evil as usize + 1
+    {
+        return false;
+    }
+    let roles: Vec<&str> = placement
+        .values()
+        .chain(state.executed_evil_roles.values())
+        .map(String::as_str)
+        .collect();
+    roles
+        .iter()
+        .any(|role| normalize_role(role) == "puppeteer")
+        && roles
+            .iter()
+            .any(|role| normalize_role(role) == "puppet")
+}
+
+fn generate_evil_placements(state: &GameState) -> Vec<EvilPlacement> {
     let n = state.n_cards;
     let mut evil_roles: Vec<String> = state.deck.evil_roles();
 
-    let puppet_in_deck = evil_roles.iter().any(|r| r == "Puppeteer");
+    let puppet_in_deck = evil_roles
+        .iter()
+        .any(|role| normalize_role(role) == "puppeteer");
     if puppet_in_deck {
-        if let Some(idx) = evil_roles.iter().position(|r| r == "Puppet") {
+        if let Some(idx) = evil_roles
+            .iter()
+            .position(|role| normalize_role(role) == "puppet")
+        {
             evil_roles.remove(idx);
         }
     }
@@ -2673,59 +3363,94 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
         // Puppet isn't in evil_roles — silently skip
     }
 
-    // Unknown executed evils
-    let executed_evil_without_role: Vec<u8> = state.confirmed_evil.iter()
-        .filter(|&&p| state.executed.contains(&p) && !state.executed_evil_roles.contains_key(&p))
-        .copied().collect();
+    // Publicly untyped deaths are expanded into exact construction clones by
+    // `build_scenarios` before this private generator is reached.
+    let n_executed_evil = state.executed_evil_roles.len();
+    let expected_remaining_counts: HashSet<usize> =
+        possible_total_evil_counts(state, puppet_in_deck)
+            .into_iter()
+            .filter_map(|total| total.checked_sub(n_executed_evil))
+            .collect();
+    if expected_remaining_counts.is_empty() {
+        return Vec::new();
+    }
 
-    let n_to_remove = executed_evil_without_role.len().min(remaining.len());
-    let possible_remaining_lists = if n_to_remove > 0 {
-        let mut seen_keys: HashSet<Vec<String>> = HashSet::new();
-        let mut lists = Vec::new();
-        for removal in combinations_indices(remaining.len(), n_to_remove) {
-            let kept: Vec<String> = remaining.iter().enumerate()
-                .filter(|(i, _)| !removal.contains(i))
-                .map(|(_, r)| r.clone()).collect();
-            let mut key = kept.clone();
-            key.sort();
-            if seen_keys.insert(key) {
-                lists.push(kept);
+    // Trusted `n_evil` is the HUD total and includes a generated Puppet.
+    // LegacyUnknown can additionally preserve the older authored-only count.
+    // Enumerate an authored subset one smaller while Puppet can still be
+    // created; the final allowed-size and Start-context predicates choose the
+    // branch.
+    let generated_puppet_already_recorded = state
+        .executed_evil_roles
+        .values()
+        .any(|role| normalize_role(role) == "puppet");
+    let mut authored_remaining_sizes = Vec::new();
+    for &expected_remaining in &expected_remaining_counts {
+        authored_remaining_sizes.push(expected_remaining);
+        if puppet_in_deck && !generated_puppet_already_recorded && expected_remaining > 0 {
+            authored_remaining_sizes.push(expected_remaining - 1);
+        }
+    }
+    authored_remaining_sizes.sort_unstable();
+    authored_remaining_sizes.dedup();
+    let mut possible_remaining_lists = Vec::new();
+    let mut seen_remaining_lists = HashSet::new();
+    for authored_count in authored_remaining_sizes {
+        for roles in evil_role_subsets_fn(&remaining, state, authored_count) {
+            let mut key: Vec<String> = roles.iter().map(|role| normalize_role(role)).collect();
+            key.sort_unstable();
+            if seen_remaining_lists.insert(key) {
+                possible_remaining_lists.push(roles);
             }
         }
-        lists
-    } else {
-        vec![remaining]
-    };
-
-    let n_executed_evil = state.executed_evil_roles.len() + executed_evil_without_role.len();
-    let expected_remaining = state.n_evil as i32 - n_executed_evil as i32;
-
-    let valid_sizes: HashSet<usize> = if puppet_in_deck {
-        [expected_remaining.max(0) as usize, (expected_remaining + 1).max(0) as usize].into()
-    } else {
-        [expected_remaining.max(0) as usize].into()
-    };
+    }
 
     let night_kills_set: HashSet<u8> = state.night_kills.iter().copied().collect();
     let player_executed: HashSet<u8> = state.executed.iter()
         .filter(|p| !night_kills_set.contains(p))
         .copied().collect();
     let confirmed_good_set: HashSet<u8> = state.confirmed_good.iter().copied().collect();
+    let exact_dead_evil_positions: HashSet<u8> = state
+        .executed_evil_roles
+        .keys()
+        .copied()
+        .filter(|position| state.executed.contains(position))
+        .collect();
     let available: Vec<u8> = (1..=n)
-        .filter(|p| !player_executed.contains(p) && !confirmed_good_set.contains(p))
+        .filter(|p| {
+            !player_executed.contains(p)
+                && !exact_dead_evil_positions.contains(p)
+                && !confirmed_good_set.contains(p)
+        })
         .collect();
 
     // Check Puppeteer/Puppet execution status
     let puppeteer_executed_pos: Option<u8> = state.executed_evil_roles.iter()
-        .find(|(_, r)| r.as_str() == "Puppeteer").map(|(&p, _)| p);
+        .find(|(_, role)| normalize_role(role) == "puppeteer")
+        .map(|(&position, _)| position);
     let puppet_executed_pos: Option<u8> = state.executed_evil_roles.iter()
-        .find(|(_, r)| r.as_str() == "Puppet").map(|(&p, _)| p);
-
+        .find(|(_, role)| normalize_role(role) == "puppet")
+        .map(|(&position, _)| position);
     let mut all_placements: Vec<HashMap<u8, String>> = Vec::new();
     let mut seen_placements: HashSet<Vec<(u8, String)>> = HashSet::new();
 
     let mut add_placement = |p: &HashMap<u8, String>| {
-        if valid_sizes.contains(&p.len()) {
+        let explicit_puppet = p
+            .iter()
+            .chain(state.executed_evil_roles.iter())
+            .find_map(|(&position, role)| {
+                (normalize_role(role) == "puppet").then_some(position)
+            });
+        let has_twin = p
+            .values()
+            .chain(state.executed_evil_roles.values())
+            .any(|role| normalize_role(role) == "twinminion");
+        if expected_remaining_counts.contains(&p.len())
+            && placement_matches_evil_total_provenance(p, state)
+            && placement_matches_trusted_evil_faction_counts(p, state)
+            && (has_twin
+                || placement_has_valid_puppeteer_structure(p, explicit_puppet, state))
+        {
             let mut key: Vec<(u8, String)> = p.iter().map(|(&k, v)| (k, v.clone())).collect();
             key.sort_by_key(|(k, _)| *k);
             if seen_placements.insert(key) {
@@ -2735,18 +3460,33 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
     };
 
     for evil_roles in &possible_remaining_lists {
-        let has_puppeteer = evil_roles.iter().any(|r| r == "Puppeteer");
+        let has_puppeteer = evil_roles
+            .iter()
+            .any(|role| normalize_role(role) == "puppeteer");
+        let twin_can_move_puppeteer = evil_roles
+            .iter()
+            .chain(state.executed_evil_roles.values())
+            .any(|role| normalize_role(role) == "twinminion");
 
         // Case: Puppeteer executed, Puppet still alive
         let puppet_still_alive = puppeteer_executed_pos.is_some()
             && !has_puppeteer
-            && !state.executed_evil_roles.values().any(|r| r == "Puppet");
+            && !state
+                .executed_evil_roles
+                .values()
+                .any(|role| normalize_role(role) == "puppet");
 
         if puppet_still_alive {
             let pep = puppeteer_executed_pos.unwrap();
-            let puppet_cands: Vec<u8> = adjacent_positions(pep, n).into_iter()
-                .filter(|a| available.contains(a)).collect();
-            // Case 1: Puppet at adjacent
+            let puppet_cands: Vec<u8> = if twin_can_move_puppeteer {
+                available.clone()
+            } else {
+                adjacent_positions(pep, n)
+                    .into_iter()
+                    .filter(|position| available.contains(position))
+                    .collect()
+            };
+            // Case 1: Puppet at a possible post-Twin neighbour.
             for &pp in &puppet_cands {
                 let remaining_avail: Vec<u8> = available.iter().filter(|&&p| p != pp).copied().collect();
                 if evil_roles.is_empty() {
@@ -2766,7 +3506,6 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
                     }
                 }
             }
-            // Case 2: No Puppet
             for combo in combinations_of(&available, evil_roles.len()) {
                 for perm in permutations_of(evil_roles) {
                     let mut p = HashMap::new();
@@ -2779,12 +3518,22 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
             continue;
         }
 
-        // Case: Puppet executed, Puppeteer must be adjacent
+        // Case: Puppet executed, Puppeteer must occupy a possible pre-action
+        // actor position. Mixed Twin fallback conservatively keeps every seat.
         if puppet_executed_pos.is_some() && has_puppeteer {
             let pxp = puppet_executed_pos.unwrap();
-            let base_evil: Vec<String> = evil_roles.iter().filter(|r| r.as_str() != "Puppeteer").cloned().collect();
-            let puppeteer_cands: Vec<u8> = adjacent_positions(pxp, n).into_iter()
-                .filter(|a| available.contains(a)).collect();
+            let base_evil: Vec<String> = evil_roles
+                .iter()
+                .filter(|role| normalize_role(role) != "puppeteer")
+                .cloned()
+                .collect();
+            let puppeteer_cands: Vec<u8> = if twin_can_move_puppeteer {
+                available.clone()
+            } else {
+                adjacent_positions(pxp, n).into_iter()
+                    .filter(|position| available.contains(position))
+                    .collect()
+            };
             for &pp_pos in &puppeteer_cands {
                 let rem: Vec<u8> = available.iter().filter(|&&p| p != pp_pos).copied().collect();
                 if base_evil.is_empty() {
@@ -2809,30 +3558,29 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
 
         // Case: Puppeteer present (needs Puppet slot)
         if has_puppeteer {
-            let base_evil: Vec<String> = evil_roles.iter().filter(|r| r.as_str() != "Puppeteer").cloned().collect();
+            let base_evil: Vec<String> = evil_roles
+                .iter()
+                .filter(|role| normalize_role(role) != "puppeteer")
+                .cloned()
+                .collect();
             for &puppeteer_pos in &available {
-                let adj = adjacent_positions(puppeteer_pos, n);
-                let puppet_cands: Vec<u8> = adj.iter()
-                    .filter(|&&a| available.contains(&a) && a != puppeteer_pos)
-                    .copied().collect();
-
-                // Filter to Villager-or-unknown
-                let mut villager_or_unknown = Vec::new();
-                let mut has_known_villager = false;
-                for &pc in &puppet_cands {
-                    if let Some(card) = state.card_at(pc) {
-                        if is_state_villager_role(&card.apparent_role, state) {
-                            villager_or_unknown.push(pc);
-                            has_known_villager = true;
-                        }
-                    } else {
-                        villager_or_unknown.push(pc);
-                    }
-                }
-                let actual_puppet_cands = if has_known_villager { &villager_or_unknown } else { &puppet_cands };
+                let actual_puppet_cands: Vec<u8> = if twin_can_move_puppeteer {
+                    available
+                        .iter()
+                        .copied()
+                        .filter(|position| *position != puppeteer_pos)
+                        .collect()
+                } else {
+                    adjacent_positions(puppeteer_pos, n)
+                        .into_iter()
+                        .filter(|position| {
+                            *position != puppeteer_pos && available.contains(position)
+                        })
+                        .collect()
+                };
 
                 // Case 1: Puppet created
-                for &puppet_p in actual_puppet_cands {
+                for &puppet_p in &actual_puppet_cands {
                     let rem: Vec<u8> = available.iter()
                         .filter(|&&p| p != puppeteer_pos && p != puppet_p)
                         .copied().collect();
@@ -2855,7 +3603,6 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
                         }
                     }
                 }
-                // Case 2: Puppet NOT created
                 let rem: Vec<u8> = available.iter()
                     .filter(|&&p| p != puppeteer_pos).copied().collect();
                 if base_evil.is_empty() {
@@ -2878,36 +3625,73 @@ fn generate_evil_placements(state: &GameState) -> Vec<HashMap<u8, String>> {
             continue;
         }
 
-        // No Puppeteer — straightforward combinations
-        let n_evil_count = evil_roles.len() as i32;
-        let evil_role_subsets: Vec<Vec<String>> = if n_evil_count > expected_remaining && expected_remaining > 0 {
-            evil_role_subsets_fn(evil_roles, state, expected_remaining as usize)
-        } else if n_evil_count == expected_remaining {
-            vec![evil_roles.clone()]
-        } else if !puppet_in_deck && n_evil_count != expected_remaining {
-            continue; // Skip invalid branch
-        } else {
-            if evil_roles.is_empty() { vec![] } else { vec![evil_roles.clone()] }
-        };
-
-        if expected_remaining > 0 {
-            for role_set in &evil_role_subsets {
-                for combo in combinations_of(&available, role_set.len()) {
-                    for perm in permutations_of(role_set) {
-                        let mut p = HashMap::new();
-                        for (i, &pos) in combo.iter().enumerate() {
-                            p.insert(pos, perm[i].clone());
-                        }
-                        add_placement(&p);
-                    }
+        // No Puppeteer — the authored multiset was selected above.
+        for combo in combinations_of(&available, evil_roles.len()) {
+            for perm in permutations_of(evil_roles) {
+                let mut p = HashMap::new();
+                for (i, &pos) in combo.iter().enumerate() {
+                    p.insert(pos, perm[i].clone());
                 }
+                add_placement(&p);
             }
-        } else {
-            add_placement(&HashMap::new());
         }
     }
 
-    all_placements
+    let mut generated = Vec::new();
+    let mut seen_generated = HashSet::new();
+    for roles in all_placements {
+        let explicit_puppet = roles
+            .iter()
+            .chain(state.executed_evil_roles.iter())
+            .find_map(|(&position, role)| {
+                (normalize_role(role) == "puppet").then_some(position)
+            });
+        let mut add_generated = |puppet_position: Option<u8>| {
+            if !placement_has_valid_puppeteer_structure(&roles, puppet_position, state) {
+                return;
+            }
+            let mut key: Vec<(u8, String)> = roles
+                .iter()
+                .map(|(&position, role)| (position, normalize_role(role)))
+                .collect();
+            key.sort_unstable();
+            if seen_generated.insert((key, puppet_position)) {
+                generated.push(EvilPlacement {
+                    roles: roles.clone(),
+                    puppet_position,
+                });
+            }
+        };
+        add_generated(explicit_puppet);
+
+        if explicit_puppet.is_none() {
+            let combined_roles = roles
+                .iter()
+                .chain(state.executed_evil_roles.iter());
+            let has_puppeteer = combined_roles
+                .clone()
+                .any(|(_, role)| normalize_role(role) == "puppeteer");
+            if has_puppeteer {
+                let mut twin_origins: Vec<u8> = roles
+                    .iter()
+                    .chain(state.executed_evil_roles.iter())
+                    .filter_map(|(&position, role)| {
+                        (normalize_role(role) == "twinminion").then_some(position)
+                    })
+                    .collect();
+                twin_origins.sort_unstable();
+                twin_origins.dedup();
+                for twin_origin in twin_origins {
+                    // Twin may leave Villager current data on its stable
+                    // runtime-Evil body. Later Puppeteer can replace that data
+                    // with Puppet without adding a new Evil physical seat, so
+                    // keep the generated role as a separate overlay.
+                    add_generated(Some(twin_origin));
+                }
+            }
+        }
+    }
+    generated
 }
 
 // ── Helper functions ──
@@ -2997,31 +3781,49 @@ fn hidden_outcast_presence_flags(
 
 fn evil_role_subsets_fn(evil_roles: &[String], state: &GameState, expected_remaining: usize) -> Vec<Vec<String>> {
     let minion_pool: Vec<String> = evil_roles.iter()
-        .filter(|r| get_card(r).map_or(false, |c| c.faction == Faction::Minion))
+        .filter(|role| role_faction_in_state(role, state) == Some(Faction::Minion))
         .cloned().collect();
     let demon_pool: Vec<String> = evil_roles.iter()
-        .filter(|r| get_card(r).map_or(false, |c| c.faction == Faction::Demon))
+        .filter(|role| role_faction_in_state(role, state) == Some(Faction::Demon))
         .cloned().collect();
 
     let mut bm = state.board_minion_count.map(|x| x as i32);
     let mut bd = state.board_demon_count.map(|x| x as i32);
 
-    let mut mp = minion_pool.clone();
-    let mut dp = demon_pool.clone();
-    for (_pos, role) in &state.executed_evil_roles {
-        let norm = normalize_role(role);
-        if let Some(idx) = mp.iter().position(|r| normalize_role(r) == norm) {
-            if let Some(ref mut b) = bm { *b -= 1; }
-            mp.remove(idx);
-        } else if let Some(idx) = dp.iter().position(|r| normalize_role(r) == norm) {
-            if let Some(ref mut b) = bd { *b -= 1; }
-            dp.remove(idx);
+    let mp = minion_pool;
+    let dp = demon_pool;
+    // `evil_roles` is already pruned by every exact stable-origin branch.
+    // Board faction quotas still describe the whole board, so subtract each
+    // authored dead role directly instead of trying to find it a second time
+    // in the pruned pool. Generated Puppet consumes no authored occurrence.
+    for role in state.executed_evil_roles.values() {
+        if normalize_role(role) == "puppet" {
+            continue;
+        }
+        match role_faction_in_state(role, state) {
+            Some(Faction::Minion) => {
+                if let Some(ref mut count) = bm {
+                    *count -= 1;
+                }
+            }
+            Some(Faction::Demon) => {
+                if let Some(ref mut count) = bd {
+                    *count -= 1;
+                }
+            }
+            _ => {}
         }
     }
 
     if let (Some(bm_v), Some(bd_v)) = (bm, bd) {
-        let bm_pick = bm_v.max(0) as usize;
-        let bd_pick = bd_v.max(0) as usize;
+        if bm_v < 0 || bd_v < 0 {
+            return Vec::new();
+        }
+        let bm_pick = bm_v as usize;
+        let bd_pick = bd_v as usize;
+        if bm_pick + bd_pick != expected_remaining {
+            return Vec::new();
+        }
         let mut subsets = Vec::new();
         for m_combo in combinations_of_strings(&mp, bm_pick) {
             for d_combo in combinations_of_strings(&dp, bd_pick) {
@@ -3032,11 +3834,7 @@ fn evil_role_subsets_fn(evil_roles: &[String], state: &GameState, expected_remai
                 }
             }
         }
-        if subsets.is_empty() {
-            vec![evil_roles[..expected_remaining.min(evil_roles.len())].to_vec()]
-        } else {
-            subsets
-        }
+        subsets
     } else {
         combinations_of_strings(evil_roles, expected_remaining)
     }
@@ -3164,6 +3962,836 @@ mod tests {
             (3, "Lilis".to_string()),
         ]);
         state
+    }
+
+    #[test]
+    fn untyped_executed_roles_branch_before_start_and_preserve_the_multiset() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.n_evil = 2;
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Baker".to_string(),
+            "Baker".to_string(),
+        ];
+        state.deck.minions = vec!["Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.cards = vec![card(2, "Baker"), card(3, "Baker"), card(4, "Baker")];
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+
+        let scenarios = build_scenarios(&state);
+        assert!(!scenarios.is_empty());
+        assert!(scenarios.iter().all(|scenario| {
+            !scenario
+                .evil_positions
+                .values()
+                .any(|role| normalize_role(role) == "unknown")
+                && scenario.evil_positions.len() == 2
+                && scenario
+                    .evil_positions
+                    .values()
+                    .filter(|role| normalize_role(role) == "minion")
+                    .count()
+                    == 1
+                && scenario
+                    .evil_positions
+                    .values()
+                    .filter(|role| normalize_role(role) == "pooka")
+                    .count()
+                    == 1
+        }));
+        assert!(scenarios.iter().any(|scenario| {
+            scenario
+                .evil_positions
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "minion")
+        }));
+        assert!(scenarios.iter().any(|scenario| {
+            scenario
+                .evil_positions
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "pooka")
+                && scenario.corrupted == HashSet::from([2, 4])
+        }));
+        assert!(state.executed_evil_roles.is_empty());
+    }
+
+    #[test]
+    fn duplicate_role_multiset_branches_without_factorial_duplicates() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 3;
+        state.deck.minions = vec!["Witch".to_string(), "Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.executed = vec![1, 2];
+        state.confirmed_evil = vec![1, 2];
+
+        let branches = branch_untyped_executed_evil_roles(&state);
+        let assignments: HashSet<(String, String)> = branches
+            .iter()
+            .map(|branch| {
+                (
+                    normalize_role(branch.get(&1).unwrap()),
+                    normalize_role(branch.get(&2).unwrap()),
+                )
+            })
+            .collect();
+        assert_eq!(branches.len(), 3);
+        assert_eq!(
+            assignments,
+            HashSet::from([
+                ("witch".to_string(), "witch".to_string()),
+                ("witch".to_string(), "pooka".to_string()),
+                ("pooka".to_string(), "witch".to_string()),
+            ]),
+        );
+    }
+
+    #[test]
+    fn exact_night_killed_evil_seat_cannot_receive_a_second_placement() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 2;
+        state.deck.minions = vec!["Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.executed = vec![1];
+        state.night_kills = vec![1];
+        state.confirmed_evil = vec![1];
+        state
+            .executed_evil_roles
+            .insert(1, "Minion".to_string());
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 2);
+        assert!(scenarios.iter().all(|scenario| {
+            scenario.evil_positions.get(&1) == Some(&"Minion".to_string())
+                && scenario.evil_positions.len() == 2
+        }));
+    }
+
+    #[test]
+    fn inferred_puppet_and_puppeteer_branches_keep_creator_adjacency() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.n_evil = 2;
+        state.deck.minions = vec!["Puppeteer".to_string()];
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+
+        let scenarios = build_scenarios(&state);
+        assert!(!scenarios.is_empty());
+        assert!(scenarios.iter().all(|scenario| {
+            let puppeteer = scenario
+                .evil_positions
+                .iter()
+                .find_map(|(&position, role)| {
+                    (normalize_role(role) == "puppeteer").then_some(position)
+                })
+                .unwrap();
+            let puppet = scenario.puppet_position.unwrap();
+            adjacent_positions(puppeteer, state.n_cards).contains(&puppet)
+        }));
+        assert!(scenarios.iter().any(|scenario| {
+            scenario
+                .evil_positions
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "puppeteer")
+        }));
+        assert!(scenarios
+            .iter()
+            .any(|scenario| scenario.puppet_position == Some(1)));
+
+        state.executed = vec![1, 3];
+        state.confirmed_evil = vec![1, 3];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (3, "Puppet".to_string()),
+        ]);
+        assert!(build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn untyped_twin_death_reconstructs_the_ordered_trace_slice() {
+        let mut state = exact_three_evil_twin_state();
+        state.confirmed_evil = vec![1, 2, 3];
+        state.executed_evil_roles.remove(&1);
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 4);
+        assert!(scenarios.iter().all(|scenario| {
+            scenario
+                .evil_positions
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "twinminion")
+                && scenario.twin_trace.is_some()
+        }));
+    }
+
+    #[test]
+    fn exact_role_outside_the_authored_multiset_is_rejected() {
+        let mut state = GameState::default();
+        state.n_cards = 2;
+        state.n_evil = 2;
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string(), "Lilis".to_string()];
+        state.board_minion_count = Some(1);
+        state.board_demon_count = Some(1);
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        state
+            .executed_evil_roles
+            .insert(1, "Shaman".to_string());
+
+        assert!(build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn puppeteer_candidates_follow_villager_and_one_saint_removal() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec!["Baker".to_string(), "Saint".to_string()];
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.cards = vec![card(2, "Baker"), card(3, "Plague Doctor")];
+        let mut real_villagers = HashSet::from([2]);
+        assert_eq!(
+            native_puppeteer_candidate_occurrences(1, &real_villagers, &state),
+            vec![(2, true)],
+        );
+
+        state.cards[0].apparent_role = "Saint".to_string();
+        assert!(native_puppeteer_candidate_occurrences(1, &real_villagers, &state).is_empty());
+
+        state.n_cards = 2;
+        state.cards = vec![card(2, "Saint")];
+        real_villagers = HashSet::from([2]);
+        assert_eq!(
+            native_puppeteer_candidate_occurrences(1, &real_villagers, &state),
+            vec![(2, true)],
+        );
+    }
+
+    #[test]
+    fn known_villager_makes_puppeteer_conversion_mandatory() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 2;
+        state.deck.villagers = vec!["Scout".to_string()];
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.deck.minions = vec!["Puppeteer".to_string()];
+        state.cards = vec![card(2, "Scout"), card(3, "Plague Doctor")];
+
+        let scenarios = build_scenarios(&state);
+        let puppeteer_at_one: Vec<_> = scenarios
+            .iter()
+            .filter(|scenario| {
+                scenario
+                    .evil_positions
+                    .get(&1)
+                    .is_some_and(|role| normalize_role(role) == "puppeteer")
+            })
+            .collect();
+        assert!(!puppeteer_at_one.is_empty());
+        assert!(puppeteer_at_one
+            .iter()
+            .all(|scenario| scenario.puppet_position == Some(2)),
+            "unexpected Puppeteer worlds: {:?}",
+            puppeteer_at_one
+                .iter()
+                .map(|scenario| (
+                    scenario.puppet_position,
+                    scenario.doppelganger_position,
+                    scenario.drunk_position,
+                    scenario.evil_positions.clone(),
+                ))
+                .collect::<Vec<_>>(),
+        );
+    }
+
+    #[test]
+    fn hidden_drunk_neighbor_allows_native_puppeteer_no_op() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 1;
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string(), "Plague Doctor".to_string()];
+        state.deck.minions = vec!["Puppeteer".to_string()];
+        state.cards = vec![card(2, "Baker"), card(3, "Plague Doctor")];
+
+        assert!(build_scenarios(&state).iter().any(|scenario| {
+            scenario
+                .evil_positions
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "puppeteer")
+                && scenario.puppet_position.is_none()
+                && scenario.drunk_position == Some(2)
+        }));
+    }
+
+    #[test]
+    fn puppeteer_removes_at_most_one_unknown_saint_occurrence() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.deck.villagers = vec!["Saint".to_string(), "Scout".to_string()];
+        let full_evil = HashMap::from([(1, "Puppeteer".to_string())]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: HashSet::from([2, 3]),
+            ..StartCorruptionContext::default()
+        };
+        assert!(!start_context_matches_native_puppeteer_conversion(
+            &full_evil,
+            None,
+            &context,
+            &state,
+        ));
+
+        state.n_cards = 2;
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: HashSet::from([2]),
+            ..StartCorruptionContext::default()
+        };
+        assert!(!start_context_matches_native_puppeteer_conversion(
+            &full_evil,
+            None,
+            &context,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn later_shaman_and_baker_writers_keep_a_sole_saint_no_op_branch() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.deck.villagers = vec!["Saint".to_string(), "Baker".to_string()];
+        state.cards = vec![card(2, "Baker"), card(3, "Baker")];
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: HashSet::from([2, 3]),
+            ..StartCorruptionContext::default()
+        };
+
+        let with_shaman = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (4, "Shaman".to_string()),
+        ]);
+        assert!(start_context_matches_native_puppeteer_conversion(
+            &with_shaman,
+            None,
+            &context,
+            &state,
+        ));
+
+        let after_baker = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (4, "Pooka".to_string()),
+        ]);
+        assert!(start_context_matches_native_puppeteer_conversion(
+            &after_baker,
+            None,
+            &context,
+            &state,
+        ));
+
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.cards = vec![card(2, "Scout"), card(3, "Witness")];
+        assert!(!start_context_matches_native_puppeteer_conversion(
+            &after_baker,
+            None,
+            &context,
+            &state,
+        ));
+    }
+
+    #[test]
+    fn mixed_twin_puppeteer_defers_post_swap_adjacency_and_conversion() {
+        let mut state = GameState {
+            n_cards: 5,
+            n_evil: 4,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            ..GameState::default()
+        };
+        state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        let placement = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Twin Minion".to_string()),
+            (3, "Puppet".to_string()),
+            (5, "Pooka".to_string()),
+        ]);
+        assert!(placement_has_valid_puppeteer_structure(
+            &placement,
+            Some(3),
+            &state,
+        ));
+        assert!(start_context_matches_native_puppeteer_conversion(
+            &placement,
+            Some(3),
+            &StartCorruptionContext::default(),
+            &state,
+        ));
+        assert!(generate_evil_placements(&state).iter().any(|candidate| {
+            placement.iter().all(|(position, role)| {
+                candidate
+                    .get(position)
+                    .is_some_and(|actual| normalize_role(actual) == normalize_role(role))
+                })
+        }));
+
+        let mut overlap_state = state.clone();
+        overlap_state.n_evil = 3;
+        let overlap_worlds = generate_evil_placements(&overlap_state);
+        assert!(overlap_worlds.iter().any(|candidate| {
+            candidate.puppet_position == Some(2)
+                && candidate
+                    .get(&1)
+                    .is_some_and(|role| normalize_role(role) == "puppeteer")
+                && candidate
+                    .get(&2)
+                    .is_some_and(|role| normalize_role(role) == "twinminion")
+                && candidate
+                    .get(&5)
+                    .is_some_and(|role| normalize_role(role) == "pooka")
+                && candidate
+                    .values()
+                    .all(|role| normalize_role(role) != "puppet")
+        }));
+        assert!(build_scenarios(&overlap_state).iter().any(|scenario| {
+            scenario.puppet_position == Some(2)
+                && scenario
+                    .evil_positions
+                    .get(&2)
+                    .is_some_and(|role| normalize_role(role) == "twinminion")
+        }));
+        assert!(!placement_has_valid_puppeteer_structure(
+            &HashMap::from([
+                (1, "Puppeteer".to_string()),
+                (2, "Twin Minion".to_string()),
+                (5, "Pooka".to_string()),
+            ]),
+            Some(1),
+            &overlap_state,
+        ));
+        assert!(!placement_has_valid_puppeteer_structure(
+            &HashMap::from([
+                (1, "Puppeteer".to_string()),
+                (2, "Twin Minion".to_string()),
+                (5, "Pooka".to_string()),
+            ]),
+            Some(5),
+            &overlap_state,
+        ));
+
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        state.executed_evil_roles = HashMap::from([(1, "Puppeteer".to_string())]);
+        assert!(generate_evil_placements(&state).iter().any(|candidate| {
+            candidate
+                .get(&2)
+                .is_some_and(|role| normalize_role(role) == "twinminion")
+                && candidate
+                    .get(&3)
+                    .is_some_and(|role| normalize_role(role) == "puppet")
+                && candidate
+                    .get(&5)
+                    .is_some_and(|role| normalize_role(role) == "pooka")
+        }));
+
+        state.executed = vec![3];
+        state.confirmed_evil = vec![3];
+        state.executed_evil_roles = HashMap::from([(3, "Puppet".to_string())]);
+        assert!(generate_evil_placements(&state).iter().any(|candidate| {
+            candidate
+                .get(&1)
+                .is_some_and(|role| normalize_role(role) == "puppeteer")
+                && candidate
+                    .get(&2)
+                    .is_some_and(|role| normalize_role(role) == "twinminion")
+                && candidate
+                    .get(&5)
+                    .is_some_and(|role| normalize_role(role) == "pooka")
+        }));
+
+        state.executed = vec![1, 3];
+        state.confirmed_evil = state.executed.clone();
+        state.executed_evil_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (3, "Puppet".to_string()),
+        ]);
+        assert!(generate_evil_placements(&state).iter().any(|candidate| {
+            candidate
+                .get(&2)
+                .is_some_and(|role| normalize_role(role) == "twinminion")
+                && candidate
+                    .get(&5)
+                    .is_some_and(|role| normalize_role(role) == "pooka")
+        }));
+
+        state.executed = vec![1, 2, 3, 5];
+        state.confirmed_evil = state.executed.clone();
+        state.executed_evil_roles = placement.clone();
+        let all_dead = generate_evil_placements(&state);
+        assert_eq!(all_dead.len(), 1);
+        assert!(all_dead[0].roles.is_empty());
+        assert_eq!(all_dead[0].puppet_position, Some(3));
+        assert!(!build_scenarios(&state).is_empty());
+
+        let without_twin = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (3, "Puppet".to_string()),
+        ]);
+        state.executed.clear();
+        state.confirmed_evil.clear();
+        state.executed_evil_roles.clear();
+        assert!(!placement_has_valid_puppeteer_structure(
+            &without_twin,
+            Some(3),
+            &state,
+        ));
+    }
+
+    #[test]
+    fn twin_body_puppet_overlay_survives_each_stable_death_state() {
+        let stable = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Twin Minion".to_string()),
+            (5, "Pooka".to_string()),
+        ]);
+        let assert_world = |dead: &[u8]| {
+            let mut state = GameState {
+                n_cards: 5,
+                n_evil: 3,
+                board_count_provenance: BoardCountProvenance::TrustedPreStart,
+                ..GameState::default()
+            };
+            state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+            state.deck.demons = vec!["Pooka".to_string()];
+            state.executed = dead.to_vec();
+            state.confirmed_evil = dead.to_vec();
+            state.executed_evil_roles = stable
+                .iter()
+                .filter(|(position, _)| dead.contains(position))
+                .map(|(&position, role)| (position, role.clone()))
+                .collect();
+            if dead.contains(&2) {
+                state.executed_current_roles.insert(2, "Puppet".to_string());
+            }
+
+            let placements = generate_evil_placements(&state);
+            assert!(placements.iter().any(|candidate| {
+                candidate.puppet_position == Some(2)
+                    && stable.iter().all(|(&position, expected)| {
+                        candidate
+                            .get(&position)
+                            .or_else(|| state.executed_evil_roles.get(&position))
+                            .is_some_and(|actual| {
+                                normalize_role(actual) == normalize_role(expected)
+                            })
+                    })
+            }), "missing Twin/Puppet overlap with dead positions {dead:?}");
+            assert!(build_scenarios(&state).iter().any(|scenario| {
+                scenario.puppet_position == Some(2)
+                    && scenario
+                        .evil_positions
+                        .get(&2)
+                        .is_some_and(|role| normalize_role(role) == "twinminion")
+            }), "scenario lost Twin/Puppet overlap with dead positions {dead:?}");
+        };
+
+        assert_world(&[]);
+        assert_world(&[1]);
+        assert_world(&[2]);
+        assert_world(&[1, 2]);
+        assert_world(&[1, 2, 5]);
+    }
+
+    #[test]
+    fn exact_dead_twin_current_role_selects_puppet_overlay() {
+        let make_state = |observed: &str| {
+            let mut state = GameState {
+                n_cards: 5,
+                n_evil: 3,
+                board_count_provenance: BoardCountProvenance::TrustedPreStart,
+                executed: vec![2],
+                confirmed_evil: vec![2],
+                executed_evil_roles: HashMap::from([(2, "Twin Minion".to_string())]),
+                executed_current_roles: HashMap::from([(2, observed.to_string())]),
+                ..GameState::default()
+            };
+            state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+            state.deck.demons = vec!["Pooka".to_string()];
+            state
+        };
+
+        let puppet = generate_evil_placements(&make_state("Puppet"));
+        assert!(!puppet.is_empty());
+        assert!(puppet
+            .iter()
+            .all(|candidate| candidate.puppet_position == Some(2)));
+
+        let mut oversized_pool = make_state("Puppet");
+        oversized_pool.n_evil = 2;
+        oversized_pool.deck.minions = vec![
+            "Puppeteer".to_string(),
+            "Twin Minion".to_string(),
+            "Witch".to_string(),
+        ];
+        let selected = generate_evil_placements(&oversized_pool);
+        assert!(!selected.is_empty());
+        assert!(selected.iter().all(|candidate| {
+            candidate.puppet_position == Some(2)
+                && candidate
+                    .values()
+                    .chain(oversized_pool.executed_evil_roles.values())
+                    .any(|role| normalize_role(role) == "puppeteer")
+        }));
+
+        let non_puppet = generate_evil_placements(&make_state("Scout"));
+        assert!(!non_puppet.is_empty());
+        assert!(non_puppet
+            .iter()
+            .all(|candidate| candidate.puppet_position != Some(2)));
+    }
+
+    #[test]
+    fn twin_body_puppet_source_leaves_the_post_twin_pd_villager_pool() {
+        let state = GameState::from_json(&serde_json::json!({
+            "n_cards": 6,
+            "n_evil": 3,
+            "board_count_provenance": "trusted_pre_start",
+            "board_villager_count": 1,
+            "board_outcast_count": 2,
+            "board_minion_count": 2,
+            "board_demon_count": 1,
+            "deck": {
+                "villagers": ["Scout"],
+                "outcasts": ["Plague Doctor", "Bombardier"],
+                "minions": ["Puppeteer", "Twin Minion"],
+                "demons": ["Lilis"]
+            },
+            "cards": [
+                {"position": 1, "apparent_role": "Scout"},
+                {"position": 2, "apparent_role": "Scout"},
+                {"position": 3, "apparent_role": "Plague Doctor"},
+                {"position": 4, "apparent_role": "Scout"},
+                {"position": 5, "apparent_role": "Scout"},
+                {"position": 6, "apparent_role": "Bombardier"}
+            ],
+            "executed": [1, 2, 4, 5],
+            "confirmed_evil": [1, 2, 4],
+            "confirmed_good": [5],
+            "executed_evil_roles": {
+                "1": "Puppeteer",
+                "2": "Twin Minion",
+                "4": "Lilis"
+            },
+            "executed_current_roles": {
+                "1": "Puppeteer",
+                "2": "Puppet",
+                "4": "Lilis",
+                "5": "Twin Minion"
+            },
+            "executed_good_roles": {"5": "Twin Minion"},
+            "executed_good_corrupted": {"5": false}
+        }))
+        .unwrap();
+
+        let result = crate::solver::solve(&state);
+        assert!(result.n_surviving > 0);
+        assert!(result.surviving_scenarios.iter().any(|scenario| {
+            scenario.puppet_position == Some(2)
+                && scenario
+                    .evil_positions
+                    .get(&2)
+                    .is_some_and(|role| normalize_role(role) == "twinminion")
+                && !scenario.corrupted.contains(&5)
+        }));
+    }
+
+    #[test]
+    fn twin_body_puppet_alchemist_source_respects_pool_capacity() {
+        let mut state = GameState {
+            n_cards: 5,
+            ..GameState::default()
+        };
+        state.cards = vec![card(2, "Alchemist")];
+        state.deck.villagers = vec!["Alchemist".to_string()];
+        state.deck.minions = vec!["Puppeteer".to_string(), "Twin Minion".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state
+            .executed_current_roles
+            .insert(3, "Twin Minion".to_string());
+        let full_evil = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Twin Minion".to_string()),
+            (5, "Lilis".to_string()),
+        ]);
+        let mut base = StartCorruptionContext {
+            real_villagers_before_puppet: HashSet::from([2, 3, 4]),
+            registered_villagers_at_pd_call: HashSet::from([3, 4]),
+            corruption_resistant_at_init: HashSet::from([4]),
+            true_alchemist_positions: vec![4],
+            puppet_position: Some(2),
+            ..StartCorruptionContext::default()
+        };
+
+        assert!(twin_puppet_overlay_start_context_variants(
+            &state,
+            &full_evil,
+            None,
+            None,
+            Some(2),
+            None,
+            base.clone(),
+        )
+        .is_empty());
+
+        base.corruption_resistant_at_init.clear();
+        base.true_alchemist_positions.clear();
+        let contexts = twin_puppet_overlay_start_context_variants(
+            &state,
+            &full_evil,
+            None,
+            None,
+            Some(2),
+            None,
+            base,
+        );
+        assert_eq!(contexts.len(), 1);
+        assert_eq!(contexts[0].corruption_resistant_at_init, HashSet::from([3]));
+        assert!(contexts[0].true_alchemist_positions.is_empty());
+    }
+
+    #[test]
+    fn legacy_puppeteer_count_may_exclude_generated_puppet() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.n_evil = 3;
+        state.deck.minions = vec!["Puppeteer".to_string(), "Witch".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.executed = vec![1, 2, 3, 4];
+        state.confirmed_evil = state.executed.clone();
+        state.executed_evil_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Puppet".to_string()),
+            (3, "Witch".to_string()),
+            (4, "Lilis".to_string()),
+        ]);
+
+        let legacy = generate_evil_placements(&state);
+        assert_eq!(legacy.len(), 1);
+        assert!(legacy[0].roles.is_empty());
+        assert_eq!(legacy[0].puppet_position, Some(2));
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        assert!(generate_evil_placements(&state).is_empty());
+    }
+
+    #[test]
+    fn trusted_faction_counts_cover_puppeteer_special_placements() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 3;
+        state.deck.minions = vec!["Puppeteer".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.board_minion_count = Some(0);
+        state.board_demon_count = Some(2);
+        assert!(generate_evil_placements(&state).is_empty());
+
+        state.board_minion_count = Some(1);
+        state.board_demon_count = Some(1);
+        assert!(!generate_evil_placements(&state).is_empty());
+    }
+
+    #[test]
+    fn apparent_villagers_that_are_authored_evils_do_not_force_a_puppet() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.n_evil = 3;
+        state.deck.villagers = vec!["Baker".to_string()];
+        state.deck.minions = vec!["Puppeteer".to_string(), "Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.cards = vec![card(1, "Baker"), card(2, "Baker"), card(3, "Baker")];
+
+        assert!(generate_evil_placements(&state).iter().any(|placement| {
+            placement.len() == 3
+                && placement
+                    .values()
+                    .all(|role| normalize_role(role) != "puppet")
+                && placement
+                    .values()
+                    .any(|role| normalize_role(role) == "puppeteer")
+        }));
+    }
+
+    #[test]
+    fn oversized_puppeteer_pool_selects_a_valid_authored_subset() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.n_evil = 3;
+        state.deck.minions = vec!["Puppeteer".to_string(), "Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string(), "Lilis".to_string()];
+        state.board_minion_count = Some(1);
+        state.board_demon_count = Some(1);
+
+        assert!(generate_evil_placements(&state).iter().any(|placement| {
+            placement.len() == 3
+                && placement
+                    .values()
+                    .any(|role| normalize_role(role) == "puppeteer")
+                && placement
+                    .values()
+                    .any(|role| normalize_role(role) == "puppet")
+                && placement.values().any(|role| {
+                    matches!(normalize_role(role).as_str(), "pooka" | "lilis")
+                })
+        }));
+    }
+
+    #[test]
+    fn trusted_faction_counts_subtract_already_pruned_executed_roles() {
+        let mut state = GameState::default();
+        state.deck.minions = vec!["Witch".to_string(), "Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.board_minion_count = Some(1);
+        state.board_demon_count = Some(1);
+        state
+            .executed_evil_roles
+            .insert(1, "Witch".to_string());
+        let remaining = vec!["Minion".to_string(), "Pooka".to_string()];
+
+        assert_eq!(
+            evil_role_subsets_fn(&remaining, &state, 1),
+            vec![vec!["Pooka".to_string()]],
+        );
+    }
+
+    #[test]
+    fn trusted_faction_counts_are_not_bypassed_by_an_equal_sized_pool() {
+        let mut state = GameState::default();
+        state.n_cards = 2;
+        state.n_evil = 2;
+        state.deck.minions = vec!["Witch".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.board_minion_count = Some(0);
+        state.board_demon_count = Some(2);
+
+        assert!(generate_evil_placements(&state).is_empty());
+    }
+
+    #[test]
+    fn trusted_zero_remaining_counts_reject_an_inconsistent_dead_multiset() {
+        let mut state = GameState::default();
+        state.n_cards = 1;
+        state.n_evil = 1;
+        state.deck.minions = vec!["Witch".to_string()];
+        state.board_minion_count = Some(0);
+        state.board_demon_count = Some(1);
+        state.executed = vec![1];
+        state.confirmed_evil = vec![1];
+        state
+            .executed_evil_roles
+            .insert(1, "Witch".to_string());
+
+        assert!(generate_evil_placements(&state).is_empty());
     }
 
     #[test]

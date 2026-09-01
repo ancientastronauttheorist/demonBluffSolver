@@ -28,11 +28,21 @@ pub fn stable_evil_origin_role_at<'a>(
     scenario: &'a Scenario,
     state: &'a GameState,
 ) -> Option<&'a str> {
+    let exact_generated_puppet = scenario.puppet_position == Some(pos)
+        && scenario
+            .evil_positions
+            .get(&pos)
+            .is_some_and(|role| normalize_role(role) == "puppet");
     // Check scenario evil positions
     if let Some(role) = scenario.evil_positions.get(&pos) {
         if scenario.puppet_position != Some(pos) || normalize_role(role) != "puppet" {
             return Some(role.as_str());
         }
+    }
+    if exact_generated_puppet {
+        // A public `Unknown` execution record must not overwrite the exact
+        // generated-Puppet branch with a fictitious stable Evil origin.
+        return None;
     }
     // Check executed evil roles
     if let Some(role) = state.executed_evil_roles.get(&pos) {

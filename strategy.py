@@ -164,7 +164,11 @@ def _remaining_evil_bounds(state: GameState, result: SolverResult) -> tuple[int,
     counts = []
     for scenario in result.surviving_scenarios:
         count = sum(1 for p in scenario.evil_positions if p not in dead)
-        if scenario.puppet_position and scenario.puppet_position not in dead:
+        if (
+            scenario.puppet_position is not None
+            and scenario.puppet_position not in dead
+            and scenario.puppet_position not in scenario.evil_positions
+        ):
             count += 1
         counts.append(count)
 
@@ -894,10 +898,10 @@ def _tiebreak_score(
     # Fewer distinct roles = more predictable outcome
     evil_roles = set()
     for s in result.surviving_scenarios:
-        if pos in s.evil_positions:
-            evil_roles.add(s.evil_positions[pos])
-        elif pos == s.puppet_position:
+        if pos == s.puppet_position:
             evil_roles.add("Puppet")
+        elif pos in s.evil_positions:
+            evil_roles.add(s.evil_positions[pos])
     # Normalize: 1 role = best (1.0), many roles = worse (closer to 0.0)
     if evil_roles:
         role_consistency = 1.0 / len(evil_roles)
@@ -2592,10 +2596,10 @@ def _compute_position_fingerprint(
     # Evil status
     is_evil = scenario_is_evil(pos, scenario)
     evil_role = None
-    if pos in scenario.evil_positions:
-        evil_role = scenario.evil_positions[pos]
-    elif pos == scenario.puppet_position:
+    if pos == scenario.puppet_position:
         evil_role = "Puppet"
+    elif pos in scenario.evil_positions:
+        evil_role = scenario.evil_positions[pos]
 
     # Ordinary generated Outcast data is visible when this position flips.
     # Drunk/Doppelganger keep their Villager disguise, so do not leak their

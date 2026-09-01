@@ -238,13 +238,31 @@ fn evil_execution_revealed_role(
             .map(|trace| trace.copied_role.clone())
             .unwrap_or_else(|| apparent_role.to_string());
     }
-    if let Some(role) = scenario.evil_positions.get(&pos) {
-        return role.clone();
-    }
     if scenario.puppet_position == Some(pos) {
         return "Puppet".to_string();
     }
+    if let Some(role) = scenario.evil_positions.get(&pos) {
+        return role.clone();
+    }
     execution_revealed_role(scenario, pos, apparent_role)
+}
+
+#[test]
+fn execution_reveal_projects_puppet_over_stable_twin_after_later_writers() {
+    let mut scenario = Scenario::default();
+    scenario
+        .evil_positions
+        .insert(2, "Twin Minion".to_string());
+    scenario.puppet_position = Some(2);
+    assert_eq!(evil_execution_revealed_role(&scenario, 2, "Scout"), "Puppet");
+
+    scenario.shaman_trace = Some(solver_core::types::ShamanTrace {
+        source_position: 1,
+        target_position: 2,
+        copied_role: "Bard".to_string(),
+        target_previous_roles: vec!["Puppet".to_string()],
+    });
+    assert_eq!(evil_execution_revealed_role(&scenario, 2, "Scout"), "Bard");
 }
 
 /// Resolve an execution only when every truth-compatible hidden-Outcast world
@@ -2321,6 +2339,107 @@ fn generated_puppet_execution_regressions_preserve_truth() {
         }
     }
     assert!(failures.is_empty(), "{}", failures.join("\n"));
+}
+
+#[test]
+fn untyped_executed_evil_regressions_preserve_exact_origin_branches() {
+    for case_name in [
+        "asc32_v5",
+        "asc33_v5",
+        "asc37_v2",
+        "asc44_v3",
+        "asc49_v1",
+        "asc52_v1",
+    ] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).expect("read regression fixture");
+        let value: serde_json::Value =
+            serde_json::from_str(&content).expect("parse regression fixture");
+        let state = GameState::from_json(&value).expect("deserialize regression fixture");
+        let result = solve(&state);
+        let true_evil_positions: HashMap<u8, String> = value
+            .get("true_evil_positions")
+            .and_then(serde_json::Value::as_object)
+            .map(|positions| {
+                positions
+                    .iter()
+                    .filter_map(|(position, role)| {
+                        Some((position.parse::<u8>().ok()?, role.as_str()?.to_string()))
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+
+        assert!(
+            !truth_compatible_scenarios(&result, &true_evil_positions, &[]).is_empty(),
+            "{case_name} lost its exact executed-Evil origin branch ({} surviving scenarios)",
+            result.n_surviving,
+        );
+        if let SimResult::ConstraintFailure { phase, detail } = simulate_game(&value) {
+            panic!("{case_name} eliminated truth at {phase}: {detail}");
+        }
+    }
+}
+
+#[test]
+fn puppeteer_archival_count_and_hidden_drunk_regressions_preserve_truth() {
+    for case_name in ["asc27_v2", "asc44_v5", "asc54_v1"] {
+        let path = v2_dir().join(format!("{case_name}.json"));
+        let content = std::fs::read_to_string(path).expect("read Puppeteer fixture");
+        let value: serde_json::Value =
+            serde_json::from_str(&content).expect("parse Puppeteer fixture");
+        let state = GameState::from_json(&value).expect("deserialize Puppeteer fixture");
+        let result = solve(&state);
+        let true_evil_positions: HashMap<u8, String> = value
+            .get("true_evil_positions")
+            .and_then(serde_json::Value::as_object)
+            .map(|positions| {
+                positions
+                    .iter()
+                    .filter_map(|(position, role)| {
+                        Some((position.parse::<u8>().ok()?, role.as_str()?.to_string()))
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+
+        assert!(
+            !truth_compatible_scenarios(&result, &true_evil_positions, &[]).is_empty(),
+            "{case_name} lost its native Puppeteer truth branch ({} surviving scenarios)",
+            result.n_surviving,
+        );
+        if let SimResult::ConstraintFailure { phase, detail } = simulate_game(&value) {
+            panic!("{case_name} eliminated truth at {phase}: {detail}");
+        }
+    }
+
+    let path = v2_dir().join("asc54_v1.json");
+    let content = std::fs::read_to_string(path).expect("read asc54_v1 fixture");
+    let value: serde_json::Value =
+        serde_json::from_str(&content).expect("parse asc54_v1 fixture");
+    let mut state = GameState::from_json(&value).expect("deserialize asc54_v1 fixture");
+    let true_evil_positions = state.executed_evil_roles.clone();
+    for prefix in [
+        vec![3],
+        vec![4],
+        vec![4, 7],
+        vec![4, 7, 5],
+        vec![4, 7, 5, 3],
+    ] {
+        state.executed = prefix.clone();
+        state.confirmed_evil = prefix.clone();
+        state.executed_evil_roles = true_evil_positions
+            .iter()
+            .filter(|(position, _)| prefix.contains(position))
+            .map(|(&position, role)| (position, role.clone()))
+            .collect();
+        let result = solve(&state);
+        assert!(
+            !truth_compatible_scenarios(&result, &true_evil_positions, &[]).is_empty(),
+            "asc54_v1 lost its legacy four-Evil truth after deaths {prefix:?} ({} surviving scenarios)",
+            result.n_surviving,
+        );
+    }
 }
 
 #[test]

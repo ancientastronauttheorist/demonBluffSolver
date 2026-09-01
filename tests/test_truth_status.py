@@ -8,6 +8,7 @@ from solver import (
     GameState,
     Scenario,
     TruthStatus,
+    effective_role_at,
     truth_appearance_status,
     truth_status,
 )
@@ -49,6 +50,16 @@ class TruthStatusTests(unittest.TestCase):
         self.assertEqual(
             truth_status(1, doppelganger, make_state()), TruthStatus.TRUTHFUL
         )
+
+    def test_puppet_overlay_on_stable_twin_uses_current_puppet_behavior(self):
+        scenario = Scenario(
+            evil_positions={1: "Twin Minion"},
+            puppet_position=1,
+        )
+        state = make_state()
+
+        self.assertEqual(effective_role_at(1, scenario, state), "Puppet")
+        self.assertEqual(truth_status(1, scenario, state), TruthStatus.TRUTHFUL)
 
     def test_drunk_models_non_null_bluff_without_healthy_bluff(self):
         scenario = Scenario(evil_positions={}, drunk_position=1)

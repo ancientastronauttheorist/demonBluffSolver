@@ -15,7 +15,7 @@ pub(crate) fn twin_origin_may_hold_bombardier(
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
-    if scenario.twin_trace.is_some() {
+    if scenario.twin_trace.is_some() || scenario.puppet_position == Some(twin_origin) {
         return false;
     }
 
@@ -314,6 +314,10 @@ mod tests {
         let possible_bombardiers =
             collect_bombardier_positions(&state, &[stable_twin.clone()]);
         assert_eq!(possible_bombardiers, vec![1, 3]);
+
+        let mut puppet_overlay = stable_twin.clone();
+        puppet_overlay.puppet_position = Some(1);
+        assert_eq!(collect_bombardier_positions(&state, &[puppet_overlay]), vec![3]);
 
         let result = SolverResult {
             definite_evil: vec![1, 2],

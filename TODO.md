@@ -155,7 +155,13 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 - [ ] **Endless mode +1 fake Outcast in deck view** — Reportedly added every round (confirmed by dev on Steam), independently of Baa. Native-verify whether this changes gameplay/HUD counts or only deck presentation before adjusting `no=`.
 
-- [x] **Puppeteer targets Villagers only when possible** — FIXED. Placement generator restricts Puppet candidates to Villager (+ unrevealed) positions when a known Villager is adjacent to Puppeteer. Outcasts only eligible when no Villagers are adjacent.
+- [x] **Puppeteer targets real Villagers** — NATIVE-CORRECTED. The ordered
+  Start scan checks the two physical neighbours' real `dataRef` types, removes
+  only the first Saint Villager occurrence, and converts a remaining candidate
+  mandatorily. If none remains it performs no conversion; Outcasts are never a
+  fallback. Conversion checks run after authored Evil placement and hidden
+  Drunk, Doppelganger, and Chancellor identity branching, so neither an Evil
+  nor an Outcast merely disguised as a Villager can force a fake Puppet.
 
 - [x] **Corrupted Knight = 4 HP damage** — NATIVE-DISPROVEN as a total. The
   authored/native rule is fixed **additional** 4 after ordinary event damage:

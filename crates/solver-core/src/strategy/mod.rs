@@ -67,7 +67,7 @@ pub fn remaining_evil_bounds(state: &GameState, result: &SolverResult) -> (usize
             .filter(|p| !dead.contains(p))
             .count();
         if let Some(pp) = s.puppet_position {
-            if !dead.contains(&pp) {
+            if !dead.contains(&pp) && !s.evil_positions.contains_key(&pp) {
                 count += 1;
             }
         }
@@ -543,6 +543,38 @@ mod tests {
         assert_eq!(remaining_evil_bounds(&state, &result), (1, 1));
         let state = GameState { night_kills: vec![3, 4], ..state };
         assert_eq!(remaining_evil_bounds(&state, &result), (0, 0));
+    }
+
+    #[test]
+    fn remaining_evil_bounds_counts_puppet_by_physical_position() {
+        let state = GameState {
+            n_cards: 4,
+            ..GameState::default()
+        };
+        let bounds_for = |scenario| {
+            let result = SolverResult {
+                definite_evil: vec![],
+                definite_good: vec![],
+                bombardier_positions: vec![],
+                n_scenarios: 1,
+                n_surviving: 1,
+                surviving_scenarios: vec![scenario],
+                reasoning: vec![],
+            };
+            remaining_evil_bounds(&state, &result)
+        };
+
+        let mut ordinary = make_scenario(&[(1, "Puppeteer"), (2, "Puppet")]);
+        ordinary.puppet_position = Some(2);
+        assert_eq!(bounds_for(ordinary), (2, 2));
+
+        let mut twin_overlap = make_scenario(&[(1, "Puppeteer"), (2, "Twin Minion")]);
+        twin_overlap.puppet_position = Some(2);
+        assert_eq!(bounds_for(twin_overlap), (2, 2));
+
+        let mut separate = make_scenario(&[(1, "Puppeteer"), (2, "Pooka")]);
+        separate.puppet_position = Some(3);
+        assert_eq!(bounds_for(separate), (3, 3));
     }
 
     #[test]

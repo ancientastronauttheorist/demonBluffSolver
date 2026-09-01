@@ -17,9 +17,14 @@ from game_loop import (
     dispatch,
 )
 from memory_reader import print_board
-from solver import Scenario, SolverResult
+from solver import DeckComposition, GameState, Scenario, SolverResult
 from state_machine import GamePhase, GameStateMachine
-from strategy import Action
+from strategy import (
+    Action,
+    _compute_position_fingerprint,
+    _remaining_evil_bounds,
+    _tiebreak_score,
+)
 
 
 def _result(*scenarios: Scenario) -> SolverResult:
@@ -526,7 +531,7 @@ class StableOriginRecoveryTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(resolved, {1: "Puppeteer", 3: "Puppet"})
 
-    def test_stable_twin_and_generated_puppet_overlap_refuses_auto_origin(self):
+    def test_stable_twin_and_generated_puppet_overlap_resolves_stable_origin(self):
         session = GameSession(2, 1)
         session.minions = ["Twin Minion", "Puppeteer"]
         result = _result(
@@ -538,8 +543,8 @@ class StableOriginRecoveryTests(unittest.TestCase):
 
         resolved, errors = _resolve_runtime_evil_origins({1}, session, result)
 
-        self.assertEqual(resolved, {})
-        self.assertTrue(any("generated Puppet" in error for error in errors))
+        self.assertEqual(errors, [])
+        self.assertEqual(resolved, {1: "Twin_Minion"})
 
     def test_validator_consumes_authored_role_multiplicity(self):
         session = GameSession(4, 2)
@@ -616,6 +621,57 @@ class StableOriginRecoveryTests(unittest.TestCase):
         )
         self.assertIn("1=Twin_Minion", output.getvalue())
         self.assertNotIn("1=Bombardier", output.getvalue())
+
+
+class PuppetTwinOverlapStrategyTests(unittest.TestCase):
+    @staticmethod
+    def _state() -> GameState:
+        return GameState(
+            n_cards=2,
+            n_evil=2,
+            deck=DeckComposition(
+                villagers=[],
+                outcasts=[],
+                minions=["Puppeteer", "Twin Minion"],
+                demons=[],
+            ),
+            cards=[],
+        )
+
+    @staticmethod
+    def _overlap() -> Scenario:
+        return Scenario(
+            evil_positions={1: "Puppeteer", 2: "Twin Minion"},
+            puppet_position=2,
+        )
+
+    def test_remaining_evil_bounds_count_overlap_by_physical_position(self):
+        self.assertEqual(
+            _remaining_evil_bounds(self._state(), _result(self._overlap())),
+            (2, 2),
+        )
+
+    def test_reveal_fingerprint_uses_current_puppet_overlay(self):
+        fingerprint = _compute_position_fingerprint(
+            2,
+            self._overlap(),
+            self._state(),
+        )
+
+        self.assertTrue(fingerprint[0])
+        self.assertEqual(fingerprint[1], "Puppet")
+
+    def test_tiebreak_distinguishes_current_puppet_from_stable_twin(self):
+        stable_twin = Scenario(
+            evil_positions={1: "Puppeteer", 2: "Twin Minion"},
+        )
+        score = _tiebreak_score(
+            2,
+            self._state(),
+            _result(self._overlap(), stable_twin),
+        )
+
+        self.assertEqual(score[1], 0.5)
 
 
 class TwinLiveSolverStopTests(unittest.TestCase):

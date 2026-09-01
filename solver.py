@@ -519,7 +519,12 @@ def get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
 
 
 def _known_evil_role(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
-    """Return the evil role at a position, including already executed evil cards."""
+    """Return the stable Evil role, falling back to generated Puppet identity.
+
+    ``puppet_position`` is a later current-data overlay.  On the supported
+    Twin/Puppet overlap, the stable origin remains Twin Minion and current-role
+    consumers must apply the Puppet writer separately.
+    """
     if pos in scenario.evil_positions:
         return scenario.evil_positions[pos]
     if pos == scenario.puppet_position:
@@ -560,6 +565,12 @@ def effective_role_at(pos: int, scenario: Scenario, state: GameState) -> Optiona
         }
     ):
         return scenario.shaman_trace.copied_role
+    # Puppeteer acts after Twin and fully reinitializes the selected current
+    # CharacterData as Puppet.  Keep this overlay ahead of the stable Evil map:
+    # a Twin body can therefore have a stable Twin origin and current Puppet
+    # data at the same physical position.
+    if pos == scenario.puppet_position:
+        return "Puppet"
     evil_role = _known_evil_role(pos, scenario, state)
     if evil_role is not None:
         return evil_role
@@ -615,7 +626,8 @@ def _truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus
 
     # Both roles apply HealthyBluff in the represented clean runtime cases.
     modeled_healthy_bluff = (
-        evil_role == "Puppet"
+        pos == scenario.puppet_position
+        or evil_role == "Puppet"
         or pos == scenario.doppelganger_position
         or effective_role_key == "doppelganger"
     )

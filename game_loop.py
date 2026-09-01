@@ -10627,24 +10627,13 @@ def _resolve_runtime_evil_origins(
             f"{sorted(runtime_evil_positions)}"
         ]
 
-    for scenario in matching_worlds:
-        puppet_position = scenario.puppet_position
-        if puppet_position is None:
-            continue
-        stable_at_puppet = scenario.evil_positions.get(puppet_position)
-        if (
-            stable_at_puppet is not None
-            and _execution_role_key(stable_at_puppet) != "puppet"
-        ):
-            return {}, [
-                f"#{puppet_position} simultaneously carries stable Evil "
-                f"origin {stable_at_puppet!r} and generated Puppet state; "
-                "one-role game_over recovery cannot represent this overlap"
-            ]
-
     for position in sorted(runtime_evil_positions):
         world_roles: set[str] = set()
         for scenario in matching_worlds:
+            # `evil_positions` is the stable-origin authority.  A generated
+            # Puppet can share its physical seat with a stable Twin origin;
+            # only an ordinary Puppet without such an origin uses the scalar
+            # fallback here.
             role = scenario.evil_positions.get(position)
             if role is None and scenario.puppet_position == position:
                 role = "Puppet"
