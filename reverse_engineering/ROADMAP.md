@@ -264,16 +264,22 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     real Villager source through Start, while retaining conservative mixed-
     writer branches; and re-enable card and historical validators only for the
     resulting exact supported worlds.
-  - [ ] Complete the remaining general ordered replay: mixed Twin fallback
-    beyond the represented Puppet overlay, erased Puppet Villager provenance,
-    Shaman copied-Start side effects, duplicate mutators, and probability-exact
-    occurrence weighting. Strict current observations remain fail-closed for
-    inferred incomplete writers.
+  - [ ] Complete the remaining general ordered replay beyond the exact gated
+    Twin/Puppeteer slice: mixed writer pools, Shaman copied-Start side effects,
+    duplicate mutators, and probability-exact occurrence weighting. Strict
+    current observations remain fail-closed for inferred incomplete writers.
     - [x] Implement the pure post-Twin Puppeteer boundary: select the first
       current actor, preserve physical previous/next occurrences, filter exact
       real Villagers, remove only the first Saint occurrence, make nonempty
       conversion mandatory, and retain the erased Villager role in an exact
-      serializable replay trace. Scenario integration remains gated below.
+      serializable replay trace.
+    - [x] Integrate an atomic exact Twin-to-Puppeteer scenario slice for trusted
+      no-Outcast boards with exactly the selected Twin/Puppeteer Minions and
+      supported identity-stable writers: enumerate the complete pre-Twin
+      Villager occurrence map, replay current-data relocation before selecting
+      the Puppeteer actor and target, preserve erased-role provenance, validate
+      exact current/public evidence, and fall back wholesale on unsupported or
+      capped inputs without resurrecting exact contradictions.
 - [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
   role/compiler-generated methods plus registered-alignment, acted-record,
   pool-filter, and RNG helpers; close its direct/Poet three-reference schema,

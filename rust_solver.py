@@ -454,6 +454,128 @@ def _parse_twin_trace(raw_trace, n_cards: int):
     )
 
 
+def _parse_puppeteer_trace(raw_trace, n_cards: int):
+    """Parse the tagged Rust Puppeteer trace, preserving legacy absence."""
+    if raw_trace is None:
+        return None
+
+    from solver import (
+        PuppeteerNeighborSide,
+        PuppeteerStartKind,
+        PuppeteerStartOutcome,
+        PuppeteerTrace,
+    )
+
+    n_cards = _require_u8(n_cards, "n_cards", minimum=1)
+    raw_trace = _require_exact_dict(
+        raw_trace,
+        "puppeteer_trace",
+        {"actor_position", "outcome"},
+    )
+    actor_position = _require_board_position(
+        raw_trace["actor_position"],
+        "puppeteer_trace.actor_position",
+        n_cards,
+    )
+    raw_outcome = _require_exact_dict(
+        raw_trace["outcome"],
+        "puppeteer_trace.outcome",
+        {"kind"}
+        if type(raw_trace["outcome"]) is dict
+        and raw_trace["outcome"].get("kind") == "no_candidate"
+        else {
+            "kind",
+            "candidate_occurrence_index",
+            "neighbor_side",
+            "target_position",
+            "erased_villager_role",
+        },
+    )
+    raw_kind = _require_exact_string(
+        raw_outcome["kind"],
+        "puppeteer_trace.outcome.kind",
+    )
+    try:
+        kind = PuppeteerStartKind(raw_kind)
+    except ValueError as exc:
+        raise ValueError(f"unknown Puppeteer outcome kind: {raw_kind!r}") from exc
+
+    if kind is PuppeteerStartKind.NO_CANDIDATE:
+        outcome = PuppeteerStartOutcome(kind=kind)
+    else:
+        raw_side = _require_exact_string(
+            raw_outcome["neighbor_side"],
+            "puppeteer_trace.outcome.neighbor_side",
+        )
+        try:
+            neighbor_side = PuppeteerNeighborSide(raw_side)
+        except ValueError as exc:
+            raise ValueError(
+                f"unknown Puppeteer neighbor side: {raw_side!r}"
+            ) from exc
+        erased_role = _require_exact_string(
+            raw_outcome["erased_villager_role"],
+            "puppeteer_trace.outcome.erased_villager_role",
+        )
+        if not erased_role.strip():
+            raise ValueError("Puppeteer erased Villager role must be nonempty")
+        outcome = PuppeteerStartOutcome(
+            kind=kind,
+            candidate_occurrence_index=_require_u8(
+                raw_outcome["candidate_occurrence_index"],
+                "puppeteer_trace.outcome.candidate_occurrence_index",
+            ),
+            neighbor_side=neighbor_side,
+            target_position=_require_board_position(
+                raw_outcome["target_position"],
+                "puppeteer_trace.outcome.target_position",
+                n_cards,
+            ),
+            erased_villager_role=erased_role,
+        )
+    return PuppeteerTrace(
+        actor_position=actor_position,
+        outcome=outcome,
+    )
+
+
+def _parse_pre_twin_current_roles(raw_roles, n_cards: int) -> dict[int, str]:
+    """Parse the complete pre-Twin CharacterData map emitted by Rust."""
+    if raw_roles is None:
+        return {}
+    if type(raw_roles) is not dict:
+        raise TypeError("pre_twin_current_roles must be an exact dict")
+
+    n_cards = _require_u8(n_cards, "n_cards", minimum=1)
+    parsed: dict[int, str] = {}
+    for raw_position, raw_role in raw_roles.items():
+        if type(raw_position) is not str or not raw_position.isdecimal():
+            raise TypeError(
+                "pre_twin_current_roles keys must be decimal position strings"
+            )
+        position = _require_board_position(
+            int(raw_position),
+            f"pre_twin_current_roles[{raw_position!r}]",
+            n_cards,
+        )
+        if position in parsed:
+            raise ValueError(
+                "pre_twin_current_roles contains duplicate normalized positions"
+            )
+        role = _require_exact_string(
+            raw_role,
+            f"pre_twin_current_roles[{raw_position!r}]",
+        )
+        if not role.strip():
+            raise ValueError("pre-Twin current roles must be nonempty")
+        parsed[position] = role
+    if parsed and set(parsed) != set(range(1, n_cards + 1)):
+        raise ValueError(
+            "pre_twin_current_roles must cover every board position when present"
+        )
+    return parsed
+
+
 def rust_solve_to_objects(state, summary_only: bool = False):
     """Call the Rust solver and return Python SolverResult + Scenario objects.
 
@@ -509,6 +631,14 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             s.get("twin_trace"),
             state_dict.get("n_cards"),
         )
+        puppeteer_trace = _parse_puppeteer_trace(
+            s.get("puppeteer_trace"),
+            state_dict.get("n_cards"),
+        )
+        pre_twin_current_roles = _parse_pre_twin_current_roles(
+            s.get("pre_twin_current_roles"),
+            state_dict.get("n_cards"),
+        )
         scenarios.append(Scenario(
             evil_positions={int(k): v for k, v in s["evil_positions"].items()},
             puppet_position=s.get("puppet_position"),
@@ -522,6 +652,8 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             chancellor_conversion=s.get("chancellor_conversion"),
             shaman_trace=shaman_trace,
             twin_trace=twin_trace,
+            pre_twin_current_roles=pre_twin_current_roles,
+            puppeteer_trace=puppeteer_trace,
         ))
 
     result_obj = SolverResult(

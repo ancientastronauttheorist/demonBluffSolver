@@ -70,8 +70,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Twin Minion — full managed `Marionette` boundary native-audited; ordered
   Start swaps current `CharacterData` with one alive neighbour of a selected
   current Demon while preserving physical alignment, status, resistance, and
-  runtime data. Exact solver identity traces and current-role live bookkeeping
-  remain an explicit parity gap; stable Twin/Demon adjacency is not valid.
+  runtime data. A gated exact Twin-to-Puppeteer solver slice now preserves the
+  complete pre-Twin current-role map, both native traces, relocated actor/target
+  identity, and erased Puppet Villager provenance. Broader mixed-writer replay
+  remains open; stable Twin/Demon adjacency is not valid.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues

@@ -146,10 +146,10 @@ pub fn tiebreak_score(pos: u8, state: &GameState, result: &SolverResult) -> (f64
     // 2. Role consistency: count distinct evil roles this position could be
     let mut evil_roles: HashSet<&str> = HashSet::new();
     for s in &result.surviving_scenarios {
-        if let Some(role) = s.evil_positions.get(&pos) {
-            evil_roles.insert(role.as_str());
-        } else if s.puppet_position == Some(pos) {
+        if s.puppet_position == Some(pos) {
             evil_roles.insert("Puppet");
+        } else if let Some(role) = s.evil_positions.get(&pos) {
+            evil_roles.insert(role.as_str());
         }
     }
     let role_consistency = if evil_roles.is_empty() {
@@ -456,6 +456,8 @@ mod tests {
             chancellor_trace: None,
             chancellor_conversion: None,
             twin_trace: None,
+            pre_twin_current_roles: HashMap::new(),
+            puppeteer_trace: None,
         }
     }
 
@@ -1040,6 +1042,28 @@ mod tests {
         assert_eq!(corr2, -0.5); // corrupted in 1/2
         assert_eq!(consist2, 1.0); // 1 role
         assert_eq!(witch2, 0.0); // not Witch
+    }
+
+    #[test]
+    fn role_consistency_uses_current_puppet_over_stable_twin_origin() {
+        let state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        let stable_twin = make_scenario(&[(1, "Twin Minion")]);
+        let mut twin_puppet_overlap = make_scenario(&[(1, "Twin Minion")]);
+        twin_puppet_overlap.puppet_position = Some(1);
+        let result = SolverResult {
+            definite_evil: vec![],
+            definite_good: vec![],
+            bombardier_positions: vec![],
+            n_scenarios: 2,
+            n_surviving: 2,
+            surviving_scenarios: vec![stable_twin, twin_puppet_overlap],
+            reasoning: vec![],
+        };
+
+        assert_eq!(tiebreak_score(1, &state, &result).2, 0.5);
     }
 
     #[test]

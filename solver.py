@@ -414,6 +414,81 @@ class TwinTrace:
         }
 
 
+class PuppeteerNeighborSide(str, Enum):
+    """Exact occurrence selected from native ``[previous, next]``."""
+
+    PREVIOUS = "previous"
+    NEXT = "next"
+
+
+class PuppeteerStartKind(str, Enum):
+    """Serialized Rust variant tag for one exact Puppeteer Start outcome."""
+
+    NO_CANDIDATE = "no_candidate"
+    CONVERTED = "converted"
+
+
+@dataclass(frozen=True)
+class PuppeteerStartOutcome:
+    """One exact native Puppeteer Start outcome returned by the Rust solver."""
+
+    kind: PuppeteerStartKind
+    candidate_occurrence_index: Optional[int] = None
+    neighbor_side: Optional[PuppeteerNeighborSide] = None
+    target_position: Optional[int] = None
+    erased_villager_role: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "kind", PuppeteerStartKind(self.kind))
+        if self.neighbor_side is not None:
+            object.__setattr__(
+                self,
+                "neighbor_side",
+                PuppeteerNeighborSide(self.neighbor_side),
+            )
+
+        converted_fields = (
+            self.candidate_occurrence_index,
+            self.neighbor_side,
+            self.target_position,
+            self.erased_villager_role,
+        )
+        if self.kind is PuppeteerStartKind.NO_CANDIDATE:
+            if any(value is not None for value in converted_fields):
+                raise ValueError(
+                    "no_candidate Puppeteer outcome cannot carry conversion fields"
+                )
+        elif any(value is None for value in converted_fields):
+            raise ValueError(
+                "converted Puppeteer outcome requires every conversion field"
+            )
+
+    def to_dict(self) -> dict:
+        result = {"kind": self.kind.value}
+        if self.kind is PuppeteerStartKind.CONVERTED:
+            result.update({
+                "candidate_occurrence_index": self.candidate_occurrence_index,
+                "neighbor_side": self.neighbor_side.value,
+                "target_position": self.target_position,
+                "erased_villager_role": self.erased_villager_role,
+            })
+        return result
+
+
+@dataclass(frozen=True)
+class PuppeteerTrace:
+    """Generated ordered Puppeteer current-data history for one scenario."""
+
+    actor_position: int
+    outcome: PuppeteerStartOutcome
+
+    def to_dict(self) -> dict:
+        return {
+            "actor_position": self.actor_position,
+            "outcome": self.outcome.to_dict(),
+        }
+
+
 @dataclass
 class Scenario:
     """A hypothetical assignment of evil roles to positions."""
@@ -432,6 +507,10 @@ class Scenario:
     shaman_trace: Optional[ShamanTrace] = None
     # Generated solver output only; legacy scenarios intentionally omit it.
     twin_trace: Optional[TwinTrace] = None
+    # Exact pre-Twin CharacterData map for atomically replayed Start slices.
+    pre_twin_current_roles: dict[int, str] = field(default_factory=dict)
+    # Exact post-Twin Puppeteer conversion and erased-role provenance.
+    puppeteer_trace: Optional[PuppeteerTrace] = None
 
     def chancellor_original_villager_positions(self) -> list[int]:
         """Return possible physical seats of Chancellor's erased Villager.
@@ -551,8 +630,96 @@ def scenario_is_evil(pos: int, scenario: Scenario) -> bool:
     return _is_evil_in_scenario(pos, scenario)
 
 
+def _pre_twin_current_role_at(
+    pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> Optional[str]:
+    """Current CharacterData immediately before an exact Twin replay."""
+    if pos in scenario.pre_twin_current_roles:
+        return scenario.pre_twin_current_roles[pos]
+
+    stable = scenario.evil_positions.get(pos)
+    if stable is not None:
+        generated_puppet = (
+            pos == scenario.puppet_position
+            and stable.lower().replace(" ", "").replace("_", "") == "puppet"
+        )
+        if not generated_puppet:
+            return stable
+    if (
+        scenario.chancellor_trace is not None
+        and pos == scenario.chancellor_trace.added_outcast_position
+    ):
+        return scenario.chancellor_trace.added_outcast_role
+    if pos == scenario.doppelganger_position:
+        return "Doppelganger"
+    if pos == scenario.drunk_position:
+        return "Drunk"
+    card = _get_card_at(pos, state)
+    return card.apparent_role if card else None
+
+
+def _role_after_twin_at(
+    pos: int,
+    before: Optional[str],
+    trace: TwinTrace,
+) -> Optional[str]:
+    """Replay one exact Twin current-data swap at a physical position."""
+    if trace.outcome.kind is TwinStartKind.NO_DEMON:
+        return before
+    actor = trace.actor_position
+    neighbor = trace.outcome.neighbor_position
+    if actor == neighbor:
+        return before
+    if pos == actor:
+        return trace.outcome.neighbor_pre_swap_role
+    if pos == neighbor:
+        return "Twin Minion"
+    return before
+
+
+def puppet_erased_role_at(pos: int, scenario: Scenario) -> Optional[str]:
+    """Saved Villager identity displayed by an exactly replayed Puppet."""
+    trace = scenario.puppeteer_trace
+    if trace is None or trace.outcome.kind is not PuppeteerStartKind.CONVERTED:
+        return None
+    if trace.outcome.target_position != pos:
+        return None
+    return trace.outcome.erased_villager_role
+
+
 def effective_role_at(pos: int, scenario: Scenario, state: GameState) -> Optional[str]:
     """True represented role, including generated and hidden Outcasts."""
+    if (
+        scenario.twin_trace is not None
+        or scenario.pre_twin_current_roles
+        or scenario.puppeteer_trace is not None
+    ):
+        current = _pre_twin_current_role_at(pos, scenario, state)
+        if scenario.twin_trace is not None:
+            current = _role_after_twin_at(pos, current, scenario.twin_trace)
+
+        if scenario.puppeteer_trace is not None:
+            if (
+                scenario.puppeteer_trace.outcome.kind
+                is PuppeteerStartKind.CONVERTED
+                and scenario.puppeteer_trace.outcome.target_position == pos
+            ):
+                current = "Puppet"
+        elif pos == scenario.puppet_position:
+            current = "Puppet"
+
+        if (
+            scenario.shaman_trace is not None
+            and pos in {
+                scenario.shaman_trace.source_position,
+                scenario.shaman_trace.target_position,
+            }
+        ):
+            current = scenario.shaman_trace.copied_role
+        return current
+
     # Shaman overwrites the destination's current dataRef while preserving its
     # physical runtime alignment. The source already owns the copied role.
     # Current-role consumers must therefore prefer this trace over the

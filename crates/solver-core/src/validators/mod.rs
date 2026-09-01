@@ -4274,9 +4274,9 @@ fn current_has_unresolved_start_identity(
                 .is_none_or(|public_role| normalize_role(public_role) == "unknown");
         if public_origin_was_unresolved && scenario.puppet_position == Some(position) {
             // Generated Puppet has no stable Evil origin role by definition,
-            // but its erased Villager identity is still missing from the
-            // partial Start model.
-            return true;
+            // but its erased Villager identity is missing unless the exact
+            // ordered Puppeteer trace retained it.
+            return scenario.puppeteer_trace.is_none();
         }
         let Some(role) = stable_evil_origin_role_at(position, scenario, state) else {
             return false;
@@ -4294,7 +4294,8 @@ fn current_has_unresolved_start_identity(
                 "twinminion" => scenario.twin_trace.is_none(),
                 // These writers still have deliberately partial general Start
                 // models (erased Puppet identity and copied-Start side effects).
-                "puppeteer" | "shaman" => true,
+                "puppeteer" => scenario.puppeteer_trace.is_none(),
+                "shaman" => true,
                 _ => false,
             }
     })
@@ -11374,6 +11375,8 @@ mod tests {
             chancellor_trace: None,
             chancellor_conversion: None,
             twin_trace: None,
+            pre_twin_current_roles: HashMap::new(),
+            puppeteer_trace: None,
         }
     }
 

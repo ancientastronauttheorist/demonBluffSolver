@@ -348,6 +348,8 @@ mod tests {
             chancellor_trace: None,
             chancellor_conversion: None,
             twin_trace: None,
+            pre_twin_current_roles: HashMap::new(),
+            puppeteer_trace: None,
         }
     }
 

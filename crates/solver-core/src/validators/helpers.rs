@@ -1,6 +1,7 @@
 /// Shared helper functions used by all validators.
 
 use crate::knowledge_base::{get_card, normalize_role};
+use crate::puppeteer::current_data_after_puppeteer_at;
 use crate::twin::current_data_after_twin_at;
 use crate::types::{GameState, Scenario};
 
@@ -90,6 +91,9 @@ fn pre_twin_current_data_role_at(
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<String> {
+    if let Some(role) = scenario.pre_twin_current_roles.get(&pos) {
+        return Some(role.clone());
+    }
     if scenario.puppet_position != Some(pos) {
         if let Some(role) = stable_evil_origin_role_at(pos, scenario, state) {
             return Some(role.to_string());
@@ -127,7 +131,9 @@ pub fn current_data_role_at(
         current = current_data_after_twin_at(pos, current.as_deref(), trace);
     }
 
-    if scenario.puppet_position == Some(pos) {
+    if let Some(trace) = scenario.puppeteer_trace.as_ref() {
+        current = current_data_after_puppeteer_at(pos, current.as_deref(), trace);
+    } else if scenario.puppet_position == Some(pos) {
         current = Some("Puppet".to_string());
     }
 
@@ -147,6 +153,23 @@ pub fn current_data_role_at(
     }
 
     current
+}
+
+/// Villager identity saved by Puppeteer before replacing `pos` with Puppet
+/// current data. This is copied/bluff provenance, not the current role.
+pub fn puppeteer_erased_villager_role_at<'a>(
+    pos: u8,
+    scenario: &'a Scenario,
+) -> Option<&'a str> {
+    let trace = scenario.puppeteer_trace.as_ref()?;
+    match &trace.outcome {
+        crate::types::PuppeteerStartOutcome::Converted {
+            target_position,
+            erased_villager_role,
+            ..
+        } if *target_position == pos => Some(erased_villager_role.as_str()),
+        _ => None,
+    }
 }
 
 /// Compatibility name for the modeled current CharacterData role.
@@ -289,6 +312,8 @@ mod truth_status_tests {
             chancellor_trace: None,
             chancellor_conversion: None,
             twin_trace: None,
+            pre_twin_current_roles: HashMap::new(),
+            puppeteer_trace: None,
         }
     }
 

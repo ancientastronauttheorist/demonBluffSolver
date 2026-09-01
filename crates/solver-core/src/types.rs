@@ -566,6 +566,20 @@ pub struct Scenario {
     /// legacy scenarios and until ordered scenario generation supplies it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub twin_trace: Option<TwinTrace>,
+    /// Exact current CharacterData map immediately before Twin Minion's
+    /// ordered Start slot. Empty on legacy and partial ordered scenarios.
+    #[serde(
+        default,
+        skip_serializing_if = "HashMap::is_empty",
+        serialize_with = "serialize_int_key_map",
+        deserialize_with = "deserialize_int_key_map_str"
+    )]
+    pub pre_twin_current_roles: HashMap<u8, String>,
+    /// Exact Puppeteer writer replay after Twin Minion. This preserves the
+    /// erased Villager identity independently of the target's current Puppet
+    /// data and stable physical provenance.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub puppeteer_trace: Option<PuppeteerTrace>,
 }
 
 impl Scenario {
@@ -1026,6 +1040,20 @@ mod tests {
                     neighbor_pre_swap_role: "Witness".to_string(),
                 },
             }),
+            pre_twin_current_roles: HashMap::from([
+                (3, "Pooka".to_string()),
+                (4, "Witness".to_string()),
+                (6, "Twin Minion".to_string()),
+            ]),
+            puppeteer_trace: Some(PuppeteerTrace {
+                actor_position: 7,
+                outcome: PuppeteerStartOutcome::Converted {
+                    candidate_occurrence_index: 0,
+                    neighbor_side: PuppeteerNeighborSide::Previous,
+                    target_position: 6,
+                    erased_villager_role: "Witness".to_string(),
+                },
+            }),
         };
         let json = serde_json::to_value(&scenario).unwrap();
         // Keys must be strings in JSON
@@ -1053,6 +1081,13 @@ mod tests {
             json["twin_trace"]["outcome"]["neighbor_pre_swap_role"],
             "Witness"
         );
+        assert_eq!(json["pre_twin_current_roles"]["4"], "Witness");
+        assert_eq!(json["puppeteer_trace"]["actor_position"], 7);
+        assert_eq!(json["puppeteer_trace"]["outcome"]["kind"], "converted");
+        assert_eq!(
+            json["puppeteer_trace"]["outcome"]["erased_villager_role"],
+            "Witness"
+        );
         // Round-trip
         let back: Scenario = serde_json::from_value(json).unwrap();
         assert_eq!(back.evil_positions.get(&3), Some(&"Pooka".to_string()));
@@ -1078,6 +1113,8 @@ mod tests {
             vec![4]
         );
         assert_eq!(back.twin_trace, scenario.twin_trace);
+        assert_eq!(back.pre_twin_current_roles, scenario.pre_twin_current_roles);
+        assert_eq!(back.puppeteer_trace, scenario.puppeteer_trace);
     }
 
     #[test]
