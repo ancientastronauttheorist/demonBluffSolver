@@ -66,7 +66,9 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   closed with no solver delta
 - [x] Puppet — no issues
 - [x] Puppeteer — no issues
-- [x] Shaman — guaranteed duplicate not enforced
+- [x] Shaman — guaranteed duplicate enforced; native source/destination history
+  tracked; exact no-Twin Puppeteer-to-Shaman composition now rebuilds the live
+  Villager pool after Puppet conversion and preserves both ordered traces
 - [x] Twin Minion — full managed `Marionette` boundary native-audited; ordered
   Start swaps current `CharacterData` with one alive neighbour of a selected
   current Demon while preserving physical alignment, status, resistance, and
@@ -75,8 +77,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   identity, and erased Puppet Villager provenance. A second atomic slice now
   crosses Twin and Shaman traces when every Twin endpoint is a proven
   non-Villager, including relocated Shaman dispatch and the no-Demon path.
-  Candidate-changing mixed-writer replay remains open; stable Twin/Demon
-  adjacency is not valid.
+  A third exact slice composes deterministic Puppeteer conversion directly into
+  Shaman's later ordered Villager draw on supported no-Twin boards, so the
+  erased Puppet role cannot leak back into Shaman history. Candidate-changing
+  mixed-writer replay remains open; stable Twin/Demon adjacency is not valid.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues

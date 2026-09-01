@@ -507,7 +507,7 @@ class Scenario:
     shaman_trace: Optional[ShamanTrace] = None
     # Generated solver output only; legacy scenarios intentionally omit it.
     twin_trace: Optional[TwinTrace] = None
-    # Exact pre-Twin CharacterData map for atomically replayed Start slices.
+    # Exact pre-first-writer CharacterData map for atomically replayed slices.
     pre_twin_current_roles: dict[int, str] = field(default_factory=dict)
     # Exact post-Twin Puppeteer conversion and erased-role provenance.
     puppeteer_trace: Optional[PuppeteerTrace] = None
@@ -635,7 +635,7 @@ def _pre_twin_current_role_at(
     scenario: Scenario,
     state: GameState,
 ) -> Optional[str]:
-    """Current CharacterData immediately before an exact Twin replay."""
+    """Current CharacterData immediately before the first exact writer."""
     if pos in scenario.pre_twin_current_roles:
         return scenario.pre_twin_current_roles[pos]
 

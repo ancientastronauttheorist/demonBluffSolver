@@ -262,6 +262,16 @@ It rejects the entire ordered state if even one Twin branch touches a Villager
 or unknown endpoint, and continues to exclude copied Bounty Hunter because that
 immediate copied-Start alignment writer is not modeled here.
 
+The exact no-Twin Puppeteer slice now composes the other shipped writer order
+directly. On trusted no-Outcast boards with exactly one Puppeteer, one Shaman,
+fully dealt Lilis Demons, and one deterministic non-Saint Villager neighbour,
+the solver enumerates the complete initial Villager occurrence map, applies
+Puppet's full replacement, and only then builds Shaman's ordered Villager
+source/destination pairs. The erased Villager identity remains Puppeteer
+provenance and cannot re-enter Shaman's pool. Both traces and all three
+`MessedUpByEvil` attempts are preserved. Ambiguous neighbour surfaces,
+preserved-status/runtime-data roles, or enumeration caps fall back atomically.
+
 The pure corruption replay also models the latent ordinary-runtime-Good copied
 Plague Doctor callback without exposing it as a normal scenario root. It runs
 after every global Plague Doctor and before the destination marker and global

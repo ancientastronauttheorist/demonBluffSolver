@@ -265,10 +265,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     writer branches; and re-enable card and historical validators only for the
     resulting exact supported worlds.
   - [ ] Complete the remaining general ordered replay beyond the exact gated
-    Twin/Puppeteer and structural Twin/Shaman slices: candidate-changing mixed
-    writer pools, duplicate mutators, and probability-exact occurrence
-    weighting. Strict current observations remain fail-closed for inferred
-    incomplete writers.
+    Twin/Puppeteer, Puppeteer/Shaman, and structural Twin/Shaman slices:
+    candidate-changing mixed writer pools, duplicate mutators, and probability-
+    exact occurrence weighting. Strict current observations remain fail-closed
+    for inferred incomplete writers.
     - [x] Implement the pure post-Twin Puppeteer boundary: select the first
       current actor, preserve physical previous/next occurrences, filter exact
       real Villagers, remove only the first Saint occurrence, make nonempty
@@ -281,6 +281,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       the Puppeteer actor and target, preserve erased-role provenance, validate
       exact current/public evidence, and fall back wholesale on unsupported or
       capped inputs without resurrecting exact contradictions.
+    - [x] Integrate an atomic exact Puppeteer-to-Shaman scenario slice for
+      trusted no-Outcast boards with exactly those two Minions, fully dealt
+      Lilis Demons, and one deterministic non-Saint Villager neighbour for
+      Puppeteer: enumerate the complete initial Villager occurrence map, replace
+      the selected identity with Puppet before constructing Shaman's ordered
+      Villager pairs, preserve both writer traces and all three marker attempts,
+      prevent the erased Puppet identity from re-entering Shaman provenance,
+      validate exact final current/public evidence, and fall back wholesale on
+      ambiguity, preserved-state hazards, or caps.
     - [x] Cross the existing ordered Shaman trace with every exact Twin outcome
       when all possible Twin endpoints are proven structural non-Villagers, so
       the live Shaman candidate pool is invariant even if Shaman data relocates

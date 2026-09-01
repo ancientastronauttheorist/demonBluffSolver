@@ -24,7 +24,7 @@ class _DummyState:
         return {"n_cards": 5, "n_evil": 2}
 
 
-def _solver_response(trace_marker=..., role_map_marker=...):
+def _solver_response(trace_marker=..., role_map_marker=..., shaman_marker=...):
     scenario = {
         "evil_positions": {"1": "Puppeteer", "2": "Twin Minion"},
     }
@@ -32,6 +32,8 @@ def _solver_response(trace_marker=..., role_map_marker=...):
         scenario["puppeteer_trace"] = trace_marker
     if role_map_marker is not ...:
         scenario["pre_twin_current_roles"] = role_map_marker
+    if shaman_marker is not ...:
+        scenario["shaman_trace"] = shaman_marker
     return {
         "definite_evil": [],
         "definite_good": [],
@@ -47,11 +49,15 @@ class PuppeteerTraceBridgeTests(unittest.TestCase):
     def setUp(self):
         rust_solver.clear_solver_cache()
 
-    def _bridge(self, trace_marker=..., role_map_marker=...):
+    def _bridge(self, trace_marker=..., role_map_marker=..., shaman_marker=...):
         with patch.object(
             rust_solver,
             "rust_solve",
-            return_value=_solver_response(trace_marker, role_map_marker),
+            return_value=_solver_response(
+                trace_marker,
+                role_map_marker,
+                shaman_marker,
+            ),
         ):
             return rust_solver.rust_solve_to_objects(_DummyState())
 
@@ -219,6 +225,55 @@ class PuppeteerTraceBridgeTests(unittest.TestCase):
         self.assertEqual(effective_role_at(4, scenario, state), "Puppeteer")
         self.assertEqual(effective_role_at(5, scenario, state), "Puppet")
         self.assertEqual(puppet_erased_role_at(5, scenario), "Scout")
+
+    def test_exact_no_twin_payload_replays_puppeteer_before_shaman(self):
+        raw_puppeteer = {
+            "actor_position": 1,
+            "outcome": {
+                "kind": "converted",
+                "candidate_occurrence_index": 0,
+                "neighbor_side": "next",
+                "target_position": 2,
+                "erased_villager_role": "Lover",
+            },
+        }
+        raw_roles = {
+            "1": "Puppeteer",
+            "2": "Lover",
+            "3": "Shaman",
+            "4": "Scout",
+            "5": "Witness",
+        }
+        raw_shaman = {
+            "source_position": 4,
+            "target_position": 5,
+            "copied_role": "Scout",
+            "target_previous_roles": ["Witness"],
+        }
+        scenario = self._bridge(
+            raw_puppeteer,
+            raw_roles,
+            raw_shaman,
+        ).surviving_scenarios[0]
+        state = GameState(
+            n_cards=5,
+            deck=DeckComposition([], [], ["Puppeteer", "Shaman"], []),
+            cards=[
+                CardInfo(1, "Puppeteer"),
+                CardInfo(2, "Lover"),
+                CardInfo(3, "Shaman"),
+                CardInfo(4, "Scout"),
+                CardInfo(5, "Scout"),
+            ],
+        )
+
+        self.assertEqual(scenario.shaman_trace.source_position, 4)
+        self.assertEqual(scenario.shaman_trace.target_position, 5)
+        self.assertEqual(scenario.shaman_trace.target_previous_roles, ["Witness"])
+        self.assertEqual(effective_role_at(2, scenario, state), "Puppet")
+        self.assertEqual(puppet_erased_role_at(2, scenario), "Lover")
+        self.assertEqual(effective_role_at(4, scenario, state), "Scout")
+        self.assertEqual(effective_role_at(5, scenario, state), "Scout")
 
     def test_exact_no_candidate_ignores_legacy_scalar_overlay(self):
         state = GameState(

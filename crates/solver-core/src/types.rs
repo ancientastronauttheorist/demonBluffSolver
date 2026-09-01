@@ -566,8 +566,10 @@ pub struct Scenario {
     /// legacy scenarios and until ordered scenario generation supplies it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub twin_trace: Option<TwinTrace>,
-    /// Exact current CharacterData map immediately before Twin Minion's
-    /// ordered Start slot. Empty on legacy and partial ordered scenarios.
+    /// Exact current CharacterData map immediately before the first modeled
+    /// ordered identity writer. This is the pre-Twin map when Twin is present
+    /// and the pre-Puppeteer map in the exact no-Twin Puppeteer/Shaman slice.
+    /// Empty on legacy and partial ordered scenarios.
     #[serde(
         default,
         skip_serializing_if = "HashMap::is_empty",
@@ -575,9 +577,10 @@ pub struct Scenario {
         deserialize_with = "deserialize_int_key_map_str"
     )]
     pub pre_twin_current_roles: HashMap<u8, String>,
-    /// Exact Puppeteer writer replay after Twin Minion. This preserves the
-    /// erased Villager identity independently of the target's current Puppet
-    /// data and stable physical provenance.
+    /// Exact Puppeteer writer replay at its ordered Start slot, after Twin
+    /// Minion when present. This preserves the erased Villager identity
+    /// independently of the target's current Puppet data and stable physical
+    /// provenance.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub puppeteer_trace: Option<PuppeteerTrace>,
 }

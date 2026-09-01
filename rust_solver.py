@@ -540,7 +540,7 @@ def _parse_puppeteer_trace(raw_trace, n_cards: int):
 
 
 def _parse_pre_twin_current_roles(raw_roles, n_cards: int) -> dict[int, str]:
-    """Parse the complete pre-Twin CharacterData map emitted by Rust."""
+    """Parse the complete pre-first-writer CharacterData map from Rust."""
     if raw_roles is None:
         return {}
     if type(raw_roles) is not dict:

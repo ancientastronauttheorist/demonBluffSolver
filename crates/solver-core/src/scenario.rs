@@ -12,6 +12,7 @@ use crate::knowledge_base::{
     BakerPreservedRuntimeClass, Faction,
 };
 use crate::puppeteer::{enumerate_puppeteer_traces, role_after_puppeteer};
+use crate::shaman::{enumerate_shaman_traces, role_after_shaman};
 use crate::twin::{enumerate_twin_traces, role_after_twin};
 use crate::types::{
     BoardCountProvenance, ChancellorTrace, GameState, PuppeteerStartOutcome,
@@ -94,6 +95,15 @@ struct ExactTwinPuppeteerSemanticKey {
     pre_twin_current_roles: Vec<(u8, String)>,
     twin_trace: TwinTrace,
     puppeteer_trace: PuppeteerTrace,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct ExactPuppeteerShamanSemanticKey {
+    evil_positions: Vec<(u8, String)>,
+    puppet_position: u8,
+    pre_puppeteer_current_roles: Vec<(u8, String)>,
+    puppeteer_trace: PuppeteerTrace,
+    shaman_trace: ShamanTrace,
 }
 
 impl std::ops::Deref for EvilPlacement {
@@ -206,6 +216,25 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
             let mut branch = state.clone();
             branch.executed_evil_roles = executed_evil_roles.clone();
             match build_exact_twin_puppeteer_scenarios(&branch) {
+                Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
+                None => {
+                    ordered_complete = false;
+                    break;
+                }
+            }
+        }
+        if ordered_complete {
+            return ordered_scenarios;
+        }
+    }
+
+    if supports_exact_puppeteer_shaman_start_slice(state) {
+        let mut ordered_scenarios = Vec::new();
+        let mut ordered_complete = true;
+        for executed_evil_roles in &executed_role_branches {
+            let mut branch = state.clone();
+            branch.executed_evil_roles = executed_evil_roles.clone();
+            match build_exact_puppeteer_shaman_scenarios(&branch) {
                 Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
                 None => {
                     ordered_complete = false;
@@ -827,6 +856,7 @@ fn build_scenarios_with_start_mode(
 
 const EXACT_TWIN_PUPPETEER_ASSIGNMENT_CAP: usize = 4_096;
 const EXACT_TWIN_PUPPETEER_SCENARIO_CAP: usize = 65_536;
+const EXACT_PUPPETEER_SHAMAN_SCENARIO_CAP: usize = 65_536;
 
 fn is_exact_slice_villager_role(role: &str) -> bool {
     normalize_role(role) == "saint"
@@ -882,6 +912,56 @@ fn supports_ordered_twin_puppeteer_start_slice(state: &GameState) -> bool {
         return false;
     };
     demons as usize == state.deck.demons.len()
+        && villagers as usize <= state.deck.villagers.len()
+        && villagers as usize + demons as usize + 2 == state.n_cards as usize
+}
+
+/// State-level gate for the first exact Puppeteer -> Shaman replay.
+///
+/// The builder further requires Puppeteer to have one real non-Saint
+/// Villager neighbour and one non-Villager neighbour in every surviving
+/// structural placement. Keeping the pool here free of earlier writers and
+/// preserved-status/runtime-data hazards makes the two writer traces exact.
+fn supports_exact_puppeteer_shaman_start_slice(state: &GameState) -> bool {
+    if state.n_cards == 0
+        || state.board_count_provenance != BoardCountProvenance::TrustedPreStart
+        || state.board_outcast_count != Some(0)
+        || !state.deck.outcasts.is_empty()
+        || state.board_minion_count != Some(2)
+        || state.deck.minions.len() != 2
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "puppeteer")
+            .count()
+            != 1
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "shaman")
+            .count()
+            != 1
+        || state.deck.demons.iter().any(|role| normalize_role(role) != "lilis")
+        || state.deck.villagers.iter().any(|role| {
+            matches!(
+                normalize_role(role).as_str(),
+                "alchemist" | "baker" | "bountyhunter" | "confessor" | "saint"
+            ) || !is_exact_slice_villager_role(role)
+        })
+        || state.pd_corruption_target.is_some()
+    {
+        return false;
+    }
+
+    let (Some(villagers), Some(demons)) =
+        (state.board_villager_count, state.board_demon_count)
+    else {
+        return false;
+    };
+    villagers >= 3
+        && demons as usize == state.deck.demons.len()
         && villagers as usize <= state.deck.villagers.len()
         && villagers as usize + demons as usize + 2 == state.n_cards as usize
 }
@@ -974,20 +1054,13 @@ fn exact_post_puppeteer_map(
         .collect()
 }
 
-fn exact_twin_puppeteer_public_evidence_matches(
+fn exact_puppeteer_public_evidence_matches(
     state: &GameState,
     stable_evil_positions: &HashSet<u8>,
-    twin_trace: &TwinTrace,
+    moved_twin_position: Option<u8>,
     puppeteer_trace: &PuppeteerTrace,
-    post_puppeteer_roles: &HashMap<u8, String>,
+    final_current_roles: &HashMap<u8, String>,
 ) -> bool {
-    let moved_twin_position = match twin_trace.outcome {
-        TwinStartOutcome::Swap {
-            neighbor_position,
-            ..
-        } if neighbor_position != twin_trace.actor_position => Some(neighbor_position),
-        _ => None,
-    };
     let converted = match &puppeteer_trace.outcome {
         PuppeteerStartOutcome::Converted {
             target_position,
@@ -1013,7 +1086,7 @@ fn exact_twin_puppeteer_public_evidence_matches(
         {
             continue;
         }
-        if !post_puppeteer_roles.get(&card.position).is_some_and(|role| {
+        if !final_current_roles.get(&card.position).is_some_and(|role| {
             normalize_role(role) == normalize_role(&card.apparent_role)
         }) {
             return false;
@@ -1025,7 +1098,7 @@ fn exact_twin_puppeteer_public_evidence_matches(
         .iter()
         .chain(state.executed_good_roles.iter())
     {
-        if !post_puppeteer_roles.get(&position).is_some_and(|role| {
+        if !final_current_roles.get(&position).is_some_and(|role| {
             normalize_role(role) == normalize_role(observed_role)
         }) {
             return false;
@@ -1034,7 +1107,7 @@ fn exact_twin_puppeteer_public_evidence_matches(
     for result in &state.slayer_results {
         if result.killed {
             if let Some(observed_role) = result.revealed_role.as_deref() {
-                if !post_puppeteer_roles
+                if !final_current_roles
                     .get(&result.target_pos)
                     .is_some_and(|role| normalize_role(role) == normalize_role(observed_role))
                 {
@@ -1044,6 +1117,29 @@ fn exact_twin_puppeteer_public_evidence_matches(
         }
     }
     true
+}
+
+fn exact_twin_puppeteer_public_evidence_matches(
+    state: &GameState,
+    stable_evil_positions: &HashSet<u8>,
+    twin_trace: &TwinTrace,
+    puppeteer_trace: &PuppeteerTrace,
+    post_puppeteer_roles: &HashMap<u8, String>,
+) -> bool {
+    let moved_twin_position = match twin_trace.outcome {
+        TwinStartOutcome::Swap {
+            neighbor_position,
+            ..
+        } if neighbor_position != twin_trace.actor_position => Some(neighbor_position),
+        _ => None,
+    };
+    exact_puppeteer_public_evidence_matches(
+        state,
+        stable_evil_positions,
+        moved_twin_position,
+        puppeteer_trace,
+        post_puppeteer_roles,
+    )
 }
 
 /// Build the aggressively gated exact Twin -> Puppeteer slice.
@@ -1200,6 +1296,201 @@ fn build_exact_twin_puppeteer_scenarios(state: &GameState) -> Option<Vec<Scenari
                     if scenarios.len() > EXACT_TWIN_PUPPETEER_SCENARIO_CAP {
                         return None;
                     }
+                }
+            }
+        }
+    }
+    Some(scenarios)
+}
+
+/// Build the aggressively gated exact Puppeteer -> Shaman slice.
+///
+/// `None` means at least one surviving structural branch could not be replayed
+/// exactly and the public wrapper must rebuild every branch through legacy.
+/// `Some(empty)` is a complete public contradiction or native Shaman failure
+/// and must not resurrect approximate worlds.
+fn build_exact_puppeteer_shaman_scenarios(state: &GameState) -> Option<Vec<Scenario>> {
+    let placements = generate_evil_placements(state);
+    let expected_villagers = state.board_villager_count? as usize;
+    let expected_demons = state.board_demon_count? as usize;
+    let current_order: Vec<u8> = (1..=state.n_cards).rev().collect();
+    let mut scenarios = Vec::new();
+    let mut seen = HashSet::new();
+
+    for generated_placement in placements {
+        if !apply_placement_constraints(&generated_placement.roles, state) {
+            continue;
+        }
+        let mut full_evil = generated_placement.roles.clone();
+        for (&position, role) in &state.executed_evil_roles {
+            full_evil.entry(position).or_insert_with(|| role.clone());
+        }
+
+        let stable_roles: HashMap<u8, String> = full_evil
+            .iter()
+            .filter(|(_, role)| normalize_role(role) != "puppet")
+            .map(|(&position, role)| (position, role.clone()))
+            .collect();
+        let puppeteer_count = stable_roles
+            .values()
+            .filter(|role| normalize_role(role) == "puppeteer")
+            .count();
+        let shaman_count = stable_roles
+            .values()
+            .filter(|role| normalize_role(role) == "shaman")
+            .count();
+        let demon_count = stable_roles
+            .values()
+            .filter(|role| normalize_role(role) == "lilis")
+            .count();
+        if puppeteer_count != 1
+            || shaman_count != 1
+            || demon_count != expected_demons
+            || stable_roles.len() != 2 + expected_demons
+            || stable_roles.values().any(|role| {
+                !matches!(
+                    normalize_role(role).as_str(),
+                    "puppeteer" | "shaman" | "lilis"
+                )
+            })
+        {
+            continue;
+        }
+
+        let stable_evil_positions: HashSet<u8> = stable_roles.keys().copied().collect();
+        let mut villager_positions: Vec<u8> = (1..=state.n_cards)
+            .filter(|position| !stable_evil_positions.contains(position))
+            .collect();
+        villager_positions.sort_unstable();
+        if villager_positions.len() != expected_villagers {
+            continue;
+        }
+        let villager_maps = enumerate_exact_villager_role_maps(state, &villager_positions)?;
+
+        for villager_map in villager_maps {
+            let mut pre_puppeteer_current_roles = stable_roles.clone();
+            pre_puppeteer_current_roles.extend(villager_map);
+
+            let puppeteer_position = pre_puppeteer_current_roles
+                .iter()
+                .find_map(|(&position, role)| {
+                    (normalize_role(role) == "puppeteer").then_some(position)
+                })?;
+            let raw_villager_neighbors = adjacent_positions(puppeteer_position, state.n_cards)
+                .into_iter()
+                .filter(|position| {
+                    pre_puppeteer_current_roles.get(position).is_some_and(|role| {
+                        role_faction_in_state(role, state) == Some(Faction::Villager)
+                    })
+                })
+                .count();
+            if raw_villager_neighbors != 1 {
+                return None;
+            }
+
+            let puppeteer_traces = enumerate_puppeteer_traces(
+                &pre_puppeteer_current_roles,
+                &current_order,
+                state.n_cards,
+            );
+            if puppeteer_traces.len() != 1 {
+                return None;
+            }
+            let puppeteer_trace = puppeteer_traces
+                .into_iter()
+                .next()
+                .expect("one exact Puppeteer trace checked above");
+            let replayed_puppet_position = match puppeteer_trace.outcome {
+                PuppeteerStartOutcome::Converted {
+                    candidate_occurrence_index: 0,
+                    target_position,
+                    ..
+                } => target_position,
+                _ => return None,
+            };
+            if generated_placement.puppet_position != Some(replayed_puppet_position) {
+                continue;
+            }
+
+            let post_puppeteer_roles: Option<HashMap<u8, String>> = (1..=state.n_cards)
+                .map(|position| {
+                    role_after_puppeteer(
+                        position,
+                        &pre_puppeteer_current_roles,
+                        &puppeteer_trace,
+                    )
+                    .map(|role| (position, role))
+                })
+                .collect();
+            let Some(post_puppeteer_roles) = post_puppeteer_roles else {
+                return None;
+            };
+            let shaman_traces = enumerate_shaman_traces(
+                &post_puppeteer_roles,
+                &current_order,
+                state.n_cards,
+            )?;
+
+            for shaman_trace in shaman_traces {
+                if shaman_trace.source_position == replayed_puppet_position
+                    || shaman_trace.target_position == replayed_puppet_position
+                {
+                    return None;
+                }
+                let final_current_roles: Option<HashMap<u8, String>> = (1..=state.n_cards)
+                    .map(|position| {
+                        role_after_shaman(position, &post_puppeteer_roles, &shaman_trace)
+                            .map(|role| (position, role))
+                    })
+                    .collect();
+                let Some(final_current_roles) = final_current_roles else {
+                    return None;
+                };
+                if !exact_puppeteer_public_evidence_matches(
+                    state,
+                    &stable_evil_positions,
+                    None,
+                    &puppeteer_trace,
+                    &final_current_roles,
+                ) {
+                    continue;
+                }
+
+                let key = ExactPuppeteerShamanSemanticKey {
+                    evil_positions: normalized_role_map_key(&full_evil),
+                    puppet_position: replayed_puppet_position,
+                    pre_puppeteer_current_roles: normalized_role_map_key(
+                        &pre_puppeteer_current_roles,
+                    ),
+                    puppeteer_trace: puppeteer_trace.clone(),
+                    shaman_trace: shaman_trace.clone(),
+                };
+                if !seen.insert(key) {
+                    continue;
+                }
+                let messed_up_by_evil = HashSet::from([
+                    replayed_puppet_position,
+                    shaman_trace.source_position,
+                    shaman_trace.target_position,
+                ]);
+                scenarios.push(Scenario {
+                    evil_positions: full_evil.clone(),
+                    puppet_position: Some(replayed_puppet_position),
+                    corrupted: HashSet::new(),
+                    pd_corrupted: None,
+                    doppelganger_position: None,
+                    drunk_position: None,
+                    alchemist_cures: HashMap::new(),
+                    messed_up_by_evil,
+                    shaman_trace: Some(shaman_trace),
+                    chancellor_trace: None,
+                    chancellor_conversion: None,
+                    twin_trace: None,
+                    pre_twin_current_roles: pre_puppeteer_current_roles.clone(),
+                    puppeteer_trace: Some(puppeteer_trace.clone()),
+                });
+                if scenarios.len() > EXACT_PUPPETEER_SHAMAN_SCENARIO_CAP {
+                    return None;
                 }
             }
         }
@@ -4662,6 +4953,36 @@ mod tests {
         state
     }
 
+    fn exact_puppeteer_shaman_state() -> GameState {
+        let mut state = GameState {
+            n_cards: 6,
+            n_evil: 4,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(3),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 2, 3, 6],
+            confirmed_evil: vec![1, 2, 3, 6],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec![
+            "Lover".to_string(),
+            "Scout".to_string(),
+            "Witness".to_string(),
+        ];
+        state.deck.minions = vec!["Puppeteer".to_string(), "Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.cards = vec![card(2, "Lover"), card(4, "Scout"), card(5, "Scout")];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Puppet".to_string()),
+            (3, "Shaman".to_string()),
+            (6, "Lilis".to_string()),
+        ]);
+        state
+    }
+
     #[test]
     fn exact_twin_puppeteer_slice_replays_reachable_overlap_and_erased_role() {
         let state = exact_twin_puppeteer_overlap_state();
@@ -4714,6 +5035,148 @@ mod tests {
             crate::validators::puppeteer_erased_villager_role_at(2, scenario),
             Some("Scout")
         );
+    }
+
+    #[test]
+    fn exact_puppeteer_shaman_slice_composes_both_writers_in_native_order() {
+        let state = exact_puppeteer_shaman_state();
+        assert!(supports_exact_puppeteer_shaman_start_slice(&state));
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 2);
+        assert!(scenarios
+            .iter()
+            .all(|scenario| crate::validators::check_scenario(scenario, &state)));
+        assert!(scenarios.iter().all(|scenario| {
+            let puppeteer = scenario
+                .puppeteer_trace
+                .as_ref()
+                .expect("the exact Puppeteer writer is preserved");
+            let shaman = scenario
+                .shaman_trace
+                .as_ref()
+                .expect("the exact later Shaman writer is preserved");
+            matches!(
+                &puppeteer.outcome,
+                PuppeteerStartOutcome::Converted {
+                    candidate_occurrence_index: 0,
+                    target_position: 2,
+                    erased_villager_role,
+                    ..
+                } if normalize_role(erased_villager_role) == "lover"
+            )
+                && puppeteer.actor_position == 1
+                && HashSet::from([shaman.source_position, shaman.target_position])
+                    == HashSet::from([4, 5])
+                && normalize_role(&shaman.copied_role) == "scout"
+                && shaman.target_previous_roles.len() == 1
+                && normalize_role(&shaman.target_previous_roles[0]) == "witness"
+                && scenario.messed_up_by_evil == HashSet::from([2, 4, 5])
+                && scenario.twin_trace.is_none()
+                && scenario.pre_twin_current_roles.len() == 6
+                && crate::validators::current_data_role_at(2, scenario, &state).as_deref()
+                    == Some("Puppet")
+                && crate::validators::current_data_role_at(4, scenario, &state).as_deref()
+                    == Some("Scout")
+                && crate::validators::current_data_role_at(5, scenario, &state).as_deref()
+                    == Some("Scout")
+        }));
+        assert_eq!(
+            scenarios
+                .iter()
+                .map(|scenario| {
+                    let trace = scenario
+                        .shaman_trace
+                        .as_ref()
+                        .expect("exact Shaman trace");
+                    (trace.source_position, trace.target_position)
+                })
+                .collect::<HashSet<_>>(),
+            HashSet::from([(4, 5), (5, 4)])
+        );
+    }
+
+    #[test]
+    fn exact_puppeteer_shaman_contradiction_does_not_resurrect_legacy_worlds() {
+        let mut state = exact_puppeteer_shaman_state();
+        state.cards[2].apparent_role = "Witness".to_string();
+
+        let exact = build_exact_puppeteer_shaman_scenarios(&state)
+            .expect("the exact replay should complete instead of falling back");
+        assert!(exact.is_empty());
+        assert!(build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn exact_puppeteer_shaman_key_preserves_converged_direction_traces() {
+        let mut state = exact_puppeteer_shaman_state();
+        state.deck.villagers[2] = "Scout".to_string();
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 2);
+        assert_eq!(
+            scenarios[0].pre_twin_current_roles,
+            scenarios[1].pre_twin_current_roles
+        );
+        assert!(scenarios.iter().all(|scenario| {
+            crate::validators::current_data_role_at(4, scenario, &state).as_deref()
+                == Some("Scout")
+                && crate::validators::current_data_role_at(5, scenario, &state).as_deref()
+                    == Some("Scout")
+        }));
+        assert_eq!(
+            scenarios
+                .iter()
+                .map(|scenario| {
+                    let trace = scenario
+                        .shaman_trace
+                        .as_ref()
+                        .expect("exact Shaman trace");
+                    (trace.source_position, trace.target_position)
+                })
+                .collect::<HashSet<_>>(),
+            HashSet::from([(4, 5), (5, 4)])
+        );
+    }
+
+    #[test]
+    fn ambiguous_puppeteer_neighbor_surface_falls_back_atomically() {
+        let mut state = exact_puppeteer_shaman_state();
+        state.executed = vec![1, 2, 3, 4];
+        state.confirmed_evil = vec![1, 2, 3, 4];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Puppeteer".to_string()),
+            (2, "Puppet".to_string()),
+            (3, "Lilis".to_string()),
+            (4, "Shaman".to_string()),
+        ]);
+        state.cards = vec![card(2, "Lover"), card(5, "Scout"), card(6, "Scout")];
+
+        assert!(supports_exact_puppeteer_shaman_start_slice(&state));
+        assert!(build_exact_puppeteer_shaman_scenarios(&state).is_none());
+        let scenarios = build_scenarios(&state);
+        assert!(!scenarios.is_empty());
+        assert!(scenarios.iter().all(|scenario| {
+            scenario.puppeteer_trace.is_none()
+                && scenario.twin_trace.is_none()
+                && scenario.pre_twin_current_roles.is_empty()
+                && scenario.shaman_trace.is_some()
+        }));
+    }
+
+    #[test]
+    fn preserved_state_hazards_stay_outside_exact_puppeteer_shaman_slice() {
+        for unsupported_role in [
+            "Alchemist",
+            "Baker",
+            "Bounty Hunter",
+            "Confessor",
+            "Saint",
+        ] {
+            let mut state = exact_puppeteer_shaman_state();
+            state.deck.villagers[2] = unsupported_role.to_string();
+            assert!(!supports_exact_puppeteer_shaman_start_slice(&state));
+        }
     }
 
     #[test]

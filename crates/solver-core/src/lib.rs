@@ -8,3 +8,4 @@ pub mod solver;
 pub mod strategy;
 pub mod twin;
 pub mod puppeteer;
+pub mod shaman;
