@@ -124,8 +124,8 @@ class RamblerMemoryParsingTests(unittest.TestCase):
             _memory_card(
                 3,
                 "Jester",
-                "#5 shut up!",
-                acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
+                "#5\nshut up!",
+                acted_infos=[{"desc": "#5\nshut up!", "targets": [5]}],
                 remaining=1,
             ),
             n_cards=6,
@@ -133,7 +133,7 @@ class RamblerMemoryParsingTests(unittest.TestCase):
 
         self.assertEqual(
             parsed.info_parsed,
-            {"silenced": True, "shut_up_target": 5},
+            {"jester_variant": "public_current", "shut_up_target": 5},
         )
 
     def test_current_rambler_quote_is_negative_interference_evidence(self):
@@ -212,8 +212,8 @@ class RamblerMemoryParsingTests(unittest.TestCase):
             _memory_card(
                 3,
                 "Jester",
-                "#5 shut up!",
-                acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
+                "#5\nshut up!",
+                acted_infos=[{"desc": "#5\nshut up!", "targets": [5]}],
                 remaining=0,
             ),
             n_cards=6,
@@ -221,7 +221,7 @@ class RamblerMemoryParsingTests(unittest.TestCase):
 
         self.assertEqual(
             parsed.info_parsed,
-            {"silenced": True, "shut_up_target": 5},
+            {"jester_variant": "public_current", "shut_up_target": 5},
         )
 
 
@@ -232,8 +232,8 @@ class RamblerSessionCaptureTests(unittest.TestCase):
         retained = _memory_card(
             3,
             "Jester",
-            "#5 shut up!",
-            acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
+            "#5\nshut up!",
+            acted_infos=[{"desc": "#5\nshut up!", "targets": [5]}],
             remaining=1,
         )
 

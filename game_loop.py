@@ -687,8 +687,148 @@ def card_empress(
 def card_witness(pos: int, affected_position: int) -> CardInfo:
     return CardInfo(pos, "Witness", info_parsed={"affected_position": affected_position})
 
-def card_jester(pos: int, targets: list[int], evil_count: int) -> CardInfo:
-    return CardInfo(pos, "Jester", info_parsed={"targets": targets, "evil_count": evil_count})
+def _validate_current_jester_targets(
+    targets,
+    *,
+    n_cards: Optional[int] = None,
+) -> list[int]:
+    """Validate the three physical selections retained in click order."""
+    if (
+        not isinstance(targets, list)
+        or len(targets) != 3
+        or any(type(target) is not int or target <= 0 for target in targets)
+        or len(set(targets)) != 3
+        or (
+            n_cards is not None
+            and (
+                type(n_cards) is not int
+                or n_cards <= 0
+                or any(target > n_cards for target in targets)
+            )
+        )
+    ):
+        raise ValueError(
+            "Current Jester targets must be three distinct current-board positions"
+        )
+    return list(targets)
+
+
+def _validate_jester_reference_ids(
+    references,
+    *,
+    n_cards: Optional[int] = None,
+) -> list[int]:
+    """Validate native Character IDs without inventing object uniqueness.
+
+    Juggler's picker guarantees three distinct physical Character objects, but
+    ActedInfo retains only their integer display IDs. Different objects may
+    carry the same ID, so duplicate references are valid even though solver
+    ``targets`` (physical board positions) must remain distinct.
+    """
+    if (
+        not isinstance(references, list)
+        or len(references) != 3
+        or any(type(reference) is not int or reference <= 0 for reference in references)
+        or (
+            n_cards is not None
+            and (
+                type(n_cards) is not int
+                or n_cards <= 0
+                or any(reference > n_cards for reference in references)
+            )
+        )
+    ):
+        raise ValueError(
+            "Current Jester references must be three current-board display IDs"
+        )
+    return list(references)
+
+
+def _jester_native_text(reference_ids: list[int], evil_count: int) -> str:
+    """Return Juggler's exact shipped result text."""
+    references = _validate_jester_reference_ids(reference_ids)
+    if type(evil_count) is not int or not 0 <= evil_count <= 3:
+        raise ValueError("Current Jester evil_count must be an integer from 0 to 3")
+    displayed = sorted(references)
+    result = (
+        "There is 1 Evil"
+        if evil_count == 1
+        else f"There are {evil_count} Evils"
+    )
+    return (
+        f"Among:\n#{displayed[0]}, #{displayed[1]}, #{displayed[2]}:\n"
+        f"{result}"
+    )
+
+
+def _parse_jester_native_text(
+    info_text,
+) -> Optional[tuple[list[int], int]]:
+    """Parse only one byte-exact current Jester result sentence."""
+    if not isinstance(info_text, str):
+        return None
+    match = re.fullmatch(
+        r"Among:\n#([1-9]\d*), #([1-9]\d*), #([1-9]\d*):\n"
+        r"There (?:is (1) Evil|are ([023]) Evils)",
+        info_text,
+    )
+    if match is None:
+        return None
+    displayed = [int(match.group(index)) for index in range(1, 4)]
+    evil_count = int(match.group(4) or match.group(5))
+    try:
+        displayed = _validate_jester_reference_ids(displayed)
+        expected = _jester_native_text(displayed, evil_count)
+    except ValueError:
+        return None
+    if displayed != sorted(displayed) or info_text != expected:
+        return None
+    return displayed, evil_count
+
+
+def card_jester(
+    pos: int,
+    targets: list[int],
+    evil_count: int,
+    *,
+    info_text: str = "",
+    jester_variant: Optional[str] = None,
+) -> CardInfo:
+    """Build Jester evidence while retaining unmarked archive compatibility."""
+    info = {"targets": targets, "evil_count": evil_count}
+    if jester_variant is not None:
+        if jester_variant != _PUBLIC_CURRENT_VARIANT:
+            raise ValueError("Unsupported Jester variant")
+        if type(pos) is not int or pos <= 0:
+            raise ValueError("Current Jester position must be positive")
+        current_targets = _validate_current_jester_targets(targets)
+        if type(evil_count) is not int or not 0 <= evil_count <= 3:
+            raise ValueError(
+                "Current Jester evil_count must be an integer from 0 to 3"
+            )
+        expected_text = _jester_native_text(current_targets, evil_count)
+        if not isinstance(info_text, str) or (
+            info_text and info_text != expected_text
+        ):
+            raise ValueError("Current Jester text must match its targets and count")
+        info = {
+            "targets": current_targets,
+            "evil_count": evil_count,
+            "jester_variant": jester_variant,
+        }
+        info_text = expected_text
+    return CardInfo(pos, "Jester", info_text=info_text, info_parsed=info)
+
+
+def _card_current_jester_no_info(pos: int) -> CardInfo:
+    """Mark a live Juggler shell without pretending its ability has fired."""
+    if type(pos) is not int or pos <= 0:
+        raise ValueError("Current Jester position must be positive")
+    return CardInfo(
+        pos,
+        "Jester",
+        info_parsed={"jester_variant": _PUBLIC_CURRENT_VARIANT},
+    )
 
 def card_jester_silenced(
     pos: int,
@@ -843,7 +983,15 @@ def _has_active_clue_result(card: CardInfo) -> bool:
         return True
     if role == "dreamer":
         return bool(info.get("target") or info.get("targets"))
-    if role in {"fortune_teller", "jester", "druid", "judge"}:
+    if role == "jester":
+        return bool(
+            info.get("callback_events")
+            or (
+                "targets" in info
+                and "evil_count" in info
+            )
+        )
+    if role in {"fortune_teller", "druid", "judge"}:
         return bool(info)
     return False
 
@@ -2379,6 +2527,484 @@ def _validate_druid_pending_token(
     normalized["expected_targets"] = targets
     return normalized
 
+
+_JESTER_RESULT_CALLBACK_FIELDS = _CALLBACK_COMMON_FIELDS | {
+    "targets",
+    "evil_count",
+}
+_JESTER_INTERRUPTION_CALLBACK_FIELDS = _CALLBACK_COMMON_FIELDS | {
+    "shut_up_target",
+}
+_JESTER_RAW_RESULT_FIELDS = {
+    "event_kind", "text", "references", "evil_count",
+}
+_JESTER_RAW_INTERRUPTION_FIELDS = {
+    "event_kind", "text", "references", "shut_up_target",
+}
+_JESTER_RAW_OPAQUE_FIELDS = {"event_kind", "text", "references"}
+_JESTER_PENDING_FIELDS = {
+    "activation_id",
+    "expected_targets",
+    "prior_callback_count",
+    "reset_generation",
+    "settled_reveal_count",
+}
+
+
+def _jester_shut_up_text(target: int) -> str:
+    """Return the exact shared Rambler replacement text."""
+    if type(target) is not int or target <= 0:
+        raise ValueError("Jester Rambler target must be a positive integer")
+    return f"#{target}\nshut up!"
+
+
+def _card_current_jester_interruption(
+    pos: int,
+    target: int,
+    *,
+    n_cards: Optional[int] = None,
+) -> CardInfo:
+    """Build one provenance-marked current Jester interruption surface."""
+    if type(pos) is not int or pos <= 0:
+        raise ValueError("Current Jester position must be positive")
+    if type(target) is not int or target <= 0:
+        raise ValueError("Jester Rambler target must be a positive integer")
+    if n_cards is not None and (pos > n_cards or target > n_cards):
+        raise ValueError("Current Jester interruption is outside the board")
+    return CardInfo(
+        pos,
+        "Jester",
+        info_text=_jester_shut_up_text(target),
+        info_parsed={
+            "shut_up_target": target,
+            "jester_variant": _PUBLIC_CURRENT_VARIANT,
+        },
+    )
+
+
+def _jester_scalar_callback(info: dict, *, n_cards: int) -> dict:
+    """Validate one non-resumable current scalar result."""
+    if not isinstance(info, dict):
+        raise ValueError("Jester info_parsed must be an object")
+    if info.get("jester_variant") != _PUBLIC_CURRENT_VARIANT:
+        raise ValueError("Current Jester evidence requires public_current provenance")
+    if set(info) != {"jester_variant", "targets", "evil_count"}:
+        if "shut_up_target" in info:
+            raise ValueError(
+                "A current Jester interruption cannot be persisted from manual "
+                "scalar input; recover its authenticated raw callback history"
+            )
+        raise ValueError("Current scalar Jester result has unsupported fields")
+    targets = _validate_current_jester_targets(
+        info.get("targets"),
+        n_cards=n_cards,
+    )
+    evil_count = info.get("evil_count")
+    if type(evil_count) is not int or not 0 <= evil_count <= 3:
+        raise ValueError("Current Jester evil_count must be an integer from 0 to 3")
+    return {
+        "event_kind": "jester_result",
+        "text": _jester_native_text(targets, evil_count),
+        "references": list(targets),
+        "targets": list(targets),
+        "evil_count": evil_count,
+    }
+
+
+def _validate_jester_callback_event(
+    event: dict,
+    *,
+    n_cards: int,
+    label: str,
+) -> dict:
+    """Validate one Jester-specific event after common group validation."""
+    kind = event.get("event_kind")
+    if kind == "jester_result":
+        if set(event) != _JESTER_RESULT_CALLBACK_FIELDS:
+            raise ValueError(f"{label} has unsupported Jester-result fields")
+        targets = _validate_current_jester_targets(
+            event.get("targets"),
+            n_cards=n_cards,
+        )
+        evil_count = event.get("evil_count")
+        if type(evil_count) is not int or not 0 <= evil_count <= 3:
+            raise ValueError(f"{label}.evil_count must be an integer from 0 to 3")
+        references = _validate_jester_reference_ids(
+            event.get("references"),
+            n_cards=n_cards,
+        )
+        expected = _jester_native_text(references, evil_count)
+        if event.get("text") != expected:
+            raise ValueError(f"{label}.text must exactly equal {expected!r}")
+        event["targets"] = targets
+        event["references"] = references
+        return event
+    if kind == "rambler_interruption":
+        if set(event) != _JESTER_INTERRUPTION_CALLBACK_FIELDS:
+            raise ValueError(f"{label} has unsupported interruption fields")
+        target = event.get("shut_up_target")
+        if type(target) is not int or not 1 <= target <= n_cards:
+            raise ValueError(f"{label}.shut_up_target is outside the board")
+        if event.get("text") != _jester_shut_up_text(target):
+            raise ValueError(f"{label}.text is not the exact interruption text")
+        if event.get("references") != [target]:
+            raise ValueError(f"{label}.references must be [{target}]")
+        return event
+    if kind == "opaque_real":
+        if set(event) != _CALLBACK_COMMON_FIELDS:
+            raise ValueError(f"{label} has unsupported opaque callback fields")
+        text = event.get("text")
+        if not isinstance(text, str) or not text:
+            raise ValueError(f"{label}.text must preserve a nonempty callback")
+        if _parse_jester_native_text(text) is not None or _looks_like_shut_up_text(text):
+            raise ValueError(f"{label}.text cannot hide a Jester/Rambler callback")
+        return event
+    raise ValueError(f"{label}.event_kind is unsupported")
+
+
+def _jester_callback_ledger(
+    info: dict,
+    *,
+    actor_position: int,
+    n_cards: int,
+    reveal_order: Optional[list[int]] = None,
+    baker_rule_version: Optional[str] = None,
+) -> list[dict]:
+    """Validate the strict ordered current-Jester callback ledger."""
+    if not isinstance(info, dict):
+        raise ValueError("Jester info_parsed must be an object")
+    if info.get("jester_variant") != _PUBLIC_CURRENT_VARIANT:
+        raise ValueError("Current Jester ledger requires public_current provenance")
+    if info.get("callback_ledger_variant") != _ORDERED_CALLBACK_LEDGER_VARIANT:
+        raise ValueError(
+            "Scalar-only current Jester evidence cannot be safely resumed; "
+            "restart the village from verified reveal history"
+        )
+    events = _validate_ordered_callback_groups(
+        info.get("callback_events"),
+        actor_position=actor_position,
+        n_cards=n_cards,
+        reveal_order=reveal_order,
+        baker_rule_version=baker_rule_version,
+    )
+    events = [
+        _validate_jester_callback_event(
+            event,
+            n_cards=n_cards,
+            label=f"Jester callback_events[{index}]",
+        )
+        for index, event in enumerate(events)
+    ]
+    for activation_id in range(1, events[-1]["activation_id"] + 1):
+        group = [event for event in events if event["activation_id"] == activation_id]
+        if group[0]["event_kind"] == "opaque_real" and (
+            len(group) != 2
+            or group[0]["dispatch_path"] != "real"
+            or group[1]["dispatch_path"] != "raw"
+            or group[1]["event_kind"] == "opaque_real"
+        ):
+            raise ValueError(
+                "An opaque real callback must be followed by one raw public "
+                "Jester callback in the same activation"
+            )
+        if group[-1]["event_kind"] == "opaque_real":
+            raise ValueError("A Jester activation cannot end with an opaque callback")
+        normal = [event for event in group if event["event_kind"] == "jester_result"]
+        if len(normal) == 2:
+            if normal[0]["targets"] != normal[1]["targets"]:
+                raise ValueError(
+                    "Both Jester-result callbacks in one activation must share "
+                    "the same physical click-order targets"
+                )
+            if normal[0]["references"] != normal[1]["references"]:
+                raise ValueError(
+                    "Both Jester-result callbacks in one activation must share "
+                    "the same native reference-ID chronology"
+                )
+
+    latest = events[-1]
+    common_fields = {
+        "jester_variant",
+        "callback_ledger_variant",
+        "callback_events",
+    }
+    if latest["event_kind"] == "jester_result":
+        if set(info) != common_fields | {"targets", "evil_count"}:
+            raise ValueError("Current Jester latest normal alias is malformed")
+        if (
+            info.get("targets") != latest["targets"]
+            or info.get("evil_count") != latest["evil_count"]
+        ):
+            raise ValueError("Current Jester latest alias must match the final callback")
+    else:
+        if set(info) != common_fields | {"shut_up_target"}:
+            raise ValueError("Current Jester latest interruption alias is malformed")
+        if info.get("shut_up_target") != latest["shut_up_target"]:
+            raise ValueError(
+                "Current Jester interruption alias must match the final callback"
+            )
+    return events
+
+
+def _stamp_jester_callback_group(
+    callbacks: list[dict],
+    *,
+    activation_id: int,
+    activation_evidence: str,
+    reset_generation: int,
+    settled_reveal_count: int,
+) -> list[dict]:
+    """Stamp one provable one- or two-dispatch Jester activation."""
+    if not 1 <= len(callbacks) <= 2:
+        raise ValueError("A newly captured Jester activation needs one or two callbacks")
+    if callbacks[-1].get("event_kind") == "opaque_real":
+        raise ValueError("A Jester activation is still awaiting its public callback")
+    if activation_evidence not in _CALLBACK_ACTIVATION_EVIDENCE:
+        raise ValueError("Jester activation evidence is unsupported")
+    if activation_evidence == "single_callback_suffix" and len(callbacks) != 1:
+        raise ValueError("single_callback_suffix can authenticate only one callback")
+    if activation_evidence == "same_activation_extension" and len(callbacks) != 2:
+        raise ValueError("same_activation_extension requires exactly two callbacks")
+    if type(reset_generation) is not int or reset_generation < 0:
+        raise ValueError("Jester reset generation must be nonnegative")
+    stamped = []
+    for callback_index, callback in enumerate(callbacks):
+        event = copy.deepcopy(callback)
+        event.update({
+            "activation_id": activation_id,
+            "activation_evidence": activation_evidence,
+            "callback_index": callback_index,
+            "dispatch_path": (
+                "either"
+                if len(callbacks) == 1
+                else "real" if callback_index == 0 else "raw"
+            ),
+            "reset_generation": reset_generation,
+            "settled_reveal_count": settled_reveal_count,
+        })
+        stamped.append(event)
+    if stamped[0]["event_kind"] == "opaque_real" and len(stamped) != 2:
+        raise ValueError("Opaque real callback has no matching raw Jester callback")
+    return stamped
+
+
+def _bind_jester_physical_targets(
+    callbacks: list[dict],
+    targets,
+    *,
+    n_cards: int,
+) -> list[dict]:
+    """Attach one proven physical picker chronology to normal callbacks."""
+    physical_targets = _validate_current_jester_targets(
+        targets,
+        n_cards=n_cards,
+    )
+    bound = copy.deepcopy(callbacks)
+    for callback in bound:
+        if callback.get("event_kind") == "jester_result":
+            callback["targets"] = list(physical_targets)
+    return bound
+
+
+def _infer_jester_physical_targets(
+    callbacks: list[dict],
+    *,
+    n_cards: int,
+) -> list[dict]:
+    """Use reference IDs as seats only when that mapping is unambiguous."""
+    normal = [
+        callback
+        for callback in callbacks
+        if callback.get("event_kind") == "jester_result"
+    ]
+    if not normal:
+        return copy.deepcopy(callbacks)
+    references = normal[0].get("references")
+    try:
+        physical_targets = _validate_current_jester_targets(
+            references,
+            n_cards=n_cards,
+        )
+    except ValueError as exc:
+        raise ValueError(
+            "Jester native reference IDs do not uniquely identify the three "
+            "physical picker targets; authenticated click provenance is required"
+        ) from exc
+    if any(callback.get("references") != references for callback in normal[1:]):
+        raise ValueError(
+            "Jester normal callbacks disagree on their native reference-ID "
+            "chronology"
+        )
+    return _bind_jester_physical_targets(
+        callbacks,
+        physical_targets,
+        n_cards=n_cards,
+    )
+
+
+def _jester_callback_signature(event: dict) -> dict:
+    """Return exactly the public fields stored in one raw ActedInfo."""
+    return {
+        "desc": event["text"],
+        "targets": copy.deepcopy(event["references"]),
+    }
+
+
+def _jester_interruption_records(
+    events: list[dict],
+    *,
+    speaker_position: int,
+) -> list[dict]:
+    """Project each independently replaced callback into global Rambler state."""
+    return [
+        {
+            "speaker_position": speaker_position,
+            "shut_up_target": event["shut_up_target"],
+        }
+        for event in events
+        if event.get("event_kind") == "rambler_interruption"
+    ]
+
+
+def _validate_jester_rambler_sync(
+    events: list[dict],
+    *,
+    speaker_position: int,
+    rambler_observations,
+) -> None:
+    """Require exact event-local parity with the shared Rambler ledger."""
+    if not isinstance(rambler_observations, list):
+        raise ValueError("Global Rambler evidence must be an array")
+    expected = _jester_interruption_records(
+        events,
+        speaker_position=speaker_position,
+    )
+    actual = []
+    for observation in rambler_observations:
+        if (
+            isinstance(observation, dict)
+            and observation.get("speaker_position") == speaker_position
+        ):
+            if set(observation) != {"speaker_position", "shut_up_target"}:
+                raise ValueError(
+                    "Same-speaker global Jester/Rambler evidence has unsupported fields"
+                )
+            actual.append(dict(observation))
+    if actual != expected:
+        raise ValueError(
+            "Persisted Jester interruptions disagree with the exact same-speaker "
+            "global Rambler evidence"
+        )
+
+
+def _apply_jester_callback_ledger(card: CardInfo, events: list[dict]) -> None:
+    """Install one validated ledger and its exact newest-value alias."""
+    latest = events[-1]
+    info = {
+        "jester_variant": _PUBLIC_CURRENT_VARIANT,
+        "callback_ledger_variant": _ORDERED_CALLBACK_LEDGER_VARIANT,
+        "callback_events": copy.deepcopy(events),
+    }
+    if latest["event_kind"] == "jester_result":
+        info["targets"] = list(latest["targets"])
+        info["evil_count"] = latest["evil_count"]
+    elif latest["event_kind"] == "rambler_interruption":
+        info["shut_up_target"] = latest["shut_up_target"]
+    else:
+        raise ValueError("Current Jester latest callback is not publicly usable")
+    card.info_parsed = info
+    card.info_text = latest["text"]
+
+
+def _validate_raw_jester_callbacks(callbacks, *, n_cards: int) -> list[dict]:
+    """Revalidate transient Jester callbacks before a session join."""
+    if not isinstance(callbacks, list):
+        raise ValueError("Jester raw callback history must be an array")
+    normalized = []
+    for index, raw_callback in enumerate(callbacks):
+        label = f"Jester raw callback[{index}]"
+        if not isinstance(raw_callback, dict):
+            raise ValueError(f"{label} must be an object")
+        callback = copy.deepcopy(raw_callback)
+        kind = callback.get("event_kind")
+        if kind == "jester_result":
+            if set(callback) != _JESTER_RAW_RESULT_FIELDS:
+                raise ValueError(f"{label} has unsupported result fields")
+            references = _validate_jester_reference_ids(
+                callback.get("references"),
+                n_cards=n_cards,
+            )
+            evil_count = callback.get("evil_count")
+            if type(evil_count) is not int or not 0 <= evil_count <= 3:
+                raise ValueError(f"{label}.evil_count must be an integer from 0 to 3")
+            if callback.get("text") != _jester_native_text(references, evil_count):
+                raise ValueError(f"{label}.text is not exact")
+            callback["references"] = references
+        elif kind == "rambler_interruption":
+            if set(callback) != _JESTER_RAW_INTERRUPTION_FIELDS:
+                raise ValueError(f"{label} has unsupported interruption fields")
+            target = callback.get("shut_up_target")
+            if type(target) is not int or not 1 <= target <= n_cards:
+                raise ValueError(f"{label}.shut_up_target is outside the board")
+            if callback.get("references") != [target]:
+                raise ValueError(f"{label}.references must equal [{target}]")
+            if callback.get("text") != _jester_shut_up_text(target):
+                raise ValueError(f"{label}.text is not exact")
+        elif kind == "opaque_real":
+            if set(callback) != _JESTER_RAW_OPAQUE_FIELDS:
+                raise ValueError(f"{label} has unsupported opaque fields")
+            text = callback.get("text")
+            if not isinstance(text, str) or not text:
+                raise ValueError(f"{label}.text must be nonempty")
+            if _parse_jester_native_text(text) is not None or _looks_like_shut_up_text(text):
+                raise ValueError(f"{label}.text cannot hide a Jester/Rambler callback")
+            callback["references"] = _validate_callback_references(
+                callback.get("references"),
+                n_cards=n_cards,
+                label=label,
+            )
+        else:
+            raise ValueError(f"{label}.event_kind is unsupported")
+        normalized.append(callback)
+    if normalized and normalized[-1]["event_kind"] == "opaque_real":
+        raise ValueError("Jester raw history is still awaiting its raw callback")
+    return normalized
+
+
+def _validate_jester_pending_token(
+    token,
+    *,
+    actor_position: int,
+    n_cards: int,
+    reveal_order: list[int],
+    reset_generation: int,
+    prior_callback_count: int,
+    next_activation_id: int,
+) -> dict:
+    """Validate a persisted automated Jester click token."""
+    if not isinstance(token, dict) or set(token) != _JESTER_PENDING_FIELDS:
+        raise ValueError("Pending Jester auto-use token is malformed")
+    settled = token.get("settled_reveal_count")
+    if (
+        type(settled) is not int
+        or not 1 <= settled <= len(reveal_order)
+        or actor_position not in reveal_order[:settled]
+    ):
+        raise ValueError("Pending Jester auto-use reveal boundary is invalid")
+    if token.get("reset_generation") != reset_generation:
+        raise ValueError("Pending Jester auto-use reset generation is stale")
+    if token.get("prior_callback_count") != prior_callback_count:
+        raise ValueError("Pending Jester auto-use callback prefix is stale")
+    if token.get("activation_id") != next_activation_id:
+        raise ValueError("Pending Jester auto-use activation ID is stale")
+    targets = _validate_current_jester_targets(
+        token.get("expected_targets"),
+        n_cards=n_cards,
+    )
+    normalized = copy.deepcopy(token)
+    normalized["expected_targets"] = targets
+    return normalized
+
 _BISHOP_PUBLIC_TYPES = ("Villager", "Outcast", "Minion", "Demon")
 
 
@@ -3205,6 +3831,313 @@ class DecisionLog:
 # GameSession
 # ============================================================
 
+def _prepare_current_jester_session_capture(
+    session,
+    card: CardInfo,
+    existing: Optional[CardInfo],
+    existing_role_key: Optional[str],
+) -> Optional[dict]:
+    """Validate and join one current Jester card without mutating the session."""
+    if (
+        card.apparent_role.lower().replace(" ", "_") != "jester"
+        or not isinstance(card.info_parsed, dict)
+        or card.info_parsed.get("jester_variant") != _PUBLIC_CURRENT_VARIANT
+    ):
+        return None
+
+    existing_current = (
+        existing is not None
+        and existing_role_key == "jester"
+        and isinstance(existing.info_parsed, dict)
+        and existing.info_parsed.get("jester_variant") == _PUBLIC_CURRENT_VARIANT
+    )
+    result = {
+        "noop": False,
+        "event_observed": False,
+        "raw_capture": False,
+        "generation_to_store": None,
+        "consume_pending": False,
+        "new_rambler_records": [],
+    }
+    raw_value = getattr(card, "_jester_raw_callbacks", None)
+    has_explicit_ledger = (
+        card.info_parsed.get("callback_ledger_variant") is not None
+        or "callback_events" in card.info_parsed
+    )
+    marker_only = set(card.info_parsed) == {"jester_variant"}
+
+    if raw_value is None:
+        if has_explicit_ledger:
+            incoming = _jester_callback_ledger(
+                card.info_parsed,
+                actor_position=card.position,
+                n_cards=session.n_cards,
+                reveal_order=session.reveal_order,
+                baker_rule_version=session.baker_rule_version,
+            )
+            if not existing_current:
+                raise ValueError(
+                    "An ordered Jester ledger requires authenticated raw "
+                    "callback provenance"
+                )
+            persisted = _jester_callback_ledger(
+                existing.info_parsed,
+                actor_position=card.position,
+                n_cards=session.n_cards,
+                reveal_order=session.reveal_order,
+                baker_rule_version=session.baker_rule_version,
+            )
+            _validate_jester_rambler_sync(
+                persisted,
+                speaker_position=card.position,
+                rambler_observations=session.rambler_shut_up_observations,
+            )
+            if incoming != persisted:
+                raise ValueError(
+                    "An ordered Jester ledger cannot be replaced without "
+                    "authenticated appended callbacks"
+                )
+            result["noop"] = True
+            return result
+        if marker_only:
+            if existing_current and existing.info_parsed.get(
+                "callback_ledger_variant"
+            ) == _ORDERED_CALLBACK_LEDGER_VARIANT:
+                result["noop"] = True
+            return result
+
+        scalar = _jester_scalar_callback(card.info_parsed, n_cards=session.n_cards)
+        if card.info_text != scalar["text"]:
+            raise ValueError("Current scalar Jester text must exactly match its payload")
+        if existing_current and existing.info_parsed.get(
+            "callback_ledger_variant"
+        ) == _ORDERED_CALLBACK_LEDGER_VARIANT:
+            raise ValueError(
+                "A strict Jester callback ledger cannot be replaced by "
+                "non-resumable scalar compatibility evidence"
+            )
+        result["event_observed"] = True
+        return result
+
+    result["raw_capture"] = True
+    if session.baker_rule_version != BAKER_RULE_VERSION:
+        raise ValueError(
+            "Current Jester callback capture requires verified "
+            "reveal_order/Baker provenance"
+        )
+    if (
+        not session.reveal_order
+        or len(session.reveal_order) > session.n_cards
+        or len(set(session.reveal_order)) != len(session.reveal_order)
+        or any(
+            type(position) is not int
+            or not 1 <= position <= session.n_cards
+            for position in session.reveal_order
+        )
+        or card.position not in session.reveal_order
+    ):
+        raise ValueError("Current Jester actor must be in the verified reveal prefix")
+
+    raw_callbacks = _validate_raw_jester_callbacks(
+        raw_value,
+        n_cards=session.n_cards,
+    )
+    prior_events: list[dict] = []
+    if existing_current:
+        if existing.info_parsed.get(
+            "callback_ledger_variant"
+        ) == _ORDERED_CALLBACK_LEDGER_VARIANT:
+            prior_events = _jester_callback_ledger(
+                existing.info_parsed,
+                actor_position=card.position,
+                n_cards=session.n_cards,
+                reveal_order=session.reveal_order,
+                baker_rule_version=session.baker_rule_version,
+            )
+        elif set(existing.info_parsed) != {"jester_variant"}:
+            raise ValueError(
+                "Scalar current Jester evidence cannot join an ordered callback ledger"
+            )
+    elif existing is not None and (
+        existing_role_key != "jester"
+        or bool(existing.info_text)
+        or bool(existing.info_parsed)
+    ):
+        raise ValueError(
+            "Authenticated current Jester callbacks may replace only an empty "
+            "same-role placeholder"
+        )
+
+    prior_signatures = [_jester_callback_signature(event) for event in prior_events]
+    raw_signatures = [_jester_callback_signature(event) for event in raw_callbacks]
+    if (
+        len(raw_signatures) < len(prior_signatures)
+        or raw_signatures[:len(prior_signatures)] != prior_signatures
+    ):
+        raise ValueError(
+            "Raw Jester callback history does not preserve the persisted prefix"
+        )
+    if raw_signatures == prior_signatures:
+        _validate_jester_rambler_sync(
+            prior_events,
+            speaker_position=card.position,
+            rambler_observations=session.rambler_shut_up_observations,
+        )
+        if not prior_events and not existing_current:
+            # A readable empty/passive history is an authenticated marker for
+            # a newly observed Jester, not an event ledger.
+            delattr(card, "_jester_raw_callbacks")
+            result["raw_capture"] = False
+            return result
+        result["noop"] = True
+        return result
+
+    suffix = raw_callbacks[len(prior_events):]
+    if len(suffix) > 2:
+        raise ValueError(
+            "New Jester callback suffix cannot be grouped into one provable activation"
+        )
+    has_generation = card.position in session.jester_reset_generations
+    if prior_events and not has_generation:
+        raise ValueError(
+            "Persisted Jester callback history has no matching session "
+            "reset-generation provenance"
+        )
+    session_generation = session.jester_reset_generations.get(
+        card.position,
+        session.lilis_nights_resolved,
+    )
+    if prior_events and prior_events[-1]["reset_generation"] > session_generation:
+        raise ValueError("Persisted Jester reset generation exceeds session history")
+    next_activation_id = prior_events[-1]["activation_id"] + 1 if prior_events else 1
+    pending = session.jester_pending_activations.get(card.position)
+    if pending is not None:
+        token = _validate_jester_pending_token(
+            pending,
+            actor_position=card.position,
+            n_cards=session.n_cards,
+            reveal_order=session.reveal_order,
+            reset_generation=session_generation,
+            prior_callback_count=len(prior_events),
+            next_activation_id=next_activation_id,
+        )
+        if any(
+            callback["event_kind"] == "jester_result"
+            for callback in suffix
+        ):
+            suffix = _bind_jester_physical_targets(
+                suffix,
+                token["expected_targets"],
+                n_cards=session.n_cards,
+            )
+        new_group = _stamp_jester_callback_group(
+            suffix,
+            activation_id=next_activation_id,
+            activation_evidence="auto_use_click",
+            reset_generation=session_generation,
+            settled_reveal_count=token["settled_reveal_count"],
+        )
+        merged_events = prior_events + new_group
+        result["consume_pending"] = True
+    else:
+        final_group = (
+            [
+                event for event in prior_events
+                if event["activation_id"] == prior_events[-1]["activation_id"]
+            ]
+            if prior_events else []
+        )
+        delayed_extension = (
+            len(suffix) == 1
+            and len(final_group) == 1
+            and final_group[0]["dispatch_path"] == "either"
+            and final_group[0]["reset_generation"] == session_generation
+            and card.position in session.used_abilities
+        )
+        if delayed_extension:
+            group_start = len(prior_events) - 1
+            extended_raw = raw_callbacks[group_start:]
+            if len(extended_raw) != 2:
+                raise ValueError(
+                    "Delayed Jester callback extension is not exactly the "
+                    "persisted event plus one appended callback"
+                )
+            extended_raw = _bind_jester_physical_targets(
+                extended_raw,
+                final_group[0].get("targets"),
+                n_cards=session.n_cards,
+            )
+            new_group = _stamp_jester_callback_group(
+                extended_raw,
+                activation_id=final_group[0]["activation_id"],
+                activation_evidence="same_activation_extension",
+                reset_generation=session_generation,
+                settled_reveal_count=final_group[0]["settled_reveal_count"],
+            )
+            merged_events = prior_events[:-1] + new_group
+        else:
+            last_generation = (
+                prior_events[-1]["reset_generation"] if prior_events else -1
+            )
+            if session_generation <= last_generation:
+                raise ValueError(
+                    "New Jester callback suffix has no unconsumed reset generation"
+                )
+            if not prior_events and len(raw_callbacks) != 1:
+                raise ValueError(
+                    "An initial Jester ledger attachment must contain exactly "
+                    "one raw callback"
+                )
+            generation_gap = session_generation - last_generation
+            if len(suffix) == 2 and generation_gap > 1:
+                raise ValueError(
+                    "A two-callback Jester suffix after skipped reset generations "
+                    "is ambiguous"
+                )
+            if not prior_events and session_generation == 0:
+                if len(suffix) != 1:
+                    raise ValueError(
+                        "Initial Jester history cannot prove a multi-callback activation"
+                    )
+                evidence = "single_callback_suffix"
+            else:
+                evidence = "session_reset_generation"
+            suffix = _infer_jester_physical_targets(
+                suffix,
+                n_cards=session.n_cards,
+            )
+            new_group = _stamp_jester_callback_group(
+                suffix,
+                activation_id=next_activation_id,
+                activation_evidence=evidence,
+                reset_generation=session_generation,
+                settled_reveal_count=len(session.reveal_order),
+            )
+            merged_events = prior_events + new_group
+
+    _apply_jester_callback_ledger(card, merged_events)
+    validated_events = _jester_callback_ledger(
+        card.info_parsed,
+        actor_position=card.position,
+        n_cards=session.n_cards,
+        reveal_order=session.reveal_order,
+        baker_rule_version=session.baker_rule_version,
+    )
+    _validate_jester_rambler_sync(
+        prior_events,
+        speaker_position=card.position,
+        rambler_observations=session.rambler_shut_up_observations,
+    )
+    result["new_rambler_records"] = _jester_interruption_records(
+        validated_events[len(prior_events):],
+        speaker_position=card.position,
+    )
+    result["generation_to_store"] = session_generation
+    result["event_observed"] = True
+    delattr(card, "_jester_raw_callbacks")
+    return result
+
+
 class GameSession:
     def __init__(self, n_cards: int, n_evil: int):
         self.n_cards = n_cards
@@ -3244,6 +4177,8 @@ class GameSession:
         # strongest available grouping evidence.
         self.druid_reset_generations: dict[int, int] = {}
         self.druid_pending_activations: dict[int, dict] = {}
+        self.jester_reset_generations: dict[int, int] = {}
+        self.jester_pending_activations: dict[int, dict] = {}
         self.terminal_loss_role: Optional[str] = None
         self.executed_current_roles: dict[int, str] = {}
         self.revealed_night_current_roles: dict[int, str] = {}
@@ -3381,6 +4316,8 @@ class GameSession:
         self.fortune_teller_rule_version = FORTUNE_TELLER_RULE_VERSION
         self.druid_reset_generations.clear()
         self.druid_pending_activations.clear()
+        self.jester_reset_generations.clear()
+        self.jester_pending_activations.clear()
         self.terminal_loss_role = None
         self.executed_current_roles.clear()
         self.revealed_night_current_roles.clear()
@@ -3506,13 +4443,16 @@ class GameSession:
         mark_active_result: bool = True,
     ):
         role_key = card.apparent_role.lower().replace(" ", "_")
+        variant_field = {
+            "druid": "druid_variant",
+            "jester": "jester_variant",
+        }.get(role_key)
         if (
-            role_key == "druid"
+            variant_field is not None
             and isinstance(card.info_parsed, dict)
-            and card.info_parsed.get("druid_variant")
-            == _PUBLIC_CURRENT_VARIANT
+            and card.info_parsed.get(variant_field) == _PUBLIC_CURRENT_VARIANT
         ):
-            # Normalize current Druid evidence on a private copy. A later
+            # Normalize current callback evidence on a private copy. A later
             # chronology/reveal-boundary rejection must leave the caller's
             # CardInfo byte-for-byte unchanged for recovery and diagnostics.
             source_card = card
@@ -3522,9 +4462,7 @@ class GameSession:
                 source_card.info_text,
                 copy.deepcopy(source_card.info_parsed),
             )
-            for attribute in (
-                "_druid_raw_callbacks",
-            ):
+            for attribute in ("_druid_raw_callbacks", "_jester_raw_callbacks"):
                 if hasattr(source_card, attribute):
                     setattr(
                         card,
@@ -3607,6 +4545,21 @@ class GameSession:
                     n_cards=self.n_cards,
                     strict_native=True,
                 )
+
+        jester_capture = _prepare_current_jester_session_capture(
+            self,
+            card,
+            existing,
+            existing_role_key,
+        )
+        if jester_capture is not None and jester_capture["noop"]:
+            return
+        jester_event_observed = bool(
+            jester_capture and jester_capture["event_observed"]
+        )
+        jester_raw_capture = bool(
+            jester_capture and jester_capture["raw_capture"]
+        )
 
         # Current Druid raw callbacks are reconciled against an immutable
         # persisted prefix before any session field is changed. Manual scalar
@@ -4091,11 +5044,13 @@ class GameSession:
         existing_is_shut_up = type(existing_shut_up_target) is int
         incoming_is_event = (
             (role_key != "druid" or not druid_raw_capture)
+            and (role_key != "jester" or not jester_raw_capture)
             and (
-            role_key not in {"druid", "fortune_teller", "judge"}
+            role_key not in {"druid", "fortune_teller", "jester", "judge"}
             or judge_event_observed
             or fortune_event_observed
             or druid_event_observed
+            or jester_event_observed
             )
         )
         reset_reusable_event = (
@@ -4114,6 +5069,16 @@ class GameSession:
             self.rambler_shut_up_observations.extend(
                 druid_new_rambler_records
             )
+        if jester_capture is not None:
+            generation = jester_capture["generation_to_store"]
+            if generation is not None:
+                self.jester_reset_generations[card.position] = generation
+            if jester_capture["consume_pending"]:
+                self.jester_pending_activations.pop(card.position, None)
+            if jester_capture["new_rambler_records"]:
+                self.rambler_shut_up_observations.extend(
+                    jester_capture["new_rambler_records"]
+                )
 
         if incoming_is_event:
             new_record = (
@@ -4317,19 +5282,28 @@ class GameSession:
             self.used_abilities.append(pos)
 
     def _require_no_pending_druid_activation(self, operation: str) -> None:
-        """Block Night/reset mutation while a persisted click is unresolved."""
-        if not self.druid_pending_activations:
+        """Block Night/reset mutation while a callback click is unresolved."""
+        pending_by_role = {
+            "Druid": self.druid_pending_activations,
+            "Jester": self.jester_pending_activations,
+        }
+        active = {
+            role: pending
+            for role, pending in pending_by_role.items()
+            if pending
+        }
+        if not active:
             return
-        positions = ", ".join(
-            f"#{position}"
-            for position in sorted(
-                self.druid_pending_activations,
-                key=lambda value: str(value),
+        positions = "; ".join(
+            f"{role} " + ", ".join(
+                f"#{position}"
+                for position in sorted(pending, key=lambda value: str(value))
             )
+            for role, pending in active.items()
         )
         raise ValueError(
-            f"Cannot {operation} while Druid auto-use callback recovery is "
-            f"pending at {positions}; run auto_card before Night/reset"
+            f"Cannot {operation} while auto-use callback recovery is pending "
+            f"at {positions}; run auto_card before Night/reset"
         )
 
     def reset_after_night_abilities(
@@ -4360,6 +5334,14 @@ class GameSession:
                 self.druid_reset_generations[card.position] = (
                     max(
                         self.druid_reset_generations.get(card.position, 0)
+                        + completed_nights,
+                        self.lilis_nights_resolved,
+                    )
+                )
+            if _execution_role_key(card.apparent_role) == "jester":
+                self.jester_reset_generations[card.position] = (
+                    max(
+                        self.jester_reset_generations.get(card.position, 0)
                         + completed_nights,
                         self.lilis_nights_resolved,
                     )
@@ -4731,6 +5713,8 @@ class GameSession:
                         pending_lilis_nights: int = 0,
                         druid_reset_generations: Optional[dict] = None,
                         druid_pending_activations: Optional[dict] = None,
+                        jester_reset_generations: Optional[dict] = None,
+                        jester_pending_activations: Optional[dict] = None,
                         ) -> "GameSession":
         session = cls(state.n_cards, state.n_evil)
         session.villagers = list(state.deck.villagers)
@@ -4802,6 +5786,34 @@ class GameSession:
             if not 1 <= position <= state.n_cards or not isinstance(token, dict):
                 raise ValueError("Persisted pending Druid activation is malformed")
             session.druid_pending_activations[position] = copy.deepcopy(token)
+        for raw_position, generation in (
+            jester_reset_generations or {}
+        ).items():
+            try:
+                position = int(raw_position)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    "Jester reset-generation position must be an integer"
+                ) from exc
+            if (
+                type(generation) is not int
+                or generation < 0
+                or not 1 <= position <= state.n_cards
+            ):
+                raise ValueError("Persisted Jester reset generation is malformed")
+            session.jester_reset_generations[position] = generation
+        for raw_position, token in (
+            jester_pending_activations or {}
+        ).items():
+            try:
+                position = int(raw_position)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    "Pending Jester activation position must be an integer"
+                ) from exc
+            if not 1 <= position <= state.n_cards or not isinstance(token, dict):
+                raise ValueError("Persisted pending Jester activation is malformed")
+            session.jester_pending_activations[position] = copy.deepcopy(token)
         if lilis_nights_resolved is None:
             # Legacy saves retain successful victims but omit no-kill history.
             # Infer only provable successful resolutions; never invent old
@@ -5339,6 +6351,7 @@ class GameSession:
                         "required"
                     ),
                 }
+
             if (
                 isinstance(actor.info_parsed, dict)
                 and actor.info_parsed.get("druid_variant")
@@ -5421,6 +6434,109 @@ class GameSession:
                     ),
                 }
 
+        jester_pre_events: list[dict] = []
+        jester_session_generation = None
+        if ability_name == "jester":
+            if (
+                self.baker_rule_version != BAKER_RULE_VERSION
+                or not self.reveal_order
+                or len(self.reveal_order) > self.n_cards
+                or len(set(self.reveal_order)) != len(self.reveal_order)
+                or any(
+                    type(position) is not int
+                    or not 1 <= position <= self.n_cards
+                    for position in self.reveal_order
+                )
+                or pos not in self.reveal_order
+            ):
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Jester #{pos}: verified "
+                        "reveal_order/Baker provenance including the actor is "
+                        "required"
+                    ),
+                }
+            info = actor.info_parsed if isinstance(actor.info_parsed, dict) else {}
+            if info.get("jester_variant") == _PUBLIC_CURRENT_VARIANT:
+                if info.get(
+                    "callback_ledger_variant"
+                ) == _ORDERED_CALLBACK_LEDGER_VARIANT:
+                    try:
+                        jester_pre_events = _jester_callback_ledger(
+                            info,
+                            actor_position=pos,
+                            n_cards=self.n_cards,
+                            reveal_order=self.reveal_order,
+                            baker_rule_version=self.baker_rule_version,
+                        )
+                    except ValueError as exc:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Jester #{pos}: malformed "
+                                f"persisted callback ledger ({exc})"
+                            ),
+                        }
+                    if pos not in self.jester_reset_generations:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Jester #{pos}: persisted "
+                                "callback history has no session reset-generation "
+                                "provenance; restart the village"
+                            ),
+                        }
+                elif set(info) != {"jester_variant"}:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate Jester #{pos}: scalar-only "
+                            "current evidence cannot be resumed; restart the "
+                            "village from verified reveal history"
+                        ),
+                    }
+            elif info or actor.info_text:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Jester #{pos}: unversioned "
+                        "active evidence cannot be joined to an ordered current "
+                        "callback ledger; restart the village"
+                    ),
+                }
+            jester_session_generation = self.jester_reset_generations.get(
+                pos,
+                self.lilis_nights_resolved,
+            )
+            if pos in self.jester_pending_activations:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Jester #{pos}: a pending "
+                        "persisted auto-use click is awaiting callback recovery; run "
+                        "auto_card before clicking again"
+                    ),
+                }
+            if jester_pre_events and (
+                jester_session_generation
+                <= jester_pre_events[-1]["reset_generation"]
+            ):
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate Jester #{pos}: no unconsumed "
+                        "reset generation proves another activation"
+                    ),
+                }
+
         if pos in self.used_abilities:
             return {"success": False, "info_parsed": None,
                     "error": f"#{pos} ability already marked used"}
@@ -5464,7 +6580,7 @@ class GameSession:
         # a retained history entry can prove this click completed.
         event_history_ability = ability_name in supported_abilities
         repeatable_event_ability = ability_name in {
-            "druid", "fortune_teller", "judge",
+            "druid", "fortune_teller", "jester", "judge",
         }
         pre_event = None
         pre_history_snapshot = None
@@ -5620,6 +6736,60 @@ class GameSession:
                                 f"Cannot safely activate Druid #{pos}: {exc}"
                             ),
                         }
+                if ability_name == "jester":
+                    parsed_before, jester_before_error = (
+                        _parse_jester_result_from_memory(
+                            before_card,
+                            n_cards=self.n_cards,
+                        )
+                    )
+                    if jester_before_error is not None:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Jester #{pos}: "
+                                + jester_before_error
+                            ),
+                        }
+                    if parsed_before is None:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Jester #{pos}: pre-click "
+                                "history ends in an incomplete opaque real callback"
+                            ),
+                        }
+                    raw_before = getattr(parsed_before, "_jester_raw_callbacks", [])
+                    if [
+                        _jester_callback_signature(event)
+                        for event in raw_before
+                    ] != [
+                        _jester_callback_signature(event)
+                        for event in jester_pre_events
+                    ]:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Jester #{pos}: pre-click "
+                                "callback history disagrees with the persisted "
+                                "ordered ledger"
+                            ),
+                        }
+                    try:
+                        _validate_jester_rambler_sync(
+                            jester_pre_events,
+                            speaker_position=pos,
+                            rambler_observations=self.rambler_shut_up_observations,
+                        )
+                    except ValueError as exc:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": f"Cannot safely activate Jester #{pos}: {exc}",
+                        }
                 try:
                     local_expectation = (
                         (
@@ -5628,7 +6798,10 @@ class GameSession:
                             None,
                             None,
                         )
-                        if ability_name == "druid" and pre_event is not None
+                        if (
+                            ability_name in {"druid", "jester"}
+                            and pre_event is not None
+                        )
                         else _local_repeatable_event_expectation(
                             actor,
                             n_cards=self.n_cards,
@@ -5670,7 +6843,7 @@ class GameSession:
                         ),
                     }
                 if (
-                    ability_name != "druid"
+                    ability_name not in {"druid", "jester"}
                     and pre_event is not None
                     and local_expectation is None
                 ):
@@ -5710,7 +6883,7 @@ class GameSession:
                                 "with locally stored repeatable evidence"
                             ),
                         }
-                    if ability_name != "druid":
+                    if ability_name not in {"druid", "jester"}:
                         try:
                             (
                                 memory_normal_history,
@@ -5778,20 +6951,50 @@ class GameSession:
                     ),
                 }
 
+        if ability_name == "jester":
+            generation_was_present = pos in self.jester_reset_generations
+            previous_generation = self.jester_reset_generations.get(pos)
+            self.jester_reset_generations[pos] = jester_session_generation
+            self.jester_pending_activations[pos] = {
+                "activation_id": (
+                    jester_pre_events[-1]["activation_id"] + 1
+                    if jester_pre_events else 1
+                ),
+                "expected_targets": list(targets),
+                "prior_callback_count": len(jester_pre_events),
+                "reset_generation": jester_session_generation,
+                "settled_reveal_count": len(self.reveal_order),
+            }
+            try:
+                self.save()
+            except Exception as exc:
+                self.jester_pending_activations.pop(pos, None)
+                if generation_was_present:
+                    self.jester_reset_generations[pos] = previous_generation
+                else:
+                    self.jester_reset_generations.pop(pos, None)
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot persist Jester #{pos} auto-use provenance: {exc}"
+                    ),
+                }
+
         # Step 1: Click active card to enter target-selection mode
         x, y = coords[pos]
         print(f"  [auto_ability] Activating {action.ability_name} at #{pos} ({x},{y})...")
         try:
             _tm.safe_click_at(x, y, f"activate_card{pos}")
         except Exception as e:
-            if ability_name == "druid":
-                self.druid_pending_activations.pop(pos, None)
-                try:
-                    self.save()
-                except Exception:
-                    pass
+            recovery = (
+                "; persisted click provenance was retained, so inspect/cancel "
+                "the picker and recover with auto_card before retrying"
+                if ability_name in {"druid", "jester"}
+                else ""
+            )
             return {"success": False, "info_parsed": None,
-                    "error": f"Failed to click active card: {e}"}
+                    "error": f"Failed to click active card: {e}{recovery}"}
         time.sleep(0.4)  # Let target-selection mode engage
 
         # Step 2: Click each target in order
@@ -5840,6 +7043,26 @@ class GameSession:
                         pre_history_snapshot,
                     )
                 )
+            if ability_name == "jester":
+                parsed_jester, parse_error = (
+                    _parse_jester_result_from_memory(
+                        card,
+                        n_cards=self.n_cards,
+                    )
+                )
+                raw_callbacks = (
+                    getattr(parsed_jester, "_jester_raw_callbacks", None)
+                    if parsed_jester is not None else None
+                )
+                return (
+                    parse_error is None
+                    and raw_callbacks is not None
+                    and len(raw_callbacks) > len(jester_pre_events)
+                    and _has_new_coherent_acted_suffix(
+                        card,
+                        pre_history_snapshot,
+                    )
+                )
             return _has_new_coherent_acted_suffix(
                 card,
                 pre_history_snapshot,
@@ -5860,7 +7083,11 @@ class GameSession:
                 (c for c in board if c['position'] == pos),
                 None,
             ) if board else None
-            if resolved and ability_name == "druid" and target_card_data:
+            if (
+                resolved
+                and ability_name in {"druid", "jester"}
+                and target_card_data
+            ):
                 last_history = _acted_history_fingerprint(target_card_data)
                 stable_reads = 0
                 for _ in range(4):
@@ -5896,7 +7123,7 @@ class GameSession:
                     if cards:
                         target_card_data = next((c for c in cards if c['position'] == pos), None)
                         if target_card_data and _ability_resolved(cards):
-                            if ability_name != "druid":
+                            if ability_name not in {"druid", "jester"}:
                                 break
                             fingerprint = _acted_history_fingerprint(
                                 target_card_data
@@ -5946,6 +7173,24 @@ class GameSession:
                     pre_history_snapshot,
                 )
             )
+        elif ability_name == "jester":
+            parsed_jester, parse_error = _parse_jester_result_from_memory(
+                target_card_data,
+                n_cards=self.n_cards,
+            )
+            raw_callbacks = (
+                getattr(parsed_jester, "_jester_raw_callbacks", None)
+                if parsed_jester is not None else None
+            )
+            has_recorded_result = (
+                parse_error is None
+                and raw_callbacks is not None
+                and len(raw_callbacks) > len(jester_pre_events)
+                and _has_new_coherent_acted_suffix(
+                    target_card_data,
+                    pre_history_snapshot,
+                )
+            )
         else:
             has_recorded_result = _has_new_coherent_acted_suffix(
                 target_card_data,
@@ -5977,7 +7222,7 @@ class GameSession:
                 unowned_repeatable_prefix_count:
             ]
         if (
-            ability_name in {"dreamer", "jester"}
+            ability_name == "dreamer"
             and not _active_result_refs_match_clicks(
                 target_card_data,
                 targets,
@@ -5993,7 +7238,7 @@ class GameSession:
                 ),
             }
 
-        # Druid's strict parser owns its complete reset history, including a
+        # Ordered-ledger roles own their complete reset history, including a
         # newest Rambler replacement. Other roles retain the shared newest-
         # interruption path.
         if ability_name == "druid":
@@ -6007,6 +7252,18 @@ class GameSession:
                     "success": False,
                     "info_parsed": None,
                     "error": druid_parse_error,
+                }
+        elif ability_name == "jester":
+            parsed, jester_parse_error = _parse_jester_result_from_memory(
+                target_card_data,
+                expected_targets=targets,
+                n_cards=self.n_cards,
+            )
+            if jester_parse_error is not None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": jester_parse_error,
                 }
         else:
             parsed, interruption_error = _card_from_rambler_interruption(
@@ -6355,6 +7612,14 @@ class GameSession:
                 str(position): copy.deepcopy(token)
                 for position, token in self.druid_pending_activations.items()
             }
+            data["jester_reset_generations"] = {
+                str(position): generation
+                for position, generation in self.jester_reset_generations.items()
+            }
+            data["jester_pending_activations"] = {
+                str(position): copy.deepcopy(token)
+                for position, token in self.jester_pending_activations.items()
+            }
 
             tmp_path = f"{path}.tmp.{os.getpid()}"
             with open(tmp_path, "w") as f:
@@ -6385,6 +7650,14 @@ class GameSession:
                 ),
                 druid_pending_activations=data.get(
                     "druid_pending_activations",
+                    {},
+                ),
+                jester_reset_generations=data.get(
+                    "jester_reset_generations",
+                    {},
+                ),
+                jester_pending_activations=data.get(
+                    "jester_pending_activations",
                     {},
                 ),
             )
@@ -7056,6 +8329,244 @@ def _classify_druid_auto_capture(
     return "update", None
 
 
+def _parse_jester_result_from_memory(
+    card: dict,
+    *,
+    n_cards: int,
+    expected_targets: Optional[list[int]] = None,
+) -> tuple[Optional[CardInfo], Optional[str]]:
+    """Validate and preserve Juggler's complete append-only callback list."""
+    position = card.get("position")
+    if type(position) is not int or not 1 <= position <= n_cards:
+        return None, f"Jester position {position!r} is outside 1..{n_cards}"
+
+    raw_clue = card.get("clue_text")
+    if raw_clue is None:
+        clue = ""
+    elif isinstance(raw_clue, str):
+        clue = raw_clue
+    else:
+        return None, "Jester savedAct text must be a string or null"
+
+    raw_infos = card.get("acted_infos")
+    if raw_infos is None:
+        return None, "Jester acted_infos history is unreadable"
+    if not isinstance(raw_infos, list):
+        return None, "Jester acted_infos must be an array"
+    if not raw_infos:
+        if clue:
+            return None, "Jester result has no acted-info record"
+        result = _card_current_jester_no_info(position)
+        result._jester_raw_callbacks = []
+        return result, None
+
+    callbacks: list[dict] = []
+    passive_count = 0
+    saw_action_event = False
+    for index, event in enumerate(raw_infos):
+        if not isinstance(event, dict):
+            return None, f"Jester acted_infos[{index}] must be an object"
+        desc = event.get("desc")
+        refs = event.get("targets")
+        if (desc is None or desc == "") and refs is None:
+            if saw_action_event or passive_count:
+                return None, (
+                    "Jester passive empty event must occur at most once and "
+                    "before every action result"
+                )
+            passive_count += 1
+            continue
+        if not isinstance(desc, str):
+            return None, f"Jester acted_infos[{index}].desc must be a string"
+        if not desc:
+            return None, f"Jester acted_infos[{index}] has an empty action text"
+        try:
+            public_refs = _validate_callback_references(
+                refs,
+                n_cards=n_cards,
+                label=f"Jester acted_infos[{index}]",
+            )
+        except ValueError as exc:
+            return None, str(exc)
+
+        shut_up_target = _parse_shut_up_target_text(desc, n_cards=n_cards)
+        if shut_up_target is not None:
+            expected_desc = _jester_shut_up_text(shut_up_target)
+            if desc != expected_desc or public_refs != [shut_up_target]:
+                return None, (
+                    "Jester Rambler event must use the exact public text and "
+                    f"single matching reference {expected_desc!r}"
+                )
+            callbacks.append({
+                "event_kind": "rambler_interruption",
+                "text": desc,
+                "references": [shut_up_target],
+                "shut_up_target": shut_up_target,
+            })
+            saw_action_event = True
+            continue
+        if _looks_like_shut_up_text(desc):
+            return None, "Jester Rambler event must use exact '#R\\nshut up!' text"
+
+        parsed_text = _parse_jester_native_text(desc)
+        if parsed_text is not None:
+            displayed_targets, evil_count = parsed_text
+            try:
+                reference_ids = _validate_jester_reference_ids(
+                    public_refs,
+                    n_cards=n_cards,
+                )
+            except ValueError as exc:
+                return None, str(exc)
+            if sorted(reference_ids) != displayed_targets:
+                return None, (
+                    f"Jester history entry {index} target mismatch: speech named "
+                    f"{displayed_targets}, references were {reference_ids}"
+                )
+            callbacks.append({
+                "event_kind": "jester_result",
+                "text": desc,
+                "references": reference_ids,
+                "evil_count": evil_count,
+            })
+            saw_action_event = True
+            continue
+
+        # A different real role can emit before raw Jester. Preserve that
+        # callback opaquely, but never use opaque storage to launder a malformed
+        # near-Jester or near-Rambler sentence.
+        near_jester = (
+            re.match(r"\s*Among\s*:", desc, re.IGNORECASE) is not None
+            and re.search(r"\bEvils?\b", desc, re.IGNORECASE) is not None
+        )
+        if near_jester:
+            return None, f"Unrecognized Jester acted-info text: {desc!r}"
+        callbacks.append({
+            "event_kind": "opaque_real",
+            "text": desc,
+            "references": public_refs,
+        })
+        saw_action_event = True
+
+    latest = raw_infos[-1]
+    latest_desc = latest.get("desc") if isinstance(latest, dict) else None
+    expected_saved_act = latest_desc or ""
+    if clue != expected_saved_act:
+        return None, (
+            "Jester savedAct does not match the newest acted-info text: "
+            f"{clue!r} != {expected_saved_act!r}"
+        )
+    if not callbacks:
+        result = _card_current_jester_no_info(position)
+        result._jester_raw_callbacks = []
+        return result, None
+
+    latest_callback = callbacks[-1]
+    if latest_callback["event_kind"] == "opaque_real":
+        return None, None
+    if latest_callback["event_kind"] == "rambler_interruption":
+        result = _card_current_jester_interruption(
+            position,
+            latest_callback["shut_up_target"],
+            n_cards=n_cards,
+        )
+    elif latest_callback["event_kind"] == "jester_result":
+        physical_targets = None
+        if expected_targets is not None:
+            try:
+                physical_targets = _validate_current_jester_targets(
+                    list(expected_targets),
+                    n_cards=n_cards,
+                )
+            except (TypeError, ValueError) as exc:
+                return None, str(exc)
+        else:
+            try:
+                physical_targets = _validate_current_jester_targets(
+                    latest_callback["references"],
+                    n_cards=n_cards,
+                )
+            except ValueError:
+                # Native IDs alone cannot identify distinct physical objects
+                # when two selected Characters display the same ID. Keep the
+                # raw capture for a pending click token to bind in add_card.
+                physical_targets = None
+        result = (
+            CardInfo(
+                position,
+                "Jester",
+                info_text=latest_callback["text"],
+                info_parsed={
+                    "targets": physical_targets,
+                    "evil_count": latest_callback["evil_count"],
+                    "jester_variant": _PUBLIC_CURRENT_VARIANT,
+                },
+            )
+            if physical_targets is not None
+            else _card_current_jester_no_info(position)
+        )
+    else:
+        return None, "Jester history has no coherent current result"
+
+    result._jester_raw_callbacks = copy.deepcopy(callbacks)
+    return result, None
+
+
+def _classify_jester_auto_capture(
+    existing: Optional[CardInfo],
+    parsed: CardInfo,
+    *,
+    n_cards: int,
+    reveal_order: list[int],
+    baker_rule_version: Optional[str],
+    rambler_observations: list[dict],
+) -> tuple[str, Optional[str]]:
+    """Classify a raw Jester capture as stale, appended, or conflicting."""
+    raw_callbacks = getattr(parsed, "_jester_raw_callbacks", None)
+    if (
+        existing is None
+        or not isinstance(existing.info_parsed, dict)
+        or existing.info_parsed.get("jester_variant") != _PUBLIC_CURRENT_VARIANT
+    ):
+        return "update", None
+    if raw_callbacks is None:
+        if set(parsed.info_parsed or {}) == {"jester_variant"}:
+            return "stale", None
+        return "error", "Jester capture has no authenticated raw history"
+    if set(existing.info_parsed) == {"jester_variant"}:
+        return "update", None
+    try:
+        persisted = _jester_callback_ledger(
+            existing.info_parsed,
+            actor_position=existing.position,
+            n_cards=n_cards,
+            reveal_order=reveal_order,
+            baker_rule_version=baker_rule_version,
+        )
+        _validate_jester_rambler_sync(
+            persisted,
+            speaker_position=existing.position,
+            rambler_observations=rambler_observations,
+        )
+    except ValueError as exc:
+        return "error", f"Persisted Jester history is malformed: {exc}"
+    raw_signatures = [_jester_callback_signature(event) for event in raw_callbacks]
+    persisted_signatures = [
+        _jester_callback_signature(event) for event in persisted
+    ]
+    if raw_signatures == persisted_signatures:
+        return "stale", None
+    if (
+        len(raw_signatures) < len(persisted_signatures)
+        or raw_signatures[:len(persisted_signatures)] != persisted_signatures
+    ):
+        return (
+            "error",
+            "Raw Jester callback history does not preserve the persisted prefix",
+        )
+    return "update", None
+
+
 def _parse_fortune_teller_result_from_memory(
     card: dict,
     *,
@@ -7647,6 +9158,9 @@ def _parse_clue_from_memory(
         # older unbound Druid-like implementation, not a Bard implementation.
         role = 'Druid'
         role_lower = 'druid'
+    elif role_lower == 'juggler':
+        role = 'Jester'
+        role_lower = 'jester'
     elif role_lower in {'acrobat2', 'acrobat', 'athlete'}:
         # Current public Bard binds managed Acrobat2. Acrobat and Athlete remain
         # historical reader aliases; RangedEmpath belongs to Druid instead.
@@ -7695,7 +9209,7 @@ def _parse_clue_from_memory(
     active_event_is_coherent = current_event_refs() is not None
     if (
         role_lower in ACTIVE_ONLY_ROLES
-        and role_lower != 'druid'
+        and role_lower not in {'druid', 'jester'}
         and not active_event_is_coherent
     ):
         if not isinstance(infos, list):
@@ -7717,6 +9231,34 @@ def _parse_clue_from_memory(
             n_cards=n_cards,
         )
         return druid_surface if druid_error is None else None
+
+    # Current memory_reader snapshots expose the native remaining-use field.
+    # That field is a build/schema discriminator only; its value never proves
+    # a result. Older synthetic/archive parser callers omit it and retain the
+    # unmarked compatibility grammar below.
+    current_jester_memory = (
+        role_lower == 'jester'
+        and type(n_cards) is int
+        and n_cards > 0
+        and (
+            any(
+                field in card
+                for field in (
+                    'pickable_uses_remaining',
+                    'act_output_enabled',
+                    'pickable_available',
+                )
+            )
+            or _execution_role_key(card.get('true_role')) == 'juggler'
+            or _execution_role_key(card.get('current_role')) == 'juggler'
+        )
+    )
+    if current_jester_memory:
+        jester_surface, jester_error = _parse_jester_result_from_memory(
+            card,
+            n_cards=n_cards,
+        )
+        return jester_surface if jester_error is None else None
 
     # Rambler replacement text owns the public event. The counter may still be
     # transiently unchanged because append precedes decrement in the callback.
@@ -10180,6 +11722,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 "librarian",
                 "rangedempath",
             }
+            is_jester_memory_role = memory_role_key in {"jester", "juggler"}
 
             parsed = _parse_clue_from_memory(
                 mc,
@@ -10191,9 +11734,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             baker_capture_error = None
             fortune_capture_error = None
             druid_capture_error = None
+            jester_capture_error = None
             if parsed is None:
                 if is_druid_memory_role:
                     _, druid_capture_error = _parse_druid_result_from_memory(
+                        mc,
+                        n_cards=session.n_cards,
+                    )
+                if is_jester_memory_role:
+                    _, jester_capture_error = _parse_jester_result_from_memory(
                         mc,
                         n_cards=session.n_cards,
                     )
@@ -10227,7 +11776,6 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 guarded_active_capture = parsed_role_key in {
                     "dreamer",
                     "fortune_teller",
-                    "jester",
                     "judge",
                     "plague_doctor",
                     "slayer",
@@ -10251,7 +11799,15 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         # record, or enter only the active no-info shell.
                         if existing is not None:
                             continue
-                        parsed = card_no_info(pos, parsed.apparent_role)
+                        parsed = (
+                            _card_current_jester_no_info(pos)
+                            if (
+                                parsed_role_key == "jester"
+                                and parsed.info_parsed.get("jester_variant")
+                                == _PUBLIC_CURRENT_VARIANT
+                            )
+                            else card_no_info(pos, parsed.apparent_role)
+                        )
                         parsed_role_key = _execution_role_key(
                             parsed.apparent_role
                         ).replace(" ", "_")
@@ -10292,6 +11848,85 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         ):
                             session.mark_ability_used(parsed.position)
                         continue
+                current_jester_capture = (
+                    parsed_role_key == "jester"
+                    and isinstance(parsed.info_parsed, dict)
+                    and parsed.info_parsed.get("jester_variant")
+                    == _PUBLIC_CURRENT_VARIANT
+                )
+                jester_pending_resolution = False
+                if current_jester_capture:
+                    had_pending_jester_click = (
+                        pos in session.jester_pending_activations
+                    )
+                    raw_jester_callbacks = getattr(
+                        parsed,
+                        "_jester_raw_callbacks",
+                        None,
+                    )
+                    existing_owns_jester_history = (
+                        existing is not None
+                        and isinstance(existing.info_parsed, dict)
+                        and existing.info_parsed.get("jester_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                        and existing.info_parsed.get("callback_ledger_variant")
+                        == _ORDERED_CALLBACK_LEDGER_VARIANT
+                    )
+                    if (
+                        raw_jester_callbacks
+                        and not had_pending_jester_click
+                        and not existing_owns_jester_history
+                    ):
+                        remaining = _pickable_uses_remaining(mc)
+                        if remaining is None:
+                            manual_needed.append(
+                                f"  #{pos} Jester: [RECOVERY] retained native "
+                                "history has no readable current-cycle budget"
+                            )
+                            continue
+                        if remaining > 0:
+                            # ResetAfterNight retains actedInfos. Without a
+                            # click token or owned prefix, an available actor
+                            # proves only that this history is old; keep/enter
+                            # the strict no-result shell.
+                            if existing is not None:
+                                continue
+                            parsed = _card_current_jester_no_info(pos)
+                            parsed_role_key = "jester"
+                    capture_status, capture_status_error = (
+                        _classify_jester_auto_capture(
+                            existing,
+                            parsed,
+                            n_cards=session.n_cards,
+                            reveal_order=session.reveal_order,
+                            baker_rule_version=session.baker_rule_version,
+                            rambler_observations=(
+                                session.rambler_shut_up_observations
+                            ),
+                        )
+                    )
+                    if capture_status_error is not None:
+                        role = (
+                            mc.get('disguise')
+                            or _observed_current_role(mc)
+                            or '?'
+                        )
+                        manual_needed.append(
+                            f"  #{pos} {role}: [RECOVERY] "
+                            f"{capture_status_error}"
+                        )
+                        continue
+                    if capture_status == "stale":
+                        if (
+                            _active_cycle_is_spent(mc)
+                            and _has_active_clue_result(parsed)
+                        ):
+                            session.mark_ability_used(parsed.position)
+                        continue
+                    jester_pending_resolution = (
+                        had_pending_jester_click
+                        and capture_status == "update"
+                    )
                 current_repeatable_capture = (
                     existing is not None
                     and memory_role_key in {"fortune_teller", "judge"}
@@ -10339,7 +11974,8 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         and same_role
                         and changed
                         and _has_active_clue_result(parsed)
-                        and _execution_role_key(parsed.apparent_role) != "druid"
+                        and _execution_role_key(parsed.apparent_role)
+                        not in {"druid", "jester"}
                     )
                     # Passive reveal callbacks can settle after an initial
                     # memory read. Never let an earlier ordinary/no-info entry
@@ -10413,6 +12049,18 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                             == _PUBLIC_CURRENT_VARIANT
                         )
                     )
+                    jester_update = (
+                        same_role
+                        and changed
+                        and _execution_role_key(parsed.apparent_role) == "jester"
+                        and parsed.info_parsed.get("jester_variant")
+                        == _PUBLIC_CURRENT_VARIANT
+                        and (
+                            existing.info_parsed == {}
+                            or existing.info_parsed.get("jester_variant")
+                            == _PUBLIC_CURRENT_VARIANT
+                        )
+                    )
                     if not (
                         active_update
                         or shut_up_update
@@ -10423,6 +12071,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or bard_update
                         or confessor_update
                         or druid_update
+                        or jester_update
                     ):
                         # A prior append-before-decrement read may already have
                         # stored this exact active result without consuming the
@@ -10439,7 +12088,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                 try:
                     session.add_card(parsed, mark_active_result=False)
                 except ValueError as exc:
-                    if current_druid_capture:
+                    if current_druid_capture or current_jester_capture:
                         role = (
                             mc.get('disguise')
                             or _observed_current_role(mc)
@@ -10456,7 +12105,13 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     if card.position == parsed.position
                 )
                 DecisionLog.log_card(recorded)
-                if _active_cycle_is_spent(mc) and _has_active_clue_result(parsed):
+                if (
+                    jester_pending_resolution
+                    and pos not in session.jester_pending_activations
+                ) or (
+                    _active_cycle_is_spent(mc)
+                    and _has_active_clue_result(parsed)
+                ):
                     session.mark_ability_used(parsed.position)
                 verb = "updated" if pos in entered else "entered"
                 print(
@@ -10468,6 +12123,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
             else:
                 capture_error = (
                     druid_capture_error
+                    or jester_capture_error
                     or rambler_capture_error
                     or baker_capture_error
                     or fortune_capture_error

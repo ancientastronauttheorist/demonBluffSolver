@@ -698,6 +698,7 @@ const GEMCRAFTER_CURRENT_VARIANT_FIELD: &str = "gemcrafter_variant";
 const BARD_CURRENT_VARIANT_FIELD: &str = "bard_variant";
 const CONFESSOR_CURRENT_VARIANT_FIELD: &str = "confessor_variant";
 const DRUID_CURRENT_VARIANT_FIELD: &str = "druid_variant";
+const JESTER_CURRENT_VARIANT_FIELD: &str = "jester_variant";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentPassivePayloadSource {
@@ -736,7 +737,8 @@ fn current_passive_payload_source(
                 && !card
                     .info_parsed
                     .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD)
-                && !card.info_parsed.contains_key(DRUID_CURRENT_VARIANT_FIELD) =>
+                && !card.info_parsed.contains_key(DRUID_CURRENT_VARIANT_FIELD)
+                && !card.info_parsed.contains_key(JESTER_CURRENT_VARIANT_FIELD) =>
         {
             Ok(None)
         }
@@ -4404,6 +4406,23 @@ fn validate_witness(card: &CardInfo, scenario: &Scenario, state: &GameState) -> 
 }
 
 fn validate_jester(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    match current_passive_payload_source(card, JESTER_CURRENT_VARIANT_FIELD, "Jester") {
+        Ok(Some(CurrentPassivePayloadSource::Direct)) => {
+            // A marker-only card is the exact current shell before its first
+            // successful picker completion. Once callback evidence exists,
+            // require the authenticated append-only ledger; marked scalar or
+            // interrupted compatibility payloads cannot safely reconstruct
+            // real/raw chronology.
+            if card.info_parsed.len() == 1 {
+                return card.info_text.is_empty();
+            }
+            return validate_current_jester(card, scenario, state);
+        }
+        // Jester is absent from current Poet's closed provider list.
+        Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => return false,
+        Ok(None) => {}
+    }
+
     // Silenced Jester (e.g. by Rambler): ability fired but no evil_count was
     // emitted. Explicitly a no-op constraint — previously this case arrived
     // here via a missing `evil_count` key and returned true by accident, which
@@ -6650,17 +6669,22 @@ fn merge_current_druid_supports(
             selected.activation_id == incoming.activation_id
                 && selected.callback_index == incoming.callback_index
         })
-    }) || merged.callbacks.last().zip(right.callbacks.first()).is_some_and(
-        |(selected, incoming)| {
+    }) || merged
+        .callbacks
+        .last()
+        .zip(right.callbacks.first())
+        .is_some_and(|(selected, incoming)| {
             (selected.activation_id, selected.callback_index)
                 >= (incoming.activation_id, incoming.callback_index)
-        },
-    ) {
+        })
+    {
         return None;
     }
     merged.callbacks.extend(&right.callbacks);
     Some(merged)
 }
+
+
 
 fn current_druid_group_supports(
     card: &CardInfo,
@@ -6824,6 +6848,1049 @@ fn validate_current_druid(card: &CardInfo, scenario: &Scenario, state: &GameStat
     };
     !current_druid_supports_for_payload(card, &payload, scenario, state).is_empty()
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentJesterClaim {
+    targets: [u8; 3],
+    evil_count: i64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum CurrentJesterCallbackKind {
+    Result(CurrentJesterClaim),
+    RamblerInterruption { target: u8 },
+    OpaqueReal,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentJesterCallbackEvent {
+    activation_id: usize,
+    callback_index: usize,
+    dispatch_path: CurrentDruidDispatchPath,
+    kind: CurrentJesterCallbackKind,
+    references: Option<Vec<u8>>,
+    settled_reveal_count: usize,
+    reset_generation: usize,
+    activation_evidence: CurrentDruidActivationEvidence,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct CurrentJesterResolvedCallback {
+    actor: u8,
+    activation_id: usize,
+    callback_index: usize,
+    path: CurrentDruidResolvedPath,
+    boundary: CurrentRamblerBoundary,
+    truth: TruthStatus,
+    interruption_target: Option<u8>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentJesterSupport {
+    anonymous_wretches: AnonymousWretchConstraints,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    baker_spy_timeline: BakerSpyTimeline,
+    callbacks: Vec<CurrentJesterResolvedCallback>,
+}
+
+fn current_jester_claim_text(references: &[u8; 3], evil_count: i64) -> Option<String> {
+    if !(0..=3).contains(&evil_count) {
+        return None;
+    }
+    let mut sorted = *references;
+    sorted.sort_unstable();
+    let result = if evil_count == 1 {
+        "There is 1 Evil".to_string()
+    } else {
+        format!("There are {evil_count} Evils")
+    };
+    Some(format!(
+        "Among:\n#{}, #{}, #{}:\n{result}",
+        sorted[0], sorted[1], sorted[2]
+    ))
+}
+
+fn parse_current_jester_claim_fields(
+    info: &serde_json::Map<String, serde_json::Value>,
+    state: &GameState,
+) -> Option<CurrentJesterClaim> {
+    let targets = info
+        .get("targets")?
+        .as_array()?
+        .iter()
+        .map(|value| u8::try_from(value.as_u64()?).ok())
+        .collect::<Option<Vec<_>>>()?;
+    let targets: [u8; 3] = targets.try_into().ok()?;
+    if targets
+        .iter()
+        .any(|target| *target == 0 || *target > state.n_cards)
+        || targets[0] == targets[1]
+        || targets[0] == targets[2]
+        || targets[1] == targets[2]
+    {
+        return None;
+    }
+    let evil_count = info.get("evil_count")?.as_i64()?;
+    (0..=3).contains(&evil_count).then_some(CurrentJesterClaim {
+        targets,
+        evil_count,
+    })
+}
+
+fn current_jester_opaque_text_is_ambiguous(text: &str) -> bool {
+    let normalized = current_druid_python_ignorecase_fold(text);
+    let trimmed = current_druid_trim_python_regex_whitespace(&normalized);
+    let near_jester = trimmed.strip_prefix("among").is_some_and(|suffix| {
+        current_druid_trim_python_regex_whitespace(suffix).starts_with(':')
+            && (current_druid_text_contains_word(trimmed, "evil")
+                || current_druid_text_contains_word(trimmed, "evils"))
+    });
+    let shut_up = normalized.match_indices("shut").any(|(index, _)| {
+        let before = normalized[..index].chars().next_back();
+        let suffix = &normalized[index + "shut".len()..];
+        let after_shut = current_druid_trim_python_regex_whitespace(suffix);
+        let separated = suffix
+            .chars()
+            .next()
+            .is_some_and(current_druid_is_python_regex_whitespace);
+        let up_boundary = after_shut.strip_prefix("up").is_some_and(|after| {
+            after
+                .chars()
+                .next()
+                .is_none_or(|character| !character.is_ascii_alphanumeric() && character != '_')
+        });
+        before.is_none_or(|character| !character.is_ascii_alphanumeric() && character != '_')
+            && separated
+            && up_boundary
+    });
+    near_jester || shut_up
+}
+
+fn parse_current_jester_callback_event(
+    value: &serde_json::Value,
+    state: &GameState,
+) -> Option<CurrentJesterCallbackEvent> {
+    const COMMON_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+    ];
+    const RESULT_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+        "targets",
+        "evil_count",
+    ];
+    const INTERRUPTION_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+        "shut_up_target",
+    ];
+
+    let event = value.as_object()?;
+    let activation_id = event
+        .get("activation_id")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())
+        .filter(|value| *value > 0)?;
+    let callback_index = event
+        .get("callback_index")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())?;
+    let dispatch_path = parse_current_druid_dispatch_path(event.get("dispatch_path")?)?;
+    let settled_reveal_count = event
+        .get("settled_reveal_count")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())
+        .filter(|value| *value > 0)?;
+    let reset_generation = event
+        .get("reset_generation")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())?;
+    let activation_evidence =
+        parse_current_druid_activation_evidence(event.get("activation_evidence")?)?;
+    let references = parse_current_druid_references(event.get("references")?, state)?;
+    let text = event.get("text")?.as_str()?;
+
+    let kind = match event.get("event_kind")?.as_str()? {
+        "jester_result" => {
+            if !current_druid_has_exact_fields(event, RESULT_FIELDS) {
+                return None;
+            }
+            let claim = parse_current_jester_claim_fields(event, state)?;
+            let display_references: [u8; 3] = references.clone()?.try_into().ok()?;
+            if current_jester_claim_text(&display_references, claim.evil_count).as_deref()
+                != Some(text)
+            {
+                return None;
+            }
+            CurrentJesterCallbackKind::Result(claim)
+        }
+        "rambler_interruption" => {
+            if !current_druid_has_exact_fields(event, INTERRUPTION_FIELDS) {
+                return None;
+            }
+            let target = event
+                .get("shut_up_target")?
+                .as_u64()
+                .and_then(|value| u8::try_from(value).ok())
+                .filter(|value| *value > 0 && *value <= state.n_cards)?;
+            if references.as_deref() != Some([target].as_slice())
+                || text != format!("#{target}\nshut up!")
+            {
+                return None;
+            }
+            CurrentJesterCallbackKind::RamblerInterruption { target }
+        }
+        "opaque_real" => {
+            if !current_druid_has_exact_fields(event, COMMON_FIELDS)
+                || text.is_empty()
+                || current_jester_opaque_text_is_ambiguous(text)
+            {
+                return None;
+            }
+            CurrentJesterCallbackKind::OpaqueReal
+        }
+        _ => return None,
+    };
+
+    Some(CurrentJesterCallbackEvent {
+        activation_id,
+        callback_index,
+        dispatch_path,
+        kind,
+        references,
+        settled_reveal_count,
+        reset_generation,
+        activation_evidence,
+    })
+}
+
+fn parse_current_jester_payload(
+    card: &CardInfo,
+    state: &GameState,
+) -> Option<Vec<CurrentJesterCallbackEvent>> {
+    if card.position == 0
+        || card.position > state.n_cards
+        || !roles_equal(&card.apparent_role, "Jester")
+        || card
+            .info_parsed
+            .get(JESTER_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+        || card
+            .info_parsed
+            .get("callback_ledger_variant")
+            .and_then(serde_json::Value::as_str)
+            != Some("ordered_callbacks_v1")
+        || state.baker_rule_version.as_deref() != Some(BAKER_CURRENT_RULE)
+    {
+        return None;
+    }
+    let values = card.info_parsed.get("callback_events")?.as_array()?;
+    if values.is_empty() {
+        return None;
+    }
+    let mut seen_reveals = HashSet::new();
+    if state.reveal_order.len() > usize::from(state.n_cards)
+        || state.reveal_order.iter().any(|position| {
+            *position == 0 || *position > state.n_cards || !seen_reveals.insert(*position)
+        })
+    {
+        return None;
+    }
+
+    let events = values
+        .iter()
+        .map(|value| parse_current_jester_callback_event(value, state))
+        .collect::<Option<Vec<_>>>()?;
+    let mut group_count = 0;
+    let mut start = 0;
+    let mut previous_boundary = 0;
+    let mut previous_generation = 0;
+    while start < events.len() {
+        let activation_id = events[start].activation_id;
+        if activation_id != group_count + 1 || events[start].callback_index != 0 {
+            return None;
+        }
+        let mut end = start + 1;
+        while end < events.len() && events[end].activation_id == activation_id {
+            end += 1;
+        }
+        let group = &events[start..end];
+        let first = &group[0];
+        if first.settled_reveal_count < previous_boundary
+            || first.settled_reveal_count > state.reveal_order.len()
+            || !state.reveal_order[..first.settled_reveal_count].contains(&card.position)
+            || group_count > 0 && first.reset_generation <= previous_generation
+            || group.iter().enumerate().any(|(index, event)| {
+                event.callback_index != index
+                    || event.settled_reveal_count != first.settled_reveal_count
+                    || event.reset_generation != first.reset_generation
+                    || event.activation_evidence != first.activation_evidence
+            })
+        {
+            return None;
+        }
+        match group {
+            [only]
+                if only.dispatch_path == CurrentDruidDispatchPath::Either
+                    && only.activation_evidence
+                        != CurrentDruidActivationEvidence::SameActivationExtension => {}
+            [real, raw]
+                if real.dispatch_path == CurrentDruidDispatchPath::Real
+                    && raw.dispatch_path == CurrentDruidDispatchPath::Raw
+                    && real.activation_evidence
+                        != CurrentDruidActivationEvidence::SingleCallbackSuffix => {}
+            _ => return None,
+        }
+        let evidence_is_reachable = match first.activation_evidence {
+            CurrentDruidActivationEvidence::SingleCallbackSuffix => {
+                group_count == 0 && first.reset_generation == 0 && group.len() == 1
+            }
+            CurrentDruidActivationEvidence::AutoUseClick => true,
+            CurrentDruidActivationEvidence::SessionResetGeneration => {
+                if group_count == 0 {
+                    first.reset_generation > 0 && group.len() == 1
+                } else {
+                    group.len() == 1
+                        || first.reset_generation.checked_sub(previous_generation) == Some(1)
+                }
+            }
+            CurrentDruidActivationEvidence::SameActivationExtension => {
+                group.len() == 2 && !matches!(group[0].kind, CurrentJesterCallbackKind::OpaqueReal)
+            }
+        };
+        if !evidence_is_reachable
+            || matches!(group[0].kind, CurrentJesterCallbackKind::OpaqueReal)
+                && (group.len() != 2
+                    || !matches!(
+                        group[1].kind,
+                        CurrentJesterCallbackKind::Result(_)
+                            | CurrentJesterCallbackKind::RamblerInterruption { .. }
+                    ))
+            || group
+                .iter()
+                .skip(1)
+                .any(|event| matches!(event.kind, CurrentJesterCallbackKind::OpaqueReal))
+            || matches!(
+                (&group[0].kind, group.get(1).map(|event| &event.kind)),
+                (
+                    CurrentJesterCallbackKind::Result(left),
+                    Some(CurrentJesterCallbackKind::Result(right)),
+                ) if left.targets != right.targets || group[0].references != group[1].references
+            )
+        {
+            return None;
+        }
+        previous_boundary = first.settled_reveal_count;
+        previous_generation = first.reset_generation;
+        group_count += 1;
+        start = end;
+    }
+
+    let latest = events.last()?;
+    match &latest.kind {
+        CurrentJesterCallbackKind::Result(claim) => {
+            const RESULT_TOP_FIELDS: &[&str] = &[
+                JESTER_CURRENT_VARIANT_FIELD,
+                "callback_ledger_variant",
+                "callback_events",
+                "targets",
+                "evil_count",
+            ];
+            if !current_druid_has_exact_fields(&card.info_parsed, RESULT_TOP_FIELDS)
+                || parse_current_jester_claim_fields(&card.info_parsed, state)? != *claim
+                || latest.references.as_deref().and_then(|references| {
+                    <[u8; 3]>::try_from(references).ok()
+                }).and_then(|references| current_jester_claim_text(&references, claim.evil_count))
+                    .as_deref() != Some(card.info_text.as_str())
+            {
+                return None;
+            }
+        }
+        CurrentJesterCallbackKind::RamblerInterruption { target } => {
+            const INTERRUPTION_TOP_FIELDS: &[&str] = &[
+                JESTER_CURRENT_VARIANT_FIELD,
+                "callback_ledger_variant",
+                "callback_events",
+                "shut_up_target",
+            ];
+            if !current_druid_has_exact_fields(&card.info_parsed, INTERRUPTION_TOP_FIELDS)
+                || card
+                    .info_parsed
+                    .get("shut_up_target")
+                    .and_then(serde_json::Value::as_u64)
+                    != Some(u64::from(*target))
+                || card.info_text != format!("#{target}\nshut up!")
+            {
+                return None;
+            }
+        }
+        CurrentJesterCallbackKind::OpaqueReal => return None,
+    }
+
+    let ledger_interruptions = events
+        .iter()
+        .filter_map(|event| match event.kind {
+            CurrentJesterCallbackKind::RamblerInterruption { target } => Some(target),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    let public_interruptions = state
+        .rambler_shut_up_observations
+        .iter()
+        .filter_map(|observation| {
+            (observation.speaker_position == card.position).then_some(observation.shut_up_target)
+        })
+        .collect::<Vec<_>>();
+    if ledger_interruptions != public_interruptions
+        || !ledger_interruptions.is_empty()
+            && state.rambler_rule_version.as_deref() != Some(RAMBLER_CURRENT_RULE)
+    {
+        return None;
+    }
+    Some(events)
+}
+
+fn current_jester_raw_provider_truth(
+    actor: u8,
+    boundary: CurrentDruidObservationBoundary,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> TruthStatus {
+    if scenario.corrupted.contains(&actor) {
+        return TruthStatus::Lying;
+    }
+    let healthy_bluff = scenario.puppet_position == Some(actor)
+        || scenario.doppelganger_position == Some(actor)
+        || current_data_role_at_druid_observation(actor, boundary, timeline, scenario, state)
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Doppelganger"));
+    if healthy_bluff {
+        TruthStatus::Truthful
+    } else {
+        TruthStatus::Lying
+    }
+}
+
+fn current_jester_real_provider_truth(
+    actor: u8,
+    boundary: CurrentDruidObservationBoundary,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> TruthStatus {
+    if is_runtime_evil_at(actor, scenario, state)
+        && current_raw_bluff_holder_at_druid_observation(actor, boundary, timeline, scenario, state)
+            != CurrentMediumRawBluffHolder::Impossible
+    {
+        TruthStatus::Truthful
+    } else {
+        truth_status(actor, scenario, state)
+    }
+}
+
+fn current_jester_registered_alignment_at_boundary(
+    position: u8,
+    boundary: CurrentDruidObservationBoundary,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<EffectiveAlignment> {
+    // GetRegisterAlignment reads a live registerAs record before runtime
+    // alignment. Stable Spy therefore counts Good until its delayed Baker
+    // reset has settled, even on a runtime-Evil body.
+    if current_spy_register_as_surface_at_druid_observation(
+        position, boundary, timeline, scenario, state,
+    )? {
+        return Some(EffectiveAlignment::Good);
+    }
+    let role =
+        current_data_role_at_druid_observation(position, boundary, timeline, scenario, state);
+    if role
+        .as_deref()
+        .is_some_and(|role| normalize_role(role) == "unknown")
+    {
+        return None;
+    }
+    if role
+        .as_deref()
+        .is_some_and(|role| roles_equal(role, "Wretch"))
+        || is_runtime_evil_at(position, scenario, state)
+    {
+        Some(EffectiveAlignment::Evil)
+    } else {
+        Some(EffectiveAlignment::Good)
+    }
+}
+
+fn current_jester_claim_supports(
+    claim: &CurrentJesterClaim,
+    truth: TruthStatus,
+    boundary: CurrentDruidObservationBoundary,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<AnonymousWretchConstraints> {
+    let anonymous_candidates: HashSet<u8> = anonymous_natural_wretch_candidates(scenario, state)
+        .into_iter()
+        .collect();
+    let mut fixed_evil = 0_i64;
+    let mut unresolved = Vec::new();
+    for &target in &claim.targets {
+        let Some(alignment) = current_jester_registered_alignment_at_boundary(
+            target, boundary, timeline, scenario, state,
+        ) else {
+            return Vec::new();
+        };
+        if alignment == EffectiveAlignment::Evil {
+            fixed_evil += 1;
+        } else if anonymous_candidates.contains(&target) {
+            unresolved.push(target);
+        }
+    }
+
+    fn enumerate(
+        index: usize,
+        candidates: &[u8],
+        fixed_evil: i64,
+        claim: &CurrentJesterClaim,
+        truth: TruthStatus,
+        required: &mut HashSet<u8>,
+        forbidden: &mut HashSet<u8>,
+        scenario: &Scenario,
+        state: &GameState,
+        supports: &mut Vec<AnonymousWretchConstraints>,
+    ) {
+        if index == candidates.len() {
+            let actual = fixed_evil + required.len() as i64;
+            let supported = match truth {
+                TruthStatus::Truthful => claim.evil_count == actual,
+                TruthStatus::Lying => claim.evil_count != actual,
+            };
+            if supported
+                && anonymous_wretch_assignment_possible(required, forbidden, scenario, state)
+            {
+                let candidate = AnonymousWretchConstraints {
+                    required: required.clone(),
+                    forbidden: forbidden.clone(),
+                };
+                if !supports.contains(&candidate) {
+                    supports.push(candidate);
+                }
+            }
+            return;
+        }
+
+        let position = candidates[index];
+        forbidden.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            fixed_evil,
+            claim,
+            truth,
+            required,
+            forbidden,
+            scenario,
+            state,
+            supports,
+        );
+        forbidden.remove(&position);
+
+        required.insert(position);
+        enumerate(
+            index + 1,
+            candidates,
+            fixed_evil,
+            claim,
+            truth,
+            required,
+            forbidden,
+            scenario,
+            state,
+            supports,
+        );
+        required.remove(&position);
+    }
+
+    let mut supports = Vec::new();
+    enumerate(
+        0,
+        &unresolved,
+        fixed_evil,
+        claim,
+        truth,
+        &mut HashSet::new(),
+        &mut HashSet::new(),
+        scenario,
+        state,
+        &mut supports,
+    );
+    supports
+}
+
+fn current_jester_callback_witness(
+    card: &CardInfo,
+    event: &CurrentJesterCallbackEvent,
+    path: CurrentDruidResolvedPath,
+    truth: TruthStatus,
+) -> CurrentJesterResolvedCallback {
+    CurrentJesterResolvedCallback {
+        actor: card.position,
+        activation_id: event.activation_id,
+        callback_index: event.callback_index,
+        path,
+        boundary: CurrentRamblerBoundary::SettledRevealCount(event.settled_reveal_count),
+        truth,
+        interruption_target: match event.kind {
+            CurrentJesterCallbackKind::RamblerInterruption { target } => Some(target),
+            _ => None,
+        },
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn current_jester_append_event_supports(
+    supports: &mut Vec<CurrentJesterSupport>,
+    card: &CardInfo,
+    event: &CurrentJesterCallbackEvent,
+    path: CurrentDruidResolvedPath,
+    truth: TruthStatus,
+    register_as: Option<(u8, String)>,
+    raw_bluff: Option<(u8, String)>,
+    forbidden_raw_bluff: Option<(u8, String)>,
+    actor_wretch_constraints: &AnonymousWretchConstraints,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) {
+    let claim_supports = match &event.kind {
+        CurrentJesterCallbackKind::Result(claim) => current_jester_claim_supports(
+            claim,
+            truth,
+            CurrentDruidObservationBoundary::SettledRevealCount(event.settled_reveal_count),
+            timeline,
+            scenario,
+            state,
+        ),
+        CurrentJesterCallbackKind::RamblerInterruption { .. }
+        | CurrentJesterCallbackKind::OpaqueReal => {
+            vec![AnonymousWretchConstraints::empty()]
+        }
+    };
+    for mut anonymous_wretches in claim_supports {
+        anonymous_wretches
+            .required
+            .extend(&actor_wretch_constraints.required);
+        anonymous_wretches
+            .forbidden
+            .extend(&actor_wretch_constraints.forbidden);
+        if !anonymous_wretches
+            .required
+            .is_disjoint(&anonymous_wretches.forbidden)
+            || !anonymous_wretch_assignment_possible(
+                &anonymous_wretches.required,
+                &anonymous_wretches.forbidden,
+                scenario,
+                state,
+            )
+        {
+            continue;
+        }
+        let support = CurrentJesterSupport {
+            anonymous_wretches,
+            register_as: register_as.clone(),
+            raw_bluff: raw_bluff.clone(),
+            forbidden_raw_bluff: forbidden_raw_bluff.clone(),
+            baker_spy_timeline: timeline.clone(),
+            callbacks: vec![current_jester_callback_witness(card, event, path, truth)],
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+}
+
+fn current_jester_event_supports(
+    card: &CardInfo,
+    event: &CurrentJesterCallbackEvent,
+    path: CurrentDruidResolvedPath,
+    raw_jester: CurrentDruidRawConstraint,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentJesterSupport> {
+    let boundary = CurrentDruidObservationBoundary::SettledRevealCount(event.settled_reveal_count);
+    let anonymous_candidates: HashSet<u8> = anonymous_natural_wretch_candidates(scenario, state)
+        .into_iter()
+        .collect();
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_settled_reveal_count(event.settled_reveal_count, state) {
+            continue;
+        }
+        let current_role = current_data_role_at_druid_observation(
+            card.position,
+            boundary,
+            &timeline,
+            scenario,
+            state,
+        );
+        let raw_holder = current_raw_bluff_holder_at_druid_observation(
+            card.position,
+            boundary,
+            &timeline,
+            scenario,
+            state,
+        );
+        let mut actor_wretches = AnonymousWretchConstraints::empty();
+        let mut register_as = None;
+        let mut raw_bluff = None;
+        let mut forbidden_raw_bluff = None;
+
+        let truth = match path {
+            CurrentDruidResolvedPath::Real => {
+                let Some(role) = current_role.as_deref() else {
+                    continue;
+                };
+                let valid_real_provider = match event.kind {
+                    CurrentJesterCallbackKind::OpaqueReal => {
+                        current_druid_role_can_emit_day_callback(role)
+                            && !roles_equal(role, "Jester")
+                    }
+                    CurrentJesterCallbackKind::Result(_)
+                    | CurrentJesterCallbackKind::RamblerInterruption { .. } => {
+                        roles_equal(role, "Jester")
+                    }
+                };
+                if !valid_real_provider {
+                    continue;
+                }
+                match raw_jester {
+                    CurrentDruidRawConstraint::Unconstrained => {}
+                    CurrentDruidRawConstraint::Forbidden => {
+                        forbidden_raw_bluff = Some((card.position, normalize_role("Jester")));
+                    }
+                    CurrentDruidRawConstraint::Required => {
+                        if raw_holder == CurrentMediumRawBluffHolder::Impossible {
+                            continue;
+                        }
+                        if anonymous_candidates.contains(&card.position) {
+                            actor_wretches.forbidden.insert(card.position);
+                        }
+                        if current_spy_register_as_surface_at_druid_observation(
+                            card.position,
+                            boundary,
+                            &timeline,
+                            scenario,
+                            state,
+                        ) == Some(true)
+                        {
+                            if !current_medium_spy_register_as_label_allowed("Jester", state) {
+                                continue;
+                            }
+                            register_as = Some((card.position, normalize_role("Jester")));
+                        }
+                        raw_bluff = Some((card.position, normalize_role("Jester")));
+                    }
+                }
+                current_jester_real_provider_truth(
+                    card.position,
+                    boundary,
+                    &timeline,
+                    scenario,
+                    state,
+                )
+            }
+            CurrentDruidResolvedPath::Raw => {
+                if matches!(event.kind, CurrentJesterCallbackKind::OpaqueReal)
+                    || event.callback_index == 0
+                        && !current_role
+                            .as_deref()
+                            .is_some_and(current_druid_role_has_no_day_callback)
+                    || raw_holder == CurrentMediumRawBluffHolder::Impossible
+                {
+                    continue;
+                }
+                if anonymous_candidates.contains(&card.position) {
+                    actor_wretches.forbidden.insert(card.position);
+                }
+                if current_spy_register_as_surface_at_druid_observation(
+                    card.position,
+                    boundary,
+                    &timeline,
+                    scenario,
+                    state,
+                ) == Some(true)
+                {
+                    if !current_medium_spy_register_as_label_allowed("Jester", state) {
+                        continue;
+                    }
+                    register_as = Some((card.position, normalize_role("Jester")));
+                }
+                raw_bluff = Some((card.position, normalize_role("Jester")));
+                current_jester_raw_provider_truth(
+                    card.position,
+                    boundary,
+                    &timeline,
+                    scenario,
+                    state,
+                )
+            }
+        };
+
+        current_jester_append_event_supports(
+            &mut supports,
+            card,
+            event,
+            path,
+            truth,
+            register_as,
+            raw_bluff,
+            forbidden_raw_bluff,
+            &actor_wretches,
+            &timeline,
+            scenario,
+            state,
+        );
+    }
+    supports
+}
+
+fn merge_current_jester_supports(
+    left: &CurrentJesterSupport,
+    right: &CurrentJesterSupport,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentJesterSupport> {
+    if left.baker_spy_timeline != right.baker_spy_timeline {
+        return None;
+    }
+    let mut merged = left.clone();
+    merged
+        .anonymous_wretches
+        .required
+        .extend(&right.anonymous_wretches.required);
+    merged
+        .anonymous_wretches
+        .forbidden
+        .extend(&right.anonymous_wretches.forbidden);
+    if !merged
+        .anonymous_wretches
+        .required
+        .is_disjoint(&merged.anonymous_wretches.forbidden)
+    {
+        return None;
+    }
+    for (selected, incoming) in [
+        (&mut merged.register_as, &right.register_as),
+        (&mut merged.raw_bluff, &right.raw_bluff),
+        (&mut merged.forbidden_raw_bluff, &right.forbidden_raw_bluff),
+    ] {
+        if selected
+            .as_ref()
+            .zip(incoming.as_ref())
+            .is_some_and(|(known, candidate)| known != candidate)
+        {
+            return None;
+        }
+        if selected.is_none() {
+            *selected = incoming.clone();
+        }
+    }
+    if merged
+        .raw_bluff
+        .as_ref()
+        .zip(merged.forbidden_raw_bluff.as_ref())
+        .is_some_and(|(required, forbidden)| required == forbidden)
+        || !anonymous_wretch_assignment_possible(
+            &merged.anonymous_wretches.required,
+            &merged.anonymous_wretches.forbidden,
+            scenario,
+            state,
+        )
+        || merged.callbacks.iter().any(|selected| {
+            right.callbacks.iter().any(|incoming| {
+                selected.actor == incoming.actor
+                    && selected.activation_id == incoming.activation_id
+                    && selected.callback_index == incoming.callback_index
+            })
+        })
+        || merged.callbacks.last().zip(right.callbacks.first()).is_some_and(
+            |(selected, incoming)| {
+                (selected.actor, selected.activation_id, selected.callback_index)
+                    >= (incoming.actor, incoming.activation_id, incoming.callback_index)
+            },
+        )
+    {
+        return None;
+    }
+    merged.callbacks.extend(&right.callbacks);
+    Some(merged)
+}
+
+fn current_jester_group_supports(
+    card: &CardInfo,
+    group: &[CurrentJesterCallbackEvent],
+    allow_pending_raw_callback: bool,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentJesterSupport> {
+    match group {
+        [event] if event.dispatch_path == CurrentDruidDispatchPath::Either => {
+            let mut supports = current_jester_event_supports(
+                card,
+                event,
+                CurrentDruidResolvedPath::Real,
+                CurrentDruidRawConstraint::Forbidden,
+                scenario,
+                state,
+            );
+            if allow_pending_raw_callback {
+                for support in current_jester_event_supports(
+                    card,
+                    event,
+                    CurrentDruidResolvedPath::Real,
+                    CurrentDruidRawConstraint::Required,
+                    scenario,
+                    state,
+                ) {
+                    if !supports.contains(&support) {
+                        supports.push(support);
+                    }
+                }
+            }
+            for support in current_jester_event_supports(
+                card,
+                event,
+                CurrentDruidResolvedPath::Raw,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            ) {
+                if !supports.contains(&support) {
+                    supports.push(support);
+                }
+            }
+            supports
+        }
+        [real, raw]
+            if real.dispatch_path == CurrentDruidDispatchPath::Real
+                && raw.dispatch_path == CurrentDruidDispatchPath::Raw =>
+        {
+            let real_supports = current_jester_event_supports(
+                card,
+                real,
+                CurrentDruidResolvedPath::Real,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            );
+            let raw_supports = current_jester_event_supports(
+                card,
+                raw,
+                CurrentDruidResolvedPath::Raw,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            );
+            let mut combined = Vec::new();
+            for selected in &real_supports {
+                for support in &raw_supports {
+                    if let Some(merged) = merge_current_jester_supports(selected, support, scenario, state) {
+                        if !combined.contains(&merged) {
+                            combined.push(merged);
+                        }
+                    }
+                }
+            }
+            combined
+        }
+        _ => Vec::new(),
+    }
+}
+
+fn current_jester_supports_for_payload(
+    card: &CardInfo,
+    events: &[CurrentJesterCallbackEvent],
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentJesterSupport> {
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+    let mut combined = Vec::new();
+    let mut start = 0;
+    while start < events.len() {
+        let activation_id = events[start].activation_id;
+        let mut end = start + 1;
+        while end < events.len() && events[end].activation_id == activation_id {
+            end += 1;
+        }
+        let supports = current_jester_group_supports(
+            card,
+            &events[start..end],
+            end == events.len(),
+            scenario,
+            state,
+        );
+        if supports.is_empty() {
+            return Vec::new();
+        }
+        if start == 0 {
+            combined = supports;
+        } else {
+            let mut next = Vec::new();
+            for selected in &combined {
+                for support in &supports {
+                    if let Some(merged) = merge_current_jester_supports(selected, support, scenario, state) {
+                        if !next.contains(&merged) {
+                            next.push(merged);
+                        }
+                    }
+                }
+            }
+            if next.is_empty() {
+                return Vec::new();
+            }
+            combined = next;
+        }
+        start = end;
+    }
+    combined
+}
+
+fn validate_current_jester(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
+    let Some(events) = parse_current_jester_payload(card, state) else {
+        return false;
+    };
+    !current_jester_supports_for_payload(card, &events, scenario, state).is_empty()
+}
+
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 enum BishopType {
@@ -7690,6 +8757,7 @@ struct CurrentHiddenSurfaceSupport {
     raw_bluff: Option<(u8, String)>,
     forbidden_raw_bluff: Option<(u8, String)>,
     baker_spy_timeline: Option<BakerSpyTimeline>,
+    jester_callbacks: Vec<CurrentJesterResolvedCallback>,
 }
 
 fn current_bounty_hunter_hidden_supports_for_target(
@@ -7745,6 +8813,7 @@ fn current_bounty_hunter_hidden_supports_for_target(
                 raw_bluff: None,
                 forbidden_raw_bluff: None,
                 baker_spy_timeline: Some(timeline),
+                jester_callbacks: Vec::new(),
             });
         }
     }
@@ -7781,6 +8850,8 @@ fn validate_current_hidden_surface_consistency(
                 .info_parsed
                 .contains_key(CONFESSOR_CURRENT_VARIANT_FIELD)
             || card.info_parsed.contains_key(DRUID_CURRENT_VARIANT_FIELD)
+            || (card.info_parsed.contains_key(JESTER_CURRENT_VARIANT_FIELD)
+                && card.info_parsed.contains_key("callback_events"))
             || (card.info_parsed.contains_key("poet_variant")
                 && card
                     .info_parsed
@@ -7821,6 +8892,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7842,6 +8914,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7863,6 +8936,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7884,6 +8958,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7909,6 +8984,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7934,6 +9010,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7959,6 +9036,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -7982,6 +9060,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: support.forbidden_raw_bluff,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -8003,6 +9082,35 @@ fn validate_current_hidden_surface_consistency(
                                     raw_bluff: support.raw_bluff,
                                     forbidden_raw_bluff: support.forbidden_raw_bluff,
                                     baker_spy_timeline: Some(support.baker_spy_timeline),
+                                    jester_callbacks: Vec::new(),
+                                })
+                                .collect(),
+                        ),
+                        None => Some(Vec::new()),
+                    }
+                }
+                Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => Some(Vec::new()),
+                Ok(None) => None,
+            }
+        } else if apparent == "jester" {
+            match current_passive_payload_source(card, JESTER_CURRENT_VARIANT_FIELD, "Jester") {
+                Ok(Some(CurrentPassivePayloadSource::Direct)) if card.info_parsed.len() == 1 => {
+                    None
+                }
+                Ok(Some(CurrentPassivePayloadSource::Direct)) => {
+                    match parse_current_jester_payload(card, state) {
+                        Some(events) => Some(
+                            current_jester_supports_for_payload(card, &events, scenario, state)
+                                .into_iter()
+                                .map(|support| CurrentHiddenSurfaceSupport {
+                                    anonymous_wretches: support.anonymous_wretches,
+                                    bishop_type_options: HashMap::new(),
+                                    anonymous_outcast_roles: HashMap::new(),
+                                    register_as: support.register_as,
+                                    raw_bluff: support.raw_bluff,
+                                    forbidden_raw_bluff: support.forbidden_raw_bluff,
+                                    baker_spy_timeline: Some(support.baker_spy_timeline),
+                                    jester_callbacks: support.callbacks,
                                 })
                                 .collect(),
                         ),
@@ -8027,6 +9135,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: support.forbidden_raw_bluff,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -8048,6 +9157,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -8072,6 +9182,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: support.raw_bluff,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -8096,6 +9207,7 @@ fn validate_current_hidden_surface_consistency(
                             raw_bluff: None,
                             forbidden_raw_bluff: None,
                             baker_spy_timeline: Some(support.baker_spy_timeline),
+                            jester_callbacks: Vec::new(),
                         })
                         .collect(),
                 ),
@@ -8132,12 +9244,16 @@ fn validate_current_hidden_surface_consistency(
         raw_bluffs: &HashMap<u8, String>,
         forbidden_raw_bluffs: &HashMap<u8, HashSet<String>>,
         baker_spy_timeline: Option<&BakerSpyTimeline>,
+        jester_callbacks: &[CurrentJesterResolvedCallback],
         scenario: &Scenario,
         state: &GameState,
     ) -> bool {
         if index == observations.len() {
             if state.rambler_rule_version.as_deref() == Some(RAMBLER_CURRENT_RULE)
-                && state.cards.iter().any(is_ordered_current_druid)
+                && state
+                    .cards
+                    .iter()
+                    .any(|card| is_ordered_current_druid(card) || is_ordered_current_jester(card))
             {
                 let Some(timeline) = baker_spy_timeline else {
                     return false;
@@ -8148,6 +9264,7 @@ fn validate_current_hidden_surface_consistency(
                     raw_bluffs,
                     forbidden_raw_bluffs,
                     anonymous_outcast_roles,
+                    jester_callbacks,
                     scenario,
                     state,
                 );
@@ -8248,6 +9365,17 @@ fn validate_current_hidden_surface_consistency(
                 .baker_spy_timeline
                 .as_ref()
                 .or(baker_spy_timeline);
+            let mut next_jester_callbacks = jester_callbacks.to_vec();
+            if support.jester_callbacks.iter().any(|incoming| {
+                next_jester_callbacks.iter().any(|selected| {
+                    selected.actor == incoming.actor
+                        && selected.activation_id == incoming.activation_id
+                        && selected.callback_index == incoming.callback_index
+                })
+            }) {
+                continue;
+            }
+            next_jester_callbacks.extend(&support.jester_callbacks);
             if search(
                 index + 1,
                 observations,
@@ -8259,6 +9387,7 @@ fn validate_current_hidden_surface_consistency(
                 &next_raw_bluffs,
                 &next_forbidden_raw_bluffs,
                 next_timeline,
+                &next_jester_callbacks,
                 scenario,
                 state,
             ) {
@@ -8279,6 +9408,7 @@ fn validate_current_hidden_surface_consistency(
         &HashMap::new(),
         &HashMap::new(),
         None,
+        &[],
         scenario,
         state,
     )
@@ -8681,6 +9811,20 @@ fn is_ordered_current_druid(card: &CardInfo) -> bool {
             == Some("ordered_callbacks_v1")
 }
 
+fn is_ordered_current_jester(card: &CardInfo) -> bool {
+    normalize_role(&card.apparent_role) == "jester"
+        && card
+            .info_parsed
+            .get(JESTER_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            == Some(POET_CURRENT_VARIANT)
+        && card
+            .info_parsed
+            .get("callback_ledger_variant")
+            .and_then(serde_json::Value::as_str)
+            == Some("ordered_callbacks_v1")
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum CurrentRamblerBoundary {
     Final,
@@ -8702,6 +9846,7 @@ impl CurrentRamblerBoundary {
 struct CurrentRamblerConstraint {
     source: u8,
     boundary: CurrentRamblerBoundary,
+    invocation: Option<(u8, usize, usize)>,
     required: u8,
     forbidden: u8,
 }
@@ -8719,17 +9864,20 @@ fn push_current_rambler_constraint(
     boundary: CurrentRamblerBoundary,
     required: u8,
     forbidden: u8,
+    invocation: Option<(u8, usize, usize)>,
 ) {
-    if let Some(existing) = constraints
-        .iter_mut()
-        .find(|constraint| constraint.source == source && constraint.boundary == boundary)
-    {
+    if let Some(existing) = constraints.iter_mut().find(|constraint| {
+        constraint.source == source
+            && constraint.boundary == boundary
+            && constraint.invocation == invocation
+    }) {
         existing.required |= required;
         existing.forbidden |= forbidden;
     } else {
         constraints.push(CurrentRamblerConstraint {
             source,
             boundary,
+            invocation,
             required,
             forbidden,
         });
@@ -9055,6 +10203,7 @@ fn current_rambler_constraints_for_timeline(
     timeline: &BakerSpyTimeline,
     selected_register_as: &HashMap<u8, String>,
     selected_raw_bluffs: &HashMap<u8, String>,
+    jester_callbacks: &[CurrentJesterResolvedCallback],
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<Vec<CurrentRamblerConstraint>> {
@@ -9063,6 +10212,12 @@ fn current_rambler_constraints_for_timeline(
         .cards
         .iter()
         .filter(|card| is_ordered_current_druid(card))
+        .map(|card| card.position)
+        .collect();
+    let ordered_jester_positions: HashSet<u8> = state
+        .cards
+        .iter()
+        .filter(|card| is_ordered_current_jester(card))
         .map(|card| card.position)
         .collect();
 
@@ -9075,7 +10230,9 @@ fn current_rambler_constraints_for_timeline(
         {
             return None;
         }
-        if !ordered_druid_positions.contains(&observation.speaker_position) {
+        if !ordered_druid_positions.contains(&observation.speaker_position)
+            && !ordered_jester_positions.contains(&observation.speaker_position)
+        {
             let pair = (observation.speaker_position, observation.shut_up_target);
             if !public_interruptions.contains(&pair) {
                 public_interruptions.push(pair);
@@ -9083,7 +10240,9 @@ fn current_rambler_constraints_for_timeline(
         }
     }
     for card in &state.cards {
-        if ordered_druid_positions.contains(&card.position) {
+        if ordered_druid_positions.contains(&card.position)
+            || ordered_jester_positions.contains(&card.position)
+        {
             continue;
         }
         if let Some(value) = card.info_parsed.get("shut_up_target") {
@@ -9116,6 +10275,7 @@ fn current_rambler_constraints_for_timeline(
             CurrentRamblerBoundary::Final,
             matcher,
             0,
+            None,
         );
     }
 
@@ -9155,6 +10315,7 @@ fn current_rambler_constraints_for_timeline(
                             boundary,
                             matcher,
                             0,
+                            None,
                         );
                     }
                     CurrentDruidCallbackKind::Result(_)
@@ -9166,11 +10327,14 @@ fn current_rambler_constraints_for_timeline(
                                 boundary,
                                 0,
                                 matcher,
+                                None,
                             );
                         }
                     }
                 }
             }
+        } else if is_ordered_current_jester(card) {
+            continue;
         } else if card_has_normal_clue(card, true) {
             let matcher = current_rambler_speaker_matcher_at_with_hidden_labels(
                 card.position,
@@ -9188,6 +10352,58 @@ fn current_rambler_constraints_for_timeline(
                     CurrentRamblerBoundary::Final,
                     0,
                     matcher,
+                    None,
+                );
+            }
+        }
+    }
+
+    // Unlike Druid, Jester's two callbacks can independently survive or be
+    // replaced. Preserve the resolved real/raw truth surface and an invocation
+    // key per callback so a sibling negative cannot be collapsed into the
+    // interruption fact for a different native result object. Rambler source
+    // identity remains shared by the outer joint search.
+    for callback in jester_callbacks {
+        if !timeline.supports_settled_reveal_count(
+            match callback.boundary {
+                CurrentRamblerBoundary::SettledRevealCount(count) => count,
+                CurrentRamblerBoundary::Final => return None,
+            },
+            state,
+        ) {
+            return None;
+        }
+        let matcher = if callback.truth == TruthStatus::Truthful {
+            RAMBLER_MATCHES_TRUTHFUL
+        } else {
+            RAMBLER_MATCHES_LYING
+        };
+        let invocation = Some((
+            callback.actor,
+            callback.activation_id,
+            callback.callback_index,
+        ));
+        if let Some(target) = callback.interruption_target {
+            if !adjacent_positions(callback.actor, state.n_cards).contains(&target) {
+                return None;
+            }
+            push_current_rambler_constraint(
+                &mut constraints,
+                target,
+                callback.boundary,
+                matcher,
+                0,
+                invocation,
+            );
+        } else {
+            for source in adjacent_positions(callback.actor, state.n_cards) {
+                push_current_rambler_constraint(
+                    &mut constraints,
+                    source,
+                    callback.boundary,
+                    0,
+                    matcher,
+                    invocation,
                 );
             }
         }
@@ -9201,6 +10417,7 @@ fn current_rambler_timeline_jointly_possible(
     selected_raw_bluffs: &HashMap<u8, String>,
     forbidden_raw_bluffs: &HashMap<u8, HashSet<String>>,
     selected_anonymous_outcasts: &HashMap<u8, String>,
+    jester_callbacks: &[CurrentJesterResolvedCallback],
     scenario: &Scenario,
     state: &GameState,
 ) -> bool {
@@ -9208,6 +10425,7 @@ fn current_rambler_timeline_jointly_possible(
         timeline,
         selected_register_as,
         selected_raw_bluffs,
+        jester_callbacks,
         scenario,
         state,
     )
@@ -9417,6 +10635,29 @@ fn card_has_normal_clue(card: &CardInfo, current_rules: bool) -> bool {
     if role == "jester" && info_bool(&card.info_parsed, "silenced") == Some(true) {
         return false;
     }
+    if is_ordered_current_jester(card) {
+        return card
+            .info_parsed
+            .get("callback_events")
+            .and_then(serde_json::Value::as_array)
+            .is_some_and(|events| {
+                events.iter().any(|event| {
+                    event.get("event_kind").and_then(serde_json::Value::as_str)
+                        == Some("jester_result")
+                })
+            });
+    }
+    if role == "jester"
+        && card
+            .info_parsed
+            .get(JESTER_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            == Some(POET_CURRENT_VARIANT)
+    {
+        // The exact marker-only current shell is an unused active ability, not
+        // evidence that a normal result escaped Rambler replacement.
+        return false;
+    }
     if role == "druid"
         && card
             .info_parsed
@@ -9541,8 +10782,13 @@ fn rambler_required_sources_are_jointly_possible(
 
 fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
     let current_rules = state.rambler_rule_version.as_deref() == Some(RAMBLER_CURRENT_RULE);
-    if current_rules && state.cards.iter().any(is_ordered_current_druid) {
-        // Ordered Druid events need their settled Baker/Spy boundary. Their
+    if current_rules
+        && state
+            .cards
+            .iter()
+            .any(|card| is_ordered_current_druid(card) || is_ordered_current_jester(card))
+    {
+        // Ordered Druid/Jester events need their settled Baker/Spy boundary. Their
         // positive and negative Rambler facts, together with every unrelated
         // card's current Rambler facts, are evaluated once at the base of the
         // hidden-surface DFS. Keep this early layer to public shape/geometry
@@ -10386,6 +11632,88 @@ mod tests {
             _ => panic!("opaque callback cannot be the latest public alias"),
         }
         let mut card = make_card(pos, "Druid", serde_json::Value::Object(info));
+        card.info_text = latest["text"].as_str().unwrap().to_string();
+        card
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn current_jester_result_event_with_references(
+        activation_id: usize,
+        callback_index: usize,
+        dispatch_path: &str,
+        targets: [u8; 3],
+        references: [u8; 3],
+        evil_count: i64,
+        settled_reveal_count: usize,
+        reset_generation: usize,
+        activation_evidence: &str,
+    ) -> serde_json::Value {
+        json!({
+            "activation_id": activation_id,
+            "callback_index": callback_index,
+            "dispatch_path": dispatch_path,
+            "event_kind": "jester_result",
+            "targets": targets,
+            "evil_count": evil_count,
+            "text": current_jester_claim_text(&references, evil_count).unwrap(),
+            "references": references,
+            "settled_reveal_count": settled_reveal_count,
+            "reset_generation": reset_generation,
+            "activation_evidence": activation_evidence,
+        })
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn current_jester_result_event(
+        activation_id: usize,
+        callback_index: usize,
+        dispatch_path: &str,
+        targets: [u8; 3],
+        evil_count: i64,
+        settled_reveal_count: usize,
+        reset_generation: usize,
+        activation_evidence: &str,
+    ) -> serde_json::Value {
+        current_jester_result_event_with_references(
+            activation_id,
+            callback_index,
+            dispatch_path,
+            targets,
+            targets,
+            evil_count,
+            settled_reveal_count,
+            reset_generation,
+            activation_evidence,
+        )
+    }
+
+    fn current_jester_ledger(pos: u8, events: Vec<serde_json::Value>) -> CardInfo {
+        let latest = events.last().unwrap();
+        let mut info = serde_json::Map::from_iter([
+            (
+                JESTER_CURRENT_VARIANT_FIELD.to_string(),
+                json!(POET_CURRENT_VARIANT),
+            ),
+            (
+                "callback_ledger_variant".to_string(),
+                json!("ordered_callbacks_v1"),
+            ),
+            ("callback_events".to_string(), json!(events)),
+        ]);
+        match latest["event_kind"].as_str().unwrap() {
+            "jester_result" => {
+                info.insert("targets".to_string(), latest["targets"].clone());
+                info.insert("evil_count".to_string(), latest["evil_count"].clone());
+            }
+            "rambler_interruption" => {
+                info.insert(
+                    "shut_up_target".to_string(),
+                    latest["shut_up_target"].clone(),
+                );
+            }
+            _ => panic!("opaque callback cannot be the latest public alias"),
+        }
+        let mut card = make_card(pos, "Jester", serde_json::Value::Object(info));
         card.info_text = latest["text"].as_str().unwrap().to_string();
         card
     }
@@ -16178,6 +17506,452 @@ mod tests {
         assert!(!validate_jester(&jester, &falsy, &state));
     }
 
+    fn current_jester_registered_count_state(jester: CardInfo) -> (GameState, Scenario) {
+        let mut state = base_state(
+            4,
+            vec![
+                jester,
+                make_card(2, "Wretch", json!({})),
+                make_card(3, "Bard", json!({})),
+                make_card(4, "Puppet", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Jester".to_string(), "Bard".to_string()];
+        state.deck.outcasts = vec!["Wretch".to_string()];
+        state.deck.minions = vec!["Spy".to_string(), "Puppeteer".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Spy".to_string());
+        scenario.puppet_position = Some(4);
+        (state, scenario)
+    }
+
+    #[test]
+    fn current_jester_accepts_only_exact_unused_or_ordered_shapes() {
+        let unused = make_card(1, "Jester", json!({"jester_variant": POET_CURRENT_VARIANT}));
+        let (unused_state, unused_scenario) = current_jester_registered_count_state(unused.clone());
+        assert!(validate_jester(&unused, &unused_scenario, &unused_state));
+        assert!(!card_has_normal_clue(&unused, true));
+
+        let marked_scalar = make_card(
+            1,
+            "Jester",
+            json!({
+                "jester_variant": POET_CURRENT_VARIANT,
+                "targets": [4, 2, 3],
+                "evil_count": 2,
+            }),
+        );
+        let (scalar_state, scalar_scenario) =
+            current_jester_registered_count_state(marked_scalar.clone());
+        assert!(!validate_jester(
+            &marked_scalar,
+            &scalar_scenario,
+            &scalar_state,
+        ));
+
+        let event = current_jester_result_event(
+            1,
+            0,
+            "either",
+            [4, 2, 3],
+            2,
+            1,
+            0,
+            "single_callback_suffix",
+        );
+        let current = current_jester_ledger(1, vec![event]);
+        let (state, scenario) = current_jester_registered_count_state(current.clone());
+        assert_eq!(current.info_text, "Among:\n#2, #3, #4:\nThere are 2 Evils");
+        assert!(validate_jester(&current, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let mut sorted_references = current.clone();
+        sorted_references.info_parsed["callback_events"][0]["references"] = json!([2, 3, 4]);
+        assert!(validate_jester(&sorted_references, &scenario, &state));
+
+        let duplicate_display_ids = current_jester_ledger(
+            1,
+            vec![current_jester_result_event_with_references(
+                1,
+                0,
+                "either",
+                [4, 2, 3],
+                [2, 2, 4],
+                2,
+                1,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let (duplicate_state, duplicate_scenario) =
+            current_jester_registered_count_state(duplicate_display_ids.clone());
+        assert_eq!(
+            duplicate_display_ids.info_text,
+            "Among:\n#2, #2, #4:\nThere are 2 Evils"
+        );
+        assert!(validate_jester(
+            &duplicate_display_ids,
+            &duplicate_scenario,
+            &duplicate_state,
+        ));
+
+        let mut out_of_board_reference = duplicate_display_ids.clone();
+        out_of_board_reference.info_parsed["callback_events"][0]["references"] =
+            json!([2, 2, 5]);
+        assert!(!validate_jester(
+            &out_of_board_reference,
+            &duplicate_scenario,
+            &duplicate_state,
+        ));
+
+        let mut malformed_latest = current.clone();
+        malformed_latest.info_parsed["evil_count"] = json!(1);
+        assert!(!validate_jester(&malformed_latest, &scenario, &state));
+
+        let mut duplicate_target = current.clone();
+        duplicate_target.info_parsed["callback_events"][0]["targets"] = json!([4, 2, 2]);
+        assert!(!validate_jester(&duplicate_target, &scenario, &state));
+
+        let current_poet = make_card(
+            1,
+            "Poet",
+            json!({
+                "poet_variant": POET_CURRENT_VARIANT,
+                "copied_role": "Jester",
+                "targets": [2, 3, 4],
+                "evil_count": 2,
+            }),
+        );
+        assert!(!validate_poet(&current_poet, &scenario, &state));
+    }
+
+    #[test]
+    fn current_jester_uses_register_as_first_and_false_count_complement() {
+        let truthful = current_jester_ledger(
+            1,
+            vec![current_jester_result_event(
+                1,
+                0,
+                "either",
+                [4, 2, 3],
+                2,
+                1,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let (mut state, scenario) = current_jester_registered_count_state(truthful.clone());
+        assert!(validate_jester(&truthful, &scenario, &state));
+
+        let false_truth = current_jester_ledger(
+            1,
+            vec![current_jester_result_event(
+                1,
+                0,
+                "either",
+                [4, 2, 3],
+                3,
+                1,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        state.cards[0] = false_truth.clone();
+        assert!(!validate_jester(&false_truth, &scenario, &state));
+
+        let mut corrupted = scenario;
+        corrupted.corrupted.insert(1);
+        assert!(validate_jester(&false_truth, &corrupted, &state));
+        assert!(!validate_jester(&truthful, &corrupted, &state));
+    }
+
+    #[test]
+    fn current_jester_activation_evidence_matches_bridge_reachability() {
+        let single = |evidence: &str, generation: usize| {
+            current_jester_ledger(
+                1,
+                vec![current_jester_result_event(
+                    1,
+                    0,
+                    "either",
+                    [1, 2, 3],
+                    0,
+                    1,
+                    generation,
+                    evidence,
+                )],
+            )
+        };
+        let mut state = base_state(3, vec![]);
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3];
+        assert!(
+            parse_current_jester_payload(&single("single_callback_suffix", 0), &state,).is_some()
+        );
+        assert!(
+            parse_current_jester_payload(&single("single_callback_suffix", 1), &state,).is_none()
+        );
+        assert!(
+            parse_current_jester_payload(&single("session_reset_generation", 1), &state,).is_some()
+        );
+        assert!(
+            parse_current_jester_payload(&single("session_reset_generation", 0), &state,).is_none()
+        );
+
+        let dual = current_jester_ledger(
+            1,
+            vec![
+                current_jester_result_event(
+                    1,
+                    0,
+                    "real",
+                    [1, 2, 3],
+                    0,
+                    1,
+                    0,
+                    "same_activation_extension",
+                ),
+                current_jester_result_event(
+                    1,
+                    1,
+                    "raw",
+                    [1, 2, 3],
+                    1,
+                    1,
+                    0,
+                    "same_activation_extension",
+                ),
+            ],
+        );
+        assert!(parse_current_jester_payload(&dual, &state).is_some());
+        let mut bad_targets = dual;
+        bad_targets.info_parsed["callback_events"][1]["targets"] = json!([3, 2, 1]);
+        assert!(parse_current_jester_payload(&bad_targets, &state).is_none());
+    }
+
+    fn current_jester_mixed_rambler_world(
+        jester: CardInfo,
+        second_is_evil_fake: bool,
+        fifth_is_evil_fake_rambler: bool,
+    ) -> (GameState, Scenario) {
+        let interruptions = jester.info_parsed["callback_events"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|event| {
+                (event["event_kind"] == "rambler_interruption").then(|| {
+                    crate::types::RamblerShutUpObservation {
+                        speaker_position: 1,
+                        shut_up_target: event["shut_up_target"].as_u64().unwrap() as u8,
+                    }
+                })
+            })
+            .collect();
+        let mut state = base_state(
+            5,
+            vec![
+                jester,
+                make_card(2, "Rambler", json!({})),
+                make_card(3, "Bard", json!({})),
+                make_card(4, "Jester", json!({"jester_variant": POET_CURRENT_VARIANT})),
+                make_card(
+                    5,
+                    if fifth_is_evil_fake_rambler {
+                        "Rambler"
+                    } else {
+                        "Shaman"
+                    },
+                    json!({}),
+                ),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Jester".to_string(),
+            "Jester".to_string(),
+            "Bard".to_string(),
+        ];
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.deck.minions = vec!["Minion".to_string(), "Shaman".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4, 5];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        state.rambler_shut_up_observations = interruptions;
+
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+        scenario.evil_positions.insert(5, "Shaman".to_string());
+        if second_is_evil_fake {
+            scenario.evil_positions.insert(2, "Minion".to_string());
+        }
+        scenario.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 1,
+            copied_role: "Jester".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+        (state, scenario)
+    }
+
+    #[test]
+    fn current_jester_rambler_replacement_is_callback_local() {
+        // Runtime-Evil copied Jester dispatches truthful real Jester first and
+        // lying raw Jester second. A lying-mode fake Rambler can therefore
+        // replace only the raw event while the real event remains normal.
+        let normal_then_interrupted = current_jester_ledger(
+            1,
+            vec![
+                current_jester_result_event(1, 0, "real", [1, 3, 5], 2, 1, 0, "auto_use_click"),
+                current_druid_interruption_event(1, 1, "raw", 2, 1, 0, "auto_use_click"),
+            ],
+        );
+        let (state, scenario) =
+            current_jester_mixed_rambler_world(normal_then_interrupted.clone(), true, true);
+        assert!(validate_jester(&normal_then_interrupted, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // The inverse ordering is independently reachable with a natural
+        // truthful Rambler: it replaces real truth but not the lying raw clue.
+        let interrupted_then_normal = current_jester_ledger(
+            1,
+            vec![
+                current_druid_interruption_event(1, 0, "real", 2, 1, 0, "auto_use_click"),
+                current_jester_result_event(1, 1, "raw", [1, 3, 5], 1, 1, 0, "auto_use_click"),
+            ],
+        );
+        let (state, scenario) =
+            current_jester_mixed_rambler_world(interrupted_then_normal.clone(), false, false);
+        assert!(validate_jester(&interrupted_then_normal, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // Both callbacks may also be replaced by different persistent sources:
+        // natural truthful Rambler #2 for real, fake lying Rambler #5 for raw.
+        let two_sources = current_jester_ledger(
+            1,
+            vec![
+                current_druid_interruption_event(1, 0, "real", 2, 1, 0, "auto_use_click"),
+                current_druid_interruption_event(1, 1, "raw", 5, 1, 0, "auto_use_click"),
+            ],
+        );
+        let (state, scenario) =
+            current_jester_mixed_rambler_world(two_sources.clone(), false, true);
+        assert!(validate_jester(&two_sources, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_jester_opaque_real_requires_one_nonopaque_raw_callback() {
+        let opaque = json!({
+            "activation_id": 1,
+            "callback_index": 0,
+            "dispatch_path": "real",
+            "event_kind": "opaque_real",
+            "text": "There are NO Corrupted around me",
+            "references": null,
+            "settled_reveal_count": 1,
+            "reset_generation": 0,
+            "activation_evidence": "auto_use_click",
+        });
+        let raw = current_jester_result_event(1, 1, "raw", [1, 2, 3], 1, 1, 0, "auto_use_click");
+        let jester = current_jester_ledger(1, vec![opaque.clone(), raw.clone()]);
+        let mut state = base_state(
+            4,
+            vec![
+                jester.clone(),
+                make_card(2, "Bard", json!({})),
+                make_card(3, "Shaman", json!({})),
+                make_card(4, "Medium", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Jester".to_string(),
+            "Medium".to_string(),
+            "Bard".to_string(),
+        ];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(1, "Pooka".to_string());
+        scenario.evil_positions.insert(3, "Shaman".to_string());
+        scenario.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 1,
+            copied_role: "Medium".to_string(),
+            target_previous_roles: vec!["Pooka".to_string()],
+        });
+        assert!(validate_jester(&jester, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        let mut opaque_last = jester.clone();
+        opaque_last.info_parsed["callback_events"] = json!([raw, opaque]);
+        assert!(!validate_jester(&opaque_last, &scenario, &state));
+
+        let mut launders_jester = jester.clone();
+        launders_jester.info_parsed["callback_events"][0]["text"] =
+            json!("Among:\n#1, #2, #3:\nThere are 2 Evils");
+        assert!(!validate_jester(&launders_jester, &scenario, &state));
+        let mut launders_rambler = jester;
+        launders_rambler.info_parsed["callback_events"][0]["text"] = json!("#2 SHUT UP");
+        assert!(!validate_jester(&launders_rambler, &scenario, &state));
+    }
+
+    #[test]
+    fn current_jester_single_raw_requires_real_role_with_no_day_output() {
+        let raw_only = current_jester_ledger(
+            1,
+            vec![current_jester_result_event(
+                1,
+                0,
+                "either",
+                [1, 2, 3],
+                1,
+                1,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let mut state = base_state(
+            3,
+            vec![
+                raw_only.clone(),
+                make_card(2, "Bard", json!({})),
+                make_card(3, "Bard", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Jester".to_string(), "Medium".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3];
+
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(validate_jester(&raw_only, &drunk, &state));
+
+        let mut medium = empty_scenario();
+        medium.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Medium".to_string(),
+            target_previous_roles: vec!["Drunk".to_string()],
+        });
+        medium.drunk_position = Some(1);
+        assert!(!validate_jester(&raw_only, &medium, &state));
+    }
+
     #[test]
     fn dreamer_honest_one_match_has_positive_native_support() {
         let (dreamer, state) = dreamer_state(
@@ -18799,6 +20573,7 @@ mod tests {
             &HashMap::new(),
             &HashMap::new(),
             &HashMap::new(),
+            &[],
             &scenario,
             &normal_state,
         ));
@@ -18808,6 +20583,7 @@ mod tests {
             &HashMap::new(),
             &HashMap::new(),
             &HashMap::new(),
+            &[],
             &scenario,
             &normal_state,
         ));
@@ -18891,6 +20667,7 @@ mod tests {
             &HashMap::new(),
             &HashMap::new(),
             &HashMap::new(),
+            &[],
             &twin,
             &twin_state,
         ));
@@ -18960,6 +20737,7 @@ mod tests {
                 &HashMap::new(),
                 &HashMap::new(),
                 &HashMap::new(),
+                &[],
                 &scenario,
                 &state,
             )

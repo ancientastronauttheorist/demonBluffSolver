@@ -794,6 +794,7 @@ class GameStateMachine:
         from game_loop import (
             DecisionLog,
             _active_cycle_is_spent,
+            _card_current_jester_no_info,
             _has_active_clue_result,
             _parse_clue_from_memory,
             _pickable_uses_remaining,
@@ -851,9 +852,26 @@ class GameStateMachine:
                 if remaining is None:
                     return False
                 if remaining > 0:
-                    parsed = card_no_info(
-                        parsed.position,
-                        parsed.apparent_role,
+                    existing = next(
+                        (
+                            card for card in self.session.cards
+                            if card.position == parsed.position
+                        ),
+                        None,
+                    )
+                    if existing is not None:
+                        return True
+                    parsed = (
+                        _card_current_jester_no_info(parsed.position)
+                        if (
+                            parsed.apparent_role.casefold() == "jester"
+                            and parsed.info_parsed.get("jester_variant")
+                            == "public_current"
+                        )
+                        else card_no_info(
+                            parsed.position,
+                            parsed.apparent_role,
+                        )
                     )
             self.session.add_card(parsed, mark_active_result=False)
             if (
@@ -910,6 +928,7 @@ class GameStateMachine:
             "Plague Doctor",
             "Plague_Doctor",
             "Druid",
+            "Jester",
             "Judge",
             "Fortune Teller",
         ):
@@ -945,6 +964,12 @@ class GameStateMachine:
                         "history. A Druid interruption cannot be entered "
                         "manually—recover authenticated acted-info memory or "
                         "restart."
+                    )
+                elif display_name == "Jester":
+                    recovery = (
+                        "Recover the authenticated acted-info history with "
+                        "auto_card. A scalar manual result cannot safely resume "
+                        "Jester's ResetAfterNight callback ledger."
                     )
                 else:
                     recovery = (

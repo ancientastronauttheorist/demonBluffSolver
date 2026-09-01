@@ -995,9 +995,238 @@ def _ft_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -
 
 
 def _jester_ground_truth(targets: list[int], scenario: Scenario, state: GameState) -> int:
-    """Jester: count evil among targets."""
+    """Archived Jester approximation: count final effective Evil targets."""
     return sum(1 for t in targets
                if effective_alignment(t, scenario, state) == Alignment.EVIL)
+
+
+_JESTER_CURRENT_VARIANT = "public_current"
+
+
+def _jester_role_key(role: Optional[str]) -> str:
+    """Canonical comparison key for a public/current role name."""
+    return (role or "").casefold().replace(" ", "").replace("_", "")
+
+
+def _jester_registered_alignment_at_observation(
+    position: int,
+    scenario: Scenario,
+    state: GameState,
+) -> Optional[Alignment]:
+    """Project current Juggler's register-as-first alignment surface.
+
+    Native Jester does not count final scenario Evil membership. It asks
+    ``GetRegisterAlignment`` at completion: a live registerAs starting
+    alignment wins, otherwise the Character's runtime alignment is used.
+    Python scenarios represent the stable Spy/Wretch/Puppet/Drunk surfaces,
+    but not arbitrary surviving registerAs pointers after identity movers.
+    Those mover-opaque cases return ``None`` so recommendation scoring fails
+    closed instead of borrowing final/effective alignment.
+    """
+    if type(position) is not int or not 1 <= position <= state.n_cards:
+        return None
+
+    shaman = scenario.shaman_trace
+    if shaman is not None and position in {
+        shaman.source_position,
+        shaman.target_position,
+    }:
+        return None
+
+    twin = scenario.twin_trace
+    if twin is not None:
+        affected = {twin.actor_position}
+        if twin.outcome.neighbor_position is not None:
+            affected.add(twin.outcome.neighbor_position)
+        if position in affected:
+            return None
+
+    physical_evil_role = scenario.evil_positions.get(position)
+    physical_evil_key = _jester_role_key(physical_evil_role)
+    if physical_evil_key == "unknown":
+        # A role-unknown Evil might be stable Spy (registered Good) or an
+        # ordinary null-registerAs Evil. Final Evil membership cannot decide.
+        return None
+
+    public_role = _public_death_role_at(state, position)
+    if public_role is None:
+        public_card = get_card_at(position, state)
+        public_role = public_card.apparent_role if public_card is not None else None
+    public_key = _jester_role_key(public_role)
+
+    if physical_evil_key == "spy":
+        # Stable Spy's Villager registerAs wins over runtime Evil. A public
+        # Baker surface can instead be a converted Spy whose delayed Reveal
+        # clears that pointer; Python Scenario does not retain the exact Baker
+        # observation phase, so keep that case out of strategy scoring.
+        if public_key == "baker":
+            return None
+        return Alignment.GOOD
+
+    if position == scenario.puppet_position or physical_evil_role is not None:
+        # Puppet and ordinary Minion/Demon bodies have no overriding Good
+        # registerAs in the represented current surface.
+        return Alignment.EVIL
+
+    # Drunk and Doppelganger remain runtime Good with null registerAs even when
+    # their public copied identity is Wretch or another Evil-registering role.
+    if position in {
+        scenario.drunk_position,
+        scenario.doppelganger_position,
+    }:
+        return Alignment.GOOD
+
+    chancellor = scenario.chancellor_trace
+    if (
+        chancellor is not None
+        and position == chancellor.added_outcast_position
+        and _jester_role_key(chancellor.added_outcast_role) == "wretch"
+    ):
+        return Alignment.EVIL
+
+    if not public_key or public_key == "unknown":
+        # An unrevealed/identity-opaque Good seat could still be Wretch.
+        return None
+    if public_key == "wretch":
+        return Alignment.EVIL
+    if get_card(public_role) is None:
+        return None
+    return Alignment.GOOD
+
+
+def _jester_current_ground_truth(
+    targets: list[int] | tuple[int, int, int],
+    scenario: Scenario,
+    state: GameState,
+) -> Optional[int]:
+    """Return the exact represented current count, or None when opaque."""
+    if (
+        len(targets) != 3
+        or len(set(targets)) != 3
+        or any(type(target) is not int for target in targets)
+    ):
+        raise ValueError("Current Jester requires exactly three distinct targets")
+    alignments = [
+        _jester_registered_alignment_at_observation(target, scenario, state)
+        for target in targets
+    ]
+    if any(alignment is None for alignment in alignments):
+        return None
+    return sum(alignment == Alignment.EVIL for alignment in alignments)
+
+
+def _jester_actor_callback_truths(
+    ability_pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> Optional[tuple[TruthStatus, ...]]:
+    """Return the represented ordered Jester callback paths for one activation.
+
+    A copied current Jester can coexist with a preserved raw Jester bluff. In
+    that exact Shaman surface native dispatches real first and raw second. The
+    Scenario model has no generic current-data/raw-bluff trace, so other
+    identity-mover surfaces fail closed rather than being collapsed to newest.
+    """
+    card = get_card_at(ability_pos, state)
+    if card is None or _jester_role_key(card.apparent_role) != "jester":
+        return None
+
+    twin = scenario.twin_trace
+    if twin is not None and twin.outcome.neighbor_position is not None and ability_pos in {
+        twin.actor_position,
+        twin.outcome.neighbor_position,
+    }:
+        return None
+
+    chancellor = scenario.chancellor_trace
+    if chancellor is not None and ability_pos in {
+        *chancellor.original_positions,
+        chancellor.added_outcast_position,
+    }:
+        return None
+
+    has_raw_bluff = (
+        ability_pos in scenario.evil_positions
+        or ability_pos in state.executed_evil_roles
+        or ability_pos == scenario.puppet_position
+        or ability_pos == scenario.drunk_position
+        or ability_pos == scenario.doppelganger_position
+    )
+    shaman = scenario.shaman_trace
+    copied_real_jester = (
+        shaman is not None
+        and ability_pos == shaman.target_position
+        and _jester_role_key(shaman.copied_role) == "jester"
+    )
+    if shaman is not None and ability_pos == shaman.target_position:
+        copied_key = _jester_role_key(shaman.copied_role)
+        if not copied_key or copied_key == "unknown":
+            return None
+        if has_raw_bluff and not copied_real_jester:
+            return None
+
+    if not copied_real_jester or not has_raw_bluff:
+        return (truth_status(ability_pos, scenario, state),)
+
+    runtime_evil = (
+        scenario_is_evil(ability_pos, scenario)
+        or ability_pos in state.executed_evil_roles
+    )
+    real_truth = (
+        TruthStatus.TRUTHFUL
+        if runtime_evil
+        else truth_status(ability_pos, scenario, state)
+    )
+    raw_truth = (
+        TruthStatus.LYING
+        if ability_pos in scenario.corrupted
+        else TruthStatus.TRUTHFUL
+        if ability_pos in {
+            scenario.puppet_position,
+            scenario.doppelganger_position,
+        }
+        else TruthStatus.LYING
+    )
+    return (real_truth, raw_truth)
+
+
+def _jester_observation_likelihoods(
+    targets: list[int] | tuple[int, int, int],
+    ability_pos: int,
+    scenario: Scenario,
+    state: GameState,
+) -> dict[tuple[int, ...], float]:
+    """Return current Jester's represented ordered count distribution."""
+    actual = _jester_current_ground_truth(targets, scenario, state)
+    if any(target < 1 or target > state.n_cards for target in targets):
+        raise ValueError("Current Jester target is outside the board")
+    if actual is None:
+        return {}
+    callback_truths = _jester_actor_callback_truths(
+        ability_pos,
+        scenario,
+        state,
+    )
+    if callback_truths is None:
+        return {}
+
+    likelihoods: dict[tuple[int, ...], float] = {(): 1.0}
+    for callback_truth in callback_truths:
+        outcomes = (
+            {actual: 1.0}
+            if callback_truth == TruthStatus.TRUTHFUL
+            else {
+                claimed: 1.0 / 3.0
+                for claimed in range(4)
+                if claimed != actual
+            }
+        )
+        likelihoods = {
+            prefix + (claimed,): prefix_probability * probability
+            for prefix, prefix_probability in likelihoods.items()
+            for claimed, probability in outcomes.items()
+        }
+    return likelihoods
 
 
 def _judge_ground_truth(target: int, scenario: Scenario, state: GameState) -> bool:
@@ -1677,6 +1906,114 @@ def _information_from_observation_likelihoods(
     )
 
 
+def _jester_information_for_targets(
+    targets: list[int] | tuple[int, int, int],
+    ability_pos: int,
+    state: GameState,
+    scenarios: list[Scenario],
+) -> tuple[float, float, int]:
+    """Return native current-Jester information for one physical triple."""
+    return _information_from_observation_likelihoods([
+        _jester_observation_likelihoods(
+            targets,
+            ability_pos,
+            scenario,
+            state,
+        )
+        for scenario in scenarios
+    ])
+
+
+def _recommend_jester_ability(
+    ability_pos: int,
+    candidate_targets: list[list[int]],
+    state: GameState,
+    result: SolverResult,
+) -> Optional[AbilityRecommendation]:
+    """Recommend a current Jester triple using exact count likelihoods."""
+    scenarios = result.surviving_scenarios
+    if not scenarios or not candidate_targets:
+        return None
+
+    best_targets: Optional[tuple[int, int, int]] = None
+    best_information = -1.0
+    best_expected_entropy = float("inf")
+    best_outcome_count = 0
+    for targets in candidate_targets:
+        target_key = tuple(sorted(targets))
+        if len(target_key) != 3 or len(set(target_key)) != 3:
+            continue
+        information, expected_entropy, outcome_count = (
+            _jester_information_for_targets(
+                target_key,
+                ability_pos,
+                state,
+                scenarios,
+            )
+        )
+        if outcome_count == 0:
+            # At least one scenario has an unrepresented live registerAs
+            # surface. Do not rank this triple using final alignment instead.
+            continue
+        if (
+            best_targets is None
+            or information > best_information + 1e-12
+            or (
+                math.isclose(
+                    information,
+                    best_information,
+                    rel_tol=0.0,
+                    abs_tol=1e-12,
+                )
+                and target_key < best_targets
+            )
+        ):
+            best_targets = target_key
+            best_information = information
+            best_expected_entropy = expected_entropy
+            best_outcome_count = outcome_count
+
+    if best_targets is None:
+        return None
+
+    callback_truths = [
+        _jester_actor_callback_truths(ability_pos, scenario, state)
+        for scenario in scenarios
+    ]
+    liar_probability = sum(
+        truths is not None and TruthStatus.LYING in truths
+        for truths in callback_truths
+    ) / len(scenarios)
+    dual_probability = sum(
+        truths is not None and len(truths) == 2
+        for truths in callback_truths
+    ) / len(scenarios)
+    warnings = []
+    if liar_probability > 0:
+        warnings.append(
+            f"Lying Jester path: {liar_probability:.0%} -- included in "
+            "uniform native false-count likelihood"
+        )
+    if dual_probability > 0:
+        warnings.append(
+            f"Dual real-to-raw Jester path: {dual_probability:.0%} -- scored "
+            "as an ordered callback pair"
+        )
+
+    return AbilityRecommendation(
+        position=ability_pos,
+        ability_name="Jester",
+        targets=list(best_targets),
+        score=best_information,
+        reasoning=(
+            f"Mutual information {best_information:.3f} bits; "
+            f"expected posterior entropy {best_expected_entropy:.3f} bits "
+            f"across {best_outcome_count} ordered native Jester counts"
+        ),
+        warnings=warnings,
+    )
+
+
 def _dreamer_information_for_targets(
     targets: list[int] | tuple[int, int],
     ability_pos: int,
@@ -2128,12 +2465,39 @@ def recommend_abilities(
                 used_abilities=used_abilities)
             _apply_timing(rec, timing, state, recommendations)
 
-        elif role == "Jester" and len(others) >= 3:
-            candidates = [list(c) for c in combinations(others, 3)]
-            rec = _recommend_count_ability(
-                "Jester", pos, _jester_ground_truth,
-                candidates, 3, state, result)
-            _apply_timing(rec, timing, state, recommendations)
+        elif role == "Jester":
+            jester_variant = (
+                card.info_parsed.get("jester_variant")
+                if isinstance(card.info_parsed, dict)
+                else None
+            )
+            if (
+                jester_variant == _JESTER_CURRENT_VARIANT
+                and state.n_cards >= 3
+            ):
+                # Juggler's global picker accepts every physical Character.
+                # Selection semantics depend only on the set, so one canonical
+                # click order per three-seat combination is sufficient here.
+                jester_targets = list(range(1, state.n_cards + 1))
+                candidates = [
+                    list(candidate)
+                    for candidate in combinations(jester_targets, 3)
+                ]
+                rec = _recommend_jester_ability(
+                    pos,
+                    candidates,
+                    state,
+                    result,
+                )
+                _apply_timing(rec, timing, state, recommendations)
+            elif jester_variant is None and len(others) >= 3:
+                # Frozen unmarked observations keep the pre-audit strategy:
+                # final/effective alignment and only live non-self targets.
+                candidates = [list(c) for c in combinations(others, 3)]
+                rec = _recommend_count_ability(
+                    "Jester", pos, _jester_ground_truth,
+                    candidates, 3, state, result)
+                _apply_timing(rec, timing, state, recommendations)
 
         elif role == "Judge":
             # Judge's shared picker accepts every board Character, including

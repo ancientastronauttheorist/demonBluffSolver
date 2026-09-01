@@ -1,4 +1,8 @@
-"""Fresh-event gates for generic Dreamer/Jester state-machine abilities."""
+"""Fresh-event gates for the generic Dreamer state-machine ability path.
+
+Current Jester now routes through GameSession's ordered callback ledger; its
+state-machine integration lives in test_jester_current.py.
+"""
 
 import copy
 import unittest
@@ -57,14 +61,16 @@ class GenericActiveFreshnessTests(unittest.TestCase):
     def _machine(role, monitor):
         session = GameSession(4, 1)
         session.cards = [CardInfo(1, role)]
+        if role == "Jester":
+            session.reveal_order = [1]
         machine = GameStateMachine(session=session, monitor=monitor)
         machine.phase = GamePhase.ABILITY_USE
         targets = [2, 3] if role == "Dreamer" else [2, 3, 4]
         machine._pending_ability = (1, targets, role, None)
         return session, machine
 
-    def test_dreamer_and_jester_snapshot_before_click_and_store_only_append(self):
-        for role in ("Dreamer", "Jester"):
+    def test_dreamer_snapshots_before_click_and_stores_only_append(self):
+        for role in ("Dreamer",):
             with self.subTest(role=role):
                 targets = [2, 3] if role == "Dreamer" else [2, 3, 4]
                 old = {"desc": "old result", "targets": list(targets)}
