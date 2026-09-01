@@ -265,10 +265,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     writer branches; and re-enable card and historical validators only for the
     resulting exact supported worlds.
   - [ ] Complete the remaining general ordered replay beyond the exact gated
-    Twin/Puppeteer, Puppeteer/Shaman, and structural Twin/Shaman slices:
-    candidate-changing mixed writer pools, duplicate mutators, and probability-
-    exact occurrence weighting. Strict current observations remain fail-closed
-    for inferred incomplete writers.
+    Twin/Puppeteer, Puppeteer/Shaman, and Twin/Shaman slices: broader mixed
+    writer pools, duplicate mutators, split Twin presentation/action provenance,
+    and probability-exact occurrence weighting. Strict current observations
+    remain fail-closed for inferred incomplete writers.
     - [x] Implement the pure post-Twin Puppeteer boundary: select the first
       current actor, preserve physical previous/next occurrences, filter exact
       real Villagers, remove only the first Saint occurrence, make nonempty
@@ -296,7 +296,17 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       onto the Twin body. Preserve both trace identities and the complete
       Cartesian product, admit the no-Demon path, reject copied Bounty Hunter,
       and fall back atomically if any Twin branch touches a Villager or unknown
-      endpoint. Candidate-changing Twin-to-Shaman worlds remain open.
+      endpoint.
+    - [x] Integrate the first candidate-changing Twin-to-Shaman role-flow slice
+      for trusted no-Outcast Scout/Witness boards with exactly Twin, Shaman,
+      and fully dealt Lilis Demons: enumerate the complete Villager occurrence
+      map, replay every Twin occurrence before rebuilding Shaman's live ordered
+      pair pool, preserve both trace identities and duplicate-role RNG weight,
+      validate the complete baseline and both native traces independently, and
+      distinguish exact contradiction from cap/incomplete fallback. Distinct
+      swaps with any captured reveal/action history fall back wholesale until
+      runtime alignment, dispatched-role truth, and delayed Minion bluff
+      presentation have separate provenance.
     - [x] Replay every selected current Plague Doctor at the global Start slot
       in descending displayed-ID order, rebuilding the live eligible pool for
       each actor and retaining ordered target/no-op history through Alchemist

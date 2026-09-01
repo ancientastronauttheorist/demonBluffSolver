@@ -8,7 +8,7 @@
 use std::collections::HashMap;
 
 use crate::knowledge_base::{get_card, normalize_role, Faction};
-use crate::types::{TwinNeighborSide, TwinStartOutcome, TwinTrace};
+use crate::types::{GameState, TwinNeighborSide, TwinStartOutcome, TwinTrace};
 
 fn is_twin(role: &str) -> bool {
     normalize_role(role) == "twinminion"
@@ -16,6 +16,41 @@ fn is_twin(role: &str) -> bool {
 
 fn is_demon(role: &str) -> bool {
     get_card(role).is_some_and(|card| card.faction == Faction::Demon)
+}
+
+/// Whether a distinct Twin swap needs public-action provenance that the
+/// role-only replay does not yet carry.
+///
+/// Native keeps runtime alignment, current CharacterData dispatch, and the
+/// delayed Minion bluff on separate layers after a swap. Until those layers
+/// have their own trace, any captured reveal/action history can observe an
+/// unsupported combination. Ordinary execution/current-role evidence is
+/// deliberately absent from this gate: it exposes the final current dataRef,
+/// which the exact replay derives directly.
+pub fn distinct_swap_has_unsupported_public_action_evidence(
+    state: &GameState,
+    trace: &TwinTrace,
+) -> bool {
+    let TwinStartOutcome::Swap {
+        neighbor_position, ..
+    } = trace.outcome
+    else {
+        return false;
+    };
+    if neighbor_position == trace.actor_position {
+        return false;
+    }
+
+    !state.cards.is_empty()
+        || !state.slayer_results.is_empty()
+        || !state.pd_ability_results.is_empty()
+        || !state.blocked_positions.is_empty()
+        || !state.night_kills.is_empty()
+        || state.night_kill_evil_count != 0
+        || !state.reveal_order.is_empty()
+        || !state.used_abilities.is_empty()
+        || !state.rambler_shut_up_observations.is_empty()
+        || state.terminal_loss_role.is_some()
 }
 
 /// Enumerate the ordinary shipped Twin Minion Start outcomes.

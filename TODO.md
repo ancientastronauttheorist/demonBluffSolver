@@ -68,7 +68,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 - [x] Puppeteer — no issues
 - [x] Shaman — guaranteed duplicate enforced; native source/destination history
   tracked; exact no-Twin Puppeteer-to-Shaman composition now rebuilds the live
-  Villager pool after Puppet conversion and preserves both ordered traces
+  Villager pool after Puppet conversion and preserves both ordered traces. The
+  first candidate-changing Twin-to-Shaman kernel now rebuilds the post-swap
+  Scout/Witness pool from a complete pre-Twin map and preserves both native
+  draws without collapsing duplicate-role probability mass
 - [x] Twin Minion — full managed `Marionette` boundary native-audited; ordered
   Start swaps current `CharacterData` with one alive neighbour of a selected
   current Demon while preserving physical alignment, status, resistance, and
@@ -79,8 +82,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   non-Villager, including relocated Shaman dispatch and the no-Demon path.
   A third exact slice composes deterministic Puppeteer conversion directly into
   Shaman's later ordered Villager draw on supported no-Twin boards, so the
-  erased Puppet role cannot leak back into Shaman history. Candidate-changing
-  mixed-writer replay remains open; stable Twin/Demon adjacency is not valid.
+  erased Puppet role cannot leak back into Shaman history. A fourth, role-only
+  slice exactly replays candidate-changing Twin-to-Shaman boards for trusted
+  Scout/Witness pools with no captured reveal/action history; broader identity
+  writers and Twin's split presentation/action provenance remain open. Stable
+  Twin/Demon adjacency is not valid.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues
@@ -130,7 +136,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   leaving actual truth dispatch untouched. Exact structural Twin worlds now
   cross every Twin trace with every Shaman direction when no Twin branch can
   change the Villager pool; any Villager/unknown endpoint or copied Bounty
-  Hunter keeps the entire state on the conservative legacy path.
+  Hunter keeps that structural path conservative. The new exact role-only
+  Scout/Witness kernel covers the first Villager-moving case by rebuilding the
+  Shaman pool after each Twin branch; any public action surface still triggers
+  wholesale fallback.
 
 - [ ] **Native branch probability weights** — surviving scenarios are still
   treated as equally likely after semantic deduplication. Preserve native draw

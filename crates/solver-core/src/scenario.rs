@@ -13,7 +13,10 @@ use crate::knowledge_base::{
 };
 use crate::puppeteer::{enumerate_puppeteer_traces, role_after_puppeteer};
 use crate::shaman::{enumerate_shaman_traces, role_after_shaman};
-use crate::twin::{enumerate_twin_traces, role_after_twin};
+use crate::twin::{
+    distinct_swap_has_unsupported_public_action_evidence, enumerate_twin_traces,
+    role_after_twin,
+};
 use crate::types::{
     BoardCountProvenance, ChancellorTrace, GameState, PuppeteerStartOutcome,
     PuppeteerTrace, Scenario, ShamanTrace, TwinStartOutcome, TwinTrace,
@@ -103,6 +106,14 @@ struct ExactPuppeteerShamanSemanticKey {
     puppet_position: u8,
     pre_puppeteer_current_roles: Vec<(u8, String)>,
     puppeteer_trace: PuppeteerTrace,
+    shaman_trace: ShamanTrace,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct ExactTwinShamanSemanticKey {
+    evil_positions: Vec<(u8, String)>,
+    pre_twin_current_roles: Vec<(u8, String)>,
+    twin_trace: TwinTrace,
     shaman_trace: ShamanTrace,
 }
 
@@ -235,6 +246,25 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
             let mut branch = state.clone();
             branch.executed_evil_roles = executed_evil_roles.clone();
             match build_exact_puppeteer_shaman_scenarios(&branch) {
+                Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
+                None => {
+                    ordered_complete = false;
+                    break;
+                }
+            }
+        }
+        if ordered_complete {
+            return ordered_scenarios;
+        }
+    }
+
+    if supports_exact_twin_shaman_start_slice(state) {
+        let mut ordered_scenarios = Vec::new();
+        let mut ordered_complete = true;
+        for executed_evil_roles in &executed_role_branches {
+            let mut branch = state.clone();
+            branch.executed_evil_roles = executed_evil_roles.clone();
+            match build_exact_twin_shaman_scenarios(&branch) {
                 Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
                 None => {
                     ordered_complete = false;
@@ -854,9 +884,8 @@ fn build_scenarios_with_start_mode(
     Some(scenarios)
 }
 
-const EXACT_TWIN_PUPPETEER_ASSIGNMENT_CAP: usize = 4_096;
-const EXACT_TWIN_PUPPETEER_SCENARIO_CAP: usize = 65_536;
-const EXACT_PUPPETEER_SHAMAN_SCENARIO_CAP: usize = 65_536;
+const EXACT_ORDERED_ASSIGNMENT_CAP: usize = 4_096;
+const EXACT_ORDERED_SCENARIO_CAP: usize = 65_536;
 
 fn is_exact_slice_villager_role(role: &str) -> bool {
     normalize_role(role) == "saint"
@@ -966,6 +995,54 @@ fn supports_exact_puppeteer_shaman_start_slice(state: &GameState) -> bool {
         && villagers as usize + demons as usize + 2 == state.n_cards as usize
 }
 
+/// State-level gate for the exact candidate-changing Twin -> Shaman replay.
+///
+/// Twin may move one Villager identity onto its runtime-Evil body and leave
+/// current Twin data on a Good neighbour. The dedicated builder reconstructs
+/// that complete pre-Twin map before rebuilding Shaman's later live pool. The
+/// initial role-only checkpoint is limited to Scout/Witness pools; roles with
+/// preserved status, runtime data, or copied Start callbacks remain legacy.
+fn supports_exact_twin_shaman_start_slice(state: &GameState) -> bool {
+    if state.n_cards == 0
+        || state.board_count_provenance != BoardCountProvenance::TrustedPreStart
+        || state.board_outcast_count != Some(0)
+        || !state.deck.outcasts.is_empty()
+        || state.board_minion_count != Some(2)
+        || state.deck.minions.len() != 2
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "twinminion")
+            .count()
+            != 1
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "shaman")
+            .count()
+            != 1
+        || state.deck.demons.iter().any(|role| normalize_role(role) != "lilis")
+        || state.deck.villagers.iter().any(|role| {
+            !matches!(normalize_role(role).as_str(), "scout" | "witness")
+        })
+        || state.pd_corruption_target.is_some()
+    {
+        return false;
+    }
+
+    let (Some(villagers), Some(demons)) =
+        (state.board_villager_count, state.board_demon_count)
+    else {
+        return false;
+    };
+    villagers >= 2
+        && demons as usize == state.deck.demons.len()
+        && villagers as usize <= state.deck.villagers.len()
+        && villagers as usize + demons as usize + 2 == state.n_cards as usize
+}
+
 fn exact_assignment_upper_bound(pool_size: usize, selected: usize) -> usize {
     if selected > pool_size {
         return 0;
@@ -983,7 +1060,7 @@ fn enumerate_exact_villager_role_maps(
     positions: &[u8],
 ) -> Option<Vec<HashMap<u8, String>>> {
     if exact_assignment_upper_bound(state.deck.villagers.len(), positions.len())
-        > EXACT_TWIN_PUPPETEER_ASSIGNMENT_CAP
+        > EXACT_ORDERED_ASSIGNMENT_CAP
     {
         return None;
     }
@@ -1054,36 +1131,22 @@ fn exact_post_puppeteer_map(
         .collect()
 }
 
-fn exact_puppeteer_public_evidence_matches(
+fn exact_final_current_public_evidence_matches(
     state: &GameState,
-    stable_evil_positions: &HashSet<u8>,
-    moved_twin_position: Option<u8>,
-    puppeteer_trace: &PuppeteerTrace,
+    unpredictable_card_positions: &HashSet<u8>,
+    special_presentation: Option<(u8, &str)>,
     final_current_roles: &HashMap<u8, String>,
 ) -> bool {
-    let converted = match &puppeteer_trace.outcome {
-        PuppeteerStartOutcome::Converted {
-            target_position,
-            erased_villager_role,
-            ..
-        } => Some((*target_position, erased_villager_role.as_str())),
-        PuppeteerStartOutcome::NoCandidate => None,
-    };
-
     for card in &state.cards {
-        if let Some((target, erased_role)) = converted {
-            if card.position == target {
-                if normalize_role(&card.apparent_role) != normalize_role(erased_role) {
+        if let Some((position, presented_role)) = special_presentation {
+            if card.position == position {
+                if normalize_role(&card.apparent_role) != normalize_role(presented_role) {
                     return false;
                 }
                 continue;
             }
         }
-        // Evil bodies may show arbitrary bluffs. A runtime-Good body carrying
-        // moved Twin data can also receive a Minion bluff after delayed Reveal.
-        if stable_evil_positions.contains(&card.position)
-            || moved_twin_position == Some(card.position)
-        {
+        if unpredictable_card_positions.contains(&card.position) {
             continue;
         }
         if !final_current_roles.get(&card.position).is_some_and(|role| {
@@ -1117,6 +1180,57 @@ fn exact_puppeteer_public_evidence_matches(
         }
     }
     true
+}
+
+fn exact_puppeteer_public_evidence_matches(
+    state: &GameState,
+    stable_evil_positions: &HashSet<u8>,
+    moved_twin_position: Option<u8>,
+    puppeteer_trace: &PuppeteerTrace,
+    final_current_roles: &HashMap<u8, String>,
+) -> bool {
+    let special_presentation = match &puppeteer_trace.outcome {
+        PuppeteerStartOutcome::Converted {
+            target_position,
+            erased_villager_role,
+            ..
+        } => Some((*target_position, erased_villager_role.as_str())),
+        PuppeteerStartOutcome::NoCandidate => None,
+    };
+    let mut unpredictable_card_positions = stable_evil_positions.clone();
+    unpredictable_card_positions.extend(moved_twin_position);
+    exact_final_current_public_evidence_matches(
+        state,
+        &unpredictable_card_positions,
+        special_presentation,
+        final_current_roles,
+    )
+}
+
+fn exact_twin_shaman_public_evidence_matches(
+    state: &GameState,
+    stable_evil_positions: &HashSet<u8>,
+    twin_trace: &TwinTrace,
+    final_current_roles: &HashMap<u8, String>,
+) -> bool {
+    let mut unpredictable_card_positions = stable_evil_positions.clone();
+    if let TwinStartOutcome::Swap {
+        neighbor_position,
+        ..
+    } = twin_trace.outcome
+    {
+        if neighbor_position != twin_trace.actor_position {
+            // Runtime-Good current Twin data receives a delayed Minion bluff;
+            // its apparent card cannot identify the moved data endpoint.
+            unpredictable_card_positions.insert(neighbor_position);
+        }
+    }
+    exact_final_current_public_evidence_matches(
+        state,
+        &unpredictable_card_positions,
+        None,
+        final_current_roles,
+    )
 }
 
 fn exact_twin_puppeteer_public_evidence_matches(
@@ -1293,7 +1407,7 @@ fn build_exact_twin_puppeteer_scenarios(state: &GameState) -> Option<Vec<Scenari
                         pre_twin_current_roles: pre_twin_current_roles.clone(),
                         puppeteer_trace: Some(puppeteer_trace),
                     });
-                    if scenarios.len() > EXACT_TWIN_PUPPETEER_SCENARIO_CAP {
+                    if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
                         return None;
                     }
                 }
@@ -1489,8 +1603,177 @@ fn build_exact_puppeteer_shaman_scenarios(state: &GameState) -> Option<Vec<Scena
                     pre_twin_current_roles: pre_puppeteer_current_roles.clone(),
                     puppeteer_trace: Some(puppeteer_trace.clone()),
                 });
-                if scenarios.len() > EXACT_PUPPETEER_SHAMAN_SCENARIO_CAP {
+                if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
                     return None;
+                }
+            }
+        }
+    }
+    Some(scenarios)
+}
+
+/// Build the aggressively gated exact Twin -> Shaman slice.
+///
+/// Unlike the earlier structural cross-product, this builder reconstructs the
+/// complete pre-Twin current-data map. Every Twin branch is replayed first and
+/// Shaman then draws from that branch's actual post-swap Villager pool. `None`
+/// requests wholesale legacy fallback; `Some(empty)` is an exact contradiction
+/// and must not resurrect approximate worlds.
+fn build_exact_twin_shaman_scenarios(state: &GameState) -> Option<Vec<Scenario>> {
+    let placements = generate_evil_placements(state);
+    let expected_villagers = state.board_villager_count? as usize;
+    let expected_demons = state.board_demon_count? as usize;
+    let current_order: Vec<u8> = (1..=state.n_cards).rev().collect();
+    let expected_twin_width = if expected_demons == 0 {
+        1
+    } else {
+        expected_demons.saturating_mul(2)
+    };
+    let mut scenarios = Vec::new();
+    let mut seen = HashSet::new();
+
+    for generated_placement in placements {
+        if !apply_placement_constraints(&generated_placement.roles, state) {
+            continue;
+        }
+        let mut full_evil = generated_placement.roles.clone();
+        for (&position, role) in &state.executed_evil_roles {
+            full_evil.entry(position).or_insert_with(|| role.clone());
+        }
+
+        let twin_count = full_evil
+            .values()
+            .filter(|role| normalize_role(role) == "twinminion")
+            .count();
+        let shaman_count = full_evil
+            .values()
+            .filter(|role| normalize_role(role) == "shaman")
+            .count();
+        let demon_count = full_evil
+            .values()
+            .filter(|role| normalize_role(role) == "lilis")
+            .count();
+        if generated_placement.puppet_position.is_some()
+            || twin_count != 1
+            || shaman_count != 1
+            || demon_count != expected_demons
+            || full_evil.len() != 2 + expected_demons
+            || full_evil.values().any(|role| {
+                !matches!(
+                    normalize_role(role).as_str(),
+                    "twinminion" | "shaman" | "lilis"
+                )
+            })
+        {
+            continue;
+        }
+
+        let stable_evil_positions: HashSet<u8> = full_evil.keys().copied().collect();
+        let mut villager_positions: Vec<u8> = (1..=state.n_cards)
+            .filter(|position| !stable_evil_positions.contains(position))
+            .collect();
+        villager_positions.sort_unstable();
+        if villager_positions.len() != expected_villagers {
+            continue;
+        }
+        let villager_maps = enumerate_exact_villager_role_maps(state, &villager_positions)?;
+
+        for villager_map in villager_maps {
+            let mut pre_twin_current_roles = full_evil.clone();
+            pre_twin_current_roles.extend(villager_map);
+            let twin_traces = enumerate_twin_traces(
+                &pre_twin_current_roles,
+                &current_order,
+                &current_order,
+            );
+            if twin_traces.len() != expected_twin_width {
+                return None;
+            }
+
+            for twin_trace in twin_traces {
+                let post_twin_current_roles: Option<HashMap<u8, String>> =
+                    (1..=state.n_cards)
+                        .map(|position| {
+                            role_after_twin(position, &pre_twin_current_roles, &twin_trace)
+                                .map(|role| (position, role))
+                        })
+                        .collect();
+                let Some(post_twin_current_roles) = post_twin_current_roles else {
+                    return None;
+                };
+                if distinct_swap_has_unsupported_public_action_evidence(
+                    state,
+                    &twin_trace,
+                ) {
+                    // The current exact trace carries identity flow, but not
+                    // the distinct runtime-alignment/action-dispatch/bluff
+                    // layers visible after a Twin swap. Fall back atomically.
+                    return None;
+                }
+                let shaman_traces = enumerate_shaman_traces(
+                    &post_twin_current_roles,
+                    &current_order,
+                    state.n_cards,
+                )?;
+
+                for shaman_trace in shaman_traces {
+                    let final_current_roles: Option<HashMap<u8, String>> =
+                        (1..=state.n_cards)
+                            .map(|position| {
+                                role_after_shaman(
+                                    position,
+                                    &post_twin_current_roles,
+                                    &shaman_trace,
+                                )
+                                .map(|role| (position, role))
+                            })
+                            .collect();
+                    let Some(final_current_roles) = final_current_roles else {
+                        return None;
+                    };
+                    if !exact_twin_shaman_public_evidence_matches(
+                        state,
+                        &stable_evil_positions,
+                        &twin_trace,
+                        &final_current_roles,
+                    ) {
+                        continue;
+                    }
+
+                    let key = ExactTwinShamanSemanticKey {
+                        evil_positions: normalized_role_map_key(&full_evil),
+                        pre_twin_current_roles: normalized_role_map_key(
+                            &pre_twin_current_roles,
+                        ),
+                        twin_trace: twin_trace.clone(),
+                        shaman_trace: shaman_trace.clone(),
+                    };
+                    if !seen.insert(key) {
+                        continue;
+                    }
+                    let messed_up_by_evil = HashSet::from([
+                        shaman_trace.source_position,
+                        shaman_trace.target_position,
+                    ]);
+                    scenarios.push(Scenario {
+                        evil_positions: full_evil.clone(),
+                        puppet_position: None,
+                        corrupted: HashSet::new(),
+                        pd_corrupted: None,
+                        doppelganger_position: None,
+                        drunk_position: None,
+                        alchemist_cures: HashMap::new(),
+                        messed_up_by_evil,
+                        shaman_trace: Some(shaman_trace),
+                        chancellor_trace: None,
+                        chancellor_conversion: None,
+                        twin_trace: Some(twin_trace.clone()),
+                        pre_twin_current_roles: pre_twin_current_roles.clone(),
+                        puppeteer_trace: None,
+                    });
+                    if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
+                        return None;
+                    }
                 }
             }
         }
@@ -4913,6 +5196,39 @@ mod tests {
         state
     }
 
+    fn exact_candidate_changing_twin_shaman_state() -> GameState {
+        let mut state = GameState {
+            n_cards: 5,
+            n_evil: 3,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(2),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 2, 3, 4, 5],
+            confirmed_evil: vec![1, 2, 4],
+            confirmed_good: vec![3, 5],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string(), "Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (2, "Lilis".to_string()),
+            (4, "Shaman".to_string()),
+        ]);
+        state.executed_current_roles = HashMap::from([
+            (3, "Twin Minion".to_string()),
+            (5, "Scout".to_string()),
+        ]);
+        state.executed_good_roles = HashMap::from([
+            (3, "Twin Minion".to_string()),
+            (5, "Scout".to_string()),
+        ]);
+        state
+    }
+
     fn exact_twin_puppeteer_overlap_state() -> GameState {
         let mut state = GameState {
             n_cards: 5,
@@ -6283,6 +6599,338 @@ mod tests {
             .villagers
             .push("Bounty Hunter".to_string());
         assert!(!supports_ordered_twin_start_slice(&shaman_bounty_hunter));
+    }
+
+    #[test]
+    fn exact_twin_shaman_rebuilds_the_candidate_pool_after_villager_swap() {
+        let state = exact_candidate_changing_twin_shaman_state();
+        assert!(supports_exact_twin_shaman_start_slice(&state));
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 2);
+        assert!(scenarios
+            .iter()
+            .all(|scenario| crate::validators::check_scenario(scenario, &state)));
+        assert!(scenarios.iter().all(|scenario| {
+            let twin = scenario.twin_trace.as_ref().expect("exact Twin trace");
+            let shaman = scenario
+                .shaman_trace
+                .as_ref()
+                .expect("exact Shaman trace");
+            matches!(
+                twin.outcome,
+                TwinStartOutcome::Swap {
+                    demon_anchor_position: 2,
+                    neighbor_position: 3,
+                    ..
+                }
+            )
+                && HashSet::from([shaman.source_position, shaman.target_position])
+                    == HashSet::from([1, 5])
+                && normalize_role(&shaman.copied_role) == "scout"
+                && shaman.target_previous_roles.len() == 1
+                && normalize_role(&shaman.target_previous_roles[0]) == "witness"
+                && scenario.messed_up_by_evil == HashSet::from([1, 5])
+                && scenario.pre_twin_current_roles.len() == 5
+                && crate::validators::current_data_role_at(1, scenario, &state).as_deref()
+                    == Some("Scout")
+                && crate::validators::current_data_role_at(3, scenario, &state).as_deref()
+                    == Some("Twin Minion")
+                && crate::validators::current_data_role_at(5, scenario, &state).as_deref()
+                    == Some("Scout")
+        }));
+        assert_eq!(
+            scenarios
+                .iter()
+                .map(|scenario| {
+                    let trace = scenario.shaman_trace.as_ref().expect("exact Shaman trace");
+                    (trace.source_position, trace.target_position)
+                })
+                .collect::<HashSet<_>>(),
+            HashSet::from([(1, 5), (5, 1)])
+        );
+        assert_eq!(
+            scenarios
+                .iter()
+                .map(|scenario| (
+                    normalize_role(
+                        scenario
+                            .pre_twin_current_roles
+                            .get(&3)
+                            .expect("complete pre-Twin map"),
+                    ),
+                    normalize_role(
+                        scenario
+                            .pre_twin_current_roles
+                            .get(&5)
+                            .expect("complete pre-Twin map"),
+                    ),
+                ))
+                .collect::<HashSet<_>>(),
+            HashSet::from([
+                ("scout".to_string(), "witness".to_string()),
+                ("witness".to_string(), "scout".to_string()),
+            ])
+        );
+    }
+
+    #[test]
+    fn exact_twin_shaman_dedups_duplicate_assignments_but_keeps_rng_weight() {
+        let mut state = GameState {
+            n_cards: 5,
+            n_evil: 3,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(2),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 3, 5],
+            confirmed_evil: vec![1, 3, 5],
+            ..GameState::default()
+        };
+        state.deck.villagers = ["Scout", "Scout", "Witness"]
+            .into_iter()
+            .map(str::to_string)
+            .collect();
+        state.deck.minions = vec!["Twin Minion".into(), "Shaman".into()];
+        state.deck.demons = vec!["Lilis".into()];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".into()),
+            (3, "Lilis".into()),
+            (5, "Shaman".into()),
+        ]);
+
+        assert!(supports_exact_twin_shaman_start_slice(&state));
+        let scenarios = build_exact_twin_shaman_scenarios(&state)
+            .expect("the bounded exact kernel must complete");
+        assert_eq!(scenarios.len(), 12);
+        assert_eq!(build_scenarios(&state).len(), 12);
+
+        let map_key = |scenario: &Scenario| {
+            (
+                normalize_role(
+                    scenario
+                        .pre_twin_current_roles
+                        .get(&2)
+                        .expect("complete pre-Twin map"),
+                ),
+                normalize_role(
+                    scenario
+                        .pre_twin_current_roles
+                        .get(&4)
+                        .expect("complete pre-Twin map"),
+                ),
+            )
+        };
+        let expected_maps = HashSet::from([
+            ("scout".to_string(), "scout".to_string()),
+            ("scout".to_string(), "witness".to_string()),
+            ("witness".to_string(), "scout".to_string()),
+        ]);
+        assert_eq!(
+            scenarios.iter().map(map_key).collect::<HashSet<_>>(),
+            expected_maps
+        );
+        for map in &expected_maps {
+            assert_eq!(
+                scenarios
+                    .iter()
+                    .filter(|scenario| &map_key(scenario) == map)
+                    .count(),
+                4
+            );
+        }
+
+        let trace_shape = |scenario: &Scenario| {
+            let neighbor = match &scenario
+                .twin_trace
+                .as_ref()
+                .expect("exact Twin trace")
+                .outcome
+            {
+                TwinStartOutcome::Swap {
+                    neighbor_position,
+                    ..
+                } => *neighbor_position,
+                TwinStartOutcome::NoDemon => unreachable!(),
+            };
+            let shaman = scenario.shaman_trace.as_ref().expect("exact Shaman trace");
+            (neighbor, shaman.source_position, shaman.target_position)
+        };
+        let expected_shapes = HashSet::from([
+            (2, 1, 4),
+            (2, 4, 1),
+            (4, 1, 2),
+            (4, 2, 1),
+        ]);
+        assert_eq!(
+            scenarios.iter().map(trace_shape).collect::<HashSet<_>>(),
+            expected_shapes
+        );
+        for shape in expected_shapes {
+            assert_eq!(
+                scenarios
+                    .iter()
+                    .filter(|scenario| trace_shape(scenario) == shape)
+                    .count(),
+                3
+            );
+        }
+        assert!(scenarios.iter().all(|scenario| {
+            let shaman = scenario.shaman_trace.as_ref().expect("exact Shaman trace");
+            scenario.pre_twin_current_roles.len() == 5
+                && scenario.messed_up_by_evil
+                    == HashSet::from([shaman.source_position, shaman.target_position])
+                && crate::validators::check_scenario(scenario, &state)
+        }));
+    }
+
+    #[test]
+    fn exact_twin_shaman_claim_fails_closed_without_its_complete_baseline() {
+        let state = exact_candidate_changing_twin_shaman_state();
+        let mut scenario = build_scenarios(&state)
+            .into_iter()
+            .next()
+            .expect("exact candidate-changing world");
+        assert!(crate::validators::check_scenario(&scenario, &state));
+
+        scenario.pre_twin_current_roles.remove(&3);
+        assert!(!crate::validators::check_scenario(&scenario, &state));
+    }
+
+    #[test]
+    fn malformed_exact_claim_cannot_leak_through_runtime_good_shaman_endpoints() {
+        let mut state = GameState {
+            n_cards: 6,
+            n_evil: 3,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(3),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 3, 6],
+            confirmed_evil: vec![1, 3, 6],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".into(), "Scout".into(), "Witness".into()];
+        state.deck.minions = vec!["Twin Minion".into(), "Shaman".into()];
+        state.deck.demons = vec!["Lilis".into()];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".into()),
+            (3, "Lilis".into()),
+            (6, "Shaman".into()),
+        ]);
+
+        let mut scenario = build_exact_twin_shaman_scenarios(&state)
+            .expect("bounded exact replay")
+            .into_iter()
+            .find(|scenario| {
+                matches!(
+                    scenario
+                        .twin_trace
+                        .as_ref()
+                        .expect("exact Twin trace")
+                        .outcome,
+                    TwinStartOutcome::Swap {
+                        neighbor_position: 2,
+                        ..
+                    }
+                ) && scenario.shaman_trace.as_ref().is_some_and(|trace| {
+                    trace.source_position == 4 && trace.target_position == 5
+                })
+            })
+            .expect("runtime-Good Shaman endpoints");
+        assert!(crate::validators::check_scenario(&scenario, &state));
+
+        scenario.pre_twin_current_roles.remove(&2);
+        assert!(!crate::validators::check_scenario(&scenario, &state));
+    }
+
+    #[test]
+    fn exact_twin_shaman_contradiction_does_not_resurrect_legacy_worlds() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state
+            .executed_current_roles
+            .insert(1, "Scout".to_string());
+        state
+            .executed_current_roles
+            .insert(5, "Witness".to_string());
+        state
+            .executed_good_roles
+            .insert(5, "Witness".to_string());
+
+        let exact = build_exact_twin_shaman_scenarios(&state)
+            .expect("the complete replay should not fall back");
+        assert!(exact.is_empty());
+        assert!(build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn unaudited_villagers_stay_outside_exact_twin_shaman_slice() {
+        for unsupported_role in [
+            "Alchemist",
+            "Baker",
+            "Bounty Hunter",
+            "Confessor",
+            "Lover",
+            "Saint",
+        ] {
+            let mut state = exact_candidate_changing_twin_shaman_state();
+            state.deck.villagers[1] = unsupported_role.to_string();
+            assert!(!supports_exact_twin_shaman_start_slice(&state));
+        }
+    }
+
+    #[test]
+    fn distinct_twin_swap_with_public_action_evidence_falls_back_atomically() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.cards.push(card(5, "Scout"));
+
+        assert!(build_exact_twin_shaman_scenarios(&state).is_none());
+        assert!(!build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn exact_twin_shaman_assignment_cap_falls_back_wholesale() {
+        let mut state = GameState {
+            n_cards: 9,
+            n_evil: 3,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(6),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 4, 9],
+            confirmed_evil: vec![1, 4, 9],
+            ..GameState::default()
+        };
+        state.deck.villagers = [
+            "Scout", "Scout", "Scout", "Scout", "Witness", "Witness", "Witness",
+        ]
+        .into_iter()
+        .map(str::to_string)
+        .collect();
+        state.deck.minions = vec!["Twin Minion".into(), "Shaman".into()];
+        state.deck.demons = vec!["Lilis".into()];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".into()),
+            (4, "Lilis".into()),
+            (9, "Shaman".into()),
+        ]);
+
+        assert!(supports_exact_twin_shaman_start_slice(&state));
+        assert_eq!(exact_assignment_upper_bound(7, 6), 5_040);
+        assert!(exact_assignment_upper_bound(7, 6) > EXACT_ORDERED_ASSIGNMENT_CAP);
+        assert!(build_exact_twin_shaman_scenarios(&state).is_none());
+
+        let scenarios = build_scenarios(&state);
+        assert!(!scenarios.is_empty());
+        assert!(scenarios.iter().all(|scenario| {
+            scenario.twin_trace.is_none()
+                && scenario.pre_twin_current_roles.is_empty()
+                && scenario.puppeteer_trace.is_none()
+                && scenario.shaman_trace.is_some()
+        }));
     }
 
     #[test]

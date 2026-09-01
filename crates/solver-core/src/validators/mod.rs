@@ -15,6 +15,11 @@ use disguisers::validate_clean_doppel_source_support;
 use std::collections::{HashMap, HashSet};
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions, Direction};
 use crate::knowledge_base::{self, get_card, normalize_role, Faction};
+use crate::shaman::{enumerate_shaman_traces, role_after_shaman};
+use crate::twin::{
+    distinct_swap_has_unsupported_public_action_evidence, enumerate_twin_traces,
+    role_after_twin,
+};
 use crate::types::{BoardCountProvenance, CardInfo, GameState, Scenario};
 
 /// Validate a single card's info against a scenario using the appropriate role validator.
@@ -229,7 +234,11 @@ pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
     // by `night_kills` rather than inferring chronology from final reveal data.
     if !validate_lilis_night_kills(scenario, state) { return false; }
 
-    validate_baker_history(scenario, state)
+    match exact_twin_shaman_post_twin_roles(scenario, state) {
+        Some(_) => true,
+        None if is_exact_twin_shaman_claim(scenario) => false,
+        None => validate_baker_history(scenario, state),
+    }
 }
 
 fn validate_lilis_night_kills(scenario: &Scenario, state: &GameState) -> bool {
@@ -11174,7 +11183,256 @@ fn validate_pd_ability(scenario: &Scenario, state: &GameState) -> bool {
 
 // ── Role count validation ──
 
+fn is_exact_twin_shaman_villager_role(role: &str) -> bool {
+    matches!(normalize_role(role).as_str(), "scout" | "witness")
+}
+
+fn is_exact_twin_shaman_claim(scenario: &Scenario) -> bool {
+    !scenario.pre_twin_current_roles.is_empty()
+        && scenario.twin_trace.is_some()
+        && scenario.shaman_trace.is_some()
+        && scenario.puppeteer_trace.is_none()
+}
+
+/// Validate the complete role-only claim emitted by the exact Twin -> Shaman
+/// kernel and return its post-Twin map.
+///
+/// Generic Shaman worlds cannot use a stable Evil seat as an endpoint. This
+/// narrow claim proves the exception from first principles: one complete
+/// pre-Twin map, one reachable Twin trace, and one Shaman trace enumerated from
+/// that exact post-swap Villager pool. Forged, partial, or hazard-bearing maps
+/// fail closed rather than leaking into the legacy validator rules.
+fn exact_twin_shaman_post_twin_roles(
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<HashMap<u8, String>> {
+    let twin_trace = scenario.twin_trace.as_ref()?;
+    let shaman_trace = scenario.shaman_trace.as_ref()?;
+    let (Some(villager_count), Some(demon_count)) =
+        (state.board_villager_count, state.board_demon_count)
+    else {
+        return None;
+    };
+
+    if state.n_cards == 0
+        || state.board_count_provenance != BoardCountProvenance::TrustedPreStart
+        || state.board_outcast_count != Some(0)
+        || state.board_minion_count != Some(2)
+        || !state.deck.outcasts.is_empty()
+        || state.deck.minions.len() != 2
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "twinminion")
+            .count()
+            != 1
+        || state
+            .deck
+            .minions
+            .iter()
+            .filter(|role| normalize_role(role) == "shaman")
+            .count()
+            != 1
+        || state.deck.demons.iter().any(|role| normalize_role(role) != "lilis")
+        || state
+            .deck
+            .villagers
+            .iter()
+            .any(|role| !is_exact_twin_shaman_villager_role(role))
+        || state.pd_corruption_target.is_some()
+        || villager_count < 2
+        || demon_count as usize != state.deck.demons.len()
+        || villager_count as usize > state.deck.villagers.len()
+        || villager_count as usize + demon_count as usize + 2 != state.n_cards as usize
+        || scenario.puppet_position.is_some()
+        || scenario.doppelganger_position.is_some()
+        || scenario.drunk_position.is_some()
+        || scenario.chancellor_trace.is_some()
+        || scenario.chancellor_conversion.is_some()
+        || scenario.puppeteer_trace.is_some()
+        || !scenario.corrupted.is_empty()
+        || scenario.pd_corrupted.is_some()
+        || !scenario.alchemist_cures.is_empty()
+        || scenario.pre_twin_current_roles.len() != state.n_cards as usize
+        || state.cards.iter().any(|card| normalize_role(&card.apparent_role) == "baker")
+        || state
+            .executed_current_roles
+            .values()
+            .chain(state.executed_good_roles.values())
+            .any(|role| normalize_role(role) == "baker")
+    {
+        return None;
+    }
+
+    let twin_count = scenario
+        .evil_positions
+        .values()
+        .filter(|role| normalize_role(role) == "twinminion")
+        .count();
+    let shaman_count = scenario
+        .evil_positions
+        .values()
+        .filter(|role| normalize_role(role) == "shaman")
+        .count();
+    let placed_demons = scenario
+        .evil_positions
+        .values()
+        .filter(|role| normalize_role(role) == "lilis")
+        .count();
+    if twin_count != 1
+        || shaman_count != 1
+        || placed_demons != demon_count as usize
+        || scenario.evil_positions.len() != 2 + demon_count as usize
+        || scenario.evil_positions.len() != state.n_evil as usize
+        || scenario
+            .evil_positions
+            .keys()
+            .any(|position| *position == 0 || *position > state.n_cards)
+        || scenario.evil_positions.values().any(|role| {
+            !matches!(
+                normalize_role(role).as_str(),
+                "twinminion" | "shaman" | "lilis"
+            )
+        })
+        || state.executed_evil_roles.iter().any(|(position, role)| {
+            !scenario.evil_positions.get(position).is_some_and(|placed| {
+                normalize_role(placed) == normalize_role(role)
+            })
+        })
+        || state
+            .confirmed_evil
+            .iter()
+            .any(|position| !scenario.evil_positions.contains_key(position))
+        || state
+            .confirmed_good
+            .iter()
+            .any(|position| scenario.evil_positions.contains_key(position))
+        || state
+            .executed_good_roles
+            .keys()
+            .chain(state.executed_good_corrupted.keys())
+            .any(|position| scenario.evil_positions.contains_key(position))
+    {
+        return None;
+    }
+
+    if (1..=state.n_cards).any(|position| {
+        !scenario.pre_twin_current_roles.contains_key(&position)
+            || scenario
+                .evil_positions
+                .get(&position)
+                .is_some_and(|stable_role| {
+                    !scenario
+                        .pre_twin_current_roles
+                        .get(&position)
+                        .is_some_and(|current_role| {
+                            normalize_role(current_role) == normalize_role(stable_role)
+                        })
+                })
+    }) {
+        return None;
+    }
+
+    let mut remaining_villagers: HashMap<String, usize> = HashMap::new();
+    for role in &state.deck.villagers {
+        *remaining_villagers.entry(normalize_role(role)).or_insert(0) += 1;
+    }
+    let mut represented_villagers = 0usize;
+    for position in 1..=state.n_cards {
+        if scenario.evil_positions.contains_key(&position) {
+            continue;
+        }
+        let role = scenario.pre_twin_current_roles.get(&position)?;
+        if !is_exact_twin_shaman_villager_role(role) {
+            return None;
+        }
+        let remaining = remaining_villagers.get_mut(&normalize_role(role))?;
+        if *remaining == 0 {
+            return None;
+        }
+        *remaining -= 1;
+        represented_villagers += 1;
+    }
+    if represented_villagers != villager_count as usize {
+        return None;
+    }
+
+    let current_order: Vec<u8> = (1..=state.n_cards).rev().collect();
+    if !enumerate_twin_traces(
+        &scenario.pre_twin_current_roles,
+        &current_order,
+        &current_order,
+    )
+    .contains(twin_trace)
+    {
+        return None;
+    }
+    if distinct_swap_has_unsupported_public_action_evidence(state, twin_trace) {
+        return None;
+    }
+    let post_twin_current_roles: Option<HashMap<u8, String>> = (1..=state.n_cards)
+        .map(|position| {
+            role_after_twin(
+                position,
+                &scenario.pre_twin_current_roles,
+                twin_trace,
+            )
+            .map(|role| (position, role))
+        })
+        .collect();
+    let post_twin_current_roles = post_twin_current_roles?;
+    if !enumerate_shaman_traces(
+        &post_twin_current_roles,
+        &current_order,
+        state.n_cards,
+    )?
+    .contains(shaman_trace)
+        || scenario.messed_up_by_evil
+            != HashSet::from([
+                shaman_trace.source_position,
+                shaman_trace.target_position,
+            ])
+    {
+        return None;
+    }
+
+    let final_current_roles: Option<HashMap<u8, String>> = (1..=state.n_cards)
+        .map(|position| {
+            role_after_shaman(position, &post_twin_current_roles, shaman_trace)
+                .map(|role| (position, role))
+        })
+        .collect();
+    let final_current_roles = final_current_roles?;
+    let mut unpredictable_card_positions: HashSet<u8> =
+        scenario.evil_positions.keys().copied().collect();
+    if let crate::types::TwinStartOutcome::Swap {
+        neighbor_position,
+        ..
+    } = twin_trace.outcome
+    {
+        if neighbor_position != twin_trace.actor_position {
+            unpredictable_card_positions.insert(neighbor_position);
+        }
+    }
+    if state.cards.iter().any(|card| {
+        !unpredictable_card_positions.contains(&card.position)
+            && !final_current_roles.get(&card.position).is_some_and(|role| {
+                normalize_role(role) == normalize_role(&card.apparent_role)
+            })
+    }) {
+        return None;
+    }
+    Some(post_twin_current_roles)
+}
+
 fn validate_role_counts(scenario: &Scenario, state: &GameState) -> bool {
+    match exact_twin_shaman_post_twin_roles(scenario, state) {
+        Some(_) => return true,
+        None if is_exact_twin_shaman_claim(scenario) => return false,
+        None => {}
+    }
+
     let mut good_villager_counts: HashMap<String, i32> = HashMap::new();
     let mut good_outcast_counts: HashMap<String, i32> = HashMap::new();
     let mut counted_good_villager_positions = HashSet::new();

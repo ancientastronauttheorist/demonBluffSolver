@@ -312,9 +312,24 @@ Villager or is structurally unknown, the whole ordered state falls back rather
 than retaining only the safe RNG branch. Copied Bounty Hunter is also excluded
 because its immediate Start alignment mutation remains outside this model.
 
-General current-data replay, candidate-changing Twin-to-Shaman worlds, other
-mixed writers, and delayed presentation branches remain native parity gaps.
-Those require a complete ordered trace spanning earlier identity mutation and
-later Start consumers; changing only an adjacency or effective-role validator
-would still be incorrect. Live Twin play therefore remains conservatively
-gated outside the supported scenario kernels.
+The first candidate-changing Twin-to-Shaman role-flow slice is now exact for
+trusted no-Outcast Scout/Witness pools with exactly Twin, Shaman, and fully
+dealt Lilis Demons. It enumerates the complete pre-Twin Villager occurrence
+map, applies every Demon/side Twin trace, rebuilds Shaman's live Villager pool
+from each post-swap map, and retains both ordered draws in the semantic key.
+Duplicate Scout/Witness occurrences deduplicate equivalent assignments without
+collapsing native Twin-side or Shaman-direction probability mass. A complete
+validator independently reconstructs the map and both reachable traces; an
+invalid claimed baseline fails closed, while cap or unsupported inputs trigger
+wholesale legacy fallback.
+
+This role-only checkpoint deliberately rejects captured reveal/action history
+for a distinct swap. The original Twin body remains runtime Evil and therefore
+`CheckLying`-positive, but `Character.Act` dispatches the real Villager data it
+now carries, whose visible callback is truthful. The runtime-Good neighbour
+carrying Twin data later receives an untraced Minion bluff, so its apparent
+identity and appearance-sensitive callbacks are also opaque. Merely skipping
+the two apparent identities would be unsound. General current-data replay,
+other mixed writers, and explicit Twin bluff/action provenance therefore remain
+native parity gaps; live Twin play stays conservative outside the supported
+scenario kernels.

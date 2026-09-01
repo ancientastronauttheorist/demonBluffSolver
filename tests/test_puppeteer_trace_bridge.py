@@ -10,6 +10,7 @@ from solver import (
     PuppeteerNeighborSide,
     PuppeteerStartKind,
     Scenario,
+    ShamanTrace,
     TwinNeighborSide,
     TwinStartKind,
     TwinStartOutcome,
@@ -274,6 +275,50 @@ class PuppeteerTraceBridgeTests(unittest.TestCase):
         self.assertEqual(puppet_erased_role_at(2, scenario), "Lover")
         self.assertEqual(effective_role_at(4, scenario, state), "Scout")
         self.assertEqual(effective_role_at(5, scenario, state), "Scout")
+
+    def test_exact_candidate_changing_twin_replays_before_shaman(self):
+        state = GameState(
+            n_cards=5,
+            deck=DeckComposition(
+                villagers=["Scout", "Witness"],
+                outcasts=[],
+                minions=["Twin Minion", "Shaman"],
+                demons=["Lilis"],
+            ),
+            cards=[],
+        )
+        twin_trace = TwinTrace(
+            actor_position=1,
+            outcome=TwinStartOutcome(
+                kind=TwinStartKind.SWAP,
+                demon_occurrence_index=0,
+                demon_anchor_position=2,
+                neighbor_side=TwinNeighborSide.NEXT,
+                neighbor_position=3,
+                neighbor_pre_swap_role="Scout",
+            ),
+        )
+        scenario = Scenario(
+            evil_positions={1: "Twin Minion", 2: "Lilis", 4: "Shaman"},
+            twin_trace=twin_trace,
+            pre_twin_current_roles={
+                1: "Twin Minion",
+                2: "Lilis",
+                3: "Scout",
+                4: "Shaman",
+                5: "Witness",
+            },
+            shaman_trace=ShamanTrace(
+                source_position=5,
+                target_position=1,
+                copied_role="Witness",
+                target_previous_roles=["Scout"],
+            ),
+        )
+
+        self.assertEqual(effective_role_at(1, scenario, state), "Witness")
+        self.assertEqual(effective_role_at(3, scenario, state), "Twin Minion")
+        self.assertEqual(effective_role_at(5, scenario, state), "Witness")
 
     def test_exact_no_candidate_ignores_legacy_scalar_overlay(self):
         state = GameState(

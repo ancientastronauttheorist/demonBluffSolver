@@ -272,6 +272,23 @@ provenance and cannot re-enter Shaman's pool. Both traces and all three
 `MessedUpByEvil` attempts are preserved. Ambiguous neighbour surfaces,
 preserved-status/runtime-data roles, or enumeration caps fall back atomically.
 
+The first candidate-changing Twin-to-Shaman kernel now composes the earlier
+writer too, within a deliberately role-only Scout/Witness boundary. It starts
+from a complete pre-Twin occurrence map, applies each native Twin trace, and
+then enumerates Shaman from that branch's rebuilt current Villager pool. Thus a
+Villager identity moved onto the stable runtime-Evil Twin body can legally be
+the later Shaman source or destination, while the runtime-Good neighbour now
+carrying Twin data is removed from the pool. Both traces, the erased Shaman
+role, and exactly the two Shaman marker endpoints are preserved. Duplicate
+role assignments are deduplicated without merging Twin-side or Shaman-direction
+draws, and malformed exact claims cannot fall through the older endpoint rules.
+
+Distinct Twin swaps still fall back wholesale when reveal or action history is
+present. Native separates physical alignment and `CheckLying` from the real
+role callback dispatched by the current data, and the Good Twin-data recipient
+has an opaque delayed Minion bluff. Those presentation/action layers need their
+own provenance before Shaman clue validators can consume them safely.
+
 The pure corruption replay also models the latent ordinary-runtime-Good copied
 Plague Doctor callback without exposing it as a normal scenario root. It runs
 after every global Plague Doctor and before the destination marker and global
