@@ -79,6 +79,54 @@ impl BakerSpyTimeline {
             .any(|(candidate, _)| *candidate == position)
     }
 
+    /// Whether a stable Spy had completed its synchronous Baker conversion
+    /// before an active observation taken after a settled reveal-order prefix.
+    /// The caller certifies that every delayed Reveal spawned by the prefix
+    /// has also completed, so a converted seat has already cleared registerAs.
+    pub(super) fn converted_before_settled_reveal_count(
+        &self,
+        position: u8,
+        settled_reveal_count: usize,
+        state: &GameState,
+    ) -> Option<bool> {
+        if !self.supports_settled_reveal_count(settled_reveal_count, state) {
+            return None;
+        }
+        Some(
+            self.converted_at
+                .iter()
+                .find_map(|(candidate, event)| {
+                    (*candidate == position).then_some(*event < settled_reveal_count)
+                })
+                .unwrap_or(false),
+        )
+    }
+
+    /// Whether this complete Baker/Spy chronology is compatible with an
+    /// observation taken after a fully settled reveal-order prefix.
+    ///
+    /// Every conversion triggered inside the prefix must also have completed
+    /// its delayed registerAs clear by that certified boundary. A late clear
+    /// invalidates the whole timeline for the observation, not only reads of
+    /// the converted seat.
+    pub(super) fn supports_settled_reveal_count(
+        &self,
+        settled_reveal_count: usize,
+        state: &GameState,
+    ) -> bool {
+        settled_reveal_count <= state.reveal_order.len()
+            && self.converted_at.iter().all(|(position, event)| {
+                *event >= settled_reveal_count
+                    || self
+                        .clears_before
+                        .iter()
+                        .find_map(|(candidate, clear_before)| {
+                            (*candidate == *position).then_some(*clear_before)
+                        })
+                        .is_some_and(|clear_before| clear_before <= settled_reveal_count)
+            })
+    }
+
     pub(super) fn converted_at_observation(
         &self,
         position: u8,

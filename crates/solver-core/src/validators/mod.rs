@@ -6,9 +6,9 @@ mod helpers;
 pub use helpers::*;
 
 use baker::{
-    baker_history_can_erase_role, baker_spy_conversion_timelines,
-    medium_uses_baker_history, validate_baker_history, BakerSpyTimeline,
-    BAKER_CURRENT_RULE,
+    baker_history_can_erase_role, baker_history_supports_pre_day_role,
+    baker_spy_conversion_timelines, medium_uses_baker_history, validate_baker_history,
+    BakerSpyTimeline, BAKER_CURRENT_RULE,
 };
 use disguisers::validate_clean_doppel_source_support;
 
@@ -5050,6 +5050,53 @@ struct CurrentDruidClaim {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+enum CurrentDruidPayload {
+    /// Compatibility for the first marker-gated bridge, which serialized only
+    /// the newest result before Druid's ResetAfterNight metadata was audited.
+    Scalar(CurrentDruidClaim),
+    Ledger(Vec<CurrentDruidCallbackEvent>),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidDispatchPath {
+    Either,
+    Real,
+    Raw,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidActivationEvidence {
+    SingleCallbackSuffix,
+    AutoUseClick,
+    SessionResetGeneration,
+    SameActivationExtension,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum CurrentDruidCallbackKind {
+    Result(CurrentDruidClaim),
+    RamblerInterruption { target: u8 },
+    OpaqueReal,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct CurrentDruidCallbackEvent {
+    activation_id: usize,
+    callback_index: usize,
+    dispatch_path: CurrentDruidDispatchPath,
+    kind: CurrentDruidCallbackKind,
+    settled_reveal_count: usize,
+    reset_generation: usize,
+    activation_evidence: CurrentDruidActivationEvidence,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidObservationBoundary {
+    FinalCompatibility,
+    SettledRevealCount(usize),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum CurrentDruidTargetSurface {
     KnownOutcast(String),
     KnownNonOutcast,
@@ -5071,6 +5118,21 @@ struct CurrentDruidSupport {
     raw_bluff: Option<(u8, String)>,
     forbidden_raw_bluff: Option<(u8, String)>,
     baker_spy_timeline: BakerSpyTimeline,
+    callbacks: Vec<CurrentDruidResolvedCallback>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidResolvedPath {
+    Real,
+    Raw,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct CurrentDruidResolvedCallback {
+    activation_id: usize,
+    callback_index: usize,
+    path: CurrentDruidResolvedPath,
+    opaque: bool,
 }
 
 fn current_druid_payload_role_token(display_name: &str) -> String {
@@ -5095,22 +5157,11 @@ fn current_druid_claim_text(targets: &[u8; 3], found_outcast: Option<&str>) -> S
     }
 }
 
-fn parse_current_druid_claim(card: &CardInfo, state: &GameState) -> Option<CurrentDruidClaim> {
-    if card.position == 0
-        || card.position > state.n_cards
-        || card.apparent_role != "Druid"
-        || card.info_parsed.len() != 3
-        || card
-            .info_parsed
-            .get(DRUID_CURRENT_VARIANT_FIELD)
-            .and_then(serde_json::Value::as_str)
-            != Some(POET_CURRENT_VARIANT)
-    {
-        return None;
-    }
-
-    let targets = card
-        .info_parsed
+fn parse_current_druid_claim_fields(
+    info: &serde_json::Map<String, serde_json::Value>,
+    state: &GameState,
+) -> Option<CurrentDruidClaim> {
+    let targets = info
         .get("targets")?
         .as_array()?
         .iter()
@@ -5127,7 +5178,7 @@ fn parse_current_druid_claim(card: &CardInfo, state: &GameState) -> Option<Curre
         return None;
     }
 
-    let found_outcast = match card.info_parsed.get("found_outcast")? {
+    let found_outcast = match info.get("found_outcast")? {
         serde_json::Value::Null => None,
         serde_json::Value::String(role) => {
             let role_data = get_card(role)?;
@@ -5140,83 +5191,649 @@ fn parse_current_druid_claim(card: &CardInfo, state: &GameState) -> Option<Curre
         }
         _ => return None,
     };
-    (card.info_text
-        == current_druid_claim_text(&targets, found_outcast.as_deref()))
-    .then_some(CurrentDruidClaim {
+    Some(CurrentDruidClaim {
         targets,
         found_outcast,
     })
 }
 
-fn current_data_role_at_settled_active(
+fn parse_current_druid_claim(card: &CardInfo, state: &GameState) -> Option<CurrentDruidClaim> {
+    if card.position == 0
+        || card.position > state.n_cards
+        || card.apparent_role != "Druid"
+        || card.info_parsed.len() != 3
+        || card
+            .info_parsed
+            .get(DRUID_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+    {
+        return None;
+    }
+    let claim = parse_current_druid_claim_fields(&card.info_parsed, state)?;
+    (card.info_text == current_druid_claim_text(&claim.targets, claim.found_outcast.as_deref()))
+        .then_some(claim)
+}
+
+fn current_druid_has_exact_fields(
+    info: &serde_json::Map<String, serde_json::Value>,
+    fields: &[&str],
+) -> bool {
+    info.len() == fields.len() && fields.iter().all(|field| info.contains_key(*field))
+}
+
+fn parse_current_druid_references(
+    value: &serde_json::Value,
+    state: &GameState,
+) -> Option<Option<Vec<u8>>> {
+    if value.is_null() {
+        return Some(None);
+    }
+    value
+        .as_array()?
+        .iter()
+        .map(|value| {
+            value
+                .as_u64()
+                .and_then(|position| u8::try_from(position).ok())
+                .filter(|position| *position > 0 && *position <= state.n_cards)
+        })
+        .collect::<Option<Vec<_>>>()
+        .map(Some)
+}
+
+fn parse_current_druid_dispatch_path(value: &serde_json::Value) -> Option<CurrentDruidDispatchPath> {
+    match value.as_str()? {
+        "either" => Some(CurrentDruidDispatchPath::Either),
+        "real" => Some(CurrentDruidDispatchPath::Real),
+        "raw" => Some(CurrentDruidDispatchPath::Raw),
+        _ => None,
+    }
+}
+
+fn parse_current_druid_activation_evidence(
+    value: &serde_json::Value,
+) -> Option<CurrentDruidActivationEvidence> {
+    match value.as_str()? {
+        "single_callback_suffix" => Some(CurrentDruidActivationEvidence::SingleCallbackSuffix),
+        "auto_use_click" => Some(CurrentDruidActivationEvidence::AutoUseClick),
+        "session_reset_generation" => {
+            Some(CurrentDruidActivationEvidence::SessionResetGeneration)
+        }
+        "same_activation_extension" => {
+            Some(CurrentDruidActivationEvidence::SameActivationExtension)
+        }
+        _ => None,
+    }
+}
+
+fn current_druid_text_contains_word(text: &str, word: &str) -> bool {
+    text.match_indices(word).any(|(index, _)| {
+        let before = text[..index].chars().next_back();
+        let after = text[index + word.len()..].chars().next();
+        before.is_none_or(|character| !character.is_ascii_alphanumeric() && character != '_')
+            && after.is_none_or(|character| !character.is_ascii_alphanumeric() && character != '_')
+    })
+}
+
+fn current_druid_is_python_regex_whitespace(character: char) -> bool {
+    // Python's Unicode `\s` follows str.isspace(), which additionally treats
+    // these four C0 information separators as whitespace. Rust's Unicode
+    // White_Space predicate deliberately omits them.
+    character.is_whitespace() || matches!(character, '\u{001C}'..='\u{001F}')
+}
+
+fn current_druid_trim_python_regex_whitespace(text: &str) -> &str {
+    text.trim_start_matches(current_druid_is_python_regex_whitespace)
+}
+
+fn current_druid_has_result_clause(text: &str) -> bool {
+    let mut search_from = 0;
+    while let Some(relative_index) = text[search_from..].find("there") {
+        let index = search_from + relative_index;
+        let before = text[..index].chars().next_back();
+        let after_there = &text[index + "there".len()..];
+        let there_is_a_word = before
+            .is_none_or(|character| !character.is_ascii_alphanumeric() && character != '_')
+            && after_there
+                .chars()
+                .next()
+                .is_some_and(current_druid_is_python_regex_whitespace);
+        if there_is_a_word {
+            let after_there = current_druid_trim_python_regex_whitespace(after_there);
+            for verb in ["is", "was"] {
+                if let Some(after_verb) = after_there.strip_prefix(verb) {
+                    let boundary = after_verb
+                        .chars()
+                        .next()
+                        .is_none_or(|character| {
+                            !character.is_ascii_alphanumeric() && character != '_'
+                        });
+                    if boundary
+                        && current_druid_trim_python_regex_whitespace(after_verb)
+                            .starts_with(':')
+                    {
+                        return true;
+                    }
+                }
+            }
+            for verb in ["are", "were"] {
+                if let Some(after_verb) = after_there.strip_prefix(verb) {
+                    let boundary = after_verb
+                        .chars()
+                        .next()
+                        .is_none_or(|character| {
+                            !character.is_ascii_alphanumeric() && character != '_'
+                        });
+                    if boundary
+                        && (current_druid_text_contains_word(after_verb, "outcast")
+                            || current_druid_text_contains_word(after_verb, "outcasts"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        search_from = index + "there".len();
+    }
+    false
+}
+
+fn current_druid_is_python_decimal_digit(character: char) -> bool {
+    // Python 3.13's Unicode `\d` is General_Category=Decimal_Number (Nd),
+    // not Rust's broader `char::is_numeric`. These are the Unicode 15.1 Nd
+    // blocks used by the bridge; every listed block has ten code points.
+    const TEN_DIGIT_BLOCK_STARTS: &[u32] = &[
+        0x30, 0x660, 0x6F0, 0x7C0, 0x966, 0x9E6, 0xA66, 0xAE6, 0xB66, 0xBE6,
+        0xC66, 0xCE6, 0xD66, 0xDE6, 0xE50, 0xED0, 0xF20, 0x1040, 0x1090,
+        0x17E0, 0x1810, 0x1946, 0x19D0, 0x1A80, 0x1A90, 0x1B50, 0x1BB0,
+        0x1C40, 0x1C50, 0xA620, 0xA8D0, 0xA900, 0xA9D0, 0xA9F0, 0xAA50,
+        0xABF0, 0xFF10, 0x104A0, 0x10D30, 0x11066, 0x110F0, 0x11136,
+        0x111D0, 0x112F0, 0x11450, 0x114D0, 0x11650, 0x116C0, 0x11730,
+        0x118E0, 0x11950, 0x11C50, 0x11D50, 0x11DA0, 0x11F50, 0x16A60,
+        0x16AC0, 0x16B50, 0x1E140, 0x1E2F0, 0x1E4F0, 0x1E950, 0x1FBF0,
+    ];
+    let code_point = u32::from(character);
+    (0x1D7CE..=0x1D7FF).contains(&code_point)
+        || TEN_DIGIT_BLOCK_STARTS
+            .iter()
+            .any(|start| (*start..=*start + 9).contains(&code_point))
+}
+
+fn current_druid_python_ignorecase_fold(text: &str) -> String {
+    // Python's Unicode IGNORECASE adds these four code points to ASCII
+    // letter matching. The bridge's Druid-family regexes are ASCII literals,
+    // so applying these folds plus ASCII lowercase reproduces their relevant
+    // case-insensitive surface without broad compatibility normalization.
+    text.chars()
+        .map(|character| match character {
+            '\u{0130}' | '\u{0131}' => 'i',
+            '\u{017F}' => 's',
+            '\u{212A}' => 'k',
+            _ => character.to_ascii_lowercase(),
+        })
+        .collect()
+}
+
+fn current_druid_opaque_text_is_ambiguous(text: &str) -> bool {
+    let normalized = current_druid_python_ignorecase_fold(
+        current_druid_trim_python_regex_whitespace(text),
+    );
+    let druid_prefix = normalized
+        .strip_prefix("among")
+        .is_some_and(|rest| {
+            rest.chars()
+                .next()
+                .is_some_and(current_druid_is_python_regex_whitespace)
+                && current_druid_trim_python_regex_whitespace(rest).starts_with('#')
+        });
+    let displayed_ids = normalized
+        .split('#')
+        .skip(1)
+        .filter(|suffix| {
+            current_druid_trim_python_regex_whitespace(suffix)
+                .chars()
+                .next()
+                .is_some_and(current_druid_is_python_decimal_digit)
+        })
+        .count();
+    let druid_family =
+        druid_prefix && displayed_ids == 3 && current_druid_has_result_clause(&normalized);
+    let after_hash = normalized
+        .strip_prefix('#')
+        .map(current_druid_trim_python_regex_whitespace)
+        .filter(|suffix| {
+            suffix
+                .chars()
+                .next()
+                .is_some_and(current_druid_is_python_decimal_digit)
+        });
+    // Match the bridge's non-DOTALL guard: a later-line foreign callback that
+    // happens to contain "shut" is not a malformed one-line shut-up result.
+    let shut_up_family = after_hash.is_some_and(|suffix| {
+        current_druid_text_contains_word(suffix.split('\n').next().unwrap_or(suffix), "shut")
+    });
+    druid_family || shut_up_family
+}
+
+fn parse_current_druid_callback_event(
+    value: &serde_json::Value,
+    state: &GameState,
+) -> Option<CurrentDruidCallbackEvent> {
+    const COMMON_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+    ];
+    const RESULT_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+        "targets",
+        "found_outcast",
+    ];
+    const INTERRUPTION_FIELDS: &[&str] = &[
+        "activation_id",
+        "callback_index",
+        "dispatch_path",
+        "event_kind",
+        "text",
+        "references",
+        "settled_reveal_count",
+        "reset_generation",
+        "activation_evidence",
+        "shut_up_target",
+    ];
+
+    let event = value.as_object()?;
+    let activation_id = event
+        .get("activation_id")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())
+        .filter(|value| *value > 0)?;
+    let callback_index = event
+        .get("callback_index")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())?;
+    let dispatch_path = parse_current_druid_dispatch_path(event.get("dispatch_path")?)?;
+    let settled_reveal_count = event
+        .get("settled_reveal_count")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())
+        .filter(|value| *value > 0)?;
+    let reset_generation = event
+        .get("reset_generation")?
+        .as_u64()
+        .and_then(|value| usize::try_from(value).ok())?;
+    let activation_evidence =
+        parse_current_druid_activation_evidence(event.get("activation_evidence")?)?;
+    let references = parse_current_druid_references(event.get("references")?, state)?;
+    let text = event.get("text")?.as_str()?;
+
+    let kind = match event.get("event_kind")?.as_str()? {
+        "druid_result" => {
+            if !current_druid_has_exact_fields(event, RESULT_FIELDS) {
+                return None;
+            }
+            let claim = parse_current_druid_claim_fields(event, state)?;
+            if references.as_deref() != Some(claim.targets.as_slice())
+                || text
+                    != current_druid_claim_text(
+                        &claim.targets,
+                        claim.found_outcast.as_deref(),
+                    )
+            {
+                return None;
+            }
+            CurrentDruidCallbackKind::Result(claim)
+        }
+        "rambler_interruption" => {
+            if !current_druid_has_exact_fields(event, INTERRUPTION_FIELDS) {
+                return None;
+            }
+            let target = event
+                .get("shut_up_target")?
+                .as_u64()
+                .and_then(|value| u8::try_from(value).ok())
+                .filter(|value| *value > 0 && *value <= state.n_cards)?;
+            if references.as_deref() != Some([target].as_slice())
+                || text != format!("#{target}\nshut up!")
+            {
+                return None;
+            }
+            CurrentDruidCallbackKind::RamblerInterruption { target }
+        }
+        "opaque_real" => {
+            if !current_druid_has_exact_fields(event, COMMON_FIELDS)
+                || text.is_empty()
+                || current_druid_opaque_text_is_ambiguous(text)
+            {
+                return None;
+            }
+            CurrentDruidCallbackKind::OpaqueReal
+        }
+        _ => return None,
+    };
+
+    Some(CurrentDruidCallbackEvent {
+        activation_id,
+        callback_index,
+        dispatch_path,
+        kind,
+        settled_reveal_count,
+        reset_generation,
+        activation_evidence,
+    })
+}
+
+fn parse_current_druid_payload(card: &CardInfo, state: &GameState) -> Option<CurrentDruidPayload> {
+    if !card.info_parsed.contains_key("callback_ledger_variant")
+        && !card.info_parsed.contains_key("callback_events")
+    {
+        return parse_current_druid_claim(card, state).map(CurrentDruidPayload::Scalar);
+    }
+    if card.position == 0
+        || card.position > state.n_cards
+        || card.apparent_role != "Druid"
+        || card
+            .info_parsed
+            .get(DRUID_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            != Some(POET_CURRENT_VARIANT)
+        || card
+            .info_parsed
+            .get("callback_ledger_variant")
+            .and_then(serde_json::Value::as_str)
+            != Some("ordered_callbacks_v1")
+        || state.baker_rule_version.as_deref() != Some(BAKER_CURRENT_RULE)
+    {
+        return None;
+    }
+    let values = card.info_parsed.get("callback_events")?.as_array()?;
+    if values.is_empty() {
+        return None;
+    }
+    let mut seen_reveals = HashSet::new();
+    if state.reveal_order.len() > usize::from(state.n_cards)
+        || state.reveal_order.iter().any(|position| {
+            *position == 0 || *position > state.n_cards || !seen_reveals.insert(*position)
+        })
+    {
+        return None;
+    }
+
+    let events = values
+        .iter()
+        .map(|value| parse_current_druid_callback_event(value, state))
+        .collect::<Option<Vec<_>>>()?;
+    let mut groups: Vec<&[CurrentDruidCallbackEvent]> = Vec::new();
+    let mut start = 0;
+    let mut previous_boundary = 0;
+    let mut previous_generation = 0;
+    while start < events.len() {
+        let activation_id = events[start].activation_id;
+        if activation_id != groups.len() + 1 || events[start].callback_index != 0 {
+            return None;
+        }
+        let mut end = start + 1;
+        while end < events.len() && events[end].activation_id == activation_id {
+            end += 1;
+        }
+        let group = &events[start..end];
+        let first = &group[0];
+        if first.settled_reveal_count < previous_boundary
+            || first.settled_reveal_count > state.reveal_order.len()
+            || !state.reveal_order[..first.settled_reveal_count].contains(&card.position)
+            || !groups.is_empty() && first.reset_generation <= previous_generation
+            || group.iter().enumerate().any(|(index, event)| {
+                event.callback_index != index
+                    || event.settled_reveal_count != first.settled_reveal_count
+                    || event.reset_generation != first.reset_generation
+                    || event.activation_evidence != first.activation_evidence
+            })
+        {
+            return None;
+        }
+        match group {
+            [only]
+                if only.dispatch_path == CurrentDruidDispatchPath::Either
+                    && only.activation_evidence
+                        != CurrentDruidActivationEvidence::SameActivationExtension => {}
+            [real, raw]
+                if real.dispatch_path == CurrentDruidDispatchPath::Real
+                    && raw.dispatch_path == CurrentDruidDispatchPath::Raw
+                    && real.activation_evidence
+                        != CurrentDruidActivationEvidence::SingleCallbackSuffix => {}
+            _ => return None,
+        }
+        let evidence_is_reachable = match first.activation_evidence {
+            CurrentDruidActivationEvidence::SingleCallbackSuffix => {
+                groups.is_empty() && first.reset_generation == 0 && group.len() == 1
+            }
+            CurrentDruidActivationEvidence::AutoUseClick => true,
+            CurrentDruidActivationEvidence::SessionResetGeneration => {
+                if groups.is_empty() {
+                    first.reset_generation > 0 && group.len() == 1
+                } else {
+                    group.len() == 1
+                        || first.reset_generation.checked_sub(previous_generation) == Some(1)
+                }
+            }
+            CurrentDruidActivationEvidence::SameActivationExtension => {
+                group.len() == 2
+                    && !matches!(group[0].kind, CurrentDruidCallbackKind::OpaqueReal)
+            }
+        };
+        if first.activation_evidence == CurrentDruidActivationEvidence::SingleCallbackSuffix
+            && group.len() != 1
+            || first.activation_evidence
+                == CurrentDruidActivationEvidence::SameActivationExtension
+                && group.len() != 2
+            || !evidence_is_reachable
+            || matches!(group[0].kind, CurrentDruidCallbackKind::OpaqueReal)
+                && (group.len() != 2
+                    || !matches!(group[1].kind, CurrentDruidCallbackKind::Result(_) | CurrentDruidCallbackKind::RamblerInterruption { .. }))
+            || group
+                .iter()
+                .skip(1)
+                .any(|event| matches!(event.kind, CurrentDruidCallbackKind::OpaqueReal))
+            || group.len() == 2
+                && matches!(group[0].kind, CurrentDruidCallbackKind::RamblerInterruption { .. })
+                    != matches!(group[1].kind, CurrentDruidCallbackKind::RamblerInterruption { .. })
+            || matches!(
+                (&group[0].kind, group.get(1).map(|event| &event.kind)),
+                (
+                    CurrentDruidCallbackKind::RamblerInterruption { target: left },
+                    Some(CurrentDruidCallbackKind::RamblerInterruption { target: right }),
+                ) if left != right
+            )
+            || matches!(
+                (&group[0].kind, group.get(1).map(|event| &event.kind)),
+                (
+                    CurrentDruidCallbackKind::Result(left),
+                    Some(CurrentDruidCallbackKind::Result(right)),
+                ) if left.targets != right.targets
+            )
+        {
+            return None;
+        }
+        previous_boundary = first.settled_reveal_count;
+        previous_generation = first.reset_generation;
+        groups.push(group);
+        start = end;
+    }
+
+    let latest = events.last()?;
+    const COMMON_TOP_FIELDS: &[&str] = &[
+        DRUID_CURRENT_VARIANT_FIELD,
+        "callback_ledger_variant",
+        "callback_events",
+    ];
+    match &latest.kind {
+        CurrentDruidCallbackKind::Result(claim) => {
+            const RESULT_TOP_FIELDS: &[&str] = &[
+                DRUID_CURRENT_VARIANT_FIELD,
+                "callback_ledger_variant",
+                "callback_events",
+                "targets",
+                "found_outcast",
+            ];
+            if !current_druid_has_exact_fields(&card.info_parsed, RESULT_TOP_FIELDS)
+                || parse_current_druid_claim_fields(&card.info_parsed, state)? != *claim
+                || card.info_text
+                    != current_druid_claim_text(
+                        &claim.targets,
+                        claim.found_outcast.as_deref(),
+                    )
+            {
+                return None;
+            }
+        }
+        CurrentDruidCallbackKind::RamblerInterruption { target } => {
+            const INTERRUPTION_TOP_FIELDS: &[&str] = &[
+                DRUID_CURRENT_VARIANT_FIELD,
+                "callback_ledger_variant",
+                "callback_events",
+                "shut_up_target",
+            ];
+            if !current_druid_has_exact_fields(&card.info_parsed, INTERRUPTION_TOP_FIELDS)
+                || card
+                    .info_parsed
+                    .get("shut_up_target")
+                    .and_then(serde_json::Value::as_u64)
+                    != Some(u64::from(*target))
+                || card.info_text != format!("#{target}\nshut up!")
+            {
+                return None;
+            }
+        }
+        CurrentDruidCallbackKind::OpaqueReal => {
+            let _ = COMMON_TOP_FIELDS;
+            return None;
+        }
+    }
+
+    let ledger_interruptions = events
+        .iter()
+        .filter_map(|event| match event.kind {
+            CurrentDruidCallbackKind::RamblerInterruption { target } => Some(target),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    let public_interruptions = state
+        .rambler_shut_up_observations
+        .iter()
+        .filter_map(|observation| {
+            (observation.speaker_position == card.position).then_some(observation.shut_up_target)
+        })
+        .collect::<Vec<_>>();
+    if ledger_interruptions != public_interruptions
+        || !ledger_interruptions.is_empty()
+            && state.rambler_rule_version.as_deref() != Some(RAMBLER_CURRENT_RULE)
+    {
+        return None;
+    }
+
+    Some(CurrentDruidPayload::Ledger(events))
+}
+
+fn current_druid_converted_at_boundary(
     position: u8,
+    boundary: CurrentDruidObservationBoundary,
+    timeline: &BakerSpyTimeline,
+    state: &GameState,
+) -> Option<bool> {
+    match boundary {
+        CurrentDruidObservationBoundary::FinalCompatibility => {
+            Some(timeline.contains_position(position))
+        }
+        CurrentDruidObservationBoundary::SettledRevealCount(count) => {
+            timeline.converted_before_settled_reveal_count(position, count, state)
+        }
+    }
+}
+
+fn current_data_role_at_druid_observation(
+    position: u8,
+    boundary: CurrentDruidObservationBoundary,
     timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<String> {
-    if timeline.contains_position(position) {
-        // Druid's picker completes after the reveal sequence. A Baker
-        // conversion has therefore finished its synchronous InitWithNoReset,
-        // independently of the delayed register-as boundary used by passive
-        // reveal observations.
+    if current_druid_converted_at_boundary(position, boundary, timeline, state)? {
         Some("Baker".to_string())
+    } else if timeline.contains_position(position) {
+        Some("Spy".to_string())
     } else {
         current_data_role_at(position, scenario, state)
     }
 }
 
-fn current_spy_register_as_surface_at_settled_active(
+fn current_spy_register_as_surface_at_druid_observation(
     position: u8,
+    boundary: CurrentDruidObservationBoundary,
     timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
-) -> bool {
-    !timeline.contains_position(position)
-        && current_spy_register_as_surface_at(position, scenario, state)
+) -> Option<bool> {
+    if timeline.contains_position(position) {
+        Some(!current_druid_converted_at_boundary(
+            position, boundary, timeline, state,
+        )?)
+    } else {
+        Some(current_spy_register_as_surface_at(
+            position, scenario, state,
+        ))
+    }
 }
 
-fn current_raw_bluff_holder_at_settled_active(
+fn current_raw_bluff_holder_at_druid_observation(
     position: u8,
+    boundary: CurrentDruidObservationBoundary,
     timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> CurrentMediumRawBluffHolder {
-    if timeline.contains_position(position) {
-        // Baker's synchronous full reinitialization clears Character.bluff;
-        // its later Reveal has a null selector and cannot repopulate it.
+    if current_druid_converted_at_boundary(position, boundary, timeline, state) != Some(false) {
         CurrentMediumRawBluffHolder::Impossible
     } else {
-        current_medium_raw_bluff_holder_at(
-            position,
-            position,
-            timeline,
-            scenario,
-            state,
-        )
+        current_medium_raw_bluff_holder_at(position, position, timeline, scenario, state)
     }
 }
 
-fn current_druid_target_surface_at_settled_active(
+fn current_druid_target_surface_at_observation(
     position: u8,
+    boundary: CurrentDruidObservationBoundary,
     timeline: &BakerSpyTimeline,
     scenario: &Scenario,
     state: &GameState,
 ) -> Option<CurrentDruidTargetSurface> {
-    // GetRegisterAs wins over dataRef. Stable/current Spy caches a Villager;
-    // a Baker-converted Spy has completed the delayed reset by active use.
-    if current_spy_register_as_surface_at_settled_active(
-        position, timeline, scenario, state,
-    ) {
+    if current_spy_register_as_surface_at_druid_observation(
+        position, boundary, timeline, scenario, state,
+    )? {
         return Some(CurrentDruidTargetSurface::KnownNonOutcast);
     }
 
-    let role = match current_data_role_at_settled_active(position, timeline, scenario, state) {
-        Some(role) if normalize_role(&role) == "unknown" => return None,
-        Some(role) => role,
-        None if scenario.is_evil(position) => return None,
-        None => return Some(CurrentDruidTargetSurface::AnonymousGood),
-    };
-    // Wretch's live register-as is a Minion identity, not an Outcast identity.
+    let role =
+        match current_data_role_at_druid_observation(position, boundary, timeline, scenario, state)
+        {
+            Some(role) if normalize_role(&role) == "unknown" => return None,
+            Some(role) => role,
+            None if scenario.is_evil(position) => return None,
+            None => return Some(CurrentDruidTargetSurface::AnonymousGood),
+        };
     if roles_equal(&role, "Wretch") {
         return Some(CurrentDruidTargetSurface::KnownNonOutcast);
     }
@@ -5238,8 +5855,9 @@ fn current_druid_target_surface_at_settled_active(
         (false, false) => get_card(&role)?.faction,
     };
     if faction == Faction::Outcast {
-        let canonical = get_card(&role)?.name.to_string();
-        Some(CurrentDruidTargetSurface::KnownOutcast(canonical))
+        Some(CurrentDruidTargetSurface::KnownOutcast(
+            get_card(&role)?.name.to_string(),
+        ))
     } else {
         Some(CurrentDruidTargetSurface::KnownNonOutcast)
     }
@@ -5416,6 +6034,7 @@ fn current_druid_append_supports(
     raw_bluff: Option<(u8, String)>,
     forbidden_raw_bluff: Option<(u8, String)>,
     timeline: &BakerSpyTimeline,
+    callbacks: &[CurrentDruidResolvedCallback],
     scenario: &Scenario,
     state: &GameState,
 ) {
@@ -5438,6 +6057,7 @@ fn current_druid_append_supports(
             raw_bluff: raw_bluff.clone(),
             forbidden_raw_bluff: forbidden_raw_bluff.clone(),
             baker_spy_timeline: timeline.clone(),
+            callbacks: callbacks.to_vec(),
         };
         if !supports.contains(&support) {
             supports.push(support);
@@ -5445,79 +6065,170 @@ fn current_druid_append_supports(
     }
 }
 
-fn current_druid_supports(
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidProviderSelection {
+    ScalarCompatibility,
+    Real {
+        callback: CurrentDruidResolvedCallback,
+        raw_druid: CurrentDruidRawConstraint,
+    },
+    Raw {
+        callback: CurrentDruidResolvedCallback,
+        allow_real_druid: bool,
+    },
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentDruidRawConstraint {
+    Unconstrained,
+    Required,
+    Forbidden,
+}
+
+fn current_druid_result_supports(
     card: &CardInfo,
+    claim: &CurrentDruidClaim,
+    boundary: CurrentDruidObservationBoundary,
+    selection: CurrentDruidProviderSelection,
     scenario: &Scenario,
     state: &GameState,
 ) -> Vec<CurrentDruidSupport> {
-    let Some(claim) = parse_current_druid_claim(card, state) else {
-        return Vec::new();
-    };
-    // An opaque executed Evil may have been any Start status/data writer.
-    // Active-use sampling cannot reconstruct that world from a later role map.
-    if current_has_unresolved_start_identity(scenario, state) {
-        return Vec::new();
-    }
-
     let anonymous_wretch_candidates: HashSet<u8> =
         anonymous_natural_wretch_candidates(scenario, state)
             .into_iter()
             .collect();
     let mut supports = Vec::new();
     for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if matches!(boundary, CurrentDruidObservationBoundary::SettledRevealCount(count) if !timeline.supports_settled_reveal_count(count, state))
+        {
+            continue;
+        }
         let surfaces = claim
             .targets
             .iter()
             .map(|position| {
-                current_druid_target_surface_at_settled_active(
-                    *position, &timeline, scenario, state,
+                current_druid_target_surface_at_observation(
+                    *position, boundary, &timeline, scenario, state,
                 )
             })
             .collect::<Option<Vec<_>>>();
         let Some(surfaces) = surfaces.and_then(|values| values.try_into().ok()) else {
             continue;
         };
-        let current_role = current_data_role_at_settled_active(
+        let current_role = current_data_role_at_druid_observation(
             card.position,
+            boundary,
             &timeline,
             scenario,
             state,
         );
-        let raw_holder = current_raw_bluff_holder_at_settled_active(
+        let raw_holder = current_raw_bluff_holder_at_druid_observation(
             card.position,
+            boundary,
             &timeline,
             scenario,
             state,
         );
+        let real_druid_callback = current_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Druid"));
 
         let runtime_evil_real_truth = is_runtime_evil_at(card.position, scenario, state)
             && raw_holder != CurrentMediumRawBluffHolder::Impossible;
-        if current_role
-            .as_deref()
-            .is_some_and(|role| roles_equal(role, "Druid"))
+        if !matches!(selection, CurrentDruidProviderSelection::Raw { .. })
+            && real_druid_callback
         {
             let truth = if runtime_evil_real_truth {
                 TruthStatus::Truthful
             } else {
                 truth_status(card.position, scenario, state)
             };
+            let (
+                anonymous_wretches,
+                register_as,
+                raw_bluff,
+                forbidden_raw_bluff,
+                callbacks,
+            ) = match selection {
+                CurrentDruidProviderSelection::ScalarCompatibility => (
+                    AnonymousWretchConstraints::empty(),
+                    None,
+                    None,
+                    runtime_evil_real_truth
+                        .then(|| (card.position, normalize_role("Druid"))),
+                    Vec::new(),
+                ),
+                CurrentDruidProviderSelection::Real {
+                    callback,
+                    raw_druid,
+                } => {
+                    let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+                    let mut register_as = None;
+                    let mut raw_bluff = None;
+                    let mut forbidden_raw_bluff = None;
+                    match raw_druid {
+                        CurrentDruidRawConstraint::Unconstrained => {}
+                        CurrentDruidRawConstraint::Forbidden => {
+                            forbidden_raw_bluff =
+                                Some((card.position, normalize_role("Druid")));
+                        }
+                        CurrentDruidRawConstraint::Required => {
+                            if raw_holder == CurrentMediumRawBluffHolder::Impossible {
+                                continue;
+                            }
+                            if anonymous_wretch_candidates.contains(&card.position) {
+                                anonymous_wretches.forbidden.insert(card.position);
+                            }
+                            if current_spy_register_as_surface_at_druid_observation(
+                                card.position,
+                                boundary,
+                                &timeline,
+                                scenario,
+                                state,
+                            ) == Some(true)
+                            {
+                                if !current_medium_spy_register_as_label_allowed("Druid", state) {
+                                    continue;
+                                }
+                                register_as =
+                                    Some((card.position, normalize_role("Druid")));
+                            }
+                            raw_bluff = Some((card.position, normalize_role("Druid")));
+                        }
+                    }
+                    (
+                        anonymous_wretches,
+                        register_as,
+                        raw_bluff,
+                        forbidden_raw_bluff,
+                        vec![callback],
+                    )
+                }
+                CurrentDruidProviderSelection::Raw { .. } => unreachable!(),
+            };
             current_druid_append_supports(
                 &mut supports,
                 &claim,
                 truth,
                 &surfaces,
-                &AnonymousWretchConstraints::empty(),
-                None,
-                None,
-                runtime_evil_real_truth
-                    .then(|| (card.position, normalize_role("Druid"))),
+                &anonymous_wretches,
+                register_as,
+                raw_bluff,
+                forbidden_raw_bluff,
                 &timeline,
+                &callbacks,
                 scenario,
                 state,
             );
         }
 
-        if raw_holder == CurrentMediumRawBluffHolder::Impossible {
+        if matches!(selection, CurrentDruidProviderSelection::Real { .. })
+            || matches!(selection, CurrentDruidProviderSelection::Raw { allow_real_druid: false, .. })
+                && !current_role
+                    .as_deref()
+                    .is_some_and(current_druid_role_has_no_day_callback)
+            || raw_holder == CurrentMediumRawBluffHolder::Impossible
+        {
             continue;
         }
         let mut anonymous_wretches = AnonymousWretchConstraints::empty();
@@ -5526,18 +6237,25 @@ fn current_druid_supports(
             // callback at that grouped seat therefore excludes Wretch.
             anonymous_wretches.forbidden.insert(card.position);
         }
-        let register_as = if current_spy_register_as_surface_at_settled_active(
+        let register_as = if current_spy_register_as_surface_at_druid_observation(
             card.position,
+            boundary,
             &timeline,
             scenario,
             state,
-        ) {
+        ) == Some(true)
+        {
             if !current_medium_spy_register_as_label_allowed("Druid", state) {
                 continue;
             }
             Some((card.position, normalize_role("Druid")))
         } else {
             None
+        };
+        let callbacks = match selection {
+            CurrentDruidProviderSelection::ScalarCompatibility => Vec::new(),
+            CurrentDruidProviderSelection::Raw { callback, .. } => vec![callback],
+            CurrentDruidProviderSelection::Real { .. } => unreachable!(),
         };
         current_druid_append_supports(
             &mut supports,
@@ -5555,6 +6273,7 @@ fn current_druid_supports(
             Some((card.position, normalize_role("Druid"))),
             None,
             &timeline,
+            &callbacks,
             scenario,
             state,
         );
@@ -5562,8 +6281,548 @@ fn current_druid_supports(
     supports
 }
 
+fn current_druid_callback_witness(
+    event: &CurrentDruidCallbackEvent,
+    path: CurrentDruidResolvedPath,
+) -> CurrentDruidResolvedCallback {
+    CurrentDruidResolvedCallback {
+        activation_id: event.activation_id,
+        callback_index: event.callback_index,
+        path,
+        opaque: matches!(event.kind, CurrentDruidCallbackKind::OpaqueReal),
+    }
+}
+
+fn current_druid_role_can_emit_day_callback(role: &str) -> bool {
+    // A real callback record needs a concrete Day-output producer. Start-,
+    // Night-, death-, and status-only roles cannot manufacture the first
+    // record in a real-then-raw Druid activation. Keep this current-build
+    // boundary closed instead of treating every non-Druid current role as an
+    // opaque producer.
+    matches!(
+        normalize_role(role).as_str(),
+        "alchemist"
+            | "architect"
+            | "baker"
+            | "bard"
+            | "bishop"
+            | "bountyhunter"
+            | "confessor"
+            | "dreamer"
+            | "druid"
+            | "empress"
+            | "enlightened"
+            | "fortuneteller"
+            | "gemcrafter"
+            | "hunter"
+            | "jester"
+            | "judge"
+            | "knitter"
+            | "lover"
+            | "medium"
+            | "oracle"
+            | "plaguedoctor"
+            | "poet"
+            | "rambler"
+            | "scout"
+            | "slayer"
+            | "witness"
+    )
+}
+
+fn current_druid_role_has_no_day_callback(role: &str) -> bool {
+    // This is intentionally a closed companion set. An unknown role proves
+    // neither that a real callback exists nor that it is absent.
+    matches!(
+        normalize_role(role).as_str(),
+        "baa"
+            | "bombardier"
+            | "chancellor"
+            | "demon"
+            | "doppelganger"
+            | "drunk"
+            | "knight"
+            | "lilis"
+            | "minion"
+            | "mutant"
+            | "poisoner"
+            | "pooka"
+            | "puppet"
+            | "puppeteer"
+            | "saint"
+            | "saintvillager"
+            | "shaman"
+            | "spy"
+            | "twinminion"
+            | "villager"
+            | "witch"
+            | "wretch"
+    )
+}
+
+fn current_druid_non_result_supports(
+    card: &CardInfo,
+    event: &CurrentDruidCallbackEvent,
+    path: CurrentDruidResolvedPath,
+    raw_druid: CurrentDruidRawConstraint,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentDruidSupport> {
+    let anonymous_wretch_candidates: HashSet<u8> =
+        anonymous_natural_wretch_candidates(scenario, state)
+            .into_iter()
+            .collect();
+    let boundary = CurrentDruidObservationBoundary::SettledRevealCount(
+        event.settled_reveal_count,
+    );
+    let callback = current_druid_callback_witness(event, path);
+    let mut supports = Vec::new();
+    for timeline in baker_spy_conversion_timelines(scenario, state) {
+        if !timeline.supports_settled_reveal_count(event.settled_reveal_count, state) {
+            continue;
+        }
+        let current_role = current_data_role_at_druid_observation(
+            card.position,
+            boundary,
+            &timeline,
+            scenario,
+            state,
+        );
+        if path == CurrentDruidResolvedPath::Real {
+            let Some(current_role) = current_role.as_deref() else {
+                continue;
+            };
+            if !current_druid_role_can_emit_day_callback(current_role) {
+                continue;
+            }
+            if matches!(event.kind, CurrentDruidCallbackKind::OpaqueReal)
+                && roles_equal(current_role, "Druid")
+            {
+                continue;
+            }
+            let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+            let mut register_as = None;
+            let mut raw_bluff = None;
+            let mut forbidden_raw_bluff = None;
+            match raw_druid {
+                CurrentDruidRawConstraint::Unconstrained => {}
+                CurrentDruidRawConstraint::Forbidden => {
+                    forbidden_raw_bluff = Some((card.position, normalize_role("Druid")));
+                }
+                CurrentDruidRawConstraint::Required => {
+                    if current_raw_bluff_holder_at_druid_observation(
+                        card.position,
+                        boundary,
+                        &timeline,
+                        scenario,
+                        state,
+                    ) == CurrentMediumRawBluffHolder::Impossible
+                    {
+                        continue;
+                    }
+                    if anonymous_wretch_candidates.contains(&card.position) {
+                        anonymous_wretches.forbidden.insert(card.position);
+                        if !anonymous_wretch_assignment_possible(
+                            &anonymous_wretches.required,
+                            &anonymous_wretches.forbidden,
+                            scenario,
+                            state,
+                        ) {
+                            continue;
+                        }
+                    }
+                    if current_spy_register_as_surface_at_druid_observation(
+                        card.position,
+                        boundary,
+                        &timeline,
+                        scenario,
+                        state,
+                    ) == Some(true)
+                    {
+                        if !current_medium_spy_register_as_label_allowed("Druid", state) {
+                            continue;
+                        }
+                        register_as = Some((card.position, normalize_role("Druid")));
+                    }
+                    raw_bluff = Some((card.position, normalize_role("Druid")));
+                }
+            }
+            let support = CurrentDruidSupport {
+                anonymous_wretches,
+                anonymous_type_options: HashMap::new(),
+                anonymous_outcast_roles: HashMap::new(),
+                register_as,
+                raw_bluff,
+                forbidden_raw_bluff,
+                baker_spy_timeline: timeline,
+                callbacks: vec![callback],
+            };
+            if !supports.contains(&support) {
+                supports.push(support);
+            }
+            continue;
+        }
+
+        if matches!(event.kind, CurrentDruidCallbackKind::OpaqueReal)
+            || event.callback_index == 0
+                && !current_role
+                    .as_deref()
+                    .is_some_and(current_druid_role_has_no_day_callback)
+            || current_raw_bluff_holder_at_druid_observation(
+                card.position,
+                boundary,
+                &timeline,
+                scenario,
+                state,
+            ) == CurrentMediumRawBluffHolder::Impossible
+        {
+            continue;
+        }
+        let mut anonymous_wretches = AnonymousWretchConstraints::empty();
+        if anonymous_wretch_candidates.contains(&card.position) {
+            anonymous_wretches.forbidden.insert(card.position);
+            if !anonymous_wretch_assignment_possible(
+                &anonymous_wretches.required,
+                &anonymous_wretches.forbidden,
+                scenario,
+                state,
+            ) {
+                continue;
+            }
+        }
+        let register_as = if current_spy_register_as_surface_at_druid_observation(
+            card.position,
+            boundary,
+            &timeline,
+            scenario,
+            state,
+        ) == Some(true)
+        {
+            if !current_medium_spy_register_as_label_allowed("Druid", state) {
+                continue;
+            }
+            Some((card.position, normalize_role("Druid")))
+        } else {
+            None
+        };
+        let support = CurrentDruidSupport {
+            anonymous_wretches,
+            anonymous_type_options: HashMap::new(),
+            anonymous_outcast_roles: HashMap::new(),
+            register_as,
+            raw_bluff: Some((card.position, normalize_role("Druid"))),
+            forbidden_raw_bluff: None,
+            baker_spy_timeline: timeline,
+            callbacks: vec![callback],
+        };
+        if !supports.contains(&support) {
+            supports.push(support);
+        }
+    }
+    supports
+}
+
+fn current_druid_event_supports(
+    card: &CardInfo,
+    event: &CurrentDruidCallbackEvent,
+    path: CurrentDruidResolvedPath,
+    raw_druid: CurrentDruidRawConstraint,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentDruidSupport> {
+    match &event.kind {
+        CurrentDruidCallbackKind::Result(claim) => current_druid_result_supports(
+            card,
+            claim,
+            CurrentDruidObservationBoundary::SettledRevealCount(
+                event.settled_reveal_count,
+            ),
+            match path {
+                CurrentDruidResolvedPath::Real => CurrentDruidProviderSelection::Real {
+                    callback: current_druid_callback_witness(event, path),
+                    raw_druid,
+                },
+                CurrentDruidResolvedPath::Raw => CurrentDruidProviderSelection::Raw {
+                    callback: current_druid_callback_witness(event, path),
+                    allow_real_druid: event.callback_index > 0,
+                },
+            },
+            scenario,
+            state,
+        ),
+        CurrentDruidCallbackKind::RamblerInterruption { .. }
+        | CurrentDruidCallbackKind::OpaqueReal => current_druid_non_result_supports(
+            card,
+            event,
+            path,
+            raw_druid,
+            scenario,
+            state,
+        ),
+    }
+}
+
+fn merge_current_druid_supports(
+    left: &CurrentDruidSupport,
+    right: &CurrentDruidSupport,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<CurrentDruidSupport> {
+    if left.baker_spy_timeline != right.baker_spy_timeline {
+        return None;
+    }
+    let mut merged = left.clone();
+    merged
+        .anonymous_wretches
+        .required
+        .extend(&right.anonymous_wretches.required);
+    merged
+        .anonymous_wretches
+        .forbidden
+        .extend(&right.anonymous_wretches.forbidden);
+    if !merged
+        .anonymous_wretches
+        .required
+        .is_disjoint(&merged.anonymous_wretches.forbidden)
+    {
+        return None;
+    }
+
+    for (&position, &options) in &right.anonymous_type_options {
+        if let Some(selected) = merged.anonymous_type_options.get_mut(&position) {
+            *selected &= options;
+            if *selected == 0 {
+                return None;
+            }
+        } else if options == 0 {
+            return None;
+        } else {
+            merged.anonymous_type_options.insert(position, options);
+        }
+    }
+    for (&position, role) in &right.anonymous_outcast_roles {
+        if merged
+            .anonymous_outcast_roles
+            .get(&position)
+            .is_some_and(|selected| selected != role)
+        {
+            return None;
+        }
+        merged
+            .anonymous_outcast_roles
+            .insert(position, role.clone());
+    }
+
+    for (selected, incoming) in [
+        (&mut merged.register_as, &right.register_as),
+        (&mut merged.raw_bluff, &right.raw_bluff),
+        (&mut merged.forbidden_raw_bluff, &right.forbidden_raw_bluff),
+    ] {
+        if selected
+            .as_ref()
+            .zip(incoming.as_ref())
+            .is_some_and(|(known, candidate)| known != candidate)
+        {
+            return None;
+        }
+        if selected.is_none() {
+            *selected = incoming.clone();
+        }
+    }
+    if merged
+        .raw_bluff
+        .as_ref()
+        .zip(merged.forbidden_raw_bluff.as_ref())
+        .is_some_and(|(required, forbidden)| required == forbidden)
+        || !current_hidden_anonymous_assignment_possible(
+            &merged.anonymous_type_options,
+            &merged.anonymous_outcast_roles,
+            &merged.anonymous_wretches.required,
+            &merged.anonymous_wretches.forbidden,
+            scenario,
+            state,
+        )
+    {
+        return None;
+    }
+    if merged.callbacks.iter().any(|selected| {
+        right.callbacks.iter().any(|incoming| {
+            selected.activation_id == incoming.activation_id
+                && selected.callback_index == incoming.callback_index
+        })
+    }) || merged.callbacks.last().zip(right.callbacks.first()).is_some_and(
+        |(selected, incoming)| {
+            (selected.activation_id, selected.callback_index)
+                >= (incoming.activation_id, incoming.callback_index)
+        },
+    ) {
+        return None;
+    }
+    merged.callbacks.extend(&right.callbacks);
+    Some(merged)
+}
+
+fn current_druid_group_supports(
+    card: &CardInfo,
+    group: &[CurrentDruidCallbackEvent],
+    allow_pending_raw_callback: bool,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentDruidSupport> {
+    match group {
+        [event] if event.dispatch_path == CurrentDruidDispatchPath::Either => {
+            let mut supports = current_druid_event_supports(
+                card,
+                event,
+                CurrentDruidResolvedPath::Real,
+                CurrentDruidRawConstraint::Forbidden,
+                scenario,
+                state,
+            );
+            // Only the terminal activation can be sampled after its real
+            // callback but before the zero-delay raw-Druid callback appends.
+            // Any later activation proves that an earlier callback group was
+            // already immutable and complete.
+            if allow_pending_raw_callback {
+                for support in current_druid_event_supports(
+                    card,
+                    event,
+                    CurrentDruidResolvedPath::Real,
+                    CurrentDruidRawConstraint::Required,
+                    scenario,
+                    state,
+                ) {
+                    if !supports.contains(&support) {
+                        supports.push(support);
+                    }
+                }
+            }
+            for support in current_druid_event_supports(
+                card,
+                event,
+                CurrentDruidResolvedPath::Raw,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            ) {
+                if !supports.contains(&support) {
+                    supports.push(support);
+                }
+            }
+            supports
+        }
+        [real, raw]
+            if real.dispatch_path == CurrentDruidDispatchPath::Real
+                && raw.dispatch_path == CurrentDruidDispatchPath::Raw =>
+        {
+            let real_supports = current_druid_event_supports(
+                card,
+                real,
+                CurrentDruidResolvedPath::Real,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            );
+            let raw_supports = current_druid_event_supports(
+                card,
+                raw,
+                CurrentDruidResolvedPath::Raw,
+                CurrentDruidRawConstraint::Unconstrained,
+                scenario,
+                state,
+            );
+            let mut combined = Vec::new();
+            for selected in &real_supports {
+                for support in &raw_supports {
+                    if let Some(merged) =
+                        merge_current_druid_supports(selected, support, scenario, state)
+                    {
+                        if !combined.contains(&merged) {
+                            combined.push(merged);
+                        }
+                    }
+                }
+            }
+            combined
+        }
+        _ => Vec::new(),
+    }
+}
+
+fn current_druid_supports_for_payload(
+    card: &CardInfo,
+    payload: &CurrentDruidPayload,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Vec<CurrentDruidSupport> {
+    // An opaque executed Evil may have been any Start status/data writer.
+    // Active-use sampling cannot reconstruct that world from a later role map.
+    if current_has_unresolved_start_identity(scenario, state) {
+        return Vec::new();
+    }
+    match payload {
+        CurrentDruidPayload::Scalar(claim) => current_druid_result_supports(
+            card,
+            claim,
+            CurrentDruidObservationBoundary::FinalCompatibility,
+            CurrentDruidProviderSelection::ScalarCompatibility,
+            scenario,
+            state,
+        ),
+        CurrentDruidPayload::Ledger(events) => {
+            let mut combined = Vec::new();
+            let mut start = 0;
+            while start < events.len() {
+                let activation_id = events[start].activation_id;
+                let mut end = start + 1;
+                while end < events.len() && events[end].activation_id == activation_id {
+                    end += 1;
+                }
+                let supports = current_druid_group_supports(
+                    card,
+                    &events[start..end],
+                    end == events.len(),
+                    scenario,
+                    state,
+                );
+                if supports.is_empty() {
+                    return Vec::new();
+                }
+                if start == 0 {
+                    combined = supports;
+                } else {
+                    let mut next = Vec::new();
+                    for selected in &combined {
+                        for support in &supports {
+                            if let Some(merged) = merge_current_druid_supports(
+                                selected,
+                                support,
+                                scenario,
+                                state,
+                            ) {
+                                if !next.contains(&merged) {
+                                    next.push(merged);
+                                }
+                            }
+                        }
+                    }
+                    if next.is_empty() {
+                        return Vec::new();
+                    }
+                    combined = next;
+                }
+                start = end;
+            }
+            combined
+        }
+    }
+}
+
 fn validate_current_druid(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
-    !current_druid_supports(card, scenario, state).is_empty()
+    let Some(payload) = parse_current_druid_payload(card, state) else {
+        return false;
+    };
+    !current_druid_supports_for_payload(card, &payload, scenario, state).is_empty()
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -6730,25 +7989,26 @@ fn validate_current_hidden_surface_consistency(
                 Ok(None) => None,
             }
         } else if apparent == "druid" {
-            match current_passive_payload_source(
-                card,
-                DRUID_CURRENT_VARIANT_FIELD,
-                "Druid",
-            ) {
-                Ok(Some(CurrentPassivePayloadSource::Direct)) => Some(
-                    current_druid_supports(card, scenario, state)
-                        .into_iter()
-                        .map(|support| CurrentHiddenSurfaceSupport {
-                            anonymous_wretches: support.anonymous_wretches,
-                            bishop_type_options: support.anonymous_type_options,
-                            anonymous_outcast_roles: support.anonymous_outcast_roles,
-                            register_as: support.register_as,
-                            raw_bluff: support.raw_bluff,
-                            forbidden_raw_bluff: support.forbidden_raw_bluff,
-                            baker_spy_timeline: Some(support.baker_spy_timeline),
-                        })
-                        .collect(),
-                ),
+            match current_passive_payload_source(card, DRUID_CURRENT_VARIANT_FIELD, "Druid") {
+                Ok(Some(CurrentPassivePayloadSource::Direct)) => {
+                    match parse_current_druid_payload(card, state) {
+                        Some(payload) => Some(
+                            current_druid_supports_for_payload(card, &payload, scenario, state)
+                                .into_iter()
+                                .map(|support| CurrentHiddenSurfaceSupport {
+                                    anonymous_wretches: support.anonymous_wretches,
+                                    bishop_type_options: support.anonymous_type_options,
+                                    anonymous_outcast_roles: support.anonymous_outcast_roles,
+                                    register_as: support.register_as,
+                                    raw_bluff: support.raw_bluff,
+                                    forbidden_raw_bluff: support.forbidden_raw_bluff,
+                                    baker_spy_timeline: Some(support.baker_spy_timeline),
+                                })
+                                .collect(),
+                        ),
+                        None => Some(Vec::new()),
+                    }
+                }
                 Ok(Some(CurrentPassivePayloadSource::Poet)) | Err(()) => Some(Vec::new()),
                 Ok(None) => None,
             }
@@ -6876,6 +8136,22 @@ fn validate_current_hidden_surface_consistency(
         state: &GameState,
     ) -> bool {
         if index == observations.len() {
+            if state.rambler_rule_version.as_deref() == Some(RAMBLER_CURRENT_RULE)
+                && state.cards.iter().any(is_ordered_current_druid)
+            {
+                let Some(timeline) = baker_spy_timeline else {
+                    return false;
+                };
+                return current_rambler_timeline_jointly_possible(
+                    timeline,
+                    register_as,
+                    raw_bluffs,
+                    forbidden_raw_bluffs,
+                    anonymous_outcast_roles,
+                    scenario,
+                    state,
+                );
+            }
             return true;
         }
         for support in &observations[index] {
@@ -7391,6 +8667,740 @@ fn rambler_source_support(pos: u8, scenario: &Scenario, state: &GameState) -> Ra
     }
 }
 
+fn is_ordered_current_druid(card: &CardInfo) -> bool {
+    normalize_role(&card.apparent_role) == "druid"
+        && card
+            .info_parsed
+            .get(DRUID_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            == Some(POET_CURRENT_VARIANT)
+        && card
+            .info_parsed
+            .get("callback_ledger_variant")
+            .and_then(serde_json::Value::as_str)
+            == Some("ordered_callbacks_v1")
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentRamblerBoundary {
+    Final,
+    SettledRevealCount(usize),
+}
+
+impl CurrentRamblerBoundary {
+    fn druid_boundary(self) -> CurrentDruidObservationBoundary {
+        match self {
+            Self::Final => CurrentDruidObservationBoundary::FinalCompatibility,
+            Self::SettledRevealCount(count) => {
+                CurrentDruidObservationBoundary::SettledRevealCount(count)
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct CurrentRamblerConstraint {
+    source: u8,
+    boundary: CurrentRamblerBoundary,
+    required: u8,
+    forbidden: u8,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CurrentRamblerIdentity {
+    Existing,
+    RawBluff,
+    AnonymousNatural,
+}
+
+fn push_current_rambler_constraint(
+    constraints: &mut Vec<CurrentRamblerConstraint>,
+    source: u8,
+    boundary: CurrentRamblerBoundary,
+    required: u8,
+    forbidden: u8,
+) {
+    if let Some(existing) = constraints
+        .iter_mut()
+        .find(|constraint| constraint.source == source && constraint.boundary == boundary)
+    {
+        existing.required |= required;
+        existing.forbidden |= forbidden;
+    } else {
+        constraints.push(CurrentRamblerConstraint {
+            source,
+            boundary,
+            required,
+            forbidden,
+        });
+    }
+}
+
+fn current_role_has_raw_bluff_selector(role: &str) -> bool {
+    matches!(
+        normalize_role(role).as_str(),
+        "drunk" | "doppelganger" | "mutant"
+    ) || get_card(role).is_some_and(|card| {
+        matches!(card.faction, Faction::Minion | Faction::Demon)
+    })
+}
+
+fn current_pre_writer_raw_holder_possible(
+    position: u8,
+    previous_role: &str,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    is_runtime_evil_at(position, scenario, state)
+        || scenario.drunk_position == Some(position)
+        || scenario.doppelganger_position == Some(position)
+        || current_role_has_raw_bluff_selector(previous_role)
+}
+
+fn current_pre_writer_raw_confessor_unresolved(
+    position: u8,
+    previous_role: &str,
+    had_raw_holder: bool,
+    stale_raw_label_preserved: bool,
+    selected_register_as: &HashMap<u8, String>,
+    selected_raw_bluffs: &HashMap<u8, String>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    if !had_raw_holder {
+        return false;
+    }
+
+    // Spy's registerAs and raw bluff share one cached Villager record. Other
+    // represented raw selectors deliberately retain the model's any-canonical
+    // label policy. A joined stale label can exclude historical Confessor only
+    // when the intervening writer has a null selector; a new selector may have
+    // overwritten bluffRole after Confessor installed its physical status.
+    let cached_spy = stable_evil_origin_role_at(position, scenario, state)
+        .is_some_and(|role| roles_equal(role, "Spy"))
+        || roles_equal(previous_role, "Spy");
+    if cached_spy && !current_medium_spy_register_as_label_allowed("Confessor", state) {
+        return false;
+    }
+
+    let registered = cached_spy
+        .then(|| selected_register_as.get(&position))
+        .flatten();
+    let raw = stale_raw_label_preserved
+        .then(|| selected_raw_bluffs.get(&position))
+        .flatten();
+    let exact_historical_label = match (registered, raw) {
+        (Some(registered), Some(raw)) if !roles_equal(registered, raw) => return true,
+        (Some(registered), _) => Some(registered),
+        (None, Some(raw)) => Some(raw),
+        (None, None) => None,
+    };
+    exact_historical_label
+        .map(|role| roles_equal(role, "Confessor"))
+        .unwrap_or(true)
+}
+
+fn current_rambler_speaker_matcher_at_with_hidden_labels(
+    speaker: u8,
+    boundary: CurrentRamblerBoundary,
+    timeline: &BakerSpyTimeline,
+    selected_register_as: &HashMap<u8, String>,
+    selected_raw_bluffs: &HashMap<u8, String>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<u8> {
+    let start_role = current_data_role_at_druid_observation(
+        speaker,
+        CurrentDruidObservationBoundary::SettledRevealCount(0),
+        timeline,
+        scenario,
+        state,
+    );
+    let current_role = current_data_role_at_druid_observation(
+        speaker,
+        boundary.druid_boundary(),
+        timeline,
+        scenario,
+        state,
+    );
+    if current_role
+        .as_deref()
+        .is_some_and(|role| normalize_role(role) == "unknown")
+    {
+        return None;
+    }
+    if start_role
+        .as_deref()
+        .is_some_and(|role| normalize_role(role) == "unknown")
+    {
+        return None;
+    }
+
+    // Confessor's Init writes AppearTruthfull onto the physical Character and
+    // InitWithNoReset preserves it. Scenario has no general appearance-status
+    // history (nor the exact-resistance branch), so a presentation/current-data
+    // mismatch or a later loss/gain of Confessor data cannot be reconstructed
+    // from role names. Fail closed instead of inventing a temporal appearance
+    // transition. No shipped role currently supplies a represented
+    // AppearLying status.
+    let start_confessor = start_role
+        .as_deref()
+        .is_some_and(|role| roles_equal(role, "Confessor"));
+    let current_confessor = current_role
+        .as_deref()
+        .is_some_and(|role| roles_equal(role, "Confessor"));
+    let shaman_may_preserve_confessor = scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        trace.target_position == speaker
+            && trace
+                .target_previous_roles
+                .iter()
+                .any(|role| roles_equal(role, "Confessor"))
+    });
+    let twin_may_misproject_confessor = scenario.twin_trace.as_ref().is_some_and(|trace| {
+        matches!(
+            &trace.outcome,
+            crate::types::TwinStartOutcome::Swap {
+                neighbor_position,
+                neighbor_pre_swap_role,
+                ..
+            } if roles_equal(neighbor_pre_swap_role, "Confessor")
+                && (trace.actor_position == speaker || *neighbor_position == speaker)
+        )
+    });
+    let baker_may_preserve_confessor = !current_confessor
+        && baker_history_supports_pre_day_role(scenario, state, speaker, "Confessor");
+    let baker_may_preserve_raw_confessor = timeline.contains_position(speaker)
+        && current_pre_writer_raw_confessor_unresolved(
+            speaker,
+            "Spy",
+            true,
+            true,
+            selected_register_as,
+            selected_raw_bluffs,
+            scenario,
+            state,
+        );
+    let twin_may_preserve_raw_confessor = scenario.twin_trace.as_ref().is_some_and(|trace| {
+        matches!(
+            &trace.outcome,
+            crate::types::TwinStartOutcome::Swap {
+                neighbor_position,
+                neighbor_pre_swap_role,
+                ..
+            } if trace.actor_position == speaker
+                && current_pre_writer_raw_confessor_unresolved(
+                    speaker,
+                    "Twin Minion",
+                    true,
+                    !current_role_has_raw_bluff_selector(neighbor_pre_swap_role),
+                    selected_register_as,
+                    selected_raw_bluffs,
+                    scenario,
+                    state,
+                )
+                || *neighbor_position == speaker
+                    && current_pre_writer_raw_confessor_unresolved(
+                        speaker,
+                        neighbor_pre_swap_role,
+                        current_pre_writer_raw_holder_possible(
+                            speaker,
+                            neighbor_pre_swap_role,
+                            scenario,
+                            state,
+                        ),
+                        false,
+                        selected_register_as,
+                        selected_raw_bluffs,
+                        scenario,
+                        state,
+                    )
+        )
+    });
+    let shaman_may_preserve_raw_confessor =
+        scenario.shaman_trace.as_ref().is_some_and(|trace| {
+            trace.target_position == speaker
+                && trace.target_previous_roles.iter().any(|role| {
+                    current_pre_writer_raw_confessor_unresolved(
+                        speaker,
+                        role,
+                        current_pre_writer_raw_holder_possible(
+                            speaker,
+                            role,
+                            scenario,
+                            state,
+                        ),
+                        !current_role_has_raw_bluff_selector(&trace.copied_role),
+                        selected_register_as,
+                        selected_raw_bluffs,
+                        scenario,
+                        state,
+                    )
+                })
+        });
+    if shaman_may_preserve_confessor
+        || twin_may_misproject_confessor
+        || baker_may_preserve_confessor
+        || baker_may_preserve_raw_confessor
+        || twin_may_preserve_raw_confessor
+        || shaman_may_preserve_raw_confessor
+    {
+        return None;
+    }
+    let apparent_confessor = state
+        .card_at(speaker)
+        .is_some_and(|card| roles_equal(&card.apparent_role, "Confessor"));
+    if start_confessor != current_confessor || apparent_confessor != current_confessor {
+        return None;
+    }
+
+    let truthful_appearance = current_confessor
+        || truth_status(speaker, scenario, state) == TruthStatus::Truthful;
+    Some(if truthful_appearance {
+        RAMBLER_MATCHES_TRUTHFUL
+    } else {
+        RAMBLER_MATCHES_LYING
+    })
+}
+
+#[cfg(test)]
+fn current_rambler_speaker_matcher_at(
+    speaker: u8,
+    boundary: CurrentRamblerBoundary,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<u8> {
+    current_rambler_speaker_matcher_at_with_hidden_labels(
+        speaker,
+        boundary,
+        timeline,
+        &HashMap::new(),
+        &HashMap::new(),
+        scenario,
+        state,
+    )
+}
+
+fn current_rambler_installed_matchers(
+    source: u8,
+    identity: CurrentRamblerIdentity,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<u8> {
+    // Rambler installs its closure during the initial AfterRoundStart pass.
+    // The closure survives source death, reveal, and Init/InitWithNoReset, so
+    // its captured truthful/lying mode is fixed here and must not be rebuilt
+    // from the source's later role/bluff surface at each Druid activation.
+    let start_boundary = CurrentDruidObservationBoundary::SettledRevealCount(0);
+    let current_role = current_data_role_at_druid_observation(
+        source,
+        start_boundary,
+        timeline,
+        scenario,
+        state,
+    );
+    if current_role
+        .as_deref()
+        .is_some_and(|role| normalize_role(role) == "unknown")
+    {
+        return None;
+    }
+    let raw_holder = current_rambler_start_raw_bluff_holder(source, timeline, scenario, state);
+    let real_rambler = match identity {
+        CurrentRamblerIdentity::AnonymousNatural => {
+            if current_role.is_some() {
+                return None;
+            }
+            true
+        }
+        CurrentRamblerIdentity::Existing | CurrentRamblerIdentity::RawBluff => current_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Rambler")),
+    };
+    let raw_rambler = identity == CurrentRamblerIdentity::RawBluff
+        && raw_holder != CurrentMediumRawBluffHolder::Impossible;
+    let truth = truth_status(source, scenario, state);
+    let runtime_evil = is_runtime_evil_at(source, scenario, state);
+    let mut matchers = 0;
+    if real_rambler {
+        let real_act = truth == TruthStatus::Truthful
+            || runtime_evil && raw_holder != CurrentMediumRawBluffHolder::Impossible;
+        add_rambler_matcher(&mut matchers, real_act);
+    }
+    if raw_rambler {
+        add_rambler_matcher(&mut matchers, truth == TruthStatus::Truthful);
+    }
+    Some(matchers)
+}
+
+fn current_rambler_start_raw_bluff_holder(
+    source: u8,
+    timeline: &BakerSpyTimeline,
+    scenario: &Scenario,
+    state: &GameState,
+) -> CurrentMediumRawBluffHolder {
+    if timeline.contains_position(source) {
+        // A stable Spy acquired its ordinary Evil bluff during initial Reveal,
+        // before any player-triggered Baker conversion represented by this
+        // timeline. The later synchronous clear cannot uninstall a Rambler
+        // closure that this bluff already installed at AfterRoundStart.
+        CurrentMediumRawBluffHolder::Proven
+    } else {
+        current_medium_raw_bluff_holder_at(source, source, timeline, scenario, state)
+    }
+}
+
+fn current_rambler_constraints_for_timeline(
+    timeline: &BakerSpyTimeline,
+    selected_register_as: &HashMap<u8, String>,
+    selected_raw_bluffs: &HashMap<u8, String>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> Option<Vec<CurrentRamblerConstraint>> {
+    let mut constraints = Vec::new();
+    let ordered_druid_positions: HashSet<u8> = state
+        .cards
+        .iter()
+        .filter(|card| is_ordered_current_druid(card))
+        .map(|card| card.position)
+        .collect();
+
+    let mut public_interruptions = Vec::new();
+    for observation in &state.rambler_shut_up_observations {
+        if observation.speaker_position == 0
+            || observation.speaker_position > state.n_cards
+            || observation.shut_up_target == 0
+            || observation.shut_up_target > state.n_cards
+        {
+            return None;
+        }
+        if !ordered_druid_positions.contains(&observation.speaker_position) {
+            let pair = (observation.speaker_position, observation.shut_up_target);
+            if !public_interruptions.contains(&pair) {
+                public_interruptions.push(pair);
+            }
+        }
+    }
+    for card in &state.cards {
+        if ordered_druid_positions.contains(&card.position) {
+            continue;
+        }
+        if let Some(value) = card.info_parsed.get("shut_up_target") {
+            let target = value
+                .as_u64()
+                .and_then(|value| u8::try_from(value).ok())
+                .filter(|target| *target > 0 && *target <= state.n_cards)?;
+            let pair = (card.position, target);
+            if !public_interruptions.contains(&pair) {
+                public_interruptions.push(pair);
+            }
+        }
+    }
+    for (speaker, source) in public_interruptions {
+        if !adjacent_positions(speaker, state.n_cards).contains(&source) {
+            return None;
+        }
+        let matcher = current_rambler_speaker_matcher_at_with_hidden_labels(
+            speaker,
+            CurrentRamblerBoundary::Final,
+            timeline,
+            selected_register_as,
+            selected_raw_bluffs,
+            scenario,
+            state,
+        )?;
+        push_current_rambler_constraint(
+            &mut constraints,
+            source,
+            CurrentRamblerBoundary::Final,
+            matcher,
+            0,
+        );
+    }
+
+    for card in &state.cards {
+        if is_ordered_current_druid(card) {
+            let CurrentDruidPayload::Ledger(events) = parse_current_druid_payload(card, state)?
+            else {
+                return None;
+            };
+            for event in events {
+                let boundary = CurrentRamblerBoundary::SettledRevealCount(
+                    event.settled_reveal_count,
+                );
+                if !timeline.supports_settled_reveal_count(
+                    event.settled_reveal_count,
+                    state,
+                ) {
+                    return None;
+                }
+                let matcher = current_rambler_speaker_matcher_at_with_hidden_labels(
+                    card.position,
+                    boundary,
+                    timeline,
+                    selected_register_as,
+                    selected_raw_bluffs,
+                    scenario,
+                    state,
+                )?;
+                match event.kind {
+                    CurrentDruidCallbackKind::RamblerInterruption { target } => {
+                        if !adjacent_positions(card.position, state.n_cards).contains(&target) {
+                            return None;
+                        }
+                        push_current_rambler_constraint(
+                            &mut constraints,
+                            target,
+                            boundary,
+                            matcher,
+                            0,
+                        );
+                    }
+                    CurrentDruidCallbackKind::Result(_)
+                    | CurrentDruidCallbackKind::OpaqueReal => {
+                        for source in adjacent_positions(card.position, state.n_cards) {
+                            push_current_rambler_constraint(
+                                &mut constraints,
+                                source,
+                                boundary,
+                                0,
+                                matcher,
+                            );
+                        }
+                    }
+                }
+            }
+        } else if card_has_normal_clue(card, true) {
+            let matcher = current_rambler_speaker_matcher_at_with_hidden_labels(
+                card.position,
+                CurrentRamblerBoundary::Final,
+                timeline,
+                selected_register_as,
+                selected_raw_bluffs,
+                scenario,
+                state,
+            )?;
+            for source in adjacent_positions(card.position, state.n_cards) {
+                push_current_rambler_constraint(
+                    &mut constraints,
+                    source,
+                    CurrentRamblerBoundary::Final,
+                    0,
+                    matcher,
+                );
+            }
+        }
+    }
+    Some(constraints)
+}
+
+fn current_rambler_timeline_jointly_possible(
+    timeline: &BakerSpyTimeline,
+    selected_register_as: &HashMap<u8, String>,
+    selected_raw_bluffs: &HashMap<u8, String>,
+    forbidden_raw_bluffs: &HashMap<u8, HashSet<String>>,
+    selected_anonymous_outcasts: &HashMap<u8, String>,
+    scenario: &Scenario,
+    state: &GameState,
+) -> bool {
+    let Some(constraints) = current_rambler_constraints_for_timeline(
+        timeline,
+        selected_register_as,
+        selected_raw_bluffs,
+        scenario,
+        state,
+    )
+    else {
+        return false;
+    };
+    let mut by_source: HashMap<u8, Vec<CurrentRamblerConstraint>> = HashMap::new();
+    for constraint in constraints {
+        by_source.entry(constraint.source).or_default().push(constraint);
+    }
+    let deck_has_rambler = state
+        .deck
+        .villagers
+        .iter()
+        .chain(state.deck.outcasts.iter())
+        .any(|role| normalize_role(role) == "rambler");
+    let mut alternatives = Vec::new();
+    for (&source, constraints) in &by_source {
+        let start_role = current_data_role_at_druid_observation(
+            source,
+            CurrentDruidObservationBoundary::SettledRevealCount(0),
+            timeline,
+            scenario,
+            state,
+        );
+        let start_raw_holder =
+            current_rambler_start_raw_bluff_holder(source, timeline, scenario, state);
+        // Spy stores registerAs and its raw bluff as the same cached Villager
+        // CharacterData.  Medium/other hidden-surface evidence therefore pins
+        // the identity of an already-installed Rambler closure too; these
+        // cannot be solved as independent existential labels.
+        let cached_spy = start_role
+            .as_deref()
+            .is_some_and(|role| roles_equal(role, "Spy"));
+        let cached_registered_rambler = cached_spy
+            && selected_register_as
+                .get(&source)
+                .is_some_and(|role| roles_equal(role, "Rambler"));
+        let apparent_rambler = state
+            .card_at(source)
+            .is_some_and(|card| normalize_role(&card.apparent_role) == "rambler");
+        let known_raw_rambler = cached_registered_rambler
+            || apparent_rambler
+                && (!start_role
+                    .as_deref()
+                    .is_some_and(|role| roles_equal(role, "Rambler"))
+                    || start_raw_holder != CurrentMediumRawBluffHolder::Impossible);
+        let raw_surface_possible = deck_has_rambler
+            && start_raw_holder != CurrentMediumRawBluffHolder::Impossible
+            && (apparent_rambler
+                || state.card_at(source).is_none()
+                || timeline.contains_position(source)
+                || cached_registered_rambler
+                || selected_raw_bluffs
+                    .get(&source)
+                    .is_some_and(|role| roles_equal(role, "Rambler")));
+        let natural_possible = crate::scenario::scenario_allows_anonymous_natural_outcast_role_at(
+            source, "Rambler", scenario, state,
+        );
+        let mut source_alternatives = Vec::new();
+        for identity in [
+            CurrentRamblerIdentity::Existing,
+            CurrentRamblerIdentity::RawBluff,
+            CurrentRamblerIdentity::AnonymousNatural,
+        ] {
+            if identity == CurrentRamblerIdentity::Existing && known_raw_rambler
+                || identity == CurrentRamblerIdentity::RawBluff && !raw_surface_possible
+                || identity == CurrentRamblerIdentity::AnonymousNatural && !natural_possible
+            {
+                continue;
+            }
+            if identity == CurrentRamblerIdentity::RawBluff {
+                if selected_raw_bluffs
+                    .get(&source)
+                    .is_some_and(|role| !roles_equal(role, "Rambler"))
+                    || cached_spy
+                        && selected_register_as
+                            .get(&source)
+                            .is_some_and(|role| !roles_equal(role, "Rambler"))
+                    || forbidden_raw_bluffs
+                        .get(&source)
+                        .is_some_and(|roles| roles.contains(&normalize_role("Rambler")))
+                {
+                    continue;
+                }
+            } else if selected_raw_bluffs
+                .get(&source)
+                .is_some_and(|role| roles_equal(role, "Rambler"))
+                || cached_registered_rambler
+            {
+                continue;
+            }
+            if identity == CurrentRamblerIdentity::AnonymousNatural {
+                if selected_anonymous_outcasts
+                    .get(&source)
+                    .is_some_and(|role| !roles_equal(role, "Rambler"))
+                {
+                    continue;
+                }
+            } else if selected_anonymous_outcasts
+                .get(&source)
+                .is_some_and(|role| roles_equal(role, "Rambler"))
+            {
+                continue;
+            }
+            let supported = current_rambler_installed_matchers(
+                source, identity, timeline, scenario, state,
+            )
+            .is_some_and(|matchers| {
+                constraints.iter().all(|constraint| {
+                    matchers & constraint.required == constraint.required
+                        && matchers & constraint.forbidden == 0
+                })
+            });
+            if supported {
+                source_alternatives.push(identity);
+            }
+        }
+        if source_alternatives.is_empty() {
+            return false;
+        }
+        alternatives.push((source, source_alternatives));
+    }
+    alternatives.sort_unstable_by_key(|(source, _)| *source);
+
+    fn search(
+        index: usize,
+        alternatives: &[(u8, Vec<CurrentRamblerIdentity>)],
+        selected_natural: &mut HashSet<u8>,
+        forbidden_natural: &mut HashSet<u8>,
+        scenario: &Scenario,
+        state: &GameState,
+    ) -> bool {
+        if index == alternatives.len() {
+            return crate::scenario::scenario_allows_anonymous_natural_outcast_role_assignments(
+                selected_natural,
+                "Rambler",
+                forbidden_natural,
+                scenario,
+                state,
+            );
+        }
+        let (source, identities) = &alternatives[index];
+        for identity in identities {
+            let natural = *identity == CurrentRamblerIdentity::AnonymousNatural;
+            let inserted_natural = natural && selected_natural.insert(*source);
+            let inserted_forbidden = !natural
+                && identities.contains(&CurrentRamblerIdentity::AnonymousNatural)
+                && forbidden_natural.insert(*source);
+            if natural && forbidden_natural.contains(source) {
+                if inserted_natural {
+                    selected_natural.remove(source);
+                }
+                continue;
+            }
+            if search(
+                index + 1,
+                alternatives,
+                selected_natural,
+                forbidden_natural,
+                scenario,
+                state,
+            ) {
+                return true;
+            }
+            if inserted_natural {
+                selected_natural.remove(source);
+            }
+            if inserted_forbidden {
+                forbidden_natural.remove(source);
+            }
+        }
+        false
+    }
+
+    let mut selected_natural = selected_anonymous_outcasts
+        .iter()
+        .filter_map(|(&position, role)| roles_equal(role, "Rambler").then_some(position))
+        .collect::<HashSet<_>>();
+    let mut forbidden_natural = selected_anonymous_outcasts
+        .iter()
+        .filter_map(|(&position, role)| (!roles_equal(role, "Rambler")).then_some(position))
+        .collect::<HashSet<_>>();
+    search(
+        0,
+        &alternatives,
+        &mut selected_natural,
+        &mut forbidden_natural,
+        scenario,
+        state,
+    )
+}
+
 fn card_has_normal_clue(card: &CardInfo, current_rules: bool) -> bool {
     if card.info_parsed.is_empty() {
         return false;
@@ -7406,6 +9416,31 @@ fn card_has_normal_clue(card: &CardInfo, current_rules: bool) -> bool {
     }
     if role == "jester" && info_bool(&card.info_parsed, "silenced") == Some(true) {
         return false;
+    }
+    if role == "druid"
+        && card
+            .info_parsed
+            .get(DRUID_CURRENT_VARIANT_FIELD)
+            .and_then(serde_json::Value::as_str)
+            == Some(POET_CURRENT_VARIANT)
+        && card
+            .info_parsed
+            .get("callback_ledger_variant")
+            .and_then(serde_json::Value::as_str)
+            == Some("ordered_callbacks_v1")
+    {
+        return card
+            .info_parsed
+            .get("callback_events")
+            .and_then(serde_json::Value::as_array)
+            .is_some_and(|events| {
+                events.iter().any(|event| {
+                    event
+                        .get("event_kind")
+                        .and_then(serde_json::Value::as_str)
+                        == Some("druid_result")
+                })
+            });
     }
     // `shut_up_target` is only the latest-value compatibility alias. Active
     // roles such as Judge can retain an earlier/later normal observation in
@@ -7506,6 +9541,43 @@ fn rambler_required_sources_are_jointly_possible(
 
 fn validate_rambler_shut_ups(scenario: &Scenario, state: &GameState) -> bool {
     let current_rules = state.rambler_rule_version.as_deref() == Some(RAMBLER_CURRENT_RULE);
+    if current_rules && state.cards.iter().any(is_ordered_current_druid) {
+        // Ordered Druid events need their settled Baker/Spy boundary. Their
+        // positive and negative Rambler facts, together with every unrelated
+        // card's current Rambler facts, are evaluated once at the base of the
+        // hidden-surface DFS. Keep this early layer to public shape/geometry
+        // only so it cannot choose a different final-state identity world.
+        for observation in &state.rambler_shut_up_observations {
+            if observation.speaker_position == 0
+                || observation.speaker_position > state.n_cards
+                || observation.shut_up_target == 0
+                || observation.shut_up_target > state.n_cards
+                || !adjacent_positions(observation.speaker_position, state.n_cards)
+                    .contains(&observation.shut_up_target)
+            {
+                return false;
+            }
+        }
+        for card in &state.cards {
+            let Some(value) = card.info_parsed.get("shut_up_target") else {
+                continue;
+            };
+            let Some(source) = value
+                .as_u64()
+                .and_then(|value| u8::try_from(value).ok())
+                .filter(|source| *source > 0 && *source <= state.n_cards)
+            else {
+                return false;
+            };
+            if card.position == 0
+                || card.position > state.n_cards
+                || !adjacent_positions(card.position, state.n_cards).contains(&source)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     let mut observations: Vec<(u8, u8)> = Vec::new();
     for observation in &state.rambler_shut_up_observations {
         if observation.speaker_position == 0
@@ -8196,6 +10268,167 @@ mod tests {
         );
         card.info_text = current_druid_claim_text(&targets, found_outcast);
         card
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn current_druid_result_event(
+        activation_id: usize,
+        callback_index: usize,
+        dispatch_path: &str,
+        targets: [u8; 3],
+        found_outcast: Option<&str>,
+        settled_reveal_count: usize,
+        reset_generation: usize,
+        activation_evidence: &str,
+    ) -> serde_json::Value {
+        json!({
+            "activation_id": activation_id,
+            "callback_index": callback_index,
+            "dispatch_path": dispatch_path,
+            "event_kind": "druid_result",
+            "targets": targets,
+            "found_outcast": found_outcast,
+            "text": current_druid_claim_text(&targets, found_outcast),
+            "references": targets,
+            "settled_reveal_count": settled_reveal_count,
+            "reset_generation": reset_generation,
+            "activation_evidence": activation_evidence,
+        })
+    }
+
+    fn current_druid_history(pos: u8, observations: &[([u8; 3], Option<&str>, usize)]) -> CardInfo {
+        let (targets, found_outcast, _) = observations.last().copied().unwrap();
+        let history = observations
+            .iter()
+            .enumerate()
+            .map(|(index, (targets, found_outcast, settled_reveal_count))| {
+                current_druid_result_event(
+                    index + 1,
+                    0,
+                    "either",
+                    *targets,
+                    *found_outcast,
+                    *settled_reveal_count,
+                    index,
+                    if index == 0 {
+                        "single_callback_suffix"
+                    } else {
+                        "session_reset_generation"
+                    },
+                )
+            })
+            .collect::<Vec<_>>();
+        let mut card = make_card(
+            pos,
+            "Druid",
+            json!({
+                "targets": targets,
+                "found_outcast": found_outcast,
+                "druid_variant": "public_current",
+                "callback_ledger_variant": "ordered_callbacks_v1",
+                "callback_events": history,
+            }),
+        );
+        card.info_text = current_druid_claim_text(&targets, found_outcast);
+        card
+    }
+
+    fn current_druid_interruption_event(
+        activation_id: usize,
+        callback_index: usize,
+        dispatch_path: &str,
+        target: u8,
+        settled_reveal_count: usize,
+        reset_generation: usize,
+        activation_evidence: &str,
+    ) -> serde_json::Value {
+        json!({
+            "activation_id": activation_id,
+            "callback_index": callback_index,
+            "dispatch_path": dispatch_path,
+            "event_kind": "rambler_interruption",
+            "text": format!("#{target}\nshut up!"),
+            "references": [target],
+            "shut_up_target": target,
+            "settled_reveal_count": settled_reveal_count,
+            "reset_generation": reset_generation,
+            "activation_evidence": activation_evidence,
+        })
+    }
+
+    fn current_druid_ledger(pos: u8, events: Vec<serde_json::Value>) -> CardInfo {
+        let latest = events.last().unwrap();
+        let mut info = serde_json::Map::from_iter([
+            (
+                "druid_variant".to_string(),
+                json!(POET_CURRENT_VARIANT),
+            ),
+            (
+                "callback_ledger_variant".to_string(),
+                json!("ordered_callbacks_v1"),
+            ),
+            ("callback_events".to_string(), json!(events)),
+        ]);
+        match latest["event_kind"].as_str().unwrap() {
+            "druid_result" => {
+                info.insert("targets".to_string(), latest["targets"].clone());
+                info.insert(
+                    "found_outcast".to_string(),
+                    latest["found_outcast"].clone(),
+                );
+            }
+            "rambler_interruption" => {
+                info.insert(
+                    "shut_up_target".to_string(),
+                    latest["shut_up_target"].clone(),
+                );
+            }
+            _ => panic!("opaque callback cannot be the latest public alias"),
+        }
+        let mut card = make_card(pos, "Druid", serde_json::Value::Object(info));
+        card.info_text = latest["text"].as_str().unwrap().to_string();
+        card
+    }
+
+    fn current_druid_rambler_timeline_state(druid: CardInfo) -> (GameState, Scenario) {
+        let interruptions = druid.info_parsed["callback_events"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|event| {
+                (event["event_kind"] == "rambler_interruption").then(|| {
+                    crate::types::RamblerShutUpObservation {
+                        speaker_position: druid.position,
+                        shut_up_target: event["shut_up_target"].as_u64().unwrap() as u8,
+                    }
+                })
+            })
+            .collect();
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                druid,
+                make_card(4, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Baker".to_string(), "Druid".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string(), "Rambler".to_string()];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        // Druid acts once before Baker #1 converts stable Spy #2, then may act
+        // again after that conversion has fully settled.
+        state.reveal_order = vec![3, 1, 2, 4];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        state.rambler_shut_up_observations = interruptions;
+
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(4, "Pooka".to_string());
+        scenario.corrupted.insert(3);
+        (state, scenario)
     }
 
     fn current_scout(pos: u8, payload: serde_json::Value) -> CardInfo {
@@ -16211,6 +18444,1789 @@ mod tests {
     }
 
     #[test]
+    fn current_druid_history_validates_every_event_and_exact_latest_alias() {
+        let druid = current_druid_history(1, &[([2, 3, 4], None, 1), ([5, 1, 4], None, 5)]);
+        let mut state = base_state(
+            5,
+            vec![
+                druid.clone(),
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Bard", json!({})),
+                make_card(4, "Lover", json!({})),
+                make_card(5, "Knitter", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Scout".to_string(),
+            "Bard".to_string(),
+            "Lover".to_string(),
+            "Knitter".to_string(),
+        ];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4, 5];
+        assert!(validate_druid(&druid, &empty_scenario(), &state));
+
+        let mut malformed = druid.clone();
+        malformed
+            .info_parsed
+            .insert("targets".to_string(), json!([2, 3, 4]));
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+
+        malformed = druid.clone();
+        malformed.info_text = "Among #1, #4, #5\nthere are NO Outcasts.".to_string();
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+
+        malformed = druid.clone();
+        malformed.info_parsed["callback_events"][0]["text"] =
+            json!("Among #2, #3, #4\nthere are no Outcasts");
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+    }
+
+    #[test]
+    fn current_druid_history_rejects_malformed_or_unsettled_boundaries() {
+        let valid = current_druid_history(2, &[([1, 2, 3], None, 2), ([2, 3, 4], None, 4)]);
+        let mut state = base_state(4, vec![valid.clone()]);
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        assert!(validate_druid(&valid, &empty_scenario(), &state));
+
+        for malformed in [
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][1]["settled_reveal_count"] = json!(1);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][1]["settled_reveal_count"] = json!(5);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("settled_reveal_count");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["extra"] = json!(true);
+                card
+            },
+        ] {
+            assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        }
+
+        let mut actor_not_revealed = state.clone();
+        actor_not_revealed.reveal_order = vec![1, 3, 2, 4];
+        assert!(!validate_druid(
+            &valid,
+            &empty_scenario(),
+            &actor_not_revealed,
+        ));
+
+        let mut unproven_order = state.clone();
+        unproven_order.baker_rule_version = None;
+        assert!(!validate_druid(&valid, &empty_scenario(), &unproven_order,));
+    }
+
+    #[test]
+    fn current_druid_history_joins_hidden_outcasts_in_one_world() {
+        let disjoint = current_druid_history(
+            1,
+            &[
+                ([2, 3, 4], Some("Bombardier"), 4),
+                ([5, 6, 7], Some("Bombardier"), 7),
+            ],
+        );
+        let mut state = base_state(7, vec![disjoint.clone()]);
+        state.deck.villagers = vec!["Druid".to_string()];
+        state.deck.outcasts = vec!["Bombardier".to_string()];
+        state.board_villager_count = Some(6);
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = (1..=7).collect();
+
+        assert!(validate_druid(
+            &current_druid(1, [2, 3, 4], Some("Bombardier")),
+            &empty_scenario(),
+            &state,
+        ));
+        assert!(validate_druid(
+            &current_druid(1, [5, 6, 7], Some("Bombardier")),
+            &empty_scenario(),
+            &state,
+        ));
+        assert!(!validate_druid(&disjoint, &empty_scenario(), &state));
+
+        let overlapping = current_druid_history(
+            1,
+            &[
+                ([2, 3, 4], Some("Bombardier"), 4),
+                ([4, 5, 6], Some("Bombardier"), 7),
+            ],
+        );
+        assert!(validate_druid(&overlapping, &empty_scenario(), &state,));
+    }
+
+    #[test]
+    fn current_druid_interruption_and_mixed_history_are_exact() {
+        let interruption = current_druid_interruption_event(
+            1,
+            0,
+            "either",
+            2,
+            1,
+            0,
+            "single_callback_suffix",
+        );
+        let interrupted = current_druid_ledger(1, vec![interruption.clone()]);
+        let mut state = base_state(3, vec![interrupted.clone()]);
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        state.rambler_shut_up_observations = vec![crate::types::RamblerShutUpObservation {
+            speaker_position: 1,
+            shut_up_target: 2,
+        }];
+        assert!(validate_druid(&interrupted, &empty_scenario(), &state,));
+        assert!(!card_has_normal_clue(&interrupted, true));
+
+        let mut malformed = interrupted.clone();
+        malformed.info_text = "#2 shut up!".to_string();
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+        malformed = interrupted.clone();
+        malformed.info_parsed["shut_up_target"] = json!(3);
+        assert!(!validate_druid(&malformed, &empty_scenario(), &state));
+
+        let normal = current_druid_history(1, &[([1, 2, 3], None, 1)]);
+        let first = normal.info_parsed["callback_events"][0].clone();
+        let second = current_druid_interruption_event(
+            2,
+            0,
+            "either",
+            2,
+            3,
+            1,
+            "session_reset_generation",
+        );
+        let mixed = current_druid_ledger(1, vec![first, second]);
+        state.cards[0] = mixed.clone();
+        assert!(validate_druid(&mixed, &empty_scenario(), &state));
+        assert!(card_has_normal_clue(&mixed, true));
+
+        state.cards[0] = normal.clone();
+        assert!(!validate_druid(&normal, &empty_scenario(), &state));
+
+        let mut scalar_interruption = make_card(
+            1,
+            "Druid",
+            json!({
+                "druid_variant": "public_current",
+                "shut_up_target": 2,
+            }),
+        );
+        scalar_interruption.info_text = "#2\nshut up!".to_string();
+        assert!(!validate_druid(
+            &scalar_interruption,
+            &empty_scenario(),
+            &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_rambler_closure_persists_and_mixed_temporal_history_fails_closed() {
+        let normal = |activation_id, boundary, generation| {
+            current_druid_result_event(
+                activation_id,
+                0,
+                "either",
+                [1, 2, 4],
+                Some("Drunk"),
+                boundary,
+                generation,
+                if activation_id == 1 && generation == 0 {
+                    "single_callback_suffix"
+                } else {
+                    "session_reset_generation"
+                },
+            )
+        };
+        let interruption = |activation_id, boundary, generation| {
+            current_druid_interruption_event(
+                activation_id,
+                0,
+                "either",
+                2,
+                boundary,
+                generation,
+                if activation_id == 1 && generation == 0 {
+                    "single_callback_suffix"
+                } else {
+                    "session_reset_generation"
+                },
+            )
+        };
+
+        // Stable Spy #2 installs a lying Rambler-bluff closure at initial
+        // AfterRoundStart. Baker later clears its raw pointer and changes its
+        // visible/current role, but the installed closure must still replace a
+        // later lying Druid result.
+        let after_conversion = current_druid_ledger(3, vec![interruption(1, 2, 0)]);
+        let (state, scenario) = current_druid_rambler_timeline_state(after_conversion.clone());
+        assert!(validate_baker_history(&scenario, &state));
+        assert!(validate_druid(&after_conversion, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        // The represented Baker/Spy chronology never changes the physical
+        // Druid's CheckLyingAppearance. One persistent installed matcher cannot
+        // both miss and hit it, in either chronological direction.
+        for events in [
+            vec![normal(1, 1, 0), interruption(2, 2, 1)],
+            vec![interruption(1, 1, 0), normal(2, 2, 1)],
+            vec![normal(1, 2, 0), interruption(2, 2, 1)],
+        ] {
+            let mixed = current_druid_ledger(3, events);
+            let (state, scenario) = current_druid_rambler_timeline_state(mixed.clone());
+            assert!(validate_druid(&mixed, &scenario, &state));
+            assert!(!validate_current_hidden_surface_consistency(
+                &scenario, &state,
+            ));
+        }
+    }
+
+    #[test]
+    fn current_druid_rambler_identity_joins_stable_spy_cached_register_as() {
+        let interruption = current_druid_ledger(
+            1,
+            vec![current_druid_interruption_event(
+                1,
+                0,
+                "either",
+                2,
+                4,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let medium = current_medium(4, json!(2), json!("Scout"));
+        let mut interrupted_state = base_state(
+            4,
+            vec![
+                interruption.clone(),
+                make_card(2, "Rambler", json!({})),
+                make_card(3, "Pooka", json!({})),
+                medium.clone(),
+            ],
+        );
+        interrupted_state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Medium".to_string(),
+            "Scout".to_string(),
+        ];
+        interrupted_state.deck.outcasts = vec!["Rambler".to_string()];
+        interrupted_state.deck.minions = vec!["Spy".to_string()];
+        interrupted_state.deck.demons = vec!["Pooka".to_string()];
+        interrupted_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        interrupted_state.reveal_order = vec![2, 4, 1, 3];
+        interrupted_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        interrupted_state.rambler_shut_up_observations = vec![
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            },
+        ];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.corrupted.insert(1);
+
+        assert!(validate_druid(&interruption, &scenario, &interrupted_state));
+        assert!(validate_medium(&medium, &scenario, &interrupted_state));
+        // Spy's one cache cannot register as Scout for Medium while its raw
+        // bluff simultaneously installs a Rambler interruption closure.
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario,
+            &interrupted_state,
+        ));
+
+        // Exercise the reverse implication at the temporal join boundary too:
+        // a cached Rambler registration forces the raw identity, so a lying
+        // Spy must interrupt the adjacent corrupted Druid instead of allowing
+        // its ordinary result through. This input is kept at the join level
+        // because the current authored Rambler is an Outcast, while historical
+        // serialized pools may classify it differently.
+        let normal = current_druid_ledger(
+            1,
+            vec![current_druid_result_event(
+                1,
+                0,
+                "either",
+                [1, 2, 3],
+                Some("Rambler"),
+                3,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let mut normal_state = base_state(
+            3,
+            vec![
+                normal,
+                make_card(2, "Scout", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        normal_state.deck.villagers = vec!["Druid".to_string(), "Scout".to_string()];
+        normal_state.deck.outcasts = vec!["Rambler".to_string()];
+        normal_state.deck.minions = vec!["Spy".to_string()];
+        normal_state.deck.demons = vec!["Pooka".to_string()];
+        normal_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        normal_state.reveal_order = vec![1, 2, 3];
+        normal_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        let timeline = baker_spy_conversion_timelines(&scenario, &normal_state)
+            .into_iter()
+            .next()
+            .expect("the stable-Spy world has one no-conversion timeline");
+        assert!(current_rambler_timeline_jointly_possible(
+            &timeline,
+            &HashMap::from([(2, normalize_role("Scout"))]),
+            &HashMap::new(),
+            &HashMap::new(),
+            &HashMap::new(),
+            &scenario,
+            &normal_state,
+        ));
+        assert!(!current_rambler_timeline_jointly_possible(
+            &timeline,
+            &HashMap::from([(2, normalize_role("Rambler"))]),
+            &HashMap::new(),
+            &HashMap::new(),
+            &HashMap::new(),
+            &scenario,
+            &normal_state,
+        ));
+
+        // A later Twin writer breaks that equality: physical Spy #2 retains
+        // its old Scout registerAs, while incoming Twin data has an independent
+        // raw selector that can install Rambler. Physical evil origin alone is
+        // therefore not enough to classify the live cache as Spy-owned.
+        let twin_interruption = current_druid_ledger(
+            1,
+            vec![current_druid_interruption_event(
+                1,
+                0,
+                "either",
+                2,
+                5,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        let twin_medium = current_medium(5, json!(2), json!("Scout"));
+        let mut twin_state = base_state(
+            5,
+            vec![
+                twin_interruption.clone(),
+                make_card(2, "Rambler", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Twin Minion", json!({})),
+                twin_medium.clone(),
+            ],
+        );
+        twin_state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Medium".to_string(),
+            "Scout".to_string(),
+        ];
+        twin_state.deck.outcasts = vec!["Rambler".to_string()];
+        twin_state.deck.minions = vec!["Spy".to_string(), "Twin Minion".to_string()];
+        twin_state.deck.demons = vec!["Pooka".to_string()];
+        twin_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        twin_state.reveal_order = vec![1, 2, 3, 4, 5];
+        twin_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        twin_state.rambler_shut_up_observations = vec![
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            },
+        ];
+        let mut twin = scenario;
+        twin.evil_positions.insert(4, "Twin Minion".to_string());
+        twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 4,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Previous,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Spy".to_string(),
+            },
+        });
+        let timeline = baker_spy_conversion_timelines(&twin, &twin_state)
+            .into_iter()
+            .next()
+            .expect("the Twin-overwritten Spy world has one no-conversion timeline");
+        assert_eq!(
+            current_data_role_at_druid_observation(
+                2,
+                CurrentDruidObservationBoundary::SettledRevealCount(0),
+                &timeline,
+                &twin,
+                &twin_state,
+            )
+            .as_deref(),
+            Some("Twin Minion"),
+        );
+        assert!(validate_druid(&twin_interruption, &twin, &twin_state));
+        assert!(validate_medium(&twin_medium, &twin, &twin_state));
+        assert!(current_rambler_timeline_jointly_possible(
+            &timeline,
+            &HashMap::from([(2, normalize_role("Scout"))]),
+            &HashMap::new(),
+            &HashMap::new(),
+            &HashMap::new(),
+            &twin,
+            &twin_state,
+        ));
+        assert!(validate_current_hidden_surface_consistency(
+            &twin,
+            &twin_state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_temporal_rambler_join_keeps_unrelated_positive_and_negative_facts() {
+        let druid = current_druid_history(1, &[([1, 2, 5], None, 1)]);
+        let scout = make_card(4, "Scout", json!({"legacy_clue": true}));
+        let mut state = base_state(
+            5,
+            vec![
+                druid.clone(),
+                make_card(2, "Bard", json!({})),
+                make_card(3, "Rambler", json!({})),
+                scout,
+                make_card(5, "Lover", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Druid".to_string(),
+            "Bard".to_string(),
+            "Scout".to_string(),
+            "Lover".to_string(),
+        ];
+        state.deck.outcasts = vec!["Rambler".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4, 5];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        let scenario = empty_scenario();
+        assert!(validate_druid(&druid, &scenario, &state));
+
+        // Adding an ordered Druid ledger moves Rambler validation into the
+        // temporal hidden-surface join. It must not discard unrelated normal
+        // clue evidence: real Rambler #3 would have replaced truthful #4.
+        assert!(validate_rambler_shut_ups(&scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+
+        state.cards[3].info_parsed = json!({"shut_up_target": 3})
+            .as_object()
+            .unwrap()
+            .clone();
+        state.rambler_shut_up_observations = vec![crate::types::RamblerShutUpObservation {
+            speaker_position: 4,
+            shut_up_target: 3,
+        }];
+        let timelines = baker_spy_conversion_timelines(&scenario, &state);
+        assert!(timelines.iter().any(|timeline| {
+            current_rambler_installed_matchers(
+                3,
+                CurrentRamblerIdentity::Existing,
+                timeline,
+                &scenario,
+                &state,
+            ) == Some(RAMBLER_MATCHES_TRUTHFUL)
+        }));
+        assert!(timelines.iter().any(|timeline| {
+            current_rambler_timeline_jointly_possible(
+                timeline,
+                &HashMap::new(),
+                &HashMap::new(),
+                &HashMap::new(),
+                &HashMap::new(),
+                &scenario,
+                &state,
+            )
+        }));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_multiple_ordered_cards_share_one_baker_spy_timeline() {
+        let first = current_druid_history(4, &[([1, 2, 4], None, 1)]);
+        let second = current_druid_history(5, &[([1, 2, 5], None, 3)]);
+        let mut state = base_state(
+            5,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+                first.clone(),
+                second.clone(),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Druid".to_string(),
+            "Druid".to_string(),
+        ];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![4, 1, 5, 2, 3];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+
+        assert!(validate_baker_history(&scenario, &state));
+        assert!(validate_druid(&first, &scenario, &state));
+        assert!(validate_druid(&second, &scenario, &state));
+        assert!(validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_druid_temporal_rambler_fails_closed_on_preserved_confessor_status() {
+        let opaque = json!({
+            "activation_id": 1,
+            "callback_index": 0,
+            "dispatch_path": "real",
+            "event_kind": "opaque_real",
+            "text": "I am dizzy",
+            "references": null,
+            "settled_reveal_count": 4,
+            "reset_generation": 0,
+            "activation_evidence": "auto_use_click",
+        });
+        let raw = current_druid_result_event(
+            1,
+            1,
+            "raw",
+            [2, 3, 4],
+            Some("Drunk"),
+            4,
+            0,
+            "auto_use_click",
+        );
+        let druid = current_druid_ledger(1, vec![opaque, raw]);
+        let mut state = base_state(
+            4,
+            vec![
+                druid.clone(),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Scout", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Confessor".to_string(), "Scout".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        let mut scenario = empty_scenario();
+        scenario
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        scenario.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Confessor".to_string(),
+            },
+        });
+
+        // The real Confessor callback plus raw Druid callback is structurally
+        // valid. Confessor's Init, however, writes a physical
+        // AppearTruthfull status that Twin/InitWithNoReset preserves while the
+        // current public provider is Druid. Scenario has no exact status or
+        // resistance history for that surface, so temporal Rambler validation
+        // must not infer appearance from either role name.
+        assert!(validate_druid(&druid, &scenario, &state));
+        assert!(!validate_current_hidden_surface_consistency(
+            &scenario, &state,
+        ));
+    }
+
+    #[test]
+    fn current_rambler_confessor_status_fails_closed_across_shaman_baker_and_later_twin_writers() {
+        let mut shaman_state = base_state(
+            3,
+            vec![
+                make_card(1, "Druid", json!({})),
+                make_card(2, "Druid", json!({})),
+                make_card(3, "Shaman", json!({})),
+            ],
+        );
+        shaman_state.deck.villagers = vec!["Confessor".to_string(), "Druid".to_string()];
+        shaman_state.deck.minions = vec!["Shaman".to_string()];
+        shaman_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        shaman_state.reveal_order = vec![1, 2, 3];
+        let timeline = BakerSpyTimeline::default();
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &empty_scenario(),
+                &shaman_state,
+            ),
+            Some(RAMBLER_MATCHES_TRUTHFUL),
+        );
+        let mut shaman = empty_scenario();
+        shaman.evil_positions.insert(3, "Shaman".to_string());
+        shaman.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Druid".to_string(),
+            target_previous_roles: vec!["Confessor".to_string()],
+        });
+        assert_eq!(current_data_role_at(1, &shaman, &shaman_state).as_deref(), Some("Druid"));
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &shaman,
+                &shaman_state,
+            ),
+            None,
+        );
+
+        let stale_twin_state = base_state(
+            3,
+            vec![
+                make_card(1, "Druid", json!({})),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        let mut stale_twin = empty_scenario();
+        stale_twin
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        stale_twin
+            .evil_positions
+            .insert(3, "Pooka".to_string());
+        stale_twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Druid".to_string(),
+            },
+        });
+        let selected_druid = HashMap::from([(1, "druid".to_string())]);
+        assert_eq!(
+            current_rambler_speaker_matcher_at_with_hidden_labels(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &HashMap::new(),
+                &selected_druid,
+                &stale_twin,
+                &stale_twin_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+
+        let mut baker_state = base_state(
+            2,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "Confessor"})),
+                make_card(2, "Baker", json!({"original_role": "original"})),
+            ],
+        );
+        baker_state.deck.villagers = vec!["Baker".to_string(), "Confessor".to_string()];
+        baker_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        baker_state.reveal_order = vec![2, 1];
+        assert!(validate_baker_history(&empty_scenario(), &baker_state));
+        assert!(baker_history_supports_pre_day_role(
+            &empty_scenario(),
+            &baker_state,
+            1,
+            "Confessor",
+        ));
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &empty_scenario(),
+                &baker_state,
+            ),
+            None,
+        );
+
+        let mut twin_state = base_state(
+            5,
+            vec![
+                make_card(1, "Twin Minion", json!({})),
+                make_card(2, "Druid", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Druid", json!({})),
+                make_card(5, "Shaman", json!({})),
+            ],
+        );
+        twin_state.deck.villagers = vec!["Confessor".to_string(), "Druid".to_string()];
+        twin_state.deck.minions = vec!["Twin Minion".to_string(), "Shaman".to_string()];
+        twin_state.deck.demons = vec!["Pooka".to_string()];
+        twin_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        twin_state.reveal_order = vec![1, 2, 3, 4, 5];
+        let mut twin_then_shaman = empty_scenario();
+        twin_then_shaman
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        twin_then_shaman
+            .evil_positions
+            .insert(3, "Pooka".to_string());
+        twin_then_shaman
+            .evil_positions
+            .insert(5, "Shaman".to_string());
+        twin_then_shaman.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Confessor".to_string(),
+            },
+        });
+        twin_then_shaman.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 4,
+            target_position: 2,
+            copied_role: "Druid".to_string(),
+            target_previous_roles: vec!["Twin Minion".to_string()],
+        });
+        assert_eq!(
+            current_data_role_at(2, &twin_then_shaman, &twin_state).as_deref(),
+            Some("Druid"),
+        );
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                2,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &twin_then_shaman,
+                &twin_state,
+            ),
+            None,
+        );
+    }
+
+    #[test]
+    fn current_rambler_confessor_status_fails_closed_on_pre_writer_raw_bluffs() {
+        let mut baker_state = base_state(
+            3,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        baker_state.deck.villagers = vec!["Baker".to_string(), "Confessor".to_string()];
+        baker_state.deck.minions = vec!["Spy".to_string()];
+        baker_state.deck.demons = vec!["Pooka".to_string()];
+        baker_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        baker_state.reveal_order = vec![1, 2, 3];
+        let mut baker = empty_scenario();
+        baker.evil_positions.insert(2, "Spy".to_string());
+        baker.evil_positions.insert(3, "Pooka".to_string());
+        let baker_timeline = baker_spy_conversion_timelines(&baker, &baker_state)
+            .into_iter()
+            .find(|timeline| timeline.contains_position(2))
+            .expect("the exact Baker history must include the converted Spy");
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                2,
+                CurrentRamblerBoundary::Final,
+                &baker_timeline,
+                &baker,
+                &baker_state,
+            ),
+            None,
+        );
+        baker_state.deck.villagers.push("Scout".to_string());
+        let selected_spy_cache = HashMap::from([(2, "scout".to_string())]);
+        assert_eq!(
+            current_rambler_speaker_matcher_at_with_hidden_labels(
+                2,
+                CurrentRamblerBoundary::Final,
+                &baker_timeline,
+                &selected_spy_cache,
+                &HashMap::new(),
+                &baker,
+                &baker_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+
+        let mut twin_state = base_state(
+            3,
+            vec![
+                make_card(1, "Spy", json!({})),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        twin_state.deck.villagers = vec!["Scout".to_string()];
+        twin_state.deck.minions = vec!["Twin Minion".to_string(), "Spy".to_string()];
+        twin_state.deck.demons = vec!["Pooka".to_string()];
+        let mut twin = empty_scenario();
+        twin.evil_positions.insert(1, "Twin Minion".to_string());
+        twin.evil_positions.insert(2, "Spy".to_string());
+        twin.evil_positions.insert(3, "Pooka".to_string());
+        twin.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Spy".to_string(),
+            },
+        });
+        let timeline = BakerSpyTimeline::default();
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &twin,
+                &twin_state,
+            ),
+            None,
+        );
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                2,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &twin,
+                &twin_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+        twin_state.deck.villagers.push("Confessor".to_string());
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                2,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &twin,
+                &twin_state,
+            ),
+            None,
+        );
+        assert_eq!(
+            current_rambler_speaker_matcher_at_with_hidden_labels(
+                2,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &selected_spy_cache,
+                &HashMap::new(),
+                &twin,
+                &twin_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+
+        let mut shaman_state = base_state(
+            4,
+            vec![
+                make_card(1, "Druid", json!({})),
+                make_card(2, "Druid", json!({})),
+                make_card(3, "Shaman", json!({})),
+                make_card(4, "Scout", json!({})),
+            ],
+        );
+        shaman_state.deck.villagers = vec!["Druid".to_string(), "Scout".to_string()];
+        shaman_state.deck.minions = vec!["Spy".to_string(), "Shaman".to_string()];
+        let mut shaman = empty_scenario();
+        shaman.evil_positions.insert(1, "Spy".to_string());
+        shaman.evil_positions.insert(3, "Shaman".to_string());
+        shaman.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Druid".to_string(),
+            target_previous_roles: vec!["Spy".to_string()],
+        });
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &shaman,
+                &shaman_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+        shaman_state.deck.villagers.push("Confessor".to_string());
+        let selected_druid = HashMap::from([(1, "druid".to_string())]);
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &shaman,
+                &shaman_state,
+            ),
+            None,
+        );
+        assert_eq!(
+            current_rambler_speaker_matcher_at_with_hidden_labels(
+                1,
+                CurrentRamblerBoundary::Final,
+                &timeline,
+                &HashMap::new(),
+                &selected_druid,
+                &shaman,
+                &shaman_state,
+            ),
+            Some(RAMBLER_MATCHES_LYING),
+        );
+    }
+
+    #[test]
+    fn current_druid_ordered_callback_schema_and_activation_evidence_are_exact() {
+        let valid = current_druid_history(
+            1,
+            &[([1, 2, 3], None, 1), ([1, 3, 4], None, 4)],
+        );
+        let mut state = base_state(4, vec![valid.clone()]);
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        assert!(validate_druid(&valid, &empty_scenario(), &state));
+
+        let malformed = [
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_ledger_variant"] = json!("future");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["activation_evidence"] =
+                    json!("manual_single");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("reset_generation");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["native_use_count"] = json!(1);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][1]["activation_id"] = json!(3);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][1]["reset_generation"] = json!(0);
+                card.info_parsed["callback_events"][0]["reset_generation"] = json!(1);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["activation_evidence"] =
+                    json!("same_activation_extension");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][1]["activation_evidence"] =
+                    json!("single_callback_suffix");
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["reset_generation"] = json!(1);
+                card.info_parsed["callback_events"][1]["reset_generation"] = json!(2);
+                card
+            },
+            {
+                let mut card = valid.clone();
+                card.info_parsed["callback_events"][0]["activation_evidence"] =
+                    json!("session_reset_generation");
+                card
+            },
+        ];
+        for card in malformed {
+            assert!(!validate_druid(&card, &empty_scenario(), &state));
+        }
+
+        let initial_session_single = current_druid_ledger(
+            1,
+            vec![current_druid_result_event(
+                1,
+                0,
+                "either",
+                [1, 2, 3],
+                None,
+                4,
+                1,
+                "session_reset_generation",
+            )],
+        );
+        assert!(parse_current_druid_payload(&initial_session_single, &state).is_some());
+
+        let skipped_generation_single = current_druid_ledger(
+            1,
+            vec![
+                current_druid_result_event(
+                    1,
+                    0,
+                    "either",
+                    [1, 2, 3],
+                    None,
+                    1,
+                    0,
+                    "single_callback_suffix",
+                ),
+                current_druid_result_event(
+                    2,
+                    0,
+                    "either",
+                    [1, 3, 4],
+                    None,
+                    4,
+                    3,
+                    "session_reset_generation",
+                ),
+            ],
+        );
+        assert!(parse_current_druid_payload(&skipped_generation_single, &state).is_some());
+
+        let next_generation_dual = current_druid_ledger(
+            1,
+            vec![
+                current_druid_result_event(
+                    1,
+                    0,
+                    "either",
+                    [1, 2, 3],
+                    None,
+                    1,
+                    0,
+                    "single_callback_suffix",
+                ),
+                current_druid_result_event(
+                    2,
+                    0,
+                    "real",
+                    [1, 3, 4],
+                    None,
+                    4,
+                    1,
+                    "session_reset_generation",
+                ),
+                current_druid_result_event(
+                    2,
+                    1,
+                    "raw",
+                    [1, 3, 4],
+                    None,
+                    4,
+                    1,
+                    "session_reset_generation",
+                ),
+            ],
+        );
+        assert!(parse_current_druid_payload(&next_generation_dual, &state).is_some());
+
+        let initial_session_dual = current_druid_ledger(
+            1,
+            vec![
+                current_druid_result_event(
+                    1,
+                    0,
+                    "real",
+                    [1, 2, 3],
+                    None,
+                    4,
+                    1,
+                    "session_reset_generation",
+                ),
+                current_druid_result_event(
+                    1,
+                    1,
+                    "raw",
+                    [1, 2, 3],
+                    None,
+                    4,
+                    1,
+                    "session_reset_generation",
+                ),
+            ],
+        );
+        assert!(parse_current_druid_payload(&initial_session_dual, &state).is_none());
+
+        let skipped_generation_dual = current_druid_ledger(
+            1,
+            vec![
+                current_druid_result_event(
+                    1,
+                    0,
+                    "either",
+                    [1, 2, 3],
+                    None,
+                    1,
+                    0,
+                    "single_callback_suffix",
+                ),
+                current_druid_result_event(
+                    2,
+                    0,
+                    "real",
+                    [1, 3, 4],
+                    None,
+                    4,
+                    2,
+                    "session_reset_generation",
+                ),
+                current_druid_result_event(
+                    2,
+                    1,
+                    "raw",
+                    [1, 3, 4],
+                    None,
+                    4,
+                    2,
+                    "session_reset_generation",
+                ),
+            ],
+        );
+        assert!(parse_current_druid_payload(&skipped_generation_dual, &state).is_none());
+
+        let opaque_extension = json!({
+            "activation_id": 1,
+            "callback_index": 0,
+            "dispatch_path": "real",
+            "event_kind": "opaque_real",
+            "text": "foreign callback",
+            "references": null,
+            "settled_reveal_count": 4,
+            "reset_generation": 0,
+            "activation_evidence": "same_activation_extension",
+        });
+        let opaque_extension = current_druid_ledger(
+            1,
+            vec![
+                opaque_extension,
+                current_druid_result_event(
+                    1,
+                    1,
+                    "raw",
+                    [1, 2, 3],
+                    None,
+                    4,
+                    0,
+                    "same_activation_extension",
+                ),
+            ],
+        );
+        assert!(parse_current_druid_payload(&opaque_extension, &state).is_none());
+
+        let old_v0 = make_card(
+            1,
+            "Druid",
+            json!({
+                "druid_variant": "public_current",
+                "targets": [1, 2, 3],
+                "found_outcast": null,
+                "observations": [{
+                    "targets": [1, 2, 3],
+                    "found_outcast": null,
+                    "text": "Among #1, #2, #3\nthere are NO Outcasts",
+                    "settled_reveal_count": 1,
+                }],
+            }),
+        );
+        assert!(!validate_druid(&old_v0, &empty_scenario(), &state));
+    }
+
+    #[test]
+    fn current_druid_dispatch_groups_require_available_real_then_raw_callbacks() {
+        let real = current_druid_result_event(
+            1,
+            0,
+            "real",
+            [1, 2, 3],
+            None,
+            3,
+            0,
+            "auto_use_click",
+        );
+        let raw = current_druid_result_event(
+            1,
+            1,
+            "raw",
+            [1, 2, 3],
+            Some("Drunk"),
+            3,
+            0,
+            "auto_use_click",
+        );
+        let dual = current_druid_ledger(1, vec![real.clone(), raw.clone()]);
+        let mut state = base_state(
+            3,
+            vec![
+                dual.clone(),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Druid".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3];
+        let mut moved = empty_scenario();
+        moved
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        moved.evil_positions.insert(3, "Pooka".to_string());
+        moved.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Druid".to_string(),
+            },
+        });
+        assert!(validate_druid(&dual, &moved, &state));
+
+        let mut transient_event = real.clone();
+        transient_event["dispatch_path"] = json!("either");
+        transient_event["settled_reveal_count"] = json!(4);
+        let transient = current_druid_ledger(1, vec![transient_event]);
+        let mut medium = current_medium(4, json!(1), json!("Druid"));
+        let mut transient_state = base_state(
+            4,
+            vec![
+                transient.clone(),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+                medium.clone(),
+            ],
+        );
+        transient_state.deck.villagers = vec!["Druid".to_string(), "Medium".to_string()];
+        transient_state.deck.outcasts = vec!["Drunk".to_string()];
+        transient_state.deck.minions = vec!["Twin Minion".to_string()];
+        transient_state.deck.demons = vec!["Pooka".to_string()];
+        transient_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        transient_state.reveal_order = vec![1, 2, 3, 4];
+        let mut transient_world = moved.clone();
+        transient_world.corrupted.insert(4);
+        assert!(validate_druid(
+            &transient,
+            &transient_world,
+            &transient_state,
+        ));
+        assert!(validate_medium(
+            &medium,
+            &transient_world,
+            &transient_state,
+        ));
+        transient_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        assert!(validate_current_hidden_surface_consistency(
+            &transient_world,
+            &transient_state,
+        ));
+
+        let interrupted = current_druid_ledger(
+            1,
+            vec![current_druid_interruption_event(
+                1,
+                0,
+                "either",
+                2,
+                4,
+                0,
+                "auto_use_click",
+            )],
+        );
+        let mut interrupted_state = transient_state.clone();
+        interrupted_state.cards[0] = interrupted.clone();
+        interrupted_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        interrupted_state.rambler_shut_up_observations =
+            vec![crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            }];
+        let CurrentDruidPayload::Ledger(interrupted_events) =
+            parse_current_druid_payload(&interrupted, &interrupted_state).unwrap()
+        else {
+            panic!("interruption helper must produce an ordered ledger");
+        };
+        let interrupted_supports = current_druid_group_supports(
+            &interrupted,
+            &interrupted_events,
+            true,
+            &transient_world,
+            &interrupted_state,
+        );
+        assert!(interrupted_supports.iter().any(|support| {
+            support
+                .raw_bluff
+                .as_ref()
+                .is_some_and(|(position, role)| *position == 1 && roles_equal(role, "Druid"))
+        }));
+        let historical_supports = current_druid_group_supports(
+            &interrupted,
+            &interrupted_events,
+            false,
+            &transient_world,
+            &interrupted_state,
+        );
+        assert!(!historical_supports.iter().any(|support| {
+            support
+                .raw_bluff
+                .as_ref()
+                .is_some_and(|(position, role)| *position == 1 && roles_equal(role, "Druid"))
+        }));
+
+        // Once the zero-delay raw event appends, its Druid identity is exact
+        // and must still join the same Medium witness.
+        let upgraded = current_druid_ledger(
+            1,
+            vec![
+                current_druid_result_event(
+                    1,
+                    0,
+                    "real",
+                    [1, 2, 3],
+                    None,
+                    4,
+                    0,
+                    "same_activation_extension",
+                ),
+                current_druid_result_event(
+                    1,
+                    1,
+                    "raw",
+                    [1, 2, 3],
+                    Some("Drunk"),
+                    4,
+                    0,
+                    "same_activation_extension",
+                ),
+            ],
+        );
+        transient_state.cards[0] = upgraded.clone();
+        assert!(validate_current_hidden_surface_consistency(
+            &transient_world,
+            &transient_state,
+        ));
+        medium = current_medium(4, json!(1), json!("Judge"));
+        transient_state.cards[3] = medium.clone();
+        assert!(validate_medium(
+            &medium,
+            &transient_world,
+            &transient_state,
+        ));
+        assert!(!validate_current_hidden_surface_consistency(
+            &transient_world,
+            &transient_state,
+        ));
+
+        // A raw-shaped single result cannot omit the real Druid callback.
+        let raw_only = current_druid_ledger(
+            1,
+            vec![current_druid_result_event(
+                1,
+                0,
+                "either",
+                [1, 2, 3],
+                Some("Drunk"),
+                3,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        assert!(!validate_druid(&raw_only, &moved, &state));
+
+        let mut raw_raw = dual.clone();
+        raw_raw.info_parsed["callback_events"][0]["dispatch_path"] = json!("raw");
+        assert!(!validate_druid(&raw_raw, &moved, &state));
+        let mut mismatched_group = dual.clone();
+        mismatched_group.info_parsed["callback_events"][1]["settled_reveal_count"] = json!(2);
+        assert!(!validate_druid(&mismatched_group, &moved, &state));
+        let mut mismatched_evidence = dual.clone();
+        mismatched_evidence.info_parsed["callback_events"][1]["activation_evidence"] =
+            json!("session_reset_generation");
+        assert!(!validate_druid(&mismatched_evidence, &moved, &state));
+    }
+
+    #[test]
+    fn current_druid_dual_groups_preserve_uniform_rambler_mutation_and_opaque_order() {
+        let opaque = json!({
+            "activation_id": 1,
+            "callback_index": 0,
+            "dispatch_path": "real",
+            "event_kind": "opaque_real",
+            "text": "foreign callback",
+            "references": null,
+            "settled_reveal_count": 4,
+            "reset_generation": 0,
+            "activation_evidence": "auto_use_click",
+        });
+        let raw = current_druid_result_event(
+            1,
+            1,
+            "raw",
+            [2, 3, 4],
+            Some("Drunk"),
+            4,
+            0,
+            "auto_use_click",
+        );
+        let opaque_then_raw = current_druid_ledger(1, vec![opaque.clone(), raw.clone()]);
+        let mut no_output_state = base_state(4, vec![opaque_then_raw.clone()]);
+        no_output_state.deck.villagers = vec!["Druid".to_string()];
+        no_output_state.deck.outcasts = vec!["Drunk".to_string()];
+        no_output_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        no_output_state.reveal_order = vec![1, 2, 3, 4];
+        let mut drunk = empty_scenario();
+        drunk.drunk_position = Some(1);
+        assert!(!validate_druid(
+            &opaque_then_raw,
+            &drunk,
+            &no_output_state,
+        ));
+        let raw_only = current_druid_ledger(
+            1,
+            vec![current_druid_result_event(
+                1,
+                0,
+                "either",
+                [2, 3, 4],
+                Some("Drunk"),
+                4,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        no_output_state.cards[0] = raw_only.clone();
+        assert!(validate_druid(&raw_only, &drunk, &no_output_state));
+
+        let mut state = base_state(
+            4,
+            vec![
+                opaque_then_raw.clone(),
+                make_card(2, "Twin Minion", json!({})),
+                make_card(3, "Pooka", json!({})),
+                make_card(4, "Scout", json!({})),
+            ],
+        );
+        state.deck.villagers = vec!["Confessor".to_string(), "Scout".to_string()];
+        state.deck.outcasts = vec!["Drunk".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4];
+        let mut callback_capable = empty_scenario();
+        callback_capable
+            .evil_positions
+            .insert(1, "Twin Minion".to_string());
+        callback_capable
+            .evil_positions
+            .insert(3, "Pooka".to_string());
+        callback_capable.twin_trace = Some(crate::types::TwinTrace {
+            actor_position: 1,
+            outcome: crate::types::TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: crate::types::TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Confessor".to_string(),
+            },
+        });
+        assert!(validate_druid(
+            &opaque_then_raw,
+            &callback_capable,
+            &state,
+        ));
+        let mut medium_state = state.clone();
+        medium_state.cards[0] = raw_only.clone();
+        medium_state.deck.villagers = vec!["Medium".to_string(), "Scout".to_string()];
+        let mut medium_capable = callback_capable.clone();
+        let Some(crate::types::TwinTrace {
+            outcome:
+                crate::types::TwinStartOutcome::Swap {
+                    neighbor_pre_swap_role,
+                    ..
+                },
+            ..
+        }) = medium_capable.twin_trace.as_mut()
+        else {
+            panic!("callback-capable fixture must have an exact Twin swap");
+        };
+        *neighbor_pre_swap_role = "Medium".to_string();
+        assert!(!validate_druid(
+            &raw_only,
+            &medium_capable,
+            &medium_state,
+        ));
+        let raw_interruption = current_druid_ledger(
+            1,
+            vec![current_druid_interruption_event(
+                1,
+                0,
+                "either",
+                2,
+                4,
+                0,
+                "single_callback_suffix",
+            )],
+        );
+        no_output_state.cards[0] = raw_interruption.clone();
+        no_output_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        no_output_state.rambler_shut_up_observations =
+            vec![crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            }];
+        let CurrentDruidPayload::Ledger(raw_interruption_events) =
+            parse_current_druid_payload(&raw_interruption, &no_output_state).unwrap()
+        else {
+            panic!("raw interruption fixture must produce an ordered ledger");
+        };
+        let drunk_interruption_supports = current_druid_group_supports(
+            &raw_interruption,
+            &raw_interruption_events,
+            false,
+            &drunk,
+            &no_output_state,
+        );
+        assert!(drunk_interruption_supports.iter().any(|support| {
+            support
+                .callbacks
+                .first()
+                .is_some_and(|callback| callback.path == CurrentDruidResolvedPath::Raw)
+        }));
+        medium_state.cards[0] = raw_interruption.clone();
+        medium_state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        medium_state.rambler_shut_up_observations =
+            no_output_state.rambler_shut_up_observations.clone();
+        let medium_interruption_supports = current_druid_group_supports(
+            &raw_interruption,
+            &raw_interruption_events,
+            false,
+            &medium_capable,
+            &medium_state,
+        );
+        assert!(!medium_interruption_supports.iter().any(|support| {
+            support
+                .callbacks
+                .first()
+                .is_some_and(|callback| callback.path == CurrentDruidResolvedPath::Raw)
+        }));
+
+        // A foreign three-target clue is still opaque unless its clause is in
+        // Druid's result family. The bridge authenticates this as a real
+        // callback followed by raw Druid in one activation.
+        let mut foreign_evils = opaque_then_raw.clone();
+        foreign_evils.info_parsed["callback_events"][0]["text"] =
+            json!("Among #1, #2, #3 there are 2 Evils");
+        foreign_evils.info_parsed["callback_events"][0]["references"] = json!([1, 2, 3]);
+        assert!(validate_druid(&foreign_evils, &callback_capable, &state));
+
+        let mut later_line_shut = opaque_then_raw.clone();
+        later_line_shut.info_parsed["callback_events"][0]["text"] =
+            json!("#1\nunrelated shut callback");
+        assert!(validate_druid(
+            &later_line_shut,
+            &callback_capable,
+            &state,
+        ));
+
+        let mut opaque_last = current_druid_ledger(1, vec![opaque.clone(), raw.clone()]);
+        opaque_last.info_parsed["callback_events"].as_array_mut().unwrap().swap(0, 1);
+        assert!(!validate_druid(
+            &opaque_last,
+            &callback_capable,
+            &state,
+        ));
+        let mut malformed_druid_opaque = opaque_then_raw.clone();
+        malformed_druid_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("Among #2, #3, #4\nthere is: unknown");
+        assert!(!validate_druid(
+            &malformed_druid_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut unicode_digit_druid_opaque = opaque_then_raw.clone();
+        unicode_digit_druid_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("Among #١, #٢, #٣ there is: unknown");
+        assert!(!validate_druid(
+            &unicode_digit_druid_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut long_s_druid_opaque = opaque_then_raw.clone();
+        long_s_druid_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("Among #1, #2, #3 there iſ: unknown");
+        assert!(!validate_druid(
+            &long_s_druid_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut python_c0_space_druid_opaque = opaque_then_raw.clone();
+        python_c0_space_druid_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("\u{001C}Among\u{001D}#\u{001E}1, #2, #3 there\u{001F}is\u{001C}: unknown");
+        assert!(!validate_druid(
+            &python_c0_space_druid_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut non_decimal_numeric_opaque = opaque_then_raw.clone();
+        non_decimal_numeric_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("Among #², #², #² there is: unknown");
+        assert!(validate_druid(
+            &non_decimal_numeric_opaque,
+            &callback_capable,
+            &state,
+        ));
+        for near_miss in [
+            "Among #1, #2, #3 there was: Wretch",
+            "Among #1, #2, #3 there were zero Outcasts",
+        ] {
+            let mut malformed = opaque_then_raw.clone();
+            malformed.info_parsed["callback_events"][0]["text"] = json!(near_miss);
+            malformed.info_parsed["callback_events"][0]["references"] = json!([1, 2, 3]);
+            assert!(!validate_druid(&malformed, &callback_capable, &state));
+        }
+        let mut malformed_shut_up_opaque = opaque_then_raw.clone();
+        malformed_shut_up_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("#2 shut up!");
+        assert!(!validate_druid(
+            &malformed_shut_up_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut unicode_digit_shut_up_opaque = opaque_then_raw.clone();
+        unicode_digit_shut_up_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("#١ shut up!");
+        assert!(!validate_druid(
+            &unicode_digit_shut_up_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut long_s_shut_up_opaque = opaque_then_raw.clone();
+        long_s_shut_up_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("#1 ſhut up!");
+        assert!(!validate_druid(
+            &long_s_shut_up_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut python_c0_space_shut_opaque = opaque_then_raw.clone();
+        python_c0_space_shut_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("\u{001C}#\u{001D}1 anything shut");
+        assert!(!validate_druid(
+            &python_c0_space_shut_opaque,
+            &callback_capable,
+            &state,
+        ));
+        let mut non_decimal_numeric_shut_opaque = opaque_then_raw.clone();
+        non_decimal_numeric_shut_opaque.info_parsed["callback_events"][0]["text"] =
+            json!("#² shut up!");
+        assert!(validate_druid(
+            &non_decimal_numeric_shut_opaque,
+            &callback_capable,
+            &state,
+        ));
+
+        let first_interruption = current_druid_interruption_event(
+            1,
+            0,
+            "real",
+            2,
+            4,
+            0,
+            "same_activation_extension",
+        );
+        let second_interruption = current_druid_interruption_event(
+            1,
+            1,
+            "raw",
+            2,
+            4,
+            0,
+            "same_activation_extension",
+        );
+        let interrupted = current_druid_ledger(
+            1,
+            vec![first_interruption.clone(), second_interruption],
+        );
+        state.rambler_rule_version = Some(RAMBLER_CURRENT_RULE.to_string());
+        state.rambler_shut_up_observations = vec![
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            },
+            crate::types::RamblerShutUpObservation {
+                speaker_position: 1,
+                shut_up_target: 2,
+            },
+        ];
+        assert!(validate_druid(
+            &interrupted,
+            &callback_capable,
+            &state,
+        ));
+        assert!(!validate_druid(
+            &interrupted,
+            &drunk,
+            &no_output_state,
+        ));
+
+        let mixed = current_druid_ledger(1, vec![first_interruption, raw]);
+        state.rambler_shut_up_observations.truncate(1);
+        assert!(!validate_druid(&mixed, &callback_capable, &state));
+    }
+
+    #[test]
     fn current_druid_truth_uses_registered_outcast_identity_and_keeps_lifecycle_seats() {
         let positive = current_druid(1, [2, 3, 4], Some("Bombardier"));
         let mut state = base_state(
@@ -16361,6 +20377,100 @@ mod tests {
             &puppet,
             &state,
         ));
+    }
+
+    #[test]
+    fn current_druid_history_projects_each_settled_baker_boundary() {
+        // Neither result targets physical Spy #2. Its delayed clear still has
+        // to be settled globally before the certified prefix can be used.
+        let history = current_druid_history(4, &[([1, 3, 4], None, 1), ([1, 3, 4], None, 2)]);
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "original"})),
+                make_card(2, "Baker", json!({"original_role": "Spy"})),
+                make_card(3, "Pooka", json!({})),
+                history.clone(),
+            ],
+        );
+        state.deck.villagers = vec!["Baker".to_string(), "Druid".to_string()];
+        state.deck.minions = vec!["Spy".to_string()];
+        state.deck.demons = vec!["Pooka".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![4, 1, 2, 3];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(2, "Spy".to_string());
+        scenario.evil_positions.insert(3, "Pooka".to_string());
+        assert!(validate_baker_history(&scenario, &state));
+        assert!(validate_druid(&history, &scenario, &state));
+
+        let timelines = baker_spy_conversion_timelines(&scenario, &state);
+        let timeline = timelines
+            .iter()
+            .cloned()
+            .into_iter()
+            .find(|timeline| {
+                timeline.contains_position(2)
+                    && timeline.supports_settled_reveal_count(2, &state)
+            })
+            .expect("the exact Baker history converts physical Spy #2");
+        assert_eq!(
+            current_data_role_at_druid_observation(
+                2,
+                CurrentDruidObservationBoundary::SettledRevealCount(1),
+                &timeline,
+                &scenario,
+                &state,
+            )
+            .as_deref(),
+            Some("Spy"),
+        );
+        assert_eq!(
+            current_data_role_at_druid_observation(
+                2,
+                CurrentDruidObservationBoundary::SettledRevealCount(2),
+                &timeline,
+                &scenario,
+                &state,
+            )
+            .as_deref(),
+            Some("Baker"),
+        );
+
+        let late_clear = timelines
+            .iter()
+            .find(|timeline| !timeline.supports_settled_reveal_count(2, &state))
+            .expect("native delay admits a clear after the second prefix");
+        assert_eq!(
+            current_data_role_at_druid_observation(
+                1,
+                CurrentDruidObservationBoundary::SettledRevealCount(2),
+                late_clear,
+                &scenario,
+                &state,
+            ),
+            None,
+            "an unrelated read must still reject the whole unsettled timeline",
+        );
+        let CurrentDruidPayload::Ledger(events) =
+            parse_current_druid_payload(&history, &state).unwrap()
+        else {
+            panic!("history helper must produce the ordered ledger");
+        };
+        let supports = current_druid_group_supports(
+            &history,
+            &events[1..2],
+            true,
+            &scenario,
+            &state,
+        );
+        assert!(!supports.is_empty());
+        assert!(supports.iter().all(|support| support
+            .baker_spy_timeline
+            .supports_settled_reveal_count(2, &state)));
+        assert!(!supports
+            .iter()
+            .any(|support| &support.baker_spy_timeline == late_clear));
     }
 
     #[test]
@@ -16529,7 +20639,13 @@ mod tests {
 
     #[test]
     fn current_druid_joins_wretch_and_raw_callback_labels_globally() {
-        let druid = current_druid(1, [3, 4, 5], Some("Bombardier"));
+        let druid = current_druid_history(
+            1,
+            &[
+                ([3, 4, 5], Some("Bombardier"), 3),
+                ([3, 4, 5], Some("Bombardier"), 5),
+            ],
+        );
         let mut bounty = current_poet("Bounty Hunter", json!({"evil_position": 3}));
         bounty.position = 2;
         let mut state = base_state(
@@ -16550,8 +20666,9 @@ mod tests {
         state.deck.outcasts = vec!["Bombardier".to_string(), "Wretch".to_string()];
         state.board_villager_count = Some(4);
         state.board_outcast_count = Some(1);
-        state.board_count_provenance =
-            crate::types::BoardCountProvenance::TrustedPreStart;
+        state.board_count_provenance = crate::types::BoardCountProvenance::TrustedPreStart;
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![1, 2, 3, 4, 5];
         let mut scenario = empty_scenario();
         assert!(validate_druid(&druid, &scenario, &state));
         assert!(validate_poet(&bounty, &scenario, &state));
@@ -16563,7 +20680,10 @@ mod tests {
             &scenario, &state,
         ));
 
-        let raw_druid = current_druid(1, [2, 3, 4], Some("Drunk"));
+        let raw_druid = current_druid_history(
+            1,
+            &[([2, 3, 4], Some("Drunk"), 1), ([2, 3, 4], Some("Drunk"), 5)],
+        );
         let mut medium = current_medium(5, json!(1), json!("Judge"));
         let mut raw_state = base_state(
             5,
@@ -16582,6 +20702,8 @@ mod tests {
         ];
         raw_state.deck.outcasts = vec!["Drunk".to_string()];
         raw_state.deck.demons = vec!["Pooka".to_string()];
+        raw_state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        raw_state.reveal_order = vec![1, 2, 3, 4, 5];
         let mut raw = empty_scenario();
         raw.evil_positions.insert(1, "Pooka".to_string());
         raw.corrupted.insert(5);
@@ -16593,7 +20715,9 @@ mod tests {
         medium = current_medium(5, json!(1), json!("Druid"));
         raw_state.cards[4] = medium.clone();
         assert!(validate_medium(&medium, &raw, &raw_state));
-        assert!(validate_current_hidden_surface_consistency(&raw, &raw_state));
+        assert!(validate_current_hidden_surface_consistency(
+            &raw, &raw_state
+        ));
     }
 
     #[test]
