@@ -255,6 +255,33 @@ The constructor uses the ordinary folded base-role body at `0x3CFFF0`; the
 target retains exact `Puzzlemaster.ctor` identity while applying the established
 canonical constructor prototype for the shared native body.
 
+## Solver checkpoint: ordered duplicate Start replay
+
+The clean-room Start simulator now preserves the global dispatcher's duplicate
+exception instead of reducing Plague Doctor presence to a boolean. Scenario
+construction enumerates the exact selected physical PD actors, including
+natural duplicate pool copies and a Chancellor-generated copy beside a natural
+one. Puppeteer-overwritten characters are removed before the PD slot. Actors
+run from highest displayed ID to lowest; each actor rebuilds the eligible live
+Villager pool, must choose when it is nonempty, and records an explicit no-op
+when earlier actors exhausted it.
+
+Each pure outcome carries an internal ordered `(actor, target-or-none)` trace.
+That trace survives Alchemist convergence without exposing a hidden target as
+public solver knowledge. Uniform target-history multiplicity is used as exact
+conditional mass only when the whole result has one structural Evil root, one
+Start context, exactly one PD actor, and no Chancellor, Shaman, Poisoner, Twin,
+or Puppeteer writer. Opaque or multiple roots still deduplicate to equal
+logical worlds; assigning them an absolute scalar weight would be unsound
+because their hidden identity priors are grouped rather than generative.
+
+Focused regressions cover descending duplicate order, live candidate removal,
+pool exhaustion, duplicate authored PD selection, Chancellor overlap,
+Puppeteer replacement, Alchemist convergence, and the exact three-target case
+where a Knight's native corruption/execution risk is `1/3` rather than `1/2`.
+Shaman's later immediate copied-PD Start call and general provenance-bearing
+probability factors remain separate replay frontiers.
+
 The clean-room behavioral contract is:
 
 - Start corrupts one eligible apparent Villager and only the real truthful

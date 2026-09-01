@@ -280,6 +280,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       the Puppeteer actor and target, preserve erased-role provenance, validate
       exact current/public evidence, and fall back wholesale on unsupported or
       capped inputs without resurrecting exact contradictions.
+    - [x] Replay every selected current Plague Doctor at the global Start slot
+      in descending displayed-ID order, rebuilding the live eligible pool for
+      each actor and retaining ordered target/no-op history through Alchemist
+      convergence. Preserve exact uniform target mass only for the singular,
+      one-actor Start kernel; grouped Chancellor/Shaman/Poisoner/Twin/
+      Puppeteer roots keep equal logical-world semantics.
 - [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
   role/compiler-generated methods plus registered-alignment, acted-record,
   pool-filter, and RNG helpers; close its direct/Poet three-reference schema,

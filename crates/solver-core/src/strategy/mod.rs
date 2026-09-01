@@ -1153,4 +1153,51 @@ mod tests {
 
         assert_eq!(corruption_risk(1, &state, &result), 1.0);
     }
+
+    #[test]
+    fn exact_pd_kernel_preserves_one_third_knight_risk_through_alchemist() {
+        let card = |position, role: &str| CardInfo {
+            position,
+            apparent_role: role.to_string(),
+            ..CardInfo::default()
+        };
+        let mut state = GameState {
+            n_cards: 6,
+            n_evil: 1,
+            confirmed_evil: vec![6],
+            cards: vec![
+                card(1, "Alchemist"),
+                card(2, "Scout"),
+                card(3, "Witness"),
+                card(4, "Knight"),
+                card(5, "Plague Doctor"),
+                card(6, "Poet"),
+            ],
+            board_villager_count: Some(4),
+            board_outcast_count: Some(1),
+            board_minion_count: Some(1),
+            board_demon_count: Some(0),
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            wrong_exec_cost: 5,
+            ..GameState::default()
+        };
+        state.deck.villagers = vec![
+            "Alchemist".to_string(),
+            "Scout".to_string(),
+            "Witness".to_string(),
+            "Knight".to_string(),
+        ];
+        state.deck.outcasts = vec!["Plague Doctor".to_string()];
+        state.deck.minions = vec!["Minion".to_string()];
+
+        let result = crate::solver::solve(&state);
+
+        assert_eq!(result.n_surviving, 3);
+        assert!((corruption_risk(4, &state, &result) - 1.0 / 3.0).abs() < 1e-12);
+        let damage = execution_damage_profile(4, &state, &result);
+        assert!((damage.risk - 1.0 / 3.0).abs() < 1e-12);
+        assert!((damage.expected_damage - 3.0).abs() < 1e-12);
+        assert_eq!(damage.max_damage, 9);
+        assert!(!damage.terminal_risk);
+    }
 }

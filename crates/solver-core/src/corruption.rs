@@ -48,7 +48,10 @@ pub struct StartCorruptionContext {
 
     pub drunk_position: Option<u8>,
     pub puppet_position: Option<u8>,
-    pub plague_doctor_acts: bool,
+    /// Current Plague Doctor data actors dispatched at the global role slot.
+    /// Scenario generation retains physical positions so the duplicate-role
+    /// exception can run every actor in descending displayed-ID order.
+    pub plague_doctor_positions: Vec<u8>,
 
     /// Caller-enumerated native Shaman source/target history. Placement and
     /// final-role consistency are validated outside this status simulator.
@@ -108,7 +111,7 @@ pub(crate) struct PostTwinCorruptionContext {
     pub legacy_drunk_cure_veto_position: Option<u8>,
 
     pub puppet_position: Option<u8>,
-    pub plague_doctor_acts: bool,
+    pub plague_doctor_positions: Vec<u8>,
     pub shaman_trace: Option<ShamanTrace>,
 }
 
@@ -131,7 +134,7 @@ impl StartCorruptionContext {
             true_alchemist_positions: self.true_alchemist_positions.clone(),
             legacy_drunk_cure_veto_position: self.drunk_position,
             puppet_position: self.puppet_position,
-            plague_doctor_acts: self.plague_doctor_acts,
+            plague_doctor_positions: self.plague_doctor_positions.clone(),
             shaman_trace: self.shaman_trace.clone(),
         }
     }
@@ -142,8 +145,13 @@ impl StartCorruptionContext {
 pub struct StartCorruptionOutcome {
     /// Live Corrupted statuses after all Alchemist cure attempts.
     pub corrupted: HashSet<u8>,
-    /// Plague Doctor's selected Start target, retained even if later cured.
+    /// The highest-ID Plague Doctor actor's selected Start target, retained
+    /// even if later cured. Standard has one actor; duplicate-role histories
+    /// retain their remaining effects through the final Corrupted set.
     pub pd_target: Option<u8>,
+    /// Ordered duplicate-role Start history, highest actor ID first. `None`
+    /// records the native no-candidate no-op for that actor.
+    pub pd_target_history: Vec<(u8, Option<u8>)>,
     /// Per-Alchemist live scan/attempt count at that actor's Start turn.
     pub alchemist_counts: HashMap<u8, u8>,
     /// Persistent evil-effect marker used by Witness. Alchemist cures do not
@@ -310,40 +318,22 @@ pub(crate) fn enumerate_post_twin_corruption(
         }
     }
 
-    let mut pd_branches: Vec<(HashSet<u8>, HashSet<u8>, Option<u8>)> = Vec::new();
-    if !context.plague_doctor_acts {
-        if known_pd_target.is_none() {
-            pd_branches.push((branch, affected, None));
-        }
-    } else {
-        let mut candidates: Vec<u8> = context
-            .registered_villagers_at_pd_call
-            .iter()
-            .copied()
-            .filter(|target| {
-                !branch.contains(target) && !context.corruption_resistant_at_init.contains(target)
-            })
-            .collect();
-        candidates.sort_unstable();
-
-        if let Some(known_target) = known_pd_target {
-            if candidates.binary_search(&known_target).is_ok() {
-                branch.insert(known_target);
-                pd_branches.push((branch, affected, Some(known_target)));
-            }
-        } else if candidates.is_empty() {
-            pd_branches.push((branch, affected, None));
-        } else {
-            for target in candidates {
-                let mut selected = branch.clone();
-                selected.insert(target);
-                pd_branches.push((selected, affected.clone(), Some(target)));
-            }
-        }
-    }
+    let pd_branches = enumerate_plague_doctor_corruption(
+        branch,
+        &context.plague_doctor_positions,
+        &context.registered_villagers_at_pd_call,
+        &context.corruption_resistant_at_init,
+        known_pd_target,
+    );
 
     let mut outcomes = Vec::new();
-    for (mut branch, mut affected, pd_target) in pd_branches {
+    for history in pd_branches {
+        let mut branch = history.corrupted;
+        let pd_target_history = history.actor_targets;
+        let pd_target = pd_target_history
+            .first()
+            .and_then(|(_, target)| *target);
+        let mut affected = affected.clone();
         let shaman_trace = context.shaman_trace.clone();
         let mut alchemist_counts = HashMap::new();
 
@@ -399,12 +389,91 @@ pub(crate) fn enumerate_post_twin_corruption(
         outcomes.push(StartCorruptionOutcome {
             corrupted: branch,
             pd_target,
+            pd_target_history,
             alchemist_counts,
             messed_up_by_evil: affected,
             shaman_trace,
         });
     }
     dedup_outcomes(outcomes)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct PlagueDoctorCorruptionHistory {
+    corrupted: HashSet<u8>,
+    actor_targets: Vec<(u8, Option<u8>)>,
+}
+
+/// Replay the duplicate-role Start exception exactly. The global dispatcher
+/// visits current Plague Doctor actors highest-ID-first. Each actor rebuilds
+/// the eligible pool from the live Corrupted set left by all prior actors;
+/// selection is mandatory while that pool is non-empty and otherwise a no-op.
+fn enumerate_plague_doctor_corruption(
+    initial_corrupted: HashSet<u8>,
+    actor_positions: &[u8],
+    registered_villagers: &HashSet<u8>,
+    corruption_resistant: &HashSet<u8>,
+    known_first_target: Option<u8>,
+) -> Vec<PlagueDoctorCorruptionHistory> {
+    let mut actors = actor_positions.to_vec();
+    actors.sort_unstable_by(|a, b| b.cmp(a));
+    actors.dedup();
+
+    if actors.is_empty() {
+        return known_first_target
+            .is_none()
+            .then_some(vec![PlagueDoctorCorruptionHistory {
+                corrupted: initial_corrupted,
+                actor_targets: Vec::new(),
+            }])
+            .unwrap_or_default();
+    }
+
+    let mut histories = vec![PlagueDoctorCorruptionHistory {
+        corrupted: initial_corrupted,
+        actor_targets: Vec::new(),
+    }];
+    for (actor_index, actor_position) in actors.into_iter().enumerate() {
+        let mut next = Vec::new();
+        for history in histories {
+            let mut candidates: Vec<u8> = registered_villagers
+                .iter()
+                .copied()
+                .filter(|target| {
+                    !history.corrupted.contains(target)
+                        && !corruption_resistant.contains(target)
+                })
+                .collect();
+            candidates.sort_unstable();
+
+            if actor_index == 0 {
+                if let Some(known_target) = known_first_target {
+                    if candidates.binary_search(&known_target).is_err() {
+                        continue;
+                    }
+                    candidates.clear();
+                    candidates.push(known_target);
+                }
+            }
+
+            if candidates.is_empty() {
+                let mut no_op = history;
+                no_op.actor_targets.push((actor_position, None));
+                next.push(no_op);
+            } else {
+                for target in candidates {
+                    let mut selected = history.clone();
+                    selected.corrupted.insert(target);
+                    selected
+                        .actor_targets
+                        .push((actor_position, Some(target)));
+                    next.push(selected);
+                }
+            }
+        }
+        histories = next;
+    }
+    histories
 }
 
 fn apply_alchemists(
@@ -502,6 +571,7 @@ fn dedup_outcomes(values: Vec<StartCorruptionOutcome>) -> Vec<StartCorruptionOut
             seen.insert((
                 sorted_set_key(&value.corrupted),
                 value.pd_target,
+                value.pd_target_history.clone(),
                 sorted_count_key(&value.alchemist_counts),
                 sorted_set_key(&value.messed_up_by_evil),
                 value.shaman_trace.clone(),
@@ -616,7 +686,7 @@ mod tests {
     #[test]
     fn plague_doctor_observes_prior_statuses_and_records_a_later_cured_target() {
         let mut ctx = context(&[2, 3, 5]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         ctx.true_alchemist_positions = vec![5];
         ctx.corruption_resistant_at_init.insert(5);
         let outcomes = enumerate_start_corruption(5, &roles(&[(1, "Pooka")]), &ctx, Some(3));
@@ -629,7 +699,7 @@ mod tests {
     #[test]
     fn invalid_known_plague_doctor_target_eliminates_the_world() {
         let mut ctx = context(&[2]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         ctx.corruption_resistant_at_init.insert(2);
         let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, Some(2));
         assert!(outcomes.is_empty());
@@ -638,7 +708,7 @@ mod tests {
     #[test]
     fn sequential_alchemists_read_the_live_mutated_set() {
         let mut ctx = context(&[2, 4, 6]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         ctx.true_alchemist_positions = vec![2, 6];
         ctx.corruption_resistant_at_init.extend([2, 6]);
         let outcomes = enumerate_start_corruption(7, &HashMap::new(), &ctx, Some(4));
@@ -650,7 +720,7 @@ mod tests {
     #[test]
     fn small_board_alchemist_scan_preserves_overlap_duplicates() {
         let mut ctx = context(&[1, 2]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         ctx.true_alchemist_positions = vec![1];
         ctx.corruption_resistant_at_init.insert(1);
         let outcomes = enumerate_start_corruption(3, &HashMap::new(), &ctx, Some(2));
@@ -661,10 +731,79 @@ mod tests {
     #[test]
     fn no_eligible_plague_doctor_target_is_a_single_no_target_outcome() {
         let mut ctx = context(&[]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         let outcomes = enumerate_start_corruption(5, &HashMap::new(), &ctx, None);
         assert_eq!(outcomes.len(), 1);
         assert_eq!(outcomes[0].pd_target, None);
+    }
+
+    #[test]
+    fn duplicate_plague_doctors_act_highest_id_first_against_the_live_pool() {
+        let histories = enumerate_plague_doctor_corruption(
+            HashSet::new(),
+            &[2, 6],
+            &HashSet::from([3, 4]),
+            &HashSet::new(),
+            None,
+        );
+
+        assert_eq!(histories.len(), 2);
+        assert!(histories
+            .iter()
+            .all(|history| history.corrupted == HashSet::from([3, 4])));
+        assert_eq!(
+            histories
+                .into_iter()
+                .map(|history| history.actor_targets)
+                .collect::<HashSet<_>>(),
+            HashSet::from([
+                vec![(6, Some(3)), (2, Some(4))],
+                vec![(6, Some(4)), (2, Some(3))],
+            ])
+        );
+    }
+
+    #[test]
+    fn later_duplicate_plague_doctor_noops_after_pool_exhaustion() {
+        let histories = enumerate_plague_doctor_corruption(
+            HashSet::new(),
+            &[1, 5],
+            &HashSet::from([3]),
+            &HashSet::new(),
+            None,
+        );
+
+        assert_eq!(histories.len(), 1);
+        assert_eq!(
+            histories[0].actor_targets,
+            vec![(5, Some(3)), (1, None)]
+        );
+    }
+
+    #[test]
+    fn duplicate_pd_target_histories_survive_alchemist_convergence() {
+        let mut ctx = context(&[2, 3, 5]);
+        ctx.plague_doctor_positions = vec![4, 6];
+        ctx.true_alchemist_positions = vec![1];
+        ctx.corruption_resistant_at_init.insert(1);
+
+        let outcomes = enumerate_start_corruption(6, &HashMap::new(), &ctx, None);
+
+        assert_eq!(outcomes.len(), 6);
+        assert!(outcomes.iter().all(|outcome| {
+            outcome.corrupted.is_empty()
+                && outcome.alchemist_counts.get(&1) == Some(&2)
+                && outcome.pd_target_history.len() == 2
+        }));
+        for first_target in [2, 3, 5] {
+            assert_eq!(
+                outcomes
+                    .iter()
+                    .filter(|outcome| outcome.pd_target == Some(first_target))
+                    .count(),
+                2
+            );
+        }
     }
 
     fn shaman_trace(source: u8, target: u8, copied_role: &str) -> ShamanTrace {
@@ -717,7 +856,7 @@ mod tests {
     #[test]
     fn corrupted_copied_alchemist_records_zero_and_does_not_cure() {
         let mut ctx = context(&[1, 4]);
-        ctx.plague_doctor_acts = true;
+        ctx.plague_doctor_positions = vec![1];
         ctx.shaman_trace = Some(shaman_trace(1, 4, "alchemist"));
         ctx.true_alchemist_positions = vec![1];
         ctx.corruption_resistant_at_init.insert(1);
@@ -743,7 +882,7 @@ mod tests {
             initial_messed_up_by_evil: HashSet::new(),
             drunk_position: Some(3),
             puppet_position: Some(2),
-            plague_doctor_acts: true,
+            plague_doctor_positions: vec![8],
             shaman_trace: Some(shaman_trace(5, 7, "Alchemist")),
         };
         let pre_twin_context = PreTwinCorruptionContext {
@@ -760,7 +899,7 @@ mod tests {
             true_alchemist_positions: legacy_context.true_alchemist_positions.clone(),
             legacy_drunk_cure_veto_position: legacy_context.drunk_position,
             puppet_position: legacy_context.puppet_position,
-            plague_doctor_acts: legacy_context.plague_doctor_acts,
+            plague_doctor_positions: legacy_context.plague_doctor_positions.clone(),
             shaman_trace: legacy_context.shaman_trace.clone(),
         };
 
@@ -792,6 +931,7 @@ mod tests {
         let outcome = |trace| StartCorruptionOutcome {
             corrupted: HashSet::new(),
             pd_target: None,
+            pd_target_history: Vec::new(),
             alchemist_counts: HashMap::new(),
             messed_up_by_evil: HashSet::from([2, 4]),
             shaman_trace: Some(trace),

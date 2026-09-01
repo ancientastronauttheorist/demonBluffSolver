@@ -117,6 +117,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   probabilities and hidden identity multiplicities for PD/Shaman/Chancellor
   histories without reintroducing duplicate logical worlds, so confidence and
   mutual-information scores reflect probability mass rather than world count.
+  The first safe slice is complete: a singular one-actor Plague Doctor kernel
+  retains uniform target histories through deterministic Alchemist convergence
+  (including exact `1/3` Knight risk). Multiple or opaque Start roots still
+  collapse deliberately until they carry provenance-bearing rational factors.
 
 - [x] ~~**Bishop lying = all Villagers**~~ — DROPPED. Wiki claim doesn't match game: corrupted Bishops show mixed types, not all Villagers.
 

@@ -41,6 +41,7 @@ struct ScenarioSemanticKey {
     corrupted: Vec<u8>,
     messed_up_by_evil: Vec<u8>,
     pd_target: Option<u8>,
+    pd_target_history: Vec<(u8, Option<u8>)>,
     alchemist_counts: Vec<(u8, u8)>,
     doppelganger_position: Option<u8>,
     drunk_position: Option<u8>,
@@ -59,7 +60,7 @@ struct StartContextSemanticKey {
     initial_messed_up_by_evil: Vec<u8>,
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
-    plague_doctor_acts: bool,
+    plague_doctor_positions: Vec<u8>,
     shaman_trace: Option<ShamanTrace>,
 }
 
@@ -196,6 +197,7 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
     if executed_role_branches.is_empty() {
         return Vec::new();
     }
+    let one_executed_role_root = executed_role_branches.len() == 1;
 
     if supports_ordered_twin_puppeteer_start_slice(state) {
         let mut ordered_scenarios = Vec::new();
@@ -222,7 +224,7 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
         for executed_evil_roles in &executed_role_branches {
             let mut branch = state.clone();
             branch.executed_evil_roles = executed_evil_roles.clone();
-            match build_scenarios_with_start_mode(&branch, true) {
+            match build_scenarios_with_start_mode(&branch, true, one_executed_role_root) {
                 Some(mut scenarios) => ordered_scenarios.append(&mut scenarios),
                 None => {
                     ordered_complete = false;
@@ -240,7 +242,7 @@ pub fn build_scenarios(state: &GameState) -> Vec<Scenario> {
         let mut branch = state.clone();
         branch.executed_evil_roles = executed_evil_roles;
         scenarios.extend(
-            build_scenarios_with_start_mode(&branch, false)
+            build_scenarios_with_start_mode(&branch, false, one_executed_role_root)
                 .expect("legacy one-shot Start generation is infallible"),
         );
     }
@@ -355,8 +357,15 @@ fn branch_untyped_executed_evil_roles(
 fn build_scenarios_with_start_mode(
     state: &GameState,
     ordered_twin_start: bool,
+    one_executed_role_root: bool,
 ) -> Option<Vec<Scenario>> {
     let placements = generate_evil_placements(state);
+    let one_structural_evil_root = one_executed_role_root
+        && placements
+            .iter()
+            .filter(|placement| apply_placement_constraints(&placement.roles, state))
+            .count()
+            == 1;
     let mut scenarios = Vec::new();
     let n = state.n_cards;
     let mut common_twin_trace_width: Option<usize> = None;
@@ -394,6 +403,23 @@ fn build_scenarios_with_start_mode(
             continue;
         }
         let final_chancellor_position = final_chancellor_positions.first().copied();
+
+        // Hidden target histories can stand in for exact conditional RNG mass
+        // only when the surrounding identity/Start root is singular. These
+        // roles either branch before PD or create opaque post-PD convergence;
+        // counting their grouped histories as probability occurrences would
+        // over-weight one logical root relative to another.
+        let exact_pd_kernel_roles = full_evil.values().all(|role| {
+            !matches!(
+                normalize_role(role).as_str(),
+                "unknown"
+                    | "chancellor"
+                    | "shaman"
+                    | "poisoner"
+                    | "twinminion"
+                    | "puppeteer"
+            )
+        });
 
         // `state.deck.outcasts` is the authoritative full role pool. Baa only
         // obscures one of those entries in the visual deck view; normalization
@@ -449,6 +475,10 @@ fn build_scenarios_with_start_mode(
                 }
             }
         }
+        let one_outer_start_root = one_structural_evil_root
+            && exact_pd_kernel_roles
+            && dopp_candidates.len() == 1
+            && drunk_candidates.len() == 1;
 
         // Identity hypotheses feed one ordered Start simulator. Random
         // Poisoner and Plague Doctor choices branch inside that simulator so
@@ -493,14 +523,16 @@ fn build_scenarios_with_start_mode(
 
                 let mut pending_seen: HashMap<PendingStartKey, usize> = HashMap::new();
                 let mut pending_contexts: Vec<PendingStartContext> = Vec::new();
-                let mut pd_variants_cache: HashMap<(u8, String, u8), Vec<bool>> = HashMap::new();
+                let mut pd_variants_cache: HashMap<(u8, u8, String, u8), Vec<Vec<u8>>> =
+                    HashMap::new();
                 let mut context_variants_cache: HashMap<
-                    (u8, u8, u8, bool),
+                    (u8, u8, u8, Vec<u8>),
                     Vec<StartCorruptionContext>,
                 > = HashMap::new();
                 for raw_trace in &trace_variants {
-                    let pd_act_variants = if let Some(trace) = raw_trace.as_ref() {
+                    let pd_actor_variants = if let Some(trace) = raw_trace.as_ref() {
                         let cache_key = (
+                            trace.original_position,
                             trace.added_outcast_position,
                             normalize_role(&trace.added_outcast_role),
                             trace.anchor_position,
@@ -508,7 +540,7 @@ fn build_scenarios_with_start_mode(
                         if let Some(cached) = pd_variants_cache.get(&cache_key) {
                             cached.clone()
                         } else {
-                            let variants = plague_doctor_act_variants(
+                            let variants = plague_doctor_actor_variants(
                                 state,
                                 &full_evil,
                                 dopp_pos_opt,
@@ -520,7 +552,7 @@ fn build_scenarios_with_start_mode(
                             variants
                         }
                     } else {
-                        plague_doctor_act_variants(
+                        plague_doctor_actor_variants(
                             state,
                             &full_evil,
                             dopp_pos_opt,
@@ -530,13 +562,13 @@ fn build_scenarios_with_start_mode(
                         )
                     };
 
-                    for &plague_doctor_acts in &pd_act_variants {
+                    for plague_doctor_positions in &pd_actor_variants {
                         let context_variants = if let Some(trace) = raw_trace.as_ref() {
                             let cache_key = (
                                 trace.original_position,
                                 trace.added_outcast_position,
                                 trace.anchor_position,
-                                plague_doctor_acts,
+                                plague_doctor_positions.clone(),
                             );
                             if let Some(cached) = context_variants_cache.get(&cache_key) {
                                 cached.clone()
@@ -549,7 +581,7 @@ fn build_scenarios_with_start_mode(
                                     puppet_pos,
                                     final_chancellor_position.expect("trace requires Chancellor"),
                                     trace,
-                                    plague_doctor_acts,
+                                    plague_doctor_positions,
                                 );
                                 context_variants_cache.insert(cache_key, variants.clone());
                                 variants
@@ -569,7 +601,7 @@ fn build_scenarios_with_start_mode(
                                         puppet_pos,
                                         None,
                                         nk_alchemists,
-                                        plague_doctor_acts,
+                                        plague_doctor_positions,
                                     )
                                 })
                                 .collect()
@@ -583,7 +615,7 @@ fn build_scenarios_with_start_mode(
                                 drunk_pos_opt,
                                 puppet_pos,
                                 raw_trace.as_ref(),
-                                plague_doctor_acts,
+                                plague_doctor_positions,
                                 base_context,
                             )
                             .into_iter()
@@ -644,6 +676,10 @@ fn build_scenarios_with_start_mode(
                     }
                 }
 
+                let preserve_exact_pd_history_multiplicity = one_outer_start_root
+                    && pending_contexts.len() == 1
+                    && pending_contexts[0].context.plague_doctor_positions.len() == 1
+                    && pending_contexts[0].context.shaman_trace.is_none();
                 for pending in pending_contexts {
                     let outcome_variants: Vec<(StartCorruptionOutcome, Option<TwinTrace>)> =
                         if ordered_twin_start {
@@ -709,13 +745,19 @@ fn build_scenarios_with_start_mode(
                         // variable. Final statuses and Alchemist counts retain
                         // every observable consequence, while only an
                         // explicitly supplied target is safe to serialize as a
-                        // known identity. This also lets cured, otherwise
-                        // equivalent target histories collapse to one world.
+                        // known identity. In the narrow exact-kernel slice,
+                        // keeping the one-actor history also preserves uniform
+                        // native target mass through deterministic Alchemist
+                        // convergence. Opaque or multiple roots deliberately
+                        // collapse back to equal logical-world semantics.
                         let represented_pd_target = state.pd_corruption_target;
                         let key = ScenarioSemanticKey {
                             corrupted: corr_key,
                             messed_up_by_evil: affected_key,
                             pd_target: represented_pd_target,
+                            pd_target_history: preserve_exact_pd_history_multiplicity
+                                .then(|| outcome.pd_target_history.clone())
+                                .unwrap_or_default(),
                             alchemist_counts: alch_key,
                             doppelganger_position: dopp_pos_opt,
                             drunk_position: drunk_pos_opt,
@@ -1244,7 +1286,7 @@ fn enumerate_ordered_twin_start_outcomes(
     if state.pd_corruption_target.is_some()
         || context.drunk_position.is_some()
         || context.puppet_position.is_some()
-        || context.plague_doctor_acts
+        || !context.plague_doctor_positions.is_empty()
         || context.shaman_trace.is_some()
         || !context.true_alchemist_positions.is_empty()
     {
@@ -1814,13 +1856,14 @@ fn natural_outcast_hypothesis_allows_with_required_villagers(
     }
 
     // Dopp/Drunk can only be the explicitly represented natural/generated
-    // identity above. Once PD behavior is concrete, PD has likewise already
-    // been accounted for and cannot silently occupy another filler slot.
+    // identity above. `Some(false)` also forbids every PD occurrence, while
+    // `Some(true)` means at least one actor existed: duplicate natural or
+    // Chancellor-generated copies may still occupy later filler slots.
     let mut forbidden_filler = HashSet::from([
         doppelganger_role,
         drunk_role,
     ]);
-    if plague_doctor_acts.is_some() {
+    if plague_doctor_acts == Some(false) {
         forbidden_filler.insert(pd_role);
     }
 
@@ -2487,7 +2530,7 @@ fn build_chancellor_start_context_variants(
     puppet_position: Option<u8>,
     final_chancellor_position: u8,
     trace: &RawChancellorTrace,
-    plague_doctor_acts: bool,
+    plague_doctor_positions: &[u8],
 ) -> Vec<StartCorruptionContext> {
     let twin_puppet_overlap = puppet_overlays_stable_twin(full_evil, puppet_position);
     let initial_alchemist_variants = enumerate_initial_alchemist_positions(
@@ -2538,6 +2581,7 @@ fn build_chancellor_start_context_variants(
                 || full_evil.contains_key(&position)
                 || doppelganger_position == Some(position)
                 || drunk_position == Some(position)
+                || plague_doctor_positions.contains(&position)
             {
                 false
             } else if alchemists_before_puppet.contains(&position) {
@@ -2573,7 +2617,7 @@ fn build_chancellor_start_context_variants(
             initial_messed_up_by_evil: HashSet::from([trace.anchor_position]),
             drunk_position,
             puppet_position,
-            plague_doctor_acts,
+            plague_doctor_positions: plague_doctor_positions.to_vec(),
             shaman_trace: None,
         };
         let key = start_context_key(&context);
@@ -2803,7 +2847,7 @@ fn hidden_faction_start_context_variants(
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
     chancellor_trace: Option<&RawChancellorTrace>,
-    plague_doctor_acts: bool,
+    plague_doctor_positions: &[u8],
     base: StartCorruptionContext,
 ) -> Vec<StartCorruptionContext> {
     let generated_position = chancellor_trace.map(|trace| trace.added_outcast_position);
@@ -2836,6 +2880,12 @@ fn hidden_faction_start_context_variants(
             fixed_outcasts.insert(trace.anchor_position);
         }
     }
+    fixed_outcasts.extend(
+        plague_doctor_positions
+            .iter()
+            .copied()
+            .filter(|position| !excluded(*position)),
+    );
 
     let mut fixed_villagers: HashSet<u8> = base
         .real_villagers_before_puppet
@@ -2930,6 +2980,18 @@ fn hidden_faction_start_context_variants(
 
     let mut variants = Vec::new();
     let mut seen = HashSet::new();
+    let generated_pd_position = chancellor_trace
+        .filter(|trace| normalize_role(&trace.added_outcast_role) == "plaguedoctor")
+        .map(|trace| trace.added_outcast_position);
+    let required_pd_roles: HashMap<u8, String> = plague_doctor_positions
+        .iter()
+        .copied()
+        .filter(|position| Some(*position) != generated_pd_position)
+        .map(|position| (position, "Plague Doctor".to_string()))
+        .collect();
+    let forbidden_pd_positions: HashSet<u8> = (1..=state.n_cards)
+        .filter(|position| !plague_doctor_positions.contains(position))
+        .collect();
     for selected_count in selected_counts {
         for selected_outcasts in combinations_of(&ambiguous, selected_count) {
             let mut exact_outcasts = fixed_outcasts.clone();
@@ -2949,11 +3011,11 @@ fn hidden_faction_start_context_variants(
                 doppelganger_position,
                 drunk_position,
                 chancellor_trace,
-                Some(plague_doctor_acts),
-                &required_villagers,
-                &HashMap::new(),
-                &HashSet::new(),
                 None,
+                &required_villagers,
+                &required_pd_roles,
+                &forbidden_pd_positions,
+                Some("Plague Doctor"),
                 Some(&exact_outcasts),
             ) {
                 continue;
@@ -2986,7 +3048,7 @@ fn shaman_start_context_variants(
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
     chancellor_trace: Option<&RawChancellorTrace>,
-    plague_doctor_acts: bool,
+    plague_doctor_positions: &[u8],
     base: StartCorruptionContext,
 ) -> Vec<StartCorruptionContext> {
     let faction_bases = hidden_faction_start_context_variants(
@@ -2996,7 +3058,7 @@ fn shaman_start_context_variants(
         drunk_position,
         puppet_position,
         chancellor_trace,
-        plague_doctor_acts,
+        plague_doctor_positions,
         base,
     );
     let faction_bases: Vec<StartCorruptionContext> = faction_bases
@@ -3269,7 +3331,11 @@ fn start_context_key(context: &StartCorruptionContext) -> StartContextSemanticKe
         ),
         drunk_position: context.drunk_position,
         puppet_position: context.puppet_position,
-        plague_doctor_acts: context.plague_doctor_acts,
+        plague_doctor_positions: {
+            let mut positions = context.plague_doctor_positions.clone();
+            positions.sort_unstable_by(|a, b| b.cmp(a));
+            positions
+        },
         shaman_trace: context.shaman_trace.clone(),
     }
 }
@@ -3283,7 +3349,7 @@ fn build_start_corruption_context(
     puppet_position: Option<u8>,
     chancellor_conversion: Option<u8>,
     extra_true_alchemists: &[u8],
-    plague_doctor_acts: bool,
+    plague_doctor_positions: &[u8],
 ) -> StartCorruptionContext {
     let extra_alchemists: HashSet<u8> = extra_true_alchemists.iter().copied().collect();
     let twin_puppet_overlap = puppet_overlays_stable_twin(full_evil, puppet_position);
@@ -3297,6 +3363,7 @@ fn build_start_corruption_context(
         } else if full_evil.contains_key(&position)
             || Some(position) == doppelganger_position
             || Some(position) == drunk_position
+            || plague_doctor_positions.contains(&position)
         {
             false
         } else if extra_alchemists.contains(&position) {
@@ -3356,39 +3423,121 @@ fn build_start_corruption_context(
         initial_messed_up_by_evil: HashSet::new(),
         drunk_position,
         puppet_position,
-        plague_doctor_acts,
+        plague_doctor_positions: plague_doctor_positions.to_vec(),
         shaman_trace: None,
     }
 }
 
 #[allow(clippy::too_many_arguments)]
-fn plague_doctor_act_variants(
+fn plague_doctor_actor_variants(
     state: &GameState,
     full_evil: &HashMap<u8, String>,
     doppelganger_position: Option<u8>,
     drunk_position: Option<u8>,
     puppet_position: Option<u8>,
     chancellor_trace: Option<&RawChancellorTrace>,
-) -> Vec<bool> {
-    let mut variants = Vec::new();
-    for acts in [false, true] {
-        if state.pd_corruption_target.is_some() && !acts {
-            continue;
-        }
-        if natural_outcast_hypothesis_allows(
-            state,
-            full_evil,
-            puppet_position,
-            doppelganger_position,
-            drunk_position,
-            chancellor_trace,
-            Some(acts),
-        ) {
-            variants.push(acts);
+) -> Vec<Vec<u8>> {
+    let pd_role = normalize_role("Plague Doctor");
+    let generated_pd_occurrence_position = chancellor_trace
+        .filter(|trace| normalize_role(&trace.added_outcast_role) == pd_role)
+        .map(|trace| trace.added_outcast_position);
+    // Chancellor's generated occurrence remains in the final deck multiset,
+    // but Puppeteer can replace that physical character before the global PD
+    // slot. In that overlap it is not a current PD actor.
+    let generated_pd_position = generated_pd_occurrence_position
+        .filter(|position| puppet_position != Some(*position));
+    let generated_position = chancellor_trace.map(|trace| trace.added_outcast_position);
+
+    let excluded = |position: u8| {
+        full_evil.contains_key(&position)
+            || puppet_position == Some(position)
+            || generated_position == Some(position)
+            || doppelganger_position == Some(position)
+            || drunk_position == Some(position)
+    };
+    let observed_role = |position: u8| {
+        state
+            .executed_good_roles
+            .get(&position)
+            .map(String::as_str)
+            .or_else(|| state.card_at(position).map(|card| card.apparent_role.as_str()))
+    };
+
+    let mut mandatory = generated_pd_position.into_iter().collect::<Vec<_>>();
+    for position in 1..=state.n_cards {
+        if !excluded(position)
+            && observed_role(position)
+                .is_some_and(|role| normalize_role(role) == pd_role)
+        {
+            mandatory.push(position);
         }
     }
-    variants.sort_unstable();
-    variants.dedup();
+    mandatory.sort_unstable_by(|a, b| b.cmp(a));
+    mandatory.dedup();
+
+    let natural_pd_capacity = state
+        .deck
+        .outcasts
+        .iter()
+        .filter(|role| normalize_role(role) == pd_role)
+        .count()
+        .saturating_sub(usize::from(generated_pd_occurrence_position.is_some()));
+    let mandatory_natural_count = mandatory
+        .iter()
+        .filter(|position| Some(**position) != generated_pd_position)
+        .count();
+    if mandatory_natural_count > natural_pd_capacity {
+        return Vec::new();
+    }
+
+    let possible_hidden: Vec<u8> = (1..=state.n_cards)
+        .filter(|position| !excluded(*position))
+        .filter(|position| !mandatory.contains(position))
+        .filter(|position| state.card_at(*position).is_none())
+        .filter(|position| !state.executed_good_roles.contains_key(position))
+        .collect();
+    let max_extra = (natural_pd_capacity - mandatory_natural_count).min(possible_hidden.len());
+
+    let mut variants = Vec::new();
+    let mut seen = HashSet::new();
+    for extra_count in 0..=max_extra {
+        for extras in combinations_of(&possible_hidden, extra_count) {
+            let mut actors = mandatory.clone();
+            actors.extend(extras);
+            actors.sort_unstable_by(|a, b| b.cmp(a));
+            actors.dedup();
+            if actors.is_empty() && state.pd_corruption_target.is_some() {
+                continue;
+            }
+
+            let required_outcast_roles: HashMap<u8, String> = actors
+                .iter()
+                .copied()
+                .filter(|position| Some(*position) != generated_pd_position)
+                .map(|position| (position, "Plague Doctor".to_string()))
+                .collect();
+            let forbidden_pd_positions: HashSet<u8> = (1..=state.n_cards)
+                .filter(|position| !actors.contains(position))
+                .collect();
+            if natural_outcast_hypothesis_allows_with_required_villagers(
+                state,
+                full_evil,
+                puppet_position,
+                doppelganger_position,
+                drunk_position,
+                chancellor_trace,
+                None,
+                &HashSet::new(),
+                &required_outcast_roles,
+                &forbidden_pd_positions,
+                Some("Plague Doctor"),
+                None,
+            ) && seen.insert(actors.clone())
+            {
+                variants.push(actors);
+            }
+        }
+    }
     variants
 }
 
@@ -5500,7 +5649,7 @@ mod tests {
         state.n_cards = 4;
         state.n_evil = 3;
 
-        assert!(build_scenarios_with_start_mode(&state, true).is_none());
+        assert!(build_scenarios_with_start_mode(&state, true, false).is_none());
         let scenarios = build_scenarios(&state);
         assert!(!scenarios.is_empty());
         assert!(scenarios.iter().all(|scenario| scenario.twin_trace.is_none()));
@@ -5512,6 +5661,7 @@ mod tests {
             corrupted: Vec::new(),
             messed_up_by_evil: Vec::new(),
             pd_target: None,
+            pd_target_history: Vec::new(),
             alchemist_counts: Vec::new(),
             doppelganger_position: None,
             drunk_position: None,
@@ -5640,7 +5790,7 @@ mod tests {
         let evil = HashMap::from([(1, "Shaman".to_string())]);
 
         let variants = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, false, context,
+            &state, &evil, None, None, None, None, &[], context,
         );
 
         assert_eq!(variants.len(), 2);
@@ -5683,10 +5833,10 @@ mod tests {
         ];
         let evil = HashMap::from([(1, "Shaman".to_string()), (4, "Puppet".to_string())]);
         let context =
-            build_start_corruption_context(&state, &evil, None, None, Some(4), Some(5), &[], false);
+            build_start_corruption_context(&state, &evil, None, None, Some(4), Some(5), &[], &[]);
 
         let variants = shaman_start_context_variants(
-            &state, &evil, None, None, Some(4), None, false, context,
+            &state, &evil, None, None, Some(4), None, &[], context,
         );
 
         assert!(!variants.is_empty());
@@ -5708,18 +5858,24 @@ mod tests {
         state.cards = vec![card(2, "Scout")];
         state.board_outcast_count = Some(1);
         state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
-        let known = HashSet::from([2]);
-        let context = StartCorruptionContext {
-            real_villagers_before_puppet: known.clone(),
-            registered_villagers_at_pd_call: known,
-            plague_doctor_acts: true,
-            ..StartCorruptionContext::default()
-        };
         let evil = HashMap::from([(1, "Shaman".to_string())]);
-
-        let variants = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, true, context,
-        );
+        let variants: Vec<StartCorruptionContext> = plague_doctor_actor_variants(
+            &state, &evil, None, None, None, None,
+        )
+        .into_iter()
+        .flat_map(|actors| {
+            let known = HashSet::from([2]);
+            let context = StartCorruptionContext {
+                real_villagers_before_puppet: known.clone(),
+                registered_villagers_at_pd_call: known,
+                plague_doctor_positions: actors.clone(),
+                ..StartCorruptionContext::default()
+            };
+            shaman_start_context_variants(
+                &state, &evil, None, None, None, None, &actors, context,
+            )
+        })
+        .collect();
         let endpoint_sets: HashSet<Vec<u8>> = variants
             .iter()
             .filter_map(|context| context.shaman_trace.as_ref())
@@ -5771,16 +5927,30 @@ mod tests {
         state.board_outcast_count = Some(1);
         state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
         let evil = HashMap::from([(1, "Minion".to_string())]);
-        let base = build_start_corruption_context(
-            &state, &evil, None, None, None, None, &[], true,
+        let actor_variants = plague_doctor_actor_variants(
+            &state, &evil, None, None, None, None,
         );
-
-        // The old saturated-only context knew #2 was a Villager but omitted
-        // both feasible hidden assignments (#3 V/#4 O and #3 O/#4 V).
-        assert_eq!(base.registered_villagers_at_pd_call, HashSet::from([2]));
-        let contexts = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, true, base,
+        assert_eq!(
+            actor_variants.iter().cloned().collect::<HashSet<_>>(),
+            HashSet::from([vec![3], vec![4]])
         );
+        let contexts: Vec<StartCorruptionContext> = actor_variants
+            .into_iter()
+            .flat_map(|actors| {
+                let base = build_start_corruption_context(
+                    &state, &evil, None, None, None, None, &[], &actors,
+                );
+                // The old saturated-only context knew #2 was a Villager but
+                // omitted the complementary hidden Villager/PD assignment.
+                assert_eq!(
+                    base.registered_villagers_at_pd_call,
+                    HashSet::from([2])
+                );
+                shaman_start_context_variants(
+                    &state, &evil, None, None, None, None, &actors, base,
+                )
+            })
+            .collect();
         let faction_sets: HashSet<Vec<u8>> = contexts
             .iter()
             .map(|context| sorted_positions(&context.registered_villagers_at_pd_call))
@@ -5814,7 +5984,7 @@ mod tests {
         let evil = HashMap::from([(1, "Shaman".to_string())]);
 
         let variants = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, false, context,
+            &state, &evil, None, None, None, None, &[], context,
         );
 
         assert_eq!(variants.len(), 2);
@@ -5859,7 +6029,7 @@ mod tests {
         let evil = HashMap::from([(1, "Shaman".to_string())]);
 
         let variants = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, false, context,
+            &state, &evil, None, None, None, None, &[], context,
         );
         let scout_trace = variants
             .iter()
@@ -5902,7 +6072,7 @@ mod tests {
         let evil = HashMap::from([(1, "Shaman".to_string())]);
 
         let variants = shaman_start_context_variants(
-            &state, &evil, None, None, None, None, false, context,
+            &state, &evil, None, None, None, None, &[], context,
         );
         let traces: Vec<&ShamanTrace> = variants
             .iter()
@@ -5984,18 +6154,125 @@ mod tests {
 
         state.board_outcast_count = Some(0);
         assert_eq!(
-            plague_doctor_act_variants(
+            plague_doctor_actor_variants(
                 &state, &full_evil, None, None, None, Some(&trace),
             ),
-            vec![false],
+            vec![Vec::<u8>::new()],
         );
 
         state.board_outcast_count = Some(1);
         assert_eq!(
-            plague_doctor_act_variants(
+            plague_doctor_actor_variants(
                 &state, &full_evil, None, None, None, Some(&trace),
+            )
+            .into_iter()
+            .collect::<HashSet<_>>(),
+            HashSet::from([vec![3], vec![4]]),
+        );
+    }
+
+    #[test]
+    fn duplicate_pd_pool_allocates_both_exact_current_actors() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.board_villager_count = Some(1);
+        state.board_outcast_count = Some(2);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.villagers = vec!["Scout".to_string()];
+        state.deck.outcasts = vec![
+            "Plague Doctor".to_string(),
+            "Plague Doctor".to_string(),
+        ];
+        state.cards = vec![
+            card(1, "Plague Doctor"),
+            card(2, "Plague Doctor"),
+            card(3, "Scout"),
+        ];
+
+        let variants = plague_doctor_actor_variants(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+        );
+        assert_eq!(variants, vec![vec![2, 1]]);
+
+        let context = build_start_corruption_context(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            &[],
+            &variants[0],
+        );
+        let outcomes = enumerate_start_corruption(3, &HashMap::new(), &context, None);
+        assert_eq!(outcomes.len(), 1);
+        assert_eq!(outcomes[0].corrupted, HashSet::from([3]));
+        assert_eq!(
+            outcomes[0].pd_target_history,
+            vec![(2, Some(3)), (1, None)]
+        );
+
+        let worlds = build_scenarios(&state);
+        assert_eq!(worlds.len(), 1);
+        assert_eq!(worlds[0].corrupted, HashSet::from([3]));
+        assert_eq!(worlds[0].pd_corrupted, None);
+        assert!(natural_outcast_hypothesis_allows(
+            &state,
+            &HashMap::new(),
+            None,
+            None,
+            None,
+            None,
+            Some(true),
+        ));
+    }
+
+    #[test]
+    fn chancellor_generated_pd_and_natural_copy_are_both_actors() {
+        let mut state = GameState::default();
+        state.n_cards = 4;
+        state.board_outcast_count = Some(1);
+        state.board_count_provenance = BoardCountProvenance::TrustedPreStart;
+        state.deck.outcasts = vec![
+            "Plague Doctor".to_string(),
+            "Plague Doctor".to_string(),
+        ];
+        state.cards = vec![
+            card(1, "Baker"),
+            card(2, "Plague Doctor"),
+            card(3, "Plague Doctor"),
+            card(4, "Scout"),
+        ];
+        let full_evil = chancellor_at(1);
+        let trace = raw_trace(2, "Plague Doctor", 2);
+
+        assert_eq!(
+            plague_doctor_actor_variants(
+                &state,
+                &full_evil,
+                None,
+                None,
+                None,
+                Some(&trace),
             ),
-            vec![true],
+            vec![vec![3, 2]]
+        );
+        assert_eq!(
+            plague_doctor_actor_variants(
+                &state,
+                &full_evil,
+                None,
+                None,
+                Some(2),
+                Some(&trace),
+            ),
+            vec![vec![3]],
+            "Puppeteer replaces the generated PD before its global Start slot",
         );
     }
 
@@ -6476,7 +6753,7 @@ mod tests {
     }
 
     #[test]
-    fn cured_hidden_pd_targets_collapse_but_a_known_target_is_preserved() {
+    fn cured_pd_histories_keep_mass_only_for_one_exact_root_and_preserve_known_target() {
         let mut state = GameState::default();
         state.n_cards = 5;
         state.n_evil = 1;
@@ -6501,7 +6778,7 @@ mod tests {
 
         let evil = HashMap::from([(1, "Minion".to_string())]);
         let context = build_start_corruption_context(
-            &state, &evil, None, None, None, None, &[], true,
+            &state, &evil, None, None, None, None, &[], &[2],
         );
         let hidden_histories = enumerate_start_corruption(
             state.n_cards, &evil, &context, None,
@@ -6524,10 +6801,24 @@ mod tests {
                 scenario.evil_positions.get(&1).map(String::as_str) == Some("Minion")
             })
             .collect();
-        assert_eq!(hidden_target_worlds.len(), 1);
-        assert!(hidden_target_worlds[0].corrupted.is_empty());
-        assert_eq!(hidden_target_worlds[0].alchemist_cures.get(&3), Some(&1));
-        assert_eq!(hidden_target_worlds[0].pd_corrupted, None);
+        assert_eq!(hidden_target_worlds.len(), 2);
+        assert!(hidden_target_worlds.iter().all(|scenario| {
+            scenario.corrupted.is_empty()
+                && scenario.alchemist_cures.get(&3) == Some(&1)
+                && scenario.pd_corrupted.is_none()
+        }));
+
+        let mut opaque_roots = state.clone();
+        opaque_roots.confirmed_evil.clear();
+        let opaque_target_worlds: Vec<Scenario> = build_scenarios(&opaque_roots)
+            .into_iter()
+            .filter(|scenario| {
+                scenario.evil_positions.get(&1).map(String::as_str) == Some("Minion")
+            })
+            .collect();
+        assert_eq!(opaque_target_worlds.len(), 1);
+        assert!(opaque_target_worlds[0].corrupted.is_empty());
+        assert_eq!(opaque_target_worlds[0].alchemist_cures.get(&3), Some(&1));
 
         state.pd_corruption_target = Some(4);
         let known_target_worlds: Vec<Scenario> = build_scenarios(&state)
@@ -6700,7 +6991,7 @@ mod tests {
             None,
             1,
             &trace,
-            false,
+            &[],
         );
 
         assert_eq!(contexts.len(), 1);
@@ -6770,7 +7061,7 @@ mod tests {
             None,
             1,
             &trace,
-            false,
+            &[],
         );
         let resistant = contexts
             .iter()
@@ -6813,7 +7104,7 @@ mod tests {
             None,
             1,
             &trace,
-            false,
+            &[],
         );
         let erased_f_alchemist = contexts
             .iter()
