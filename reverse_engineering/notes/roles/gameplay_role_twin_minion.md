@@ -302,10 +302,19 @@ Reconstruction, solver, and live tooling should therefore:
   references, reset history, or achievement.
 
 The current Rust solver correctly lacks the tempting but unsound stable
-Twin/Demon adjacency predicate. It does **not** yet represent this current-data
-swap, its later-Start relocation, or its presentation branches. That is a real
-native parity gap requiring an ordered current-data trace spanning earlier
-identity mutation and later Start consumers; changing only an adjacency or
-effective-role validator would be incorrect. This checkpoint corrects the
-Python and Rust knowledge-base metadata to mark Twin Minion as a game-start
-role, but deliberately does not claim full solver/live parity.
+Twin/Demon adjacency predicate. It now represents atomic exact subsets of this
+current-data swap: the dedicated Twin-to-Puppeteer slice, plus Twin-to-Shaman
+worlds where every possible Twin endpoint is a proven structural non-Villager.
+The latter crosses every Twin occurrence trace with every existing Shaman
+source/destination trace, including no-Demon and relocated-Shaman outcomes,
+because the live Villager pool cannot change. If any possible endpoint is a
+Villager or is structurally unknown, the whole ordered state falls back rather
+than retaining only the safe RNG branch. Copied Bounty Hunter is also excluded
+because its immediate Start alignment mutation remains outside this model.
+
+General current-data replay, candidate-changing Twin-to-Shaman worlds, other
+mixed writers, and delayed presentation branches remain native parity gaps.
+Those require a complete ordered trace spanning earlier identity mutation and
+later Start consumers; changing only an adjacency or effective-role validator
+would still be incorrect. Live Twin play therefore remains conservatively
+gated outside the supported scenario kernels.

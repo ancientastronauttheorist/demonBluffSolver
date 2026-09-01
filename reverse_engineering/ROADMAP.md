@@ -265,9 +265,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     writer branches; and re-enable card and historical validators only for the
     resulting exact supported worlds.
   - [ ] Complete the remaining general ordered replay beyond the exact gated
-    Twin/Puppeteer slice: mixed writer pools, Shaman copied-Start side effects,
-    duplicate mutators, and probability-exact occurrence weighting. Strict
-    current observations remain fail-closed for inferred incomplete writers.
+    Twin/Puppeteer and structural Twin/Shaman slices: candidate-changing mixed
+    writer pools, duplicate mutators, and probability-exact occurrence
+    weighting. Strict current observations remain fail-closed for inferred
+    incomplete writers.
     - [x] Implement the pure post-Twin Puppeteer boundary: select the first
       current actor, preserve physical previous/next occurrences, filter exact
       real Villagers, remove only the first Saint occurrence, make nonempty
@@ -280,6 +281,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       the Puppeteer actor and target, preserve erased-role provenance, validate
       exact current/public evidence, and fall back wholesale on unsupported or
       capped inputs without resurrecting exact contradictions.
+    - [x] Cross the existing ordered Shaman trace with every exact Twin outcome
+      when all possible Twin endpoints are proven structural non-Villagers, so
+      the live Shaman candidate pool is invariant even if Shaman data relocates
+      onto the Twin body. Preserve both trace identities and the complete
+      Cartesian product, admit the no-Demon path, reject copied Bounty Hunter,
+      and fall back atomically if any Twin branch touches a Villager or unknown
+      endpoint. Candidate-changing Twin-to-Shaman worlds remain open.
     - [x] Replay every selected current Plague Doctor at the global Start slot
       in descending displayed-ID order, rebuilding the live eligible pool for
       each actor and retaining ordered target/no-op history through Alchemist

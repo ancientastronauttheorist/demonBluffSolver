@@ -252,6 +252,16 @@ runtime preserves its named history, incompatible non-null runtime can
 invalidate the Day surface, and current Corrupted copies do not create
 descendants without status 38.
 
+The exact ordered Twin slice can now carry this trace through the earlier Twin
+slot when every possible Twin endpoint is a structural non-Villager. Twin may
+move the one current Shaman identity onto the original Twin body, but the later
+ordinary Shaman scan still dispatches it exactly once and its global Villager
+pool is unchanged. Scenario generation therefore preserves the full Cartesian
+product of `TwinTrace` and `ShamanTrace`, including the explicit no-Demon path.
+It rejects the entire ordered state if even one Twin branch touches a Villager
+or unknown endpoint, and continues to exclude copied Bounty Hunter because that
+immediate copied-Start alignment writer is not modeled here.
+
 The pure corruption replay also models the latent ordinary-runtime-Good copied
 Plague Doctor callback without exposing it as a normal scenario root. It runs
 after every global Plague Doctor and before the destination marker and global

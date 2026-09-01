@@ -1217,23 +1217,42 @@ fn is_ordered_twin_safe_role(role: &str) -> bool {
         Faction::Outcast => matches!(role.as_str(), "rambler" | "wretch" | "bombardier"),
         Faction::Minion => matches!(
             role.as_str(),
-            "twinminion" | "witch" | "minion" | "poisoner"
+            "twinminion" | "witch" | "minion" | "poisoner" | "shaman"
         ),
         Faction::Demon => matches!(role.as_str(), "baa" | "pooka" | "lilis"),
     }
 }
 
 /// This checkpoint integrates only the identity-stable slice around Twin.
-/// Later current-data consumers remain a hard gate until their contexts are
-/// derived from the replayed post-Twin map.
+/// Shaman composes only when there is one authored actor of each kind and its
+/// copied Start cannot be Bounty Hunter's still-unmodeled alignment writer.
+/// The ordered enumerator separately proves that every Twin branch leaves the
+/// live Villager pool unchanged. Other later current-data consumers remain a
+/// hard gate until their contexts are derived from the replayed post-Twin map.
 fn supports_ordered_twin_start_slice(state: &GameState) -> bool {
     if state.n_cards == 0 {
         return false;
     }
     let roles = state.deck.all_roles();
-    roles
+    let twin_count = roles
         .iter()
-        .any(|role| normalize_role(role) == "twinminion")
+        .filter(|role| normalize_role(role) == "twinminion")
+        .count();
+    let shaman_count = roles
+        .iter()
+        .filter(|role| normalize_role(role) == "shaman")
+        .count();
+    let shaman_slice_is_bounded = shaman_count == 0
+        || (shaman_count == 1
+            && twin_count == 1
+            && state
+                .deck
+                .villagers
+                .iter()
+                .all(|role| normalize_role(role) != "bountyhunter"));
+
+    twin_count > 0
+        && shaman_slice_is_bounded
         && roles.iter().all(|role| is_ordered_twin_safe_role(role))
 }
 
@@ -1287,7 +1306,6 @@ fn enumerate_ordered_twin_start_outcomes(
         || context.drunk_position.is_some()
         || context.puppet_position.is_some()
         || !context.plague_doctor_positions.is_empty()
-        || context.shaman_trace.is_some()
         || !context.true_alchemist_positions.is_empty()
     {
         return None;
@@ -1339,6 +1357,58 @@ fn enumerate_ordered_twin_start_outcomes(
     };
     if traces.is_empty() || traces.len() != expected_width {
         return None;
+    }
+
+    // The existing Shaman trace was generated from the pre-Twin Villager
+    // pool. It remains exact only when every native Twin branch is disjoint
+    // from that pool. The structural map above currently contains stable Evil
+    // seats only, but keep the invariant explicit so a future complete-map
+    // caller cannot silently admit a mixed safe/unsafe trace set.
+    if let Some(shaman) = context.shaman_trace.as_ref() {
+        if !matches!(
+            role_faction_in_state(&shaman.copied_role, state),
+            Some(Faction::Villager)
+        ) || matches!(
+            normalize_role(&shaman.copied_role).as_str(),
+            "alchemist" | "bountyhunter"
+        ) || !context
+            .registered_villagers_at_pd_call
+            .contains(&shaman.source_position)
+            || !context
+                .registered_villagers_at_pd_call
+                .contains(&shaman.target_position)
+        {
+            return None;
+        }
+
+        let pre_shaman_villagers: HashSet<u8> = context
+            .real_villagers_before_puppet
+            .union(&context.registered_villagers_at_pd_call)
+            .copied()
+            .collect();
+        if traces.iter().any(|trace| match &trace.outcome {
+            TwinStartOutcome::NoDemon => false,
+            TwinStartOutcome::Swap {
+                neighbor_position,
+                neighbor_pre_swap_role,
+                ..
+            } => {
+                pre_shaman_villagers.contains(&trace.actor_position)
+                    || pre_shaman_villagers.contains(neighbor_position)
+                    || !matches!(
+                        current_roles
+                            .get(&trace.actor_position)
+                            .and_then(|role| role_faction_in_state(role, state)),
+                        Some(Faction::Minion | Faction::Demon | Faction::Outcast)
+                    )
+                    || !matches!(
+                        role_faction_in_state(neighbor_pre_swap_role, state),
+                        Some(Faction::Minion | Faction::Demon | Faction::Outcast)
+                    )
+            }
+        }) {
+            return None;
+        }
     }
 
     let pre_twin_context = context.pre_twin_context();
@@ -4527,6 +4597,31 @@ mod tests {
         state
     }
 
+    fn exact_twin_shaman_state() -> GameState {
+        let mut state = GameState {
+            n_cards: 5,
+            n_evil: 3,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(2),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(1),
+            executed: vec![1, 2, 3],
+            confirmed_evil: vec![1, 2, 3],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string(), "Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        state.cards = vec![card(4, "Scout"), card(5, "Scout")];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (2, "Lilis".to_string()),
+            (3, "Shaman".to_string()),
+        ]);
+        state
+    }
+
     fn exact_twin_puppeteer_overlap_state() -> GameState {
         let mut state = GameState {
             n_cards: 5,
@@ -5685,7 +5780,6 @@ mod tests {
             "Chancellor",
             "Puppeteer",
             "Puppet",
-            "Shaman",
             "Plague Doctor",
             "Alchemist",
             "Doppelganger",
@@ -5716,6 +5810,154 @@ mod tests {
         let legacy = build_scenarios(&gated_state);
         assert!(!legacy.is_empty());
         assert!(legacy.iter().all(|scenario| scenario.twin_trace.is_none()));
+
+        let shaman_state = exact_twin_shaman_state();
+        assert!(supports_ordered_twin_start_slice(&shaman_state));
+
+        let mut shaman_bounty_hunter = shaman_state;
+        shaman_bounty_hunter
+            .deck
+            .villagers
+            .push("Bounty Hunter".to_string());
+        assert!(!supports_ordered_twin_start_slice(&shaman_bounty_hunter));
+    }
+
+    #[test]
+    fn ordered_twin_crosses_every_structurally_disjoint_shaman_trace() {
+        let state = exact_twin_shaman_state();
+        let scenarios = build_scenarios(&state);
+
+        assert_eq!(scenarios.len(), 4);
+        assert!(scenarios.iter().all(|scenario| {
+            scenario.twin_trace.is_some()
+                && scenario.shaman_trace.is_some()
+                && scenario.messed_up_by_evil == HashSet::from([4, 5])
+        }));
+
+        let combinations: HashSet<(TwinTrace, u8, u8)> = scenarios
+            .iter()
+            .map(|scenario| {
+                let shaman = scenario.shaman_trace.as_ref().unwrap();
+                (
+                    scenario.twin_trace.clone().unwrap(),
+                    shaman.source_position,
+                    shaman.target_position,
+                )
+            })
+            .collect();
+        assert_eq!(combinations.len(), 4);
+        assert_eq!(
+            scenarios
+                .iter()
+                .filter_map(|scenario| scenario.shaman_trace.as_ref())
+                .map(|trace| (trace.source_position, trace.target_position))
+                .collect::<HashSet<_>>(),
+            HashSet::from([(4, 5), (5, 4)])
+        );
+
+        let relocated = scenarios
+            .iter()
+            .find(|scenario| {
+                matches!(
+                    scenario.twin_trace.as_ref().map(|trace| &trace.outcome),
+                    Some(TwinStartOutcome::Swap {
+                        neighbor_position: 3,
+                        ..
+                    })
+                )
+            })
+            .expect("one Twin branch relocates Shaman data");
+        assert_eq!(
+            crate::validators::current_data_role_at(1, relocated, &state).as_deref(),
+            Some("Shaman")
+        );
+        assert_eq!(
+            crate::validators::current_data_role_at(3, relocated, &state).as_deref(),
+            Some("Twin Minion")
+        );
+
+        let self_swap = scenarios
+            .iter()
+            .find(|scenario| {
+                matches!(
+                    scenario.twin_trace.as_ref().map(|trace| &trace.outcome),
+                    Some(TwinStartOutcome::Swap {
+                        neighbor_position: 1,
+                        ..
+                    })
+                )
+            })
+            .expect("one Twin branch is an occurrence-preserving self swap");
+        assert_eq!(
+            crate::validators::current_data_role_at(1, self_swap, &state).as_deref(),
+            Some("Twin Minion")
+        );
+        assert_eq!(
+            crate::validators::current_data_role_at(3, self_swap, &state).as_deref(),
+            Some("Shaman")
+        );
+    }
+
+    #[test]
+    fn ordered_twin_shaman_pool_overlap_aborts_every_native_trace() {
+        let mut state = GameState::default();
+        state.n_cards = 5;
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string(), "Shaman".to_string()];
+        state.deck.demons = vec!["Lilis".to_string()];
+        let current_roles = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (2, "Lilis".to_string()),
+            (3, "Scout".to_string()),
+            (4, "Shaman".to_string()),
+            (5, "Witness".to_string()),
+        ]);
+        let villagers = HashSet::from([3, 5]);
+        let context = StartCorruptionContext {
+            real_villagers_before_puppet: villagers.clone(),
+            registered_villagers_at_pd_call: villagers,
+            shaman_trace: Some(ShamanTrace {
+                source_position: 3,
+                target_position: 5,
+                copied_role: "Scout".to_string(),
+                target_previous_roles: vec!["Witness".to_string()],
+            }),
+            ..StartCorruptionContext::default()
+        };
+
+        assert!(enumerate_ordered_twin_start_outcomes(&state, &current_roles, &context).is_none());
+    }
+
+    #[test]
+    fn no_demon_twin_trace_crosses_shaman_directions() {
+        let mut state = GameState {
+            n_cards: 4,
+            n_evil: 2,
+            board_count_provenance: BoardCountProvenance::TrustedPreStart,
+            board_villager_count: Some(2),
+            board_outcast_count: Some(0),
+            board_minion_count: Some(2),
+            board_demon_count: Some(0),
+            executed: vec![1, 2],
+            confirmed_evil: vec![1, 2],
+            ..GameState::default()
+        };
+        state.deck.villagers = vec!["Scout".to_string(), "Witness".to_string()];
+        state.deck.minions = vec!["Twin Minion".to_string(), "Shaman".to_string()];
+        state.cards = vec![card(3, "Scout"), card(4, "Scout")];
+        state.executed_evil_roles = HashMap::from([
+            (1, "Twin Minion".to_string()),
+            (2, "Shaman".to_string()),
+        ]);
+
+        let scenarios = build_scenarios(&state);
+        assert_eq!(scenarios.len(), 2);
+        assert!(scenarios.iter().all(|scenario| {
+            matches!(
+                scenario.twin_trace.as_ref().map(|trace| &trace.outcome),
+                Some(TwinStartOutcome::NoDemon)
+            ) && scenario.shaman_trace.is_some()
+        }));
     }
 
     #[test]

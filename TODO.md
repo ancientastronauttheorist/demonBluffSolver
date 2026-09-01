@@ -72,8 +72,11 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   current Demon while preserving physical alignment, status, resistance, and
   runtime data. A gated exact Twin-to-Puppeteer solver slice now preserves the
   complete pre-Twin current-role map, both native traces, relocated actor/target
-  identity, and erased Puppet Villager provenance. Broader mixed-writer replay
-  remains open; stable Twin/Demon adjacency is not valid.
+  identity, and erased Puppet Villager provenance. A second atomic slice now
+  crosses Twin and Shaman traces when every Twin endpoint is a proven
+  non-Villager, including relocated Shaman dispatch and the no-Demon path.
+  Candidate-changing mixed-writer replay remains open; stable Twin/Demon
+  adjacency is not valid.
 - [x] Witch — full managed `Cipher` boundary native-audited; global quota,
   last-Hidden predicate, self/dead/Lilis cleanup, and reset semantics closed
 - [x] Baa — no issues
@@ -120,7 +123,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   copy their current real Villager data. Exact copied-Confessor traces now also
   project the guaranteed settled `AppearTruthfull` status onto both endpoints,
   including after Baker no-reset presentation changes, for Judge/Rambler while
-  leaving actual truth dispatch untouched.
+  leaving actual truth dispatch untouched. Exact structural Twin worlds now
+  cross every Twin trace with every Shaman direction when no Twin branch can
+  change the Villager pool; any Villager/unknown endpoint or copied Bounty
+  Hunter keeps the entire state on the conservative legacy path.
 
 - [ ] **Native branch probability weights** — surviving scenarios are still
   treated as equally likely after semantic deduplication. Preserve native draw
