@@ -485,6 +485,44 @@ pub struct TwinTrace {
     pub outcome: TwinStartOutcome,
 }
 
+/// Which physical occurrence from Puppeteer's native `[previous, next]`
+/// neighbour pair survived the Villager and Saint filters.
+///
+/// Previous and next remain distinct when both entries reference the same
+/// physical card on a two-card board.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PuppeteerNeighborSide {
+    Previous,
+    Next,
+}
+
+/// Native result of the shipped Puppeteer Start action.
+///
+/// A non-empty candidate list always converts one occurrence. The selected
+/// index is its index after the real-Villager filter and the one-time removal
+/// of the first Saint occurrence.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum PuppeteerStartOutcome {
+    NoCandidate,
+    Converted {
+        candidate_occurrence_index: u8,
+        neighbor_side: PuppeteerNeighborSide,
+        target_position: u8,
+        erased_villager_role: String,
+    },
+}
+
+/// Exact current-data mutation made by the first current Puppeteer Start
+/// dispatch. Runtime alignment, resistance, and physical provenance remain on
+/// the selected target while its current data becomes Puppet.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct PuppeteerTrace {
+    pub actor_position: u8,
+    pub outcome: PuppeteerStartOutcome,
+}
+
 /// A hypothetical assignment of evil roles to positions.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Scenario {
