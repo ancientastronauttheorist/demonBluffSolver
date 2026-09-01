@@ -11,6 +11,7 @@ from game_loop import (
     _parse_fortune_teller_result_from_memory,
     card_fortune_teller,
     card_shut_up,
+    dispatch,
 )
 from knowledge_base import get_card
 from solver import (
@@ -38,16 +39,23 @@ def _memory_card(
     *,
     position: int = 1,
     clue: str | None = None,
+    remaining: int | None = None,
 ) -> dict:
     if clue is None:
         clue = events[-1]["desc"] if events else ""
+    if remaining is None:
+        remaining = 0 if events else 1
     return {
         "position": position,
         "true_role": "Fortune Teller",
+        "state": "Alive",
         "clue_text": clue,
         "acted_infos": [dict(event) for event in events],
-        "uses": 1 if events else 0,
-        "ability_used": bool(events),
+        "pickable_uses_remaining": remaining,
+        "act_output_enabled": True,
+        "pickable_available": remaining > 0,
+        "uses": remaining,
+        "ability_used": True,
     }
 
 
@@ -179,7 +187,7 @@ class FortuneTellerMemoryTests(unittest.TestCase):
         reader._read_ptr = lambda address: pointers.get(address, 0)
         reader._read_i32 = lambda address: 4097
 
-        self.assertEqual(reader._read_acted_infos(character), [])
+        self.assertIsNone(reader._read_acted_infos(character))
 
     def test_memory_reader_rejects_null_slot_inside_reported_history(self):
         reader = memory_module.MemoryReader()
@@ -202,7 +210,7 @@ class FortuneTellerMemoryTests(unittest.TestCase):
         )
         reader._read_string = lambda pointer: "first event"
 
-        self.assertEqual(reader._read_acted_infos(character), [])
+        self.assertIsNone(reader._read_acted_infos(character))
 
 
 class FortuneTellerSessionTests(unittest.TestCase):
@@ -337,6 +345,95 @@ class FortuneTellerSessionTests(unittest.TestCase):
 
 
 class FortuneTellerAutomationTests(unittest.TestCase):
+    def test_auto_card_post_night_stale_short_history_does_not_append_or_mark(self):
+        session = GameSession(4, 1)
+        first = _event(1, 2, False)
+        latest = _event(2, 3, True)
+        session.add_card(card_fortune_teller(
+            1,
+            [2, 3],
+            True,
+            info_text=latest["desc"],
+            observations=[
+                {"targets": [1, 2], "has_evil": False, "text": first["desc"]},
+                {"targets": [2, 3], "has_evil": True, "text": latest["desc"]},
+            ],
+        ))
+        session.reset_after_night_abilities()
+        stale_short = _memory_card([latest], remaining=1)
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [stale_short]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("memory_reader.print_board"),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_card"),
+        ):
+            dispatch("auto_card", [], session)
+
+        self.assertEqual(len(session.cards[0].info_parsed["observations"]), 2)
+        self.assertNotIn(1, session.used_abilities)
+
+    def test_auto_card_waits_for_counter_settlement_then_records_new_suffix(self):
+        session = GameSession(4, 1)
+        first = _event(1, 2, False)
+        second = _event(2, 4, True)
+        session.add_card(card_fortune_teller(
+            1,
+            [1, 2],
+            False,
+            info_text=first["desc"],
+            observations=[{
+                "targets": [1, 2],
+                "has_evil": False,
+                "text": first["desc"],
+            }],
+        ))
+        session.reset_after_night_abilities()
+        pending = _memory_card([first, second], remaining=1)
+        settled = _memory_card([first, second], remaining=0)
+
+        class Reader:
+            def __init__(self):
+                self.reads = 0
+
+            def open(self):
+                return True
+
+            def read_board(self):
+                self.reads += 1
+                return [pending if self.reads == 1 else settled]
+
+            def close(self):
+                return None
+
+        reader = Reader()
+        with (
+            patch("memory_reader.MemoryReader", return_value=reader),
+            patch("memory_reader.print_board"),
+            patch.object(session, "save"),
+            patch.object(DecisionLog, "log_card"),
+        ):
+            dispatch("auto_card", [], session)
+            self.assertEqual(
+                len(session.cards[0].info_parsed["observations"]),
+                1,
+            )
+            self.assertNotIn(1, session.used_abilities)
+            dispatch("auto_card", [], session)
+
+        self.assertEqual(len(session.cards[0].info_parsed["observations"]), 2)
+        self.assertIn(1, session.used_abilities)
+
     def test_self_and_unused_active_target_pass_preflight_and_record_result(self):
         session = GameSession(4, 1)
         session.cards.extend([
@@ -389,7 +486,7 @@ class FortuneTellerAutomationTests(unittest.TestCase):
     def test_unchanged_old_latest_event_is_not_accepted_after_reset(self):
         session = GameSession(4, 1)
         session.cards.append(CardInfo(1, "Fortune Teller"))
-        stale = _memory_card([_event(2, 3, False)])
+        stale = _memory_card([_event(2, 3, False)], remaining=1)
 
         class Reader:
             def open(self):
@@ -411,15 +508,19 @@ class FortuneTellerAutomationTests(unittest.TestCase):
             )
 
         self.assertFalse(result["success"])
-        self.assertIn("new or changed latest", result["error"])
+        self.assertIn("coherent strict acted-info suffix", result["error"])
         self.assertNotIn(1, session.used_abilities)
 
     def test_prior_same_pair_fails_before_click_when_pre_history_is_unreadable(self):
         session = GameSession(4, 1)
         session.add_card(card_fortune_teller(1, [2, 3], False))
         session.reset_after_night_abilities()
-        stale = _memory_card([_event(2, 3, False)])
-        unreadable = _memory_card([], clue=stale["clue_text"])
+        stale = _memory_card([_event(2, 3, False)], remaining=1)
+        unreadable = _memory_card(
+            [],
+            clue=stale["clue_text"],
+            remaining=1,
+        )
 
         class Reader:
             def __init__(self):
@@ -451,6 +552,48 @@ class FortuneTellerAutomationTests(unittest.TestCase):
         self.assertEqual(reader.reads, 1)
         self.assertNotIn(1, session.used_abilities)
 
+    def test_same_latest_but_different_older_prefix_fails_before_click(self):
+        session = GameSession(4, 1)
+        first = _event(1, 2, False)
+        latest = _event(2, 4, True)
+        session.add_card(card_fortune_teller(
+            1,
+            [2, 4],
+            True,
+            info_text=latest["desc"],
+            observations=[
+                {"targets": [1, 2], "has_evil": False, "text": first["desc"]},
+                {"targets": [2, 4], "has_evil": True, "text": latest["desc"]},
+            ],
+        ))
+        session.reset_after_night_abilities()
+        conflicting = _memory_card([
+            _event(1, 3, False),
+            latest,
+        ], remaining=1)
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [conflicting]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("template_match.safe_click_at") as click,
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 1, [1, 4], "Fortune Teller")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("full local ordered", result["error"])
+        click.assert_not_called()
+
     def test_prior_same_pair_fails_before_click_on_stale_shorter_history(self):
         session = GameSession(4, 1)
         session.add_card(card_fortune_teller(1, [2, 3], False))
@@ -458,8 +601,8 @@ class FortuneTellerAutomationTests(unittest.TestCase):
         session.add_card(card_fortune_teller(1, [2, 3], False))
         session.reset_after_night_abilities()
         event = _event(2, 3, False)
-        stale_short = _memory_card([event])
-        recovered_old = _memory_card([event, event])
+        stale_short = _memory_card([event], remaining=1)
+        recovered_old = _memory_card([event, event], remaining=1)
 
         class Reader:
             def __init__(self):

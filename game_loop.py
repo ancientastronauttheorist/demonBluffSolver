@@ -1160,14 +1160,134 @@ def _acted_history_fingerprint(card: Optional[dict]):
     return len(infos), encoded
 
 
+def _acted_history_snapshot(card: Optional[dict]) -> Optional[tuple[str, ...]]:
+    """Canonical append-only native event prefix, or None when unreadable."""
+    if not isinstance(card, dict):
+        return None
+    infos = card.get("acted_infos")
+    if not isinstance(infos, list):
+        return None
+    snapshots = []
+    for info in infos:
+        try:
+            snapshots.append(json.dumps(
+                info,
+                sort_keys=True,
+                separators=(",", ":"),
+                default=repr,
+            ))
+        except (TypeError, ValueError):
+            return None
+    return tuple(snapshots)
+
+
+def _has_new_coherent_acted_suffix(
+    card: Optional[dict],
+    before: Optional[tuple[str, ...]],
+) -> bool:
+    """Require a strict event-list extension whose newest text is public."""
+    if before is None or not isinstance(card, dict):
+        return False
+    after = _acted_history_snapshot(card)
+    if (
+        after is None
+        or len(after) <= len(before)
+        or after[:len(before)] != before
+    ):
+        return False
+    infos = card.get("acted_infos")
+    latest = infos[-1] if infos else None
+    clue = card.get("clue_text")
+    return (
+        isinstance(latest, dict)
+        and isinstance(latest.get("desc"), str)
+        and bool(latest["desc"])
+        and isinstance(clue, str)
+        and clue == latest["desc"]
+    )
+
+
+def _newest_coherent_acted_refs(card: Optional[dict]) -> Optional[list[int]]:
+    """Return click-order refs owned by the newest visible native event."""
+    if not isinstance(card, dict):
+        return None
+    infos = card.get("acted_infos")
+    latest = (
+        infos[-1]
+        if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+        else None
+    )
+    if latest is None or latest.get("desc") != card.get("clue_text"):
+        return None
+    refs = latest.get("targets")
+    if not isinstance(refs, list) or any(type(ref) is not int for ref in refs):
+        return None
+    return list(refs)
+
+
+def _active_result_refs_match_clicks(
+    card: Optional[dict],
+    expected_targets: list[int],
+    *,
+    n_cards: int,
+) -> bool:
+    """Bind a normal Dreamer/Jester result to exact click chronology.
+
+    Rambler replaces the original reference list, so a coherent shut-up event
+    is authenticated by the strict append boundary instead.
+    """
+    refs = _newest_coherent_acted_refs(card)
+    clue = card.get("clue_text") if isinstance(card, dict) else None
+    if refs is None or not isinstance(clue, str):
+        return False
+    if _parse_shut_up_target_text(clue, n_cards=n_cards) is not None:
+        return len(refs) == 1
+    return refs == expected_targets
+
+
+def _pickable_uses_remaining(card: Optional[dict]) -> Optional[int]:
+    """Read native remaining Day-callback budget without legacy coercion."""
+    if not isinstance(card, dict):
+        return None
+    remaining = card.get("pickable_uses_remaining")
+    return remaining if type(remaining) is int else None
+
+
+def _active_cycle_is_spent(card: Optional[dict]) -> bool:
+    """Whether native current-cycle pickability is conclusively unavailable."""
+    remaining = _pickable_uses_remaining(card)
+    return remaining is not None and remaining <= 0
+
+
+def _observed_active_role_key(card: Optional[dict]) -> str:
+    """Normalize the public active identity carried by one memory snapshot."""
+    if not isinstance(card, dict):
+        return ""
+    raw_role = (
+        card.get("disguise")
+        or card.get("current_role")
+        or card.get("true_role")
+        or ""
+    )
+    key = str(raw_role).strip().casefold().replace("-", "_").replace(" ", "_")
+    return {
+        "dreamer2": "dreamer",
+        "juggler": "jester",
+        "judge2": "judge",
+        "librarian": "druid",
+        "puzzlemaster": "plague_doctor",
+        "rangedempath": "druid",
+    }.get(key, key)
+
+
 def _local_repeatable_event_expectation(
     card: CardInfo,
     *,
     n_cards: int,
     rambler_observations: list[dict],
     fortune_teller_rule_version: Optional[str],
-) -> Optional[tuple[int, str]]:
-    """Return minimum native history size and expected newest-event payload.
+) -> Optional[tuple[int, str, list[dict], list[int]]]:
+    """Return the local normal/interruption history expected in native memory.
 
     ResetAfterNight memory is append-only, while the session retains normal
     observations plus Rambler replacements in a separate ledger.  Reconcile
@@ -1196,7 +1316,7 @@ def _local_repeatable_event_expectation(
             n_cards=n_cards,
         )
 
-    interruption_count = 0
+    interruption_targets = []
     for observation in rambler_observations:
         if (
             isinstance(observation, dict)
@@ -1207,7 +1327,7 @@ def _local_repeatable_event_expectation(
                 raise ValueError(
                     "local Rambler interruption history is malformed"
                 )
-            interruption_count += 1
+            interruption_targets.append(target)
 
     interrupted = "shut_up_target" in info
     if interrupted:
@@ -1218,7 +1338,12 @@ def _local_repeatable_event_expectation(
         expected_targets = [target]
         # Older imported states may carry the latest interruption on the card
         # without its parallel ledger entry. The card still proves one event.
-        interruption_count = max(interruption_count, 1)
+        if not interruption_targets:
+            interruption_targets.append(target)
+        elif interruption_targets[-1] != target:
+            raise ValueError(
+                "local latest interruption disagrees with the Rambler ledger"
+            )
     elif normal_history:
         latest = normal_history[-1]
         if role_key == "fortune_teller":
@@ -1245,14 +1370,183 @@ def _local_repeatable_event_expectation(
             "local repeatable clue text disagrees with structured evidence"
         )
 
-    minimum_count = len(normal_history) + interruption_count
+    minimum_count = len(normal_history) + len(interruption_targets)
     expected = _latest_acted_event_fingerprint({
         "acted_infos": [{
             "desc": expected_desc,
             "targets": expected_targets,
         }],
     })
-    return minimum_count, expected[1]
+    normal_projection = [
+        (
+            {
+                "targets": list(observation["targets"]),
+                "has_evil": observation["has_evil"],
+            }
+            if role_key == "fortune_teller"
+            else {
+                "target": observation["target"],
+                "is_lying": observation["is_lying"],
+            }
+        )
+        for observation in normal_history
+    ]
+    return (
+        minimum_count,
+        expected[1],
+        normal_projection,
+        interruption_targets,
+    )
+
+
+def _repeatable_memory_history_projection(
+    card: dict,
+    *,
+    role_key: str,
+    n_cards: int,
+) -> tuple[list[dict], list[int]]:
+    """Project an exact FT/Judge native prefix into its two local ledgers."""
+    raw_infos = card.get("acted_infos")
+    if not isinstance(raw_infos, list):
+        raise ValueError("pre-click acted-info history is unreadable")
+    if raw_infos:
+        if not isinstance(raw_infos[-1], dict):
+            raise ValueError("newest acted-info history entry must be an object")
+        if card.get("clue_text") != raw_infos[-1].get("desc"):
+            raise ValueError(
+                "pre-click savedAct does not match the newest acted-info event"
+            )
+
+    normal_history: list[dict] = []
+    interruption_targets: list[int] = []
+    for index, event in enumerate(raw_infos):
+        if not isinstance(event, dict):
+            raise ValueError(f"acted_infos[{index}] must be an object")
+        desc = event.get("desc")
+        refs = event.get("targets")
+        if not isinstance(desc, str):
+            raise ValueError(f"acted_infos[{index}].desc must be a string")
+        shut_up_target = _parse_shut_up_target_text(desc, n_cards=n_cards)
+        if shut_up_target is not None:
+            if refs != [shut_up_target]:
+                raise ValueError(
+                    f"acted_infos[{index}] Rambler reference is malformed"
+                )
+            interruption_targets.append(shut_up_target)
+            continue
+
+        if role_key == "fortune_teller":
+            if (
+                not isinstance(refs, list)
+                or len(refs) != 2
+                or any(type(target) is not int for target in refs)
+                or len(set(refs)) != 2
+                or refs != sorted(refs)
+                or any(not 1 <= target <= n_cards for target in refs)
+            ):
+                raise ValueError(
+                    f"acted_infos[{index}] Fortune Teller references are malformed"
+                )
+            match = re.fullmatch(
+                r"Is #(\d+) or #(\d+) Evil\?: (False|True)",
+                desc,
+            )
+            if match is None or [int(match.group(1)), int(match.group(2))] != refs:
+                raise ValueError(
+                    f"acted_infos[{index}] Fortune Teller text/reference mismatch"
+                )
+            normal_history.append({
+                "targets": list(refs),
+                "has_evil": match.group(3) == "True",
+            })
+            continue
+
+        if (
+            not isinstance(refs, list)
+            or len(refs) != 1
+            or type(refs[0]) is not int
+            or not 1 <= refs[0] <= n_cards
+        ):
+            raise ValueError(
+                f"acted_infos[{index}] Judge reference is malformed"
+            )
+        match = re.fullmatch(r"#(\d+) is\n(saying Truth|Lying)", desc)
+        if match is None or int(match.group(1)) != refs[0]:
+            raise ValueError(
+                f"acted_infos[{index}] Judge text/reference mismatch"
+            )
+        normal_history.append({
+            "target": refs[0],
+            "is_lying": match.group(2) == "Lying",
+        })
+
+    return normal_history, interruption_targets
+
+
+def _classify_repeatable_memory_capture(
+    existing: Optional[CardInfo],
+    memory_card: dict,
+    *,
+    n_cards: int,
+    rambler_observations: list[dict],
+    fortune_teller_rule_version: Optional[str],
+) -> tuple[str, Optional[str]]:
+    """Classify an FT/Judge raw history as stale, extending, or conflicting."""
+    role_key = _observed_active_role_key(memory_card)
+    if role_key not in {"fortune_teller", "judge"}:
+        return "error", "repeatable history classifier received another role"
+    try:
+        memory_normal, memory_interruptions = (
+            _repeatable_memory_history_projection(
+                memory_card,
+                role_key=role_key,
+                n_cards=n_cards,
+            )
+        )
+        local = (
+            _local_repeatable_event_expectation(
+                existing,
+                n_cards=n_cards,
+                rambler_observations=rambler_observations,
+                fortune_teller_rule_version=fortune_teller_rule_version,
+            )
+            if existing is not None else None
+        )
+    except ValueError as exc:
+        return "error", str(exc)
+
+    if local is None:
+        if existing is not None and (existing.info_parsed or existing.info_text):
+            return "error", (
+                "local repeatable evidence cannot be projected into native history"
+            )
+        return "update", None
+
+    _, expected_latest, local_normal, local_interruptions = local
+    memory_latest = _latest_acted_event_fingerprint(memory_card)
+    if (
+        memory_normal == local_normal
+        and memory_interruptions == local_interruptions
+        and memory_latest is not None
+        and memory_latest[1] == expected_latest
+    ):
+        return "stale", None
+    if (
+        len(memory_normal) >= len(local_normal)
+        and memory_normal[:len(local_normal)] == local_normal
+        and len(memory_interruptions) >= len(local_interruptions)
+        and memory_interruptions[:len(local_interruptions)]
+        == local_interruptions
+        and (
+            len(memory_normal) + len(memory_interruptions)
+            > len(local_normal) + len(local_interruptions)
+        )
+    ):
+        return "update", None
+    return "error", (
+        "raw repeatable history does not preserve the local ordered normal/"
+        "interruption subsequences"
+    )
 
 
 def _parse_ambiguous_among(clue: Optional[str]) -> Optional[tuple[list[int], list[str]]]:
@@ -3205,7 +3499,12 @@ class GameSession:
 
     # -- Cards --
 
-    def add_card(self, card: CardInfo):
+    def add_card(
+        self,
+        card: CardInfo,
+        *,
+        mark_active_result: bool = True,
+    ):
         role_key = card.apparent_role.lower().replace(" ", "_")
         if (
             role_key == "druid"
@@ -3870,7 +4169,11 @@ class GameSession:
             "plague_doctor",
             "slayer",
         }
-        if role_key in active_result_roles and _has_active_clue_result(card):
+        if (
+            mark_active_result
+            and role_key in active_result_roles
+            and _has_active_clue_result(card)
+        ):
             self.mark_ability_used(card.position)
         # Medium reveals a dead card's role — auto-create card entry for
         # night-killed positions so the solver can track PD corruption etc.
@@ -4900,11 +5203,11 @@ class GameSession:
         same state path as `pd_check`.
 
         Flow:
-          1. Click active card → game enters target-selection mode
-          2. Click each target in order
-          3. Wait for memory to show uses>0 or acted_infos populated
-          4. Call _parse_clue_from_memory to extract info_parsed
-          5. session.add_card() + session.mark_ability_used()
+          1. Snapshot the actor's append-only native event prefix
+          2. Click active card → game enters target-selection mode
+          3. Click each target in order
+          4. Require a new coherent acted-info suffix and parse it
+          5. Record the result, then mark the session ability used
 
         Returns: {"success": bool, "info_parsed": dict|None, "error": str|None}
         """
@@ -4918,15 +5221,50 @@ class GameSession:
         pos = action.position
         targets = list(action.targets or [])
         ability_name = (action.ability_name or "").lower().replace(" ", "_")
+        actor = next((card for card in self.cards if card.position == pos), None)
 
         # Slayer's kill/death result still needs its dedicated execution path.
         if ability_name == "slayer":
             return {"success": False, "info_parsed": None,
                     "error": f"{action.ability_name} requires manual handling (use slayer_result)"}
+        supported_abilities = {
+            "dreamer",
+            "druid",
+            "fortune_teller",
+            "jester",
+            "judge",
+            "plague_doctor",
+        }
+        if ability_name not in supported_abilities:
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"{action.ability_name or 'Unknown ability'} has no "
+                    "authenticated autonomous result path"
+                ),
+            }
 
-        if ability_name == "dreamer" and len(targets) != 2:
+        if (
+            ability_name == "dreamer"
+            and (
+                len(targets) != 2
+                or any(type(target) is not int for target in targets)
+                or len(set(targets)) != 2
+            )
+        ):
             return {"success": False, "info_parsed": None,
-                    "error": f"Dreamer requires exactly 2 targets, got {targets}"}
+                    "error": f"Dreamer requires exactly 2 distinct integer targets, got {targets}"}
+        if (
+            ability_name == "jester"
+            and (
+                len(targets) != 3
+                or any(type(target) is not int for target in targets)
+                or len(set(targets)) != 3
+            )
+        ):
+            return {"success": False, "info_parsed": None,
+                    "error": f"Jester requires exactly 3 distinct integer targets, got {targets}"}
         if (
             ability_name == "fortune_teller"
             and (
@@ -4953,8 +5291,7 @@ class GameSession:
         if ability_name == "plague_doctor" and len(targets) != 1:
             return {"success": False, "info_parsed": None,
                     "error": f"Plague Doctor requires exactly 1 target, got {targets}"}
-        if ability_name in {"druid", "fortune_teller", "judge", "plague_doctor"}:
-            actor = next((card for card in self.cards if card.position == pos), None)
+        if ability_name in supported_abilities:
             actor_role = (
                 actor.apparent_role.lower().replace(" ", "_")
                 if actor is not None else None
@@ -4964,6 +5301,8 @@ class GameSession:
                 display_name = (
                     "Plague Doctor" if ability_name == "plague_doctor"
                     else "Fortune Teller" if ability_name == "fortune_teller"
+                    else "Dreamer" if ability_name == "dreamer"
+                    else "Jester" if ability_name == "jester"
                     else "Druid" if ability_name == "druid"
                     else "Judge"
                 )
@@ -5100,11 +5439,14 @@ class GameSession:
             # Druid, Judge, and Fortune Teller use picker-first OnClick routing, so
             # every board card is selectable, including self and a target
             # with its own unused active ability.
-            if ability_name in {"druid", "fortune_teller", "judge"}:
-                continue
-            # Native PD explicitly supports self-targeting. Once its picker is
-            # active, the repeated card click is routed to that picker.
-            if ability_name == "plague_doctor" and t == pos:
+            if ability_name in {
+                "dreamer",
+                "druid",
+                "fortune_teller",
+                "jester",
+                "judge",
+                "plague_doctor",
+            }:
                 continue
             if t in self.used_abilities:
                 continue
@@ -5116,20 +5458,26 @@ class GameSession:
                 return {"success": False, "info_parsed": None,
                         "error": f"#{t} ({target_card_entry.apparent_role}) has unused active ability; clicking it would activate the card instead of selecting it. Use ability_used {t} first or handle this ability manually."}
 
-        # ResetAfterNight roles keep their acted-info lists. Snapshot the
-        # newest chronological event before clicking and require a fresh or
-        # changed last item afterward, rather than accepting stale history.
+        # Every successful active result appends to Character.actedInfos before
+        # decrementing the shared physical Day-callback budget. Snapshot that
+        # full prefix before any UI input; neither constructor-true ``act`` nor
+        # a retained history entry can prove this click completed.
+        event_history_ability = ability_name in supported_abilities
         repeatable_event_ability = ability_name in {
             "druid", "fortune_teller", "judge",
         }
         pre_event = None
-        pre_druid_history_fingerprint = None
-        if repeatable_event_ability:
-            display_name = (
-                "Fortune Teller" if ability_name == "fortune_teller"
-                else "Druid" if ability_name == "druid"
-                else "Judge"
-            )
+        pre_history_snapshot = None
+        unowned_repeatable_prefix_count = 0
+        if event_history_ability:
+            display_name = {
+                "dreamer": "Dreamer",
+                "druid": "Druid",
+                "fortune_teller": "Fortune Teller",
+                "jester": "Jester",
+                "judge": "Judge",
+                "plague_doctor": "Plague Doctor",
+            }[ability_name]
             before_board = None
             if monitor and monitor.is_healthy():
                 before_board = monitor.get_board()
@@ -5165,146 +5513,236 @@ class GameSession:
                     "info_parsed": None,
                     "error": f"{display_name} #{pos} missing from pre-click memory snapshot",
                 }
+            observed_role = _observed_active_role_key(before_card)
+            if observed_role != ability_name:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: "
+                        f"pre-click memory shows {observed_role or 'no role'}"
+                    ),
+                }
+            pre_history_snapshot = _acted_history_snapshot(before_card)
+            if pre_history_snapshot is None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: "
+                        "pre-click acted-info history is unreadable"
+                    ),
+                }
+            remaining = _pickable_uses_remaining(before_card)
+            if remaining is None:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: native "
+                        "pickable-use budget is unreadable"
+                    ),
+                }
+            if remaining <= 0:
+                return {
+                    "success": False,
+                    "info_parsed": None,
+                    "error": (
+                        f"Cannot safely activate {display_name} #{pos}: native "
+                        f"pickable-use budget is {remaining}, so the card is "
+                        "not currently available"
+                    ),
+                }
             pre_event = _latest_acted_event_fingerprint(before_card)
-            if ability_name == "druid":
-                pre_druid_history_fingerprint = _acted_history_fingerprint(
-                    before_card
-                )
-            session_has_prior_event = (
-                actor is not None
-                and (
-                    _has_active_clue_result(actor)
-                    or bool(actor.info_text)
-                )
-            )
-            if ability_name == "druid":
-                parsed_before, druid_before_error = (
-                    _parse_druid_result_from_memory(
-                        before_card,
-                        n_cards=self.n_cards,
+            if repeatable_event_ability:
+                session_has_prior_event = (
+                    actor is not None
+                    and (
+                        _has_active_clue_result(actor)
+                        or bool(actor.info_text)
                     )
                 )
-                if druid_before_error is not None:
-                    return {
-                        "success": False,
-                        "info_parsed": None,
-                        "error": (
-                            f"Cannot safely activate Druid #{pos}: "
-                            + druid_before_error
-                        ),
-                    }
-                if parsed_before is None:
-                    return {
-                        "success": False,
-                        "info_parsed": None,
-                        "error": (
-                            f"Cannot safely activate Druid #{pos}: pre-click "
-                            "history ends in an incomplete opaque real callback"
-                        ),
-                    }
-                raw_before = getattr(parsed_before, "_druid_raw_callbacks", [])
-                if [
-                    _druid_callback_signature(event)
-                    for event in raw_before
-                ] != [
-                    _druid_callback_signature(event)
-                    for event in druid_pre_events
-                ]:
-                    return {
-                        "success": False,
-                        "info_parsed": None,
-                        "error": (
-                            f"Cannot safely activate Druid #{pos}: pre-click "
-                            "callback history disagrees with the persisted "
-                            "ordered ledger"
-                        ),
-                    }
+                if ability_name == "druid":
+                    parsed_before, druid_before_error = (
+                        _parse_druid_result_from_memory(
+                            before_card,
+                            n_cards=self.n_cards,
+                        )
+                    )
+                    if druid_before_error is not None:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Druid #{pos}: "
+                                + druid_before_error
+                            ),
+                        }
+                    if parsed_before is None:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Druid #{pos}: pre-click "
+                                "history ends in an incomplete opaque real callback"
+                            ),
+                        }
+                    raw_before = getattr(parsed_before, "_druid_raw_callbacks", [])
+                    if [
+                        _druid_callback_signature(event)
+                        for event in raw_before
+                    ] != [
+                        _druid_callback_signature(event)
+                        for event in druid_pre_events
+                    ]:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Druid #{pos}: pre-click "
+                                "callback history disagrees with the persisted "
+                                "ordered ledger"
+                            ),
+                        }
+                    try:
+                        _validate_druid_rambler_sync(
+                            druid_pre_events,
+                            speaker_position=pos,
+                            rambler_observations=(
+                                self.rambler_shut_up_observations
+                            ),
+                        )
+                    except ValueError as exc:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate Druid #{pos}: {exc}"
+                            ),
+                        }
                 try:
-                    _validate_druid_rambler_sync(
-                        druid_pre_events,
-                        speaker_position=pos,
-                        rambler_observations=(
-                            self.rambler_shut_up_observations
-                        ),
+                    local_expectation = (
+                        (
+                            pre_event[0],
+                            pre_event[1],
+                            None,
+                            None,
+                        )
+                        if ability_name == "druid" and pre_event is not None
+                        else _local_repeatable_event_expectation(
+                            actor,
+                            n_cards=self.n_cards,
+                            rambler_observations=(
+                                self.rambler_shut_up_observations
+                            ),
+                            fortune_teller_rule_version=(
+                                self.fortune_teller_rule_version
+                            ),
+                        )
                     )
                 except ValueError as exc:
                     return {
                         "success": False,
                         "info_parsed": None,
                         "error": (
-                            f"Cannot safely activate Druid #{pos}: {exc}"
+                            f"Cannot safely activate {display_name} #{pos}: "
+                            f"{exc}"
                         ),
                     }
-            try:
-                local_expectation = (
+                if session_has_prior_event and local_expectation is None:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate {display_name} #{pos}: "
+                            "the session has prior active evidence that cannot be "
+                            "reconciled with repeatable event history"
+                        ),
+                    }
+                if pre_event is None and local_expectation is not None:
+                    return {
+                        "success": False,
+                        "info_parsed": None,
+                        "error": (
+                            f"Cannot safely activate {display_name} #{pos}: the "
+                            "session has prior active evidence, but the pre-click "
+                            "memory snapshot has no readable newest acted-info event"
+                        ),
+                    }
+                if (
+                    ability_name != "druid"
+                    and pre_event is not None
+                    and local_expectation is None
+                ):
+                    # A recovered/reloaded no-info shell may face retained
+                    # native history it never persisted. The deliberate click
+                    # still provides a strict append boundary; parse only that
+                    # authenticated suffix so unowned old events never enter
+                    # the current solver state.
+                    unowned_repeatable_prefix_count = len(
+                        pre_history_snapshot
+                    )
+                if local_expectation is not None:
                     (
-                        pre_event[0],
-                        pre_event[1],
-                    )
-                    if ability_name == "druid" and pre_event is not None
-                    else _local_repeatable_event_expectation(
-                        actor,
-                        n_cards=self.n_cards,
-                        rambler_observations=(
-                            self.rambler_shut_up_observations
-                        ),
-                        fortune_teller_rule_version=(
-                            self.fortune_teller_rule_version
-                        ),
-                    )
-                )
-            except ValueError as exc:
-                return {
-                    "success": False,
-                    "info_parsed": None,
-                    "error": (
-                        f"Cannot safely activate {display_name} #{pos}: "
-                        f"{exc}"
-                    ),
-                }
-            if session_has_prior_event and local_expectation is None:
-                return {
-                    "success": False,
-                    "info_parsed": None,
-                    "error": (
-                        f"Cannot safely activate {display_name} #{pos}: "
-                        "the session has prior active evidence that cannot be "
-                        "reconciled with repeatable event history"
-                    ),
-                }
-            if pre_event is None and local_expectation is not None:
-                return {
-                    "success": False,
-                    "info_parsed": None,
-                    "error": (
-                        f"Cannot safely activate {display_name} #{pos}: the "
-                        "session has prior active evidence, but the pre-click "
-                        "memory snapshot has no readable newest acted-info event"
-                    ),
-                }
-            if local_expectation is not None:
-                minimum_count, expected_latest = local_expectation
-                if pre_event[0] < minimum_count:
-                    return {
-                        "success": False,
-                        "info_parsed": None,
-                        "error": (
-                            f"Cannot safely activate {display_name} #{pos}: "
-                            "the pre-click acted-info history is shorter than "
-                            f"the local minimum ({pre_event[0]} < "
-                            f"{minimum_count})"
-                        ),
-                    }
-                if pre_event[1] != expected_latest:
-                    return {
-                        "success": False,
-                        "info_parsed": None,
-                        "error": (
-                            f"Cannot safely activate {display_name} #{pos}: "
-                            "the pre-click newest acted-info event disagrees "
-                            "with locally stored repeatable evidence"
-                        ),
-                    }
+                        minimum_count,
+                        expected_latest,
+                        expected_normal_history,
+                        expected_interruptions,
+                    ) = local_expectation
+                    if pre_event[0] < minimum_count:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate {display_name} #{pos}: "
+                                "the pre-click acted-info history is shorter than "
+                                f"the local minimum ({pre_event[0]} < "
+                                f"{minimum_count})"
+                            ),
+                        }
+                    if pre_event[1] != expected_latest:
+                        return {
+                            "success": False,
+                            "info_parsed": None,
+                            "error": (
+                                f"Cannot safely activate {display_name} #{pos}: "
+                                "the pre-click newest acted-info event disagrees "
+                                "with locally stored repeatable evidence"
+                            ),
+                        }
+                    if ability_name != "druid":
+                        try:
+                            (
+                                memory_normal_history,
+                                memory_interruptions,
+                            ) = _repeatable_memory_history_projection(
+                                before_card,
+                                role_key=ability_name,
+                                n_cards=self.n_cards,
+                            )
+                        except ValueError as exc:
+                            return {
+                                "success": False,
+                                "info_parsed": None,
+                                "error": (
+                                    f"Cannot safely activate {display_name} "
+                                    f"#{pos}: {exc}"
+                                ),
+                            }
+                        if (
+                            memory_normal_history != expected_normal_history
+                            or memory_interruptions != expected_interruptions
+                        ):
+                            return {
+                                "success": False,
+                                "info_parsed": None,
+                                "error": (
+                                    f"Cannot safely activate {display_name} "
+                                    f"#{pos}: pre-click native history "
+                                    "disagrees with the full local ordered "
+                                    "normal/interruption ledgers"
+                                ),
+                            }
 
         # Persist the Druid click intent before touching the UI. Native
         # remaining-pickableUses is not cumulative and cannot prove callback
@@ -5367,8 +5805,9 @@ class GameSession:
                         "error": f"Failed to click target #{t}: {e}"}
             time.sleep(0.25)  # pause between target clicks
 
-        # Step 3: Wait for ability result in memory. Public Dreamer can set the act
-        # flag and clue text while leaving uses at 0.
+        # Step 3: wait for a strict append to the pre-click native event list.
+        # Counter decrement is ordered after append and ``act`` never means
+        # "used", so neither is a completion signal.
         print(f"  [auto_ability] Waiting for ability result...")
         target_card_data = None
 
@@ -5378,30 +5817,32 @@ class GameSession:
             card = next((c for c in board if c['position'] == pos), None)
             if not card:
                 return False
-            if repeatable_event_ability:
-                if ability_name == "druid":
-                    parsed_druid, parse_error = (
-                        _parse_druid_result_from_memory(
-                            card,
-                            n_cards=self.n_cards,
-                            expected_targets=targets,
-                        )
+            if _observed_active_role_key(card) != ability_name:
+                return False
+            if ability_name == "druid":
+                parsed_druid, parse_error = (
+                    _parse_druid_result_from_memory(
+                        card,
+                        n_cards=self.n_cards,
+                        expected_targets=targets,
                     )
-                    raw_callbacks = (
-                        getattr(parsed_druid, "_druid_raw_callbacks", None)
-                        if parsed_druid is not None else None
+                )
+                raw_callbacks = (
+                    getattr(parsed_druid, "_druid_raw_callbacks", None)
+                    if parsed_druid is not None else None
+                )
+                return (
+                    parse_error is None
+                    and raw_callbacks is not None
+                    and len(raw_callbacks) > len(druid_pre_events)
+                    and _has_new_coherent_acted_suffix(
+                        card,
+                        pre_history_snapshot,
                     )
-                    return (
-                        parse_error is None
-                        and raw_callbacks is not None
-                        and len(raw_callbacks) > len(druid_pre_events)
-                    )
-                latest = _latest_acted_event_fingerprint(card)
-                return latest is not None and latest != pre_event
-            return (
-                card.get('uses', 0) > 0
-                or bool(card.get('acted_infos'))
-                or bool(card.get('ability_used') and card.get('clue_text'))
+                )
+            return _has_new_coherent_acted_suffix(
+                card,
+                pre_history_snapshot,
             )
 
         # Native RoleAct dispatches real/raw synchronously and both callbacks
@@ -5475,36 +5916,82 @@ class GameSession:
         if not target_card_data:
             return {"success": False, "info_parsed": None,
                     "error": f"Position #{pos} not found in memory reader after activation"}
-        if repeatable_event_ability:
-            latest_repeatable_event = _latest_acted_event_fingerprint(target_card_data)
+        final_observed_role = _observed_active_role_key(target_card_data)
+        if final_observed_role != ability_name:
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"{display_name} actor identity changed before final "
+                    f"result capture (memory shows "
+                    f"{final_observed_role or 'no role'})"
+                ),
+            }
+        if ability_name == "druid":
+            parsed_druid, parse_error = _parse_druid_result_from_memory(
+                target_card_data,
+                n_cards=self.n_cards,
+                expected_targets=targets,
+            )
+            raw_callbacks = (
+                getattr(parsed_druid, "_druid_raw_callbacks", None)
+                if parsed_druid is not None else None
+            )
             has_recorded_result = (
-                latest_repeatable_event is not None
-                and latest_repeatable_event != pre_event
+                parse_error is None
+                and raw_callbacks is not None
+                and len(raw_callbacks) > len(druid_pre_events)
+                and _has_new_coherent_acted_suffix(
+                    target_card_data,
+                    pre_history_snapshot,
+                )
             )
         else:
-            has_recorded_result = (
-                target_card_data.get('uses', 0) > 0
-                or bool(target_card_data.get('acted_infos'))
-                or bool(target_card_data.get('ability_used') and target_card_data.get('clue_text'))
+            has_recorded_result = _has_new_coherent_acted_suffix(
+                target_card_data,
+                pre_history_snapshot,
             )
         if not has_recorded_result:
-            if repeatable_event_ability:
-                display_name = (
-                    "Fortune Teller"
-                    if ability_name == "fortune_teller"
-                    else "Druid" if ability_name == "druid"
-                    else "Judge"
-                )
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"{display_name} result did not produce a coherent strict "
+                    "acted-info suffix — click may have missed"
+                ),
+            }
+        parse_card_data = target_card_data
+        if (
+            unowned_repeatable_prefix_count
+            and ability_name in {"fortune_teller", "judge"}
+        ):
+            appended_infos = target_card_data.get("acted_infos")
+            if not isinstance(appended_infos, list):
                 return {
                     "success": False,
                     "info_parsed": None,
-                    "error": (
-                        f"{display_name} result did not produce a new or changed latest "
-                        "acted-info event — click may have missed"
-                    ),
+                    "error": f"{display_name} appended history became unreadable",
                 }
-            return {"success": False, "info_parsed": None,
-                    "error": f"Ability result not detected (uses=0, acted_infos empty) — click may have missed"}
+            parse_card_data = copy.deepcopy(target_card_data)
+            parse_card_data["acted_infos"] = appended_infos[
+                unowned_repeatable_prefix_count:
+            ]
+        if (
+            ability_name in {"dreamer", "jester"}
+            and not _active_result_refs_match_clicks(
+                target_card_data,
+                targets,
+                n_cards=self.n_cards,
+            )
+        ):
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"{display_name} newest native references do not match "
+                    "the clicked targets"
+                ),
+            }
 
         # Druid's strict parser owns its complete reset history, including a
         # newest Rambler replacement. Other roles retain the shared newest-
@@ -5523,7 +6010,7 @@ class GameSession:
                 }
         else:
             parsed, interruption_error = _card_from_rambler_interruption(
-                target_card_data,
+                parse_card_data,
                 n_cards=self.n_cards,
             )
             if interruption_error is not None:
@@ -5536,7 +6023,7 @@ class GameSession:
         # Step 4a: PD has a distinct result object unless Rambler replaced it.
         if parsed is None and ability_name == "plague_doctor":
             pd_result, parse_error = _parse_pd_ability_result_from_memory(
-                target_card_data,
+                parse_card_data,
                 ability_pos=pos,
                 expected_target=targets[0],
                 n_cards=self.n_cards,
@@ -5579,7 +6066,7 @@ class GameSession:
             == FORTUNE_TELLER_RULE_VERSION
         ):
             parsed, parse_error = _parse_fortune_teller_result_from_memory(
-                target_card_data,
+                parse_card_data,
                 expected_targets=targets,
                 n_cards=self.n_cards,
             )
@@ -5590,7 +6077,7 @@ class GameSession:
         # Step 4c: Judge has a strict one-target public result boundary.
         if parsed is None and ability_name == "judge":
             parsed, parse_error = _parse_judge_result_from_memory(
-                target_card_data,
+                parse_card_data,
                 expected_target=targets[0],
                 n_cards=self.n_cards,
             )
@@ -5600,7 +6087,7 @@ class GameSession:
         elif parsed is None:
             # Parse ordinary clue-producing abilities via auto_card.
             parsed = _parse_clue_from_memory(
-                target_card_data,
+                parse_card_data,
                 n_cards=self.n_cards,
                 baker_rule_version=self.baker_rule_version,
                 fortune_teller_rule_version=self.fortune_teller_rule_version,
@@ -5608,21 +6095,34 @@ class GameSession:
         if parsed is None:
             return {"success": False, "info_parsed": None,
                     "error": f"Could not parse ability result from memory data"}
+        parsed_role_key = (
+            parsed.apparent_role.casefold().replace(" ", "_")
+        )
+        if parsed.position != pos or parsed_role_key != ability_name:
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"Authenticated {display_name} result parsed as a "
+                    "different actor"
+                ),
+            }
         if not parsed.info_parsed:
             return {"success": False, "info_parsed": None,
                     "error": f"Parser returned empty info_parsed for {action.ability_name}"}
 
         # Step 5: Update session
         try:
-            self.add_card(parsed)
+            self.add_card(parsed, mark_active_result=False)
         except ValueError as exc:
-            if ability_name == "druid":
-                return {
-                    "success": False,
-                    "info_parsed": None,
-                    "error": f"Cannot safely record Druid #{pos}: {exc}",
-                }
-            raise
+            return {
+                "success": False,
+                "info_parsed": None,
+                "error": (
+                    f"Cannot safely record {action.ability_name or ability_name} "
+                    f"#{pos}: {exc}"
+                ),
+            }
         self.mark_ability_used(pos)
         recorded = next(
             card for card in self.cards if card.position == parsed.position
@@ -6171,10 +6671,11 @@ def _parse_pd_ability_result_from_memory(
 ) -> tuple[Optional[dict], Optional[str]]:
     """Parse PD's exact public result while honoring the UI/memory boundary.
 
-    The first acted-info reference must be the character the automation
-    clicked. The visible speech text supplies the status and any revealed
-    position. A native self-check can retain a hidden second reference even
-    though it displays clean; this parser deliberately ignores that reference.
+    The newest coherent acted-info reference must begin with the character the
+    automation clicked. The visible speech text supplies the status and any
+    revealed position. A native self-check can retain a hidden second reference
+    even though it displays clean; this parser deliberately ignores that
+    reference.
     """
     import re
 
@@ -6187,9 +6688,21 @@ def _parse_pd_ability_result_from_memory(
             f"Plague Doctor target #{expected_target} is outside 1..{n_cards}"
         )
 
-    clue = (card.get('clue_text') or '').strip()
-    infos = card.get('acted_infos') or []
-    targets = infos[0].get('targets', []) if infos else []
+    clue_raw = card.get('clue_text')
+    clue = clue_raw.strip() if isinstance(clue_raw, str) else ''
+    infos = card.get('acted_infos')
+    latest = (
+        infos[-1]
+        if isinstance(infos, list) and infos and isinstance(infos[-1], dict)
+        else None
+    )
+    if latest is None or latest.get('desc') != clue_raw:
+        return None, (
+            "Plague Doctor result has no newest coherent acted-info event"
+        )
+    targets = latest.get('targets', [])
+    if not isinstance(targets, list):
+        return None, "Plague Doctor result references are malformed"
     if not targets:
         return None, "Plague Doctor result has no recorded picked target"
     if any(not isinstance(position, int) or not 1 <= position <= n_cards
@@ -6305,7 +6818,7 @@ def _parse_druid_result_from_memory(
 
     raw_infos = card.get("acted_infos")
     if raw_infos is None:
-        raw_infos = []
+        return None, "Druid acted_infos history is unreadable"
     if not isinstance(raw_infos, list):
         return None, "Druid acted_infos must be an array"
     if not raw_infos:
@@ -7106,10 +7619,10 @@ def _parse_clue_from_memory(
 ) -> Optional[CardInfo]:
     """Parse memory reader card data into a CardInfo, or None if unparseable.
 
-    Handles passive clues read from savedAct/actedInfos/runtimeData.
-    Active abilities (FT, Judge, Jester, Druid, Dreamer, Slayer, PD) are
-    guarded by the ability_used flag — stale clue data from prior villages
-    is ignored unless the ability was actually used this game.
+    Handles passive clues read from savedAct/actedInfos/runtimeData. Active
+    results require a newest acted-info event that owns the visible savedAct;
+    the native ``act`` field is only a publication gate and the remaining
+    pickable-use counter is lifecycle metadata, not result provenance.
     """
     pos = card['position']
     role = card.get('disguise') or _observed_current_role(card) or ''
@@ -7139,8 +7652,6 @@ def _parse_clue_from_memory(
         # historical reader aliases; RangedEmpath belongs to Druid instead.
         role = 'Bard'
         role_lower = 'bard'
-    ability_used = card.get('ability_used', False)
-
     def current_event_refs() -> Optional[list[int]]:
         """Return refs from the newest coherent native event, if any."""
         latest = (
@@ -7174,27 +7685,30 @@ def _parse_clue_from_memory(
             and latest.get('targets') is None
         )
 
-    # Active-only roles normally cannot authenticate any carried public event
-    # until their current-village fire state is visible. Druid is the narrow
-    # exception: its native callback can append the completed event before the
-    # uses/act fields settle, and its exact branch below validates that event.
+    # Active-only roles authenticate a public result from the newest coherent
+    # event, not from ``act`` (a constructor-default publication gate) or the
+    # remaining callback budget. Druid owns a stricter full-ledger parser below.
     ACTIVE_ONLY_ROLES = {
         'dreamer', 'druid', 'fortune_teller', 'jester', 'judge',
         'slayer', 'plague_doctor',
     }
-    uses_count = card.get('uses', 0)
-    active_fired = uses_count > 0 or (ability_used and role_lower != 'plague_doctor')
+    active_event_is_coherent = current_event_refs() is not None
     if (
         role_lower in ACTIVE_ONLY_ROLES
         and role_lower != 'druid'
-        and not active_fired
+        and not active_event_is_coherent
     ):
+        if not isinstance(infos, list):
+            return None
+        if clue or (isinstance(infos, list) and infos):
+            return None
         return card_no_info(pos, role)
 
     # --- Druid/Librarian: validate its complete append-only reset history. ---
-    # Librarian can publish its exact callback before uses/act settles, so its
-    # coherent event is authoritative. The dedicated parser also owns Rambler
-    # precedence because an interruption replaces the newest Druid refs.
+    # Librarian can publish its exact callback before the remaining budget is
+    # decremented, so its coherent event is authoritative. The dedicated
+    # parser also owns Rambler precedence because an interruption replaces the
+    # newest Druid refs.
     if role_lower == 'druid':
         if type(n_cards) is not int or n_cards <= 0:
             return None
@@ -7204,9 +7718,8 @@ def _parse_clue_from_memory(
         )
         return druid_surface if druid_error is None else None
 
-    # Rambler replacement text owns the public event even when an active
-    # speaker's uses/act fields have settled. Druid is the only role whose
-    # exact callback event is allowed to precede those fields.
+    # Rambler replacement text owns the public event. The counter may still be
+    # transiently unchanged because append precedes decrement in the callback.
     rambler_surface, rambler_error = _card_from_rambler_surface(
         card,
         n_cards=n_cards,
@@ -7497,14 +8010,22 @@ def _parse_clue_from_memory(
         has_evil = 'true' in clue.lower()
         return card_fortune_teller(pos, targets, has_evil)
 
-    # --- Jester: targets + evil count from clue ---
-    if role_lower == 'jester' and targets:
+    # --- Jester: newest coherent targets + evil count from clue ---
+    if (
+        role_lower == 'jester'
+        and (jester_targets := current_event_refs())
+        and len(jester_targets) == 3
+        and len(set(jester_targets)) == 3
+    ):
         m = re.search(r'(\d+)\s+(?:of them |are |is )?\s*evil', clue, re.IGNORECASE)
         if m:
-            return card_jester(pos, targets, int(m.group(1)))
+            evil_count = int(m.group(1))
+            if 0 <= evil_count <= 3:
+                return card_jester(pos, jester_targets, evil_count)
+            return None
         # "none of them are evil"
         if 'none' in clue.lower() or 'no' in clue.lower():
-            return card_jester(pos, targets, 0)
+            return card_jester(pos, jester_targets, 0)
 
     # --- Bishop: exact current public text + shuffled newest refs. ---
     if role_lower == 'bishop':
@@ -7561,10 +8082,20 @@ def _parse_clue_from_memory(
 
     # --- Dreamer: public two-target role pair/Cabbage, then legacy one-target ---
     if role_lower == 'dreamer':
-        # Public shipped Dreamer: IDs serialized in the clue are authoritative.
+        dreamer_refs = current_event_refs()
+        # Public shipped Dreamer stores both selections in click order while
+        # formatting their IDs in ascending order. Require both surfaces to
+        # name the same two physical positions.
         ambiguous = _parse_ambiguous_among(clue)
         if ambiguous:
             amb_targets, options = ambiguous
+            if (
+                dreamer_refs is None
+                or len(dreamer_refs) != 2
+                or len(set(dreamer_refs)) != 2
+                or sorted(dreamer_refs) != sorted(amb_targets)
+            ):
+                return None
             return card_dreamer_ambiguous(
                 pos,
                 amb_targets,
@@ -7573,6 +8104,13 @@ def _parse_clue_from_memory(
             )
         cabbage_targets = _parse_cabbage_between(clue)
         if cabbage_targets:
+            if (
+                dreamer_refs is None
+                or len(dreamer_refs) != 2
+                or len(set(dreamer_refs)) != 2
+                or sorted(dreamer_refs) != sorted(cabbage_targets)
+            ):
+                return None
             return card_dreamer_cabbage(
                 pos,
                 cabbage_targets,
@@ -7589,9 +8127,12 @@ def _parse_clue_from_memory(
             re.IGNORECASE | re.DOTALL,
         )
         if m:
+            target = int(m.group(1))
+            if dreamer_refs != [target]:
+                return None
             return card_dreamer(
                 pos,
-                int(m.group(1)),
+                target,
                 m.group(2).strip(),
                 info_text=clue,
             )
@@ -9680,8 +10221,42 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     )
             if parsed:
                 existing = entered.get(pos)
+                parsed_role_key = _execution_role_key(
+                    parsed.apparent_role
+                ).replace(" ", "_")
+                guarded_active_capture = parsed_role_key in {
+                    "dreamer",
+                    "fortune_teller",
+                    "jester",
+                    "judge",
+                    "plague_doctor",
+                    "slayer",
+                }
+                if (
+                    guarded_active_capture
+                    and _has_active_clue_result(parsed)
+                ):
+                    remaining = _pickable_uses_remaining(mc)
+                    if remaining is None:
+                        manual_needed.append(
+                            f"  #{pos} {parsed.apparent_role}: [RECOVERY] "
+                            "active result has an unreadable native "
+                            "pickable-use budget"
+                        )
+                        continue
+                    if remaining > 0:
+                        # A coherent event can be retained from a prior Night
+                        # or village. Without a pre-click prefix it is not a
+                        # current-cycle result. Preserve an existing session
+                        # record, or enter only the active no-info shell.
+                        if existing is not None:
+                            continue
+                        parsed = card_no_info(pos, parsed.apparent_role)
+                        parsed_role_key = _execution_role_key(
+                            parsed.apparent_role
+                        ).replace(" ", "_")
                 current_druid_capture = (
-                    _execution_role_key(parsed.apparent_role) == "druid"
+                    parsed_role_key == "druid"
                     and isinstance(parsed.info_parsed, dict)
                     and parsed.info_parsed.get("druid_variant")
                     == _PUBLIC_CURRENT_VARIANT
@@ -9711,6 +10286,44 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         )
                         continue
                     if capture_status == "stale":
+                        if (
+                            _active_cycle_is_spent(mc)
+                            and _has_active_clue_result(parsed)
+                        ):
+                            session.mark_ability_used(parsed.position)
+                        continue
+                current_repeatable_capture = (
+                    existing is not None
+                    and memory_role_key in {"fortune_teller", "judge"}
+                    and (
+                        memory_role_key != "fortune_teller"
+                        or session.fortune_teller_rule_version
+                        == FORTUNE_TELLER_RULE_VERSION
+                    )
+                )
+                if current_repeatable_capture:
+                    capture_status, capture_status_error = (
+                        _classify_repeatable_memory_capture(
+                            existing,
+                            mc,
+                            n_cards=session.n_cards,
+                            rambler_observations=(
+                                session.rambler_shut_up_observations
+                            ),
+                            fortune_teller_rule_version=(
+                                session.fortune_teller_rule_version
+                            ),
+                        )
+                    )
+                    if capture_status_error is not None:
+                        manual_needed.append(
+                            f"  #{pos} {parsed.apparent_role}: [RECOVERY] "
+                            f"{capture_status_error}"
+                        )
+                        continue
+                    if capture_status == "stale":
+                        if _active_cycle_is_spent(mc):
+                            session.mark_ability_used(parsed.position)
                         continue
                 if existing:
                     same_role = (
@@ -9722,7 +10335,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or existing.info_text != parsed.info_text
                     )
                     active_update = (
-                        (mc.get('uses', 0) > 0 or mc.get('ability_used', False))
+                        _active_cycle_is_spent(mc)
                         and same_role
                         and changed
                         and _has_active_clue_result(parsed)
@@ -9811,9 +10424,20 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                         or confessor_update
                         or druid_update
                     ):
+                        # A prior append-before-decrement read may already have
+                        # stored this exact active result without consuming the
+                        # local cycle. Reconcile once native remaining uses
+                        # settles, even though the evidence itself is unchanged.
+                        if (
+                            same_role
+                            and not changed
+                            and _active_cycle_is_spent(mc)
+                            and _has_active_clue_result(parsed)
+                        ):
+                            session.mark_ability_used(parsed.position)
                         continue
                 try:
-                    session.add_card(parsed)
+                    session.add_card(parsed, mark_active_result=False)
                 except ValueError as exc:
                     if current_druid_capture:
                         role = (
@@ -9832,7 +10456,7 @@ def dispatch(cmd: str, args: list[str], session: Optional[GameSession] = None) -
                     if card.position == parsed.position
                 )
                 DecisionLog.log_card(recorded)
-                if (mc.get('uses', 0) > 0 or mc.get('ability_used', False)) and _has_active_clue_result(parsed):
+                if _active_cycle_is_spent(mc) and _has_active_clue_result(parsed):
                     session.mark_ability_used(parsed.position)
                 verb = "updated" if pos in entered else "entered"
                 print(

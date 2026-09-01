@@ -96,10 +96,10 @@ CHAR_STATUS = {
 CHAR_RUNTIME_DATA_OFFSET = 0x70  # RuntimeCharacterData (polymorphic per role)
 CHAR_ACTED_OFFSET = 0xA8         # Acted (speech bubble component)
 CHAR_LEFT_ACT_OFFSET = 0xB0      # bool (left ability activated)
-CHAR_USES_OFFSET = 0xDC          # int (ability use count / pickableUses)
+CHAR_USES_OFFSET = 0xDC          # int (remaining pickableUses callback budget)
 CHAR_ACTED_INFOS_OFFSET = 0x148  # List<ActedInfo>
 CHAR_SAVED_ACT_OFFSET = 0x198    # string (cached clue text)
-CHAR_ACT_OFFSET = 0x1A1          # bool (ability activated flag)
+CHAR_ACT_OFFSET = 0x1A1          # bool (ActedInfo output/publication gate)
 
 # ActedInfo class field offsets
 ACTED_INFO_DESC_OFFSET = 0x10    # string (formatted clue text)
@@ -120,12 +120,10 @@ ALIGNMENT = {0: 'None', 10: 'Good', 20: 'Evil'}
 STATE = {0: 'None', 5: 'Hidden', 10: 'Alive', 20: 'Dead', 30: 'Revealed'}
 CHAR_TYPE = {0: 'None', 10: 'Villager', 20: 'Outcast', 30: 'Minion', 100: 'Demon'}
 
-# Displayed roles that NEVER show a passive speech bubble.
-# The game's savedAct field (offset 0x198) persists stale clue strings from a
-# previous village until overwritten. For display roles with no passive clue,
-# the string is always stale — null it out here so print_board and auto_card
-# see a clean input. Matches NO_INFO_ROLES + ACTIVE_ONLY_ROLES in
-# game_loop.py:1078,1312 (kept in sync by comment, not imported).
+# Displayed roles that never show a passive speech bubble. The game's savedAct
+# field (offset 0x198) persists across Night and village boundaries, so retain
+# it only when the newest readable actedInfos event owns the exact same text.
+# This set mirrors NO_INFO_ROLES + ACTIVE_ONLY_ROLES in game_loop.py.
 NO_PASSIVE_CLUE_DISPLAY_ROLES = {
     'wretch', 'bombardier', 'knight', 'doppelganger',
     'dreamer', 'druid', 'fortune teller', 'jester', 'judge',
@@ -482,19 +480,31 @@ class MemoryReader:
         return result
 
     def _read_acted_infos(self, char_ptr):
-        """Read List<ActedInfo> — clue history for a character."""
+        """Read List<ActedInfo>, preserving unreadable history as ``None``."""
         list_ptr = self._read_ptr(char_ptr + CHAR_ACTED_INFOS_OFFSET)
-        if not list_ptr or list_ptr < 0x10000:
+        if list_ptr is None:
+            return None
+        if list_ptr == 0:
             return []
-        items_array = self._read_ptr(list_ptr + LIST_ITEMS_OFFSET)
+        if list_ptr < 0x10000:
+            return None
         list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
-        if not items_array or not list_size or list_size <= 0:
+        if list_size is None or list_size < 0:
+            return None
+        if list_size == 0:
             return []
         # A real game cannot approach this ceiling. Reject the whole list if a
         # stale offset/pointer produces a runaway size; never truncate a valid
         # chronological history because savedAct corresponds to its last item.
         if list_size > 4096:
-            return []
+            return None
+        items_array = self._read_ptr(list_ptr + LIST_ITEMS_OFFSET)
+        if (
+            items_array is None
+            or items_array == 0
+            or items_array < 0x10000
+        ):
+            return None
         results = []
         # Native actedInfos is append-only and ResetAfterNight roles can exceed
         # ten uses. Preserve the entire chronological List order so index -1
@@ -505,16 +515,18 @@ class MemoryReader:
                 # List<T> slots below _size are populated. Silently skipping a
                 # bad pointer would splice the chronology and could preserve a
                 # plausible newest savedAct while dropping earlier evidence.
-                return []
+                return None
             # Read desc string
             desc_ptr = self._read_ptr(info_ptr + ACTED_INFO_DESC_OFFSET)
+            if desc_ptr is None:
+                return None
             desc = self._read_string(desc_ptr) if desc_ptr else None
             # Read referenced character positions
             char_list_ptr = self._read_ptr(info_ptr + ACTED_INFO_CHARS_OFFSET)
             if char_list_ptr is None:
                 # A failed pointer read is not evidence of native null. Drop
                 # the history so strict consumers cannot authenticate it.
-                return []
+                return None
             # Preserve native null separately from a populated empty List. A
             # few role contracts (notably current Confessor) intentionally
             # return ActedInfo(desc, null), while most zero-reference roles
@@ -522,19 +534,36 @@ class MemoryReader:
             targets = None
             if char_list_ptr and char_list_ptr > 0x10000:
                 targets = []
-                ref_items = self._read_ptr(char_list_ptr + LIST_ITEMS_OFFSET)
                 ref_size = self._read_i32(char_list_ptr + LIST_SIZE_OFFSET)
-                if ref_items and ref_size and 0 < ref_size <= 20:
+                if ref_size is None or ref_size < 0 or ref_size > 20:
+                    return None
+                if ref_size > 0:
+                    ref_items = self._read_ptr(
+                        char_list_ptr + LIST_ITEMS_OFFSET
+                    )
+                    if (
+                        ref_items is None
+                        or ref_items == 0
+                        or ref_items < 0x10000
+                    ):
+                        return None
                     for j in range(ref_size):
-                        ref_char = self._read_ptr(ref_items + ARRAY_FIRST_ELEMENT_OFFSET + j * 8)
-                        if ref_char:
-                            ref_id = self._read_i32(ref_char + CHAR_ID_OFFSET)
-                            if ref_id is not None:
-                                targets.append(ref_id)
+                        ref_char = self._read_ptr(
+                            ref_items + ARRAY_FIRST_ELEMENT_OFFSET + j * 8
+                        )
+                        if (
+                            ref_char is None
+                            or ref_char == 0
+                            or ref_char < 0x10000
+                        ):
+                            return None
+                        ref_id = self._read_i32(ref_char + CHAR_ID_OFFSET)
+                        if ref_id is None:
+                            return None
+                        targets.append(ref_id)
             elif char_list_ptr:
                 # A non-null invalid pointer is not the native null contract.
-                # Keep it distinguishable from null so strict ingestion fails.
-                targets = []
+                return None
             results.append({'desc': desc, 'targets': targets})
         return results
 
@@ -573,10 +602,30 @@ class MemoryReader:
         return None
 
     def _read_ability_state(self, char_ptr):
-        """Read ability usage state: uses count and act flag."""
-        uses = self._read_i32(char_ptr + CHAR_USES_OFFSET)
-        act = self._read_bool(char_ptr + CHAR_ACT_OFFSET)
-        return {'uses': uses or 0, 'act': act or False}
+        """Read the exact native pickable-use state and legacy aliases.
+
+        ``pickableUses`` is the remaining physical callback budget, not a
+        cumulative use count.  It normally transitions 1 -> 0 and can reach
+        -1 when one activation dispatches two Day callbacks (Druid).  ``act``
+        is a separate output gate and does not say whether an ability was used.
+        Failed process reads must remain ``None`` rather than looking spent.
+        """
+        pickable_uses_remaining = self._read_i32(char_ptr + CHAR_USES_OFFSET)
+        act_output_enabled = self._read_bool(char_ptr + CHAR_ACT_OFFSET)
+        pickable_available = (
+            pickable_uses_remaining > 0
+            if pickable_uses_remaining is not None
+            else None
+        )
+        return {
+            'pickable_uses_remaining': pickable_uses_remaining,
+            'act_output_enabled': act_output_enabled,
+            'pickable_available': pickable_available,
+            # Deprecated compatibility aliases.  Keep their existing raw
+            # native meanings while callers migrate to the explicit names.
+            'uses': pickable_uses_remaining,
+            'ability_used': act_output_enabled,
+        }
 
     def read_board(self):
         """Read all cards on the current board."""
@@ -631,22 +680,21 @@ class MemoryReader:
             ability_state = self._read_ability_state(char_ptr)
             runtime_data = self._read_runtime_data(char_ptr)
 
-            # Stale clue filter: for displayed roles with no passive speech bubble,
-            # savedAct is always stale (persists from previous village). Null it
-            # unless the active ability has been used (uses>0, acted_infos
-            # non-empty, or the act flag is set). Plague Doctor is stricter
-            # because game-start setup can set the act flag before the active
-            # check ability is used.
+            # Stale clue filter: for displayed roles with no passive speech
+            # bubble, savedAct can persist from a previous village or Night.
+            # Neither pickableUses nor act authenticates the text: Night resets
+            # pickableUses without clearing history, and act is an output gate.
+            # Keep only text produced by the newest chronological event.
             display_role_lower = (disguise or current_role or '').lower().replace('_', ' ')
-            is_active_unused = (
-                ability_state['uses'] == 0
-                and not acted_infos
-                and not ability_state['act']
-            )
-            if display_role_lower == 'plague doctor':
-                is_active_unused = ability_state['uses'] == 0 and not acted_infos
-            if display_role_lower in NO_PASSIVE_CLUE_DISPLAY_ROLES and is_active_unused:
-                saved_act = None
+            if display_role_lower in NO_PASSIVE_CLUE_DISPLAY_ROLES:
+                newest_event = acted_infos[-1] if acted_infos else None
+                has_coherent_newest_event = (
+                    isinstance(newest_event, dict)
+                    and saved_act is not None
+                    and newest_event.get('desc') == saved_act
+                )
+                if not has_coherent_newest_event:
+                    saved_act = None
 
             cards.append({
                 'position': card_id,
@@ -661,8 +709,12 @@ class MemoryReader:
                 'statuses': statuses,
                 'clue_text': saved_act,
                 'acted_infos': acted_infos,
-                'ability_used': ability_state['act'],
+                'pickable_uses_remaining': ability_state['pickable_uses_remaining'],
+                'act_output_enabled': ability_state['act_output_enabled'],
+                'pickable_available': ability_state['pickable_available'],
+                # Deprecated compatibility aliases; see _read_ability_state.
                 'uses': ability_state['uses'],
+                'ability_used': ability_state['ability_used'],
                 'runtime_data': runtime_data,
             })
 

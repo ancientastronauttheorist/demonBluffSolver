@@ -13,23 +13,35 @@ from solver import CardInfo
 from strategy import Action
 
 
+_ABSENT = object()
+
+
 def _memory_card(
     clue: str,
     targets: list[int],
     *,
     position: int = 2,
     infos: int = 1,
+    remaining=_ABSENT,
 ) -> dict:
     acted_infos = [
         {"desc": clue, "targets": list(targets)}
         for _ in range(infos)
     ]
+    if remaining is _ABSENT:
+        remaining = 0 if acted_infos else 1
     return {
         "position": position,
         "true_role": "Judge",
+        "state": "Alive",
         "clue_text": clue,
         "acted_infos": acted_infos,
-        "uses": 1,
+        "pickable_uses_remaining": remaining,
+        "act_output_enabled": True,
+        "pickable_available": (
+            remaining > 0 if type(remaining) is int else None
+        ),
+        "uses": remaining,
         "ability_used": True,
     }
 
@@ -204,6 +216,39 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         self.assertIn("exactly 1 target", wrong_count["error"])
         self.assertIn("not an apparent Judge", wrong_actor["error"])
 
+    def test_preflight_rejects_unreadable_or_spent_native_budget_before_click(self):
+        for remaining in (None, 0, -1):
+            with self.subTest(remaining=remaining):
+                session = GameSession(4, 1)
+                session.cards.append(CardInfo(2, "Judge"))
+                before = _memory_card(
+                    "",
+                    [],
+                    infos=0,
+                    remaining=remaining,
+                )
+
+                class Reader:
+                    def open(self):
+                        return True
+
+                    def read_board(self):
+                        return [before]
+
+                    def close(self):
+                        return None
+
+                with (
+                    patch("memory_reader.MemoryReader", return_value=Reader()),
+                    patch("template_match.safe_click_at") as click,
+                ):
+                    result = session.auto_use_ability(
+                        Action("use_ability", 2, [3], "Judge")
+                    )
+
+                self.assertFalse(result["success"])
+                click.assert_not_called()
+
     def test_preflight_allows_target_with_unused_active_ability(self):
         session = GameSession(4, 1)
         session.cards.extend([
@@ -238,11 +283,45 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         self.assertIn("sentinel after preflight", result["error"])
         self.assertNotIn("unused active ability", result["error"])
 
+    def test_final_snapshot_actor_identity_cannot_change_after_wait(self):
+        session = GameSession(4, 1)
+        session.cards.append(CardInfo(2, "Judge"))
+        before = _memory_card("", [], infos=0, remaining=1)
+        resolved = _memory_card("#3 is\nsaying Truth", [3], remaining=0)
+        wrong_actor = {**resolved, "true_role": "Jester"}
+
+        class Monitor:
+            def __init__(self):
+                self.reads = 0
+
+            def is_healthy(self):
+                return True
+
+            def get_board(self):
+                self.reads += 1
+                return [before if self.reads == 1 else wrong_actor]
+
+            def wait_for(self, predicate, timeout, min_delay):
+                return predicate([resolved])
+
+        with (
+            patch("template_match.safe_click_at"),
+            patch("game_loop.time.sleep"),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, [3], "Judge"),
+                monitor=Monitor(),
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("actor identity changed", result["error"])
+        self.assertNotIn(2, session.used_abilities)
+
     def test_resettable_judge_rejects_unchanged_stale_latest_event(self):
         session = GameSession(4, 1)
         session.cards.append(CardInfo(2, "Judge"))
         action = Action("use_ability", 2, [3], "Judge")
-        stale = _memory_card("#3 is\nsaying Truth", [3])
+        stale = _memory_card("#3 is\nsaying Truth", [3], remaining=1)
 
         class Reader:
             def open(self):
@@ -262,7 +341,7 @@ class JudgeAutonomousUseTests(unittest.TestCase):
             result = session.auto_use_ability(action)
 
         self.assertFalse(result["success"])
-        self.assertIn("new or changed latest", result["error"])
+        self.assertIn("coherent strict acted-info suffix", result["error"])
         self.assertNotIn(2, session.used_abilities)
         self.assertEqual(session.cards[0].info_parsed, {})
 
@@ -275,8 +354,13 @@ class JudgeAutonomousUseTests(unittest.TestCase):
             info_parsed={"target": 3, "is_lying": False},
         ))
         session.reset_after_night_abilities()
-        stale = _memory_card("#3 is\nsaying Truth", [3])
-        unreadable = _memory_card("#3 is\nsaying Truth", [3], infos=0)
+        stale = _memory_card("#3 is\nsaying Truth", [3], remaining=1)
+        unreadable = _memory_card(
+            "#3 is\nsaying Truth",
+            [3],
+            infos=0,
+            remaining=1,
+        )
 
         class Reader:
             def __init__(self):
@@ -308,6 +392,55 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         self.assertEqual(reader.reads, 1)
         self.assertNotIn(2, session.used_abilities)
 
+    def test_same_latest_but_different_older_prefix_fails_before_click(self):
+        session = GameSession(4, 1)
+        latest_clue = "#3 is\nLying"
+        session.add_card(CardInfo(
+            2,
+            "Judge",
+            info_text=latest_clue,
+            info_parsed={
+                "target": 3,
+                "is_lying": True,
+                "observations": [
+                    {"target": 1, "is_lying": False},
+                    {"target": 3, "is_lying": True},
+                ],
+            },
+        ))
+        session.reset_after_night_abilities()
+        conflicting = _memory_card(
+            latest_clue,
+            [3],
+            remaining=1,
+        )
+        conflicting["acted_infos"] = [
+            {"desc": "#2 is\nsaying Truth", "targets": [2]},
+            {"desc": latest_clue, "targets": [3]},
+        ]
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [conflicting]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("template_match.safe_click_at") as click,
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 2, [4], "Judge")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("full local ordered", result["error"])
+        click.assert_not_called()
+
     def test_prior_same_target_fails_before_click_on_stale_shorter_history(self):
         session = GameSession(4, 1)
         prior = CardInfo(
@@ -324,8 +457,20 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         ))
         session.reset_after_night_abilities()
         clue = "#3 is\nsaying Truth"
-        stale_short = _memory_card(clue, [3], position=1, infos=1)
-        recovered_old = _memory_card(clue, [3], position=1, infos=2)
+        stale_short = _memory_card(
+            clue,
+            [3],
+            position=1,
+            infos=1,
+            remaining=1,
+        )
+        recovered_old = _memory_card(
+            clue,
+            [3],
+            position=1,
+            infos=2,
+            remaining=1,
+        )
 
         class Reader:
             def __init__(self):
@@ -358,10 +503,20 @@ class JudgeAutonomousUseTests(unittest.TestCase):
 
     def test_resettable_judge_accepts_changed_latest_event(self):
         session = GameSession(4, 1)
-        session.cards.append(CardInfo(2, "Judge"))
+        session.add_card(CardInfo(
+            2,
+            "Judge",
+            info_text="#1 is\nsaying Truth",
+            info_parsed={"target": 1, "is_lying": False},
+        ))
+        session.reset_after_night_abilities()
         action = Action("use_ability", 2, [3], "Judge")
-        before = _memory_card("#1 is\nsaying Truth", [1])
+        before = _memory_card("#1 is\nsaying Truth", [1], remaining=1)
         after = _memory_card("#3 is\nLying", [3])
+        after["acted_infos"] = [
+            *before["acted_infos"],
+            *after["acted_infos"],
+        ]
 
         class Reader:
             def __init__(self):
@@ -390,7 +545,14 @@ class JudgeAutonomousUseTests(unittest.TestCase):
         self.assertTrue(result["success"], result["error"])
         self.assertEqual(
             result["info_parsed"],
-            {"target": 3, "is_lying": True},
+            {
+                "target": 3,
+                "is_lying": True,
+                "observations": [
+                    {"target": 1, "is_lying": False},
+                    {"target": 3, "is_lying": True},
+                ],
+            },
         )
 
 

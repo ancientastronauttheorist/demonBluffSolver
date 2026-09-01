@@ -60,14 +60,18 @@ def _memory_druid(
     infos = list(prior_infos or [])
     if refs is not _ABSENT:
         infos.append({"desc": clue, "targets": refs})
+    remaining = 0 if refs is not _ABSENT else 1
     card = {
         "position": position,
         "true_role": role,
         "clue_text": clue,
         "acted_infos": infos,
         "runtime_data": None,
-        "ability_used": False,
-        "uses": 0,
+        "pickable_uses_remaining": remaining,
+        "act_output_enabled": True,
+        "pickable_available": remaining > 0,
+        "ability_used": True,
+        "uses": remaining,
         **extra,
     }
     if current_role is not _ABSENT:
@@ -84,17 +88,29 @@ def _druid_event(refs, found=None):
     }
 
 
-def _memory_druid_history(events, *, position=2, role="Librarian", **extra):
+def _memory_druid_history(
+    events,
+    *,
+    position=2,
+    role="Librarian",
+    remaining=None,
+    **extra,
+):
     events = [copy.deepcopy(event) for event in events]
     clue = events[-1]["desc"] if events else ""
+    if remaining is None:
+        remaining = 0 if events else 1
     return {
         "position": position,
         "true_role": role,
         "clue_text": clue,
         "acted_infos": [{"desc": "", "targets": None}] + events,
         "runtime_data": None,
-        "ability_used": bool(events),
-        "uses": 0,
+        "pickable_uses_remaining": remaining,
+        "act_output_enabled": True,
+        "pickable_available": remaining > 0,
+        "ability_used": True,
+        "uses": remaining,
         **extra,
     }
 
@@ -604,7 +620,7 @@ class DruidManualAndCaptureTests(unittest.TestCase):
         session.reset_after_night_abilities()
         stale_output = self._run_auto_card(
             session,
-            _memory_druid_history([first]),
+            _memory_druid_history([first], remaining=1),
         )
         self.assertIn("Entered 0 cards", stale_output)
         self.assertEqual(session.cards[0].info_parsed, first_info)

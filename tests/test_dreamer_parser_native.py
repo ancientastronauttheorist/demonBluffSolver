@@ -160,10 +160,10 @@ class TestDreamerNativeParsers(unittest.TestCase):
 
 
 class TestDreamerMemoryIngestion(unittest.TestCase):
-    def test_ambiguous_uses_clue_ids_and_preserves_raw_text(self):
+    def test_ambiguous_cross_checks_native_refs_and_preserves_raw_text(self):
         clue = "Among\n#3, #9\nthere is:\nPuppeteer or Lover"
         parsed = _parse_clue_from_memory(
-            _memory_card(clue, acted_targets=[1, 2])
+            _memory_card(clue, acted_targets=[3, 9])
         )
 
         self.assertIsNotNone(parsed)
@@ -177,10 +177,10 @@ class TestDreamerMemoryIngestion(unittest.TestCase):
             },
         )
 
-    def test_cabbage_uses_clue_ids_and_preserves_raw_text(self):
+    def test_cabbage_cross_checks_native_refs_and_preserves_raw_text(self):
         clue = "Between #3, #9 there is: a Cabbage"
         parsed = _parse_clue_from_memory(
-            _memory_card(clue, acted_targets=[1, 2])
+            _memory_card(clue, acted_targets=[3, 9])
         )
 
         self.assertIsNotNone(parsed)
@@ -194,10 +194,10 @@ class TestDreamerMemoryIngestion(unittest.TestCase):
             },
         )
 
-    def test_legacy_one_target_uses_its_clue_id(self):
+    def test_legacy_one_target_cross_checks_its_native_ref(self):
         clue = "#7 could be:\nPooka"
         parsed = _parse_clue_from_memory(
-            _memory_card(clue, acted_targets=[1])
+            _memory_card(clue, acted_targets=[7])
         )
 
         self.assertIsNotNone(parsed)

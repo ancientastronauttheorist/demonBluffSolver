@@ -10,6 +10,7 @@ native shape is pinned independently by the reverse-engineering audit.
 """
 
 import unittest
+from unittest.mock import patch
 
 from game_loop import (
     GameSession,
@@ -125,10 +126,13 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
             "true_role": "Dreamer",
             "disguise": "Dreamer",
             "clue_text": clue,
-            "acted_infos": [{"desc": "...", "targets": targets or []}],
+            "acted_infos": [{"desc": clue, "targets": targets or []}],
             "runtime_data": None,
+            "pickable_uses_remaining": 0,
+            "act_output_enabled": True,
+            "pickable_available": False,
             "ability_used": True,
-            "uses": 1,
+            "uses": 0,
         }
 
     def test_ambiguous_asc74_v7(self):
@@ -181,10 +185,16 @@ class TestParseClueFromMemoryDreamer(unittest.TestCase):
             "true_role": "Drunk",
             "disguise": "Dreamer",
             "clue_text": "Among\n#4, #9\nthere is:\nPooka or Rambler",
-            "acted_infos": [{"desc": "...", "targets": [4, 9]}],
+            "acted_infos": [{
+                "desc": "Among\n#4, #9\nthere is:\nPooka or Rambler",
+                "targets": [4, 9],
+            }],
             "runtime_data": None,
+            "pickable_uses_remaining": 0,
+            "act_output_enabled": True,
+            "pickable_available": False,
             "ability_used": True,
-            "uses": 1,
+            "uses": 0,
         }
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
@@ -244,6 +254,20 @@ class TestManualActiveAbilityBookkeeping(unittest.TestCase):
 
 
 class TestDreamerAutoAbilityGuards(unittest.TestCase):
+    def test_unknown_active_role_has_no_generic_automation_path(self):
+        session = GameSession(3, 1)
+        action = Action(
+            "use_ability",
+            position=1,
+            targets=[2],
+            ability_name="Unmapped Active",
+        )
+
+        result = session.auto_use_ability(action)
+
+        self.assertFalse(result["success"])
+        self.assertIn("no authenticated autonomous result path", result["error"])
+
     def test_dreamer_requires_two_targets(self):
         session = GameSession(3, 1)
         action = Action(
@@ -256,11 +280,14 @@ class TestDreamerAutoAbilityGuards(unittest.TestCase):
         result = session.auto_use_ability(action)
 
         self.assertFalse(result["success"])
-        self.assertIn("exactly 2 targets", result["error"])
+        self.assertIn("exactly 2 distinct integer targets", result["error"])
 
-    def test_dreamer_refuses_unused_active_target(self):
+    def test_dreamer_picker_accepts_unused_active_target(self):
         session = GameSession(3, 1)
-        session.add_card(CardInfo(2, "Jester"))
+        session.cards.extend([
+            CardInfo(1, "Dreamer"),
+            CardInfo(2, "Jester"),
+        ])
         action = Action(
             "use_ability",
             position=1,
@@ -268,10 +295,102 @@ class TestDreamerAutoAbilityGuards(unittest.TestCase):
             ability_name="Dreamer",
         )
 
-        result = session.auto_use_ability(action)
+        with patch("memory_reader.MemoryReader") as reader_type:
+            reader_type.return_value.open.return_value = False
+            result = session.auto_use_ability(action)
 
         self.assertFalse(result["success"])
-        self.assertIn("unused active ability", result["error"])
+        self.assertIn("Cannot open memory reader", result["error"])
+        self.assertNotIn("unused active ability", result["error"])
+
+    def test_dreamer_parser_rejects_text_reference_mismatch(self):
+        clue = "Among\n#2, #3\nthere is:\nPooka or Rambler"
+        card = {
+            "position": 1,
+            "true_role": "Dreamer",
+            "clue_text": clue,
+            "acted_infos": [{"desc": clue, "targets": [3, 4]}],
+        }
+
+        self.assertIsNone(_parse_clue_from_memory(card, n_cards=4))
+
+    def test_auto_use_rejects_mismatched_memory_actor_before_click(self):
+        session = GameSession(4, 1)
+        session.cards.append(CardInfo(1, "Dreamer"))
+        before = {
+            "position": 1,
+            "true_role": "Jester",
+            "clue_text": None,
+            "acted_infos": [],
+            "pickable_uses_remaining": 1,
+        }
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [before]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("template_match.safe_click_at") as click,
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 1, [2, 3], "Dreamer")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("pre-click memory shows jester", result["error"])
+        click.assert_not_called()
+
+    def test_auto_use_rejects_new_refs_that_do_not_match_click_order(self):
+        session = GameSession(4, 1)
+        session.cards.append(CardInfo(1, "Dreamer"))
+        clue = "Among\n#2, #3\nthere is:\nPooka or Rambler"
+        before = {
+            "position": 1,
+            "true_role": "Dreamer",
+            "clue_text": None,
+            "acted_infos": [],
+            "pickable_uses_remaining": 1,
+        }
+        after = {
+            **before,
+            "clue_text": clue,
+            "acted_infos": [{"desc": clue, "targets": [3, 2]}],
+            "pickable_uses_remaining": 0,
+        }
+
+        class Reader:
+            def __init__(self):
+                self.reads = 0
+
+            def open(self):
+                return True
+
+            def read_board(self):
+                self.reads += 1
+                return [before if self.reads == 1 else after]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("template_match.safe_click_at"),
+            patch("game_loop.time.sleep"),
+        ):
+            result = session.auto_use_ability(
+                Action("use_ability", 1, [2, 3], "Dreamer")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("do not match the clicked targets", result["error"])
+        self.assertNotIn(1, session.used_abilities)
 
 
 if __name__ == "__main__":

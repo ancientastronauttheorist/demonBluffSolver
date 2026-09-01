@@ -30,19 +30,24 @@ def _memory_card(
     clue: str,
     *,
     acted_infos=None,
-    uses: int = 0,
-    ability_used: bool = False,
+    remaining: int | None = None,
 ) -> dict:
+    acted_infos = list(acted_infos or [])
+    if remaining is None:
+        remaining = 0 if acted_infos else 1
     return {
         "position": position,
         "true_role": role,
         "disguise": role,
         "state": "Alive",
         "clue_text": clue,
-        "acted_infos": list(acted_infos or []),
+        "acted_infos": acted_infos,
         "runtime_data": None,
-        "uses": uses,
-        "ability_used": ability_used,
+        "pickable_uses_remaining": remaining,
+        "act_output_enabled": True,
+        "pickable_available": remaining > 0,
+        "uses": remaining,
+        "ability_used": True,
     }
 
 
@@ -114,21 +119,22 @@ class RamblerMemoryParsingTests(unittest.TestCase):
                 )
                 self.assertIsNone(parsed)
 
-    def test_unused_active_role_stale_shut_up_is_still_ignored(self):
+    def test_reset_available_active_role_retains_prior_shut_up_evidence(self):
         parsed = _parse_clue_from_memory(
             _memory_card(
                 3,
                 "Jester",
                 "#5 shut up!",
                 acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
-                uses=0,
-                ability_used=False,
+                remaining=1,
             ),
             n_cards=6,
         )
 
-        self.assertEqual(parsed.info_parsed, {})
-        self.assertNotIn("shut_up_target", parsed.info_parsed)
+        self.assertEqual(
+            parsed.info_parsed,
+            {"silenced": True, "shut_up_target": 5},
+        )
 
     def test_current_rambler_quote_is_negative_interference_evidence(self):
         quote = "I once met a cabbage on the road."
@@ -208,8 +214,7 @@ class RamblerMemoryParsingTests(unittest.TestCase):
                 "Jester",
                 "#5 shut up!",
                 acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
-                uses=1,
-                ability_used=True,
+                remaining=0,
             ),
             n_cards=6,
         )
@@ -221,6 +226,37 @@ class RamblerMemoryParsingTests(unittest.TestCase):
 
 
 class RamblerSessionCaptureTests(unittest.TestCase):
+    def test_auto_card_does_not_consume_reset_available_retained_jester_event(self):
+        session = GameSession(5, 1)
+        session.cards.append(CardInfo(3, "Jester"))
+        retained = _memory_card(
+            3,
+            "Jester",
+            "#5 shut up!",
+            acted_infos=[{"desc": "#5 shut up!", "targets": [5]}],
+            remaining=1,
+        )
+
+        class Reader:
+            def open(self):
+                return True
+
+            def read_board(self):
+                return [retained]
+
+            def close(self):
+                return None
+
+        with (
+            patch("memory_reader.MemoryReader", return_value=Reader()),
+            patch("memory_reader.print_board"),
+            patch.object(session, "save"),
+        ):
+            dispatch("auto_card", [], session)
+
+        self.assertEqual(session.cards[0].info_parsed, {})
+        self.assertNotIn(3, session.used_abilities)
+
     def test_auto_card_replaces_early_passive_entry_and_keeps_reveal_order(self):
         session = GameSession(4, 1)
         session.add_card(CardInfo(1, "Lover", info_parsed={"evil_adjacent": 0}))
@@ -441,16 +477,14 @@ class RamblerSessionCaptureTests(unittest.TestCase):
             "Judge",
             "#2 shut up!",
             acted_infos=[{"desc": "#2 shut up!", "targets": [2]}],
-            uses=1,
-            ability_used=True,
+            remaining=0,
         )
         before = _memory_card(
             1,
             "Judge",
             "",
             acted_infos=[],
-            uses=0,
-            ability_used=False,
+            remaining=1,
         )
 
         class Reader:

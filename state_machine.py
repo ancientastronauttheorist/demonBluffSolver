@@ -8,6 +8,7 @@ Usage in REPL:
     resume           # resume after NEEDS_HUMAN
 """
 
+import copy
 from enum import Enum
 from typing import Optional
 
@@ -28,6 +29,38 @@ class GamePhase(Enum):
     GAME_OVER = "game_over"
     POST_GAME = "post_game"
     NEEDS_HUMAN = "needs_human"
+
+
+def _acted_history_baseline(card):
+    """Copy one readable native acted-info history for freshness checks."""
+    if not isinstance(card, dict):
+        return None
+    history = card.get("acted_infos")
+    if not isinstance(history, list):
+        return None
+    return copy.deepcopy(history)
+
+
+def _coherent_appended_acted_event(card, baseline):
+    """Return the newest event only for an exact strict history extension."""
+    if not isinstance(card, dict) or not isinstance(baseline, list):
+        return None
+    history = card.get("acted_infos")
+    if (
+        not isinstance(history, list)
+        or len(history) <= len(baseline)
+        or history[:len(baseline)] != baseline
+    ):
+        return None
+    newest = history[-1]
+    if not isinstance(newest, dict):
+        return None
+    desc = newest.get("desc")
+    if not isinstance(desc, str) or not desc:
+        return None
+    if card.get("clue_text") != desc:
+        return None
+    return copy.deepcopy(newest)
 
 
 class GameStateMachine:
@@ -758,7 +791,14 @@ class GameStateMachine:
 
     def _auto_enter_single_card(self, pos: int):
         """Wait for one coherent public clue surface, then enter it."""
-        from game_loop import _parse_clue_from_memory, DecisionLog
+        from game_loop import (
+            DecisionLog,
+            _active_cycle_is_spent,
+            _has_active_clue_result,
+            _parse_clue_from_memory,
+            _pickable_uses_remaining,
+            card_no_info,
+        )
 
         if not self.monitor or not self.monitor.is_healthy():
             print(f"  [auto] No monitor — manual entry needed for #{pos}")
@@ -806,7 +846,21 @@ class GameStateMachine:
                     parsed = _parse_from_board(self.monitor.get_board())
 
         if parsed:
-            self.session.add_card(parsed)
+            if _has_active_clue_result(parsed):
+                remaining = _pickable_uses_remaining(captured["card"])
+                if remaining is None:
+                    return False
+                if remaining > 0:
+                    parsed = card_no_info(
+                        parsed.position,
+                        parsed.apparent_role,
+                    )
+            self.session.add_card(parsed, mark_active_result=False)
+            if (
+                _active_cycle_is_spent(captured["card"])
+                and _has_active_clue_result(parsed)
+            ):
+                self.session.mark_ability_used(parsed.position)
             DecisionLog.log_card(parsed)
             print(f"  [auto] #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
             return True
@@ -830,7 +884,12 @@ class GameStateMachine:
         import time
         from game_utils import all_game_card_coords
         import template_match as _tm
-        from game_loop import _parse_clue_from_memory, DecisionLog
+        from game_loop import (
+            DecisionLog,
+            _active_result_refs_match_clicks,
+            _observed_active_role_key,
+            _parse_clue_from_memory,
+        )
 
         pos, targets, ability_name, result = self._pending_ability
         print(f"\n  [auto] Phase: ABILITY_USE #{pos} ({ability_name}) -> targets {targets}")
@@ -902,25 +961,99 @@ class GameStateMachine:
             self.phase = GamePhase.SOLVING
             return
 
-        if ability_name == "Dreamer" and len(targets or []) != 2:
+        if (
+            ability_name == "Dreamer"
+            and (
+                len(targets or []) != 2
+                or any(type(target) is not int for target in (targets or []))
+                or len(set(targets or [])) != 2
+            )
+        ):
             self._pause(
-                f"Dreamer requires exactly 2 targets; solver returned {targets}. "
+                f"Dreamer requires exactly 2 distinct integer targets; "
+                f"solver returned {targets}. "
                 f"Handle manually, then 'resume'."
             )
             return
-
-        # Safety: check that targets don't have unused active abilities
-        for t in (targets or []):
-            if self._has_active_ability(t):
-                self._pause(
-                    f"Target #{t} has unused active ability — "
-                    f"clicking would activate it instead. Manual handling needed."
-                )
-                return
+        if (
+            ability_name == "Jester"
+            and (
+                len(targets or []) != 3
+                or any(type(target) is not int for target in (targets or []))
+                or len(set(targets or [])) != 3
+            )
+        ):
+            self._pause(
+                f"Jester requires exactly 3 distinct integer targets; "
+                f"solver returned {targets}. Handle manually, then 'resume'."
+            )
+            return
+        if ability_name not in ("Dreamer", "Jester"):
+            self._pause(
+                f"Ability {ability_name} has no authenticated autonomous "
+                "result path; handle it manually, then 'resume'."
+            )
+            return
 
         coords = all_game_card_coords(self.session.n_cards)
         if pos not in coords:
             self._pause(f"Position #{pos} not valid for {self.session.n_cards}-card game")
+            return
+        invalid_targets = [target for target in (targets or []) if target not in coords]
+        if invalid_targets:
+            self._pause(
+                f"Targets {invalid_targets} are not valid for "
+                f"{self.session.n_cards}-card game"
+            )
+            return
+
+        # Dreamer and Jester share this generic transition. Snapshot the full
+        # native callback history before the actor click; persistent savedAct,
+        # act flags, and prior actedInfos are otherwise indistinguishable from
+        # a result produced by this activation.
+        baseline_history = None
+        baseline_remaining = None
+        if not self.monitor or not self.monitor.is_healthy():
+            self._pause(
+                f"Ability {ability_name} on #{pos} cannot be activated "
+                "safely without a readable pre-click acted-info history."
+            )
+            return
+        baseline_board = self.monitor.get_board()
+        baseline_card = next(
+            (
+                card for card in (baseline_board or [])
+                if card.get("position") == pos
+            ),
+            None,
+        )
+        baseline_history = _acted_history_baseline(baseline_card)
+        if baseline_card is None or baseline_history is None:
+            self._pause(
+                f"Ability {ability_name} on #{pos} has no readable "
+                "pre-click acted-info history."
+            )
+            return
+        expected_role_key = ability_name.casefold().replace(" ", "_")
+        observed_role_key = _observed_active_role_key(baseline_card)
+        if observed_role_key != expected_role_key:
+            self._pause(
+                f"Ability {ability_name} on #{pos} cannot be activated: "
+                f"pre-click memory shows {observed_role_key or 'no role'}."
+            )
+            return
+        baseline_remaining = baseline_card.get("pickable_uses_remaining")
+        if type(baseline_remaining) is not int:
+            self._pause(
+                f"Ability {ability_name} on #{pos} has an unreadable native "
+                "pickable-use budget."
+            )
+            return
+        if baseline_remaining <= 0:
+            self._pause(
+                f"Ability {ability_name} on #{pos} is not currently "
+                f"available (remaining budget {baseline_remaining})."
+            )
             return
 
         # Step 1: Click the ability card to activate
@@ -930,76 +1063,111 @@ class GameStateMachine:
 
         # Step 2: Click each target
         for t in (targets or []):
-            if t not in coords:
-                self._pause(f"Target #{t} not valid for {self.session.n_cards}-card game")
-                return
             tx, ty = coords[t]
             _tm.fast_click_at(tx, ty, f"ability_target_{t}")
             time.sleep(0.3)
 
-        # Step 3: Wait for result via memory reader
-        # Monitor for uses count change or clue_text change
-        old_uses = None
+        # Step 3: Wait for a genuinely appended native result event.
+        resolved_card = {"card": None}
+        counter_decrease = {"seen": False}
         if self.monitor and self.monitor.is_healthy():
-            board = self.monitor.get_board()
-            if board:
-                mc = next((c for c in board if c['position'] == pos), None)
-                if mc:
-                    old_uses = mc.get('uses', 0)
-
             def _ability_resolved(board):
                 if not board:
                     return False
                 card = next((c for c in board if c['position'] == pos), None)
                 if not card:
                     return False
-                new_uses = card.get('uses', 0)
-                return (
-                    new_uses > (old_uses or 0)
-                    or bool(card.get('acted_infos'))
-                    or bool(card.get('ability_used') and card.get('clue_text'))
-                )
+                if _observed_active_role_key(card) != expected_role_key:
+                    return False
+                remaining = card.get("pickable_uses_remaining")
+                if (
+                    type(remaining) is int
+                    and remaining < baseline_remaining
+                ):
+                    # Native exposes a remaining-use counter. Its decrease
+                    # corroborates a click, but never substitutes for a new
+                    # coherent callback event.
+                    counter_decrease["seen"] = True
+                if _coherent_appended_acted_event(
+                    card,
+                    baseline_history,
+                ) is None:
+                    return False
+                if not _active_result_refs_match_clicks(
+                    card,
+                    list(targets or []),
+                    n_cards=self.session.n_cards,
+                ):
+                    return False
+                resolved_card["card"] = copy.deepcopy(card)
+                return True
 
             resolved = self.monitor.wait_for(_ability_resolved, timeout=5, min_delay=0.5)
+            if resolved and resolved_card["card"] is None:
+                # Lightweight monitor adapters may report readiness without
+                # invoking the predicate. Authenticate their latest snapshot.
+                resolved = _ability_resolved(self.monitor.get_board())
             if not resolved:
+                detail = (
+                    " The remaining-use counter decreased, but no coherent "
+                    "new acted-info event was appended."
+                    if counter_decrease["seen"] else ""
+                )
                 self._pause(
                     f"Ability {ability_name} on #{pos} didn't resolve — "
-                    f"check if clicks landed correctly."
+                    f"check if clicks landed correctly.{detail}"
                 )
                 return
         else:
-            time.sleep(2)
+            self._pause(
+                f"Ability {ability_name} on #{pos} lost its readable "
+                "memory monitor before a fresh acted-info event was verified."
+            )
+            return
 
-        # Step 4: Parse result from memory and enter
-        self.session.mark_ability_used(pos)
-
-        if self.monitor and self.monitor.is_healthy():
-            board = self.monitor.get_board()
-            if board:
-                mc = next((c for c in board if c['position'] == pos), None)
-                if mc:
-                    parsed = _parse_clue_from_memory(
-                        mc,
-                        n_cards=self.session.n_cards,
-                        baker_rule_version=self.session.baker_rule_version,
-                        fortune_teller_rule_version=self.session.fortune_teller_rule_version,
+        # Step 4: Parse result from the exact snapshot authenticated above.
+        mc = resolved_card["card"]
+        if mc:
+            parsed = _parse_clue_from_memory(
+                mc,
+                n_cards=self.session.n_cards,
+                baker_rule_version=self.session.baker_rule_version,
+                fortune_teller_rule_version=self.session.fortune_teller_rule_version,
+            )
+            if parsed:
+                parsed_role_key = (
+                    parsed.apparent_role.casefold().replace(" ", "_")
+                )
+                if parsed.position != pos or parsed_role_key != expected_role_key:
+                    self._pause(
+                        f"Ability {ability_name} on #{pos}: authenticated "
+                        "memory parsed as a different actor."
                     )
-                    if parsed:
-                        self.session.add_card(parsed)
-                        DecisionLog.log_card(parsed)
-                        print(f"  [auto] Ability result: #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
-                    else:
-                        role = (
-                            mc.get('disguise')
-                            or mc.get('current_role')
-                            or mc.get('true_role', '?')
-                        )
-                        clue = mc.get('clue_text', '')
-                        self._pause(
-                            f"Ability {ability_name} on #{pos}: couldn't parse result "
-                            f"\"{clue}\" — enter manually, then 'resume'."
-                        )
-                        return
+                    return
+                try:
+                    self.session.add_card(parsed, mark_active_result=False)
+                except ValueError as exc:
+                    self._pause(
+                        f"Ability {ability_name} on #{pos}: validated result "
+                        f"could not be stored: {exc}"
+                    )
+                    return
+                self.session.mark_ability_used(pos)
+                DecisionLog.log_card(parsed)
+                print(f"  [auto] Ability result: #{parsed.position} {parsed.apparent_role}: {parsed.info_parsed}")
+            else:
+                clue = mc.get('clue_text', '')
+                self._pause(
+                    f"Ability {ability_name} on #{pos}: couldn't parse result "
+                    f"\"{clue}\" — enter manually, then 'resume'."
+                )
+                return
+        else:
+            self._pause(
+                f"Ability {ability_name} on #{pos}: verified result "
+                "snapshot disappeared before parsing."
+            )
+            return
 
         self.session.save()
         self._snapshot_counts()

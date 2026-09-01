@@ -1,7 +1,7 @@
 """Plague Doctor public-result parsing and CLI validation regressions."""
 
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from game_loop import (
     GameSession,
@@ -10,6 +10,7 @@ from game_loop import (
 )
 from solver import CardInfo
 from state_machine import GamePhase, GameStateMachine
+from strategy import Action
 
 
 def _memory_card(clue: str, targets: list[int]) -> dict:
@@ -20,6 +21,23 @@ def _memory_card(clue: str, targets: list[int]) -> dict:
 
 
 class PlagueDoctorMemoryResultTests(unittest.TestCase):
+    def test_picker_accepts_another_unused_active_card_as_target(self):
+        session = GameSession(4, 1)
+        session.cards.extend([
+            CardInfo(1, "Plague Doctor"),
+            CardInfo(2, "Dreamer"),
+        ])
+
+        with patch("memory_reader.MemoryReader") as reader_type:
+            reader_type.return_value.open.return_value = False
+            result = session.auto_use_ability(
+                Action("use_ability", 1, [2], "Plague Doctor")
+            )
+
+        self.assertFalse(result["success"])
+        self.assertIn("Cannot open memory reader", result["error"])
+        self.assertNotIn("unused active ability", result["error"])
+
     def test_exact_corrupted_result_uses_public_text_and_cross_checks_refs(self):
         parsed, error = _parse_pd_ability_result_from_memory(
             _memory_card("#5 is Evil\n#2 is Corrupted", [2, 5]),

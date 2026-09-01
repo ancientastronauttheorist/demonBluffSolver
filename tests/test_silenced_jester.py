@@ -29,8 +29,11 @@ def _base_jester(clue, targets=None, position=3, true_role="Jester",
         "clue_text": clue,
         "acted_infos": [{"desc": clue, "targets": targets or []}],
         "runtime_data": None,
+        "pickable_uses_remaining": 0,
+        "act_output_enabled": True,
+        "pickable_available": False,
         "ability_used": True,
-        "uses": 1,
+        "uses": 0,
     }
 
 
@@ -101,6 +104,17 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
         self.assertNotIn("silenced", ci.info_parsed)
         self.assertEqual(ci.info_parsed.get("evil_count"), 0)
 
+    def test_normal_jester_requires_three_distinct_refs_and_count_domain(self):
+        malformed = (
+            _base_jester("2 are evil", targets=[1, 2]),
+            _base_jester("2 are evil", targets=[1, 1, 2]),
+            _base_jester("4 are evil", targets=[1, 2, 4]),
+        )
+
+        for card in malformed:
+            with self.subTest(card=card):
+                self.assertIsNone(_parse_clue_from_memory(card, n_cards=5))
+
     def test_drunk_disguised_as_jester_silenced(self):
         # Parser must key off apparent role (disguise), not true_role.
         card = {
@@ -110,8 +124,11 @@ class TestParseClueFromMemorySilencedJester(unittest.TestCase):
             "clue_text": "#5 shut up!",
             "acted_infos": [{"desc": "#5 shut up!", "targets": [5]}],
             "runtime_data": None,
+            "pickable_uses_remaining": 0,
+            "act_output_enabled": True,
+            "pickable_available": False,
             "ability_used": True,
-            "uses": 1,
+            "uses": 0,
         }
         ci = _parse_clue_from_memory(card)
         self.assertIsNotNone(ci)
@@ -130,7 +147,10 @@ class TestShutUpCluesForNonJester(unittest.TestCase):
             "clue_text": "#10 shut up!",
             "acted_infos": [{"desc": "#10 shut up!", "targets": [10]}],
             "runtime_data": None,
-            "ability_used": False,
+            "pickable_uses_remaining": 0,
+            "act_output_enabled": True,
+            "pickable_available": False,
+            "ability_used": True,
             "uses": 0,
         }
         ci = _parse_clue_from_memory(card)

@@ -230,7 +230,7 @@ class ConfessorConstructorTests(unittest.TestCase):
         unreadable_refs = read_history(None)
         self.assertIsNone(null_refs[0]["targets"])
         self.assertEqual(empty_refs[0]["targets"], [])
-        self.assertEqual(unreadable_refs, [])
+        self.assertIsNone(unreadable_refs)
 
 
 class ConfessorManualIngestionTests(unittest.TestCase):
