@@ -484,9 +484,14 @@ EXECUTION_IMMUNE_ROLES = {"Knight"}
 # Query Helpers (used by strategy.py, game_loop.py, rust_solver.py)
 # ============================================================
 
-# Module-level cache for the current state's card lookup
+# Module-level cache for the current state's card lookup. Keep a strong
+# reference to the exact list rather than only its ``id``: CPython can recycle
+# an id as soon as a short-lived GameState is collected, which previously let
+# a new state inherit the prior state's position map. The signature also
+# catches in-place list/position edits made by live-session code.
 _card_lookup: dict[int, CardInfo] = {}
-_card_lookup_id: int = -1  # id of the state.cards list we built from
+_card_lookup_cards: Optional[list[CardInfo]] = None
+_card_lookup_signature: tuple[tuple[int, int], ...] = ()
 
 
 def _build_card_lookup(state: GameState) -> dict[int, CardInfo]:
@@ -496,11 +501,15 @@ def _build_card_lookup(state: GameState) -> dict[int, CardInfo]:
 
 def _get_card_at(pos: int, state: GameState) -> Optional[CardInfo]:
     """Get revealed card at position, or None. Uses cached dict lookup."""
-    global _card_lookup, _card_lookup_id
-    cards_id = id(state.cards)
-    if cards_id != _card_lookup_id:
+    global _card_lookup, _card_lookup_cards, _card_lookup_signature
+    signature = tuple((id(card), card.position) for card in state.cards)
+    if (
+        state.cards is not _card_lookup_cards
+        or signature != _card_lookup_signature
+    ):
         _card_lookup = _build_card_lookup(state)
-        _card_lookup_id = cards_id
+        _card_lookup_cards = state.cards
+        _card_lookup_signature = signature
     return _card_lookup.get(pos)
 
 
