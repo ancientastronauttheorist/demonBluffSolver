@@ -10047,6 +10047,13 @@ fn current_rambler_speaker_matcher_at_with_hidden_labels(
         return None;
     }
 
+    // Both exact Shaman copied-Confessor endpoints receive the physical
+    // AppearTruthfull status during their delayed internal Reveal. A later
+    // Baker write uses InitWithNoReset and therefore preserves it.
+    if shaman_copied_confessor_status_at(speaker, scenario) {
+        return Some(RAMBLER_MATCHES_TRUTHFUL);
+    }
+
     // Confessor's Init writes AppearTruthfull onto the physical Character and
     // InitWithNoReset preserves it. Scenario has no general appearance-status
     // history (nor the exact-resistance branch), so a presentation/current-data
@@ -17426,6 +17433,68 @@ mod tests {
     }
 
     #[test]
+    fn judge_uses_shaman_copied_confessor_status_on_both_endpoints() {
+        let says_truthful_source = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": false}),
+        );
+        let says_lying_source = make_card(
+            1,
+            "Judge",
+            json!({"target": 2, "is_lying": true}),
+        );
+        let says_truthful_target = make_card(
+            1,
+            "Judge",
+            json!({"target": 3, "is_lying": false}),
+        );
+        let says_lying_target = make_card(
+            1,
+            "Judge",
+            json!({"target": 3, "is_lying": true}),
+        );
+        let says_truthful_control = make_card(
+            1,
+            "Judge",
+            json!({"target": 4, "is_lying": false}),
+        );
+        let says_lying_control = make_card(
+            1,
+            "Judge",
+            json!({"target": 4, "is_lying": true}),
+        );
+        let state = base_state(
+            4,
+            vec![
+                says_truthful_source.clone(),
+                make_card(2, "Baker", json!({})),
+                make_card(3, "Scout", json!({})),
+                make_card(4, "Witness", json!({})),
+            ],
+        );
+        let mut scenario = empty_scenario();
+        scenario.corrupted = HashSet::from([2, 3, 4]);
+        scenario.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 3,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+
+        assert!(validate_judge(&says_truthful_source, &scenario, &state));
+        assert!(!validate_judge(&says_lying_source, &scenario, &state));
+        assert!(validate_judge(&says_truthful_target, &scenario, &state));
+        assert!(!validate_judge(&says_lying_target, &scenario, &state));
+        assert!(!validate_judge(&says_truthful_control, &scenario, &state));
+        assert!(validate_judge(&says_lying_control, &scenario, &state));
+
+        scenario.corrupted.insert(1);
+        assert!(!validate_judge(&says_truthful_source, &scenario, &state));
+        assert!(validate_judge(&says_lying_source, &scenario, &state));
+    }
+
+    #[test]
     fn judge_no_info_is_vacuous_but_partial_or_out_of_range_evidence_rejects() {
         let no_info = make_card(1, "Judge", json!({}));
         let empty_observations = make_card(1, "Judge", json!({"observations": []}));
@@ -18664,6 +18733,44 @@ mod tests {
             TruthStatus::Lying
         );
         assert!(validate_rambler_shut_ups(&corrupted_confessor, &state));
+    }
+
+    #[test]
+    fn rambler_uses_shaman_copied_confessor_appearance_on_nonconfessor_speaker() {
+        let state = base_state(
+            5,
+            vec![
+                make_card(1, "Rambler", json!({"quote_observed": true})),
+                make_card(2, "Scout", json!({"shut_up_target": 1})),
+                make_card(3, "Baker", json!({})),
+            ],
+        );
+        let mut copied_confessor = empty_scenario();
+        copied_confessor.corrupted.insert(2);
+        copied_confessor.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 3,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+
+        assert_eq!(
+            truth_status(2, &copied_confessor, &state),
+            TruthStatus::Lying,
+        );
+        assert_eq!(
+            truth_appearance_status(2, &copied_confessor, &state),
+            TruthStatus::Truthful,
+        );
+        assert!(validate_rambler_shut_ups(&copied_confessor, &state));
+
+        copied_confessor.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 3,
+            target_position: 4,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Baker".to_string()],
+        });
+        assert!(!validate_rambler_shut_ups(&copied_confessor, &state));
     }
 
     #[test]
@@ -21054,6 +21161,50 @@ mod tests {
         assert!(!validate_current_hidden_surface_consistency(
             &scenario, &state,
         ));
+    }
+
+    #[test]
+    fn current_rambler_keeps_exact_copied_confessor_status_after_baker_writer() {
+        let mut state = base_state(
+            4,
+            vec![
+                make_card(1, "Baker", json!({"original_role": "Confessor"})),
+                make_card(2, "Confessor", json!({})),
+                make_card(3, "Baker", json!({"original_role": "original"})),
+                make_card(4, "Shaman", json!({})),
+            ],
+        );
+        state.deck.villagers = vec![
+            "Baker".to_string(),
+            "Confessor".to_string(),
+            "Druid".to_string(),
+        ];
+        state.deck.minions = vec!["Shaman".to_string()];
+        state.baker_rule_version = Some(BAKER_CURRENT_RULE.to_string());
+        state.reveal_order = vec![2, 3, 1, 4];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(4, "Shaman".to_string());
+        scenario.shaman_trace = Some(crate::types::ShamanTrace {
+            source_position: 2,
+            target_position: 1,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Druid".to_string()],
+        });
+
+        assert_eq!(
+            current_data_role_at(1, &scenario, &state).as_deref(),
+            Some("Baker"),
+        );
+        assert_eq!(
+            current_rambler_speaker_matcher_at(
+                1,
+                CurrentRamblerBoundary::Final,
+                &BakerSpyTimeline::default(),
+                &scenario,
+                &state,
+            ),
+            Some(RAMBLER_MATCHES_TRUTHFUL),
+        );
     }
 
     #[test]

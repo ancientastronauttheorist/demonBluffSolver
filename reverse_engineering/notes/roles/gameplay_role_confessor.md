@@ -483,12 +483,21 @@ and Baker chronology. When a later raw callback is proven, it must also be
 Confessor because any other provider would overwrite the observed event;
 merely possible raw-pointer presence remains conservative.
 
+The later copied-Confessor composition checkpoint passed 465/465 Rust release
+library tests, 761/761 Python tests, a clean release build, and all 34 release
+simulation tests over the 426-case active corpus. The exhaustive simulation
+gate completed in 996.57 seconds.
+
 ## Remaining uncertainty
 
-- The scenario model does not expose Confessor's resisted `AppearTruthfull`
-  insertion. Judge/Rambler appearance logic therefore still assumes the status
-  lands on a displayed Confessor; the actual Confessor clue predicate does not
-  make that assumption.
+- The solver now derives settled `AppearTruthfull` for both exact
+  Shaman-copied Confessor endpoints and preserves that appearance through later
+  no-reset Baker presentation changes. Judge and Rambler consume the derived
+  physical fact; actual truth dispatch remains separate. No shipped gameplay
+  path produces resistance to status 25, so ordinary current-build insertion
+  is guaranteed. An externally injected exact-25 resistance remains outside
+  the scenario schema, and a grouped erased-role class that merely contains
+  Confessor is deliberately not promoted to a positive status fact.
 - Dynamic animated-art frame timing and generic skin-unlock machinery were not
   live-forced. They do not feed the clue, references, runtime data, or RNG.
 - When raw-bluff presence is only `Possible`, the hidden-state model cannot

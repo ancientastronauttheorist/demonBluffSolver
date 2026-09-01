@@ -117,7 +117,10 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
   also preserves latent copied-PD target/no-op history through later Alchemist
   convergence, while normal scenarios correctly exclude that composition:
   shipped pre-Reveal Shaman sources still have null live bluffs and can only
-  copy their current real Villager data.
+  copy their current real Villager data. Exact copied-Confessor traces now also
+  project the guaranteed settled `AppearTruthfull` status onto both endpoints,
+  including after Baker no-reset presentation changes, for Judge/Rambler while
+  leaving actual truth dispatch untouched.
 
 - [ ] **Native branch probability weights** — surviving scenarios are still
   treated as equally likely after semantic deduplication. Preserve native draw

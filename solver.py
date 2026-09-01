@@ -820,6 +820,17 @@ def truth_status(pos: int, scenario: Scenario, state: GameState) -> TruthStatus:
     return _truth_status(pos, scenario, state)
 
 
+def _shaman_copied_confessor_status_at(pos: int, scenario: Scenario) -> bool:
+    """Return the exact shipped copied-Confessor appearance-status fact."""
+    trace = scenario.shaman_trace
+    return bool(
+        trace is not None
+        and trace.copied_role.lower().replace(" ", "").replace("_", "")
+        == "confessor"
+        and pos in {trace.source_position, trace.target_position}
+    )
+
+
 def _truth_appearance_status(
     pos: int,
     scenario: Scenario,
@@ -828,15 +839,17 @@ def _truth_appearance_status(
     """Model native ``CharacterHelper.CheckLyingAppearance``.
 
     Confessor applies ``AppearTruthfull`` from both its real and bluff-role
-    initialization paths.  The scenario model does not carry arbitrary
-    appearance statuses, so every other apparent role falls back to the actual
-    native lie predicate represented by :func:`_truth_status`.
+    initialization paths. Shaman's exact copied-Confessor endpoints retain the
+    same physical status after later no-reset presentation changes. The
+    scenario model does not carry arbitrary appearance statuses, so every
+    other apparent role falls back to the actual native lie predicate
+    represented by :func:`_truth_status`.
     """
     card = _get_card_at(pos, state)
     if (
-        card is not None
-        and card.apparent_role.lower().replace(" ", "").replace("_", "")
-        == "confessor"
+        _shaman_copied_confessor_status_at(pos, scenario)
+        or card is not None
+        and card.apparent_role.lower().replace(" ", "").replace("_", "") == "confessor"
     ):
         return TruthStatus.TRUTHFUL
 

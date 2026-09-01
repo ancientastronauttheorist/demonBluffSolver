@@ -262,3 +262,27 @@ that pool after its real data becomes Outcast; an exact override requires a
 caller-proven live Villager `registerAs` pool plus the ordinary Good/no-stale-
 bluff dispatch shape. Runtime-Evil or secondary stale-bluff dispatch remains a
 separate ordered-replay frontier.
+
+Copied Confessor has a different, shipped-reachable delayed effect. Its
+immediate copied Start call is a no-op, but both Shaman endpoints own the
+Confessor identity when their internal Reveal dispatches Init. Both the real
+and bluff Confessor Init paths attempt status 25 (`AppearTruthfull`). An
+exhaustive recovered-source producer check found no shipped resistance for
+status 25: Alchemist is the only gameplay `AddResistance` caller and passes
+only `Corrupted` (10). The settled status is therefore guaranteed on both
+endpoints in current ordinary play, even when Corruption makes their actual
+role dispatch lie. Later Baker conversion uses `InitWithNoReset` and preserves
+the physical status.
+
+The solver derives this exact fact from `ShamanTrace.copied_role == Confessor`
+and endpoint membership instead of adding a second serialized status field.
+Judge and Rambler consequently use truthful appearance for either endpoint,
+including after a non-Confessor presentation change, while `truth_status`
+continues to model actual dispatch independently. Rambler's setup coroutine
+order does not add a branch here: every shipped setup target is Hidden, so the
+hidden path installs its callback without an appearance query and rechecks
+appearance only when the target later acts. A grouped
+`target_previous_roles` class that merely contains Confessor remains
+insufficient evidence; Twin can move Confessor data onto a physical card after
+universal Init and Shaman can overwrite it before that body ever runs
+Confessor Init.

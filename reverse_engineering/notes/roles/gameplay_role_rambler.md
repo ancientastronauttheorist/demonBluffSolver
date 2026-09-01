@@ -267,6 +267,12 @@ extra `charRef` parameter. The debug-only install string is
   sources replace adjacent appearance-lying results. Ordinary Evil fake
   Ramblers belong to the latter mode, while HealthyBluff fake Ramblers belong
   to the former.
+- Exact Shaman-copied Confessor endpoints have settled `AppearTruthfull` by
+  public Day, even after a later Baker no-reset presentation change. Initial
+  callback installation is order-independent for this composition because the
+  shipped Hidden-target branch attaches unconditionally and rechecks appearance
+  only when the target acts. The solver derives this only when the copied role
+  itself is Confessor; a possible erased prior Confessor remains unresolved.
 - One visible event has exactly one Rambler reference even if several callbacks
   ran; the last matching callback wins. Immediate reinstallation can instead
   append another separate event.

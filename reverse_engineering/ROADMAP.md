@@ -293,6 +293,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       overwritten destination drops when pre-Reveal `registerAs` is null.
       Keep it outside normal scenario generation because shipped initial Start
       has no live source bluff and therefore cannot copy Outcast PD data.
+    - [x] Derive the settled physical `AppearTruthfull` status for both exact
+      Shaman-copied Confessor endpoints from the existing ordered trace, retain
+      it through later Baker no-reset presentation changes, and project it into
+      Judge and shipped Rambler appearance checks without changing actual truth
+      dispatch. Keep grouped erased-prior Confessor candidates fail-closed.
 - [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
   role/compiler-generated methods plus registered-alignment, acted-record,
   pool-filter, and RNG helpers; close its direct/Poet three-reference schema,

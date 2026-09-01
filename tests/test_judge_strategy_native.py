@@ -3,7 +3,14 @@
 import unittest
 
 from knowledge_base import get_card
-from solver import CardInfo, DeckComposition, GameState, Scenario, SolverResult
+from solver import (
+    CardInfo,
+    DeckComposition,
+    GameState,
+    Scenario,
+    ShamanTrace,
+    SolverResult,
+)
 from strategy import _judge_ground_truth, _recommend_judge, recommend_abilities
 
 
@@ -49,6 +56,23 @@ class JudgeNativeStrategyTests(unittest.TestCase):
 
         self.assertFalse(_judge_ground_truth(2, corrupted, state))
         self.assertFalse(_judge_ground_truth(2, evil, state))
+
+    def test_shaman_copied_confessor_endpoints_survive_presentation_changes(self):
+        state = _state(["Judge", "Baker", "Scout", "Witness"])
+        scenario = Scenario(
+            evil_positions={},
+            corrupted={2, 3, 4},
+            shaman_trace=ShamanTrace(
+                source_position=2,
+                target_position=3,
+                copied_role="Confessor",
+                target_previous_roles=["Scout"],
+            ),
+        )
+
+        self.assertFalse(_judge_ground_truth(2, scenario, state))
+        self.assertFalse(_judge_ground_truth(3, scenario, state))
+        self.assertTrue(_judge_ground_truth(4, scenario, state))
 
     def test_corrupted_judge_deterministically_inverts_observation(self):
         state = _state(["Judge", "Baker"])

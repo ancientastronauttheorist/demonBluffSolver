@@ -258,17 +258,36 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     TruthStatus::Truthful
 }
 
+/// Whether the exact shipped Shaman history guarantees that one physical card
+/// received Confessor's `AppearTruthfull` status.
+///
+/// A copied Confessor's immediate Start dispatch is a no-op. Both ordered
+/// endpoints nevertheless own the copied identity when their delayed internal
+/// Reveal dispatches Init, and both the real and bluff Confessor Init paths add
+/// the status. No shipped producer grants resistance to this status. Later
+/// `InitWithNoReset` writers preserve it. Merely listing Confessor among the
+/// target's possible erased roles is not sufficient evidence.
+pub fn shaman_copied_confessor_status_at(pos: u8, scenario: &Scenario) -> bool {
+    scenario.shaman_trace.as_ref().is_some_and(|trace| {
+        roles_equal(&trace.copied_role, "Confessor")
+            && (trace.source_position == pos || trace.target_position == pos)
+    })
+}
+
 /// Determine the truth condition exposed by native
 /// `CharacterHelper.CheckLyingAppearance` for the statuses represented by the
 /// scenario model.
 ///
 /// Confessor applies `AppearTruthfull` during both its real and bluff-role Init
 /// dispatch, so every card appearing as Confessor is perceived as truthful even
-/// when actual action dispatch lies because it is corrupted or evil. The model
-/// does not yet represent arbitrary appearance statuses; all other cards fall
-/// back to the actual native lie predicate modeled by [`truth_status`].
+/// when actual action dispatch lies because it is corrupted or evil. The exact
+/// Shaman copied-Confessor endpoints retain the same physical status even after
+/// a later presentation change. The model does not yet represent arbitrary
+/// appearance statuses; all other cards fall back to the actual native lie
+/// predicate modeled by [`truth_status`].
 pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
-    if state
+    if shaman_copied_confessor_status_at(pos, scenario)
+        || state
         .card_at(pos)
         .map(|card| normalize_role(&card.apparent_role) == "confessor")
         .unwrap_or(false)
@@ -452,6 +471,53 @@ mod truth_status_tests {
         assert_eq!(
             truth_appearance_status(1, &scenario, &state),
             TruthStatus::Truthful
+        );
+    }
+
+    #[test]
+    fn shaman_copied_confessor_endpoints_keep_truthful_appearance_after_presentation_changes() {
+        let mut state = GameState::default();
+        state.n_cards = 3;
+        state.cards = vec![
+            CardInfo {
+                position: 1,
+                apparent_role: "Baker".to_string(),
+                ..CardInfo::default()
+            },
+            CardInfo {
+                position: 2,
+                apparent_role: "Scout".to_string(),
+                ..CardInfo::default()
+            },
+            CardInfo {
+                position: 3,
+                apparent_role: "Witness".to_string(),
+                ..CardInfo::default()
+            },
+        ];
+        let mut scenario = scenario();
+        scenario.corrupted = HashSet::from([1, 2, 3]);
+        scenario.shaman_trace = Some(ShamanTrace {
+            source_position: 1,
+            target_position: 2,
+            copied_role: "Confessor".to_string(),
+            target_previous_roles: vec!["Scout".to_string()],
+        });
+
+        for pos in 1..=3 {
+            assert_eq!(truth_status(pos, &scenario, &state), TruthStatus::Lying);
+        }
+        assert_eq!(
+            truth_appearance_status(1, &scenario, &state),
+            TruthStatus::Truthful,
+        );
+        assert_eq!(
+            truth_appearance_status(2, &scenario, &state),
+            TruthStatus::Truthful,
+        );
+        assert_eq!(
+            truth_appearance_status(3, &scenario, &state),
+            TruthStatus::Lying,
         );
     }
 
