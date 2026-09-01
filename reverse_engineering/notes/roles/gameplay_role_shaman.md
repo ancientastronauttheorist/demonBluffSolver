@@ -100,6 +100,19 @@ real `dataRef`. The apparent-type filter and copied-identity query are therefore
 different surfaces: selection is register-as-first, while copying is
 bluff-or-real.
 
+In the shipped initial Start pass, however, this generic bluff branch is not
+normally reachable. Fresh `Character.Init` calls clear `bluff` and
+`registerAs`, and none of the pending `DelayReveal` continuations resumes until
+the synchronous ordered Start dispatcher returns. Earlier Chancellor and Twin
+`Init`/`InitWithNoReset` writers likewise leave the source's live `bluff`
+pointer null at Shaman's slot. An ordinary selected source therefore contributes
+its current real Villager data. In particular, public Plague Doctor is an
+Outcast and cannot be copied by the shipped pre-Reveal Shaman path merely
+because a later presentation could give some physical card a PD bluff. A copied
+PD Start remains a valid latent/native composition only for an explicitly
+proven nonstandard state with a live eligible source bluff or equivalent
+registered/current-data provenance.
+
 Shaman passes the resulting `CharacterData` to
 `destination.InitWithNoReset(data, -100)`. It then immediately invokes
 `destination.Act(Start)`, and only after that dispatch attempts
@@ -238,3 +251,14 @@ follows the linked Baker audit: null runtime means original, compatible Baker
 runtime preserves its named history, incompatible non-null runtime can
 invalidate the Day surface, and current Corrupted copies do not create
 descendants without status 38.
+
+The pure corruption replay also models the latent ordinary-runtime-Good copied
+Plague Doctor callback without exposing it as a normal scenario root. It runs
+after every global Plague Doctor and before the destination marker and global
+Alchemists, rebuilds the live eligible pool, and preserves a separate copied
+target/no-candidate provenance value through later cure convergence. With the
+ordinary pre-Reveal null `registerAs`, the overwritten destination drops from
+that pool after its real data becomes Outcast; an exact override requires a
+caller-proven live Villager `registerAs` pool plus the ordinary Good/no-stale-
+bluff dispatch shape. Runtime-Evil or secondary stale-bluff dispatch remains a
+separate ordered-replay frontier.

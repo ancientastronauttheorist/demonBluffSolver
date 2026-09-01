@@ -286,6 +286,13 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
       convergence. Preserve exact uniform target mass only for the singular,
       one-actor Start kernel; grouped Chancellor/Shaman/Poisoner/Twin/
       Puppeteer roots keep equal logical-world semantics.
+    - [x] Implement the pure latent Shaman-copied Plague Doctor callback for a
+      caller-proven ordinary runtime-Good/no-stale-bluff destination: rebuild
+      its live apparent-Villager pool after global PD, preserve separate copied
+      target/no-op provenance through Alchemist convergence, and prove that the
+      overwritten destination drops when pre-Reveal `registerAs` is null.
+      Keep it outside normal scenario generation because shipped initial Start
+      has no live source bluff and therefore cannot copy Outcast PD data.
 - [x] Asset-bind public Empress to managed `Noble`; native-audit all 14 declared
   role/compiler-generated methods plus registered-alignment, acted-record,
   pool-filter, and RNG helpers; close its direct/Poet three-reference schema,

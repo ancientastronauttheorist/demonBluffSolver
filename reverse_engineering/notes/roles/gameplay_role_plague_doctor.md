@@ -279,8 +279,15 @@ Focused regressions cover descending duplicate order, live candidate removal,
 pool exhaustion, duplicate authored PD selection, Chancellor overlap,
 Puppeteer replacement, Alchemist convergence, and the exact three-target case
 where a Knight's native corruption/execution risk is `1/3` rather than `1/2`.
-Shaman's later immediate copied-PD Start call and general provenance-bearing
-probability factors remain separate replay frontiers.
+The pure post-Twin corruption boundary now also replays a latent Shaman-copied
+PD on a caller-proven ordinary runtime-Good destination: it runs after the
+global history, rebuilds the live pool, records selected/no-candidate
+provenance separately, and preserves three-way target mass through later
+Alchemist convergence. Normal shipped scenario generation deliberately does
+not emit that trace because initial bluffs and register-as pointers are still
+null at Shaman's pre-Reveal slot, so an ordinary Villager source cannot supply
+Outcast PD data. Runtime-Evil/stale-bluff composition and general provenance-
+bearing probability factors remain separate replay frontiers.
 
 The clean-room behavioral contract is:
 

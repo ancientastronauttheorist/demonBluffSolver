@@ -110,7 +110,14 @@ Research phase COMPLETE. All 40 cards audited against demonbluff.wiki.gg.
 
 ### P1: Missing Deduction Constraints (improve scenario elimination)
 
-- [x] **Shaman ordered overwrite trace** — FIXED. Enumerates ordered source/target pairs, carries the copied role plus an existential erased-role candidate class, and admits mixed-faction hidden endpoints only when the exact Outcast budget can make them Villagers.
+- [x] **Shaman ordered overwrite trace** — FIXED. Enumerates ordered
+  source/target pairs, carries the copied role plus an existential erased-role
+  candidate class, and admits mixed-faction hidden endpoints only when the
+  exact Outcast budget can make them Villagers. The pure corruption boundary
+  also preserves latent copied-PD target/no-op history through later Alchemist
+  convergence, while normal scenarios correctly exclude that composition:
+  shipped pre-Reveal Shaman sources still have null live bluffs and can only
+  copy their current real Villager data.
 
 - [ ] **Native branch probability weights** — surviving scenarios are still
   treated as equally likely after semantic deduplication. Preserve native draw
