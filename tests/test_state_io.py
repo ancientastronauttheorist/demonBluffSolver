@@ -4,14 +4,19 @@ import unittest
 from unittest.mock import patch
 
 from game_loop import DecisionLog, GameSession, _release_session_lock, dispatch
-from solver import CardInfo, DeckComposition, GameState
+from solver import (
+    CardInfo,
+    DeckComposition,
+    GameState,
+    TwinRecipientBluffContext,
+)
 
 
 class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-11:],
+            names[-12:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
@@ -24,6 +29,7 @@ class TestGameStateIO(unittest.TestCase):
                 "terminal_loss_role",
                 "executed_current_roles",
                 "revealed_night_current_roles",
+                "twin_recipient_bluff_context",
             ],
         )
 
@@ -56,6 +62,14 @@ class TestGameStateIO(unittest.TestCase):
             terminal_loss_role="Bombardier",
             executed_current_roles={4: "Bombardier"},
             revealed_night_current_roles={3: "Witch"},
+            twin_recipient_bluff_context=TwinRecipientBluffContext(
+                rule_version="twin_recipient_bluff_native_v1",
+                recipient_position=3,
+                acquisition_ordinal=7,
+                duplicate_pool=["Scout", "Scout", "Confessor"],
+                unique_pool=["Witness", "Confessor"],
+                bluff_must_include_at_recipient=["Bard"],
+            ),
         )
 
         data = state.to_dict()
@@ -89,6 +103,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertIsNone(loaded.terminal_loss_role)
         self.assertEqual(loaded.executed_current_roles, {})
         self.assertEqual(loaded.revealed_night_current_roles, {})
+        self.assertIsNone(loaded.twin_recipient_bluff_context)
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -183,17 +198,46 @@ class TestGameStateIO(unittest.TestCase):
             current["fortune_teller_rule_version"],
             "fortune_teller_native_v1",
         )
+        self.assertNotIn("twin_recipient_bluff_context", current)
         self.assertIsNone(legacy.rambler_rule_version)
         self.assertEqual(legacy.rambler_shut_up_observations, [])
         self.assertIsNone(legacy.baker_rule_version)
         self.assertIsNone(legacy.doppel_drunk_rule_version)
         self.assertIsNone(legacy.fortune_teller_rule_version)
         self.assertIsNone(legacy.terminal_loss_role)
+        self.assertIsNone(legacy.twin_recipient_bluff_context)
         self.assertNotIn("rambler_rule_version", legacy.to_dict())
         self.assertNotIn("baker_rule_version", legacy.to_dict())
         self.assertNotIn("doppel_drunk_rule_version", legacy.to_dict())
         self.assertNotIn("fortune_teller_rule_version", legacy.to_dict())
         self.assertNotIn("terminal_loss_role", legacy.to_dict())
+        self.assertNotIn("twin_recipient_bluff_context", legacy.to_dict())
+
+    def test_offline_twin_recipient_context_round_trips_exact_pool_occurrences(self):
+        context = TwinRecipientBluffContext(
+            rule_version="twin_recipient_bluff_native_v1",
+            recipient_position=2,
+            acquisition_ordinal=65535,
+            duplicate_pool=["Scout", "Scout", "Confessor"],
+            unique_pool=["Witness"],
+            bluff_must_include_at_recipient=["Bard", "Bard"],
+        )
+        state = GameState(
+            n_cards=3,
+            deck=DeckComposition([], [], ["Twin Minion"], ["Pooka"]),
+            cards=[],
+            twin_recipient_bluff_context=context,
+        )
+
+        serialized = state.to_dict()
+        self.assertEqual(
+            serialized["twin_recipient_bluff_context"],
+            context.to_dict(),
+        )
+        self.assertEqual(
+            GameState.from_dict(serialized).twin_recipient_bluff_context,
+            context,
+        )
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):
         data = {

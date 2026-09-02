@@ -13,6 +13,7 @@ use baker::{
 use disguisers::validate_clean_doppel_source_support;
 
 use std::collections::{HashMap, HashSet};
+use crate::bluff::enumerate_twin_recipient_bluffs;
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions, Direction};
 use crate::knowledge_base::{self, get_card, normalize_role, Faction};
 use crate::shaman::{enumerate_shaman_traces, role_after_shaman};
@@ -166,8 +167,77 @@ fn executed_evil_origin_is_unresolved(
             .is_some_and(|role| normalize_role(role) == "unknown")
 }
 
+/// Validate the guarded offline bluff-selection evidence carried by the exact
+/// Twin -> Shaman kernel. Context without a trace is forbidden only on an exact
+/// claim; legacy fallback worlds intentionally ignore the hidden snapshot as
+/// one atomic unsupported dimension.
+fn validate_twin_recipient_bluff_trace(scenario: &Scenario, state: &GameState) -> bool {
+    let Some(trace) = scenario.twin_recipient_bluff_trace.as_ref() else {
+        return !(is_exact_twin_shaman_claim(scenario)
+            && state.twin_recipient_bluff_context.is_some());
+    };
+    if !is_exact_twin_shaman_claim(scenario) {
+        return false;
+    }
+    let Some(context) = state.twin_recipient_bluff_context.as_ref() else {
+        return false;
+    };
+    let Some(outcomes) = enumerate_twin_recipient_bluffs(context) else {
+        return false;
+    };
+    if !outcomes.iter().any(|outcome| &outcome.trace == trace) {
+        return false;
+    }
+
+    let Some(twin_trace) = scenario.twin_trace.as_ref() else {
+        return false;
+    };
+    let crate::types::TwinStartOutcome::Swap {
+        neighbor_position,
+        ..
+    } = twin_trace.outcome
+    else {
+        return false;
+    };
+    if neighbor_position == twin_trace.actor_position
+        || neighbor_position != trace.recipient_position
+        || scenario.is_evil(trace.recipient_position)
+    {
+        return false;
+    }
+
+    let Some(post_twin_roles) = exact_twin_shaman_post_twin_roles(scenario, state) else {
+        return false;
+    };
+    let Some(shaman_trace) = scenario.shaman_trace.as_ref() else {
+        return false;
+    };
+    if !role_after_shaman(
+        trace.recipient_position,
+        &post_twin_roles,
+        shaman_trace,
+    )
+    .is_some_and(|role| normalize_role(&role) == "twinminion")
+    {
+        return false;
+    }
+
+    let mut recipient_cards = state
+        .cards
+        .iter()
+        .filter(|card| card.position == trace.recipient_position);
+    let Some(card) = recipient_cards.next() else {
+        return false;
+    };
+    recipient_cards.next().is_none()
+        && normalize_role(&card.apparent_role) == normalize_role(&trace.bluff_role)
+}
+
 /// Check if all revealed cards + ability results + structural constraints are consistent.
 pub fn check_scenario(scenario: &Scenario, state: &GameState) -> bool {
+    if !validate_twin_recipient_bluff_trace(scenario, state) {
+        return false;
+    }
     // Check observed corruption status of executed good cards.
     for (&pos, &was_corrupted) in &state.executed_good_corrupted {
         if !matches_executed_good_corruption(scenario, pos, was_corrupted) {
@@ -11647,6 +11717,7 @@ mod tests {
             twin_trace: None,
             pre_twin_current_roles: HashMap::new(),
             puppeteer_trace: None,
+            twin_recipient_bluff_trace: None,
         }
     }
 

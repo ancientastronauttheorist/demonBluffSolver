@@ -458,6 +458,7 @@ mod tests {
             twin_trace: None,
             pre_twin_current_roles: HashMap::new(),
             puppeteer_trace: None,
+            twin_recipient_bluff_trace: None,
         }
     }
 

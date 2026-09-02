@@ -291,6 +291,12 @@ pub struct GameState {
         deserialize_with = "deserialize_int_key_map_str"
     )]
     pub executed_current_roles: HashMap<u8, String>,
+
+    /// Offline-only native pool snapshot at the first Minion bluff acquisition
+    /// on a runtime-Good card carrying moved Twin data. Live play must leave
+    /// this hidden context absent.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub twin_recipient_bluff_context: Option<TwinRecipientBluffContext>,
 }
 
 fn default_hp() -> i32 {
@@ -337,6 +343,7 @@ impl Default for GameState {
             name: None,
             notes: None,
             executed_current_roles: HashMap::new(),
+            twin_recipient_bluff_context: None,
         }
     }
 }
@@ -485,6 +492,37 @@ pub struct TwinTrace {
     pub outcome: TwinStartOutcome,
 }
 
+/// Offline-only occurrence-preserving native pool state at the moved Twin
+/// recipient's first Minion bluff acquisition event.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct TwinRecipientBluffContext {
+    pub rule_version: String,
+    pub recipient_position: u8,
+    pub acquisition_ordinal: u16,
+    pub duplicate_pool: Vec<String>,
+    pub unique_pool: Vec<String>,
+    #[serde(default)]
+    pub bluff_must_include_at_recipient: Vec<String>,
+}
+
+/// Exact occurrence selected by native Minion bluff acquisition.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum BluffAcquisitionSource {
+    DuplicatePool { occurrence_index: u16 },
+    UniquePool { occurrence_index: u16 },
+    BluffMustInclude { occurrence_index: u16 },
+}
+
+/// Exact installed bluff on a runtime-Good card carrying moved Twin data.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct TwinRecipientBluffTrace {
+    pub recipient_position: u8,
+    pub acquisition_ordinal: u16,
+    pub bluff_role: String,
+    pub source: BluffAcquisitionSource,
+}
+
 /// Which physical occurrence from Puppeteer's native `[previous, next]`
 /// neighbour pair survived the Villager and Saint filters.
 ///
@@ -583,6 +621,9 @@ pub struct Scenario {
     /// provenance.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub puppeteer_trace: Option<PuppeteerTrace>,
+    /// Exact offline-only bluff outcome on the runtime-Good moved Twin seat.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub twin_recipient_bluff_trace: Option<TwinRecipientBluffTrace>,
 }
 
 impl Scenario {
@@ -1057,6 +1098,14 @@ mod tests {
                     erased_villager_role: "Witness".to_string(),
                 },
             }),
+            twin_recipient_bluff_trace: Some(TwinRecipientBluffTrace {
+                recipient_position: 4,
+                acquisition_ordinal: 7,
+                bluff_role: "Confessor".to_string(),
+                source: BluffAcquisitionSource::UniquePool {
+                    occurrence_index: 1,
+                },
+            }),
         };
         let json = serde_json::to_value(&scenario).unwrap();
         // Keys must be strings in JSON
@@ -1091,6 +1140,15 @@ mod tests {
             json["puppeteer_trace"]["outcome"]["erased_villager_role"],
             "Witness"
         );
+        assert_eq!(json["twin_recipient_bluff_trace"]["recipient_position"], 4);
+        assert_eq!(
+            json["twin_recipient_bluff_trace"]["source"]["kind"],
+            "unique_pool"
+        );
+        assert_eq!(
+            json["twin_recipient_bluff_trace"]["source"]["occurrence_index"],
+            1
+        );
         // Round-trip
         let back: Scenario = serde_json::from_value(json).unwrap();
         assert_eq!(back.evil_positions.get(&3), Some(&"Pooka".to_string()));
@@ -1118,6 +1176,46 @@ mod tests {
         assert_eq!(back.twin_trace, scenario.twin_trace);
         assert_eq!(back.pre_twin_current_roles, scenario.pre_twin_current_roles);
         assert_eq!(back.puppeteer_trace, scenario.puppeteer_trace);
+        assert_eq!(
+            back.twin_recipient_bluff_trace,
+            scenario.twin_recipient_bluff_trace
+        );
+    }
+
+    #[test]
+    fn twin_recipient_bluff_context_is_optional_and_round_trips_occurrences() {
+        let legacy = GameState::from_json(&serde_json::json!({
+            "n_cards": 1,
+            "deck": {"villagers": [], "outcasts": [], "minions": [], "demons": []}
+        }))
+        .unwrap();
+        assert!(legacy.twin_recipient_bluff_context.is_none());
+        assert!(serde_json::to_value(&legacy)
+            .unwrap()
+            .get("twin_recipient_bluff_context")
+            .is_none());
+
+        let current = GameState::from_json(&serde_json::json!({
+            "n_cards": 4,
+            "deck": {"villagers": [], "outcasts": [], "minions": [], "demons": []},
+            "twin_recipient_bluff_context": {
+                "rule_version": "twin_recipient_bluff_native_v1",
+                "recipient_position": 4,
+                "acquisition_ordinal": 7,
+                "duplicate_pool": ["Scout", "Scout", "Confessor"],
+                "unique_pool": ["Witness", "Confessor"],
+                "bluff_must_include_at_recipient": []
+            }
+        }))
+        .unwrap();
+        let context = current.twin_recipient_bluff_context.as_ref().unwrap();
+        assert_eq!(context.duplicate_pool[0..2], ["Scout", "Scout"]);
+        assert_eq!(context.acquisition_ordinal, 7);
+        assert_eq!(
+            serde_json::to_value(&current).unwrap()["twin_recipient_bluff_context"]
+                ["duplicate_pool"],
+            serde_json::json!(["Scout", "Scout", "Confessor"])
+        );
     }
 
     #[test]

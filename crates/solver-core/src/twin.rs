@@ -8,7 +8,7 @@
 use std::collections::HashMap;
 
 use crate::knowledge_base::{get_card, normalize_role, Faction};
-use crate::types::{GameState, TwinNeighborSide, TwinStartOutcome, TwinTrace};
+use crate::types::{CardInfo, GameState, TwinNeighborSide, TwinStartOutcome, TwinTrace};
 
 fn is_twin(role: &str) -> bool {
     normalize_role(role) == "twinminion"
@@ -27,11 +27,8 @@ fn is_demon(role: &str) -> bool {
 /// the existing lying validators are exact. Scout additionally requires the
 /// authenticated current-build payload; archived scalar Scout observations do
 /// not carry enough native output provenance for this boundary.
-fn is_supported_distinct_actor_card(state: &GameState, actor_position: u8) -> bool {
-    let [card] = state.cards.as_slice() else {
-        return state.cards.is_empty();
-    };
-    if card.position != actor_position || card.position == 0 || card.position > state.n_cards {
+fn is_supported_distinct_actor_card(state: &GameState, card: &CardInfo) -> bool {
+    if card.position == 0 || card.position > state.n_cards {
         return false;
     }
 
@@ -53,15 +50,44 @@ fn is_supported_distinct_actor_card(state: &GameState, actor_position: u8) -> bo
     }
 }
 
+fn is_supported_distinct_recipient_card(state: &GameState, card: &CardInfo) -> bool {
+    if card.position == 0 || card.position > state.n_cards {
+        return false;
+    }
+
+    match normalize_role(&card.apparent_role).as_str() {
+        "scout" | "witness" => is_supported_distinct_actor_card(state, card),
+        "confessor" => {
+            if card.info_parsed.len() != 2
+                || card
+                    .info_parsed
+                    .get("confessor_variant")
+                    .and_then(serde_json::Value::as_str)
+                    != Some("public_current")
+            {
+                return false;
+            }
+            card.info_parsed
+                .get("dizzy")
+                .and_then(serde_json::Value::as_bool)
+                .is_some_and(|dizzy| {
+                    card.info_text
+                        == if dizzy { "I am dizzy" } else { "I am Good" }
+                })
+        }
+        _ => false,
+    }
+}
+
 /// Whether a distinct Twin swap needs public-action provenance that the
 /// role replay does not yet carry.
 ///
 /// Native keeps runtime alignment, current CharacterData dispatch, and the
 /// delayed Minion bluff on separate layers after a swap. The original Twin
 /// actor's direct current-build Scout/Witness card is exact: its raw
-/// `bluffRole` stays null and its real role receives `BluffAct`. Every other
-/// captured reveal/action surface remains quarantined, especially the moved
-/// runtime-Good card whose Twin data acquires a random Minion bluff. Ordinary
+/// `bluffRole` stays null and its real role receives `BluffAct`. A guarded
+/// offline acquisition context additionally makes one moved runtime-Good
+/// recipient's exact Scout/Witness/Confessor surface representable. Ordinary
 /// execution/current-role evidence is deliberately absent from this gate: it
 /// exposes the final current dataRef, which the exact replay derives directly.
 pub fn distinct_swap_has_unsupported_public_action_evidence(
@@ -78,7 +104,35 @@ pub fn distinct_swap_has_unsupported_public_action_evidence(
         return false;
     }
 
-    !is_supported_distinct_actor_card(state, trace.actor_position)
+    let context_matches_recipient = state
+        .twin_recipient_bluff_context
+        .as_ref()
+        .is_some_and(|context| context.recipient_position == neighbor_position);
+    let mut actor_card = None;
+    let mut recipient_card = None;
+    for card in &state.cards {
+        let slot = if card.position == trace.actor_position {
+            &mut actor_card
+        } else if context_matches_recipient && card.position == neighbor_position {
+            &mut recipient_card
+        } else {
+            return true;
+        };
+        if slot.replace(card).is_some() {
+            return true;
+        }
+    }
+
+    let cards_are_supported = actor_card
+        .is_none_or(|card| is_supported_distinct_actor_card(state, card))
+        && if context_matches_recipient {
+            recipient_card
+                .is_some_and(|card| is_supported_distinct_recipient_card(state, card))
+        } else {
+            recipient_card.is_none()
+        };
+
+    !cards_are_supported
         || !state.slayer_results.is_empty()
         || !state.pd_ability_results.is_empty()
         || !state.blocked_positions.is_empty()
@@ -527,6 +581,48 @@ mod tests {
         });
 
         assert!(!distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+    }
+
+    #[test]
+    fn exact_context_supports_one_current_confessor_recipient_surface() {
+        let mut state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        state.twin_recipient_bluff_context = Some(
+            crate::types::TwinRecipientBluffContext {
+                rule_version: "twin_recipient_bluff_native_v1".to_string(),
+                recipient_position: 2,
+                acquisition_ordinal: 4,
+                duplicate_pool: vec!["Scout".to_string()],
+                unique_pool: vec!["Confessor".to_string()],
+                bluff_must_include_at_recipient: Vec::new(),
+            },
+        );
+        state.cards.push(crate::types::CardInfo {
+            position: 2,
+            apparent_role: "Confessor".to_string(),
+            info_text: "I am Good".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "confessor_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                ("dizzy".to_string(), serde_json::Value::Bool(false)),
+            ]),
+            ..crate::types::CardInfo::default()
+        });
+
+        assert!(!distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+
+        state.cards[0].info_text = "I am dizzy".to_string();
+        assert!(distinct_swap_has_unsupported_public_action_evidence(
             &state,
             &distinct_scout_swap(),
         ));

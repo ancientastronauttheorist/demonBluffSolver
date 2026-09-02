@@ -69,6 +69,24 @@
       "rva": "0x36C7A0"
     },
     {
+      "name": "Characters.PickRoundBluffs",
+      "metadata_name": "Characters$$PickRoundBluffs",
+      "signature": "void Characters__PickRoundBluffs (Characters_o* __this, const MethodInfo* method);",
+      "rva": "0x36D3A0"
+    },
+    {
+      "name": "Characters.PickRoundDuplicates",
+      "metadata_name": "Characters$$PickRoundDuplicates",
+      "signature": "void Characters__PickRoundDuplicates (Characters_o* __this, const MethodInfo* method);",
+      "rva": "0x36D720"
+    },
+    {
+      "name": "Characters.PickRoundBluffs.ContainsScriptCharacter",
+      "metadata_name": "Characters.<>c__DisplayClass22_0$$<PickRoundBluffs>b__0",
+      "signature": "bool Characters___c__DisplayClass22_0___PickRoundBluffs_b__0 (Characters___c__DisplayClass22_0_o* __this, CharacterData_o* cd, const MethodInfo* method);",
+      "rva": "0x377170"
+    },
+    {
       "name": "Characters.GetARandomBluffMustIncludeOfType",
       "metadata_name": "Characters$$GetARandomBluffMustIncludeOfType",
       "signature": "CharacterData_o* Characters__GetARandomBluffMustIncludeOfType (Characters_o* __this, int32_t type, bool remove, const MethodInfo* method);",

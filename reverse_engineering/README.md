@@ -501,9 +501,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,674
-datatypes. Its forty-one-set inventory contains 871 target memberships, 538
-distinct selected FunctionDefinitions, and 440 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,678
+datatypes. Its forty-one-set inventory contains 874 target memberships, 541
+distinct selected FunctionDefinitions, and 443 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -517,13 +517,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current thirty-nine-set run used five batches for each phase. Ghidra
+sets; the current forty-one-set run used six batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all thirty-nine target
-sets after a no-analysis refresh. Two hundred eighty-eight memberships are exact
-FunctionDefinition overlaps between boundaries. Folded/shared bodies make the
-512 selected definitions exceed the 424 unique native RVAs by eighty-eight;
+The preserved fully analyzed typed project now covers all forty-one target
+sets after a no-analysis refresh. Three hundred thirty-three memberships are
+exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
+the 541 selected definitions exceed the 443 unique native RVAs by ninety-eight;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -548,9 +548,10 @@ the Enlightened refresh imported 12, the Bishop refresh imported 38, and the
 Empress refresh imported six additional reachable datatypes, the Gemcrafter
 refresh imported six more, the Bard refresh imported six more, and the
 Confessor refresh imported three more. The Druid refresh imported 157 more and
-canonicalized six shared bodies. The five-batch refresh reapplied and validated
-all 800 memberships without rerunning auto-analysis. The final read-only pass
-validated all 800 memberships (512 exact definitions) and 2,342
+canonicalized six shared bodies. The bluff-acquisition pool refresh imported
+six additional reachable datatypes. The six-batch refresh reapplied and
+validated all 874 memberships without rerunning auto-analysis. The final
+read-only pass validated all 874 memberships (541 exact definitions) and 2,561
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64

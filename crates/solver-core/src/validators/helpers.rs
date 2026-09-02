@@ -216,8 +216,9 @@ pub enum EffectiveAlignment {
 /// not consult either one here anyway).
 /// It can represent the native cases relevant to generated scenarios as follows:
 /// clean Puppet and clean Doppelganger model HealthyBluff, while Drunk models a
-/// non-null bluff without HealthyBluff. Arbitrary good characters with bluff data
-/// cannot be expressed until the scenario model gains such a field.
+/// non-null bluff without HealthyBluff. The guarded moved-Twin recipient trace
+/// represents one further exact non-null bluff; arbitrary other Good bluff
+/// holders remain outside the scenario model.
 pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
     // Native precedence: corruption overrides HealthyBluff and cant_lie roles.
     // Drunk is normally also present in this set; the explicit bluff mapping
@@ -248,6 +249,10 @@ pub fn truth_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthSta
     // Doppelganger case already returned via HealthyBluff.
     let modeled_non_null_bluff = scenario.drunk_position == Some(pos)
         || scenario.doppelganger_position == Some(pos)
+        || scenario
+            .twin_recipient_bluff_trace
+            .as_ref()
+            .is_some_and(|trace| trace.recipient_position == pos)
         || effective_role.as_deref().is_some_and(|role| {
             roles_equal(role, "Drunk") || roles_equal(role, "Doppelganger")
         });
@@ -274,6 +279,17 @@ pub fn shaman_copied_confessor_status_at(pos: u8, scenario: &Scenario) -> bool {
     })
 }
 
+/// Whether the exact moved-Twin recipient bluff initialized Confessor on this
+/// physical card and therefore installed native `AppearTruthfull`.
+pub fn twin_recipient_confessor_status_at(pos: u8, scenario: &Scenario) -> bool {
+    scenario
+        .twin_recipient_bluff_trace
+        .as_ref()
+        .is_some_and(|trace| {
+            trace.recipient_position == pos && roles_equal(&trace.bluff_role, "Confessor")
+        })
+}
+
 /// Determine the truth condition exposed by native
 /// `CharacterHelper.CheckLyingAppearance` for the statuses represented by the
 /// scenario model.
@@ -282,11 +298,13 @@ pub fn shaman_copied_confessor_status_at(pos: u8, scenario: &Scenario) -> bool {
 /// dispatch, so every card appearing as Confessor is perceived as truthful even
 /// when actual action dispatch lies because it is corrupted or evil. The exact
 /// Shaman copied-Confessor endpoints retain the same physical status even after
-/// a later presentation change. The model does not yet represent arbitrary
-/// appearance statuses; all other cards fall back to the actual native lie
-/// predicate modeled by [`truth_status`].
+/// a later presentation change, and a moved Twin recipient whose selected raw
+/// bluff is Confessor installs it through that bluff Init. The model does not
+/// yet represent arbitrary appearance statuses; all other cards fall back to
+/// the actual native lie predicate modeled by [`truth_status`].
 pub fn truth_appearance_status(pos: u8, scenario: &Scenario, state: &GameState) -> TruthStatus {
     if shaman_copied_confessor_status_at(pos, scenario)
+        || twin_recipient_confessor_status_at(pos, scenario)
         || state
         .card_at(pos)
         .map(|card| normalize_role(&card.apparent_role) == "confessor")
@@ -333,6 +351,7 @@ mod truth_status_tests {
             twin_trace: None,
             pre_twin_current_roles: HashMap::new(),
             puppeteer_trace: None,
+            twin_recipient_bluff_trace: None,
         }
     }
 

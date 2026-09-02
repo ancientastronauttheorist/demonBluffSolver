@@ -13,6 +13,7 @@ BAKER_RULE_VERSION = "baker_day_reveal_v1"
 DOPPEL_DRUNK_RULE_VERSION = "doppel_drunk_reveal_v1"
 FORTUNE_TELLER_RULE_VERSION = "fortune_teller_native_v1"
 POET_VARIANT = "public_current"
+TWIN_RECIPIENT_BLUFF_RULE_VERSION = "twin_recipient_bluff_native_v1"
 
 # Native Gossip constructor order.  These are canonical public clue-provider
 # names, not a list of every Villager whose text happens to resemble a Poet
@@ -138,6 +139,78 @@ class DeckComposition:
 
 
 @dataclass
+class TwinRecipientBluffContext:
+    """Offline-only hidden pool state at a moved Twin recipient's bluff draw."""
+
+    rule_version: str
+    recipient_position: int
+    acquisition_ordinal: int
+    duplicate_pool: list[str] = field(default_factory=list)
+    unique_pool: list[str] = field(default_factory=list)
+    bluff_must_include_at_recipient: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "rule_version": self.rule_version,
+            "recipient_position": self.recipient_position,
+            "acquisition_ordinal": self.acquisition_ordinal,
+            "duplicate_pool": list(self.duplicate_pool),
+            "unique_pool": list(self.unique_pool),
+            "bluff_must_include_at_recipient": list(
+                self.bluff_must_include_at_recipient
+            ),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "TwinRecipientBluffContext":
+        if type(data) is not dict:
+            raise TypeError("twin_recipient_bluff_context must be an exact dict")
+
+        rule_version = data.get("rule_version")
+        recipient_position = data.get("recipient_position")
+        acquisition_ordinal = data.get("acquisition_ordinal")
+        if type(rule_version) is not str or not rule_version.strip():
+            raise ValueError(
+                "twin_recipient_bluff_context.rule_version must be a nonempty str"
+            )
+        if (
+            type(recipient_position) is not int
+            or not 1 <= recipient_position <= 255
+        ):
+            raise ValueError(
+                "twin_recipient_bluff_context.recipient_position "
+                "must be an exact nonzero u8"
+            )
+        if type(acquisition_ordinal) is not int or not 0 <= acquisition_ordinal <= 65535:
+            raise ValueError(
+                "twin_recipient_bluff_context.acquisition_ordinal "
+                "must be an exact u16"
+            )
+
+        pools = {}
+        for key in (
+            "duplicate_pool",
+            "unique_pool",
+            "bluff_must_include_at_recipient",
+        ):
+            raw_pool = data.get(key, [])
+            if type(raw_pool) is not list:
+                raise TypeError(f"twin_recipient_bluff_context.{key} must be a list")
+            if any(type(role) is not str or not role.strip() for role in raw_pool):
+                raise ValueError(
+                    f"twin_recipient_bluff_context.{key} roles must be nonempty strs"
+                )
+            pools[key] = list(raw_pool)
+
+        return cls(
+            rule_version=rule_version,
+            recipient_position=recipient_position,
+            acquisition_ordinal=acquisition_ordinal,
+            **pools,
+        )
+
+
+@dataclass
 class GameState:
     """Full state of a game in progress."""
     n_cards: int                    # Total cards in circle
@@ -193,6 +266,9 @@ class GameState:
     # Exact public current role later revealed for a hidden night victim (for
     # example by Medium). Kept separate from ordinary-execution evidence.
     revealed_night_current_roles: dict[int, str] = field(default_factory=dict)
+    # Offline/post-mortem pool snapshot for one exact moved Twin recipient.
+    # Live play must leave this absent because the pool state is hidden.
+    twin_recipient_bluff_context: Optional[TwinRecipientBluffContext] = None
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -241,6 +317,10 @@ class GameState:
             data["fortune_teller_rule_version"] = self.fortune_teller_rule_version
         if self.terminal_loss_role is not None:
             data["terminal_loss_role"] = self.terminal_loss_role
+        if self.twin_recipient_bluff_context is not None:
+            data["twin_recipient_bluff_context"] = (
+                self.twin_recipient_bluff_context.to_dict()
+            )
         if nest_deck:
             data["deck"] = self.deck.to_dict()
         else:
@@ -305,6 +385,13 @@ class GameState:
                     "revealed_night_current_roles", {}
                 ).items()
             },
+            twin_recipient_bluff_context=(
+                TwinRecipientBluffContext.from_dict(
+                    data["twin_recipient_bluff_context"]
+                )
+                if data.get("twin_recipient_bluff_context") is not None
+                else None
+            ),
         )
 
 
@@ -414,6 +501,49 @@ class TwinTrace:
         }
 
 
+class BluffAcquisitionSourceKind(str, Enum):
+    """Tagged native source used for a moved Twin recipient's live bluff."""
+
+    DUPLICATE_POOL = "duplicate_pool"
+    UNIQUE_POOL = "unique_pool"
+    BLUFF_MUST_INCLUDE = "bluff_must_include"
+
+
+@dataclass(frozen=True)
+class BluffAcquisitionSource:
+    """Occurrence-sensitive source of one installed recipient bluff."""
+
+    kind: BluffAcquisitionSourceKind
+    occurrence_index: int
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "kind", BluffAcquisitionSourceKind(self.kind))
+
+    def to_dict(self) -> dict:
+        return {
+            "kind": self.kind.value,
+            "occurrence_index": self.occurrence_index,
+        }
+
+
+@dataclass(frozen=True)
+class TwinRecipientBluffTrace:
+    """Exact Minion bluff installed on a runtime-Good moved Twin recipient."""
+
+    recipient_position: int
+    acquisition_ordinal: int
+    bluff_role: str
+    source: BluffAcquisitionSource
+
+    def to_dict(self) -> dict:
+        return {
+            "recipient_position": self.recipient_position,
+            "acquisition_ordinal": self.acquisition_ordinal,
+            "bluff_role": self.bluff_role,
+            "source": self.source.to_dict(),
+        }
+
+
 class PuppeteerNeighborSide(str, Enum):
     """Exact occurrence selected from native ``[previous, next]``."""
 
@@ -511,6 +641,8 @@ class Scenario:
     pre_twin_current_roles: dict[int, str] = field(default_factory=dict)
     # Exact post-Twin Puppeteer conversion and erased-role provenance.
     puppeteer_trace: Optional[PuppeteerTrace] = None
+    # Exact offline-only bluff outcome on the runtime-Good moved Twin seat.
+    twin_recipient_bluff_trace: Optional[TwinRecipientBluffTrace] = None
 
     def chancellor_original_villager_positions(self) -> list[int]:
         """Return possible physical seats of Chancellor's erased Villager.

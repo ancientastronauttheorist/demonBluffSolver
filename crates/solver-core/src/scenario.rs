@@ -2,6 +2,7 @@
 /// full scenarios with corruption variants.
 
 use std::collections::{HashMap, HashSet};
+use crate::bluff::enumerate_twin_recipient_bluffs;
 use crate::corruption::{
     enumerate_post_twin_corruption, enumerate_pre_twin_corruption,
     enumerate_start_corruption, StartCorruptionContext, StartCorruptionOutcome,
@@ -870,6 +871,7 @@ fn build_scenarios_with_start_mode(
                             twin_trace,
                             pre_twin_current_roles: HashMap::new(),
                             puppeteer_trace: None,
+                            twin_recipient_bluff_trace: None,
                         };
                         let index = placement_scenarios.len();
                         placement_scenarios.push(scenario);
@@ -1410,6 +1412,7 @@ fn build_exact_twin_puppeteer_scenarios(state: &GameState) -> Option<Vec<Scenari
                         twin_trace: Some(twin_trace.clone()),
                         pre_twin_current_roles: pre_twin_current_roles.clone(),
                         puppeteer_trace: Some(puppeteer_trace),
+                        twin_recipient_bluff_trace: None,
                     });
                     if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
                         return None;
@@ -1606,6 +1609,7 @@ fn build_exact_puppeteer_shaman_scenarios(state: &GameState) -> Option<Vec<Scena
                     twin_trace: None,
                     pre_twin_current_roles: pre_puppeteer_current_roles.clone(),
                     puppeteer_trace: Some(puppeteer_trace.clone()),
+                    twin_recipient_bluff_trace: None,
                 });
                 if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
                     return None;
@@ -1695,6 +1699,16 @@ fn build_exact_twin_shaman_scenarios(state: &GameState) -> Option<Vec<Scenario>>
             }
 
             for twin_trace in twin_traces {
+                if let Some(context) = state.twin_recipient_bluff_context.as_ref() {
+                    match &twin_trace.outcome {
+                        TwinStartOutcome::Swap {
+                            neighbor_position,
+                            ..
+                        } if *neighbor_position != twin_trace.actor_position
+                            && *neighbor_position == context.recipient_position => {}
+                        _ => continue,
+                    }
+                }
                 let post_twin_current_roles: Option<HashMap<u8, String>> =
                     (1..=state.n_cards)
                         .map(|position| {
@@ -1774,6 +1788,7 @@ fn build_exact_twin_shaman_scenarios(state: &GameState) -> Option<Vec<Scenario>>
                         twin_trace: Some(twin_trace.clone()),
                         pre_twin_current_roles: pre_twin_current_roles.clone(),
                         puppeteer_trace: None,
+                        twin_recipient_bluff_trace: None,
                     });
                     if scenarios.len() > EXACT_ORDERED_SCENARIO_CAP {
                         return None;
@@ -1782,7 +1797,86 @@ fn build_exact_twin_shaman_scenarios(state: &GameState) -> Option<Vec<Scenario>>
             }
         }
     }
-    Some(scenarios)
+    expand_exact_twin_recipient_bluffs(state, scenarios)
+}
+
+/// Expand one exact moved-Twin recipient branch by the occurrence-preserving
+/// native Minion bluff draw. The context is deliberately offline-only and is
+/// a snapshot at this recipient's first acquisition event, so no public reveal
+/// chronology is reused as hidden coroutine order.
+fn expand_exact_twin_recipient_bluffs(
+    state: &GameState,
+    scenarios: Vec<Scenario>,
+) -> Option<Vec<Scenario>> {
+    let Some(context) = state.twin_recipient_bluff_context.as_ref() else {
+        return Some(scenarios);
+    };
+    if context.recipient_position > state.n_cards {
+        return None;
+    }
+    let outcomes = enumerate_twin_recipient_bluffs(context)?;
+    let mut recipient_cards = state
+        .cards
+        .iter()
+        .filter(|card| card.position == context.recipient_position);
+    let recipient_card = recipient_cards.next()?;
+    if recipient_cards.next().is_some() {
+        return None;
+    }
+
+    let mut expanded = Vec::new();
+    for scenario in scenarios {
+        let twin_trace = scenario.twin_trace.as_ref()?;
+        let shaman_trace = scenario.shaman_trace.as_ref()?;
+        match &twin_trace.outcome {
+            TwinStartOutcome::Swap {
+                neighbor_position,
+                ..
+            } if *neighbor_position != twin_trace.actor_position
+                && *neighbor_position == context.recipient_position => {}
+            _ => continue,
+        }
+        if scenario.is_evil(context.recipient_position) {
+            continue;
+        }
+
+        let post_twin_roles: Option<HashMap<u8, String>> = (1..=state.n_cards)
+            .map(|position| {
+                role_after_twin(position, &scenario.pre_twin_current_roles, twin_trace)
+                    .map(|role| (position, role))
+            })
+            .collect();
+        let post_twin_roles = post_twin_roles?;
+        if !role_after_shaman(
+            context.recipient_position,
+            &post_twin_roles,
+            shaman_trace,
+        )
+        .is_some_and(|role| normalize_role(&role) == "twinminion")
+        {
+            continue;
+        }
+
+        for outcome in &outcomes {
+            if normalize_role(&outcome.trace.bluff_role)
+                != normalize_role(&recipient_card.apparent_role)
+            {
+                continue;
+            }
+            let tickets = usize::try_from(outcome.tickets).ok()?;
+            if tickets == 0
+                || expanded.len().checked_add(tickets)? > EXACT_ORDERED_SCENARIO_CAP
+            {
+                return None;
+            }
+            for _ in 0..tickets {
+                let mut weighted = scenario.clone();
+                weighted.twin_recipient_bluff_trace = Some(outcome.trace.clone());
+                expanded.push(weighted);
+            }
+        }
+    }
+    Some(expanded)
 }
 
 fn is_ordered_twin_safe_role(role: &str) -> bool {
@@ -5129,7 +5223,10 @@ fn permutations_of(roles: &[String]) -> Vec<Vec<String>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::{CardInfo, TwinNeighborSide, TwinStartOutcome};
+    use crate::types::{
+        BluffAcquisitionSource, CardInfo, TwinNeighborSide, TwinRecipientBluffContext,
+        TwinStartOutcome,
+    };
 
     fn card(position: u8, apparent_role: &str) -> CardInfo {
         CardInfo {
@@ -6982,6 +7079,142 @@ mod tests {
                 == Some("Witness")
                 && scenario.messed_up_by_evil == HashSet::from([1, 5])
                 && crate::validators::check_scenario(scenario, &state)
+        }));
+    }
+
+    #[test]
+    fn exact_twin_recipient_bluff_preserves_native_occurrence_weight() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.twin_recipient_bluff_context = Some(TwinRecipientBluffContext {
+            rule_version: "twin_recipient_bluff_native_v1".to_string(),
+            recipient_position: 3,
+            acquisition_ordinal: 7,
+            duplicate_pool: vec![
+                "Scout".to_string(),
+                "Scout".to_string(),
+                "Confessor".to_string(),
+            ],
+            unique_pool: vec!["Witness".to_string(), "Confessor".to_string()],
+            bluff_must_include_at_recipient: Vec::new(),
+        });
+        state.cards.push(CardInfo {
+            position: 3,
+            apparent_role: "Confessor".to_string(),
+            info_text: "I am Good".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "confessor_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                ("dizzy".to_string(), serde_json::Value::Bool(false)),
+            ]),
+            ..CardInfo::default()
+        });
+
+        let scenarios = build_exact_twin_shaman_scenarios(&state)
+            .expect("the guarded recipient event is inside the exact boundary");
+        assert_eq!(scenarios.len(), 26);
+        assert_eq!(build_scenarios(&state).len(), 26);
+        let solved = crate::solver::solve(&state);
+        assert_eq!((solved.n_scenarios, solved.n_surviving), (26, 26));
+        assert!(scenarios.iter().all(|scenario| {
+            matches!(
+                scenario
+                    .twin_trace
+                    .as_ref()
+                    .map(|trace| &trace.outcome),
+                Some(TwinStartOutcome::Swap {
+                    neighbor_position: 3,
+                    ..
+                })
+            ) && scenario
+                .twin_recipient_bluff_trace
+                .as_ref()
+                .is_some_and(|trace| {
+                    trace.recipient_position == 3
+                        && trace.acquisition_ordinal == 7
+                        && trace.bluff_role == "Confessor"
+                })
+                && crate::validators::truth_status(3, scenario, &state)
+                    == crate::validators::TruthStatus::Lying
+                && crate::validators::truth_appearance_status(3, scenario, &state)
+                    == crate::validators::TruthStatus::Truthful
+                && crate::validators::check_scenario(scenario, &state)
+        }));
+
+        let duplicate_tickets = scenarios
+            .iter()
+            .filter(|scenario| {
+                matches!(
+                    scenario
+                        .twin_recipient_bluff_trace
+                        .as_ref()
+                        .map(|trace| &trace.source),
+                    Some(BluffAcquisitionSource::DuplicatePool {
+                        occurrence_index: 2
+                    })
+                )
+            })
+            .count();
+        let unique_tickets = scenarios
+            .iter()
+            .filter(|scenario| {
+                matches!(
+                    scenario
+                        .twin_recipient_bluff_trace
+                        .as_ref()
+                        .map(|trace| &trace.source),
+                    Some(BluffAcquisitionSource::UniquePool {
+                        occurrence_index: 1
+                    })
+                )
+            })
+            .count();
+        assert_eq!((duplicate_tickets, unique_tickets), (8, 18));
+
+        let mut forged = scenarios[0].clone();
+        forged
+            .twin_recipient_bluff_trace
+            .as_mut()
+            .unwrap()
+            .source = BluffAcquisitionSource::UniquePool {
+                occurrence_index: 0,
+            };
+        assert!(!crate::validators::check_scenario(&forged, &state));
+    }
+
+    #[test]
+    fn malformed_twin_recipient_context_falls_back_atomically() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.twin_recipient_bluff_context = Some(TwinRecipientBluffContext {
+            rule_version: "future_rule".to_string(),
+            recipient_position: 3,
+            acquisition_ordinal: 7,
+            duplicate_pool: vec!["Scout".to_string()],
+            unique_pool: vec!["Confessor".to_string()],
+            bluff_must_include_at_recipient: Vec::new(),
+        });
+        state.cards.push(CardInfo {
+            position: 3,
+            apparent_role: "Confessor".to_string(),
+            info_text: "I am Good".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "confessor_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                ("dizzy".to_string(), serde_json::Value::Bool(false)),
+            ]),
+            ..CardInfo::default()
+        });
+
+        assert!(build_exact_twin_shaman_scenarios(&state).is_none());
+        let fallback = build_scenarios(&state);
+        assert!(!fallback.is_empty());
+        assert!(fallback.iter().all(|scenario| {
+            scenario.twin_recipient_bluff_trace.is_none()
+                && scenario.pre_twin_current_roles.is_empty()
+                && scenario.twin_trace.is_none()
         }));
     }
 

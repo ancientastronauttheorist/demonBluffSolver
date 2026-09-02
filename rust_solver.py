@@ -356,6 +356,14 @@ def _require_u8(value, name: str, *, minimum: int = 0, maximum: int = 255) -> in
     return value
 
 
+def _require_u16(value, name: str) -> int:
+    if type(value) is not int:
+        raise TypeError(f"{name} must be an exact int")
+    if not 0 <= value <= 65535:
+        raise ValueError(f"{name} must be in [0, 65535]")
+    return value
+
+
 def _require_board_position(value, name: str, n_cards: int) -> int:
     return _require_u8(value, name, minimum=1, maximum=n_cards)
 
@@ -451,6 +459,74 @@ def _parse_twin_trace(raw_trace, n_cards: int):
     return TwinTrace(
         actor_position=actor_position,
         outcome=outcome,
+    )
+
+
+def _parse_twin_recipient_bluff_trace(raw_trace, n_cards: int):
+    """Parse an exact offline Twin-recipient bluff trace."""
+    if raw_trace is None:
+        return None
+
+    from solver import (
+        BluffAcquisitionSource,
+        BluffAcquisitionSourceKind,
+        TwinRecipientBluffTrace,
+    )
+
+    n_cards = _require_u8(n_cards, "n_cards", minimum=1)
+    raw_trace = _require_exact_dict(
+        raw_trace,
+        "twin_recipient_bluff_trace",
+        {
+            "recipient_position",
+            "acquisition_ordinal",
+            "bluff_role",
+            "source",
+        },
+    )
+    recipient_position = _require_board_position(
+        raw_trace["recipient_position"],
+        "twin_recipient_bluff_trace.recipient_position",
+        n_cards,
+    )
+    acquisition_ordinal = _require_u16(
+        raw_trace["acquisition_ordinal"],
+        "twin_recipient_bluff_trace.acquisition_ordinal",
+    )
+    bluff_role = _require_exact_string(
+        raw_trace["bluff_role"],
+        "twin_recipient_bluff_trace.bluff_role",
+    )
+    if not bluff_role.strip():
+        raise ValueError("Twin recipient bluff role must be nonempty")
+
+    raw_source = _require_exact_dict(
+        raw_trace["source"],
+        "twin_recipient_bluff_trace.source",
+        {"kind", "occurrence_index"},
+    )
+    raw_kind = _require_exact_string(
+        raw_source["kind"],
+        "twin_recipient_bluff_trace.source.kind",
+    )
+    try:
+        source_kind = BluffAcquisitionSourceKind(raw_kind)
+    except ValueError as exc:
+        raise ValueError(
+            f"unknown Twin recipient bluff source kind: {raw_kind!r}"
+        ) from exc
+    source = BluffAcquisitionSource(
+        kind=source_kind,
+        occurrence_index=_require_u16(
+            raw_source["occurrence_index"],
+            "twin_recipient_bluff_trace.source.occurrence_index",
+        ),
+    )
+    return TwinRecipientBluffTrace(
+        recipient_position=recipient_position,
+        acquisition_ordinal=acquisition_ordinal,
+        bluff_role=bluff_role,
+        source=source,
     )
 
 
@@ -631,6 +707,10 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             s.get("twin_trace"),
             state_dict.get("n_cards"),
         )
+        twin_recipient_bluff_trace = _parse_twin_recipient_bluff_trace(
+            s.get("twin_recipient_bluff_trace"),
+            state_dict.get("n_cards"),
+        )
         puppeteer_trace = _parse_puppeteer_trace(
             s.get("puppeteer_trace"),
             state_dict.get("n_cards"),
@@ -654,6 +734,7 @@ def rust_solve_to_objects(state, summary_only: bool = False):
             twin_trace=twin_trace,
             pre_twin_current_roles=pre_twin_current_roles,
             puppeteer_trace=puppeteer_trace,
+            twin_recipient_bluff_trace=twin_recipient_bluff_trace,
         ))
 
     result_obj = SolverResult(
