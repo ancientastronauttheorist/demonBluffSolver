@@ -501,9 +501,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,645
-datatypes. Its thirty-nine-set inventory contains 800 target memberships, 512
-distinct selected FunctionDefinitions, and 424 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,674
+datatypes. Its forty-one-set inventory contains 871 target memberships, 538
+distinct selected FunctionDefinitions, and 440 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,

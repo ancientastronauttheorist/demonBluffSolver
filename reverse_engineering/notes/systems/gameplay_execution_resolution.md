@@ -56,14 +56,20 @@ Role dispatch uses this matrix:
 | --- | --- | --- | --- |
 | false | any | `Act` | `Act` |
 | true | non-Evil | `BluffAct` | `BluffAct` |
-| true | Evil | `Act` | `BluffAct` |
+| true | Evil, null `bluffRole` | `BluffAct` | absent |
+| true | Evil, non-null `bluffRole` | `Act` | `BluffAct` |
 
-The Evil exception therefore applies even when corruption caused the lying
-result. `Character.RoleAct` replaces the selected role's `onActed` callback,
-then calls `Act` for case zero and `BluffAct` for every nonzero case. The
-callback starts `ShowActedDelayed(0.0, info, trigger)`; creation of the acted
-information remains the role implementation's responsibility. The real role is
-required, while a missing bluff role is a clean no-op after real dispatch.
+The Evil exception is gated by the raw cloned-role pointer, not merely by
+runtime alignment or the lying result. It still applies when corruption caused
+the lie, but only while `bluffRole` is non-null. A fresh Evil card acting before
+delayed bluff acquisition therefore sends its real role through `BluffAct`;
+roles inheriting base `Role.BluffAct` still reach their virtual `Act`, while
+roles with a real bluff override do not. `Character.RoleAct` replaces the
+selected role's `onActed` callback, then calls `Act` for case zero and
+`BluffAct` for every nonzero case. The callback starts
+`ShowActedDelayed(0.0, info, trigger)`; creation of the acted information
+remains the role implementation's responsibility. The real role is required,
+while a missing bluff role is a clean no-op after real dispatch.
 
 `CharacterStatuses.AddStatus` first checks exact enum membership in the
 resistance list. A resisted value returns without touching any other field.

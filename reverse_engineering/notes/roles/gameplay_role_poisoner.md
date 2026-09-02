@@ -85,8 +85,11 @@ treated as shared managed identity.
 
 `Poisoner.Act` has exactly one meaningful trigger: `Start` (enum value 5).
 Every other trigger returns without effect. The normal `Character.Act` truth
-matrix invokes an Evil actor's current real role action even while that actor
-lies, so a real Poisoner reaches this branch during its serialized slot. Its
+matrix initially sends a lying Evil actor with a null `bluffRole` through the
+real role's `BluffAct`. Poisoner inherits base `Role.BluffAct`, which forwards
+to its virtual `Act`, so a fresh real Poisoner still reaches this branch during
+its serialized pre-Reveal slot. If a nonstandard path has already populated
+`bluffRole`, the Evil exception instead selects real `Act` directly. The
 apparent bluff role remains a separate dispatch surface; it neither replaces
 nor suppresses the real Poisoner Start action.
 

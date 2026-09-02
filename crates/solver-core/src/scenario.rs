@@ -1220,6 +1220,10 @@ fn exact_twin_shaman_public_evidence_matches(
     } = twin_trace.outcome
     {
         if neighbor_position != twin_trace.actor_position {
+            // The original Twin body's final Scout/Witness current data is
+            // its actual presentation and receives the native lying callback.
+            // The evidence gate admits only that direct current-build card.
+            unpredictable_card_positions.remove(&twin_trace.actor_position);
             // Runtime-Good current Twin data receives a delayed Minion bluff;
             // its apparent card cannot identify the moved data endpoint.
             unpredictable_card_positions.insert(neighbor_position);
@@ -6888,6 +6892,97 @@ mod tests {
 
         assert!(build_exact_twin_shaman_scenarios(&state).is_none());
         assert!(!build_scenarios(&state).is_empty());
+    }
+
+    #[test]
+    fn exact_twin_actor_accepts_current_scout_bluff_evidence() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.cards.push(CardInfo {
+            position: 1,
+            apparent_role: "Scout".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "scout_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                (
+                    "evil_role".to_string(),
+                    serde_json::Value::String("Scout".to_string()),
+                ),
+                ("distance".to_string(), serde_json::Value::from(2)),
+            ]),
+            ..CardInfo::default()
+        });
+
+        let exact = build_exact_twin_shaman_scenarios(&state)
+            .expect("the direct actor clue is inside the exact boundary");
+        assert_eq!(exact.len(), 2);
+        assert!(exact.iter().all(|scenario| {
+            crate::validators::current_data_role_at(1, scenario, &state).as_deref()
+                == Some("Scout")
+                && crate::validators::truth_status(1, scenario, &state)
+                    == crate::validators::TruthStatus::Lying
+                && crate::validators::check_scenario(scenario, &state)
+        }));
+    }
+
+    #[test]
+    fn exact_twin_actor_truthful_scout_distance_is_a_complete_contradiction() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.cards.push(CardInfo {
+            position: 1,
+            apparent_role: "Scout".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "scout_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                (
+                    "evil_role".to_string(),
+                    serde_json::Value::String("Scout".to_string()),
+                ),
+                ("distance".to_string(), serde_json::Value::from(1)),
+            ]),
+            ..CardInfo::default()
+        });
+
+        let exact = build_exact_twin_shaman_scenarios(&state)
+            .expect("a supported clue mismatch must not fall back");
+        assert_eq!(exact.len(), 2);
+        assert!(exact
+            .iter()
+            .all(|scenario| !crate::validators::check_scenario(scenario, &state)));
+        let built = build_scenarios(&state);
+        assert_eq!(built.len(), 2);
+        assert!(built.iter().all(|scenario| scenario.twin_trace.is_some()));
+    }
+
+    #[test]
+    fn exact_twin_actor_accepts_lying_witness_evidence() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state
+            .executed_current_roles
+            .insert(5, "Witness".to_string());
+        state.executed_good_roles.insert(5, "Witness".to_string());
+        state.cards.push(CardInfo {
+            position: 1,
+            apparent_role: "Witness".to_string(),
+            info_parsed: serde_json::Map::from_iter([(
+                "affected_position".to_string(),
+                serde_json::Value::from(2),
+            )]),
+            ..CardInfo::default()
+        });
+
+        let exact = build_exact_twin_shaman_scenarios(&state)
+            .expect("the direct Witness actor is inside the exact boundary");
+        assert_eq!(exact.len(), 2);
+        assert!(exact.iter().all(|scenario| {
+            crate::validators::current_data_role_at(1, scenario, &state).as_deref()
+                == Some("Witness")
+                && scenario.messed_up_by_evil == HashSet::from([1, 5])
+                && crate::validators::check_scenario(scenario, &state)
+        }));
     }
 
     #[test]

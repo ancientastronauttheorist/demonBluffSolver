@@ -75,10 +75,13 @@ special rule.
 
 `Pooka.Act` has exactly one meaningful trigger: `Start` (enum value 5) routes
 to `PoisonNeighboursIfAble`; every other trigger returns without effect. The
-normal `Character.Act` truth matrix invokes the real role's `Act` for an Evil
-actor even though that actor lies, so the public real Pooka reaches this branch
-during its ordered slot. The apparent bluff role remains a separate dispatch
-surface and does not replace Pooka's real action.
+normal `Character.Act` truth matrix sends a lying Evil actor with a null
+`bluffRole` through the real role's `BluffAct`. Pooka inherits base
+`Role.BluffAct`, which forwards to its virtual `Act`, so the public real Pooka
+still reaches this branch during its ordered pre-Reveal slot. If a nonstandard
+path has already populated `bluffRole`, the Evil exception selects real `Act`
+directly. The apparent bluff role remains a separate dispatch surface and does
+not replace Pooka's real action.
 
 No Pooka method creates `ActedInfo`, writes speech, opens a picker, retains
 references, schedules a reset, or requests an achievement. The fieldless

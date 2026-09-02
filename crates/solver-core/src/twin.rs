@@ -18,15 +18,52 @@ fn is_demon(role: &str) -> bool {
     get_card(role).is_some_and(|card| card.faction == Faction::Demon)
 }
 
+/// Whether one captured card is the first exact public-action surface carried
+/// by the candidate-changing Twin -> Shaman slice.
+///
+/// The original runtime-Evil Twin body has a null raw `bluffRole` after its
+/// ordinary delayed Reveal when its final current data is Scout or Witness.
+/// Native therefore sends that real role through its concrete `BluffAct`, and
+/// the existing lying validators are exact. Scout additionally requires the
+/// authenticated current-build payload; archived scalar Scout observations do
+/// not carry enough native output provenance for this boundary.
+fn is_supported_distinct_actor_card(state: &GameState, actor_position: u8) -> bool {
+    let [card] = state.cards.as_slice() else {
+        return state.cards.is_empty();
+    };
+    if card.position != actor_position || card.position == 0 || card.position > state.n_cards {
+        return false;
+    }
+
+    match normalize_role(&card.apparent_role).as_str() {
+        "scout" => card
+            .info_parsed
+            .get("scout_variant")
+            .and_then(serde_json::Value::as_str)
+            == Some("public_current"),
+        "witness" => {
+            card.info_parsed.len() == 1
+                && card
+                    .info_parsed
+                    .get("affected_position")
+                    .and_then(serde_json::Value::as_u64)
+                    .is_some_and(|position| position <= u64::from(state.n_cards))
+        }
+        _ => false,
+    }
+}
+
 /// Whether a distinct Twin swap needs public-action provenance that the
-/// role-only replay does not yet carry.
+/// role replay does not yet carry.
 ///
 /// Native keeps runtime alignment, current CharacterData dispatch, and the
-/// delayed Minion bluff on separate layers after a swap. Until those layers
-/// have their own trace, any captured reveal/action history can observe an
-/// unsupported combination. Ordinary execution/current-role evidence is
-/// deliberately absent from this gate: it exposes the final current dataRef,
-/// which the exact replay derives directly.
+/// delayed Minion bluff on separate layers after a swap. The original Twin
+/// actor's direct current-build Scout/Witness card is exact: its raw
+/// `bluffRole` stays null and its real role receives `BluffAct`. Every other
+/// captured reveal/action surface remains quarantined, especially the moved
+/// runtime-Good card whose Twin data acquires a random Minion bluff. Ordinary
+/// execution/current-role evidence is deliberately absent from this gate: it
+/// exposes the final current dataRef, which the exact replay derives directly.
 pub fn distinct_swap_has_unsupported_public_action_evidence(
     state: &GameState,
     trace: &TwinTrace,
@@ -41,7 +78,7 @@ pub fn distinct_swap_has_unsupported_public_action_evidence(
         return false;
     }
 
-    !state.cards.is_empty()
+    !is_supported_distinct_actor_card(state, trace.actor_position)
         || !state.slayer_results.is_empty()
         || !state.pd_ability_results.is_empty()
         || !state.blocked_positions.is_empty()
@@ -436,5 +473,124 @@ mod tests {
         assert_eq!(json["outcome"]["demon_occurrence_index"], 2);
         assert_eq!(json["outcome"]["neighbor_side"], "next");
         assert_eq!(serde_json::from_value::<TwinTrace>(json).unwrap(), trace);
+    }
+
+    fn distinct_scout_swap() -> TwinTrace {
+        TwinTrace {
+            actor_position: 1,
+            outcome: TwinStartOutcome::Swap {
+                demon_occurrence_index: 0,
+                demon_anchor_position: 3,
+                neighbor_side: TwinNeighborSide::Next,
+                neighbor_position: 2,
+                neighbor_pre_swap_role: "Scout".to_string(),
+            },
+        }
+    }
+
+    #[test]
+    fn direct_current_scout_card_on_distinct_actor_is_supported() {
+        let mut state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        state.cards.push(crate::types::CardInfo {
+            position: 1,
+            apparent_role: "Scout".to_string(),
+            info_parsed: serde_json::Map::from_iter([(
+                "scout_variant".to_string(),
+                serde_json::Value::String("public_current".to_string()),
+            )]),
+            ..crate::types::CardInfo::default()
+        });
+
+        assert!(!distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+    }
+
+    #[test]
+    fn direct_witness_sentinel_card_on_distinct_actor_is_supported() {
+        let mut state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        state.cards.push(crate::types::CardInfo {
+            position: 1,
+            apparent_role: "Witness".to_string(),
+            info_parsed: serde_json::Map::from_iter([(
+                "affected_position".to_string(),
+                serde_json::Value::from(0),
+            )]),
+            ..crate::types::CardInfo::default()
+        });
+
+        assert!(!distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+    }
+
+    #[test]
+    fn moved_neighbor_or_unversioned_actor_card_stays_quarantined() {
+        let mut state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        state.cards.push(crate::types::CardInfo {
+            position: 2,
+            apparent_role: "Scout".to_string(),
+            info_parsed: serde_json::Map::from_iter([(
+                "scout_variant".to_string(),
+                serde_json::Value::String("public_current".to_string()),
+            )]),
+            ..crate::types::CardInfo::default()
+        });
+        assert!(distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+
+        state.cards[0].position = 1;
+        state.cards[0].info_parsed.clear();
+        assert!(distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+    }
+
+    #[test]
+    fn additional_action_surface_requarantines_supported_actor_card() {
+        let mut state = GameState {
+            n_cards: 3,
+            ..GameState::default()
+        };
+        state.cards.push(crate::types::CardInfo {
+            position: 1,
+            apparent_role: "Scout".to_string(),
+            info_parsed: serde_json::Map::from_iter([(
+                "scout_variant".to_string(),
+                serde_json::Value::String("public_current".to_string()),
+            )]),
+            ..crate::types::CardInfo::default()
+        });
+
+        state.reveal_order.push(1);
+        assert!(distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
+
+        state.reveal_order.clear();
+        state.cards.push(crate::types::CardInfo {
+            position: 2,
+            apparent_role: "Scout".to_string(),
+            ..crate::types::CardInfo::default()
+        });
+        assert!(distinct_swap_has_unsupported_public_action_evidence(
+            &state,
+            &distinct_scout_swap(),
+        ));
     }
 }

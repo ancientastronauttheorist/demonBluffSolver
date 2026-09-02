@@ -11,14 +11,14 @@ outside the repository.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_role_twin_minion.json`](../../targets/gameplay_role_twin_minion.json).
-Its read-only baseline and typed Ghidra exports each complete at 20/20
+Its read-only baseline and typed Ghidra exports each complete at 22/22
 functions with no failures. The body-free
 [`quality report`](../../reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_twin_minion.json)
-passes its regression check: unresolved-type tokens fall from 168 to 45, raw
-field-offset accesses from 211 to 39, raw integer type tokens from 144 to 15,
-placeholder parameter tokens from 218 to zero, and indirect-call patterns from
-11 to zero. Both exports retain two decompiler-error markers; warning markers
-increase by one, from 32 to 33.
+passes its regression check: unresolved-type tokens fall from 183 to 47, raw
+field-offset accesses from 235 to 40, raw integer type tokens from 166 to 17,
+placeholder parameter tokens from 236 to zero, and indirect-call patterns from
+13 to zero. Both exports retain two decompiler-error markers; warning markers
+increase by one, from 33 to 34.
 
 ## Public asset binding and ordered Start slot
 
@@ -69,26 +69,30 @@ match when duplicate Twin Minion data is present.
 | `Character.InitWithNoReset` | `0x365720` | Current-`dataRef` replacement |
 | `Character.DelayReveal.MoveNext` | `0x3756B0` | Immediate role clone and delayed reveal |
 | `Character.Reveal` | `0x368410` | Register-as, bluff, and presentation refresh |
+| `Character.RevealReal` | `0x3682A0` | Final current-`dataRef` presentation when the raw bluff stays null |
 | `Character.GetCharacterBluffIfAble` | `0x364C40` | Separate current bluff-or-real accessor; not `Reveal`'s call site |
 | `Character.GiveBluff` | `0x365160` | Reveal-time bluff application |
+| `Role.GetRegisterAsRole` | `0x3712B0` | Constant-null base register-as identity for Scout and Witness |
 | `UnityEngine.Random.Range(Int32)` | `0x1C86600` | Demon and neighbour draws |
 
-The 20 memberships select 20 distinct managed FunctionDefinitions and 20
+The 22 memberships select 22 distinct managed FunctionDefinitions and 22
 native RVAs inside this target. `Marionette..ctor` is one of 537 managed
 aliases of the fieldless construction body and uses the established
 ABI-compatible canonical prototype `Slayer___ctor`. `Role.BluffAct` has two
-managed aliases. The selected integer `UnityEngine.Random.Range` body likewise
-has two managed aliases, but the target retains the exact overload identity and
-applies the named `UnityEngine_Random__Range_Int32` prototype. Shared native
-code is not treated as shared managed identity.
+managed aliases. `Role.GetRegisterAsRole` is one of 323 managed aliases of its
+constant-null body and applies the ABI-compatible canonical prototype
+`Role__GetBluffIfAble`. The selected integer `UnityEngine.Random.Range` body
+likewise has two managed aliases, but the target retains the exact overload
+identity and applies the named `UnityEngine_Random__Range_Int32` prototype.
+Shared native code is not treated as shared managed identity.
 
 ## Start dispatch and fixed output surface
 
 `Marionette.Act` returns immediately for every trigger except `Start` (enum
-value 5). A real Evil actor still reaches the implementation through the
-normal truth matrix. If lying dispatch selects inherited `Role.BluffAct`, that
-base method forwards to the role's virtual `Act`; a populated bluff-role path
-also leaves the real Evil action enabled. Twin Minion therefore does not lose
+value 5). A lying real Evil with a null raw `bluffRole` dispatches only its real
+role's `BluffAct`; inherited `Role.BluffAct` forwards to the virtual real
+`Act`. With a populated raw `bluffRole`, native instead runs the real Evil
+`Act` and then the bluff role's `BluffAct`. Twin Minion therefore does not lose
 its Start mutation merely because it lies or displays another role.
 
 `Marionette.GetInfo` allocates a fresh `ActedInfo` with an empty description and
@@ -256,20 +260,22 @@ unreflectable code.
 
 ## Typed-union accounting
 
-Fifteen target memberships are exact managed-identity overlaps with the
-previous 24 target sets. The boundary adds all five declared Marionette methods
-as newly selected FunctionDefinitions. The constructor body already exists
-under its canonical folded-body identity, so the four non-constructor methods
-are the four newly selected RVAs.
+Fifteen of the original target memberships were exact managed-identity overlaps
+with the preceding 24-set prefix. The boundary introduced all five declared
+Marionette methods; its constructor body was already present under a canonical
+folded identity, so the other four methods introduced four native RVAs. This
+checkpoint additionally selects `Character.RevealReal` and
+`Role.GetRegisterAsRole`; both are new managed definitions, while the latter's
+constant-null RVA was already represented by `Role.GetBluffIfAble`.
 
-The deterministic 25-set union contains 548 memberships, 342 distinct selected
-FunctionDefinitions, and 312 unique native RVAs. Its 206 exact membership
-overlaps and 30 folded-body differences remain explicit. The GDT contains
-151,448 datatypes. Twin Minion signature application and read-only validation
-both close 20/20 functions and 61 membership-level parameter-storage
-locations, importing six newly reachable datatypes with zero validation-time
-program mutations. Across the whole union, the final read-only pass validates
-all 548 memberships and 1,608 parameter-storage locations.
+The current deterministic 41-set union contains 871 memberships, 538 distinct
+selected FunctionDefinitions, and 440 unique native RVAs. Its 333 exact
+membership overlaps and 98-definition folded/shared-body gap remain explicit.
+The rebuilt GDT contains 151,674 datatypes. Twin Minion signature application
+and read-only validation both close 22/22 functions and 66 membership-level
+parameter-storage locations with zero validation-time program mutations.
+Across the whole union, the final read-only pass validates all 871 memberships
+and 2,554 parameter-storage locations.
 
 ## Corpus, solver, and live implications
 
@@ -281,6 +287,9 @@ consistent with the native distinction between stable/original runtime-Evil
 identity and the **current data identity** that the Start swap places beside a
 Demon. The historical fixtures do not expose a complete current-data swap
 trace and cannot independently prove the native selection algorithm.
+All 79 fixtures also capture a card on at least one possible neighbour endpoint,
+and none carries trusted board-count provenance for this exact slice. The newly
+admitted actor-only evidence therefore changes no archived corpus outcome.
 
 Reconstruction, solver, and live tooling should therefore:
 
@@ -323,13 +332,20 @@ validator independently reconstructs the map and both reachable traces; an
 invalid claimed baseline fails closed, while cap or unsupported inputs trigger
 wholesale legacy fallback.
 
-This role-only checkpoint deliberately rejects captured reveal/action history
-for a distinct swap. The original Twin body remains runtime Evil and therefore
-`CheckLying`-positive, but `Character.Act` dispatches the real Villager data it
-now carries, whose visible callback is truthful. The runtime-Good neighbour
-carrying Twin data later receives an untraced Minion bluff, so its apparent
-identity and appearance-sensitive callbacks are also opaque. Merely skipping
-the two apparent identities would be unsound. General current-data replay,
-other mixed writers, and explicit Twin bluff/action provenance therefore remain
-native parity gaps; live Twin play stays conservative outside the supported
-scenario kernels.
+The first public-action checkpoint now admits exactly one direct current-build
+Scout or Witness card on the original Twin body. That body remains runtime Evil
+and therefore `CheckLying`-positive. Its fresh raw `bluffRole` is null, base
+`GetRegisterAsRole` returns null, and the later Villager Reveal preserves the
+final Scout/Witness `dataRef` as its presentation. `Character.Act` dispatches
+that real Villager data through its concrete `BluffAct`, so the existing lying
+validators are exact; the scenario validator independently requires the
+presented role to equal the replayed final current role.
+
+A card on the moved neighbour, any second card, reveal ordering, ability or kill
+history, Rambler evidence, and terminal-loss evidence still trigger wholesale
+fallback. The runtime-Good neighbour carrying Twin data receives an untraced
+Minion bluff, so its apparent identity, callback role, and appearance-sensitive
+queries remain opaque. General current-data replay, other mixed writers, global
+delayed-Reveal ordering, the round duplicate/unique bluff pools, and explicit
+moved-neighbour bluff provenance remain native parity gaps; live Twin play stays
+conservative outside the supported scenario kernels.

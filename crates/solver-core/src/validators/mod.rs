@@ -11412,6 +11412,11 @@ fn exact_twin_shaman_post_twin_roles(
     } = twin_trace.outcome
     {
         if neighbor_position != twin_trace.actor_position {
+            // The exact evidence gate permits one direct current-build
+            // Scout/Witness card on the original Twin body. Its final current
+            // role is therefore a required presentation match, not an opaque
+            // ordinary Evil bluff.
+            unpredictable_card_positions.remove(&twin_trace.actor_position);
             unpredictable_card_positions.insert(neighbor_position);
         }
     }

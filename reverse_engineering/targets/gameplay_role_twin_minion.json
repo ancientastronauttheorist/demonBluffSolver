@@ -107,6 +107,12 @@
       "rva": "0x368410"
     },
     {
+      "name": "Character.RevealReal",
+      "metadata_name": "Character$$RevealReal",
+      "signature": "void Character__RevealReal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x3682A0"
+    },
+    {
       "name": "Character.GetCharacterBluffIfAble",
       "metadata_name": "Character$$GetCharacterBluffIfAble",
       "signature": "CharacterData_o* Character__GetCharacterBluffIfAble (Character_o* __this, const MethodInfo* method);",
@@ -117,6 +123,13 @@
       "metadata_name": "Character$$GiveBluff",
       "signature": "void Character__GiveBluff (Character_o* __this, CharacterData_o* cd, const MethodInfo* method);",
       "rva": "0x365160"
+    },
+    {
+      "name": "Role.GetRegisterAsRole",
+      "metadata_name": "Role$$GetRegisterAsRole",
+      "signature": "CharacterData_o* Role__GetRegisterAsRole (Role_o* __this, Character_o* charRef, const MethodInfo* method);",
+      "applied_prototype_name": "Role__GetBluffIfAble",
+      "rva": "0x3712B0"
     },
     {
       "name": "UnityEngine.Random.Range.Int32",

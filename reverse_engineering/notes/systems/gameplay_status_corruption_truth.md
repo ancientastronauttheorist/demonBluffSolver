@@ -424,8 +424,15 @@ Character.Act
   -> CharacterHelper.CheckLying
   -> not lying:      real Act,      then bluff-role Act
   -> lying non-Evil: real BluffAct, then bluff-role BluffAct
-  -> lying Evil:     real Act,      then bluff-role BluffAct
+  -> lying Evil:
+       bluffRole null:     real BluffAct only
+       bluffRole non-null: real Act, then bluff-role BluffAct
 ```
+
+The runtime-Evil exception tests the raw `bluffRole` pointer. It is not an
+unconditional consequence of Evil alignment. During ordered Start, a fresh
+card can still have a null `bluffRole`; base `Role.BluffAct` forwards to the
+role's virtual `Act`, but a concrete bluff-action override remains distinct.
 
 `CheckLyingAppearance` and `CheckIfDisguisedAppearance` are query surfaces
 separate from actual action dispatch.
