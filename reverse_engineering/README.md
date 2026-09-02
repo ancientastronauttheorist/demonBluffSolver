@@ -134,12 +134,15 @@ RVA against `script.json`. All 40 status-storage, selection, truth/appearance,
 corruption-producer, Alchemist, and bluff-orchestration methods now have
 native-static coverage in the
 [`status/corruption/truth audit`](notes/systems/gameplay_status_corruption_truth.md).
-The subsequent `gameplay_bluff_acquisition` boundary adds 20 checked methods
+The subsequent `gameplay_bluff_acquisition` boundary adds 31 checked methods
 covering common assignment, Demon/Minion/Spy/Mutant selection, bluff pools,
-script registration, and fresh-card creation. Two entries are exact overlaps
-with earlier sets; CharacterData overloads receive explicit typed prototype
-aliases, and the Helpers/Calculator `RollDice` shared native body retains both
-managed identities. All 20 are documented in the
+script registration, fresh-card creation, delayed-Reveal registration and
+resume, first-bluff assignment, and the GameAssembly-to-Unity coroutine/RNG
+handoff. Thirteen entries are exact overlaps with earlier sets; CharacterData
+overloads receive explicit typed prototype aliases, and the Helpers/Calculator
+`RollDice`, `Random.Range`/`RandomRangeInt`, and
+`StartCoroutine(IEnumerator)`/`StartCoroutine_Auto` shared native bodies retain
+their exact managed identities. All 31 are documented in the
 [`bluff-acquisition audit`](notes/systems/gameplay_bluff_acquisition.md).
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
@@ -501,9 +504,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,678
-datatypes. Its forty-one-set inventory contains 874 target memberships, 541
-distinct selected FunctionDefinitions, and 443 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,680
+datatypes. Its forty-one-set inventory contains 882 target memberships, 543
+distinct selected FunctionDefinitions, and 445 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -521,9 +524,9 @@ sets; the current forty-one-set run used six batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
 The preserved fully analyzed typed project now covers all forty-one target
-sets after a no-analysis refresh. Three hundred thirty-three memberships are
+sets after a no-analysis refresh. Three hundred thirty-nine memberships are
 exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
-the 541 selected definitions exceed the 443 unique native RVAs by ninety-eight;
+the 543 selected definitions exceed the 445 unique native RVAs by ninety-eight;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -549,9 +552,11 @@ Empress refresh imported six additional reachable datatypes, the Gemcrafter
 refresh imported six more, the Bard refresh imported six more, and the
 Confessor refresh imported three more. The Druid refresh imported 157 more and
 canonicalized six shared bodies. The bluff-acquisition pool refresh imported
-six additional reachable datatypes. The six-batch refresh reapplied and
-validated all 874 memberships without rerunning auto-analysis. The final
-read-only pass validated all 874 memberships (541 exact definitions) and 2,561
+six additional reachable datatypes. Its scheduler-handoff expansion added two
+FunctionDefinitions to the rebuilt GDT and required no additional reachable
+datatype imports during application. The six-batch refresh reapplied and
+validated all 882 memberships without rerunning auto-analysis. The final
+read-only pass validated all 882 memberships (543 exact definitions) and 2,585
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -577,7 +582,7 @@ For the current exports, unresolved-type tokens fell from 78 to 43 in
 `gameplay_core`, from 160 to 96 in `gameplay_execution_resolution`, from 370
 to 140 in `gameplay_lifecycle`, from 38 to 34 in
 `gameplay_roster_helpers`, from 281 to 145 in
-`gameplay_status_corruption_truth`, and from 114 to 70 in
+`gameplay_status_corruption_truth`, and from 244 to 74 in
 `gameplay_bluff_acquisition`. The role boundaries fell from 70 to 51 for
 Slayer, from 14 to 5 for Wretch, from 105 to 80 for Dreamer2, and from 190 to
 92 for the public Dreamer, from 25 to 17 for Baa, from 95 to 18 for Shaman,
@@ -594,7 +599,7 @@ from 97 to 24. Bishop fell from 187 to 98, Empress fell from 102 to 45,
 Gemcrafter fell from 67 to 27, Bard fell from 62 to 18, and Confessor fell
 from 51 to four. Druid fell from 262 to 101.
 Raw field-offset accesses fell from 237 to 144, from
-243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 132 to 62
+243 to 120, from 678 to 289, from 76 to 41, from 421 to 148, and from 361 to 88
 for the six subsystem boundaries, then from 97 to 83 for Slayer, from 20 to 8
 for Wretch, from 167 to 156 for Dreamer2, from 370 to 186 for the public
 Dreamer, from 33 to 28 for Baa, from 144 to 21 for Shaman, from 329 to 223
@@ -612,8 +617,11 @@ Gemcrafter fell from 53 to 14, Bard fell from 47 to 25, and Confessor fell
 from 55 to three. Druid fell from 424 to 261.
 Error-marker counts did not increase;
 lifecycle and the status boundary each gained one nonfatal decompiler warning,
-eight role reports retained their baseline warning counts, and Witch and the
-Chancellor/Witness boundary each gained one nonfatal warning marker. The
+and the expanded bluff-acquisition boundary retained three error markers,
+gained one nonfatal warning, reduced placeholder parameters from 320 to zero,
+and reduced indirect-call patterns from ten to zero. Eight role reports
+retained their baseline warning counts, and Witch and the Chancellor/Witness
+boundary each gained one nonfatal warning marker. The
 Lilis/Knight boundary retained four error markers and gained one nonfatal
 warning; placeholder parameters fell from 451 to zero and indirect-call
 patterns from 44 to 12. Rambler retained zero error markers, gained one
@@ -731,6 +739,8 @@ The current Confessor comparison is in the
 [`Confessor typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_confessor.json).
 The current Druid comparison is in the
 [`Druid typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_druid.json).
+The current bluff-acquisition comparison is in the
+[`bluff-acquisition typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_bluff_acquisition.json).
 
 ## Method coverage
 

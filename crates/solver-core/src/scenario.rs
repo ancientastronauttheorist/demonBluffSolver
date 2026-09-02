@@ -2,7 +2,9 @@
 /// full scenarios with corruption variants.
 
 use std::collections::{HashMap, HashSet};
-use crate::bluff::enumerate_twin_recipient_bluffs;
+use crate::bluff::{
+    enumerate_twin_recipient_bluffs, enumerate_twin_recipient_bluffs_after_one_lilis,
+};
 use crate::corruption::{
     enumerate_post_twin_corruption, enumerate_pre_twin_corruption,
     enumerate_start_corruption, StartCorruptionContext, StartCorruptionOutcome,
@@ -1808,13 +1810,42 @@ fn expand_exact_twin_recipient_bluffs(
     state: &GameState,
     scenarios: Vec<Scenario>,
 ) -> Option<Vec<Scenario>> {
-    let Some(context) = state.twin_recipient_bluff_context.as_ref() else {
-        return Some(scenarios);
+    let context = match (
+        state.twin_recipient_bluff_context.as_ref(),
+        state.twin_recipient_bluff_prefix_context.as_ref(),
+    ) {
+        (None, None) => return Some(scenarios),
+        (None, Some(_)) => return None,
+        (Some(context), _) => context,
     };
     if context.recipient_position > state.n_cards {
         return None;
     }
-    let outcomes = enumerate_twin_recipient_bluffs(context)?;
+    let (outcomes, prefix_positions) =
+        if let Some(prefix) = state.twin_recipient_bluff_prefix_context.as_ref() {
+            if state.board_demon_count != Some(1)
+                || state.deck.demons.len() != 1
+                || normalize_role(&state.deck.demons[0]) != "lilis"
+            {
+                return None;
+            }
+            let lilis_position = prefix.acquisition_order.first()?.position;
+            let shaman_position = prefix.acquisition_order.last()?.position;
+            if lilis_position > state.n_cards || shaman_position > state.n_cards {
+                return None;
+            }
+            (
+                enumerate_twin_recipient_bluffs_after_one_lilis(
+                    context,
+                    prefix,
+                    lilis_position,
+                    shaman_position,
+                )?,
+                Some((lilis_position, shaman_position)),
+            )
+        } else {
+            (enumerate_twin_recipient_bluffs(context)?, None)
+        };
     let mut recipient_cards = state
         .cards
         .iter()
@@ -1823,9 +1854,35 @@ fn expand_exact_twin_recipient_bluffs(
     if recipient_cards.next().is_some() {
         return None;
     }
+    let prefix_lilis_card = if let Some((lilis_position, _)) = prefix_positions {
+        let mut cards = state
+            .cards
+            .iter()
+            .filter(|card| card.position == lilis_position);
+        let card = cards.next();
+        if cards.next().is_some() {
+            return None;
+        }
+        card
+    } else {
+        None
+    };
 
     let mut expanded = Vec::new();
     for scenario in scenarios {
+        if let Some((lilis_position, shaman_position)) = prefix_positions {
+            if !scenario
+                .evil_positions
+                .get(&lilis_position)
+                .is_some_and(|role| normalize_role(role) == "lilis")
+                || !scenario
+                    .evil_positions
+                    .get(&shaman_position)
+                    .is_some_and(|role| normalize_role(role) == "shaman")
+            {
+                continue;
+            }
+        }
         let twin_trace = scenario.twin_trace.as_ref()?;
         let shaman_trace = scenario.shaman_trace.as_ref()?;
         match &twin_trace.outcome {
@@ -1858,6 +1915,13 @@ fn expand_exact_twin_recipient_bluffs(
         }
 
         for outcome in &outcomes {
+            if prefix_lilis_card.is_some_and(|card| {
+                outcome.trace.prior_acquisitions.len() != 1
+                    || normalize_role(&outcome.trace.prior_acquisitions[0].bluff_role)
+                        != normalize_role(&card.apparent_role)
+            }) {
+                continue;
+            }
             if normalize_role(&outcome.trace.bluff_role)
                 != normalize_role(&recipient_card.apparent_role)
             {
@@ -5224,8 +5288,8 @@ fn permutations_of(roles: &[String]) -> Vec<Vec<String>> {
 mod tests {
     use super::*;
     use crate::types::{
-        BluffAcquisitionSource, CardInfo, TwinNeighborSide, TwinRecipientBluffContext,
-        TwinStartOutcome,
+        BluffAcquisitionSource, CardInfo, DelayedRevealAcquisitionEvent, TwinNeighborSide,
+        TwinRecipientBluffContext, TwinRecipientBluffPrefixContext, TwinStartOutcome,
     };
 
     fn card(position: u8, apparent_role: &str) -> CardInfo {
@@ -7181,6 +7245,174 @@ mod tests {
                 occurrence_index: 0,
             };
         assert!(!crate::validators::check_scenario(&forged, &state));
+    }
+
+    #[test]
+    fn exact_one_lilis_prefix_composes_weights_and_public_bluffs() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.twin_recipient_bluff_context = Some(TwinRecipientBluffContext {
+            rule_version: "twin_recipient_bluff_native_v1".to_string(),
+            recipient_position: 3,
+            acquisition_ordinal: 7,
+            duplicate_pool: vec!["Scout".to_string()],
+            unique_pool: vec!["Confessor".to_string()],
+            bluff_must_include_at_recipient: vec!["Confessor".to_string()],
+        });
+        state.twin_recipient_bluff_prefix_context = Some(
+            TwinRecipientBluffPrefixContext {
+                rule_version:
+                    "twin_recipient_bluff_one_lilis_prefix_native_v1".to_string(),
+                acquisition_order: vec![
+                    DelayedRevealAcquisitionEvent {
+                        position: 2,
+                        acquisition_ordinal: 0,
+                    },
+                    DelayedRevealAcquisitionEvent {
+                        position: 3,
+                        acquisition_ordinal: 7,
+                    },
+                    DelayedRevealAcquisitionEvent {
+                        position: 4,
+                        acquisition_ordinal: 9,
+                    },
+                ],
+                bluff_must_include_before_prefix: vec![
+                    "Witness".to_string(),
+                    "Confessor".to_string(),
+                ],
+            },
+        );
+        state.cards = vec![
+            CardInfo {
+                position: 2,
+                apparent_role: "Witness".to_string(),
+                info_parsed: serde_json::Map::from_iter([(
+                    "affected_position".to_string(),
+                    serde_json::Value::from(2),
+                )]),
+                ..CardInfo::default()
+            },
+            CardInfo {
+                position: 3,
+                apparent_role: "Confessor".to_string(),
+                info_text: "I am Good".to_string(),
+                info_parsed: serde_json::Map::from_iter([
+                    (
+                        "confessor_variant".to_string(),
+                        serde_json::Value::String("public_current".to_string()),
+                    ),
+                    ("dizzy".to_string(), serde_json::Value::Bool(false)),
+                ]),
+                ..CardInfo::default()
+            },
+        ];
+
+        let scenarios = build_exact_twin_shaman_scenarios(&state)
+            .expect("the bounded delayed-Reveal prefix is exact");
+        assert_eq!(scenarios.len(), 6);
+        assert_eq!(build_scenarios(&state).len(), 6);
+        assert!(scenarios.iter().all(|scenario| {
+            let trace = scenario.twin_recipient_bluff_trace.as_ref().unwrap();
+            trace.bluff_role == "Confessor"
+                && matches!(
+                    trace.source,
+                    BluffAcquisitionSource::BluffMustInclude {
+                        occurrence_index: 0
+                    }
+                )
+                && trace.prior_acquisitions.len() == 1
+                && trace.prior_acquisitions[0].position == 2
+                && trace.prior_acquisitions[0].acquisition_ordinal == 0
+                && trace.prior_acquisitions[0].current_role == "Lilis"
+                && trace.prior_acquisitions[0].bluff_role == "Witness"
+                && matches!(
+                    trace.prior_acquisitions[0].source,
+                    BluffAcquisitionSource::BluffMustInclude {
+                        occurrence_index: 0
+                    }
+                )
+                && crate::validators::truth_status(2, scenario, &state)
+                    == crate::validators::TruthStatus::Lying
+                && crate::validators::check_scenario(scenario, &state)
+        }));
+
+        let mut wrong_lilis_surface = state.clone();
+        wrong_lilis_surface.cards[0] = CardInfo {
+            position: 2,
+            apparent_role: "Confessor".to_string(),
+            info_text: "I am Good".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "confessor_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                ("dizzy".to_string(), serde_json::Value::Bool(false)),
+            ]),
+            ..CardInfo::default()
+        };
+        assert!(build_exact_twin_shaman_scenarios(&wrong_lilis_surface)
+            .is_some_and(|scenarios| scenarios.is_empty()));
+        assert!(build_scenarios(&wrong_lilis_surface).is_empty());
+
+        let mut forged = scenarios[0].clone();
+        forged.twin_recipient_bluff_trace.as_mut().unwrap()
+            .prior_acquisitions[0].bluff_role = "Scout".to_string();
+        assert!(!crate::validators::check_scenario(&forged, &state));
+    }
+
+    #[test]
+    fn malformed_one_lilis_prefix_falls_back_wholesale() {
+        let mut state = exact_candidate_changing_twin_shaman_state();
+        state.twin_recipient_bluff_context = Some(TwinRecipientBluffContext {
+            rule_version: "twin_recipient_bluff_native_v1".to_string(),
+            recipient_position: 3,
+            acquisition_ordinal: 7,
+            duplicate_pool: vec!["Scout".to_string()],
+            unique_pool: vec!["Confessor".to_string()],
+            bluff_must_include_at_recipient: Vec::new(),
+        });
+        state.twin_recipient_bluff_prefix_context = Some(
+            TwinRecipientBluffPrefixContext {
+                rule_version: "future_rule".to_string(),
+                acquisition_order: vec![
+                    DelayedRevealAcquisitionEvent {
+                        position: 2,
+                        acquisition_ordinal: 1,
+                    },
+                    DelayedRevealAcquisitionEvent {
+                        position: 3,
+                        acquisition_ordinal: 7,
+                    },
+                    DelayedRevealAcquisitionEvent {
+                        position: 4,
+                        acquisition_ordinal: 9,
+                    },
+                ],
+                bluff_must_include_before_prefix: Vec::new(),
+            },
+        );
+        state.cards.push(CardInfo {
+            position: 3,
+            apparent_role: "Confessor".to_string(),
+            info_text: "I am Good".to_string(),
+            info_parsed: serde_json::Map::from_iter([
+                (
+                    "confessor_variant".to_string(),
+                    serde_json::Value::String("public_current".to_string()),
+                ),
+                ("dizzy".to_string(), serde_json::Value::Bool(false)),
+            ]),
+            ..CardInfo::default()
+        });
+
+        assert!(build_exact_twin_shaman_scenarios(&state).is_none());
+        let fallback = build_scenarios(&state);
+        assert!(!fallback.is_empty());
+        assert!(fallback.iter().all(|scenario| {
+            scenario.twin_recipient_bluff_trace.is_none()
+                && scenario.pre_twin_current_roles.is_empty()
+                && scenario.twin_trace.is_none()
+        }));
     }
 
     #[test]

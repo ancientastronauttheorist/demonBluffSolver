@@ -11,6 +11,7 @@ Usage:
 
 import atexit
 import ctypes
+import json
 import struct
 import sys
 import os
@@ -60,6 +61,9 @@ GAMEPLAY_DEMONS_OFFSET = 0x40
 
 # Characters class
 CHARACTERS_LIST_OFFSET = 0x20
+CHARACTERS_UNIQUE_POOL_OFFSET = 0x40
+CHARACTERS_DUPLICATES_POOL_OFFSET = 0x48
+CHARACTERS_BLUFF_MUST_INCLUDE_OFFSET = 0x50
 
 # List<T> internals
 LIST_ITEMS_OFFSET = 0x10
@@ -119,6 +123,17 @@ CD_ALIGNMENT_OFFSET = 0x134      # EAlignment (int32)
 ALIGNMENT = {0: 'None', 10: 'Good', 20: 'Evil'}
 STATE = {0: 'None', 5: 'Hidden', 10: 'Alive', 20: 'Dead', 30: 'Revealed'}
 CHAR_TYPE = {0: 'None', 10: 'Villager', 20: 'Outcast', 30: 'Minion', 100: 'Demon'}
+
+POSTMORTEM_BLUFF_SNAPSHOT_SCHEMA = (
+    'demon_bluff.postmortem_bluff_snapshot'
+)
+POSTMORTEM_BLUFF_SNAPSHOT_SCHEMA_VERSION = 1
+_POSTMORTEM_CAPTURE_MAX_LIST_SIZE = 4096
+
+
+class PostmortemBluffCaptureError(RuntimeError):
+    """A hidden-state capture could not be read completely."""
+
 
 # Displayed roles that never show a passive speech bubble. The game's savedAct
 # field (offset 0x198) persists across Night and village boundaries, so retain
@@ -737,6 +752,325 @@ class MemoryReader:
             names.append(self._read_cd_name(cd_ptr))
         return names
 
+    def _read_required_postmortem_ptr(self, address, label):
+        """Read one required managed pointer without collapsing failure/null."""
+        pointer = self._read_ptr(address)
+        if pointer is None:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer was unreadable"
+            )
+        if type(pointer) is not int:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer had a non-integer value"
+            )
+        if pointer == 0:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer was native-null"
+            )
+        if pointer < 0x10000:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer was invalid: 0x{pointer:x}"
+            )
+        return pointer
+
+    def _read_managed_list_occurrences_strict(self, list_ptr, label):
+        """Read every populated List<T> occurrence or reject the whole list.
+
+        A valid zero-sized managed list returns ``[]``. An unreadable, native-
+        null, malformed, or partially readable list raises instead, so an
+        exact offline capture cannot mistake missing memory for an empty pool.
+        """
+        if list_ptr is None:
+            raise PostmortemBluffCaptureError(
+                f"{label} list pointer was unreadable"
+            )
+        if type(list_ptr) is not int:
+            raise PostmortemBluffCaptureError(
+                f"{label} list pointer had a non-integer value"
+            )
+        if list_ptr == 0:
+            raise PostmortemBluffCaptureError(
+                f"{label} list pointer was native-null"
+            )
+        if list_ptr < 0x10000:
+            raise PostmortemBluffCaptureError(
+                f"{label} list pointer was invalid: 0x{list_ptr:x}"
+            )
+
+        list_size = self._read_i32(list_ptr + LIST_SIZE_OFFSET)
+        if list_size is None:
+            raise PostmortemBluffCaptureError(
+                f"{label} list size was unreadable"
+            )
+        if type(list_size) is not int or not (
+            0 <= list_size <= _POSTMORTEM_CAPTURE_MAX_LIST_SIZE
+        ):
+            raise PostmortemBluffCaptureError(
+                f"{label} list size was malformed: {list_size!r}"
+            )
+        if list_size == 0:
+            return []
+
+        items_array = self._read_required_postmortem_ptr(
+            list_ptr + LIST_ITEMS_OFFSET,
+            f"{label} items",
+        )
+        occurrences = []
+        for occurrence_index in range(list_size):
+            item_ptr = self._read_ptr(
+                items_array
+                + ARRAY_FIRST_ELEMENT_OFFSET
+                + occurrence_index * 8
+            )
+            if item_ptr is None:
+                raise PostmortemBluffCaptureError(
+                    f"{label}[{occurrence_index}] pointer was unreadable"
+                )
+            if type(item_ptr) is not int:
+                raise PostmortemBluffCaptureError(
+                    f"{label}[{occurrence_index}] pointer was non-integer"
+                )
+            if item_ptr == 0:
+                raise PostmortemBluffCaptureError(
+                    f"{label}[{occurrence_index}] pointer was native-null"
+                )
+            if item_ptr < 0x10000:
+                raise PostmortemBluffCaptureError(
+                    f"{label}[{occurrence_index}] pointer was invalid: "
+                    f"0x{item_ptr:x}"
+                )
+            occurrences.append(item_ptr)
+        return occurrences
+
+    def _read_character_data_name_strict(self, cd_ptr, label):
+        try:
+            name = self._read_cd_name(cd_ptr)
+        except Exception as exc:
+            raise PostmortemBluffCaptureError(
+                f"{label} CharacterData name read failed"
+            ) from exc
+        if (
+            type(name) is not str
+            or not name.strip()
+            or name.strip() == '?'
+        ):
+            raise PostmortemBluffCaptureError(
+                f"{label} CharacterData name was unreadable"
+            )
+        return name
+
+    def _read_character_data_list_strict(self, list_ptr, label):
+        """Read an occurrence-preserving List<CharacterData>."""
+        return [
+            self._read_character_data_name_strict(
+                cd_ptr,
+                f"{label}[{occurrence_index}]",
+            )
+            for occurrence_index, cd_ptr in enumerate(
+                self._read_managed_list_occurrences_strict(list_ptr, label)
+            )
+        ]
+
+    def _read_optional_character_data_field_strict(
+        self,
+        char_ptr,
+        field_offset,
+        label,
+    ):
+        pointer = self._read_ptr(char_ptr + field_offset)
+        if pointer is None:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer was unreadable"
+            )
+        if type(pointer) is not int:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer had a non-integer value"
+            )
+        if pointer == 0:
+            return None
+        if pointer < 0x10000:
+            raise PostmortemBluffCaptureError(
+                f"{label} pointer was invalid: 0x{pointer:x}"
+            )
+        return self._read_character_data_name_strict(pointer, label)
+
+    def _read_postmortem_board_identity(self, characters_mgr):
+        board_list = self._read_required_postmortem_ptr(
+            characters_mgr + CHARACTERS_LIST_OFFSET,
+            "Characters.characters",
+        )
+        character_ptrs = self._read_managed_list_occurrences_strict(
+            board_list,
+            "Characters.characters",
+        )
+        if not character_ptrs:
+            raise PostmortemBluffCaptureError(
+                "Characters.characters was a valid but empty board"
+            )
+
+        board = []
+        seen_positions = set()
+        for board_index, char_ptr in enumerate(character_ptrs):
+            label = f"Characters.characters[{board_index}]"
+            position = self._read_i32(char_ptr + CHAR_ID_OFFSET)
+            if (
+                type(position) is not int
+                or not 1 <= position <= 255
+                or position in seen_positions
+            ):
+                raise PostmortemBluffCaptureError(
+                    f"{label} position was malformed or duplicated: "
+                    f"{position!r}"
+                )
+            seen_positions.add(position)
+
+            current_data = self._read_required_postmortem_ptr(
+                char_ptr + CHAR_DATAREF_OFFSET,
+                f"{label}.dataRef",
+            )
+            alignment = self._read_i32(char_ptr + CHAR_ALIGNMENT_OFFSET)
+            if alignment not in ALIGNMENT:
+                raise PostmortemBluffCaptureError(
+                    f"{label} runtime alignment was unreadable or unknown: "
+                    f"{alignment!r}"
+                )
+            state = self._read_i32(char_ptr + CHAR_STATE_OFFSET)
+            if state not in STATE:
+                raise PostmortemBluffCaptureError(
+                    f"{label} state was unreadable or unknown: {state!r}"
+                )
+
+            board.append({
+                "board_index": board_index,
+                "position": position,
+                "current_role": self._read_character_data_name_strict(
+                    current_data,
+                    f"{label}.dataRef",
+                ),
+                "runtime_alignment": ALIGNMENT[alignment],
+                "state": STATE[state],
+                "bluff": self._read_optional_character_data_field_strict(
+                    char_ptr,
+                    CHAR_BLUFF_OFFSET,
+                    f"{label}.bluff",
+                ),
+                "register_as": (
+                    self._read_optional_character_data_field_strict(
+                        char_ptr,
+                        CHAR_REGISTERAS_OFFSET,
+                        f"{label}.registerAs",
+                    )
+                ),
+            })
+        return board
+
+    def _read_postmortem_build_fingerprint(self):
+        fingerprint = self.get_dll_fingerprint()
+        if type(fingerprint) is not dict:
+            raise PostmortemBluffCaptureError(
+                "GameAssembly.dll fingerprint was unreadable"
+            )
+        size = fingerprint.get("size")
+        pe_timestamp = fingerprint.get("pe_timestamp")
+        if type(size) is not int or type(pe_timestamp) is not int:
+            raise PostmortemBluffCaptureError(
+                "GameAssembly.dll fingerprint was malformed"
+            )
+        exact = {"size": size, "pe_timestamp": pe_timestamp}
+        if exact != KNOWN_DLL_FINGERPRINT:
+            raise PostmortemBluffCaptureError(
+                "GameAssembly.dll fingerprint does not match the validated "
+                "postmortem capture offsets"
+            )
+        return exact
+
+    def read_postmortem_bluff_snapshot(self):
+        """Capture hidden round-bluff state for offline/postmortem use only.
+
+        This API is intentionally disconnected from GameSession and solver
+        state. The caller asserts postmortem use; this sequential reader cannot
+        verify game phase or cross-field stability. It does not capture global
+        delayed-Reveal order, and ``BluffMustInclude`` is the remaining list at
+        capture time rather than acquisition-time reconstruction.
+        """
+        fingerprint = self._read_postmortem_build_fingerprint()
+        gameplay = self._get_gameplay_instance()
+        if gameplay is None:
+            raise PostmortemBluffCaptureError(
+                "Gameplay.Instance pointer was unreadable"
+            )
+        if type(gameplay) is not int or gameplay == 0:
+            raise PostmortemBluffCaptureError(
+                "Gameplay.Instance pointer was native-null or malformed"
+            )
+        if gameplay < 0x10000:
+            raise PostmortemBluffCaptureError(
+                f"Gameplay.Instance pointer was invalid: 0x{gameplay:x}"
+            )
+
+        characters_mgr = self._read_required_postmortem_ptr(
+            gameplay + GAMEPLAY_CHARACTERS_OFFSET,
+            "Gameplay.characters",
+        )
+
+        pools = {}
+        for key, offset in (
+            ("unique_pool", CHARACTERS_UNIQUE_POOL_OFFSET),
+            ("duplicate_pool", CHARACTERS_DUPLICATES_POOL_OFFSET),
+            (
+                "bluff_must_include_remaining_at_capture",
+                CHARACTERS_BLUFF_MUST_INCLUDE_OFFSET,
+            ),
+        ):
+            list_ptr = self._read_required_postmortem_ptr(
+                characters_mgr + offset,
+                f"Characters.{key}",
+            )
+            pools[key] = self._read_character_data_list_strict(
+                list_ptr,
+                f"Characters.{key}",
+            )
+
+        current_script = {}
+        for key, offset in (
+            ("villagers", GAMEPLAY_TOWNSFOLKS_OFFSET),
+            ("outcasts", GAMEPLAY_OUTSIDERS_OFFSET),
+            ("minions", GAMEPLAY_MINIONS_OFFSET),
+            ("demons", GAMEPLAY_DEMONS_OFFSET),
+        ):
+            list_ptr = self._read_required_postmortem_ptr(
+                gameplay + offset,
+                f"Gameplay.current_script.{key}",
+            )
+            current_script[key] = self._read_character_data_list_strict(
+                list_ptr,
+                f"Gameplay.current_script.{key}",
+            )
+
+        return {
+            "schema": POSTMORTEM_BLUFF_SNAPSHOT_SCHEMA,
+            "schema_version": POSTMORTEM_BLUFF_SNAPSHOT_SCHEMA_VERSION,
+            "provenance": {
+                "intended_use": "postmortem_only",
+                "capture_phase": "caller_asserted_postmortem",
+                "source": "read_only_process_memory",
+                "captured_at_unix_ms": int(time.time() * 1000),
+                "build_fingerprint": fingerprint,
+                "live_solver_input": False,
+                "acquisition_order_captured": False,
+                "snapshot_consistency": "sequential_read_not_atomic",
+                "pool_phase": "settled_state_not_verified",
+                "must_include_semantics": (
+                    "remaining_at_capture_not_acquisition_time"
+                ),
+            },
+            "round_pools": pools,
+            "current_script": current_script,
+            "board_identity": self._read_postmortem_board_identity(
+                characters_mgr
+            ),
+        }
+
     def read_deck(self):
         """Read the current deck (pool of possible roles)."""
         gameplay = self._get_gameplay_instance()
@@ -1135,6 +1469,14 @@ def main():
     parser.add_argument('--watch', action='store_true', help='Watch for changes')
     parser.add_argument('--deck', action='store_true', help='Show current deck pool')
     parser.add_argument('--score', action='store_true', help='Show score details')
+    parser.add_argument(
+        '--postmortem-bluff-snapshot-json',
+        action='store_true',
+        help=(
+            'Print hidden round-bluff memory as JSON for postmortem/offline '
+            'analysis only; never use during live solver decisions'
+        ),
+    )
     parser.add_argument('--interval', type=float, default=2.0, help='Watch interval')
     parser.add_argument('--pid', type=int, help='Process ID override')
     args = parser.parse_args()
@@ -1144,7 +1486,17 @@ def main():
         sys.exit(1)
 
     try:
-        if args.score:
+        if args.postmortem_bluff_snapshot_json:
+            try:
+                snapshot = reader.read_postmortem_bluff_snapshot()
+            except PostmortemBluffCaptureError as exc:
+                print(
+                    f"POSTMORTEM BLUFF CAPTURE FAILED: {exc}",
+                    file=sys.stderr,
+                )
+                raise SystemExit(2) from exc
+            print(json.dumps(snapshot, indent=2))
+        elif args.score:
             score = reader.read_score()
             print_score(score)
         elif args.deck:

@@ -21,6 +21,30 @@
       "rva": "0x365160"
     },
     {
+      "name": "Character.Init",
+      "metadata_name": "Character$$Init",
+      "signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365A20"
+    },
+    {
+      "name": "Character.InitWithNoReset",
+      "metadata_name": "Character$$InitWithNoReset",
+      "signature": "void Character__InitWithNoReset (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "rva": "0x365720"
+    },
+    {
+      "name": "Character.DelayReveal.MoveNext",
+      "metadata_name": "Character.<DelayReveal>d__84$$MoveNext",
+      "signature": "bool Character__DelayReveal_d__84__MoveNext (Character__DelayReveal_d__84_o* __this, const MethodInfo* method);",
+      "rva": "0x3756B0"
+    },
+    {
+      "name": "Character.Reveal",
+      "metadata_name": "Character$$Reveal",
+      "signature": "void Character__Reveal (Character_o* __this, const MethodInfo* method);",
+      "rva": "0x368410"
+    },
+    {
       "name": "Demon.GetBluffIfAble",
       "metadata_name": "Demon$$GetBluffIfAble",
       "signature": "CharacterData_o* Demon__GetBluffIfAble (Demon_o* __this, Character_o* charRef, const MethodInfo* method);",
@@ -87,6 +111,12 @@
       "rva": "0x377170"
     },
     {
+      "name": "Characters.ManageCharacters",
+      "metadata_name": "Characters$$ManageCharacters",
+      "signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "rva": "0x36CE30"
+    },
+    {
       "name": "Characters.GetARandomBluffMustIncludeOfType",
       "metadata_name": "Characters$$GetARandomBluffMustIncludeOfType",
       "signature": "CharacterData_o* Characters__GetARandomBluffMustIncludeOfType (Characters_o* __this, int32_t type, bool remove, const MethodInfo* method);",
@@ -135,6 +165,26 @@
       "metadata_name": "Helpers$$RollDice",
       "signature": "int32_t Helpers__RollDice (int32_t sides, const MethodInfo* method);",
       "rva": "0x396840"
+    },
+    {
+      "name": "UnityEngine.Random.Range.Int32",
+      "metadata_name": "UnityEngine.Random$$Range",
+      "signature": "int32_t UnityEngine_Random__Range (int32_t minInclusive, int32_t maxExclusive, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_Random__Range_Int32",
+      "rva": "0x1C86600"
+    },
+    {
+      "name": "UnityEngine.MonoBehaviour.StartCoroutine.IEnumerator",
+      "metadata_name": "UnityEngine.MonoBehaviour$$StartCoroutine",
+      "signature": "UnityEngine_Coroutine_o* UnityEngine_MonoBehaviour__StartCoroutine (UnityEngine_MonoBehaviour_o* __this, System_Collections_IEnumerator_o* routine, const MethodInfo* method);",
+      "prototype_name": "UnityEngine_MonoBehaviour__StartCoroutine_IEnumerator",
+      "rva": "0x1C7F160"
+    },
+    {
+      "name": "UnityEngine.MonoBehaviour.StartCoroutineManaged2",
+      "metadata_name": "UnityEngine.MonoBehaviour$$StartCoroutineManaged2",
+      "signature": "UnityEngine_Coroutine_o* UnityEngine_MonoBehaviour__StartCoroutineManaged2 (UnityEngine_MonoBehaviour_o* __this, System_Collections_IEnumerator_o* enumerator, const MethodInfo* method);",
+      "rva": "0x1C7F0B0"
     },
     {
       "name": "CharactersPool.CreateAndGetCharacters",

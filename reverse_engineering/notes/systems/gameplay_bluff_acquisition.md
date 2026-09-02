@@ -2,17 +2,20 @@
 
 Build: `f530404b0f3f_807de4a83df4`
 
-Evidence status: **native-static** for all 23 methods in the checked boundary.
+Evidence status: **native-static** for all 31 methods in the checked boundary,
+plus the version-matched Unity 2022.3 coroutine API contract where explicitly
+identified below.
 
 The checked target set is
 [`reverse_engineering/targets/gameplay_bluff_acquisition.json`](../../targets/gameplay_bluff_acquisition.json).
-It closes the common path from per-card bluff assignment through role-specific
-selection, exact round-pool construction, must-include and pool draws,
-script-list registration, and fresh-card creation. `Character.Init`,
-`Character.Act`, internal `Character.Reveal`,
-`Character.DelayReveal.MoveNext`, `Characters.ManageCharacters`, and the
-Chancellor/Baron transformation remain linked lifecycle evidence rather than
-duplicate members of this target.
+It closes the common path from fresh-card initialization and delayed-Reveal
+registration through first-bluff assignment, role-specific selection, exact
+round-pool construction, must-include and pool draws, script-list registration,
+and the GameAssembly-to-Unity coroutine/RNG handoff. `Character.Act`, concrete
+Init/AfterRoundStart role hooks, the unused emitted `Character.DelayReveal`
+wrapper, UnityPlayer's scheduler implementation, and the Chancellor/Baron
+transformation remain linked or explicitly external evidence rather than
+members of this target.
 
 ## Target boundary
 
@@ -21,6 +24,10 @@ duplicate members of this target.
 | `Character.AssignBluff` | `0x364880` | Select and store the card bluff |
 | `Character.GetCharacterBluffRoleIfAble` | `0x364CD0` | Guarded real/bluff role query |
 | `Character.GiveBluff` | `0x365160` | Store bluff data and clone its role |
+| `Character.Init` | `0x365A20` | Fresh/replacement initialization and continuation registration |
+| `Character.InitWithNoReset` | `0x365720` | Status-preserving replacement and continuation registration |
+| `Character.<DelayReveal>d__84.MoveNext` | `0x3756B0` | Shared role clone, wait, and resume dispatch |
+| `Character.Reveal` | `0x368410` | Atomic register-as and first-bluff acquisition event |
 | `Demon.GetBluffIfAble` | `0x3D6AC0` | Unique-Villager draw and registration |
 | `Minion.GetBluffIfAble` | `0x3E49F0` | Duplicate-versus-unique draw |
 | `Spy.GetBluffIfAble` | `0x3ED4B0` | Cached Villager bluff selection |
@@ -32,6 +39,7 @@ duplicate members of this target.
 | `Characters.PickRoundBluffs` | `0x36D3A0` | Build the round unique pool |
 | `Characters.PickRoundDuplicates` | `0x36D720` | Build the round duplicate pool |
 | `Characters.<>c__DisplayClass22_0.<PickRoundBluffs>b__0` | `0x377170` | Remove starting data already contained in the script |
+| `Characters.ManageCharacters` | `0x36CE30` | Deterministic creation and ordered-Start registration order |
 | `Characters.GetARandomBluffMustIncludeOfType` | `0x36BE50` | Filtered must-include draw/removal |
 | `Characters.GetARandomBluffMustInclude` | `0x36BF80` | General must-include draw/removal |
 | `Characters.FilterRealCharacterType(CharacterData)` | `0x36B9C0` | Exact real-type filter |
@@ -40,6 +48,9 @@ duplicate members of this target.
 | `Characters.FilterBluffableCharacters(CharacterData)` | `0x36A550` | Bluffable-data filter |
 | `Gameplay.AddScriptCharacterIfAble` | `0x37B370` | Faction-list registration |
 | `Helpers.RollDice` | `0x396840` | Inclusive one-based die roll |
+| `UnityEngine.Random.Range(int, int)` | `0x1C86600` | Shared engine RNG internal-call boundary |
+| `UnityEngine.MonoBehaviour.StartCoroutine(IEnumerator)` | `0x1C7F160` | Validation and engine scheduler handoff |
+| `UnityEngine.MonoBehaviour.StartCoroutineManaged2` | `0x1C7F0B0` | Direct engine scheduler internal-call stub |
 | `CharactersPool.CreateAndGetCharacters` | `0x3698F0` | Destroy old cards and instantiate a fresh board |
 
 ## Assignment, storage, and action surface
@@ -268,29 +279,81 @@ and [Chancellor/Baron section](gameplay_lifecycle.md#chancellorbaron-start-repla
 
 ## Global delayed-Reveal ordering
 
-Ordinary `Character.Init` starts one `DelayReveal` continuation per freshly
-created board card in board-list order. Each continuation clones the
-then-current `dataRef.role` before yielding the same `0.3f` wait. All ordinary
-initial continuations therefore exist before the ordered Start pass. Writers
-such as Chancellor, Twin Minion, Puppeteer, and Shaman can synchronously add
-more continuations without cancelling the earlier ones. Twin's two
-`InitWithNoReset` calls start the selected neighbour's continuation before the
-original Twin body's continuation; a self-swap adds both to the same card.
+`Characters.ManageCharacters` calls ordinary `Character.Init` once per fresh
+card in board-list order, publishes the board, and only then begins the Init and
+ordered Start passes. Both `Character.Init` and `Character.InitWithNoReset`
+clear raw `bluff`, allocate a `<DelayReveal>d__84` directly, store state zero
+and the physical Character reference, and pass that iterator to
+`MonoBehaviour.StartCoroutine`. Neither caller retains the returned Coroutine
+handle or cancels an earlier continuation. The separately emitted
+`Character.DelayReveal` wrapper at `0x364A20` merely constructs the same state
+machine and has no retained native call reference; it is not part of the
+shipped setup path.
 
-The resume-side iterator retains only its Character reference. It calls
-`Character.Reveal` against current shared card state rather than a captured
-data or role identity. Reveal recomputes register-as data, acquires and stores a
-bluff only while the raw `bluff` is Unity-null, optionally dispatches Start for
-`HealthyBluff`, and then always dispatches Init and AfterRoundStart. Thus the
-first continuation that successfully assigns a live bluff fixes that card's
-selection for later siblings, while every sibling still repeats the later
-hooks. A null or destroyed result remains eligible for retry.
+The version-matched
+[Unity 2022.3 `StartCoroutine` contract](https://docs.unity3d.com/2022.3/Documentation/ScriptReference/MonoBehaviour.StartCoroutine.html)
+returns when the iterator reaches its first yield. The first `MoveNext` call is
+therefore synchronous inside each Init call. It clones the then-current
+`dataRef.role` into the physical card's shared `Character.role` field, creates
+the common `0.3f` `WaitForSeconds`, stores it as iterator current, changes the
+iterator to state one, and returns true. This is not a per-continuation role
+snapshot: a later reinitializer starts another iterator and overwrites the same
+`Character.role` field before either sibling resumes. The iterator itself has
+only state, current-yield object, and Character-reference fields.
 
-Native static analysis fixes continuation creation order but not Unity's
-resume order after equal waits. Unity's coroutine contract does not guarantee
-that coroutines completing in one frame finish in their start order. A solver
-must not infer global Reveal order from board order, Twin endpoint order, or
-coroutine creation order.
+All ordinary first yields consequently finish before the ordered Start pass.
+Chancellor, Twin Minion, Puppeteer, and Shaman can synchronously add more
+continuations during that pass without cancelling the ordinary ones. Twin's
+two `InitWithNoReset` calls register the selected neighbour before the original
+Twin body; a self-swap registers two more iterators on the same card. Those
+game-side creation and registration orders are exact. `WaitForSeconds` starts
+its scaled wait at the end of the current frame and permits resumption on the
+first frame after the duration has elapsed, so the registrations in this one
+synchronous setup call share the same frame boundary.
+
+The checked `StartCoroutine(IEnumerator)` body validates non-null input and a
+live MonoBehaviour, then resolves
+`UnityEngine.MonoBehaviour::StartCoroutineManaged2(System.Collections.IEnumerator)`
+and tail-dispatches it. The separately emitted `StartCoroutineManaged2` stub
+resolves the same engine internal call. GameAssembly contains no queue, sort,
+or resume policy beyond that handoff; the implementation lives in
+`UnityPlayer.dll` 2022.3.10f1. Unity's version-matched contract explicitly does
+not guarantee that coroutines finishing in one frame finish in start order.
+Board order, writer call order, and iterator registration order are therefore
+not valid substitutes for realized resume order.
+
+At state one, `DelayReveal.MoveNext` calls `Character.Reveal` against current
+shared card state and completes. Reveal contains no yield, so one resume is an
+atomic game-code event: it recomputes `registerAs` through the current
+`dataRef.role`, tests raw `bluff` with Unity-object equality, and only when that
+field is null or destroyed calls the current role's `GetBluffIfAble` and then
+`GiveBluff`. The selector, every RNG draw, must-include removal, script-list
+addition, and bluff write all finish before another continuation can resume.
+A live first result suppresses later sibling bluff selectors; null or destroyed
+results remain retryable. `GiveBluff` still does not clear an older
+`bluffRole` when the new result is not live.
+
+Register-as runs before the raw-bluff guard and can itself consume RNG or mutate
+a role cache even on a sibling whose bluff is already live. Current Twin
+Minion/Marionette inherits the folded default `Role.GetRegisterAsRole`, which
+returns null without RNG, but a global replay cannot generalize that fact to
+other current roles. After acquisition, Reveal optionally dispatches Start for
+`HealthyBluff`, then always dispatches Init and AfterRoundStart. Those hooks can
+mutate card or global state; a `HealthyBluff` Start can reenter an ordered writer
+and register additional continuations in the middle of the resume stream.
+
+All checked integer selections, including `Helpers.RollDice`, converge on
+`UnityEngine.Random.Range(int, int)` and its engine internal call
+`UnityEngine.Random::RandomRangeInt`. The GameAssembly stub exposes the exact
+arguments but not the engine RNG state. For a current Minion acquisition, the
+native event consumes one 1-through-10 branch draw plus one duplicate-pool draw
+on the 40% branch. The 60% unique branch then consumes one pool draw when the
+must-include list is empty, or a probe plus a second independently selected and
+removed must-include occurrence when a live entry exists. Thus an ordinary
+Minion event consumes exactly two or three shared RNG draws. Demon selection
+uses one unique-Villager pool draw or two must-include draws, then registers the
+selected identity in the current script. Pool draws do not consume pool
+entries; the second must-include draw removes one matching occurrence.
 
 This matters directly when a runtime-Good Twin recipient reaches Reveal with
 current Minion data. Its first successful selection rolls the exact 40/60
@@ -302,15 +365,17 @@ uses the replacement role. If the recipient preserved `HealthyBluff`, Reveal
 dispatches the current Twin Start again and can cause another board swap and
 additional continuations.
 
-Exact replay therefore requires either the realized global continuation order
-or a complete enumeration of relevant interleavings. It must also retain the
-ordered/multiplicity-bearing `UniquePool`, `DuplicatesPool`, and
-`BluffMustInclude` state at each event; current script-list mutations; every
-physical card's current data, runtime alignment, statuses, resistance, raw
-bluff, copied bluff role, and register-as data; and all intervening random
-outcomes. A bounded reconstruction can instead require a known pool snapshot,
-a recipient that remains runtime-Good/current-Twin with a null bluff and no
-`HealthyBluff`, and proof that no unresolved earlier continuation can consume
+Exact global replay therefore requires the realized resume order, or a bounded
+explicit branch over an independently justified set of scheduler outcomes. At
+each atomic event it must retain the ordered and multiplicity-bearing
+`UniquePool`, `DuplicatesPool`, and `BluffMustInclude`; current script lists;
+the physical card's current `dataRef`, shared cloned `role`, runtime alignment,
+statuses, resistance, runtime data, raw bluff, copied bluff role, register-as,
+and reveal state; and either the intervening RNG outcomes/state or a complete
+weighted branch over those draws. Creation ordinal alone is insufficient. A
+bounded reconstruction can instead require a known acquisition-time pool
+snapshot, a recipient that remains runtime-Good/current-Twin with a null bluff
+and no `HealthyBluff`, and proof that no unresolved earlier resume can consume
 or replace its selection state. Any missing provenance must fall back
 atomically rather than assume an ordering.
 
@@ -324,6 +389,29 @@ the unique-add attempt and reset the shared status target pointer to null.
 This changes appearance queries, not actual `Character.Act` truth routing, and
 an existing `AppearLying` status retains appearance precedence.
 
+### Postmortem capture surface
+
+`memory_reader.py --postmortem-bluff-snapshot-json` exposes the deliberately
+offline-only schema `demon_bluff.postmortem_bluff_snapshot` version 1. It
+strictly reads the occurrence-preserving unique and duplicate pools, the
+remaining must-include list, all four current script lists, and board identity
+records containing board index, displayed position, current data, runtime
+alignment, state, raw bluff, and register-as data. Its provenance includes the
+validated DLL fingerprint and explicitly sets `live_solver_input` false.
+
+This snapshot is useful structural evidence, not an acquisition ledger. The
+reader is sequential rather than atomic, the caller asserts the postmortem
+phase, settled pool state is not verified, and the must-include list is only
+the remainder at capture time. Version 1 deliberately records no continuation
+creation/resume order, acquisition ordinal, RNG state or results, shared
+`Character.role`, `bluffRole`, statuses, resistance, or runtime data. It must
+not be converted into `twin_recipient_bluff_context` or
+`twin_recipient_bluff_prefix_context`, fed into a live solver decision, or used
+to infer that board order was resume order. A future exact
+bridge needs event-time capture immediately before `Character.Reveal` (or its
+first successful bluff write), including a monotonic resume/acquisition
+ordinal and every omitted mutation-relevant field.
+
 ### Bounded solver integration
 
 The Rust solver's first exact consumer is deliberately narrower than a global
@@ -334,6 +422,29 @@ acquisition ordinal, the occurrence-preserving duplicate and unique pools, and
 the must-include list as it existed at that recipient's first successful
 Minion bluff acquisition. Fresh live sessions never populate this hidden
 field, and public `reveal_order` is never interpreted as its substitute.
+
+An optional `twin_recipient_bluff_prefix_context` composes exactly one earlier
+Lilis acquisition with that recipient snapshot. Rule marker
+`twin_recipient_bluff_one_lilis_prefix_native_v1` requires exactly three
+strictly ordered acquisition events: Lilis, the moved Twin recipient, then
+Shaman. It also records the occurrence-preserving must-include list immediately
+before Lilis. The replay accepts this prefix only when the round has exactly
+one board Demon and the deck's only Demon is Lilis, and when the three
+positions are distinct, in range, and agree with the scenario's current-role
+evidence.
+
+Lilis uniformly selects one supported Villager occurrence from the pre-prefix
+must-include list when any exists. Native then calls `List.Remove(selected)` on
+the original list, so it removes the first equal `CharacterData` occurrence
+even when a later duplicate occurrence supplied the selected source index.
+Otherwise Lilis uniformly selects a supported Villager occurrence from the
+immutable unique pool and leaves must-include unchanged. Only branches whose
+resulting must-include list equals the independently captured recipient
+snapshot survive. The recipient then retains the ordinary Minion 40/60
+occurrence weights. Its `twin_recipient_bluff_trace.prior_acquisitions` stores
+the exact Lilis position, ordinal, selected bluff, pool source, and occurrence
+index. When a public Lilis card is present, it must show that selected bluff
+before the branch is admitted.
 
 Within the exact Twin-then-Shaman slice, the context is accepted only for a
 distinct runtime-Good recipient that remains current Twin, has no modeled
@@ -346,20 +457,33 @@ retains a tagged `twin_recipient_bluff_trace` with its pool source and
 occurrence index, so later validation cannot replace the selected role with an
 existential raw-bluff guess.
 
-Missing context preserves archived behavior. Malformed, over-cap, unsupported,
-or structurally incompatible context causes wholesale fallback rather than
+Missing context preserves archived behavior. A prefix without the recipient
+snapshot, malformed ordinals or positions, a non-one-Lilis round, an
+unsupported pool occurrence, an over-cap ticket product, or any other
+structurally incompatible context causes wholesale fallback rather than
 partially mixing weighted exact worlds with the legacy approximation. The
 current live regression corpus has no acquisition-event snapshots, so this
 checkpoint changes no archived case result; it establishes the guarded input
-boundary for future post-mortem fixtures and eventual global interleaving work.
+boundary for future event-time postmortem fixtures and eventual global
+interleaving work.
 
 ## Typed import, overlaps, and shared identity
 
-Two target memberships intentionally overlap earlier checked boundaries:
+Thirteen target memberships intentionally overlap earlier checked boundaries:
 
-- `Character.GiveBluff` reuses the exact status/corruption/truth identity.
-- `Characters.FilterRealCharacterType(CharacterData)` reuses the exact
-  roster-helper identity.
+- `Character.GiveBluff`, `Character.Init`, `Character.InitWithNoReset`,
+  `Character.<DelayReveal>d__84.MoveNext`, `Character.Reveal`, and
+  `Characters.ManageCharacters` reuse exact lifecycle or role-boundary
+  identities.
+- `Characters.GetRandomUniqueVillagerBluff`,
+  `Characters.GetARandomBluffMustIncludeOfType`,
+  `Characters.FilterRealCharacterType(CharacterData)`,
+  `Characters.FilterCharacterType(CharacterData)`,
+  `Characters.FilterBluffableCharacters(CharacterData)`, and
+  `Gameplay.AddScriptCharacterIfAble` reuse exact pool, roster, or role-helper
+  identities.
+- `UnityEngine.Random.Range(int, int)` reuses the exact engine-RNG identity
+  already selected by multiple role boundaries.
 
 The CharacterData overloads of `FilterCharacterType` and
 `FilterAlignmentCharacters` share their emitted Il2CppDumper C identifiers
@@ -367,30 +491,35 @@ with existing `List<Character>` overloads. Their target entries use explicit
 `prototype_name` aliases for Ghidra while retaining the unmodified metadata
 signatures and RVAs for validation.
 
-`Helpers.RollDice` and `Calculator.RollDice` are two managed method identities
-bound to the same native RVA. Only `Helpers.RollDice` is a member of this
-23-method target, but coverage records both exact managed identities against
-the shared body. The typed program applies the selected Helpers signature; it
-does not collapse the Calculator method into the target membership count.
+Three selected identities have a second metadata identity at the same RVA:
+`Helpers.RollDice` shares with `Calculator.RollDice`,
+`UnityEngine.Random.Range(int, int)` shares with `RandomRangeInt`, and
+`UnityEngine.MonoBehaviour.StartCoroutine(IEnumerator)` shares with
+`StartCoroutine_Auto`. Only the first identity in each pair is a member of this
+31-method target. The exact alias remains visible in `script.json`, but does
+not add a target membership, FunctionDefinition, or selected RVA.
 
-The expanded boundary exports all 23 functions from both the baseline and typed
-projects with zero failures. Its three new memberships are three new exact
-FunctionDefinitions at three distinct native RVAs. Across all 41 checked target
-sets, deterministic discovery now yields 874 memberships, 541 distinct selected
-FunctionDefinitions, and 443 unique native RVAs. The 333 repeated exact
-identities explain the membership/definition difference; folded or shared
-bodies explain the remaining 98-definition RVA gap. The Calculator alias is
-outside the target union, so it adds a coverage classification but no target
-membership, FunctionDefinition, or selected RVA.
+The expanded boundary exports all 31 functions from both the baseline and typed
+projects with zero failures, and all 31 select distinct signatures and RVAs
+within this target. Of the eight scheduler-boundary additions, six reuse exact
+definitions already in the target union; the two StartCoroutine identities add
+two FunctionDefinitions at two distinct native RVAs. Across all 41 checked
+target sets, deterministic discovery now yields 882 memberships, 543 distinct
+selected FunctionDefinitions, and 445 unique native RVAs. The 339 repeated
+exact identities explain the membership/definition difference; folded or
+shared bodies explain the remaining 98-definition RVA gap.
 
-The rebuilt GDT contains 151,678 datatypes and all 541 selected definitions.
-The six-batch no-analysis refresh imported six additional reachable datatypes,
-then its separate read-only pass validated all 874 memberships and 2,561
-membership-level parameter-storage locations with zero program mutations. The
-checked quality report covers all 23 baseline/typed pairs: unresolved type
-tokens fall from 131 to 65, raw field-offset accesses from 187 to 70, and
-placeholder parameter tokens from 155 to zero. It records no decompiler-error
-markers and passes its directional regression policy.
+The rebuilt GDT contains 151,680 datatypes and all 543 selected definitions.
+The scheduler expansion required no additional reachable datatype imports
+during its six-batch no-analysis refresh. Its separate read-only pass validated
+all 882 memberships and 2,585 membership-level parameter-storage locations
+with zero program mutations; this target accounts for 31 memberships and 89
+storages. The checked quality report covers all 31 baseline/typed pairs:
+unresolved type tokens fall from 244 to 74, raw field-offset accesses from 361
+to 88, indirect-call patterns from ten to zero, and placeholder parameter
+tokens from 320 to zero. Three decompiler-error markers remain unchanged in
+the baseline and typed exports, and the directional regression policy passes
+with zero regressions.
 
 ## Reconstruction implications
 
@@ -411,5 +540,14 @@ markers and passes its directional regression policy.
 - Equal-delay Reveal continuations require explicit order provenance or full
   interleaving enumeration whenever their pool consumption or current-role
   mutations can affect an observation.
+- The bounded exact prefix can replay one Lilis acquisition before a moved
+  Twin recipient only from event-time order and both pre-Lilis and
+  recipient-time must-include snapshots; its `prior_acquisitions` trace is
+  part of the exact scenario claim.
+- The version-1 postmortem bluff snapshot is a strict offline pool/script/board
+  capture, not acquisition-order provenance and not live solver input.
+- `Character.Reveal` must remain one atomic event through register-as, pool/RNG
+  mutation, `GiveBluff`, and synchronous HealthyBluff/init hooks. Unsupported
+  hook re-entry or missing event-time state requires atomic fallback.
 - Invalid or empty pool configurations generally fail rather than yielding a
   playable card with no bluff.

@@ -6,9 +6,11 @@ from unittest.mock import patch
 from game_loop import DecisionLog, GameSession, _release_session_lock, dispatch
 from solver import (
     CardInfo,
+    DelayedRevealAcquisitionEvent,
     DeckComposition,
     GameState,
     TwinRecipientBluffContext,
+    TwinRecipientBluffPrefixContext,
 )
 
 
@@ -16,7 +18,7 @@ class TestGameStateIO(unittest.TestCase):
     def test_new_game_state_fields_are_appended_to_the_positional_abi(self):
         names = [field.name for field in fields(GameState)]
         self.assertEqual(
-            names[-12:],
+            names[-13:],
             [
                 "executed_good_corrupted",
                 "executed_good_roles",
@@ -30,6 +32,7 @@ class TestGameStateIO(unittest.TestCase):
                 "executed_current_roles",
                 "revealed_night_current_roles",
                 "twin_recipient_bluff_context",
+                "twin_recipient_bluff_prefix_context",
             ],
         )
 
@@ -70,6 +73,16 @@ class TestGameStateIO(unittest.TestCase):
                 unique_pool=["Witness", "Confessor"],
                 bluff_must_include_at_recipient=["Bard"],
             ),
+            twin_recipient_bluff_prefix_context=TwinRecipientBluffPrefixContext(
+                rule_version=(
+                    "twin_recipient_bluff_one_lilis_prefix_native_v1"
+                ),
+                acquisition_order=[
+                    DelayedRevealAcquisitionEvent(4, 6),
+                    DelayedRevealAcquisitionEvent(3, 7),
+                ],
+                bluff_must_include_before_prefix=["Bard", "Confessor"],
+            ),
         )
 
         data = state.to_dict()
@@ -104,6 +117,7 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(loaded.executed_current_roles, {})
         self.assertEqual(loaded.revealed_night_current_roles, {})
         self.assertIsNone(loaded.twin_recipient_bluff_context)
+        self.assertIsNone(loaded.twin_recipient_bluff_prefix_context)
 
     def test_game_session_save_load_round_trip_preserves_metadata(self):
         session = GameSession(5, 2)
@@ -199,6 +213,7 @@ class TestGameStateIO(unittest.TestCase):
             "fortune_teller_native_v1",
         )
         self.assertNotIn("twin_recipient_bluff_context", current)
+        self.assertNotIn("twin_recipient_bluff_prefix_context", current)
         self.assertIsNone(legacy.rambler_rule_version)
         self.assertEqual(legacy.rambler_shut_up_observations, [])
         self.assertIsNone(legacy.baker_rule_version)
@@ -206,12 +221,17 @@ class TestGameStateIO(unittest.TestCase):
         self.assertIsNone(legacy.fortune_teller_rule_version)
         self.assertIsNone(legacy.terminal_loss_role)
         self.assertIsNone(legacy.twin_recipient_bluff_context)
+        self.assertIsNone(legacy.twin_recipient_bluff_prefix_context)
         self.assertNotIn("rambler_rule_version", legacy.to_dict())
         self.assertNotIn("baker_rule_version", legacy.to_dict())
         self.assertNotIn("doppel_drunk_rule_version", legacy.to_dict())
         self.assertNotIn("fortune_teller_rule_version", legacy.to_dict())
         self.assertNotIn("terminal_loss_role", legacy.to_dict())
         self.assertNotIn("twin_recipient_bluff_context", legacy.to_dict())
+        self.assertNotIn(
+            "twin_recipient_bluff_prefix_context",
+            legacy.to_dict(),
+        )
 
     def test_offline_twin_recipient_context_round_trips_exact_pool_occurrences(self):
         context = TwinRecipientBluffContext(
@@ -237,6 +257,33 @@ class TestGameStateIO(unittest.TestCase):
         self.assertEqual(
             GameState.from_dict(serialized).twin_recipient_bluff_context,
             context,
+        )
+
+    def test_offline_lilis_prefix_round_trips_exact_event_order(self):
+        prefix = TwinRecipientBluffPrefixContext(
+            rule_version="twin_recipient_bluff_one_lilis_prefix_native_v1",
+            acquisition_order=[
+                DelayedRevealAcquisitionEvent(4, 12),
+                DelayedRevealAcquisitionEvent(2, 19),
+            ],
+            bluff_must_include_before_prefix=["Scout", "Scout", "Bard"],
+        )
+        state = GameState(
+            n_cards=4,
+            deck=DeckComposition([], [], ["Twin Minion"], ["Lilis"]),
+            cards=[],
+            twin_recipient_bluff_prefix_context=prefix,
+        )
+
+        serialized = state.to_dict()
+
+        self.assertEqual(
+            serialized["twin_recipient_bluff_prefix_context"],
+            prefix.to_dict(),
+        )
+        self.assertEqual(
+            GameState.from_dict(serialized).twin_recipient_bluff_prefix_context,
+            prefix,
         )
 
     def test_reveal_order_defaults_empty_for_legacy_data(self):

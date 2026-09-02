@@ -14,6 +14,9 @@ DOPPEL_DRUNK_RULE_VERSION = "doppel_drunk_reveal_v1"
 FORTUNE_TELLER_RULE_VERSION = "fortune_teller_native_v1"
 POET_VARIANT = "public_current"
 TWIN_RECIPIENT_BLUFF_RULE_VERSION = "twin_recipient_bluff_native_v1"
+TWIN_RECIPIENT_BLUFF_PREFIX_RULE_VERSION = (
+    "twin_recipient_bluff_one_lilis_prefix_native_v1"
+)
 
 # Native Gossip constructor order.  These are canonical public clue-provider
 # names, not a list of every Villager whose text happens to resemble a Poet
@@ -210,6 +213,109 @@ class TwinRecipientBluffContext:
         )
 
 
+@dataclass(frozen=True)
+class DelayedRevealAcquisitionEvent:
+    """One successful hidden delayed-Reveal bluff acquisition."""
+
+    position: int
+    acquisition_ordinal: int
+
+    def to_dict(self) -> dict:
+        return {
+            "position": self.position,
+            "acquisition_ordinal": self.acquisition_ordinal,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "DelayedRevealAcquisitionEvent":
+        if type(data) is not dict or set(data) != {
+            "position",
+            "acquisition_ordinal",
+        }:
+            raise TypeError(
+                "delayed-Reveal acquisition event must be an exact dict"
+            )
+        position = data["position"]
+        acquisition_ordinal = data["acquisition_ordinal"]
+        if type(position) is not int or not 1 <= position <= 255:
+            raise ValueError(
+                "delayed-Reveal acquisition position must be an exact nonzero u8"
+            )
+        if (
+            type(acquisition_ordinal) is not int
+            or not 0 <= acquisition_ordinal <= 65535
+        ):
+            raise ValueError(
+                "delayed-Reveal acquisition ordinal must be an exact u16"
+            )
+        return cls(position, acquisition_ordinal)
+
+
+@dataclass
+class TwinRecipientBluffPrefixContext:
+    """Offline-only one-Lilis acquisition prefix before a moved Twin draw."""
+
+    rule_version: str
+    acquisition_order: list[DelayedRevealAcquisitionEvent] = field(
+        default_factory=list
+    )
+    bluff_must_include_before_prefix: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "rule_version": self.rule_version,
+            "acquisition_order": [
+                event.to_dict() for event in self.acquisition_order
+            ],
+            "bluff_must_include_before_prefix": list(
+                self.bluff_must_include_before_prefix
+            ),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "TwinRecipientBluffPrefixContext":
+        expected = {
+            "rule_version",
+            "acquisition_order",
+            "bluff_must_include_before_prefix",
+        }
+        if type(data) is not dict or set(data) != expected:
+            raise TypeError(
+                "twin_recipient_bluff_prefix_context must be an exact dict"
+            )
+        rule_version = data["rule_version"]
+        if type(rule_version) is not str or not rule_version.strip():
+            raise ValueError(
+                "twin_recipient_bluff_prefix_context.rule_version must be "
+                "a nonempty str"
+            )
+        raw_order = data["acquisition_order"]
+        if type(raw_order) is not list:
+            raise TypeError(
+                "twin_recipient_bluff_prefix_context.acquisition_order "
+                "must be a list"
+            )
+        raw_pool = data["bluff_must_include_before_prefix"]
+        if type(raw_pool) is not list:
+            raise TypeError(
+                "twin_recipient_bluff_prefix_context."
+                "bluff_must_include_before_prefix must be a list"
+            )
+        if any(type(role) is not str or not role.strip() for role in raw_pool):
+            raise ValueError(
+                "twin_recipient_bluff_prefix_context."
+                "bluff_must_include_before_prefix roles must be nonempty strs"
+            )
+        return cls(
+            rule_version=rule_version,
+            acquisition_order=[
+                DelayedRevealAcquisitionEvent.from_dict(event)
+                for event in raw_order
+            ],
+            bluff_must_include_before_prefix=list(raw_pool),
+        )
+
+
 @dataclass
 class GameState:
     """Full state of a game in progress."""
@@ -269,6 +375,11 @@ class GameState:
     # Offline/post-mortem pool snapshot for one exact moved Twin recipient.
     # Live play must leave this absent because the pool state is hidden.
     twin_recipient_bluff_context: Optional[TwinRecipientBluffContext] = None
+    # Offline-only explicit delayed-Reveal prefix. Never inferred from the
+    # public player click order and never populated by a live GameSession.
+    twin_recipient_bluff_prefix_context: Optional[
+        TwinRecipientBluffPrefixContext
+    ] = None
 
     def to_dict(self, *, nest_deck: bool = True) -> dict:
         data = {
@@ -320,6 +431,10 @@ class GameState:
         if self.twin_recipient_bluff_context is not None:
             data["twin_recipient_bluff_context"] = (
                 self.twin_recipient_bluff_context.to_dict()
+            )
+        if self.twin_recipient_bluff_prefix_context is not None:
+            data["twin_recipient_bluff_prefix_context"] = (
+                self.twin_recipient_bluff_prefix_context.to_dict()
             )
         if nest_deck:
             data["deck"] = self.deck.to_dict()
@@ -390,6 +505,13 @@ class GameState:
                     data["twin_recipient_bluff_context"]
                 )
                 if data.get("twin_recipient_bluff_context") is not None
+                else None
+            ),
+            twin_recipient_bluff_prefix_context=(
+                TwinRecipientBluffPrefixContext.from_dict(
+                    data["twin_recipient_bluff_prefix_context"]
+                )
+                if data.get("twin_recipient_bluff_prefix_context") is not None
                 else None
             ),
         )
@@ -527,6 +649,26 @@ class BluffAcquisitionSource:
 
 
 @dataclass(frozen=True)
+class RevealBluffAcquisitionTrace:
+    """Exact earlier bluff installation in the hidden Reveal order."""
+
+    position: int
+    acquisition_ordinal: int
+    current_role: str
+    bluff_role: str
+    source: BluffAcquisitionSource
+
+    def to_dict(self) -> dict:
+        return {
+            "position": self.position,
+            "acquisition_ordinal": self.acquisition_ordinal,
+            "current_role": self.current_role,
+            "bluff_role": self.bluff_role,
+            "source": self.source.to_dict(),
+        }
+
+
+@dataclass(frozen=True)
 class TwinRecipientBluffTrace:
     """Exact Minion bluff installed on a runtime-Good moved Twin recipient."""
 
@@ -534,14 +676,22 @@ class TwinRecipientBluffTrace:
     acquisition_ordinal: int
     bluff_role: str
     source: BluffAcquisitionSource
+    prior_acquisitions: list[RevealBluffAcquisitionTrace] = field(
+        default_factory=list
+    )
 
     def to_dict(self) -> dict:
-        return {
+        result = {
             "recipient_position": self.recipient_position,
             "acquisition_ordinal": self.acquisition_ordinal,
             "bluff_role": self.bluff_role,
             "source": self.source.to_dict(),
         }
+        if self.prior_acquisitions:
+            result["prior_acquisitions"] = [
+                trace.to_dict() for trace in self.prior_acquisitions
+            ]
+        return result
 
 
 class PuppeteerNeighborSide(str, Enum):

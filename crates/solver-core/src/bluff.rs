@@ -7,10 +7,18 @@
 //! offline context and fall back atomically when it is unavailable.
 
 use crate::knowledge_base::{get_card, Faction};
-use crate::types::{BluffAcquisitionSource, TwinRecipientBluffContext, TwinRecipientBluffTrace};
+use crate::types::{
+    BluffAcquisitionSource, RevealBluffAcquisitionTrace, TwinRecipientBluffContext,
+    TwinRecipientBluffPrefixContext, TwinRecipientBluffTrace,
+};
 
 /// Exact provenance marker accepted by this native-current enumerator.
 pub const TWIN_RECIPIENT_BLUFF_NATIVE_V1: &str = "twin_recipient_bluff_native_v1";
+
+/// Exact bounded delayed-Reveal prefix: one Lilis acquisition, then the moved
+/// Twin recipient, then the stable Shaman acquisition.
+pub const TWIN_RECIPIENT_BLUFF_ONE_LILIS_PREFIX_NATIVE_V1: &str =
+    "twin_recipient_bluff_one_lilis_prefix_native_v1";
 
 /// Keep equal-ticket expansion bounded before scenario integration clones it.
 const MAX_TOTAL_TICKETS: u64 = 65_536;
@@ -62,6 +70,11 @@ fn pool_is_valid(pool: &[String]) -> bool {
     // A u16 index can represent the inclusive range 0..=u16::MAX.
     pool.len() <= usize::from(u16::MAX) + 1
         && pool.iter().all(|role| is_canonical_supported_bluff(role))
+}
+
+fn is_supported_villager_bluff(role: &str) -> bool {
+    is_canonical_supported_bluff(role)
+        && get_card(role).is_some_and(|card| card.faction == Faction::Villager)
 }
 
 /// Enumerate the native 40% duplicate / 60% unique Minion draw.
@@ -134,6 +147,7 @@ pub fn enumerate_twin_recipient_bluffs(
                 source: BluffAcquisitionSource::DuplicatePool {
                     occurrence_index: u16::try_from(index).ok()?,
                 },
+                prior_acquisitions: Vec::new(),
             },
             tickets: duplicate_tickets,
         });
@@ -152,6 +166,7 @@ pub fn enumerate_twin_recipient_bluffs(
                 acquisition_ordinal: context.acquisition_ordinal,
                 bluff_role: role.clone(),
                 source,
+                prior_acquisitions: Vec::new(),
             },
             tickets: unique_tickets,
         });
@@ -160,9 +175,130 @@ pub fn enumerate_twin_recipient_bluffs(
     Some(outcomes)
 }
 
+/// Replay the smallest exact shared-state prefix before one moved Twin
+/// recipient's Minion bluff acquisition.
+///
+/// Lilis uses the typed unique-Villager selector. A Villager occurrence in the
+/// pre-prefix must-include list is chosen uniformly and removed; otherwise a
+/// Villager occurrence is chosen uniformly from the immutable unique pool and
+/// the must-include list is unchanged. Only branches producing the recipient's
+/// independently captured post-Lilis snapshot survive. An empty result is an
+/// exact contradiction; malformed provenance or an oversized ticket space is
+/// `None` so the ordered caller can fall back atomically.
+pub fn enumerate_twin_recipient_bluffs_after_one_lilis(
+    context: &TwinRecipientBluffContext,
+    prefix: &TwinRecipientBluffPrefixContext,
+    lilis_position: u8,
+    shaman_position: u8,
+) -> Option<Vec<WeightedTwinRecipientBluffOutcome>> {
+    let recipient_outcomes = enumerate_twin_recipient_bluffs(context)?;
+    if prefix.rule_version != TWIN_RECIPIENT_BLUFF_ONE_LILIS_PREFIX_NATIVE_V1
+        || lilis_position == 0
+        || shaman_position == 0
+        || lilis_position == shaman_position
+        || lilis_position == context.recipient_position
+        || shaman_position == context.recipient_position
+        || prefix.acquisition_order.len() != 3
+        || !pool_is_valid(&prefix.bluff_must_include_before_prefix)
+    {
+        return None;
+    }
+
+    let order = &prefix.acquisition_order;
+    if order.iter().any(|event| event.position == 0)
+        || order[0].position != lilis_position
+        || order[1].position != context.recipient_position
+        || order[2].position != shaman_position
+        || order[1].acquisition_ordinal != context.acquisition_ordinal
+        || order[0].acquisition_ordinal >= order[1].acquisition_ordinal
+        || order[1].acquisition_ordinal >= order[2].acquisition_ordinal
+    {
+        return None;
+    }
+
+    let villager_must_include: Vec<(usize, &String)> = prefix
+        .bluff_must_include_before_prefix
+        .iter()
+        .enumerate()
+        .filter(|(_, role)| is_supported_villager_bluff(role))
+        .collect();
+
+    let mut lilis_outcomes = Vec::new();
+    if villager_must_include.is_empty() {
+        if prefix.bluff_must_include_before_prefix != context.bluff_must_include_at_recipient {
+            return Some(Vec::new());
+        }
+        for (index, role) in context.unique_pool.iter().enumerate() {
+            if !is_supported_villager_bluff(role) {
+                continue;
+            }
+            lilis_outcomes.push(RevealBluffAcquisitionTrace {
+                position: lilis_position,
+                acquisition_ordinal: order[0].acquisition_ordinal,
+                current_role: "Lilis".to_string(),
+                bluff_role: role.clone(),
+                source: BluffAcquisitionSource::UniquePool {
+                    occurrence_index: u16::try_from(index).ok()?,
+                },
+            });
+        }
+        // Native Demon selection fails rather than yielding a no-bluff branch.
+        if lilis_outcomes.is_empty() {
+            return None;
+        }
+    } else {
+        for (index, role) in villager_must_include {
+            let mut remaining = prefix.bluff_must_include_before_prefix.clone();
+            // The typed helper selects from a filtered copy, then calls
+            // List.Remove(selected) on the original list. Canonical repeated
+            // role occurrences represent the same CharacterData object here,
+            // so native removal deletes the first equal occurrence rather
+            // than necessarily the occurrence selected in the filtered copy.
+            let removed_index = remaining.iter().position(|candidate| candidate == role)?;
+            remaining.remove(removed_index);
+            if remaining != context.bluff_must_include_at_recipient {
+                continue;
+            }
+            lilis_outcomes.push(RevealBluffAcquisitionTrace {
+                position: lilis_position,
+                acquisition_ordinal: order[0].acquisition_ordinal,
+                current_role: "Lilis".to_string(),
+                bluff_role: role.clone(),
+                source: BluffAcquisitionSource::BluffMustInclude {
+                    occurrence_index: u16::try_from(index).ok()?,
+                },
+            });
+        }
+    }
+
+    if lilis_outcomes.is_empty() {
+        return Some(Vec::new());
+    }
+
+    let capacity = lilis_outcomes.len().checked_mul(recipient_outcomes.len())?;
+    if capacity > usize::try_from(MAX_TOTAL_TICKETS).ok()? {
+        return None;
+    }
+    let mut outcomes = Vec::with_capacity(capacity);
+    let mut total_tickets = 0u64;
+    for lilis_trace in lilis_outcomes {
+        for recipient_outcome in &recipient_outcomes {
+            total_tickets = total_tickets.checked_add(recipient_outcome.tickets)?;
+            if total_tickets > MAX_TOTAL_TICKETS {
+                return None;
+            }
+            let mut weighted = recipient_outcome.clone();
+            weighted.trace.prior_acquisitions = vec![lilis_trace.clone()];
+            outcomes.push(weighted);
+        }
+    }
+    Some(outcomes)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::types::DelayedRevealAcquisitionEvent;
     use std::collections::HashMap;
 
     fn context(duplicate: &[&str], unique: &[&str]) -> TwinRecipientBluffContext {
@@ -173,6 +309,30 @@ mod tests {
             duplicate_pool: duplicate.iter().map(|role| (*role).to_string()).collect(),
             unique_pool: unique.iter().map(|role| (*role).to_string()).collect(),
             bluff_must_include_at_recipient: Vec::new(),
+        }
+    }
+
+    fn one_lilis_prefix(before: &[&str]) -> TwinRecipientBluffPrefixContext {
+        TwinRecipientBluffPrefixContext {
+            rule_version: TWIN_RECIPIENT_BLUFF_ONE_LILIS_PREFIX_NATIVE_V1.to_string(),
+            acquisition_order: vec![
+                DelayedRevealAcquisitionEvent {
+                    position: 2,
+                    acquisition_ordinal: 3,
+                },
+                DelayedRevealAcquisitionEvent {
+                    position: 4,
+                    acquisition_ordinal: 7,
+                },
+                DelayedRevealAcquisitionEvent {
+                    position: 6,
+                    acquisition_ordinal: 9,
+                },
+            ],
+            bluff_must_include_before_prefix: before
+                .iter()
+                .map(|role| (*role).to_string())
+                .collect(),
         }
     }
 
@@ -318,5 +478,184 @@ mod tests {
             10
         );
         assert!(outcomes.iter().all(|outcome| outcome.tickets == 1));
+    }
+
+    #[test]
+    fn one_lilis_prefix_preserves_duplicate_must_include_occurrences() {
+        let mut input = context(&["Scout"], &["Witness"]);
+        input.bluff_must_include_at_recipient = vec!["Scout".to_string(), "Witness".to_string()];
+        let prefix = one_lilis_prefix(&["Scout", "Scout", "Witness"]);
+
+        let outcomes = enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6)
+            .expect("the one-Lilis prefix is exact");
+
+        assert_eq!(
+            outcomes.iter().map(|outcome| outcome.tickets).sum::<u64>(),
+            20
+        );
+        let source_totals: HashMap<u16, u64> =
+            outcomes.iter().fold(HashMap::new(), |mut totals, outcome| {
+                let prior = &outcome.trace.prior_acquisitions[0];
+                let BluffAcquisitionSource::BluffMustInclude { occurrence_index } = prior.source
+                else {
+                    panic!("Lilis must use the typed must-include source");
+                };
+                *totals.entry(occurrence_index).or_default() += outcome.tickets;
+                totals
+            });
+        assert_eq!(source_totals, HashMap::from([(0, 10), (1, 10)]));
+        assert!(outcomes.iter().all(|outcome| {
+            let prior = &outcome.trace.prior_acquisitions[0];
+            prior.position == 2
+                && prior.acquisition_ordinal == 3
+                && prior.current_role == "Lilis"
+                && prior.bluff_role == "Scout"
+        }));
+    }
+
+    #[test]
+    fn one_lilis_prefix_removes_first_equal_separated_duplicate() {
+        let mut input = context(&["Confessor"], &["Witness"]);
+        input.bluff_must_include_at_recipient = vec!["Witness".to_string(), "Scout".to_string()];
+        let prefix = one_lilis_prefix(&["Scout", "Witness", "Scout"]);
+
+        let outcomes = enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6)
+            .expect("both selected Scout occurrences remove the first equal asset");
+
+        let source_totals: HashMap<u16, u64> =
+            outcomes.iter().fold(HashMap::new(), |mut totals, outcome| {
+                let prior = &outcome.trace.prior_acquisitions[0];
+                let BluffAcquisitionSource::BluffMustInclude { occurrence_index } = prior.source
+                else {
+                    panic!("Lilis must use the typed must-include source");
+                };
+                *totals.entry(occurrence_index).or_default() += outcome.tickets;
+                totals
+            });
+        assert_eq!(source_totals, HashMap::from([(0, 10), (2, 10)]));
+        assert_eq!(
+            outcomes.iter().map(|outcome| outcome.tickets).sum::<u64>(),
+            20
+        );
+        assert!(outcomes
+            .iter()
+            .all(|outcome| { outcome.trace.prior_acquisitions[0].bluff_role == "Scout" }));
+    }
+
+    #[test]
+    fn lilis_typed_selector_removes_only_villager_must_include() {
+        let mut input = context(&["Scout"], &["Witness"]);
+        input.bluff_must_include_at_recipient = vec!["Bombardier".to_string()];
+        let prefix = one_lilis_prefix(&["Bombardier", "Scout"]);
+
+        let outcomes = enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6)
+            .expect("the typed must-include transition is exact");
+
+        assert_eq!(
+            outcomes.iter().map(|outcome| outcome.tickets).sum::<u64>(),
+            5
+        );
+        assert!(outcomes.iter().all(|outcome| {
+            let prior = &outcome.trace.prior_acquisitions[0];
+            prior.bluff_role == "Scout"
+                && matches!(
+                    prior.source,
+                    BluffAcquisitionSource::BluffMustInclude {
+                        occurrence_index: 1
+                    }
+                )
+        }));
+        assert!(outcomes.iter().any(|outcome| {
+            outcome.trace.bluff_role == "Bombardier"
+                && matches!(
+                    outcome.trace.source,
+                    BluffAcquisitionSource::BluffMustInclude {
+                        occurrence_index: 0
+                    }
+                )
+        }));
+    }
+
+    #[test]
+    fn lilis_unique_fallback_leaves_outcast_must_include_untouched() {
+        let mut input = context(&["Scout"], &["Witness", "Confessor", "Bombardier"]);
+        input.bluff_must_include_at_recipient = vec!["Bombardier".to_string()];
+        let prefix = one_lilis_prefix(&["Bombardier"]);
+
+        let outcomes = enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6)
+            .expect("the unique-Villager fallback is exact");
+
+        assert_eq!(
+            outcomes.iter().map(|outcome| outcome.tickets).sum::<u64>(),
+            10
+        );
+        let lilis_sources: std::collections::HashSet<(u16, String)> = outcomes
+            .iter()
+            .map(|outcome| {
+                let prior = &outcome.trace.prior_acquisitions[0];
+                let BluffAcquisitionSource::UniquePool { occurrence_index } = prior.source else {
+                    panic!("Lilis must use the unique pool fallback");
+                };
+                (occurrence_index, prior.bluff_role.clone())
+            })
+            .collect();
+        assert_eq!(
+            lilis_sources,
+            std::collections::HashSet::from([
+                (0, "Witness".to_string()),
+                (1, "Confessor".to_string()),
+            ])
+        );
+        assert!(!lilis_sources.iter().any(|(index, _)| *index == 2));
+
+        let mut unsupported = input.clone();
+        unsupported.unique_pool = vec!["Bombardier".to_string()];
+        assert!(
+            enumerate_twin_recipient_bluffs_after_one_lilis(&unsupported, &prefix, 2, 6,).is_none()
+        );
+    }
+
+    #[test]
+    fn malformed_one_lilis_order_fails_and_snapshot_mismatch_is_empty() {
+        let mut input = context(&["Scout"], &["Witness"]);
+        input.bluff_must_include_at_recipient = Vec::new();
+        let prefix = one_lilis_prefix(&["Scout", "Witness"]);
+        assert_eq!(
+            enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6),
+            Some(Vec::new())
+        );
+
+        let mut malformed = prefix;
+        malformed.acquisition_order.swap(0, 1);
+        assert!(
+            enumerate_twin_recipient_bluffs_after_one_lilis(&input, &malformed, 2, 6,).is_none()
+        );
+    }
+
+    #[test]
+    fn zero_based_global_prefix_ordinal_is_accepted() {
+        let mut input = context(&["Scout"], &["Witness"]);
+        input.bluff_must_include_at_recipient = vec!["Witness".to_string()];
+        let mut prefix = one_lilis_prefix(&["Scout", "Witness"]);
+        prefix.acquisition_order[0].acquisition_ordinal = 0;
+
+        let outcomes = enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6)
+            .expect("zero is valid when strict global order is retained");
+        assert!(!outcomes.is_empty());
+        assert!(outcomes
+            .iter()
+            .all(|outcome| { outcome.trace.prior_acquisitions[0].acquisition_ordinal == 0 }));
+    }
+
+    #[test]
+    fn one_lilis_cross_product_cap_fails_closed() {
+        let mut input = context(&["Scout"], &["Witness"]);
+        input.bluff_must_include_at_recipient = vec!["Scout".to_string(); 256];
+        let prefix = TwinRecipientBluffPrefixContext {
+            bluff_must_include_before_prefix: vec!["Scout".to_string(); 257],
+            ..one_lilis_prefix(&[])
+        };
+
+        assert!(enumerate_twin_recipient_bluffs_after_one_lilis(&input, &prefix, 2, 6,).is_none());
     }
 }

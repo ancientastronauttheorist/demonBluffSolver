@@ -87,7 +87,9 @@ fn is_supported_distinct_recipient_card(state: &GameState, card: &CardInfo) -> b
 /// actor's direct current-build Scout/Witness card is exact: its raw
 /// `bluffRole` stays null and its real role receives `BluffAct`. A guarded
 /// offline acquisition context additionally makes one moved runtime-Good
-/// recipient's exact Scout/Witness/Confessor surface representable. Ordinary
+/// recipient's exact Scout/Witness/Confessor surface representable. The
+/// bounded Lilis-prefix context likewise carries enough raw-bluff provenance
+/// for that earlier Lilis card's same three public surfaces. Ordinary
 /// execution/current-role evidence is deliberately absent from this gate: it
 /// exposes the final current dataRef, which the exact replay derives directly.
 pub fn distinct_swap_has_unsupported_public_action_evidence(
@@ -108,13 +110,21 @@ pub fn distinct_swap_has_unsupported_public_action_evidence(
         .twin_recipient_bluff_context
         .as_ref()
         .is_some_and(|context| context.recipient_position == neighbor_position);
+    let prefix_lilis_position = state
+        .twin_recipient_bluff_prefix_context
+        .as_ref()
+        .and_then(|context| context.acquisition_order.first())
+        .map(|event| event.position);
     let mut actor_card = None;
     let mut recipient_card = None;
+    let mut prefix_lilis_card = None;
     for card in &state.cards {
         let slot = if card.position == trace.actor_position {
             &mut actor_card
         } else if context_matches_recipient && card.position == neighbor_position {
             &mut recipient_card
+        } else if prefix_lilis_position == Some(card.position) {
+            &mut prefix_lilis_card
         } else {
             return true;
         };
@@ -130,7 +140,9 @@ pub fn distinct_swap_has_unsupported_public_action_evidence(
                 .is_some_and(|card| is_supported_distinct_recipient_card(state, card))
         } else {
             recipient_card.is_none()
-        };
+        }
+        && prefix_lilis_card
+            .is_none_or(|card| is_supported_distinct_recipient_card(state, card));
 
     !cards_are_supported
         || !state.slayer_results.is_empty()

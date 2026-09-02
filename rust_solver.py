@@ -462,27 +462,49 @@ def _parse_twin_trace(raw_trace, n_cards: int):
     )
 
 
+def _parse_bluff_acquisition_source(raw_source, label: str):
+    """Parse one occurrence-sensitive native bluff source."""
+    from solver import BluffAcquisitionSource, BluffAcquisitionSourceKind
+
+    raw_source = _require_exact_dict(
+        raw_source,
+        label,
+        {"kind", "occurrence_index"},
+    )
+    raw_kind = _require_exact_string(raw_source["kind"], f"{label}.kind")
+    try:
+        source_kind = BluffAcquisitionSourceKind(raw_kind)
+    except ValueError as exc:
+        raise ValueError(f"unknown bluff acquisition source kind: {raw_kind!r}") from exc
+    return BluffAcquisitionSource(
+        kind=source_kind,
+        occurrence_index=_require_u16(
+            raw_source["occurrence_index"],
+            f"{label}.occurrence_index",
+        ),
+    )
+
+
 def _parse_twin_recipient_bluff_trace(raw_trace, n_cards: int):
     """Parse an exact offline Twin-recipient bluff trace."""
     if raw_trace is None:
         return None
 
-    from solver import (
-        BluffAcquisitionSource,
-        BluffAcquisitionSourceKind,
-        TwinRecipientBluffTrace,
-    )
+    from solver import RevealBluffAcquisitionTrace, TwinRecipientBluffTrace
 
     n_cards = _require_u8(n_cards, "n_cards", minimum=1)
+    expected_fields = {
+        "recipient_position",
+        "acquisition_ordinal",
+        "bluff_role",
+        "source",
+    }
+    if type(raw_trace) is dict and "prior_acquisitions" in raw_trace:
+        expected_fields.add("prior_acquisitions")
     raw_trace = _require_exact_dict(
         raw_trace,
         "twin_recipient_bluff_trace",
-        {
-            "recipient_position",
-            "acquisition_ordinal",
-            "bluff_role",
-            "source",
-        },
+        expected_fields,
     )
     recipient_position = _require_board_position(
         raw_trace["recipient_position"],
@@ -500,33 +522,62 @@ def _parse_twin_recipient_bluff_trace(raw_trace, n_cards: int):
     if not bluff_role.strip():
         raise ValueError("Twin recipient bluff role must be nonempty")
 
-    raw_source = _require_exact_dict(
+    source = _parse_bluff_acquisition_source(
         raw_trace["source"],
         "twin_recipient_bluff_trace.source",
-        {"kind", "occurrence_index"},
     )
-    raw_kind = _require_exact_string(
-        raw_source["kind"],
-        "twin_recipient_bluff_trace.source.kind",
-    )
-    try:
-        source_kind = BluffAcquisitionSourceKind(raw_kind)
-    except ValueError as exc:
-        raise ValueError(
-            f"unknown Twin recipient bluff source kind: {raw_kind!r}"
-        ) from exc
-    source = BluffAcquisitionSource(
-        kind=source_kind,
-        occurrence_index=_require_u16(
-            raw_source["occurrence_index"],
-            "twin_recipient_bluff_trace.source.occurrence_index",
-        ),
-    )
+    raw_prior = raw_trace.get("prior_acquisitions", [])
+    if type(raw_prior) is not list:
+        raise TypeError("twin_recipient_bluff_trace.prior_acquisitions must be a list")
+    prior_acquisitions = []
+    for index, raw_prior_trace in enumerate(raw_prior):
+        label = f"twin_recipient_bluff_trace.prior_acquisitions[{index}]"
+        raw_prior_trace = _require_exact_dict(
+            raw_prior_trace,
+            label,
+            {
+                "position",
+                "acquisition_ordinal",
+                "current_role",
+                "bluff_role",
+                "source",
+            },
+        )
+        current_role = _require_exact_string(
+            raw_prior_trace["current_role"],
+            f"{label}.current_role",
+        )
+        prior_bluff_role = _require_exact_string(
+            raw_prior_trace["bluff_role"],
+            f"{label}.bluff_role",
+        )
+        if not current_role.strip() or not prior_bluff_role.strip():
+            raise ValueError("prior acquisition roles must be nonempty")
+        prior_acquisitions.append(
+            RevealBluffAcquisitionTrace(
+                position=_require_board_position(
+                    raw_prior_trace["position"],
+                    f"{label}.position",
+                    n_cards,
+                ),
+                acquisition_ordinal=_require_u16(
+                    raw_prior_trace["acquisition_ordinal"],
+                    f"{label}.acquisition_ordinal",
+                ),
+                current_role=current_role,
+                bluff_role=prior_bluff_role,
+                source=_parse_bluff_acquisition_source(
+                    raw_prior_trace["source"],
+                    f"{label}.source",
+                ),
+            )
+        )
     return TwinRecipientBluffTrace(
         recipient_position=recipient_position,
         acquisition_ordinal=acquisition_ordinal,
         bluff_role=bluff_role,
         source=source,
+        prior_acquisitions=prior_acquisitions,
     )
 
 

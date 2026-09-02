@@ -297,6 +297,12 @@ pub struct GameState {
     /// this hidden context absent.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub twin_recipient_bluff_context: Option<TwinRecipientBluffContext>,
+
+    /// Offline-only delayed-Reveal provenance immediately around the moved
+    /// Twin recipient's bluff acquisition. The first bounded version proves
+    /// that exactly one Lilis acquired before the recipient and Shaman after.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub twin_recipient_bluff_prefix_context: Option<TwinRecipientBluffPrefixContext>,
 }
 
 fn default_hp() -> i32 {
@@ -344,6 +350,7 @@ impl Default for GameState {
             notes: None,
             executed_current_roles: HashMap::new(),
             twin_recipient_bluff_context: None,
+            twin_recipient_bluff_prefix_context: None,
         }
     }
 }
@@ -505,6 +512,25 @@ pub struct TwinRecipientBluffContext {
     pub bluff_must_include_at_recipient: Vec<String>,
 }
 
+/// One successful bluff-acquisition event in the hidden delayed-Reveal order.
+/// Ordinals are global provenance and therefore need only be strictly ordered,
+/// not contiguous.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct DelayedRevealAcquisitionEvent {
+    pub position: u8,
+    pub acquisition_ordinal: u16,
+}
+
+/// Occurrence-preserving state before the bounded one-Lilis Reveal prefix.
+/// Duplicate and unique round pools remain in `TwinRecipientBluffContext`.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct TwinRecipientBluffPrefixContext {
+    pub rule_version: String,
+    pub acquisition_order: Vec<DelayedRevealAcquisitionEvent>,
+    #[serde(default)]
+    pub bluff_must_include_before_prefix: Vec<String>,
+}
+
 /// Exact occurrence selected by native Minion bluff acquisition.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
@@ -514,6 +540,17 @@ pub enum BluffAcquisitionSource {
     BluffMustInclude { occurrence_index: u16 },
 }
 
+/// Exact earlier bluff installation that changed shared acquisition state
+/// before the moved Twin recipient selected its own bluff.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct RevealBluffAcquisitionTrace {
+    pub position: u8,
+    pub acquisition_ordinal: u16,
+    pub current_role: String,
+    pub bluff_role: String,
+    pub source: BluffAcquisitionSource,
+}
+
 /// Exact installed bluff on a runtime-Good card carrying moved Twin data.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct TwinRecipientBluffTrace {
@@ -521,6 +558,8 @@ pub struct TwinRecipientBluffTrace {
     pub acquisition_ordinal: u16,
     pub bluff_role: String,
     pub source: BluffAcquisitionSource,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub prior_acquisitions: Vec<RevealBluffAcquisitionTrace>,
 }
 
 /// Which physical occurrence from Puppeteer's native `[previous, next]`
@@ -1105,6 +1144,7 @@ mod tests {
                 source: BluffAcquisitionSource::UniquePool {
                     occurrence_index: 1,
                 },
+                prior_acquisitions: Vec::new(),
             }),
         };
         let json = serde_json::to_value(&scenario).unwrap();
@@ -1190,9 +1230,14 @@ mod tests {
         }))
         .unwrap();
         assert!(legacy.twin_recipient_bluff_context.is_none());
+        assert!(legacy.twin_recipient_bluff_prefix_context.is_none());
         assert!(serde_json::to_value(&legacy)
             .unwrap()
             .get("twin_recipient_bluff_context")
+            .is_none());
+        assert!(serde_json::to_value(&legacy)
+            .unwrap()
+            .get("twin_recipient_bluff_prefix_context")
             .is_none());
 
         let current = GameState::from_json(&serde_json::json!({
@@ -1205,6 +1250,15 @@ mod tests {
                 "duplicate_pool": ["Scout", "Scout", "Confessor"],
                 "unique_pool": ["Witness", "Confessor"],
                 "bluff_must_include_at_recipient": []
+            },
+            "twin_recipient_bluff_prefix_context": {
+                "rule_version": "twin_recipient_bluff_one_lilis_prefix_native_v1",
+                "acquisition_order": [
+                    {"position": 2, "acquisition_ordinal": 0},
+                    {"position": 4, "acquisition_ordinal": 7},
+                    {"position": 3, "acquisition_ordinal": 9}
+                ],
+                "bluff_must_include_before_prefix": ["Scout", "Confessor"]
             }
         }))
         .unwrap();
@@ -1215,6 +1269,58 @@ mod tests {
             serde_json::to_value(&current).unwrap()["twin_recipient_bluff_context"]
                 ["duplicate_pool"],
             serde_json::json!(["Scout", "Scout", "Confessor"])
+        );
+        let prefix = current
+            .twin_recipient_bluff_prefix_context
+            .as_ref()
+            .unwrap();
+        assert_eq!(prefix.acquisition_order[0].acquisition_ordinal, 0);
+        assert_eq!(
+            serde_json::to_value(&current).unwrap()
+                ["twin_recipient_bluff_prefix_context"]
+                ["bluff_must_include_before_prefix"],
+            serde_json::json!(["Scout", "Confessor"])
+        );
+    }
+
+    #[test]
+    fn prior_bluff_acquisition_trace_round_trips_inside_recipient_trace() {
+        let scenario = Scenario {
+            twin_recipient_bluff_trace: Some(TwinRecipientBluffTrace {
+                recipient_position: 4,
+                acquisition_ordinal: 7,
+                bluff_role: "Confessor".to_string(),
+                source: BluffAcquisitionSource::BluffMustInclude {
+                    occurrence_index: 0,
+                },
+                prior_acquisitions: vec![RevealBluffAcquisitionTrace {
+                    position: 2,
+                    acquisition_ordinal: 0,
+                    current_role: "Lilis".to_string(),
+                    bluff_role: "Scout".to_string(),
+                    source: BluffAcquisitionSource::UniquePool {
+                        occurrence_index: 3,
+                    },
+                }],
+            }),
+            ..Scenario::default()
+        };
+
+        let json = serde_json::to_value(&scenario).unwrap();
+        assert_eq!(
+            json["twin_recipient_bluff_trace"]["prior_acquisitions"][0]
+                ["acquisition_ordinal"],
+            0
+        );
+        assert_eq!(
+            json["twin_recipient_bluff_trace"]["prior_acquisitions"][0]["source"]
+                ["kind"],
+            "unique_pool"
+        );
+        let back: Scenario = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            back.twin_recipient_bluff_trace,
+            scenario.twin_recipient_bluff_trace
         );
     }
 

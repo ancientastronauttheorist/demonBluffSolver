@@ -13,7 +13,9 @@ use baker::{
 use disguisers::validate_clean_doppel_source_support;
 
 use std::collections::{HashMap, HashSet};
-use crate::bluff::enumerate_twin_recipient_bluffs;
+use crate::bluff::{
+    enumerate_twin_recipient_bluffs, enumerate_twin_recipient_bluffs_after_one_lilis,
+};
 use crate::geometry::{circle_distance, circle_direction, adjacent_positions, Direction};
 use crate::knowledge_base::{self, get_card, normalize_role, Faction};
 use crate::shaman::{enumerate_shaman_traces, role_after_shaman};
@@ -182,11 +184,68 @@ fn validate_twin_recipient_bluff_trace(scenario: &Scenario, state: &GameState) -
     let Some(context) = state.twin_recipient_bluff_context.as_ref() else {
         return false;
     };
-    let Some(outcomes) = enumerate_twin_recipient_bluffs(context) else {
-        return false;
+    let outcomes = if let Some(prefix) = state.twin_recipient_bluff_prefix_context.as_ref() {
+        if state.board_demon_count != Some(1)
+            || state.deck.demons.len() != 1
+            || normalize_role(&state.deck.demons[0]) != "lilis"
+        {
+            return false;
+        }
+        let mut lilis_positions = scenario
+            .evil_positions
+            .iter()
+            .filter(|(_, role)| normalize_role(role) == "lilis")
+            .map(|(position, _)| *position);
+        let Some(lilis_position) = lilis_positions.next() else {
+            return false;
+        };
+        if lilis_positions.next().is_some() {
+            return false;
+        }
+        let mut shaman_positions = scenario
+            .evil_positions
+            .iter()
+            .filter(|(_, role)| normalize_role(role) == "shaman")
+            .map(|(position, _)| *position);
+        let Some(shaman_position) = shaman_positions.next() else {
+            return false;
+        };
+        if shaman_positions.next().is_some()
+            || lilis_position > state.n_cards
+            || shaman_position > state.n_cards
+        {
+            return false;
+        }
+        let Some(outcomes) = enumerate_twin_recipient_bluffs_after_one_lilis(
+            context,
+            prefix,
+            lilis_position,
+            shaman_position,
+        ) else {
+            return false;
+        };
+        outcomes
+    } else {
+        let Some(outcomes) = enumerate_twin_recipient_bluffs(context) else {
+            return false;
+        };
+        outcomes
     };
     if !outcomes.iter().any(|outcome| &outcome.trace == trace) {
         return false;
+    }
+    for prior in &trace.prior_acquisitions {
+        let mut cards = state
+            .cards
+            .iter()
+            .filter(|card| card.position == prior.position);
+        if let Some(card) = cards.next() {
+            if cards.next().is_some()
+                || normalize_role(&card.apparent_role) != normalize_role(&prior.bluff_role)
+            {
+                return false;
+            }
+        }
     }
 
     let Some(twin_trace) = scenario.twin_trace.as_ref() else {

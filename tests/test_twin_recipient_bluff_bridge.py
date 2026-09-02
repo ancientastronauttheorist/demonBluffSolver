@@ -124,6 +124,85 @@ class TwinRecipientBluffBridgeTests(unittest.TestCase):
         self.assertEqual(trace.source.occurrence_index, 65535)
         self.assertEqual(trace.to_dict(), raw)
 
+    def test_one_lilis_prefix_trace_parses_without_losing_occurrence_source(self):
+        raw = {
+            "recipient_position": 3,
+            "acquisition_ordinal": 19,
+            "bluff_role": "Confessor",
+            "source": {
+                "kind": "unique_pool",
+                "occurrence_index": 1,
+            },
+            "prior_acquisitions": [
+                {
+                    "position": 2,
+                    "acquisition_ordinal": 12,
+                    "current_role": "Lilis",
+                    "bluff_role": "Scout",
+                    "source": {
+                        "kind": "bluff_must_include",
+                        "occurrence_index": 0,
+                    },
+                }
+            ],
+        }
+
+        trace = self._bridge(raw).surviving_scenarios[0].twin_recipient_bluff_trace
+
+        self.assertEqual(len(trace.prior_acquisitions), 1)
+        prior = trace.prior_acquisitions[0]
+        self.assertEqual(prior.position, 2)
+        self.assertEqual(prior.acquisition_ordinal, 12)
+        self.assertEqual(prior.current_role, "Lilis")
+        self.assertEqual(prior.bluff_role, "Scout")
+        self.assertIs(
+            prior.source.kind,
+            BluffAcquisitionSourceKind.BLUFF_MUST_INCLUDE,
+        )
+        self.assertEqual(prior.source.occurrence_index, 0)
+        self.assertEqual(trace.to_dict(), raw)
+
+    def test_malformed_prior_acquisition_trace_fails_closed(self):
+        base = {
+            "recipient_position": 3,
+            "acquisition_ordinal": 19,
+            "bluff_role": "Confessor",
+            "source": {
+                "kind": "unique_pool",
+                "occurrence_index": 1,
+            },
+            "prior_acquisitions": [
+                {
+                    "position": 2,
+                    "acquisition_ordinal": 12,
+                    "current_role": "Lilis",
+                    "bluff_role": "Scout",
+                    "source": {
+                        "kind": "bluff_must_include",
+                        "occurrence_index": 0,
+                    },
+                }
+            ],
+        }
+        malformed = []
+        not_a_list = deepcopy(base)
+        not_a_list["prior_acquisitions"] = {}
+        malformed.append(not_a_list)
+        missing_role = deepcopy(base)
+        del missing_role["prior_acquisitions"][0]["current_role"]
+        malformed.append(missing_role)
+        bad_position = deepcopy(base)
+        bad_position["prior_acquisitions"][0]["position"] = 6
+        malformed.append(bad_position)
+        extra_field = deepcopy(base)
+        extra_field["prior_acquisitions"][0]["unexpected"] = True
+        malformed.append(extra_field)
+
+        for payload in malformed:
+            with self.subTest(payload=payload):
+                with self.assertRaises((TypeError, ValueError)):
+                    rust_solver._parse_twin_recipient_bluff_trace(payload, 5)
+
     def test_malformed_trace_payloads_fail_closed(self):
         valid = {
             "recipient_position": 3,
