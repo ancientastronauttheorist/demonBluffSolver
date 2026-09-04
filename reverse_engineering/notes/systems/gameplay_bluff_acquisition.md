@@ -467,6 +467,80 @@ checkpoint changes no archived case result; it establishes the guarded input
 boundary for future event-time postmortem fixtures and eventual global
 interleaving work.
 
+### Composable offline selector ledger
+
+The next clean-room boundary is `bluff::ledger::replay_selectors` in
+`crates/solver-core/src/bluff/ledger.rs`. Its versioned
+`bluff_selector_ledger_native_v1` input composes independently ordered calls
+to the exact `Demon.GetBluffIfAble`, `Minion.GetBluffIfAble`, and
+`Drunk.GetBluffIfAble` selectors. This is **behavioral** reconstruction tested
+against the native-static contracts above and the
+[Drunk selector audit](../roles/gameplay_roles_doppelganger_drunk.md#drunk-selection-and-registration).
+It adds no new native target or coverage classification.
+
+The input contains immutable occurrence-preserving unique/duplicate pools,
+mutable must-include occurrences, all four ordered script lists, and explicit
+selector events with physical positions and acquisition ordinals. Names denote
+one live canonical current-build asset each; repeated names denote repeated
+references to that same asset. Distinct same-name assets and null/destroyed
+assets are outside the supported model. Selector dispatch is explicit: a
+Minion-faction asset with an override, such as Spy, cannot be assumed to call
+the base Minion selector.
+
+Each output retains its unconditional reduced rational probability, final
+pools/script lists, and every selected source occurrence. In particular:
+
+- Demon and Drunk consume only eligible Villager must-include entries, falling
+  back to the immutable unique pool's Villager occurrences when none remain.
+- Ordinary Minion keeps the exact 2/5 duplicate and 3/5 unique split. Its
+  must-include selector is untyped and can consume an Outcast.
+- Must-include removal deletes the first equal asset from the original list,
+  while the trace preserves the actual selected occurrence index. Neither
+  unique-pool nor duplicate-pool selection consumes a pool entry.
+- Demon, Drunk, and Minion-unique selections append an absent selected asset
+  to the correct script faction list. Existing occurrences are preserved and
+  do not cause rerolls. Minion-duplicate never registers its selection.
+- Drunk emits a pre-selection Corrupted-attempt effect: accepted unique-add
+  with self as target, or resisted with existing status/target unchanged.
+  This is an effect record, not a reconstruction of the whole status container.
+- RNG draw counts include the Minion branch roll and must-include probe. The
+  discarded probe's independent outcomes are marginalized. These counts are
+  not engine RNG state, and the ledger does not claim seed-exact replay.
+
+Rational path mass is necessary once branches leave different pool widths.
+For example, start with must-include `[Scout, Bard]` and one duplicate option.
+A Minion duplicate followed by a Demon has two paths of mass `1/5` each;
+a Minion unique followed by a Demon has two paths of mass `3/10` each.
+Multiplying independently reduced per-event ticket counts would lose this
+relationship. Tests also condition this general ledger on the old captured
+post-Lilis remainder and verify agreement with the existing one-Lilis ticket
+distribution, including separated duplicate source indices.
+
+This version accepts at most 16 events with strictly increasing ordinals and
+distinct nonzero physical positions. It rejects a repeated body's acquisition
+because reinitialization or failed first assignment would require additional
+state. Ordinal gaps are allowed only under the caller's proof that omitted
+events do not alter the modeled state. Every needed support must be nonempty
+on every positive-mass path: if even one path fails, the whole operation returns
+an error rather than dropping that path and biasing the distribution. Native
+failure side effects are not emulated. Path-count, cloned-entry, and checked
+integer-arithmetic bounds also reject the complete operation without returning
+partial results.
+
+This API is deliberately separate from `GameState`, Python session ingestion,
+and live recommendations. It models selector calls only. It does not execute
+`Character.Reveal`, register-as callbacks, `GiveBluff`, HealthyBluff Start,
+Init/AfterRoundStart hooks, scheduler choices, or intervening writers. Those
+effects must be proved irrelevant before composing these calls; full Reveal
+interleaving remains unresolved. The version-1 postmortem snapshot still cannot
+be promoted to this event ledger because it has no event-time/order evidence.
+
+Checkpoint validation: 524 Rust library tests (including 13 new ledger tests),
+778 Python tests, 13 reverse-engineering tests, release build, formatting, and
+the byte-for-byte method-coverage check pass. The long simulation suite was
+not rerun for this isolated API: scenario generation, validators, and live
+entry points have no new calls or behavior changes.
+
 ## Typed import, overlaps, and shared identity
 
 Thirteen target memberships intentionally overlap earlier checked boundaries:

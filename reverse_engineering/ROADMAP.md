@@ -383,6 +383,14 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
 - [x] Recover execution, damage, protection, and night-resolution pipelines.
 - [ ] Recover and validate every role implementation.
 - [ ] Extract an authored clean-room behavioral core with differential tests.
+  - [x] Add the offline Demon/ordinary-Minion/Drunk selector ledger with
+    occurrence-preserving pool mutations, exact rational path probabilities,
+    script registration, Drunk corruption-attempt effects, and conditional
+    equivalence tests against the one-Lilis prefix. Keep unsupported Reveal
+    hooks, dispatch, scheduler order, and intervening writers outside this API.
+  - [ ] Compose the selector ledger with event-time register-as, GiveBluff,
+    Init/AfterRoundStart, and HealthyBluff callbacks; establish scheduler order
+    provenance or justified interleaving support before scenario integration.
 - [ ] Run and publish the final method-classification coverage audit.
 
 ## Method classification

@@ -6,6 +6,8 @@
 //! ordering. Callers must supply that hidden provenance through the guarded
 //! offline context and fall back atomically when it is unavailable.
 
+pub mod ledger;
+
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{
     BluffAcquisitionSource, RevealBluffAcquisitionTrace, TwinRecipientBluffContext,

@@ -144,6 +144,11 @@ overloads receive explicit typed prototype aliases, and the Helpers/Calculator
 `StartCoroutine(IEnumerator)`/`StartCoroutine_Auto` shared native bodies retain
 their exact managed identities. All 31 are documented in the
 [`bluff-acquisition audit`](notes/systems/gameplay_bluff_acquisition.md).
+Its offline clean-room selector ledger now composes Demon, ordinary Minion,
+and Drunk acquisitions with exact rational path mass, occurrence-sensitive
+must-include consumption, script registration, and Drunk corruption-attempt
+effects. It remains separate from full Reveal scheduling and live solver input;
+see the [ledger boundary](notes/systems/gameplay_bluff_acquisition.md#composable-offline-selector-ledger).
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and
@@ -747,8 +752,8 @@ The current bluff-acquisition comparison is in the
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 505 classifications backed by
-259 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 529 classifications backed by
+275 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
