@@ -164,8 +164,10 @@ per-trigger truth decision. Active Twin/Spy Start callbacks, subscriptions,
 and writer-created continuations remain outside this offline API.
 An isolated [Twin Start writer kernel](notes/roles/gameplay_role_twin_minion.md#offline-start-writer-kernel)
 now reconstructs the weighted swap, ordered field resets and immediate role
-clones, including two new continuations on self-swap. Joining this kernel to
-Character.Act and the Reveal scheduler remains pending.
+clones, including two new continuations on self-swap. A separate
+`character_start_native_v1` projection now joins it to Character.Act's guard,
+frozen dispatch and subsequent copied callback, including two Twin swaps in
+one call. Joining the composed Start to the Reveal scheduler remains pending.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and

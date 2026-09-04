@@ -229,6 +229,59 @@ integrity. No live/scenario caller changed, so the long simulation suite was
 not rerun. This milestone reuses existing native evidence and does not increase
 the method coverage counts.
 
+### Character.Act Start composition
+
+`bluff::character_start::replay_character_start` adds a separate
+`character_start_native_v1` contract around the writer. This is an explicit
+`Character.Act(Start)` call, not a Reveal request: HealthyBluff is not required,
+and no pending continuation is consumed. Its nested writer board must specify
+the real slot (`copied_slot: false`); Character.Act chooses its own role slots.
+The same complete board, object-validity, subscription, asset and presentation
+exclusions still apply. The original writer API and Reveal v1/v2/v3 contracts
+retain their existing behavior.
+
+`Character.Act` (`0x3645C0`) invokes onTrigger before the Start latch check, so
+subscribers remain rejected even when latched. A latched call returns one
+identity path without CheckLying, role callbacks or RNG. Otherwise it sets the
+latch, computes actual lying once, and dispatches the entry real action role.
+For a liar, real Act requires runtime Evil and a nonnull copied-role pointer;
+otherwise it uses BluffAct. Truthful actors use Act. The subsequent copied
+callback always uses the original truth decision.
+
+After real dispatch, the implementation rereads the current copied role from
+the mutated physical body. Raw bluff may now be null while copied storage is
+still populated. Twin's InitWithNoReset can also reset the Start latch and
+replace the real action role, but neither mutation restarts dispatch or cancels
+the already-in-progress Character.Act. The newly cloned real role is not
+implicitly started. The latch remains false if a replacement reset it.
+
+Both real and copied Twin invoke the same writer through base Role.BluffAct
+forwarding. Thus two Twin slots can perform four ordered replacements, with
+independent occurrence draws and multiplied unconditional rational weights.
+The second writer reads current data, registered Demon candidates and alive
+state after the first writer. It does not move the entry data a second time by
+assumption. Each trace records role slot, dispatch, status effects and the
+writer's two selections/replacements without embedding repeated board snapshots.
+
+Lilis/Drunk status callbacks and inert Scout/Witness/Confessor Start callbacks
+can occur on either side of the writer. Spy Start remains unsupported if
+reached. Any unsupported role, failing positive-probability writer branch,
+continuation overflow or retained-state/path cap rejects the whole call with no
+partial result. RoleAct's onActed delegate assignment is outside this projection;
+none of the supported Start methods invokes it. No Init/AfterRoundStart or view
+epilogue is included yet.
+
+Eight regressions cover latch suppression, preserved reset latch and copied
+storage, double Twin's four weighted paths, truth frozen before Drunk's status
+mutation, the runtime-Evil/copied-pointer dispatch gate, explicit Start without
+HealthyBluff and empty-Demon behavior, unsupported second-slot rejection, and
+overflow on the second swap. Full Reveal scheduling remains a separate frontier.
+
+Checkpoint validation passed 572 Rust library tests, 778 Python tests, 13
+reverse-engineering tests, release build, formatting and coverage-ledger
+integrity. The long simulation suite was not rerun for this offline-only
+composition. No live/scenario call sites or native coverage counts changed.
+
 ## InitWithNoReset and delayed reveal
 
 Each replacement hides the acted-information object, clears `actedInfos`,

@@ -112,7 +112,7 @@ pub struct StatusState {
 }
 
 impl StatusState {
-    fn apply(&mut self, status: i32, target: Option<u8>) -> StatusApplication {
+    pub(super) fn apply(&mut self, status: i32, target: Option<u8>) -> StatusApplication {
         let accepted = !self.resistance.contains(&status);
         let inserted = accepted && !self.values.contains(&status);
         if inserted {

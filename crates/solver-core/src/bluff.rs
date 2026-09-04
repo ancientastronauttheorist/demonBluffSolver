@@ -7,6 +7,7 @@
 //! offline context and fall back atomically when it is unavailable.
 
 pub mod ledger;
+pub mod character_start;
 pub mod reveal;
 pub mod twin_writer;
 

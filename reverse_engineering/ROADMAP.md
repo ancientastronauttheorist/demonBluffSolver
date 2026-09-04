@@ -406,8 +406,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     and alive-neighbor selection, ordered InitWithNoReset effects, immediate
     action-role clones, preserved stale register-as/copied-role storage and
     explicit new continuation counts. Test self-swaps and a moved Drunk resume.
-  - [ ] Compose the Twin writer with Character.Act's frozen dispatch and current
-    copied-role reread, then enumerate bounded writer-created Reveal schedules.
+  - [x] Compose the Twin writer with one explicit Character.Act(Start), its
+    one-shot guard, frozen truth decision, current copied-role reread, and
+    optional second Twin swap. Preserve reset latches and unconditional mass.
+  - [ ] Join Character.Act(Start) composition to Reveal acquisition and later
+    Init/AfterRoundStart, then enumerate bounded writer-created Reveal schedules.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
     Twin/Spy Start, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before

@@ -113,7 +113,7 @@ fn replace(
     })
 }
 
-pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPath>, LedgerError> {
+pub(super) fn validate_board(context: &TwinWriterContext) -> Result<(), LedgerError> {
     if context.rule_version != TWIN_WRITER_NATIVE_V1
         || context.reveal.rule_version != REVEAL_CALLBACKS_START_NATIVE_V3
         || !context.reveal.resumes.is_empty()
@@ -130,9 +130,41 @@ pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPa
     let positions: BTreeSet<_> = context.reveal.actors.iter().map(|a| a.position).collect();
     if positions != context.bodies.keys().copied().collect()
         || positions != context.current_order.iter().copied().collect()
+        || !positions.contains(&context.position)
     {
         return Err(LedgerError::InvalidContext);
     }
+    Ok(())
+}
+
+pub(super) fn retained_entries(context: &TwinWriterContext) -> usize {
+    let pools = &context.reveal.pools;
+    context.current_order.len()
+        + context.bodies.len() * 10
+        + context.reveal.spy_caches.len()
+        + [
+            &pools.unique,
+            &pools.duplicate,
+            &pools.must_include,
+            &pools.script.villagers,
+            &pools.script.outcasts,
+            &pools.script.minions,
+            &pools.script.demons,
+        ]
+        .iter()
+        .map(|p| p.len())
+        .sum::<usize>()
+        + context
+            .reveal
+            .actors
+            .iter()
+            .map(|a| 16 + a.statuses.values.len() + a.statuses.resistance.len())
+            .sum::<usize>()
+        + 2
+}
+
+pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPath>, LedgerError> {
+    validate_board(context)?;
     let source = context
         .reveal
         .actors
@@ -167,29 +199,7 @@ pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPa
                 })
         })
         .collect();
-    let pools = &context.reveal.pools;
-    let entries = context.current_order.len()
-        + context.bodies.len() * 10
-        + context.reveal.spy_caches.len()
-        + [
-            &pools.unique,
-            &pools.duplicate,
-            &pools.must_include,
-            &pools.script.villagers,
-            &pools.script.outcasts,
-            &pools.script.minions,
-            &pools.script.demons,
-        ]
-        .iter()
-        .map(|p| p.len())
-        .sum::<usize>()
-        + context
-            .reveal
-            .actors
-            .iter()
-            .map(|a| 16 + a.statuses.values.len() + a.statuses.resistance.len())
-            .sum::<usize>()
-        + 2;
+    let entries = retained_entries(context);
     if entries
         .checked_mul((demons.len() * 2).max(1))
         .is_none_or(|n| n > 1_048_576)
@@ -262,6 +272,9 @@ pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPa
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::bluff::character_start::{
+        replay_character_start, CharacterStartContext, CHARACTER_START_NATIVE_V1,
+    };
     use crate::bluff::ledger::{ScriptLists, SelectorPools};
     use crate::bluff::reveal::{BluffRole, ResumeEvent, RevealActor, StatusState};
 
@@ -331,6 +344,224 @@ mod tests {
                 },
             },
         }
+    }
+
+    fn start_input() -> CharacterStartContext {
+        let mut board = input();
+        board.reveal.actors[0].character_start_acted = Some(false);
+        CharacterStartContext {
+            rule_version: CHARACTER_START_NATIVE_V1.into(),
+            board,
+        }
+    }
+
+    #[test]
+    fn character_start_latched_twin_skips_rng_and_subscribers_still_fail() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].character_start_acted = Some(true);
+        let result = replay_character_start(&input).unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].board, input.board);
+        assert_eq!(result[0].initial_lying, None);
+        assert!(result[0].callbacks.is_empty());
+        input.board.reveal.actors[0].on_trigger_subscribed = true;
+        assert_eq!(
+            replay_character_start(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn character_start_swap_keeps_reset_latch_and_runs_stale_copied_role() {
+        let result = replay_character_start(&start_input()).unwrap();
+        assert_eq!(result.len(), 2);
+        let branch = &result[1];
+        assert_eq!(
+            branch.board.reveal.actors[0].action_role,
+            CallbackRole::Drunk
+        );
+        assert_eq!(
+            branch.board.reveal.actors[0].character_start_acted,
+            Some(false)
+        );
+        assert_eq!(branch.board.reveal.actors[0].bluff, BluffReference::Null);
+        assert_eq!(
+            branch.callbacks.iter().map(|c| c.role).collect::<Vec<_>>(),
+            vec![CallbackRole::TwinMinion, CallbackRole::Confessor]
+        );
+        assert!(branch.callbacks[1].status_application.is_none()); // Confessor Start is inert.
+        assert_eq!(branch.board.reveal.actors[0].remaining_continuations, 2);
+    }
+
+    #[test]
+    fn character_start_both_twin_slots_swap_with_four_weighted_paths() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].bluff_role = Some(CallbackRole::TwinMinion);
+        let paths = replay_character_start(&input).unwrap();
+        assert_eq!(paths.len(), 4);
+        for path in &paths {
+            assert_eq!(
+                path.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 4
+                }
+            );
+            assert_eq!(path.callbacks.len(), 2);
+            assert!(path
+                .callbacks
+                .iter()
+                .all(|c| c.twin.as_ref().unwrap().rng_draw_count == 2));
+            assert_eq!(
+                path.board
+                    .reveal
+                    .actors
+                    .iter()
+                    .map(|a| u32::from(a.remaining_continuations))
+                    .sum::<u32>(),
+                7
+            );
+            assert_eq!(
+                path.board.reveal.actors[0].character_start_acted,
+                Some(false)
+            );
+        }
+        // The second Twin callback swaps the source's NEW data, not the role
+        // identity on the copied Twin object that is currently executing.
+        let twice_distinct = &paths[3];
+        assert_eq!(
+            twice_distinct.callbacks[1]
+                .twin
+                .as_ref()
+                .unwrap()
+                .replacements[0]
+                .new_data,
+            DataRole::Drunk
+        );
+        assert_eq!(
+            twice_distinct.board.reveal.actors[0].data_role,
+            DataRole::TwinMinion
+        );
+        assert_eq!(paths[0].board.reveal.actors[0].remaining_continuations, 5);
+    }
+
+    #[test]
+    fn character_start_truth_decision_survives_status_mutation_before_copied_twin() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].action_role = CallbackRole::Drunk;
+        input.board.reveal.actors[0].bluff_role = Some(CallbackRole::TwinMinion);
+        input.board.reveal.actors[0].statuses.resistance.clear();
+        let paths = replay_character_start(&input).unwrap();
+        for path in paths {
+            assert_eq!(path.initial_lying, Some(false));
+            assert_eq!(
+                path.callbacks[0].dispatch,
+                crate::bluff::reveal::Dispatch::Act
+            );
+            assert_eq!(
+                path.callbacks[1].dispatch,
+                crate::bluff::reveal::Dispatch::Act
+            );
+            assert!(path.board.reveal.actors[0].is_lying());
+            assert_eq!(
+                path.callbacks[0]
+                    .status_application
+                    .as_ref()
+                    .unwrap()
+                    .target_after,
+                Some(1)
+            );
+        }
+    }
+
+    #[test]
+    fn character_start_lying_real_gate_uses_runtime_alignment_and_copied_pointer() {
+        use crate::bluff::reveal::Dispatch;
+        for evil in [false, true] {
+            for copied in [false, true] {
+                let mut input = start_input();
+                input.board.reveal.actors[0].statuses.values = vec![10];
+                input.board.reveal.actors[0].runtime_evil = evil;
+                input.board.reveal.actors[0].bluff_role = copied.then_some(CallbackRole::Lilis);
+                let paths = replay_character_start(&input).unwrap();
+                for path in paths {
+                    assert_eq!(
+                        path.callbacks[0].dispatch,
+                        if evil && copied {
+                            Dispatch::Act
+                        } else {
+                            Dispatch::BluffAct
+                        }
+                    );
+                    assert!(path.callbacks[0].twin.is_some()); // Base BluffAct forwards.
+                    assert_eq!(path.callbacks.len(), if copied { 2 } else { 1 });
+                    if copied {
+                        assert_eq!(path.callbacks[1].dispatch, Dispatch::BluffAct);
+                        assert_eq!(
+                            path.callbacks[1]
+                                .status_application
+                                .as_ref()
+                                .unwrap()
+                                .status,
+                            60
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn character_start_without_healthy_flag_still_runs_and_no_demon_keeps_latch() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].statuses.values.clear();
+        input.board.reveal.actors[1].register_as = Some("Scout".into());
+        let path = replay_character_start(&input).unwrap().remove(0);
+        assert_eq!(path.callbacks[0].twin.as_ref().unwrap().rng_draw_count, 0);
+        assert_eq!(
+            path.board.reveal.actors[0].character_start_acted,
+            Some(true)
+        );
+        assert_eq!(path.board.reveal.actors[0].remaining_continuations, 1);
+        // A second explicit Character.Act respects the latch left by the first.
+        input.board = path.board;
+        assert!(replay_character_start(&input).unwrap()[0]
+            .callbacks
+            .is_empty());
+    }
+
+    #[test]
+    fn character_start_rejects_unsupported_second_slot_without_partial_branches() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].bluff_role = Some(CallbackRole::Spy);
+        assert_eq!(
+            replay_character_start(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input.board.reveal.actors[0].character_start_acted = Some(true);
+        assert!(replay_character_start(&input).is_ok());
+        input.board.copied_slot = true;
+        assert_eq!(
+            replay_character_start(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = start_input();
+        input.rule_version = "unversioned".into();
+        assert_eq!(
+            replay_character_start(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn character_start_second_swap_failure_rejects_whole_call() {
+        let mut input = start_input();
+        input.board.reveal.actors[0].bluff_role = Some(CallbackRole::TwinMinion);
+        input.board.reveal.actors[0].remaining_continuations = u16::MAX - 2;
+        assert_eq!(replay_character_start(&input), Err(LedgerError::Capacity));
+        let mut json = serde_json::to_value(start_input()).unwrap();
+        json["inferred_order"] = true.into();
+        assert!(serde_json::from_value::<CharacterStartContext>(json).is_err());
     }
 
     #[test]
