@@ -75,14 +75,60 @@ other presentation lifecycle callbacks must not mutate modeled state. Native
 null failures, transforms, localization/art getters, SetupArt, pixels, and
 arbitrary scene callbacks are outside this projection. RefreshCharacter is a
 different routine and can reset pickableUses for a supported active-ability
-surface; it is not called by these three methods. This audit does not remove
-the existing writer's presentation-side-effect restrictions or automatically
-join the tail into ordered Reveal replay. That integration and provenance for
-coroutine readiness remain subsequent work.
+surface; it is not called by these three methods. The standalone audit does not
+remove presentation-side-effect restrictions. The versioned integration below
+adds only the audited effects; coroutine readiness still needs provenance.
 
 The coverage ledger adds three `understood` classifications and one native-static
 evidence record: 532 classified methods and 276 evidence records, with the
 4,207-method / 3,066-native-body denominator unchanged.
+
+## Ordered replay integration
+
+The separate `ordered_reveal_writer_view_native_v2` contract now joins the
+bounded view model to `replay_reveal_writers`. V2 requires exactly one UI record
+per physical body, including explicit pickable/rip active flags and an explicit
+nullable disguise-icon state. Missing and extra records, or an omitted icon
+field, reject the context. V1 still rejects populated UI state and omits all new
+UI fields from serialized output. The original standalone view API is unchanged.
+
+Every event first performs register-as/acquisition and optional Start, then
+Init/AfterRoundStart against the resulting role identities. The view tail uses
+the final raw bluff and body state. Its updated retained-death-object flag is
+written into the board before the next resume, while active UI states are kept
+in a separate per-body map. Later refreshes therefore reuse a death presentation
+created by an earlier event. Per-event traces retain visual identity sources and
+the ordered tail writes without embedding duplicate full board snapshots.
+
+Twin replacements also affect UI before the final tail, including on the other
+endpoint that has not resumed. Native InitWithNoReset (`0x365720`) hides RIP
+only when it destroys a live createdDeadPrefab. Subsequent replacements on the
+same body see the cleared pointer. After state becomes Hidden and killedByDemon
+is cleared, RefreshView hides an existing disguise icon. Pickable activity is
+preserved because uses is reset to one. RefreshCharacter (`0x367970`) cannot
+activate that control on a Hidden body; its possible count reset remains one.
+This allows the modeled net UI changes to be applied in replacement order from
+the Start trace, before the final Reveal tail, without running scene callbacks.
+
+`replacement_views` records the aggregate RIP/disguise writes per replacement,
+not every duplicate RefreshView call. Identity colors, transforms and other
+unmodeled controls on a replaced non-resuming endpoint are not invented. A
+missing optional icon remains absent, and a RIP object can remain active when
+there was no live death presentation to destroy. Self-swaps hide RIP only on the
+first replacement while retaining both continuation registrations.
+
+Six new tests cover both endpoints, self-swap destruction, death-object reuse,
+new-data reacquisition changing the view path, absent-icon/RIP preservation,
+strict UI provenance and v1 output compatibility. The same whole-branch failure
+and retained-state budgets apply; UI snapshots and traces count toward capacity.
+The integration still requires valid required UI objects and inert Unity/asset
+callbacks, and does not infer coroutine readiness or arbitrary intervening events.
+
+Integration validation passed 594 Rust library tests, 778 Python tests, 13
+reverse-engineering tests, release build, formatting and coverage integrity.
+Native coverage stays at 532 classifications and 276 evidence records. The
+long simulation suite was not rerun for this offline-only extension; no live
+solver or scenario-generation caller changed.
 
 Validation passed 588 Rust library tests, 778 Python tests, 13 reverse-engineering
 tests, release build, formatting and coverage integrity. The long simulation

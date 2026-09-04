@@ -417,8 +417,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.
-  - [ ] Join audited view-tail effects to ordered Reveal replay with explicit
-    UI-state provenance and close remaining asset/scene callback assumptions.
+  - [x] Join audited view-tail effects to ordered Reveal replay with explicit
+    UI-state provenance, replacement-side UI changes and retained death objects.
+  - [ ] Close remaining asset/scene callback assumptions and establish native
+    coroutine readiness/order provenance for automatic interleaving support.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
     Twin/Spy Start, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before

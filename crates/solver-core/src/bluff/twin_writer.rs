@@ -367,7 +367,203 @@ mod tests {
                 resume_ordinal: 0,
                 acquisition_ordinal: None,
             }],
+            ui: BTreeMap::new(),
         }
+    }
+
+    fn view_writer_input() -> RevealWriterContext {
+        use crate::bluff::reveal_writer::{ViewUiState, REVEAL_WRITER_VIEW_NATIVE_V2};
+        let mut context = writer_input();
+        context.rule_version = REVEAL_WRITER_VIEW_NATIVE_V2.into();
+        context.ui = (1..=3)
+            .map(|p| {
+                (
+                    p,
+                    ViewUiState {
+                        pickable_active: true,
+                        rip_active: true,
+                        disguise_icon_active: Some(true),
+                    },
+                )
+            })
+            .collect();
+        context
+    }
+
+    #[test]
+    fn view_writer_swaps_update_both_endpoints_and_use_post_start_identity() {
+        use crate::bluff::reveal_view::VisualSource;
+        let input = view_writer_input();
+        let paths = replay_reveal_writers(&input).unwrap();
+        let path = &paths[1];
+        for p in [1, 3] {
+            assert!(!path.ui[&p].rip_active);
+            assert_eq!(path.ui[&p].disguise_icon_active, Some(false));
+            assert!(path.ui[&p].pickable_active);
+            assert!(!path.board.bodies[&p].created_dead_presentation);
+        }
+        assert_eq!(path.ui[&2], input.ui[&2]);
+        assert_eq!(
+            path.trace[0]
+                .replacement_views
+                .iter()
+                .map(|v| v.position)
+                .collect::<Vec<_>>(),
+            vec![3, 1]
+        );
+        let tail = path.trace[0].view.as_ref().unwrap();
+        assert_eq!(tail.name_art_source, VisualSource::CurrentData);
+        assert_eq!(tail.writes.len(), 4);
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 2
+            }
+        );
+    }
+
+    #[test]
+    fn view_writer_self_swap_destroys_death_presentation_only_once() {
+        let path = replay_reveal_writers(&view_writer_input())
+            .unwrap()
+            .remove(0);
+        let writes = &path.trace[0].replacement_views;
+        assert_eq!(writes.len(), 2);
+        assert_eq!(writes[0].rip_write, Some(false));
+        assert_eq!(writes[1].rip_write, None);
+        assert_eq!(path.board.reveal.actors[0].remaining_continuations, 2);
+        assert_eq!(path.board.bodies[&1].previous_state, 5);
+    }
+
+    #[test]
+    fn view_writer_retains_new_death_presentation_across_resumes() {
+        use crate::bluff::reveal_view::ViewWrite;
+        let mut input = view_writer_input();
+        input.board.bodies.get_mut(&1).unwrap().state = 20;
+        input
+            .board
+            .bodies
+            .get_mut(&1)
+            .unwrap()
+            .created_dead_presentation = false;
+        input.board.reveal.actors[0].character_start_acted = Some(true);
+        input.board.reveal.actors[0].remaining_continuations = 2;
+        input.ui.get_mut(&1).unwrap().rip_active = false;
+        input.resumes.push(ResumeEvent {
+            position: 1,
+            resume_ordinal: 1,
+            acquisition_ordinal: None,
+        });
+        let path = replay_reveal_writers(&input).unwrap().remove(0);
+        assert!(path.ui[&1].rip_active);
+        assert!(path.board.bodies[&1].created_dead_presentation);
+        let created = |i: usize| {
+            path.trace[i]
+                .view
+                .as_ref()
+                .unwrap()
+                .writes
+                .iter()
+                .filter(|w| {
+                    matches!(
+                        w,
+                        ViewWrite::Refresh {
+                            created_dead: true,
+                            ..
+                        }
+                    )
+                })
+                .count()
+        };
+        assert_eq!(created(0), 1);
+        assert_eq!(created(1), 0);
+        assert_eq!(path.board.reveal.actors[0].remaining_continuations, 0);
+    }
+
+    #[test]
+    fn view_writer_later_reacquisition_changes_tail_from_real_to_bluff() {
+        use crate::bluff::reveal_view::VisualSource;
+        let mut input = view_writer_input();
+        input.resumes.push(ResumeEvent {
+            position: 1,
+            resume_ordinal: 1,
+            acquisition_ordinal: Some(0),
+        });
+        let paths = replay_reveal_writers(&input).unwrap();
+        let path = paths
+            .iter()
+            .find(|p| p.trace[1].acquisition.selector_status.is_some())
+            .unwrap();
+        assert_eq!(
+            path.trace[0].view.as_ref().unwrap().name_art_source,
+            VisualSource::CurrentData
+        );
+        assert_eq!(
+            path.trace[1].view.as_ref().unwrap().name_art_source,
+            VisualSource::RawBluff
+        );
+        assert_eq!(path.trace[1].view.as_ref().unwrap().writes.len(), 5);
+        assert!(!path.ui[&1].rip_active);
+        assert!(!path.ui[&3].rip_active);
+        assert_eq!(paths.len(), 5);
+    }
+
+    #[test]
+    fn view_writer_replacement_preserves_rip_without_live_death_object_and_absent_icon() {
+        let mut input = view_writer_input();
+        input
+            .board
+            .bodies
+            .get_mut(&1)
+            .unwrap()
+            .created_dead_presentation = false;
+        input.ui.get_mut(&1).unwrap().disguise_icon_active = None;
+        let paths = replay_reveal_writers(&input).unwrap();
+        for path in paths {
+            assert!(path.ui[&1].rip_active);
+            assert_eq!(path.ui[&1].disguise_icon_active, None);
+            assert!(path.trace[0]
+                .replacement_views
+                .iter()
+                .filter(|v| v.position == 1)
+                .all(|v| v.rip_write.is_none() && v.disguise_write.is_none()));
+        }
+    }
+
+    #[test]
+    fn view_writer_requires_exact_ui_provenance_and_preserves_v1_shape() {
+        use crate::bluff::reveal_writer::ViewUiState;
+        let mut input = view_writer_input();
+        input.ui.remove(&3);
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = view_writer_input();
+        input.ui.insert(4, input.ui[&1].clone());
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = view_writer_input();
+        input.rule_version = REVEAL_WRITER_NATIVE_V1.into();
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        let old = serde_json::to_value(replay_reveal_writers(&writer_input()).unwrap()).unwrap();
+        assert!(old[0].get("ui").is_none());
+        assert!(old[0]["trace"][0].get("view").is_none());
+        assert!(old[0]["trace"][0].get("replacement_views").is_none());
+        assert!(serde_json::from_str::<ViewUiState>(
+            r#"{"pickable_active":false,"rip_active":false}"#
+        )
+        .is_err());
+        assert!(serde_json::from_str::<ViewUiState>(
+            r#"{"pickable_active":false,"rip_active":false,"disguise_icon_active":null}"#
+        )
+        .is_ok());
     }
 
     #[test]

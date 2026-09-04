@@ -170,10 +170,13 @@ frozen dispatch and subsequent copied callback, including two Twin swaps in
 one call. The `ordered_reveal_writer_native_v1` projection now composes
 acquisition, conditional Start and current-role Init/AfterRoundStart across
 explicitly ordered resumes, carrying newly created continuation counts.
-Automatic schedule enumeration and view-epilogue composition remain pending.
+Automatic schedule enumeration remains pending.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.
+The `ordered_reveal_writer_view_native_v2` extension carries explicit per-body
+UI snapshots through Twin replacements and each Reveal tail, preserving newly
+created death presentations across later resumes.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and
