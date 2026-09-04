@@ -702,6 +702,57 @@ method-coverage integrity checks pass. The long gameplay simulation suite was
 not rerun: scenario generation and live entry points do not call this offline
 API, and the existing v1 behavior and serialized shape remain covered.
 
+### HealthyBluff Start latch extension
+
+The offline `bounded_reveal_callbacks_start_native_v3` contract adds required,
+explicit `character_start_acted` booleans for every modeled body. Older v1/v2
+contexts reject this field when populated and continue to reject HealthyBluff;
+their serialized actors omit the field. A missing or null v3 latch is invalid,
+including for bodies without HealthyBluff. No memory snapshot implies a latch.
+
+Native `Character.Reveal` (`0x368410`) checks HealthyBluff after register-as and
+bluff acquisition, including when an existing live bluff skipped acquisition.
+It requests Start before Init and AfterRoundStart. `Character.Act` (`0x3645C0`)
+invokes subscribers before checking `characterStartActed`, then sets the latch
+before dispatch. Accordingly, subscribed actors remain unsupported even when
+the latch is already true. A true latch suppresses both Start role callbacks;
+it does not suppress later Init/AfterRoundStart or consume extra continuations.
+Without HealthyBluff, Reveal leaves the latch unchanged.
+
+Supported Start callbacks are Lilis (`Striga.Act`, `0x3EE6F0`), which attempts
+NightCall 60 with null target, and Drunk (`0x3DA3D0`), which attempts Corrupted 10
+with self target. Neither class nor Demon's intervening base overrides
+`Role.BluffAct` (`0x3C4CA0`), which forwards to concrete Act. Scout/Witness's
+Act and BluffAct (`0x3B09F0`, `0x3B33E0`) and Confessor's corresponding methods
+(`0x3D65D0`, `0x3D6650`) are inert at Start. Existing resistance, duplicate-status,
+and shared-target semantics apply. Both real and copied action slots are
+independent of data identity and raw bluff identity.
+
+Each trigger freezes its initial actual-lying decision for both role slots.
+Thus a healthy Drunk with a live bluff can dispatch both Start slots through
+Act while its newly added Corrupted changes subsequent Init dispatch. Drunk
+acquisition happens earlier and may already have applied Corrupted; this yields
+a different initial Start decision. Confessor Init can subsequently clear the
+shared status target without removing Corrupted.
+
+Reached, unlatched Twin or Spy action slots reject the entire replay. A latched
+Start or absent HealthyBluff safely bypasses those slots; acquisition may also
+replace a stale unsupported copied slot before this check. Twin's ordered
+InitWithNoReset writes, latch resets and new coroutine registrations require a
+separate board/writer model. No continuation order or native failure-side-effect
+state is inferred. The v3 model remains an offline projection through
+AfterRoundStart and retains all prior view-epilogue and mutation exclusions.
+
+Seven new regressions cover dispatch timing, resistance, duplicate NightCall,
+acquisition before Start, copied status writers, schema provenance and reachable
+unsupported callbacks. This reuses existing native evidence; coverage counts
+and the 31-method acquisition boundary are unchanged.
+
+Checkpoint validation: 556 Rust library tests, 778 Python tests, 13 reverse-
+engineering tests, release build, rustfmt and coverage-ledger integrity passed.
+The long simulation suite was not rerun for this isolated offline API change;
+no live bridge or scenario generation path calls this module.
+
 ## Typed import, overlaps, and shared identity
 
 Thirteen target memberships intentionally overlap earlier checked boundaries:

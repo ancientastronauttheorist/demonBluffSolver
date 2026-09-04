@@ -158,6 +158,10 @@ Its [Spy v2 extension](notes/systems/gameplay_bluff_acquisition.md#spy-register-
 adds explicit role-cache identity, script-occurrence-weighted register-as
 selection, shared-cache reuse, and live-bluff register-as updates while
 preserving the original v1 serialized shape.
+The v3 extension adds explicit `characterStartActed` provenance and bounded
+HealthyBluff Start replay, including Drunk/Lilis status effects and the
+per-trigger truth decision. Active Twin/Spy Start callbacks, subscriptions,
+and writer-created continuations remain outside this offline API.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and

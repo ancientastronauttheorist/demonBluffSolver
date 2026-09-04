@@ -2,7 +2,8 @@
 //!
 //! Starts at a caller-proven continuation resume and ends after AfterRoundStart.
 //! Supports Lilis/Twin/Drunk data, plus explicit Spy role caches in v2, and
-//! Scout/Witness/Confessor bluff assets only.
+//! Scout/Witness/Confessor bluff assets only. V3 adds an explicit Start latch
+//! and HealthyBluff re-entry for status-only and inert callbacks.
 //! It does not reconstruct coroutine order, native object graphs, view updates,
 //! or subscribers. The caller must exclude intervening mutations, including
 //! omitted resumes and view epilogues, from the modeled state. No live GameState
@@ -17,6 +18,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub const REVEAL_CALLBACKS_NATIVE_V1: &str = "bounded_reveal_callbacks_native_v1";
 pub const REVEAL_CALLBACKS_SPY_NATIVE_V2: &str = "bounded_reveal_callbacks_spy_native_v2";
+pub const REVEAL_CALLBACKS_START_NATIVE_V3: &str = "bounded_reveal_callbacks_start_native_v3";
 const MAX_RESUMES: usize = 16;
 const MAX_PATHS: usize = 65_536;
 const MAX_ENTRIES: usize = 1_048_576;
@@ -142,6 +144,9 @@ pub struct RevealActor {
     pub statuses: StatusState,
     pub remaining_continuations: u16,
     pub on_trigger_subscribed: bool,
+    /// Explicit native characterStartActed provenance; required in v3.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub character_start_acted: Option<bool>,
 }
 
 impl RevealActor {
@@ -193,6 +198,7 @@ pub struct StatusApplication {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Trigger {
+    Start,
     Init,
     AfterRoundStart,
 }
@@ -276,8 +282,12 @@ fn selector_ledger(pools: SelectorPools, events: Vec<SelectorEvent>) -> Selector
 }
 
 fn validate(context: &RevealContext) -> Result<(), LedgerError> {
-    if ![REVEAL_CALLBACKS_NATIVE_V1, REVEAL_CALLBACKS_SPY_NATIVE_V2]
-        .contains(&context.rule_version.as_str())
+    if ![
+        REVEAL_CALLBACKS_NATIVE_V1,
+        REVEAL_CALLBACKS_SPY_NATIVE_V2,
+        REVEAL_CALLBACKS_START_NATIVE_V3,
+    ]
+    .contains(&context.rule_version.as_str())
         || context.board_size == 0
         || context.trailer_mode
         || context.resumes.len() > MAX_RESUMES
@@ -320,7 +330,11 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
             || actor.position > context.board_size
             || seen[usize::from(actor.position)]
             || actor.on_trigger_subscribed
-            || actor.statuses.values.contains(&HEALTHY_BLUFF)
+            || (context.rule_version == REVEAL_CALLBACKS_START_NATIVE_V3
+                && actor.character_start_acted.is_none())
+            || (context.rule_version != REVEAL_CALLBACKS_START_NATIVE_V3
+                && (actor.character_start_acted.is_some()
+                    || actor.statuses.values.contains(&HEALTHY_BLUFF)))
             || actor.statuses.values.len() > 256
             || actor.statuses.resistance.len() > 256
             || actor
@@ -354,9 +368,26 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
     Ok(())
 }
 
-fn callbacks(actor: &mut RevealActor) -> Vec<CallbackTrace> {
+fn callbacks(actor: &mut RevealActor) -> Result<Vec<CallbackTrace>, LedgerError> {
     let mut result = Vec::new();
-    for trigger in [Trigger::Init, Trigger::AfterRoundStart] {
+    for trigger in [Trigger::Start, Trigger::Init, Trigger::AfterRoundStart] {
+        if trigger == Trigger::Start {
+            if !actor.statuses.values.contains(&HEALTHY_BLUFF)
+                || actor.character_start_acted == Some(true)
+            {
+                continue;
+            }
+            // onTrigger subscribers are excluded even when the latch is set:
+            // native invokes them before checking this guard.
+            if actor.character_start_acted != Some(false)
+                || [Some(actor.action_role), actor.bluff_role]
+                    .iter()
+                    .any(|role| matches!(role, Some(CallbackRole::TwinMinion | CallbackRole::Spy)))
+            {
+                return Err(LedgerError::InvalidContext);
+            }
+            actor.character_start_acted = Some(true);
+        }
         // Character.Act computes this once before real then copied dispatch.
         let lying = actor.is_lying();
         let real_dispatch = if !lying || (actor.runtime_evil && actor.bluff_role.is_some()) {
@@ -377,12 +408,16 @@ fn callbacks(actor: &mut RevealActor) -> Vec<CallbackTrace> {
             ),
         ] {
             if let Some(role) = role {
-                let status_application =
-                    if trigger == Trigger::Init && role == CallbackRole::Confessor {
+                let status_application = match (trigger, role) {
+                    (Trigger::Init, CallbackRole::Confessor) => {
                         Some(actor.statuses.apply(APPEAR_TRUTHFUL, None))
-                    } else {
-                        None
-                    };
+                    }
+                    (Trigger::Start, CallbackRole::Drunk) => {
+                        Some(actor.statuses.apply(CORRUPTED, Some(actor.position)))
+                    }
+                    (Trigger::Start, CallbackRole::Lilis) => Some(actor.statuses.apply(60, None)),
+                    _ => None,
+                };
                 result.push(CallbackTrace {
                     trigger,
                     slot,
@@ -393,7 +428,7 @@ fn callbacks(actor: &mut RevealActor) -> Vec<CallbackTrace> {
             }
         }
     }
-    result
+    Ok(result)
 }
 
 fn push_bounded(
@@ -489,7 +524,7 @@ fn spy_resume(
                 role,
             }
         });
-        let callbacks = callbacks(actor);
+        let callbacks = callbacks(actor)?;
         let rng_draw_count = u8::from(matches!(source, SpyRegisterSource::ScriptVillager { .. }));
         branch.trace.push(ResumeTrace {
             event: event.clone(),
@@ -589,7 +624,7 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     let actor = &mut branch.actors[actor_index];
                     actor.bluff = BluffReference::Live { role };
                     actor.bluff_role = Some(role.callback());
-                    let callbacks = callbacks(actor);
+                    let callbacks = callbacks(actor)?;
                     branch.trace.push(ResumeTrace {
                         event: event.clone(),
                         previous_register_as: previous_register_as.clone(),
@@ -602,7 +637,7 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     push_bounded(&mut next, branch, &mut entries)?;
                 }
             } else {
-                let callbacks = callbacks(actor);
+                let callbacks = callbacks(actor)?;
                 path.trace.push(ResumeTrace {
                     event: event.clone(),
                     previous_register_as,
@@ -650,6 +685,7 @@ mod tests {
             },
             remaining_continuations: 2,
             on_trigger_subscribed: false,
+            character_start_acted: None,
         }
     }
 
@@ -693,6 +729,183 @@ mod tests {
             }
         }
         input
+    }
+
+    fn healthy_context(role: DataRole) -> RevealContext {
+        let mut input = context(
+            vec![actor(1, role)],
+            vec![resume(1, 0, None), resume(1, 1, None)],
+        );
+        input.rule_version = REVEAL_CALLBACKS_START_NATIVE_V3.into();
+        let actor = &mut input.actors[0];
+        actor.character_start_acted = Some(false);
+        actor.statuses.values = vec![HEALTHY_BLUFF];
+        actor.bluff = BluffReference::Live {
+            role: BluffRole::Witness,
+        };
+        actor.bluff_role = Some(CallbackRole::Witness);
+        input
+    }
+
+    #[test]
+    fn healthy_drunk_start_freezes_dispatch_then_init_rechecks_corruption() {
+        let path = replay_reveal_callbacks(&healthy_context(DataRole::Drunk))
+            .unwrap()
+            .remove(0);
+        let first = &path.trace[0].callbacks;
+        assert_eq!(first.len(), 6);
+        assert_eq!(first[0].trigger, Trigger::Start);
+        assert_eq!(first[0].dispatch, Dispatch::Act);
+        assert_eq!(
+            first[0].status_application.as_ref().unwrap().target_after,
+            Some(1)
+        );
+        assert_eq!(first[1].dispatch, Dispatch::Act);
+        assert_eq!(first[2].dispatch, Dispatch::BluffAct);
+        assert_eq!(first[3].dispatch, Dispatch::BluffAct);
+        assert_eq!(path.trace[1].callbacks.len(), 4);
+        assert_eq!(path.actors[0].character_start_acted, Some(true));
+        assert_eq!(path.actors[0].remaining_continuations, 0);
+        assert_eq!(
+            path.actors[0].statuses.values,
+            vec![HEALTHY_BLUFF, CORRUPTED]
+        );
+    }
+
+    #[test]
+    fn healthy_drunk_resistance_keeps_truth_and_consumes_start_latch() {
+        let mut input = healthy_context(DataRole::Drunk);
+        input.actors[0].statuses.resistance.push(CORRUPTED);
+        input.actors[0].statuses.target_position = Some(8);
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        let application = path.trace[0].callbacks[0]
+            .status_application
+            .as_ref()
+            .unwrap();
+        assert!(!application.accepted);
+        assert_eq!(application.target_after, Some(8));
+        assert!(path
+            .trace
+            .iter()
+            .flat_map(|t| &t.callbacks)
+            .all(|c| c.dispatch == Dispatch::Act));
+        assert_eq!(path.actors[0].character_start_acted, Some(true));
+    }
+
+    #[test]
+    fn healthy_lilis_duplicate_status_clears_target_unless_resisted() {
+        for resisted in [false, true] {
+            let mut input = healthy_context(DataRole::Lilis);
+            input.actors[0].statuses.values.push(60);
+            input.actors[0].statuses.target_position = Some(8);
+            if resisted {
+                input.actors[0].statuses.resistance.push(60);
+            }
+            let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+            let application = path.trace[0].callbacks[0]
+                .status_application
+                .as_ref()
+                .unwrap();
+            assert!(!application.inserted);
+            assert_eq!(application.accepted, !resisted);
+            assert_eq!(
+                application.target_after,
+                if resisted { Some(8) } else { None }
+            );
+            assert_eq!(path.trace[1].callbacks.len(), 4);
+        }
+    }
+
+    #[test]
+    fn healthy_acquisition_precedes_start_and_confessor_init() {
+        let mut input = healthy_context(DataRole::Drunk);
+        input.actors[0].bluff = BluffReference::Null;
+        input.actors[0].bluff_role = Some(CallbackRole::TwinMinion);
+        input.resumes[0].acquisition_ordinal = Some(7);
+        input.pools.unique = names(&["Confessor"]);
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        assert!(path.trace[0].selector_status.as_ref().unwrap().inserted);
+        assert!(
+            !path.trace[0].callbacks[0]
+                .status_application
+                .as_ref()
+                .unwrap()
+                .inserted
+        );
+        assert_eq!(path.trace[0].callbacks[1].role, CallbackRole::Confessor);
+        assert_eq!(path.trace[0].callbacks[1].dispatch, Dispatch::BluffAct);
+        assert_eq!(path.actors[0].statuses.target_position, None);
+        assert!(path.actors[0].statuses.values.contains(&APPEAR_TRUTHFUL));
+    }
+
+    #[test]
+    fn healthy_copied_status_writer_uses_same_start_decision() {
+        let mut input = healthy_context(DataRole::Lilis);
+        input.actors[0].action_role = CallbackRole::Scout;
+        input.actors[0].bluff_role = Some(CallbackRole::Drunk);
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        assert_eq!(path.trace[0].callbacks[1].dispatch, Dispatch::Act);
+        assert_eq!(
+            path.trace[0].callbacks[1]
+                .status_application
+                .as_ref()
+                .unwrap()
+                .status,
+            CORRUPTED
+        );
+        assert_eq!(path.trace[0].callbacks[3].dispatch, Dispatch::BluffAct);
+    }
+
+    #[test]
+    fn healthy_start_requires_versioned_latch_provenance() {
+        let mut input = healthy_context(DataRole::Lilis);
+        input.actors[0].character_start_acted = None;
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input.actors[0].character_start_acted = Some(false);
+        for version in [REVEAL_CALLBACKS_NATIVE_V1, REVEAL_CALLBACKS_SPY_NATIVE_V2] {
+            input.rule_version = version.into();
+            input.actors[0].statuses.values.clear();
+            assert_eq!(
+                replay_reveal_callbacks(&input),
+                Err(LedgerError::InvalidContext)
+            );
+        }
+        let old = context(vec![actor(1, DataRole::Lilis)], vec![resume(1, 0, Some(0))]);
+        let json = serde_json::to_value(replay_reveal_callbacks(&old).unwrap()).unwrap();
+        assert!(json[0]["actors"][0].get("character_start_acted").is_none());
+    }
+
+    #[test]
+    fn healthy_unsupported_start_only_rejected_when_reached_but_subscribers_always_rejected() {
+        for role in [CallbackRole::TwinMinion, CallbackRole::Spy] {
+            for copied in [false, true] {
+                let mut input = healthy_context(DataRole::Lilis);
+                if copied {
+                    input.actors[0].bluff_role = Some(role);
+                } else {
+                    input.actors[0].action_role = role;
+                }
+                assert_eq!(
+                    replay_reveal_callbacks(&input),
+                    Err(LedgerError::InvalidContext)
+                );
+                input.actors[0].character_start_acted = Some(true);
+                assert!(replay_reveal_callbacks(&input).is_ok());
+                input.actors[0].on_trigger_subscribed = true;
+                assert_eq!(
+                    replay_reveal_callbacks(&input),
+                    Err(LedgerError::InvalidContext)
+                );
+                input.actors[0].on_trigger_subscribed = false;
+                input.actors[0].character_start_acted = Some(false);
+                input.actors[0].statuses.values.clear();
+                let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+                assert_eq!(path.actors[0].character_start_acted, Some(false));
+            }
+        }
     }
 
     #[test]

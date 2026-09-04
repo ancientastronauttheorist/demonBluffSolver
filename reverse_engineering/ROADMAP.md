@@ -398,8 +398,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     identity, shared/distinct-object provenance, script-occurrence weighting,
     cache reuse after script growth, and register-as updates despite live bluff.
     Preserve the v1 schema and exclude unsupported callback identities.
+  - [x] Add versioned HealthyBluff Start latch provenance, status-only Drunk/Lilis
+    callbacks, frozen per-trigger dispatch, resistance and repeated-Reveal
+    regressions. Preserve v1/v2 serialized shapes and reject reached Twin/Spy
+    Start callbacks atomically.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
-    HealthyBluff, subscriptions, and writer-created continuations; establish
+    Twin/Spy Start, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before
     scenario integration.
 - [ ] Run and publish the final method-classification coverage audit.
