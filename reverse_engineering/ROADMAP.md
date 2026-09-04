@@ -394,7 +394,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     dispatch, and Scout/Witness/Confessor callbacks with exact status targets.
     Require explicit resume/acquisition provenance and exclude subscriptions,
     HealthyBluff re-entry, view epilogues, and intervening writers.
-  - [ ] Extend callback replay to register-as overrides, additional roles,
+  - [x] Add the versioned Spy register-as override with explicit data-role cache
+    identity, shared/distinct-object provenance, script-occurrence weighting,
+    cache reuse after script growth, and register-as updates despite live bluff.
+    Preserve the v1 schema and exclude unsupported callback identities.
+  - [ ] Extend callback replay to remaining register-as overrides, additional roles,
     HealthyBluff, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before
     scenario integration.

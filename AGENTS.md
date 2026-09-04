@@ -42,6 +42,9 @@ stop, diagnose, fix, verify, then resume.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
+    Resolve export filenames from the target manifest or directory listing;
+    public-role filenames can differ from managed class names. Inspect shared
+    method bodies without printing their potentially enormous alias-header line.
 
 ## Recovery Protocol
 

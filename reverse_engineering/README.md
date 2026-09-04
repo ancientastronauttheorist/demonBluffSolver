@@ -154,6 +154,10 @@ adds register-as reset, first-bluff installation, repeated continuations,
 real/copied Init and AfterRoundStart dispatch, and Confessor status effects for
 Lilis/Twin/Drunk bodies with supported bluff assets. It requires explicit resume
 provenance and excludes HealthyBluff, subscribers, and intervening writers.
+Its [Spy v2 extension](notes/systems/gameplay_bluff_acquisition.md#spy-register-as-and-role-cache-extension)
+adds explicit role-cache identity, script-occurrence-weighted register-as
+selection, shared-cache reuse, and live-bluff register-as updates while
+preserving the original v1 serialized shape.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and

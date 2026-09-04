@@ -1,7 +1,8 @@
 //! Bounded offline gameplay projection of delayed Character.Reveal callbacks.
 //!
 //! Starts at a caller-proven continuation resume and ends after AfterRoundStart.
-//! Supports Lilis/Twin/Drunk data and Scout/Witness/Confessor bluff assets only.
+//! Supports Lilis/Twin/Drunk data, plus explicit Spy role caches in v2, and
+//! Scout/Witness/Confessor bluff assets only.
 //! It does not reconstruct coroutine order, native object graphs, view updates,
 //! or subscribers. The caller must exclude intervening mutations, including
 //! omitted resumes and view epilogues, from the modeled state. No live GameState
@@ -12,8 +13,10 @@ use super::ledger::{
     SelectorPools, SelectorTrace, SELECTOR_LEDGER_NATIVE_V1,
 };
 use serde::{Deserialize, Serialize};
+use std::collections::{BTreeMap, BTreeSet};
 
 pub const REVEAL_CALLBACKS_NATIVE_V1: &str = "bounded_reveal_callbacks_native_v1";
+pub const REVEAL_CALLBACKS_SPY_NATIVE_V2: &str = "bounded_reveal_callbacks_spy_native_v2";
 const MAX_RESUMES: usize = 16;
 const MAX_PATHS: usize = 65_536;
 const MAX_ENTRIES: usize = 1_048_576;
@@ -23,15 +26,20 @@ const APPEAR_LYING: i32 = 26;
 const HEALTHY_BLUFF: i32 = 30;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum DataRole {
     Lilis,
     TwinMinion,
     Drunk,
+    /// Identifies the actual dataRef.role object, not the per-card role clone.
+    Spy {
+        cache_key: u16,
+    },
 }
 
-/// These fieldless role classes have no Init/AfterRoundStart gameplay effect
-/// except Confessor.OnInit. Keep the cloned action role separate from dataRef.
+/// These role classes have no Init/AfterRoundStart gameplay effect except
+/// Confessor.OnInit. Spy's action-role clone cache is inert at these triggers;
+/// only dataRef.role's cache participates in register-as and bluff selection.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum CallbackRole {
@@ -41,6 +49,7 @@ pub enum CallbackRole {
     Scout,
     Witness,
     Confessor,
+    Spy,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -52,6 +61,13 @@ pub enum BluffRole {
 }
 
 impl BluffRole {
+    fn name(self) -> &'static str {
+        match self {
+            Self::Scout => "Scout",
+            Self::Witness => "Witness",
+            Self::Confessor => "Confessor",
+        }
+    }
     fn parse(name: &str) -> Option<Self> {
         match name {
             "Scout" => Some(Self::Scout),
@@ -121,7 +137,7 @@ pub struct RevealActor {
     pub runtime_evil: bool,
     pub bluff: BluffReference,
     pub bluff_role: Option<CallbackRole>,
-    /// The supported data roles all overwrite this with native null.
+    /// Non-Spy data roles overwrite this with null; Spy uses its role cache.
     pub register_as: Option<String>,
     pub statuses: StatusState,
     pub remaining_continuations: u16,
@@ -160,6 +176,10 @@ pub struct RevealContext {
     pub pools: SelectorPools,
     pub actors: Vec<RevealActor>,
     pub resumes: Vec<ResumeEvent>,
+    /// Required provenance for every distinct Spy dataRef.role object. No
+    /// missing cache is inferred to be null. Equal keys explicitly share state.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub spy_caches: BTreeMap<u16, BluffReference>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -207,6 +227,34 @@ pub struct ResumeTrace {
     pub acquisition: Option<SelectorTrace>,
     pub selector_status: Option<StatusApplication>,
     pub callbacks: Vec<CallbackTrace>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spy_register_as: Option<SpyRegisterTrace>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spy_acquisition: Option<SpyAcquisitionTrace>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum SpyRegisterSource {
+    LiveCache,
+    ScriptVillager { occurrence_index: u16 },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct SpyRegisterTrace {
+    pub cache_key: u16,
+    pub previous_cache: BluffReference,
+    pub role: BluffRole,
+    pub source: SpyRegisterSource,
+    pub rng_draw_count: u8,
+}
+
+/// Spy selects from the cache just populated/read by register-as. This call
+/// consumes no additional RNG, removes no pool item, and registers no asset.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct SpyAcquisitionTrace {
+    pub acquisition_ordinal: u16,
+    pub role: BluffRole,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -215,6 +263,8 @@ pub struct RevealPath {
     pub pools: SelectorPools,
     pub actors: Vec<RevealActor>,
     pub trace: Vec<ResumeTrace>,
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    pub spy_caches: BTreeMap<u16, BluffReference>,
 }
 
 fn selector_ledger(pools: SelectorPools, events: Vec<SelectorEvent>) -> SelectorLedger {
@@ -226,7 +276,8 @@ fn selector_ledger(pools: SelectorPools, events: Vec<SelectorEvent>) -> Selector
 }
 
 fn validate(context: &RevealContext) -> Result<(), LedgerError> {
-    if context.rule_version != REVEAL_CALLBACKS_NATIVE_V1
+    if ![REVEAL_CALLBACKS_NATIVE_V1, REVEAL_CALLBACKS_SPY_NATIVE_V2]
+        .contains(&context.rule_version.as_str())
         || context.board_size == 0
         || context.trailer_mode
         || context.resumes.len() > MAX_RESUMES
@@ -243,6 +294,26 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
     }
     // Reuse the selector ledger's canonical asset, faction and occurrence caps.
     replay_selectors(&selector_ledger(context.pools.clone(), Vec::new()))?;
+    let cache_keys: BTreeSet<_> = context
+        .actors
+        .iter()
+        .filter_map(|actor| {
+            if let DataRole::Spy { cache_key } = actor.data_role {
+                Some(cache_key)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if cache_keys != context.spy_caches.keys().copied().collect()
+        || (context.rule_version == REVEAL_CALLBACKS_NATIVE_V1
+            && (!cache_keys.is_empty()
+                || context.actors.iter().any(|a| {
+                    a.action_role == CallbackRole::Spy || a.bluff_role == Some(CallbackRole::Spy)
+                })))
+    {
+        return Err(LedgerError::InvalidContext);
+    }
     let mut seen = [false; 256];
     for actor in &context.actors {
         if actor.position == 0
@@ -331,7 +402,8 @@ fn push_bounded(
     entries: &mut usize,
 ) -> Result<(), LedgerError> {
     let script = &path.pools.script;
-    let count = path.pools.unique.len()
+    let count = path.spy_caches.len()
+        + path.pools.unique.len()
         + path.pools.duplicate.len()
         + path.pools.must_include.len()
         + script.villagers.len()
@@ -346,7 +418,11 @@ fn push_bounded(
         + path
             .trace
             .iter()
-            .map(|t| 1 + t.callbacks.len())
+            .map(|t| {
+                1 + t.callbacks.len()
+                    + usize::from(t.spy_register_as.is_some())
+                    + usize::from(t.spy_acquisition.is_some())
+            })
             .sum::<usize>();
     *entries = entries.checked_add(count).ok_or(LedgerError::Capacity)?;
     if paths.len() >= MAX_PATHS || *entries > MAX_ENTRIES {
@@ -354,6 +430,85 @@ fn push_bounded(
     }
     paths.push(path);
     Ok(())
+}
+
+/// Called after consuming the continuation. The raw-bluff guard is checked by
+/// the caller, but never used to skip Spy's earlier register-as invocation.
+fn spy_resume(
+    path: &RevealPath,
+    actor_index: usize,
+    event: &ResumeEvent,
+    previous_register_as: &Option<String>,
+    cache_key: u16,
+) -> Result<Vec<RevealPath>, LedgerError> {
+    let previous_cache = *path
+        .spy_caches
+        .get(&cache_key)
+        .ok_or(LedgerError::InvalidContext)?;
+    let choices = match previous_cache {
+        BluffReference::Live { role } => vec![(role, SpyRegisterSource::LiveCache)],
+        BluffReference::Null | BluffReference::Destroyed { .. } => {
+            if path.pools.script.villagers.is_empty() {
+                return Err(LedgerError::EmptySupport);
+            }
+            // Validate the whole source before branching; never discard an
+            // unsupported Villager and renormalize the remaining occurrences.
+            path.pools
+                .script
+                .villagers
+                .iter()
+                .enumerate()
+                .map(|(index, name)| {
+                    Ok((
+                        BluffRole::parse(name).ok_or(LedgerError::InvalidContext)?,
+                        SpyRegisterSource::ScriptVillager {
+                            occurrence_index: u16::try_from(index)
+                                .map_err(|_| LedgerError::Capacity)?,
+                        },
+                    ))
+                })
+                .collect::<Result<Vec<_>, LedgerError>>()?
+        }
+    };
+    let probability = path.probability.multiply(1, choices.len() as u64)?;
+    let mut paths = Vec::new();
+    let mut entries = 0;
+    for (role, source) in choices {
+        let mut branch = path.clone();
+        branch.probability = probability;
+        branch
+            .spy_caches
+            .insert(cache_key, BluffReference::Live { role });
+        let actor = &mut branch.actors[actor_index];
+        actor.register_as = Some(role.name().into());
+        let spy_acquisition = event.acquisition_ordinal.map(|acquisition_ordinal| {
+            actor.bluff = BluffReference::Live { role };
+            actor.bluff_role = Some(role.callback());
+            SpyAcquisitionTrace {
+                acquisition_ordinal,
+                role,
+            }
+        });
+        let callbacks = callbacks(actor);
+        let rng_draw_count = u8::from(matches!(source, SpyRegisterSource::ScriptVillager { .. }));
+        branch.trace.push(ResumeTrace {
+            event: event.clone(),
+            previous_register_as: previous_register_as.clone(),
+            acquisition: None,
+            selector_status: None,
+            callbacks,
+            spy_register_as: Some(SpyRegisterTrace {
+                cache_key,
+                previous_cache,
+                role,
+                source,
+                rng_draw_count,
+            }),
+            spy_acquisition,
+        });
+        push_bounded(&mut paths, branch, &mut entries)?;
+    }
+    Ok(paths)
 }
 
 /// Compose proven resumes through the synchronous gameplay callbacks. Repeated
@@ -369,6 +524,7 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
         pools: context.pools.clone(),
         actors: context.actors.clone(),
         trace: Vec::new(),
+        spy_caches: context.spy_caches.clone(),
     }];
     for event in &context.resumes {
         let mut next = Vec::new();
@@ -387,6 +543,14 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
             }
             actor.remaining_continuations -= 1;
             let previous_register_as = actor.register_as.take();
+            if let DataRole::Spy { cache_key } = actor.data_role {
+                for branch in
+                    spy_resume(&path, actor_index, event, &previous_register_as, cache_key)?
+                {
+                    push_bounded(&mut next, branch, &mut entries)?;
+                }
+                continue;
+            }
             if let Some(acquisition_ordinal) = event.acquisition_ordinal {
                 let selector = match actor.data_role {
                     DataRole::Lilis => Selector::Demon,
@@ -394,6 +558,7 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     DataRole::Drunk => Selector::Drunk {
                         corruption_resistant: actor.statuses.resistance.contains(&CORRUPTED),
                     },
+                    DataRole::Spy { .. } => unreachable!("Spy register-as handled above"),
                 };
                 let selector_status = if actor.data_role == DataRole::Drunk {
                     Some(actor.statuses.apply(CORRUPTED, Some(actor.position)))
@@ -431,6 +596,8 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                         acquisition: Some(acquisition),
                         selector_status: selector_status.clone(),
                         callbacks,
+                        spy_register_as: None,
+                        spy_acquisition: None,
                     });
                     push_bounded(&mut next, branch, &mut entries)?;
                 }
@@ -442,6 +609,8 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     acquisition: None,
                     selector_status: None,
                     callbacks,
+                    spy_register_as: None,
+                    spy_acquisition: None,
                 });
                 push_bounded(&mut next, path, &mut entries)?;
             }
@@ -468,6 +637,7 @@ mod tests {
                 DataRole::Lilis => CallbackRole::Lilis,
                 DataRole::TwinMinion => CallbackRole::TwinMinion,
                 DataRole::Drunk => CallbackRole::Drunk,
+                DataRole::Spy { .. } => CallbackRole::Spy,
             },
             runtime_evil: data_role == DataRole::Lilis,
             bluff: BluffReference::Null,
@@ -509,7 +679,342 @@ mod tests {
             },
             actors,
             resumes,
+            spy_caches: BTreeMap::new(),
         }
+    }
+
+    fn spy_context(actors: Vec<RevealActor>, resumes: Vec<ResumeEvent>) -> RevealContext {
+        let mut input = context(actors, resumes);
+        input.rule_version = REVEAL_CALLBACKS_SPY_NATIVE_V2.into();
+        input.pools.script.villagers = names(&["Scout", "Scout", "Confessor"]);
+        for actor in &input.actors {
+            if let DataRole::Spy { cache_key } = actor.data_role {
+                input.spy_caches.insert(cache_key, BluffReference::Null);
+            }
+        }
+        input
+    }
+
+    #[test]
+    fn spy_script_occurrences_supply_one_register_draw_and_cached_acquisition() {
+        let input = spy_context(
+            vec![actor(1, DataRole::Spy { cache_key: 0 })],
+            vec![resume(1, 2, Some(0))],
+        );
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 3);
+        for (index, path) in paths.iter().enumerate() {
+            assert_eq!(
+                path.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 3
+                }
+            );
+            let trace = path.trace[0].spy_register_as.as_ref().unwrap();
+            assert_eq!(
+                trace.source,
+                SpyRegisterSource::ScriptVillager {
+                    occurrence_index: index as u16
+                }
+            );
+            assert_eq!(trace.rng_draw_count, 1);
+            assert_eq!(trace.previous_cache, BluffReference::Null);
+            assert_eq!(
+                path.actors[0].register_as.as_deref(),
+                Some(trace.role.name())
+            );
+            assert_eq!(
+                path.actors[0].bluff,
+                BluffReference::Live { role: trace.role }
+            );
+            assert_eq!(
+                path.trace[0].spy_acquisition.as_ref().unwrap().role,
+                trace.role
+            );
+            assert!(path.trace[0].acquisition.is_none());
+            assert!(path.trace[0].selector_status.is_none());
+            assert_eq!(path.pools, input.pools);
+        }
+        assert_eq!(paths[0].actors, paths[1].actors);
+        assert_eq!(paths[2].actors[0].statuses.values, vec![APPEAR_TRUTHFUL]);
+        assert_eq!(input.spy_caches[&0], BluffReference::Null);
+    }
+
+    #[test]
+    fn spy_same_role_object_shares_cache_across_bodies_and_repeat_resumes() {
+        let input = spy_context(
+            vec![
+                actor(1, DataRole::Spy { cache_key: 9 }),
+                actor(2, DataRole::Spy { cache_key: 9 }),
+            ],
+            vec![
+                resume(1, 0, Some(0)),
+                resume(2, 1, Some(1)),
+                resume(1, 2, None),
+            ],
+        );
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 3); // not 9: the second physical Spy reads the same cache
+        for path in paths {
+            assert_eq!(path.actors[0].bluff, path.actors[1].bluff);
+            assert_eq!(path.actors[0].register_as, path.actors[1].register_as);
+            for trace in &path.trace[1..] {
+                let register = trace.spy_register_as.as_ref().unwrap();
+                assert_eq!(register.source, SpyRegisterSource::LiveCache);
+                assert_eq!(register.rng_draw_count, 0);
+            }
+            assert!(path.trace[1].spy_acquisition.is_some());
+            assert!(path.trace[2].spy_acquisition.is_none());
+            assert_eq!(path.trace[2].callbacks.len(), 4);
+        }
+    }
+
+    #[test]
+    fn spy_distinct_role_objects_branch_independently() {
+        let input = spy_context(
+            vec![
+                actor(1, DataRole::Spy { cache_key: 2 }),
+                actor(2, DataRole::Spy { cache_key: 7 }),
+            ],
+            vec![resume(1, 0, Some(0)), resume(2, 1, Some(1))],
+        );
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 9);
+        assert!(paths.iter().all(|path| path.probability
+            == Probability {
+                numerator: 1,
+                denominator: 9
+            }));
+        assert!(paths
+            .iter()
+            .any(|path| path.actors[0].bluff != path.actors[1].bluff));
+        assert!(paths.iter().all(|path| path.trace[1]
+            .spy_register_as
+            .as_ref()
+            .unwrap()
+            .rng_draw_count
+            == 1));
+    }
+
+    #[test]
+    fn spy_live_bluff_does_not_skip_register_as_or_replace_copied_role() {
+        let mut body = actor(1, DataRole::Spy { cache_key: 4 });
+        body.bluff = BluffReference::Live {
+            role: BluffRole::Scout,
+        };
+        body.bluff_role = Some(CallbackRole::Confessor);
+        let mut input = spy_context(vec![body], vec![resume(1, 0, None)]);
+        input.pools.script.villagers = names(&["Witness"]);
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        assert_eq!(path.actors[0].register_as.as_deref(), Some("Witness"));
+        assert_eq!(path.actors[0].bluff, input.actors[0].bluff);
+        assert_eq!(path.actors[0].bluff_role, input.actors[0].bluff_role);
+        assert_eq!(
+            path.trace[0]
+                .spy_register_as
+                .as_ref()
+                .unwrap()
+                .rng_draw_count,
+            1
+        );
+        assert!(path.trace[0].spy_acquisition.is_none());
+        assert_eq!(path.actors[0].statuses.values, vec![APPEAR_TRUTHFUL]);
+    }
+
+    #[test]
+    fn spy_live_cache_ignores_script_membership_and_old_register_as() {
+        let mut input = spy_context(
+            vec![actor(1, DataRole::Spy { cache_key: 1 })],
+            vec![resume(1, 0, Some(0))],
+        );
+        input.spy_caches.insert(
+            1,
+            BluffReference::Live {
+                role: BluffRole::Confessor,
+            },
+        );
+        input.pools.script.villagers.clear();
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        assert_eq!(path.actors[0].register_as.as_deref(), Some("Confessor"));
+        assert_eq!(path.trace[0].previous_register_as.as_deref(), Some("Bard"));
+        assert_eq!(
+            path.trace[0]
+                .spy_register_as
+                .as_ref()
+                .unwrap()
+                .rng_draw_count,
+            0
+        );
+        assert_eq!(path.pools, input.pools);
+        // A supported live cache is usable even when current script contains
+        // callback classes outside this bounded model; it doesn't reread it.
+        input.pools.script.villagers = names(&["Bard"]);
+        assert!(replay_reveal_callbacks(&input).is_ok());
+    }
+
+    #[test]
+    fn spy_destroyed_cache_is_resampled_before_bluff_guard() {
+        let mut input = spy_context(
+            vec![actor(1, DataRole::Spy { cache_key: 6 })],
+            vec![resume(1, 0, Some(0))],
+        );
+        input.spy_caches.insert(
+            6,
+            BluffReference::Destroyed {
+                role: BluffRole::Witness,
+            },
+        );
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 3);
+        assert!(paths.iter().all(
+            |p| p.trace[0].spy_register_as.as_ref().unwrap().previous_cache
+                == BluffReference::Destroyed {
+                    role: BluffRole::Witness
+                }
+        ));
+        assert!(paths
+            .iter()
+            .all(|p| p.actors[0].register_as.as_deref() != Some("Witness")));
+    }
+
+    #[test]
+    fn minion_script_addition_changes_later_spy_weights() {
+        let mut input = spy_context(
+            vec![
+                actor(1, DataRole::TwinMinion),
+                actor(2, DataRole::Spy { cache_key: 1 }),
+            ],
+            vec![resume(1, 0, Some(0)), resume(2, 1, Some(1))],
+        );
+        input.pools.script.villagers = names(&["Scout"]);
+        input.pools.duplicate = names(&["Confessor"]);
+        input.pools.unique = names(&["Witness"]);
+        let paths = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(paths.len(), 3);
+        assert_eq!(
+            paths.iter().map(|p| p.probability).collect::<Vec<_>>(),
+            vec![
+                Probability {
+                    numerator: 2,
+                    denominator: 5
+                },
+                Probability {
+                    numerator: 3,
+                    denominator: 10
+                },
+                Probability {
+                    numerator: 3,
+                    denominator: 10
+                }
+            ]
+        );
+        assert_eq!(paths[0].actors[1].register_as.as_deref(), Some("Scout"));
+        assert_eq!(paths[2].actors[1].register_as.as_deref(), Some("Witness"));
+        assert!(paths
+            .iter()
+            .all(|p| p.actors[1].register_as.as_deref() != Some("Confessor")));
+    }
+
+    #[test]
+    fn later_demon_registration_does_not_refresh_spy_cache() {
+        let mut input = spy_context(
+            vec![
+                actor(1, DataRole::Spy { cache_key: 1 }),
+                actor(2, DataRole::Lilis),
+            ],
+            vec![
+                resume(1, 0, Some(0)),
+                resume(2, 1, Some(1)),
+                resume(1, 2, None),
+            ],
+        );
+        input.pools.script.villagers = names(&["Scout"]);
+        let path = replay_reveal_callbacks(&input).unwrap().remove(0);
+        assert_eq!(path.pools.script.villagers, names(&["Scout", "Witness"]));
+        assert_eq!(path.actors[0].register_as.as_deref(), Some("Scout"));
+        assert_eq!(
+            path.trace[2].spy_register_as.as_ref().unwrap().source,
+            SpyRegisterSource::LiveCache
+        );
+        input.resumes = vec![
+            resume(2, 0, Some(0)),
+            resume(1, 1, Some(1)),
+            resume(1, 2, None),
+        ];
+        let reordered = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(reordered.len(), 2);
+        assert_eq!(
+            reordered[1].actors[0].register_as.as_deref(),
+            Some("Witness")
+        );
+    }
+
+    #[test]
+    fn spy_empty_or_unsupported_script_never_becomes_a_partial_distribution() {
+        let mut body = actor(1, DataRole::Spy { cache_key: 0 });
+        body.bluff = BluffReference::Live {
+            role: BluffRole::Scout,
+        };
+        let mut input = spy_context(vec![body], vec![resume(1, 0, None)]);
+        input.pools.script.villagers.clear();
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::EmptySupport)
+        );
+        input.pools.script.villagers = names(&["Scout", "Bard"]);
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn spy_requires_exact_cache_provenance_and_v2_marker() {
+        let base = spy_context(
+            vec![actor(1, DataRole::Spy { cache_key: 1 })],
+            vec![resume(1, 0, Some(0))],
+        );
+        let mut input = base.clone();
+        input.rule_version = REVEAL_CALLBACKS_NATIVE_V1.into();
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = base.clone();
+        input.spy_caches.clear();
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = base;
+        input.spy_caches.insert(2, BluffReference::Null);
+        assert_eq!(
+            replay_reveal_callbacks(&input),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn spy_schema_preserves_v1_output_shape_and_v2_cache_keys() {
+        let old = context(vec![actor(1, DataRole::Lilis)], vec![resume(1, 0, Some(0))]);
+        let old_json = serde_json::to_value(&old).unwrap();
+        assert!(old_json.get("spy_caches").is_none());
+        let old_paths = serde_json::to_value(replay_reveal_callbacks(&old).unwrap()).unwrap();
+        assert!(old_paths[0].get("spy_caches").is_none());
+        assert!(old_paths[0]["trace"][0].get("spy_register_as").is_none());
+        assert!(old_paths[0]["trace"][0].get("spy_acquisition").is_none());
+        let current = spy_context(
+            vec![actor(1, DataRole::Spy { cache_key: 42 })],
+            vec![resume(1, 0, Some(0))],
+        );
+        let json = serde_json::to_value(&current).unwrap();
+        assert_eq!(
+            serde_json::from_value::<RevealContext>(json).unwrap(),
+            current
+        );
+        let output = serde_json::to_value(replay_reveal_callbacks(&current).unwrap()).unwrap();
+        assert_eq!(output[0]["spy_caches"]["42"]["kind"], "live");
     }
 
     #[test]

@@ -624,6 +624,84 @@ integrity checks pass. The installed DLL and metadata SHA-256 values match the
 build manifest. Long gameplay simulations were not rerun because this offline
 module has no callers in scenario generation, validators, or live entry points.
 
+### Spy register-as and role-cache extension
+
+The `bounded_reveal_callbacks_spy_native_v2` rule extends the same offline
+callback API to Spy. Existing v1 contexts retain their serialized input/output
+shape, and v1 explicitly rejects Spy roles or cache state. The new
+`DataRole::Spy { cache_key }` identifies the exact role object reached through
+`Character.dataRef.role`. A required `spy_caches` entry records that object's
+live, null, or destroyed `chData` reference. Missing cache state is an error,
+not an inferred fresh cache. Equal keys explicitly share state across physical
+actors; distinct keys represent independently established distinct objects.
+Neither sharing nor independence is inferred from a public name, board
+position, or current script membership.
+
+This follows the checked `Character.Reveal` dispatch through `dataRef.role`,
+`Spy.GetRegisterAsRole` at `0x3ED6A0`, and `Spy.GetBluffIfAble` at `0x3ED4B0`.
+Metadata places `Spy.chData` on the managed role instance at offset `0x48`.
+The separate `Character.role` action clone is not used by these two selector
+calls. Its cached fields remain outside the projection because `Spy.Act`
+binds the empty `0x33ED50` body, corroborated by the existing folded Wretch
+export, and inherited `Role.BluffAct` forwards to that no-op. No additional
+native target, full Spy-role audit, or coverage classification is claimed.
+
+`Gameplay.GetScriptCharacters` at `0x37DC00` concatenates current Villagers,
+Outcasts, Minions, then Demons. The subsequent exact Villager filter therefore
+returns the ordered `script.villagers` occurrences in the validated ledger.
+A null/destroyed Spy cache draws one such occurrence uniformly and stores it.
+A live cache is returned without any draw or script-membership check. The
+per-resume trace retains cache identity, previous cache state, selected role,
+the original Villager-list occurrence index or live-cache source, and RNG draw
+count. A selected asset is neither removed nor registered in the script.
+
+Register-as always runs before the raw-bluff guard. Consequently:
+
+- A Spy with an already-live bluff still initializes an empty cache and updates
+  register-as. Its raw bluff and independent copied-role pointer stay intact,
+  and normal Init/AfterRoundStart callbacks still run.
+- When raw bluff is null/destroyed, register-as has already populated/read the
+  live cache. `GetBluffIfAble` returns that same value without an additional
+  draw, and GiveBluff installs the selected supported copied role.
+- A later physical Spy sharing the same role object reuses the first result;
+  it does not independently resample merely because it has a different ID.
+- Later Demon/Drunk/Minion-unique script additions affect a still-empty Spy
+  cache's selection support. They do not invalidate a live cache. Minion-
+  duplicate acquisitions add nothing to the script.
+
+The existing `ResumeTrace.acquisition` remains the ordinary selector trace.
+New optional `spy_register_as` and `spy_acquisition` fields record Spy's two
+distinct operations, and final paths preserve the cache map. Acquisition and
+resume ordinals stay separate; a register-as draw with an already-live bluff
+does not become a bluff-acquisition event.
+
+Eleven added regressions cover duplicate script occurrences, shared versus
+distinct role identities, cache reuse after script growth, live-bluff
+register-as selection, stale register-as replacement, destroyed-cache refresh,
+empty/unsupported source rejection, version/cache provenance, and v1 shape
+compatibility. A mixed Minion-to-Spy example starts with script `[Scout]`,
+unique pool `[Witness]`, and duplicate pool `[Confessor]`: the complete paths
+have probabilities `2/5` (duplicate then Spy Scout), `3/10` (unique then Spy
+Scout), and `3/10` (unique then Spy Witness). Confessor never enters Spy's
+support through the duplicate branch.
+
+This remains a bounded **behavioral** reconstruction backed by the linked
+**native-static** methods. Newly sampled and cached identities are restricted
+to Scout/Witness/Confessor, whose callbacks the projection implements. An
+unsupported script Villager rejects the whole operation when sampling is
+needed; it is not pruned or rerolled. A supported live cache can still be used
+with an empty or otherwise unsupported current script because no sample is
+taken. The existing HealthyBluff, subscriber, writer, view-epilogue, scheduler,
+and live-input exclusions remain. Cross-round cache lifetime and cache
+destruction between modeled resumes require additional event evidence and
+are not inferred by v2.
+
+Checkpoint validation: all 549 Rust library tests (including 25 Reveal tests),
+778 Python tests, 13 reverse-engineering tests, release build, formatting, and
+method-coverage integrity checks pass. The long gameplay simulation suite was
+not rerun: scenario generation and live entry points do not call this offline
+API, and the existing v1 behavior and serialized shape remain covered.
+
 ## Typed import, overlaps, and shared identity
 
 Thirteen target memberships intentionally overlap earlier checked boundaries:
