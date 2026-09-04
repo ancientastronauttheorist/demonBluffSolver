@@ -170,7 +170,11 @@ frozen dispatch and subsequent copied callback, including two Twin swaps in
 one call. The `ordered_reveal_writer_native_v1` projection now composes
 acquisition, conditional Start and current-role Init/AfterRoundStart across
 explicitly ordered resumes, carrying newly created continuation counts.
-Automatic schedule enumeration remains pending.
+An offline [sealed ready-batch explorer](notes/systems/gameplay_ready_batch.md)
+(`sealed_ready_batch_native_v1`) now enumerates every order
+of up to six caller-proven ready continuations. Each order has a separate RNG
+distribution, with no scheduler probability assigned. Native readiness capture
+and admission of later-ready continuations remain pending.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

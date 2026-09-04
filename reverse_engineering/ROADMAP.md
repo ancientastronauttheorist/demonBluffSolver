@@ -414,6 +414,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     writer-created continuation counts and validate repeated new-data resumes.
   - [ ] Establish scheduler provenance and enumerate justified interleavings,
     including branch-dependent acquisition events and omitted view epilogues.
+  - [x] Explore all orders of a caller-sealed ready batch, with distinct
+    coroutine IDs, branch-local acquisition decisions, conditional RNG weights,
+    deferred writer-created continuations and whole-exploration failure caps.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

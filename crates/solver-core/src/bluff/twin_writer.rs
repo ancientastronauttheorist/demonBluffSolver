@@ -276,6 +276,9 @@ mod tests {
         replay_character_start, CharacterStartContext, CHARACTER_START_NATIVE_V1,
     };
     use crate::bluff::ledger::{ScriptLists, SelectorPools};
+    use crate::bluff::ready_batch::{
+        replay_ready_batch, ReadyBatchContext, ReadyContinuation, READY_BATCH_NATIVE_V1,
+    };
     use crate::bluff::reveal::{BluffRole, ResumeEvent, RevealActor, StatusState};
     use crate::bluff::reveal_writer::{
         replay_reveal_writers, RevealWriterContext, REVEAL_WRITER_NATIVE_V1,
@@ -388,6 +391,142 @@ mod tests {
             })
             .collect();
         context
+    }
+
+    fn ready_input(positions: &[u8]) -> ReadyBatchContext {
+        let mut initial = view_writer_input();
+        initial.resumes.clear();
+        ReadyBatchContext {
+            rule_version: READY_BATCH_NATIVE_V1.into(),
+            initial,
+            ready: positions
+                .iter()
+                .enumerate()
+                .map(|(i, p)| ReadyContinuation {
+                    id: i as u16,
+                    position: *p,
+                })
+                .collect(),
+        }
+    }
+
+    #[test]
+    fn ready_batch_keeps_schedule_choices_separate_from_rng_weights() {
+        let mut input = ready_input(&[1, 2]);
+        input.initial.board.reveal.actors[0].character_start_acted = Some(true);
+        let schedules = replay_ready_batch(&input).unwrap();
+        assert_eq!(schedules.len(), 2);
+        assert_eq!(schedules[0].order, vec![0, 1]);
+        assert_eq!(schedules[1].order, vec![1, 0]);
+        for schedule in &schedules {
+            assert_eq!(schedule.paths.len(), 1);
+            assert_eq!(
+                schedule.paths[0].replay.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 1
+                }
+            );
+            assert!(schedule.paths[0].new_continuations.is_empty());
+        }
+        let json = serde_json::to_value(schedules).unwrap();
+        assert!(json[0].get("probability").is_none());
+    }
+
+    #[test]
+    fn ready_batch_defers_writer_created_continuations() {
+        let schedules = replay_ready_batch(&ready_input(&[1])).unwrap();
+        assert_eq!(schedules.len(), 1);
+        assert_eq!(schedules[0].paths.len(), 2);
+        let self_swap = &schedules[0].paths[0];
+        assert_eq!(self_swap.new_continuations, BTreeMap::from([(1, 2)]));
+        let distinct = &schedules[0].paths[1];
+        assert_eq!(distinct.new_continuations, BTreeMap::from([(1, 1), (3, 1)]));
+        for path in &schedules[0].paths {
+            assert_eq!(path.replay.trace.len(), 1);
+            assert_eq!(
+                path.replay.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 2
+                }
+            );
+        }
+    }
+
+    #[test]
+    fn ready_batch_derives_branch_local_acquisitions_without_discarding_paths() {
+        let mut input = ready_input(&[1, 1, 1]);
+        input.initial.board.reveal.actors[0].remaining_continuations = 3;
+        let schedules = replay_ready_batch(&input).unwrap();
+        assert_eq!(schedules.len(), 6);
+        for schedule in schedules {
+            assert!(schedule.paths.iter().any(|p| p.replay.trace[2]
+                .acquisition
+                .event
+                .acquisition_ordinal
+                .is_none()));
+            assert!(schedule.paths.iter().any(|p| p.replay.trace[2]
+                .acquisition
+                .event
+                .acquisition_ordinal
+                == Some(2)));
+            // All weights have denominators dividing 200 in this fixture.
+            assert_eq!(
+                schedule
+                    .paths
+                    .iter()
+                    .map(|p| {
+                        assert_eq!(200 % p.replay.probability.denominator, 0);
+                        p.replay.probability.numerator * (200 / p.replay.probability.denominator)
+                    })
+                    .sum::<u64>(),
+                200
+            );
+        }
+    }
+
+    #[test]
+    fn ready_batch_matches_explicit_ordered_replay_when_flags_are_shared() {
+        let input = ready_input(&[1]);
+        let schedules = replay_ready_batch(&input).unwrap();
+        let direct = replay_reveal_writers(&view_writer_input()).unwrap();
+        assert_eq!(
+            schedules[0]
+                .paths
+                .iter()
+                .map(|p| p.replay.clone())
+                .collect::<Vec<_>>(),
+            direct
+        );
+    }
+
+    #[test]
+    fn ready_batch_rejects_missing_duplicate_and_excess_ready_provenance() {
+        let mut input = ready_input(&[1, 1]);
+        assert_eq!(replay_ready_batch(&input), Err(LedgerError::InvalidContext));
+        input.initial.board.reveal.actors[0].remaining_continuations = 2;
+        input.ready[1].id = input.ready[0].id;
+        assert_eq!(replay_ready_batch(&input), Err(LedgerError::InvalidContext));
+        input = ready_input(&[4]);
+        assert_eq!(replay_ready_batch(&input), Err(LedgerError::InvalidContext));
+        input = ready_input(&[1; 7]);
+        assert_eq!(replay_ready_batch(&input), Err(LedgerError::InvalidContext));
+        let mut json = serde_json::to_value(ready_input(&[])).unwrap();
+        json["uniform_scheduler"] = true.into();
+        assert!(serde_json::from_value::<ReadyBatchContext>(json).is_err());
+    }
+
+    #[test]
+    fn ready_batch_empty_is_identity_and_failed_rng_branch_fails_exploration() {
+        let input = ready_input(&[]);
+        let schedules = replay_ready_batch(&input).unwrap();
+        assert_eq!(schedules.len(), 1);
+        assert!(schedules[0].order.is_empty());
+        assert_eq!(schedules[0].paths[0].replay.board, input.initial.board);
+        let mut input = ready_input(&[1]);
+        input.initial.board.bodies.get_mut(&2).unwrap().state = 20;
+        assert_eq!(replay_ready_batch(&input), Err(LedgerError::EmptySupport));
     }
 
     #[test]
