@@ -77,7 +77,7 @@ pub struct Probability {
 }
 
 impl Probability {
-    fn multiply(self, numerator: u64, denominator: u64) -> Result<Self, LedgerError> {
+    pub(super) fn multiply(self, numerator: u64, denominator: u64) -> Result<Self, LedgerError> {
         let left = gcd(self.numerator, denominator);
         let right = gcd(numerator, self.denominator);
         let numerator = (self.numerator / left)

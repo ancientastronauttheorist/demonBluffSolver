@@ -388,9 +388,16 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     script registration, Drunk corruption-attempt effects, and conditional
     equivalence tests against the one-Lilis prefix. Keep unsupported Reveal
     hooks, dispatch, scheduler order, and intervening writers outside this API.
-  - [ ] Compose the selector ledger with event-time register-as, GiveBluff,
-    Init/AfterRoundStart, and HealthyBluff callbacks; establish scheduler order
-    provenance or justified interleaving support before scenario integration.
+  - [x] Compose the selector ledger with the bounded Lilis/Twin/Drunk Reveal
+    callback projection: constant-null register-as, live-bluff guard,
+    GiveBluff, repeated continuations, separate real/copied Init/AfterRoundStart
+    dispatch, and Scout/Witness/Confessor callbacks with exact status targets.
+    Require explicit resume/acquisition provenance and exclude subscriptions,
+    HealthyBluff re-entry, view epilogues, and intervening writers.
+  - [ ] Extend callback replay to register-as overrides, additional roles,
+    HealthyBluff, subscriptions, and writer-created continuations; establish
+    scheduler order provenance or justified interleaving support before
+    scenario integration.
 - [ ] Run and publish the final method-classification coverage audit.
 
 ## Method classification

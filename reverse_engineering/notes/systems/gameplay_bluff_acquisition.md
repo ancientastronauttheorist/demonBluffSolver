@@ -541,6 +541,89 @@ the byte-for-byte method-coverage check pass. The long simulation suite was
 not rerun for this isolated API: scenario generation, validators, and live
 entry points have no new calls or behavior changes.
 
+### Bounded Reveal callback composition
+
+The next offline API, `bluff::reveal::replay_reveal_callbacks`, composes the
+selector ledger with the synchronous gameplay portion of `Character.Reveal`:
+register-as assignment, raw-bluff guard, selector/GiveBluff, and the Init then
+AfterRoundStart callback passes. The rule marker is
+`bounded_reveal_callbacks_native_v1`. This is a **behavioral**, synthetic-tested
+projection from existing **native-static** evidence; it adds no native target
+or coverage classification and is not wired to `GameState` or live ingestion.
+
+The supported current data roles are Lilis (`Striga`), Twin Minion
+(`Marionette`), and Drunk. All inherit the constant-null base register-as
+provider. Their selectors are respectively Demon, Minion, and Drunk. Allowed
+selected bluff assets are Scout, Witness, and Confessor. The separately
+captured shared `Character.role` and copied `bluffRole` can contain any of
+those six fieldless role classes; they are never inferred from current data
+or display identity. This permits an independently established snapshot with
+different current data, shared action role, and copied bluff role without
+inventing the history that produced it.
+
+The native evidence is already exported in these boundaries:
+
+| Evidence | Consequence in this projection |
+| --- | --- |
+| `Character.Reveal`, `0x368410` | Register-as precedes the bluff guard; Init precedes AfterRoundStart; each goes through `Character.Act` |
+| `Character.GiveBluff`, `0x365160` | A live selected asset replaces raw bluff and its copied role |
+| `Character.Act`, `0x3645C0` | Actual truth controls real then copied dispatch; runtime Evil uses real Act only when the copied-role pointer exists |
+| `Role.BluffAct`, `0x3C4CA0` | Inherited bluff dispatch forwards to the concrete Act override |
+| `Striga.Act`, `0x3EE6F0`; `Marionette.Act`, `0x3E4090`; `Drunk.Act`, `0x3DA3D0` | These roles have no gameplay effect at Init or AfterRoundStart |
+| Shared Scout/Witness Act, `0x3B09F0`, and BluffAct, `0x3B33E0` | Both callback paths are Day-only, hence inert at the modeled triggers |
+| Confessor Act, `0x3D65D0`, BluffAct, `0x3D6650`, and OnInit, `0x3D6A50` | Both Init routes attempt status 25 with null target |
+| `CharacterStatuses.AddStatus`, `0x363AA0` | Resistance blocks all writes; accepted duplicate status still overwrites the shared target |
+
+The context supplies a board-size bound, physical actor records, outstanding
+continuation counts, and an explicit ordered resume stream. Resume and
+acquisition ordinals are separate. Each resume must identify an available
+continuation; it supplies an acquisition ordinal exactly when raw bluff is
+Unity-null or destroyed. Both ordinal streams must increase, but they need
+not match or be contiguous. Order and the absence of intervening writers are
+caller-established evidence, never derived from positions or registration
+order. Unmodeled board cards may remain outside the actor list.
+
+Each successful resume consumes one outstanding continuation and overwrites
+register-as with null, even if the bluff is already live. A null/destroyed
+bluff runs the selector and overwrites a stale copied role with the selected
+asset's clone. A live bluff suppresses both selection and GiveBluff, retaining
+the independent copied-role pointer, including a null or different supported
+class. Init/AfterRoundStart still repeat on every resume. The trace records
+the previous register-as identity, optional acquisition, selector status
+effect, and ordered real/copied callback dispatches.
+
+Drunk's selector applies Corrupted before selection, including the unique-add
+and shared-self-target semantics. A later Confessor Init can clear that target
+to null while leaving Corrupted active. A resisted Confessor leaves the
+existing target unchanged. Repeated Confessor Init does not append another
+status, but repeats the accepted target write. The final actual-truth and
+appearance predicates remain separate: AppearTruthfull never makes a lying
+actor's callbacks truthful, and AppearLying still outranks it for appearance.
+
+The first focused regressions cover repeated Twin resumes without duplicate
+acquisition, mixed-actor rational weights, separate ordinal streams, Drunk
+and Confessor target ordering, accepted/resisted duplicate statuses, raw versus
+copied identity, destroyed-bluff replacement, and the Evil copied-pointer
+dispatch exception. An unsupported/failing branch rejects the entire replay,
+including when an earlier sibling branch would have succeeded. Limits cover
+resume count, status-list width, path count, and retained state size.
+
+This is not yet full Reveal interleaving. Trailer mode, HealthyBluff, and any
+`onTrigger` subscription are rejected. Other data/callback classes and bluff
+assets are unsupported, rather than pruned from the distribution. The context
+does not execute reinitialization, register-as overrides such as Spy, pending
+callback subscribers, user clicks, or view epilogues. Callers must establish
+that omitted work, including ordinal gaps and view updates, cannot mutate the
+modeled state. Native failure side effects, object identity/clone internals,
+`onActed` delegate identities, and UI rendering are outside the projection.
+No new acquisition-time memory capture is claimed by this checkpoint.
+
+Checkpoint validation: all 538 Rust library tests, the Python suite, all 13
+reverse-engineering tests, release build, formatting, and method-coverage
+integrity checks pass. The installed DLL and metadata SHA-256 values match the
+build manifest. Long gameplay simulations were not rerun because this offline
+module has no callers in scenario generation, validators, or live entry points.
+
 ## Typed import, overlaps, and shared identity
 
 Thirteen target memberships intentionally overlap earlier checked boundaries:

@@ -7,6 +7,7 @@
 //! offline context and fall back atomically when it is unavailable.
 
 pub mod ledger;
+pub mod reveal;
 
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{
