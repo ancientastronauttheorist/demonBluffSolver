@@ -1,0 +1,30 @@
+{
+  "functions": [
+    {
+      "metadata_name": "Character$$RefreshView",
+      "name": "Character.RefreshView",
+      "rva": "0x367B60",
+      "signature": "void Character__RefreshView (Character_o* __this, const MethodInfo* method);"
+    },
+    {
+      "metadata_name": "Character$$UpdateView",
+      "name": "Character.UpdateView",
+      "rva": "0x3695A0",
+      "signature": "void Character__UpdateView (Character_o* __this, const MethodInfo* method);"
+    },
+    {
+      "metadata_name": "Character$$UpdateViewReal",
+      "name": "Character.UpdateViewReal",
+      "rva": "0x3694D0",
+      "signature": "void Character__UpdateViewReal (Character_o* __this, const MethodInfo* method);"
+    }
+  ],
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "mode": "read-only no-analysis export from existing typed project; new method prototypes not applied",
+  "summary": {
+    "requested": 3,
+    "exported": 3,
+    "cancelled": false,
+    "failed": 0
+  }
+}

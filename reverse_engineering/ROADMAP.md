@@ -414,6 +414,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     writer-created continuation counts and validate repeated new-data resumes.
   - [ ] Establish scheduler provenance and enumerate justified interleavings,
     including branch-dependent acquisition events and omitted view epilogues.
+  - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
+    projection for identity sources, retained death presentation, exhausted
+    pickable controls and conditional disguise-icon writes.
+  - [ ] Join audited view-tail effects to ordered Reveal replay with explicit
+    UI-state provenance and close remaining asset/scene callback assumptions.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
     Twin/Spy Start, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before

@@ -171,6 +171,9 @@ one call. The `ordered_reveal_writer_native_v1` projection now composes
 acquisition, conditional Start and current-role Init/AfterRoundStart across
 explicitly ordered resumes, carrying newly created continuation counts.
 Automatic schedule enumeration and view-epilogue composition remain pending.
+The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
+UpdateView, UpdateViewReal and RefreshView, including death-presentation
+creation, preserved icon state and a bounded offline presentation projection.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and
