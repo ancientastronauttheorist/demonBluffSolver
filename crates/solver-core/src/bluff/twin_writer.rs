@@ -1,0 +1,534 @@
+//! Offline projection of one entered Marionette.Act(Start) body.
+//!
+//! The caller establishes dispatch; this is not Character.Act and does not set
+//! its latch. Stops after the two InitWithNoReset calls and immediate coroutine
+//! role clones. No pending Reveal is resumed or ordered here. Native objects
+//! must be valid, with no state-change subscribers or presentation-side writers.
+use super::ledger::{LedgerError, Probability};
+use super::reveal::{
+    replay_reveal_callbacks, BluffReference, CallbackRole, DataRole, RevealContext, RoleSlot,
+    REVEAL_CALLBACKS_START_NATIVE_V3,
+};
+use crate::knowledge_base::{get_card, Faction};
+use serde::{Deserialize, Serialize};
+use std::collections::{BTreeMap, BTreeSet};
+
+pub const TWIN_WRITER_NATIVE_V1: &str = "twin_start_writer_native_v1";
+const DEAD: i32 = 20;
+const HIDDEN: i32 = 5;
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct BodyState {
+    pub state: i32,
+    pub previous_state: i32,
+    pub revealed: bool,
+    pub killed_by_demon: bool,
+    pub pickable_uses: i32,
+    pub acted_info_count: u32,
+    pub created_dead_presentation: bool,
+    pub on_state_change_subscribed: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TwinWriterContext {
+    pub rule_version: String,
+    /// V3 input, with explicit latches and no scheduled resume events.
+    pub reveal: RevealContext,
+    /// Exact global CurrentCharacters order, preserving repeated references.
+    pub current_order: Vec<u8>,
+    pub bodies: BTreeMap<u8, BodyState>,
+    pub position: u8,
+    /// The already-entered concrete Twin action may occupy either slot.
+    pub copied_slot: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct ReplacementTrace {
+    pub position: u8,
+    pub old_data: DataRole,
+    pub new_data: DataRole,
+    pub continuations_after: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct TwinWriterPath {
+    pub probability: Probability,
+    pub context: TwinWriterContext,
+    pub slot: RoleSlot,
+    pub demon_occurrence: Option<usize>,
+    pub demon_position: Option<u8>,
+    /// 0 = previous, 1 = next in the alive ring.
+    pub neighbor_occurrence: Option<u8>,
+    pub rng_draw_count: u8,
+    pub replacements: Vec<ReplacementTrace>,
+}
+
+fn clone_role(data: DataRole) -> CallbackRole {
+    match data {
+        DataRole::Lilis => CallbackRole::Lilis,
+        DataRole::TwinMinion => CallbackRole::TwinMinion,
+        DataRole::Drunk => CallbackRole::Drunk,
+        DataRole::Spy { .. } => CallbackRole::Spy,
+    }
+}
+
+fn replace(
+    context: &mut TwinWriterContext,
+    position: u8,
+    data: DataRole,
+) -> Result<ReplacementTrace, LedgerError> {
+    let actor = context
+        .reveal
+        .actors
+        .iter_mut()
+        .find(|a| a.position == position)
+        .ok_or(LedgerError::InvalidContext)?;
+    let old_data = actor.data_role;
+    actor.character_start_acted = Some(false);
+    actor.bluff = BluffReference::Null;
+    actor.data_role = data;
+    actor.action_role = clone_role(data);
+    actor.remaining_continuations = actor
+        .remaining_continuations
+        .checked_add(1)
+        .ok_or(LedgerError::Capacity)?;
+    let body = context
+        .bodies
+        .get_mut(&position)
+        .ok_or(LedgerError::InvalidContext)?;
+    body.acted_info_count = 0;
+    body.created_dead_presentation = false;
+    body.revealed = false;
+    body.killed_by_demon = false;
+    body.pickable_uses = 1;
+    body.previous_state = body.state;
+    body.state = HIDDEN;
+    Ok(ReplacementTrace {
+        position,
+        old_data,
+        new_data: data,
+        continuations_after: actor.remaining_continuations,
+    })
+}
+
+pub fn replay_twin_start(context: &TwinWriterContext) -> Result<Vec<TwinWriterPath>, LedgerError> {
+    if context.rule_version != TWIN_WRITER_NATIVE_V1
+        || context.reveal.rule_version != REVEAL_CALLBACKS_START_NATIVE_V3
+        || !context.reveal.resumes.is_empty()
+        || context.current_order.len() > 256
+        || context
+            .bodies
+            .values()
+            .any(|b| b.on_state_change_subscribed)
+    {
+        return Err(LedgerError::InvalidContext);
+    }
+    // Shared validation of assets, explicit cache identity, statuses and latches.
+    replay_reveal_callbacks(&context.reveal)?;
+    let positions: BTreeSet<_> = context.reveal.actors.iter().map(|a| a.position).collect();
+    if positions != context.bodies.keys().copied().collect()
+        || positions != context.current_order.iter().copied().collect()
+    {
+        return Err(LedgerError::InvalidContext);
+    }
+    let source = context
+        .reveal
+        .actors
+        .iter()
+        .find(|a| a.position == context.position)
+        .ok_or(LedgerError::InvalidContext)?;
+    if (if context.copied_slot {
+        source.bluff_role
+    } else {
+        Some(source.action_role)
+    }) != Some(CallbackRole::TwinMinion)
+    {
+        return Err(LedgerError::InvalidContext);
+    }
+    let demons: Vec<_> = context
+        .current_order
+        .iter()
+        .copied()
+        .enumerate()
+        .filter(|(_, position)| {
+            let actor = context
+                .reveal
+                .actors
+                .iter()
+                .find(|a| a.position == *position)
+                .unwrap();
+            actor
+                .register_as
+                .as_ref()
+                .map_or(actor.data_role == DataRole::Lilis, |role| {
+                    get_card(role).unwrap().faction == Faction::Demon
+                })
+        })
+        .collect();
+    let pools = &context.reveal.pools;
+    let entries = context.current_order.len()
+        + context.bodies.len() * 10
+        + context.reveal.spy_caches.len()
+        + [
+            &pools.unique,
+            &pools.duplicate,
+            &pools.must_include,
+            &pools.script.villagers,
+            &pools.script.outcasts,
+            &pools.script.minions,
+            &pools.script.demons,
+        ]
+        .iter()
+        .map(|p| p.len())
+        .sum::<usize>()
+        + context
+            .reveal
+            .actors
+            .iter()
+            .map(|a| 16 + a.statuses.values.len() + a.statuses.resistance.len())
+            .sum::<usize>()
+        + 2;
+    if entries
+        .checked_mul((demons.len() * 2).max(1))
+        .is_none_or(|n| n > 1_048_576)
+    {
+        return Err(LedgerError::Capacity);
+    }
+    let base = TwinWriterPath {
+        probability: Probability {
+            numerator: 1,
+            denominator: 1,
+        },
+        context: context.clone(),
+        slot: if context.copied_slot {
+            RoleSlot::Bluff
+        } else {
+            RoleSlot::Real
+        },
+        demon_occurrence: None,
+        demon_position: None,
+        neighbor_occurrence: None,
+        rng_draw_count: 0,
+        replacements: vec![],
+    };
+    if demons.is_empty() {
+        return Ok(vec![base]);
+    }
+    let alive: Vec<_> = context
+        .current_order
+        .iter()
+        .copied()
+        .filter(|p| context.bodies[p].state != DEAD)
+        .collect();
+    let mut paths = Vec::new();
+    for (occurrence, demon) in &demons {
+        // Native uses the first matching physical reference in the alive list.
+        // A dead Demon has positive draw mass but no neighbor support: reject
+        // the whole invocation, never condition on surviving branches.
+        let index = alive
+            .iter()
+            .position(|p| p == demon)
+            .ok_or(LedgerError::EmptySupport)?;
+        let neighbors = [
+            alive[(index + alive.len() - 1) % alive.len()],
+            alive[(index + 1) % alive.len()],
+        ];
+        for (side, neighbor) in neighbors.into_iter().enumerate() {
+            let mut path = base.clone();
+            path.probability = path.probability.multiply(1, (demons.len() * 2) as u64)?;
+            path.demon_occurrence = Some(*occurrence);
+            path.demon_position = Some(*demon);
+            path.neighbor_occurrence = Some(side as u8);
+            path.rng_draw_count = 2;
+            let saved = context
+                .reveal
+                .actors
+                .iter()
+                .find(|a| a.position == neighbor)
+                .unwrap()
+                .data_role;
+            path.replacements
+                .push(replace(&mut path.context, neighbor, source.data_role)?);
+            path.replacements
+                .push(replace(&mut path.context, context.position, saved)?);
+            paths.push(path);
+        }
+    }
+    Ok(paths)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::bluff::ledger::{ScriptLists, SelectorPools};
+    use crate::bluff::reveal::{BluffRole, ResumeEvent, RevealActor, StatusState};
+
+    fn input() -> TwinWriterContext {
+        let actors = [DataRole::TwinMinion, DataRole::Lilis, DataRole::Drunk]
+            .into_iter()
+            .enumerate()
+            .map(|(i, data)| RevealActor {
+                position: (i + 1) as u8,
+                data_role: data,
+                action_role: clone_role(data),
+                runtime_evil: i < 2,
+                bluff: BluffReference::Live {
+                    role: BluffRole::Witness,
+                },
+                bluff_role: Some(CallbackRole::Confessor),
+                register_as: None,
+                statuses: StatusState {
+                    values: vec![30],
+                    resistance: vec![10],
+                    target_position: Some(2),
+                },
+                remaining_continuations: 1,
+                on_trigger_subscribed: false,
+                character_start_acted: Some(true),
+            })
+            .collect();
+        TwinWriterContext {
+            rule_version: TWIN_WRITER_NATIVE_V1.into(),
+            position: 1,
+            copied_slot: false,
+            current_order: vec![1, 2, 3],
+            bodies: (1..=3)
+                .map(|p| {
+                    (
+                        p,
+                        BodyState {
+                            state: 10,
+                            previous_state: 5,
+                            revealed: true,
+                            killed_by_demon: true,
+                            pickable_uses: 4,
+                            acted_info_count: 3,
+                            created_dead_presentation: true,
+                            on_state_change_subscribed: false,
+                        },
+                    )
+                })
+                .collect(),
+            reveal: RevealContext {
+                rule_version: REVEAL_CALLBACKS_START_NATIVE_V3.into(),
+                board_size: 3,
+                trailer_mode: false,
+                actors,
+                resumes: vec![],
+                spy_caches: BTreeMap::new(),
+                pools: SelectorPools {
+                    unique: vec!["Witness".into()],
+                    duplicate: vec!["Scout".into()],
+                    must_include: vec![],
+                    script: ScriptLists {
+                        villagers: vec!["Witness".into()],
+                        outcasts: vec!["Drunk".into()],
+                        minions: vec!["Twin Minion".into()],
+                        demons: vec!["Lilis".into()],
+                    },
+                },
+            },
+        }
+    }
+
+    #[test]
+    fn distinct_swap_resets_only_reinitialized_storage() {
+        let original = input();
+        let paths = replay_twin_start(&original).unwrap();
+        assert_eq!(paths.len(), 2);
+        let path = &paths[1];
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 2
+            }
+        );
+        assert_eq!(
+            path.replacements
+                .iter()
+                .map(|r| r.position)
+                .collect::<Vec<_>>(),
+            vec![3, 1]
+        );
+        assert_eq!(path.context.reveal.actors[0].data_role, DataRole::Drunk);
+        assert_eq!(
+            path.context.reveal.actors[2].action_role,
+            CallbackRole::TwinMinion
+        );
+        for index in [0, 2] {
+            let a = &path.context.reveal.actors[index];
+            assert_eq!(a.runtime_evil, original.reveal.actors[index].runtime_evil);
+            assert_eq!(a.statuses, original.reveal.actors[index].statuses);
+            assert_eq!(a.bluff, BluffReference::Null);
+            assert_eq!(a.bluff_role, Some(CallbackRole::Confessor));
+            assert_eq!(a.character_start_acted, Some(false));
+            assert_eq!(a.remaining_continuations, 2);
+            let b = &path.context.bodies[&a.position];
+            assert_eq!(
+                (
+                    b.state,
+                    b.previous_state,
+                    b.pickable_uses,
+                    b.acted_info_count
+                ),
+                (5, 10, 1, 0)
+            );
+            assert!(!b.revealed && !b.killed_by_demon && !b.created_dead_presentation);
+        }
+        assert_eq!(path.context.reveal.pools, original.reveal.pools);
+        assert_eq!(path.context.reveal.actors[1], original.reveal.actors[1]);
+    }
+
+    #[test]
+    fn self_swap_runs_both_writes_and_retains_stale_registration() {
+        let mut original = input();
+        original.reveal.actors[0].register_as = Some("Scout".into());
+        let path = replay_twin_start(&original).unwrap().remove(0);
+        assert_eq!(
+            path.replacements
+                .iter()
+                .map(|r| r.continuations_after)
+                .collect::<Vec<_>>(),
+            vec![2, 3]
+        );
+        assert_eq!(path.context.bodies[&1].previous_state, HIDDEN);
+        assert_eq!(
+            path.context.reveal.actors[0].register_as.as_deref(),
+            Some("Scout")
+        );
+        assert_eq!(
+            path.context.reveal.actors[0].data_role,
+            DataRole::TwinMinion
+        );
+        assert_eq!(path.rng_draw_count, 2);
+    }
+
+    #[test]
+    fn registered_demon_overrides_data_and_dead_mass_is_not_pruned() {
+        let mut original = input();
+        original.reveal.actors[1].register_as = Some("Scout".into());
+        let noop = replay_twin_start(&original).unwrap().remove(0);
+        assert_eq!(noop.context, original);
+        assert_eq!(noop.rng_draw_count, 0);
+        original.reveal.actors[2].register_as = Some("Lilis".into());
+        assert!(replay_twin_start(&original)
+            .unwrap()
+            .iter()
+            .all(|p| p.demon_position == Some(3)));
+        original.reveal.actors[1].register_as = None;
+        original.bodies.get_mut(&3).unwrap().state = DEAD;
+        assert_eq!(replay_twin_start(&original), Err(LedgerError::EmptySupport));
+    }
+
+    #[test]
+    fn duplicate_global_references_use_first_alive_index_and_keep_draw_mass() {
+        let mut original = input();
+        original.current_order = vec![2, 1, 2, 3];
+        let paths = replay_twin_start(&original).unwrap();
+        assert_eq!(paths.len(), 4);
+        assert_eq!(
+            paths
+                .iter()
+                .map(|p| p.replacements[0].position)
+                .collect::<Vec<_>>(),
+            vec![3, 1, 3, 1]
+        );
+        assert_eq!(
+            paths.iter().map(|p| p.demon_occurrence).collect::<Vec<_>>(),
+            vec![Some(0), Some(0), Some(2), Some(2)]
+        );
+        assert!(paths.iter().all(|p| p.probability
+            == Probability {
+                numerator: 1,
+                denominator: 4
+            }));
+    }
+
+    #[test]
+    fn one_alive_card_keeps_two_identical_neighbor_occurrences() {
+        let mut original = input();
+        original.bodies.get_mut(&1).unwrap().state = DEAD;
+        original.bodies.get_mut(&3).unwrap().state = DEAD;
+        let paths = replay_twin_start(&original).unwrap();
+        assert_eq!(paths.len(), 2);
+        assert!(paths.iter().all(|p| p.replacements[0].position == 2));
+        assert_eq!(paths[0].context.bodies[&1].previous_state, DEAD);
+        assert_eq!(paths[0].context.bodies[&1].state, HIDDEN);
+    }
+
+    #[test]
+    fn copied_twin_moves_actual_data_and_spy_cache_identity() {
+        let mut original = input();
+        original.copied_slot = true;
+        original.reveal.actors[0].data_role = DataRole::Spy { cache_key: 9 };
+        original.reveal.actors[0].action_role = CallbackRole::Scout;
+        original.reveal.actors[0].bluff_role = Some(CallbackRole::TwinMinion);
+        original.reveal.spy_caches.insert(
+            9,
+            BluffReference::Live {
+                role: BluffRole::Scout,
+            },
+        );
+        let path = replay_twin_start(&original).unwrap().remove(1);
+        assert_eq!(
+            path.context.reveal.actors[2].data_role,
+            DataRole::Spy { cache_key: 9 }
+        );
+        assert_eq!(path.context.reveal.actors[2].action_role, CallbackRole::Spy);
+        assert_eq!(path.context.reveal.spy_caches, original.reveal.spy_caches);
+    }
+
+    #[test]
+    fn moved_drunk_can_resume_from_new_data_with_preserved_resistance() {
+        let mut reveal = replay_twin_start(&input())
+            .unwrap()
+            .remove(1)
+            .context
+            .reveal;
+        reveal.resumes = vec![ResumeEvent {
+            position: 1,
+            resume_ordinal: 0,
+            acquisition_ordinal: Some(0),
+        }];
+        let path = replay_reveal_callbacks(&reveal).unwrap().remove(0);
+        assert_eq!(path.actors[0].remaining_continuations, 1);
+        assert_eq!(path.actors[0].character_start_acted, Some(true));
+        assert!(!path.actors[0].statuses.values.contains(&10));
+        assert_eq!(path.actors[2].remaining_continuations, 2);
+    }
+
+    #[test]
+    fn provenance_and_capacity_fail_atomically() {
+        let mut original = input();
+        original.reveal.actors[0].remaining_continuations = u16::MAX - 1;
+        assert_eq!(replay_twin_start(&original), Err(LedgerError::Capacity));
+        original = input();
+        original.current_order.pop();
+        assert_eq!(
+            replay_twin_start(&original),
+            Err(LedgerError::InvalidContext)
+        );
+        original = input();
+        original
+            .bodies
+            .get_mut(&1)
+            .unwrap()
+            .on_state_change_subscribed = true;
+        assert_eq!(
+            replay_twin_start(&original),
+            Err(LedgerError::InvalidContext)
+        );
+        original = input();
+        original.current_order = vec![2; 257];
+        assert_eq!(
+            replay_twin_start(&original),
+            Err(LedgerError::InvalidContext)
+        );
+        let mut json = serde_json::to_value(input()).unwrap();
+        json["unknown"] = true.into();
+        assert!(serde_json::from_value::<TwinWriterContext>(json).is_err());
+    }
+}

@@ -8,6 +8,7 @@
 
 pub mod ledger;
 pub mod reveal;
+pub mod twin_writer;
 
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{

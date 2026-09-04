@@ -176,6 +176,59 @@ finds and dispatches that role at its new physical position. A role whose slot
 already passed does not receive a second ordered Start merely because it moved.
 Twin Minion's own slot does not restart the newly written copy on `n`.
 
+## Offline Start writer kernel
+
+`bluff::twin_writer::replay_twin_start` implements a bounded offline projection
+of an already-entered `Marionette.Act(Start)` (`0x3E4090`). Its explicit
+`twin_start_writer_native_v1` input carries a v3 Reveal context with no resume
+events, the exact global CurrentCharacters occurrence order, body state, and
+the entered real/copied Twin action slot. It does not infer dispatch from data
+identity or set Character.Act's latch. Callers must establish that method entry;
+the enclosing Character.Act dispatch and subsequent copied-slot reread are not
+yet composed with this kernel.
+
+The input covers every distinct global body and preserves repeated references.
+Its registered identity is explicitly null or live; destroyed register-as
+references must first be represented as null by a provenance-aware caller.
+Canonical role assets determine registered Demon type, with current Lilis data
+as the null-register fallback in this restricted data-role domain. Runtime
+alignment and raw bluff do not filter the Demon pool. Both RNG draws retain
+occurrence mass, including equal previous/next neighbors. Repeated Demon
+references use their first match in the alive list. Any selectable dead Demon
+rejects the entire call with empty support, rather than conditioning away its
+native failure branch. No Demon gives an identity result with zero RNG draws.
+
+The ordered replacements project `InitWithNoReset` (`0x365720`) and the first
+`DelayReveal.MoveNext` entry (`0x3756B0`): reset the Start latch, clear raw bluff,
+install current data and immediately cloned action role, increment pending
+continuations, clear acted-information count, revealed/killed flags and dead
+presentation, set pickable uses to one, and assign previous/current state before
+the second replacement. Self-swap performs both calls, so previous state ends
+Hidden and the same body gains two continuations. Register-as, copied bluff
+role, runtime alignment, statuses/resistance/target and Spy data-role cache
+identity remain unchanged. No pool draw or delayed Reveal occurs in this call.
+
+The kernel assumes valid native objects and successful coroutine registration.
+State-change subscribers and presentation-side gameplay writers are excluded;
+the context explicitly rejects subscribed bodies. UI objects, acted-info
+contents, opaque runtimeData and role-object internals are not reconstructed.
+Spy cache identity is transported, but its action clone's cache is outside the
+modeled trigger surface. The 256-occurrence input cap, retained-entry budget
+and checked continuation increments reject atomically without partial outputs.
+
+Eight regressions cover distinct/self swaps, stale registration, registered
+Demon filtering and dead mass, duplicate global references, a one-card alive
+ring, copied Twin with Spy data, inherited resistance on a moved Drunk's next
+Reveal, and provenance/capacity rejection. The moved-Drunk example composes
+only the post-writer state with a caller-specified later resume; it does not
+claim a complete surrounding Character.Act or scheduler interleaving.
+
+Checkpoint validation passed 564 Rust library tests, 778 Python tests, 13
+reverse-engineering tests, release build, formatting and coverage-ledger
+integrity. No live/scenario caller changed, so the long simulation suite was
+not rerun. This milestone reuses existing native evidence and does not increase
+the method coverage counts.
+
 ## InitWithNoReset and delayed reveal
 
 Each replacement hides the acted-information object, clears `actedInfos`,
