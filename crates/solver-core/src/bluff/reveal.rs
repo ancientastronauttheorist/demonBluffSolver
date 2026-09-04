@@ -368,11 +368,15 @@ fn validate(context: &RevealContext) -> Result<(), LedgerError> {
     Ok(())
 }
 
-fn callbacks(actor: &mut RevealActor) -> Result<Vec<CallbackTrace>, LedgerError> {
+pub(super) fn callbacks(
+    actor: &mut RevealActor,
+    include_start: bool,
+) -> Result<Vec<CallbackTrace>, LedgerError> {
     let mut result = Vec::new();
     for trigger in [Trigger::Start, Trigger::Init, Trigger::AfterRoundStart] {
         if trigger == Trigger::Start {
-            if !actor.statuses.values.contains(&HEALTHY_BLUFF)
+            if !include_start
+                || !actor.statuses.values.contains(&HEALTHY_BLUFF)
                 || actor.character_start_acted == Some(true)
             {
                 continue;
@@ -475,6 +479,7 @@ fn spy_resume(
     event: &ResumeEvent,
     previous_register_as: &Option<String>,
     cache_key: u16,
+    include_callbacks: bool,
 ) -> Result<Vec<RevealPath>, LedgerError> {
     let previous_cache = *path
         .spy_caches
@@ -524,7 +529,11 @@ fn spy_resume(
                 role,
             }
         });
-        let callbacks = callbacks(actor)?;
+        let callbacks = if include_callbacks {
+            callbacks(actor, true)?
+        } else {
+            vec![]
+        };
         let rng_draw_count = u8::from(matches!(source, SpyRegisterSource::ScriptVillager { .. }));
         branch.trace.push(ResumeTrace {
             event: event.clone(),
@@ -550,6 +559,21 @@ fn spy_resume(
 /// bodies consume another pending continuation but do not reacquire a live bluff.
 /// Any unsupported branch rejects the whole invocation; no partial worlds leak.
 pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath>, LedgerError> {
+    replay_phase(context, true)
+}
+
+/// Private phase boundary for composing board writers after acquisition.
+pub(super) fn replay_acquisition(context: &RevealContext) -> Result<Vec<RevealPath>, LedgerError> {
+    if context.resumes.len() != 1 {
+        return Err(LedgerError::InvalidContext);
+    }
+    replay_phase(context, false)
+}
+
+fn replay_phase(
+    context: &RevealContext,
+    include_callbacks: bool,
+) -> Result<Vec<RevealPath>, LedgerError> {
     validate(context)?;
     let mut paths = vec![RevealPath {
         probability: Probability {
@@ -579,9 +603,14 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
             actor.remaining_continuations -= 1;
             let previous_register_as = actor.register_as.take();
             if let DataRole::Spy { cache_key } = actor.data_role {
-                for branch in
-                    spy_resume(&path, actor_index, event, &previous_register_as, cache_key)?
-                {
+                for branch in spy_resume(
+                    &path,
+                    actor_index,
+                    event,
+                    &previous_register_as,
+                    cache_key,
+                    include_callbacks,
+                )? {
                     push_bounded(&mut next, branch, &mut entries)?;
                 }
                 continue;
@@ -624,7 +653,11 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     let actor = &mut branch.actors[actor_index];
                     actor.bluff = BluffReference::Live { role };
                     actor.bluff_role = Some(role.callback());
-                    let callbacks = callbacks(actor)?;
+                    let callbacks = if include_callbacks {
+                        callbacks(actor, true)?
+                    } else {
+                        vec![]
+                    };
                     branch.trace.push(ResumeTrace {
                         event: event.clone(),
                         previous_register_as: previous_register_as.clone(),
@@ -637,7 +670,11 @@ pub fn replay_reveal_callbacks(context: &RevealContext) -> Result<Vec<RevealPath
                     push_bounded(&mut next, branch, &mut entries)?;
                 }
             } else {
-                let callbacks = callbacks(actor)?;
+                let callbacks = if include_callbacks {
+                    callbacks(actor, true)?
+                } else {
+                    vec![]
+                };
                 path.trace.push(ResumeTrace {
                     event: event.clone(),
                     previous_register_as,

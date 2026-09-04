@@ -167,7 +167,10 @@ now reconstructs the weighted swap, ordered field resets and immediate role
 clones, including two new continuations on self-swap. A separate
 `character_start_native_v1` projection now joins it to Character.Act's guard,
 frozen dispatch and subsequent copied callback, including two Twin swaps in
-one call. Joining the composed Start to the Reveal scheduler remains pending.
+one call. The `ordered_reveal_writer_native_v1` projection now composes
+acquisition, conditional Start and current-role Init/AfterRoundStart across
+explicitly ordered resumes, carrying newly created continuation counts.
+Automatic schedule enumeration and view-epilogue composition remain pending.
 The first per-role boundaries add all ten Slayer methods and all seven Wretch
 methods (the latter is managed internally as `Recluse`). Their paired
 [`Slayer`](notes/roles/gameplay_role_slayer.md) and

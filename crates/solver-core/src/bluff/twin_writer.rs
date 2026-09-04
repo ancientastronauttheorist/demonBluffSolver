@@ -277,6 +277,9 @@ mod tests {
     };
     use crate::bluff::ledger::{ScriptLists, SelectorPools};
     use crate::bluff::reveal::{BluffRole, ResumeEvent, RevealActor, StatusState};
+    use crate::bluff::reveal_writer::{
+        replay_reveal_writers, RevealWriterContext, REVEAL_WRITER_NATIVE_V1,
+    };
 
     fn input() -> TwinWriterContext {
         let actors = [DataRole::TwinMinion, DataRole::Lilis, DataRole::Drunk]
@@ -353,6 +356,261 @@ mod tests {
             rule_version: CHARACTER_START_NATIVE_V1.into(),
             board,
         }
+    }
+
+    fn writer_input() -> RevealWriterContext {
+        RevealWriterContext {
+            rule_version: REVEAL_WRITER_NATIVE_V1.into(),
+            board: start_input().board,
+            resumes: vec![ResumeEvent {
+                position: 1,
+                resume_ordinal: 0,
+                acquisition_ordinal: None,
+            }],
+        }
+    }
+
+    #[test]
+    fn reveal_writer_acquires_once_before_swap_then_dispatches_new_role() {
+        let mut input = writer_input();
+        input.board.reveal.actors[0].bluff = BluffReference::Null;
+        input.resumes[0].acquisition_ordinal = Some(0);
+        let paths = replay_reveal_writers(&input).unwrap();
+        assert_eq!(paths.len(), 4);
+        for path in &paths {
+            let trace = &path.trace[0];
+            assert!(trace.acquisition.acquisition.is_some());
+            assert!(trace.acquisition.callbacks.is_empty());
+            assert_eq!(path.board.reveal.actors[0].bluff, BluffReference::Null);
+            assert_eq!(
+                path.board.reveal.actors[0].character_start_acted,
+                Some(false)
+            );
+            assert_eq!(
+                trace.callbacks[0].role,
+                path.board.reveal.actors[0].action_role
+            );
+            assert!(trace
+                .callbacks
+                .iter()
+                .all(|c| c.trigger != crate::bluff::reveal::Trigger::Start));
+            assert_eq!(trace.start.as_ref().unwrap().callbacks.len(), 2);
+        }
+        assert_eq!(
+            paths.iter().map(|p| p.probability).collect::<Vec<_>>(),
+            vec![
+                Probability {
+                    numerator: 1,
+                    denominator: 5
+                },
+                Probability {
+                    numerator: 1,
+                    denominator: 5
+                },
+                Probability {
+                    numerator: 3,
+                    denominator: 10
+                },
+                Probability {
+                    numerator: 3,
+                    denominator: 10
+                }
+            ]
+        );
+    }
+
+    #[test]
+    fn reveal_writer_later_resume_uses_new_data_and_created_continuation() {
+        let mut input = writer_input();
+        input.resumes.push(ResumeEvent {
+            position: 1,
+            resume_ordinal: 1,
+            acquisition_ordinal: Some(0),
+        });
+        let paths = replay_reveal_writers(&input).unwrap();
+        assert_eq!(paths.len(), 5);
+        let drunk = paths
+            .iter()
+            .find(|p| p.trace[1].acquisition.selector_status.is_some())
+            .unwrap();
+        assert_eq!(
+            drunk.probability,
+            Probability {
+                numerator: 1,
+                denominator: 2
+            }
+        );
+        assert_eq!(drunk.board.reveal.actors[0].data_role, DataRole::Drunk);
+        assert_eq!(drunk.board.reveal.actors[0].remaining_continuations, 0);
+        assert_eq!(
+            drunk.board.reveal.actors[0].character_start_acted,
+            Some(true)
+        );
+        assert_eq!(drunk.board.reveal.actors[2].remaining_continuations, 2);
+        assert!(
+            !drunk.trace[1]
+                .acquisition
+                .selector_status
+                .as_ref()
+                .unwrap()
+                .accepted
+        );
+        assert_eq!(
+            paths
+                .iter()
+                .map(|p| p.probability.numerator * (20 / p.probability.denominator))
+                .sum::<u64>(),
+            20
+        );
+    }
+
+    #[test]
+    fn reveal_writer_init_confessor_runs_after_swap_and_clears_target() {
+        let path = replay_reveal_writers(&writer_input()).unwrap().remove(1);
+        assert_eq!(path.trace[0].callbacks[0].role, CallbackRole::Drunk);
+        assert_eq!(path.trace[0].callbacks[1].role, CallbackRole::Confessor);
+        assert!(
+            path.trace[0].callbacks[1]
+                .status_application
+                .as_ref()
+                .unwrap()
+                .inserted
+        );
+        assert_eq!(path.board.reveal.actors[0].statuses.target_position, None);
+        assert_eq!(
+            path.board.reveal.actors[2].statuses.target_position,
+            Some(2)
+        );
+        assert_eq!(path.board.reveal.actors[0].remaining_continuations, 1);
+    }
+
+    #[test]
+    fn reveal_writer_no_writer_matches_original_v3_callback_projection() {
+        let mut input = writer_input();
+        input.board.reveal.actors[0].action_role = CallbackRole::Drunk;
+        input.board.reveal.actors[0].statuses.resistance.clear();
+        let mut old_input = input.board.reveal.clone();
+        old_input.resumes = input.resumes.clone();
+        let old = replay_reveal_callbacks(&old_input).unwrap().remove(0);
+        let new = replay_reveal_writers(&input).unwrap().remove(0);
+        assert_eq!(new.board.reveal.actors, old.actors);
+        assert_eq!(new.board.reveal.pools, old.pools);
+        assert_eq!(new.probability, old.probability);
+        let start = new.trace[0].start.as_ref().unwrap();
+        assert_eq!(
+            start.callbacks.len() + new.trace[0].callbacks.len(),
+            old.trace[0].callbacks.len()
+        );
+        assert_eq!(new.trace[0].callbacks, old.trace[0].callbacks[2..]);
+    }
+
+    #[test]
+    fn reveal_writer_spy_acquisition_replaces_unsupported_copied_slot_before_guard() {
+        let mut input = writer_input();
+        let actor = &mut input.board.reveal.actors[0];
+        actor.data_role = DataRole::Spy { cache_key: 7 };
+        actor.action_role = CallbackRole::Scout;
+        actor.bluff_role = Some(CallbackRole::Spy);
+        actor.bluff = BluffReference::Null;
+        input
+            .board
+            .reveal
+            .spy_caches
+            .insert(7, BluffReference::Null);
+        input.resumes[0].acquisition_ordinal = Some(0);
+        let result = replay_reveal_writers(&input).unwrap();
+        assert_eq!(result.len(), 1);
+        let path = &result[0];
+        assert!(path.trace[0].acquisition.spy_register_as.is_some());
+        assert!(path.trace[0].acquisition.spy_acquisition.is_some());
+        assert_eq!(
+            path.trace[0].start.as_ref().unwrap().callbacks[1].role,
+            CallbackRole::Witness
+        );
+        assert_eq!(
+            path.board.reveal.actors[0].register_as.as_deref(),
+            Some("Witness")
+        );
+    }
+
+    #[test]
+    fn reveal_writer_distinguishes_absent_start_from_latched_start() {
+        let mut input = writer_input();
+        input.board.reveal.actors[0].statuses.values.clear();
+        let absent = replay_reveal_writers(&input).unwrap().remove(0);
+        assert!(absent.trace[0].start.is_none());
+        assert_eq!(
+            absent.board.reveal.actors[0].character_start_acted,
+            Some(false)
+        );
+        input.board.reveal.actors[0].statuses.values.push(30);
+        input.board.reveal.actors[0].character_start_acted = Some(true);
+        let latched = replay_reveal_writers(&input).unwrap().remove(0);
+        let start = latched.trace[0].start.as_ref().unwrap();
+        assert_eq!(start.initial_lying, None);
+        assert!(start.callbacks.is_empty());
+        assert_eq!(latched.trace[0].callbacks.len(), 4);
+    }
+
+    #[test]
+    fn reveal_writer_branch_dependent_acquisition_provenance_fails_whole_replay() {
+        let mut input = writer_input();
+        input.resumes.push(ResumeEvent {
+            position: 1,
+            resume_ordinal: 1,
+            acquisition_ordinal: Some(0),
+        });
+        // Distinct first swap -> Drunk leaves live bluff; self-swap branches
+        // clear it again. Neither single acquisition assertion fits all paths.
+        for acquisition in [None, Some(1)] {
+            let mut fork = input.clone();
+            fork.resumes.push(ResumeEvent {
+                position: 1,
+                resume_ordinal: 2,
+                acquisition_ordinal: acquisition,
+            });
+            assert_eq!(
+                replay_reveal_writers(&fork),
+                Err(LedgerError::InvalidContext)
+            );
+        }
+    }
+
+    #[test]
+    fn reveal_writer_validates_global_ordinals_and_pending_provenance() {
+        let mut input = writer_input();
+        input.resumes.push(input.resumes[0].clone());
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = writer_input();
+        input.board.reveal.actors[0].remaining_continuations = 0;
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        input = writer_input();
+        input.board.reveal.actors[0].bluff = BluffReference::Null;
+        input.resumes = vec![
+            ResumeEvent {
+                position: 1,
+                resume_ordinal: 0,
+                acquisition_ordinal: Some(3),
+            },
+            ResumeEvent {
+                position: 1,
+                resume_ordinal: 1,
+                acquisition_ordinal: Some(2),
+            },
+        ];
+        assert_eq!(
+            replay_reveal_writers(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        let mut json = serde_json::to_value(writer_input()).unwrap();
+        json["scheduler_guessed"] = true.into();
+        assert!(serde_json::from_value::<RevealWriterContext>(json).is_err());
     }
 
     #[test]

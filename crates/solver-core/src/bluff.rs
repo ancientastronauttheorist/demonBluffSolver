@@ -9,6 +9,7 @@
 pub mod ledger;
 pub mod character_start;
 pub mod reveal;
+pub mod reveal_writer;
 pub mod twin_writer;
 
 use crate::knowledge_base::{get_card, Faction};

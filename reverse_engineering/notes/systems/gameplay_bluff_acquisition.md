@@ -753,6 +753,63 @@ engineering tests, release build, rustfmt and coverage-ledger integrity passed.
 The long simulation suite was not rerun for this isolated offline API change;
 no live bridge or scenario generation path calls this module.
 
+### Ordered Reveal writer composition
+
+`bluff::reveal_writer::replay_reveal_writers` adds the separate
+`ordered_reveal_writer_native_v1` contract. It combines the existing selector,
+Spy register-as/cache, Character.Act(Start), and Twin writer kernels with the
+final Init/AfterRoundStart callbacks. A complete v3 writer board and up to 16
+caller-proven resume events are required. Embedded board resumes must be empty,
+and the real/copied slot is chosen internally. Event resume ordinals and
+acquisition ordinals are independently strictly increasing across the whole
+input, rather than resetting at each internal one-event call.
+
+Each event consumes one existing continuation before register-as/acquisition.
+An internal acquisition-only phase preserves the old v1/v2/v3 public Reveal
+behavior while exposing the precise point before HealthyBluff's Start request.
+Drunk selection/status effects and Spy cache behavior are shared with the
+existing implementation rather than reimplemented. If HealthyBluff is present,
+the composed Character.Act(Start) runs; otherwise no Start is requested. The
+trace distinguishes absent Start from requested-but-latched Start.
+
+After Start, Init and AfterRoundStart read the current real and copied roles.
+They do not repeat acquisition or Start even if Twin just cleared raw bluff,
+reset the latch and cloned another real role. A later proven continuation
+instead reads that body's then-current data and may acquire another bluff.
+Both inherited pending continuations and writer-created continuations are
+counted on physical bodies. No identity/order is assigned to otherwise
+indistinguishable pending coroutine instances.
+
+Trace entries separate acquisition, optional Start, and final callbacks.
+Acquisition entries retain the selector/Spy details but have empty callback
+arrays. Exact rational probabilities multiply across acquisition and each
+writer's occurrence draws. Whole-replay rejection applies to unsupported
+positive-mass paths, exhausted continuation counts, divergent acquisition
+assertions, or capacity limits; no conditional pruning or renormalization.
+For example, after self-versus-distinct Twin swaps, a later source resume can
+run either Minion or Drunk acquisition. A still-later fixed acquisition flag
+may fit only some branches and must then reject the entire replay.
+
+This is a projection through AfterRoundStart, not a claim that all of
+Character.Reveal's presentation epilogue is reconstructed. Native
+Character.Reveal (`0x368410`) calls RevealReal/UpdateViewReal when a Twin writer
+leaves raw bluff null, and otherwise uses the bluff presentation. Callers must
+prove excluded epilogues and intervening activity do not mutate modeled state
+before a later supplied event. Body state reflects the modeled writer effects;
+UI state is not implicitly advanced. No coroutine timing, readiness ordering,
+user clicks, subscriptions or missing writer events are invented. Spy Start
+and other unsupported callback roles still fail when reached.
+
+Eight regressions cover acquisition before swap, new-data repeated resumes,
+post-swap Confessor Init, equivalence with old v3 for a non-writer case, Spy
+acquisition replacing a stale copied slot, absent versus latched Start,
+branch-dependent acquisition rejection, and global/pending-event provenance.
+
+Checkpoint validation passed 580 Rust library tests, 778 Python tests, 13
+reverse-engineering tests, release build, formatting and coverage-ledger
+integrity. The long simulation suite was not rerun for this offline projection;
+no live/scenario caller changed. Native coverage counts remain unchanged.
+
 ## Typed import, overlaps, and shared identity
 
 Thirteen target memberships intentionally overlap earlier checked boundaries:

@@ -409,8 +409,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Compose the Twin writer with one explicit Character.Act(Start), its
     one-shot guard, frozen truth decision, current copied-role reread, and
     optional second Twin swap. Preserve reset latches and unconditional mass.
-  - [ ] Join Character.Act(Start) composition to Reveal acquisition and later
-    Init/AfterRoundStart, then enumerate bounded writer-created Reveal schedules.
+  - [x] Join Character.Act(Start) composition to Reveal acquisition and later
+    Init/AfterRoundStart under explicit resume/acquisition provenance. Transport
+    writer-created continuation counts and validate repeated new-data resumes.
+  - [ ] Establish scheduler provenance and enumerate justified interleavings,
+    including branch-dependent acquisition events and omitted view epilogues.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
     Twin/Spy Start, subscriptions, and writer-created continuations; establish
     scheduler order provenance or justified interleaving support before
