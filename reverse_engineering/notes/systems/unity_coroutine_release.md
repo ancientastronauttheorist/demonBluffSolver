@@ -59,7 +59,7 @@ the two strings are not incorrectly asserted to be identical.
 ## Bounded native validation
 
 [`audit_unityplayer_coroutine_release.py`](../../scripts/audit_unityplayer_coroutine_release.py)
-checks 73 native relationships across the images, rechecks 52 registration
+checks 95 native relationships across the images, rechecks 52 registration
 relationships, and executes 14 cases in isolated Unicorn memory. Only the
 reference-release routine, registered cleanup thunk, cleanup body and the
 retained-reference path of the auxiliary release helper execute.
@@ -91,12 +91,21 @@ then clears payload `+0x78` and continues. Two native cases verify counts 2→1
 and 3→2 and all those field writes. The emulator excludes the last-reference
 branch, which calls the object's vtable destructor and enters allocator paths.
 
-The auxiliary object's concrete type and last-reference destructor, the zero-
+The yielded-object branch now identifies the auxiliary base family as
+`UnityEngine.AsyncOperation`: CoreModule lookup stores that type at cache
+`+0x1c8`, and the yield dispatcher tests that cache entry before reading the
+yielded object's native pointer at `+0x10`. It installs the coroutine dispatch
+and release callbacks at native object `+0x10`/`+0x18`, payload at `+0x20`,
+owner key at `+0x28`, then retains the object into coroutine `+0x78` and
+atomically increments object `+0xc`. This is a static binding audit; it does
+not emulate asynchronous completion or identify every concrete subclass.
+
+The AsyncOperation object's concrete subtype and last-reference destructor, the zero-
 reference but still-linked diagnostic path, and validity of arbitrary reference/
 link graphs remain unresolved. Full cancellation/release-body mutation and
 actual lifetime integration remain separate from the finite queue projection.
 
-Validation passed 14 native cases, 73 cross-image relationships, 52 registration
+Validation passed 14 native cases, 95 cross-image relationships, 52 registration
 relationships, 778 Python tests, 32 reverse-engineering tests, Python compilation
 and diff checks. The preceding Rust queue checkpoint already passed 625 Rust
 library tests, all 34 simulations and the release build; no gameplay code changed

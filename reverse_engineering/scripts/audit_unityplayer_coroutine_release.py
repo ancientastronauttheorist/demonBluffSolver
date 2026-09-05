@@ -129,6 +129,17 @@ def audit(path):
         (0x33CC9D, "lock xadd", "dword ptr [rcx + 4], eax"),
         (0x33CCA2, "cmp", "eax, 1"), (0x33CCA5, "jne", "0x33cf80"),
         (0x33CF85, "ret", ""),
+        (0x81BD1D, "mov", "r8, rsi"), (0x81BD38, "call", "0x75fc00"),
+        (0x81BD4B, "mov", "rax, qword ptr [rax]"),
+        (0x81BD58, "mov", "qword ptr [rcx + 0x1c8], rax"),
+        (0x8211D0, "call", "0x81a880"), (0x779730, "call", "0x8211c0"),
+        (0x77973B, "mov", "rdx, qword ptr [rax + 0x1c8]"),
+        (0x779742, "call", "rsi"), (0x779755, "mov", "rdi, qword ptr [rdi + 0x10]"),
+        (0x7797FF, "mov", "qword ptr [rdi + 0x10], rax"),
+        (0x77980A, "mov", "qword ptr [rdi + 0x18], rax"),
+        (0x77980E, "mov", "qword ptr [rdi + 0x20], r14"),
+        (0x779824, "mov", "qword ptr [r14 + 0x78], rdi"),
+        (0x779828, "lock inc", "dword ptr [rdi + 0xc]"),
     ]
     for rva, mnemonic, operands in checks:
         ins = next(cs.disasm(pe.get_data(rva, 15), rva))
@@ -145,6 +156,20 @@ def audit(path):
     target = ins.address + ins.size + ins.operands[1].mem.disp
     if ins.mnemonic != "lea" or pe.get_data(target, 80).split(b"\0")[0] != b"il2cpp_gchandle_free":
         raise ValueError("unexpected release GC export")
+    for rva, expected in [(0x81B729, "UnityEngine"), (0x81BD16, "AsyncOperation"),
+                           (0x81BD20, "UnityEngine.CoreModule.dll")]:
+        ins = next(cs.disasm(pe.get_data(rva, 15), rva))
+        target = ins.address + ins.size + ins.operands[1].mem.disp
+        if ins.mnemonic != "lea" or pe.get_data(target, len(expected) + 1) != expected.encode() + b"\0":
+            raise ValueError("auxiliary AsyncOperation type identity mismatch")
+    for rva, mnemonic, expected in [(0x81BD3D, "mov", 0x1CD6AF8),
+            (0x8211C4, "mov", 0x1CD6AF8), (0x8211E8, "mov", 0x1CD6AF8),
+            (0x7797F8, "lea", 0x778B30), (0x779803, "lea", 0x778BD0)]:
+        ins = next(cs.disasm(pe.get_data(rva, 15), rva))
+        refs = [rva + ins.size + op.mem.disp for op in ins.operands
+                if op.type == capstone.CS_OP_MEM and op.mem.base == capstone.x86.X86_REG_RIP]
+        if ins.mnemonic != mnemonic or refs != [expected]:
+            raise ValueError("auxiliary callback/type-cache binding mismatch")
     name = "UnityEngine.Coroutine::ReleaseCoroutine"
     name_rva = struct.unpack("<Q", pe.get_data(0x189BB80 + 2225 * 8, 8))[0] - pe.OPTIONAL_HEADER.ImageBase
     target_rva = struct.unpack("<Q", pe.get_data(0x1894FC0 + 2225 * 8, 8))[0] - pe.OPTIONAL_HEADER.ImageBase
@@ -272,7 +297,7 @@ def audit(path):
             raise ValueError("retained auxiliary object cleanup mismatch")
         results[-1]["retained_auxiliary"] = {"remaining_references": remaining, "fields_10_through_28_cleared": cleared}
     return {"schema_version": 1, "unityplayer_sha256": digest,
-            "native_relationships_verified": len(checks) + 5 + len(managed_checks) + 8,
+            "native_relationships_verified": len(checks) + 5 + len(managed_checks) + 16,
             "managed_input_hashes": {name: item["sha256"] for name, item in pinned.items()},
             "registration_relationships_rechecked": registration["semantic_checks_passed"],
             "registered_binding": {"name": name, "index": 2225, "rva": "0xf88b0", "cleanup_rva": "0x778cc0"},
@@ -284,7 +309,8 @@ def audit(path):
             "synthetic_boundaries": ["GC-handle free", "0x88-byte allocation free"],
             "storage_note": "free sinks record calls without unmapping memory; snapshots are emulated storage only",
             "auxiliary_support": "0x78 object fields cleared and atomic reference released only with initial count >=2; final-reference branch excluded",
-            "unresolved": ["concrete auxiliary waiter type and last-reference destructor/allocator branch",
+            "auxiliary_type_binding": "UnityEngine.AsyncOperation cache+0x1c8; native pointer from yielded object+0x10; callbacks/payload installed before retaining into coroutine+0x78",
+            "unresolved": ["concrete AsyncOperation subtype and last-reference destructor/allocator branch",
                            "zero-reference but still-linked diagnostic path in managed cleanup",
                            "validity of arbitrary reference/link graphs and full lifetime integration"]}
 

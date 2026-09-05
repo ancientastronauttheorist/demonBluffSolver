@@ -456,7 +456,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Trace reference-release and managed Coroutine finalizer ownership,
     signature-fallback internal-call resolution, handle clearing and allocation
     release in both invocation orders; verify 14 bounded native lifetime cases,
-    including auxiliary cleanup while another reference retains the object.
+    including auxiliary cleanup while another reference retains the object and
+    the AsyncOperation type/cache/callback binding for that auxiliary pointer.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.
