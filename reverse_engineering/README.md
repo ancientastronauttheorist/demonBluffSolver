@@ -791,8 +791,8 @@ The current bluff-acquisition comparison is in the
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 529 classifications backed by
-275 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 532 classifications backed by
+276 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

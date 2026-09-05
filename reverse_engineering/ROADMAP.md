@@ -423,8 +423,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Fingerprint shipped UnityPlayer and audit the diagnostic-linked
     WaitForSeconds record producer and deadline-tree insertion with reproducible
     native semantic checks. Keep unidentified engine fields/order unresolved.
-  - [ ] Trace the engine deadline-queue consumer, eligibility predicates and
-    callback dispatch; resolve StartCoroutineManaged2 binding independently.
+  - [x] Trace the engine deadline-queue consumer, phase/generation/signed-counter
+    eligibility gates, successor traversal and one-shot dispatch/release slots.
+    Pin the constructor/vtable binding and record the distinct producer/consumer
+    time fields without inferring their public identities.
+  - [ ] Resolve engine time fields, phase provenance, tree mutation ordering,
+    continuation dispatch and StartCoroutineManaged2 binding independently.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

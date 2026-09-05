@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "build_id": "f530404b0f3f_807de4a83df4",
   "engine": {
     "file": "UnityPlayer.dll",
@@ -8,17 +8,42 @@
     "pe_timestamp": 1694569221,
     "image_base": "0x180000000"
   },
-  "semantic_checks_passed": 15,
+  "semantic_checks_passed": 52,
   "wait_producer_chunk": "0x7793F3..0x7794FE",
   "deadline_tree_insert": "0x440F00",
   "tree_link_helper": "0x366CB0",
   "time_cap_rva": "0x1a72fd8",
   "time_cap": "0x1.fffffffffffffp+1023",
-  "resume_callback_candidate": "0x778B30",
-  "release_callback_candidate": "0x778BD0",
+  "queue_constructor": "0x43B700",
+  "queue_vtable": "0x1941950",
+  "queue_consumer": "0x43BD90",
+  "consumer_virtual_slot": "0xB8",
+  "queue_erase_without_release": "0x43BC60",
+  "queue_erase_with_release": "0x43BB00",
+  "record_fields": {
+    "0x00": "double deadline",
+    "0x08": "signed 64-bit eligibility threshold",
+    "0x10": "float repeat interval",
+    "0x14": "repeat flag",
+    "0x18": "callback payload",
+    "0x20": "dispatch callback",
+    "0x28": "release callback",
+    "0x30": "owner lookup key",
+    "0x34": "phase mask",
+    "0x38": "insertion generation"
+  },
+  "consumer_gates": [
+    "stop traversal if sampled engine field 0x90 < deadline or unordered",
+    "skip when phase masks do not intersect",
+    "skip insertion generation equal to current dispatch generation",
+    "skip signed threshold greater than sampled engine field 0xC8"
+  ],
+  "dispatch_callback": "0x778B30",
+  "continuation_dispatch_target": "0x778D90",
+  "release_callback": "0x778BD0",
   "unresolved": [
     "engine time/counter field ownership",
-    "queue drain and eligibility predicate",
+    "owner lookup and continuation dispatch internals",
     "equal-deadline dispatch order",
     "StartCoroutineManaged2 function binding"
   ]

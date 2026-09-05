@@ -41,7 +41,8 @@ stop, diagnose, fix, verify, then resume.
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob); do not pass wildcard file paths that the shell leaves unexpanded.
-    Resolve uncertain script/test filenames with `rg --files` before reading;
+    Resolve all uncertain filenames, including status/summary documents, with
+    `rg --files` before reading;
     do not guess filenames or repeat an unexpanded wildcard search.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
@@ -49,6 +50,9 @@ stop, diagnose, fix, verify, then resume.
     Resolve export filenames from the target manifest or directory listing;
     public-role filenames can differ from managed class names. Inspect shared
     method bodies without printing their potentially enormous alias-header line.
+    For native PE inspection, distinguish zero-filled virtual data from file-
+    backed bytes, and verify an unwind entry actually contains a queried RVA
+    before treating it as that instruction's chunk.
 
 ## Recovery Protocol
 
