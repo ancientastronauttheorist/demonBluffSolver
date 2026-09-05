@@ -14,6 +14,7 @@ pub mod ready_batch;
 pub mod continuation_registry;
 pub mod reveal_view;
 pub mod twin_writer;
+pub mod wait_eligibility;
 
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{

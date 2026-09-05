@@ -185,6 +185,9 @@ The [internal-call registration audit](notes/systems/unity_icall_bindings.md)
 validates all 3,447 registered pairs and independently binds StartCoroutineManaged2
 and the public time/frame getters. Producer-clock semantics, phase identities
 and mutation-safe equal-deadline dispatch remain unresolved.
+A bounded offline `wait_eligibility` module now projects finite wait arithmetic
+and timing gates from explicit producer/consumer snapshots, preserving native
+float promotion, signed frame counters and wrapping dispatch generations.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

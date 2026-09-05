@@ -138,6 +138,39 @@ same-generation gate if encountered later in this drain. This is a native
 local exclusion; it does not prove which records become eligible at the next
 engine phase, nor supply the timing of writer-created Reveal continuations.
 
+## Finite offline eligibility projection
+
+`bluff::wait_eligibility` implements the separate
+`unity_wait_eligibility_native_v1` contract. `make_wait_for_seconds` accepts an
+explicit producer snapshot, promotes the float duration to double, adds it to
+the producer clock, increments the signed 64-bit threshold with native wrapping
+semantics, and records phase mask `0xA` plus the insertion generation. It never
+substitutes the consumer's Time.time snapshot for the producer clock.
+
+`evaluate_wait` accepts a timing record and an explicit drain-entry snapshot.
+It returns one of: stop at a future deadline, skip phase, skip current
+generation, skip future frame, or timing-eligible. Equality meets the deadline
+and frame thresholds. The generation comparison uses the incremented wrapping
+32-bit generation. Frame comparisons retain all 64 bits and remain signed.
+
+This version supports finite inputs/results under the usual IEEE floating-
+point arithmetic environment. It rejects nonfinite values, including the
+native NaN diagnostic case, rather than modeling floating-point exception
+control or NaN tree placement. Clock snapshots, phase masks and generations
+are caller-provided offline provenance. Passing timing gates does not establish
+that an owner exists or a callback runs; this module neither walks the tree
+nor mutates the continuation registry. No live/scenario caller is added.
+
+Seven regressions cover float promotion at a deadline boundary, zero/negative
+duration frame gates, ordered stop/skip predicates, generation rollover,
+signed/full-width frame thresholds, nonfinite/version rejection and required
+serialized provenance. The normal native arithmetic assumptions are part of
+this bounded projection, not a claim about every engine floating-point mode.
+
+The finite-projection checkpoint passed 613 Rust library tests, 778 Python
+tests, 20 reverse-engineering tests, the release build, formatting and diff
+checks. The long simulation suite was not rerun for this offline-only API.
+
 ## Next native work and coverage
 
 Trace the producer clock's relationship to Time.time and the callback dispatch

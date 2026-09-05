@@ -433,6 +433,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     native signed 64-bit gate.
   - [ ] Resolve the producer clock relationship, phase provenance, tree mutation
     ordering, coroutine creation and continuation dispatch.
+  - [x] Project finite WaitForSeconds production and local consumer eligibility
+    with separate clock snapshots, promoted float duration, signed 64-bit frame
+    gates, wrapping generations and explicit traversal-stop versus skip results.
+    Keep owner resolution, queue mutation and automatic registry admission open.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.
