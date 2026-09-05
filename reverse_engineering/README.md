@@ -205,6 +205,9 @@ synthetic cases; owner/lifetime provenance and registry admission remain explici
 The [native coroutine bridge](notes/systems/unity_coroutine_bridge.md) now links
 valid-owner creation to the immediate managed MoveNext call, WaitForSeconds
 registration and the later callback into that same dispatcher.
+The [coroutine cancellation audit](notes/systems/unity_coroutine_cancellation.md)
+binds handle, IEnumerator and StopAll entry points and verifies 26 native cases
+for queue matching, cursor updates and bounded owner-list unlinking.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

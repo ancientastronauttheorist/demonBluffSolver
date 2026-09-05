@@ -450,6 +450,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [ ] Resolve complete clock-update policy, remaining phase provenance,
     repeating/reentrant drains, release-body mutation and remaining coroutine
     lifetime/cancellation branches.
+  - [x] Bind handle, IEnumerator and StopAll cancellation entry points; audit
+    owner/callback/payload matching, marked links, cached/GC enumerator identity,
+    empty-list guards and bounded unlink behavior in 26 native-emulated cases.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.

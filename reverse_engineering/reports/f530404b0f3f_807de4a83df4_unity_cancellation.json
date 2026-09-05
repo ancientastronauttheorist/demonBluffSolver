@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "registration_relationships_rechecked": 52,
+  "registered_pair_count": 3447,
+  "cancellation_relationships_verified": 78,
+  "bindings": {
+    "UnityEngine.MonoBehaviour::StopAllCoroutines": {
+      "index": 2264,
+      "rva": "0xff000"
+    },
+    "UnityEngine.MonoBehaviour::StopCoroutineManaged": {
+      "index": 2275,
+      "rva": "0x100f80"
+    },
+    "UnityEngine.MonoBehaviour::StopCoroutineFromEnumeratorManaged": {
+      "index": 2276,
+      "rva": "0x101190"
+    }
+  },
+  "emulator": "Unicorn 2.1.4 x86-64",
+  "synthetic_boundaries": [
+    "il2cpp_gc_wbarrier_set_field",
+    "il2cpp_gchandle_get_target",
+    "node allocation",
+    "release bodies"
+  ],
+  "emulated_scope": "valid handle, IEnumerator and StopAll wrappers, matching wait removal, simple owner-list unlink",
+  "cases": 26,
+  "results": [
+    {
+      "name": "direct owner callback and payload match",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "same payload with different owner key is retained",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "same owner and payload with different callback is retained",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "different payload without wrapper marker is retained",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "marked wrapper linked to requested payload is removed",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "wrapper"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "link without wrapper marker is insufficient",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "wrapper marker without nonnull link is insufficient",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "null native Coroutine handle is a no-op",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": false,
+      "owner_list_empty": false,
+      "cursor_is_end": true
+    },
+    {
+      "name": "empty wait queue still detaches the coroutine",
+      "events": [],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "all matching records removed and saved successor advanced to end",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ],
+        [
+          "erase",
+          3
+        ],
+        [
+          "release_payload",
+          "wrapper"
+        ],
+        [
+          "erase",
+          4
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [
+        2
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll removes all matching-owner coroutine callbacks regardless of payload",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ],
+        [
+          "erase",
+          2
+        ],
+        [
+          "release_payload",
+          "other"
+        ]
+      ],
+      "remaining": [
+        3,
+        4
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll also removes matching-owner null callback records",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll honors null release slots",
+      "events": [
+        [
+          "erase",
+          1
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll advances a saved cursor through all removed records",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ],
+        [
+          "erase",
+          2
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "empty coroutine owner list skips StopAll queue removal",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll with an empty queue still detaches the linked coroutine",
+      "events": [],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator stop matches cached mode-2 target",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator stop matches GC-handle target outside cached mode",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "different IEnumerator leaves wait and owner link intact",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": false,
+      "owner_list_empty": false,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator owner-key filtering retains other-owner wait",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator stop follows marked linked payload",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "wrapper"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator stop does not follow an unmarked link",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "null IEnumerator is a no-op",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": false,
+      "owner_list_empty": false,
+      "cursor_is_end": true
+    },
+    {
+      "name": "queued cache match still requires nonzero handle field",
+      "events": [],
+      "remaining": [
+        1
+      ],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    },
+    {
+      "name": "IEnumerator removes all queued matches then unlinks first surviving owner-list match",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ],
+        [
+          "erase",
+          2
+        ],
+        [
+          "release_payload",
+          "second"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": false,
+      "cursor_is_end": true
+    },
+    {
+      "name": "StopAll unlinks every surviving owner-list coroutine",
+      "events": [
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_payload",
+          "requested"
+        ],
+        [
+          "erase",
+          2
+        ],
+        [
+          "release_payload",
+          "second"
+        ]
+      ],
+      "remaining": [],
+      "requested_payload_detached": true,
+      "owner_list_empty": true,
+      "cursor_is_end": true
+    }
+  ],
+  "unresolved": [
+    "nested coroutine stop branches and real release/refcount destruction",
+    "invalid managed wrappers and exception paths",
+    "mutation from release bodies"
+  ]
+}
