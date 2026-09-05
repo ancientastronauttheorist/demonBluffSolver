@@ -420,6 +420,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Carry a complete logical continuation registry across explicit batches,
     remove consumed identities, allocate writer-created instances in trace order,
     validate per-body counts and reject replayed IDs or allocation overflow.
+  - [x] Fingerprint shipped UnityPlayer and audit the diagnostic-linked
+    WaitForSeconds record producer and deadline-tree insertion with reproducible
+    native semantic checks. Keep unidentified engine fields/order unresolved.
+  - [ ] Trace the engine deadline-queue consumer, eligibility predicates and
+    callback dispatch; resolve StartCoroutineManaged2 binding independently.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

@@ -178,6 +178,10 @@ and admission of later-ready continuations remain pending.
 A logical continuation registry now carries complete pending identities between
 explicit batches, with consumed-ID removal and ordered writer-created labels.
 Those labels are simulation-local and do not establish native readiness.
+The [UnityPlayer wait-boundary audit](notes/systems/unity_wait_boundary.md)
+now fingerprints the engine and verifies its diagnostic-linked wait producer
+and deadline-tree insertion. Queue consumption and equal-deadline dispatch
+remain unresolved, so no native readiness/order assumption is added.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

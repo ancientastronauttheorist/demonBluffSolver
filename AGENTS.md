@@ -41,6 +41,8 @@ stop, diagnose, fix, verify, then resume.
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob); do not pass wildcard file paths that the shell leaves unexpanded.
+    Resolve uncertain script/test filenames with `rg --files` before reading;
+    do not guess filenames or repeat an unexpanded wildcard search.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.

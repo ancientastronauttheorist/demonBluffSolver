@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine": {
+    "file": "UnityPlayer.dll",
+    "sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+    "size": 30671384,
+    "pe_timestamp": 1694569221,
+    "image_base": "0x180000000"
+  },
+  "semantic_checks_passed": 15,
+  "wait_producer_chunk": "0x7793F3..0x7794FE",
+  "deadline_tree_insert": "0x440F00",
+  "tree_link_helper": "0x366CB0",
+  "time_cap_rva": "0x1a72fd8",
+  "time_cap": "0x1.fffffffffffffp+1023",
+  "resume_callback_candidate": "0x778B30",
+  "release_callback_candidate": "0x778BD0",
+  "unresolved": [
+    "engine time/counter field ownership",
+    "queue drain and eligibility predicate",
+    "equal-deadline dispatch order",
+    "StartCoroutineManaged2 function binding"
+  ]
+}
