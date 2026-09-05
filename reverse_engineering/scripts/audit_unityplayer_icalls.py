@@ -38,7 +38,7 @@ def audit(path):
 
     data = Path(path).read_bytes()
     digest = verify_fingerprint(data, ENGINE_SHA256)
-    pe = pefile.PE(data=data)
+    pe = pefile.PE(data=data, fast_load=True)
     cs = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     cs.detail = True
 
@@ -69,6 +69,30 @@ def audit(path):
         (0x10E527, "mov", "eax, dword ptr [rax + 0xd0]"),
         (0x100E0A, "call", "0x77bc80"),
         (0x76CC60, "call", "0x6a3420"),
+        (0x10E237, "movss", "xmm0, dword ptr [rax + 0x48]"),
+        (0x10E367, "movss", "xmm0, dword ptr [rax + 0xfc]"),
+        (0x10E617, "movzx", "eax, byte ptr [rax + 0xf9]"),
+        (0x551D74, "inc", "qword ptr [rcx + 0xc8]"),
+        (0x551D7B, "inc", "dword ptr [rcx + 0xd0]"),
+        (0x551EBC, "movsd", "qword ptr [rcx + 0x60], xmm2"),
+        (0x551F36, "movups", "xmm0, xmmword ptr [rcx + 0x60]"),
+        (0x551F44, "movups", "xmmword ptr [rcx + 0x90], xmm0"),
+        (0x5A6697, "movss", "xmm0, dword ptr [rcx + 0x48]"),
+        (0x5A669C, "movsd", "xmm1, qword ptr [rcx + 0x30]"),
+        (0x5A66A4, "addsd", "xmm0, xmm1"),
+        (0x5A66A8, "comisd", "xmm0, xmmword ptr [rcx + 0x60]"),
+        (0x5A66AD, "jbe", "0x5a66e6"),
+        (0x5A66AF, "cmp", "byte ptr [rcx + 0xc2], 0"),
+        (0x5A66B6, "jne", "0x5a66e6"),
+        (0x5A66B8, "movups", "xmm0, xmmword ptr [rcx + 0x60]"),
+        (0x5A66C2, "movups", "xmmword ptr [rcx + 0x90], xmm0"),
+        (0x5A66DE, "mov", "byte ptr [rcx + 0xf9], 0"),
+        (0x5A66F2, "jne", "0x5a6705"),
+        (0x5A6700, "movsd", "qword ptr [rcx + 0x30], xmm0"),
+        (0x5A6743, "movups", "xmm0, xmmword ptr [rcx + 0x30]"),
+        (0x5A6747, "mov", "byte ptr [rcx + 0xc2], 0"),
+        (0x5A6754, "movups", "xmmword ptr [rcx + 0x90], xmm0"),
+        (0x5A676D, "mov", "byte ptr [rcx + 0xf9], 1"),
     ]
     for rva, mnemonic, operands in checks:
         ins = instruction(rva)
@@ -79,7 +103,9 @@ def audit(path):
             or relative_target(image_reference.address, image_reference.size,
                                image_reference.operands[1].mem.disp) != 0):
         raise ValueError("Registration base is not the image base")
-    for site in (0x10E100, 0x10E120, 0x10E510, 0x10E520):
+    clock_global_sites = (0x10E100, 0x10E120, 0x10E510, 0x10E520,
+                          0x10E230, 0x10E360, 0x10E610, 0x5A6690)
+    for site in clock_global_sites:
         ins = instruction(site)
         if (ins.mnemonic != "mov"
                 or relative_target(ins.address, ins.size, ins.operands[1].mem.disp) != 0x1C6E718):
@@ -124,18 +150,21 @@ def audit(path):
         "UnityEngine.Time::get_fixedTimeAsDouble": 0x10E1A0,
         "UnityEngine.Time::get_frameCount": 0x10E510,
         "UnityEngine.Time::get_renderedFrameCount": 0x10E520,
+        "UnityEngine.Time::get_fixedDeltaTime": 0x10E230,
+        "UnityEngine.Time::get_timeScale": 0x10E360,
+        "UnityEngine.Time::get_inFixedTimeStep": 0x10E610,
     }
     for name, expected in selected.items():
         if bindings.get(name, {}).get("rva") != expected:
             raise ValueError(f"Unexpected registered binding for {name}")
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "build_id": "f530404b0f3f_807de4a83df4",
         "engine_sha256": digest,
         "registration_loop": "0xFA1110",
         "function_table": "0x1894FC0", "name_table": "0x189BB80",
         "registered_pair_count": len(bindings),
-        "semantic_checks_passed": len(checks) + 7,
+        "semantic_checks_passed": len(checks) + len(clock_global_sites) + 3,
         "registration_sink": "il2cpp_add_internal_call",
         "selected_bindings_verified": len(selected),
         "bindings": {name: {"index": bindings[name]["index"], "rva": hex(rva)}
@@ -144,11 +173,17 @@ def audit(path):
             "0x90": "double backing Time.time and Time.timeAsDouble; sampled by wait consumer",
             "0xC8": "low 32 bits back Time.frameCount; consumer uses signed 64-bit value",
             "0xD0": "low 32 bits back Time.renderedFrameCount",
-            "0x60": "wait producer clock field; public identity/relationship unresolved",
+            "0x60": "frame clock selected into Time.time outside fixed steps; retained during fixed selection",
+            "0x30": "fixed clock backing Time.fixedTime; selected into Time.time during fixed steps",
+            "0x48": "float backing Time.fixedDeltaTime",
+            "0xFC": "float backing Time.timeScale",
+            "0xF9": "flag backing Time.inFixedTimeStep",
+            "0xC2": "initial fixed-step flag; suppresses the first fixed-clock increment",
         },
+        "clock_update": "0x551D70", "clock_selector": "0x5A6690",
         "start_coroutine_managed2_creation_target": "0x77BC80",
-        "unresolved": ["producer clock versus Time.time relationship", "engine phase identities",
-                       "coroutine creation/MoveNext bridge", "equal-deadline mutation ordering"],
+        "unresolved": ["complete frame-time update policy", "engine phase identities",
+                       "complete coroutine lifetime handling", "equal-deadline mutation ordering"],
     }
 
 

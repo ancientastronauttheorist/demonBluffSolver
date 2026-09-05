@@ -1,14 +1,14 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "build_id": "f530404b0f3f_807de4a83df4",
   "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
   "registration_loop": "0xFA1110",
   "function_table": "0x1894FC0",
   "name_table": "0x189BB80",
   "registered_pair_count": 3447,
-  "semantic_checks_passed": 24,
+  "semantic_checks_passed": 52,
   "registration_sink": "il2cpp_add_internal_call",
-  "selected_bindings_verified": 8,
+  "selected_bindings_verified": 11,
   "bindings": {
     "UnityEngine.MonoBehaviour::StartCoroutineManaged": {
       "index": 2273,
@@ -41,19 +41,38 @@
     "UnityEngine.Time::get_renderedFrameCount": {
       "index": 2499,
       "rva": "0x10e520"
+    },
+    "UnityEngine.Time::get_fixedDeltaTime": {
+      "index": 2489,
+      "rva": "0x10e230"
+    },
+    "UnityEngine.Time::get_timeScale": {
+      "index": 2496,
+      "rva": "0x10e360"
+    },
+    "UnityEngine.Time::get_inFixedTimeStep": {
+      "index": 2504,
+      "rva": "0x10e610"
     }
   },
   "field_findings": {
     "0x90": "double backing Time.time and Time.timeAsDouble; sampled by wait consumer",
     "0xC8": "low 32 bits back Time.frameCount; consumer uses signed 64-bit value",
     "0xD0": "low 32 bits back Time.renderedFrameCount",
-    "0x60": "wait producer clock field; public identity/relationship unresolved"
+    "0x60": "frame clock selected into Time.time outside fixed steps; retained during fixed selection",
+    "0x30": "fixed clock backing Time.fixedTime; selected into Time.time during fixed steps",
+    "0x48": "float backing Time.fixedDeltaTime",
+    "0xFC": "float backing Time.timeScale",
+    "0xF9": "flag backing Time.inFixedTimeStep",
+    "0xC2": "initial fixed-step flag; suppresses the first fixed-clock increment"
   },
+  "clock_update": "0x551D70",
+  "clock_selector": "0x5A6690",
   "start_coroutine_managed2_creation_target": "0x77BC80",
   "unresolved": [
-    "producer clock versus Time.time relationship",
+    "complete frame-time update policy",
     "engine phase identities",
-    "coroutine creation/MoveNext bridge",
+    "complete coroutine lifetime handling",
     "equal-deadline mutation ordering"
   ]
 }

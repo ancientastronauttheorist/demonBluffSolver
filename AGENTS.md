@@ -55,6 +55,8 @@ stop, diagnose, fix, verify, then resume.
     before treating it as that instruction's chunk.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
+    Check each requested export's result before reading its file: a successful
+    headless process can still report missing functions or partial exports.
 
 ## Recovery Protocol
 

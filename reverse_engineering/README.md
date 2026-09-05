@@ -183,8 +183,9 @@ now fingerprints the engine and verifies its diagnostic-linked wait producer,
 deadline insertion, consumer eligibility gates and one-shot callback protocol.
 The [internal-call registration audit](notes/systems/unity_icall_bindings.md)
 validates all 3,447 registered pairs and independently binds StartCoroutineManaged2
-and the public time/frame getters. Producer-clock semantics, phase identities
-and mutation-safe equal-deadline dispatch remain unresolved.
+and the public time/frame getters, including frame/fixed clock selection.
+Full clock-update policy, phase identities and mutation-safe equal-deadline
+dispatch remain unresolved.
 A bounded offline `wait_eligibility` module now projects finite wait arithmetic
 and timing gates from explicit producer/consumer snapshots, preserving native
 float promotion, signed frame counters and wrapping dispatch generations.

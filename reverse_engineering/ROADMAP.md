@@ -435,7 +435,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     SetupCoroutine.InvokeMoveNext, current-yield dispatch, WaitForSeconds
     registration and the later callback into the same managed-step dispatcher.
     Pin the engine/CoreModule bridge without claiming all lifetime branches.
-  - [ ] Resolve the producer clock relationship, phase provenance, tree mutation
+  - [x] Identify the retained frame clock versus selected public Time.time,
+    fixed-step equality boundary and special first fixed step; bind fixed delta,
+    time scale and inFixedTimeStep and verify full-width frame-counter updates.
+  - [ ] Resolve complete clock-update policy, phase provenance, tree mutation
     ordering and remaining coroutine lifetime/cancellation branches.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame

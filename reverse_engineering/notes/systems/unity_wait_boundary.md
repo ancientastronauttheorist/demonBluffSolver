@@ -55,7 +55,8 @@ meaning of these fields have not been independently resolved.** Calling them
 scaled time and frame count would currently be an inference, not a recovered
 field identity. The subsequent registration audit identifies consumer field
 `0x90` as the double backing Time.time and the low 32 bits of `0xC8` as
-Time.frameCount; producer field `0x60` remains distinct and unresolved.
+Time.frameCount. Its later clock-selector audit identifies `0x60` as the frame
+clock retained while fixed-step selection changes the public time snapshot.
 
 Two callback addresses, `0x778B30` and `0x778BD0`, are stored in that record.
 The consumer below establishes their dispatch/release slots. The dispatch
@@ -173,8 +174,8 @@ checks. The long simulation suite was not rerun for this offline-only API.
 
 ## Next native work and coverage
 
-Trace the producer clock's relationship to Time.time and the callback dispatch
-chain; recover tree mutation effects and phase provenance. The separate
+Trace the remaining clock-update policy and callback lifetime branches;
+recover tree mutation effects and phase provenance. The separate
 registration-loop audit resolves StartCoroutineManaged2 without table proximity.
 Keep any subsequently recovered engine-specific order separate from Unity's
 public portability guarantees and from observed live event provenance.

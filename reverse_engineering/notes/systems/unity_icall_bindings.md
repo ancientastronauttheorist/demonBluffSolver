@@ -36,6 +36,9 @@ in the public report.
 | `Time::get_fixedTimeAsDouble` | 2482 | `0x10E1A0` |
 | `Time::get_frameCount` | 2498 | `0x10E510` |
 | `Time::get_renderedFrameCount` | 2499 | `0x10E520` |
+| `Time::get_fixedDeltaTime` | 2489 | `0x10E230` |
+| `Time::get_timeScale` | 2496 | `0x10E360` |
+| `Time::get_inFixedTimeStep` | 2504 | `0x10E610` |
 
 All names above have the `UnityEngine.` prefix. The native
 StartCoroutineManaged2 wrapper reaches creation helper `0x77BC80` on its valid
@@ -55,8 +58,41 @@ The selected time/frame getters access the same engine object global
   consumer use a **64-bit** value at this offset; the consumer comparison is
   signed. This audit does not discard the upper bits or substitute a u32 gate.
 - The low 32 bits at `0xD0` back `Time.renderedFrameCount`.
-- Wait production still uses the distinct double field `0x60`. Its relationship
-  to the public time getter remains unresolved, including fixed-step behavior.
+- Wait production uses the distinct frame clock at double field `0x60`. The
+  selector below copies this clock into the public time snapshot outside a
+  fixed step, and copies fixed time into that snapshot during a fixed step.
+- Field `0x48` backs fixedDeltaTime, `0xFC` backs timeScale, and byte `0xF9`
+  backs inFixedTimeStep. All three getters use the same engine object.
+
+## Frame versus fixed-step clock selection
+
+Native selector `0x5A6690` calculates `fixed_time + double(fixed_delta)`, using
+fields `0x30` and `0x48`. For finite values, if this candidate is **greater than**
+the frame clock at `0x60` and the initial-fixed-step flag at `0xC2` is false,
+it copies the frame timing block `0x60..0x8F` to public timing block
+`0x90..0xBF`, clears inFixedTimeStep and returns false. Equality takes the fixed
+branch. The native unordered comparison also takes that branch; the finite
+Rust eligibility projection does not model that floating-point case.
+
+Otherwise the selector records the previous fixed time at `0x38`. It advances
+fixed time by the promoted float delta only when `0xC2` was false. The first
+fixed step therefore uses the existing fixed time and then clears that flag.
+It also updates the unscaled fixed fields when timeScale is nonzero, copies
+fixed timing block `0x30..0x5F` to public timing block `0x90..0xBF`, sets
+inFixedTimeStep and returns true. The frame clock at `0x60` is retained through
+both selector branches.
+
+Clock-update routine `0x551D70` increments the native 64-bit frame counter and
+32-bit rendered-frame counter. Its frame-update path writes `0x60` and copies
+the frame timing block into the public timing block. Full time accumulation,
+capture settings, clamping, initialization and timeScale policy remain outside
+this audit. The checked selection relationship is sufficient to reject the
+assumption that producer `0x60` and consumer `0x90` are always interchangeable.
+
+The selector was a leaf function not recognized by the first private Ghidra
+export. Defining its independently verified entry in a read-only analysis
+session produced a complete export, consistent with the direct native audit.
+Per-target export success is now required explicitly by AGENTS.md.
 
 This narrows the readiness contract without supplying a runtime clock snapshot,
 identifying the queue's numerical phase masks, or establishing mutation-safe
@@ -70,8 +106,8 @@ python reverse_engineering/scripts/audit_unityplayer_icalls.py `
   --output reverse_engineering/reports/f530404b0f3f_807de4a83df4_unity_icall_bindings.json
 ```
 
-The audit pins the engine before decoding, checks 24 instruction/relative-
-reference relationships and eight selected bindings, and validates all 3,447
+The audit pins the engine before decoding, checks 52 instruction/relative-
+reference relationships and 11 selected bindings, and validates all 3,447
 table pairs. Four synthetic tests cover shared native aliases, malformed table
 sizes, out-of-image/nonexecuting pointers, and duplicate/invalid names. Native
 dependencies remain lazy imports and are unnecessary for those tests.
