@@ -441,7 +441,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Verify finite equal-deadline occurrence order through native tree
     insertion, balancing and arbitrary erasure with a differential emulator
     corpus and payload/link/red-black invariant checks after every operation.
-  - [ ] Resolve complete clock-update policy, phase provenance, mutation during
+  - [x] Bind five default PlayerLoop nodes to native wait-dispatch masks through
+    qualified managed type-cache lookups, callback installation and isolated
+    native construction of the 131-node loop; preserve phase-8 uncertainty.
+  - [ ] Resolve complete clock-update policy, remaining phase provenance, mutation during
     consumer traversal and remaining coroutine lifetime/cancellation branches.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame

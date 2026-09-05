@@ -184,8 +184,10 @@ deadline insertion, consumer eligibility gates and one-shot callback protocol.
 The [internal-call registration audit](notes/systems/unity_icall_bindings.md)
 validates all 3,447 registered pairs and independently binds StartCoroutineManaged2
 and the public time/frame getters, including frame/fixed clock selection.
-Full clock-update policy, phase identities and mutation-safe equal-deadline
-dispatch remain unresolved.
+The [PlayerLoop phase audit](notes/systems/unity_wait_phases.md) binds five
+default-loop nodes to wait-dispatch masks, including both mask-2 dynamic-frame
+callbacks. Full clock policy, phase bit 8 and callback-mutated dispatch remain
+unresolved.
 The [native tree differential audit](notes/systems/unity_wait_tree.md) establishes
 stable finite equal-deadline occurrence order through insertion, balancing and
 removal in the pinned engine, with synthetic records executed in an emulator.

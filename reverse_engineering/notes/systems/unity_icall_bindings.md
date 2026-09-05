@@ -94,9 +94,11 @@ export. Defining its independently verified entry in a read-only analysis
 session produced a complete export, consistent with the direct native audit.
 Per-target export success is now required explicitly by AGENTS.md.
 
-This narrows the readiness contract without supplying a runtime clock snapshot,
-identifying the queue's numerical phase masks, or establishing mutation-safe
-equal-deadline dispatch. Existing replay APIs retain their explicit provenance.
+This narrows the readiness contract without supplying a runtime clock snapshot
+or establishing mutation-safe equal-deadline dispatch. The separate
+[PlayerLoop phase audit](unity_wait_phases.md) now identifies five default-loop
+node bindings, including both mask-2 callbacks; phase bit 8 remains open.
+Existing replay APIs retain their explicit provenance.
 
 ## Reproduce
 

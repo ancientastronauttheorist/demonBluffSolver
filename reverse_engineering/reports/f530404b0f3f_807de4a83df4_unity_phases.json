@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_relationships_verified": 67,
+  "emulated_builder": {
+    "rva": "0x5a6810",
+    "type_array_builder": "0x42f6b0",
+    "emulator": "Unicorn 2.1.4 x86-64",
+    "constructed_nodes": 131,
+    "distinct_executed_instructions": 973,
+    "input": "synthetic already-initialized type cache with unique offset tags"
+  },
+  "bindings": [
+    {
+      "name": "EarlyUpdate/ScriptRunDelayedStartupFrame",
+      "mask": 4,
+      "guard": "unconditional in callback",
+      "cache_offset": "0x6a8",
+      "callback_cell_rva": "0x1caa2d8",
+      "callback_rva": "0x5b7ce0",
+      "constructed_node_index": 34
+    },
+    {
+      "name": "FixedUpdate/ScriptRunDelayedFixedFrameRate",
+      "mask": 1,
+      "guard": "byte at engine RVA 0x1cd5908 is nonzero",
+      "cache_offset": "0x778",
+      "callback_cell_rva": "0x1caa380",
+      "callback_rva": "0x5b7d20",
+      "constructed_node_index": 56
+    },
+    {
+      "name": "Update/ScriptRunDelayedDynamicFrameRate",
+      "mask": 2,
+      "guard": "unconditional in callback",
+      "cache_offset": "0xa48",
+      "callback_cell_rva": "0x1caa3e0",
+      "callback_rva": "0x5b7d50",
+      "constructed_node_index": 70
+    },
+    {
+      "name": "PostLateUpdate/ScriptRunDelayedDynamicFrameRate",
+      "mask": 2,
+      "guard": "unconditional in callback",
+      "cache_offset": "0x8a8",
+      "callback_cell_rva": "0x1caa468",
+      "callback_rva": "0x5b7d50",
+      "constructed_node_index": 89
+    },
+    {
+      "name": "PostLateUpdate/PlayerSendFrameComplete",
+      "mask": 32,
+      "guard": "dword at engine RVA 0x1cd5904 is zero",
+      "cache_offset": "0x860",
+      "callback_cell_rva": "0x1caa528",
+      "callback_rva": "0x5b7af0",
+      "constructed_node_index": 113
+    }
+  ],
+  "unresolved": [
+    "provenance or reachability of phase bit 8",
+    "runtime clock snapshots and modifications of the default PlayerLoop",
+    "callback-mutated wait traversal and full coroutine lifetime"
+  ]
+}
