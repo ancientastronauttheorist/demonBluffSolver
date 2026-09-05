@@ -453,6 +453,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Bind handle, IEnumerator and StopAll cancellation entry points; audit
     owner/callback/payload matching, marked links, cached/GC enumerator identity,
     empty-list guards and bounded unlink behavior in 26 native-emulated cases.
+  - [x] Trace reference-release and managed Coroutine finalizer ownership,
+    signature-fallback internal-call resolution, handle clearing and allocation
+    release in both invocation orders; verify 12 bounded native lifetime cases.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.

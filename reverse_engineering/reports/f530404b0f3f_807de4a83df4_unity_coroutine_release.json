@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_relationships_verified": 60,
+  "managed_input_hashes": {
+    "GameAssembly.dll": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+    "global-metadata.dat": "807DE4A83DF41DEA29F31E98308131DBA93008B340746B8D6BE85CA5EA373713"
+  },
+  "registration_relationships_rechecked": 52,
+  "registered_binding": {
+    "name": "UnityEngine.Coroutine::ReleaseCoroutine",
+    "index": 2225,
+    "rva": "0xf88b0",
+    "cleanup_rva": "0x778cc0"
+  },
+  "managed_finalizer_rva": "0x1c7ad80",
+  "managed_release_wrapper_rva": "0x1c7ae00",
+  "managed_request": "UnityEngine.Coroutine::ReleaseCoroutine(System.IntPtr)",
+  "signature_fallback": "0x265bc0 retries the same table with the prefix before '(' after a full-name miss",
+  "release_rva": "0x778bd0",
+  "gc_free_export": "il2cpp_gchandle_free",
+  "emulator": "Unicorn 2.1.4 x86-64",
+  "cases": 12,
+  "results": [
+    {
+      "name": "positive remaining reference returns one without cleanup",
+      "return_value": 1,
+      "events": [],
+      "post_call_emulated_storage": {
+        "references": 1,
+        "cleanup_flag": 0,
+        "list_links_zero": false,
+        "enumerator_handle": 17,
+        "enumerator_mode": 2,
+        "secondary_handle": 29,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "last reference without handles unlinks and frees payload",
+      "return_value": 0,
+      "events": [
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "enumerator handle freed before native payload",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "secondary handle branch clears handles without freeing payload in this call",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_handle",
+          29
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "GC free receives low 32 bits of each nonzero handle field",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_handle",
+          29
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "linked 68 payload releases recursively before caller payload",
+      "return_value": 0,
+      "events": [
+        [
+          "free_payload",
+          "linked_68"
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "70 link clears reciprocal 68 without releasing linked object",
+      "return_value": 0,
+      "events": [
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "managed cleanup while active clears secondary handle without decrementing references",
+      "return_value": null,
+      "events": [
+        [
+          "free_handle",
+          29
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 2,
+        "cleanup_flag": 0,
+        "list_links_zero": false,
+        "enumerator_handle": 17,
+        "enumerator_mode": 2,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "first later native release remains active",
+      "return_value": 1,
+      "events": [],
+      "post_call_emulated_storage": {
+        "references": 1,
+        "cleanup_flag": 0,
+        "list_links_zero": false,
+        "enumerator_handle": 17,
+        "enumerator_mode": 2,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "last native release after wrapper cleanup frees allocation",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "native completion before wrapper cleanup defers allocation release",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_handle",
+          29
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    },
+    {
+      "name": "later managed cleanup frees zero-reference detached allocation",
+      "return_value": null,
+      "events": [
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true
+      }
+    }
+  ],
+  "synthetic_boundaries": [
+    "GC-handle free",
+    "0x88-byte allocation free"
+  ],
+  "storage_note": "free sinks record calls without unmapping memory; snapshots are emulated storage only",
+  "unresolved": [
+    "non-null waiter field 0x78 and helper 0x33cc90",
+    "zero-reference but still-linked diagnostic path in managed cleanup",
+    "validity of arbitrary reference/link graphs and full lifetime integration"
+  ]
+}

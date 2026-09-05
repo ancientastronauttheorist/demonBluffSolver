@@ -59,6 +59,9 @@ stop, diagnose, fix, verify, then resume.
     output range; arbitrary byte windows can silently misdecode native code.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
+    Internal-call requests can include parameter signatures that registrations
+    omit. Inspect the exact request and audit its fallback lookup before
+    asserting an exact request-to-registration string match.
 
 ## Recovery Protocol
 

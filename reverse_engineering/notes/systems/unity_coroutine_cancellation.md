@@ -108,3 +108,8 @@ Validation passed 26 native cases, 78 cancellation relationships plus 52
 registration relationships, 778 Python tests, 32 reverse-engineering tests,
 Python compilation and diff checks. Rust/simulations were not repeated for
 these offline-only audit files after the tested Rust queue checkpoint.
+
+The subsequent [reference-release audit](unity_coroutine_release.md) connects
+the native reference count and secondary-handle branches to managed Coroutine
+finalizer cleanup. Nonnull waiter objects and arbitrary lifetime/link graphs
+remain outside that bounded extension.
