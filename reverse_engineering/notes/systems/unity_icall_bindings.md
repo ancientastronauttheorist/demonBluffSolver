@@ -41,6 +41,8 @@ All names above have the `UnityEngine.` prefix. The native
 StartCoroutineManaged2 wrapper reaches creation helper `0x77BC80` on its valid
 owner path. The complete creation and managed continuation bridge remain the
 next audit boundary; a name binding alone does not reconstruct those methods.
+The subsequent [coroutine bridge audit](unity_coroutine_bridge.md) recovers the
+normal valid-owner creation, managed-step and WaitForSeconds path.
 
 ## What the clock getters establish
 

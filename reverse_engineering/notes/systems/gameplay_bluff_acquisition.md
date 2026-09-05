@@ -322,6 +322,13 @@ not guarantee that coroutines finishing in one frame finish in start order.
 Board order, writer call order, and iterator registration order are therefore
 not valid substitutes for realized resume order.
 
+The subsequent fingerprinted [native coroutine bridge audit](unity_coroutine_bridge.md)
+now independently recovers StartCoroutineManaged2's immediate creation-to-step
+call, its SetupCoroutine.InvokeMoveNext bridge, the WaitForSeconds registration
+path and the later callback into the same dispatcher. This corroborates the
+synchronous first step at the engine level. Queue phase/time provenance and
+mutation-safe ordering still require their own evidence.
+
 At state one, `DelayReveal.MoveNext` calls `Character.Reveal` against current
 shared card state and completes. Reveal contains no yield, so one resume is an
 atomic game-code event: it recomputes `registerAs` through the current

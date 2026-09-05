@@ -188,6 +188,9 @@ and mutation-safe equal-deadline dispatch remain unresolved.
 A bounded offline `wait_eligibility` module now projects finite wait arithmetic
 and timing gates from explicit producer/consumer snapshots, preserving native
 float promotion, signed frame counters and wrapping dispatch generations.
+The [native coroutine bridge](notes/systems/unity_coroutine_bridge.md) now links
+valid-owner creation to the immediate managed MoveNext call, WaitForSeconds
+registration and the later callback into that same dispatcher.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

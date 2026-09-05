@@ -431,8 +431,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     independently bind StartCoroutineManaged2 and selected Time getters. Identify
     the consumer clock and public frame-count backing without narrowing its
     native signed 64-bit gate.
+  - [x] Trace normal valid-owner coroutine creation through immediate
+    SetupCoroutine.InvokeMoveNext, current-yield dispatch, WaitForSeconds
+    registration and the later callback into the same managed-step dispatcher.
+    Pin the engine/CoreModule bridge without claiming all lifetime branches.
   - [ ] Resolve the producer clock relationship, phase provenance, tree mutation
-    ordering, coroutine creation and continuation dispatch.
+    ordering and remaining coroutine lifetime/cancellation branches.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.
