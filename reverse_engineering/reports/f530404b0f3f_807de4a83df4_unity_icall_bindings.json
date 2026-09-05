@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "registration_loop": "0xFA1110",
+  "function_table": "0x1894FC0",
+  "name_table": "0x189BB80",
+  "registered_pair_count": 3447,
+  "semantic_checks_passed": 24,
+  "registration_sink": "il2cpp_add_internal_call",
+  "selected_bindings_verified": 8,
+  "bindings": {
+    "UnityEngine.MonoBehaviour::StartCoroutineManaged": {
+      "index": 2273,
+      "rva": "0x1007f0"
+    },
+    "UnityEngine.MonoBehaviour::StartCoroutineManaged2": {
+      "index": 2274,
+      "rva": "0x100ce0"
+    },
+    "UnityEngine.Time::get_time": {
+      "index": 2476,
+      "rva": "0x10e100"
+    },
+    "UnityEngine.Time::get_timeAsDouble": {
+      "index": 2477,
+      "rva": "0x10e120"
+    },
+    "UnityEngine.Time::get_fixedTime": {
+      "index": 2481,
+      "rva": "0x10e180"
+    },
+    "UnityEngine.Time::get_fixedTimeAsDouble": {
+      "index": 2482,
+      "rva": "0x10e1a0"
+    },
+    "UnityEngine.Time::get_frameCount": {
+      "index": 2498,
+      "rva": "0x10e510"
+    },
+    "UnityEngine.Time::get_renderedFrameCount": {
+      "index": 2499,
+      "rva": "0x10e520"
+    }
+  },
+  "field_findings": {
+    "0x90": "double backing Time.time and Time.timeAsDouble; sampled by wait consumer",
+    "0xC8": "low 32 bits back Time.frameCount; consumer uses signed 64-bit value",
+    "0xD0": "low 32 bits back Time.renderedFrameCount",
+    "0x60": "wait producer clock field; public identity/relationship unresolved"
+  },
+  "start_coroutine_managed2_creation_target": "0x77BC80",
+  "unresolved": [
+    "producer clock versus Time.time relationship",
+    "engine phase identities",
+    "coroutine creation/MoveNext bridge",
+    "equal-deadline mutation ordering"
+  ]
+}

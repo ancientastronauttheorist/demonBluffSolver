@@ -35,7 +35,9 @@ is stored at RVA `0x18BFE08`, with a data reference at `0x18A0290`. Adjacent nam
 include StopCoroutineManaged and StopCoroutineFromEnumeratorManaged. This
 confirms an engine-side naming surface; it does not bind a function pointer.
 A neighboring pointer region did not yield a verified one-to-one mapping.
-Positional pairing with that region is rejected as evidence.
+Positional pairing with that region is rejected as evidence. The subsequent
+[registration-loop audit](unity_icall_bindings.md) establishes the correct
+table bases/count and resolves StartCoroutineManaged2 to `0x100CE0`.
 
 The WaitForSeconds NaN diagnostic string at `0x1978260` has a direct reference
 at `0x779419`. The PE exception/unwind entry spans `0x7793F3..0x7794FE`;
@@ -51,7 +53,9 @@ record. It also reads an engine-object 64-bit value at offset `0xC8`, increments
 it by one, and stores it in the record. **The owning engine type and exact
 meaning of these fields have not been independently resolved.** Calling them
 scaled time and frame count would currently be an inference, not a recovered
-field identity.
+field identity. The subsequent registration audit identifies consumer field
+`0x90` as the double backing Time.time and the low 32 bits of `0xC8` as
+Time.frameCount; producer field `0x60` remains distinct and unresolved.
 
 Two callback addresses, `0x778B30` and `0x778BD0`, are stored in that record.
 The consumer below establishes their dispatch/release slots. The dispatch
@@ -136,9 +140,9 @@ engine phase, nor supply the timing of writer-created Reveal continuations.
 
 ## Next native work and coverage
 
-Trace the owner of the engine time/counter globals and the callback dispatch
-chain; recover tree mutation effects and phase provenance. Independently
-resolve the StartCoroutineManaged2 binding rather than using table proximity.
+Trace the producer clock's relationship to Time.time and the callback dispatch
+chain; recover tree mutation effects and phase provenance. The separate
+registration-loop audit resolves StartCoroutineManaged2 without table proximity.
 Keep any subsequently recovered engine-specific order separate from Unity's
 public portability guarantees and from observed live event provenance.
 

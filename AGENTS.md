@@ -53,6 +53,8 @@ stop, diagnose, fix, verify, then resume.
     For native PE inspection, distinguish zero-filled virtual data from file-
     backed bytes, and verify an unwind entry actually contains a queried RVA
     before treating it as that instruction's chunk.
+    Decode from a verified entry/instruction boundary before selecting a later
+    output range; arbitrary byte windows can silently misdecode native code.
 
 ## Recovery Protocol
 

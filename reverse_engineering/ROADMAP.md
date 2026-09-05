@@ -427,8 +427,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     eligibility gates, successor traversal and one-shot dispatch/release slots.
     Pin the constructor/vtable binding and record the distinct producer/consumer
     time fields without inferring their public identities.
-  - [ ] Resolve engine time fields, phase provenance, tree mutation ordering,
-    continuation dispatch and StartCoroutineManaged2 binding independently.
+  - [x] Recover the engine's 3,447-pair internal-call registration loop and
+    independently bind StartCoroutineManaged2 and selected Time getters. Identify
+    the consumer clock and public frame-count backing without narrowing its
+    native signed 64-bit gate.
+  - [ ] Resolve the producer clock relationship, phase provenance, tree mutation
+    ordering, coroutine creation and continuation dispatch.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.
