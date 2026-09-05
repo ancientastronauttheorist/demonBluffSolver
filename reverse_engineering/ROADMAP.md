@@ -417,6 +417,9 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Explore all orders of a caller-sealed ready batch, with distinct
     coroutine IDs, branch-local acquisition decisions, conditional RNG weights,
     deferred writer-created continuations and whole-exploration failure caps.
+  - [x] Carry a complete logical continuation registry across explicit batches,
+    remove consumed identities, allocate writer-created instances in trace order,
+    validate per-body counts and reject replayed IDs or allocation overflow.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

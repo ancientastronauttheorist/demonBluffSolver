@@ -175,6 +175,9 @@ An offline [sealed ready-batch explorer](notes/systems/gameplay_ready_batch.md)
 of up to six caller-proven ready continuations. Each order has a separate RNG
 distribution, with no scheduler probability assigned. Native readiness capture
 and admission of later-ready continuations remain pending.
+A logical continuation registry now carries complete pending identities between
+explicit batches, with consumed-ID removal and ordered writer-created labels.
+Those labels are simulation-local and do not establish native readiness.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.

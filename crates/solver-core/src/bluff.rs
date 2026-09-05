@@ -11,6 +11,7 @@ pub mod character_start;
 pub mod reveal;
 pub mod reveal_writer;
 pub mod ready_batch;
+pub mod continuation_registry;
 pub mod reveal_view;
 pub mod twin_writer;
 

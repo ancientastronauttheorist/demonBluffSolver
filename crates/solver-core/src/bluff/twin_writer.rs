@@ -275,6 +275,9 @@ mod tests {
     use crate::bluff::character_start::{
         replay_character_start, CharacterStartContext, CHARACTER_START_NATIVE_V1,
     };
+    use crate::bluff::continuation_registry::{
+        advance_ready_batch, ContinuationState, CONTINUATION_REGISTRY_NATIVE_V1,
+    };
     use crate::bluff::ledger::{ScriptLists, SelectorPools};
     use crate::bluff::ready_batch::{
         replay_ready_batch, ReadyBatchContext, ReadyContinuation, READY_BATCH_NATIVE_V1,
@@ -408,6 +411,156 @@ mod tests {
                 })
                 .collect(),
         }
+    }
+
+    fn registry_input() -> ContinuationState {
+        ContinuationState {
+            rule_version: CONTINUATION_REGISTRY_NATIVE_V1.into(),
+            initial: ready_input(&[]).initial,
+            pending: BTreeMap::from([(10, 1), (20, 2), (30, 3)]),
+            next_id: 100,
+            batch_ordinal: 0,
+        }
+    }
+
+    #[test]
+    fn registry_labels_ordered_writer_creations_and_preserves_unready_instances() {
+        let result = advance_ready_batch(&registry_input(), &[10]).unwrap();
+        assert_eq!(result[0].order, vec![10]);
+        let path = &result[0].paths[1];
+        assert_eq!(
+            path.state.pending,
+            BTreeMap::from([(20, 2), (30, 3), (100, 3), (101, 1)])
+        );
+        assert_eq!(
+            path.created
+                .iter()
+                .map(|c| (c.logical_id, c.position, c.replacement_index))
+                .collect::<Vec<_>>(),
+            vec![(100, 3, 0), (101, 1, 1)]
+        );
+        assert_eq!(path.state.next_id, 102);
+        assert_eq!(path.state.batch_ordinal, 1);
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 2
+            }
+        );
+    }
+
+    #[test]
+    fn registry_new_instance_can_resume_in_later_explicit_batch_only_once() {
+        let first = advance_ready_batch(&registry_input(), &[10]).unwrap();
+        let second = advance_ready_batch(&first[0].paths[1].state, &[101]).unwrap();
+        assert_eq!(second[0].paths.len(), 1);
+        let path = &second[0].paths[0];
+        assert_eq!(
+            path.state.pending,
+            BTreeMap::from([(20, 2), (30, 3), (100, 3)])
+        );
+        assert_eq!(path.state.next_id, 102);
+        assert_eq!(path.state.batch_ordinal, 2);
+        assert!(path.created.is_empty());
+        assert_eq!(path.trace[0].acquisition.event.acquisition_ordinal, Some(0));
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 1
+            }
+        );
+        assert_eq!(
+            advance_ready_batch(&path.state, &[101]),
+            Err(LedgerError::InvalidContext)
+        );
+        assert_eq!(
+            advance_ready_batch(&path.state, &[10]),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn registry_self_swap_keeps_distinct_ids_on_same_body() {
+        let first = advance_ready_batch(&registry_input(), &[10]).unwrap();
+        let state = &first[0].paths[0].state;
+        assert_eq!(state.pending[&100], 1);
+        assert_eq!(state.pending[&101], 1);
+        let second = advance_ready_batch(state, &[100, 101]).unwrap();
+        assert_eq!(second.len(), 2);
+        assert_eq!(second[0].order, vec![100, 101]);
+        assert_eq!(second[1].order, vec![101, 100]);
+        for schedule in second {
+            for path in schedule.paths {
+                assert!(!path.state.pending.contains_key(&100));
+                assert!(!path.state.pending.contains_key(&101));
+                assert!(path.created.iter().all(|c| c.logical_id >= 102));
+            }
+        }
+    }
+
+    #[test]
+    fn registry_rejects_incomplete_counts_and_unknown_or_duplicate_ready_ids() {
+        let mut state = registry_input();
+        state.pending.remove(&30);
+        assert_eq!(
+            advance_ready_batch(&state, &[10]),
+            Err(LedgerError::InvalidContext)
+        );
+        state = registry_input();
+        state.pending.insert(40, 1);
+        assert_eq!(
+            advance_ready_batch(&state, &[]),
+            Err(LedgerError::InvalidContext)
+        );
+        state = registry_input();
+        state.next_id = 30;
+        assert_eq!(
+            advance_ready_batch(&state, &[]),
+            Err(LedgerError::InvalidContext)
+        );
+        assert_eq!(
+            advance_ready_batch(&registry_input(), &[99]),
+            Err(LedgerError::InvalidContext)
+        );
+        assert_eq!(
+            advance_ready_batch(&registry_input(), &[10, 10]),
+            Err(LedgerError::InvalidContext)
+        );
+    }
+
+    #[test]
+    fn registry_allocation_and_batch_overflow_fail_without_partial_output() {
+        let mut state = registry_input();
+        state.next_id = u64::MAX;
+        assert_eq!(
+            advance_ready_batch(&state, &[10]),
+            Err(LedgerError::Capacity)
+        );
+        state = registry_input();
+        state.batch_ordinal = u16::MAX;
+        assert_eq!(advance_ready_batch(&state, &[]), Err(LedgerError::Capacity));
+    }
+
+    #[test]
+    fn registry_empty_batch_preserves_state_and_roundtrips_for_next_handoff() {
+        let state = registry_input();
+        let result = advance_ready_batch(&state, &[]).unwrap();
+        let path = &result[0].paths[0];
+        assert_eq!(path.state.pending, state.pending);
+        assert_eq!(path.state.initial, state.initial);
+        assert_eq!(path.state.next_id, state.next_id);
+        assert!(path.created.is_empty());
+        assert_eq!(path.state.batch_ordinal, 1);
+        let json = serde_json::to_value(&path.state).unwrap();
+        assert_eq!(
+            serde_json::from_value::<ContinuationState>(json.clone()).unwrap(),
+            path.state
+        );
+        let mut invalid = json;
+        invalid["native_handle_guessed"] = true.into();
+        assert!(serde_json::from_value::<ContinuationState>(invalid).is_err());
     }
 
     #[test]
