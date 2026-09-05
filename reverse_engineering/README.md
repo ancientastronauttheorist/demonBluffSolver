@@ -198,6 +198,10 @@ Full lifetime, reentrant drains and release-body mutation remain separate.
 A bounded offline `wait_eligibility` module now projects finite wait arithmetic
 and timing gates from explicit producer/consumer snapshots, preserving native
 float promotion, signed frame counters and wrapping dispatch generations.
+The [one-shot queue projection](notes/systems/unity_wait_queue_projection.md)
+adds stable queue traversal, supplied callback insertions/cancellations and
+exact release conditions. Its Rust regression compares 23 native-emulated
+synthetic cases; owner/lifetime provenance and registry admission remain explicit.
 The [native coroutine bridge](notes/systems/unity_coroutine_bridge.md) now links
 valid-owner creation to the immediate managed MoveNext call, WaitForSeconds
 registration and the later callback into that same dispatcher.

@@ -91,3 +91,8 @@ before automatic Reveal scheduling or scenario integration.
 Validation passed all 23 native consumer cases, a repeat of the 26,496-operation
 tree corpus after extending its harness, 778 Python tests, 32 reverse-engineering
 tests, Python compilation and diff checks. The tree report was unchanged.
+
+The subsequent [Rust queue projection](unity_wait_queue_projection.md) replays
+these 23 native cases from redistributable synthetic fixtures. The audit's
+optional `--projection-fixture` argument regenerates their complete queue
+states, visit order and callback/erase/release events from native execution.

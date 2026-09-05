@@ -454,6 +454,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.
     Keep owner resolution, queue mutation and automatic registry admission open.
+  - [x] Project finite one-shot queue traversal and supplied callback mutations,
+    with stable equal deadlines, saved-successor cancellation, monotonic labels,
+    exact release conditions and atomic failure bounds; compare complete results
+    against 23 isolated native consumer cases in proprietary-input-free CI.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

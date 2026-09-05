@@ -57,6 +57,7 @@ class NativeConsumer(NativeTree):
         self.owners = {}
         self.pending_callback = None
         self.native_visits = []
+        self.next_identity = 0
         self.uc.mem_write(self.owner + 0x40, struct.pack("<QI", self.head, generation))
         self.uc.mem_write(self.allocator, bytes(0x100))
         self.uc.mem_write(self.profiler, bytes(0x1000))
@@ -135,7 +136,55 @@ class NativeConsumer(NativeTree):
         self.nodes[identity] = node
         self.records[node] = record
         self.deadlines[identity] = deadline
+        self.next_identity = max(self.next_identity, identity + 1)
         self.validate()
+
+    def projection_state(self):
+        entries = []
+        for identity in sorted(self.deadlines, key=self.deadlines.__getitem__):
+            record = self.records[self.nodes[identity]]
+            entries.append({"logical_id": identity, "timing": {
+                "deadline": struct.unpack_from("<d", record, 0)[0],
+                "frame_threshold": struct.unpack_from("<q", record, 8)[0],
+                "phase_mask": struct.unpack_from("<I", record, 0x34)[0],
+                "insertion_generation": struct.unpack_from("<I", record, 0x38)[0]},
+                "release_present": struct.unpack_from("<Q", record, 0x28)[0] != 0})
+        return {"rule_version": "unity_wait_queue_native_v1", "entries": entries,
+                "generation": struct.unpack("<I", self.uc.mem_read(self.owner + 0x48, 4))[0],
+                "next_id": self.next_identity}
+
+    def projection_context(self, time=1.0, frame=1, phase=2):
+        state = self.projection_state()
+        responses = {}
+        for entry in state["entries"]:
+            identity = entry["logical_id"]
+            if self.qword(self.base + 0x1CD5328) == 0 or self.owners.get(identity) in ("missing", "null"):
+                responses[str(identity)] = {"owner": "unavailable"}
+                continue
+            mutations = []
+            for action in self.actions.get(identity, []):
+                if action[0] == "cancel":
+                    mutations.append({"operation": "cancel", "logical_id": action[1]})
+                elif action[0] == "insert":
+                    args = action[1]
+                    if args.get("mask", 10) != 10 or "generation" in args:
+                        raise ValueError("fixture insertion is not a current-generation WaitForSeconds")
+                    threshold = args.get("frame", 0)
+                    producer_frame = (threshold - 1 + 2**63) % 2**64 - 2**63
+                    mutations.append({"operation": "insert", "duration": 0.0,
+                        "producer_time": args.get("deadline", 0.0),
+                        "producer_frame_counter": producer_frame,
+                        "release_present": args.get("release", True)})
+                elif action[0] != "clock":
+                    raise ValueError("unknown projected action")
+                # Callback engine-clock writes intentionally have no queue effect:
+                # the native audit checks the retained entry-time samples.
+            responses[str(identity)] = {"owner": "resolved",
+                "callback_result": self.returns.get(identity, 1), "mutations": mutations}
+        return {"rule_version": "unity_wait_queue_native_v1", "initial": state,
+                "dispatch": {"rule_version": "unity_wait_eligibility_native_v1",
+                    "sampled_time": time, "sampled_frame_counter": frame, "phase_mask": phase,
+                    "generation_before": state["generation"]}, "responses": responses}
 
     def cancel(self, identity):
         node = self.nodes[identity]
@@ -195,13 +244,15 @@ class NativeConsumer(NativeTree):
                 "generation": struct.unpack("<I", self.uc.mem_read(self.owner + 0x48, 4))[0]}
 
 
-def audit(path):
+def audit(path, projection_output=None):
     data = Path(path).read_bytes()
     digest = verify_fingerprint(data, ENGINE_SHA256)
     tree = NativeConsumer(data)
     results = []
+    projections = []
 
     def check(name, expected_callbacks, expected_remaining, expected_visits=None, expected_releases=None, **snapshot):
+        context = tree.projection_context(**snapshot)
         result = tree.drain(**snapshot)
         callbacks = [identity for kind, identity in result["events"] if kind == "callback"]
         releases = [identity for kind, identity in result["events"] if kind == "release"]
@@ -212,6 +263,9 @@ def audit(path):
         if expected_releases is not None and releases != expected_releases:
             raise ValueError(f"native release result mismatch: {name}: {result}")
         results.append({"name": name, **result})
+        projections.append({"name": name, "context": context,
+            "expected_state": tree.projection_state(), "expected_events": result["events"],
+            "expected_visits": result["visits"]})
 
     tree.reset_case()
     for identity in (7, 3, 9):
@@ -315,6 +369,14 @@ def audit(path):
     tree.actions = {1: [("clock", 100.0, 100)]}
     check("clock changes inside callback do not replace sampled frame counter", [1], [2], [1, 2], [1])
 
+    if projection_output is not None:
+        projection_output = Path(projection_output)
+        projection_output.parent.mkdir(parents=True, exist_ok=True)
+        projection_output.write_text(json.dumps({"schema_version": 1,
+            "native_input_sha256": digest,
+            "scope": "authored synthetic queue inputs and native-emulated results; no native bytes",
+            "clock_write_projection": "callback clock writes omitted; entry-time samples are retained",
+            "cases": projections}, indent=2) + "\n", encoding="utf-8")
     return {"schema_version": 1, "unityplayer_sha256": digest,
             "emulator": "Unicorn 2.1.4 x86-64, MXCSR 0x1f80",
             "native_scope": "one-shot consumer, timing gates, traversal, tree insertion and cursor-aware erasure",
@@ -333,7 +395,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("unityplayer", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--projection-fixture", type=Path)
     args = parser.parse_args()
-    report = audit(args.unityplayer)
+    report = audit(args.unityplayer, args.projection_fixture)
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"Verified {report['cases']} native one-shot consumer cases")
