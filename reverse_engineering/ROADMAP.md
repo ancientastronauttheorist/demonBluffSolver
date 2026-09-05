@@ -438,8 +438,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Identify the retained frame clock versus selected public Time.time,
     fixed-step equality boundary and special first fixed step; bind fixed delta,
     time scale and inFixedTimeStep and verify full-width frame-counter updates.
-  - [ ] Resolve complete clock-update policy, phase provenance, tree mutation
-    ordering and remaining coroutine lifetime/cancellation branches.
+  - [x] Verify finite equal-deadline occurrence order through native tree
+    insertion, balancing and arbitrary erasure with a differential emulator
+    corpus and payload/link/red-black invariant checks after every operation.
+  - [ ] Resolve complete clock-update policy, phase provenance, mutation during
+    consumer traversal and remaining coroutine lifetime/cancellation branches.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.

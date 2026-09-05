@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "emulator": "Unicorn 2.1.4, x86-64, MXCSR 0x1f80",
+  "synthetic_allocator": "0x677920; zeroed 0x60-byte nodes; no host DLL execution",
+  "scope": "finite deadline insert/link/erase/rotations; no consumer or callback execution",
+  "seed": "0xdb202209",
+  "cases": 143,
+  "operations": 26496,
+  "insertions": 13248,
+  "erasures": 13248,
+  "verified_after_every_operation": [
+    "stable finite deadline occurrence order",
+    "unchanged 0x40-byte surviving payloads",
+    "red-black invariants",
+    "parent and sentinel links",
+    "minimum, maximum and count"
+  ],
+  "routines": {
+    "insert": {
+      "rva": "0x440f00",
+      "end_exclusive": "0x441003",
+      "distinct_executed_instructions": 62
+    },
+    "link_and_balance": {
+      "rva": "0x366cb0",
+      "end_exclusive": "0x366ef2",
+      "distinct_executed_instructions": 159
+    },
+    "erase": {
+      "rva": "0x3eb6d0",
+      "end_exclusive": "0x3eba51",
+      "distinct_executed_instructions": 250
+    },
+    "rotate_right": {
+      "rva": "0x3eba60",
+      "end_exclusive": "0x3ebab9",
+      "distinct_executed_instructions": 27
+    },
+    "rotate_left": {
+      "rva": "0x3ebac0",
+      "end_exclusive": "0x3ebb15",
+      "distinct_executed_instructions": 27
+    }
+  },
+  "unresolved": [
+    "nonfinite keys and alternate floating-point modes",
+    "mutation during consumer traversal and callback dispatch",
+    "complete engine phase and lifetime provenance"
+  ]
+}

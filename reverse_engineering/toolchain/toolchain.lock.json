@@ -48,6 +48,12 @@
       "release": "v6.7.46",
       "version": "6.7.46"
     },
+    "unicorn": {
+      "version": "2.1.4",
+      "purpose": "Optional isolated native audit execution; no host DLL loading",
+      "repository": "https://github.com/unicorn-engine/unicorn",
+      "windows_amd64_wheel_sha256": "D7107500C64CE5C168FBFF6BEF9485B5DB1350050036F4CEA568650CF8BDBDF5"
+    },
     "ilspycmd": {
       "archive_name": "ilspycmd.11.0.0.9375.zip",
       "archive_sha256": "8F555B3FCA90A1D7A59050D78539C69DEEDAAD421756BD4FE478D135BDAC2DEA",

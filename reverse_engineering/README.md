@@ -186,6 +186,10 @@ validates all 3,447 registered pairs and independently binds StartCoroutineManag
 and the public time/frame getters, including frame/fixed clock selection.
 Full clock-update policy, phase identities and mutation-safe equal-deadline
 dispatch remain unresolved.
+The [native tree differential audit](notes/systems/unity_wait_tree.md) establishes
+stable finite equal-deadline occurrence order through insertion, balancing and
+removal in the pinned engine, with synthetic records executed in an emulator.
+Mutation during consumer traversal remains a separate boundary.
 A bounded offline `wait_eligibility` module now projects finite wait arithmetic
 and timing gates from explicit producer/consumer snapshots, preserving native
 float promotion, signed frame counters and wrapping dispatch generations.
@@ -811,6 +815,8 @@ Every behavioral or layout claim should carry one of these labels:
 
 - `metadata`: directly present in IL2CPP metadata, such as a field offset.
 - `native-static`: recovered from disassembly/decompilation.
+- `native-emulated`: pinned native routines executed in an isolated emulator
+  against authored synthetic inputs, with explicit environment and scope.
 - `live-validated`: confirmed against paired UI and process-memory observations.
 - `behavioral`: confirmed through controlled gameplay or regression traces.
 - `hypothesis`: plausible but not yet validated.

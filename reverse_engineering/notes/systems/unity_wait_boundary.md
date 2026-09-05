@@ -174,8 +174,10 @@ checks. The long simulation suite was not rerun for this offline-only API.
 
 ## Next native work and coverage
 
-Trace the remaining clock-update policy and callback lifetime branches;
-recover tree mutation effects and phase provenance. The separate
+The [native tree audit](unity_wait_tree.md) now verifies stable finite
+equal-deadline insertion order through balancing and erasure. Trace the remaining
+clock-update policy, callback lifetime branches, mutation during consumer
+traversal and phase provenance. The separate
 registration-loop audit resolves StartCoroutineManaged2 without table proximity.
 Keep any subsequently recovered engine-specific order separate from Unity's
 public portability guarantees and from observed live event provenance.
