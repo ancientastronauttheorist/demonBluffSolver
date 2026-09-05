@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
-  "native_relationships_verified": 60,
+  "native_relationships_verified": 73,
   "managed_input_hashes": {
     "GameAssembly.dll": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
     "global-metadata.dat": "807DE4A83DF41DEA29F31E98308131DBA93008B340746B8D6BE85CA5EA373713"
@@ -20,7 +20,7 @@
   "release_rva": "0x778bd0",
   "gc_free_export": "il2cpp_gchandle_free",
   "emulator": "Unicorn 2.1.4 x86-64",
-  "cases": 12,
+  "cases": 14,
   "results": [
     {
       "name": "positive remaining reference returns one without cleanup",
@@ -35,7 +35,8 @@
         "secondary_handle": 29,
         "secondary_mode": 2,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -56,7 +57,8 @@
         "secondary_handle": 0,
         "secondary_mode": 2,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -81,7 +83,8 @@
         "secondary_handle": 0,
         "secondary_mode": 2,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -106,7 +109,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -131,7 +135,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -156,7 +161,8 @@
         "secondary_handle": 0,
         "secondary_mode": 2,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -177,7 +183,8 @@
         "secondary_handle": 0,
         "secondary_mode": 2,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -198,7 +205,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -214,7 +222,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -239,7 +248,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -264,7 +274,8 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
       }
     },
     {
@@ -285,7 +296,68 @@
         "secondary_handle": 0,
         "secondary_mode": 0,
         "link_68_zero": true,
-        "link_70_zero": true
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      }
+    },
+    {
+      "name": "auxiliary waiter retained by 1 other references is cleared and released",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      },
+      "retained_auxiliary": {
+        "remaining_references": 1,
+        "fields_10_through_28_cleared": true
+      }
+    },
+    {
+      "name": "auxiliary waiter retained by 2 other references is cleared and released",
+      "return_value": 0,
+      "events": [
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      },
+      "retained_auxiliary": {
+        "remaining_references": 2,
+        "fields_10_through_28_cleared": true
       }
     }
   ],
@@ -294,8 +366,9 @@
     "0x88-byte allocation free"
   ],
   "storage_note": "free sinks record calls without unmapping memory; snapshots are emulated storage only",
+  "auxiliary_support": "0x78 object fields cleared and atomic reference released only with initial count >=2; final-reference branch excluded",
   "unresolved": [
-    "non-null waiter field 0x78 and helper 0x33cc90",
+    "concrete auxiliary waiter type and last-reference destructor/allocator branch",
     "zero-reference but still-linked diagnostic path in managed cleanup",
     "validity of arbitrary reference/link graphs and full lifetime integration"
   ]

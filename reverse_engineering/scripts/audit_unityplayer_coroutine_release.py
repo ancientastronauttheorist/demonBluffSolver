@@ -2,7 +2,8 @@
 
 Executes the pinned release routine, including nested release calls. GC-handle
 free and allocation free are recorded rather than executed on the host. Waiter
-objects at +0x78 and complete cross-caller lifetime remain outside scope.
+objects at +0x78 are covered only while another reference retains them; their
+last-reference destructor and complete cross-caller lifetime remain outside scope.
 """
 import argparse
 import hashlib
@@ -37,7 +38,8 @@ class NativeRelease(NativeCancellation):
             return
         rva = address - self.base
         if not any(a <= rva and rva + size <= b for a, b in
-                   [(0x778BD0, 0x778CB8), (0xF88B0, 0xF88B5), (0x778CC0, 0x778D82)]):
+                   [(0x778BD0, 0x778CB8), (0xF88B0, 0xF88B5), (0x778CC0, 0x778D82),
+                    (0x33CC90, 0x33CCB1), (0x33CF80, 0x33CF86)]):
             raise ValueError(f"execution left audited coroutine release: {rva:#x}")
         self.instructions.add(rva)
 
@@ -61,7 +63,8 @@ class NativeRelease(NativeCancellation):
                 "secondary_handle": self.qword(pointer + 0x28),
                 "secondary_mode": struct.unpack("<I", self.uc.mem_read(pointer + 0x30, 4))[0],
                 "link_68_zero": self.qword(pointer + 0x68) == 0,
-                "link_70_zero": self.qword(pointer + 0x70) == 0}
+                "link_70_zero": self.qword(pointer + 0x70) == 0,
+                "auxiliary_78_zero": self.qword(pointer + 0x78) == 0}
 
 
 def audit(path):
@@ -116,6 +119,16 @@ def audit(path):
         (0x778CF8, "je", "0x778d6d"),
         (0x778D6D, "mov", "edx, 0x88"),
         (0x778D7D, "jmp", "0x17a7808"),
+        (0x778C45, "mov", "dword ptr [rax + 0x28], edi"),
+        (0x778C48, "mov", "qword ptr [rax + 0x10], rdi"),
+        (0x778C4C, "mov", "qword ptr [rax + 0x18], rdi"),
+        (0x778C50, "mov", "qword ptr [rax + 0x20], rdi"),
+        (0x778C58, "add", "rcx, 8"), (0x778C5C, "call", "0x33cc90"),
+        (0x778C61, "mov", "qword ptr [rbx + 0x78], rdi"),
+        (0x33CC96, "mov", "ebp, 0xffffffff"), (0x33CC9B, "mov", "eax, ebp"),
+        (0x33CC9D, "lock xadd", "dword ptr [rcx + 4], eax"),
+        (0x33CCA2, "cmp", "eax, 1"), (0x33CCA5, "jne", "0x33cf80"),
+        (0x33CF85, "ret", ""),
     ]
     for rva, mnemonic, operands in checks:
         ins = next(cs.disasm(pe.get_data(rva, 15), rva))
@@ -244,6 +257,20 @@ def audit(path):
     native.events = []
     run("later managed cleanup frees zero-reference detached allocation", None,
         [["free_payload", "requested"]], entry="cleanup_gc")
+    for count in (2, 3):
+        native.prepare(enumerator_handle=17)
+        auxiliary = native.payload + 0x400
+        native.uc.mem_write(auxiliary, bytes(0x30))
+        native.uc.mem_write(auxiliary + 0xC, struct.pack("<I", count))
+        native.uc.mem_write(auxiliary + 0x10, struct.pack("<QQQI", 0x1111, 0x2222, 0x3333, 7))
+        native.uc.mem_write(native.payload + 0x78, struct.pack("<Q", auxiliary))
+        snapshot = run(f"auxiliary waiter retained by {count - 1} other references is cleared and released", 0,
+                       [["free_handle", 17], ["free_payload", "requested"]])
+        remaining = struct.unpack("<I", native.uc.mem_read(auxiliary + 0xC, 4))[0]
+        cleared = bytes(native.uc.mem_read(auxiliary + 0x10, 0x1C)) == bytes(0x1C)
+        if not snapshot["auxiliary_78_zero"] or remaining != count - 1 or not cleared:
+            raise ValueError("retained auxiliary object cleanup mismatch")
+        results[-1]["retained_auxiliary"] = {"remaining_references": remaining, "fields_10_through_28_cleared": cleared}
     return {"schema_version": 1, "unityplayer_sha256": digest,
             "native_relationships_verified": len(checks) + 5 + len(managed_checks) + 8,
             "managed_input_hashes": {name: item["sha256"] for name, item in pinned.items()},
@@ -256,7 +283,8 @@ def audit(path):
             "emulator": "Unicorn 2.1.4 x86-64", "cases": len(results), "results": results,
             "synthetic_boundaries": ["GC-handle free", "0x88-byte allocation free"],
             "storage_note": "free sinks record calls without unmapping memory; snapshots are emulated storage only",
-            "unresolved": ["non-null waiter field 0x78 and helper 0x33cc90",
+            "auxiliary_support": "0x78 object fields cleared and atomic reference released only with initial count >=2; final-reference branch excluded",
+            "unresolved": ["concrete auxiliary waiter type and last-reference destructor/allocator branch",
                            "zero-reference but still-linked diagnostic path in managed cleanup",
                            "validity of arbitrary reference/link graphs and full lifetime integration"]}
 

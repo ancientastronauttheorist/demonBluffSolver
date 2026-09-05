@@ -59,14 +59,16 @@ the two strings are not incorrectly asserted to be identical.
 ## Bounded native validation
 
 [`audit_unityplayer_coroutine_release.py`](../../scripts/audit_unityplayer_coroutine_release.py)
-checks 60 native relationships across the images, rechecks 52 registration
-relationships, and executes 12 cases in isolated Unicorn memory. Only the
-reference-release routine, registered cleanup thunk and cleanup body execute.
+checks 73 native relationships across the images, rechecks 52 registration
+relationships, and executes 14 cases in isolated Unicorn memory. Only the
+reference-release routine, registered cleanup thunk, cleanup body and the
+retained-reference path of the auxiliary release helper execute.
 GC-handle free and allocation release are synthetic recording boundaries.
 
 The cases cover positive-reference retention, final release with zero/one/two
 handles, low-32-bit handle arguments, reciprocal-link cleanup, recursive release,
-and both managed/native cleanup orders. Allocation-release sinks deliberately
+both managed/native cleanup orders, and auxiliary objects retained by one or
+two other references. Allocation-release sinks deliberately
 leave emulated storage mapped so field writes can be inspected; these snapshots
 do not imply that reading freed memory would be valid in the real process.
 
@@ -81,12 +83,20 @@ GameAssembly and metadata must be present alongside the pinned engine in the
 normal game layout. Native bytes and decompiler output are never written to
 the report.
 
-The nonnull waiter field `+0x78`/helper `0x33cc90`, the zero-reference but still-
-linked diagnostic path, and validity of arbitrary reference/link graphs remain
-unresolved. Full cancellation/release-body mutation and actual lifetime
-integration therefore remain separate from the finite queue projection.
+For a nonnull auxiliary object at payload `+0x78`, cleanup first clears object
+fields `+0x10`, `+0x18`, `+0x20` and `+0x28`, then passes object+8 to helper
+`0x33cc90`. The helper atomically decrements the reference count at object+12.
+With an initial count of at least two, it returns without destruction; cleanup
+then clears payload `+0x78` and continues. Two native cases verify counts 2→1
+and 3→2 and all those field writes. The emulator excludes the last-reference
+branch, which calls the object's vtable destructor and enters allocator paths.
 
-Validation passed 12 native cases, 60 cross-image relationships, 52 registration
+The auxiliary object's concrete type and last-reference destructor, the zero-
+reference but still-linked diagnostic path, and validity of arbitrary reference/
+link graphs remain unresolved. Full cancellation/release-body mutation and
+actual lifetime integration remain separate from the finite queue projection.
+
+Validation passed 14 native cases, 73 cross-image relationships, 52 registration
 relationships, 778 Python tests, 32 reverse-engineering tests, Python compilation
 and diff checks. The preceding Rust queue checkpoint already passed 625 Rust
 library tests, all 34 simulations and the release build; no gameplay code changed

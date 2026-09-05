@@ -45,7 +45,8 @@ stop, diagnose, fix, verify, then resume.
     `rg --files` before reading; verify a documented directory exists before
     searching it, since directory maps can describe intended layout.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
-    current text before preparing an exact-match patch to a changed guide.
+    current text before preparing an exact-match patch to a changed guide, and
+    keep patch hunks in file order.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.

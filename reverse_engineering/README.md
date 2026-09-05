@@ -210,7 +210,8 @@ binds handle, IEnumerator and StopAll entry points and verifies 26 native cases
 for queue matching, cursor updates and bounded owner-list unlinking.
 The [reference-release/finalizer audit](notes/systems/unity_coroutine_release.md)
 connects native reference cleanup to managed Coroutine cleanup and verifies
-both invocation orders in 12 native cases, retaining explicit waiter/graph limits.
+both invocation orders and retained auxiliary cleanup in 14 native cases,
+retaining explicit final-reference destructor and lifetime-graph limits.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.
