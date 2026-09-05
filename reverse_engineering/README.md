@@ -191,7 +191,10 @@ unresolved.
 The [native tree differential audit](notes/systems/unity_wait_tree.md) establishes
 stable finite equal-deadline occurrence order through insertion, balancing and
 removal in the pinned engine, with synthetic records executed in an emulator.
-Mutation during consumer traversal remains a separate boundary.
+The [one-shot consumer audit](notes/systems/unity_wait_consumer.md) additionally
+checks saved-successor behavior under callback insertions/cancellations,
+generation exclusion and retained clock samples in 23 isolated native cases.
+Full lifetime, reentrant drains and release-body mutation remain separate.
 A bounded offline `wait_eligibility` module now projects finite wait arithmetic
 and timing gates from explicit producer/consumer snapshots, preserving native
 float promotion, signed frame counters and wrapping dispatch generations.

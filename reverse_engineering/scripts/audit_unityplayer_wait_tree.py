@@ -90,6 +90,8 @@ def make_record(deadline, identity):
 
 
 class NativeTree:
+    routines = ROUTINES
+
     def __init__(self, data):
         import pefile
         import unicorn
@@ -117,6 +119,7 @@ class NativeTree:
         self.output = self.arena + 0x300
         self.instructions = set()
         self.operation_count = 0
+        self.call_stack_offset = 0xF008
         self.insertions = 0
         self.erasures = 0
         self.uc.hook_add(unicorn.UC_HOOK_CODE, self._on_code)
@@ -138,7 +141,7 @@ class NativeTree:
             uc.reg_write(self.x86.UC_X86_REG_RSP, rsp + 8)
             uc.reg_write(self.x86.UC_X86_REG_RIP, target)
             return
-        if not any(start <= rva and rva + size <= end for start, end in ROUTINES.values()):
+        if not any(start <= rva and rva + size <= end for start, end in self.routines.values()):
             raise ValueError(f"execution left audited tree routines: {rva:#x}")
         self.instructions.add(rva)
 
@@ -153,7 +156,7 @@ class NativeTree:
 
     def call(self, name, *args):
         x = self.x86
-        rsp = self.stack + 0xF008  # Windows x64 entry alignment and shadow space.
+        rsp = self.stack + self.call_stack_offset  # Windows x64 entry alignment and shadow space.
         self.uc.mem_write(rsp, struct.pack("<Q", self.stop) + bytes(0x28))
         self.uc.reg_write(x.UC_X86_REG_RSP, rsp)
         self.uc.reg_write(x.UC_X86_REG_EFLAGS, 2)
@@ -161,7 +164,7 @@ class NativeTree:
         for register, value in zip((x.UC_X86_REG_RCX, x.UC_X86_REG_RDX,
                                     x.UC_X86_REG_R8, x.UC_X86_REG_R9), args):
             self.uc.reg_write(register, value)
-        self.uc.emu_start(self.base + ROUTINES[name][0], self.stop,
+        self.uc.emu_start(self.base + self.routines[name][0], self.stop,
                           timeout=1_000_000, count=100_000)
         if self.uc.reg_read(x.UC_X86_REG_RIP) != self.stop:
             raise ValueError("native operation exceeded its execution bound")

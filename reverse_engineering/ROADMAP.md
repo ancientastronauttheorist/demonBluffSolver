@@ -444,8 +444,12 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Bind five default PlayerLoop nodes to native wait-dispatch masks through
     qualified managed type-cache lookups, callback installation and isolated
     native construction of the 131-node loop; preserve phase-8 uncertainty.
-  - [ ] Resolve complete clock-update policy, remaining phase provenance, mutation during
-    consumer traversal and remaining coroutine lifetime/cancellation branches.
+  - [x] Exercise one-shot consumer traversal with synthetic callbacks that insert
+    and cancel native records; verify saved-successor updates, retained clock
+    samples, timing gates, owner-failure removal and exact release conditions.
+  - [ ] Resolve complete clock-update policy, remaining phase provenance,
+    repeating/reentrant drains, release-body mutation and remaining coroutine
+    lifetime/cancellation branches.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.

@@ -77,10 +77,12 @@ branch also takes the right link. It then calls the tree-link/balance helper
 at `0x366CB0`.
 
 This establishes a deadline-keyed insertion operation and its equality branch.
-The consumer establishes in-order traversal, but a complete equal-deadline
-FIFO claim still requires the tree linking/balancing and erasure helpers,
-callback mutations and all relevant producers to be accounted for. The bounded
-ready-batch explorer continues to require explicit sealed-ready provenance.
+The later [tree audit](unity_wait_tree.md) verifies finite equal-deadline
+occurrence order through balancing and erasure. The
+[one-shot consumer audit](unity_wait_consumer.md) separately verifies saved
+successor behavior under bounded callback insertions/cancellations. Full
+producer/lifetime coverage remains open, and the ready-batch explorer continues
+to require explicit sealed-ready provenance.
 
 ## Queue consumer and local eligibility
 
