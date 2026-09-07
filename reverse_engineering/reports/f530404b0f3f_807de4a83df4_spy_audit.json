@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "type_def_index": 5911,
+  "managed_method_count": 6,
+  "cache_field": {
+    "name": "chData",
+    "offset": "0x48"
+  },
+  "native_relationships_verified": 17,
+  "declaration_boundary_verified": true,
+  "method_rvas": [
+    "0x3ed7d0",
+    "0x3ed640",
+    "0x33ed50",
+    "0x3ed4b0",
+    "0x3ed6a0",
+    "0x3cfff0"
+  ],
+  "description": "Can register as a Good Townsfolk. Demon will kill best targets.",
+  "truth_and_inherited_bluff_clue": {
+    "text": "",
+    "references": "null"
+  },
+  "act": "empty shared return body for all triggers",
+  "inherited_bluff_act": "Role.BluffAct forwards to the concrete Act slot",
+  "constructor": "two empty constructor forwarders reach the shared return body; no cache write",
+  "asset_name_observations": [
+    {
+      "file": "sharedassets0.assets",
+      "sha256": "E0D239C03FA47EC138F9C2797779E83B65AEF41F30C5AD84D4CA76767A93E967",
+      "size": 25255232,
+      "ascii_spy_occurrences": 0
+    },
+    {
+      "file": "level0",
+      "sha256": "B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1",
+      "size": 24296436,
+      "ascii_spy_occurrences": 0
+    },
+    {
+      "file": "resources.assets",
+      "sha256": "FED4E49586B019E3712C5EE3A8547885BF05CCB82997B790BC8A6B8ADF1226D6",
+      "size": 3415304,
+      "ascii_spy_occurrences": 0
+    },
+    {
+      "file": "globalgamemanagers.assets",
+      "sha256": "38E56EF97CDA4C5DFCFCB397F8077335AEBBF199460FA5B536D91698C21ED2D9",
+      "size": 705652,
+      "ascii_spy_occurrences": 0
+    }
+  ],
+  "asset_limit": "No current shipped Spy asset binding established; negative name searches alone do not prove global unreachability",
+  "selector_evidence": "Existing bluff-acquisition audit and Spy-cache replay cover exact Villager occurrence selection and cache reuse"
+}

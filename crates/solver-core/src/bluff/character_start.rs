@@ -77,9 +77,6 @@ fn dispatch(
         status_application: None,
         twin: None,
     };
-    if role == CallbackRole::Spy {
-        return Err(LedgerError::InvalidContext);
-    }
     if role == CallbackRole::TwinMinion {
         // Twin inherits Role.BluffAct -> concrete Act, so both routes swap.
         let mut input = path.board.clone();
@@ -118,8 +115,11 @@ fn dispatch(
     callback.status_application = match role {
         CallbackRole::Drunk => Some(actor.statuses.apply(10, Some(actor.position))),
         CallbackRole::Lilis => Some(actor.statuses.apply(60, None)),
-        CallbackRole::Scout | CallbackRole::Witness | CallbackRole::Confessor => None,
-        CallbackRole::TwinMinion | CallbackRole::Spy => unreachable!(),
+        CallbackRole::Scout
+        | CallbackRole::Witness
+        | CallbackRole::Confessor
+        | CallbackRole::Spy => None,
+        CallbackRole::TwinMinion => unreachable!(),
     };
     path.callbacks.push(callback);
     Ok(vec![path])

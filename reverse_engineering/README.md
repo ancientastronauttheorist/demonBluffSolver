@@ -585,9 +585,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,680
-datatypes. Its forty-one-set inventory contains 882 target memberships, 543
-distinct selected FunctionDefinitions, and 445 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,685
+datatypes. Its forty-two-set inventory contains 891 target memberships, 548
+distinct selected FunctionDefinitions, and 448 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -601,13 +601,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current forty-one-set run used six batches for each phase. Ghidra
+sets; the current forty-two-set run used six batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all forty-one target
-sets after a no-analysis refresh. Three hundred thirty-nine memberships are
+The preserved fully analyzed typed project now covers all forty-two target
+sets after a no-analysis refresh. Three hundred forty-three memberships are
 exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
-the 543 selected definitions exceed the 445 unique native RVAs by ninety-eight;
+the 548 selected definitions exceed the 448 unique native RVAs by one hundred;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -635,9 +635,10 @@ Confessor refresh imported three more. The Druid refresh imported 157 more and
 canonicalized six shared bodies. The bluff-acquisition pool refresh imported
 six additional reachable datatypes. Its scheduler-handoff expansion added two
 FunctionDefinitions to the rebuilt GDT and required no additional reachable
-datatype imports during application. The six-batch refresh reapplied and
-validated all 882 memberships without rerunning auto-analysis. The final
-read-only pass validated all 882 memberships (543 exact definitions) and 2,585
+datatype imports during application. The Spy boundary adds five FunctionDefinitions
+without additional reachable datatype imports. The six-batch refresh reapplied and
+validated all 891 memberships without rerunning auto-analysis. The final
+read-only pass validated all 891 memberships (548 exact definitions) and 2,613
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -823,13 +824,21 @@ The current Druid comparison is in the
 The current bluff-acquisition comparison is in the
 [`bluff-acquisition typed-quality report`](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_bluff_acquisition.json).
 
+The [Spy managed boundary](notes/roles/gameplay_role_spy.md) closes all six
+Spy declarations and three inherited/shared callees. Its inert real/copied
+Start dispatch now composes with cache-aware Reveal and the native queue;
+no current shipped Spy asset binding is assumed. The native audit verifies
+17 instruction/literal relationships and four pinned asset-name observations.
+Its [typed-quality report](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_spy.json)
+compares nine completed exports in each project and passes all quality gates.
+
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 532 classifications backed by
-276 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 537 classifications backed by
+278 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

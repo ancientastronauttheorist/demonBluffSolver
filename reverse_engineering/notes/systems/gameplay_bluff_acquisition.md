@@ -651,7 +651,9 @@ The separate `Character.role` action clone is not used by these two selector
 calls. Its cached fields remain outside the projection because `Spy.Act`
 binds the empty `0x33ED50` body, corroborated by the existing folded Wretch
 export, and inherited `Role.BluffAct` forwards to that no-op. No additional
-native target, full Spy-role audit, or coverage classification is claimed.
+native target, full Spy-role audit, or coverage classification was claimed at
+this cache checkpoint. The later [Spy boundary](../roles/gameplay_role_spy.md)
+closes its six declarations and explicitly supports inert Start dispatch.
 
 `Gameplay.GetScriptCharacters` at `0x37DC00` concatenates current Villagers,
 Outcasts, Minions, then Demons. The subsequent exact Villager filter therefore
@@ -742,9 +744,11 @@ acquisition happens earlier and may already have applied Corrupted; this yields
 a different initial Start decision. Confessor Init can subsequently clear the
 shared status target without removing Corrupted.
 
-Reached, unlatched Twin or Spy action slots reject the entire replay. A latched
+Reached, unlatched Twin action slots reject this standalone replay. A latched
 Start or absent HealthyBluff safely bypasses those slots; acquisition may also
-replace a stale unsupported copied slot before this check. Twin's ordered
+replace a stale unsupported copied slot before this check. Spy Start was
+initially excluded here and is now accepted under its complete native audit.
+Twin's ordered
 InitWithNoReset writes, latch resets and new coroutine registrations require a
 separate board/writer model. No continuation order or native failure-side-effect
 state is inferred. The v3 model remains an offline projection through
@@ -804,8 +808,9 @@ leaves raw bluff null, and otherwise uses the bluff presentation. Callers must
 prove excluded epilogues and intervening activity do not mutate modeled state
 before a later supplied event. Body state reflects the modeled writer effects;
 UI state is not implicitly advanced. No coroutine timing, readiness ordering,
-user clicks, subscriptions or missing writer events are invented. Spy Start
-and other unsupported callback roles still fail when reached.
+user clicks, subscriptions or missing writer events are invented. Unsupported
+callback roles still fail when reached; audited Spy Start is now inert in both
+real and copied slots.
 
 Eight regressions cover acquisition before swap, new-data repeated resumes,
 post-swap Confessor Init, equivalence with old v3 for a non-writer case, Spy

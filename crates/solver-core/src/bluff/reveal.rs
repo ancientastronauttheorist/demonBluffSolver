@@ -386,7 +386,7 @@ pub(super) fn callbacks(
             if actor.character_start_acted != Some(false)
                 || [Some(actor.action_role), actor.bluff_role]
                     .iter()
-                    .any(|role| matches!(role, Some(CallbackRole::TwinMinion | CallbackRole::Spy)))
+                    .any(|role| matches!(role, Some(CallbackRole::TwinMinion)))
             {
                 return Err(LedgerError::InvalidContext);
             }
@@ -917,7 +917,7 @@ mod tests {
 
     #[test]
     fn healthy_unsupported_start_only_rejected_when_reached_but_subscribers_always_rejected() {
-        for role in [CallbackRole::TwinMinion, CallbackRole::Spy] {
+        for role in [CallbackRole::TwinMinion] {
             for copied in [false, true] {
                 let mut input = healthy_context(DataRole::Lilis);
                 if copied {
@@ -943,6 +943,70 @@ mod tests {
                 assert_eq!(path.actors[0].character_start_acted, Some(false));
             }
         }
+    }
+
+    #[test]
+    fn healthy_spy_start_is_inert_in_real_and_copied_slots_but_consumes_latch() {
+        for copied in [false, true] {
+            let mut input = healthy_context(DataRole::Lilis);
+            input.actors[0].action_role = if copied {
+                CallbackRole::Witness
+            } else {
+                CallbackRole::Spy
+            };
+            input.actors[0].bluff_role = Some(if copied {
+                CallbackRole::Spy
+            } else {
+                CallbackRole::Witness
+            });
+            let output = replay_reveal_callbacks(&input).unwrap();
+            assert_eq!(output.len(), 1);
+            let path = &output[0];
+            assert_eq!(path.actors[0].statuses, input.actors[0].statuses);
+            assert_eq!(path.actors[0].character_start_acted, Some(true));
+            assert!(path.spy_caches.is_empty());
+            assert_eq!(path.trace[0].callbacks.len(), 6);
+            assert_eq!(path.trace[1].callbacks.len(), 4);
+            let spy = path.trace[0]
+                .callbacks
+                .iter()
+                .find(|c| c.role == CallbackRole::Spy && c.trigger == Trigger::Start)
+                .unwrap();
+            assert_eq!(
+                spy.slot,
+                if copied {
+                    RoleSlot::Bluff
+                } else {
+                    RoleSlot::Real
+                }
+            );
+            assert!(spy.status_application.is_none());
+            input.actors[0].on_trigger_subscribed = true;
+            assert_eq!(
+                replay_reveal_callbacks(&input),
+                Err(LedgerError::InvalidContext)
+            );
+        }
+    }
+
+    #[test]
+    fn healthy_spy_data_reuses_register_cache_across_start_and_repeated_resume() {
+        let mut input = healthy_context(DataRole::Spy { cache_key: 7 });
+        input.spy_caches.insert(
+            7,
+            BluffReference::Live {
+                role: BluffRole::Scout,
+            },
+        );
+        let output = replay_reveal_callbacks(&input).unwrap();
+        assert_eq!(output.len(), 1);
+        let path = &output[0];
+        assert_eq!(path.actors[0].register_as.as_deref(), Some("Scout"));
+        assert_eq!(path.actors[0].bluff, input.actors[0].bluff);
+        assert_eq!(path.spy_caches, input.spy_caches);
+        assert_eq!(path.actors[0].character_start_acted, Some(true));
+        assert!(path.trace.iter().all(|t| t.spy_acquisition.is_none()
+            && t.spy_register_as.as_ref().unwrap().rng_draw_count == 0));
     }
 
     #[test]

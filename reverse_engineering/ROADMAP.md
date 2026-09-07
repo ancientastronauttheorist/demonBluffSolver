@@ -371,6 +371,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   compatibility; expand the typed union to 39 target sets, 800 memberships,
   512 selected managed definitions, and 424 unique native RVAs, then publish
   its typed-quality report.
+- [x] Close the six-method managed Spy boundary and three semantic callees;
+  verify inert real/copied Start, cached Villager identity and empty clue
+  construction, preserve the unestablished shipped-asset binding, and join
+  Spy Start to standalone/ordered/queue-driven Reveal. Extend the typed union
+  to 42 sets, 891 memberships, 548 definitions and 448 native RVAs.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
@@ -483,7 +488,7 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [ ] Close remaining asset/scene callback assumptions and establish native
     coroutine readiness/order provenance for automatic interleaving support.
   - [ ] Extend callback replay to remaining register-as overrides, additional roles,
-    Twin/Spy Start, subscriptions, and writer-created continuations; establish
+    subscriptions, mixed wait kinds, and remaining identity writers; establish
     scheduler order provenance or justified interleaving support before
     scenario integration.
 - [ ] Run and publish the final method-classification coverage audit.

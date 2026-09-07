@@ -48,6 +48,7 @@ stop, diagnose, fix, verify, then resume.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order.
+    Use explicit UTF-8 for repository text reads and writes in Python on Windows.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.
@@ -62,6 +63,8 @@ stop, diagnose, fix, verify, then resume.
     before treating it as that instruction's chunk.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
+    Derive exact instruction assertions from that decode, including operands
+    on folded return stubs; do not infer their encoding from decompiled C.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
     Internal-call requests can include parameter signatures that registrations

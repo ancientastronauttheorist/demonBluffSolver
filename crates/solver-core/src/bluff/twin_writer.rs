@@ -1386,7 +1386,7 @@ mod tests {
     }
 
     #[test]
-    fn reveal_writer_spy_acquisition_replaces_unsupported_copied_slot_before_guard() {
+    fn reveal_writer_spy_acquisition_replaces_stale_spy_copied_slot_before_start() {
         let mut input = writer_input();
         let actor = &mut input.board.reveal.actors[0];
         actor.data_role = DataRole::Spy { cache_key: 7 };
@@ -1670,13 +1670,101 @@ mod tests {
     }
 
     #[test]
-    fn character_start_rejects_unsupported_second_slot_without_partial_branches() {
+    fn character_start_real_spy_preserves_empty_and_live_shared_caches() {
+        for cache in [
+            BluffReference::Null,
+            BluffReference::Live {
+                role: BluffRole::Witness,
+            },
+        ] {
+            let mut input = start_input();
+            let actor = &mut input.board.reveal.actors[0];
+            actor.data_role = DataRole::Spy { cache_key: 7 };
+            actor.action_role = CallbackRole::Spy;
+            actor.bluff_role = None;
+            input.board.reveal.spy_caches.insert(7, cache);
+            let before = input.board.clone();
+            let paths = replay_character_start(&input).unwrap();
+            assert_eq!(paths.len(), 1);
+            let path = &paths[0];
+            assert_eq!(path.callbacks.len(), 1);
+            assert_eq!(path.callbacks[0].role, CallbackRole::Spy);
+            assert!(path.callbacks[0].status_application.is_none());
+            assert!(path.callbacks[0].twin.is_none());
+            let mut expected = before;
+            expected.reveal.actors[0].character_start_acted = Some(true);
+            assert_eq!(path.board, expected);
+        }
+    }
+
+    #[test]
+    fn scheduled_spy_reveal_initializes_cache_once_then_runs_inert_start() {
+        use crate::bluff::scheduled_reveal::replay_scheduled_reveal;
+        let mut input = scheduled_input();
+        let reveal = &mut input.initial.continuations.initial.board.reveal;
+        reveal.actors[0].data_role = DataRole::Spy { cache_key: 7 };
+        reveal.actors[0].action_role = CallbackRole::Spy;
+        reveal.actors[0].bluff = BluffReference::Null;
+        reveal.actors[0].bluff_role = None;
+        reveal.spy_caches.insert(7, BluffReference::Null);
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        let paths = replay_scheduled_reveal(&input).unwrap();
+        assert_eq!(paths.len(), 1);
+        let path = &paths[0];
+        assert_eq!(path.callbacks.len(), 1);
+        assert_eq!(
+            path.probability,
+            Probability {
+                numerator: 1,
+                denominator: 1
+            }
+        );
+        assert!(path.callbacks[0].replay.created.is_empty());
+        assert_eq!(path.state.queue.entries.len(), 2);
+        assert_eq!(path.state.continuations.next_id, 100);
+        let actor = &path.state.continuations.initial.board.reveal.actors[0];
+        assert_eq!(actor.character_start_acted, Some(true));
+        assert_eq!(actor.register_as.as_deref(), Some("Witness"));
+        assert_eq!(
+            actor.bluff,
+            BluffReference::Live {
+                role: BluffRole::Witness
+            }
+        );
+        assert_eq!(
+            path.state.continuations.initial.board.reveal.spy_caches[&7],
+            actor.bluff
+        );
+        let start = path.callbacks[0].replay.trace[0].start.as_ref().unwrap();
+        assert_eq!(start.callbacks[0].role, CallbackRole::Spy);
+        assert!(start
+            .callbacks
+            .iter()
+            .all(|c| c.twin.is_none() && c.status_application.is_none()));
+    }
+
+    #[test]
+    fn character_start_spy_copied_slot_is_inert_and_context_guards_remain() {
         let mut input = start_input();
         input.board.reveal.actors[0].bluff_role = Some(CallbackRole::Spy);
-        assert_eq!(
-            replay_character_start(&input),
-            Err(LedgerError::InvalidContext)
-        );
+        let paths = replay_character_start(&input).unwrap();
+        assert_eq!(paths.len(), 2);
+        for path in paths {
+            assert_eq!(path.callbacks.len(), 2);
+            assert_eq!(path.callbacks[1].role, CallbackRole::Spy);
+            assert!(path.callbacks[1].status_application.is_none());
+            assert!(path.callbacks[1].twin.is_none());
+            assert_eq!(
+                path.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 2
+                }
+            );
+        }
         input.board.reveal.actors[0].character_start_acted = Some(true);
         assert!(replay_character_start(&input).is_ok());
         input.board.copied_slot = true;
