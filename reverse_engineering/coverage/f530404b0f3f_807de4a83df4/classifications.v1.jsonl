@@ -118,7 +118,7 @@
 {"method":"tdi5910.m0004","state":"understood","reason":"Native Minion 40/60 duplicate-versus-unique draw and registration difference are documented.","evidence":["ev.role.bluff-selection.1"]}
 {"method":"tdi5911.m0003","state":"understood","reason":"Native Spy existing-bluff shortcut, live cache, Villager sampling, and failure paths are documented.","evidence":["ev.role.bluff-selection.1","ev.role.spy.boundary.1"]}
 {"method":"tdi5911.m0004","state":"understood","reason":"Native Spy register-as cache and Villager sampling shared with bluff selection are documented.","evidence":["ev.role.bluff-selection.1","ev.role.spy.boundary.1"]}
-{"method":"tdi5903.m0004","state":"understood","reason":"Native Mutant Good/bluffable filtering, Mad-before-draw ordering, and failure behavior are documented.","evidence":["ev.role.bluff-selection.1"]}
+{"method":"tdi5903.m0004","state":"understood","reason":"Native Mutant Good/bluffable filtering, Mad-before-draw ordering, and failure behavior are documented.","evidence":["ev.role.bluff-selection.1","ev.role.managed-mutant.1"]}
 {"method":"tdi5505.m0010","state":"understood","reason":"Native must-include-first unique Villager selection, fallback filtering, and random-draw behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
 {"method":"tdi5505.m0011","state":"understood","reason":"Native must-include-first general unique selection and non-removing fallback behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
 {"method":"tdi5505.m0012","state":"understood","reason":"Native duplicate-pool random selection and empty-list failure behavior are documented.","evidence":["ev.characters.bluff-selection-pools.1"]}
@@ -1158,3 +1158,6 @@
 {"method":"tdi6170.m0005","state":"understood","reason":"The direct getter returns the reference in metadata field <>2__current at +0x18 without writes, dereferencing the returned reference, or advancing iterator state.","evidence":["ev.shared.scaffolding.1"]}
 {"method":"tdi6184.m0003","state":"understood","reason":"The direct getter returns the reference in metadata field <>2__current at +0x18 without writes, dereferencing the returned reference, or advancing iterator state.","evidence":["ev.shared.scaffolding.1"]}
 {"method":"tdi6184.m0005","state":"understood","reason":"The direct getter returns the reference in metadata field <>2__current at +0x18 without writes, dereferencing the returned reference, or advancing iterator state.","evidence":["ev.shared.scaffolding.1"]}
+{"method":"tdi5903.m0000","state":"understood","reason":"The native managed description returns the pinned empty string.","evidence":["ev.role.managed-mutant.1"]}
+{"method":"tdi5903.m0001","state":"understood","reason":"The native truthful clue allocates ActedInfo with empty text and null target references.","evidence":["ev.role.managed-mutant.1"]}
+{"method":"tdi5903.m0002","state":"understood","reason":"The native bluff clue independently allocates ActedInfo with empty text and null target references.","evidence":["ev.role.managed-mutant.1"]}

@@ -384,6 +384,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   metadata field identities and 384 native execution cases. Preserve 49 existing
   classifications, add 454, and exclude generic-shared and Unity constructor
   paths from the closed boundary.
+- [x] Close all six managed Mutant declarations separately from the public
+  Mutant/Skinwalker binding; model occurrence-weighted exact-field acquisition
+  with retained Mad on indexed-draw failure, and compare 16 native caller cases.
+  Extend the typed union to 43 sets, 899 memberships and 553 definitions.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

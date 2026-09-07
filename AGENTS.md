@@ -44,8 +44,9 @@ stop, diagnose, fix, verify, then resume.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob); do not pass wildcard paths that the shell leaves unexpanded, including
     a trailing `/*` on a directory argument.
-    Resolve all uncertain filenames, including status/summary documents, with
-    `rg --files` before reading; verify a documented directory exists before
+    Resolve all uncertain filenames, including audit scripts and status/summary
+    documents, with `rg --files` before reading. Do not infer an audit filename
+    from a role name. Verify a documented directory exists before
     searching it, since directory maps can describe intended layout.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
@@ -65,6 +66,7 @@ stop, diagnose, fix, verify, then resume.
     before treating it as that instruction's chunk.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
+    Include the entire final instruction when sizing a decode range.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
     Check each requested export's result before reading its file: a successful

@@ -585,9 +585,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,685
-datatypes. Its forty-two-set inventory contains 891 target memberships, 548
-distinct selected FunctionDefinitions, and 448 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,690
+datatypes. Its forty-three-set inventory contains 899 target memberships, 553
+distinct selected FunctionDefinitions, and 451 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -636,9 +636,10 @@ canonicalized six shared bodies. The bluff-acquisition pool refresh imported
 six additional reachable datatypes. Its scheduler-handoff expansion added two
 FunctionDefinitions to the rebuilt GDT and required no additional reachable
 datatype imports during application. The Spy boundary adds five FunctionDefinitions
-without additional reachable datatype imports. The six-batch refresh reapplied and
-validated all 891 memberships without rerunning auto-analysis. The final
-read-only pass validated all 891 memberships (548 exact definitions) and 2,613
+without additional reachable datatype imports. Managed Mutant adds five more
+FunctionDefinitions without additional reachable datatype imports. The refresh
+reapplied and validated all 899 memberships without rerunning auto-analysis. The final
+read-only pass validated all 899 memberships (553 exact definitions) and 2,638
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -842,13 +843,18 @@ The [shared scaffolding audit](notes/systems/shared_scaffolding.md) verifies
 with 384 isolated native cases. It adds 454 classifications while preserving
 49 existing records, including DelayReveal's state constructor and Current.
 
+The [managed Mutant boundary](notes/roles/gameplay_role_managed_mutant.md)
+closes all six declarations separately from public Mutant/Skinwalker. Its
+offline selector preserves Mad across empty-draw failure and compares against
+16 native caller cases with explicit service gateways.
+
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,160 classifications backed by
-280 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,163 classifications backed by
+281 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

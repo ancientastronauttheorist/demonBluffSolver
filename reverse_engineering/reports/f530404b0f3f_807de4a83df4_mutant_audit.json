@@ -1,0 +1,895 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "type_def_index": 5903,
+  "managed_method_count": 6,
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "method_rvas": [
+    "0x3e4db0",
+    "0x3e4d50",
+    "0x3e4cf0",
+    "0x33ed50",
+    "0x3e4bb0",
+    "0x3cfff0"
+  ],
+  "native_relationships_verified": 22,
+  "description_and_both_clues": "empty text; clue reference lists are null",
+  "native_caller_cases": 16,
+  "cases": [
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "empty_support"
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 0
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 0
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 1,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 1
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 2,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 4,
+        "occurrence_index": 2
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          2,
+          3
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "empty_support"
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          2,
+          3,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 0
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          2,
+          3,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 1,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 3
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          2,
+          3,
+          1,
+          4
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 2,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 4,
+        "occurrence_index": 4
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          null
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "null_asset",
+        "occurrence_index": 0
+      },
+      "mad_attempted": false,
+      "rng_draw_count": 0,
+      "events": [
+        "script",
+        "alignment"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          1,
+          null
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "null_asset",
+        "occurrence_index": 1
+      },
+      "mad_attempted": false,
+      "rng_draw_count": 0,
+      "events": [
+        "script",
+        "alignment"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          2,
+          null,
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "null_asset",
+        "occurrence_index": 1
+      },
+      "mad_attempted": false,
+      "rng_draw_count": 0,
+      "events": [
+        "script",
+        "alignment"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          4,
+          1,
+          4,
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 0,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 4,
+        "occurrence_index": 0
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          4,
+          1,
+          4,
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 1,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 1
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          4,
+          1,
+          4,
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 2,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 4,
+        "occurrence_index": 2
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    },
+    {
+      "context": {
+        "rule_version": "managed_mutant_selector_native_v1",
+        "assets": [
+          {
+            "asset_id": 1,
+            "alignment": 10,
+            "bluffable": true
+          },
+          {
+            "asset_id": 2,
+            "alignment": 20,
+            "bluffable": true
+          },
+          {
+            "asset_id": 3,
+            "alignment": 10,
+            "bluffable": false
+          },
+          {
+            "asset_id": 4,
+            "alignment": 10,
+            "bluffable": true
+          }
+        ],
+        "script_occurrences": [
+          4,
+          1,
+          4,
+          1
+        ],
+        "statuses": {
+          "values": [
+            10
+          ],
+          "resistance": [],
+          "target_position": 7
+        }
+      },
+      "draw_index": 3,
+      "expected_selection": {
+        "kind": "selected",
+        "asset_id": 1,
+        "occurrence_index": 3
+      },
+      "mad_attempted": true,
+      "rng_draw_count": 1,
+      "events": [
+        "script",
+        "alignment",
+        "bluffable",
+        "mad",
+        "range",
+        "item"
+      ]
+    }
+  ],
+  "public_mutant_asset": {
+    "path_id": 21592,
+    "size": 680,
+    "object_sha256": "A3A703FA630D1A3288E4C031C2EDB4C91C88924F59FC7B957960AAE575470653",
+    "managed_role": "Skinwalker",
+    "role_name_offset": "0x284"
+  },
+  "emulation_scope": "Warm native Mutant.GetBluffIfAble caller; list/filter/status/RNG/index services are explicit gateways; exact argument and call ordering verified",
+  "unresolved": [
+    "managed Mutant shipped-asset binding",
+    "native execution of gateway callees in this harness",
+    "Unity RNG state",
+    "public Skinwalker rules and broader Reveal composition"
+  ]
+}
