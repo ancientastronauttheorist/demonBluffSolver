@@ -1,0 +1,1520 @@
+{
+  "schema_version": 1,
+  "unityplayer_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_relationships_verified": 42,
+  "bridge_relationships_rechecked": 60,
+  "release_relationships_rechecked": 95,
+  "release_cases_rechecked": 14,
+  "emulator": "Unicorn 2.1.4 x86-64",
+  "cases": 848,
+  "verified_case_digest_sha256": "af8fc03644a64ea7dd0131801e5a64af6a24ab1ada0b8a76a190261d0f1b9004",
+  "representative_results": [
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "current_yield_boundary"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": 1,
+      "remaining_references": 1,
+      "events": [
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": 0,
+      "remaining_references": 0,
+      "events": [
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": false,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": false,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          false
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": false,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 0,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "continuing": true,
+      "exception": true,
+      "cached_enumerator": true,
+      "stop_during_invoke": true,
+      "secondary_handle_present": false,
+      "native_releases_during_invoke": 1,
+      "return_value": null,
+      "remaining_references": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          true,
+          true
+        ],
+        [
+          "stop_handle_during_invoke"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "report_exception"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 1,
+      "owner_mismatch": true,
+      "return_value": 1,
+      "events": [
+        [
+          "report_owner_mismatch"
+        ]
+      ]
+    },
+    {
+      "queued": false,
+      "initial_references": 2,
+      "owner_mismatch": true,
+      "return_value": 1,
+      "events": [
+        [
+          "report_owner_mismatch"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 1,
+      "owner_mismatch": true,
+      "return_value": null,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "report_owner_mismatch"
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "initial_references": 2,
+      "owner_mismatch": true,
+      "return_value": null,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "report_owner_mismatch"
+        ],
+        [
+          "release_reference",
+          2
+        ]
+      ]
+    },
+    {
+      "queued": true,
+      "stop_all_sibling": true,
+      "sibling_initial_references": 1,
+      "sibling_secondary_handle": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_all_during_invoke"
+        ],
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          19
+        ],
+        [
+          "free_payload",
+          "sibling"
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_sibling_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      }
+    },
+    {
+      "queued": true,
+      "stop_all_sibling": true,
+      "sibling_initial_references": 1,
+      "sibling_secondary_handle": 31,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_all_during_invoke"
+        ],
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          19
+        ],
+        [
+          "free_handle",
+          31
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_sibling_emulated_storage": {
+        "references": 0,
+        "cleanup_flag": 1,
+        "list_links_zero": true,
+        "enumerator_handle": 0,
+        "enumerator_mode": 0,
+        "secondary_handle": 0,
+        "secondary_mode": 0,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      }
+    },
+    {
+      "queued": true,
+      "stop_all_sibling": true,
+      "sibling_initial_references": 2,
+      "sibling_secondary_handle": 0,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_all_during_invoke"
+        ],
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_sibling_emulated_storage": {
+        "references": 1,
+        "cleanup_flag": 0,
+        "list_links_zero": true,
+        "enumerator_handle": 19,
+        "enumerator_mode": 2,
+        "secondary_handle": 0,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      }
+    },
+    {
+      "queued": true,
+      "stop_all_sibling": true,
+      "sibling_initial_references": 2,
+      "sibling_secondary_handle": 31,
+      "events": [
+        [
+          "erase",
+          0
+        ],
+        [
+          "invoke",
+          false,
+          false
+        ],
+        [
+          "stop_all_during_invoke"
+        ],
+        [
+          "erase",
+          1
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          2
+        ],
+        [
+          "release_reference",
+          1
+        ],
+        [
+          "free_handle",
+          17
+        ],
+        [
+          "free_payload",
+          "requested"
+        ]
+      ],
+      "post_call_sibling_emulated_storage": {
+        "references": 1,
+        "cleanup_flag": 0,
+        "list_links_zero": true,
+        "enumerator_handle": 19,
+        "enumerator_mode": 2,
+        "secondary_handle": 31,
+        "secondary_mode": 2,
+        "link_68_zero": true,
+        "link_70_zero": true,
+        "auxiliary_78_zero": true
+      }
+    }
+  ],
+  "matrix": {
+    "initial_references": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cached_enumerator": [
+      false,
+      true
+    ],
+    "continuing": [
+      false,
+      true
+    ],
+    "exception": [
+      false,
+      true
+    ],
+    "stop_during_invoke": [
+      false,
+      true
+    ],
+    "secondary_handle": [
+      0,
+      29
+    ],
+    "releases_during_invoke": "zero through initial reference count",
+    "entries": [
+      "direct dispatcher",
+      "native one-shot queue"
+    ],
+    "exclusion": "queued continuing nonexception with retained owner: real yield production is unaudited"
+  },
+  "synthetic_boundaries": [
+    "managed MoveNext invocation and chosen return/exception",
+    "GC APIs",
+    "owner-context virtual lookup",
+    "method parameter-count lookup",
+    "diagnostic sinks",
+    "allocation/free sinks",
+    "continuing current-yield gateway only"
+  ],
+  "native_composition": [
+    "queue erasure and matching-owner callback",
+    "invocation-frame initialization",
+    "managed-step dispatcher",
+    "reference release",
+    "StopCoroutineManaged during invocation",
+    "StopAll with actual sibling release and saved-cursor cancellation"
+  ],
+  "storage_note": "free sinks record calls without unmapping; post-call snapshots are emulated storage only",
+  "unresolved": [
+    "arbitrary linked/nested coroutine graphs",
+    "actual managed bodies and exception construction",
+    "current-yield production within continuing cases",
+    "reentrant queue drains and complete lifetime graph"
+  ]
+}

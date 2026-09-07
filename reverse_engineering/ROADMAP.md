@@ -458,6 +458,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     release in both invocation orders; verify 14 bounded native lifetime cases,
     including auxiliary cleanup while another reference retains the object and
     the AsyncOperation type/cache/callback binding for that auxiliary pointer.
+  - [x] Execute managed-step dispatch through native invocation-frame setup and
+    actual queue/reference release; verify survival guards, error-out timing,
+    native stops/releases during invocation and StopAll with real sibling
+    destruction and saved-cursor cancellation in 848 isolated cases.
   - [x] Project finite WaitForSeconds production and local consumer eligibility
     with separate clock snapshots, promoted float duration, signed 64-bit frame
     gates, wrapping generations and explicit traversal-stop versus skip results.

@@ -216,6 +216,9 @@ The [reference-release/finalizer audit](notes/systems/unity_coroutine_release.md
 connects native reference cleanup to managed Coroutine cleanup and verifies
 both invocation orders and retained auxiliary cleanup in 14 native cases,
 retaining explicit final-reference destructor and lifetime-graph limits.
+The [completion/ownership audit](notes/systems/unity_coroutine_completion.md)
+executes the dispatcher together with queue release and in-invocation native
+stop/release calls in 848 cases, including StopAll retiring a queued sibling.
 The [Reveal view-tail audit](notes/systems/gameplay_reveal_view.md) now covers
 UpdateView, UpdateViewReal and RefreshView, including death-presentation
 creation, preserved icon state and a bounded offline presentation projection.
