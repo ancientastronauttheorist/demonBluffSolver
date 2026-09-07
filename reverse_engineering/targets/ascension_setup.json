@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "description": "Complete AscensionsData and ScriptInfo declarations, GameData pool/copy consumers, and four mode current/previous profile selectors",
+  "functions": [
+    {
+      "name": "AscensionsData.AddCharactersToScript",
+      "metadata_name": "AscensionsData$$AddCharactersToScript",
+      "signature": "void AscensionsData__AddCharactersToScript (AscensionsData_o* __this, System_Collections_Generic_List_CharacterData__o* newCharacters, const MethodInfo* method);",
+      "rva": "0x3b11c0"
+    },
+    {
+      "name": "AscensionsData.ClearCurrentPickedScript",
+      "metadata_name": "AscensionsData$$ClearCurrentPickedScript",
+      "signature": "void AscensionsData__ClearCurrentPickedScript (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b15f0"
+    },
+    {
+      "name": "AscensionsData.CopyData",
+      "metadata_name": "AscensionsData$$CopyData",
+      "signature": "void AscensionsData__CopyData (AscensionsData_o* __this, AscensionsData_o* data, const MethodInfo* method);",
+      "rva": "0x3b1610"
+    },
+    {
+      "name": "AscensionsData.GetAllStartingCharacters",
+      "metadata_name": "AscensionsData$$GetAllStartingCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* AscensionsData__GetAllStartingCharacters (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b18a0"
+    },
+    {
+      "name": "AscensionsData.GetAllStartingtCharacters",
+      "metadata_name": "AscensionsData$$GetAllStartingtCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* AscensionsData__GetAllStartingtCharacters (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b1be0"
+    },
+    {
+      "name": "AscensionsData.GetCharactersCount",
+      "metadata_name": "AscensionsData$$GetCharactersCount",
+      "signature": "System_Collections_Generic_List_CharactersCount__o* AscensionsData__GetCharactersCount (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b1cb0"
+    },
+    {
+      "name": "AscensionsData.GetOnlyUnlockedCharacters",
+      "metadata_name": "AscensionsData$$GetOnlyUnlockedCharacters",
+      "signature": "System_Collections_Generic_List_CharacterData__o* AscensionsData__GetOnlyUnlockedCharacters (AscensionsData_o* __this, System_Collections_Generic_List_CharacterData__o* data, const MethodInfo* method);",
+      "rva": "0x3b1cd0"
+    },
+    {
+      "name": "AscensionsData.GetStartingtCharactersOfType",
+      "metadata_name": "AscensionsData$$GetStartingtCharactersOfType",
+      "signature": "CharacterData_array* AscensionsData__GetStartingtCharactersOfType (AscensionsData_o* __this, int32_t type, const MethodInfo* method);",
+      "rva": "0x3b1e10"
+    },
+    {
+      "name": "AscensionsData.SetupCharactersCount",
+      "metadata_name": "AscensionsData$$SetupCharactersCount",
+      "signature": "void AscensionsData__SetupCharactersCount (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b2010"
+    },
+    {
+      "name": "AscensionsData.SetupStartingCharacters",
+      "metadata_name": "AscensionsData$$SetupStartingCharacters",
+      "signature": "void AscensionsData__SetupStartingCharacters (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b2110"
+    },
+    {
+      "name": "AscensionsData.UpdateCharCounts",
+      "metadata_name": "AscensionsData$$UpdateCharCounts",
+      "signature": "void AscensionsData__UpdateCharCounts (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b2270"
+    },
+    {
+      "name": "AscensionsData.ctor",
+      "metadata_name": "AscensionsData$$.ctor",
+      "signature": "void AscensionsData___ctor (AscensionsData_o* __this, const MethodInfo* method);",
+      "rva": "0x3b2380"
+    },
+    {
+      "name": "ScriptInfo.UpdateCharCounts",
+      "metadata_name": "ScriptInfo$$UpdateCharCounts",
+      "signature": "void ScriptInfo__UpdateCharCounts (ScriptInfo_o* __this, const MethodInfo* method);",
+      "rva": "0x3c61c0"
+    },
+    {
+      "name": "ScriptInfo.ctor",
+      "metadata_name": "ScriptInfo$$.ctor",
+      "signature": "void ScriptInfo___ctor (ScriptInfo_o* __this, const MethodInfo* method);",
+      "rva": "0x3c62d0"
+    },
+    {
+      "name": "AdvancedMode.GetCurrentAscension",
+      "metadata_name": "AdvancedMode$$GetCurrentAscension",
+      "signature": "AscensionsData_o* AdvancedMode__GetCurrentAscension (AdvancedMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3d1740"
+    },
+    {
+      "name": "AdvancedMode.GetPreviousAscension",
+      "metadata_name": "AdvancedMode$$GetPreviousAscension",
+      "signature": "AscensionsData_o* AdvancedMode__GetPreviousAscension (AdvancedMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3d1790"
+    },
+    {
+      "name": "GameData.GetAllCharactersData",
+      "metadata_name": "GameData$$GetAllCharactersData",
+      "signature": "System_Collections_Generic_List_CharacterData__o* GameData__GetAllCharactersData (GameData_o* __this, const MethodInfo* method);",
+      "rva": "0x3dc030"
+    },
+    {
+      "name": "GameData.GetAllCharactersOfType",
+      "metadata_name": "GameData$$GetAllCharactersOfType",
+      "signature": "System_Collections_Generic_List_CharacterData__o* GameData__GetAllCharactersOfType (GameData_o* __this, int32_t type, const MethodInfo* method);",
+      "rva": "0x3dc120"
+    },
+    {
+      "name": "GameData.GetAllStartingCharactersFromAscension",
+      "metadata_name": "GameData$$GetAllStartingCharactersFromAscension",
+      "signature": "System_Collections_Generic_List_CharacterData__o* GameData__GetAllStartingCharactersFromAscension (GameData_o* __this, AscensionsData_o* data, const MethodInfo* method);",
+      "rva": "0x3dc180"
+    },
+    {
+      "name": "GameData.GetAllUnlockedCharactersOfType",
+      "metadata_name": "GameData$$GetAllUnlockedCharactersOfType",
+      "signature": "System_Collections_Generic_List_CharacterData__o* GameData__GetAllUnlockedCharactersOfType (GameData_o* __this, int32_t type, const MethodInfo* method);",
+      "rva": "0x3dc290"
+    },
+    {
+      "name": "GameData.GetCharactersOfType",
+      "metadata_name": "GameData$$GetCharactersOfType",
+      "signature": "CharacterData_array* GameData__GetCharactersOfType (GameData_o* __this, int32_t type, const MethodInfo* method);",
+      "rva": "0x3dc590"
+    },
+    {
+      "name": "GameData.GetCurrentAscension",
+      "metadata_name": "GameData$$GetCurrentAscension",
+      "signature": "AscensionsData_o* GameData__GetCurrentAscension (GameData_o* __this, const MethodInfo* method);",
+      "rva": "0x3dc600"
+    },
+    {
+      "name": "GameData.GetPrevAscension",
+      "metadata_name": "GameData$$GetPrevAscension",
+      "signature": "AscensionsData_o* GameData__GetPrevAscension (GameData_o* __this, const MethodInfo* method);",
+      "rva": "0x3dc610"
+    },
+    {
+      "name": "GameData.GetStandardAscensionOfId",
+      "metadata_name": "GameData$$GetStandardAscensionOfId",
+      "signature": "AscensionsData_o* GameData__GetStandardAscensionOfId (GameData_o* __this, int32_t id, const MethodInfo* method);",
+      "rva": "0x3dc6b0"
+    },
+    {
+      "name": "GameData.GetStartingtCharactersOfType",
+      "metadata_name": "GameData$$GetStartingtCharactersOfType",
+      "signature": "CharacterData_array* GameData__GetStartingtCharactersOfType (GameData_o* __this, int32_t type, const MethodInfo* method);",
+      "rva": "0x3dc6f0"
+    },
+    {
+      "name": "GameData.SetupCurrentAscension",
+      "metadata_name": "GameData$$SetupCurrentAscension",
+      "signature": "void GameData__SetupCurrentAscension (GameData_o* __this, const MethodInfo* method);",
+      "rva": "0x3dccd0"
+    },
+    {
+      "name": "GameData.UpdateScriptCharactersFromPreviousLevels",
+      "metadata_name": "GameData$$UpdateScriptCharactersFromPreviousLevels",
+      "signature": "void GameData__UpdateScriptCharactersFromPreviousLevels (GameData_o* __this, const MethodInfo* method);",
+      "rva": "0x3dce90"
+    },
+    {
+      "name": "RoguelikeMode.GetCurrentAscension",
+      "metadata_name": "RoguelikeMode$$GetCurrentAscension",
+      "signature": "AscensionsData_o* RoguelikeMode__GetCurrentAscension (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3e9160"
+    },
+    {
+      "name": "RoguelikeMode.GetPreviousAscension",
+      "metadata_name": "RoguelikeMode$$GetPreviousAscension",
+      "signature": "AscensionsData_o* RoguelikeMode__GetPreviousAscension (RoguelikeMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3e9260"
+    },
+    {
+      "name": "RoguelikeStandard.GetCurrentAscension",
+      "metadata_name": "RoguelikeStandard$$GetCurrentAscension",
+      "signature": "AscensionsData_o* RoguelikeStandard__GetCurrentAscension (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x3e9be0"
+    },
+    {
+      "name": "RoguelikeStandard.GetPreviousAscension",
+      "metadata_name": "RoguelikeStandard$$GetPreviousAscension",
+      "signature": "AscensionsData_o* RoguelikeStandard__GetPreviousAscension (RoguelikeStandard_o* __this, const MethodInfo* method);",
+      "rva": "0x3e9cc0"
+    },
+    {
+      "name": "StandardMode.GetCurrentAscension",
+      "metadata_name": "StandardMode$$GetCurrentAscension",
+      "signature": "AscensionsData_o* StandardMode__GetCurrentAscension (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3edc50"
+    },
+    {
+      "name": "StandardMode.GetPreviousAscension",
+      "metadata_name": "StandardMode$$GetPreviousAscension",
+      "signature": "AscensionsData_o* StandardMode__GetPreviousAscension (StandardMode_o* __this, const MethodInfo* method);",
+      "rva": "0x3edd50"
+    }
+  ]
+}

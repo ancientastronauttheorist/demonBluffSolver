@@ -66,6 +66,8 @@ stop, diagnose, fix, verify, then resume.
     For native PE inspection, distinguish zero-filled virtual data from file-
     backed bytes, and verify an unwind entry actually contains a queried RVA
     before treating it as that instruction's chunk.
+    A method can span adjacent unwind chunks; the first chunk's end is not
+    necessarily the method's end. Resolve the next verified managed entry.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
     Include the entire final instruction when sizing a decode range; assert

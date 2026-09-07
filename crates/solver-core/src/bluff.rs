@@ -7,6 +7,7 @@
 //! offline context and fall back atomically when it is unavailable.
 
 pub mod ledger;
+pub mod ascension_script;
 pub mod mutant_selector;
 pub mod character_start;
 pub mod reveal;

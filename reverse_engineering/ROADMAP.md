@@ -540,3 +540,8 @@ No nontrivial method may disappear from the denominator.
 - [x] Decode the complete ProjectContext -> GameData -> 46 ascension / 12
   custom-script configuration graph, and correct Compendium catalogue provenance.
   Keep mode choice, runtime cloning/writers, and global reachability open.
+
+- [x] Audit complete AscensionsData/ScriptInfo declarations and selected mode /
+  GameData callers, 33 methods with 412 native cases. Model weighted cached
+  script selection in Rust, preserving superseded draws and partial failures.
+  Extend the typed union to 45 sets, 946 memberships, 594 definitions and 488 RVAs.
