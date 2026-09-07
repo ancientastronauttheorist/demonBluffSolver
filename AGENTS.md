@@ -4,6 +4,8 @@ This file is the operating guide for Codex and other coding agents working in
 this repository. It is adapted from `CLAUDE.md`, with Claude-specific process
 language translated into agent-neutral rules.
 
+When subagents are requested or authorized, use `gpt-6-astra` for them.
+
 ## Goal
 
 Primary: harden the Rust solver so it wins consistently at high ascensions.
