@@ -832,13 +832,18 @@ no current shipped Spy asset binding is assumed. The native audit verifies
 Its [typed-quality report](reports/f530404b0f3f_807de4a83df4_typed_quality_gameplay_role_spy.json)
 compares nine completed exports in each project and passes all quality gates.
 
+The [shared void return audit](notes/systems/folded_void_return.md) verifies
+175 direct managed definitions against the regenerated denominator and 64
+isolated native executions. It adds 169 explicit method classifications,
+including delayed Reveal's empty Dispose, without inferring caller behavior.
+
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 537 classifications backed by
-278 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 706 classifications backed by
+279 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

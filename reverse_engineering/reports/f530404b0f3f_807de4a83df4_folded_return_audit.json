@@ -1,0 +1,904 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "global_metadata_sha256": "807DE4A83DF41DEA29F31E98308131DBA93008B340746B8D6BE85CA5EA373713",
+  "denominator_methods": 4207,
+  "body": "ga:rva:0033ED50",
+  "definition_count": 175,
+  "definitions": [
+    {
+      "id": "tdi5426.m0000",
+      "declaring_type": "FHierarchyIcons",
+      "symbol_key": "FHierarchyIcons::private static void .cctor()"
+    },
+    {
+      "id": "tdi5426.m0001",
+      "declaring_type": "FHierarchyIcons",
+      "symbol_key": "FHierarchyIcons::private static void EvaluateIcons(int instanceId, Rect selectionRect)"
+    },
+    {
+      "id": "tdi5426.m0002",
+      "declaring_type": "FHierarchyIcons",
+      "symbol_key": "FHierarchyIcons::private static void DrawIcon(string texName, Rect rect)"
+    },
+    {
+      "id": "tdi5442.m0001",
+      "declaring_type": "EnvMapAnimator.<Start>d__4",
+      "symbol_key": "EnvMapAnimator.<Start>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5462.m0000",
+      "declaring_type": "AudioController",
+      "symbol_key": "AudioController::private void Start()"
+    },
+    {
+      "id": "tdi5462.m0001",
+      "declaring_type": "AudioController",
+      "symbol_key": "AudioController::private void Update()"
+    },
+    {
+      "id": "tdi5463.m0001",
+      "declaring_type": "MusicController.<SwitchMusic>d__19",
+      "symbol_key": "MusicController.<SwitchMusic>d__19::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5464.m0007",
+      "declaring_type": "MusicController",
+      "symbol_key": "MusicController::private void PlayDebugMusic(AudioClip clip)"
+    },
+    {
+      "id": "tdi5471.m0002",
+      "declaring_type": "CardRotate.<>c",
+      "symbol_key": "CardRotate.<>c::internal void <ResetRotation>b__24_0()"
+    },
+    {
+      "id": "tdi5474.m0001",
+      "declaring_type": "CardsUnlockController.<RoutineFinishedRoutine>d__14",
+      "symbol_key": "CardsUnlockController.<RoutineFinishedRoutine>d__14::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5476.m0001",
+      "declaring_type": "Acted.<ActDelayed>d__9",
+      "symbol_key": "Acted.<ActDelayed>d__9::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5482.m0001",
+      "declaring_type": "Character.<DelayReveal>d__84",
+      "symbol_key": "Character.<DelayReveal>d__84::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5483.m0001",
+      "declaring_type": "Character.<DelayedDemonKill>d__103",
+      "symbol_key": "Character.<DelayedDemonKill>d__103::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5484.m0001",
+      "declaring_type": "Character.<InterfereDelay>d__131",
+      "symbol_key": "Character.<InterfereDelay>d__131::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5485.m0001",
+      "declaring_type": "Character.<ShowActedDelayed>d__133",
+      "symbol_key": "Character.<ShowActedDelayed>d__133::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5486.m0001",
+      "declaring_type": "Character.<ShowInfoDelayed>d__134",
+      "symbol_key": "Character.<ShowInfoDelayed>d__134::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5504.m0001",
+      "declaring_type": "Characters.<ShuffleDeck>d__16",
+      "symbol_key": "Characters.<ShuffleDeck>d__16::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5505.m0004",
+      "declaring_type": "Characters",
+      "symbol_key": "Characters::private void Update()"
+    },
+    {
+      "id": "tdi5507.m0001",
+      "declaring_type": "CharacterShuffleAnimation.<PlayAudioDelay>d__9",
+      "symbol_key": "CharacterShuffleAnimation.<PlayAudioDelay>d__9::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5528.m0000",
+      "declaring_type": "StandardController",
+      "symbol_key": "StandardController::public override void ActNextStep()"
+    },
+    {
+      "id": "tdi5531.m0001",
+      "declaring_type": "Map.<CloseMapCoroutine>d__18",
+      "symbol_key": "Map.<CloseMapCoroutine>d__18::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5532.m0001",
+      "declaring_type": "Map.<SetupMap>d__16",
+      "symbol_key": "Map.<SetupMap>d__16::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5534.m0001",
+      "declaring_type": "PlayerController.<DelayedInit>d__9",
+      "symbol_key": "PlayerController.<DelayedInit>d__9::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5535.m0004",
+      "declaring_type": "PlayerController",
+      "symbol_key": "PlayerController::public void DelayedPlayerReset()"
+    },
+    {
+      "id": "tdi5548.m0011",
+      "declaring_type": "SavesGame",
+      "symbol_key": "SavesGame::public static void GetCharacterPreference(CharacterData cd)"
+    },
+    {
+      "id": "tdi5563.m0003",
+      "declaring_type": "BgChangeButtonDebug",
+      "symbol_key": "BgChangeButtonDebug::public void CheckColor(Sprite spr, SpriteVersion ver)"
+    },
+    {
+      "id": "tdi5572.m0001",
+      "declaring_type": "DebugInitialization.<DelayedDebugInit>d__5",
+      "symbol_key": "DebugInitialization.<DelayedDebugInit>d__5::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5574.m0001",
+      "declaring_type": "DebugKills.<ShowVisualDelay>d__4",
+      "symbol_key": "DebugKills.<ShowVisualDelay>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5575.m0000",
+      "declaring_type": "DebugKills",
+      "symbol_key": "DebugKills::private void OnEnable()"
+    },
+    {
+      "id": "tdi5575.m0001",
+      "declaring_type": "DebugKills",
+      "symbol_key": "DebugKills::private void OnDisable()"
+    },
+    {
+      "id": "tdi5576.m0000",
+      "declaring_type": "DebugMode",
+      "symbol_key": "DebugMode::private void Start()"
+    },
+    {
+      "id": "tdi5576.m0001",
+      "declaring_type": "DebugMode",
+      "symbol_key": "DebugMode::private void Update()"
+    },
+    {
+      "id": "tdi5578.m0000",
+      "declaring_type": "DebugScript",
+      "symbol_key": "DebugScript::private void OnEnable()"
+    },
+    {
+      "id": "tdi5578.m0001",
+      "declaring_type": "DebugScript",
+      "symbol_key": "DebugScript::private void OnDisable()"
+    },
+    {
+      "id": "tdi5578.m0003",
+      "declaring_type": "DebugScript",
+      "symbol_key": "DebugScript::private void Start()"
+    },
+    {
+      "id": "tdi5578.m0004",
+      "declaring_type": "DebugScript",
+      "symbol_key": "DebugScript::private void ResetTutorials()"
+    },
+    {
+      "id": "tdi5578.m0005",
+      "declaring_type": "DebugScript",
+      "symbol_key": "DebugScript::public void DebugTranslation()"
+    },
+    {
+      "id": "tdi5581.m0002",
+      "declaring_type": "KillModeFix.<>c",
+      "symbol_key": "KillModeFix.<>c::internal void <ManageView>b__4_0()"
+    },
+    {
+      "id": "tdi5586.m0001",
+      "declaring_type": "Screenshot",
+      "symbol_key": "Screenshot::private void Update()"
+    },
+    {
+      "id": "tdi5588.m0001",
+      "declaring_type": "ScrollCharacters.<AnimateCard>d__9",
+      "symbol_key": "ScrollCharacters.<AnimateCard>d__9::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5593.m0001",
+      "declaring_type": "TrailerProduction.<AnimateVignetteAndCards>d__25",
+      "symbol_key": "TrailerProduction.<AnimateVignetteAndCards>d__25::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5594.m0001",
+      "declaring_type": "TrailerProduction.<IterateAnimation>d__24",
+      "symbol_key": "TrailerProduction.<IterateAnimation>d__24::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5595.m0001",
+      "declaring_type": "TrailerProduction.<RotatePanCamera>d__23",
+      "symbol_key": "TrailerProduction.<RotatePanCamera>d__23::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5597.m0001",
+      "declaring_type": "UnlockAllDebug.<UnlockAll>d__1",
+      "symbol_key": "UnlockAllDebug.<UnlockAll>d__1::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5601.m0001",
+      "declaring_type": "Gameplay.<DelayedDeckIntro>d__50",
+      "symbol_key": "Gameplay.<DelayedDeckIntro>d__50::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5602.m0001",
+      "declaring_type": "Gameplay.<InitCoroutine>d__41",
+      "symbol_key": "Gameplay.<InitCoroutine>d__41::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5603.m0001",
+      "declaring_type": "Gameplay.<SetupDelay>d__47",
+      "symbol_key": "Gameplay.<SetupDelay>d__47::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5614.m0001",
+      "declaring_type": "NewCharactersUnlocked.<ClosePanelRoutine>d__13",
+      "symbol_key": "NewCharactersUnlocked.<ClosePanelRoutine>d__13::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5619.m0000",
+      "declaring_type": "Menu",
+      "symbol_key": "Menu::private void Start()"
+    },
+    {
+      "id": "tdi5619.m0001",
+      "declaring_type": "Menu",
+      "symbol_key": "Menu::private void Update()"
+    },
+    {
+      "id": "tdi5621.m0001",
+      "declaring_type": "PickNewCharacters.<AnimateRewards>d__11",
+      "symbol_key": "PickNewCharacters.<AnimateRewards>d__11::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5622.m0001",
+      "declaring_type": "PickNewCharacters.<RefreshNewCharacters>d__12",
+      "symbol_key": "PickNewCharacters.<RefreshNewCharacters>d__12::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5623.m0001",
+      "declaring_type": "PickNewCharacters.<RevealRoutine>d__14",
+      "symbol_key": "PickNewCharacters.<RevealRoutine>d__14::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5626.m0002",
+      "declaring_type": "RevealCard.<>c",
+      "symbol_key": "RevealCard.<>c::internal void <Hide>b__20_1()"
+    },
+    {
+      "id": "tdi5628.m0001",
+      "declaring_type": "CustomHint.<ShowHintCoroutine>d__7",
+      "symbol_key": "CustomHint.<ShowHintCoroutine>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5632.m0001",
+      "declaring_type": "TutorialNote.<CloseCooldown>d__12",
+      "symbol_key": "TutorialNote.<CloseCooldown>d__12::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5639.m0001",
+      "declaring_type": "TutorialsController.<CancelKillTutorial>d__22",
+      "symbol_key": "TutorialsController.<CancelKillTutorial>d__22::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5640.m0001",
+      "declaring_type": "TutorialsController.<CharacterInfoTutorial>d__18",
+      "symbol_key": "TutorialsController.<CharacterInfoTutorial>d__18::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5641.m0001",
+      "declaring_type": "TutorialsController.<CharacterKillRoutine>d__11",
+      "symbol_key": "TutorialsController.<CharacterKillRoutine>d__11::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5642.m0001",
+      "declaring_type": "TutorialsController.<HoverCharacterRoutine>d__26",
+      "symbol_key": "TutorialsController.<HoverCharacterRoutine>d__26::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5643.m0001",
+      "declaring_type": "TutorialsController.<HoverObjective>d__21",
+      "symbol_key": "TutorialsController.<HoverObjective>d__21::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5644.m0001",
+      "declaring_type": "TutorialsController.<KillTutorial>d__20",
+      "symbol_key": "TutorialsController.<KillTutorial>d__20::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5645.m0001",
+      "declaring_type": "TutorialsController.<PickableCharacterType>d__25",
+      "symbol_key": "TutorialsController.<PickableCharacterType>d__25::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5646.m0001",
+      "declaring_type": "TutorialsController.<PoisonKilledRoutine>d__12",
+      "symbol_key": "TutorialsController.<PoisonKilledRoutine>d__12::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5647.m0001",
+      "declaring_type": "TutorialsController.<RevealCardTutorial>d__19",
+      "symbol_key": "TutorialsController.<RevealCardTutorial>d__19::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5648.m0001",
+      "declaring_type": "TutorialsController.<SecondLevelNoteCoroutine>d__8",
+      "symbol_key": "TutorialsController.<SecondLevelNoteCoroutine>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5649.m0001",
+      "declaring_type": "TutorialsController.<ThirdLevelNoteCoroutine>d__9",
+      "symbol_key": "TutorialsController.<ThirdLevelNoteCoroutine>d__9::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5652.m0001",
+      "declaring_type": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8",
+      "symbol_key": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5653.m0001",
+      "declaring_type": "UnlockNewCharacterPanel.<RevealRoutine>d__10",
+      "symbol_key": "UnlockNewCharacterPanel.<RevealRoutine>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5656.m0001",
+      "declaring_type": "WinConditions.<ChangeGameplayState>d__27",
+      "symbol_key": "WinConditions.<ChangeGameplayState>d__27::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5657.m0001",
+      "declaring_type": "WinConditions.<DelayedCheckCondition>d__21",
+      "symbol_key": "WinConditions.<DelayedCheckCondition>d__21::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5658.m0001",
+      "declaring_type": "WinConditions.<NewHandoutRoutine>d__32",
+      "symbol_key": "WinConditions.<NewHandoutRoutine>d__32::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5664.m0001",
+      "declaring_type": "LayoutRebuilder.<ForceRebuildCoroutine>d__2",
+      "symbol_key": "LayoutRebuilder.<ForceRebuildCoroutine>d__2::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5695.m0001",
+      "declaring_type": "PickNewRelics.<AnimateRewards>d__10",
+      "symbol_key": "PickNewRelics.<AnimateRewards>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5696.m0001",
+      "declaring_type": "PickNewRelics.<RefreshNewCharacters>d__11",
+      "symbol_key": "PickNewRelics.<RefreshNewCharacters>d__11::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5697.m0001",
+      "declaring_type": "PickNewRelics.<RevealRoutine>d__13",
+      "symbol_key": "PickNewRelics.<RevealRoutine>d__13::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5702.m0002",
+      "declaring_type": "RevealObject.<>c",
+      "symbol_key": "RevealObject.<>c::internal void <Hide>b__15_1()"
+    },
+    {
+      "id": "tdi5708.m0001",
+      "declaring_type": "SkinUnlockedUI.<RevealDelay>d__15",
+      "symbol_key": "SkinUnlockedUI.<RevealDelay>d__15::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5716.m0001",
+      "declaring_type": "DisguiseIcon.<EnableHovering>d__5",
+      "symbol_key": "DisguiseIcon.<EnableHovering>d__5::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5717.m0001",
+      "declaring_type": "DisguiseIcon.<ShowDisguiseDelayed>d__7",
+      "symbol_key": "DisguiseIcon.<ShowDisguiseDelayed>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5730.m0001",
+      "declaring_type": "CardExplanationUI.<ForceRebuildCoroutine>d__18",
+      "symbol_key": "CardExplanationUI.<ForceRebuildCoroutine>d__18::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5732.m0001",
+      "declaring_type": "CardHighlight.<HighlightCoroutine>d__4",
+      "symbol_key": "CardHighlight.<HighlightCoroutine>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5736.m0001",
+      "declaring_type": "Compendium.<RevealIfAble>d__17",
+      "symbol_key": "Compendium.<RevealIfAble>d__17::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5746.m0000",
+      "declaring_type": "EnableOnRule",
+      "symbol_key": "EnableOnRule::private void Start()"
+    },
+    {
+      "id": "tdi5746.m0001",
+      "declaring_type": "EnableOnRule",
+      "symbol_key": "EnableOnRule::private void Update()"
+    },
+    {
+      "id": "tdi5755.m0001",
+      "declaring_type": "AchievementHint.<ForceRebuildCoroutine>d__5",
+      "symbol_key": "AchievementHint.<ForceRebuildCoroutine>d__5::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5757.m0001",
+      "declaring_type": "CharacterHint.<ForceRebuildCoroutine>d__8",
+      "symbol_key": "CharacterHint.<ForceRebuildCoroutine>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5765.m0001",
+      "declaring_type": "GenericHint.<ForceRebuildCoroutine>d__7",
+      "symbol_key": "GenericHint.<ForceRebuildCoroutine>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5767.m0001",
+      "declaring_type": "MarksHintHelper.<ShowMarksDelay>d__6",
+      "symbol_key": "MarksHintHelper.<ShowMarksDelay>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5770.m0001",
+      "declaring_type": "BeforeGameInfo.<ShowInfo>d__6",
+      "symbol_key": "BeforeGameInfo.<ShowInfo>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5771.m0001",
+      "declaring_type": "BeforeGameInfo",
+      "symbol_key": "BeforeGameInfo::private void OnDisable()"
+    },
+    {
+      "id": "tdi5776.m0001",
+      "declaring_type": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18",
+      "symbol_key": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5783.m0005",
+      "declaring_type": "HealthView",
+      "symbol_key": "HealthView::private void AnimateBounce()"
+    },
+    {
+      "id": "tdi5787.m0002",
+      "declaring_type": "AnimateBounceDamage",
+      "symbol_key": "AnimateBounceDamage::public override void Reset(float finalAmount)"
+    },
+    {
+      "id": "tdi5788.m0002",
+      "declaring_type": "AnimateParticle",
+      "symbol_key": "AnimateParticle::public override void Reset(float finalAmount)"
+    },
+    {
+      "id": "tdi5789.m0002",
+      "declaring_type": "ControllObjectsHealth",
+      "symbol_key": "ControllObjectsHealth::public override void Reset(float finalAmount)"
+    },
+    {
+      "id": "tdi5793.m0003",
+      "declaring_type": "SettingsPanel.<>c",
+      "symbol_key": "SettingsPanel.<>c::internal void <ResetStandardProgress>b__14_1()"
+    },
+    {
+      "id": "tdi5796.m0001",
+      "declaring_type": "ShopCard.<TrailerCoroutine>d__8",
+      "symbol_key": "ShopCard.<TrailerCoroutine>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5798.m0001",
+      "declaring_type": "SimpleUIInfo.<ShowInfoCoroutine>d__19",
+      "symbol_key": "SimpleUIInfo.<ShowInfoCoroutine>d__19::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5806.m0001",
+      "declaring_type": "TransitionPanel.<TransitionDelayed>d__7",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5807.m0001",
+      "declaring_type": "TransitionPanel.<TransitionDelayed>d__8",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5810.m0001",
+      "declaring_type": "FlickeringBg.<Flick>d__3",
+      "symbol_key": "FlickeringBg.<Flick>d__3::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5811.m0001",
+      "declaring_type": "FlickeringBg.<FlickOut>d__4",
+      "symbol_key": "FlickeringBg.<FlickOut>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5815.m0001",
+      "declaring_type": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4",
+      "symbol_key": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5819.m0001",
+      "declaring_type": "CharactersAnimationResponder",
+      "symbol_key": "CharactersAnimationResponder::private void OnEnable()"
+    },
+    {
+      "id": "tdi5819.m0002",
+      "declaring_type": "CharactersAnimationResponder",
+      "symbol_key": "CharactersAnimationResponder::private void OnDisable()"
+    },
+    {
+      "id": "tdi5822.m0001",
+      "declaring_type": "EyeController.<Despawn>d__21",
+      "symbol_key": "EyeController.<Despawn>d__21::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5823.m0001",
+      "declaring_type": "EyeController.<SpawnCoroutine>d__18",
+      "symbol_key": "EyeController.<SpawnCoroutine>d__18::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5825.m0001",
+      "declaring_type": "FloatingScore.<Animate>d__6",
+      "symbol_key": "FloatingScore.<Animate>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5828.m0001",
+      "declaring_type": "VfxInstance.<DestroyDelay>d__8",
+      "symbol_key": "VfxInstance.<DestroyDelay>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi5853.m0007",
+      "declaring_type": "Role",
+      "symbol_key": "Role::public virtual void OnInit(Character charRef)"
+    },
+    {
+      "id": "tdi5853.m0011",
+      "declaring_type": "Role",
+      "symbol_key": "Role::public virtual void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5853.m0012",
+      "declaring_type": "Role",
+      "symbol_key": "Role::public virtual void ActOnDied(Character charRef)"
+    },
+    {
+      "id": "tdi5853.m0013",
+      "declaring_type": "Role",
+      "symbol_key": "Role::public virtual void OnStatusRemoved(ECharacterStatus status)"
+    },
+    {
+      "id": "tdi5853.m0017",
+      "declaring_type": "Role",
+      "symbol_key": "Role::public virtual void Reveal()"
+    },
+    {
+      "id": "tdi5857.m0002",
+      "declaring_type": "Villager",
+      "symbol_key": "Villager::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5857.m0003",
+      "declaring_type": "Villager",
+      "symbol_key": "Villager::public override void BluffAct(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5903.m0003",
+      "declaring_type": "Mutant",
+      "symbol_key": "Mutant::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5905.m0003",
+      "declaring_type": "Recluse",
+      "symbol_key": "Recluse::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5905.m0004",
+      "declaring_type": "Recluse",
+      "symbol_key": "Recluse::public override void BluffAct(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5906.m0003",
+      "declaring_type": "Saint",
+      "symbol_key": "Saint::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5907.m0003",
+      "declaring_type": "SaintVillager",
+      "symbol_key": "SaintVillager::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5908.m0002",
+      "declaring_type": "Doppleganger",
+      "symbol_key": "Doppleganger::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5908.m0004",
+      "declaring_type": "Doppleganger",
+      "symbol_key": "Doppleganger::public override void BluffAct(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5910.m0003",
+      "declaring_type": "Minion",
+      "symbol_key": "Minion::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5911.m0002",
+      "declaring_type": "Spy",
+      "symbol_key": "Spy::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5919.m0003",
+      "declaring_type": "Demon",
+      "symbol_key": "Demon::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5921.m0001",
+      "declaring_type": "Skinwalker",
+      "symbol_key": "Skinwalker::public override void Act(ETriggerPhase trigger, Character charRef)"
+    },
+    {
+      "id": "tdi5924.m0000",
+      "declaring_type": "SpecialRule",
+      "symbol_key": "SpecialRule::public virtual void Init()"
+    },
+    {
+      "id": "tdi5924.m0001",
+      "declaring_type": "SpecialRule",
+      "symbol_key": "SpecialRule::public virtual void Remove()"
+    },
+    {
+      "id": "tdi5932.m0003",
+      "declaring_type": "GameMode",
+      "symbol_key": "GameMode::public virtual void OnLoadGame()"
+    },
+    {
+      "id": "tdi5932.m0004",
+      "declaring_type": "GameMode",
+      "symbol_key": "GameMode::public virtual void DeInit()"
+    },
+    {
+      "id": "tdi5932.m0010",
+      "declaring_type": "GameMode",
+      "symbol_key": "GameMode::public virtual void AscensionComplete()"
+    },
+    {
+      "id": "tdi5932.m0011",
+      "declaring_type": "GameMode",
+      "symbol_key": "GameMode::public virtual void AbandonRun()"
+    },
+    {
+      "id": "tdi5933.m0011",
+      "declaring_type": "RoguelikeMode",
+      "symbol_key": "RoguelikeMode::public override void OnStageCompleted()"
+    },
+    {
+      "id": "tdi5935.m0018",
+      "declaring_type": "AdvancedMode",
+      "symbol_key": "AdvancedMode::public override void UpdateScore(int score, int level)"
+    },
+    {
+      "id": "tdi5936.m0020",
+      "declaring_type": "RoguelikeStandard",
+      "symbol_key": "RoguelikeStandard::public override void UpdateScore(int score, int level)"
+    },
+    {
+      "id": "tdi5937.m0006",
+      "declaring_type": "RoguelikeAdvanced",
+      "symbol_key": "RoguelikeAdvanced::public override void OnStageCompleted()"
+    },
+    {
+      "id": "tdi5937.m0013",
+      "declaring_type": "RoguelikeAdvanced",
+      "symbol_key": "RoguelikeAdvanced::public override void UpdateScore(int score, int level)"
+    },
+    {
+      "id": "tdi5937.m0015",
+      "declaring_type": "RoguelikeAdvanced",
+      "symbol_key": "RoguelikeAdvanced::public override void AbandonRun()"
+    },
+    {
+      "id": "tdi6015.m0001",
+      "declaring_type": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8",
+      "symbol_key": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6016.m0001",
+      "declaring_type": "BugReport.<ShowCodecksFormCoroutine>d__6",
+      "symbol_key": "BugReport.<ShowCodecksFormCoroutine>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6025.m0012",
+      "declaring_type": "TMPro.TMP_TextEventHandler",
+      "symbol_key": "TMPro.TMP_TextEventHandler::public void OnPointerEnter(PointerEventData eventData)"
+    },
+    {
+      "id": "tdi6025.m0013",
+      "declaring_type": "TMPro.TMP_TextEventHandler",
+      "symbol_key": "TMPro.TMP_TextEventHandler::public void OnPointerExit(PointerEventData eventData)"
+    },
+    {
+      "id": "tdi6026.m0001",
+      "declaring_type": "Benchmark01.<Start>d__10",
+      "symbol_key": "Benchmark01.<Start>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6028.m0001",
+      "declaring_type": "Benchmark01_UGUI.<Start>d__10",
+      "symbol_key": "Benchmark01_UGUI.<Start>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6032.m0000",
+      "declaring_type": "TMPro.Examples.Benchmark03",
+      "symbol_key": "TMPro.Examples.Benchmark03::private void Awake()"
+    },
+    {
+      "id": "tdi6038.m0001",
+      "declaring_type": "ShaderPropAnimator.<AnimateProperties>d__6",
+      "symbol_key": "ShaderPropAnimator.<AnimateProperties>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6041.m0001",
+      "declaring_type": "SkewTextExample.<WarpText>d__7",
+      "symbol_key": "SkewTextExample.<WarpText>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6043.m0001",
+      "declaring_type": "TeleType.<Start>d__4",
+      "symbol_key": "TeleType.<Start>d__4::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6045.m0001",
+      "declaring_type": "TextConsoleSimulator.<RevealCharacters>d__7",
+      "symbol_key": "TextConsoleSimulator.<RevealCharacters>d__7::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6046.m0001",
+      "declaring_type": "TextConsoleSimulator.<RevealWords>d__8",
+      "symbol_key": "TextConsoleSimulator.<RevealWords>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6048.m0001",
+      "declaring_type": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6049.m0001",
+      "declaring_type": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6051.m0000",
+      "declaring_type": "TMPro.Examples.TextMeshSpawner",
+      "symbol_key": "TMPro.Examples.TextMeshSpawner::private void Awake()"
+    },
+    {
+      "id": "tdi6061.m0007",
+      "declaring_type": "TMPro.Examples.TMP_TextSelector_B",
+      "symbol_key": "TMPro.Examples.TMP_TextSelector_B::public void OnPointerClick(PointerEventData eventData)"
+    },
+    {
+      "id": "tdi6061.m0008",
+      "declaring_type": "TMPro.Examples.TMP_TextSelector_B",
+      "symbol_key": "TMPro.Examples.TMP_TextSelector_B::public void OnPointerUp(PointerEventData eventData)"
+    },
+    {
+      "id": "tdi6064.m0001",
+      "declaring_type": "VertexColorCycler.<AnimateVertexColors>d__3",
+      "symbol_key": "VertexColorCycler.<AnimateVertexColors>d__3::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6067.m0001",
+      "declaring_type": "VertexJitter.<AnimateVertexColors>d__11",
+      "symbol_key": "VertexJitter.<AnimateVertexColors>d__11::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6069.m0001",
+      "declaring_type": "VertexShakeA.<AnimateVertexColors>d__11",
+      "symbol_key": "VertexShakeA.<AnimateVertexColors>d__11::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6071.m0001",
+      "declaring_type": "VertexShakeB.<AnimateVertexColors>d__10",
+      "symbol_key": "VertexShakeB.<AnimateVertexColors>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6074.m0001",
+      "declaring_type": "VertexZoom.<AnimateVertexColors>d__10",
+      "symbol_key": "VertexZoom.<AnimateVertexColors>d__10::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6076.m0001",
+      "declaring_type": "WarpTextExample.<WarpText>d__8",
+      "symbol_key": "WarpTextExample.<WarpText>d__8::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6093.m0001",
+      "declaring_type": "Demo_Display.<CycleShader>d__19",
+      "symbol_key": "Demo_Display.<CycleShader>d__19::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6094.m0001",
+      "declaring_type": "Demo_Display.<HandlePosition>d__20",
+      "symbol_key": "Demo_Display.<HandlePosition>d__20::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6102.m0001",
+      "declaring_type": "Demo_Trigger.<PlayEvent>d__6",
+      "symbol_key": "Demo_Trigger.<PlayEvent>d__6::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6147.m0012",
+      "declaring_type": "FIMSpace.FTools.FIK_ProcessorBase",
+      "symbol_key": "FIMSpace.FTools.FIK_ProcessorBase::public virtual void Update()"
+    },
+    {
+      "id": "tdi6170.m0001",
+      "declaring_type": "TailAnimator2.<LateFixed>d__278",
+      "symbol_key": "TailAnimator2.<LateFixed>d__278::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6171.m0115",
+      "declaring_type": "FIMSpace.FTail.TailAnimator2",
+      "symbol_key": "FIMSpace.FTail.TailAnimator2::public void OnDrop(PointerEventData data)"
+    },
+    {
+      "id": "tdi6175.m0001",
+      "declaring_type": "FIMSpace.FTail.TailAnimatorWind",
+      "symbol_key": "FIMSpace.FTail.TailAnimatorWind::public void OnDrop(PointerEventData data)"
+    },
+    {
+      "id": "tdi6184.m0001",
+      "declaring_type": "FEyesAnimator.<BlendInOut>d__180",
+      "symbol_key": "FEyesAnimator.<BlendInOut>d__180::private void System.IDisposable.Dispose()"
+    },
+    {
+      "id": "tdi6185.m0042",
+      "declaring_type": "FIMSpace.FEyes.FEyesAnimator",
+      "symbol_key": "FIMSpace.FEyes.FEyesAnimator::public void OnDrop(PointerEventData data)"
+    },
+    {
+      "id": "tdi6185.m0061",
+      "declaring_type": "FIMSpace.FEyes.FEyesAnimator",
+      "symbol_key": "FIMSpace.FEyes.FEyesAnimator::protected virtual void OnValidate()"
+    },
+    {
+      "id": "tdi6185.m0063",
+      "declaring_type": "FIMSpace.FEyes.FEyesAnimator",
+      "symbol_key": "FIMSpace.FEyes.FEyesAnimator::private void StartLookAnim()"
+    },
+    {
+      "id": "tdi6185.m0064",
+      "declaring_type": "FIMSpace.FEyes.FEyesAnimator",
+      "symbol_key": "FIMSpace.FEyes.FEyesAnimator::private void UpdateLookAnim()"
+    }
+  ],
+  "native_emulation": {
+    "cases": 64,
+    "executed_instructions": 64,
+    "input_digest_sha256": "78f8b995c5ca7989b46f34b68e347f9919a78df8a2504b46d7df0503d476a8e3",
+    "gpr_values_preserved": 15,
+    "xmm_values_preserved": 16,
+    "flags_preserved": true,
+    "heap_and_stack_unchanged": true,
+    "stack_pointer_delta": 8
+  },
+  "scope": "Direct native void bodies have only return control/stack effects, without heap/stack writes or data/vector-register/flag changes; caller/runtime actions remain separate",
+  "classification_policy": "Preserve existing classifications and explicitly classify reviewed method identities; no automatic blanket terminal-state write",
+  "unresolved": [
+    "call-site dispatch and null checking",
+    "runtime class-initialization bookkeeping",
+    "surrounding iterator and cancellation behavior",
+    "all non-stub methods on these declaring types"
+  ]
+}

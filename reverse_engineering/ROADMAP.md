@@ -376,6 +376,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   construction, preserve the unestablished shipped-asset binding, and join
   Spy Start to standalone/ordered/queue-driven Reveal. Extend the typed union
   to 42 sets, 891 memberships, 548 definitions and 448 native RVAs.
+- [x] Audit all 175 direct void definitions sharing the immediate-return body
+  against the pinned native image and regenerated denominator, including
+  delayed Reveal Dispose. Preserve six existing classifications and add 169
+  individually identified methods, with 64 isolated execution cases.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.
