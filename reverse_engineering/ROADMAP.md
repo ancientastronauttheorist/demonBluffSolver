@@ -380,6 +380,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   against the pinned native image and regenerated denominator, including
   delayed Reveal Dispose. Preserve six existing classifications and add 169
   individually identified methods, with 64 isolated execution cases.
+- [x] Verify 503 direct shared constructor/getter definitions with individual
+  metadata field identities and 384 native execution cases. Preserve 49 existing
+  classifications, add 454, and exclude generic-shared and Unity constructor
+  paths from the closed boundary.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

@@ -1,0 +1,4641 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "global_metadata_sha256": "807DE4A83DF41DEA29F31E98308131DBA93008B340746B8D6BE85CA5EA373713",
+  "denominator_methods": 4207,
+  "definition_count": 503,
+  "definitions": [
+    {
+      "id": "tdi5426.m0004",
+      "symbol_key": "FHierarchyIcons::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5444.m0000",
+      "symbol_key": "Readme.Section::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5448.m0000",
+      "symbol_key": "AudioClipSingleInfo.<>c__DisplayClass4_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5449.m0000",
+      "symbol_key": "AudioClipSingleInfo.<>c__DisplayClass5_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5450.m0000",
+      "symbol_key": "AudioClipSingleInfo.<>c__DisplayClass6_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5452.m0000",
+      "symbol_key": "AudioClipIntroLoopInfo.<>c__DisplayClass4_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5453.m0000",
+      "symbol_key": "AudioClipIntroLoopInfo.<>c__DisplayClass4_1::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5454.m0000",
+      "symbol_key": "AudioClipIntroLoopInfo.<>c__DisplayClass5_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5455.m0000",
+      "symbol_key": "AudioClipIntroLoopInfo.<>c__DisplayClass6_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5457.m0000",
+      "symbol_key": "AudioClipTimelineInfo.<>c__DisplayClass4_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5458.m0000",
+      "symbol_key": "AudioClipTimelineInfo.<>c__DisplayClass5_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5459.m0000",
+      "symbol_key": "AudioClipTimelineInfo.<>c__DisplayClass6_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5461.m0000",
+      "symbol_key": "AudioSourceInfo::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5466.m0000",
+      "symbol_key": "SFXInfo::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5471.m0001",
+      "symbol_key": "CardRotate.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5472.m0000",
+      "symbol_key": "CardRotate.<>c__DisplayClass26_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5481.m0000",
+      "symbol_key": "Character.<>c__DisplayClass125_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5493.m0000",
+      "symbol_key": "RegisterAsCharacter::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5501.m0000",
+      "symbol_key": "Characters.<>c__DisplayClass22_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5502.m0000",
+      "symbol_key": "Characters.<>c__DisplayClass50_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5503.m0000",
+      "symbol_key": "Characters.<>c__DisplayClass51_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5527.m0001",
+      "symbol_key": "ModeController::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5528.m0001",
+      "symbol_key": "StandardController::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5530.m0001",
+      "symbol_key": "Map.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5536.m0000",
+      "symbol_key": "PlayerInfo::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5537.m0000",
+      "symbol_key": "Resource::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5538.m0002",
+      "symbol_key": "Gold::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5539.m0004",
+      "symbol_key": "Health::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5540.m0004",
+      "symbol_key": "Mana::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5541.m0000",
+      "symbol_key": "Block::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5542.m0005",
+      "symbol_key": "Value::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5543.m0004",
+      "symbol_key": "SimpleValue::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5544.m0004",
+      "symbol_key": "CurrentMaxValue::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5545.m0004",
+      "symbol_key": "CurrentStartingValue::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5547.m0000",
+      "symbol_key": "SavesGame.<>c__DisplayClass15_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5549.m0000",
+      "symbol_key": "GameModeAscension::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5553.m0000",
+      "symbol_key": "CharacterPreference::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5554.m0000",
+      "symbol_key": "Shop.<>c__DisplayClass14_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5556.m0002",
+      "symbol_key": "ShopCardInfo::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5559.m0003",
+      "symbol_key": "RemoveCardCard::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5560.m0003",
+      "symbol_key": "AddRandomCharacterCard::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5561.m0003",
+      "symbol_key": "PassiveCardCard::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5566.m0000",
+      "symbol_key": "BgSpriteInfo::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5581.m0001",
+      "symbol_key": "KillModeFix.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5583.m0001",
+      "symbol_key": "DebugLocalization.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5600.m0001",
+      "symbol_key": "Gameplay.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5608.m0000",
+      "symbol_key": "DebugSettings::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5620.m0000",
+      "symbol_key": "PickNewCharacters.<>c__DisplayClass11_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5626.m0001",
+      "symbol_key": "RevealCard.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5630.m0002",
+      "symbol_key": "RoleHint::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5631.m0002",
+      "symbol_key": "EnlightenedHint::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5636.m0000",
+      "symbol_key": "TutorialsController.<>c__DisplayClass20_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5637.m0000",
+      "symbol_key": "TutorialsController.<>c__DisplayClass21_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5638.m0000",
+      "symbol_key": "TutorialsController.<>c__DisplayClass25_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5655.m0001",
+      "symbol_key": "WinConditions.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5671.m0002",
+      "symbol_key": "LocalizedRole::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5672.m0001",
+      "symbol_key": "ScoutLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5673.m0001",
+      "symbol_key": "KnitterLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5674.m0001",
+      "symbol_key": "WitnessLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5675.m0001",
+      "symbol_key": "ArchitectLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5676.m0001",
+      "symbol_key": "EmpathLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5677.m0001",
+      "symbol_key": "BakerLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5678.m0001",
+      "symbol_key": "AlchemistLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5679.m0001",
+      "symbol_key": "SlayerLoc::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5692.m0000",
+      "symbol_key": "StringHelper.<>c__DisplayClass0_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5694.m0000",
+      "symbol_key": "PickNewRelics.<>c__DisplayClass10_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5702.m0001",
+      "symbol_key": "RevealObject.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5707.m0000",
+      "symbol_key": "AchievementCompendiumPage::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5738.m0000",
+      "symbol_key": "CharactersCompendiumPage::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5759.m0002",
+      "symbol_key": "HintObject::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5784.m0003",
+      "symbol_key": "HealthAnimation::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5786.m0003",
+      "symbol_key": "AnimateHealthDamage::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5787.m0003",
+      "symbol_key": "AnimateBounceDamage::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5788.m0003",
+      "symbol_key": "AnimateParticle::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5789.m0003",
+      "symbol_key": "ControllObjectsHealth::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5790.m0000",
+      "symbol_key": "ObjectsFloatValue::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5793.m0001",
+      "symbol_key": "SettingsPanel.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5804.m0000",
+      "symbol_key": "TransitionPanel.<>c__DisplayClass5_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5805.m0000",
+      "symbol_key": "TransitionPanel.<>c__DisplayClass6_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5818.m0000",
+      "symbol_key": "CharactersAnimationResponder.<>c__DisplayClass7_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5830.m0001",
+      "symbol_key": "VfxObjects::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5833.m0001",
+      "symbol_key": "AchievementUnlockLogic::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5834.m0001",
+      "symbol_key": "UnlockableAchiv::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5835.m0001",
+      "symbol_key": "AutoUnlockedAchiv::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5836.m0001",
+      "symbol_key": "LockedAchiv::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5853.m0022",
+      "symbol_key": "Role::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5854.m0008",
+      "symbol_key": "Scout::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5855.m0007",
+      "symbol_key": "Knitter::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5857.m0005",
+      "symbol_key": "Villager::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5858.m0007",
+      "symbol_key": "Witness::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5859.m0006",
+      "symbol_key": "RangedEmpath::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5862.m0008",
+      "symbol_key": "Architect::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5863.m0008",
+      "symbol_key": "Empath::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5864.m0008",
+      "symbol_key": "Sapper::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5865.m0007",
+      "symbol_key": "Sapper2::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5867.m0000",
+      "symbol_key": "Rambler2.<>c__DisplayClass9_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5869.m0009",
+      "symbol_key": "Immortal::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5870.m0006",
+      "symbol_key": "Mathematician::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5871.m0007",
+      "symbol_key": "BountyHunter::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5872.m0010",
+      "symbol_key": "Baker::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5873.m0009",
+      "symbol_key": "Alchemist::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5874.m0001",
+      "symbol_key": "Dreamer.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5875.m0010",
+      "symbol_key": "Dreamer::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5879.m0001",
+      "symbol_key": "FortuneTeller.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5882.m0001",
+      "symbol_key": "Noble.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5885.m0001",
+      "symbol_key": "Bishop.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5886.m0000",
+      "symbol_key": "Bishop.<>c__DisplayClass2_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5887.m0000",
+      "symbol_key": "Bishop.<>c__DisplayClass5_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5892.m0001",
+      "symbol_key": "Investigator.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5899.m0001",
+      "symbol_key": "Librarian.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5901.m0001",
+      "symbol_key": "Juggler.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5924.m0002",
+      "symbol_key": "SpecialRule::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5929.m0001",
+      "symbol_key": "AscensionsList::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5932.m0020",
+      "symbol_key": "GameMode::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5933.m0018",
+      "symbol_key": "RoguelikeMode::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5935.m0022",
+      "symbol_key": "AdvancedMode::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5936.m0028",
+      "symbol_key": "RoguelikeStandard::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5937.m0016",
+      "symbol_key": "RoguelikeAdvanced::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5938.m0016",
+      "symbol_key": "Advanced::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5940.m0001",
+      "symbol_key": "RelicInfo::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5941.m0001",
+      "symbol_key": "SadTeddy::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5942.m0001",
+      "symbol_key": "UselessHat::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5947.m0000",
+      "symbol_key": "UnlockWith::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5948.m0000",
+      "symbol_key": "UnlockWithAchievement::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5949.m0000",
+      "symbol_key": "AutoUnlocked::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5958.m0000",
+      "symbol_key": "Plurals::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5959.m0000",
+      "symbol_key": "CustomVariable::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5960.m0000",
+      "symbol_key": "ValuesLocal::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5961.m0003",
+      "symbol_key": "PluralsRange::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5962.m0003",
+      "symbol_key": "PluralCustomRange::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5963.m0002",
+      "symbol_key": "PluralDefault::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5964.m0002",
+      "symbol_key": "CharacterId::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5965.m0001",
+      "symbol_key": "CharacterIdDefault::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5966.m0002",
+      "symbol_key": "CharacterIdGender::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5974.m0000",
+      "symbol_key": "CharacterLocBundleEntry::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5977.m0000",
+      "symbol_key": "CharacterLocSerializer.CustomValuessDto::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5987.m0001",
+      "symbol_key": "Hint::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5989.m0000",
+      "symbol_key": "Localization::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5991.m0004",
+      "symbol_key": "OptionSettings::protected void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5993.m0000",
+      "symbol_key": "BoolsSettings::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5998.m0000",
+      "symbol_key": "StringInfoSettings::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6002.m0000",
+      "symbol_key": "OptionSettingsSerializer.EntryJson::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6005.m0000",
+      "symbol_key": "TranslationExporter.HintLocaleEntry::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6007.m0000",
+      "symbol_key": "TranslationExporter.ExportEntry::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6014.m0001",
+      "symbol_key": "UnitySourceGeneratedAssemblyMonoScriptTypes_v1::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6073.m0000",
+      "symbol_key": "VertexZoom.<>c__DisplayClass10_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6104.m0001",
+      "symbol_key": "SpriteShadersUltimate.Demo.Demo_TriggerEvent::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6117.m0000",
+      "symbol_key": "SoftMaskSampleChooser.<>c__DisplayClass2_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6168.m0000",
+      "symbol_key": "TailAnimator2.<>c__DisplayClass44_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6169.m0000",
+      "symbol_key": "TailAnimator2.<>c__DisplayClass45_0::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6173.m0001",
+      "symbol_key": "FTail_SkinningVertexData.<>c::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi6179.m0000",
+      "symbol_key": "FEyesAnimator.BlinkTimers::public void .ctor()",
+      "body": "ga:rva:00357920",
+      "behavior": "empty_constructor"
+    },
+    {
+      "id": "tdi5876.m0009",
+      "symbol_key": "DreamerOld::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5877.m0009",
+      "symbol_key": "Dreamer2::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5878.m0009",
+      "symbol_key": "Slayer::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5880.m0010",
+      "symbol_key": "FortuneTeller::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5881.m0007",
+      "symbol_key": "Lookout::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5883.m0007",
+      "symbol_key": "Noble::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5884.m0006",
+      "symbol_key": "Archivist::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5888.m0006",
+      "symbol_key": "Bishop::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5890.m0008",
+      "symbol_key": "Shugenja::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5891.m0007",
+      "symbol_key": "Tracker::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5893.m0006",
+      "symbol_key": "Investigator::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5894.m0008",
+      "symbol_key": "Confessor::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5895.m0008",
+      "symbol_key": "Acrobat::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5896.m0008",
+      "symbol_key": "Acrobat2::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5897.m0009",
+      "symbol_key": "Arbiter::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5898.m0009",
+      "symbol_key": "Judge2::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5902.m0009",
+      "symbol_key": "Juggler::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5903.m0005",
+      "symbol_key": "Mutant::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5904.m0007",
+      "symbol_key": "Drunk::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5906.m0004",
+      "symbol_key": "Saint::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5907.m0004",
+      "symbol_key": "SaintVillager::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5908.m0008",
+      "symbol_key": "Doppleganger::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5909.m0010",
+      "symbol_key": "Puzzlemaster::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5910.m0005",
+      "symbol_key": "Minion::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5911.m0005",
+      "symbol_key": "Spy::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5912.m0003",
+      "symbol_key": "Poisoner::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5913.m0004",
+      "symbol_key": "Baron::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5914.m0004",
+      "symbol_key": "Marionette::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5915.m0003",
+      "symbol_key": "Illuzionist::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5916.m0006",
+      "symbol_key": "Puppet::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5918.m0004",
+      "symbol_key": "Cipher::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5919.m0007",
+      "symbol_key": "Demon::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5920.m0002",
+      "symbol_key": "Imp::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5921.m0002",
+      "symbol_key": "Skinwalker::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5922.m0004",
+      "symbol_key": "Pooka::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5923.m0002",
+      "symbol_key": "Striga::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5967.m0002",
+      "symbol_key": "CharacterIdExactName::public void .ctor()",
+      "body": "ga:rva:003CFFF0",
+      "behavior": "empty_constructor_chain"
+    },
+    {
+      "id": "tdi5442.m0000",
+      "symbol_key": "EnvMapAnimator.<Start>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5463.m0000",
+      "symbol_key": "MusicController.<SwitchMusic>d__19::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5474.m0000",
+      "symbol_key": "CardsUnlockController.<RoutineFinishedRoutine>d__14::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5476.m0000",
+      "symbol_key": "Acted.<ActDelayed>d__9::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5482.m0000",
+      "symbol_key": "Character.<DelayReveal>d__84::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5483.m0000",
+      "symbol_key": "Character.<DelayedDemonKill>d__103::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5484.m0000",
+      "symbol_key": "Character.<InterfereDelay>d__131::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5485.m0000",
+      "symbol_key": "Character.<ShowActedDelayed>d__133::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5486.m0000",
+      "symbol_key": "Character.<ShowInfoDelayed>d__134::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5495.m0000",
+      "symbol_key": "AlchemistRuntimeData::public void .ctor(int cures)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "cures"
+      }
+    },
+    {
+      "id": "tdi5497.m0000",
+      "symbol_key": "EnlightenedRuntimeData::public void .ctor(Shugenja.EEvilDirection direction)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "Shugenja.EEvilDirection",
+        "name": "direction"
+      }
+    },
+    {
+      "id": "tdi5504.m0000",
+      "symbol_key": "Characters.<ShuffleDeck>d__16::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5506.m0000",
+      "symbol_key": "CharacterShuffleAnimation.<Animate>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5507.m0000",
+      "symbol_key": "CharacterShuffleAnimation.<PlayAudioDelay>d__9::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5508.m0000",
+      "symbol_key": "CharacterShuffleAnimation.<ShuffleCardsRoutine>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5531.m0000",
+      "symbol_key": "Map.<CloseMapCoroutine>d__18::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5532.m0000",
+      "symbol_key": "Map.<SetupMap>d__16::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5534.m0000",
+      "symbol_key": "PlayerController.<DelayedInit>d__9::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5572.m0000",
+      "symbol_key": "DebugInitialization.<DelayedDebugInit>d__5::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5574.m0000",
+      "symbol_key": "DebugKills.<ShowVisualDelay>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5588.m0000",
+      "symbol_key": "ScrollCharacters.<AnimateCard>d__9::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5589.m0000",
+      "symbol_key": "ScrollCharacters.<ScrollAnimate>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5593.m0000",
+      "symbol_key": "TrailerProduction.<AnimateVignetteAndCards>d__25::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5594.m0000",
+      "symbol_key": "TrailerProduction.<IterateAnimation>d__24::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5595.m0000",
+      "symbol_key": "TrailerProduction.<RotatePanCamera>d__23::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5597.m0000",
+      "symbol_key": "UnlockAllDebug.<UnlockAll>d__1::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5601.m0000",
+      "symbol_key": "Gameplay.<DelayedDeckIntro>d__50::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5602.m0000",
+      "symbol_key": "Gameplay.<InitCoroutine>d__41::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5603.m0000",
+      "symbol_key": "Gameplay.<SetupDelay>d__47::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5614.m0000",
+      "symbol_key": "NewCharactersUnlocked.<ClosePanelRoutine>d__13::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5615.m0000",
+      "symbol_key": "NewCharactersUnlocked.<ShowNewCharactersRoutine>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5617.m0000",
+      "symbol_key": "NightPhase.<StartPhase>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5621.m0000",
+      "symbol_key": "PickNewCharacters.<AnimateRewards>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5622.m0000",
+      "symbol_key": "PickNewCharacters.<RefreshNewCharacters>d__12::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5623.m0000",
+      "symbol_key": "PickNewCharacters.<RevealRoutine>d__14::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5628.m0000",
+      "symbol_key": "CustomHint.<ShowHintCoroutine>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5632.m0000",
+      "symbol_key": "TutorialNote.<CloseCooldown>d__12::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5639.m0000",
+      "symbol_key": "TutorialsController.<CancelKillTutorial>d__22::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5640.m0000",
+      "symbol_key": "TutorialsController.<CharacterInfoTutorial>d__18::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5641.m0000",
+      "symbol_key": "TutorialsController.<CharacterKillRoutine>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5642.m0000",
+      "symbol_key": "TutorialsController.<HoverCharacterRoutine>d__26::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5643.m0000",
+      "symbol_key": "TutorialsController.<HoverObjective>d__21::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5644.m0000",
+      "symbol_key": "TutorialsController.<KillTutorial>d__20::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5645.m0000",
+      "symbol_key": "TutorialsController.<PickableCharacterType>d__25::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5646.m0000",
+      "symbol_key": "TutorialsController.<PoisonKilledRoutine>d__12::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5647.m0000",
+      "symbol_key": "TutorialsController.<RevealCardTutorial>d__19::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5648.m0000",
+      "symbol_key": "TutorialsController.<SecondLevelNoteCoroutine>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5649.m0000",
+      "symbol_key": "TutorialsController.<ThirdLevelNoteCoroutine>d__9::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5652.m0000",
+      "symbol_key": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5653.m0000",
+      "symbol_key": "UnlockNewCharacterPanel.<RevealRoutine>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5656.m0000",
+      "symbol_key": "WinConditions.<ChangeGameplayState>d__27::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5657.m0000",
+      "symbol_key": "WinConditions.<DelayedCheckCondition>d__21::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5658.m0000",
+      "symbol_key": "WinConditions.<NewHandoutRoutine>d__32::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5664.m0000",
+      "symbol_key": "LayoutRebuilder.<ForceRebuildCoroutine>d__2::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5695.m0000",
+      "symbol_key": "PickNewRelics.<AnimateRewards>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5696.m0000",
+      "symbol_key": "PickNewRelics.<RefreshNewCharacters>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5697.m0000",
+      "symbol_key": "PickNewRelics.<RevealRoutine>d__13::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5708.m0000",
+      "symbol_key": "SkinUnlockedUI.<RevealDelay>d__15::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5716.m0000",
+      "symbol_key": "DisguiseIcon.<EnableHovering>d__5::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5717.m0000",
+      "symbol_key": "DisguiseIcon.<ShowDisguiseDelayed>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5730.m0000",
+      "symbol_key": "CardExplanationUI.<ForceRebuildCoroutine>d__18::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5732.m0000",
+      "symbol_key": "CardHighlight.<HighlightCoroutine>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5736.m0000",
+      "symbol_key": "Compendium.<RevealIfAble>d__17::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5743.m0000",
+      "symbol_key": "DeckView.<RevealAll>d__24::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5755.m0000",
+      "symbol_key": "AchievementHint.<ForceRebuildCoroutine>d__5::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5757.m0000",
+      "symbol_key": "CharacterHint.<ForceRebuildCoroutine>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5765.m0000",
+      "symbol_key": "GenericHint.<ForceRebuildCoroutine>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5767.m0000",
+      "symbol_key": "MarksHintHelper.<ShowMarksDelay>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5770.m0000",
+      "symbol_key": "BeforeGameInfo.<ShowInfo>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5776.m0000",
+      "symbol_key": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5779.m0000",
+      "symbol_key": "PinnedDeckView.<RevealAllCoroutine>d__13::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5796.m0000",
+      "symbol_key": "ShopCard.<TrailerCoroutine>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5798.m0000",
+      "symbol_key": "SimpleUIInfo.<ShowInfoCoroutine>d__19::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5806.m0000",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5807.m0000",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5810.m0000",
+      "symbol_key": "FlickeringBg.<Flick>d__3::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5811.m0000",
+      "symbol_key": "FlickeringBg.<FlickOut>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5815.m0000",
+      "symbol_key": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5822.m0000",
+      "symbol_key": "EyeController.<Despawn>d__21::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5823.m0000",
+      "symbol_key": "EyeController.<SpawnCoroutine>d__18::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5825.m0000",
+      "symbol_key": "FloatingScore.<Animate>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5828.m0000",
+      "symbol_key": "VfxInstance.<DestroyDelay>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6015.m0000",
+      "symbol_key": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6016.m0000",
+      "symbol_key": "BugReport.<ShowCodecksFormCoroutine>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6026.m0000",
+      "symbol_key": "Benchmark01.<Start>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6028.m0000",
+      "symbol_key": "Benchmark01_UGUI.<Start>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6038.m0000",
+      "symbol_key": "ShaderPropAnimator.<AnimateProperties>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6041.m0000",
+      "symbol_key": "SkewTextExample.<WarpText>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6043.m0000",
+      "symbol_key": "TeleType.<Start>d__4::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6045.m0000",
+      "symbol_key": "TextConsoleSimulator.<RevealCharacters>d__7::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6046.m0000",
+      "symbol_key": "TextConsoleSimulator.<RevealWords>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6048.m0000",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6049.m0000",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6064.m0000",
+      "symbol_key": "VertexColorCycler.<AnimateVertexColors>d__3::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6067.m0000",
+      "symbol_key": "VertexJitter.<AnimateVertexColors>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6069.m0000",
+      "symbol_key": "VertexShakeA.<AnimateVertexColors>d__11::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6071.m0000",
+      "symbol_key": "VertexShakeB.<AnimateVertexColors>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6074.m0000",
+      "symbol_key": "VertexZoom.<AnimateVertexColors>d__10::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6076.m0000",
+      "symbol_key": "WarpTextExample.<WarpText>d__8::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6093.m0000",
+      "symbol_key": "Demo_Display.<CycleShader>d__19::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6094.m0000",
+      "symbol_key": "Demo_Display.<HandlePosition>d__20::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6102.m0000",
+      "symbol_key": "Demo_Trigger.<PlayEvent>d__6::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6170.m0000",
+      "symbol_key": "TailAnimator2.<LateFixed>d__278::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi6184.m0000",
+      "symbol_key": "FEyesAnimator.<BlendInOut>d__180::public void .ctor(int <>1__state)",
+      "body": "ga:rva:00357700",
+      "behavior": "int32_constructor",
+      "field": {
+        "offset": "0x10",
+        "type": "int",
+        "name": "<>1__state"
+      }
+    },
+    {
+      "id": "tdi5442.m0003",
+      "symbol_key": "EnvMapAnimator.<Start>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5442.m0005",
+      "symbol_key": "EnvMapAnimator.<Start>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5463.m0003",
+      "symbol_key": "MusicController.<SwitchMusic>d__19::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5463.m0005",
+      "symbol_key": "MusicController.<SwitchMusic>d__19::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5474.m0003",
+      "symbol_key": "CardsUnlockController.<RoutineFinishedRoutine>d__14::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5474.m0005",
+      "symbol_key": "CardsUnlockController.<RoutineFinishedRoutine>d__14::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5476.m0003",
+      "symbol_key": "Acted.<ActDelayed>d__9::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5476.m0005",
+      "symbol_key": "Acted.<ActDelayed>d__9::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5482.m0003",
+      "symbol_key": "Character.<DelayReveal>d__84::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5482.m0005",
+      "symbol_key": "Character.<DelayReveal>d__84::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5483.m0003",
+      "symbol_key": "Character.<DelayedDemonKill>d__103::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5483.m0005",
+      "symbol_key": "Character.<DelayedDemonKill>d__103::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5484.m0003",
+      "symbol_key": "Character.<InterfereDelay>d__131::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5484.m0005",
+      "symbol_key": "Character.<InterfereDelay>d__131::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5485.m0003",
+      "symbol_key": "Character.<ShowActedDelayed>d__133::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5485.m0005",
+      "symbol_key": "Character.<ShowActedDelayed>d__133::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5486.m0003",
+      "symbol_key": "Character.<ShowInfoDelayed>d__134::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5486.m0005",
+      "symbol_key": "Character.<ShowInfoDelayed>d__134::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5504.m0003",
+      "symbol_key": "Characters.<ShuffleDeck>d__16::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5504.m0005",
+      "symbol_key": "Characters.<ShuffleDeck>d__16::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5506.m0004",
+      "symbol_key": "CharacterShuffleAnimation.<Animate>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5506.m0006",
+      "symbol_key": "CharacterShuffleAnimation.<Animate>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5507.m0003",
+      "symbol_key": "CharacterShuffleAnimation.<PlayAudioDelay>d__9::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5507.m0005",
+      "symbol_key": "CharacterShuffleAnimation.<PlayAudioDelay>d__9::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5508.m0004",
+      "symbol_key": "CharacterShuffleAnimation.<ShuffleCardsRoutine>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5508.m0006",
+      "symbol_key": "CharacterShuffleAnimation.<ShuffleCardsRoutine>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5531.m0003",
+      "symbol_key": "Map.<CloseMapCoroutine>d__18::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5531.m0005",
+      "symbol_key": "Map.<CloseMapCoroutine>d__18::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5532.m0003",
+      "symbol_key": "Map.<SetupMap>d__16::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5532.m0005",
+      "symbol_key": "Map.<SetupMap>d__16::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5534.m0003",
+      "symbol_key": "PlayerController.<DelayedInit>d__9::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5534.m0005",
+      "symbol_key": "PlayerController.<DelayedInit>d__9::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5572.m0003",
+      "symbol_key": "DebugInitialization.<DelayedDebugInit>d__5::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5572.m0005",
+      "symbol_key": "DebugInitialization.<DelayedDebugInit>d__5::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5574.m0003",
+      "symbol_key": "DebugKills.<ShowVisualDelay>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5574.m0005",
+      "symbol_key": "DebugKills.<ShowVisualDelay>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5588.m0003",
+      "symbol_key": "ScrollCharacters.<AnimateCard>d__9::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5588.m0005",
+      "symbol_key": "ScrollCharacters.<AnimateCard>d__9::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5589.m0004",
+      "symbol_key": "ScrollCharacters.<ScrollAnimate>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5589.m0006",
+      "symbol_key": "ScrollCharacters.<ScrollAnimate>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5593.m0003",
+      "symbol_key": "TrailerProduction.<AnimateVignetteAndCards>d__25::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5593.m0005",
+      "symbol_key": "TrailerProduction.<AnimateVignetteAndCards>d__25::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5594.m0003",
+      "symbol_key": "TrailerProduction.<IterateAnimation>d__24::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5594.m0005",
+      "symbol_key": "TrailerProduction.<IterateAnimation>d__24::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5595.m0003",
+      "symbol_key": "TrailerProduction.<RotatePanCamera>d__23::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5595.m0005",
+      "symbol_key": "TrailerProduction.<RotatePanCamera>d__23::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5597.m0003",
+      "symbol_key": "UnlockAllDebug.<UnlockAll>d__1::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5597.m0005",
+      "symbol_key": "UnlockAllDebug.<UnlockAll>d__1::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5601.m0003",
+      "symbol_key": "Gameplay.<DelayedDeckIntro>d__50::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5601.m0005",
+      "symbol_key": "Gameplay.<DelayedDeckIntro>d__50::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5602.m0003",
+      "symbol_key": "Gameplay.<InitCoroutine>d__41::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5602.m0005",
+      "symbol_key": "Gameplay.<InitCoroutine>d__41::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5603.m0003",
+      "symbol_key": "Gameplay.<SetupDelay>d__47::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5603.m0005",
+      "symbol_key": "Gameplay.<SetupDelay>d__47::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5614.m0003",
+      "symbol_key": "NewCharactersUnlocked.<ClosePanelRoutine>d__13::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5614.m0005",
+      "symbol_key": "NewCharactersUnlocked.<ClosePanelRoutine>d__13::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5615.m0004",
+      "symbol_key": "NewCharactersUnlocked.<ShowNewCharactersRoutine>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5615.m0006",
+      "symbol_key": "NewCharactersUnlocked.<ShowNewCharactersRoutine>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5617.m0004",
+      "symbol_key": "NightPhase.<StartPhase>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5617.m0006",
+      "symbol_key": "NightPhase.<StartPhase>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5621.m0003",
+      "symbol_key": "PickNewCharacters.<AnimateRewards>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5621.m0005",
+      "symbol_key": "PickNewCharacters.<AnimateRewards>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5622.m0003",
+      "symbol_key": "PickNewCharacters.<RefreshNewCharacters>d__12::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5622.m0005",
+      "symbol_key": "PickNewCharacters.<RefreshNewCharacters>d__12::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5623.m0003",
+      "symbol_key": "PickNewCharacters.<RevealRoutine>d__14::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5623.m0005",
+      "symbol_key": "PickNewCharacters.<RevealRoutine>d__14::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5628.m0003",
+      "symbol_key": "CustomHint.<ShowHintCoroutine>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5628.m0005",
+      "symbol_key": "CustomHint.<ShowHintCoroutine>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5632.m0003",
+      "symbol_key": "TutorialNote.<CloseCooldown>d__12::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5632.m0005",
+      "symbol_key": "TutorialNote.<CloseCooldown>d__12::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5639.m0003",
+      "symbol_key": "TutorialsController.<CancelKillTutorial>d__22::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5639.m0005",
+      "symbol_key": "TutorialsController.<CancelKillTutorial>d__22::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5640.m0003",
+      "symbol_key": "TutorialsController.<CharacterInfoTutorial>d__18::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5640.m0005",
+      "symbol_key": "TutorialsController.<CharacterInfoTutorial>d__18::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5641.m0003",
+      "symbol_key": "TutorialsController.<CharacterKillRoutine>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5641.m0005",
+      "symbol_key": "TutorialsController.<CharacterKillRoutine>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5642.m0003",
+      "symbol_key": "TutorialsController.<HoverCharacterRoutine>d__26::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5642.m0005",
+      "symbol_key": "TutorialsController.<HoverCharacterRoutine>d__26::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5643.m0003",
+      "symbol_key": "TutorialsController.<HoverObjective>d__21::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5643.m0005",
+      "symbol_key": "TutorialsController.<HoverObjective>d__21::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5644.m0003",
+      "symbol_key": "TutorialsController.<KillTutorial>d__20::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5644.m0005",
+      "symbol_key": "TutorialsController.<KillTutorial>d__20::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5645.m0003",
+      "symbol_key": "TutorialsController.<PickableCharacterType>d__25::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5645.m0005",
+      "symbol_key": "TutorialsController.<PickableCharacterType>d__25::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5646.m0003",
+      "symbol_key": "TutorialsController.<PoisonKilledRoutine>d__12::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5646.m0005",
+      "symbol_key": "TutorialsController.<PoisonKilledRoutine>d__12::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5647.m0003",
+      "symbol_key": "TutorialsController.<RevealCardTutorial>d__19::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5647.m0005",
+      "symbol_key": "TutorialsController.<RevealCardTutorial>d__19::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5648.m0003",
+      "symbol_key": "TutorialsController.<SecondLevelNoteCoroutine>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5648.m0005",
+      "symbol_key": "TutorialsController.<SecondLevelNoteCoroutine>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5649.m0003",
+      "symbol_key": "TutorialsController.<ThirdLevelNoteCoroutine>d__9::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5649.m0005",
+      "symbol_key": "TutorialsController.<ThirdLevelNoteCoroutine>d__9::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5652.m0003",
+      "symbol_key": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5652.m0005",
+      "symbol_key": "UnlockNewCharacterPanel.<RefreshNewCharacters>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5653.m0003",
+      "symbol_key": "UnlockNewCharacterPanel.<RevealRoutine>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5653.m0005",
+      "symbol_key": "UnlockNewCharacterPanel.<RevealRoutine>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5656.m0003",
+      "symbol_key": "WinConditions.<ChangeGameplayState>d__27::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5656.m0005",
+      "symbol_key": "WinConditions.<ChangeGameplayState>d__27::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5657.m0003",
+      "symbol_key": "WinConditions.<DelayedCheckCondition>d__21::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5657.m0005",
+      "symbol_key": "WinConditions.<DelayedCheckCondition>d__21::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5658.m0003",
+      "symbol_key": "WinConditions.<NewHandoutRoutine>d__32::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5658.m0005",
+      "symbol_key": "WinConditions.<NewHandoutRoutine>d__32::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5664.m0003",
+      "symbol_key": "LayoutRebuilder.<ForceRebuildCoroutine>d__2::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5664.m0005",
+      "symbol_key": "LayoutRebuilder.<ForceRebuildCoroutine>d__2::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5695.m0003",
+      "symbol_key": "PickNewRelics.<AnimateRewards>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5695.m0005",
+      "symbol_key": "PickNewRelics.<AnimateRewards>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5696.m0003",
+      "symbol_key": "PickNewRelics.<RefreshNewCharacters>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5696.m0005",
+      "symbol_key": "PickNewRelics.<RefreshNewCharacters>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5697.m0003",
+      "symbol_key": "PickNewRelics.<RevealRoutine>d__13::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5697.m0005",
+      "symbol_key": "PickNewRelics.<RevealRoutine>d__13::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5708.m0003",
+      "symbol_key": "SkinUnlockedUI.<RevealDelay>d__15::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5708.m0005",
+      "symbol_key": "SkinUnlockedUI.<RevealDelay>d__15::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5716.m0003",
+      "symbol_key": "DisguiseIcon.<EnableHovering>d__5::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5716.m0005",
+      "symbol_key": "DisguiseIcon.<EnableHovering>d__5::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5717.m0003",
+      "symbol_key": "DisguiseIcon.<ShowDisguiseDelayed>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5717.m0005",
+      "symbol_key": "DisguiseIcon.<ShowDisguiseDelayed>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5730.m0003",
+      "symbol_key": "CardExplanationUI.<ForceRebuildCoroutine>d__18::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5730.m0005",
+      "symbol_key": "CardExplanationUI.<ForceRebuildCoroutine>d__18::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5732.m0003",
+      "symbol_key": "CardHighlight.<HighlightCoroutine>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5732.m0005",
+      "symbol_key": "CardHighlight.<HighlightCoroutine>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5736.m0003",
+      "symbol_key": "Compendium.<RevealIfAble>d__17::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5736.m0005",
+      "symbol_key": "Compendium.<RevealIfAble>d__17::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5743.m0007",
+      "symbol_key": "DeckView.<RevealAll>d__24::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5743.m0009",
+      "symbol_key": "DeckView.<RevealAll>d__24::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5755.m0003",
+      "symbol_key": "AchievementHint.<ForceRebuildCoroutine>d__5::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5755.m0005",
+      "symbol_key": "AchievementHint.<ForceRebuildCoroutine>d__5::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5757.m0003",
+      "symbol_key": "CharacterHint.<ForceRebuildCoroutine>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5757.m0005",
+      "symbol_key": "CharacterHint.<ForceRebuildCoroutine>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5765.m0003",
+      "symbol_key": "GenericHint.<ForceRebuildCoroutine>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5765.m0005",
+      "symbol_key": "GenericHint.<ForceRebuildCoroutine>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5767.m0003",
+      "symbol_key": "MarksHintHelper.<ShowMarksDelay>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5767.m0005",
+      "symbol_key": "MarksHintHelper.<ShowMarksDelay>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5770.m0003",
+      "symbol_key": "BeforeGameInfo.<ShowInfo>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5770.m0005",
+      "symbol_key": "BeforeGameInfo.<ShowInfo>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5776.m0003",
+      "symbol_key": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5776.m0005",
+      "symbol_key": "ObjectivesUI.<UpdateRevealedCardsRoutine>d__18::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5779.m0007",
+      "symbol_key": "PinnedDeckView.<RevealAllCoroutine>d__13::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5779.m0009",
+      "symbol_key": "PinnedDeckView.<RevealAllCoroutine>d__13::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5796.m0003",
+      "symbol_key": "ShopCard.<TrailerCoroutine>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5796.m0005",
+      "symbol_key": "ShopCard.<TrailerCoroutine>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5798.m0003",
+      "symbol_key": "SimpleUIInfo.<ShowInfoCoroutine>d__19::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5798.m0005",
+      "symbol_key": "SimpleUIInfo.<ShowInfoCoroutine>d__19::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5806.m0003",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5806.m0005",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5807.m0003",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5807.m0005",
+      "symbol_key": "TransitionPanel.<TransitionDelayed>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5810.m0003",
+      "symbol_key": "FlickeringBg.<Flick>d__3::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5810.m0005",
+      "symbol_key": "FlickeringBg.<Flick>d__3::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5811.m0003",
+      "symbol_key": "FlickeringBg.<FlickOut>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5811.m0005",
+      "symbol_key": "FlickeringBg.<FlickOut>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5815.m0003",
+      "symbol_key": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5815.m0005",
+      "symbol_key": "CharacterAnimationResponder.<OnCharacterKilledDelay>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5822.m0003",
+      "symbol_key": "EyeController.<Despawn>d__21::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5822.m0005",
+      "symbol_key": "EyeController.<Despawn>d__21::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5823.m0003",
+      "symbol_key": "EyeController.<SpawnCoroutine>d__18::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5823.m0005",
+      "symbol_key": "EyeController.<SpawnCoroutine>d__18::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5825.m0003",
+      "symbol_key": "FloatingScore.<Animate>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5825.m0005",
+      "symbol_key": "FloatingScore.<Animate>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5828.m0003",
+      "symbol_key": "VfxInstance.<DestroyDelay>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5828.m0005",
+      "symbol_key": "VfxInstance.<DestroyDelay>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi5971.m0001",
+      "symbol_key": "CustomOptionValue::public string get_Label()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "string",
+        "name": "<Label>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi5997.m0001",
+      "symbol_key": "IdsList::public string get_Format()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "string",
+        "name": "<Format>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi6015.m0003",
+      "symbol_key": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6015.m0005",
+      "symbol_key": "BugReport.<HideCodecksFormWithDelayCoroutine>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6016.m0003",
+      "symbol_key": "BugReport.<ShowCodecksFormCoroutine>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6016.m0005",
+      "symbol_key": "BugReport.<ShowCodecksFormCoroutine>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6026.m0003",
+      "symbol_key": "Benchmark01.<Start>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6026.m0005",
+      "symbol_key": "Benchmark01.<Start>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6028.m0003",
+      "symbol_key": "Benchmark01_UGUI.<Start>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6028.m0005",
+      "symbol_key": "Benchmark01_UGUI.<Start>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6038.m0003",
+      "symbol_key": "ShaderPropAnimator.<AnimateProperties>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6038.m0005",
+      "symbol_key": "ShaderPropAnimator.<AnimateProperties>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6041.m0003",
+      "symbol_key": "SkewTextExample.<WarpText>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6041.m0005",
+      "symbol_key": "SkewTextExample.<WarpText>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6043.m0003",
+      "symbol_key": "TeleType.<Start>d__4::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6043.m0005",
+      "symbol_key": "TeleType.<Start>d__4::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6045.m0003",
+      "symbol_key": "TextConsoleSimulator.<RevealCharacters>d__7::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6045.m0005",
+      "symbol_key": "TextConsoleSimulator.<RevealCharacters>d__7::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6046.m0003",
+      "symbol_key": "TextConsoleSimulator.<RevealWords>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6046.m0005",
+      "symbol_key": "TextConsoleSimulator.<RevealWords>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6048.m0003",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6048.m0005",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshFloatingText>d__16::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6049.m0003",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6049.m0005",
+      "symbol_key": "TextMeshProFloatingText.<DisplayTextMeshProFloatingText>d__15::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6064.m0003",
+      "symbol_key": "VertexColorCycler.<AnimateVertexColors>d__3::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6064.m0005",
+      "symbol_key": "VertexColorCycler.<AnimateVertexColors>d__3::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6067.m0003",
+      "symbol_key": "VertexJitter.<AnimateVertexColors>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6067.m0005",
+      "symbol_key": "VertexJitter.<AnimateVertexColors>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6069.m0003",
+      "symbol_key": "VertexShakeA.<AnimateVertexColors>d__11::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6069.m0005",
+      "symbol_key": "VertexShakeA.<AnimateVertexColors>d__11::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6071.m0003",
+      "symbol_key": "VertexShakeB.<AnimateVertexColors>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6071.m0005",
+      "symbol_key": "VertexShakeB.<AnimateVertexColors>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6074.m0003",
+      "symbol_key": "VertexZoom.<AnimateVertexColors>d__10::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6074.m0005",
+      "symbol_key": "VertexZoom.<AnimateVertexColors>d__10::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6076.m0003",
+      "symbol_key": "WarpTextExample.<WarpText>d__8::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6076.m0005",
+      "symbol_key": "WarpTextExample.<WarpText>d__8::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6093.m0003",
+      "symbol_key": "Demo_Display.<CycleShader>d__19::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6093.m0005",
+      "symbol_key": "Demo_Display.<CycleShader>d__19::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6094.m0003",
+      "symbol_key": "Demo_Display.<HandlePosition>d__20::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6094.m0005",
+      "symbol_key": "Demo_Display.<HandlePosition>d__20::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6102.m0003",
+      "symbol_key": "Demo_Trigger.<PlayEvent>d__6::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6102.m0005",
+      "symbol_key": "Demo_Trigger.<PlayEvent>d__6::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6139.m0002",
+      "symbol_key": "FIMSpace.FImp_ColliderData_Base::public Collider get_Collider()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "Collider",
+        "name": "<Collider>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi6148.m0002",
+      "symbol_key": "FIMSpace.FTools.FIK_IKBoneBase::public Transform get_transform()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "Transform",
+        "name": "<transform>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi6156.m0000",
+      "symbol_key": "FIMSpace.Basics.FAnimator::public string get_CurrentAnimation()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "string",
+        "name": "<CurrentAnimation>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi6158.m0002",
+      "symbol_key": "TailAnimator2.TailSegment::public TailAnimator2.TailSegment get_ChildBone()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "TailAnimator2.TailSegment",
+        "name": "<ChildBone>k__BackingField"
+      }
+    },
+    {
+      "id": "tdi6170.m0003",
+      "symbol_key": "TailAnimator2.<LateFixed>d__278::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6170.m0005",
+      "symbol_key": "TailAnimator2.<LateFixed>d__278::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6184.m0003",
+      "symbol_key": "FEyesAnimator.<BlendInOut>d__180::private object System.Collections.Generic.IEnumerator<System.Object>.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    },
+    {
+      "id": "tdi6184.m0005",
+      "symbol_key": "FEyesAnimator.<BlendInOut>d__180::private object System.Collections.IEnumerator.get_Current()",
+      "body": "ga:rva:00353580",
+      "behavior": "reference_getter",
+      "field": {
+        "offset": "0x18",
+        "type": "object",
+        "name": "<>2__current"
+      }
+    }
+  ],
+  "native_emulation": {
+    "cases": 384,
+    "groups": [
+      {
+        "entry_rva": "0x357920",
+        "behavior": "empty_constructor",
+        "cases": 96
+      },
+      {
+        "entry_rva": "0x3cfff0",
+        "behavior": "empty_constructor_chain",
+        "cases": 96
+      },
+      {
+        "entry_rva": "0x357700",
+        "behavior": "int32_constructor",
+        "cases": 96
+      },
+      {
+        "entry_rva": "0x353580",
+        "behavior": "reference_getter",
+        "cases": 96
+      }
+    ],
+    "input_digest_sha256": "065b8eb4b77396fa270f83e92d153d18168b3902d69f9654cd62722e6f875552",
+    "instruction_relationships": 19,
+    "all_nonvolatile_and_vector_registers_preserved": true,
+    "exact_object_and_stack_writes_verified": true,
+    "limitations": [
+      "mapped receivers required for field access bodies",
+      "arithmetic flags are unspecified for constructor bodies",
+      "native body only: allocation, GC and caller initialization are outside scope"
+    ]
+  },
+  "prerequisite_return_audit": {
+    "definitions": 175,
+    "native_cases": 64
+  },
+  "scope": "Exact direct bodies and per-definition fields; no complete iterator, class, allocation or runtime behavior claim",
+  "excluded": [
+    "generic-shared constructor binding",
+    "MonoBehaviour constructor forwarding into Unity engine code"
+  ]
+}

@@ -837,13 +837,18 @@ The [shared void return audit](notes/systems/folded_void_return.md) verifies
 isolated native executions. It adds 169 explicit method classifications,
 including delayed Reveal's empty Dispose, without inferring caller behavior.
 
+The [shared scaffolding audit](notes/systems/shared_scaffolding.md) verifies
+503 direct constructor/getter definitions and their individual metadata fields
+with 384 isolated native cases. It adds 454 classifications while preserving
+49 existing records, including DelayReveal's state constructor and Current.
+
 ## Method coverage
 
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 706 classifications backed by
-279 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,160 classifications backed by
+280 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
