@@ -28,7 +28,7 @@ object SHA-256 is
 `2AC121706A476186E51FAFAF18AE7F8BDBAFEDEBD4EB9946985DE2740071B09C`.
 The asset is an Evil Minion (`characterType == 30`,
 `startingAlignment == 20`), has `abilityUsage == 0` (`Once`), has no picker,
-and is not bluffable or usually disguised. Its roguelike values are 10 points,
+is not bluffable, and is usually disguised. Its roguelike values are 10 points,
 a 1.0 multiplier, and one income. `Baron` is TypeDefIndex `5913`, declares no
 fields, and declares exactly five methods.
 

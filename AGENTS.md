@@ -43,7 +43,7 @@ stop, diagnose, fix, verify, then resume.
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
     glob); do not pass wildcard paths that the shell leaves unexpanded, including
-    a trailing `/*` on a directory argument.
+    a trailing `/*` or partial-name wildcard on a directory argument.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents, with `rg --files` before reading. Do not infer an audit filename
     from a role name. Verify a documented directory exists before
@@ -61,6 +61,8 @@ stop, diagnose, fix, verify, then resume.
     Strip the complete comment header; fixed line-count skipping is unreliable.
     Unity type trees can omit custom MonoBehaviour fields; check consumed size
     and treat partial reads as headers, not complete serialized objects.
+    Serialized Boolean fields may align individually; do not apply contiguous
+    IL2CPP runtime offsets to asset bytes. Validate following reference IDs.
     For native PE inspection, distinguish zero-filled virtual data from file-
     backed bytes, and verify an unwind entry actually contains a queried RVA
     before treating it as that instruction's chunk.
@@ -233,8 +235,9 @@ Memory reader notes:
   only for historical cases. Live wording may be `There was N Corruption around
   me`, not only `N Corrupted around me`.
 - Baa is managed internally as `Imp`. At Start it selects one existing Outcast
-  and adds that exact record to `DeckView.ObscuredCharacters`; current assets
-  make the selection uniform because every `usuallyDisguised` flag is false.
+  and adds that exact record to `DeckView.ObscuredCharacters`. It first draws
+  from all Outcasts, then replaces that draw from the usually-disguised priority
+  pool when nonempty. Current Drunk and Doppelganger assets have that flag set.
   On any Baa death it removes that record and refreshes the deck view. This
   reveals only the hidden deck-strip identity, not a board card.
 - Shaman is managed internally as `Illuzionist`; Witch is `Cipher`. After

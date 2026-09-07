@@ -30,7 +30,7 @@ object SHA-256 is
 `E6A3C8B245D7FCA4C2D9B25C1753757B482992FAFE3166EB7DACD1B9953CD9E7`.
 
 The card is an Evil Minion (`characterType == 30`,
-`startingAlignment == 20`), is not bluffable, is not usually disguised, and
+`startingAlignment == 20`), is not bluffable, is usually disguised, and
 has `picking == false`. Its `abilityUsage` is enum value zero (`Once`), but it
 has no Day picker or player-selected target. It serializes no additional
 statuses, tags, or appearance conditions. The exact managed/public passive

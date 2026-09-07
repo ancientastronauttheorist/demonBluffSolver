@@ -29,7 +29,7 @@ The public Doppelganger `CharacterData` is `sharedassets0.assets` path ID
 serialized ID and managed type. Its raw object SHA-256 is
 `720335AB6E1B23938405822FF49450834B9B38CFE7906A26BC598F87AE3EBADB`.
 It is a Good Outcast (`characterType == 20`, `startingAlignment == 10`), has
-Once ability usage, is not bluffable or usually disguised, has no picker, and
+Once ability usage, is not bluffable, is usually disguised, has no picker, and
 authors no starting status.
 
 Its exact public description is:
@@ -47,7 +47,7 @@ The public Drunk `CharacterData` is path ID `21605`. It is named `Drunk`, has
 character ID `Drunk_15369527`, and binds managed `Drunk` at TypeDefIndex
 `5904`. Its raw object SHA-256 is
 `82A407F22608D01F46AAB9C5E1A24D6F173B9E828CC7D99775E3586F10D3AB6B`.
-It is also a Good Outcast, has Once ability usage, is not bluffable or usually
+It is also a Good Outcast, has Once ability usage, is not bluffable, is usually
 disguised, and has no picker or authored starting status. Its exact public
 description is:
 

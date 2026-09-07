@@ -24,8 +24,7 @@ The shipped `sharedassets0.assets` `CharacterData` at path ID `21591` is named
 role to managed `Striga` in `Assembly-CSharp`. Its raw object SHA-256 is
 `924EC7C600C232F33B2A3B83D34B18ACFF367C155F2E8B75AD998F568AB26721`.
 It is an Evil Demon (`characterType == 100`, `startingAlignment == 20`), has
-`abilityUsage == 0` (`Once`), and is not bluffable, usually disguised, or
-picking. Its roguelike values are 10 points, a 1.0 multiplier, and one income.
+`abilityUsage == 0` (`Once`), is not bluffable or picking, and is usually disguised. Its roguelike values are 10 points, a 1.0 multiplier, and one income.
 Its additional-status, tag, and conditional-appearance lists are empty.
 `Striga` is TypeDefIndex `5923`, declares no fields, and declares exactly three
 methods.

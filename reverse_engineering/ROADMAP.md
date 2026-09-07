@@ -388,6 +388,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   Mutant/Skinwalker binding; model occurrence-weighted exact-field acquisition
   with retained Mad on indexed-draw failure, and compare 16 native caller cases.
   Extend the typed union to 43 sets, 899 memberships and 553 definitions.
+- [x] Correct serialized Boolean alignment across all 46 core CharacterData
+  prefixes and validate following role-reference IDs. Restore Dreamer's native
+  script-priority selection, correct Baa/Dreamer2 guidance and eight stale asset
+  flag facts, and compare the Rust flag table against all audited records.
 - [x] Replace the solver's generic Shaman duplicate allowance with an ordered
   source/target/copied trace plus a viable overwritten-identity class,
   native-timed status effects, and copied-Alchemist Start regressions.

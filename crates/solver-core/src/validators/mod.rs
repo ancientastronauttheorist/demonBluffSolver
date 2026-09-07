@@ -4826,6 +4826,25 @@ fn dreamer_targets_include_wretch(
     })
 }
 
+/// Current script lists are the deck role pool, not just occupied board roles.
+/// Keep occurrences: native list removal deletes only one matching entry.
+fn dreamer_script_priority_roles(state: &GameState, targets: &[DreamerIdentity; 2]) -> Vec<String> {
+    state
+        .deck
+        .all_roles()
+        .into_iter()
+        .filter(|role| {
+            crate::knowledge_base::usually_disguised_current(role)
+                && !targets.iter().any(|target| {
+                    target
+                        .real
+                        .as_deref()
+                        .is_some_and(|real| roles_equal(real, role))
+                })
+        })
+        .collect()
+}
+
 fn dreamer_truthful_pair_supported(
     targets: &[u8; 2],
     options: &[String; 2],
@@ -4845,9 +4864,9 @@ fn dreamer_truthful_pair_supported(
     ];
     let (board, board_complete) = dreamer_board_projection(scenario, state);
 
-    // Build f530404b0f3f_807de4a83df4 has 46 CharacterData assets and every
-    // `usuallyDisguised` flag is false. The native authored-role pool between
-    // the target-bluff and board-entry branches is unreachable in this build.
+    // Serialized flags are independently aligned: 15 of the 46 core assets
+    // have usuallyDisguised set. This script pool precedes board fallback.
+    let priority = dreamer_script_priority_roles(state, &target_identities);
     for anchor_index in 0..2 {
         let other_index = 1 - anchor_index;
         let Some(anchor_real) = target_identities[anchor_index].real.as_deref() else {
@@ -4856,13 +4875,23 @@ fn dreamer_truthful_pair_supported(
 
         // The other selected character's bluff wins whenever it is distinct
         // from the real anchor. Only when that candidate is absent/colliding
-        // does native code fall through to a board entry.
+        // does native code try the script pool, then a board entry.
         if let Some(other_bluff) = target_identities[other_index]
             .bluff
             .as_deref()
             .filter(|bluff| !roles_equal(bluff, anchor_real))
         {
             if dreamer_pair_matches(options, anchor_real, other_bluff) {
+                return true;
+            }
+            continue;
+        }
+
+        if !priority.is_empty() {
+            if priority
+                .iter()
+                .any(|role| dreamer_pair_matches(options, anchor_real, role))
+            {
                 return true;
             }
             continue;
@@ -4910,7 +4939,7 @@ fn dreamer_truthful_pair_supported(
             .bluff
             .as_deref()
             .is_some_and(|bluff| !roles_equal(bluff, anchor_real));
-        if !has_priority_bluff {
+        if !has_priority_bluff && priority.is_empty() {
             return true;
         }
     }
@@ -4939,8 +4968,6 @@ fn dreamer_liar_pair_supported(
         }
     }
 
-    // See the build-pinned `usuallyDisguised` note in the truthful path. With
-    // that authored pool empty, every missing output comes from the helper.
     let mut excluded = Vec::new();
     for identity in &target_identities {
         if let Some(real) = identity.real.as_deref() {
@@ -4950,7 +4977,51 @@ fn dreamer_liar_pair_supported(
             dreamer_push_unique(&mut excluded, bluff);
         }
     }
-
+    let mut priority = dreamer_script_priority_roles(state, &target_identities);
+    for initial in &initial_bluffs {
+        if let Some(index) = priority.iter().position(|role| roles_equal(role, initial)) {
+            priority.remove(index);
+        }
+    }
+    // Unknown selected real identities may remove entries from this priority
+    // pool. Preserve the existing conservative unknown-target boundary.
+    if target_identities
+        .iter()
+        .any(|identity| identity.real.is_none())
+    {
+        return initial_bluffs
+            .iter()
+            .all(|initial| options.iter().any(|option| roles_equal(option, initial)))
+            && options.iter().all(|option| {
+                initial_bluffs
+                    .iter()
+                    .any(|initial| roles_equal(option, initial))
+                    || !excluded.iter().any(|role| roles_equal(option, role))
+            });
+    }
+    let needed = 2usize.saturating_sub(initial_bluffs.len());
+    if priority.len() >= needed {
+        return match initial_bluffs.as_slice() {
+            [first, second] => dreamer_pair_matches(options, first, second),
+            [initial] => priority
+                .iter()
+                .any(|role| dreamer_pair_matches(options, initial, role)),
+            [] => priority.iter().enumerate().any(|(index, first)| {
+                priority
+                    .iter()
+                    .skip(index + 1)
+                    .any(|second| dreamer_pair_matches(options, first, second))
+            }),
+            _ => false,
+        };
+    }
+    // Fewer than the missing number of priority entries: native consumes all
+    // remaining occurrences before invoking its unique board-identity helper.
+    let mut required = initial_bluffs;
+    required.extend(priority);
+    for role in &required {
+        dreamer_push_unique(&mut excluded, role);
+    }
     let mut helper_pool = Vec::new();
     for entry in &board {
         for role in [entry.real.as_deref(), entry.bluff.as_deref()]
@@ -4962,9 +5033,7 @@ fn dreamer_liar_pair_supported(
             }
         }
     }
-
-    let exact_support = match initial_bluffs.as_slice() {
-        [first, second] => dreamer_pair_matches(options, first, second),
+    let exact_support = match required.as_slice() {
         [initial] => helper_pool
             .iter()
             .any(|helper| dreamer_pair_matches(options, initial, helper)),
@@ -4979,27 +5048,15 @@ fn dreamer_liar_pair_supported(
     if exact_support || board_complete {
         return exact_support;
     }
-
-    // Conservative incomplete-board fallback. Known initial bluffs are
-    // mandatory. Any remaining option may be supplied by an unseen helper
-    // identity, but the helper excludes both selected real and bluff
-    // identities. This keeps the native cross-target bluff/real collision
-    // reachable without admitting an arbitrary match to a selected real role.
-    if initial_bluffs.len() == 2 {
-        return dreamer_pair_matches(options, &initial_bluffs[0], &initial_bluffs[1]);
-    }
-    if !initial_bluffs
+    // Hidden non-target cards can fill only the still-missing helper slot.
+    // They cannot bypass a known initial bluff or a script-priority draw.
+    required
         .iter()
         .all(|initial| options.iter().any(|option| roles_equal(option, initial)))
-    {
-        return false;
-    }
-    options.iter().all(|option| {
-        initial_bluffs
-            .iter()
-            .any(|initial| roles_equal(option, initial))
-            || !excluded.iter().any(|role| roles_equal(option, role))
-    })
+        && options.iter().all(|option| {
+            required.iter().any(|initial| roles_equal(option, initial))
+                || !excluded.iter().any(|role| roles_equal(option, role))
+        })
 }
 
 fn validate_dreamer(card: &CardInfo, scenario: &Scenario, state: &GameState) -> bool {
@@ -18619,6 +18676,145 @@ mod tests {
         ));
     }
 
+    #[test]
+    fn dreamer_truth_uses_unoccupied_script_priority_before_board_fallback() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Baker","Pooka"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.demons = vec!["Pooka".into()];
+        assert!(validate_dreamer(&dreamer, &empty_scenario(), &state));
+        let mut board_pair = dreamer.clone();
+        board_pair.info_parsed["evil_role_options"] = json!(["Baker", "Knight"]);
+        assert!(!validate_dreamer(&board_pair, &empty_scenario(), &state));
+        state.cards.retain(|card| card.position != 4);
+        assert!(!validate_dreamer(&board_pair, &empty_scenario(), &state));
+    }
+
+    #[test]
+    fn dreamer_truth_excludes_both_selected_reals_from_script_pool() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Pooka","Knight"]
+            }),
+            "Pooka",
+            "Knight",
+            "Scout",
+        );
+        state.deck.demons = vec!["Pooka".into()];
+        // The only priority asset is selected, so board fallback is reachable.
+        assert!(validate_dreamer(&dreamer, &empty_scenario(), &state));
+    }
+
+    #[test]
+    fn dreamer_target_bluff_precedes_script_priority() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Baker","Knight"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.demons = vec!["Pooka".into(), "Lilis".into()];
+        let mut scenario = empty_scenario();
+        scenario.evil_positions.insert(3, "Pooka".into());
+        assert!(validate_dreamer(&dreamer, &scenario, &state));
+        let mut priority_pair = dreamer;
+        priority_pair.info_parsed["evil_role_options"] = json!(["Baker", "Lilis"]);
+        assert!(!validate_dreamer(&priority_pair, &scenario, &state));
+    }
+
+    #[test]
+    fn dreamer_liar_takes_two_script_roles_before_helpers() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Drunk","Witch"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.outcasts = vec!["Drunk".into(), "Wretch".into()];
+        state.deck.minions = vec!["Witch".into()];
+        let mut liar = empty_scenario();
+        liar.corrupted.insert(1);
+        assert!(validate_dreamer(&dreamer, &liar, &state));
+        let mut helper_pair = dreamer;
+        helper_pair.info_parsed["evil_role_options"] = json!(["Dreamer", "Scout"]);
+        assert!(!validate_dreamer(&helper_pair, &liar, &state));
+        state.cards.retain(|card| card.position != 4);
+        assert!(!validate_dreamer(&helper_pair, &liar, &state));
+    }
+
+    #[test]
+    fn dreamer_liar_single_priority_is_required_before_unknown_helper() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Drunk","Scout"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.outcasts = vec!["Drunk".into()];
+        let mut liar = empty_scenario();
+        liar.corrupted.insert(1);
+        assert!(validate_dreamer(&dreamer, &liar, &state));
+        state.cards.retain(|card| card.position != 4);
+        assert!(validate_dreamer(&dreamer, &liar, &state));
+        let mut skips_priority = dreamer;
+        skips_priority.info_parsed["evil_role_options"] = json!(["Dreamer", "Scout"]);
+        assert!(!validate_dreamer(&skips_priority, &liar, &state));
+    }
+
+    #[test]
+    fn dreamer_liar_initial_bluff_precedes_script_and_excludes_selected_real() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Baker","Witch"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.demons = vec!["Pooka".into()];
+        state.deck.minions = vec!["Witch".into()];
+        let mut liar = empty_scenario();
+        liar.corrupted.insert(1);
+        liar.evil_positions.insert(2, "Pooka".into());
+        assert!(validate_dreamer(&dreamer, &liar, &state));
+        let mut selected_real = dreamer;
+        selected_real.info_parsed["evil_role_options"] = json!(["Baker", "Pooka"]);
+        assert!(!validate_dreamer(&selected_real, &liar, &state));
+    }
+
+    #[test]
+    fn dreamer_liar_duplicate_priority_occurrences_do_not_invent_helper_fallback() {
+        let (dreamer, mut state) = dreamer_state(
+            json!({
+                "dreamer_variant": "public_current", "targets": [2,3],
+                "evil_role_options": ["Drunk","Scout"]
+            }),
+            "Baker",
+            "Knight",
+            "Scout",
+        );
+        state.deck.outcasts = vec!["Drunk".into(), "Drunk".into()];
+        let mut liar = empty_scenario();
+        liar.corrupted.insert(1);
+        assert!(!validate_dreamer(&dreamer, &liar, &state));
+    }
     #[test]
     fn dreamer_honest_both_options_can_match_via_board_entry_fallback() {
         let (dreamer, state) = dreamer_state(

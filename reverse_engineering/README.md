@@ -240,9 +240,11 @@ gameplay binding for `Dreamer2`; the alternate class therefore does not replace
 the live role-pair contract. The subsequent
 [`public Dreamer`](notes/roles/gameplay_role_dreamer.md) boundary adds all 11
 role methods plus five compiler-generated helpers. It reconstructs the exact
-weighted role-pair and Cabbage paths and proves that all 46 shipped core
-CharacterData assets currently have `usuallyDisguised == false`. The resulting
-board-entry fallback can truthfully emit both selected roles, while a selected
+weighted role-pair and Cabbage paths. The corrected
+[aligned asset audit](notes/systems/character_asset_flags.md) identifies 15
+usually-disguised assets among 46 core records, restoring the script-priority
+pool ahead of board helpers. When that pool is empty, the board-entry fallback
+can truthfully emit both selected roles, while a selected
 bluff can make a lying clue collide with the other target's real role.
 The following [`Baa`](notes/roles/gameplay_role_baa.md) boundary asset-binds
 the public card to managed `Imp` and adds all three role methods plus the two
@@ -854,7 +856,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,163 classifications backed by
-281 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+282 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels

@@ -161,6 +161,30 @@ pub fn normalize_role(name: &str) -> String {
         .replace('_', "")
 }
 
+/// Pinned serialized CharacterData flag, independently aligned in the asset
+/// stream. This is not inferred from runtime disguise, alignment or faction.
+pub fn usually_disguised_current(name: &str) -> bool {
+    let canonical = get_card(name).map_or(name, |card| card.name);
+    matches!(
+        normalize_role(canonical).as_str(),
+        "baa"
+            | "lilis"
+            | "mutant"
+            | "pooka"
+            | "chancellor"
+            | "marionette"
+            | "minion"
+            | "poisoner"
+            | "puppet"
+            | "puppeteer"
+            | "shaman"
+            | "twinminion"
+            | "witch"
+            | "doppelganger"
+            | "drunk"
+    )
+}
+
 /// Check if a role name is a Villager in the knowledge base.
 pub fn is_villager_role(name: &str) -> bool {
     get_card(name).map_or(false, |c| c.faction == Faction::Villager)
@@ -180,6 +204,29 @@ pub fn is_plague_doctor(name: &str) -> bool {
 mod tests {
     use super::*;
 
+    #[test]
+    fn current_disguise_flags_match_all_pinned_asset_records() {
+        let report: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../reverse_engineering/reports/f530404b0f3f_807de4a83df4_character_assets_audit.json"
+        )).unwrap();
+        let records = report["records"].as_array().unwrap();
+        assert_eq!(records.len(), 46);
+        assert_eq!(
+            records
+                .iter()
+                .filter(|r| r["usuallyDisguised"] == true)
+                .count(),
+            15
+        );
+        for record in records {
+            assert_eq!(
+                usually_disguised_current(record["characterName"].as_str().unwrap()),
+                record["usuallyDisguised"].as_bool().unwrap()
+            );
+        }
+        assert!(usually_disguised_current("TM"));
+        assert!(!usually_disguised_current("Wretch"));
+    }
     #[test]
     fn test_card_count() {
         assert_eq!(ALL_CARDS.len(), 41);

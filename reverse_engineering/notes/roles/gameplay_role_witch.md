@@ -29,7 +29,7 @@ five native methods in this boundary.
 
 The asset is an Evil Minion: `characterType == 30`,
 `startingAlignment == 20`, `abilityUsage == 0` (`Once`), `bluffable == false`,
-`usuallyDisguised == false`, and `picking == false`. Its roguelike point value
+`usuallyDisguised == true`, and `picking == false`. Its roguelike point value
 is 10, multiplier is 1.0, and income is 1. `additionalStatuses`, tags,
 `canAppearIf`, and the localized description override fields are empty.
 

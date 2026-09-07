@@ -124,12 +124,12 @@ The selected type is consequently present at one or both targets, making
 false type is sampled and its probability; it does not change the truth
 predicate.
 
-A read-only audit of all 46 shipped core CharacterData assets found
-`usuallyDisguised == false` on every record. In the current roster the first
-step is therefore always empty, so the unbound alternate's lying path falls
-back to sampling the two selected registered types with equal entry weight.
-This current-build fact does not make the unbound clue format part of the
-public Dreamer contract.
+The corrected [aligned asset audit](../systems/character_asset_flags.md) finds
+15 flagged records among the 46 core assets. The first step therefore selects
+only flagged targets when any exist; it falls back to both selected registered
+types only when neither target is flagged. Earlier all-false claims came from
+reading serialized padding as packed Boolean fields. This correction does not
+make the unbound clue format part of the public Dreamer contract.
 
 ## Typed-analysis corroboration
 

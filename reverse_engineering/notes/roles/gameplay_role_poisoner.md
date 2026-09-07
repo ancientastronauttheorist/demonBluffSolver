@@ -28,7 +28,7 @@ SerializeReference role to exact managed `Poisoner` at TypeDefIndex `5912` in
 `63CCF9E795472EFBE7C0198C9665300D3FBFF7A1F6473961D8ED5AC72643329E`.
 
 The card is an Evil Minion (`characterType == 30`,
-`startingAlignment == 20`), is not bluffable, is not usually disguised, and
+`startingAlignment == 20`), is not bluffable, is usually disguised, and
 has `picking == false`. Its `abilityUsage` is enum value zero (`Once`), but it
 has no Day picker or player-selected target. It serializes no additional
 statuses or appearance conditions and carries the `Corrupt` tag. The exact

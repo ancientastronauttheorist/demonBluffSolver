@@ -103,19 +103,21 @@ the unchosen target merely because it was selected.
 
 ### Current-build authored-description violation
 
-A read-only serialized audit found 46 current core CharacterData records at
-`sharedassets0.assets` path IDs `21590` through `21635`; every record has
-`usuallyDisguised == false`, including all Minions and Demons. No additional
-CharacterData records were found in the other scanned gameplay assets.
-Consequently step 2 is empty for the shipped roster and step 3 is a normal,
-reachable path.
+A corrected [aligned asset audit](../systems/character_asset_flags.md) finds
+46 core records at `sharedassets0.assets` path IDs 21590 through 21635, with
+15 `usuallyDisguised` flags set: all core Minion/Demon assets plus Drunk and
+Doppelganger. An earlier packed-byte read mistakenly inspected padding and
+reported every flag false. Step 2 is reachable and takes priority over step 3
+whenever eligible script entries remain after removing the selected reals.
 
-When two ordinary unbluffed targets have distinct roles, the fallback can draw
+When the script-priority pool is empty and two ordinary unbluffed targets have
+distinct roles, the fallback can draw
 the unchosen target itself. The clue can therefore honestly contain both
 selected roles, despite the authored promise that one role is not among them.
 For a chosen anchor, that event has probability `1 / eligible board entries`.
-Solver validation must preserve the native truth predicate of **at least one**
-matching option; requiring exactly one would reject reachable truthful clues.
+At least one matching option is necessary but not sufficient for native
+support: validation must also respect the target-bluff/script/board priority.
+Requiring exactly one would reject reachable truthful fallback clues.
 
 ## Lying result generation
 
@@ -123,7 +125,8 @@ matching option; requiring exactly one would reject reachable truthful clues.
 target's live `bluff`. It then builds the same current-script
 `usuallyDisguised` pool, excluding both selected real roles and any already
 chosen bluff, and draws without replacement until it has two entries or the
-pool is exhausted. That authored pool is empty in the current shipped assets.
+pool is exhausted. The corrected asset flags make this pool reachable; a board
+helper cannot bypass an eligible script-priority draw.
 
 Any missing result is filled by
 `GetRandomNonRepeatedFakeCharacter(nonRepeatList)`. The helper walks every

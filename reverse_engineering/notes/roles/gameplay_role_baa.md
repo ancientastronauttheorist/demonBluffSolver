@@ -52,11 +52,12 @@ nonempty, a uniform sample from it replaces the first choice; otherwise the
 original all-Outcast choice remains. The selected object is stored in
 `Imp.blockedOutcast` and passed to `DeckView.AddToObscuredDeckView`.
 
-All 46 shipped core `CharacterData` assets currently have
-`usuallyDisguised == false`. The priority branch is therefore latent in this
-build, and the reachable selection is uniform across the authored Outcast
-pool. The authored “Prioritize hiding Drunks and Doppelgangers” note is not
-implemented by the current asset flags.
+The corrected [aligned asset audit](../systems/character_asset_flags.md)
+finds `usuallyDisguised` set on Drunk and Doppelganger. When either occurs in
+the Outcast pool, the priority draw is used and the first draw is discarded.
+Otherwise the original uniform all-Outcast draw remains. An earlier audit
+read serialized padding as packed Boolean fields and incorrectly described
+this branch as latent. The pinned game build has not changed.
 
 The method does not remove the selected object from the script pool, clone a
 role, change a character type or alignment, alter HUD faction counts, or touch

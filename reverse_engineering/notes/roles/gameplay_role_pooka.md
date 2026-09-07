@@ -27,7 +27,7 @@ raw object SHA-256 is
 `D7113C5C8FD18D560433C50FF010C3663883A83C37D8DB0DAFFCA426794EDEFE`.
 
 The card is an Evil Demon (`characterType == 100`,
-`startingAlignment == 20`), is not bluffable, is not usually disguised, and
+`startingAlignment == 20`), is not bluffable, is usually disguised, and
 has `picking == false`. Its `abilityUsage` is enum value zero (`Once`), but it
 has no Day picker or player-selected target. It serializes no additional
 statuses or appearance conditions and carries the `Corrupt` tag. The exact
