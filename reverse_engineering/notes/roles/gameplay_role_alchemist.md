@@ -70,7 +70,7 @@ It names `Alchemist_Christmass_Normandia` /
 `Alchemist_Christmass_Normandia_SKIN_0203`, credits `normandia`, and uses
 `UnlockWithAchievement`.
 
-The normal candidate-pool object is `level0` path ID `139347`, file offset
+The Compendium catalogue object is `level0` path ID `139347`, file offset
 `17578592`, size `1080`, SHA-256
 `FB9D821AE0A7E3655BEF4A3DD3E544E85B3109258A48DCF68FF0969ACED8D948`.
 It references Alchemist once, at object-local offset `404` (path ID at `408`).
@@ -571,3 +571,8 @@ classification records and 275 evidence records.
   not dynamically forced.
 - This is a build-specific Alchemist checkpoint, not evidence that every role
   or the whole game has been fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

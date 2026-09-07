@@ -58,11 +58,10 @@ The serialized role type string occurs in the object at raw offset `0x1070`.
 The asset's bundled-character, skin, achievement, additional-status, tag,
 `canAppearIf`, hint, and if-lies collections are empty.
 
-The normal serialized level object `level0` at path ID `139347`, SHA-256
+The serialized Compendium level object `level0` at path ID `139347`, SHA-256
 `B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1`,
-contains one normal candidate-pool reference to this exact CharacterData at
-path ID `21618`. Enlightened is therefore live as a direct Standard/Ascension
-card, independently of Poet. It is absent from the 15-entry
+contains one Compendium catalogue reference to this exact CharacterData at
+path ID `21618`. Enlightened is represented directly in the Compendium catalogue. It is absent from the 15-entry
 `startGameActOrder`, and its managed action bodies contain no Start branch.
 
 ## Audited boundary and shared bodies
@@ -496,3 +495,8 @@ decompiler excerpt, or private export path is checked into the repository.
 This checkpoint closes the shipped public Enlightened/Shugenja clue-generation
 boundary and its declared helper surface. It does not claim that every Poet
 provider, every role, or the whole game is fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

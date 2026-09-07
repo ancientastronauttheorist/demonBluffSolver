@@ -53,9 +53,9 @@ The executable picker and clue bodies agree with the current asset, not that
 stale description: they require exactly three distinct Character objects and
 use the current `Outcast` enum category.
 
-The normal serialized candidate pool in `Demon Bluff_Data/level0`, path ID
+The serialized Compendium catalogue in `Demon Bluff_Data/level0`, path ID
 `139347`, contains exactly one file-ID-`2` reference to Druid path ID `21616`,
-at pool-object-local offset `488`. The pool object is at file offset
+at Compendium-object-local offset `488`. The Compendium object is at file offset
 `17578592`, size `1080`, and has SHA-256
 `FB9D821AE0A7E3655BEF4A3DD3E544E85B3109258A48DCF68FF0969ACED8D948`.
 The containing `level0` file has SHA-256
@@ -63,7 +63,7 @@ The containing `level0` file has SHA-256
 Druid is absent from the 15-entry ordered-Start object at path ID `137026`,
 file offset `17310672`, size `332`, and object SHA-256
 `544328634CD77D551B5864CDC1B643029F3B30BFFC5BB4350DFCF83C66226BB0`.
-It is a direct normal-pool reveal/day role, not an ordered-Start participant.
+Its role behavior is reveal/day; it is not an ordered-Start participant.
 
 ## Alias implications and obsolete predecessor
 
@@ -574,3 +574,8 @@ A solver/reader bridge that claims current Druid support should pin at least:
   recover its native reference chronology.
 - This is a build-specific Druid checkpoint, not evidence that every role or
   the whole game has been fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

@@ -533,3 +533,10 @@ No nontrivial method may disappear from the denominator.
 - Run Python tests, `cargo build --release`, and
   `cargo test --release --test simulation` for gameplay-facing changes.
 - Commit and push each discrete subsystem or role milestone.
+
+- [x] Audit public Mutant/Skinwalker and the full Demon declaration, including
+  empty special-rule/clue behavior; extend the typed union to 44 sets, 913
+  memberships, 561 exact definitions and 455 native RVAs.
+- [x] Decode the complete ProjectContext -> GameData -> 46 ascension / 12
+  custom-script configuration graph, and correct Compendium catalogue provenance.
+  Keep mode choice, runtime cloning/writers, and global reachability open.

@@ -56,9 +56,9 @@ without terminal punctuation:
 Can not lie, even if I am Evil
 ```
 
-The normal serialized candidate pool in `Demon Bluff_Data/level0`, path ID
+The serialized Compendium catalogue in `Demon Bluff_Data/level0`, path ID
 `139347`, contains exactly one file-ID-`2` reference to Confessor path ID
-`21614`, at pool-object-local offset `464`. The pool object is at file offset
+`21614`, at Compendium-object-local offset `464`. The Compendium object is at file offset
 `17578592`, size `1080`, and has SHA-256
 `FB9D821AE0A7E3655BEF4A3DD3E544E85B3109258A48DCF68FF0969ACED8D948`.
 The containing `level0` file has SHA-256
@@ -66,7 +66,7 @@ The containing `level0` file has SHA-256
 Confessor has zero references in the 15-entry ordered Start object at path ID
 `137026`, file offset `17310672`, size `332`, and object SHA-256
 `544328634CD77D551B5864CDC1B643029F3B30BFFC5BB4350DFCF83C66226BB0`.
-It is therefore a direct normal-pool role whose setup is the Reveal-time
+Its setup is the Reveal-time
 `Init` hook, not an ordered-`Start` participant.
 
 ## Exact callable boundary and shared bodies
@@ -508,3 +508,8 @@ gate completed in 996.57 seconds.
   callback provenance, or the current-Spy exception.
 - This is a build-specific Confessor checkpoint, not evidence that every role
   or the whole game has been fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

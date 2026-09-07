@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "declarations": {
+    "Skinwalker": {
+      "type_def_index": 5921,
+      "base_class": "Demon",
+      "rvas": [
+        "0x3ebef0",
+        "0x33ed50",
+        "0x3cfff0"
+      ]
+    },
+    "Demon": {
+      "type_def_index": 5919,
+      "base_class": "Role",
+      "rvas": [
+        "0x3d7060",
+        "0x3d6bd0",
+        "0x3d6b70",
+        "0x33ed50",
+        "0x3d6c30",
+        "0x3d6e70",
+        "0x3d6ac0",
+        "0x3cfff0"
+      ]
+    }
+  },
+  "native_relationships_verified": 30,
+  "rules": "Fresh List<SpecialRule> allocation and default constructor call; no rule additions",
+  "action": "Skinwalker and Demon Act share ret 0; inherited BluffAct dispatches to Act",
+  "clues": "Both inherited Demon clue methods allocate ActedInfo with empty text and null character references",
+  "registration": "Inherited Role.GetRegisterAsRole returns null",
+  "scope": "Static instruction and pinned metadata verification; asset binding and configuration references are separate reports; no global reachability or complete Demon lifecycle claim"
+}

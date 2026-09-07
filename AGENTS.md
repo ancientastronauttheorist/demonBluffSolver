@@ -68,7 +68,8 @@ stop, diagnose, fix, verify, then resume.
     before treating it as that instruction's chunk.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
-    Include the entire final instruction when sizing a decode range.
+    Include the entire final instruction when sizing a decode range; assert
+    requested instruction addresses decoded before indexing the result.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
     Check each requested export's result before reading its file: a successful

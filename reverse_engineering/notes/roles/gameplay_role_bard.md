@@ -43,14 +43,13 @@ punctuation and without `closest`:
 Learn how far I am from Poisoned character
 ```
 
-The normal serialized `level0` candidate pool at path ID `139347` contains one
+The serialized `level0` Compendium catalogue at path ID `139347` contains one
 file-ID-`2` reference to this exact path ID, at object-local offset `440`. The
-candidate-pool object has SHA-256
+Compendium object has SHA-256
 `FB9D821AE0A7E3655BEF4A3DD3E544E85B3109258A48DCF68FF0969ACED8D948`;
 `level0` has SHA-256
 `B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1`.
-Bard is therefore live as a direct Standard/Ascension card independently of
-Poet. It has zero references in the 15-entry `startGameActOrder` object at path
+Bard is represented directly in the Compendium catalogue. It has zero references in the 15-entry `startGameActOrder` object at path
 ID `137026`, whose object SHA-256 is
 `544328634CD77D551B5864CDC1B643029F3B30BFFC5BB4350DFCF83C66226BB0`.
 
@@ -470,3 +469,8 @@ being inferred from the archive's textless scalar clues.
   here and were not forced in a live game.
 - This is a build-specific Bard checkpoint, not evidence that every role or
   the whole game has been fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

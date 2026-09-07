@@ -60,11 +60,10 @@ named after the public card. This is also distinct from similarly phrased
 selection roles: Medium chooses one Character and reports a role identity,
 while Bounty Hunter reports only an Evil ID and Hunter reports a distance.
 
-The normal serialized level object, SHA-256
+The serialized Compendium level object, SHA-256
 `B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1`,
-contains one normal candidate-pool reference to this exact CharacterData. The
-role is therefore live as a direct Standard/Ascension card, unlike the dormant
-physical Bounty Hunter asset. Medium is absent from `startGameActOrder`, and
+contains one Compendium catalogue reference to this exact CharacterData. The
+role is represented directly in the Compendium catalogue. Medium is absent from `startGameActOrder`, and
 its managed action bodies contain no Start branch.
 
 ## Audited boundary and shared bodies
@@ -447,3 +446,8 @@ This checkpoint closes the shipped Medium clue-generation and execution-side
 effect boundary for both direct roster use and retained Poet-provider use. It
 does not claim that every remaining role or every delayed-Reveal composition is
 fully reconstructed.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).

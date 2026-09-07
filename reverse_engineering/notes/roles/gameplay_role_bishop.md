@@ -64,12 +64,11 @@ The serialized managed role type string `Bishop` occurs at raw object offset
 tag, and `canAppearIf` collections are empty. The asset has no authored hint
 outside the if-lying field.
 
-The normal serialized `level0` candidate pool at path ID `139347` contains one
+The serialized `level0` Compendium catalogue at path ID `139347` contains one
 reference from file ID `2` to this exact CharacterData at path ID `21613`.
 `level0` has SHA-256
 `B509AC15904F0926419CCCC1D2E86508C69B0E3AF2235A08FF8E9FC4D170C7F1`.
-Bishop is therefore live as a direct Standard/Ascension card independently of
-Poet. It is absent from the 15-entry `startGameActOrder` object at path ID
+Bishop is represented directly in the Compendium catalogue. It is absent from the 15-entry `startGameActOrder` object at path ID
 `137026`, and neither action body has a Start branch.
 
 ## Audited boundary and shared bodies
@@ -492,3 +491,8 @@ model introduced no new corpus constraint failure.
   do not independently validate the current exact clue strings or RNG path.
 - This is a build-specific Bishop checkpoint, not evidence that every role or
   the whole game has been fully decompiled.
+
+Catalogue provenance correction: this scene object binds `Compendium`. Its
+41 asset identities match `GameData.allCharacterData`; catalogue membership
+alone does not establish runtime mode availability. See the
+[complete ascension asset graph](../systems/ascension_asset_graph.md).
