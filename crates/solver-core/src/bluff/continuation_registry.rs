@@ -49,7 +49,7 @@ pub struct ContinuationSchedule {
     pub paths: Vec<ContinuationPath>,
 }
 
-fn validate_registry(state: &ContinuationState) -> Result<(), LedgerError> {
+pub(super) fn validate_registry(state: &ContinuationState) -> Result<(), LedgerError> {
     if state.rule_version != CONTINUATION_REGISTRY_NATIVE_V1
         || state.initial.rule_version != REVEAL_WRITER_VIEW_NATIVE_V2
         || !state.initial.resumes.is_empty()

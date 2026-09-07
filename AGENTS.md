@@ -40,7 +40,8 @@ stop, diagnose, fix, verify, then resume.
 10. When a process error happens, improve this file. Prefer tightening an
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
-    glob); do not pass wildcard file paths that the shell leaves unexpanded.
+    glob); do not pass wildcard paths that the shell leaves unexpanded, including
+    a trailing `/*` on a directory argument.
     Resolve all uncertain filenames, including status/summary documents, with
     `rg --files` before reading; verify a documented directory exists before
     searching it, since directory maps can describe intended layout.
@@ -53,6 +54,9 @@ stop, diagnose, fix, verify, then resume.
     Resolve export filenames from the target manifest or directory listing;
     public-role filenames can differ from managed class names. Inspect shared
     method bodies without printing their potentially enormous alias-header line.
+    Strip the complete comment header; fixed line-count skipping is unreliable.
+    Unity type trees can omit custom MonoBehaviour fields; check consumed size
+    and treat partial reads as headers, not complete serialized objects.
     For native PE inspection, distinguish zero-filled virtual data from file-
     backed bytes, and verify an unwind entry actually contains a queried RVA
     before treating it as that instruction's chunk.

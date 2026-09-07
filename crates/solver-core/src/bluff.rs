@@ -16,6 +16,7 @@ pub mod reveal_view;
 pub mod twin_writer;
 pub mod wait_eligibility;
 pub mod wait_queue;
+pub mod scheduled_reveal;
 
 use crate::knowledge_base::{get_card, Faction};
 use crate::types::{

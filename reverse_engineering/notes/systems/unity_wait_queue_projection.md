@@ -50,9 +50,10 @@ valid result. The caller's context is never mutated on either success or error.
 This contract assumes one-shot records, non-reentrant callbacks and release
 bodies that do not mutate the queue. Native owner lookup, callback lifetime,
 actual engine phase observations and producer snapshots remain explicit
-provenance. There is no new live-solver, scenario or logical-continuation-registry
-caller. In particular, the sealed-ready explorer does not gain authority to
-invent a ready set from this API.
+provenance. The [scheduled Reveal adapter](scheduled_reveal.md) now joins this
+same kernel to the logical-continuation registry under a separately versioned,
+complete DelayReveal-only contract. There is no live-solver or scenario caller.
+The sealed-ready explorer does not gain authority to invent a ready set.
 
 ## Independent native differential fixtures
 

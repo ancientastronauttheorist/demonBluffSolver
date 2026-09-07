@@ -466,6 +466,11 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     with stable equal deadlines, saved-successor cancellation, monotonic labels,
     exact release conditions and atomic failure bounds; compare complete results
     against 23 isolated native consumer cases in proprietary-input-free CI.
+  - [x] Join the one-shot queue kernel to weighted Reveal/continuation replay
+    for a complete DelayReveal-only queue with explicit matching-owner and
+    producer-clock provenance. Allocate 0.3f waits in actual writer order,
+    preserve branch-local identities and defer new waits by native generation.
+    Keep mixed queues, lifetime-driven mutation and live admission unsupported.
   - [x] Audit UpdateView/UpdateViewReal/RefreshView and add a bounded view-tail
     projection for identity sources, retained death presentation, exhausted
     pickable controls and conditional disguise-icon writes.

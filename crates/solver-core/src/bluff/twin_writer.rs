@@ -423,6 +423,399 @@ mod tests {
         }
     }
 
+    fn scheduled_input() -> crate::bluff::scheduled_reveal::ScheduledRevealContext {
+        use crate::bluff::scheduled_reveal::*;
+        use crate::bluff::wait_eligibility::*;
+        use crate::bluff::wait_queue::*;
+        ScheduledRevealContext {
+            rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+            initial: ScheduledRevealState {
+                rule_version: SCHEDULED_REVEAL_NATIVE_V1.into(),
+                continuations: registry_input(),
+                queue: WaitQueueState {
+                    rule_version: UNITY_WAIT_QUEUE_NATIVE_V1.into(),
+                    generation: 0,
+                    next_id: 100,
+                    entries: [10, 20, 30]
+                        .into_iter()
+                        .map(|logical_id| WaitQueueEntry {
+                            logical_id,
+                            timing: WaitTimingRecord {
+                                deadline: 0.0,
+                                frame_threshold: 1,
+                                phase_mask: 10,
+                                insertion_generation: 0,
+                            },
+                            release_present: true,
+                        })
+                        .collect(),
+                },
+            },
+            dispatch: WaitDispatchContext {
+                rule_version: UNITY_WAIT_ELIGIBILITY_NATIVE_V1.into(),
+                sampled_time: 3.0,
+                sampled_frame_counter: 1,
+                phase_mask: 2,
+                generation_before: 0,
+            },
+            callbacks: [10, 20, 30]
+                .into_iter()
+                .map(|id| {
+                    (
+                        id,
+                        RevealCallbackBoundary {
+                            same_live_owner: true,
+                            callback_result: 1,
+                            producer_time: 3.0,
+                            producer_frame_counter: 1,
+                        },
+                    )
+                })
+                .collect(),
+        }
+    }
+
+    #[test]
+    fn scheduled_queue_order_matches_weighted_sealed_order_without_permuting() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        // Equal deadlines retain occurrence order, which need not follow IDs.
+        input.initial.queue.entries.swap(1, 2);
+        let actual = replay_scheduled_reveal(&input).unwrap();
+        let expected = advance_ready_batch(&input.initial.continuations, &[10, 30, 20])
+            .unwrap()
+            .into_iter()
+            .find(|s| s.order == [10, 30, 20])
+            .unwrap();
+        assert_eq!(actual.len(), expected.paths.len());
+        for (a, e) in actual.iter().zip(expected.paths) {
+            assert_eq!(
+                a.callbacks.iter().map(|c| c.logical_id).collect::<Vec<_>>(),
+                [10, 30, 20]
+            );
+            assert_eq!(a.probability, e.probability);
+            assert_eq!(a.state.continuations.initial, e.state.initial);
+            assert_eq!(a.state.continuations.pending, e.state.pending);
+            assert_eq!(a.state.continuations.next_id, e.state.next_id);
+            assert_eq!(a.state.continuations.batch_ordinal, 3);
+            assert_eq!(a.state.queue.generation, 1);
+            assert_eq!(a.state.queue.next_id, e.state.next_id);
+            assert!(a.state.queue.entries.iter().all(|entry| {
+                entry.logical_id >= 100
+                    && entry.timing.deadline == 3.0 + f64::from(0.3_f32)
+                    && entry.timing.frame_threshold == 2
+                    && entry.timing.insertion_generation == 1
+            }));
+        }
+        assert!(actual.len() > 1);
+    }
+
+    #[test]
+    fn scheduled_new_overdue_waits_are_generation_skipped_when_cursor_reaches_them() {
+        use crate::bluff::scheduled_reveal::*;
+        use crate::bluff::wait_eligibility::WaitEligibility;
+        use crate::bluff::wait_queue::WaitQueueEvent;
+        let mut input = scheduled_input();
+        input.initial.queue.entries[2].timing.deadline = 2.0;
+        for boundary in input.callbacks.values_mut() {
+            boundary.producer_time = 0.0;
+            boundary.producer_frame_counter = 0;
+        }
+        let paths = replay_scheduled_reveal(&input).unwrap();
+        for path in paths {
+            assert_eq!(
+                path.callbacks
+                    .iter()
+                    .map(|c| c.logical_id)
+                    .collect::<Vec<_>>(),
+                [10, 20, 30]
+            );
+            assert!(path.queue_trace.iter().any(|event| matches!(
+                event,
+                WaitQueueEvent::Visit {
+                    logical_id: 100,
+                    eligibility: WaitEligibility::SkipCurrentGeneration
+                }
+            )));
+            assert!(path.queue_trace.iter().all(|event| !matches!(event,
+                WaitQueueEvent::Callback { logical_id } if *logical_id >= 100
+            )));
+        }
+    }
+
+    #[test]
+    fn scheduled_producer_clock_is_distinct_and_missing_skipped_owners_are_allowed() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        input.callbacks.get_mut(&10).unwrap().producer_time = 20.0;
+        input.callbacks.get_mut(&10).unwrap().producer_frame_counter = 5;
+        let paths = replay_scheduled_reveal(&input).unwrap();
+        assert_eq!(paths.len(), 2);
+        for path in paths {
+            assert_eq!(path.callbacks.len(), 1);
+            let new: Vec<_> = path
+                .state
+                .queue
+                .entries
+                .iter()
+                .filter(|e| e.logical_id >= 100)
+                .collect();
+            assert_eq!(new.len(), 2);
+            assert!(new
+                .iter()
+                .all(|e| e.timing.deadline == 20.0 + f64::from(0.3_f32)
+                    && e.timing.frame_threshold == 6));
+            assert_eq!(
+                path.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 2
+                }
+            );
+        }
+    }
+
+    #[test]
+    fn scheduled_later_drain_requires_new_frame_and_preserves_pending_identity() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        input.callbacks.get_mut(&10).unwrap().producer_time = 0.0;
+        let first = replay_scheduled_reveal(&input).unwrap();
+        let mut second = input.clone();
+        second.initial = first[1].state.clone();
+        second.dispatch.generation_before = 1;
+        second.callbacks.clear();
+        let skipped = replay_scheduled_reveal(&second).unwrap();
+        assert_eq!(skipped.len(), 1);
+        assert!(skipped[0].callbacks.is_empty());
+        assert_eq!(skipped[0].state.continuations, second.initial.continuations);
+        second.initial = skipped[0].state.clone();
+        second.dispatch.generation_before = 2;
+        second.dispatch.sampled_frame_counter = 2;
+        for id in [100, 101] {
+            let mut boundary = input.callbacks[&10].clone();
+            boundary.producer_frame_counter = 2;
+            second.callbacks.insert(id, boundary);
+        }
+        let resumed = replay_scheduled_reveal(&second).unwrap();
+        assert!(!resumed.is_empty());
+        for path in resumed {
+            assert_eq!(
+                path.callbacks
+                    .iter()
+                    .map(|c| c.logical_id)
+                    .collect::<Vec<_>>(),
+                [100, 101]
+            );
+            assert!(!path.state.continuations.pending.contains_key(&100));
+            assert!(!path.state.continuations.pending.contains_key(&101));
+            assert!(path.state.continuations.pending.contains_key(&20));
+            assert!(path.state.continuations.pending.contains_key(&30));
+        }
+    }
+
+    #[test]
+    fn scheduled_callback_result_controls_release_without_changing_reveal() {
+        use crate::bluff::scheduled_reveal::*;
+        use crate::bluff::wait_queue::WaitQueueEvent;
+        let input = scheduled_input();
+        let baseline = replay_scheduled_reveal(&input).unwrap();
+        for result in [-1, 0, 2] {
+            let mut changed = input.clone();
+            for boundary in changed.callbacks.values_mut() {
+                boundary.callback_result = result;
+            }
+            let paths = replay_scheduled_reveal(&changed).unwrap();
+            for (path, reference) in paths.iter().zip(&baseline) {
+                assert_eq!(path.state, reference.state);
+                assert_eq!(path.probability, reference.probability);
+                assert!(!path
+                    .queue_trace
+                    .iter()
+                    .any(|e| matches!(e, WaitQueueEvent::Release { .. })));
+            }
+        }
+        assert!(baseline.iter().all(|p| p
+            .queue_trace
+            .iter()
+            .filter(|e| matches!(e, WaitQueueEvent::Release { .. }))
+            .count()
+            == 3));
+    }
+
+    #[test]
+    fn scheduled_rejects_incomplete_join_owner_guesses_and_foreign_evidence_atomically() {
+        use crate::bluff::scheduled_reveal::*;
+        let original = scheduled_input();
+        for defect in 0..9 {
+            let mut input = original.clone();
+            match defect {
+                0 => {
+                    input.initial.queue.entries.pop();
+                }
+                1 => input.initial.queue.next_id += 1,
+                2 => input.initial.queue.entries[0].logical_id = 20,
+                3 => input.initial.queue.entries[0].release_present = false,
+                4 => input.initial.queue.entries[0].timing.phase_mask = 2,
+                5 => {
+                    input.callbacks.remove(&10);
+                }
+                6 => input.callbacks.get_mut(&10).unwrap().same_live_owner = false,
+                7 => {
+                    input.callbacks.insert(99, input.callbacks[&10].clone());
+                }
+                8 => input
+                    .initial
+                    .continuations
+                    .pending
+                    .insert(10, 3)
+                    .map(|_| ())
+                    .unwrap(),
+                _ => unreachable!(),
+            }
+            let snapshot = input.clone();
+            assert_eq!(
+                replay_scheduled_reveal(&input),
+                Err(LedgerError::InvalidContext),
+                "{defect}"
+            );
+            assert_eq!(input, snapshot);
+        }
+    }
+
+    #[test]
+    fn scheduled_no_callback_preserves_registry_even_at_batch_limit() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        input.initial.continuations.batch_ordinal = u16::MAX;
+        input.dispatch.phase_mask = 1;
+        input.callbacks.clear();
+        let output = replay_scheduled_reveal(&input).unwrap();
+        assert_eq!(output.len(), 1);
+        assert_eq!(output[0].state.continuations, input.initial.continuations);
+        assert_eq!(output[0].state.queue.entries, input.initial.queue.entries);
+        assert_eq!(output[0].state.queue.generation, 1);
+        assert_eq!(
+            output[0].probability,
+            Probability {
+                numerator: 1,
+                denominator: 1
+            }
+        );
+        input.dispatch.phase_mask = 2;
+        input.callbacks = scheduled_input().callbacks;
+        assert_eq!(replay_scheduled_reveal(&input), Err(LedgerError::Capacity));
+    }
+
+    #[test]
+    fn scheduled_callback_and_allocation_limits_fail_without_returning_prefixes() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        let exemplar = input.initial.queue.entries[0].clone();
+        let boundary = input.callbacks[&10].clone();
+        input.initial.continuations.initial.board.reveal.actors[0].character_start_acted =
+            Some(true);
+        for count in [16_u16, 17] {
+            for actor in &mut input.initial.continuations.initial.board.reveal.actors {
+                actor.remaining_continuations = if actor.position == 1 { count } else { 0 };
+            }
+            input.initial.continuations.pending = (0..u64::from(count)).map(|id| (id, 1)).collect();
+            input.initial.queue.entries = (0..u64::from(count))
+                .map(|id| {
+                    let mut entry = exemplar.clone();
+                    entry.logical_id = id;
+                    entry
+                })
+                .collect();
+            input.callbacks = (0..u64::from(count))
+                .map(|id| (id, boundary.clone()))
+                .collect();
+            let snapshot = input.clone();
+            if count == 16 {
+                let output = replay_scheduled_reveal(&input).unwrap();
+                assert_eq!(output.len(), 1);
+                assert_eq!(output[0].callbacks.len(), 16);
+                assert!(output[0].state.queue.entries.is_empty());
+                assert!(output[0].state.continuations.pending.is_empty());
+            } else {
+                assert_eq!(replay_scheduled_reveal(&input), Err(LedgerError::Capacity));
+            }
+            assert_eq!(input, snapshot);
+        }
+        let mut input = scheduled_input();
+        input.initial.queue.next_id = u64::MAX;
+        input.initial.continuations.next_id = u64::MAX;
+        assert_eq!(replay_scheduled_reveal(&input), Err(LedgerError::Capacity));
+        let mut input = scheduled_input();
+        input.callbacks.remove(&30);
+        let snapshot = input.clone();
+        assert_eq!(
+            replay_scheduled_reveal(&input),
+            Err(LedgerError::InvalidContext)
+        );
+        assert_eq!(input, snapshot);
+    }
+
+    #[test]
+    fn scheduled_generation_wrap_and_nonfinite_boundary_validation() {
+        use crate::bluff::scheduled_reveal::*;
+        let mut input = scheduled_input();
+        input.initial.queue.generation = u32::MAX;
+        input.dispatch.generation_before = u32::MAX;
+        for entry in &mut input.initial.queue.entries {
+            entry.timing.insertion_generation = u32::MAX;
+        }
+        let output = replay_scheduled_reveal(&input).unwrap();
+        assert!(output.iter().all(|p| p.state.queue.generation == 0
+            && p.state
+                .queue
+                .entries
+                .iter()
+                .all(|e| e.timing.insertion_generation == 0)));
+        for value in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            input.callbacks.get_mut(&10).unwrap().producer_time = value;
+            assert_eq!(
+                replay_scheduled_reveal(&input),
+                Err(LedgerError::InvalidContext)
+            );
+        }
+    }
+
+    #[test]
+    fn scheduled_contract_roundtrips_and_requires_versions() {
+        use crate::bluff::scheduled_reveal::*;
+        let input = scheduled_input();
+        let json = serde_json::to_value(&input).unwrap();
+        assert_eq!(
+            serde_json::from_value::<ScheduledRevealContext>(json.clone()).unwrap(),
+            input
+        );
+        for field in ["rule_version", "dispatch", "callbacks"] {
+            let mut bad = json.clone();
+            bad.as_object_mut().unwrap().remove(field);
+            assert!(serde_json::from_value::<ScheduledRevealContext>(bad).is_err());
+        }
+        let mut bad = json;
+        bad["assume_all_owners_valid"] = true.into();
+        assert!(serde_json::from_value::<ScheduledRevealContext>(bad).is_err());
+        let output = replay_scheduled_reveal(&input).unwrap();
+        for path in output {
+            let saved = serde_json::to_value(&path.state).unwrap();
+            assert_eq!(
+                serde_json::from_value::<ScheduledRevealState>(saved).unwrap(),
+                path.state
+            );
+        }
+    }
+
     #[test]
     fn registry_labels_ordered_writer_creations_and_preserves_unready_instances() {
         let result = advance_ready_batch(&registry_input(), &[10]).unwrap();

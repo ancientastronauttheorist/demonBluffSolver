@@ -3,7 +3,8 @@
 //! Finite records retain native deadline order and saved-successor mutation
 //! semantics. Callback effects are supplied, not inferred from hidden game state.
 //! Repeating waits, reentrant drains and mutation from release bodies are outside
-//! this contract. No continuation-registry or live-solver caller is added.
+//! this contract. The offline scheduled-Reveal adapter shares this kernel;
+//! no live-solver caller is added.
 
 use super::ledger::LedgerError;
 use super::wait_eligibility::{
@@ -150,53 +151,105 @@ fn validate(context: &WaitQueueContext) -> Result<(), LedgerError> {
     Ok(())
 }
 
-/// Replay one drain atomically. A future deadline terminates traversal; skips
-/// preserve records. Callback insertions never replace the saved successor,
-/// while cancellation advances it if the canceled record was that successor.
-/// The entry-time clock/frame snapshot remains fixed throughout this call.
-pub fn replay_wait_queue(context: &WaitQueueContext) -> Result<WaitQueueOutcome, LedgerError> {
-    validate(context)?;
-    let mut state = context.initial.clone();
-    state.generation = state.generation.wrapping_add(1);
-    let mut trace = Vec::new();
-    let mut cursor = state.entries.first().map(|entry| entry.logical_id);
-    let mut visits = 0usize;
-    while let Some(id) = cursor {
-        visits += 1;
-        if visits > MAX_RECORDS + MAX_MUTATIONS {
-            return Err(LedgerError::Capacity);
+/// Internal resumable drain. A callback boundary may be cloned for each RNG
+/// branch, but queue traversal and mutation still use the native-tested kernel.
+#[derive(Debug, Clone)]
+pub(super) struct WaitQueueDrain {
+    pub(super) state: WaitQueueState,
+    pub(super) trace: Vec<WaitQueueEvent>,
+    dispatch: WaitDispatchContext,
+    cursor: Option<u64>,
+    pending: Option<WaitQueueEntry>,
+    visits: usize,
+    mutations: usize,
+}
+
+impl WaitQueueDrain {
+    pub(super) fn begin(
+        state: &WaitQueueState,
+        dispatch: &WaitDispatchContext,
+    ) -> Result<Self, LedgerError> {
+        validate(&WaitQueueContext {
+            rule_version: UNITY_WAIT_QUEUE_NATIVE_V1.into(),
+            initial: state.clone(),
+            dispatch: dispatch.clone(),
+            responses: BTreeMap::new(),
+        })?;
+        let mut next = state.clone();
+        next.generation = next.generation.wrapping_add(1);
+        Ok(Self {
+            cursor: next.entries.first().map(|entry| entry.logical_id),
+            state: next,
+            trace: Vec::new(),
+            dispatch: dispatch.clone(),
+            pending: None,
+            visits: 0,
+            mutations: 0,
+        })
+    }
+
+    /// Stop immediately after an eligible record has been erased. The caller
+    /// must resolve this boundary before continuing or finishing the drain.
+    pub(super) fn next_callback(&mut self) -> Result<Option<u64>, LedgerError> {
+        if self.pending.is_some() {
+            return Err(LedgerError::InvalidContext);
         }
-        let index = state
-            .entries
-            .iter()
-            .position(|entry| entry.logical_id == id)
-            .ok_or(LedgerError::InvalidContext)?;
-        let entry = state.entries[index].clone();
-        let eligibility = evaluate_wait(&entry.timing, &context.dispatch)?;
-        trace.push(WaitQueueEvent::Visit {
-            logical_id: id,
-            eligibility,
-        });
-        if eligibility == WaitEligibility::StopAtFutureDeadline {
-            break;
+        while let Some(id) = self.cursor {
+            self.visits += 1;
+            if self.visits > MAX_RECORDS + MAX_MUTATIONS {
+                return Err(LedgerError::Capacity);
+            }
+            let index = self
+                .state
+                .entries
+                .iter()
+                .position(|entry| entry.logical_id == id)
+                .ok_or(LedgerError::InvalidContext)?;
+            let entry = self.state.entries[index].clone();
+            let eligibility = evaluate_wait(&entry.timing, &self.dispatch)?;
+            self.trace.push(WaitQueueEvent::Visit {
+                logical_id: id,
+                eligibility,
+            });
+            if eligibility == WaitEligibility::StopAtFutureDeadline {
+                self.cursor = None;
+                return Ok(None);
+            }
+            self.cursor = self
+                .state
+                .entries
+                .get(index + 1)
+                .map(|next| next.logical_id);
+            if eligibility != WaitEligibility::Eligible {
+                continue;
+            }
+            self.state.entries.remove(index);
+            self.trace.push(WaitQueueEvent::Erase { logical_id: id });
+            self.pending = Some(entry);
+            return Ok(Some(id));
         }
-        cursor = state.entries.get(index + 1).map(|next| next.logical_id);
-        if eligibility != WaitEligibility::Eligible {
-            continue;
+        Ok(None)
+    }
+
+    pub(super) fn resolve(&mut self, response: &WaitQueueResponse) -> Result<(), LedgerError> {
+        let entry = self.pending.take().ok_or(LedgerError::InvalidContext)?;
+        let id = entry.logical_id;
+        if let WaitQueueResponse::Resolved { mutations, .. } = response {
+            self.mutations = self
+                .mutations
+                .checked_add(mutations.len())
+                .ok_or(LedgerError::Capacity)?;
+            if self.mutations > MAX_MUTATIONS {
+                return Err(LedgerError::Capacity);
+            }
         }
-        let response = context
-            .responses
-            .get(&id)
-            .ok_or(LedgerError::InvalidContext)?;
-        state.entries.remove(index);
-        trace.push(WaitQueueEvent::Erase { logical_id: id });
         let should_release = match response {
             WaitQueueResponse::Unavailable => true,
             WaitQueueResponse::Resolved {
                 callback_result,
                 mutations,
             } => {
-                trace.push(WaitQueueEvent::Callback { logical_id: id });
+                self.trace.push(WaitQueueEvent::Callback { logical_id: id });
                 for mutation in mutations {
                     match mutation {
                         WaitQueueMutation::Insert {
@@ -205,7 +258,7 @@ pub fn replay_wait_queue(context: &WaitQueueContext) -> Result<WaitQueueOutcome,
                             producer_frame_counter,
                             release_present,
                         } => {
-                            if state.entries.len() >= MAX_RECORDS {
+                            if self.state.entries.len() >= MAX_RECORDS {
                                 return Err(LedgerError::Capacity);
                             }
                             let timing = make_wait_for_seconds(&WaitForSecondsContext {
@@ -213,46 +266,51 @@ pub fn replay_wait_queue(context: &WaitQueueContext) -> Result<WaitQueueOutcome,
                                 duration: *duration,
                                 producer_time: *producer_time,
                                 producer_frame_counter: *producer_frame_counter,
-                                insertion_generation: state.generation,
+                                insertion_generation: self.state.generation,
                             })?;
                             let created = WaitQueueEntry {
-                                logical_id: state.next_id,
+                                logical_id: self.state.next_id,
                                 timing,
                                 release_present: *release_present,
                             };
-                            state.next_id =
-                                state.next_id.checked_add(1).ok_or(LedgerError::Capacity)?;
-                            let insertion = state.entries.partition_point(|existing| {
+                            self.state.next_id = self
+                                .state
+                                .next_id
+                                .checked_add(1)
+                                .ok_or(LedgerError::Capacity)?;
+                            let insertion = self.state.entries.partition_point(|existing| {
                                 existing.timing.deadline <= created.timing.deadline
                             });
-                            state.entries.insert(insertion, created.clone());
-                            trace.push(WaitQueueEvent::Insert { entry: created });
+                            self.state.entries.insert(insertion, created.clone());
+                            self.trace.push(WaitQueueEvent::Insert { entry: created });
                         }
                         WaitQueueMutation::Cancel { logical_id } => {
-                            let canceled_index = state
+                            let canceled_index = self
+                                .state
                                 .entries
                                 .iter()
                                 .position(|entry| entry.logical_id == *logical_id)
                                 .ok_or(LedgerError::InvalidContext)?;
-                            if cursor == Some(*logical_id) {
-                                cursor = state
+                            if self.cursor == Some(*logical_id) {
+                                self.cursor = self
+                                    .state
                                     .entries
                                     .get(canceled_index + 1)
                                     .map(|next| next.logical_id);
                             }
-                            let canceled = state.entries.remove(canceled_index);
-                            trace.push(WaitQueueEvent::Erase {
+                            let canceled = self.state.entries.remove(canceled_index);
+                            self.trace.push(WaitQueueEvent::Erase {
                                 logical_id: *logical_id,
                             });
                             if canceled.release_present {
-                                trace.push(WaitQueueEvent::Release {
+                                self.trace.push(WaitQueueEvent::Release {
                                     logical_id: *logical_id,
                                 });
                             }
                         }
                     }
                 }
-                trace.push(WaitQueueEvent::CallbackResult {
+                self.trace.push(WaitQueueEvent::CallbackResult {
                     logical_id: id,
                     value: *callback_result,
                 });
@@ -260,10 +318,37 @@ pub fn replay_wait_queue(context: &WaitQueueContext) -> Result<WaitQueueOutcome,
             }
         };
         if should_release && entry.release_present {
-            trace.push(WaitQueueEvent::Release { logical_id: id });
+            self.trace.push(WaitQueueEvent::Release { logical_id: id });
         }
+        Ok(())
     }
-    Ok(WaitQueueOutcome { state, trace })
+
+    pub(super) fn finish(self) -> Result<WaitQueueOutcome, LedgerError> {
+        if self.pending.is_some() || self.cursor.is_some() {
+            return Err(LedgerError::InvalidContext);
+        }
+        Ok(WaitQueueOutcome {
+            state: self.state,
+            trace: self.trace,
+        })
+    }
+}
+
+/// Replay one drain atomically. A future deadline terminates traversal; skips
+/// preserve records. Callback insertions never replace the saved successor,
+/// while cancellation advances it if the canceled record was that successor.
+/// The entry-time clock/frame snapshot remains fixed throughout this call.
+pub fn replay_wait_queue(context: &WaitQueueContext) -> Result<WaitQueueOutcome, LedgerError> {
+    validate(context)?;
+    let mut drain = WaitQueueDrain::begin(&context.initial, &context.dispatch)?;
+    while let Some(id) = drain.next_callback()? {
+        let response = context
+            .responses
+            .get(&id)
+            .ok_or(LedgerError::InvalidContext)?;
+        drain.resolve(response)?;
+    }
+    drain.finish()
 }
 
 #[cfg(test)]
