@@ -1,8 +1,15 @@
 {
   "schema_version": 1,
   "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
-  "native_relationships_verified": 9,
+  "native_relationships_verified": 13,
   "constructed_nodes": 131,
+  "clock_join_relationships": 9,
+  "unbound_wait_dispatch": {
+    "call_rva": "0x59F692",
+    "mask": 16,
+    "verified_unwind_chunk_start": "0x59F67B",
+    "scope": "Queue load, literal mask and virtual call only; enclosing lifecycle and callback provenance remain open. Chunk start is not a recovered function entry."
+  },
   "distinct_builder_instructions": 973,
   "clock": {
     "name": "TimeUpdate/WaitForLastPresentationAndUpdateTime",

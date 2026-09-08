@@ -14,7 +14,8 @@ def audit(path):
     pe = pefile.PE(data=raw, fast_load=True)
     cs = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64); cs.detail = True
     instructions = {}
-    for begin, end in [(0x81A880, 0x820F66), (0x59BFE0, 0x59C900)]:
+    for begin, end in [(0x81A880, 0x820F66), (0x59BFE0, 0x59C900),
+                       (0x59F67B, 0x59F698)]:
         instructions.update({i.address: i for i in cs.disasm(pe.get_data(begin, end - begin), begin)})
     checked = set()
     def reference(address, mnemonic, prefix, expected):
@@ -41,12 +42,25 @@ def audit(path):
     reference(0x81F2A1, 'mov', 'rcx,', 0x1CD6AF8)
     reference(0x59C662, 'lea', 'rax,', 0x5B72C0)
     reference(0x59C669, 'mov', 'qword ptr [rip', 0x1CAA1E8)
+    clock_checks = len(checked)
+    # Independently verified unwind chunk; it is not asserted to be a method entry.
+    reference(0x59F683, 'mov', 'rcx,', 0x1C6E720)
+    for address, mnemonic, operands in [(0x59F68A, 'mov', 'edx, 0x10'),
+                                         (0x59F68F, 'mov', 'rax, qword ptr [rcx]'),
+                                         (0x59F692, 'call', 'qword ptr [rax + 0xb8]')]:
+        ins = instructions[address]
+        if (ins.mnemonic, ins.op_str) != (mnemonic, operands): raise ValueError('Additional wait dispatch changed')
+        checked.add(address)
     clock = {'name': name, 'cache': 0xA28, 'cell': 0x1CAA1E8}
     count, indices, executed = emulate_loop(raw, [clock, *PHASES])
     if count != 131 or indices != [2, 34, 56, 70, 89, 113]:
         raise ValueError('Default clock/wait node construction changed')
     return {'schema_version': 1, 'engine_sha256': digest,
             'native_relationships_verified': len(checked), 'constructed_nodes': count,
+            'clock_join_relationships': clock_checks,
+            'unbound_wait_dispatch': {'call_rva': '0x59F692', 'mask': 16,
+                                     'verified_unwind_chunk_start': '0x59F67B',
+                                     'scope': 'Queue load, literal mask and virtual call only; enclosing lifecycle and callback provenance remain open. Chunk start is not a recovered function entry.'},
             'distinct_builder_instructions': executed,
             'clock': {'name': name, 'callback_rva': '0x5B72C0', 'callback_cell_rva': '0x1CAA1E8',
                       'type_cache_offset': '0xA28', 'node_index': indices[0]},

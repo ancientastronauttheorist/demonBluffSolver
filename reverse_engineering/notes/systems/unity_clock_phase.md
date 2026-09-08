@@ -27,3 +27,11 @@ The reusable builder harness now accepts an explicit selection of nodes to
 check while preserving its original default selection. All 32 reverse-
 engineering tests passed. This checkpoint changes offline audit tooling and
 does not add Assembly-CSharp coverage or alter solver behavior.
+
+A final extension verifies four additional instruction relationships at
+`0x59F683..0x59F692`: loading the same wait manager, passing mask `0x10`, loading
+its vtable and invoking slot `+0xB8`. The report therefore contains thirteen
+checks in total. Its enclosing lifecycle/provenance remains open. Decode began
+at verified unwind chunk `0x59F67B`, which is not asserted to be a method entry.
+This additional mask does not resolve phase bit 8 or establish that the listed
+wait callbacks exhaust all native dispatch paths.

@@ -21,6 +21,8 @@ Resume with these boundaries in view:
    public setters are audited, but provider/pause callbacks, optional setter
    notifications, configuration writers and modified runtime loops remain open.
    Phase bit 8 and complete delayed-Reveal interleaving are still unresolved.
+   An additional verified mask-16 dispatch calls the wait manager at `0x59F692`;
+   trace its enclosing lifecycle next. `0x59F67B` is only its unwind chunk start.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
    semantics, fully-shared generic copy alternatives and remaining mode/save
