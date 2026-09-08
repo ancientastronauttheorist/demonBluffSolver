@@ -1,5 +1,41 @@
 # Full Reconstruction Roadmap
 
+## Continuation checkpoint: 2026-09-07 evening
+
+Branch `codex/full-decompile` is pushed through the timing-setter checkpoint
+`946ed00`. The overlay contains 1,216 classifications and 287 evidence records
+against 4,207 managed definitions; these include explicit unresolved states
+and are not a claim that the game is fully reconstructed. The typed union has
+47 sets, 968 memberships, 615 exact definitions and 509 native RVAs, with
+2,804 parameter locations validated read-only and zero program mutations.
+
+Latest validation: 669 Rust library tests, 34 simulation tests over 426 fixtures,
+778 Python tests, 32 reverse-engineering tests and the release build passed.
+The latest full simulation took 992.37 seconds. Subsequent clock-source, phase
+and setter work consists of offline audit artifacts and bounded harness changes.
+
+Resume with these boundaries in view:
+
+1. Connect the new explicit `bluff::clock` transitions to caller-supplied
+   scheduler traces. Clock update/reset/calibration, default-loop placement and
+   public setters are audited, but provider/pause callbacks, optional setter
+   notifications, configuration writers and modified runtime loops remain open.
+   Phase bit 8 and complete delayed-Reveal interleaving are still unresolved.
+2. Continue the ascension-to-acquisition bridge: weighted cached script selection
+   is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
+   semantics, fully-shared generic copy alternatives and remaining mode/save
+   callees are explicit boundaries, not interchangeable with known caller logic.
+3. Preserve the corrected individually aligned serialized Boolean fields:
+   15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
+   support now uses those flags. The old all-false result was a parser error.
+   Keep public Mutant/Skinwalker separate from the unbound managed Mutant class.
+4. Expand the remaining Assembly-CSharp ledger from native evidence without
+   equating a shared RVA or typed prototype with every method being recovered.
+
+Start with the linked clock, ascension setup/helpers and GameData lifecycle
+notes in README. Proprietary exports remain in the private artifact workspace.
+No live game or automation loop was used for this reconstruction session.
+
 ## Definition of complete
 
 For this project, “fully decompiled” means:

@@ -47,8 +47,9 @@ stop, diagnose, fix, verify, then resume.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents and Rust module roots, with `rg --files` before reading. Do not
     infer an audit filename from a role name or assume a module uses `mod.rs`.
-    Verify a documented directory exists before
-    searching it, since directory maps can describe intended layout.
+    Verify a documented directory exists before searching it, since directory
+    maps can describe intended layout. Start with repository-root `rg --files`
+    when even the containing directory is unconfirmed.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order.
