@@ -587,9 +587,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,736
-datatypes. Its forty-five-set inventory contains 946 target memberships, 594
-distinct selected FunctionDefinitions, and 488 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,749
+datatypes. Its forty-six-set inventory contains 956 target memberships, 604
+distinct selected FunctionDefinitions, and 498 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -603,13 +603,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current forty-five-set run used six batches for each phase. Ghidra
+sets; the current forty-six-set run used six batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all forty-five target
+The preserved fully analyzed typed project now covers all forty-six target
 sets after a no-analysis refresh. Three hundred fifty-two memberships are
 exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
-the 561 selected definitions exceed the 488 unique native RVAs by 106;
+the 561 selected definitions exceed the 498 unique native RVAs by 106;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -640,8 +640,8 @@ FunctionDefinitions to the rebuilt GDT and required no additional reachable
 datatype imports during application. The Spy boundary adds five FunctionDefinitions
 without additional reachable datatype imports. Managed Mutant adds five more
 FunctionDefinitions without additional reachable datatype imports. The refresh
-reapplied and validated all 946 memberships without rerunning auto-analysis. The final
-read-only pass validated all 946 memberships (594 exact definitions) and 2,756
+reapplied and validated all 956 memberships without rerunning auto-analysis. The final
+read-only pass validated all 956 memberships (604 exact definitions) and 2,779
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -855,8 +855,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,200 classifications backed by
-285 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,204 classifications backed by
+286 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -905,3 +905,9 @@ shared-reference copying and partial failures. An offline weighted Rust kernel
 replays script selection and retains superseded draws. All 662 Rust unit tests
 and the release build passed. Generic copy internals and lock policy are the
 next audited callees; the complete mode-to-Reveal lifecycle remains open.
+
+The [ascension helper boundary](notes/systems/ascension_helpers.md) verifies
+140 native cases for JSON-copy callers and the distinct lock/unlock selectors.
+Two generic definitions are explicitly unresolved because their fully-shared
+alternates remain unreviewed. Managed JSON wrappers are traced to their engine
+internal-call boundary; UnityPlayer serialization remains open.

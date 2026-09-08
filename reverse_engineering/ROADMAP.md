@@ -545,3 +545,7 @@ No nontrivial method may disappear from the denominator.
   GameData callers, 33 methods with 412 native cases. Model weighted cached
   script selection in Rust, preserving superseded draws and partial failures.
   Extend the typed union to 45 sets, 946 memberships, 594 definitions and 488 RVAs.
+
+- [x] Audit reference-type ascension copy helpers, managed JSON wrappers and
+  distinct lock/unlock pool sources: 140 native cases, 46 typed sets and 956
+  memberships. Retain unresolved generic alternates and engine JSON internals.

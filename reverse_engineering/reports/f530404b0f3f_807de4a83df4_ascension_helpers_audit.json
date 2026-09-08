@@ -1,0 +1,1782 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "target_count": 10,
+  "native_relationships_verified": 22,
+  "membership_cases": [
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [],
+      "result_assets": [
+        3,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        3,
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        3,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        3,
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        3,
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        3,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        3,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        3,
+        3
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1,
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        2,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        2,
+        3
+      ],
+      "result_assets": []
+    },
+    {
+      "getter": "unlocked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": [
+        1,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_assets": [
+        1,
+        2,
+        3
+      ],
+      "saved_asset_ids": [
+        1,
+        2,
+        3
+      ],
+      "result_assets": []
+    }
+  ],
+  "null_asset_cases": [
+    {
+      "getter": "unlocked",
+      "baseline_contains_null": false,
+      "error": null,
+      "partial_or_final_result": []
+    },
+    {
+      "getter": "locked",
+      "baseline_contains_null": false,
+      "error": "null",
+      "partial_or_final_result": [
+        1
+      ]
+    },
+    {
+      "getter": "unlocked",
+      "baseline_contains_null": true,
+      "error": null,
+      "partial_or_final_result": [
+        null
+      ]
+    },
+    {
+      "getter": "locked",
+      "baseline_contains_null": true,
+      "error": null,
+      "partial_or_final_result": [
+        1
+      ]
+    }
+  ],
+  "copy_cases": [
+    {
+      "input_assets": null,
+      "json_round_trips": 0,
+      "null_result_indices": [],
+      "character_data_log_count": 0,
+      "error": "null",
+      "allocated_list_count": 1
+    },
+    {
+      "input_assets": [],
+      "json_round_trips": 0,
+      "null_result_indices": [],
+      "character_data_log_count": 0,
+      "error": null,
+      "allocated_list_count": 1
+    },
+    {
+      "input_assets": [
+        1
+      ],
+      "json_round_trips": 1,
+      "null_result_indices": [],
+      "character_data_log_count": 0,
+      "error": null,
+      "allocated_list_count": 1
+    },
+    {
+      "input_assets": [
+        1,
+        1
+      ],
+      "json_round_trips": 2,
+      "null_result_indices": [],
+      "character_data_log_count": 0,
+      "error": null,
+      "allocated_list_count": 1
+    },
+    {
+      "input_assets": [
+        1,
+        null,
+        2
+      ],
+      "json_round_trips": 3,
+      "null_result_indices": [
+        1
+      ],
+      "character_data_log_count": 0,
+      "error": null,
+      "allocated_list_count": 1
+    },
+    {
+      "input_assets": [
+        4
+      ],
+      "json_round_trips": 1,
+      "null_result_indices": [],
+      "character_data_log_count": 1,
+      "error": null,
+      "allocated_list_count": 1
+    },
+    {
+      "direct_copy": null,
+      "json_round_trips": 1,
+      "returns_null": true
+    },
+    {
+      "direct_copy": 1,
+      "json_round_trips": 1,
+      "returns_null": false
+    }
+  ],
+  "native_case_count": 140,
+  "candidate_universes": {
+    "unlocked": "GameData.allCharacterData filtered by allCharactersAscension.unlockedCharacters only",
+    "locked": "temporary stored starting arrays excluding baseline assets and saved unlockedCharactersId"
+  },
+  "json_wrapper_scope": "Static native checks cover null/empty behavior, runtime type resolution, abstract/subclass guards, generic cast and cached internal-call forwarding; UnityPlayer serialization bodies remain open.",
+  "scope": "Pinned native callers and nested private CreateCopy body. Collections, allocator, Debug.Log, starting-array concatenation and JSON services are gateways; Unity JSON engine internals, generic cast and string-equality internals are not executed."
+}

@@ -74,6 +74,10 @@ stop, diagnose, fix, verify, then resume.
     requested instruction addresses decoded before indexing the result.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
+    Give overloaded target signatures distinct `prototype_name` values while
+    preserving their original metadata signatures and exact RVAs.
+    Native fixture metadata names must match Dumper's exact namespace syntax;
+    assert every required slot was found before executing warmed fixtures.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
     Internal-call requests can include parameter signatures that registrations

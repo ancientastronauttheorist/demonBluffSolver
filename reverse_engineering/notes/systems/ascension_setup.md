@@ -155,3 +155,7 @@ Both baseline and typed exports completed all 33 targets. The 45-set typed
 union validates 946 memberships, 594 exact definitions, 488 native RVAs and
 2,756 parameter locations with zero read-only mutations. Its GDT contains
 151,736 datatypes. The body-free quality check passed.
+
+Follow-up: the [copy and lock helper audit](ascension_helpers.md) resolves the
+reference-type copies to JSON round trips and distinguishes locked starting
+pools from the unlocked catalogue selector. Engine serialization remains open.
