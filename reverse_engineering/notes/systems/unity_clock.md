@@ -103,3 +103,7 @@ and full-loop sequencing remain outside the combined boundary.
 Validation passed all 669 Rust library tests, all 34 simulation tests covering
 the unchanged 426-fixture corpus (992.37 seconds), 778 Python tests and
 32 reverse-engineering tests. The release build also passed.
+
+The [public setter audit](unity_clock_setters.md) subsequently verifies 72
+native cases. It distinguishes fixedDeltaTime's 0.0001 floor from this updater's
+0.00001 floor and confirms that several public setters admit nonfinite values.

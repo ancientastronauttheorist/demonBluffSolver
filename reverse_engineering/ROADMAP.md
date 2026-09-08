@@ -476,8 +476,10 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
     suppression from updater skip.
   - [x] Join the clock caller to TimeUpdate/WaitForLastPresentationAndUpdateTime
     at native default-loop node 2, preserving all five audited wait bindings.
+  - [x] Audit four public timing setters in 72 native cases, including fixed-step
+    clamp propagation, timeScale rejection and admitted nonfinite values.
   - [ ] Resolve provider/pause callbacks, remaining
-    configuration initialization and setter policy,
+    configuration initialization and optional setter notification effects,
     remaining phase provenance,
     repeating/reentrant drains, release-body mutation and remaining coroutine
     lifetime/cancellation branches.

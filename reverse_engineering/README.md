@@ -934,3 +934,7 @@ The [clock phase join](notes/systems/unity_clock_phase.md) binds its native
 caller to TimeUpdate/WaitForLastPresentationAndUpdateTime at node 2 of the
 131-node default loop. Nine static relationships and native loop construction
 verify the join while preserving the existing five wait-node bindings.
+
+The [timing setter audit](notes/systems/unity_clock_setters.md) checks 72 native
+cases for fixedDeltaTime, maximumDeltaTime, timeScale and captureDeltaTime,
+including distinct clamp floors, rejection paths and admitted nonfinite values.

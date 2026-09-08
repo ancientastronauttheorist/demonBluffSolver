@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "registered_setters": {
+    "fixedDeltaTime": "0x10e240",
+    "maximumDeltaTime": "0x10e2e0",
+    "timeScale": "0x10e370",
+    "captureDeltaTime": "0x10e600"
+  },
+  "native_case_count": 72,
+  "cases": [
+    {
+      "setter": "fixedDeltaTime",
+      "value": "negative_infinity",
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -10.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -0.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.019999999552965164,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 1.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 10.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 100.0,
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "positive_infinity",
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "nan",
+      "prior_maximum": 0.0010000000474974513,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "negative_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.019999999552965164,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 1.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 100.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "positive_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "nan",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "negative_infinity",
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -10.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": -0.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 0.019999999552965164,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 1.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 10.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": 100.0,
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "positive_infinity",
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "fixedDeltaTime",
+      "value": "nan",
+      "prior_maximum": 20.0,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": "negative_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": -10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": -0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 0.019999999552965164,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 1.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": 100.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": "positive_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "maximumDeltaTime",
+      "value": "nan",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": "negative_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": true
+    },
+    {
+      "setter": "timeScale",
+      "value": -10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": true
+    },
+    {
+      "setter": "timeScale",
+      "value": -0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 0.019999999552965164,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 1.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": 100.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": "positive_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "timeScale",
+      "value": "nan",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": true
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": "negative_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": -10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": -0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 0.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 9.999999747378752e-06,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 9.999999747378752e-05,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 0.019999999552965164,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 1.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 10.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": 100.0,
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": "positive_infinity",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    },
+    {
+      "setter": "captureDeltaTime",
+      "value": "nan",
+      "prior_maximum": 0.3330000042915344,
+      "rejected_with_log": false
+    }
+  ],
+  "visited_instruction_count": 119,
+  "scope": "Native setters and native NaN classifier, complete synthetic object-byte comparisons, default MXCSR. Error formatting/logging use explicit successful short-string gateways. The timeScale object-notification subsystem is disabled; its optional effects and other configuration writers remain open."
+}
