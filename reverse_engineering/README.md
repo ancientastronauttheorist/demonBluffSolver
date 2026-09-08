@@ -587,9 +587,9 @@ powershell -ExecutionPolicy Bypass -File `
 
 `build-types` normalizes the private `il2cpp.h`, validates 5,830 inheritance
 rewrites and 6,159 explicit alignments, and builds one deterministic GDT from
-the union of every checked target set. The current archive contains 151,749
-datatypes. Its forty-six-set inventory contains 956 target memberships, 604
-distinct selected FunctionDefinitions, and 498 unique native RVAs. The typed
+the union of every checked target set. The current archive contains 151,760
+datatypes. Its forty-seven-set inventory contains 968 target memberships, 615
+distinct selected FunctionDefinitions, and 509 unique native RVAs. The typed
 project is
 separate from the baseline project. It applies only datatype graphs reachable
 from the checked-in function signatures and validates exact entry points,
@@ -603,13 +603,13 @@ and then performs the same exact validations in a separate read-only headless
 pass. A single all-target invocation can exceed Windows' command-line limit
 before Ghidra launches. `typed-refresh` and `typed-validate` therefore split
 the deterministic target inventory into serialized batches of at most eight
-sets; the current forty-six-set run used six batches for each phase. Ghidra
+sets; the current forty-seven-set run used six batches for each phase. Ghidra
 commands still must not overlap on the saved project.
 
-The preserved fully analyzed typed project now covers all forty-six target
-sets after a no-analysis refresh. Three hundred fifty-two memberships are
+The preserved fully analyzed typed project now covers all forty-seven target
+sets after a no-analysis refresh. Three hundred fifty-three memberships are
 exact FunctionDefinition overlaps between boundaries. Folded/shared bodies make
-the 561 selected definitions exceed the 498 unique native RVAs by 106;
+the 615 selected definitions exceed the 509 unique native RVAs by 106;
 each canonical native prototype is explicit while all exact managed
 definitions remain in the GDT. The original full
 import added 2,032 reachable datatypes and completed its analysis pass in 2,781
@@ -640,8 +640,8 @@ FunctionDefinitions to the rebuilt GDT and required no additional reachable
 datatype imports during application. The Spy boundary adds five FunctionDefinitions
 without additional reachable datatype imports. Managed Mutant adds five more
 FunctionDefinitions without additional reachable datatype imports. The refresh
-reapplied and validated all 956 memberships without rerunning auto-analysis. The final
-read-only pass validated all 956 memberships (604 exact definitions) and 2,779
+reapplied and validated all 968 memberships without rerunning auto-analysis. The final
+read-only pass validated all 968 memberships (615 exact definitions) and 2,804
 membership-level parameter-storage locations with zero program mutations.
 
 The signature-application ABI check now derives each of the first four Win64
@@ -855,8 +855,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,204 classifications backed by
-286 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,216 classifications backed by
+287 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -911,3 +911,8 @@ The [ascension helper boundary](notes/systems/ascension_helpers.md) verifies
 Two generic definitions are explicitly unresolved because their fully-shared
 alternates remain unreviewed. Managed JSON wrappers are traced to their engine
 internal-call boundary; UnityPlayer serialization remains open.
+
+The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
+all 23 methods in that declaration. Its twelve-target extension checks 189
+native cases for mode publication, initialization, state changes, catalogue
+lookups and achievement callers. Service internals remain explicit boundaries.

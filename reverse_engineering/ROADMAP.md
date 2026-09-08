@@ -549,3 +549,7 @@ No nontrivial method may disappear from the denominator.
 - [x] Audit reference-type ascension copy helpers, managed JSON wrappers and
   distinct lock/unlock pool sources: 140 native cases, 46 typed sets and 956
   memberships. Retain unresolved generic alternates and engine JSON internals.
+
+- [x] Complete the 23-method GameData declaration with a twelve-target lifecycle
+  audit and 189 native cases. Retain mode virtual methods, save serialization,
+  preference loading and achievement effects as explicit callee boundaries.

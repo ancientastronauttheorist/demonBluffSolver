@@ -1,0 +1,1458 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "game_assembly_sha256": "F530404B0F3F28479A7CE21D5738C4E36C2A0A03E1B5520092975B4150D819EC",
+  "target_count": 12,
+  "mode_cases": [
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 0,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 1,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 2,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 3,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 0,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 1,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 2,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 3,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 0,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 1,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 2,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 3,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 0,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 1,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 2,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": false,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 3,
+      "events": [],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 0,
+      "events": [
+        "load"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 1,
+      "events": [
+        "load",
+        "mode_changed"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 2,
+      "events": [
+        "load",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": false,
+      "event_mask": 3,
+      "events": [
+        "load",
+        "mode_changed",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 0,
+      "events": [
+        "load"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 1,
+      "events": [
+        "load",
+        "mode_changed"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 2,
+      "events": [
+        "load",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": false,
+      "loaded_present": true,
+      "event_mask": 3,
+      "events": [
+        "load",
+        "mode_changed",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 0,
+      "events": [
+        "load",
+        "deinit"
+      ],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 1,
+      "events": [
+        "load",
+        "deinit"
+      ],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 2,
+      "events": [
+        "load",
+        "deinit"
+      ],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": false,
+      "event_mask": 3,
+      "events": [
+        "load",
+        "deinit"
+      ],
+      "error": "null",
+      "publishes_loaded": false
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 0,
+      "events": [
+        "load",
+        "deinit",
+        "init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 1,
+      "events": [
+        "load",
+        "deinit",
+        "init",
+        "mode_changed"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 2,
+      "events": [
+        "load",
+        "deinit",
+        "init",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    },
+    {
+      "new_present": true,
+      "old_present": true,
+      "loaded_present": true,
+      "event_mask": 3,
+      "events": [
+        "load",
+        "deinit",
+        "init",
+        "mode_changed",
+        "game_init"
+      ],
+      "error": null,
+      "publishes_loaded": true
+    }
+  ],
+  "callback_failure_cases": [
+    {
+      "failure_gateway": "load",
+      "events_before_stop": [
+        "load"
+      ],
+      "loaded_mode_published": false
+    },
+    {
+      "failure_gateway": "deinit",
+      "events_before_stop": [
+        "load",
+        "deinit"
+      ],
+      "loaded_mode_published": false
+    },
+    {
+      "failure_gateway": "init",
+      "events_before_stop": [
+        "load",
+        "deinit",
+        "init"
+      ],
+      "loaded_mode_published": false
+    },
+    {
+      "failure_gateway": "mode_changed",
+      "events_before_stop": [
+        "load",
+        "deinit",
+        "init",
+        "mode_changed"
+      ],
+      "loaded_mode_published": true
+    },
+    {
+      "failure_gateway": "game_init",
+      "events_before_stop": [
+        "load",
+        "deinit",
+        "init",
+        "mode_changed",
+        "game_init"
+      ],
+      "loaded_mode_published": true
+    }
+  ],
+  "state_cases": [
+    {
+      "old_state": -1,
+      "new_state": -1,
+      "callback": false
+    },
+    {
+      "old_state": -1,
+      "new_state": -1,
+      "callback": true
+    },
+    {
+      "old_state": -1,
+      "new_state": 0,
+      "callback": false
+    },
+    {
+      "old_state": -1,
+      "new_state": 0,
+      "callback": true
+    },
+    {
+      "old_state": -1,
+      "new_state": 6,
+      "callback": false
+    },
+    {
+      "old_state": -1,
+      "new_state": 6,
+      "callback": true
+    },
+    {
+      "old_state": 0,
+      "new_state": -1,
+      "callback": false
+    },
+    {
+      "old_state": 0,
+      "new_state": -1,
+      "callback": true
+    },
+    {
+      "old_state": 0,
+      "new_state": 0,
+      "callback": false
+    },
+    {
+      "old_state": 0,
+      "new_state": 0,
+      "callback": true
+    },
+    {
+      "old_state": 0,
+      "new_state": 6,
+      "callback": false
+    },
+    {
+      "old_state": 0,
+      "new_state": 6,
+      "callback": true
+    },
+    {
+      "old_state": 5,
+      "new_state": -1,
+      "callback": false
+    },
+    {
+      "old_state": 5,
+      "new_state": -1,
+      "callback": true
+    },
+    {
+      "old_state": 5,
+      "new_state": 0,
+      "callback": false
+    },
+    {
+      "old_state": 5,
+      "new_state": 0,
+      "callback": true
+    },
+    {
+      "old_state": 5,
+      "new_state": 6,
+      "callback": false
+    },
+    {
+      "old_state": 5,
+      "new_state": 6,
+      "callback": true
+    }
+  ],
+  "village_setter_cases": 5,
+  "catalogue_lookup_cases": [
+    {
+      "lookup_kind": "name",
+      "catalogue": [],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [],
+      "query_token": 1000,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [],
+      "query_token": 1001,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 1000,
+      "result_asset": 2,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 1001,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 1000,
+      "result_asset": 2,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 1001,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": "null"
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 1000,
+      "result_asset": null,
+      "error": "null"
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 1001,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "name",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": "null"
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [],
+      "query_token": 1500,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [],
+      "query_token": 1501,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 1500,
+      "result_asset": 2,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 1501,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        2,
+        3
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 1500,
+      "result_asset": 2,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 1501,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        2,
+        1,
+        3
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 0,
+      "result_asset": null,
+      "error": "null"
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 1500,
+      "result_asset": null,
+      "error": "null"
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 1501,
+      "result_asset": 1,
+      "error": null
+    },
+    {
+      "lookup_kind": "id",
+      "catalogue": [
+        1,
+        null,
+        2
+      ],
+      "query_token": 9999,
+      "result_asset": null,
+      "error": "null"
+    }
+  ],
+  "initialization_cases": [
+    {
+      "has_saved_json": false,
+      "failure_input": null,
+      "preference_read_count": 1,
+      "json_decode_count": 0,
+      "character_preference_load_count": 2,
+      "error": null
+    },
+    {
+      "has_saved_json": false,
+      "failure_input": "saved_data",
+      "preference_read_count": 0,
+      "json_decode_count": 0,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": false,
+      "failure_input": "saved_info",
+      "preference_read_count": 0,
+      "json_decode_count": 0,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": false,
+      "failure_input": "catalogue",
+      "preference_read_count": 1,
+      "json_decode_count": 0,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": false,
+      "failure_input": "null_character",
+      "preference_read_count": 1,
+      "json_decode_count": 0,
+      "character_preference_load_count": 1,
+      "error": "null"
+    },
+    {
+      "has_saved_json": true,
+      "failure_input": null,
+      "preference_read_count": 2,
+      "json_decode_count": 1,
+      "character_preference_load_count": 2,
+      "error": null
+    },
+    {
+      "has_saved_json": true,
+      "failure_input": "saved_data",
+      "preference_read_count": 0,
+      "json_decode_count": 0,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": true,
+      "failure_input": "saved_info",
+      "preference_read_count": 0,
+      "json_decode_count": 0,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": true,
+      "failure_input": "catalogue",
+      "preference_read_count": 2,
+      "json_decode_count": 1,
+      "character_preference_load_count": 0,
+      "error": "null"
+    },
+    {
+      "has_saved_json": true,
+      "failure_input": "null_character",
+      "preference_read_count": 2,
+      "json_decode_count": 1,
+      "character_preference_load_count": 1,
+      "error": "null"
+    }
+  ],
+  "village_growth_cases": [
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": -1,
+      "new_village": 0
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": -1,
+      "new_village": 0
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 0,
+      "new_village": 1
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 1,
+      "new_village": 2
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": -1,
+      "new_village": 0
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": -1,
+      "new_village": 0
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 0,
+      "new_village": 1
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 1,
+      "new_village": 2
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "roguelike_standard",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "other",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 0,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 1,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": -1,
+      "new_village": -1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 0,
+      "new_village": 0
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 1,
+      "new_village": 1
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2,
+      "new_village": 2
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 3,
+      "new_village": 3
+    },
+    {
+      "mode": "null",
+      "standard_length_or_rogue_max_plus_one": 3,
+      "old_village": 2147483647,
+      "new_village": 2147483647
+    }
+  ],
+  "static_constructor_cases": 1,
+  "relic_reference_cases": 2,
+  "achievement_cases": [
+    {
+      "operation": "get_unlocked",
+      "assets": [],
+      "unlocked_id_tokens": [],
+      "result_count": 0,
+      "error": null
+    },
+    {
+      "operation": "unlock",
+      "assets": [],
+      "requested_id_token": 1501,
+      "unlock_call_count": 0,
+      "error": null
+    },
+    {
+      "operation": "get_unlocked",
+      "assets": [],
+      "unlocked_id_tokens": [
+        1501
+      ],
+      "result_count": 0,
+      "error": null
+    },
+    {
+      "operation": "unlock",
+      "assets": [],
+      "requested_id_token": 1501,
+      "unlock_call_count": 0,
+      "error": null
+    },
+    {
+      "operation": "get_unlocked",
+      "assets": [
+        1,
+        2,
+        3
+      ],
+      "unlocked_id_tokens": [],
+      "result_count": 0,
+      "error": null
+    },
+    {
+      "operation": "unlock",
+      "assets": [
+        1,
+        2,
+        3
+      ],
+      "requested_id_token": 1501,
+      "unlock_call_count": 2,
+      "error": null
+    },
+    {
+      "operation": "get_unlocked",
+      "assets": [
+        1,
+        2,
+        3
+      ],
+      "unlocked_id_tokens": [
+        1501
+      ],
+      "result_count": 2,
+      "error": null
+    },
+    {
+      "operation": "unlock",
+      "assets": [
+        1,
+        2,
+        3
+      ],
+      "requested_id_token": 1501,
+      "unlock_call_count": 2,
+      "error": null
+    },
+    {
+      "operation": "get_unlocked",
+      "assets": [
+        1,
+        null,
+        2
+      ],
+      "unlocked_id_tokens": [],
+      "result_count": 0,
+      "error": "null"
+    },
+    {
+      "operation": "unlock",
+      "assets": [
+        1,
+        null,
+        2
+      ],
+      "requested_id_token": 1501,
+      "unlock_call_count": 1,
+      "error": "null"
+    },
+    {
+      "operation": "get_unlocked",
+      "assets": [
+        1,
+        null,
+        2
+      ],
+      "unlocked_id_tokens": [
+        1501
+      ],
+      "result_count": 1,
+      "error": "null"
+    },
+    {
+      "operation": "unlock",
+      "assets": [
+        1,
+        null,
+        2
+      ],
+      "requested_id_token": 1501,
+      "unlock_call_count": 1,
+      "error": "null"
+    }
+  ],
+  "native_case_count": 189,
+  "scope": "Native GameData callers with initialized metadata; mode virtual methods, delegates, collections, strings, PlayerPrefs, JSON and character preference loading are explicit gateways. Callback-failure fixtures stop at the failing gateway, not native exception unwinding. Other declared methods are separate static findings."
+}
