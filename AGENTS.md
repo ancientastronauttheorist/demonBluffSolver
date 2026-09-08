@@ -45,8 +45,9 @@ stop, diagnose, fix, verify, then resume.
     glob); do not pass wildcard paths that the shell leaves unexpanded, including
     a trailing `/*` or partial-name wildcard on a directory argument.
     Resolve all uncertain filenames, including audit scripts and status/summary
-    documents, with `rg --files` before reading. Do not infer an audit filename
-    from a role name. Verify a documented directory exists before
+    documents and Rust module roots, with `rg --files` before reading. Do not
+    infer an audit filename from a role name or assume a module uses `mod.rs`.
+    Verify a documented directory exists before
     searching it, since directory maps can describe intended layout.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
@@ -64,22 +65,29 @@ stop, diagnose, fix, verify, then resume.
     Serialized Boolean fields may align individually; do not apply contiguous
     IL2CPP runtime offsets to asset bytes. Validate following reference IDs.
     For native PE inspection, distinguish zero-filled virtual data from file-
-    backed bytes, and verify an unwind entry actually contains a queried RVA
+    backed bytes; require a full file read before unpacking and supply runtime
+    globals explicitly in emulation. Verify an unwind entry contains a queried RVA
     before treating it as that instruction's chunk.
     A method can span adjacent unwind chunks; the first chunk's end is not
     necessarily the method's end. Resolve the next verified managed entry.
     Decode from a verified entry/instruction boundary before selecting a later
     output range; arbitrary byte windows can silently misdecode native code.
-    Include the entire final instruction when sizing a decode range; assert
-    requested instruction addresses decoded before indexing the result.
+    Include the entire final instruction when sizing a decode range, exclude
+    trailing alignment padding, and verify all return paths rather than stopping
+    at the first `ret`. Assert requested addresses decoded before indexing them.
     Derive exact instruction assertions from that decode, including operands
     on folded return stubs; do not infer their encoding from decompiled C.
+    Read numeric constants before assigning units or expected magnitudes.
     Give overloaded target signatures distinct `prototype_name` values while
     preserving their original metadata signatures and exact RVAs.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
+    Preserve exact floating-point values when loading native timing fixtures;
+    check parser rounding before weakening a failed exact comparison.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
+    For omitted initializer functions, resolve entries from their native pointer
+    table before defining them in a read-only export session.
     Internal-call requests can include parameter signatures that registrations
     omit. Inspect the exact request and audit its fallback lookup before
     asserting an exact request-to-registration string match.

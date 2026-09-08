@@ -468,7 +468,15 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Exercise one-shot consumer traversal with synthetic callbacks that insert
     and cancel native records; verify saved-successor updates, retained clock
     samples, timing gates, owner-failure removal and exact release conditions.
-  - [ ] Resolve complete clock-update policy, remaining phase provenance,
+  - [x] Audit finite clock-update arithmetic, clamp/capture/skip precedence and
+    public snapshot order in 1,437 native cases plus 180 fixed selections;
+    add the exact offline Rust projection and round-trip JSON float parsing.
+  - [x] Trace QPC timestamp conversion, process baseline, clock constructor and
+    reset plus frequency calibration in 62 native cases; distinguish caller
+    suppression from updater skip.
+  - [ ] Resolve provider/pause callbacks, remaining
+    configuration initialization and setter policy,
+    remaining phase provenance,
     repeating/reentrant drains, release-body mutation and remaining coroutine
     lifetime/cancellation branches.
   - [x] Bind handle, IEnumerator and StopAll cancellation entry points; audit
@@ -536,7 +544,7 @@ No nontrivial method may disappear from the denominator.
 
 - [x] Audit public Mutant/Skinwalker and the full Demon declaration, including
   empty special-rule/clue behavior; extend the typed union to 44 sets, 913
-  memberships, 561 exact definitions and 455 native RVAs.
+  memberships, 561 exact definitions and 462 native RVAs.
 - [x] Decode the complete ProjectContext -> GameData -> 46 ascension / 12
   custom-script configuration graph, and correct Compendium catalogue provenance.
   Keep mode choice, runtime cloning/writers, and global reachability open.

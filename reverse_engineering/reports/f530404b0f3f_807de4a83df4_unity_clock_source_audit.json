@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "timestamp_cases": [
+    {
+      "counter": 0,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 0.0
+    },
+    {
+      "counter": 0,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 0.0
+    },
+    {
+      "counter": 0,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 0.0
+    },
+    {
+      "counter": 0,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 18446744073.709553
+    },
+    {
+      "counter": 0,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 1844674407370.955
+    },
+    {
+      "counter": 0,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 4611686018.427388
+    },
+    {
+      "counter": 1,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 1e-09
+    },
+    {
+      "counter": 1,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 1e-07
+    },
+    {
+      "counter": 1,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2.5e-10
+    },
+    {
+      "counter": 1,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 18446744073.709553
+    },
+    {
+      "counter": 1,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 1844674407370.955
+    },
+    {
+      "counter": 1,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 4611686018.427388
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9007199.254740993
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 900719925.4740992
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2251799.813685248
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9007199.254740894
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 900719925.4740894
+    },
+    {
+      "counter": 9007199254740993,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2251799.8136852235
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9223372036.854776
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 922337203685.4775
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2305843009.213694
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9223372036.854776
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 922337203685.4775
+    },
+    {
+      "counter": 9223372036854775807,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2305843009.213694
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9223372036.854776
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 922337203685.4775
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2305843009.213694
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 9223372036.854776
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 922337203685.4775
+    },
+    {
+      "counter": 9223372036854775825,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 2305843009.213694
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 0,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 18446744073.709553
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 0,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 1844674407370.955
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 0,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 4611686018.427388
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 100,
+      "nanoseconds_per_tick": 1.0,
+      "seconds": 18446744073.709553
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 100,
+      "nanoseconds_per_tick": 100.0,
+      "seconds": 1844674407370.955
+    },
+    {
+      "counter": 18446744073709551615,
+      "origin": 100,
+      "nanoseconds_per_tick": 0.25,
+      "seconds": 4611686018.427388
+    }
+  ],
+  "thread_initialization_cases": 2,
+  "reset_cases": [
+    {
+      "initial": false,
+      "baseline_present": false,
+      "fixed_delta": 0.009999999776482582
+    },
+    {
+      "initial": false,
+      "baseline_present": false,
+      "fixed_delta": 0.019999999552965164
+    },
+    {
+      "initial": false,
+      "baseline_present": false,
+      "fixed_delta": 0.10000000149011612
+    },
+    {
+      "initial": false,
+      "baseline_present": true,
+      "fixed_delta": 0.009999999776482582
+    },
+    {
+      "initial": false,
+      "baseline_present": true,
+      "fixed_delta": 0.019999999552965164
+    },
+    {
+      "initial": false,
+      "baseline_present": true,
+      "fixed_delta": 0.10000000149011612
+    },
+    {
+      "initial": true,
+      "baseline_present": false,
+      "fixed_delta": 0.009999999776482582
+    },
+    {
+      "initial": true,
+      "baseline_present": false,
+      "fixed_delta": 0.019999999552965164
+    },
+    {
+      "initial": true,
+      "baseline_present": false,
+      "fixed_delta": 0.10000000149011612
+    },
+    {
+      "initial": true,
+      "baseline_present": true,
+      "fixed_delta": 0.009999999776482582
+    },
+    {
+      "initial": true,
+      "baseline_present": true,
+      "fixed_delta": 0.019999999552965164
+    },
+    {
+      "initial": true,
+      "baseline_present": true,
+      "fixed_delta": 0.10000000149011612
+    }
+  ],
+  "constructor_cases": 4,
+  "baseline_initializer_cases": 1,
+  "calibration_cases": [
+    {
+      "frequency": 1,
+      "service_success": true,
+      "nanoseconds_per_tick": 1000000000.0
+    },
+    {
+      "frequency": 10000000,
+      "service_success": true,
+      "nanoseconds_per_tick": 100.0
+    },
+    {
+      "frequency": 9007199254740993,
+      "service_success": true,
+      "nanoseconds_per_tick": 1.1102230246251565e-07
+    },
+    {
+      "frequency": 9223372036854775825,
+      "service_success": true,
+      "nanoseconds_per_tick": 1.0842021724855044e-10
+    },
+    {
+      "frequency": 18446744073709551615,
+      "service_success": true,
+      "nanoseconds_per_tick": 5.421010862427522e-11
+    },
+    {
+      "frequency": 0,
+      "service_success": false,
+      "nanoseconds_per_tick": "positive_infinity"
+    },
+    {
+      "frequency": 10000000,
+      "service_success": false,
+      "nanoseconds_per_tick": 100.0
+    }
+  ],
+  "native_case_count": 62,
+  "caller_instruction_relationships": 8,
+  "visited_instruction_count": 184,
+  "scope": "Native timestamp conversion, frequency calibration, reset, constructor and baseline initializer. OS counters/frequency, thread initialization, baseline allocation, memset and reset tail service use explicit gateways. Outer frame-caller ABI is static only; provider callbacks, mode/pause policy and global initialization order remain open."
+}

@@ -17,6 +17,7 @@ pub mod continuation_registry;
 pub mod reveal_view;
 pub mod twin_writer;
 pub mod wait_eligibility;
+pub mod clock;
 pub mod wait_queue;
 pub mod scheduled_reveal;
 

@@ -916,3 +916,16 @@ The [GameData lifecycle audit](notes/systems/game_data_lifecycle.md) completes
 all 23 methods in that declaration. Its twelve-target extension checks 189
 native cases for mode publication, initialization, state changes, catalogue
 lookups and achievement callers. Service internals remain explicit boundaries.
+
+The [Unity clock audit](notes/systems/unity_clock.md) checks 1,437 native frame
+updates and 180 fixed selections. Its offline Rust projection preserves exact
+snapshot ordering, partial early-return writes, float rounding and full-width
+counters. JSON float parsing now preserves native timestamp bits. Timestamp
+production, initialization, setters and complete PlayerLoop composition remain
+explicit next boundaries.
+
+The [clock source extension](notes/systems/unity_clock_source.md) adds 62 native
+cases for QPC conversion, construction, reset and baseline initialization. It
+verifies double forwarding into the updater and preserves separate caller-level
+suppression. Provider/pause callbacks and remaining configuration
+writers are still open.

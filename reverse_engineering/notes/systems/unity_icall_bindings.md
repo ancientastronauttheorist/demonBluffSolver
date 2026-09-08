@@ -86,7 +86,10 @@ Clock-update routine `0x551D70` increments the native 64-bit frame counter and
 32-bit rendered-frame counter. Its frame-update path writes `0x60` and copies
 the frame timing block into the public timing block. Full time accumulation,
 capture settings, clamping, initialization and timeScale policy remain outside
-this audit. The checked selection relationship is sufficient to reject the
+this original binding audit. The subsequent [clock audit](unity_clock.md)
+recovers finite update arithmetic and early-return precedence in 1,437 native
+cases, plus 180 native selector cases. Initialization and setter policy remain
+open. The checked selection relationship is sufficient to reject the
 assumption that producer `0x60` and consumer `0x90` are always interchangeable.
 
 The selector was a leaf function not recognized by the first private Ghidra
