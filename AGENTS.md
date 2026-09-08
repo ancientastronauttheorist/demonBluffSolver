@@ -42,7 +42,8 @@ stop, diagnose, fix, verify, then resume.
 10. When a process error happens, improve this file. Prefer tightening an
     existing rule over appending duplicate guidance.
     In PowerShell, pass ripgrep a directory and `-g '*.json'` (or the relevant
-    glob); do not pass wildcard paths that the shell leaves unexpanded, including
+    glob). For a filename family use `rg <pattern> <directory> -g 'prefix*.md'`.
+    Do not pass wildcard paths that the shell leaves unexpanded, including
     a trailing `/*` or partial-name wildcard on a directory argument.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents and Rust module roots, with `rg --files` before reading. Do not

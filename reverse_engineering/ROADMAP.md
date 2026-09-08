@@ -23,6 +23,8 @@ Resume with these boundaries in view:
    Phase bit 8 and complete delayed-Reveal interleaving are still unresolved.
    An additional verified mask-16 dispatch calls the wait manager at `0x59F692`;
    trace its enclosing lifecycle next. `0x59F67B` is only its unwind chunk start.
+   Also inspect clock vtable target `0x5520E0` before treating the four public
+   setters as the complete configuration-normalization boundary.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
    semantics, fully-shared generic copy alternatives and remaining mode/save
