@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_relationships_verified": 9,
+  "constructed_nodes": 131,
+  "distinct_builder_instructions": 973,
+  "clock": {
+    "name": "TimeUpdate/WaitForLastPresentationAndUpdateTime",
+    "callback_rva": "0x5B72C0",
+    "callback_cell_rva": "0x1CAA1E8",
+    "type_cache_offset": "0xA28",
+    "node_index": 2
+  },
+  "wait_nodes": [
+    {
+      "name": "EarlyUpdate/ScriptRunDelayedStartupFrame",
+      "mask": 4,
+      "node_index": 34
+    },
+    {
+      "name": "FixedUpdate/ScriptRunDelayedFixedFrameRate",
+      "mask": 1,
+      "node_index": 56
+    },
+    {
+      "name": "Update/ScriptRunDelayedDynamicFrameRate",
+      "mask": 2,
+      "node_index": 70
+    },
+    {
+      "name": "PostLateUpdate/ScriptRunDelayedDynamicFrameRate",
+      "mask": 2,
+      "node_index": 89
+    },
+    {
+      "name": "PostLateUpdate/PlayerSendFrameComplete",
+      "mask": 32,
+      "node_index": 113
+    }
+  ],
+  "scope": "Qualified managed type-cache lookup, callback installation and native default-loop construction with synthetic initialized type tags. The clock callback body is audited separately. Runtime loop modifications, callback guards and phase bit 8 remain separate boundaries."
+}

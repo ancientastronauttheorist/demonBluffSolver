@@ -70,7 +70,7 @@ def find_phase_nodes(buffer, image_base, tag_base, phases):
     return count, results
 
 
-def emulate_loop(data):
+def emulate_loop(data, phases=PHASES):
     import pefile
     import unicorn
     from unicorn import x86_const as x
@@ -109,7 +109,7 @@ def emulate_loop(data):
     uc.emu_start(base + 0x5A6810, stop, timeout=2_000_000, count=100_000)
     if uc.reg_read(x.UC_X86_REG_RIP) != stop:
         raise ValueError("loop construction exceeded its execution bound")
-    count, indices = find_phase_nodes(bytes(uc.mem_read(loop, 0x8000)), base, tag_base, PHASES)
+    count, indices = find_phase_nodes(bytes(uc.mem_read(loop, 0x8000)), base, tag_base, phases)
     return count, indices, len(seen)
 
 

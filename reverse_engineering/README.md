@@ -929,3 +929,8 @@ cases for QPC conversion, construction, reset and baseline initialization. It
 verifies double forwarding into the updater and preserves separate caller-level
 suppression. Provider/pause callbacks and remaining configuration
 writers are still open.
+
+The [clock phase join](notes/systems/unity_clock_phase.md) binds its native
+caller to TimeUpdate/WaitForLastPresentationAndUpdateTime at node 2 of the
+131-node default loop. Nine static relationships and native loop construction
+verify the join while preserving the existing five wait-node bindings.

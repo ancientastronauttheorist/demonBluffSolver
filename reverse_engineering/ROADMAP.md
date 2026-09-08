@@ -474,6 +474,8 @@ layout, or byte-for-byte C# source. Those do not survive IL2CPP compilation.
   - [x] Trace QPC timestamp conversion, process baseline, clock constructor and
     reset plus frequency calibration in 62 native cases; distinguish caller
     suppression from updater skip.
+  - [x] Join the clock caller to TimeUpdate/WaitForLastPresentationAndUpdateTime
+    at native default-loop node 2, preserving all five audited wait bindings.
   - [ ] Resolve provider/pause callbacks, remaining
     configuration initialization and setter policy,
     remaining phase provenance,

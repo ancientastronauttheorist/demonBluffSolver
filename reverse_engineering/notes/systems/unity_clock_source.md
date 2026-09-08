@@ -101,3 +101,7 @@ All proprietary instructions remain private. The repository contains authored
 assertions, synthetic inputs and numeric results. The existing Rust clock
 projection still accepts explicit state and timestamps; this audit does not
 silently infer startup state or add a complete PlayerLoop driver.
+
+The subsequent [phase binding](unity_clock_phase.md) places this caller at
+default-loop node 2, TimeUpdate/WaitForLastPresentationAndUpdateTime, by joining
+its qualified managed type cache with the installed native callback cell.
