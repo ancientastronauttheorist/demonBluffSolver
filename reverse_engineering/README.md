@@ -945,6 +945,10 @@ adds 14,673 native cases for the separate normalization and reciprocal-refresh
 virtual operations. [Shipped clock settings](notes/systems/unity_clock_assets.md)
 recover the complete TimeManager payload and bind all four named fields to
 native clock offsets. Serialized defaults do not establish runtime load order.
+The [particle timing extension](notes/systems/unity_particle_timing.md) verifies
+8,438 native writer invocations. Raising fixed delta leaves particle delta
+unchanged; separate normalization restores its floor. The particle setter's
+unordered comparison preserves supplied NaN bits.
 
 The [mask-16 lifecycle audit](notes/systems/unity_wait_dispatch16.md) executes
 the complete enclosing routine in 32 cases and checks three direct caller

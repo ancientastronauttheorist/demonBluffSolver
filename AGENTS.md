@@ -85,7 +85,9 @@ stop, diagnose, fix, verify, then resume.
     Give overloaded target signatures distinct `prototype_name` values while
     preserving their original metadata signatures and exact RVAs.
     For a shared RVA, reuse its established canonical `applied_prototype_name`
-    before invoking exports; preserve each declaration's metadata signature.
+    before invoking exports when parameter counts agree; preserve each declaration's
+    metadata signature. Incompatible folded declarations need separate exact
+    evidence, not a false prototype or a target that fails union validation.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
     Preserve exact floating-point values when loading native timing fixtures;

@@ -27,7 +27,8 @@ three-instruction body loads the clock pointer from global RVA `0x1c6e718`,
 loads the float at `+0x104`, and returns at `0x10e32f`. The harness asserts the
 registration and all three instructions through the exclusive `0x10e330`
 boundary. It also verifies registration of the corresponding setter at
-`0x10e330`; the setter body is outside this audit.
+`0x10e330`; the [follow-up audit](unity_particle_timing.md) covers that setter
+and its interaction with fixed-delta writes.
 
 Normalization preserves the cached fields `+0x50` and `+0x58`. Refresh preserves
 `+0x48` and both limits; it does no clamping or NaN rejection. Refresh copies the
