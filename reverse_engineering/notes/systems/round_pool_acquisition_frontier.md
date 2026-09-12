@@ -35,8 +35,10 @@ results and every stopped partial prefix.
 ManageCharacters36CE30 records: update positions; PickRoundBluffs; PickRoundDuplicates;
 ordinary per-card Character.Init with descending displayed IDs; publish the shallow
 board copy; per-card Act(Init); configured ordered Act(Start); onSetup; shuffle.
-Pool construction therefore precedes these per-card initializations and ordered
-writers. Its call order must be executed or supplied with provenance, including
+Ordinary ordered-Start roles stop after their first current-data match; Alchemist,
+Poisoner and Puzzlemaster/Plague Doctor scan all matching occurrences. Preserve
+that exception when producing writer/continuation state. Pool construction
+therefore precedes these per-card initializations and ordered writers. Its call order must be executed or supplied with provenance, including
 failure of the unique builder preventing the duplicate builder and later setup.
 Shared pool/script identities must be mapped explicitly: the current kernels
 construct distinct intermediate lists and do not prove arbitrary alias/reentrancy.
@@ -90,3 +92,5 @@ supported writers. Do not replace it with board order, equal-delay registration
 order, public reveal order or inferred OS time. Engine allocation/lifetime, scene
 callbacks, unsupported writers, general PlayerLoop/queue contents, List internals
 and unsupplied RNG state remain explicit boundaries.
+
+The [ManageCharacters prefix audit](manage_pool_prefix.md) now verifies caller handoff and first Init arguments across 44 native cases. Its pool builders remain supplied gateways, and it stops before Init or empty-board publication; the complete composition above remains open.

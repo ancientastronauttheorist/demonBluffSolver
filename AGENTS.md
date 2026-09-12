@@ -55,6 +55,8 @@ stop, diagnose, fix, verify, then resume.
     Verify a documented directory exists before searching it, since directory
     maps can describe intended layout. Start with repository-root `rg --files`
     when even the containing directory is unconfirmed.
+    Evidence sources can name corpus directories as well as files; validate the
+    referenced path's existence without assuming every source is a single file.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
     keep patch hunks in file order and omit empty placeholder hunks.

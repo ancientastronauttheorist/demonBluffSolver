@@ -1,0 +1,4501 @@
+{
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "metadata_verified": [
+    {
+      "Address": 3591728,
+      "Name": "Characters$$ManageCharacters",
+      "Signature": "void Characters__ManageCharacters (Characters_o* __this, System_Collections_Generic_List_CharacterData__o* charactersList, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3597536,
+      "Name": "Characters$$UpdateCharacterPositions",
+      "Signature": "void Characters__UpdateCharacterPositions (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3593120,
+      "Name": "Characters$$PickRoundBluffs",
+      "Signature": "void Characters__PickRoundBluffs (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3594016,
+      "Name": "Characters$$PickRoundDuplicates",
+      "Signature": "void Characters__PickRoundDuplicates (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3562016,
+      "Name": "Character$$Init",
+      "Signature": "void Character__Init (Character_o* __this, CharacterData_o* character, int32_t id, const MethodInfo* method);",
+      "TypeSignature": "viiii"
+    }
+  ],
+  "required_generic_tokens": [
+    "Method$System.Collections.Generic.List<Character>.GetEnumerator()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.MoveNext()",
+    "Method$System.Collections.Generic.List<CharacterData>.get_Item()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.Dispose()"
+  ],
+  "cases_passed": 44,
+  "native_assertions": 9,
+  "native_instructions_executed": 103,
+  "cases": [
+    {
+      "input": {
+        "cold": false
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 3
+      }
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "positions",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "positions",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "unique",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions"
+        ]
+      },
+      "error": "unique",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "duplicates",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique"
+        ]
+      },
+      "error": "duplicates",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "enumerator",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "move_next",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": false,
+        "fail": [
+          "get_item",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "get_item",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "class_init",
+          "class_name": "System.Math_TypeInfo",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 3
+      }
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          4
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          5
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          6
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          7
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          8
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          9
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          10
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          11
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "metadata",
+          12
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "metadata",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "positions",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": []
+      },
+      "error": "positions",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "unique",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions"
+        ]
+      },
+      "error": "unique",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "duplicates",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique"
+        ]
+      },
+      "error": "duplicates",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "enumerator",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "move_next",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "class_init",
+          "class_name": "System.Math_TypeInfo",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "class_init",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "cold": true,
+        "fail": [
+          "get_item",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "metadata",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "class_init",
+          "class_name": "System.Math_TypeInfo",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "get_item",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "null_board": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": null,
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": null,
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": null,
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": null,
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "null",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "null_roster": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "null",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "empty_roster": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "bounds",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "null_character": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "null",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "null_after_move": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": null,
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "null",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "board_size": 0
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 0,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 0
+      }
+    },
+    {
+      "input": {
+        "board_size": 1
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 1,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 1,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 1
+      }
+    },
+    {
+      "input": {
+        "board_size": 7
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 7,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 7,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 7
+      }
+    },
+    {
+      "input": {
+        "board_size": -1
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 4294967295,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 4294967295,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 1
+      }
+    },
+    {
+      "input": {
+        "board_size": -2147483648
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 2147483648,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 2147483648,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 2147483648
+      }
+    },
+    {
+      "input": {
+        "replace_after": "positions"
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "alternate",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "other_character",
+        "data": "data",
+        "display_id_bits": 5
+      }
+    },
+    {
+      "input": {
+        "replace_after": "unique"
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "alternate",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "other_character",
+        "data": "data",
+        "display_id_bits": 5
+      }
+    },
+    {
+      "input": {
+        "replace_after": "duplicates"
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "alternate",
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "alternate",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "other_character",
+        "data": "data",
+        "display_id_bits": 5
+      }
+    },
+    {
+      "input": {
+        "replace_after": "move_next"
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "alternate",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "alternate",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": "data",
+        "display_id_bits": 5
+      }
+    },
+    {
+      "input": {
+        "null_character": true,
+        "empty_roster": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": "bounds",
+      "boundary": null,
+      "init_arguments": null
+    },
+    {
+      "input": {
+        "null_data": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "get_item",
+          "index": 0,
+          "snapshot": {
+            "board": "board",
+            "board_size": 3,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 3,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "before_first_init",
+      "init_arguments": {
+        "character": "character",
+        "data": null,
+        "display_id_bits": 3
+      }
+    },
+    {
+      "input": {
+        "empty_board": true,
+        "board_size": 0,
+        "null_roster": true
+      },
+      "events": [
+        {
+          "kind": "positions",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": []
+          }
+        },
+        {
+          "kind": "unique",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions"
+            ]
+          }
+        },
+        {
+          "kind": "duplicates",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique"
+            ]
+          }
+        },
+        {
+          "kind": "enumerator",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "move_next",
+          "source": "board",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        },
+        {
+          "kind": "dispose",
+          "snapshot": {
+            "board": "board",
+            "board_size": 0,
+            "alternate_size": 5,
+            "effects": [
+              "positions",
+              "unique",
+              "duplicates"
+            ]
+          }
+        }
+      ],
+      "final": {
+        "board": "board",
+        "board_size": 0,
+        "alternate_size": 5,
+        "effects": [
+          "positions",
+          "unique",
+          "duplicates"
+        ]
+      },
+      "error": null,
+      "boundary": "empty_before_publication",
+      "init_arguments": null
+    }
+  ],
+  "scope": "Actual ManageCharacters prefix only. Stops before Character.Init or before publication for empty enumeration. Positions/unique/duplicates and collection/metadata/class-init are supplied preserving services with optional controlled board replacement. No per-card Init, later callback passes, shuffle, unwind or complete ManageCharacters replay."
+}

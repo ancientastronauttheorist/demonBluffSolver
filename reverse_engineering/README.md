@@ -860,7 +860,7 @@ offline selector preserves Mad across empty-draw failure and compares against
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
 method identities. The current overlay contains 1,434 classifications backed by
-326 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+327 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -1063,3 +1063,5 @@ and [animation callers](notes/systems/acted_version_animation.md) add 30 and 72
 cases, completing all seven declarations while retaining explicit tween and
 framework services. The [pool-to-acquisition frontier](notes/systems/round_pool_acquisition_frontier.md)
 records the remaining setup, identity, RNG and continuation-state joins.
+
+The [ManageCharacters prefix audit](notes/systems/manage_pool_prefix.md) adds 44 native cases for the pool-builder handoff and first Init arguments. Builders remain supplied services; this prefix stops before Init or empty-board publication. Full startup-to-acquisition composition remains open.

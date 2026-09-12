@@ -3,7 +3,7 @@
 ## Continuation checkpoint: 2026-09-12 overnight
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,434 classifications and 326 evidence records
+additional native timing audits. The overlay contains 1,434 classifications and 327 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
@@ -637,3 +637,5 @@ No nontrivial method may disappear from the denominator.
 - [x] Complete the 23-method GameData declaration with a twelve-target lifecycle
   audit and 189 native cases. Retain mode virtual methods, save serialization,
   preference loading and achievement effects as explicit callee boundaries.
+
+The [ManageCharacters prefix audit](notes/systems/manage_pool_prefix.md) adds 44 native cases for the pool-builder handoff and first Init arguments. Builders remain supplied services; this prefix stops before Init or empty-board publication. Full startup-to-acquisition composition remains open.
