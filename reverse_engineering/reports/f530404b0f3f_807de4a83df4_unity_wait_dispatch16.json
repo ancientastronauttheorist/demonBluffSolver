@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "native_relationships_verified": 33,
+  "function_rva": "0x59F5E0",
+  "function_end_exclusive": "0x59F743",
+  "unwind_chunks": [
+    [
+      "0x59f5e0",
+      "0x59f5e9"
+    ],
+    [
+      "0x59f5e9",
+      "0x59f62e"
+    ],
+    [
+      "0x59f62e",
+      "0x59f65d"
+    ],
+    [
+      "0x59f65d",
+      "0x59f67b"
+    ],
+    [
+      "0x59f67b",
+      "0x59f6c7"
+    ],
+    [
+      "0x59f6c7",
+      "0x59f743"
+    ]
+  ],
+  "distinct_native_instructions_executed": 76,
+  "cases": [
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 0,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 0,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 1,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 1,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 2,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 2,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 5,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": false,
+      "mode": 5,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 0,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 0,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 1,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 1,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 2,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 2,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 5,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": false,
+      "optional_service_present": true,
+      "mode": 5,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 0,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 0,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 1,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 1,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 2,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 2,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 5,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": false,
+      "mode": 5,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 0,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 0,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 1,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 1,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 2,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 2,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 5,
+      "clock_time": 0.0,
+      "dispatches": 1,
+      "mask": 16
+    },
+    {
+      "tree_present": true,
+      "optional_service_present": true,
+      "mode": 5,
+      "clock_time": 123.25,
+      "dispatches": 1,
+      "mask": 16
+    }
+  ],
+  "direct_callers": [
+    {
+      "function": "0x5C62D0",
+      "sites": [
+        "0x5C63B4",
+        "0x5C6403"
+      ],
+      "gate": "mode at input+0x3E0 equals 0 or 2"
+    },
+    {
+      "function": "0xBD81B0",
+      "sites": [
+        "0xBD84F1"
+      ],
+      "gate": "within existing object+0x78 guard, mode at second argument+8 equals 0"
+    }
+  ],
+  "scope": "Native enclosing routine executes with all callees mocked. Mask16 is unconditional inside this routine; mode2 skips a later notification only. Native stores reset tree links when supplied and set clock+F0 to negated clock+60 and clock+C0/C1 to1. Caller modes have no assigned public identity. Not whole caller emulation, no live scheduling timestamps, no phase8 resolution."
+}

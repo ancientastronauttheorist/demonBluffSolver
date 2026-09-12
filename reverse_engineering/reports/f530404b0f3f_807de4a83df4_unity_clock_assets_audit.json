@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "engine_sha256": "B5D48235E7CC02FF9496FB33A07D5921ADFC4B40DED1BC64C96A7A7C10B4DFB2",
+  "sources": {
+    "globalgamemanagers": {
+      "size": 202560,
+      "sha256": "6BD99988279019EB3190F40940B1FF2242ED28A728BE22B9C48A26F118198C32",
+      "time_manager_count": 1
+    },
+    "globalgamemanagers.assets": {
+      "size": 705652,
+      "sha256": "38E56EF97CDA4C5DFCFCB397F8077335AEBBF199460FA5B536D91698C21ED2D9",
+      "time_manager_count": 0
+    }
+  },
+  "unity_version": "2022.3.10f1",
+  "unitypy_version": "1.25.0",
+  "time_manager": {
+    "source": "globalgamemanagers",
+    "class_id": 5,
+    "path_id": 8,
+    "object_size": 16,
+    "consumed_bytes": 16,
+    "object_sha256": "A8D974DF26D17852D4AB7775F4C6487EB855195154BA29A663FA117A75B27BA0",
+    "schema_provenance": "UnityPy versioned fallback; serialized object has no embedded type tree",
+    "fields": [
+      {
+        "serialized_name": "Fixed Timestep",
+        "serialized_offset": 0,
+        "native_clock_offset": "0x48",
+        "binary32_bits": "3ca3d70a",
+        "value": 0.019999999552965164,
+        "native_name_rva": "0x1954de0",
+        "description_call_rva": "0x55225d",
+        "named_reader_call_rva": "0x5523ab"
+      },
+      {
+        "serialized_name": "Maximum Allowed Timestep",
+        "serialized_offset": 4,
+        "native_clock_offset": "0x100",
+        "binary32_bits": "3eaaaaab",
+        "value": 0.3333333432674408,
+        "native_name_rva": "0x1954df0",
+        "description_call_rva": "0x55229d",
+        "named_reader_call_rva": "0x5523c1"
+      },
+      {
+        "serialized_name": "m_TimeScale",
+        "serialized_offset": 8,
+        "native_clock_offset": "0xfc",
+        "binary32_bits": "3f800000",
+        "value": 1.0,
+        "native_name_rva": "0x1954dd0",
+        "description_call_rva": "0x5522dd",
+        "named_reader_call_rva": "0x5523d7"
+      },
+      {
+        "serialized_name": "Maximum Particle Timestep",
+        "serialized_offset": 12,
+        "native_clock_offset": "0x104",
+        "binary32_bits": "3cf5c28f",
+        "value": 0.029999999329447746,
+        "native_name_rva": "0x1954e10",
+        "description_call_rva": "0x55231d",
+        "named_reader_call_rva": "0x5523ed"
+      }
+    ]
+  },
+  "native_vtable_rva": "0x1954e38",
+  "native_transfer_slots": {
+    "0x78": "0x552360",
+    "0x80": "0x552210"
+  },
+  "native_transfer_ranges": [
+    [
+      "0x552210",
+      "0x552358"
+    ],
+    [
+      "0x552360",
+      "0x552443"
+    ]
+  ],
+  "native_mapping_assertion_count": 32,
+  "scope": "Complete pinned shipped TimeManager configuration plus two independent native field/name transfer mappings. Static native instruction assertions, not execution of deserialization helpers. Does not establish runtime load ordering, normalization/refresh ordering, all runtime writers, or live state."
+}

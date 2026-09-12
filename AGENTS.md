@@ -48,12 +48,14 @@ stop, diagnose, fix, verify, then resume.
     Resolve all uncertain filenames, including audit scripts and status/summary
     documents and Rust module roots, with `rg --files` before reading. Do not
     infer an audit filename from a role name or assume a module uses `mod.rs`.
+    Retain the returned directory when opening a resolved basename; a script
+    name mentioned in notes is not necessarily relative to the repository root.
     Verify a documented directory exists before searching it, since directory
     maps can describe intended layout. Start with repository-root `rg --files`
     when even the containing directory is unconfirmed.
     Do not guess filenames or repeat an unexpanded wildcard search. Read the
     current text before preparing an exact-match patch to a changed guide, and
-    keep patch hunks in file order.
+    keep patch hunks in file order and omit empty placeholder hunks.
     Use explicit UTF-8 for repository text reads and writes in Python on Windows.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
@@ -82,13 +84,17 @@ stop, diagnose, fix, verify, then resume.
     Read numeric constants before assigning units or expected magnitudes.
     Give overloaded target signatures distinct `prototype_name` values while
     preserving their original metadata signatures and exact RVAs.
+    For a shared RVA, reuse its established canonical `applied_prototype_name`
+    before invoking exports; preserve each declaration's metadata signature.
     Native fixture metadata names must match Dumper's exact namespace syntax;
     assert every required slot was found before executing warmed fixtures.
     Preserve exact floating-point values when loading native timing fixtures;
     check parser rounding before weakening a failed exact comparison.
     Check each requested export's result before reading its file: a successful
     headless process can still report missing functions or partial exports.
-    For omitted initializer functions, resolve entries from their native pointer
+    An export batch may abort at its first missing target; require a per-target
+    completion record before reading any subsequent requested output.
+    For omitted initializer or virtual functions, resolve entries from their native pointer
     table before defining them in a read-only export session.
     Internal-call requests can include parameter signatures that registrations
     omit. Inspect the exact request and audit its fallback lookup before

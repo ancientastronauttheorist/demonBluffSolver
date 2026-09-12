@@ -98,7 +98,7 @@ pub enum FrameUpdatePath {
     Scaled,
 }
 
-fn checked(context: &ClockContext) -> Result<ClockState, LedgerError> {
+pub(super) fn checked(context: &ClockContext) -> Result<ClockState, LedgerError> {
     if context.rule_version != UNITY_CLOCK_NATIVE_V1 || !context.state.finite() {
         return Err(LedgerError::InvalidContext);
     }

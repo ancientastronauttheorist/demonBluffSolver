@@ -1,30 +1,32 @@
 # Full Reconstruction Roadmap
 
-## Continuation checkpoint: 2026-09-07 evening
+## Continuation checkpoint: 2026-09-11 evening
 
-Branch `codex/full-decompile` is pushed through the timing-setter checkpoint
-`946ed00`. The overlay contains 1,216 classifications and 287 evidence records
+Branch `codex/full-decompile` now includes the clocked Reveal adapter and
+additional native timing audits. The overlay contains 1,216 classifications and 287 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 47 sets, 968 memberships, 615 exact definitions and 509 native RVAs, with
 2,804 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 669 Rust library tests, 34 simulation tests over 426 fixtures,
+Latest validation: 676 Rust library tests; prior full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 992.37 seconds. Subsequent clock-source, phase
 and setter work consists of offline audit artifacts and bounded harness changes.
 
 Resume with these boundaries in view:
 
-1. Connect the new explicit `bluff::clock` transitions to caller-supplied
-   scheduler traces. Clock update/reset/calibration, default-loop placement and
-   public setters are audited, but provider/pause callbacks, optional setter
-   notifications, configuration writers and modified runtime loops remain open.
+1. The explicit `bluff::clock` transitions now feed the weighted scheduler via
+   `bluff::clocked_reveal`, with callback clock stability required as provenance.
+   Clock update/reset/calibration, default-loop placement, four public setters,
+   normalization/refresh and shipped TimeManager fields are audited. Provider/pause
+   callbacks, optional setter notifications, runtime configuration loading order
+   and modified runtime loops remain open.
    Phase bit 8 and complete delayed-Reveal interleaving are still unresolved.
-   An additional verified mask-16 dispatch calls the wait manager at `0x59F692`;
-   trace its enclosing lifecycle next. `0x59F67B` is only its unwind chunk start.
-   Also inspect clock vtable target `0x5520E0` before treating the four public
-   setters as the complete configuration-normalization boundary.
+   The additional mask-16 dispatch at `0x59F692` now has a complete enclosing
+   method audit and three direct caller gates. Their public lifecycle identity
+   remains open. `0x59F67B` is only an unwind chunk start. Normalization at
+   `0x5520E0` is distinct from reciprocal refresh and leaves its caches untouched.
 2. Continue the ascension-to-acquisition bridge: weighted cached script selection
    is reconstructed, and all 23 GameData methods are audited. Engine JSON copy
    semantics, fully-shared generic copy alternatives and remaining mode/save

@@ -938,3 +938,19 @@ verify the join while preserving the existing five wait-node bindings.
 The [timing setter audit](notes/systems/unity_clock_setters.md) checks 72 native
 cases for fixedDeltaTime, maximumDeltaTime, timeScale and captureDeltaTime,
 including distinct clamp floors, rejection paths and admitted nonfinite values.
+
+The [clock normalization audit](notes/systems/unity_clock_normalization.md)
+adds 14,673 native cases for the separate normalization and reciprocal-refresh
+virtual operations. [Shipped clock settings](notes/systems/unity_clock_assets.md)
+recover the complete TimeManager payload and bind all four named fields to
+native clock offsets. Serialized defaults do not establish runtime load order.
+
+The [mask-16 lifecycle audit](notes/systems/unity_wait_dispatch16.md) executes
+the complete enclosing routine in 32 cases and checks three direct caller
+sites. Its reset-like final clock writes are recovered; public lifecycle names
+and phase bit 8 remain unresolved.
+
+The [clocked Reveal adapter](notes/systems/clocked_reveal.md) now derives wait
+consumer/producer timestamps from explicit audited clock transitions. Seven
+tests cover weighted replay, chained drains, fixed selection, counter rollover
+and atomic fallback. All 676 Rust library tests passed.

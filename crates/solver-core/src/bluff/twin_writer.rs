@@ -475,6 +475,278 @@ mod tests {
         }
     }
 
+    fn clocked_input() -> crate::bluff::clocked_reveal::ClockedRevealContext {
+        use crate::bluff::clock::{ClockContext, ClockState, UNITY_CLOCK_NATIVE_V1};
+        use crate::bluff::clocked_reveal::*;
+        let scheduled = scheduled_input();
+        let report: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../../reverse_engineering/reports/f530404b0f3f_807de4a83df4_unity_clock_audit.json"
+        ))
+        .unwrap();
+        let mut clock: ClockState =
+            serde_json::from_value(report["selected_results"][0]["input"].clone()).unwrap();
+        clock.frame.time = 3.0;
+        clock.public.time = 3.0;
+        clock.frame_counter = 1;
+        clock.time_scale = 1.0;
+        clock.capture_delta = 0.5;
+        ClockedRevealContext {
+            rule_version: CLOCKED_REVEAL_NATIVE_V1.into(),
+            initial_clock: ClockContext {
+                rule_version: UNITY_CLOCK_NATIVE_V1.into(),
+                state: clock,
+            },
+            initial: scheduled.initial,
+            transitions: vec![],
+            phase_mask: 2,
+            clock_stable_during_callbacks: true,
+            callbacks: scheduled
+                .callbacks
+                .into_iter()
+                .map(|(id, callback)| {
+                    (
+                        id,
+                        ClockedCallbackBoundary {
+                            same_live_owner: callback.same_live_owner,
+                            callback_result: callback.callback_result,
+                        },
+                    )
+                })
+                .collect(),
+        }
+    }
+
+    #[test]
+    fn clocked_drain_matches_existing_weighted_replay_without_clock_rng() {
+        use crate::bluff::clocked_reveal::*;
+        use crate::bluff::scheduled_reveal::replay_scheduled_reveal;
+        let input = clocked_input();
+        let output = replay_clocked_reveal(&input).unwrap();
+        assert_eq!(
+            output.paths,
+            replay_scheduled_reveal(&scheduled_input()).unwrap()
+        );
+        assert_eq!(output.clock, input.initial_clock);
+        assert!(output.clock_trace.is_empty());
+        assert_eq!(
+            output.dispatch.generation_before,
+            input.initial.queue.generation
+        );
+    }
+
+    #[test]
+    fn clocked_fixed_snapshot_retains_frame_clock_for_writer_created_waits() {
+        use crate::bluff::clocked_reveal::*;
+        let mut input = clocked_input();
+        input.initial_clock.state.frame.time = 20.0;
+        input.initial_clock.state.fixed.time = 0.0;
+        input.initial_clock.state.fixed.delta = 1.0;
+        input.initial_clock.state.frame_counter = 5;
+        input.transitions.push(ClockTransition::SelectFixed);
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        let output = replay_clocked_reveal(&input).unwrap();
+        assert_eq!(output.dispatch.sampled_time, 1.0);
+        assert_eq!(output.clock.state.frame.time, 20.0);
+        assert!(matches!(
+            output.clock_trace.as_slice(),
+            [ClockTransitionResult::SelectFixed {
+                selected_fixed: true,
+                ..
+            }]
+        ));
+        assert_eq!(output.paths.len(), 2);
+        for path in output.paths {
+            let created: Vec<_> = path
+                .state
+                .queue
+                .entries
+                .iter()
+                .filter(|e| e.logical_id >= 100)
+                .collect();
+            assert_eq!(created.len(), 2);
+            assert!(created
+                .iter()
+                .all(|e| e.timing.deadline == 20.0 + f64::from(0.3_f32)
+                    && e.timing.frame_threshold == 6));
+            assert_eq!(
+                path.probability,
+                Probability {
+                    numerator: 1,
+                    denominator: 2
+                }
+            );
+        }
+    }
+
+    #[test]
+    fn clocked_chained_drains_resume_only_after_clock_and_frame_advance() {
+        use crate::bluff::clocked_reveal::*;
+        let mut input = clocked_input();
+        input.initial_clock.state.frame.time = 0.0;
+        input.initial_clock.state.public.time = 0.0;
+        input.initial_clock.state.frame_counter = 0;
+        input.transitions = vec![ClockTransition::UpdateFrame { timestamp: 1.0 }];
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        let first = replay_clocked_reveal(&input).unwrap();
+        assert_eq!(first.clock.state.frame.time, 0.5);
+        assert_eq!(first.clock.state.frame_counter, 1);
+        let mut second = input.clone();
+        second.initial_clock = first.clock;
+        second.initial = first.paths[1].state.clone();
+        second.transitions.clear();
+        second.callbacks.clear();
+        let skipped = replay_clocked_reveal(&second).unwrap();
+        assert_eq!(skipped.paths.len(), 1);
+        assert!(skipped.paths[0].callbacks.is_empty());
+        assert_eq!(skipped.dispatch.generation_before, 1);
+        second.initial = skipped.paths[0].state.clone();
+        second.initial_clock = skipped.clock;
+        second
+            .transitions
+            .push(ClockTransition::UpdateFrame { timestamp: 2.0 });
+        for id in [100, 101] {
+            second.callbacks.insert(
+                id,
+                ClockedCallbackBoundary {
+                    same_live_owner: true,
+                    callback_result: 1,
+                },
+            );
+        }
+        let resumed = replay_clocked_reveal(&second).unwrap();
+        assert_eq!(resumed.dispatch.generation_before, 2);
+        assert_eq!(resumed.dispatch.sampled_time, 1.0);
+        assert_eq!(resumed.dispatch.sampled_frame_counter, 2);
+        assert!(!resumed.paths.is_empty());
+        for path in resumed.paths {
+            assert_eq!(
+                path.callbacks
+                    .iter()
+                    .map(|c| c.logical_id)
+                    .collect::<Vec<_>>(),
+                [100, 101]
+            );
+            assert_eq!(path.state.queue.generation, 3);
+        }
+    }
+
+    #[test]
+    fn clocked_suppression_advances_full_width_counter_without_replacing_clocks() {
+        use crate::bluff::clock::FrameUpdatePath;
+        use crate::bluff::clocked_reveal::*;
+        let mut input = clocked_input();
+        input.initial_clock.state.suppress_update = true;
+        input.initial_clock.state.frame_counter = i64::MAX;
+        input.initial_clock.state.frame.time = 0.0;
+        input.initial_clock.state.public.time = 1.0;
+        input.initial.queue.generation = u32::MAX;
+        for entry in &mut input.initial.queue.entries {
+            entry.timing.frame_threshold = i64::MIN;
+            entry.timing.insertion_generation = u32::MAX;
+        }
+        for entry in &mut input.initial.queue.entries[1..] {
+            entry.timing.deadline = 100.0;
+        }
+        input.callbacks.retain(|id, _| *id == 10);
+        input
+            .transitions
+            .push(ClockTransition::UpdateFrame { timestamp: 100.0 });
+        let output = replay_clocked_reveal(&input).unwrap();
+        assert_eq!(output.dispatch.sampled_frame_counter, i64::MIN);
+        assert_eq!(output.dispatch.sampled_time, 1.0);
+        assert_eq!(output.clock.state.frame.time, 0.0);
+        assert!(matches!(
+            output.clock_trace[0],
+            ClockTransitionResult::UpdateFrame {
+                path: FrameUpdatePath::Suppressed,
+                ..
+            }
+        ));
+        for path in output.paths {
+            assert_eq!(path.state.queue.generation, 0);
+            assert!(path
+                .state
+                .queue
+                .entries
+                .iter()
+                .filter(|e| e.logical_id >= 100)
+                .all(|e| e.timing.deadline == f64::from(0.3_f32)
+                    && e.timing.frame_threshold == i64::MIN + 1));
+        }
+    }
+
+    #[test]
+    fn clocked_replay_rejects_missing_clock_owner_or_version_provenance_atomically() {
+        use crate::bluff::clocked_reveal::*;
+        for variant in 0..7 {
+            let mut input = clocked_input();
+            match variant {
+                0 => input.rule_version = "unknown".into(),
+                1 => input.initial_clock.rule_version = "unknown".into(),
+                2 => input.clock_stable_during_callbacks = false,
+                3 => input.initial_clock.state.frame.time = f64::INFINITY,
+                4 => input.transitions.push(ClockTransition::UpdateFrame {
+                    timestamp: f64::NAN,
+                }),
+                5 => {
+                    input.callbacks.remove(&10);
+                }
+                _ => input.callbacks.get_mut(&10).unwrap().same_live_owner = false,
+            }
+            assert_eq!(
+                replay_clocked_reveal(&input),
+                Err(LedgerError::InvalidContext)
+            );
+        }
+        let mut input = clocked_input();
+        input.transitions = vec![ClockTransition::SelectFixed; 257];
+        let original = input.clone();
+        assert_eq!(replay_clocked_reveal(&input), Err(LedgerError::Capacity));
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn clocked_serialization_rejects_independent_callback_clocks() {
+        use crate::bluff::clocked_reveal::*;
+        let input = clocked_input();
+        let mut value = serde_json::to_value(&input).unwrap();
+        value["callbacks"]["10"]["producer_time"] = 900.0.into();
+        assert!(serde_json::from_value::<ClockedRevealContext>(value).is_err());
+        let mut value = serde_json::to_value(&input).unwrap();
+        value
+            .as_object_mut()
+            .unwrap()
+            .remove("clock_stable_during_callbacks");
+        assert!(serde_json::from_value::<ClockedRevealContext>(value).is_err());
+    }
+
+    #[test]
+    fn clocked_limit_accepts_256_steps_and_needs_no_owner_for_ineligible_waits() {
+        use crate::bluff::clocked_reveal::*;
+        let mut input = clocked_input();
+        input.transitions = vec![ClockTransition::SelectFixed; 256];
+        for entry in &mut input.initial.queue.entries {
+            entry.timing.deadline = 100.0;
+        }
+        for boundary in input.callbacks.values_mut() {
+            boundary.same_live_owner = false;
+        }
+        let output = replay_clocked_reveal(&input).unwrap();
+        assert_eq!(output.clock_trace.len(), 256);
+        assert_eq!(output.paths.len(), 1);
+        assert!(output.paths[0].callbacks.is_empty());
+        assert_eq!(
+            output.paths[0].state.continuations,
+            input.initial.continuations
+        );
+    }
+
     #[test]
     fn scheduled_queue_order_matches_weighted_sealed_order_without_permuting() {
         use crate::bluff::scheduled_reveal::*;
