@@ -169,6 +169,12 @@ def audit(game_root,dumper_root):
     entries=entries+ [('other','Method$Gameplay.Init()')] + entries if opt.get('duplicates',True) else []
     if entries:
      dp=arena+0x40000+(p-ge if p<gpe else p-gpe+0x1000);q(dp,types['System.Action<Character>'] if p in (gpe+0x48,gpe+0x50) else types['System.Action']);labels[dp]=key+':old_handlers';delegate_lists[dp]=entries;q(p,dp)
+  # Alias actual list references before capturing the authored initial state.
+  alias=opt.get('alias')
+  if alias=='deck_relics':q(gp,rq(obj+0x20))
+  elif alias=='saved_deck':q(obj+0x48,rq(obj+0x20))
+  elif alias=='saved_current':q(obj+0x48,rq(obj+0x30))
+  else:assert alias is None
   before=snapshot();sp=stack+0x8008;q(sp,stop);uc.reg_write(x.UC_X86_REG_RSP,sp);uc.reg_write(x.UC_X86_REG_RCX,obj)
   uc.emu_start(base+METHODS[name],stop+0x200,count=30000)
   return {'method':name,'input':dict(options),'initial':before,'final':snapshot(),'error':state['error'],'events':state['events'][:]}
@@ -228,6 +234,34 @@ def audit(game_root,dumper_root):
  success('Init',{'equality_null':True,'null':'project'})
  for null in ['saved','player','health_group','health','mode']:
   result=run('RestartGame',{'null':null});assert result['error'] in ('null','null_list');assert result['final']['references']['static+8']=='previous_score';cases.append(result)
+ # Real pointer aliases test clear/copy order rather than equal contents.
+ for alias,name,fail in [('deck_relics','Init',None),('deck_relics','Init',['array_clear',1]),
+                         ('saved_deck','Init',None),('saved_deck','RestartGame',None),
+                         ('saved_current','Init',None),('saved_current','RestartGame',None)]:
+  options={'alias':alias}
+  if name=='Init' and alias!='deck_relics':options['equality_null']=True
+  if fail:options['fail']=fail
+  result=run(name,options);before=result['initial'];after=result['final']
+  assert result['error']==('array_clear' if fail else None)
+  source=before['references']['instance+48'];deck=before['references']['instance+20']
+  if alias=='deck_relics':
+   assert before['references']['static+0']==deck
+   assert after['list_headers'][deck]==[0,0 if fail else 1]
+   assert not after['list_contents'][deck]
+   assert len([e for e in result['events'] if e['kind']=='array_clear'])==1
+   if fail:
+    assert after['references']['instance+28']==before['references']['instance+28']
+    assert after['references']['static+8']==before['references']['static+8']
+  else:
+   assert source==before['references']['instance+20' if alias=='saved_deck' else 'instance+30']
+   assert after['references']['instance+48']==source
+   current=after['references']['instance+28']
+   assert current!=source and after['copy_sources'][current]==source
+   assert after['list_contents'][current]==([] if alias=='saved_deck' and name=='Init' else before['list_contents'][source])
+   if alias=='saved_current':
+    assert after['references']['instance+30']!=source
+    assert after['list_contents'][source]==before['list_contents'][source]
+  cases.append(result)
  # Intern snapshots while retaining exact failure prefixes and identities.
  table=[];indices={}
  for case in cases:

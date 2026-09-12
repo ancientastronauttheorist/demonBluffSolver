@@ -1,0 +1,1987 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 6301888,
+      "Name": "Characters$$FilterRealCharacterRole<object>",
+      "Signature": "System_Collections_Generic_List_Character__o* Characters__FilterRealCharacterRole_object_ (Characters_o* __this, System_Collections_Generic_List_Character__o* inpuCharacters, const MethodInfo_6028C0* method);",
+      "TypeSignature": "iiii"
+    }
+  ],
+  "cases_passed": 40,
+  "distinct_native_instructions": 97,
+  "metadata_bindings": [
+    "Method$System.Collections.Generic.List.Enumerator<Character>.Dispose()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.MoveNext()",
+    "Method$System.Collections.Generic.List.Enumerator<Character>.get_Current()",
+    "Method$System.Collections.Generic.List<Character>..ctor()",
+    "Method$System.Collections.Generic.List<Character>.Add()",
+    "Method$System.Collections.Generic.List<Character>.GetEnumerator()",
+    "System.Collections.Generic.List<Character>_TypeInfo"
+  ],
+  "cases": [
+    {
+      "input": [],
+      "options": {
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [],
+      "options": {
+        "matching": [
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [],
+      "options": {
+        "matching": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 3
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "matching": [
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 3
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "options": {
+        "matching": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 3
+        },
+        {
+          "event": "add",
+          "value": 3
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "matching": [
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        0,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "matching": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "add",
+          "value": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        0,
+        1,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        null
+      ],
+      "options": {
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        null
+      ],
+      "options": {
+        "matching": [
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        null
+      ],
+      "options": {
+        "matching": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        null,
+        2
+      ],
+      "options": {
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        null,
+        2
+      ],
+      "options": {
+        "matching": [
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        null,
+        2
+      ],
+      "options": {
+        "matching": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "cold_metadata": true
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0,
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": null,
+      "options": {},
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "null_data": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "null"
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "null_role": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": null
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        2
+      ],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "mutate_source": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 1,
+      "error": "version"
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "mutate_on_classify": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 1,
+      "error": "version"
+    },
+    {
+      "input": [
+        0,
+        1,
+        2
+      ],
+      "options": {
+        "mutate_on_classify": true,
+        "matching": []
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 1,
+      "error": "version"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "allocate",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "allocate"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "constructor",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "constructor"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "enumerator"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "move_next"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "move_next"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "isinst",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "isinst"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "isinst",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "isinst"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "add",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "add"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "add",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        },
+        {
+          "event": "add",
+          "value": 0
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 2
+        },
+        {
+          "event": "add",
+          "value": 2
+        }
+      ],
+      "output_prefix": [
+        0
+      ],
+      "source_version": 0,
+      "error": "add"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "metadata",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "metadata"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "metadata",
+          7
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "metadata"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "rgctx",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "rgctx"
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "options": {
+        "cold_metadata": true,
+        "cold_type": true,
+        "fail": [
+          "type_ready",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "metadata"
+        },
+        {
+          "event": "rgctx"
+        },
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "type_ready"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "type_ready"
+    },
+    {
+      "input": [],
+      "options": {
+        "null_allocation": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        1
+      ],
+      "options": {
+        "null_allocation": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 1
+        },
+        {
+          "event": "move_next"
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": null
+    },
+    {
+      "input": [
+        0
+      ],
+      "options": {
+        "null_allocation": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "constructor"
+        },
+        {
+          "event": "enumerator"
+        },
+        {
+          "event": "move_next"
+        },
+        {
+          "event": "isinst",
+          "role": 0
+        }
+      ],
+      "output_prefix": [],
+      "source_version": 0,
+      "error": "null"
+    }
+  ],
+  "scope": "Native generic role filter caller, exact rgctx ABI, metadata/type readiness, reference-preserving ordered output and null/version/failure prefixes. Managed allocation/constructor/enumerator/Add and runtime isinst are explicit fixture services. No isinst internals or managed exception unwinding claimed."
+}

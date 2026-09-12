@@ -1,0 +1,4731 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "exact_declarations": [
+    {
+      "Address": 3594016,
+      "Name": "Characters$$PickRoundDuplicates",
+      "Signature": "void Characters__PickRoundDuplicates (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3597456,
+      "Name": "Characters$$ShuffleDeck",
+      "Signature": "System_Collections_IEnumerator_o* Characters__ShuffleDeck (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "iii"
+    },
+    {
+      "Address": 3632192,
+      "Name": "Characters.<ShuffleDeck>d__16$$System.Collections.IEnumerator.Reset",
+      "Signature": "void Characters__ShuffleDeck_d__16__System_Collections_IEnumerator_Reset (Characters__ShuffleDeck_d__16_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases_passed": 52,
+  "distinct_native_instructions": 169,
+  "weighted_paths": [
+    {
+      "choices": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "choices": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "choices": [
+        0,
+        0,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        7
+      ]
+    },
+    {
+      "choices": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        0,
+        1,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        7
+      ]
+    },
+    {
+      "choices": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "choices": [
+        1,
+        0,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ]
+    },
+    {
+      "choices": [
+        1,
+        0,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        0,
+        1,
+        7
+      ]
+    },
+    {
+      "choices": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        0,
+        1,
+        0,
+        7
+      ]
+    },
+    {
+      "choices": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        2,
+        0,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        2,
+        0,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        7
+      ]
+    },
+    {
+      "choices": [
+        2,
+        1,
+        0,
+        0
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        2,
+        1,
+        0,
+        1
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ]
+    },
+    {
+      "choices": [
+        2,
+        1,
+        0,
+        2
+      ],
+      "probability": "1/18",
+      "output": [
+        1,
+        0,
+        0,
+        7
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "entry": "0x36d720",
+      "villagers": [],
+      "outcasts": [],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "output": [],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 4,
+      "error": "bounds"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [],
+      "outcasts": [
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "output": [],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "bounds"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [],
+      "outcasts": [
+        6,
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 0,
+          "index": 0
+        }
+      ],
+      "output": [],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 4,
+      "error": "bounds"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 5,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 6,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6,
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 6,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 7,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "outcasts": [],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 6,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 5,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 4,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 2
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 2
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 3
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 3
+        }
+      ],
+      "draws": [
+        {
+          "width": 6,
+          "index": 0
+        },
+        {
+          "width": 5,
+          "index": 0
+        },
+        {
+          "width": 4,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "remaining_villagers": [
+        4,
+        5
+      ],
+      "remaining_outcasts": [],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 6,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 5,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 4,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 2
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 2
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 3
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 3
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 6,
+          "index": 0
+        },
+        {
+          "width": 5,
+          "index": 0
+        },
+        {
+          "width": 4,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      "remaining_villagers": [
+        4,
+        5
+      ],
+      "remaining_outcasts": [],
+      "version": 9,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "outcasts": [
+        6,
+        6
+      ],
+      "options": {},
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 6,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 5,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 4,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 2
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 2
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 3
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 3
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 6,
+          "index": 0
+        },
+        {
+          "width": 5,
+          "index": 0
+        },
+        {
+          "width": 4,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      "remaining_villagers": [
+        4,
+        5
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 9,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          0,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          0,
+          1,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 0
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          0,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          0,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        0,
+        0,
+        1,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          1,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          1,
+          1,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 1
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        0,
+        1,
+        0,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          0,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          0,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          0,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          1,
+          0,
+          0
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 0
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          1,
+          0,
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 1
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 1
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        7
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0,
+        0,
+        1
+      ],
+      "outcasts": [
+        6,
+        6,
+        7
+      ],
+      "options": {
+        "choices": [
+          2,
+          1,
+          0,
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "villager_store",
+          "value": 1
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 1
+        },
+        {
+          "event": "rng",
+          "width": 2,
+          "index": 1
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 3,
+          "index": 2
+        },
+        {
+          "event": "outcast_add",
+          "value": 7
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 7
+        }
+      ],
+      "draws": [
+        {
+          "width": 3,
+          "index": 2
+        },
+        {
+          "width": 2,
+          "index": 1
+        },
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 3,
+          "index": 2
+        }
+      ],
+      "output": [
+        1,
+        0,
+        0,
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6,
+        6
+      ],
+      "version": 8,
+      "error": null
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "script",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 3,
+      "error": "script"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "clear",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "clear"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "bluffable",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "bluffable"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "real_type",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "real_type"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "real_type",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "real_type"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "discarded_good_filter",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "discarded_good_filter"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "rng",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "rng"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "villager_store",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 5,
+      "error": "villager_store"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "remove",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 5,
+      "error": "remove"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "outcast_add",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 5,
+      "error": "outcast_add"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "fail": [
+          "remove",
+          2
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "outcast_add",
+          "value": 6
+        },
+        {
+          "event": "remove",
+          "pool": "outcast",
+          "value": 6
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        },
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0,
+        6
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 6,
+      "error": "remove"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "null_game": true
+      },
+      "events": [],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 3,
+      "error": "null"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "null_pool": true
+      },
+      "events": [
+        {
+          "event": "script"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 3,
+      "error": "null"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "null_type": 10
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        }
+      ],
+      "draws": [],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 4,
+      "error": "null"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [
+        6
+      ],
+      "options": {
+        "null_type": 20
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "clear",
+          "count": 1
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "villager_store",
+          "value": 0
+        },
+        {
+          "event": "remove",
+          "pool": "villager",
+          "value": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [
+        0
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [
+        6
+      ],
+      "version": 5,
+      "error": "null"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [],
+      "options": {
+        "capacity": 0,
+        "fail": [
+          "grow",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "script"
+        },
+        {
+          "event": "bluffable"
+        },
+        {
+          "event": "real_type",
+          "value": 10
+        },
+        {
+          "event": "real_type",
+          "value": 20
+        },
+        {
+          "event": "discarded_good_filter"
+        },
+        {
+          "event": "rng",
+          "width": 1,
+          "index": 0
+        },
+        {
+          "event": "grow",
+          "value": 0
+        }
+      ],
+      "draws": [
+        {
+          "width": 1,
+          "index": 0
+        }
+      ],
+      "output": [],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [],
+      "version": 5,
+      "error": "grow"
+    },
+    {
+      "entry": "0x36d720",
+      "villagers": [
+        0
+      ],
+      "outcasts": [],
+      "options": {
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "event": "class_init"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [
+        0
+      ],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": "class_init"
+    },
+    {
+      "entry": "0x36e490",
+      "villagers": [],
+      "outcasts": [],
+      "options": {
+        "null_receiver": false
+      },
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": null
+    },
+    {
+      "entry": "0x36e490",
+      "villagers": [],
+      "outcasts": [],
+      "options": {
+        "null_receiver": true
+      },
+      "events": [
+        {
+          "event": "allocate"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": null
+    },
+    {
+      "entry": "0x376c40",
+      "villagers": [],
+      "outcasts": [],
+      "options": {
+        "iterator_state": -1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "exception_ctor"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": "not_supported"
+    },
+    {
+      "entry": "0x376c40",
+      "villagers": [],
+      "outcasts": [],
+      "options": {
+        "iterator_state": 0
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "exception_ctor"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": "not_supported"
+    },
+    {
+      "entry": "0x376c40",
+      "villagers": [],
+      "outcasts": [],
+      "options": {
+        "iterator_state": 1
+      },
+      "events": [
+        {
+          "event": "allocate"
+        },
+        {
+          "event": "exception_ctor"
+        }
+      ],
+      "draws": [],
+      "output": [
+        7
+      ],
+      "remaining_villagers": [],
+      "remaining_outcasts": [],
+      "version": 3,
+      "error": "not_supported"
+    }
+  ],
+  "scope": "Native duplicate sampling/cap/clear/inlineAdd and uncovered ShuffleDeck factory/Reset. Candidate filters, uniform RNG, get_Item bounds, first-equal Remove, growth and outcastAdd are explicit stable services. No complete shuffle MoveNext recounting, live RNG or collection-internal failure rollback claimed."
+}

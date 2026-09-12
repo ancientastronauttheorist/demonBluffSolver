@@ -3,13 +3,13 @@
 ## Continuation checkpoint: 2026-09-12 overnight
 
 Branch `codex/full-decompile` now includes the clocked Reveal adapter and
-additional native timing audits. The overlay contains 1,399 classifications and 315 evidence records
+additional native timing audits. The overlay contains 1,408 classifications and 320 evidence records
 against 4,207 managed definitions; these include explicit unresolved states
 and are not a claim that the game is fully reconstructed. The typed union has
 50 sets, 996 memberships, 643 exact definitions and 535 native RVAs, with
 2,861 parameter locations validated read-only and zero program mutations.
 
-Latest validation: 726 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
+Latest validation: 735 Rust library tests; full regression: 34 simulation tests over 426 fixtures,
 778 Python tests, 32 reverse-engineering tests and the release build passed.
 The latest full simulation took 1,953.46 seconds while native audits ran concurrently.
 New mode, roster, score and startup reconstructions are offline, with explicit service contracts.
@@ -48,8 +48,12 @@ Resume with these boundaries in view:
    scoped caller evidence; roster filtering, score arithmetic, delayed deck
    intro, character filters, saved/current startup copies and lazy starting-pool
    composition now have native fixtures and offline Rust replays. Preserve each
-   caller's faction-read order and explicit service contracts. Duplicate selection
-   and the remaining Characters caller bodies are the next bounded frontier.
+   caller's faction-read order and explicit service contracts. All 45 Characters
+   declarations now have scoped native evidence. Duplicate selection has a
+   weighted replay, and its actual candidate filter composition has 124 native
+   cases; the composed Rust bridge and unique-pool failure ordering are next.
+   Rotation/highlight replay and full diagnostic Reveal-wrapper callers are
+   audited, with transform, formatting and UI callback internals still explicit.
 3. Preserve the corrected individually aligned serialized Boolean fields:
    15 of 46 core roles are usuallyDisguised. Public Dreamer's script-priority
    support now uses those flags. The old all-false result was a parser error.

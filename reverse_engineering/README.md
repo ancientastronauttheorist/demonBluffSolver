@@ -859,8 +859,8 @@ offline selector preserves Mad across empty-draw failure and compares against
 [`coverage/`](coverage/) contains the deterministic 4,207-method denominator,
 sparse authored classifications, and reusable evidence. Missing classifications
 resolve to `unresolved/not-reviewed`; shared native RVAs never collapse managed
-method identities. The current overlay contains 1,399 classifications backed by
-315 evidence records. See [`coverage/README.md`](coverage/README.md) for the
+method identities. The current overlay contains 1,408 classifications backed by
+320 evidence records. See [`coverage/README.md`](coverage/README.md) for the
 generation and byte-for-byte check command.
 
 ## Evidence levels
@@ -935,7 +935,7 @@ The [base GameMode audit](notes/systems/game_mode_base_surface.md) covers all
 and [progression](notes/systems/standard_mode_progression.md) complete its
 24-method caller surface, including native save/score failure ordering.
 The offline Rust progression replay matches all 304 applicable native fixtures;
-all 726 Rust library tests passed.
+all 735 Rust library tests passed.
 [Roguelike lifecycle](notes/systems/roguelike_standard_lifecycle.md) identifies
 the kill-handler Combine during teardown. The
 [delegate-to-score follow-up](notes/systems/roguelike_delegate_score.md)
@@ -1032,5 +1032,16 @@ The [starting-pool bridge](notes/systems/roster_starting_bridge.md) composes laz
 selection with roster removal across 2,122 native fixtures and 46 weighted paths.
 The [startup composition](notes/systems/gameplay_startup_composition.md) joins
 Init with saved-roster reset, preserving distinct saved/current allocations and
-contrasting RestartGame across 111 native fixtures. Both have bounded Rust
-replays; the complete release library suite passes 726 tests.
+contrasting RestartGame across 117 native fixtures. Both have bounded Rust
+replays; the complete release library suite passes 735 tests.
+
+All 45 top-level Characters declarations now have scoped native evidence.
+[Duplicate selection](notes/systems/round_duplicates.md) adds 52 cases and a
+weighted Rust replay; the [candidate composition](notes/systems/round_candidate_composition.md)
+executes the actual concatenator and three filters in 124 native cases.
+[Rotation and highlighting](notes/systems/characters_layout_highlight.md)
+have a Rust replay matched against 96 cases, while the
+[generic real-role filter](notes/systems/character_role_filter.md) adds 40 cases.
+[Reveal wrappers](notes/systems/characters_reveal_entries.md) add 386 cases for
+diagnostic selection/format arguments, post-callback state swaps and delegate
+rereads. Scoped caller coverage still leaves engine and callback bodies open.

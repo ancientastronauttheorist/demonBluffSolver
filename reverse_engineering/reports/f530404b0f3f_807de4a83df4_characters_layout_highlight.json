@@ -1,0 +1,7024 @@
+{
+  "schema_version": 1,
+  "build_id": "f530404b0f3f_807de4a83df4",
+  "cases_passed": 96,
+  "distinct_native_instructions": 200,
+  "metadata_verified": [
+    {
+      "Address": 3597536,
+      "Name": "Characters$$UpdateCharacterPositions",
+      "Signature": "void Characters__UpdateCharacterPositions (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3590896,
+      "Name": "Characters$$HighlightCharacters",
+      "Signature": "void Characters__HighlightCharacters (Characters_o* __this, System_Collections_Generic_List_Character__o* chList, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 3579232,
+      "Name": "Characters$$DisableHighlightAll",
+      "Signature": "void Characters__DisableHighlightAll (Characters_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 29958192,
+      "Name": "UnityEngine.Transform$$set_localEulerAngles",
+      "Signature": "void UnityEngine_Transform__set_localEulerAngles (UnityEngine_Transform_o* __this, UnityEngine_Vector3_o value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 29957824,
+      "Name": "UnityEngine.Transform$$set_eulerAngles",
+      "Signature": "void UnityEngine_Transform__set_eulerAngles (UnityEngine_Transform_o* __this, UnityEngine_Vector3_o value, const MethodInfo* method);",
+      "TypeSignature": "viii"
+    },
+    {
+      "Address": 29893760,
+      "Name": "UnityEngine.Object$$op_Inequality",
+      "Signature": "bool UnityEngine_Object__op_Inequality (UnityEngine_Object_o* x, UnityEngine_Object_o* y, const MethodInfo* method);",
+      "TypeSignature": "iiii"
+    },
+    {
+      "Address": 3764368,
+      "Name": "CardHighlight$$ShowHighlight",
+      "Signature": "void CardHighlight__ShowHighlight (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    },
+    {
+      "Address": 3764032,
+      "Name": "CardHighlight$$DisableHighlight",
+      "Signature": "void CardHighlight__DisableHighlight (CardHighlight_o* __this, const MethodInfo* method);",
+      "TypeSignature": "vii"
+    }
+  ],
+  "cases": [
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          2,
+          2,
+          0
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character2": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ],
+        "character0": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          null,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          null
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_board": true
+      },
+      "events": [],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        }
+      ],
+      "error": "enumerator",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        }
+      ],
+      "error": "transform",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "local_euler",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "local_euler",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        }
+      ],
+      "error": "transform",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "world_euler",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "world_euler",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        }
+      ],
+      "error": "transform",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "local_euler",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        }
+      ],
+      "error": "local_euler",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          4
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        }
+      ],
+      "error": "transform",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "world_euler",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "world_euler",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          5
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        }
+      ],
+      "error": "transform",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "local_euler",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        }
+      ],
+      "error": "local_euler",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "transform",
+          6
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        }
+      ],
+      "error": "transform",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "world_euler",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "world_euler",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          4
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "dispose",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": "dispose",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": []
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          0,
+          1,
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight0"
+        ],
+        [
+          "show",
+          "highlight1"
+        ],
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          0,
+          null,
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight0"
+        ],
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          null
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_selected": true
+      },
+      "events": [],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        }
+      ],
+      "error": "enumerator",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        }
+      ],
+      "error": "class_init",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "unity_nonnull",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        }
+      ],
+      "error": "unity_nonnull",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "show",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        }
+      ],
+      "error": "show",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "unity_nonnull",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        }
+      ],
+      "error": "unity_nonnull",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "show",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        }
+      ],
+      "error": "show",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "dispose",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": "dispose",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          2,
+          2,
+          0
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight2"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ],
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          null,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          null
+        ],
+        "selected": [
+          2,
+          0
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_board": true
+      },
+      "events": [],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "enumerator",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        }
+      ],
+      "error": "enumerator",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "class_init",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        }
+      ],
+      "error": "class_init",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "unity_nonnull",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        }
+      ],
+      "error": "unity_nonnull",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "disable",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        }
+      ],
+      "error": "disable",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "unity_nonnull",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        }
+      ],
+      "error": "unity_nonnull",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "disable",
+          2
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        }
+      ],
+      "error": "disable",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "unity_nonnull",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        }
+      ],
+      "error": "unity_nonnull",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "disable",
+          3
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        }
+      ],
+      "error": "disable",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "move_next",
+          4
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        }
+      ],
+      "error": "move_next",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "cold": true,
+        "fail": [
+          "dispose",
+          1
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": "dispose",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": -2147483648
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            2147483648
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            3023306752
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            3031695360
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          2147483648
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          3023306752
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          3031695360
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": -1
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            2147483648
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            3283353600
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            3291742208
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          2147483648
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          3283353600
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          3291742208
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": 0
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            4290772992
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            2139095040
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            2139095040
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          4290772992
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          2139095040
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          2139095040
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": 1
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1135869952
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1144258560
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1135869952
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1144258560
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": 3
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": 7
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1112389339
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1120777947
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1112389339
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1120777947
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "size": 2147483647
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            875823104
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            884211712
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          875823104
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          884211712
+        ],
+        "icon2": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "zero_bits": [
+          2147483648,
+          2143363909,
+          1065353216
+        ]
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon2",
+          "bits": [
+            2147483648,
+            2143363909,
+            1065353216
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          2147483648,
+          2143363909,
+          1065353216
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          2147483648,
+          2143363909,
+          1065353216
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ],
+        "icon2": [
+          2147483648,
+          2143363909,
+          1065353216
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_icon": 0
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "character0"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "icon0"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_icon": 1
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "character1"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "icon1"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_icon": 2
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "character2"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "UpdateCharacterPositions",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "missing_transform": "icon2"
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character0"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon0"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon0",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character1"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character1",
+          "bits": [
+            0,
+            0,
+            1123024896
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon1"
+        },
+        {
+          "kind": "world_euler",
+          "target": "icon1",
+          "bits": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "transform",
+          "target": "character2"
+        },
+        {
+          "kind": "local_euler",
+          "target": "character2",
+          "bits": [
+            0,
+            0,
+            1131413504
+          ]
+        },
+        {
+          "kind": "transform",
+          "target": "icon2"
+        }
+      ],
+      "error": "null",
+      "rotations": {
+        "character0": [
+          0,
+          0,
+          0
+        ],
+        "icon0": [
+          0,
+          0,
+          0
+        ],
+        "character1": [
+          0,
+          0,
+          1123024896
+        ],
+        "icon1": [
+          0,
+          0,
+          0
+        ],
+        "character2": [
+          0,
+          0,
+          1131413504
+        ]
+      },
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [
+          "character0"
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [
+          "character0",
+          "character1",
+          "character2"
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 0
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 1
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "show",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "show",
+          "highlight2"
+        ],
+        [
+          "show",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 2
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "HighlightCharacters",
+      "input": {
+        "board": [
+          null
+        ],
+        "selected": [
+          null
+        ],
+        "nonnull_override": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "selected"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [
+          "character0"
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight2"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight1"
+        ],
+        [
+          "disable",
+          "highlight2"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "destroyed": [
+          "character0",
+          "character1",
+          "character2"
+        ],
+        "cold": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "class_init"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": false
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "dispose"
+        }
+      ],
+      "error": null,
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 0
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 1
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          0,
+          1,
+          2
+        ],
+        "selected": [
+          2,
+          0
+        ],
+        "null_highlight": 2
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character0",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight0"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character1",
+          "result": true
+        },
+        {
+          "kind": "disable",
+          "target": "highlight1"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": "character2",
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": [
+        [
+          "disable",
+          "highlight0"
+        ],
+        [
+          "disable",
+          "highlight1"
+        ]
+      ]
+    },
+    {
+      "method": "DisableHighlightAll",
+      "input": {
+        "board": [
+          null
+        ],
+        "selected": [
+          null
+        ],
+        "nonnull_override": true
+      },
+      "events": [
+        {
+          "kind": "enumerator",
+          "source": "board"
+        },
+        {
+          "kind": "move_next"
+        },
+        {
+          "kind": "unity_nonnull",
+          "target": null,
+          "result": true
+        }
+      ],
+      "error": "null",
+      "rotations": {},
+      "highlight_calls": []
+    }
+  ],
+  "boundary": "Three actual Characters callers; explicit stable enumeration, Unity null comparison, class initialization, transform lookup/setters and CardHighlight callbacks. No transform/tween/coroutine engine bodies or exception unwinding. MXCSR0x1F80; malformed size/provider combinations are adversarial fixtures."
+}

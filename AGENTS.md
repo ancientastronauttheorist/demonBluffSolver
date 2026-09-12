@@ -47,7 +47,8 @@ stop, diagnose, fix, verify, then resume.
     a trailing `/*` or partial-name wildcard on a directory argument; this also
     applies to documentation filename prefixes in multi-command batches.
     Resolve all uncertain filenames, including audit scripts and status/summary
-    documents and Rust module roots, with `rg --files` before reading. Do not
+    documents, versioned coverage inventories and Rust module roots, with
+    `rg --files` before reading. Do not
     infer an audit filename from a role name or assume a module uses `mod.rs`.
     Retain the returned directory when opening a resolved basename; a script
     name mentioned in notes is not necessarily relative to the repository root.
@@ -65,6 +66,9 @@ stop, diagnose, fix, verify, then resume.
     Resolve each completed module's actual path before adding its declaration;
     a module name alone does not identify whether its parent is `lib.rs` or a
     nested module such as `bluff.rs`.
+    Gate dependent shell steps on successful exit codes. In PowerShell a failed
+    native command does not stop later lines; keep validation and commit in a
+    checked subprocess sequence or explicitly exit on failure.
 11. Serialize Ghidra headless commands that open the same saved project.
     Ghidra takes a project lock even for read-only exports, so parallel target
     exports against one baseline or typed project will race and one will fail.

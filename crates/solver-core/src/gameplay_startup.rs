@@ -719,10 +719,10 @@ mod tests {
         serde_json::from_str(include_str!("../../../reverse_engineering/reports/f530404b0f3f_807de4a83df4_gameplay_startup_composition.json")).unwrap()
     }
     #[test]
-    fn all_111_native_startup_compositions() {
+    fn all_117_native_startup_compositions() {
         let report = corpus();
         let cases = report["cases"].as_array().unwrap();
-        assert_eq!(cases.len(), 111);
+        assert_eq!(cases.len(), 117);
         for (index, case) in cases.iter().enumerate() {
             let ctx = context(case);
             let out = replay_gameplay_startup(&ctx).unwrap();
